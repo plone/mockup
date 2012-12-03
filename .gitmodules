@@ -4,3 +4,9 @@
 [submodule "lib/plone.app.toolbar"]
 	path = lib/plone.app.toolbar
 	url = git://github.com/plone/plone.app.toolbar.git
+[submodule "lib/plone.app.deco"]
+	path = lib/plone.app.deco
+	url = git://github.com/plone/plone.app.deco.git
+[submodule "lib/plone.app.tiles"]
+	path = lib/plone.app.tiles
+	url = git://github.com/plone/plone.app.tiles.git
