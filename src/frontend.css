@@ -8898,8 +8898,8 @@ a.badge:hover {
     overflow: visible !important;
   }
 }
-header h1 {
-  margin: 0.5em 0;
+header #portal-logo {
+  margin: 0.5em 0 0.25em 0;
   font-size: 72.3px;
   line-height: 100px;
   font-style: italic;
