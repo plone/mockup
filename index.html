@@ -4,267 +4,201 @@
 <head>
   <title>Plone Mockup</title>
   <meta charset="UTF-8" />
-  <script data-main="src/main" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js"></script>
+  <script data-main="src/frontend" src="lib/Patterns/lib/require.min.js"></script>
 </head>
 
 <body>
 
-  <article class="hentry">
+  <h1>Plone Mockup</h1>
 
-    <header>
-      <h1 class="entry-title">But Will It Make You Happy?</h1>
-      <h2 class="entry-summary">
-        How you spend has a greater effect on your happiness than how
-        much you spend, researchers say.
-      </h2>
-      <time class="updated" datetime="2012-01-07 11:11:03-0400" pubdate>
-        01-07-2012
-      </time>
-      <p class="byline author vcard">
-        By <span class="fn">Stephanie Rosenbloom</span>
-      </p>
-    </header>
+  <div style="display:none;"
+    data-iframe="toolbar"
+    data-iframe-resources="
+    lib/plone.app.toolbar/plone/app/toolbar/resources/src/plone.min.css;
+    lib/Patterns/lib/require.min.js?data-main=src/backend;
+    ">
+    <div class="navbar navbar-inverse" id="plone-toolbar">
+      <div class="navbar-inner">
+        <div class="container">
 
-    <div class="entry-content" data-panel="content">
-      <p>...article text...</p>
-      <p>...article text...</p>
+          <ul class="nav">
+            <li id="plone-action-folderContents">
+              <a href="action_folder_contents.html">Contents</a>
+            </li>
+            <li id="plone-action-view">
+              <a href="#">View</a>
+            </li>
+            <li id="plone-action-deco">
+              <a href="edit.html">Edit</a>
+            </li>
+            <li id="plone-action-contentrules">
+              <a href="action_manage_content_rules.html">Rules</a>
+            </li>
+            <li id="plone-action-local_roles">
+              <a href="action_sharing.html">Sharing</a>
+            </li>
+          </ul>
 
-      <figure>
-        <img src="tammy-strobel.jpg" alt="Portrait of Tammy Strobel" />
-        <figcaption>Tammy Strobel in her pared-down, 400sq-ft apt.</figcaption>
-      </figure>
+          <ul class="nav pull-right">
+            <li id="plone-contentmenu-actions" class="dropdown ">
+              <a data-toggle="dropdown" class="dropdown-toggle"
+                href="action_folder_contents.html">
+                <span>Actions</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li id="cut" class="actionicon-object_buttons-cut">
+                  <a href="object_cut.html">
+                    <span>Cut</span>
+                  </a>
+                </li>
+                <li id="copy" class="actionicon-object_buttons-copy">
+                  <a href="object_copy.html">
+                    <span>Copy</span>
+                  </a>
+                </li>
+                <li id="delete" class="actionicon-object_buttons-delete">
+                  <a href="delete_confirmation.html">
+                    <span>Delete</span>
+                  </a>
+                </li>
+                <li id="rename" class="actionicon-object_buttons-rename">
+                  <a href="object_rename.html">
+                    <span>Rename</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li id="plone-contentmenu-display" class="dropdown ">
+              <a data-toggle="dropdown" class="dropdown-toggle"
+                href="select_default_view.html">
+                <span>Display</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li id="view" class="active">
+                  <a href="selectViewTemplate?templateId=view">
+                    <span>view</span>
+                  </a>
+                </li>
+                <li id="contextSetDefaultPage" class="">
+                  <a href="select_default_page">
+                    <span>Select a content item as default view...</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li id="plone-contentmenu-factories" class="dropdown ">
+              <a data-toggle="dropdown" class="dropdown-toggle" href="folder_factories">
+                <span>Add new…</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li id="collection" class="contenttype-collection">
+                  <a href="createObject?type_name=Collection">
+                    <span>Collection</span>
+                  </a>
+                </li>
+                <li id="page" class="contenttype-page">
+                  <a href="++add++page">
+                    <img alt="icon" src="images/page_icon.gif"><span>Deco Page</span>
+                  </a>
+                </li>
+                <li id="event" class="contenttype-event">
+                  <a href="createObject?type_name=Event">
+                    <span>Event</span>
+                  </a>
+                </li>
+                <li id="file" class="contenttype-file">
+                  <a href="createObject?type_name=File">
+                    <span>File</span>
+                  </a>
+                </li>
+                <li id="folder" class="contenttype-folder">
+                  <a href="createObject?type_name=Folder">
+                    <span>Folder</span>
+                  </a>
+                </li>
+                <li id="image" class="contenttype-image">
+                  <a href="createObject?type_name=Image">
+                    <span>Image</span>
+                  </a>
+                </li>
+                <li id="link" class="contenttype-link">
+                  <a href="createObject?type_name=Link">
+                    <span>Link</span>
+                  </a>
+                </li>
+                <li id="news-item" class="contenttype-news-item">
+                  <a href="createObject?type_name=News+Item">
+                    <span>News Item</span>
+                  </a>
+                </li>
+                <li id="document" class="contenttype-document">
+                  <a href="createObject?type_name=Document">
+                    <span>Page</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li id="plone-contentmenu-workflow" class="dropdown ">
+              <a data-toggle="dropdown" class="dropdown-toggle"
+                href="content_status_history">
+                <span>State:</span>
+                <span class="state-private">Private</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li id="workflow-transition-publish" class="kssIgnore">
+                  <a href="content_status_modify?workflow_action=publish">
+                    <span>Publish</span>
+                  </a>
+                </li>
+                <li id="workflow-transition-submit" class="kssIgnore">
+                  <a href="content_status_modify?workflow_action=submit">
+                    <span>Submit for publication</span>
+                  </a>
+                </li>
+                <li id="advanced" class="kssIgnore">
+                  <a href="content_status_history">
+                    <span>Advanced...</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
 
-      <p>...article text...</p>
-      <p>...article text...</p>
+            <li class="divider-vertical"></li>
 
-      <aside>
-        <h2>Share this Article</h2>
-        <ul>
-          <li>Facebook</li>
-          <li>Twitter</li>
-          <li>Etc</li>
-        </ul>
-      </aside>
-
-      <div class="entry-content-asset">
-        <a href="photo-full.png">
-          <img src="photo.png" alt="The objects Tammy removed from her life" />
-        </a>
+            <li id="plone-personal-actions" class="dropdown">
+              <a data-toggle="dropdown" class="dropdown-toggle" href="author/admin">
+                <img alt="user portrait" src="images/user.png"><span>admin</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu"><li id="plone-personal-actions-dashboard">
+                  <a target="_parent" href="dashboard">Dashboard</a>
+                </li>
+                <li id="plone-personal-actions-preferences">
+                  <a href="@@personal-preferences">Preferences</a>
+                </li>
+                <li id="plone-personal-actions-plone_setup">
+                  <a href="@@overview-controlpanel">Site Setup</a>
+                </li>
+                <li id="plone-personal-actions-logout">
+                  <a target="_parent" href="logout">Log out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
-
-      <p>...article text...</p>
-      <p>...article text...</p>
-
-      <a class="entry-unrelated" href="http://fake.site/">Find Great Vacations</a>
     </div>
+  </div>
 
-    <footer>
-      <p>
-        A version of this article appeared in print on January 8,
-        2012, on page BU1 of the New York edition.
-      </p>
-      <div class="source-org vcard copyright">
-        Copyright 2012 <span class="org fn">The New York Times Company</span>
-      </div>
-    </footer>
-
-  </article>
+  <div id="content" data-panel="content">
+  </div>
 
 </body>
 
 </html>
 
 
-<!--div style="display:none;"
-     data-iframe="toolbar"
-     data-iframe-resources="
-        lib/plone_toolbar/src/plone.min.css;
-        lib/plone_toolbar/lib/jquery-1.7.2.js;
-        lib/plone_toolbar/lib/jquery.form.js;
-        lib/plone_toolbar/lib/bootstrap/js/bootstrap-dropdown.js;
-        lib/plone_toolbar/lib/bootstrap/js/bootstrap-modal.js;
-        lib/plone_deco/lib/jquery.event.drag-2.1.0.js;
-        lib/plone_deco/lib/jquery.event.drop-2.1.0.js;
-        lib/plone_deco/src/deco.js;
-        lib/plone_toolbar/src/plone.init.js;
-        lib/plone_toolbar/src/plone.mask.js;
-        lib/plone_toolbar/src/plone.overlay.js;
-        lib/plone_toolbar/src/jquery.iframe.js;
-        lib/plone_deco/src/plone.deco.js;
-        ">
-  <div class="navbar navbar-inverse" id="plone-toolbar">
-    <div class="navbar-inner">
-      <div class="container">
-
-        <ul class="nav">
-          <li id="plone-action-folderContents">
-            <a href="action_folder_contents.html">Contents</a>
-          </li>
-          <li id="plone-action-view">
-            <a href="#">View</a>
-          </li>
-          <li id="plone-action-deco">
-            <a href="edit.html">Edit</a>
-          </li>
-          <li id="plone-action-contentrules">
-            <a href="action_manage_content_rules.html">Rules</a>
-          </li>
-          <li id="plone-action-local_roles">
-            <a href="action_sharing.html">Sharing</a>
-          </li>
-        </ul>
-
-        <ul class="nav pull-right">
-          <li id="plone-contentmenu-actions" class="dropdown ">
-            <a data-toggle="dropdown" class="dropdown-toggle"
-              href="action_folder_contents.html">
-              <span>Actions</span>
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li id="cut" class="actionicon-object_buttons-cut">
-                <a href="object_cut.html">
-                  <span>Cut</span>
-                </a>
-              </li>
-              <li id="copy" class="actionicon-object_buttons-copy">
-                <a href="object_copy.html">
-                  <span>Copy</span>
-                </a>
-              </li>
-              <li id="delete" class="actionicon-object_buttons-delete">
-                <a href="delete_confirmation.html">
-                  <span>Delete</span>
-                </a>
-              </li>
-              <li id="rename" class="actionicon-object_buttons-rename">
-                <a href="object_rename.html">
-                  <span>Rename</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li id="plone-contentmenu-display" class="dropdown ">
-            <a data-toggle="dropdown" class="dropdown-toggle"
-              href="select_default_view.html">
-              <span>Display</span>
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li id="view" class="active">
-                <a href="selectViewTemplate?templateId=view">
-                  <span>view</span>
-                </a>
-              </li>
-              <li id="contextSetDefaultPage" class="">
-                <a href="select_default_page">
-                  <span>Select a content item as default view...</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li id="plone-contentmenu-factories" class="dropdown ">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="folder_factories">
-              <span>Add new…</span>
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li id="collection" class="contenttype-collection">
-                <a href="createObject?type_name=Collection">
-                  <span>Collection</span>
-                </a>
-              </li>
-              <li id="page" class="contenttype-page">
-                <a href="++add++page">
-                  <img alt="icon" src="images/page_icon.gif"><span>Deco Page</span>
-                </a>
-              </li>
-              <li id="event" class="contenttype-event">
-                <a href="createObject?type_name=Event">
-                  <span>Event</span>
-                </a>
-              </li>
-              <li id="file" class="contenttype-file">
-                <a href="createObject?type_name=File">
-                  <span>File</span>
-                </a>
-              </li>
-              <li id="folder" class="contenttype-folder">
-                <a href="createObject?type_name=Folder">
-                  <span>Folder</span>
-                </a>
-              </li>
-              <li id="image" class="contenttype-image">
-                <a href="createObject?type_name=Image">
-                  <span>Image</span>
-                </a>
-              </li>
-              <li id="link" class="contenttype-link">
-                <a href="createObject?type_name=Link">
-                  <span>Link</span>
-                </a>
-              </li>
-              <li id="news-item" class="contenttype-news-item">
-                <a href="createObject?type_name=News+Item">
-                  <span>News Item</span>
-                </a>
-              </li>
-              <li id="document" class="contenttype-document">
-                <a href="createObject?type_name=Document">
-                  <span>Page</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li id="plone-contentmenu-workflow" class="dropdown ">
-            <a data-toggle="dropdown" class="dropdown-toggle"
-              href="content_status_history">
-              <span>State:</span>
-              <span class="state-private">Private</span>
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li id="workflow-transition-publish" class="kssIgnore">
-                <a href="content_status_modify?workflow_action=publish">
-                  <span>Publish</span>
-                </a>
-              </li>
-              <li id="workflow-transition-submit" class="kssIgnore">
-                <a href="content_status_modify?workflow_action=submit">
-                  <span>Submit for publication</span>
-                </a>
-              </li>
-              <li id="advanced" class="kssIgnore">
-                <a href="content_status_history">
-                  <span>Advanced...</span>
-                </a>
-              </li>
-            </ul>
-        </li>
-
-          <li class="divider-vertical"></li>
-
-          <li id="plone-personal-actions" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="author/admin">
-              <img alt="user portrait" src="images/user.png"><span>admin</span>
-              <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu"><li id="plone-personal-actions-dashboard">
-                <a target="_parent" href="dashboard">Dashboard</a>
-              </li>
-              <li id="plone-personal-actions-preferences">
-                <a href="@@personal-preferences">Preferences</a>
-              </li>
-              <li id="plone-personal-actions-plone_setup">
-                <a href="@@overview-controlpanel">Site Setup</a>
-              </li>
-              <li id="plone-personal-actions-logout">
-                <a target="_parent" href="logout">Log out</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div-->

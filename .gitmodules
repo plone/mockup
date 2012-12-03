@@ -1,0 +1,6 @@
+[submodule "lib/Patterns"]
+	path = lib/Patterns
+	url = git://github.com/Patternslib/Patterns.git
+[submodule "lib/plone.app.toolbar"]
+	path = lib/plone.app.toolbar
+	url = git://github.com/plone/plone.app.toolbar.git
