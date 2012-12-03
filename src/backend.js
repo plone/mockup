@@ -5,11 +5,15 @@ var toolbar_path = '../lib/plone.app.toolbar/plone/app/toolbar/resources/';
 requirejs.config({
   paths: {
     'jquery': toolbar_path + 'lib/jquery-1.8.2.min',
+    'jquery-form': toolbar_path + 'lib/jquery.form',
     'jquery-iframe': toolbar_path + 'src/jquery.iframe',
     'jquery-mask': toolbar_path + 'src/jquery.mask',
-    'bootstrap-download': toolbar_path + 'lib/bootstrap/js/bootstrap-dropdown',
+    'bootstrap-dropdown': toolbar_path + 'lib/bootstrap/js/bootstrap-dropdown',
+    'bootstrap-modal': toolbar_path + 'lib/bootstrap/js/bootstrap-modal',
     'plone-init': toolbar_path + 'src/plone.init',
-    'plone-toolbar': toolbar_path + 'src/plone.toolbar'
+    'plone-toolbar': toolbar_path + 'src/plone.toolbar',
+    'plone-overlay': toolbar_path + 'src/plone.overlay',
+    'plone-cmsui': toolbar_path + 'src/plone.cmsui'
   },
   shim: {
     'jquery-iframe': {
@@ -25,19 +29,22 @@ requirejs.config({
       deps: [ 'jquery' ]
     },
     'plone-toolbar': {
-      deps: [ 'jquery', 'jquery-iframe', 'bootstrap-download' ]
+      deps: [ 'jquery', 'jquery-iframe', 'bootstrap-dropdown' ]
+    },
+    'plone-overlay': {
+      deps: [ 'jquery', 'jquery-form', 'jquery-iframe', 'jquery-mask',
+              'bootstrap-modal' ]
+    },
+    'plone-cmsui': {
+      deps: [ 'jquery', 'plone-overlay' ]
     }
   }
 });
 
 require([
-    'jquery-iframe',
-    'plone-init',
-    'plone-toolbar'
-   ], function($, iframe) {
-
-   console.log('WORKS!');
-
-});
+    'plone-init',  // to be replaced by patternslib i guess
+    'plone-toolbar',
+    'plone-cmsui'
+   ]);
 
 }());

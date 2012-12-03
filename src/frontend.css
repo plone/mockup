@@ -8903,13 +8903,12 @@ header #portal-logo {
   font-size: 72.3px;
   line-height: 100px;
   font-style: italic;
-  font-weight: normal;
 }
 header .plone-logo {
   background: #ffffff;
   position: relative;
   font-style: normal;
-  font-weight: bold;
+  font-weight: normal;
 }
 header .plone-logo .plone-text {
   color: #0083be;
