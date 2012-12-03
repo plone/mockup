@@ -42,9 +42,9 @@ requirejs.config({
 });
 
 require([
-    'plone-init',  // to be replaced by patternslib i guess
-    'plone-toolbar',
-    'plone-cmsui'
+    'plone-init',     // to be replaced by patternslib i guess
+    'plone-toolbar',  // this is basically only dropdown for toolbar
+    'plone-cmsui'     // overlays for toolbar actions
    ]);
 
 }());
