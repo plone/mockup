@@ -4,12 +4,11 @@
 <head>
   <title>Plone Mockup</title>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="src/frontend.css" type="text/css" />
   <script data-main="src/frontend" src="lib/Patterns/lib/require.min.js"></script>
 </head>
 
 <body>
-
-  <h1>Plone Mockup</h1>
 
   <div style="display:none;"
     data-iframe="toolbar"
@@ -194,8 +193,32 @@
     </div>
   </div>
 
-  <div id="content" data-panel="content">
+  <header>
+    <div class="container">
+      <h1>
+        <span class="plone-logo">
+          <span class="plone-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Mockup
+      </h1>
+      <p>Some description</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+      Some content
+    </div>
   </div>
+
+
 
 </body>
 

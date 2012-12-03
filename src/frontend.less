@@ -1,0 +1,66 @@
+@import "../lib/plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/less/bootstrap.less";
+@import "../lib/plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/less/responsive.less";
+
+@ploneLogoSize: 100px;
+@ploneLogoFgColor: #0083be;
+@ploneLogoBgColor: #ffffff;
+@ploneLogoRatio: 0.8;
+
+
+header {
+  h1 {
+    margin: 0.5em 0;
+    font-size: 0.723 * @ploneLogoSize;
+    line-height: @ploneLogoSize;
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  .plone-logo {
+    background: @ploneLogoBgColor;
+    position: relative;
+    font-style: normal;
+    font-weight: bold;
+
+    .plone-text {
+      color: @ploneLogoFgColor;
+      font-size: 0.723 * @ploneLogoSize;
+      line-height: @ploneLogoSize;
+      margin-left: @ploneLogoSize * 0.135;
+      float: left;
+    }
+    .plone-circle {
+      float: left;
+      display: block;
+      position: relative;
+      width: @ploneLogoSize;
+      height: @ploneLogoSize;
+      background-color: @ploneLogoFgColor;
+      border-radius: @ploneLogoSize / 2;
+
+      .plone-circle-inner {
+        display: block;
+        position: absolute;
+        width: @ploneLogoSize * @ploneLogoRatio;
+        height: @ploneLogoSize * @ploneLogoRatio;
+        background-color: @ploneLogoBgColor;
+        border-radius: @ploneLogoSize * @ploneLogoRatio / 2;
+        top: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;
+        left: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;
+
+        .plone-dot(@x, @y) {
+          display: block;
+          position: absolute;
+          width: @ploneLogoSize * (1 - @ploneLogoRatio);
+          height: @ploneLogoSize * (1 - @ploneLogoRatio);
+          background-color: @ploneLogoFgColor;
+          border-radius: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;
+          top: @y;   left: @x;
+        }
+        .plone-dot-1 { .plone-dot(0.223 * @ploneLogoSize, 0.074 * @ploneLogoSize); }
+        .plone-dot-2 { .plone-dot(0.445 * @ploneLogoSize, 0.289 * @ploneLogoSize); }
+        .plone-dot-3 { .plone-dot(0.223 * @ploneLogoSize, 0.504 * @ploneLogoSize); }
+      }
+    }
+  }
+}
