@@ -10,3 +10,6 @@
 [submodule "lib/plone.app.tiles"]
 	path = lib/plone.app.tiles
 	url = git://github.com/plone/plone.app.tiles.git
+[submodule "lib/almond"]
+	path = lib/almond
+	url = git://github.com/jrburke/almond.git
