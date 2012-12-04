@@ -1,18 +1,12 @@
-[submodule "lib/Patterns"]
-	path = lib/Patterns
+[submodule "src/Patterns"]
+	path = src/Patterns
 	url = git://github.com/Patternslib/Patterns.git
-[submodule "lib/plone.app.toolbar"]
-	path = lib/plone.app.toolbar
+[submodule "src/plone.app.toolbar"]
+	path = src/plone.app.toolbar
 	url = git://github.com/plone/plone.app.toolbar.git
-[submodule "lib/plone.app.deco"]
-	path = lib/plone.app.deco
+[submodule "src/plone.app.deco"]
+	path = src/plone.app.deco
 	url = git://github.com/plone/plone.app.deco.git
-[submodule "lib/plone.app.tiles"]
-	path = lib/plone.app.tiles
+[submodule "src/plone.app.tiles"]
+	path = src/plone.app.tiles
 	url = git://github.com/plone/plone.app.tiles.git
-[submodule "lib/almond"]
-	path = lib/almond
-	url = git://github.com/jrburke/almond.git
-[submodule "lib/requirejs"]
-	path = lib/requirejs
-	url = git://github.com/jrburke/requirejs.git
