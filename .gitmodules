@@ -13,3 +13,6 @@
 [submodule "lib/almond"]
 	path = lib/almond
 	url = git://github.com/jrburke/almond.git
+[submodule "lib/requirejs"]
+	path = lib/requirejs
+	url = git://github.com/jrburke/requirejs.git
