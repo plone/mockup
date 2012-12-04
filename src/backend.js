@@ -1,8 +1,8 @@
 (function(undefined) {
 
-var toolbar_path = '../lib/plone.app.toolbar/plone/app/toolbar/resources/',
-    tiles_path = '../lib/plone.app.tiles/plone/app/tiles/resources/',
-    deco_path = '../lib/plone.app.deco/plone/app/deco/resources/';
+var toolbar_path = 'plone.app.toolbar/plone/app/toolbar/resources/',
+    tiles_path = 'plone.app.tiles/plone/app/tiles/resources/',
+    deco_path = 'plone.app.deco/plone/app/deco/resources/';
 
 requirejs.config({
   paths: {

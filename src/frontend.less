@@ -55,11 +55,19 @@ header {
           height: @ploneLogoSize * (1 - @ploneLogoRatio);
           background-color: @ploneLogoFgColor;
           border-radius: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;
-          top: @y;   left: @x;
+          top: @y;
+          left: @x;
         }
-        .plone-dot-1 { .plone-dot(0.223 * @ploneLogoSize, 0.074 * @ploneLogoSize); }
-        .plone-dot-2 { .plone-dot(0.445 * @ploneLogoSize, 0.289 * @ploneLogoSize); }
-        .plone-dot-3 { .plone-dot(0.223 * @ploneLogoSize, 0.504 * @ploneLogoSize); }
+
+        .plone-dot-1 {
+          .plone-dot((0.328 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize,
+                     (0.180 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize); }
+        .plone-dot-2 {
+          .plone-dot((0.547 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize,
+                     (0.391 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize); }
+        .plone-dot-3 {
+          .plone-dot((0.328 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize,
+                     (0.609 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize); }
       }
     }
   }
