@@ -8900,22 +8900,24 @@ a.badge:hover {
 }
 header #portal-logo {
   margin: 0.5em 0 0.25em 0;
-  font-size: 72.3px;
-  line-height: 100px;
   font-style: italic;
+  font-size: 79.7px;
+  line-height: 100px;
 }
 header .plone-logo {
   background: #ffffff;
   position: relative;
   font-style: normal;
-  font-weight: normal;
+  font-size: 79.7px;
+  line-height: 100px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 header .plone-logo .plone-text {
   color: #0083be;
+  float: left;
   font-size: 72.3px;
   line-height: 100px;
   margin-left: 13.5px;
-  float: left;
 }
 header .plone-logo .plone-circle {
   float: left;
@@ -8929,40 +8931,40 @@ header .plone-logo .plone-circle {
 header .plone-logo .plone-circle .plone-circle-inner {
   display: block;
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 79.7px;
+  height: 79.7px;
   background-color: #ffffff;
-  border-radius: 40px;
-  top: 9.999999999999998px;
-  left: 9.999999999999998px;
+  border-radius: 39.85px;
+  top: 10.149999999999999px;
+  left: 10.149999999999999px;
 }
 header .plone-logo .plone-circle .plone-circle-inner .plone-dot-1 {
   display: block;
   position: absolute;
-  width: 19.999999999999996px;
-  height: 19.999999999999996px;
+  width: 20.299999999999997px;
+  height: 20.299999999999997px;
   background-color: #0083be;
-  border-radius: 9.999999999999998px;
-  top: 8.000000000000002px;
-  left: 22.800000000000004px;
+  border-radius: 10.149999999999999px;
+  top: 7.850000000000001px;
+  left: 22.650000000000002px;
 }
 header .plone-logo .plone-circle .plone-circle-inner .plone-dot-2 {
   display: block;
   position: absolute;
-  width: 19.999999999999996px;
-  height: 19.999999999999996px;
+  width: 20.299999999999997px;
+  height: 20.299999999999997px;
   background-color: #0083be;
-  border-radius: 9.999999999999998px;
-  top: 29.100000000000005px;
-  left: 44.7px;
+  border-radius: 10.149999999999999px;
+  top: 28.950000000000003px;
+  left: 44.550000000000004px;
 }
 header .plone-logo .plone-circle .plone-circle-inner .plone-dot-3 {
   display: block;
   position: absolute;
-  width: 19.999999999999996px;
-  height: 19.999999999999996px;
+  width: 20.299999999999997px;
+  height: 20.299999999999997px;
   background-color: #0083be;
-  border-radius: 9.999999999999998px;
-  top: 50.9px;
-  left: 22.800000000000004px;
+  border-radius: 10.149999999999999px;
+  top: 50.75000000000001px;
+  left: 22.650000000000002px;
 }

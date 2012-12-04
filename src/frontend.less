@@ -1,34 +1,37 @@
-@import "../lib/plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/less/bootstrap.less";
-@import "../lib/plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/less/responsive.less";
+@import "plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/less/bootstrap.less";
+@import "plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/less/responsive.less";
 
 @ploneLogoSize: 100px;
 @ploneLogoFgColor: #0083be;
 @ploneLogoBgColor: #ffffff;
-@ploneLogoRatio: 0.8;
+@ploneLogoRatio: 0.797;
 
 
 header {
 
   #portal-logo {
     margin: 0.5em 0 0.25em 0;
-    font-size: 0.723 * @ploneLogoSize;
-    line-height: @ploneLogoSize;
     font-style: italic;
+    font-size: @ploneLogoRatio * @ploneLogoSize;
+    line-height: @ploneLogoSize;
   }
 
   .plone-logo {
     background: @ploneLogoBgColor;
     position: relative;
     font-style: normal;
-    font-weight: normal;
+    font-size: @ploneLogoRatio * @ploneLogoSize;
+    line-height: @ploneLogoSize;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 
     .plone-text {
       color: @ploneLogoFgColor;
+      float: left;
       font-size: 0.723 * @ploneLogoSize;
       line-height: @ploneLogoSize;
       margin-left: @ploneLogoSize * 0.135;
-      float: left;
     }
+
     .plone-circle {
       float: left;
       display: block;
@@ -46,7 +49,7 @@ header {
         background-color: @ploneLogoBgColor;
         border-radius: @ploneLogoSize * @ploneLogoRatio / 2;
         top: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;
-        left: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;
+        left: @ploneLogoSize * (1 - @ploneLogoRatio) / 2;    
 
         .plone-dot(@x, @y) {
           display: block;
@@ -61,16 +64,18 @@ header {
 
         .plone-dot-1 {
           .plone-dot((0.328 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize,
-                     (0.180 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize); }
+                    (0.180 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize);
+        }
         .plone-dot-2 {
           .plone-dot((0.547 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize,
-                     (0.391 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize); }
+                    (0.391 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize);
+        }
         .plone-dot-3 {
           .plone-dot((0.328 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize,
-                     (0.609 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize); }
-      }
+                    (0.609 - (1 - @ploneLogoRatio) / 2) * @ploneLogoSize);
+        }
+    }
     }
   }
+
 }
-
-

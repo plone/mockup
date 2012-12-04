@@ -1,6 +1,6 @@
 requirejs.config({
   paths: {
-    'iframe': '../lib/plone.app.toolbar/plone/app/toolbar/resources/src/iframe'
+    'iframe': 'plone.app.toolbar/plone/app/toolbar/resources/src/iframe'
   }
 });
 

@@ -1,0 +1,4 @@
+({
+    baseUrl: ".",
+    mainConfigFile: "backend.js"
+})
