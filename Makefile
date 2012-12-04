@@ -1,5 +1,5 @@
 NODEJS = node
-BUILDJS = bundles/build.js
+BUILDJS = src/build.js
 RJS = lib/r.js
 STANDALONE = name=lib/almond include=main wrap=true
 TARGETS = build/plone.js plone/plone.min.js build/plone-standalone.js build/plone-standalone.min.js
