@@ -1,0 +1,132 @@
+/*
+ * Toolbar
+ *
+ * HTML Markup:
+ *  <div class="toolbar">
+ *    <div class="toolbar-top"></div>
+ *    <div class="toolbar-right">
+ *      <div class="toolbar-swirl"><div></div></div>
+ *    </div>
+ *    <div class="toolbar-left">
+ *      <div class="toolbar-left-action">
+ *        <li><a href="#">Action 1</a></li>
+ *        <li class="toolbar-dropdown">
+ *          <a href="#">Action 1</a>
+ *          <ul class="toolbar-dropdown-menu">
+ *            <li><a href="#">Sub action 1</a></li>
+ *            <li><a href="#">Sub action 2</a></li>
+ *          </ul>
+ *        </li>
+ *      </div>
+ *      <div class="toolbar-right-action"></div>
+ *    </div>
+ *  </div>
+ * 
+ * LESS Markup:
+ *  .toolbar ( .makeToolbar(44px); }
+ */
+.makeToolbar(@size, @bgColor: #3e3f42, @borderColor: #000000, @bg2Color: #3d8cd5) {
+  .gradient(@bgColor, darken(@bgColor, 8%), @bgColor);
+  .box-shadow(0 1px 2px rgba(0,0,0,0.3));
+  height: @size;
+  background-color: @bgColor;
+  border-bottom: 1px solid @borderColor;
+
+  & > div {
+    .toolbar-dropdown > a:after {
+      display: inline-block;
+      font-size: 0.9em;
+      line-height: 1.1em;
+      content: "\25BC";
+      margin-left: 0.135 * @size;
+    }
+    .toolbar-dropdown-menu {
+      display: none;
+    }
+    .toolbar-dropdown-open > .toolbar-dropdown-menu {
+      display: block;
+    }
+    &.toolbar-top {
+      .box-shadow(0 1px 1px rgba(0,0,0,0.3));
+      height: 0.13 * @size;
+      background-color: @bg2Color;
+    }
+    &.toolbar-left {
+      & > ul > li > a {
+        .border-radius(4px);
+        .box-shadow(0 1px rgba(255, 255, 255, 0.1) inset);
+        .gradient(#404040, #222, #404040);
+        .transition(0.1s, linear);
+        background-repeat: no-repeat;
+        background-color: #222;
+        border: 1px solid #222;
+        &:hover {
+          background-position: 0 -0.61 * @size;
+        }
+      }
+      & > .toolbar-left-actions {
+        float: left;
+        margin: 0.13 * @size 0.5 * @size;
+        line-height: 0.65 * @size;
+      }
+      & > .toolbar-right-actions {
+        float: right;
+        margin: 0.13 * @size 0.5 * @size;
+        line-height: 0.65 * @size;
+      }
+    }
+    &.toolbar-right {
+      float: right;
+      height: 0.77 * @size;
+      .border-radius(0, 0, 0.77 * @size, 0);
+      .gradient(@bg2Color, lighten(@bg2Color, 2%), @bg2Color);
+      .box-shadow(inset 0 -1px rgba(255,255,255,0.3));
+      .toolbar-swirl {
+        width: 0.72 * @size;
+        height: 0.36 * @size;
+        display: block;
+        float: left;
+        top: 0px;
+        left: 0px;
+        margin-left: -0.54 * @size;
+        .gradient(@bg2Color, lighten(@bg2Color, 2%), @bg2Color);
+        overflow: hidden;
+        div {
+          .border-radius(0.77 * @size, 0, 0, 0);
+          width: 0.72 * @size;
+          height: 0.72 * @size;
+          .gradient(@bgColor, darken(@bgColor, 8%), @bgColor);
+        }
+      }
+      & > ul {
+        margin: 0 0.5 * @size;
+        line-height: 0.65 * @size;
+        & > li {
+          & > a {
+            color: #fff;
+            img {
+              height: 1.5em;
+              margin: 2px 7px 2px 0;
+            }
+          }
+        }
+      }
+    }
+    & > ul {
+      list-style: none;
+      & > li { 
+        display: inline-block;
+        & > a {
+          display: inline-block;
+          text-decoration: none;
+          cursor: pointer;
+          color: #fff;
+          font-size: 0.295 * @size;
+          font-family: Arial;
+          padding: 0.068 * @size 0.272 * @size;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

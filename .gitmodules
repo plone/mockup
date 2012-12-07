@@ -10,3 +10,9 @@
 [submodule "src/Patterns"]
 	path = src/Patterns
 	url = git://github.com/Patternslib/Patterns.git
+[submodule "src/less/elements"]
+	path = src/less/elements
+	url = git://github.com/dmitryf/elements.git
+[submodule "src/less/bootstrap"]
+	path = src/less/bootstrap
+	url = git://github.com/twitter/bootstrap.git
