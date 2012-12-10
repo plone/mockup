@@ -1,4 +1,61 @@
 /*
+ * Toolbar Dropdown
+ */
+.makeToolbarDropdown() {
+  position: relative; 
+  & > a:after {
+    display: inline-block;
+    font-size: 0.9em;
+    line-height: 1.1em;
+    content: "\25BC";
+    margin-left: 0.135 * @size;
+  }
+  & > ul.toolbar-dropdown-menu {
+    .border-radius(4x, 4px, 4px, 0);
+    .box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.4));
+    color: #000000;
+    margin: 0;
+    padding: 0.5em 0;
+    position: absolute;
+    top: 1.9em;
+    left: 1px;
+    min-width: 200px;
+    display: none;
+    position: absolute;
+    background-color: #FFFFFF;
+    list-style: none;
+    z-index: 2000;
+    & > li {
+      padding: 0.3em 1em;
+      & > a {
+        color: #333333;
+        display: block;
+        width: 100%;
+      }
+      &:hover {
+        .gradient(#3d8cd5, darken(#3d8cd5, 8%), #3d8cd5);
+        background-color: #3d8cd5;
+        color: #FFFFFF;
+        & > a {
+          color: #FFFFFF;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  &.toolbar-dropdown-open {
+    & > a {
+      color: #333333;
+      background: #FFFFFF;
+      .border-radius(4px 4px 0 0);
+    } 
+    & > .toolbar-dropdown-menu {
+      display: block;
+    }
+  }
+}
+
+/*
  * Toolbar
  *
  * HTML Markup:
@@ -24,7 +81,9 @@
  * 
  * LESS Markup:
  *  .toolbar ( .makeToolbar(44px); }
+ *
  */
+
 .makeToolbar(@size, @bgColor: #3e3f42, @borderColor: #000000, @bg2Color: #3d8cd5) {
   .gradient(@bgColor, darken(@bgColor, 8%), @bgColor);
   .box-shadow(0 1px 2px rgba(0,0,0,0.3));
@@ -33,46 +92,28 @@
   border-bottom: 1px solid @borderColor;
 
   & > div {
-    .toolbar-dropdown > a:after {
-      display: inline-block;
-      font-size: 0.9em;
-      line-height: 1.1em;
-      content: "\25BC";
-      margin-left: 0.135 * @size;
-    }
-    .toolbar-dropdown-menu {
-      display: none;
-    }
-    .toolbar-dropdown-open > .toolbar-dropdown-menu {
-      display: block;
-    }
     &.toolbar-top {
       .box-shadow(0 1px 1px rgba(0,0,0,0.3));
       height: 0.13 * @size;
       background-color: @bg2Color;
     }
     &.toolbar-left {
-      & > ul > li > a {
-        .border-radius(4px);
-        .box-shadow(0 1px rgba(255, 255, 255, 0.1) inset);
-        .gradient(#404040, #222, #404040);
-        .transition(0.1s, linear);
-        background-repeat: no-repeat;
-        background-color: #222;
-        border: 1px solid #222;
-        &:hover {
-          background-position: 0 -0.61 * @size;
+      & > ul > li {
+        &.toolbar-dropdown { .makeToolbarDropdown(); }
+        & > a {
+          .border-radius(4px);
+          .box-shadow(0 1px rgba(255, 255, 255, 0.1) inset);
+          .gradient(#404040, #222, #404040);
+          .transition(0.1s, linear);
+          padding-left: 0.272 * @size;
+          padding-right: 0.272 * @size;
+          background-repeat: no-repeat;
+          background-color: #222;
+          border: 1px solid #222;
+          &:hover {
+            background-position: 0 -0.61 * @size;
+          }
         }
-      }
-      & > .toolbar-left-actions {
-        float: left;
-        margin: 0.13 * @size 0.5 * @size;
-        line-height: 0.65 * @size;
-      }
-      & > .toolbar-right-actions {
-        float: right;
-        margin: 0.13 * @size 0.5 * @size;
-        line-height: 0.65 * @size;
       }
     }
     &.toolbar-right {
@@ -99,9 +140,15 @@
         }
       }
       & > ul {
-        margin: 0 0.5 * @size;
+        margin-top: 0;
         line-height: 0.65 * @size;
         & > li {
+          &.toolbar-dropdown { .makeToolbarDropdown(); }
+          &.toolbar-dropdown > ul.toolbar-dropdown-menu {
+            right: 0;
+            left: auto;
+            .border-radius(0, 4x, 4px, 4px);
+          }
           & > a {
             color: #fff;
             img {
@@ -120,13 +167,24 @@
           display: inline-block;
           text-decoration: none;
           cursor: pointer;
-          color: #fff;
+          color: #FFFFFF;
           font-size: 0.295 * @size;
           font-family: Arial;
-          padding: 0.068 * @size 0.272 * @size;
+          padding: 0.068 * @size 0.15 * @size;
           margin: 0;
+          &:focus {
+            outline-style: none;
+          }
         }
       }
+    }
+    & > .toolbar-left-actions {
+      float: left;
+      margin: 0.13 * @size 0.5 * @size 0.13 * @size 0.25 * @size;
+    }
+    & > .toolbar-right-actions {
+      float: right;
+      margin: 0.13 * @size 0.25 * @size 0.13 * @size 0.5 * @size;
     }
   }
 }

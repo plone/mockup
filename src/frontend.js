@@ -6,8 +6,4 @@ requirejs.config({
 
 require([
     'iframe'
-   ], function($, iframe) {
-
-   console.log('WORKS!');
-
-});
+   ]);

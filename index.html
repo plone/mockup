@@ -4,7 +4,8 @@
 <head>
   <title>Plone Mockup</title>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="build/frontend.css" type="text/css" />
+  <link rel="stylesheet/less" href="src/less/frontend.less" type="text/css" />
+  <script src="lib/less.js"></script>
   <script data-main="src/frontend" src="lib/require.js"></script>
 </head>
 
@@ -13,16 +14,21 @@
   <div style="display:none;"
        data-iframe="toolbar"
        data-iframe-resources="
-         build/backend.css;
-         lib/require.js?data-main=src/backend;">
+          build/backend.css;
+          lib/require.js?data-main=src/backend;">
     <div id="plone-toolbar">
       <div class="toolbar">
         <div class="toolbar-top"></div>
         <div class="toolbar-right">
           <div class="toolbar-swirl"><div></div></div>
-          <ul>
+          <ul class="toolbar-right-actions">
             <li class="toolbar-dropdown">
-              <a href="#"><img src="images/user.png"/>Rob Gietema</a>
+              <a href="#"
+                 data-classtoggle="toolbar-dropdown-open"
+                 data-classtoggle-target=".toolbar-dropdown">
+                <img src="images/user.png"/>
+                <span>Rob Gietema</span>
+              </a>
               <ul class="toolbar-dropdown-menu">
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="#">Preferences</a></li>
@@ -34,7 +40,10 @@
         <div class="toolbar-left">
           <ul class="toolbar-left-actions">
             <li class="toolbar-dropdown">
-              <a href="#">Add</a>
+              <a href="#"
+                 data-classtoggle="toolbar-dropdown-open"
+                 data-classtoggle-target=".toolbar-dropdown">
+                Add</a>
               <ul class="toolbar-dropdown-menu">
                 <li><a href="#">Page</a></li>
                 <li><a href="#">Event</a></li>
@@ -46,7 +55,9 @@
           <ul class="toolbar-right-actions">
             <li><a href="edit.html">Edit</a></li>
             <li class="toolbar-dropdown">
-              <a href="#">
+              <a href="#"
+                 data-classtoggle="toolbar-dropdown-open"
+                 data-classtoggle-target=".toolbar-dropdown">
                 <span>State:</span>
                 <span class="state-private">Private</span>
               </a>

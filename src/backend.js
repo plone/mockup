@@ -17,17 +17,22 @@ requirejs.config({
     'bootstrap-tabs': toolbar_path + 'lib/bootstrap/js/bootstrap-tab',
     'deco': deco_path + 'src/deco',
     'plone-init': toolbar_path + 'src/plone.init',
-    'plone-toolbar': toolbar_path + 'src/plone.toolbar',
     'plone-overlay': toolbar_path + 'src/plone.overlay',
     'plone-cmsui': toolbar_path + 'src/plone.cmsui',
     'plone-tabs': toolbar_path + 'src/plone.tabs',
     'plone-tile': tiles_path + 'src/plone.tile',
     'plone-tiletype': tiles_path + 'src/plone.tiletype',
-    'plone-deco': deco_path + 'src/plone.deco'
+    'plone-deco': deco_path + 'src/plone.deco',
+
+    'patterns': 'patterns',
+    'pattern-classtoggle': 'pattern.classtoggle',
+
+    'plone-toolbar': 'plone.toolbar'
   },
   shim: {
     'jquery-iframe': {
-      deps: [ 'jquery' ]
+      deps: [ 'jquery' ],
+      exports: '$.iframe'
     },
     'jquery-mask': {
       deps: [ 'jquery' ]
@@ -71,10 +76,13 @@ requirejs.config({
 });
 
 require([
-    'plone-init',     // to be replaced by patternslib i guess
-    'plone-toolbar',  // this is basically only dropdown for toolbar
-    'plone-cmsui',    // overlays for toolbar actions
-    'plone-deco'      // deco
-   ]);
+  'patterns',
+  'plone-toolbar'
+], function(patterns) {
+  $(document).ready(function() {
+    patterns.scan(document);
+  });
+  console.log('Backend loaded!');
+});
 
 }());
