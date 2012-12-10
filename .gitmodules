@@ -7,9 +7,6 @@
 [submodule "src/plone.app.toolbar"]
 	path = src/plone.app.toolbar
 	url = git://github.com/plone/plone.app.toolbar.git
-[submodule "src/Patterns"]
-	path = src/Patterns
-	url = git://github.com/Patternslib/Patterns.git
 [submodule "src/less/elements"]
 	path = src/less/elements
 	url = git://github.com/dmitryf/elements.git
