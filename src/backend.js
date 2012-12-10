@@ -1,28 +1,22 @@
-(function(undefined) {
-
-var toolbar_path = 'plone.app.toolbar/plone/app/toolbar/resources/',
-    tiles_path = 'plone.app.tiles/plone/app/tiles/resources/',
-    deco_path = 'plone.app.deco/plone/app/deco/resources/';
-
 requirejs.config({
   paths: {
-    'jquery': toolbar_path + 'lib/jquery-1.8.2.min',
-    'jquery-form': toolbar_path + 'lib/jquery.form',
-    'jquery-event-drag': deco_path + 'lib/jquery.event.drag-2.1.0',
-    'jquery-event-drop': deco_path + 'lib/jquery.event.drop-2.1.0',
-    'jquery-iframe': toolbar_path + 'src/jquery.iframe',
-    'jquery-mask': toolbar_path + 'src/jquery.mask',
-    'bootstrap-dropdown': toolbar_path + 'lib/bootstrap/js/bootstrap-dropdown',
-    'bootstrap-modal': toolbar_path + 'lib/bootstrap/js/bootstrap-modal',
-    'bootstrap-tabs': toolbar_path + 'lib/bootstrap/js/bootstrap-tab',
-    'deco': deco_path + 'src/deco',
-    'plone-init': toolbar_path + 'src/plone.init',
-    'plone-overlay': toolbar_path + 'src/plone.overlay',
-    'plone-cmsui': toolbar_path + 'src/plone.cmsui',
-    'plone-tabs': toolbar_path + 'src/plone.tabs',
-    'plone-tile': tiles_path + 'src/plone.tile',
-    'plone-tiletype': tiles_path + 'src/plone.tiletype',
-    'plone-deco': deco_path + 'src/plone.deco',
+    'jquery': 'plone.app.toolbar/plone/app/toolbar/resources/lib/jquery-1.8.2.min',
+    'jquery-form': 'plone.app.toolbar/plone/app/toolbar/resources/lib/jquery.form',
+    'jquery-event-drag': 'plone.app.deco/plone/app/deco/resources/lib/jquery.event.drag-2.1.0',
+    'jquery-event-drop': 'plone.app.deco/plone/app/deco/resources/lib/jquery.event.drop-2.1.0',
+    'jquery-iframe': 'plone.app.toolbar/plone/app/toolbar/resources/src/jquery.iframe',
+    'jquery-mask': 'plone.app.toolbar/plone/app/toolbar/resources/src/jquery.mask',
+    'bootstrap-dropdown': 'plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/js/bootstrap-dropdown',
+    'bootstrap-modal': 'plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/js/bootstrap-modal',
+    'bootstrap-tabs': 'plone.app.toolbar/plone/app/toolbar/resources/lib/bootstrap/js/bootstrap-tab',
+    'deco': 'plone.app.deco/plone/app/deco/resources/src/deco',
+    'plone-init': 'plone.app.toolbar/plone/app/toolbar/resources/src/plone.init',
+    'plone-overlay': 'plone.app.toolbar/plone/app/toolbar/resources/src/plone.overlay',
+    'plone-cmsui': 'plone.app.toolbar/plone/app/toolbar/resources/src/plone.cmsui',
+    'plone-tabs': 'plone.app.toolbar/plone/app/toolbar/resources/src/plone.tabs',
+    'plone-tile': 'plone.app.tiles/plone/app/tiles/resources/src/plone.tile',
+    'plone-tiletype': 'plone.app.tiles/plone/app/tiles/resources/src/plone.tiletype',
+    'plone-deco': 'plone.app.deco/plone/app/deco/resources/src/plone.deco',
 
     'patterns': 'patterns',
     'pattern-classtoggle': 'pattern.classtoggle',
@@ -55,9 +49,6 @@ requirejs.config({
     'plone-tabs': {
       deps: [ 'jquery', 'bootstrap-tabs' ]
     },
-    'plone-toolbar': {
-      deps: [ 'jquery', 'jquery-iframe', 'bootstrap-dropdown' ]
-    },
     'plone-overlay': {
       deps: [ 'jquery', 'jquery-form', 'jquery-iframe', 'jquery-mask',
               'bootstrap-modal' ]
@@ -84,5 +75,3 @@ require([
   });
   console.log('Backend loaded!');
 });
-
-}());

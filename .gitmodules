@@ -13,3 +13,6 @@
 [submodule "src/less/bootstrap"]
 	path = src/less/bootstrap
 	url = git://github.com/twitter/bootstrap.git
+[submodule "build"]
+	path = build
+	url = git://github.com/garbas/plone-mockup.git
