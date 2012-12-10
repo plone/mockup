@@ -15,4 +15,4 @@
 	url = git://github.com/twitter/bootstrap.git
 [submodule "build"]
 	path = build
-	url = git://github.com/garbas/plone-mockup.git
+    url = git@github.com:garbas/plone-mockup.git
