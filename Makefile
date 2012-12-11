@@ -15,13 +15,14 @@ build/js/frontend.js:
 build/js/backend.js:
 	$(NODEJS) lib/r.js -o baseUrl=src insertRequire=backend mainConfigFile=src/backend.js name=../lib/almond include=backend wrap=true optimize=uglify out=$@
 build/images:
+	mkdir -p build/images
 	cp images/* build/images
 build/index.html:
 	cp index.html $@
 	sed -i 's@stylesheet/less@stylesheet@g' $@
 	sed -i 's@src/less/frontend.less@css/frontend.css@g' $@
 	sed -i 's@lib/less.js"></script><script data-main="src/frontend" src="lib/require.js@js/frontend.js@g' $@
-	sed -i 's@data-iframe-resources="build/backend.css;lib/require.js?data-main=src/backend;"@data-iframe-resources="css/backend.css;js/backend.js"@g' $@
+	sed -i 's@data-iframe-resources="src/less/backend.less;lib/less.js;lib/require.js?data-main=src/backend;"@data-iframe-resources="css/backend.css;js/backend.js"@g' $@
 
 bootstrap:
 	git submodule update --init
