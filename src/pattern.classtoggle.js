@@ -3,55 +3,41 @@ define([
     'jquery',
     'patterns'
 ], function($, patterns) {
-
-    Pattern = {
+    var Pattern = function($el) { this.init($el); };
+    Pattern.prototype = {
       name: 'classtoggle',
       jqueryPlugin: 'classToggle',
-      trigger: '[data-classtoggle]',
-      init: function($all) {
-        return $all.each(function() {
-          var $el = $(this),
-              className = $el.attr('data-classtoggle'),
-              eventName = $el.attr('data-classtoggle-event') || 'click',
-              $target = $el.closest($el.attr('data-classtoggle-target')) || $el;
+      init: function($el) {
+        var self = this;
+        self.$el = $el;
+        self.className = $el.attr('data-classtoggle'),
+        self.eventName = $el.attr('data-classtoggle-event') || 'click',
+        self.$target = $el.closest($el.attr('data-classtoggle-target')) || $el;
 
-          $el.off(eventName).on(eventName, function(e) {
-            $el.classToggle('toggle');
-            e.stopPropagation();
-            e.preventDefault();
-          });
-
+        $el.off(self.eventName).on(self.eventName, function(e) {
+          self.toggle();
+          e.stopPropagation();
+          e.preventDefault();
         });
+      },
+      isMarked: function() {
+        return this.$target.hasClass(this.className);
       },
       toggle: function() {
-        return $(this).each(function() {
-          var $el = $(this),
-              className = $el.attr('data-classtoggle'),
-              $target = $el.closest($el.attr('data-classtoggle-target')) || $el;
-          if ($target.hasClass(className)) {
-            $el.classToggle('close');
-          } else {
-            $el.classToggle('open');
-          }
-        });
+        if (this.isMarked()) {
+          this.remove();
+        } else {
+          this.add();
+        }
+        this.$el.trigger('patterns.classtoggle.toggle');
       },
-      close: function() {
-        return $(this).each(function() {
-          var $el = $(this),
-              className = $el.attr('data-classtoggle'),
-              $target = $el.closest($el.attr('data-classtoggle-target')) || $el;
-          $target.removeClass(className);
-          $el.trigger('patterns.classtoggle.close');
-        });
+      remove: function() {
+        this.$target.removeClass(this.className);
+        this.$el.trigger('patterns.classtoggle.remove');
       },
-      open: function() {
-        return $(this).each(function() {
-          var $el = $(this),
-              className = $el.attr('data-classtoggle'),
-              $target = $el.closest($el.attr('data-classtoggle-target')) || $el;
-          $target.addClass(className);
-          $el.trigger('patterns.classtoggle.open');
-        });
+      add: function() {
+        this.$target.addClass(this.className);
+        this.$el.trigger('patterns.classtoggle.add');
       }
     };
 

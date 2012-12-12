@@ -19,8 +19,9 @@
         <div class="toolbar-right">
           <div class="toolbar-swirl"><div></div></div>
           <ul class="toolbar-right-actions">
-            <li class="toolbar-dropdown">
+            <li id="plone-personalactions" class="toolbar-dropdown">
               <a href="#"
+                 class="pat-classtoggle"
                  data-classtoggle="toolbar-dropdown-open"
                  data-classtoggle-target=".toolbar-dropdown">
                 <img src="images/user.png" />
@@ -36,32 +37,47 @@
         </div>
         <div class="toolbar-left">
           <ul class="toolbar-left-actions">
-            <li class="toolbar-dropdown">
+            <li id="plone-addcontent" class="toolbar-dropdown">
               <a href="#"
+                 class="pat-classtoggle"
                  data-classtoggle="toolbar-dropdown-open"
                  data-classtoggle-target=".toolbar-dropdown">
-                Add</a>
+                Add
+              </a>
               <ul class="toolbar-dropdown-menu">
                 <li><a href="#">Page</a></li>
                 <li><a href="#">Event</a></li>
                 <li><a href="#">News Item</a></li>
               </ul>
             </li>
-            <li><a href="#">Browse</a></li>
+            <li id="plone-browsecontent"><a href="#">Browse</a></li>
           </ul>
           <ul class="toolbar-right-actions">
-            <li><a href="#">Edit</a></li>
-            <li class="toolbar-dropdown">
+            <li id="plone-editcontent"><a href="#">Edit</a></li>
+            <li id="plone-changestate" class="toolbar-dropdown">
               <a href="#"
+                 class="pat-classtoggle"
                  data-classtoggle="toolbar-dropdown-open"
                  data-classtoggle-target=".toolbar-dropdown">
                 <span>State:</span>
                 <span class="state-private">Private</span>
               </a>
               <ul class="toolbar-dropdown-menu">
-                <li><a href="#">Publish</a></li>
-                <li><a href="#">Submit for publication</a></li>
-                <li><a href="#">Advanced...</a>
+                <li id="plone-changestate-publish"
+                    >
+                  <a href="content_status_modify?workflow_action=publish">Publish</a>
+                </li>
+                <li id="plone-changestate-submit">
+                  <a href="content_status_modify?workflow_action=submit">Submit for publication</a>
+                </li>
+                <li id="plone-changestate-reject">
+                  <a href="content_status_modify?workflow_action=reject">Send back</a>
+                </li>
+                <li id="plone-changestate-retract">
+                  <a href="content_status_modify?workflow_action=retract">Retract</a>
+                </li>
+                <li id="plone-changestate-advance">
+                  <a href="#">Advanced...</a>
                 </li>
               </ul>
             </li>

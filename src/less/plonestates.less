@@ -7,7 +7,7 @@
   &.state-expired { background-color: Red; }
 }
 
-.ploneStatesToolbar(@radiusSize: 4px) {
+.ploneStatesToolbar(@color, @shadowColor, @radiusSize: 4px) {
   .ploneStates();
   &.state-private,
   &.state-visible,
@@ -16,6 +16,8 @@
   &.state-expired {
     padding: @radiusSize/4 @radiusSize;
     .border-radius(@radiusSize);
+    .box-shadow(0 @radiusSize/4 @radiusSize/2 @shadowColor);
+    color: @color;
   }
 }
 

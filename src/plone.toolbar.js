@@ -2,19 +2,18 @@ define([
     'jquery',
     'jquery-iframe',
     'pattern-classtoggle'
-], function($, $iframe, ClassToggle) {
+], function($, $iframe) {
 
-  $(ClassToggle.trigger).on('patterns.classtoggle.open', function(e) {
-    var $el = $(this);
-        className = $el.attr('data-classtoggle');
+  $('.toolbar-dropdown > a.pat-classtoggle').on('patterns.classtoggle.add', function(e) {
+    var el = this;
     $('.toolbar-dropdown-open > a').each(function() {
-      if ($el[0] !== this) {
-        $(this).classToggle('close');
+      if (el !== this) {
+        $(this).classToggle('remove');
       }
     });
     $iframe.stretch();
   });
-  $(ClassToggle.trigger).on('patterns.classtoggle.close', function(e) {
+  $('.toolbar-dropdown > a.pat-classtoggle').on('patterns.classtoggle.remove', function(e) {
     $iframe.shrink();
   });
 
@@ -26,7 +25,7 @@ define([
       },
       function(e) {
         $('.toolbar-dropdown-open > a').each(function() {
-          $(this).classToggle('close');
+          $(this).classToggle('remove');
         });
         $.iframe.shrink();
       });

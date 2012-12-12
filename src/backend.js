@@ -71,7 +71,19 @@ require([
   'plone-toolbar'
 ], function(patterns) {
   $(document).ready(function() {
+
+    // not yet implemented
+    $('#plone-changestate > ul > li > a,' +
+      '#plone-addcontent > ul > li > a,' +
+      '#plone-personalactions > ul > li > a,' +
+      '#plone-editcontent > a,' +
+      '#plone-browsecontent > a').on('click', function(e) {
+      alert('Not yet implemented!');
+    });
+
+
+    // initialize patterns
     patterns.scan(document);
+
   });
-  console.log('Backend loaded!');
 });

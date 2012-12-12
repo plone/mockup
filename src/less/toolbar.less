@@ -60,6 +60,7 @@
       color: @fgColor;
       background: @bgColor;
       .border-radius(@radiusSize @radiusSize 0 0);
+      & > span { .ploneStatesToolbar(@bgColor, @shadowColor, @radiusSize); }
     } 
     & > .toolbar-dropdown-menu {
       display: block;
@@ -246,7 +247,7 @@
           padding: 0.068*@size 0.15*@size;
           margin: 0;
           &:focus { outline-style: none; }
-          & > span { .ploneStatesToolbar(); }
+          & > span { .ploneStatesToolbar(@leftFgColor, @shadowColor, @radiusSize); }
         }
       }
     }
