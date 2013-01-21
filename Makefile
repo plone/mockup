@@ -1,36 +1,43 @@
+JAM = jam
 LESSC = lessc
+CSSMIN = cssmin
+WIDGETS = build/widgets.js build/widgets.css build/widgets.png
 
-NODEJS = node
-STANDALONE = name=lib/almond include=main wrap=true
-TARGETS = build/css/frontend.css build/css/backend.css build/js/backend.js build/js/frontend.js build/images build/index.html
+all:: widgets
 
-all:: clean $(TARGETS)
-
-build/css/backend.css:
-	$(LESSC) src/less/backend.less -x $@
-build/css/frontend.css:
-	$(LESSC) src/less/frontend.less -x $@
-build/js/frontend.js:
-	$(NODEJS) lib/r.js -o baseUrl=src insertRequire=frontend mainConfigFile=src/frontend.js name=../lib/almond include=frontend wrap=true optimize=uglify out=$@
-build/js/backend.js:
-	$(NODEJS) lib/r.js -o baseUrl=src insertRequire=backend mainConfigFile=src/backend.js name=../lib/almond include=backend wrap=true optimize=uglify out=$@
-build/images:
-	mkdir -p build/images
-	cp images/* build/images
-build/index.html:
-	cp index.html $@
-	sed -i 's@stylesheet/less@stylesheet@g' $@
-	sed -i 's@src/less/frontend.less@css/frontend.css@g' $@
-	sed -i 's@lib/less.js"></script><script data-main="src/frontend" src="lib/require.js@js/frontend.js@g' $@
-	sed -i 's@data-iframe-resources="src/less/backend.less;lib/less.js;lib/require.js?data-main=src/backend;"@data-iframe-resources="css/backend.css;js/backend.js"@g' $@
+clean: clean_widgets
 
 bootstrap:
-	git submodule update --init
+	mkdir -p build
+	$(JAM) install
 
 test:
-	buster test -vv -r specification -c src/plone.app.toolbar/plone/app/toolbar/resources/test/buster.js
+	buster test -vv -r specification
 
-clean:
-	rm -rf $(TARGETS)
+clean_widgets:
+	rm -rf $(WIDGETS)
 
-.PHONY: all clean bootstrap test
+widgets: clean_widgets $(WIDGETS)
+	# ----------------------------------------------------------------------- #
+	# $ cp build/widgets.* path/to/plone.app.widgets/plone/app/widgets/static #
+	# ----------------------------------------------------------------------- #
+
+build/widgets.js:
+	$(JAM) compile -i js/widgets -e jquery --almond $@
+
+build/widgets.css:
+	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css > $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.core.css >> $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.plugin.arrow.css >> $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.plugin.autocomplete.css >> $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.plugin.clear.css >> $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.plugin.focus.css >> $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.plugin.prompt.css >> $@
+	$(CSSMIN) jam/jquery-textext/src/css/textext.plugin.tags.css >> $@
+	$(LESSC) less/patterns.less | $(CSSMIN) >> $@
+	sed -i 's@widgets.png@++resource++plone.app.widgets.png@g' $@
+
+build/widgets.png:
+	cp less/widgets.png $@
+
+.PHONY: all clean bootstrap test widgets

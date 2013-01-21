@@ -1,0 +1,230 @@
+@import "jam/bootstrap/less/bootstrap.less";
+@import "jam/bootstrap/less/responsive.less";
+
+@import "less/elements.less";
+@import "less/plonetoolbar.less";
+
+
+body {
+  padding: 0;
+}
+
+#plone-toolbar {
+  min-height: 50px;
+  .toolbar { .makeToolbar(44px); }
+  .toolbar-deco { .makeToolbar(44px, 4px, 1px, #f2f2f2, #e5e5e5); }
+}
+
+
+
+
+
+
+.hiddenStructure {
+  display: none !important;
+}
+
+// MODAL {{{
+.modal-backdrop { overflow: hidden; }
+.modal-wrapper { left: 15%; margin-left: 0; width: 100%; }
+.modal {
+
+  &.fade.in {
+    margin: 0;
+    width: 70%;
+    top: 100px;
+    left: 15%;
+  }
+
+  form { margin: 0; }
+
+  #sharing-user-group-search {
+    width: 20em;
+    display: inline;
+  }
+  #sharing-search-button {
+    .btn();
+    vertical-align: top;
+    margin-top: 0.3em;
+  }
+  table.listing { .table(); }
+  #cmfeditions_version_comment_block {
+    border-top: 1px solid #DDDDDD;
+    margin-top: 1em;
+    padding-top: 1em;
+  }
+  #atrb_relatedItems { display: none; }
+  .nav-tabs {
+    & > li {
+      & > a:hover {
+        background-color: transparent;
+        color: #0088CC;
+      }
+      & > a:focus{
+        outline-style: none;
+      }
+      &.active > a,
+      &.active > a:hover {
+        border-bottom: 1px solid @white;
+      }
+    }
+  }
+  .pattern-calendar {
+    .pattern-calendar-year,
+    .pattern-calendar-month,
+    .pattern-calendar-day,
+    .pattern-calendar-hour,
+    .pattern-calendar-minute,
+    .pattern-calendar-ampm {
+      height: 2em;
+    }
+    .pickadate__select--year,
+    .pickadate__select--month {
+      height: 2em;
+    }
+    .pattern-calendar-delimiter {
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 0.2em;
+    }
+    .pattern-calendar-icon {
+      background-image: url("++resource++plone.app.toolbar.png");
+      background-position: 14px 14px;
+      background-repeat: no-repeat;
+      display: inline-block;
+      height: 14px;
+      line-height: 14px;
+      margin-top: 1px;
+      margin-bottom: 0.5em;
+      vertical-align: middle;
+      width: 14px;
+      .icon-calendar();
+    }
+  }
+  input.destructive[type='submit'] {
+    .btn();
+    .btn-primary();
+    .btn-danger();
+  }
+  input.context[type='submit'] {
+    .btn();
+    .btn-primary();
+  }
+  input.standalone[type='submit'] {
+    .btn();
+  }
+  dl.default-page-listing {
+    dt {
+      input[type="radio"] {
+        margin: 0;
+      }
+      label {
+        display: inline-block;
+        font-weight: bold;
+        font-size: 1.5em;
+        line-height: 1.5em;
+        margin: 0 0 0 0.5em;
+      }
+    }
+    dd {
+      margin-left: 2em;      
+    }
+  }
+  dl.portalMessage {
+    .alert();
+    .alert-block();
+    &.info { .alert-info(); }
+    &.error {
+      .alert-error();
+      dd { background: transparent; }
+    }
+    dt {
+      .border-radius(0);
+      float: none;
+      font-size: 1.2em;
+      line-height: 1.25em;
+      background: transparent;
+      color: inherit;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    dd {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  div.field {
+    &.error {
+      .control-group.error();
+      .fieldRequired { color: transparent; }
+      label { color: @grayDarker; }
+      div {
+        color: #B94A48;
+        &.formHelp { color: @grayDarker; }
+      }
+      color: #B94A48;
+      background: transparent;
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+    .control-group();
+    input[type="radio"],
+    input[type="checkbox"] {
+      float: left;
+      margin-right: 0.5em;
+    }
+    label {
+      font-size: 1.2em;
+      font-weight: bold;
+      display: block;
+      span {
+        font-size: 0.8em;
+        font-weight: normal;
+        display: block;
+      }
+      span.required {
+        background-color: Red;
+        display: inline-block;
+        height: 0.3em;
+        width: 0.3em;
+        line-height: 1em;
+      }
+    }
+    .fieldRequired { color: transparent; }
+    & > div {
+      .help-block();
+      line-height: 2em;
+      padding: 0;
+      &.formHelp { line-height: 1em; }
+    }
+    textarea {
+      width: 98%;
+    }
+    input#title {
+      font-size: 2em;
+      margin-bottom: 0;
+    }
+    input[type="text"] {
+      margin-bottom: 1em;
+      margin-top: 0.2em;
+      height: 1.2em;
+      width: 98%;
+    }
+    input.pattern-autocomplete[type="text"] {
+      width: 40em;
+      height: auto;
+      padding: 3px 5px 4px;
+      margin: 0;
+    }
+    .text-core,
+    .text-wrap {
+      min-height: 1.5em;
+    }
+    margin-bottom: 1em;
+  }
+  div.modal-footer > input {
+    margin-left: 1em;
+  }
+}
+// }}}
