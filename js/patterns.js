@@ -170,7 +170,7 @@ define([
   });
 
   // Public API
-  return {
+  window.Patterns = {
     _registry: _registry,
     initialize: initializePatterns,
     register: registerPattern,
@@ -178,4 +178,5 @@ define([
     Base: BasePattern
   };
 
+  return window.Patterns;
 });
