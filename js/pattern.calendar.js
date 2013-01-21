@@ -34,7 +34,7 @@
 define([
   'jquery',
   'js/patterns',
-  'pickadate'
+  'jam/pickadate/source/pickadate'
 ], function($, Patterns, Pickadate, undefined) {
   "use strict";
 

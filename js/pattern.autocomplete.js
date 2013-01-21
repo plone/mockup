@@ -36,8 +36,17 @@
 define([
   'jquery',
   'js/patterns',
-  'jquery-textext'
-], function($, Patterns, Textext, undefined) {
+  'jam/jquery-textext/src/js/textext.core.js',
+  'jam/jquery-textext/src/js/textext.plugin.ajax.js',
+  'jam/jquery-textext/src/js/textext.plugin.arrow.js',
+  'jam/jquery-textext/src/js/textext.plugin.autocomplete.js',
+  'jam/jquery-textext/src/js/textext.plugin.clear.js',
+  'jam/jquery-textext/src/js/textext.plugin.filter.js',
+  'jam/jquery-textext/src/js/textext.plugin.focus.js',
+  'jam/jquery-textext/src/js/textext.plugin.prompt.js',
+  'jam/jquery-textext/src/js/textext.plugin.suggestions.js',
+  'jam/jquery-textext/src/js/textext.plugin.tags.js'
+], function($, Patterns) {
   "use strict";
 
   var AutocompleteItemManager = function() {};
