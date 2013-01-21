@@ -61,7 +61,8 @@ build/toolbar_init.css:
 build/toolbar.js:
 	$(JAM) compile -i js/toolbar -e jquery --almond $@
 
-build/toolbar.css:
+build/toolbar.css: build/widgets.css
+	cat build/widgets.css > $@
 	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@                                
 	sed -i 's@../img/glyphicons-halflings.png@++resource++plone.app.toolbar.png@g' $@
 
