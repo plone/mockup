@@ -1,11 +1,13 @@
 JAM = jam
 LESSC = lessc
 CSSMIN = cssmin
+UGLIFYJS = uglifyjs
 WIDGETS = build/widgets.js build/widgets.css build/widgets.png
+TOOLBAR = build/toolbar_init.js build/toolbar.js build/toolbar.css build/toolbar.png
 
-all:: widgets
+all:: widgets toolbar
 
-clean: clean_widgets
+clean: clean_widgets clean_toolbar
 
 bootstrap:
 	mkdir -p build
@@ -14,12 +16,13 @@ bootstrap:
 test:
 	buster test -vv -r specification
 
+
 clean_widgets:
 	rm -rf $(WIDGETS)
 
 widgets: clean_widgets $(WIDGETS)
 	# ----------------------------------------------------------------------- #
-	# $ cp build/widgets.* path/to/plone.app.widgets/plone/app/widgets/static #
+	# cp build/widgets.* path/to/plone.app.widgets/plone/app/widgets/static   #
 	# ----------------------------------------------------------------------- #
 
 build/widgets.js:
@@ -39,5 +42,31 @@ build/widgets.css:
 
 build/widgets.png:
 	cp less/widgets.png $@
+
+
+clean_toolbar:
+	rm -rf $(TOOLBAR)
+
+toolbar: clean_toolbar $(TOOLBAR)
+	# ----------------------------------------------------------------------- #
+	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
+	# ----------------------------------------------------------------------- #
+
+build/toolbar_init.js:
+	$(UGLIFYJS) js/iframe.js > $@
+
+build/toolbar_init.css:
+	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@                           
+
+build/toolbar.js:
+	$(JAM) compile -i js/toolbar -e jquery --almond $@
+
+build/toolbar.css:
+	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@                                
+	sed -i 's@../img/glyphicons-halflings.png@++resource++plone.app.toolbar.png@g' $@
+
+build/toolbar.png:
+	cp jam/bootstrap/img/glyphicons-halflings.png $@
+
 
 .PHONY: all clean bootstrap test widgets

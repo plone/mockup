@@ -20,7 +20,6 @@ require([
 
   // trigger resize on window to resize toolbar
   $(window).trigger('resize');
-  console.log('WORKS');
 
   $(document).ready(function() {
 

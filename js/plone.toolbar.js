@@ -34,45 +34,45 @@ define([
   'js/patterns',
   'js/pattern.toggle',
   'js/jquery.iframe'
-], function($, Patterns, PatternToggle, IFrame, undefined) {
-"use strict";
+], function($, Patterns, Toggle, IFrame, undefined) {
+  "use strict";
 
-var PloneToolbar = Patterns.Base.extend({
-  name: 'plone-toolbar',
-  jqueryPlugin: 'ploneToolbar',
-  init: function() {
-    var self = this;
+  var PloneToolbar = Patterns.Base.extend({
+    name: 'plone-toolbar',
+    jqueryPlugin: 'ploneToolbar',
+    init: function() {
+      var self = this;
 
-    // for each dropdown toolbar button
-    self.$el
-      // at opening dropdown:
-      // - close all other opened dropdown buttons
-      // - stretch iframe
-      .on('patterns.toggle.add', 'a[data-pattern~="toggle"]', function(e) {
-        var $el = $(this);
-        $('.toolbar-dropdown-open > a').each(function() {
-          if ($el[0] !== $(this)[0]) {
-            $(this).patternToggle('remove');
-          }
+      // for each dropdown toolbar button
+      self.$el
+        // at opening dropdown:
+        // - close all other opened dropdown buttons
+        // - stretch iframe
+        .on('patterns.toggle.add', 'a[data-pattern~="toggle"]', function(e) {
+          var $el = $(this);
+          $('.toolbar-dropdown-open > a').each(function() {
+            if ($el[0] !== $(this)[0]) {
+              $(this).patternToggle('remove');
+            }
+          });
+          IFrame.stretch();
+        })
+        // at closing dropdown shrink iframe
+        .on('patterns.toggle.removed', 'a[data-pattern~="toggle"]', function(e) {
+          IFrame.shrink();
         });
-        IFrame.stretch();
-      })
-      // at closing dropdown shrink iframe
-      .on('patterns.toggle.removed', 'a[data-pattern~="toggle"]', function(e) {
-        IFrame.shrink();
+
+      // make sure we close all dropdowns when iframe is shrinking
+      IFrame.$el.on('iframe.shrink', function(e) {
+        $('.toolbar-dropdown-open > a', self.$el).each(function() {
+          $(this).patternToggle('remove');
+        });
       });
+    }
+  });
 
-    // make sure we close all dropdowns when iframe is shrinking
-    IFrame.$el.on('iframe.shrink', function(e) {
-      $('.toolbar-dropdown-open > a', self.$el).each(function() {
-        $(this).patternToggle('remove');
-      });
-    });
-  }
-});
+  Patterns.register(PloneToolbar);
 
-Patterns.register(PloneToolbar);
-
-return PloneToolbar;
+  return PloneToolbar;
 
 });
