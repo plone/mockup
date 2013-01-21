@@ -3,7 +3,7 @@ LESSC = lessc
 CSSMIN = cssmin
 UGLIFYJS = uglifyjs
 WIDGETS = build/widgets.js build/widgets.css build/widgets.png
-TOOLBAR = build/toolbar_init.js build/toolbar.js build/toolbar.css build/toolbar.png
+TOOLBAR = build/toolbar_init.js build/toolbar_init.css build/toolbar.js build/toolbar.css build/toolbar.png
 
 all:: widgets toolbar
 
