@@ -2,8 +2,8 @@ JAM = jam
 LESSC = lessc
 CSSMIN = cssmin
 UGLIFYJS = uglifyjs
-WIDGETS = build/widgets.js build/widgets.css build/widgets.png
-TOOLBAR = build/toolbar_init.js build/toolbar_init.css build/toolbar.js build/toolbar.css build/toolbar.png
+WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png
+TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar.png
 
 all:: widgets toolbar
 
@@ -26,6 +26,9 @@ widgets: clean_widgets $(WIDGETS)
 	# ----------------------------------------------------------------------- #
 
 build/widgets.js:
+	$(JAM) compile -i js/widgets -e jquery --no-minify --almond $@
+
+build/widgets.min.js:
 	$(JAM) compile -i js/widgets -e jquery --almond $@
 
 build/widgets.css:
@@ -53,12 +56,18 @@ toolbar: clean_toolbar $(TOOLBAR)
 	# ----------------------------------------------------------------------- #
 
 build/toolbar_init.js:
+	cat js/iframe.js > $@
+
+build/toolbar_init.min.js:
 	$(UGLIFYJS) js/iframe.js > $@
 
 build/toolbar_init.css:
 	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@                           
 
 build/toolbar.js:
+	$(JAM) compile -i js/toolbar -e jquery --no-minify --almond $@
+
+build/toolbar.min.js:
 	$(JAM) compile -i js/toolbar -e jquery --almond $@
 
 build/toolbar.css: build/widgets.css
