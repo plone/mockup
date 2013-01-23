@@ -85,7 +85,7 @@ define([
 
       // make sure all content of iframe is visible
       self.fit();
-      self.$el.on('resize', function(e) { self.fit(); });
+      $(window).on('resize', function(e) { self.fit(); });
     },
 
     // Abstract calls to window.parent so its easier to stub/mock in tests
