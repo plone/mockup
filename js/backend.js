@@ -1,7 +1,7 @@
 require([
+  'require',
   'jquery',
   'sinon',
-  'js/toolbar',
 
   // widgets styles
   'css!jam/pickadate/themes/pickadate.02.classic.css',
@@ -16,37 +16,39 @@ require([
   // toolbar styles
   'lessc!less/toolbar.less'
 
-], function($, sinon) {
+], function(require, $, sinon) {
 
-  // trigger resize on window to resize toolbar
-  $(window).trigger('resize');
+  $.ploneCMSUIOptions = {
+    ajaxUrlPrefix: ''
+  };
 
-  $(document).ready(function() {
+  $('body', window.parent.document).attr('data-portal-navigation-url',
+      window.location.href.split('/').slice(0, -1).join('/'));
 
-    // not yet implemented
-    $('#plone-changestate > ul > li > a,' +
-      '#plone-personalactions > ul > li > a,' +
-      '#plone-editcontent > a,' +
-      '#plone-browsecontent > a').on('click', function(e) {
-      alert('Not yet implemented!');
-      return false;
-    });
+  require([ 'js/toolbar' ], function() {
 
-    //$('#plone-addcontent > ul > li > a').on('click', function(
-    var server = sinon.fakeServer.create();
-    server.autoRespond = true;
-    server.respondWith(/\\*\/\+\+add\+\+/, function(xhr) {
-      xhr.respond(200, { "Content-Type": "text/html" }, '' +
-        '<html>' +
-        '<head></head>' +
-        '<body>' +
-        '<h1 class="documentFirstHeading">XXX</h1>' +
-        '<div id="content">' +
-        ' asdasdasdasdasd ' +
-        '</div>' +
-        '</body>' +
-        '</html>');
+    // trigger resize on window to resize toolbar
+    $(window).trigger('resize');
+
+    $(document).ready(function() {
+
+      //$('#plone-addcontent > ul > li > a').on('click', function(
+      //var server = sinon.fakeServer.create();
+      //server.autoRespond = true;
+      //server.respondWith("file:///home/rok/dev/plone/mockup/index.html#!/front-page/edit", function(xhr) {
+      //  xhr.respond(200, { "Content-Type": "text/html" }, '' +
+      //    '<html>' +
+      //    '<head></head>' +
+      //    '<body>' +
+      //    '<h1 class="documentFirstHeading">XXX</h1>' +
+      //    '<div id="content">' +
+      //    '</div>' +
+      //    '</body>' +
+      //    '</html>');
+      //});
+
     });
 
   });
+
 });
