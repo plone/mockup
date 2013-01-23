@@ -77,10 +77,12 @@ define([
     $.each(($el.data('pattern') || '').split(' '), function(i, patternName) {
       if (patternName.length !== 0) {
         if (_registry[patternName] === undefined) {
-          error('Pattern you try to initialize "' + patternName + '" does not exists.');
+          //error('Pattern you try to initialize "' + patternName + '" does not exists.');
           return;
         }
-        $el.data('pattern-' + patternName, initializePattern($el, patternName));
+        if (typeof $el.data('pattern-' + patternName) !== 'object') {
+          $el.data('pattern-' + patternName, initializePattern($el, patternName));
+        }
       }
     });
   }
@@ -94,19 +96,19 @@ define([
     }
     // then initialize for its childrens
     $('[data-pattern]', context).each(function() {
-        initializePatternsForElement($(this));
+      initializePatternsForElement($(this));
     });
   }
 
   // Register pattern
   function registerPattern(Pattern) {
     if (!Pattern.prototype.name) {
-      error('Pattern you try to register has no name.');
+      //error('Pattern you try to register has no name.');
       return;
     }
     if (_registry[Pattern.prototype.name] !== undefined) {
-      error('Pattern with name "' + Pattern.prototype.name + '" was already ' +
-            'registered. Please select different name.');
+      //error('Pattern with name "' + Pattern.prototype.name + '" was already ' +
+      //      'registered. Please select different name.');
       return;
     }
 
@@ -124,10 +126,10 @@ define([
           if (!pattern || typeof(pattern) === 'string') {
             pattern = initializePattern($el, Pattern.prototype.name, options);
             $el.data('pattern-' + Pattern.prototype.name, pattern);
-          } else if (method && pattern && pattern[method]) {
+          }
+          if (method && typeof method === 'string' && pattern && pattern[method]) {
             pattern[method].apply(pattern, [options]);
           }
-
         });
         return this;
       };
@@ -163,11 +165,6 @@ define([
     Constructor.__super__ = Base.prototype;
     return Constructor;
   };
-
-  // Initial initialization of patterns
-  $(document).ready(function() {
-    initializePatterns($(document));
-  });
 
   // Public API
   window.Patterns = {
