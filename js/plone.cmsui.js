@@ -34,24 +34,26 @@ define([
 ], function($, Patterns, Overlay, undefined) {
   "use strict";
 
+  var options = $.ploneCMSUIOptions || {};
+
   $(document).ready(function() {
 
     // Edit form
-    $('#plone-toolbar #plone-action-edit > a').ploneOverlay({
+    $('#plone-toolbar #plone-action-edit > a').ploneOverlay($.extend(options, {
       events: {
         'click .modal-body input[name="form.button.cancel"]': {},
         'click .modal-body input[name="form.button.save"]': {
           contentFilters: [ '#portal-column-content' ]
         }
       }
-    });
+    }));
 
     // Rules form
-    $('#plone-toolbar #plone-action-contentrules > a').ploneOverlay({
-    });
+    $('#plone-toolbar #plone-action-contentrules > a').ploneOverlay($.extend(options, {
+    }));
 
     // Sharing form
-    $('#plone-toolbar #plone-action-local_roles > a').ploneOverlay({
+    $('#plone-toolbar #plone-action-local_roles > a').ploneOverlay($.extend(options, {
       modalTemplate: function($modal) {
         // FIXME: we should hack like this
         $('#link-presentation', $modal).remove();
@@ -79,10 +81,10 @@ define([
         'click .modal-body input[name="form.button.Save"]': {
         }
       }
-    });
+    }));
 
     // Delete Action
-    $('#plone-toolbar #plone-contentmenu-actions > ul > li#plone-contentmenu-actions-delete > a').ploneOverlay({
+    $('#plone-toolbar #plone-contentmenu-actions > ul > li#plone-contentmenu-actions-delete > a').ploneOverlay($.extend(options, {
       events: {
         'click .modal-body input[name="form.button.Cancel"]': {},
         'click .modal-body input.destructive': {
@@ -91,10 +93,10 @@ define([
           }
         }
       }
-    });
+    }));
 
     // Rename Action
-    $('#plone-toolbar #plone-contentmenu-actions > ul > li#plone-contentmenu-actions-rename > a').ploneOverlay({
+    $('#plone-toolbar #plone-contentmenu-actions > ul > li#plone-contentmenu-actions-rename > a').ploneOverlay($.extend(options, {
       events: {
         'click .modal-body input[name="form.button.Cancel"]': {},
         'click .modal-body input[name="form.button.RenameAll"]': {
@@ -103,11 +105,11 @@ define([
           }
         }
       }
-    });
+    }));
 
     // Change content item as default view...
     $('#plone-toolbar #plone-contentmenu-display > ul > li#folderChangeDefaultPage > a,' +
-      '#plone-toolbar #plone-contentmenu-display > ul > li#contextSetDefaultPage > a').ploneOverlay({
+      '#plone-toolbar #plone-contentmenu-display > ul > li#contextSetDefaultPage > a').ploneOverlay($.extend(options, {
       modalTemplate: function($modal) {
         // FIXME: we should hack like this
         $('form > dl', $modal).addClass('default-page-listing');
@@ -122,10 +124,10 @@ define([
           }
         }
       }
-    });
+    }));
 
     // Add forms
-    $('#plone-toolbar #plone-contentmenu-factories > ul > li:not(#plone-contentmenu-settings) > a').ploneOverlay({
+    $('#plone-toolbar #plone-contentmenu-factories > ul > li:not(#plone-contentmenu-settings) > a').ploneOverlay($.extend(options, {
       events: {
         'click .modal-body input[name="form.button.cancel"]': {},
         'click .modal-body input[name="form.button.save"]': {
@@ -134,10 +136,10 @@ define([
           }
         }
       }
-    });
+    }));
 
     // "Restrictions..." form
-    var restrictionsOverlayOptions = {
+    var restrictionsOverlayOptions = $.extend(options, {
       modalTemplate: function($modal) {
         var $details = $('#details', $modal)
           .removeAttr('style')
@@ -198,11 +200,11 @@ define([
           }
         }
       }
-    };
+    });
     $('#plone-toolbar #plone-contentmenu-factories > ul > li#plone-contentmenu-settings > a').ploneOverlay(restrictionsOverlayOptions);
 
     // Advance workflow
-    $('#plone-toolbar #plone-contentmenu-workflow > ul > li#workflow-transition-advanced > a').ploneOverlay({
+    $('#plone-toolbar #plone-contentmenu-workflow > ul > li#workflow-transition-advanced > a').ploneOverlay($.extend(options, {
       modalTemplate: function($modal) {
         // FIXME: we should hack like this
         $('#workflow_action', $modal).parent().find('> br').remove();
@@ -212,7 +214,7 @@ define([
         'click .modal-body input[name="form.button.Cancel"]': {},
         'click .modal-body input[name="form.button.Publish"]': {}
       }
-    });
+    }));
 
 
     // Site setup
