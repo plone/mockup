@@ -1,4 +1,5 @@
 JAM = jam
+NPM = npm
 LESSC = lessc
 CSSMIN = cssmin
 UGLIFYJS = uglifyjs
@@ -11,10 +12,11 @@ clean: clean_widgets clean_toolbar
 
 bootstrap:
 	mkdir -p build
+	$(NPM) install underscore buster buster-coverage buster-amd --prefix=./node_modules
 	$(JAM) install
 
 test:
-	buster test -vv -r specification
+	./node_modules/buster/bin/buster test -vv -r specification
 
 
 clean_widgets:
