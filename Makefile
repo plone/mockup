@@ -32,6 +32,8 @@ build/widgets.js:
 
 build/widgets.min.js:
 	$(JAM) compile -i js/widgets -e jquery --almond $@
+	echo 'require(["js/widgets"]);' >> $@
+
 
 build/widgets.css:
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css > $@
@@ -68,6 +70,7 @@ build/toolbar_init.css:
 
 build/toolbar.js:
 	$(JAM) compile -i js/toolbar -e jquery --no-minify --almond $@
+	echo 'require(["js/toolbar"]);' >> $@
 
 build/toolbar.min.js:
 	$(JAM) compile -i js/toolbar -e jquery --almond $@
