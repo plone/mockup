@@ -59,19 +59,19 @@
 
       <h2>Install</h2>
       <pre>
-        git clone git://github.com/garbas/plone-mockup.git
-        cd plone-mockup
-        make bootstrap
+git clone git://github.com/garbas/plone-mockup.git
+cd plone-mockup
+make bootstrap
       </pre>
 
       <h2>Build</h2>
       <pre>
-        make
+make
       </pre>
 
       <h2>Test</h2>
       <pre>
-        make test
+make test
       </pre>
 
     </div>
@@ -83,78 +83,159 @@
        data-iframe-resources="jam/require.js;js/backend.js">
 
     <!-- Toolbar -->
-    <div id="plone-toolbar">
+    <div id="plone-toolbar" data-pattern="plone-toolbar">
       <div class="toolbar">
         <div class="toolbar-top"></div>
         <div class="toolbar-right">
           <div class="toolbar-swirl"><div></div></div>
           <ul class="toolbar-right-actions">
-            <li id="plone-personalactions" class="toolbar-dropdown">
-              <a href="#"
-                 class="pat-classtoggle"
-                 data-classtoggle="toolbar-dropdown-open"
-                 data-classtoggle-target=".toolbar-dropdown">
-                <img src="images/user.png" />
-                <span>Rob Gietema</span>
+            <li class="toolbar-dropdown" id="plone-personalactions">
+              <a data-toggle-target=".toolbar-dropdown" data-toggle-value="toolbar-dropdown-open" data-pattern="toggle" href="#!/author/admin">
+                <img alt="user portrait" src="img/user.png">
+                <span>admin</span>
               </a>
               <ul class="toolbar-dropdown-menu">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Preferences</a></li>
-                <li><a href="#">Logout</a></li>
+                <li id="plone-personal-actions-dashboard">
+                  <a href="#!/dashboard">Dashboard</a>
+                </li>
+                <li id="plone-personal-actions-preferences">
+                  <a href="#!/@@personal-preferences">Preferences</a>
+                </li>
+                <li id="plone-personal-actions-plone_setup">
+                  <a href="#!/@@overview-controlpanel">Site Setup</a>
+                </li>
+                <li id="plone-personal-actions-logout">
+                  <a href="#!/logout">Log out</a>
+                </li>
               </ul>
             </li>
           </ul>
         </div>
         <div class="toolbar-left">
           <ul class="toolbar-left-actions">
-            <li id="plone-addcontent" class="toolbar-dropdown">
-              <a href="#"
-                 class="pat-classtoggle"
-                 data-classtoggle="toolbar-dropdown-open"
-                 data-classtoggle-target=".toolbar-dropdown">
-                Add
-              </a>
-              <ul class="toolbar-dropdown-menu">
-                <li>
-                  <a href="++add++"
-                    class="pat-classtoggle pat-ploneoverlay"
-                    data-classtoggle="toolbar-dropdown-open"
-                    data-classtoggle-target=".toolbar-dropdown">
-                    Page
-                  </a>
-                </li>
-                <li><a href="++add++" class="pat-ploneoverlay">Event</a></li>
-                <li><a href="++add++" class="pat-ploneoverlay">News Item</a></li>
-              </ul>
+            <li id="plone-action-folderContents">
+              <a href="#!/folder_contents">Contents</a>
             </li>
-            <li id="plone-browsecontent"><a href="#">Browse</a></li>
+            <li id="plone-action-edit">
+              <a href="/edit.html">Edit</a>
+            </li>
+            <li id="plone-action-contentrules">
+              <a href="#!/@@manage-content-rules">Rules</a>
+            </li>
+            <li id="plone-action-local_roles">
+              <a href="#!/front-page/@@sharing">Sharing</a>
+            </li>
           </ul>
           <ul class="toolbar-right-actions">
-            <li id="plone-editcontent"><a href="#">Edit</a></li>
-            <li id="plone-changestate" class="toolbar-dropdown">
-              <a href="#"
-                 class="pat-classtoggle"
-                 data-classtoggle="toolbar-dropdown-open"
-                 data-classtoggle-target=".toolbar-dropdown">
-                <span>State:</span>
-                <span class="state-private">Private</span>
+            <li id="plone-contentmenu-display" class="toolbar-dropdown ">
+              <a data-toggle-target=".toolbar-dropdown" data-toggle-value="toolbar-dropdown-open" data-pattern="toggle" href="#!/select_default_view">
+                <span>Display</span>
               </a>
               <ul class="toolbar-dropdown-menu">
-                <li id="plone-changestate-publish"
-                    >
-                  <a href="content_status_modify?workflow_action=publish">Publish</a>
+                <li id="folder-folder_listing" class="">
+                  <a href="#!/selectViewTemplate?templateId=folder_listing">
+                    <span>Standard view</span>
+                  </a>
                 </li>
-                <li id="plone-changestate-submit">
-                  <a href="content_status_modify?workflow_action=submit">Submit for publication</a>
+                <li id="folder-folder_summary_view" class="">
+                  <a href="#!/selectViewTemplate?templateId=folder_summary_view">
+                    <span>Summary view</span>
+                  </a>
                 </li>
-                <li id="plone-changestate-reject">
-                  <a href="content_status_modify?workflow_action=reject">Send back</a>
+                <li id="folder-folder_full_view" class="">
+                  <a href="#!/selectViewTemplate?templateId=folder_full_view">
+                    <span>All content</span>
+                  </a>
                 </li>
-                <li id="plone-changestate-retract">
-                  <a href="content_status_modify?workflow_action=retract">Retract</a>
+                <li id="folder-folder_tabular_view" class="">
+                  <a href="#!/selectViewTemplate?templateId=folder_tabular_view">
+                    <span>Tabular view</span>
+                  </a>
                 </li>
-                <li id="plone-changestate-advance">
-                  <a href="#">Advanced...</a>
+                <li id="folder-atct_album_view" class="">
+                  <a href="#!/selectViewTemplate?templateId=atct_album_view">
+                    <span>Thumbnail view</span>
+                  </a>
+                </li>
+                <li id="folderDefaultPageDisplay" class="active">
+                  <a>
+                    <span>Item: Welcome to Plone2</span>
+                  </a>
+                </li>
+                <li id="folderChangeDefaultPage" class="">
+                  <a href="#!/select_default_page">
+                    <span>Change content item as default view...</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li id="plone-contentmenu-factories" class="toolbar-dropdown ">
+              <a data-toggle-target=".toolbar-dropdown" data-toggle-value="toolbar-dropdown-open" data-pattern="toggle" href="#!/folder_factories">
+                <span>Add new…</span>
+              </a>
+              <ul class="toolbar-dropdown-menu">
+                <li id="collection" class="contenttype-collection">
+                  <a href="#!/createObject?type_name=Collection">
+                    <span>Collection</span>
+                  </a>
+                </li>
+                <li id="event" class="contenttype-event">
+                  <a href="#!/createObject?type_name=Event">
+                    <span>Event</span>
+                  </a>
+                </li>
+                <li id="file" class="contenttype-file">
+                  <a href="#!/createObject?type_name=File">
+                    <span>File</span>
+                  </a>
+                </li>
+                <li id="folder" class="contenttype-folder">
+                  <a href="#!/createObject?type_name=Folder">
+                    <span>Folder</span>
+                  </a>
+                </li>
+                <li id="image" class="contenttype-image">
+                  <a href="#!/createObject?type_name=Image">
+                    <span>Image</span>
+                  </a>
+                </li>
+                <li id="link" class="contenttype-link">
+                  <a href="#!/createObject?type_name=Link">
+                    <span>Link</span>
+                  </a>
+                </li>
+                <li id="news-item" class="contenttype-news-item">
+                  <a href="#!/createObject?type_name=News+Item">
+                    <span>News Item</span>
+                  </a>
+                </li>
+                <li id="document" class="contenttype-document">
+                  <a href="#!/createObject?type_name=Document">
+                    <span>Page</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li id="plone-contentmenu-workflow" class="toolbar-dropdown ">
+              <a data-toggle-target=".toolbar-dropdown" data-toggle-value="toolbar-dropdown-open" data-pattern="toggle" href="#!/front-page/content_status_history">
+                <span>State:</span>
+                <span class="state-published">Published</span>
+              </a>
+              <ul class="toolbar-dropdown-menu">
+                <li id="workflow-transition-reject" class="kssIgnore">
+                  <a href="#!/front-page/content_status_modify?workflow_action=reject">
+                    <span>Send back</span>
+                  </a>
+                </li>
+                <li id="workflow-transition-retract" class="kssIgnore">
+                  <a href="#!/front-page/content_status_modify?workflow_action=retract">
+                    <span>Retract</span>
+                  </a>
+                </li>
+                <li id="workflow-transition-advanced" class="kssIgnore">
+                  <a href="#!/front-page/content_status_history">
+                    <span>Advanced...</span>
+                  </a>
                 </li>
               </ul>
             </li>
