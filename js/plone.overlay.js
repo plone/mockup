@@ -2,7 +2,7 @@
 // Contact: rok@garbas.si
 // Version: 1.0
 //
-// Description: 
+// Description:
 //    This script is used to provide glue code between iframe and twitter
 //    bootstrap modal. And also providing some convinience method for usage in
 //    Plone.
@@ -47,7 +47,12 @@ define([
       loadingText: 'Loading ...',
       events: {},
       ajaxSubmitOptions: {
-        error: '.portalMessage.error',
+        timeout: 5000,
+        timeoutText: 'Requests timeouted! You wish to ' +
+          '<a href="#" class="retry">retry</a>' +
+          ' or ' +
+          '<a href="#" class="close">close</a>',
+        successError: '.portalMessage.error',
         modalButtons: '.modal-footer',
         contentButtons: '.formControls > input[type="submit"]'
       },
@@ -75,13 +80,13 @@ define([
     init: function() {
       var self = this;
 
-      // we don't have to initialize modal if already initialized
-      if ( self.$modal ) { return self; }
-
-      // no jquery element passed as first argument this means first arguments
-      // are options. also this means that showing/hiding of overlay will be
+      // no jquery element passed as first argument this means first argument
+      // is options. also this means that showing/hidding of overlay will be
       // handled manually
-      if (!self.$el.jquery) { self.options = self.$el; self.$el = undefined; }
+      if (!self.$el.jquery) {
+        self.options = self.$el;
+        self.$el = undefined;
+      }
 
       // merge options with defaults
       self.options = $.extend(true, {}, self.defaults, self.options);
@@ -104,15 +109,7 @@ define([
       // if modal already passed via options
       if (self.options.modal) {
         self.$modal = $(self.options.modal).hide();
-        self.initModalEvents(self.$modal);
-
-        // patterns integration
-        if (Patterns) {
-          Patterns.initialize(self.$modal);
-          $('[data-pattern~="tabs"] > li > a', self.$modal).on('shown', function() {
-            self.resizeModal(self.$modal);
-          });
-        }
+        self.initModal(self.$modal);
 
       // else options.ajaxUrl is used to load modal
       } else if (self.options.ajaxUrl) {
@@ -123,34 +120,31 @@ define([
         $.error('ploneOverlay can not recognize any content to use as $modal');
       }
 
-      // stretch iframe when showing overlay
-      if (IFrame) {
-        // close overlay if we click on backdrop
-        IFrame.$el.on('iframe.click', function(e, original) {
-          if (original.which === 1 && (
-              $(original.target).hasClass('modal-backdrop') ||
-              $(original.target).hasClass('modal-wrapper'))) {
-            self.hide();
+      // close overlay if we click on backdrop
+      IFrame.$el.on('iframe.click', function(e, original) {
+        if (original.which === 1 && $(original.target).hasClass('modal-backdrop')) {
+          self.hide();
+        }
+      });
+      // sync scrolling of top frame and current frame
+      $(IFrame.document).scroll(function () {
+        if (self.$modal && self.$modal.jquery) {
+          var backdrop = self.$modal.parents('.modal-backdrop');
+          if (backdrop.size() !== 0) {
+            backdrop.css({
+              'top': -1 * $(IFrame.document).scrollTop(),
+              'height': $(IFrame.document).scrollTop() + backdrop.height()
+            });
           }
-        });
-        // sync scrolling of top frame and current frame
-        $(IFrame.document).scroll(function () {
-          if (self.$modal && self.$modal.jquery) {
-            var backdrop = self.$modal.parents('.modal-backdrop');
-            if (backdrop.size() !== 0) {
-              backdrop.css({
-                'top': -1 * $(IFrame.document).scrollTop(),
-                'height': $(IFrame.document).scrollTop() + backdrop.height()
-              });
-            }
-          }
-        });
-        self.initialTopFrameHeight = $(IFrame.document).height() +
-            $('body', IFrame.document).offset().top;
-      }
+        }
+      });
+      self.initialTopFrameHeight = $(IFrame.document).height() +
+          $('body', IFrame.document).offset().top;
+
     },
-    initModalEvents: function($modal) {
+    initOverlay: function($modal) {
       var self = this;
+
       // handle custom events of overlay
       if (self.options.events) {
         $.each(self.options.events, function(item) {
@@ -158,24 +152,20 @@ define([
               tmp = item.split(' '),
               eventName = tmp[0],
               $el = $(tmp.splice(1).join(' '), $modal);
-
           // custom defined function
           if (typeof self.options.events[item] === 'function') {
             handleEvent = self.options.events[item];
 
           } else if ($el.size() !== 0) {
-
             // if inside form we expect this to be handled via ajaxSubmit
             if ($el.parents('form').size() !== 0) {
               handleEvent = self.prepareAjaxSubmit($el, $modal, self.options.events[item]);
-
             // if link points to url starting with self.options.overlayUrl
             } else if (self.startsWithOverlayUrl($el)) {
+              // TODO:
               handleEvent = self.prepareNewModal($el, $modal, self.options.events[item]);
             }
-
           }
-
           $el.on(eventName, function(e) {
             if (handleEvent) {
               e.stopPropagation();
@@ -185,6 +175,12 @@ define([
           });
         });
       }
+
+      // patterns integration
+      Patterns.initialize(self.$modal);
+      $('[data-pattern~="tabs"] > li > a', self.$modal).on('shown', function() {
+        self.resizeModal(self.$modal);
+      });
     },
     initModal: function($modal) {
       var self = this;
@@ -207,7 +203,7 @@ define([
         e.stopPropagation();
       });
 
-      self.initModalEvents($modal);
+      self.initOverlay($modal);
 
       // initialize hook
       if (self.options.onInitModal) {
@@ -263,15 +259,7 @@ define([
           // from response get content of body
           self.$modal.html('');
           self.$modal.append($('> *', self.modalTemplate(responseBody)));
-          self.initModalEvents(self.$modal);
-
-          // patterns integration
-          if (Patterns) {
-            Patterns.initialize(self.$modal);
-            $('[data-pattern~="tabs"] > li > a', self.$modal).on('shown', function() {
-              self.resizeModal(self.$modal);
-            });
-          }
+          self.initOverlay(self.$modal);
 
           self.resizeModal(self.$modal);
 
@@ -396,15 +384,52 @@ define([
 
         // we return array of options which will be passed to ajaxSubmit
         $el.parents('form').ajaxSubmit($.extend(true, {
+          timeout: options.timeout,
           dataType: 'html',
           url: self.changeAjaxURL($el.parents('form').attr('action')),
+          error: function(xhr, textStatus, errorStatus) {
+            if (textStatus === 'timeout') {
+              if (options.onTimeout) {
+                options.onTimeout.apply(self, [ xhr, errorStatus ]);
+              } else {
+                // TODO: show that request timeouted
+                var $timeout = $('<p/>').html(options.timeoutText);
+
+                $('a.retry', $timeout).on('click', function(e) {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  self.show();
+                });
+                $('a.close', $timeout).on('click', function(e) {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  self.hide();
+                });
+
+                $('.progress', $modal)
+                  .removeClass('progress-striped')
+                  .addClass('progress-danger')
+                  .after($timeout);
+
+              }
+
+            // on "error", "abort", and "parsererror"
+            } else {
+              if (options.onError) {
+                options.onError.apply(self, [ xhr, textStatus, errorStatus ]);
+              } else {
+                // TODO: notify about error (when notification center is done)
+                self.hide();
+              }
+            }
+          },
           success: function(response, state, xhr, form) {
             var _document = IFrame ? IFrame.document : document,
                 responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
                     .replace('<body', '<div').replace('</body>', '</div>'));
 
             // if error is found
-            if ($(options.error, responseBody).size() !== 0) {
+            if ($(options.successError, responseBody).size() !== 0) {
               self.$modal.html('');
               self.$modal.append($('> *', self.modalTemplate(responseBody)));
               self.initModalEvents(self.$modal);
@@ -417,8 +442,8 @@ define([
                 });
               }
 
-              if (options.onError) {
-                options.onError.apply(self, [ responseBody, state, xhr, form ]);
+              if (options.onSuccessError) {
+                options.onSuccessError.apply(self, [ responseBody, state, xhr, form ]);
               }
 
             // custom success function
@@ -442,9 +467,10 @@ define([
       //ajaxUrl = ajaxUrl.match(/^([^#?]+)/)[1];
 
       var self = this,
-          ajaxUrlPrefix = self.options.ajaxUrlPrefix || '/++toolbar++',
+          ajaxUrlPrefix = self.options.ajaxUrlPrefix === undefined ?
+              '/++toolbar++' : self.options.ajaxUrlPrefix,
           portalUrl = self.options.portalUrl ||
-            $('body', IFrame ? IFrame.document : document).data('portal-navigation-url');
+            $('body', IFrame.document).data('portal-navigation-url') || '';
 
       if (ajaxUrl.indexOf('http') === 0) {
         return portalUrl + ajaxUrlPrefix + ajaxUrl.substr(portalUrl.length);
@@ -460,47 +486,63 @@ define([
     show: function() {
       var self = this;
 
+      // dont show overlay if already shown
+      if (self.is_shown === true) {
+        return;
+      }
+
+      self.is_shown = true;
+
       // close any opened toolbar dropdown
       $('.toolbar-dropdown-open > a').patternToggle('remove');
 
       // if self.$modal is function then call it and pass this function as parameter
       // which needs to be called once loading of modal's html has been done
       if (typeof(self.$modal) === 'function') {
-        self.$modal(self.show);
-
+        self.$modal(self._show);
       } else {
-
-        if (IFrame) {
-          IFrame.stretch();
-        }
-
-        // show hook
-        if (self.options.onShow) {
-          self.options.onShow.call(self);
-        }
-        if (self.$el) {
-          self.$el.trigger('plone.overlay.show', [ self ]);
-        }
-
-        // showing bootstrap's modal
-        self.$modal.modal('show');
-
-        // show hook
-        if (self.options.onShown) {
-          self.options.onShown.call(self);
-        }
-        if (self.$el) {
-          self.$el.trigger('plone.overlay.shown', [ self ]);
-        }
+        self._show();
       }
+    },
+    _show: function() {
+      var self = this;
+
+      IFrame.stretch();
+
+      // show hook
+      if (self.options.onShow) {
+        self.options.onShow.call(self);
+      }
+      if (self.$el) {
+        self.$el.trigger('plone.overlay.show', [ self ]);
+      }
+
+      // showing bootstrap's modal
+      self.$modal.modal('show');
+
+      // show hook
+      if (self.options.onShown) {
+        self.options.onShown.call(self);
+      }
+      if (self.$el) {
+        self.$el.trigger('plone.overlay.shown', [ self ]);
+      }
+
     },
     hide: function() {
       var self = this;
+
+      // dont hide overlay if already shown
+      if (self.is_shown !== true) {
+        return;
+      }
 
       // hiding of modal is not possible if its not even loaded
       if (typeof(self.$modal) === 'function') {
         return;
       }
+
+      self.is_shown = false;
 
       // hide hook
       if (self.options.onHide) {
@@ -514,22 +556,17 @@ define([
       self.$modal.modal('hide');
 
       // remove modal's DOM element
-      self.$modal.parents('body > *').detach();
+      self.$modal.remove();
+
+      // shrink iframe when hidding overlay
       IFrame.shrink();
 
       // set content frame to initial height
-      if (IFrame) {
-        $('body', IFrame.document).height(self.initialTopFrameHeight);
-      }
+      $('body', IFrame.document).height(self.initialTopFrameHeight);
 
       // reinitialize overlay
       if (self.$el) {
-        self.$el.data('plone-overlay', new PloneOverlay(self.$el, self.options));
-      }
-
-      // shrink iframe when showing overlay
-      if (IFrame) {
-        IFrame.shrink();
+        self.$el.off().data('plone-overlay', new PloneOverlay(self.$el, self.options));
       }
 
       // hidden hook
