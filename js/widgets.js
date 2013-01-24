@@ -1,19 +1,20 @@
-if (jQuery) {
-  define( "jquery", [], function () { return jQuery; } );
+if (window.jQuery) {
+  define( "jquery", [], function () { return window.jQuery; } );
 }
 define([
   'jquery',
-  'js/patterns',
-  'js/pattern.autocomplete',
-  'js/pattern.calendar',
-  'js/pattern.tabs',
-  'js/pattern.toggle',
-  'js/plone.tabs'
-], function($, Patterns) {
+  'jam/Patterns/src/registry',
+  'js/pattern.select2'
+//  'js/pattern.pickadate',
+//  'js/pattern.tabs',
+//  'js/plone.tabs'
+], function($, registry, Select2) {
 
   // Initial initialization of patterns
   $(document).ready(function() {
-    Patterns.initialize($(document));
+    registry.scan(document);
   });
+
+  registry.register(registry.wrap(Select2));
 
 });
