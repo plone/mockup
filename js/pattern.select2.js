@@ -35,15 +35,13 @@
 
 define([
   'jquery',
-  'jam/Patterns/src/core/logger',
   'jam/Patterns/src/core/parser',
   'jam/Patterns/src/patterns/base.js',
   'jam/select2/select2.js'
-], function($, logger, Parser, Base) {
+], function($, Parser, Base) {
   "use strict";
 
-  var log = logger.getLogger("pat.select2"),
-      parser = new Parser("select2");
+  var parser = new Parser("select2");
 
   parser.add_argument("width");
   parser.add_argument("minimumInputLength");
