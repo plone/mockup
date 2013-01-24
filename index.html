@@ -10,6 +10,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Mockup</title>
   <link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />
+  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
+  <link rel="stylesheet/less" type="text/css" href="less/pattern.datetime.less" />
   <link rel="stylesheet/less" type="text/css" href="less/frontend.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
   <script src="jam/require.js"></script>
@@ -39,24 +41,27 @@
   <div class="container">
     <div id="content" data-panel="content">
 
-      <h1>What is this Mockup all about?</h1>
+      <p>TODO: write what plone mockup is</p>
 
-      <h1>Where all Plone's mockup is used or only partly used?</h1>
 
-      <ul>
-        <li>
-          Diazo
-        </li>
-        <li>
-          plone.app.widgets
-        </li>
-        <li>
-          plone.app.toolbar
-        </li>
-        <li>
-          plone.app.deco
-        </li>
-      </ul>
+      <h1>Widgets</h1>
+
+      <h2>Select2</h2>
+
+      <label>Simple select</label>
+      <select class="pat-select2">
+        <option value="1">one</option>
+        <option value="2">two</option>
+        <option value="3">green</option>
+      </select>
+
+      <h2>DateTime</h2>
+
+      <input class="pat-datetime" />
+
+
+
+
 
       <h1>Develop</h1>
 
@@ -76,17 +81,6 @@ make
       <pre>
 make test
       </pre>
-
-      <h1>Examples</h1>
-
-      <h2>Autocomplete</h2>
-
-      <select class="pat-select2">
-        <option value="1">one</option>
-        <option value="2">two</option>
-        <option value="3">green</option>
-      </select>
-
     </div>
   </div>
 
@@ -94,7 +88,9 @@ make test
   <div style="display:none;"
        data-iframe="toolbar"
        data-iframe-resources="
+              jam/select2/select2.css;
               jam/pickadate/themes/pickadate.02.classic.css;
+              less/pattern.datetime.less;
               less/toolbar.less;
               jam/less/dist/less-1.3.3.js;
               jam/require.js;

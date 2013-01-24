@@ -33,39 +33,42 @@
 
 define([
   'jquery',
-  'js/patterns',
+  'jam/Patterns/src/core/parser',
+  'jam/Patterns/src/patterns/base.js',
   'jam/pickadate/source/pickadate'
-], function($, Patterns, Pickadate, undefined) {
+], function($, Parser, Base) {
   "use strict";
 
-  var Calendar = Patterns.Base.extend({
-    name: 'calendar',
-    jqueryPlugin: 'patternCalendar',
-    defaults: {
-      klassWrapper: 'pattern-calendar',
-      klassIcon: 'pattern-calendar-icon',
-      klassYearInput: 'pattern-calendar-year',
-      klassMonthInput: 'pattern-calendar-month',
-      klassDayInput: 'pattern-calendar-day',
-      klassHourInput: 'pattern-calendar-hour',
-      klassMinuteInput: 'pattern-calendar-minute',
-      klassAMPMInput: 'pattern-calendar-ampm',
-      klassDelimiter: 'pattern-calendar-delimiter',
-      format: 'd-mmmm-yyyy@HH:MM',
-      formatSubmit: 'yyyy-m-d H:M',
-      showAMPM: true,
-      AMPM: ['AM', 'PM'],
-      minuteStep: '5'
-    },
-    init: function() {
+  var parser = new Parser("select2");
+
+  parser.add_argument("klassWrapper", "pat-datetime-wrapper");
+  parser.add_argument("klassIcon", "pat-datetime-icon");
+  parser.add_argument("klassYearInput", "pat-datetime-year");
+  parser.add_argument("klassMonthInput", "pat-datetime-month");
+  parser.add_argument("klassDayInput", "pat-datetime-day");
+  parser.add_argument("klassHourInput", "pat-datetime-hour");
+  parser.add_argument("klassMinuteInput", "pat-datetime-minute");
+  parser.add_argument("klassAMPMInput", "pat-datetime-ampm");
+  parser.add_argument("klassDelimiter", "pat-datetime-delimiter");
+  parser.add_argument("format", "d-mmmm-yyyy@HH:MM");
+  parser.add_argument("formatSubmit", "yyyy-m-d H:M");
+  parser.add_argument("showAMPM", true);
+  parser.add_argument("AMPM", ['AM', 'PM']);
+  parser.add_argument("minuteStep", 5);
+  parser.add_argument("pickadate", {
+    monthSelector: true,
+    yearSelector: true
+  });
+
+  var DateTime = Base.extend({
+    name: 'datetime',
+    parser: parser,
+    init: function($el, options) {
       var self = this;
+      self.$el = $el;
+      self.options = options;
 
-      self.options = $.extend({}, self.defaults, self.options);
-
-      self.pickadateOptions = $.extend({}, $.fn.pickadate.defaults, {
-        monthSelector: true,
-        yearSelector: true
-      }, Patterns.getOptions(self.$el, 'pickadate'), {
+      self.pickadateOptions = $.extend({}, $.fn.pickadate.defaults, self.options.pickadate, {
         formatSubmit: 'yyyy-mm-dd',
         onOpen: function() {},
         onClose: function() {},
@@ -89,7 +92,7 @@ define([
 
       self.$wrapper = $('<div/>')
         .addClass(self.options.klassWrapper)
-        .appendTo(self.$el.parent());
+        .insertAfter(self.$el);
 
       self.pickadate = $('<input/>')
         .hide().appendTo(self.$wrapper)
@@ -452,8 +455,6 @@ define([
   });
 
 
-  Patterns.register(Calendar);
-
-  return Calendar;
+  return DateTime;
 
 });

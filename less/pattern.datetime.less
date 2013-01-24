@@ -1,24 +1,31 @@
 
-.pattern-calendar {
+.pat-datetime-wrapper {
 
-  .pattern-calendar-month,
-  .pattern-calendar-day,
-  .pattern-calendar-hour,
-  .pattern-calendar-minute,
-  .pattern-calendar-ampm {
+  .pat-datetime-day,
+  .pat-datetime-hour,
+  .pat-datetime-minute,
+  .pat-datetime-ampm {
     width: 4em;
   }
-  .pattern-calendar-year {
+  .pat-datetime-year {
     width: 5em;
   }
-  .pattern-calendar-icon {
+  .pat-datetime-month {
+    width: 8em;
+  }
+  .pat-datetime-icon {
     display: inline-block;
+    line-height: 1em;
     height: 16px;
     width: 16px;
     background: url('widgets.png') 0 0 no-repeat;   
-    vertical-align: middle;
+    vertical-align: baseline;
     margin: 0 0.2em;
     cursor: pointer;
+  }
+  .pat-datetime-delimiter {
+    vertical-align: baseline;
+    line-height: 1em;
   }
 
   .pickadate__holder--opened .pickadate__frame {
