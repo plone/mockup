@@ -1,21 +1,7 @@
 require([
   'require',
   'jquery',
-  'sinon',
-
-  // widgets styles
-  'css!jam/pickadate/themes/pickadate.02.classic.css',
-	'css!jam/jquery-textext/src/css/textext.core.css',
-	'css!jam/jquery-textext/src/css/textext.plugin.arrow.css',
-	'css!jam/jquery-textext/src/css/textext.plugin.autocomplete.css',
-	'css!jam/jquery-textext/src/css/textext.plugin.clear.css',
-	'css!jam/jquery-textext/src/css/textext.plugin.focus.css',
-	'css!jam/jquery-textext/src/css/textext.plugin.prompt.css',
-	'css!jam/jquery-textext/src/css/textext.plugin.tags.css',
-
-  // toolbar styles
-  'lessc!less/toolbar.less'
-
+  'sinon'
 ], function(require, $, sinon) {
 
   $.ploneCMSUIOptions = {
