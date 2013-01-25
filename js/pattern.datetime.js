@@ -33,10 +33,10 @@
 
 define([
   'jquery',
+  'js/pattern.base.js',
   'jam/Patterns/src/core/parser',
-  'jam/Patterns/src/patterns/base.js',
   'jam/pickadate/source/pickadate'
-], function($, Parser, Base) {
+], function($, Base, Parser) {
   "use strict";
 
   var parser = new Parser("select2");
@@ -453,7 +453,6 @@ define([
       }
     }
   });
-
 
   return DateTime;
 
