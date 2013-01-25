@@ -36,10 +36,9 @@
 define([
   'jquery',
   'js/pattern.base.js',
-  'jam/Patterns/src/registry',
   'jam/Patterns/src/core/parser',
   'jam/select2/select2.js'
-], function($, Base, registry, Parser) {
+], function($, Base, Parser) {
   "use strict";
 
   var parser = new Parser("select2");
