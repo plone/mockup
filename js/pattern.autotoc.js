@@ -49,6 +49,8 @@ define([
   parser.add_argument('klassSection', 'autotoc-section');
   parser.add_argument('klassLevelPrefix', 'autotoc-level-');
   parser.add_argument('klassActive', 'active');
+  parser.add_argument('scrollDuration');
+  parser.add_argument('scrollEasing', 'swing');
   parser.add_argument('klass');
 
   var AutoTOC = Base.extend({
@@ -81,16 +83,23 @@ define([
           .text($level.text())
           .prop('href', '#' + id)
           .addClass(self.options.klassLevelPrefix + self.getLevel($level))
-          .on('click', function(e) {
+          .on('click', function(e, doScroll) {
             e.stopPropagation();
             e.preventDefault();
-            $('.' + self.options.klassActive, self.$el).removeClass(self.options.klassActive);
-            $level.parents(self.options.section).addClass(self.options.klassActive);
+            $('.' + self.options.klassActive, self.$el)
+                .removeClass(self.options.klassActive);
             $(e.target).addClass(self.options.klassActive);
+            $level.parents(self.options.section)
+                .addClass(self.options.klassActive);
+            if (doScroll !== false && self.options.scrollDuration && $level) {
+              $('body,html').animate({
+                scrollTop: $level.offset().top
+              }, self.options.scrollDuration, self.options.scrollEasing);
+            }
           });
       });
 
-      self.$toc.find('a').first().trigger('click');
+      self.$toc.find('a').first().trigger('click', false);
 
     },
     getLevel: function($el) {

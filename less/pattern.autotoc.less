@@ -5,6 +5,7 @@
     padding: 0.5em 0;
     margin: 0 0 1em 1em;
     a { display: block; }
+    a:focus { outline-style: none; }
     .autotoc-level-1 { margin: 0 1em 0 1em; }
     .autotoc-level-2 { margin: 0 1em 0 2em; }
     .autotoc-level-3 { margin: 0 1em 0 3em; }
@@ -13,7 +14,7 @@
     .autotoc-nav {
       float: none;
       padding: 0;
-      margin: 0 0 5px 0;
+      margin: 0 0 0.3em 0;
       border: 0;
       border-bottom: 1px solid #DDD;
       &:after {
@@ -32,9 +33,6 @@
             -ie-border-radius: 4px 4px 0 0;
              -o-border-radius: 4px 4px 0 0;
                 border-radius: 4px 4px 0 0;
-        &:focus {
-          outline-style: none;
-        }
         &.active {
           border: 1px solid #DDD;
           border-bottom-color: #FFF;
@@ -55,6 +53,9 @@
       display: none;
       &.active {
         display: block;
+        legend {
+          display: none;
+        }
       }
     }
   }
