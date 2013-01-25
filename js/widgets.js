@@ -6,7 +6,8 @@ define([
   'jam/Patterns/src/registry',
   'js/pattern.select2',
   'js/pattern.datetime',
-  'js/pattern.autotoc'
+  'js/pattern.autotoc',
+  'js/pattern.expose'
 ], function($, registry, Select2, DateTime) {
 
   // Initial initialization of patterns
