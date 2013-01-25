@@ -42,61 +42,103 @@
         Patterns are triggered by CSS classes and configured via HTML5-data
         attributes.</p>
 
-      <p>The mockup is a fully functional prototype of Plone. As it is realised
-        entirely in HTML+JS, it can be run in a browser without the need for
-        a full Plone installation. Therefore making it easy to showcase Plone's
-        UI or developing a new theme. Using diazo/deliverance it is possible to
-        integrate other backends alongside or instead of Plone.</p>
+      <p>The mockup is a fully functional prototype of Plone and its bundles.
+        As it is realised entirely in HTML+JS, it can be run in a browser
+        without the need for a full Plone installation. Therefore making it
+        easy to showcase Plone's UI or developing a new theme. Using
+        diazo/deliverance it is possible to integrate other backends alongside
+        or instead of Plone.</p>
 
-
-      <h1 id="integrations">Integrations</h1>
+      <h1 id="budles">Bundles</h1>
 
       <div class="row">
-        <!--div class="span3">
+        <div class="span4">
           <h2><a href="diazo.html">Diazo</a></h2>
-        </div-->
-        <div class="span3">
+          <p>Diazo toolbar exposes the diazo rules applied to a theme (or not)
+            in order to map it to the backend. This helps when writing and
+            debugging diazo rules. <code>iframe.js</code> is the script used to
+            create the diazo debugging toolbar. </p>
+          <p>To build and use the diazo toolbar bundle, follow the steps
+            below:</p>
+          <pre>
+$ make diazo
+$ cp build/diazo* path/to/diazo/lib/diazo/debug_resources</pre>
+          <a href="diazo.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
+        </div>
+        <div class="span4">
           <h2><a href="widgets.html">Widgets</a></h2>
-          <div class="alert alert-error">
-            <strong>TODO:</strong> Write description how it integrates.
-          </div>
+          <p><code>plone.app.widgets</code> are an alternative to the current
+            Plone widgets, with enhanced features and modern design.</p>
+          <p>To build and use the widgets bundle, follow the steps below:</p>
+          <pre>
+$ make widgets
+$ cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static</pre>
+          <a href="widgets.html" class="btn btn-primary pull-right">Demo</a>
+          <div style="clear:both"></div>
         </div>
-        <div class="span3">
+        <div class="span4">
           <h2><a href="toolbar.html">Toolbar</a></h2>
-          <div class="alert alert-error">
-            <strong>TODO:</strong> Write description how it integrates.
-          </div>
+          <p><code>plone.app.toolbar</code> separates the content management
+            interface elements from the design, placing all functionality
+            neatly into a toolbar at the top. This enormously simplifies
+            theming and also usability for content managers.</p>
+          <p>To build and use the toolbar bundle, follow the steps below:</p>
+          <pre>
+$ make toolbar
+$ cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static</pre>
+          <a href="toolbar.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
         </div>
-        <!--div class="span3">
+      </div>
+      <div class="row">
+        <div class="span6">
+          <h2><a href="standardtiles.html">Standard Tiles</a></h2>
+          <p><code>plone.app.standardtiles</code> are reusable visual elements
+            outside content area, eg. logo, footer, ... This will eventually
+            deprecate viewlets and portlets (forever!)</p>
+          <p>To build and use the standardtiles bundle, follow the steps below:</p>
+          <pre>
+$ make standardtiles
+$ cp build/standardtiles* path/to/plone.app.standardtiles/plone/app/standardtiles/static</pre>
+          <a href="standardtiles.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
+        </div>
+        <div class="span6">
           <h2><a href="deco.html">Deco</a></h2>
-        </div-->
+          <p><code>plone.app.deco</code> is the new layout editor for the
+            content area. Provides user friendly way (drag-n-drop) of adjusting
+            the layout of the page.</p>
+          <p>To build and use the deco bundle, follow the steps below:</p>
+          <pre>
+$ make deco
+$ cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
+          <a href="toolbar.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
+        </div>
       </div>
 
 
-      <h1>Quickstart</h1>
+      <h1>Use it now</h1>
 
-      <h2>Install</h2>
-      <pre>git clone git://github.com/plone/mockup.git
+      <pre>
+git clone git://github.com/plone/mockup.git
 cd mockup
 make bootstrap</pre>
 
       <p>Until Patterns is under heavy development.</p>
-      <pre>cd mockup
+      <pre>
+cd mockup
 mkdir ext
 cd ext
 git clone git://github.com/Patternslib/Patterns.git
 cd ..
 ./node_modules/jamjs/bin/jam.js link ext/Patterns</pre>
 
-      <h2>Build</h2>
-      <p>To build all type:</p>
+      <p>To build all bundles:</p>
       <pre>make</pre>
-      <p>To build for specific project type:</p>
-      <pre>make &lt;project&gt;</pre>
-      <p>Where project can be any
-        <a href="#integrations">existing intagrations</a></p>
 
-      <h2>Test</h2>
+      <p>Run tests:</p>
       <pre>make test</pre>
 
     </div>
