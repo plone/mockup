@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Mockup</title>
+  <link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />
+  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
+  <link rel="stylesheet/less" type="text/css" href="less/pattern.datetime.less" />
+  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
+  <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/require.js"></script>
+  <script>
+    require([ 'js/widgets' ]);
+  </script>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div id="portal-logo">
+        <span class="plone-logo">
+          <span class="plone-logo-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Widgets
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+      <h3><a href="index.html">&larr; Back</a></h3>
+
+      <h2>Select2</h2>
+
+      <label>Simple select</label>
+      <select class="pat-select2">
+        <option value="1">one</option>
+        <option value="2">two</option>
+        <option value="3">green</option>
+      </select>
+
+      <h2>DateTime</h2>
+
+      <input class="pat-datetime" />
+
+      <h2>Tabs</h2>
+
+    </div>
+  </div>
+
+</body>
+
+</html>
+
+
