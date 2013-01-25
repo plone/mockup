@@ -5,9 +5,8 @@ define([
   'jquery',
   'jam/Patterns/src/registry',
   'js/pattern.select2',
-  'js/pattern.datetime'
-//  'js/pattern.tabs',
-//  'js/plone.tabs'
+  'js/pattern.datetime',
+  'js/pattern.autotoc'
 ], function($, registry, Select2, DateTime) {
 
   // Initial initialization of patterns
