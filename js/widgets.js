@@ -10,12 +10,19 @@ define([
 //  'js/plone.tabs'
 ], function($, registry, Select2, DateTime) {
 
-  registry.register(registry.wrap(Select2));
-  registry.register(registry.wrap(DateTime));
-
   // Initial initialization of patterns
   $(document).ready(function() {
     registry.scan(document);
+  });
+
+  $(document).on("patterns-registry-before-scan.patterns", function(e) {
+    var $el = $(e.target);
+
+    // enableFormTabbing
+    $match = $el.filter('.enableFormTabbing');
+    $match = $match.add($el.find('.enableFormTabbing'));
+    $match.addClass('pat-autotoc');
+
   });
 
 });
