@@ -32,13 +32,28 @@
 
 define([
   'jquery',
-  'jam/Patterns/src/registry'
-], function($, registry, undefined) {
+  'jam/Patterns/src/registry',
+  'jam/Patterns/src/core/logger'
+], function($, registry, logger, undefined) {
   "use strict";
 
   // Base Pattern
-  var Base = function($el, options) { this.init($el, options); };
-  Base.prototype = { constructor: Base };
+  var Base = function($el, options) {
+    this.log = logger.getLogger(this.name);
+    this.$el = $el;
+    this.options = this.parser.parse($el, this.defaults || {}, this.multipleOptions || false);
+    this.init();
+    this.trigger('init');
+  };
+  Base.prototype = {
+    constructor: Base,
+    on: function(eventName, eventCallback) {
+      this.$el.on(eventName + '.' + this.name + '.patterns', eventCallback);
+    },
+    trigger: function(eventName) {
+      this.$el.trigger(eventName + '.' + this.name + '.patterns', this);
+    }
+  };
   Base.extend = function(NewPattern) {
     var Base = this;
     var Constructor;
@@ -65,10 +80,7 @@ define([
           var $el = $(this),
               data = $el.data('pattern-' + Constructor.prototype.name + '-' + i);
           if (!data) {
-            $el.data('pattern-' + Constructor.prototype.name + '-' + i,
-              new Constructor($el, Constructor.prototype.parser.parse($el,
-                  Constructor.prototype.defaults || {},
-                  Constructor.prototype.multipleOptions || false)));
+            $el.data('pattern-' + Constructor.prototype.name + '-' + i, new Constructor($el));
           }
         });
       }
