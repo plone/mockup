@@ -55,21 +55,19 @@ define([
   parser.add_argument("showAMPM", true);
   parser.add_argument("AMPM", ['AM', 'PM']);
   parser.add_argument("minuteStep", 5);
-  parser.add_argument("pickadate", {
-    monthSelector: true,
-    yearSelector: true
-  });
+  parser.add_argument("pickadateMonthSelector", true);
+  parser.add_argument("pickadateYearSelector", true);
 
   var DateTime = Base.extend({
     name: 'datetime',
     parser: parser,
-    init: function($el, options) {
+    init: function() {
       var self = this;
-      self.$el = $el;
-      self.options = options;
 
-      self.pickadateOptions = $.extend({}, $.fn.pickadate.defaults, self.options.pickadate, {
+      self.pickadateOptions = $.extend({}, $.fn.pickadate.defaults, {
         formatSubmit: 'yyyy-mm-dd',
+        monthSelector: self.options.pickadateMonthSelector,
+        yearSelector: self.options.pickadateYearSelector,
         onOpen: function() {},
         onClose: function() {},
         onSelect: function(e) {
@@ -442,14 +440,18 @@ define([
     },
     open: function() {
       if (!this._opened) {
+        this.trigger('open');
         this.pickadate.open();
         this._opened = true;
+        this.trigger('opened');
       }
     },
     close: function() {
       if (this._opened) {
+        this.trigger('close');
         this.pickadate.close();
         this._opened = false;
+        this.trigger('closed');
       }
     }
   });
