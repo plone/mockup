@@ -56,10 +56,8 @@ define([
   var AutoTOC = Base.extend({
     name: "autotoc",
     parser: parser,
-    init: function($el, options) {
+    init: function() {
       var self = this;
-      self.$el = $el;
-      self.options = options;
       self.$toc = $('<nav/>')
           .prependTo(self.$el)
           .addClass(self.options.klassTOC);
