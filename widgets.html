@@ -16,7 +16,41 @@
   <script src="jam/less/dist/less-1.3.3.js"></script>
   <script src="jam/require.js"></script>
   <script>
-    require([ 'js/widgets' ]);
+
+require([ 'jquery', 'sinon', 'js/widgets' ], function($, sinon) {
+
+    // before demo patterns in overlay remove html created by autotoc pattern
+    $('#modal1').on('show.modal.patterns', function(e, modal) {
+      $('.autotoc-nav', modal.$modal).remove();
+    });
+
+    var server = sinon.fakeServer.create();
+    server.autoRespond = true;
+    server.respondWith(/something.html/, function (xhr, id) {
+      xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
+    });
+
+});
+
+  </script>
+  <script type="text/XXX" id="something-html">
+    <html>
+    <head></head>
+    <body>
+    <div id="content">
+    <div class="pull-right">
+      Button that triggers "hide" event ->
+      <a class="btn" onclick="$(this).trigger('hide.modal.patterns')">Close</a>
+    </div>
+    <h1>Content from AJAX</h1>
+    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
+    of logic to it. A flower in my garden, a mystery in my panties. [climbing
+    under trampoline] This shall keep me safe from the hot Mexican sun. This is
+    not me encouraging you to go here and write a review. No. So, what do you
+    say? We got a basket full of father-son fun here. What's Kama Sutra oil?
+    Maybe it's not for us.</p>
+    </body>
+    </html>
   </script>
 </head>
 
@@ -246,9 +280,12 @@
         </div>
       </div>
 
-      <h2>DateTime / Calendar</h2>
-
-      <input class="pat-datetime" />
+      <div class="row">
+        <div class="span12">
+          <h2>DateTime / Calendar</h2>
+          <input class="pat-datetime" />
+        </div>
+      </div>
 
       <div class="row">
         <div class="span6">
@@ -270,38 +307,39 @@
           </div>
         </div>
         <div class="span6">
-          <h2>Tabs</h2>
-          <form class="pat-autotoc" data-pat-autotoc="levels:legend;section:fieldset;klass:autotabs">
-            <fieldset>
-              <legend>Tab 1</legend>
-              <p>I've used one adjective to describe myself. What is it?
-                Everybody dance… NOW. Actually, that was a box of Oscar's
-                legally obtained medical marijuana. Primo bud. Real sticky
-                weed. Suddenly playing with yourself is a scholarly pursuit? We
-                need a name. Maybe 'Operation Hot Mother'. O-kay, who'd like
-                a banger in the mouth? </p>
-            </fieldset>
-            <fieldset>
-              <legend>Tab 2</legend>
-              <p>Don't ask "Can I"… ask "I Can!" Do you have any idea how often
-                you say the word "afraid"? Well, I know I used it in the
-                Jacuzzi. It looks like you've been looking for dragons… in the
-                future. I've been in the film business for a while but I just
-                can't seem to get one in the can. Oh, I don't have any drugs
-                for sale, unless… did you want me to follow you to your car?
-                Turn this skiff around! </p>
-            </fieldset>
-            <fieldset>
-              <legend>Tab 3</legend>
-              <p>I didn't get into this business to please sophomore Tracy
-                Schwartzman, so… onward and upward. On… Why, Tracy?! Why?!! So
-                maybe you could start jete-ing, and stop je-terrorizing me!
-              </p>
-            </fieldset>
-          </form>
+          <div id="mockup-tabs">
+            <h2>Tabs</h2>
+            <form class="pat-autotoc" data-pat-autotoc="levels:legend;section:fieldset;klass:autotabs">
+              <fieldset>
+                <legend>Tab 1</legend>
+                <p>I've used one adjective to describe myself. What is it?
+                  Everybody dance… NOW. Actually, that was a box of Oscar's
+                  legally obtained medical marijuana. Primo bud. Real sticky
+                  weed. Suddenly playing with yourself is a scholarly pursuit? We
+                  need a name. Maybe 'Operation Hot Mother'. O-kay, who'd like
+                  a banger in the mouth? </p>
+              </fieldset>
+              <fieldset>
+                <legend>Tab 2</legend>
+                <p>Don't ask "Can I"… ask "I Can!" Do you have any idea how often
+                  you say the word "afraid"? Well, I know I used it in the
+                  Jacuzzi. It looks like you've been looking for dragons… in the
+                  future. I've been in the film business for a while but I just
+                  can't seem to get one in the can. Oh, I don't have any drugs
+                  for sale, unless… did you want me to follow you to your car?
+                  Turn this skiff around! </p>
+              </fieldset>
+              <fieldset>
+                <legend>Tab 3</legend>
+                <p>I didn't get into this business to please sophomore Tracy
+                  Schwartzman, so… onward and upward. On… Why, Tracy?! Why?!! So
+                  maybe you could start jete-ing, and stop je-terrorizing me!
+                </p>
+              </fieldset>
+            </form>
+          </div>
         </div>
       </div>
-
 
       <div class="row">
         <div class="span6">
@@ -331,16 +369,33 @@
         </div>
         <div class="span6">
           <h2>Modal</h2>
-          <a href="#mockup-expose" class="btn btn-large btn-primary pat-modal">Login form</a>
-          <pre>
-            Couldn't do it on time :(, continue on it tomorrow.
-          </pre>
+          <p>
+          <a href="#mockup-expose" class="btn btn-large btn-primary pat-modal">
+            Modal basic</a>
+          </p>
+          <p>
+            <a href="#mockup-tabs" id="modal1"
+               class="btn btn-large btn-primary pat-modal">
+              Modal with Patterns inside</a>
+          </p>
+          <p>
+            <a href="something.html#content" id="modal2"
+               class="btn btn-large btn-primary pat-modal">
+              Modal with remote content (AJAX)</a>
+          </p>
         </div>
       </div>
 
-
     </div>
   </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
 
 </body>
 

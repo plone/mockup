@@ -7,14 +7,17 @@ define([
   'js/pattern.select2',
   'js/pattern.datetime',
   'js/pattern.autotoc',
-  'js/pattern.expose'
-], function($, registry, Select2, DateTime) {
+  'js/pattern.expose',
+  'js/pattern.modal'
+], function($, registry) {
 
   // Initial initialization of patterns
   $(document).ready(function() {
-    registry.scan(document);
+    registry.scan($('body'));
   });
 
+
+  // 
   $(document).on("patterns-registry-before-scan.patterns", function(e) {
     var $el = $(e.target);
 
