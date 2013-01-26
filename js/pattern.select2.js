@@ -66,10 +66,8 @@ define([
   var Select2 = Base.extend({
     name: "select2",
     parser: parser,
-    init: function($el, options) {
-      this.$el = $el;
-      this.options = options;
-      $el.select2(options);
+    init: function() {
+      this.$el.select2(this.options);
     }
   });
 
