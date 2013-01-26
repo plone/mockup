@@ -31,55 +31,14 @@
 define([
   'jquery',
   'js/pattern.base',
+  'js/pattern.backdrop',
   'jam/Patterns/src/core/parser'
-], function($, Base, Parser) {
+], function($, Base, Backdrop, Parser) {
   "use strict";
 
-  var Backdrop = function($el, options) { this.init($el, options); };
-  Backdrop.prototype = {
-    init: function($el, options) {
-      var self = this;
-      self.options = options;
-      self.$wrapper = $el;
-      self.$el = $('<div/>')
-          .hide()
-          .appendTo(self.$wrapper)
-          .addClass(self.options.klass)
-          .trigger('init.backdrop.patterns');
-      if (self.options.closeOnEsc === true) {
-        console.log('esc');
-      }
-      if (self.options.closeOnClick === true) {
-        self.$el.on('click', function() {
-          self.hide();
-        });
-      }
-    },
-    show: function() {
-      var self = this;
-      if (!self.$wrapper.hasClass(self.options.klassActive)) {
-        self.$el.trigger('show.backdrop.patterns');
-        self.$el.css('opacity', '0');
-        self.$el.show();
-        self.$wrapper.addClass(self.options.klassActive);
-        self.$el.animate({ opacity: self.options.opacity }, 500);
-        self.$el.trigger('shown.backdrop.patterns');
-      }
-    },
-    hide: function() {
-      var self = this;
-      if (self.$wrapper.hasClass(self.options.klassActive)) {
-        self.$el.trigger('hide.backdrop.patterns');
-        self.$el.animate({ opacity: '0' }, 500);
-        self.$el.hide();
-        self.$wrapper.removeClass(self.options.klassActive);
-        self.$el.trigger('hidden.backdrop.patterns');
-      }
-    }
-  };
-
   var parser = new Parser("expose");
-  parser.add_argument("triggers");
+
+  parser.add_argument("triggers", "focusin");
   parser.add_argument("klassActive", "active");
   parser.add_argument("backdrop", "body");
   parser.add_argument("backdropZIndex", "1000");
@@ -92,10 +51,9 @@ define([
   var Expose = Base.extend({
     name: "expose",
     parser: parser,
-    init: function($el, options) {
+    init: function() {
       var self = this;
-      self.$el = $el;
-      self.options = options;
+
       self.backdrop = new Backdrop($(self.options.backdrop), {
         zindex: self.options.backdropZIndex,
         klass: self.options.backdropKlass,
@@ -106,37 +64,36 @@ define([
         closeOnClick: self.options.backdropCloseOnClick
       });
       if (self.options.triggers) {
-        $.each(self.options.triggers, function(i, item) {
+        $.each(self.options.triggers.split(','), function(i, item) {
           item = item.split(' ');
-          $(item[1]).on(item[0], function() {
+          $(item[1] || self.$el).on(item[0], function() {
             self.show();
           });
         });
-      } else {
-        self.$el.on('focusin', function() { self.show(); });
       }
-      self.backdrop.$el.on('hidden.backdrop.patterns', function() { self.hide(); });
-      self.$el.trigger('init.expose.patterns');
+      self.backdrop.on('hidden', function() { self.hide(); });
     },
     show: function() {
       var self = this;
       if (!self.$el.hasClass(self.options.klassActive)) {
-        self.$el.trigger('show.expose.patterns');
+        self.trigger('show');
         self.$el.addClass(self.options.klassActive);
         self.backdrop.show();
+        self._initialZIndex = self.$el.css('z-index');
         self.$el.css('z-index', self.options.backdropZIndex + 1);
         self.$el.css('opacity', '0');
         self.$el.animate({ opacity: '1' }, 500);
-        self.$el.trigger('shown.expose.patterns');
+        self.trigger('shown');
       }
     },
     hide: function() {
       var self = this;
       if (self.$el.hasClass(self.options.klassActive)) {
-        self.$el.trigger('hide.expose.patterns');
+        self.trigger('hide');
         self.backdrop.hide();
+        self.$el.css('z-index', self._initialZIndex);
         self.$el.removeClass(self.options.klassActive);
-        self.$el.trigger('hidden.expose.patterns');
+        self.trigger('hidden');
       }
     }
   });
