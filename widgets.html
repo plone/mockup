@@ -26,6 +26,7 @@ require([ 'jquery', 'sinon', 'js/widgets' ], function($, sinon) {
 
     var server = sinon.fakeServer.create();
     server.autoRespond = true;
+    server.autoRespondAfter = 4000;
     server.respondWith(/something.html/, function (xhr, id) {
       xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
     });

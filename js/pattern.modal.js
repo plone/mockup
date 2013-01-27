@@ -49,6 +49,7 @@ define([
   parser.add_argument("klass", "modal");
   parser.add_argument("klassWrapper", "modal-wrapper");
   parser.add_argument("klassWrapperInner", "modal-wrapper-inner");
+  parser.add_argument("klassLoading", "modal-loading");
   parser.add_argument("klassActive", "active");
 
   // XXX: should support same options as $.ajax
@@ -117,6 +118,16 @@ define([
           .appendTo(self.$wrapper);
       }
 
+      self.$loading = $('> .' + self.options.klassLoading, self.$wrapperInner);
+      if (self.$loading.size() === 0) {
+        self.$loading = $('<div/>').hide()
+          .addClass(self.options.klassLoading)
+          .appendTo(self.$wrapperInner);
+      }
+      $(window).resize(function() {
+        self.positionModal();
+      });
+
       if (self.options.triggers) {
         $.each(self.options.triggers, function(i, item) {
           item = item.split(' ');
@@ -152,12 +163,19 @@ define([
             .on('click', function(e) { e.stopPropagation(); });
 
       if (self.options.ajaxUrl) {
-        self.trigger('beforeajax');
         self.$modal = function() {
-          $.ajax({
+          self.$wrapper.parent().css('overflow', 'hidden');
+          self.$wrapper.show();
+          self.backdrop.show();
+          self.$loading.show();
+          self.positionLoading();
+          self.trigger('beforeajax');
+          self.ajaxXHR = $.ajax({
               url: self.options.ajaxUrl,
               type: self.options.ajaxType
           }).done(function(response, textStatus, xhr) {
+            self.ajaxXHR = undefined;
+            self.$loading.hide();
             self.$modal = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
               .replace('<body', '<div').replace('</body>', '</div>'))
                 .addClass(self.options.klass)
@@ -179,6 +197,18 @@ define([
               .appendTo(self.$wrapperInner);
       }
 
+    },
+    positionLoading: function() {
+      var self = this;
+      self.$loading.css({
+        'margin-left': self.$wrapper.width()/2 - self.$loading.width()/2,
+        'margin-top': self.$wrapper.height()/2 - self.$loading.height()/2,
+        'position': 'absolute',
+        'bottom': '0',
+        'left': '0',
+        'right': '0',
+        'top': '0'
+      });
     },
     positionModal: function() {
       var self = this;
@@ -265,13 +295,16 @@ define([
     },
     hide: function() {
       var self = this;
+      self.backdrop.hide();
+      self.$wrapper.hide();
+      self.$wrapper.parent().css('overflow', 'visible');
+      if (self.ajaxXHR) {
+        self.ajaxXHR.abort();
+      }
       if (self.$el.hasClass(self.options.klassActive)) {
         self.trigger('hide');
-        self.backdrop.hide();
         if (self.$modal.remove) {
           self.$modal.remove();
-          self.$wrapper.hide();
-          self.$wrapper.parent().css('overflow', 'visible');
           self.initModal();
         }
         self.$el.removeClass(self.options.klassActive);
