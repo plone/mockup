@@ -31,8 +31,7 @@
 
 
 define([
-  'jquery',
-  'js/patterns'
+  'jquery'
 ], function($, undefined) {
   "use strict";
 
@@ -78,7 +77,7 @@ define([
         // if click on any other element then 'a' of iframe trigger iframe.click
         // event
         } else {
-          self.$el.trigger('iframe.click', e);
+          self.$el.trigger('click.iframe', e);
         }
 
       });
@@ -102,10 +101,10 @@ define([
     shrink: function() {
       var self = this;
       if (self.is_stretched) {
-        self.$el.trigger('iframe.shrink');
+        self.$el.trigger('shrink.iframe');
         self.is_stretched = false;
         self.fit();
-        self.$el.trigger('iframe.shrinked');
+        self.$el.trigger('shrinked.iframe');
       }
     },
 
@@ -116,10 +115,10 @@ define([
     stretch: function() {
       var self = this;
       if (!self.is_stretched) {
-        self.$el.trigger('iframe.stretch');
+        self.$el.trigger('stretch.iframe');
         self.is_stretched = true;
         self.$el.css({ height: $(self.document).height() });
-        self.$el.trigger('iframe.stretched');
+        self.$el.trigger('stretched.iframe');
       }
     },
 

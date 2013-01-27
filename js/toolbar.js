@@ -1,17 +1,17 @@
-if (jQuery) {
-  define( "jquery", [], function () { return jQuery; } );
+if (window.jQuery) {
+  define( "jquery", [], function () { return window.jQuery; } );
 }
 define([
   'jquery',
-  'js/patterns',
+  'jam/Patterns/src/registry',
   'js/widgets',
   'js/plone.toolbar',
-  'js/plone.cmsui'
+//  'js/plone.cmsui'
 ], function($, Patterns) {
 
   // Initial initialization of patterns
   $(document).ready(function() {
-    Patterns.initialize($(document));
+    Patterns.scan($('body'));
   });
 
 });

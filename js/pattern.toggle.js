@@ -33,94 +33,94 @@
 
 define([
   'jquery',
-  'js/patterns'
-], function($, Patterns, undefined) {
-"use strict";
+  'js/pattern.base',
+  'jam/Patterns/src/core/parser'
+], function($, Base, Parser, undefined) {
+  "use strict";
 
-var Toggle = Patterns.Base.extend({
-  name: 'toggle',
-  jqueryPlugin: 'patternToggle',
-  defaults: {
-    attribute: 'class',
-    event: 'click'
-  },
-  init: function() {
-    var self = this;
+  var parser = new Parser("toggle");
 
-    self.options = $.extend({}, self.defaults, self.options);
+  parser.add_argument("target");
+  parser.add_argument("value");
+  parser.add_argument("attribute", "class");
+  parser.add_argument("event", "click");
 
-    if (!self.options.target) {
-      self.$target = self.$el;
-    } else {
-      self.$target = self.$el.closest(self.options.target);
-      if (self.$target.size() === 0) {
-        self.$target = self.closest(self.$el, self.options.target);
+  var Toggle = Base.extend({
+    name: 'toggle',
+    parser: parser,
+    init: function() {
+      var self = this;
+
+      if (!self.options.target) {
+        self.$target = self.$el;
+      } else {
+        self.$target = self.$el.closest(self.options.target);
+        if (self.$target.size() === 0) {
+          self.$target = self.closest(self.$el, self.options.target);
+        }
       }
-    }
 
-    if (!self.$target) {
-      $.error('No target found for "' + self.options.target + '".');
-    }
-
-    self.$el.on(self.options.event, function(e) {
-      e.stopPropagation();
-      if ($.nodeName(e.target, 'a') || $(e.target).parents('a').size() !== 0) {
-        e.preventDefault();
+      if (!self.$target) {
+        $.error('No target found for "' + self.options.target + '".');
       }
-      self.toggle();
-    });
-  },
-  closest: function($el, selector) {
-    var self = this,
-        $target = $(selector, $el);
-    if ($target.size() === 0) {
-      if ($el.size() === 0 || $.nodeName($el[0], 'body')) {
-        return;
+
+      self.on(self.options.event, function(e) {
+        e.stopPropagation();
+        if ($(e.target).is('a') || $(e.target).parents('a').size() !== 0) {
+          e.preventDefault();
+        }
+        self.toggle();
+      });
+    },
+    closest: function($el, selector) {
+      var self = this,
+          $target = $(selector, $el);
+      if ($target.size() === 0) {
+        if ($el.size() === 0 || $.nodeName($el[0], 'body')) {
+          return;
+        }
+        $target = self.closest($el.parent(), selector);
       }
-      $target = self.closest($el.parent(), selector);
+      return $target;
+    },
+    isMarked: function() {
+      var self = this;
+      if (self.options.attribute === 'class') {
+        return this.$target.hasClass(this.options.value);
+      } else {
+        return this.$target.attr(this.options.attribute) === this.options.value;
+      }
+    },
+    toggle: function() {
+      var self = this;
+      if (self.isMarked()) {
+        self.remove();
+      } else {
+        self.add();
+      }
+    },
+    remove: function() {
+      var self = this;
+      self.trigger('remove');
+      if (self.options.attribute === 'class') {
+        self.$target.removeClass(self.options.value);
+      } else {
+        self.$target.removeAttr(self.options.attribute);
+      }
+      self.trigger('removed');
+    },
+    add: function() {
+      var self = this;
+      self.trigger('add');
+      if (self.options.attribute === 'class') {
+        self.$target.addClass(self.options.value);
+      } else {
+        self.$target.attr(self.options.attribute, self.options.value);
+      }
+      self.trigger('added');
     }
-    return $target;
-  },
-  isMarked: function() {
-    var self = this;
-    if (self.options.attribute === 'class') {
-      return this.$target.hasClass(this.options.value);
-    } else {
-      return this.$target.attr(this.options.attribute) === this.options.value;
-    }
-  },
-  toggle: function() {
-    var self = this;
-    if (self.isMarked()) {
-      self.remove();
-    } else {
-      self.add();
-    }
-  },
-  remove: function() {
-    var self = this;
-    self.$el.trigger('patterns.toggle.remove');
-    if (self.options.attribute === 'class') {
-      self.$target.removeClass(self.options.value);
-    } else {
-      self.$target.removeAttr(self.options.attribute);
-    }
-    self.$el.trigger('patterns.toggle.removed');
-  },
-  add: function() {
-    var self = this;
-    self.$el.trigger('patterns.toggle.add');
-    if (self.options.attribute === 'class') {
-      self.$target.addClass(self.options.value);
-    } else {
-      self.$target.attr(self.options.attribute, self.options.value);
-    }
-    self.$el.trigger('patterns.toggle.added');
-  }
-});
+  });
 
-Patterns.register(Toggle);
-
-return Toggle;
+  return Toggle;
 
 });

@@ -1,3 +1,29 @@
+@import "../jam/bootstrap/less/mixins.less";
+
+.gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
+  background: @color;
+  background: -webkit-gradient(linear,
+                               left bottom,
+                               left top,
+                               color-stop(0, @start),
+                               color-stop(1, @stop));
+  background: -ms-linear-gradient(bottom,
+                                  @start,
+                                  @stop);
+  background: -moz-linear-gradient(center bottom,
+                                   @start 0%,
+                                   @stop 100%);
+  background: -o-linear-gradient(@stop,
+                                 @start);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@stop,@start));
+}
+.transition(@duration:0.2s, @ease:ease-out) {
+  -webkit-transition: all @duration @ease;
+  -moz-transition: all @duration @ease;
+  -o-transition: all @duration @ease;
+  transition: all @duration @ease;
+}
+
 /*
  * Toolbar Dropdown
  */
@@ -21,7 +47,7 @@
   }
 
   & > ul.toolbar-dropdown-menu {
-    .border-radius(@radiusSize, @radiusSize, @radiusSize, 0);
+    .border-radius(@radiusSize @radiusSize @radiusSize 0);
     .box-shadow(0 @radiusSize/2 @radiusSize/2 0 @shadowColor);
     color: @fgColor;
     margin: 0;
@@ -167,7 +193,7 @@
         & > li.toolbar-dropdown > ul.toolbar-dropdown-menu {
           right: @radiusSize/4;
           left: auto;
-          .border-radius(0, @radiusSize, @radiusSize, @radiusSize);
+          .border-radius(@radiusSize 0 @radiusSize @radiusSize);
         }
       }
     }
@@ -176,7 +202,7 @@
     &.toolbar-right {
       float: right;
       height: 0.77*@size;
-      .border-radius(0, 0, 0.77*@size, 0);
+      .border-radius(0 0 0 0.77*@size);
       .gradient(@rightBgColor, lighten(@rightBgColor,2%), @rightBgColor);
       .box-shadow(inset 0 -1*@radiusSize/4 @shadow2Color);
 
@@ -194,7 +220,7 @@
         div {
           width: 0.72*@size;
           height: 0.72*@size;
-          .border-radius(0.77*@size, 0, 0, 0);
+          .border-radius(0 0.77*@size 0 0);
           .gradient(@leftBgColor, darken(@leftBgColor,8%), @leftBgColor);
         }
       }
@@ -218,7 +244,7 @@
           &.toolbar-dropdown > ul.toolbar-dropdown-menu {
             right: 0;
             left: auto;
-            .border-radius(0, @radiusSize, @radiusSize, @radiusSize);
+            .border-radius(@radiusSize 0 @radiusSize @radiusSize);
           }
           & > a {
             color: @rightFgColor;
