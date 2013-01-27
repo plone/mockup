@@ -8,33 +8,16 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plone Mockup</title>
+  <title>Plone Widgets</title>
   <link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />
   <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/jquery/dist/jquery.js"></script>
   <script src="jam/require.js"></script>
-  <script>
-
-require([ 'jquery', 'sinon', 'js/widgets' ], function($, sinon) {
-
-    // before demo patterns in overlay remove html created by autotoc pattern
-    $('#modal1').on('show.modal.patterns', function(e, modal) {
-      $('.autotoc-nav', modal.$modal).remove();
-    });
-
-    var server = sinon.fakeServer.create();
-    server.autoRespond = true;
-    server.autoRespondAfter = 4000;
-    server.respondWith(/something.html/, function (xhr, id) {
-      xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
-    });
-
-});
-
-  </script>
-  <script type="text/XXX" id="something-html">
+  <script src="js/mockup.widgets.js"></script>
+  <script type="text/x-ajax-respond" id="something-html">
     <html>
     <head></head>
     <body>
