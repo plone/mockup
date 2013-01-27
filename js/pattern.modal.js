@@ -83,16 +83,6 @@ define([
 
       self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
-        self.$wrapperInner = $('<div/>')
-          .addClass(self.options.klassWrapperInner)
-          .css({
-            'margin': self.options.margin,
-            'position': 'absolute',
-            'bottom': '0',
-            'left': '0',
-            'right': '0',
-            'top': '0'
-          });
         self.$wrapper = $('<div/>')
           .css({
             'z-index': self.options.backdropZIndex + 1,
@@ -109,8 +99,22 @@ define([
             self.backdrop.hide();
           })
           .addClass(self.options.klassWrapper)
-          .append(self.$wrapperInner)
           .insertBefore(self.backdrop.$backdrop);
+      }
+
+      self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
+      if (self.$wrapperInner.size() === 0) {
+        self.$wrapperInner = $('<div/>')
+          .addClass(self.options.klassWrapperInner)
+          .css({
+            'margin': self.options.margin,
+            'position': 'absolute',
+            'bottom': '0',
+            'left': '0',
+            'right': '0',
+            'top': '0'
+          })
+          .appendTo(self.$wrapper);
       }
 
       if (self.options.triggers) {
@@ -181,8 +185,7 @@ define([
       if (self.$el.hasClass(self.options.klassActive) &&
           typeof self.$modal !== 'function') {
         var postionHorizontal = self.options.position.split(' ')[0],
-            postionVertical = self.options.position.split(' ')[1],
-            margin = parseInt(self.$modal.css('margin-left'), 10);
+            postionVertical = self.options.position.split(' ')[1];
 
         self.$wrapper.parent().css('overflow', 'hidden');
 
