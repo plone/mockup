@@ -29,7 +29,6 @@
 
 define([
   'jquery',
-  'js/patterns',
   'js/plone.overlay'
 ], function($, Patterns, Overlay, undefined) {
   "use strict";

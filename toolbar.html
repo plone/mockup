@@ -12,6 +12,27 @@
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
   <script src="js/iframe.js"></script>
+
+  <script type="text/x-ajax-respond" data-regexp="edit.html">
+    <html>
+    <head></head>
+    <body>
+    <div id="content">
+    <div class="pull-right">
+      Button that triggers "hide" event ->
+      <a class="btn" onclick="$(this).trigger('hide.modal.patterns')">Close</a>
+    </div>
+    <h1>Content from AJAX</h1>
+    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
+    of logic to it. A flower in my garden, a mystery in my panties. [climbing
+    under trampoline] This shall keep me safe from the hot Mexican sun. This is
+    not me encouraging you to go here and write a review. No. So, what do you
+    say? We got a basket full of father-son fun here. What's Kama Sutra oil?
+    Maybe it's not for us.</p>
+    </body>
+    </html>
+  </script>
+
 </head>
 
 <body>
@@ -97,7 +118,7 @@
               <a href="#!/folder_contents">Contents</a>
             </li>
             <li id="plone-action-edit">
-              <a href="/edit.html">Edit</a>
+              <a href="/edit.html" class="pat-modal">Edit</a>
             </li>
             <li id="plone-action-contentrules">
               <a href="#!/@@manage-content-rules">Rules</a>
