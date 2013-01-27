@@ -81,6 +81,7 @@ define([
         closeOnEsc: self.options.backdropCloseOnEsc,
         closeOnClick: self.options.backdropCloseOnClick
       });
+      self.backdrop.on('hidden', function() { self.hide(); });
 
       self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
@@ -102,7 +103,7 @@ define([
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            self.hide();
+            self.backdrop.hide();
           });
       }
 
@@ -166,7 +167,11 @@ define([
     initModal: function() {
       var self = this,
           $modal = $('<div/>')
-            .addClass(self.options.klass);
+            .addClass(self.options.klass)
+            .on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+            });
 
       if (self.options.ajaxUrl) {
         self.$modal = function() {
@@ -223,8 +228,6 @@ define([
         var postionHorizontal = self.options.position.split(' ')[0],
             postionVertical = self.options.position.split(' ')[1];
 
-        self.$wrapper.parent().css('overflow', 'hidden');
-
         self.$modal.css({
           'width': self.options.width === 'auto' ? self.$modal.width() : self.options.width,
           'height': self.options.height === 'auto' ? self.$modal.height() : self.options.height,
@@ -271,9 +274,6 @@ define([
           }
         }
 
-        $(window).resize(function() {
-          self.positionModal();
-        });
       }
     },
     show: function() {
@@ -284,41 +284,36 @@ define([
           self.$modal();
         } else {
           self.trigger('show');
-          self.$modal
-            .addClass(self.options.klassActive)
-            .on('click', function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-            })
-            .on('close.modal.patterns', function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              self.hide();
-            });
-          self.$el.addClass(self.options.klassActive);
           self.backdrop.show();
           self.$wrapper.show();
+          self.$wrapper.parent().css('overflow', 'hidden');
+          self.$el.addClass(self.options.klassActive);
+          self.$modal.addClass(self.options.klassActive);
           Registry.scan(self.$modal);
           self.positionModal();
+          $(window).off('resize').on('resize', function() {
+            self.positionModal();
+          });
           self.trigger('shown');
         }
       }
     },
     hide: function() {
       var self = this;
-      self.backdrop.hide();
-      self.$wrapper.hide();
-      self.$wrapper.parent().css('overflow', 'visible');
       if (self.ajaxXHR) {
         self.ajaxXHR.abort();
       }
       if (self.$el.hasClass(self.options.klassActive)) {
         self.trigger('hide');
+        self.backdrop.hide();
+        self.$wrapper.hide();
+        self.$wrapper.parent().css('overflow', 'visible');
+        self.$el.removeClass(self.options.klassActive);
         if (self.$modal.remove) {
           self.$modal.remove();
           self.initModal();
         }
-        self.$el.removeClass(self.options.klassActive);
+        $(window).off('resize');
         self.trigger('hidden');
       }
     }
