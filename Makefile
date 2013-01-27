@@ -4,7 +4,7 @@ LESSC = ./node_modules/less/bin/lessc
 CSSMIN = ./node_modules/cssmin/bin/cssmin
 UGLIFYJS = ./node_modules/uglify-js/bin/uglifyjs
 
-WIDGETS = build/widgets.js build/widgets.min.js
+WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css
 TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar.png
 
 all:: widgets toolbar
@@ -35,6 +35,10 @@ build/widgets.js:
 build/widgets.min.js:
 	$(JAM) compile -i js/widgets -e jquery --almond $@
 	echo 'require(["js/widgets"]);' >> $@
+
+build/widgets.css:
+	$(CSSMIN) jam/select2/select2.css > $@
+	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 
 
 clean_toolbar:
