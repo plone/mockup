@@ -43,7 +43,12 @@ define([
   parser.add_argument("triggers");
   // left|center|right top|middle|button
   parser.add_argument("position", "center middle");
+  parser.add_argument("width", "auto");
+  parser.add_argument("height", "auto");
+  parser.add_argument("margin", "20px");
   parser.add_argument("klass", "modal");
+  parser.add_argument("klassWrapper", "modal-wrapper");
+  parser.add_argument("klassWrapperInner", "modal-wrapper-inner");
   parser.add_argument("klassActive", "active");
 
   // XXX: should support same options as $.ajax
@@ -65,6 +70,7 @@ define([
     init: function() {
       var self = this;
 
+
       self.backdrop = new Backdrop($(self.options.backdrop), {
         zindex: self.options.backdropZIndex,
         klass: self.options.backdropKlass,
@@ -74,6 +80,38 @@ define([
         closeOnEsc: self.options.backdropCloseOnEsc,
         closeOnClick: self.options.backdropCloseOnClick
       });
+
+      self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
+      if (self.$wrapper.size() === 0) {
+        self.$wrapperInner = $('<div/>')
+          .addClass(self.options.klassWrapperInner)
+          .css({
+            'margin': self.options.margin,
+            'position': 'absolute',
+            'bottom': '0',
+            'left': '0',
+            'right': '0',
+            'top': '0'
+          });
+        self.$wrapper = $('<div/>')
+          .css({
+            'z-index': self.options.backdropZIndex + 1,
+            'overflow-y': 'scroll',
+            'position': 'fixed',
+            'bottom': '0',
+            'left': '0',
+            'right': '0',
+            'top': '0'
+          }).hide()
+          .on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            self.backdrop.hide();
+          })
+          .addClass(self.options.klassWrapper)
+          .append(self.$wrapperInner)
+          .insertBefore(self.backdrop.$backdrop);
+      }
 
       if (self.options.triggers) {
         $.each(self.options.triggers, function(i, item) {
@@ -105,7 +143,9 @@ define([
     },
     initModal: function() {
       var self = this,
-          $modal = $('<div/>').hide().addClass(self.options.klass);
+          $modal = $('<div/>')
+            .addClass(self.options.klass)
+            .on('click', function(e) { e.stopPropagation(); });
 
       if (self.options.ajaxUrl) {
         self.trigger('beforeajax');
@@ -117,7 +157,7 @@ define([
             self.$modal = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
               .replace('<body', '<div').replace('</body>', '</div>'))
                 .addClass(self.options.klass)
-                .insertBefore(self.backdrop.$backdrop);
+                .appendTo(self.$wrapperInner);
             self.trigger('afterajax', self, textStatus, xhr);
             self.show();
           });
@@ -126,44 +166,75 @@ define([
         self.$modal = function() {
           self.$modal = $modal
               .html($(self.options.target).clone())
-              .insertBefore(self.backdrop.$backdrop);
+              .appendTo(self.$wrapperInner);
           self.show();
         };
       } else {
         self.$modal = $modal
               .html(self.$el.clone())
-              .insertBefore(self.backdrop.$backdrop);
+              .appendTo(self.$wrapperInner);
       }
 
     },
     positionModal: function() {
       var self = this;
-      if (!self.$el.hasClass(self.options.klassActive) &&
-          typeof self.$modal === 'function') {
-        var postionHorizontal= self.options.position.split(' ')[0],
-            postionVertical= self.options.position.split(' ')[1];
+      if (self.$el.hasClass(self.options.klassActive) &&
+          typeof self.$modal !== 'function') {
+        var postionHorizontal = self.options.position.split(' ')[0],
+            postionVertical = self.options.position.split(' ')[1],
+            margin = parseInt(self.$modal.css('margin-left'), 10);
+
+        self.$wrapper.parent().css('overflow', 'hidden');
+
         self.$modal.css({
-          'margin': '0',
-          'top': 'auto',
-          'bottom': 'auto',
-          'right': 'auto',
-          'left': 'auto'
+          'width': self.options.width === 'auto' ? self.$modal.width() : self.options.width,
+          'height': self.options.height === 'auto' ? self.$modal.height() : self.options.height,
+          'position': 'absolute',
+          'bottom': '0',
+          'left': '0',
+          'right': '0',
+          'top': '0'
         });
+        self.$wrapperInner.css({ 'margin': '0' });
+        var wrapperOffsetBefore = self.$wrapperInner.offset();
+        self.$wrapperInner.css({ 'margin': self.options.margin });
+        var wrapperOffset = self.$wrapperInner.offset(),
+            wrapperOuterWidth = self.$wrapperInner.outerWidth(true),
+            wrapperInnerWidth = self.$wrapperInner.innerWidth(),
+            wrapperOuterHeight = self.$wrapperInner.outerHeight(true),
+            wrapperInnerHeight = self.$wrapperInner.innerHeight();
+
+        var topMargin = wrapperOffset.top - wrapperOffsetBefore.top,
+            bottomMargin = wrapperOuterHeight - wrapperInnerHeight - topMargin,
+            leftMargin = wrapperOffset.left - wrapperOffsetBefore.left,
+            rightMargin = wrapperOuterWidth - wrapperInnerWidth - leftMargin;
+
         if (postionHorizontal === 'left') {
-          self.$modal.css('left', 0);
+          self.$modal.css('left', leftMargin);
         } else if (postionHorizontal === 'center') {
-          self.$modal.css('margin-left', $(window).width()/2 - self.$modal.outerWidth()/2);
+          self.$modal.css('margin-left',
+              self.$wrapper.width()/2 - self.$modal.width()/2 - leftMargin);
         } else if (postionHorizontal === 'right') {
-          self.$modal.css('right', '0');
+          self.$modal.css('right', rightMargin);
         }
-        if (postionVertical === 'top') {
-          self.$modal.css('top', '0');
-        } else if (postionVertical === 'middle') {
-          self.$modal.css('top', '0');
-          self.$modal.css('margin-top', $(window).height()/2 - self.$modal.height()/2);
-        } else if (postionVertical === 'bottom') {
-          self.$modal.css('bottom', '0');
+
+        if (self.$modal.height() > self.$wrapper.height()) {
+          self.$wrapperInner.height(self.$modal.height() + bottomMargin);
+        } else {
+          if (postionVertical === 'top') {
+            self.$modal.css('margin-top', topMargin);
+          } else if (postionVertical === 'middle') {
+            self.$modal.css('margin-top', self.$wrapper.height()/2 -
+                self.$modal.height()/2 - topMargin);
+          } else if (postionVertical === 'bottom') {
+            self.$modal.css('margin-top', self.$wrapper.height() -
+                self.$modal.height() - topMargin);
+          }
         }
+
+        $(window).resize(function() {
+          self.positionModal();
+        });
       }
     },
     show: function() {
@@ -182,15 +253,9 @@ define([
             });
           self.$el.addClass(self.options.klassActive);
           self.backdrop.show();
-          self.$modal.show().css({
-            'z-index': self.options.backdropZIndex + 1,
-            'opacity': '0'
-          }).animate({ opacity: '1' }, 500);
-
-          // scan for patterns
+          self.$wrapper.show();
           Registry.scan(self.$modal);
-
-          // position modal
+          self.positionModal();
           self.trigger('shown');
         }
       }
@@ -202,6 +267,8 @@ define([
         self.backdrop.hide();
         if (self.$modal.remove) {
           self.$modal.remove();
+          self.$wrapper.hide();
+          self.$wrapper.parent().css('overflow', 'visible');
           self.initModal();
         }
         self.$el.removeClass(self.options.klassActive);
