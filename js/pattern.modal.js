@@ -85,22 +85,25 @@ define([
       self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
         self.$wrapper = $('<div/>')
+          .hide()
           .css({
             'z-index': self.options.backdropZIndex + 1,
             'overflow-y': 'scroll',
             'position': 'fixed',
+            'height': '100%',
+            'width': '100%',
             'bottom': '0',
             'left': '0',
             'right': '0',
             'top': '0'
-          }).hide()
+          })
+          .addClass(self.options.klassWrapper)
+          .insertBefore(self.backdrop.$backdrop)
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            self.backdrop.hide();
-          })
-          .addClass(self.options.klassWrapper)
-          .insertBefore(self.backdrop.$backdrop);
+            self.hide();
+          });
       }
 
       self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
@@ -154,22 +157,25 @@ define([
       }
 
       self.initModal();
-      self.backdrop.on('hidden', function() { self.hide(); });
+      self.$wrapper.on('hidden', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        self.hide();
+      });
     },
     initModal: function() {
       var self = this,
           $modal = $('<div/>')
-            .addClass(self.options.klass)
-            .on('click', function(e) { e.stopPropagation(); });
+            .addClass(self.options.klass);
 
       if (self.options.ajaxUrl) {
         self.$modal = function() {
+          self.trigger('beforeajax');
           self.$wrapper.parent().css('overflow', 'hidden');
           self.$wrapper.show();
           self.backdrop.show();
           self.$loading.show();
           self.positionLoading();
-          self.trigger('beforeajax');
           self.ajaxXHR = $.ajax({
               url: self.options.ajaxUrl,
               type: self.options.ajaxType
@@ -280,8 +286,13 @@ define([
           self.trigger('show');
           self.$modal
             .addClass(self.options.klassActive)
-            .on('hide.modal.patterns', function(e) {
+            .on('click', function(e) {
               e.stopPropagation();
+              e.preventDefault();
+            })
+            .on('close.modal.patterns', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
               self.hide();
             });
           self.$el.addClass(self.options.klassActive);

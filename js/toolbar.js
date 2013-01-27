@@ -39,7 +39,8 @@ define([
   'jquery',
   'jam/Patterns/src/registry',
   'js/jquery.iframe',
-  'js/widgets'
+  'js/widgets',
+  'js/pattern.toggle'
 //  'js/plone.cmsui'
 ], function($, Patterns, iframe) {
   "use strict";
@@ -70,12 +71,27 @@ define([
       })
 
       .on('beforeajax.modal.patterns', 'a.pat-modal', function(e) {
+        var $el = $(this);
+        $('.toolbar-dropdown-open > a').each(function() {
+          if ($el[0] !== $(this)[0]) {
+            $(this).trigger('click');
+          }
+        });
+        $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
       })
       .on('show.modal.patterns', 'a.pat-modal', function(e) {
+        var $el = $(this);
+        $('.toolbar-dropdown-open > a').each(function() {
+          if ($el[0] !== $(this)[0]) {
+            $(this).trigger('click');
+          }
+        });
+        $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
       })
       .on('hidden.modal.patterns', 'a.pat-modal', function(e) {
+        $('body', iframe.document).css('overflow', 'visible');
         iframe.shrink();
       });
 
