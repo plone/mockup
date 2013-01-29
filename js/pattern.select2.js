@@ -35,39 +35,80 @@
 
 define([
   'jquery',
-  'js/pattern.base.js',
+  'js/pattern.base',
   'jam/Patterns/src/core/parser',
-  'jam/select2/select2.js'
+  'jam/select2/select2'
 ], function($, Base, Parser) {
   "use strict";
 
-  var parser = new Parser("select2");
+  var parser = new Parser("select2"),
+      options = [
+        "width",
+        "minimumInputLength",
+        "maximumInputLength",
+        "minimumResultsForSearch",
+        "maximumSelectionSize",
+        "placeholder",
+        "separator",
+        "allowClear",
+        "multiple",
+        "closeOnSelect",
+        "openOnEnter",
+        "data",
+        "tags",
+        "ajaxUrl",
 
-  parser.add_argument("width");
-  parser.add_argument("minimumInputLength");
-  parser.add_argument("maximumInputLength");
-  parser.add_argument("minimumResultsForSearch");
-  parser.add_argument("maximumSelectionSize");
-  parser.add_argument("placeholder");
-  parser.add_argument("separator");
-  parser.add_argument("allowClear");
-  parser.add_argument("multiple");
-  parser.add_argument("closeOnSelect");
-  parser.add_argument("openOnEnter");
-  parser.add_argument("tokenSeparators");
-  parser.add_argument("ajax");
-  parser.add_argument("data");
-  parser.add_argument("tags");
-  parser.add_argument("containerCss");
-  parser.add_argument("containerCssClass");
-  parser.add_argument("dropdownCss");
-  parser.add_argument("dropdownCssClass");
+        "initSelection"
+      ];
+  $.each(options, function(i, option) {
+    parser.add_argument(option);
+  });
 
   var Select2 = Base.extend({
     name: "select2",
     parser: parser,
     init: function() {
-      this.$el.select2(this.options);
+      var self = this,
+          select2options = {};
+      $.each(options, function(i, option) {
+        if (self.options[option]) {
+          if (option === 'ajaxUrl') {
+            select2options.ajax = {
+              quietMillis: 300,
+              data: function (term, page) {
+                return {
+                  query: term,
+                  page_limit: 10,
+                  page: page
+                };
+              },
+              results: function (data, page) {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+                return { results: data.results, more: more };
+              }
+            };
+            select2options.ajax.url = self.options[option];
+          } else if (option === 'initSelection') {
+            select2options.initSelection = function ($el, callback) {
+              var data = [], value = $el.val(),
+                  initSelection = JSON.parse(self.options.initSelection);
+              $(value.split(",")).each(function () {
+                var text = this;
+                if (initSelection[this]) {
+                  text = initSelection[this];
+                }
+                data.push({id: this, text: text});
+              });
+              callback(data);
+            };
+          } else if (option === 'tags' || option === 'data') {
+            select2options.tags = JSON.parse(self.options[option]);
+          } else {
+            select2options[option] = self.options[option];
+          }
+        }
+      });
+      self.$el.select2(select2options);
     }
   });
 
