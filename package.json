@@ -13,7 +13,8 @@
       "select2": ">=3.2.0",
       "pickadate": ">=2.0.6",
       "jquery-form": ">=3.25.0",
-      "bootstrap": ">=2.2.2"
+      "bootstrap": ">=2.2.2",
+      "logging": ">=1.0.0pre"
     }
   },
   "maintainers": [
