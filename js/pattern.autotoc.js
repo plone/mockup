@@ -35,7 +35,7 @@
 
 define([
   'jquery',
-  'js/pattern.base.js',
+  'js/pattern.base',
   'jam/Patterns/src/core/parser'
 ], function($, Base, Parser) {
   "use strict";
@@ -79,7 +79,7 @@ define([
         $('<a/>')
           .appendTo(self.$toc)
           .text($level.text())
-          .prop('href', '#' + id)
+          .prop('href', id)
           .addClass(self.options.klassLevelPrefix + self.getLevel($level))
           .on('click', function(e, doScroll) {
             e.stopPropagation();
