@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
+
 @import "../jam/bootstrap/less/bootstrap.less";
 @import "../jam/bootstrap/less/responsive.less";
 
@@ -27,4 +29,34 @@ footer {
 
 #mockup-expose {
   padding: 1em;
+}
+.syntaxhighlighter {
+
+  font-size: 0.9em !important;
+  overflow: hidden !important;
+
+  a, div, code, table, table td, table tr,
+  table tbody, table thead, table caption, textarea {
+    font-family: "Inconsolata","Consolas","Bitstream Vera Sans Mono","Courier New",Courier,monospace !important;
+  }
+  table {
+    margin: 3px 0 !important;
+    background: #EEE !important;
+    td.code .line {
+      padding: 0 0.5em 0 0!important;
+    }
+  }
+  &:hover {
+    overflow: visible !important;
+    z-index: 500 !important;
+    table td.code .container {
+      border-top: 3px solid #EEE !important;
+      border-bottom: 3px solid #EEE !important;
+    }
+  }
+  .container {
+    &:before, &:after {
+      content: none;
+    }
+  }
 }

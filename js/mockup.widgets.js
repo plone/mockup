@@ -1,7 +1,10 @@
 require([
   'jquery',
   'sinon',
-  'js/widgets'
+  'js/widgets',
+  'jam/SyntaxHighlighter/scripts/XRegExp.js',
+  'jam/SyntaxHighlighter/scripts/shCore.js',
+  'jam/SyntaxHighlighter/scripts/shBrushXml.js'
 ], function($, sinon) {
 
   // before demo patterns in overlay remove html created by autotoc pattern
@@ -15,5 +18,7 @@ require([
   server.respondWith(/something.html/, function (xhr, id) {
     xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
   });
+
+  SyntaxHighlighter.all();
 
 });

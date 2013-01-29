@@ -8,9 +8,14 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plone Mockup</title>
+  <title>Plone Mockup(s)</title>
+  <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/XRegExp.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shCore.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shBrushBash.js"></script>
 </head>
 
 <body>
@@ -52,7 +57,7 @@
       <h1 id="budles">Bundles</h1>
 
       <div class="row">
-        <div class="span4">
+        <!--div class="span4">
           <h2><a href="#diazo.html">Diazo</a></h2>
           <p>Diazo toolbar exposes the diazo rules applied to a theme (or not)
             in order to map it to the backend. This helps when writing and
@@ -60,47 +65,47 @@
             create the diazo debugging toolbar. </p>
           <p>To build and use the diazo toolbar bundle, follow the steps
             below:</p>
-          <pre>
-$ make diazo
-$ cp build/diazo* path/to/diazo/lib/diazo/debug_resources</pre>
+          <pre class="brush: bash;toolbar: false;">
+make diazo
+cp build/diazo* path/to/diazo/lib/diazo/debug_resources</pre>
           <a href="#diazo.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
           <div style="clear:both"></div>
-        </div>
-        <div class="span4">
+        </div-->
+        <div class="span6">
           <h2><a href="widgets.html">Widgets</a></h2>
           <p><code>plone.app.widgets</code> are an alternative to the current
             Plone widgets, with enhanced features and modern design.</p>
           <p>To build and use the widgets bundle, follow the steps below:</p>
-          <pre>
-$ make widgets
-$ cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static</pre>
+          <pre class="brush: bash;toolbar: false;">
+make widgets
+cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static</pre>
           <a href="widgets.html" class="btn btn-primary pull-right">Demo</a>
           <div style="clear:both"></div>
         </div>
-        <div class="span4">
+        <div class="span6">
           <h2><a href="toolbar.html">Toolbar</a></h2>
           <p><code>plone.app.toolbar</code> separates the content management
             interface elements from the design, placing all functionality
             neatly into a toolbar at the top. This enormously simplifies
             theming and also usability for content managers.</p>
           <p>To build and use the toolbar bundle, follow the steps below:</p>
-          <pre>
-$ make toolbar
-$ cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static</pre>
+          <pre class="brush: bash;toolbar: false;">
+make toolbar
+cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static</pre>
           <a href="toolbar.html" class="btn btn-primary pull-right">Demo</a>
           <div style="clear:both"></div>
         </div>
       </div>
-      <div class="row">
+      <!--div class="row">
         <div class="span6">
           <h2><a href="#standardtiles.html">Standard Tiles</a></h2>
           <p><code>plone.app.standardtiles</code> are reusable visual elements
             outside content area, eg. logo, footer, ... This will eventually
             deprecate viewlets and portlets (forever!)</p>
           <p>To build and use the standardtiles bundle, follow the steps below:</p>
-          <pre>
-$ make standardtiles
-$ cp build/standardtiles* path/to/plone.app.standardtiles/plone/app/standardtiles/static</pre>
+          <pre class="brush: bash;toolbar: false;">
+make standardtiles
+cp build/standardtiles* path/to/plone.app.standardtiles/plone/app/standardtiles/static</pre>
           <a href="#standardtiles.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
           <div style="clear:both"></div>
         </div>
@@ -110,24 +115,24 @@ $ cp build/standardtiles* path/to/plone.app.standardtiles/plone/app/standardtile
             content area. Provides user friendly way (drag-n-drop) of adjusting
             the layout of the page.</p>
           <p>To build and use the deco bundle, follow the steps below:</p>
-          <pre>
-$ make deco
-$ cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
+          <pre class="brush: bash;toolbar: false;">
+make deco
+cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
           <a href="#deco.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
           <div style="clear:both"></div>
         </div>
-      </div>
+      </div-->
 
 
       <h1>Use it now</h1>
 
-      <pre>
+      <pre class="brush: bash;toolbar: false;">
 git clone git://github.com/plone/mockup.git
 cd mockup
 make bootstrap</pre>
 
       <p>Until Patterns is under heavy development.</p>
-      <pre>
+      <pre class="brush: bash;toolbar: false;">
 cd mockup
 mkdir ext
 cd ext
@@ -136,10 +141,10 @@ cd ..
 ./node_modules/jamjs/bin/jam.js link ext/Patterns</pre>
 
       <p>To build all bundles:</p>
-      <pre>make</pre>
+      <pre class="brush: bash;toolbar: false;">make</pre>
 
       <p>Run tests:</p>
-      <pre>make test</pre>
+      <pre class="brush: bash;toolbar: false;">make test</pre>
 
     </div>
   </div>
@@ -151,6 +156,9 @@ cd ..
     </div>
   </footer>
 
+  <script type="text/javascript">
+     SyntaxHighlighter.all()
+  </script>
 </body>
 
 </html>

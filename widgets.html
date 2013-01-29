@@ -9,6 +9,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Widgets</title>
+  <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />
   <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
@@ -257,10 +259,16 @@
             <option value="Yoruba">Yoruba</option>
             <option value="Yupik">Yupik</option>
           </select>
+          <pre class="brush: html;toolbar: false;">
+&lt;select class="pat-select2" data-pat-select2="width:20em;"&gt;
+  ...
+&lt;/select&gt;</pre>
         </div>
         <div class="span6">
           <h2>Tagging</h2>
           <input type="text" class="pat-select2" data-pat-select2="tags:Red,Yellow,Green;width:20em;" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input type="text" class="pat-select2" data-pat-select2="tags:Red,Yellow,Green;width:20em;" /&gt;<pre>
         </div>
       </div>
 
@@ -268,6 +276,8 @@
         <div class="span12">
           <h2>DateTime / Calendar</h2>
           <input class="pat-datetime" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input class="pat-datetime" /&gt;</pre>
         </div>
       </div>
 
@@ -289,6 +299,11 @@
               beauties have been nowhere near the bananas. I thought the two of
               us could talk man-on-man.</p>
           </div>
+          <pre class="brush: html;toolbar: false;">
+&lt;div class="pat-autotoc" data-pat-autotoc="scrollDuration:slow;levels:h3,h4,h5;"&gt;
+&lt;h3&gt;Title 1&lt;/h3&gt;
+...
+&lt;/div&gt;</pre>
         </div>
         <div class="span6">
           <div id="mockup-tabs">
@@ -321,6 +336,14 @@
                 </p>
               </fieldset>
             </form>
+            <pre class="brush: html;toolbar: false;">
+&lt;form class="pat-autotoc" data-pat-autotoc="levels:legend;section:fieldset;klass:autotabs"&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Tab 1&lt;/legend&gt;
+    ...
+  &lt;/fieldset&gt;
+  ...
+&lt;/form&gt;</pre>
           </div>
         </div>
       </div>
@@ -350,22 +373,38 @@
               </div>
             </div>
           </form>
+          <pre class="brush: html;toolbar: false;">
+&lt;form id="mockup-expose" class="form-horizontal pat-expose"&gt;
+  ...
+&lt;/form&gt;</pre>
         </div>
         <div class="span6">
           <h2>Modal</h2>
           <p>
-          <a href="#mockup-expose" class="btn btn-large btn-primary pat-modal">
-            Modal basic</a>
+            <a href="#mockup-expose" class="btn btn-large btn-primary pat-modal">
+                Modal basic</a>
+           <pre class="brush: html;toolbar: false;">
+&lt;a href="#mockup-expose"
+    class="btn btn-large btn-primary pat-modal"&gt;
+    Modal basic&lt;/a&gt;</pre>
           </p>
           <p>
             <a href="#mockup-tabs" id="modal1"
                class="btn btn-large btn-primary pat-modal">
               Modal with Patterns inside</a>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="#mockup-tabs" id="modal1"
+   class="btn btn-large btn-primary pat-modal"&gt;
+  Modal with Patterns inside&lt;/a&gt;</pre>
           </p>
           <p>
             <a href="something.html#content" id="modal2"
                class="btn btn-large btn-primary pat-modal">
               Modal with remote content (AJAX)</a>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="something.html#content" id="modal2"
+   class="btn btn-large btn-primary pat-modal"&gt;
+  Modal with remote content (AJAX)&lt;/a&gt;</pre>
           </p>
           <p>
             <a href="#modal3"
@@ -377,6 +416,16 @@
                 <h1>Modal with custom position and also width / height</h1>
               </div>
             </div>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="#modal3"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="position:center bottom;height:100px;width:100%;"&gt;
+  Modal with custom position&lt;/a&gt;
+&lt;div style="display:none"&gt;
+  &lt;div id="modal3"&gt;
+    &lt;h1&gt;Modal with custom position and also width / height&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
           </p>
           <p>
             <a href="#modal4"
@@ -657,6 +706,16 @@
 
               </div>
             </div>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="#modal4"
+   class="btn btn-large btn-primary pat-modal"&gt;
+  Modal with long text&lt;/a&gt;
+&lt;div style="display:none"&gt;
+  &lt;div id="modal4"&gt;
+    &lt;p&gt;Did you know ....&lt;/p&gt;
+    ...
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
           </p>
         </div>
       </div>

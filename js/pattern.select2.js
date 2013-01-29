@@ -102,7 +102,11 @@ define([
               callback(data);
             };
           } else if (option === 'tags' || option === 'data') {
-            select2options.tags = JSON.parse(self.options[option]);
+            if (self.options[option].substr(0, 1) === '[') {
+              select2options.tags = JSON.parse(self.options[option]);
+            } else {
+              select2options.tags = self.options[option].split(',');
+            }
           } else {
             select2options[option] = self.options[option];
           }
