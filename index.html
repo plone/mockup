@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Mockup(s)</title>
+  
+  
+  <link href="index.css" rel="stylesheet" type="text/css" />
+  <script src="index.js"></script>
+  
+  
+  
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div id="portal-logo">
+        <span class="plone-logo">
+          <span class="plone-logo-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Mockup(s)
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+      <p>Plone Mockup is an attempt to separate Plone, the user interface, from
+        Plone, the server. It is realised with Patterns
+        (http://patternslib.com), a library of rich interaction patterns.
+        Patterns are triggered by CSS classes and configured via HTML5-data
+        attributes.</p>
+
+      <p>The mockup is a fully functional prototype of Plone and its bundles.
+        As it is realised entirely in HTML+JS, it can be run in a browser
+        without the need for a full Plone installation. Therefore making it
+        easy to showcase Plone's UI or developing a new theme. Using
+        diazo/deliverance it is possible to integrate other backends alongside
+        or instead of Plone.</p>
+
+      <h1 id="budles">Bundles</h1>
+
+      <div class="row">
+        <!--div class="span4">
+          <h2><a href="#diazo.html">Diazo</a></h2>
+          <p>Diazo toolbar exposes the diazo rules applied to a theme (or not)
+            in order to map it to the backend. This helps when writing and
+            debugging diazo rules. <code>iframe.js</code> is the script used to
+            create the diazo debugging toolbar. </p>
+          <p>To build and use the diazo toolbar bundle, follow the steps
+            below:</p>
+          <pre class="brush: bash;toolbar: false;">
+make diazo
+cp build/diazo* path/to/diazo/lib/diazo/debug_resources</pre>
+          <a href="#diazo.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
+        </div-->
+        <div class="span6">
+          <h2><a href="widgets.html">Widgets</a></h2>
+          <p><code>plone.app.widgets</code> are an alternative to the current
+            Plone widgets, with enhanced features and modern design.</p>
+          <p>To build and use the widgets bundle, follow the steps below:</p>
+          <pre class="brush: bash;toolbar: false;">
+make widgets
+cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static</pre>
+          <a href="widgets.html" class="btn btn-primary pull-right">Demo</a>
+          <div style="clear:both"></div>
+        </div>
+        <div class="span6">
+          <h2><a href="toolbar.html">Toolbar</a></h2>
+          <p><code>plone.app.toolbar</code> separates the content management
+            interface elements from the design, placing all functionality
+            neatly into a toolbar at the top. This enormously simplifies
+            theming and also usability for content managers.</p>
+          <p>To build and use the toolbar bundle, follow the steps below:</p>
+          <pre class="brush: bash;toolbar: false;">
+make toolbar
+cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static</pre>
+          <a href="toolbar.html" class="btn btn-primary pull-right">Demo</a>
+          <div style="clear:both"></div>
+        </div>
+      </div>
+      <!--div class="row">
+        <div class="span6">
+          <h2><a href="#standardtiles.html">Standard Tiles</a></h2>
+          <p><code>plone.app.standardtiles</code> are reusable visual elements
+            outside content area, eg. logo, footer, ... This will eventually
+            deprecate viewlets and portlets (forever!)</p>
+          <p>To build and use the standardtiles bundle, follow the steps below:</p>
+          <pre class="brush: bash;toolbar: false;">
+make standardtiles
+cp build/standardtiles* path/to/plone.app.standardtiles/plone/app/standardtiles/static</pre>
+          <a href="#standardtiles.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
+        </div>
+        <div class="span6">
+          <h2><a href="#deco.html">Deco</a></h2>
+          <p><code>plone.app.deco</code> is the new layout editor for the
+            content area. Provides user friendly way (drag-n-drop) of adjusting
+            the layout of the page.</p>
+          <p>To build and use the deco bundle, follow the steps below:</p>
+          <pre class="brush: bash;toolbar: false;">
+make deco
+cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
+          <a href="#deco.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
+          <div style="clear:both"></div>
+        </div>
+      </div-->
+
+
+      <h1>Use it now</h1>
+
+      <pre class="brush: bash;toolbar: false;">
+git clone git://github.com/plone/mockup.git
+cd mockup
+make bootstrap</pre>
+
+      <!--p>Until Patterns is under heavy development.</p>
+      <pre class="brush: bash;toolbar: false;">
+cd mockup
+mkdir ext
+cd ext
+git clone git://github.com/Patternslib/Patterns.git
+cd ..
+./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
+
+      <p>To build all bundles:</p>
+      <pre class="brush: bash;toolbar: false;">make</pre>
+
+      <p>Run tests:</p>
+      <pre class="brush: bash;toolbar: false;">make test</pre>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+     SyntaxHighlighter.all()
+  </script>
+</body>
+
+</html>
+
+
