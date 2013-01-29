@@ -1,3 +1,4 @@
+GIT = git
 NPM = npm
 JAM = ./node_modules/jamjs/bin/jam.js
 LESSC = ./node_modules/less/bin/lessc
@@ -5,7 +6,7 @@ CSSMIN = ./node_modules/cssmin/bin/cssmin
 BUSTER  = ./node_modules/buster/bin/buster
 UGLIFYJS = ./node_modules/uglify-js/bin/uglifyjs
 
-DOCS = docs/index.html docs/index.js docs/index.css docs/widgets.html docs/widgets.js docs/widgets.css docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css
+DOCS = docs/index.html docs/index.js docs/index.css docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
 TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar.png
 
@@ -14,8 +15,8 @@ all:: widgets toolbar
 clean: clean_docs clean_widgets clean_toolbar
 
 bootstrap:
-	mkdir -p docs
 	mkdir -p build
+	$(GIT) clone git@github.com:plone/mockup.git -b gh-pages
 	$(NPM) install jamjs less cssmin uglify-js --prefix=./node_modules
 	$(NPM) install underscore buster buster-coverage buster-amd --prefix=./node_modules
 	$(JAM) install
@@ -79,6 +80,14 @@ docs/widgets.css:
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 	$(LESSC) less/widgets.less | $(CSSMIN) >> $@
+	sed -i -e 's@select2.png@widgets.png@g' $@
+	sed -i -e 's@select2-spinner.gif@widgets-spinner.gif@g' $@
+
+docs/widgets.png:
+	cp jam/select2/select2.png $@
+
+docs/widgets-spinner.gif:
+	cp jam/select2/select2-spinner.gif $@
 
 docs/toolbar.html:
 	cp toolbar.html $@
@@ -109,6 +118,10 @@ docs/toolbar.css:
 	$(CSSMIN) jam/select2/select2.css > $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
+	sed -i -e 's@../img/glyphicons-halflings.png@toolbar.png@g' $@
+
+docs/toolbar.png:
+	cp jam/bootstrap/img/glyphicons-halflings.png $@
 
 
 clean_widgets:
