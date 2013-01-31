@@ -16,7 +16,7 @@ clean: clean_docs clean_widgets clean_toolbar
 
 bootstrap:
 	mkdir -p build
-	$(GIT) clone git@github.com:plone/mockup.git -b gh-pages
+	if test ! -d docs; then $(GIT) clone git@github.com:plone/mockup.git -b gh-pages docs; fi
 	$(NPM) install jamjs less cssmin uglify-js --prefix=./node_modules
 	$(NPM) install underscore buster buster-coverage buster-amd --prefix=./node_modules
 	$(JAM) install
