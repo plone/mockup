@@ -1,1 +1,1 @@
-continue here http://garbas.github.com/plone-mockup.
+continue here http://status.plone.org/mockup/
