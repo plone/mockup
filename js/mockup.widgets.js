@@ -1,11 +1,14 @@
 require([
   'jquery',
   'sinon',
+  'jam/Patterns/src/registry',
   'js/widgets',
+  'js/pattern.expose',
+  'js/pattern.modal',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'
-], function($, sinon) {
+], function($, sinon, registry) {
 
   // before demo patterns in overlay remove html created by autotoc pattern
   $('#modal1').on('show.modal.patterns', function(e, modal) {
@@ -20,5 +23,10 @@ require([
   });
 
   SyntaxHighlighter.all();
+
+  // Initialize patterns
+  $(document).ready(function() {
+    registry.scan($('body'));
+  });
 
 });

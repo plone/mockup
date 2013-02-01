@@ -15,4 +15,9 @@ require([
     });
   });
 
+  // Initialize patterns
+  $(document).ready(function() {
+    registry.scan($('body'));
+  });
+
 });

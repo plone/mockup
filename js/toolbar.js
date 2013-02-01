@@ -29,6 +29,7 @@
   undef:true, strict:true, trailing:true, browser:true, evil:true */
 /*global define:false */
 
+
 if (window.jQuery) {
   define( "jquery", [], function () {
     "use strict";
@@ -39,20 +40,16 @@ define([
   'jquery',
   'jam/Patterns/src/registry',
   'js/jquery.iframe',
-  'js/widgets',
-  'js/pattern.toggle'
+  'js/pattern.toggle',
+  'js/widgets'
 //  'js/plone.cmsui'
-], function($, Patterns, iframe) {
+], function($, registry, iframe) {
   "use strict";
 
   $(document).ready(function() {
 
-    // Initial initialization of patterns
-    Patterns.scan($('body'));
-
     $(document)
-
-      // at opening dropdown:
+      // at opening toolbar dropdown:
       // - close all other opened dropdown buttons
       // - stretch iframe
       .on('add.toggle.patterns', '.toolbar-dropdown > a.pat-toggle', function(e) {
@@ -64,7 +61,6 @@ define([
         });
         iframe.stretch();
       })
-
       // at closing dropdown shrink iframe
       .on('removed.toggle.patterns', '.toolbar-dropdown > a.pat-toggle', function(e) {
         iframe.shrink();

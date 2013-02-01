@@ -36,6 +36,7 @@ if (window.jQuery) {
 define([
   'jquery',
   'jam/Patterns/src/registry',
+  'logging',  // should be pullin as dependency of Patterns but is not for some reason
   'js/pattern.select2',
   'js/pattern.datetime',
   'js/pattern.autotoc'
@@ -43,7 +44,7 @@ define([
   "use strict";
 
   // BBB: we need to hook pattern to classes which plone was using until now
-  registry.register({
+  var Widgets = {
     name: "plone-widgets",
     transform: function($root) {
 
@@ -54,11 +55,9 @@ define([
       $match.attr('data-pat-autotoc', 'levels:legend;section:fieldset;klass:autotabs');
 
     }
-  });
+  };
 
-  // Initialize patterns
-  $(document).ready(function() {
-    registry.scan($('body'));
-  });
+  registry.register(Widgets);
 
+  return Widgets;
 });

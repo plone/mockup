@@ -68,8 +68,6 @@ docs/widgets.html:
 
 docs/widgets.js:
 	$(JAM) compile -i js/mockup.widgets -i sinon --no-minify --almond $@
-	sed -i -e 's@define("logging/src/logging", function(){});@@g' $@
-	sed -i -e 's@define('\''logging'\'', \['\''logging/src/logging'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
@@ -109,8 +107,6 @@ docs/toolbar_init.css:
 
 docs/toolbar.js:
 	$(JAM) compile -i js/mockup.toolbar --no-minify --almond $@
-	sed -i -e 's@define("logging/src/logging", function(){});@@g' $@
-	sed -i -e 's@define('\''logging'\'', \['\''logging/src/logging'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
@@ -134,9 +130,7 @@ widgets: clean_widgets $(WIDGETS)
 
 build/widgets.js:
 	$(JAM) compile -i js/widgets -e jquery --no-minify --almond $@
-	echo 'require(["js/widgets"]);' >> $@
-	sed -i -e 's@define("logging/src/logging", function(){});@@g' $@
-	sed -i -e 's@define('\''logging'\'', \['\''logging/src/logging'\''\], function (main) { return main; });@@g' $@
+	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/widgets'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
 
 build/widgets.min.js: build/widgets.js
 	$(UGLIFYJS) build/widgets.js > $@
