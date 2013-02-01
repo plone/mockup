@@ -1,7 +1,6 @@
 // Author: Rok Garbas
 // Contact: rok@garbas.si
 // Version: 1.0
-//
 // Description:
 // 
 // License:
@@ -33,8 +32,8 @@ if (window.jQuery) {
     return window.jQuery;
   } );
 }
+
 define([
-  'logging',
   'jquery',
   'jam/Patterns/src/registry',
   'js/pattern.select2',
@@ -42,24 +41,24 @@ define([
   'js/pattern.autotoc',
   'js/pattern.expose',
   'js/pattern.modal'
-], function(logging, $, registry) {
+], function($, registry) {
   "use strict";
 
+  // BBB: we need to hook pattern to classes which plone was using until now
   registry.register({
     name: "plone-widgets",
     transform: function($root) {
 
-      // enableFormTabbing
+      // apply autotoc pattern where enableFormTabbing exists
       var $match = $root.filter('.enableFormTabbing');
       $match = $match.add($root.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
       $match.attr('data-pat-autotoc', 'levels:legend;section:fieldset;klass:autotabs');
 
     }
-
   });
 
-  // Initial initialization of patterns
+  // Initialize patterns
   $(document).ready(function() {
     registry.scan($('body'));
   });
