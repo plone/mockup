@@ -64,6 +64,11 @@ define([
     init: function() {
       var self = this;
 
+      // only initialize on "input" elements
+      if (!self.$el.is('input')) {
+        return;
+      }
+
       self.pickadateOptions = $.extend({}, $.fn.pickadate.defaults, {
         formatSubmit: 'yyyy-mm-dd',
         monthSelector: self.options.pickadateMonthSelector,
