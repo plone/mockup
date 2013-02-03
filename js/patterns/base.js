@@ -37,11 +37,50 @@ define([
 ], function($, registry, logger, undefined) {
   "use strict";
 
+  function getOptions($el, prefix, options) {
+    options = options || {};
+
+    // get options from parent element first, stop if element tag name is 'body'
+    if ($el.size() !== 0 && !$.nodeName($el[0], 'body')) {
+      options = getOptions($el.parent(), prefix, options);
+    }
+
+    // collect all options from element
+    if($el.length) {
+      $.each($el[0].attributes, function(index, attr) {
+        if (attr.name.substr(0, ('data-'+prefix).length) === 'data-'+prefix) {
+          var name = attr.name.substr(('data-'+prefix).length+1),
+              value = attr.value.replace(/^\s+|\s+$/g, '');  // trim
+          if (value.substring(0, 1) === '{' || value.substring(0, 1) === '[') {
+            $.extend(options, JSON.parse(value));
+            return;
+          } else if (value === 'true') {
+            value = true;
+          } else if (value === 'false') {
+            value = false;
+          }
+          options[name] = value;
+        }
+      });
+    }
+
+    return options;
+  }
+
   // Base Pattern
   var Base = function($el, options) {
     this.log = logger.getLogger(this.name);
     this.$el = $el;
-    this.options = this.parser.parse($el, this.defaults || {}, this.multipleOptions || false);
+    if (this.parser) {
+      this.options = $.extend(
+          this.parser.parse($el, this.defaults || {}, this.multipleOptions || false),
+          options || {});
+    } else {
+      this.options = $.extend(
+          this.defaults || {},
+          getOptions($el, this.name),
+          options || {});
+    }
     this.init();
     this.trigger('init');
   };
@@ -55,7 +94,8 @@ define([
     }
   };
   Base.extend = function(NewPattern) {
-    var Base = this;
+    var Base = this,
+        jquery_plugin = true;
     var Constructor;
 
     if (NewPattern && NewPattern.hasOwnProperty('constructor')) {
@@ -72,10 +112,33 @@ define([
 
     Constructor.__super__ = Base.prototype;
 
+    if (Constructor.prototype.jqueryPlugin) {
+      jquery_plugin = false;
+      $.fn[Constructor.prototype.jqueryPlugin] = function(method, options) {
+        $(this).each(function() {
+          var $el = $(this),
+              pattern = $el.data('pattern-' + Constructor.prototype.name);
+          if (typeof method === "object") {
+            options = method;
+            method = undefined;
+          }
+          if (!pattern || typeof(pattern) === 'string') {
+            pattern = new Constructor($el, options);
+            $el.data('pattern-' + Constructor.prototype.name, pattern);
+          } else if (method && pattern && pattern[method]) {
+            // TODO: now allow method starts with "_"
+            pattern[method].apply(pattern, [options]);
+          }
+
+        });
+        return this;
+      };
+    }
+
     registry.register({
       name: Constructor.prototype.name,
       trigger: '.pat-' + Constructor.prototype.name,
-      jquery_plugin: true,
+      jquery_plugin: jquery_plugin,
       init: function($all) {
         return $all.each(function(i) {
           var $el = $(this),
