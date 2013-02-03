@@ -72,7 +72,7 @@ define([
       var self = this;
 
 
-      self.backdrop = new Backdrop($(self.options.backdrop), {
+      self.backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
         zindex: self.options.backdropZIndex,
         klass: self.options.backdropKlass,
         klassActive: self.options.backdropKlassActive,

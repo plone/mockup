@@ -29,6 +29,7 @@ module.exports['Patterns'] = {
     'js/patterns/backdrop.js',
     'js/patterns/datetime.js',
     'js/patterns/expose.js',
+    'js/patterns/modal.js',
     'js/patterns/select2.js',
     'js/patterns/toggle.js'
   ],

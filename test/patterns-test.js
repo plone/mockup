@@ -39,9 +39,11 @@ require([
   'js/patterns/backdrop',
   'js/patterns/datetime',
   'js/patterns/expose',
+  'js/patterns/modal',
   'js/patterns/select2',
   'js/patterns/toggle'
-], function($, registry, AutoTOC, Backdrop, DateTime, Expose, Select2, Toggle) {
+], function($, registry, AutoTOC, Backdrop, DateTime, Expose, Modal, Select2,
+      Toggle) {
   "use strict";
 
   describe("AutoTOC", function () {
@@ -194,15 +196,47 @@ require([
   describe("Expose", function() {
     it("default behaivour", function() {
       var $el = $('' +
-        '<div>' +
-        ' <form class="pat-expose">' +
+        '<div id="body">' +
+        ' <form class="pat-expose" data-pat-expose="backdrop:#body;">' +
         '  <input value="" />' +
         ' </form>' +
         '</div>');
       registry.scan($el);
       expect($('form', $el).css('z-index')).toEqual('');
+      expect($('.backdrop', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
       $('input', $el).focus();
       expect($('form', $el).css('z-index')).toEqual('1001');
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      var keydown = $.Event("keydown");
+      keydown.keyCode = 27;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($('form', $el).css('z-index')).toEqual('');
+    });
+  });
+
+  describe("Modal", function() {
+    it("default behaivour", function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <a class="pat-modal" href="#target"' +
+        '    data-pat-modal="backdrop:#body;">Open</a>' +
+        ' <div id="target"> Target </div>' +
+        '</div>');
+      registry.scan($el);
+      expect($('.modal-wrapper', $el).size()).toEqual(1);
+      expect($('.modal', $el).size()).toEqual(0);
+      expect($('.backdrop', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      $('a.pat-modal', $el).click();
+      expect($('.modal', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      var keydown = $.Event("keydown");
+      keydown.keyCode = 27;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($('.modal', $el).size()).toEqual(0);
     });
   });
 
