@@ -23,7 +23,8 @@ module.exports['Patterns'] = {
     'jam/Patterns/src/core/parser.js',
     'jam/Patterns/src/registry.js',
     'js/patterns/base.js',
-    'js/patterns/autotoc.js'
+    'js/patterns/autotoc.js',
+    'js/patterns/toggle.js'
   ],
   libs: [
     'jam/require.js'

@@ -35,8 +35,9 @@ buster.spec.expose();
 require([
   'jquery',
   'jam/Patterns/src/registry',
-  'js/patterns/autotoc'
-], function($, registry, AutoTOC) {
+  'js/patterns/autotoc',
+  'js/patterns/toggle'
+], function($, registry, AutoTOC, Toggle) {
   "use strict";
 
   describe("AutoTOC", function () {
@@ -57,8 +58,6 @@ require([
         ' </div>' +
         '</div>');
     });
-
-    // scanning twice wont initialize pattern twice
     it("by default creates TOC from h1/h2/h3", function() {
       expect($('> nav', this.$el).size()).toEqual(0);
       registry.scan(this.$el);
@@ -69,13 +68,11 @@ require([
       expect($('> nav > a.autotoc-level-3', this.$el).size()).toEqual(1);
       expect($('> nav > a.autotoc-level-4', this.$el).size()).toEqual(0);
     });
-
     it("can be used as jQuery plugin as well", function () {
       expect($('> nav', this.$el).size()).toEqual(0);
       this.$el.patAutotoc();
       expect($('> nav', this.$el).size()).toEqual(1);
     });
-
     it("can have custom levels", function() {
       this.$el.attr('data-pat-autotoc', 'levels:h1');
       expect($('> nav', this.$el).size()).toEqual(0);
@@ -84,8 +81,47 @@ require([
       expect($('> nav > a.autotoc-level-1', this.$el).size()).toEqual(4);
       expect($('> nav > a.autotoc-level-2', this.$el).size()).toEqual(0);
     });
-
   });
+
+  describe("Toggle", function() {
+    before(function() {
+      this.$el = $('' +
+        '<div>' +
+        ' <a class="pat-toggle"' +
+        '    data-pat-toggle="target:#target;value:toggled;">Button</a>' +
+        ' <div id="target"></div>' +
+        '</div>');
+    });
+    it("by default toggles on click event", function() {
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      registry.scan(this.$el);
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      $('.pat-toggle', this.$el).trigger('click');
+      expect($('.toggled', this.$el).size()).toEqual(1);
+    });
+    it("can also listen to custom event", function() {
+      $('.pat-toggle', this.$el).attr('data-pat-toggle',
+        $('.pat-toggle', this.$el).attr('data-pat-toggle') + 'event:customEvent;');
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      registry.scan(this.$el);
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      $('.pat-toggle', this.$el).trigger('customEvent');
+      expect($('.toggled', this.$el).size()).toEqual(1);
+    });
+    it("can also toggle custom element attribute", function() {
+      $('.pat-toggle', this.$el).attr('data-pat-toggle',
+        $('.pat-toggle', this.$el).attr('data-pat-toggle') + 'attribute:rel;');
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('[rel="toggled"]', this.$el).size()).toEqual(0);
+      registry.scan(this.$el);
+      expect($('[rel="toggled"]', this.$el).size()).toEqual(0);
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      $('.pat-toggle', this.$el).trigger('click');
+      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('[rel="toggled"]', this.$el).size()).toEqual(1);
+    });
+  });
+
   buster.run();
 
 });
