@@ -2,9 +2,9 @@ require([
   'jquery',
   'sinon',
   'jam/Patterns/src/registry',
-  'js/widgets',
-  'js/pattern.expose',
-  'js/pattern.modal',
+  'js/bundles/widgets',
+  'js/patterns/expose',
+  'js/patterns/modal',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'

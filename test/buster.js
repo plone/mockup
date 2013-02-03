@@ -10,13 +10,11 @@
 //        }
 //      };
 
-module.exports['pattern.modal.js'] = {
+module.exports['Patterns'] = {
   environment: "browser",
+  autoRun: false,
   rootPath: "..",
-  libs: [
-    'jam/require.js'
-  ],
-  sources: [
+  resources: [
     'jam/jquery/dist/jquery.js',
     'jam/logging/src/logging.js',
     'jam/Patterns/src/core/logger.js',
@@ -24,15 +22,40 @@ module.exports['pattern.modal.js'] = {
     'jam/Patterns/src/utils.js',
     'jam/Patterns/src/core/parser.js',
     'jam/Patterns/src/registry.js',
-    'js/pattern.base.js',
-    'js/pattern.modal.js'
+    'js/patterns/base.js',
+    'js/patterns/autotoc.js'
+  ],
+  libs: [
+    'jam/require.js'
   ],
   tests: [
-    'test/pattern.modal-test.js'
-  ],
-  extensions: [ require("buster-amd")]
-  //extensions: [ require("buster-amd"), require("buster-coverage")]
+    'test/patterns-test.js'
+  ]
 };
+
+//module.exports['pattern.modal.js'] = {
+//  environment: "browser",
+//  rootPath: "..",
+//  libs: [
+//    'jam/require.js'
+//  ],
+//  sources: [
+//    'jam/jquery/dist/jquery.js',
+//    'jam/logging/src/logging.js',
+//    'jam/Patterns/src/core/logger.js',
+//    'jam/Patterns/src/compat.js',
+//    'jam/Patterns/src/utils.js',
+//    'jam/Patterns/src/core/parser.js',
+//    'jam/Patterns/src/registry.js',
+//    'js/pattern.base.js',
+//    'js/pattern.modal.js'
+//  ],
+//  tests: [
+//    'test/pattern.modal-test.js'
+//  ],
+//  extensions: [ require("buster-amd")]
+//  //extensions: [ require("buster-amd"), require("buster-coverage")]
+//};
 
 //config['plone.app.toolbar-iframe.js'] = _.extend({}, defaults, {
 //  libs:         [],

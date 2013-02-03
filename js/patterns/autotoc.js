@@ -1,13 +1,8 @@
-// plone integration for textext.
+// Pattern which generates Table Of Contents.
 //
 // Author: Rok Garbas
 // Contact: rok@garbas.si
 // Version: 1.0
-// Depends:
-//    ++resource++plone.app.jquery.js
-//    ++resource++plone.app.widgets/textext.js
-//
-// Description:
 //
 // License:
 //
@@ -35,7 +30,7 @@
 
 define([
   'jquery',
-  'js/pattern.base',
+  'js/patterns/base',
   'jam/Patterns/src/core/parser'
 ], function($, Base, Parser) {
   "use strict";

@@ -38,15 +38,96 @@ if (window.jQuery) {
 }
 define([
   'jquery',
-  'jam/Patterns/src/registry',
   'js/jquery.iframe',
-  'js/pattern.toggle',
-  'js/widgets'
-//  'js/plone.cmsui'
-], function($, registry, iframe) {
+  'js/patterns/toggle',
+  'js/patterns/modal.js',
+  'js/bundles/widgets'
+//  'js/overlays'
+], function($, iframe) {
   "use strict";
 
+  window.plone = window.plone || {};
+  window.plone.toolbar = window.plone.toolbar || {};
+
   $(document).ready(function() {
+
+    // Edit form
+    //$('#plone-toolbar #plone-action-edit > a').ploneOverlay(
+    //  $.extend(window.plone.toolbar, {
+    //    events: {
+    //      'click .modal-body input[name="form.button.cancel"]': {},
+    //      'click .modal-body input[name="form.button.save"]': {
+    //        contentFilters: [ '#portal-column-content' ]
+    //      }
+    //    }
+    //  }));
+
+    //
+    function templateBootstrapModal($modal, options) {
+      var $content = $modal.html();
+
+      options = $.extend({
+        title: 'h1.documentFirstHeading',
+        buttons: '.formControls > input[type="submit"]'
+      }, options);
+
+      $modal
+        .addClass('modal')
+        .addClass('fade')
+        .html('<div class="modal-header">' +
+              '  <a class="close" data-dismiss="modal">&times;</a>' +
+              '  <h3></h3>' +
+              '</div>' +
+              '<div class="modal-body"></div>' +
+              '<div class="modal-footer"></div>');
+
+
+      $('.modal-header > h3', $modal).html($(options.title, $content).html());
+      $(options.title, $content).remove();
+      $('.modal-body', $modal).html($content);
+      $('.modal-header > a', $modal)
+        .off('click')
+        .on('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          $.trigger('close.modal.patterns');
+        });
+
+      $(options.buttons, $modal).each(function() {
+        var $button = $(this);
+        $button.clone()
+          .appendTo($('.modal-footer', $modal))
+          .off('click').on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $button.trigger('click');
+          });
+        $button.hide();
+      });
+    }
+
+    // Sharing
+    $('#plone-action-local_roles > a').patModal({
+      template: function($modal) {
+        templateBootstrapModal($modal, {
+          buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
+        });
+        // FIXME: we shouldn't hack like this
+        $('#link-presentation', $modal).remove();
+      },
+      events: {
+        'click .modal-body input[name="form.button.Search"]': {
+          onSuccess: function(responseBody) {
+            var self = this;
+            self.$modal.html('');
+            self.$modal.append($('> *', self.modalTemplate(responseBody)));
+            self.initModalEvents(self.$modal);
+          }
+        },
+        'click .modal-body input[name="form.button.Cancel"]': {},
+        'click .modal-body input[name="form.button.Save"]': {}
+      }
+    });
 
     $(document)
       // at opening toolbar dropdown:
@@ -65,7 +146,7 @@ define([
       .on('removed.toggle.patterns', '.toolbar-dropdown > a.pat-toggle', function(e) {
         iframe.shrink();
       })
-
+      // integration of toolbar and modals
       .on('beforeajax.modal.patterns', 'a.pat-modal', function(e) {
         var $el = $(this);
         $('.toolbar-dropdown-open > a').each(function() {

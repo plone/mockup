@@ -13,7 +13,103 @@
   <script src="jam/less/dist/less-1.3.3.js"></script>
   <script src="js/iframe.js"></script>
 
-  <script type="text/x-ajax-respond" data-regexp="edit.html">
+  <script type="text/x-ajax-respond" data-regexp="sharing.html">
+    <html>
+    <head></head>
+    <body>
+      <div id="portal-columns" class="row">
+        <div class="documentEditable">
+          <div id="content">
+            <h1 class="documentFirstHeading">
+              Sharing for
+              <q>Welcome to Plone</q>
+            </h1>
+            <div class="documentDescription">
+              You can control who can view and edit your item using the list
+              below.
+            </div>
+            <p id="link-presentation">
+              <a href="#!/presentation_view" rel="nofollow"
+                 class="link-presentation">
+                Also available in presentation mode...
+              </a>
+            </p>
+            <div id="content-core">
+              <form method="post" action="sharing.html">
+                <input type="hidden" name="form.submitted:boolean" value="True" />
+                <div class="field">
+                  <input type="text" size="30" name="search_term"
+                      title="Search for user or group"
+                      placeholder="Search for user or group"
+                      class="searchField" value="" />
+                  <input type="submit" id="sharing-search-button"
+                      name="form.button.Search" value="Search"
+                      class="searchButton allowMultiSubmit" />
+                </div>
+                <div id="user-group-sharing-container">
+                  <table id="user-group-sharing" class="listing"
+                      summary="Current sharing permissions">
+                    <thead id="user-group-sharing-head">
+                      <tr>
+                        <th>Name</th>
+                        <th class="nosort">Can add</th>
+                        <th class="nosort">Can edit</th>
+                        <th class="nosort">Can review</th>
+                        <th class="nosort">Can view</th>
+                      </tr>
+                    </thead>
+                    <tbody id="user-group-sharing-settings">
+                      <tr class="even">
+                        <td>
+                          <img src="img/group.png" alt="" title="" height="16"width="16" />
+                          Logged-in users
+                          <input type="hidden" name="entries.id:records" value="AuthenticatedUsers" />
+                          <input type="hidden" name="entries.type:records" value="group" />
+                        </td>
+                        <td class="listingCheckbox">
+                          <input class="noborder" type="checkbox" value="True" name="entries.role_Contributor:records" />
+                        </td>
+                        <td class="listingCheckbox">
+                          <input class="noborder" type="checkbox" value="True" name="entries.role_Editor:records" />
+                        </td>
+                        <td class="listingCheckbox">
+                          <input class="noborder" type="checkbox" value="True" name="entries.role_Reviewer:records" />
+                        </td>
+                        <td class="listingCheckbox">
+                          <input class="noborder" type="checkbox" value="True" name="entries.role_Reader:records" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="field" id="field-inherit">
+                  <input class="noborder" type="checkbox" name="inherit:boolean" value="1" checked="checked" id="inherit" />
+                  <label for="inherit">Inherit permissions from higher levels</label>
+                  <div class="formHelp">
+                    By default, permissions from the container of this item are inherited.
+                    If you disable this, only the explicitly defined sharing permissions will
+                    be valid.
+                    In the overview, the symbol
+                    <img src="img/confirm_icon.png" alt="" title="" height="16" width="16" />
+                    indicates an inherited value. Similarly, the symbol
+                    <img src="img/site_icon.png" alt="" title="" height="16" width="16" />
+                    indicates a global role, which is managed by the site administrator.
+                  </div>
+                </div>
+                <input id="sharing-save-button" class="context allowMultiSubmit" type="submit" name="form.button.Save" value="Save" />
+                <input class="standalone" type="submit" name="form.button.Cancel" value="Cancel" />
+                <input type="hidden" name="_authenticator" value="0e963e258615effaa9483d4c32d2312882e58911"/>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="viewlet-below-content"></div>
+      </div>
+    </body>
+    </html>
+  </script>
+
+  <script type="text/x-ajax-respond" data-regexp="/edit.html/">
     <html>
     <head></head>
     <body>
@@ -157,16 +253,16 @@
         <div class="toolbar-left">
           <ul class="toolbar-left-actions">
             <li id="plone-action-folderContents">
-              <a href="#!/folder_contents">Contents</a>
+              <a href="contents.html">Contents</a>
             </li>
             <li id="plone-action-edit">
-              <a href="/edit.html" class="pat-modal">Edit</a>
+              <a href="edit.html">Edit</a>
             </li>
             <li id="plone-action-contentrules">
-              <a href="#!/@@manage-content-rules">Rules</a>
+              <a href="rules.html">Rules</a>
             </li>
             <li id="plone-action-local_roles">
-              <a href="#!/front-page/@@sharing">Sharing</a>
+              <a href="sharing.html">Sharing</a>
             </li>
           </ul>
           <ul class="toolbar-right-actions">

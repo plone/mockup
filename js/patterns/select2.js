@@ -35,7 +35,7 @@
 
 define([
   'jquery',
-  'js/pattern.base',
+  'js/patterns/base',
   'jam/Patterns/src/core/parser',
   'jam/select2/select2'
 ], function($, Base, Parser) {

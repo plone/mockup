@@ -30,8 +30,8 @@
 /*global define:false */
 define([
   'jquery',
-  'js/pattern.base',
-  'js/pattern.backdrop',
+  'js/patterns/base',
+  'js/patterns/backdrop',
   'jam/Patterns/src/core/parser'
 ], function($, Base, Backdrop, Parser) {
   "use strict";

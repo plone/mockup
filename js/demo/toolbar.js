@@ -1,8 +1,9 @@
 require([
   'jquery',
   'sinon',
+  'jam/Patterns/src/registry',
   'js/toolbar'
-], function($, sinon) {
+], function($, sinon, registry) {
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;

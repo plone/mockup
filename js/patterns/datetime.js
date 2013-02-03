@@ -33,7 +33,7 @@
 
 define([
   'jquery',
-  'js/pattern.base',
+  'js/patterns/base',
   'jam/Patterns/src/core/parser',
   'jam/pickadate/source/pickadate'
 ], function($, Base, Parser) {

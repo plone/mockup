@@ -31,11 +31,11 @@
 /*global define:false */
 define([
   'jquery',
-  'js/pattern.base',
-  'js/pattern.backdrop',
+  'js/patterns/base',
+  'js/patterns/backdrop',
   'jam/Patterns/src/registry',
   'jam/Patterns/src/core/parser'
-], function($, Base, Backdrop, Registry, Parser, undefined) {
+], function($, Base, Backdrop, registry, Parser, undefined) {
   "use strict";
 
   var parser = new Parser("modal");
@@ -289,7 +289,10 @@ define([
           self.$wrapper.parent().css('overflow', 'hidden');
           self.$el.addClass(self.options.klassActive);
           self.$modal.addClass(self.options.klassActive);
-          Registry.scan(self.$modal);
+          if (self.options.template) {
+            self.options.template(self.$modal);
+          }
+          registry.scan(self.$modal);
           self.positionModal();
           $(window).off('resize').on('resize', function() {
             self.positionModal();

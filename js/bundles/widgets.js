@@ -37,9 +37,9 @@ define([
   'jquery',
   'jam/Patterns/src/registry',
   'logging',  // should be pullin as dependency of Patterns but is not for some reason
-  'js/pattern.select2',
-  'js/pattern.datetime',
-  'js/pattern.autotoc'
+  'js/patterns/select2',
+  'js/patterns/datetime',
+  'js/patterns/autotoc'
 ], function($, registry) {
   "use strict";
 
