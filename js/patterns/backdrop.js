@@ -57,12 +57,20 @@ define([
             .addClass(self.options.klass);
       }
       if (self.options.closeOnEsc === true) {
-        // TODO
-        console.log('TODO: need to close backdrop when ESC key is pressed');
+         // ESCAPE key pressed
+        $(document).on('keydown', function(e, data) {
+          if (self.$el.is('.' + self.options.klassActive)) {
+            if (e.keyCode === 27) {
+              self.hide();
+            }
+          }
+        });
       }
       if (self.options.closeOnClick === true) {
         self.$backdrop.on('click', function() {
-          self.hide();
+          if (self.$el.is('.' + self.options.klassActive)) {
+            self.hide();
+          }
         });
       }
     },
