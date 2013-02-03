@@ -26,6 +26,7 @@ module.exports['Patterns'] = {
     'jam/select2/select2.js',
     'js/patterns/base.js',
     'js/patterns/autotoc.js',
+    'js/patterns/backdrop.js',
     'js/patterns/datetime.js',
     'js/patterns/select2.js',
     'js/patterns/toggle.js'

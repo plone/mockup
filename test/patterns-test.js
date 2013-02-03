@@ -36,10 +36,11 @@ require([
   'jquery',
   'jam/Patterns/src/registry',
   'js/patterns/autotoc',
+  'js/patterns/backdrop',
   'js/patterns/datetime',
   'js/patterns/select2',
   'js/patterns/toggle'
-], function($, registry, AutoTOC, DateTime, Select2, Toggle) {
+], function($, registry, AutoTOC, Backdrop, DateTime, Select2, Toggle) {
   "use strict";
 
   describe("AutoTOC", function () {
@@ -160,6 +161,32 @@ require([
       registry.scan($el);
       expect($('.select2-choices', $el).size()).toEqual(1);
       expect($('.select2-choices li', $el).size()).toEqual(2);
+    });
+  });
+
+  describe("Backdrop", function() {
+    it("default", function() {
+      var $el = $('<div></div>'),
+          backdrop = new Backdrop($el);
+      expect($('.backdrop', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      backdrop.show();
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      backdrop.hide();
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      backdrop.show();
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      backdrop.$backdrop.trigger('click');
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      backdrop.show();
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      var keydown = $.Event("keydown");
+      keydown.keyCode = 50;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      keydown.keyCode = 27;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
     });
   });
 
