@@ -28,13 +28,14 @@
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   regexp:true, undef:true, strict:true, trailing:true, browser:true */
 /*global buster:false, require:false, describe:false, it:false, expect:false,
-  before:false */
+  before:false, after:false */
 
 
 buster.spec.expose();
 require([
   'jquery',
   'jam/Patterns/src/registry',
+  'js/patterns/base',
   'js/patterns/autotoc',
   'js/patterns/backdrop',
   'js/patterns/datetime',
@@ -42,9 +43,39 @@ require([
   'js/patterns/modal',
   'js/patterns/select2',
   'js/patterns/toggle'
-], function($, registry, AutoTOC, Backdrop, DateTime, Expose, Modal, Select2,
-      Toggle) {
+], function($, registry, Base, AutoTOC, Backdrop, DateTime, Expose, Modal,
+      Select2, Toggle) {
   "use strict";
+
+  describe("Base", function () {
+    before(function() {
+      this._patterns = $.extend({}, registry.patterns);
+    });
+    after(function() {
+      registry.patterns = this._patterns;
+    });
+    it("read options from dom tree", function() {
+      var $el = $('' +
+        '<div data-example="{&quot;name1&quot;: &quot;value1&quot;,' +
+        '    &quot;name2&quot;: &quot;value2&quot;}">' +
+        ' <div class="pat-example" data-example-name2="something"></div>' +
+        '</div>');
+
+      Base.extend({
+        name: "example",
+        defaults: {
+          name3: 'value3'
+        },
+        init: function() {
+          expect(this.options.name1).toEqual('value1');
+          expect(this.options.name2).toEqual('something');
+          expect(this.options.name3).toEqual('value3');
+        }
+      });
+
+      registry.scan($el);
+    });
+  });
 
   describe("AutoTOC", function () {
     before(function() {
@@ -89,6 +120,146 @@ require([
     });
   });
 
+  describe("Backdrop", function() {
+    it("default behaivour", function() {
+      var $el = $('<div></div>'),
+          backdrop = new Backdrop($el);
+      expect($('.backdrop', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      backdrop.show();
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      backdrop.hide();
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      backdrop.show();
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      backdrop.$backdrop.trigger('click');
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      backdrop.show();
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      var keydown = $.Event("keydown");
+      keydown.keyCode = 50;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      keydown.keyCode = 27;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+    });
+  });
+
+  describe("DateTime", function() {
+    before(function() {
+      this.$el = $('' +
+        '<div>' +
+        ' <input class="pat-datetime" data-pat-datetime="" />' +
+        '</div>');
+    });
+    it('creates initial structure', function() {
+      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(0);
+      registry.scan(this.$el);
+      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(1);
+      expect($('.pat-datetime-wrapper select', this.$el).size()).toEqual(8);
+      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).toEqual(2);
+    });
+    it('doesn not work on anything else then "input" elements', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <a class="pat-datetime" data-pat-toggle="" />' +
+        '</div>');
+      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
+      registry.scan($el);
+      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
+    });
+  });
+
+  describe("Expose", function() {
+    it("default behaivour", function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <form class="pat-expose" data-pat-expose="backdrop:#body;">' +
+        '  <input value="" />' +
+        ' </form>' +
+        '</div>');
+      registry.scan($el);
+      expect($('form', $el).css('z-index')).toEqual('');
+      expect($('.backdrop', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      $('input', $el).focus();
+      expect($('form', $el).css('z-index')).toEqual('1001');
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      var keydown = $.Event("keydown");
+      keydown.keyCode = 27;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($('form', $el).css('z-index')).toEqual('');
+    });
+  });
+
+  describe("Modal", function() {
+    it("default behaivour", function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <a class="pat-modal" href="#target"' +
+        '    data-modal-backdrop="#body">Open</a>' +
+        ' <div id="target">Target</div>' +
+        '</div>');
+      registry.scan($el);
+      expect($('.modal-wrapper', $el).size()).toEqual(1);
+      expect($('.modal', $el).size()).toEqual(0);
+      expect($('.backdrop', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      $('a.pat-modal', $el).click();
+      expect($('.modal', $el).size()).toEqual(1);
+      expect($el.hasClass('backdrop-active')).toBeTrue();
+      var keydown = $.Event("keydown");
+      keydown.keyCode = 27;
+      $(document).trigger(keydown);
+      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($('.modal', $el).size()).toEqual(0);
+    });
+    it("modal with custom template", function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <a class="pat-modal" href="#target"' +
+        '    data-pat-modal="backdrop:#body;">Open</a>' +
+        ' <div id="target"> Target </div>' +
+        '</div>');
+
+      $('a.pat-modal', $el).patModal({
+        template: function($modal) {
+          var contents = $modal.html();
+          $modal
+            .html('')
+            .append($('<div class="modal-header"><h3>Title</h3></div>'))
+            .append($('<div class="modal-body"></div>'))
+            .append($('<div class="modal-footer"></div>'));
+          $('.modal-body', $modal).html(contents);
+        }
+      });
+
+      $('a.pat-modal', $el).click();
+
+      expect($('.modal', $el).size()).toEqual(1);
+      expect($('.modal .modal-header', $el).size()).toEqual(1);
+      expect($('.modal .modal-body', $el).size()).toEqual(1);
+      expect($('.modal .modal-footer', $el).size()).toEqual(1);
+
+    });
+  });
+
+  describe("Select2", function() {
+    it('tagging', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-select2" data-pat-select2="tags:Red,Yelow,Blue"' +
+        '      value="Yellow" />' +
+        '</div>');
+      expect($('.select2-choices', $el).size()).toEqual(0);
+      registry.scan($el);
+      expect($('.select2-choices', $el).size()).toEqual(1);
+      expect($('.select2-choices li', $el).size()).toEqual(2);
+    });
+  });
+
   describe("Toggle", function() {
     before(function() {
       this.$el = $('' +
@@ -125,118 +296,6 @@ require([
       $('.pat-toggle', this.$el).trigger('click');
       expect($('.toggled', this.$el).size()).toEqual(0);
       expect($('[rel="toggled"]', this.$el).size()).toEqual(1);
-    });
-  });
-
-  describe("DateTime", function() {
-    before(function() {
-      this.$el = $('' +
-        '<div>' +
-        ' <input class="pat-datetime" data-pat-datetime="" />' +
-        '</div>');
-    });
-    it('creates initial structure', function() {
-      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(0);
-      registry.scan(this.$el);
-      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(1);
-      expect($('.pat-datetime-wrapper select', this.$el).size()).toEqual(8);
-      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).toEqual(2);
-    });
-    it('doesn not work on anything else then "input" elements', function() {
-      var $el = $('' +
-        '<div>' +
-        ' <a class="pat-datetime" data-pat-toggle="" />' +
-        '</div>');
-      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
-      registry.scan($el);
-      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
-    });
-  });
-
-  describe("Select2", function() {
-    it('tagging', function() {
-      var $el = $('' +
-        '<div>' +
-        ' <input class="pat-select2" data-pat-select2="tags:Red,Yelow,Blue"' +
-        '      value="Yellow" />' +
-        '</div>');
-      expect($('.select2-choices', $el).size()).toEqual(0);
-      registry.scan($el);
-      expect($('.select2-choices', $el).size()).toEqual(1);
-      expect($('.select2-choices li', $el).size()).toEqual(2);
-    });
-  });
-
-  describe("Backdrop", function() {
-    it("default behaivour", function() {
-      var $el = $('<div></div>'),
-          backdrop = new Backdrop($el);
-      expect($('.backdrop', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      backdrop.show();
-      expect($el.hasClass('backdrop-active')).toBeTrue();
-      backdrop.hide();
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      backdrop.show();
-      expect($el.hasClass('backdrop-active')).toBeTrue();
-      backdrop.$backdrop.trigger('click');
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      backdrop.show();
-      expect($el.hasClass('backdrop-active')).toBeTrue();
-      var keydown = $.Event("keydown");
-      keydown.keyCode = 50;
-      $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeTrue();
-      keydown.keyCode = 27;
-      $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-    });
-  });
-
-  describe("Expose", function() {
-    it("default behaivour", function() {
-      var $el = $('' +
-        '<div id="body">' +
-        ' <form class="pat-expose" data-pat-expose="backdrop:#body;">' +
-        '  <input value="" />' +
-        ' </form>' +
-        '</div>');
-      registry.scan($el);
-      expect($('form', $el).css('z-index')).toEqual('');
-      expect($('.backdrop', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      $('input', $el).focus();
-      expect($('form', $el).css('z-index')).toEqual('1001');
-      expect($el.hasClass('backdrop-active')).toBeTrue();
-      var keydown = $.Event("keydown");
-      keydown.keyCode = 27;
-      $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      expect($('form', $el).css('z-index')).toEqual('');
-    });
-  });
-
-  describe("Modal", function() {
-    it("default behaivour", function() {
-      var $el = $('' +
-        '<div id="body">' +
-        ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal="backdrop:#body;">Open</a>' +
-        ' <div id="target"> Target </div>' +
-        '</div>');
-      registry.scan($el);
-      expect($('.modal-wrapper', $el).size()).toEqual(1);
-      expect($('.modal', $el).size()).toEqual(0);
-      expect($('.backdrop', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      $('a.pat-modal', $el).click();
-      expect($('.modal', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeTrue();
-      var keydown = $.Event("keydown");
-      keydown.keyCode = 27;
-      $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      expect($('.modal', $el).size()).toEqual(0);
     });
   });
 
