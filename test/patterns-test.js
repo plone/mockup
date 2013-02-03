@@ -37,8 +37,9 @@ require([
   'jam/Patterns/src/registry',
   'js/patterns/autotoc',
   'js/patterns/datetime',
+  'js/patterns/select2',
   'js/patterns/toggle'
-], function($, registry, AutoTOC, DateTime, Toggle) {
+], function($, registry, AutoTOC, DateTime, Select2, Toggle) {
   "use strict";
 
   describe("AutoTOC", function () {
@@ -127,7 +128,7 @@ require([
     before(function() {
       this.$el = $('' +
         '<div>' +
-        ' <input class="pat-datetime" data-pat-toggle="" />' +
+        ' <input class="pat-datetime" data-pat-datetime="" />' +
         '</div>');
     });
     it('creates initial structure', function() {
@@ -145,6 +146,20 @@ require([
       expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
       registry.scan($el);
       expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
+    });
+  });
+
+  describe("Select2", function() {
+    it('tagging', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-select2" data-pat-select2="tags:Red,Yelow,Blue"' +
+        '      value="Yellow" />' +
+        '</div>');
+      expect($('.select2-choices', $el).size()).toEqual(0);
+      registry.scan($el);
+      expect($('.select2-choices', $el).size()).toEqual(1);
+      expect($('.select2-choices li', $el).size()).toEqual(2);
     });
   });
 

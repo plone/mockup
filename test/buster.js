@@ -23,9 +23,11 @@ module.exports['Patterns'] = {
     'jam/Patterns/src/core/parser.js',
     'jam/Patterns/src/registry.js',
     'jam/pickadate/source/pickadate.js',
+    'jam/select2/select2.js',
     'js/patterns/base.js',
     'js/patterns/autotoc.js',
     'js/patterns/datetime.js',
+    'js/patterns/select2.js',
     'js/patterns/toggle.js'
   ],
   libs: [
