@@ -36,8 +36,9 @@ require([
   'jquery',
   'jam/Patterns/src/registry',
   'js/patterns/autotoc',
+  'js/patterns/datetime',
   'js/patterns/toggle'
-], function($, registry, AutoTOC, Toggle) {
+], function($, registry, AutoTOC, DateTime, Toggle) {
   "use strict";
 
   describe("AutoTOC", function () {
@@ -119,6 +120,31 @@ require([
       $('.pat-toggle', this.$el).trigger('click');
       expect($('.toggled', this.$el).size()).toEqual(0);
       expect($('[rel="toggled"]', this.$el).size()).toEqual(1);
+    });
+  });
+
+  describe("DateTime", function() {
+    before(function() {
+      this.$el = $('' +
+        '<div>' +
+        ' <input class="pat-datetime" data-pat-toggle="" />' +
+        '</div>');
+    });
+    it('creates initial structure', function() {
+      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(0);
+      registry.scan(this.$el);
+      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(1);
+      expect($('.pat-datetime-wrapper select', this.$el).size()).toEqual(8);
+      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).toEqual(2);
+    });
+    it('doesn not work on anything else then "input" elements', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <a class="pat-datetime" data-pat-toggle="" />' +
+        '</div>');
+      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
+      registry.scan($el);
+      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
     });
   });
 
