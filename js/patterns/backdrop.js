@@ -57,10 +57,9 @@ define([
             .addClass(self.options.klass);
       }
       if (self.options.closeOnEsc === true) {
-         // ESCAPE key pressed
         $(document).on('keydown', function(e, data) {
           if (self.$el.is('.' + self.options.klassActive)) {
-            if (e.keyCode === 27) {
+            if (e.keyCode === 27) {  // ESC key pressed
               self.hide();
             }
           }

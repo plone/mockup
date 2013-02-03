@@ -80,7 +80,7 @@ define([
         self.$el.addClass(self.options.klassActive);
         self.backdrop.show();
         self._initialZIndex = self.$el.css('z-index');
-        self.$el.css('z-index', self.options.backdropZIndex + 1);
+        self.$el.css('z-index', parseInt(self.options.backdropZIndex, 10) + 1);
         self.$el.css('opacity', '0');
         self.$el.animate({ opacity: '1' }, 500);
         self.trigger('shown');

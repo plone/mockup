@@ -38,9 +38,10 @@ require([
   'js/patterns/autotoc',
   'js/patterns/backdrop',
   'js/patterns/datetime',
+  'js/patterns/expose',
   'js/patterns/select2',
   'js/patterns/toggle'
-], function($, registry, AutoTOC, Backdrop, DateTime, Select2, Toggle) {
+], function($, registry, AutoTOC, Backdrop, DateTime, Expose, Select2, Toggle) {
   "use strict";
 
   describe("AutoTOC", function () {
@@ -165,7 +166,7 @@ require([
   });
 
   describe("Backdrop", function() {
-    it("default", function() {
+    it("default behaivour", function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
       expect($('.backdrop', $el).size()).toEqual(1);
@@ -187,6 +188,21 @@ require([
       keydown.keyCode = 27;
       $(document).trigger(keydown);
       expect($el.hasClass('backdrop-active')).toBeFalse();
+    });
+  });
+
+  describe("Expose", function() {
+    it("default behaivour", function() {
+      var $el = $('' +
+        '<div>' +
+        ' <form class="pat-expose">' +
+        '  <input value="" />' +
+        ' </form>' +
+        '</div>');
+      registry.scan($el);
+      expect($('form', $el).css('z-index')).toEqual('');
+      $('input', $el).focus();
+      expect($('form', $el).css('z-index')).toEqual('1001');
     });
   });
 

@@ -28,6 +28,7 @@ module.exports['Patterns'] = {
     'js/patterns/autotoc.js',
     'js/patterns/backdrop.js',
     'js/patterns/datetime.js',
+    'js/patterns/expose.js',
     'js/patterns/select2.js',
     'js/patterns/toggle.js'
   ],
