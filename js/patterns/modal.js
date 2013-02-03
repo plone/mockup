@@ -33,41 +33,32 @@ define([
   'jquery',
   'js/patterns/base',
   'js/patterns/backdrop',
-  'jam/Patterns/src/registry',
-  'jam/Patterns/src/core/parser'
-], function($, Base, Backdrop, registry, Parser, undefined) {
+  'jam/Patterns/src/registry'
+], function($, Base, Backdrop, registry, undefined) {
   "use strict";
-
-  var parser = new Parser("modal");
-
-  parser.add_argument("triggers");
-  // left|center|right top|middle|button
-  parser.add_argument("position", "center middle");
-  parser.add_argument("width", "auto");
-  parser.add_argument("height", "auto");
-  parser.add_argument("margin", "20px");
-  parser.add_argument("klass", "modal");
-  parser.add_argument("klassWrapper", "modal-wrapper");
-  parser.add_argument("klassWrapperInner", "modal-wrapper-inner");
-  parser.add_argument("klassLoading", "modal-loading");
-  parser.add_argument("klassActive", "active");
-
-  // XXX: should support same options as $.ajax
-  parser.add_argument("ajaxUrl");
-  parser.add_argument("ajaxType", "GET");
-
-  parser.add_argument("backdrop", "body");
-  parser.add_argument("backdropZIndex", "1000");
-  parser.add_argument("backdropOpacity", "0.8");
-  parser.add_argument("backdropKlass", "backdrop");
-  parser.add_argument("backdropKlassActive", 'backdrop-active');
-  parser.add_argument("backdropCloseOnEsc", true);
-  parser.add_argument("backdropCloseOnClick", true);
-
 
   var Modal = Base.extend({
     name: "modal",
-    parser: parser,
+    jqueryPlugin: "patModal",
+    defaults: {
+      triggers: '',
+      position: "center middle",
+      width: "auto",
+      height: "auto",
+      margin: "20px",
+      klass: "modal",
+      klassWrapper: "modal-wrapper",
+      klassWrapperInner: "modal-wrapper-inner",
+      klassLoading: "modal-loading",
+      klassActive: "active",
+      backdrop: "body",
+      backdropZIndex: "1000",
+      backdropOpacity: "0.8",
+      backdropKlass: "backdrop",
+      backdropKlassActive: "backdrop-active",
+      backdropCloseOnEsc: true,
+      backdropCloseOnClick: true
+    },
     init: function() {
       var self = this;
 
