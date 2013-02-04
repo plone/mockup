@@ -1,6 +1,6 @@
 language: node_js
 before_install:
-  - apt-get install chromium firefox
+  - sudo apt-get install chromium firefox opera
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -8,7 +8,8 @@ before_script:
   - node_modules/.bin/buster-server &
   - sleep 5
   - firefox http://localhost:1111/capture &
-  - sleep 5
+  - chromium http://localhost:1111/capture &
+  - opera http://localhost:1111/capture &
   - phantomjs node_modules/buster/script/phantom.js http://localhost:1111/capture &
   - sleep 5
   - make bootstrap
