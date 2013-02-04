@@ -180,7 +180,6 @@ require([
         ' </form>' +
         '</div>');
       registry.scan($el);
-      expect($('form', $el).css('z-index')).toEqual('');
       expect($('.backdrop', $el).size()).toEqual(1);
       expect($el.hasClass('backdrop-active')).toBeFalse();
       $('input', $el).focus();
@@ -190,7 +189,6 @@ require([
       keydown.keyCode = 27;
       $(document).trigger(keydown);
       expect($el.hasClass('backdrop-active')).toBeFalse();
-      expect($('form', $el).css('z-index')).toEqual('');
     });
   });
 
@@ -224,16 +222,14 @@ require([
         ' <div id="target"> Target </div>' +
         '</div>');
 
-      $('a', $el).modal({
-        template: function($modal) {
-          var contents = $modal.html();
-          $modal
-            .html('')
-            .append($('<div class="modal-header"><h3>Title</h3></div>'))
-            .append($('<div class="modal-body"></div>'))
-            .append($('<div class="modal-footer"></div>'));
-          $('.modal-body', $modal).html(contents);
-        }
+      $('a', $el).modal().on('show.modal.patterns', function(e, modal) {
+        var contents = modal.$modal.html();
+        modal.$modal
+          .html('')
+          .append($('<div class="modal-header"><h3>Title</h3></div>'))
+          .append($('<div class="modal-body"></div>'))
+          .append($('<div class="modal-footer"></div>'));
+        $('.modal-body', modal.$modal).html(contents);
       }).click();
 
       expect($('.modal', $el).size()).toEqual(1);

@@ -1,16 +1,5 @@
-//var _ = require('underscore'),
-//    config = module.exports,
-//    defaults = {
-//        rootPath: "../",
-//        environment: "browser",
-//        extensions: [ require("buster-coverage"), require("buster-amd") ],
-//        "buster-coverage": {
-//          coverageExclusions: ["example-resource"],
-//          combinedResultsOnly: true
-//        }
-//      };
 
-module.exports['Patterns'] = {
+module.exports['js/patterns/*'] = {
   environment: "browser",
   autoRun: false,
   rootPath: "..",
@@ -41,39 +30,19 @@ module.exports['Patterns'] = {
   ]
 };
 
-//module.exports['pattern.modal.js'] = {
-//  environment: "browser",
-//  rootPath: "..",
-//  libs: [
-//    'jam/require.js'
-//  ],
-//  sources: [
-//    'jam/jquery/dist/jquery.js',
-//    'jam/logging/src/logging.js',
-//    'jam/Patterns/src/core/logger.js',
-//    'jam/Patterns/src/compat.js',
-//    'jam/Patterns/src/utils.js',
-//    'jam/Patterns/src/core/parser.js',
-//    'jam/Patterns/src/registry.js',
-//    'js/pattern.base.js',
-//    'js/pattern.modal.js'
-//  ],
-//  tests: [
-//    'test/pattern.modal-test.js'
-//  ],
-//  extensions: [ require("buster-amd")]
-//  //extensions: [ require("buster-amd"), require("buster-coverage")]
-//};
-
-//config['plone.app.toolbar-iframe.js'] = _.extend({}, defaults, {
-//  libs:         [],
-//  resources:    [ 'test/example-resource.css', 'test/example-resource.js',
-//                  'test/example-resource.less' ],
-//  testHelpers:  [ 'test/iframe-helpers.js' ],
-//  sources:      [ 'js/iframe.js' ],
-//  tests:        [ 'test/iframe-test.js' ],
-//  extensions:   [ require("buster-coverage") ]
-//});
+module.exports['js/iframe.js'] = {
+  environment: "browser",
+  rootPath: "..",
+  resources: [
+    'test/example-resource.css',
+    'test/example-resource.js',
+    'test/example-resource.less'
+  ],
+  testHelpers: [ 'test/iframe-helpers.js' ],
+  sources: [ 'js/iframe.js' ],
+  tests: [ 'test/iframe-test.js' ]
+  //extensions:   [ require("buster-coverage") ]
+};
 
 //config['plone.app.toolbar-jquery.iframe.js'] = _.extend({}, defaults, {
 //  libs: [
