@@ -181,8 +181,16 @@ define([
             self.$modal = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
               .replace('<body', '<div').replace('</body>', '</div>'))
                 .addClass(self.options.klass)
-                .appendTo(self.$wrapperInner);
-            self.trigger('afterajax', self, textStatus, xhr);
+                .appendTo(self.$wrapperInner)
+                .on('click', function(e) {
+                  e.stopPropagation();
+                  e.preventDefault();
+                })
+                .on('close.modal.patterns', function(e) {
+                  e.stopPropagation();
+                  self.hide();
+                });
+            self.trigger('after-ajax', self, textStatus, xhr);
             self.show();
           });
         };
@@ -282,9 +290,6 @@ define([
           self.$wrapper.parent().css('overflow', 'hidden');
           self.$el.addClass(self.options.klassActive);
           self.$modal.addClass(self.options.klassActive);
-          if (self.options.template) {
-            self.options.template(self.$modal);
-          }
           registry.scan(self.$modal);
           self.positionModal();
           $(window).off('resize').on('resize', function() {

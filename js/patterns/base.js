@@ -90,7 +90,7 @@ define([
       this.$el.on(eventName + '.' + this.name + '.patterns', eventCallback);
     },
     trigger: function(eventName) {
-      this.$el.trigger(eventName + '.' + this.name + '.patterns', this);
+      this.$el.trigger(eventName + '.' + this.name + '.patterns', [ this ]);
     }
   };
   Base.extend = function(NewPattern) {

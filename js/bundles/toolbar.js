@@ -39,11 +39,13 @@ if (window.jQuery) {
 define([
   'jquery',
   'js/jquery.iframe',
+  'jam/Patterns/src/registry',
+  'jam/jquery-form/jquery.form.js',
   'js/patterns/toggle',
   'js/patterns/modal.js',
   'js/bundles/widgets'
 //  'js/overlays'
-], function($, iframe) {
+], function($, iframe, registry) {
   "use strict";
 
   window.plone = window.plone || {};
@@ -82,7 +84,14 @@ define([
     // Modals {{{
 
     // mark buttons which open in modal
-    $('#plone-action-local_roles > a').addClass('modal-trigger');
+    $('#plone-action-local_roles > a').addClass('modal-trigger').modal();
+
+    // make sure we close all dropdowns when iframe is shrinking
+    iframe.$el.on('shrink.iframe', function(e) {
+      $('.toolbar-dropdown-open > a').each(function() {
+        $(this).trigger('click');
+      });
+    });
 
     // integration of toolbar and modals
     $(document)
@@ -111,6 +120,52 @@ define([
         iframe.shrink();
       });
 
+    // modal template for plone
+    function modalTemplate($modal, options) {
+      var $content = $modal.html();
+
+      options = $.extend({
+        title: 'h1.documentFirstHeading',
+        buttons: '.formControls > input[type="submit"]'
+      }, options);
+
+      $modal
+        .html('<div class="modal-header">' +
+              '  <a class="close">&times;</a>' +
+              '  <h3></h3>' +
+              '</div>' +
+              '<div class="modal-body"></div>' +
+              '<div class="modal-footer"></div>');
+
+
+      $('.modal-header > h3', $modal).html($(options.title, $content).html());
+      $('.modal-body', $modal).html($content);
+      $(options.title, $modal).remove();
+      $('.modal-header > a.close', $modal)
+        .off('click')
+        .on('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          $(e.target).trigger('close.modal.patterns');
+        });
+
+      // cleanup html
+      $('.row', $modal).removeClass('row');
+
+      $(options.buttons, $modal).each(function() {
+        var $button = $(this);
+        $button.clone()
+          .appendTo($('.modal-footer', $modal))
+          .off('click').on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $button.trigger('click');
+          });
+        $button.hide();
+      });
+
+    }
+
     // }}}
 
     // Edit form
@@ -124,81 +179,121 @@ define([
     //    }
     //  }));
 
-    //
-    function templateBootstrapModal($modal, options) {
-      var $content = $modal.html();
-
+    function ajaxForm($modal, options) {
       options = $.extend({
-        title: 'h1.documentFirstHeading',
-        buttons: '.formControls > input[type="submit"]'
+        buttons: {},
+        timeout: 5000,
+        formError: '.portalMessage.error'
       }, options);
 
-      $modal
-        .addClass('modal')
-        .addClass('fade')
-        .html('<div class="modal-header">' +
-              '  <a class="close" data-dismiss="modal">&times;</a>' +
-              '  <h3></h3>' +
-              '</div>' +
-              '<div class="modal-body"></div>' +
-              '<div class="modal-footer"></div>');
+      $.each(options.buttons, function(button, buttonOptions) {
+        var $button = $(button, $modal);
 
+        buttonOptions = $.extend({}, options, buttonOptions);
 
-      $('.modal-header > h3', $modal).html($(options.title, $content).html());
-      $(options.title, $content).remove();
-      $('.modal-body', $modal).html($content);
-      $('.modal-header > a', $modal)
-        .off('click')
-        .on('click', function(e) {
+        // pass button that was clicked when submiting form
+        var extraData = {};
+        extraData[$button.attr('name')] = $button.attr('value');
+
+        $button.on('click', function(e) {
           e.stopPropagation();
           e.preventDefault();
-          $.trigger('close.modal.patterns');
-        });
+          $button.parents('form').ajaxSubmit({
+            timeout: buttonOptions.timeout,
+            dataType: 'html',
+            data: extraData,
+            url: $button.parents('form').attr('action'),
+            error: function(xhr, textStatus, errorStatus) {
+              console.log('error');
+              if (textStatus === 'timeout') {
+                if (buttonOptions.onTimeout) {
+                  buttonOptions.onTimeout(xhr, errorStatus);
+                } else {
+                  // TODO: show that request timeouted
+                  console.log('TODO: make below code work');
+                  //var $timeout = $('<p/>').html(buttonOptions.timeoutText);
 
-      $(options.buttons, $modal).each(function() {
-        var $button = $(this);
-        $button.clone()
-          .appendTo($('.modal-footer', $modal))
-          .off('click').on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            $button.trigger('click');
+                  //$('a.retry', $timeout).on('click', function(e) {
+                  //  e.stopPropagation();
+                  //  e.preventDefault();
+                  //  self.show();
+                  //});
+                  //$('a.close', $timeout).on('click', function(e) {
+                  //  e.stopPropagation();
+                  //  e.preventDefault();
+                  //  self.hide();
+                  //});
+
+                  //$('.progress', $modal)
+                  //  .removeClass('progress-striped')
+                  //  .addClass('progress-danger')
+                  //  .after($timeout);
+
+                }
+
+              // on "error", "abort", and "parsererror"
+              } else if (buttonOptions.onError) {
+                buttonOptions.onError(xhr, textStatus, errorStatus);
+              } else {
+                // TODO: notify about error (when notification center is done)
+                $button.trigger('close.modal.patterns');
+              }
+            },
+            success: function(response, state, xhr, form) {
+              var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                      .replace('<body', '<div').replace('</body>', '</div>'));
+
+              // if error is found
+              if ($(buttonOptions.formError, responseBody).size() !== 0) {
+                if (buttonOptions.onFormError) {
+                  buttonOptions.onFormError(responseBody, state, xhr, form);
+                } else {
+                  $modal.html(responseBody.html());
+                  modalTemplate($modal);
+                  registry.scan($modal);
+                }
+
+              // custom success function
+              } else if (buttonOptions.onSuccess) {
+                buttonOptions.onSuccess(responseBody, state, xhr, form);
+
+              } else {
+                $button.trigger('close.modal.patterns');
+              }
+            }
           });
-        $button.hide();
+        });
       });
     }
 
     // Sharing
-    $('#plone-action-local_roles > a').modal({
-      template: function($modal) {
-        templateBootstrapModal($modal, {
+    $('#plone-action-local_roles > a').on('show.modal.patterns', function(e, modal) {
+
+      function initModal($modal) {
+        modalTemplate($modal, {
           buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
         });
 
         // FIXME: we shouldn't be hacking like this
         $('#link-presentation', $modal).remove();
-      },
-      events: {
-        'click .modal-body input[name="form.button.Search"]': {
-          onSuccess: function(responseBody) {
-            var self = this;
-            self.$modal.html('');
-            self.$modal.append($('> *', self.modalTemplate(responseBody)));
-            self.initModalEvents(self.$modal);
+
+        ajaxForm(modal.$modal, {
+          buttons: {
+            '.modal-body input[name="form.button.Cancel"]': {},
+            '.modal-body input[name="form.button.Save"]': {},
+            '.modal-body input[name="form.button.Search"]': {
+              onSuccess: function(responseBody, state, xhr, form) {
+                modal.$modal.html(responseBody.html());
+                initModal(modal.$modal);
+                registry.scan(modal.$modal);
+              }
+            }
           }
-        },
-        'click .modal-body input[name="form.button.Cancel"]': {},
-        'click .modal-body input[name="form.button.Save"]': {}
+        });
       }
-    });
 
+      initModal(modal.$modal);
 
-
-    // make sure we close all dropdowns when iframe is shrinking
-    iframe.$el.on('shrink.iframe', function(e) {
-      $('.toolbar-dropdown-open > a').each(function() {
-        $(this).trigger('click');
-      });
     });
 
   });
