@@ -16,7 +16,7 @@ clean: clean_docs clean_widgets clean_toolbar
 
 bootstrap:
 	mkdir -p build
-	if test ! -d docs; then $(GIT) clone git@github.com:plone/mockup.git -b gh-pages docs; fi
+	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	$(NPM) install jamjs less cssmin uglify-js --prefix=./node_modules
 	$(NPM) install underscore buster buster-coverage buster-amd --prefix=./node_modules
 	$(JAM) install
@@ -70,10 +70,10 @@ docs/widgets.html:
 	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@<script src="widgets.js"></script>@g' $@
 	sed -i -e 's@<script src="jam/jquery/dist/jquery.js"></script>@@g' $@
 	sed -i -e 's@<script src="jam/require.js"></script>@@g' $@
-	sed -i -e 's@<script src="js/mockup.widgets.js"></script>@@g' $@
+	sed -i -e 's@<script src="js/demo/widgets.js"></script>@@g' $@
 
 docs/widgets.js:
-	$(JAM) compile -i js/mockup.widgets -i sinon --no-minify --almond $@
+	$(JAM) compile -i js/demo/widgets -i sinon --no-minify --almond $@
 	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
@@ -103,7 +103,7 @@ docs/toolbar.html:
 	sed -i -e 's@less/toolbar.less;@@g' $@
 	sed -i -e 's@jam/less/dist/less-1.3.3.js;@@g' $@
 	sed -i -e 's@jam/require.js;@toolbar.css;@g' $@
-	sed -i -e 's@js/mockup.toolbar.js;@toolbar.js;@g' $@
+	sed -i -e 's@js/demo/toolbar.js;@toolbar.js;@g' $@
 
 docs/toolbar_init.js:
 	$(UGLIFYJS) js/iframe.js > $@
@@ -112,7 +112,7 @@ docs/toolbar_init.css:
 	$(LESSC) less/mockup.less | $(CSSMIN) > $@
 
 docs/toolbar.js:
-	$(JAM) compile -i js/mockup.toolbar --no-minify --almond $@
+	$(JAM) compile -i js/demo/toolbar --no-minify --almond $@
 	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
