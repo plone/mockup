@@ -39,7 +39,7 @@ define([
 
   var Modal = Base.extend({
     name: "modal",
-    jqueryPlugin: "patModal",
+    jqueryPlugin: "modal",
     defaults: {
       triggers: '',
       position: "center middle",
@@ -166,7 +166,7 @@ define([
 
       if (self.options.ajaxUrl) {
         self.$modal = function() {
-          self.trigger('beforeajax');
+          self.trigger('before-ajax');
           self.$wrapper.parent().css('overflow', 'hidden');
           self.$wrapper.show();
           self.backdrop.show();
@@ -237,31 +237,33 @@ define([
             wrapperOuterHeight = self.$wrapperInner.outerHeight(true),
             wrapperInnerHeight = self.$wrapperInner.innerHeight();
 
-        var topMargin = wrapperOffset.top - wrapperOffsetBefore.top,
-            bottomMargin = wrapperOuterHeight - wrapperInnerHeight - topMargin,
-            leftMargin = wrapperOffset.left - wrapperOffsetBefore.left,
-            rightMargin = wrapperOuterWidth - wrapperInnerWidth - leftMargin;
+        if (wrapperOffset && wrapperOffsetBefore) {
+          var topMargin = wrapperOffset.top - wrapperOffsetBefore.top,
+              bottomMargin = wrapperOuterHeight - wrapperInnerHeight - topMargin,
+              leftMargin = wrapperOffset.left - wrapperOffsetBefore.left,
+              rightMargin = wrapperOuterWidth - wrapperInnerWidth - leftMargin;
 
-        if (postionHorizontal === 'left') {
-          self.$modal.css('left', leftMargin);
-        } else if (postionHorizontal === 'center') {
-          self.$modal.css('margin-left',
-              self.$wrapper.width()/2 - self.$modal.width()/2 - leftMargin);
-        } else if (postionHorizontal === 'right') {
-          self.$modal.css('right', rightMargin);
-        }
+          if (postionHorizontal === 'left') {
+            self.$modal.css('left', leftMargin);
+          } else if (postionHorizontal === 'center') {
+            self.$modal.css('margin-left',
+                self.$wrapper.width()/2 - self.$modal.width()/2 - leftMargin);
+          } else if (postionHorizontal === 'right') {
+            self.$modal.css('right', rightMargin);
+          }
 
-        if (self.$modal.height() > self.$wrapper.height()) {
-          self.$wrapperInner.height(self.$modal.height() + bottomMargin);
-        } else {
-          if (postionVertical === 'top') {
-            self.$modal.css('margin-top', topMargin);
-          } else if (postionVertical === 'middle') {
-            self.$modal.css('margin-top', self.$wrapper.height()/2 -
-                self.$modal.height()/2 - topMargin);
-          } else if (postionVertical === 'bottom') {
-            self.$modal.css('margin-top', self.$wrapper.height() -
-                self.$modal.height() - topMargin);
+          if (self.$modal.height() > self.$wrapper.height()) {
+            self.$wrapperInner.height(self.$modal.height() + bottomMargin);
+          } else {
+            if (postionVertical === 'top') {
+              self.$modal.css('margin-top', topMargin);
+            } else if (postionVertical === 'middle') {
+              self.$modal.css('margin-top', self.$wrapper.height()/2 -
+                  self.$modal.height()/2 - topMargin);
+            } else if (postionVertical === 'bottom') {
+              self.$modal.css('margin-top', self.$wrapper.height() -
+                  self.$modal.height() - topMargin);
+            }
           }
         }
 

@@ -13,7 +13,7 @@
   <script src="jam/less/dist/less-1.3.3.js"></script>
   <script src="js/iframe.js"></script>
 
-  <script type="text/x-ajax-respond" data-regexp="sharing.html">
+  <script type="text/x-ajax-respond" data-url="sharing.html">
     <html>
     <head></head>
     <body>
@@ -109,7 +109,7 @@
     </html>
   </script>
 
-  <script type="text/x-ajax-respond" data-regexp="/edit.html/">
+  <script type="text/x-ajax-respond" data-url="edit.html">
     <html>
     <head></head>
     <body>
@@ -218,7 +218,7 @@
               less/toolbar.less;
               jam/less/dist/less-1.3.3.js;
               jam/require.js;
-              js/mockup.toolbar.js;">
+              js/demo/toolbar.js;">
 
     <!-- Toolbar -->
     <div id="plone-toolbar">
@@ -228,8 +228,7 @@
           <div class="toolbar-swirl"><div></div></div>
           <ul class="toolbar-right-actions">
             <li class="toolbar-dropdown" id="plone-personalactions">
-              <a href="#!/author/admin" class="pat-toggle"
-                 data-pat-toggle=".toolbar-dropdown toolbar-dropdown-open">
+              <a href="#!/author/admin">
                 <img alt="user portrait" src="img/user.png">
                 <span>admin</span>
               </a>
@@ -267,8 +266,7 @@
           </ul>
           <ul class="toolbar-right-actions">
             <li id="plone-contentmenu-display" class="toolbar-dropdown ">
-              <a href="#!/select_default_view" class="pat-toggle"
-                 data-pat-toggle=".toolbar-dropdown toolbar-dropdown-open">
+              <a href="#!/select_default_view">
                 <span>Display</span>
               </a>
               <ul class="toolbar-dropdown-menu">
@@ -310,8 +308,7 @@
               </ul>
             </li>
             <li id="plone-contentmenu-factories" class="toolbar-dropdown ">
-              <a href="#!/folder_factories" class="pat-toggle"
-                 data-pat-toggle=".toolbar-dropdown toolbar-dropdown-open">
+              <a href="#!/folder_factories">
                 <span>Add new…</span>
               </a>
               <ul class="toolbar-dropdown-menu">
@@ -358,8 +355,7 @@
               </ul>
             </li>
             <li id="plone-contentmenu-workflow" class="toolbar-dropdown ">
-              <a href="#!/font-page/content_status_history" class="pat-toggle"
-                 data-pat-toggle=".toolbar-dropdown toolbar-dropdown-open">
+              <a href="#!/font-page/content_status_history">
                 <span>State:</span>
                 <span class="state-published">Published</span>
               </a>

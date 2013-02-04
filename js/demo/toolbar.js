@@ -2,7 +2,7 @@ require([
   'jquery',
   'sinon',
   'jam/Patterns/src/registry',
-  'js/toolbar'
+  'js/bundles/toolbar'
 ], function($, sinon, registry) {
 
   var server = sinon.fakeServer.create();
@@ -10,8 +10,8 @@ require([
   server.autoRespondAfter = 4000;
 
   $('script[type="text/x-ajax-respond"]', window.parent.document).each(function() {
-    $el = $(this);
-    server.respondWith(new RegExp($el.data('regexp')), function (xhr, id) {
+    var $el = $(this);
+    server.respondWith($el.data('url'), function (xhr, id) {
       xhr.respond(200, { "Content-Type": "html/html" }, $el.html());
     });
   });

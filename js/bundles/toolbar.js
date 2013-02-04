@@ -51,6 +51,68 @@ define([
 
   $(document).ready(function() {
 
+    // Dropdown {{{
+
+    // toggle class on click (shows dropdown)
+    $('.toolbar-dropdown > a').toggle({
+      target: '.toolbar-dropdown',
+      value: 'toolbar-dropdown-open'
+    });
+
+    // at opening toolbar dropdown:
+    // - close all other opened dropdown buttons
+    // - stretch iframe
+    // at closing dropdown shrink iframe
+    $(document)
+      .on('attr-add.toggle.patterns', '.toolbar-dropdown > a', function(e) {
+        var $el = $(this);
+        $('.toolbar-dropdown-open > a').each(function() {
+          if ($el[0] !== $(this)[0]) {
+            $(this).trigger('click');
+          }
+        });
+        iframe.stretch();
+      })
+      .on('attr-removed.toggle.patterns', '.toolbar-dropdown > a', function(e) {
+        iframe.shrink();
+      });
+
+    // }}}
+
+    // Modals {{{
+
+    // mark buttons which open in modal
+    $('#plone-action-local_roles > a').addClass('modal-trigger');
+
+    // integration of toolbar and modals
+    $(document)
+      .on('before-ajax.modal.patterns', 'a.modal-trigger', function(e) {
+        var $el = $(this);
+        $('.toolbar-dropdown-open > a').each(function() {
+          if ($el[0] !== $(this)[0]) {
+            $(this).trigger('click');
+          }
+        });
+        $('body', iframe.document).css('overflow', 'hidden');
+        iframe.stretch();
+      })
+      .on('show.modal.patterns', 'a.modal-trigger', function(e) {
+        var $el = $(this);
+        $('.toolbar-dropdown-open > a').each(function() {
+          if ($el[0] !== $(this)[0]) {
+            $(this).trigger('click');
+          }
+        });
+        $('body', iframe.document).css('overflow', 'hidden');
+        iframe.stretch();
+      })
+      .on('hidden.modal.patterns', 'a.modal-trigger', function(e) {
+        $('body', iframe.document).css('overflow', 'visible');
+        iframe.shrink();
+      });
+
+    // }}}
+
     // Edit form
     //$('#plone-toolbar #plone-action-edit > a').ploneOverlay(
     //  $.extend(window.plone.toolbar, {
@@ -107,12 +169,13 @@ define([
     }
 
     // Sharing
-    $('#plone-action-local_roles > a').patModal({
+    $('#plone-action-local_roles > a').modal({
       template: function($modal) {
         templateBootstrapModal($modal, {
           buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
         });
-        // FIXME: we shouldn't hack like this
+
+        // FIXME: we shouldn't be hacking like this
         $('#link-presentation', $modal).remove();
       },
       events: {
@@ -129,48 +192,6 @@ define([
       }
     });
 
-    $(document)
-      // at opening toolbar dropdown:
-      // - close all other opened dropdown buttons
-      // - stretch iframe
-      .on('add.toggle.patterns', '.toolbar-dropdown > a.pat-toggle', function(e) {
-        var $el = $(this);
-        $('.toolbar-dropdown-open > a').each(function() {
-          if ($el[0] !== $(this)[0]) {
-            $(this).trigger('click');
-          }
-        });
-        iframe.stretch();
-      })
-      // at closing dropdown shrink iframe
-      .on('removed.toggle.patterns', '.toolbar-dropdown > a.pat-toggle', function(e) {
-        iframe.shrink();
-      })
-      // integration of toolbar and modals
-      .on('beforeajax.modal.patterns', 'a.pat-modal', function(e) {
-        var $el = $(this);
-        $('.toolbar-dropdown-open > a').each(function() {
-          if ($el[0] !== $(this)[0]) {
-            $(this).trigger('click');
-          }
-        });
-        $('body', iframe.document).css('overflow', 'hidden');
-        iframe.stretch();
-      })
-      .on('show.modal.patterns', 'a.pat-modal', function(e) {
-        var $el = $(this);
-        $('.toolbar-dropdown-open > a').each(function() {
-          if ($el[0] !== $(this)[0]) {
-            $(this).trigger('click');
-          }
-        });
-        $('body', iframe.document).css('overflow', 'hidden');
-        iframe.stretch();
-      })
-      .on('hidden.modal.patterns', 'a.pat-modal', function(e) {
-        $('body', iframe.document).css('overflow', 'visible');
-        iframe.shrink();
-      });
 
 
     // make sure we close all dropdowns when iframe is shrinking

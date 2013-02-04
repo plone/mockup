@@ -219,12 +219,12 @@ require([
     it("modal with custom template", function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal="backdrop:#body;">Open</a>' +
+        ' <a href="#target"' +
+        '    data-modal-backdrop="#body">Open</a>' +
         ' <div id="target"> Target </div>' +
         '</div>');
 
-      $('a.pat-modal', $el).patModal({
+      $('a', $el).modal({
         template: function($modal) {
           var contents = $modal.html();
           $modal
@@ -234,9 +234,7 @@ require([
             .append($('<div class="modal-footer"></div>'));
           $('.modal-body', $modal).html(contents);
         }
-      });
-
-      $('a.pat-modal', $el).click();
+      }).click();
 
       expect($('.modal', $el).size()).toEqual(1);
       expect($('.modal .modal-header', $el).size()).toEqual(1);
@@ -265,7 +263,8 @@ require([
       this.$el = $('' +
         '<div>' +
         ' <a class="pat-toggle"' +
-        '    data-pat-toggle="target:#target;value:toggled;">Button</a>' +
+        '    data-toggle-target="#target"' +
+        '    data-toggle-value="toggled">Button</a>' +
         ' <div id="target"></div>' +
         '</div>');
     });
@@ -277,8 +276,7 @@ require([
       expect($('.toggled', this.$el).size()).toEqual(1);
     });
     it("can also listen to custom event", function() {
-      $('.pat-toggle', this.$el).attr('data-pat-toggle',
-        $('.pat-toggle', this.$el).attr('data-pat-toggle') + 'event:customEvent;');
+      $('.pat-toggle', this.$el).attr('data-toggle-event', 'customEvent');
       expect($('.toggled', this.$el).size()).toEqual(0);
       registry.scan(this.$el);
       expect($('.toggled', this.$el).size()).toEqual(0);
@@ -286,8 +284,7 @@ require([
       expect($('.toggled', this.$el).size()).toEqual(1);
     });
     it("can also toggle custom element attribute", function() {
-      $('.pat-toggle', this.$el).attr('data-pat-toggle',
-        $('.pat-toggle', this.$el).attr('data-pat-toggle') + 'attribute:rel;');
+      $('.pat-toggle', this.$el).attr('data-toggle-attribute', 'rel');
       expect($('.toggled', this.$el).size()).toEqual(0);
       expect($('[rel="toggled"]', this.$el).size()).toEqual(0);
       registry.scan(this.$el);

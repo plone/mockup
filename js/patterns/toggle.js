@@ -33,21 +33,17 @@
 
 define([
   'jquery',
-  'js/patterns/base',
-  'jam/Patterns/src/core/parser'
-], function($, Base, Parser, undefined) {
+  'js/patterns/base'
+], function($, Base, undefined) {
   "use strict";
-
-  var parser = new Parser("toggle");
-
-  parser.add_argument("target");
-  parser.add_argument("value");
-  parser.add_argument("attribute", "class");
-  parser.add_argument("event", "click");
 
   var Toggle = Base.extend({
     name: 'toggle',
-    parser: parser,
+    jqueryPlugin: 'toggle',
+    defaults: {
+      attribute: 'class',
+      event: 'click'
+    },
     init: function() {
       var self = this;
 
@@ -101,23 +97,23 @@ define([
     },
     remove: function() {
       var self = this;
-      self.trigger('remove');
+      self.trigger('attr-remove');
       if (self.options.attribute === 'class') {
         self.$target.removeClass(self.options.value);
       } else {
         self.$target.removeAttr(self.options.attribute);
       }
-      self.trigger('removed');
+      self.trigger('attr-removed');
     },
     add: function() {
       var self = this;
-      self.trigger('add');
+      self.trigger('attr-add');
       if (self.options.attribute === 'class') {
         self.$target.addClass(self.options.value);
       } else {
         self.$target.attr(self.options.attribute, self.options.value);
       }
-      self.trigger('added');
+      self.trigger('attr-added');
     }
   });
 

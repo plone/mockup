@@ -72,11 +72,11 @@ define([
     this.log = logger.getLogger(this.name);
     this.$el = $el;
     if (this.parser) {
-      this.options = $.extend(
+      this.options = $.extend(true, {},
           this.parser.parse($el, this.defaults || {}, this.multipleOptions || false),
           options || {});
     } else {
-      this.options = $.extend(
+      this.options = $.extend(true, {},
           this.defaults || {},
           getOptions($el, this.name),
           options || {});
