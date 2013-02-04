@@ -135,8 +135,8 @@ widgets: clean_widgets $(WIDGETS)
 	# ----------------------------------------------------------------------- #
 
 build/widgets.js:
-	$(JAM) compile -i js/widgets -e jquery --no-minify --almond $@
-	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/widgets'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
+	$(JAM) compile -i js/bundles/widgets -e jquery --no-minify --almond $@
+	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/bundles/widgets'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
 
 build/widgets.min.js: build/widgets.js
 	$(UGLIFYJS) build/widgets.js > $@
@@ -173,11 +173,11 @@ build/toolbar_init.css:
 	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@                           
 
 build/toolbar.js:
-	$(JAM) compile -i js/toolbar -e jquery --no-minify --almond $@
-	echo 'require(["js/toolbar"]);' >> $@
+	$(JAM) compile -i js/bundles/toolbar -e jquery --no-minify --almond $@
+	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/bundles/toolbar'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
 
-build/toolbar.min.js:
-	$(JAM) compile -i js/toolbar -e jquery --almond $@
+build/toolbar.min.js: build/toolbar.js
+	$(UGLIFYJS) build/toolbar.js > $@
 
 build/toolbar.css: build/widgets.css
 	cat build/widgets.css > $@
