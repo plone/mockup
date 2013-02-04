@@ -97,7 +97,7 @@ define([
     },
     remove: function() {
       var self = this;
-      self.trigger('attr-remove');
+      self.trigger('remove-attr');
       if (self.options.attribute === 'class') {
         self.$target.removeClass(self.options.value);
       } else {
@@ -107,13 +107,13 @@ define([
     },
     add: function() {
       var self = this;
-      self.trigger('attr-add');
+      self.trigger('add-attr');
       if (self.options.attribute === 'class') {
         self.$target.addClass(self.options.value);
       } else {
         self.$target.attr(self.options.attribute, self.options.value);
       }
-      self.trigger('attr-added');
+      self.trigger('added-attr');
     }
   });
 

@@ -66,7 +66,7 @@ define([
     // - stretch iframe
     // at closing dropdown shrink iframe
     $(document)
-      .on('attr-add.toggle.patterns', '.toolbar-dropdown > a', function(e) {
+      .on('add-attr.toggle.patterns', '.toolbar-dropdown > a', function(e) {
         var $el = $(this);
         $('.toolbar-dropdown-open > a').each(function() {
           if ($el[0] !== $(this)[0]) {
@@ -75,7 +75,7 @@ define([
         });
         iframe.stretch();
       })
-      .on('attr-removed.toggle.patterns', '.toolbar-dropdown > a', function(e) {
+      .on('removed-attr.toggle.patterns', '.toolbar-dropdown > a', function(e) {
         iframe.shrink();
       });
 
@@ -105,7 +105,7 @@ define([
         $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
       })
-      .on('show.modal.patterns', 'a.modal-trigger', function(e) {
+      .on('show.modal.patterns', 'a.modal-trigger', function(e, modal) {
         var $el = $(this);
         $('.toolbar-dropdown-open > a').each(function() {
           if ($el[0] !== $(this)[0]) {
@@ -114,6 +114,31 @@ define([
         });
         $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
+
+        function initModal($modal) {
+          modalTemplate($modal, {
+            buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
+          });
+
+          // FIXME: we shouldn't be hacking like this
+          $('#link-presentation', $modal).remove();
+
+          ajaxForm(modal.$modal, {
+            buttons: {
+              '.modal-body input[name="form.button.Cancel"]': {},
+              '.modal-body input[name="form.button.Save"]': {},
+              '.modal-body input[name="form.button.Search"]': {
+                onSuccess: function(responseBody, state, xhr, form) {
+                  modal.$modal.html(responseBody.html());
+                  initModal(modal.$modal);
+                  registry.scan(modal.$modal);
+                }
+              }
+            }
+          });
+        }
+
+        initModal(modal.$modal);
       })
       .on('hidden.modal.patterns', 'a.modal-trigger', function(e) {
         $('body', iframe.document).css('overflow', 'visible');
@@ -126,7 +151,8 @@ define([
 
       options = $.extend({
         title: 'h1.documentFirstHeading',
-        buttons: '.formControls > input[type="submit"]'
+        buttons: '.formControls > input[type="submit"]',
+        content: '#content'
       }, options);
 
       $modal
@@ -139,7 +165,7 @@ define([
 
 
       $('.modal-header > h3', $modal).html($(options.title, $content).html());
-      $('.modal-body', $modal).html($content);
+      $('.modal-body', $modal).html($(options.content, $content).html());
       $(options.title, $modal).remove();
       $('.modal-header > a.close', $modal)
         .off('click')
@@ -267,34 +293,6 @@ define([
     }
 
     // Sharing
-    $('#plone-action-local_roles > a').on('show.modal.patterns', function(e, modal) {
-
-      function initModal($modal) {
-        modalTemplate($modal, {
-          buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
-        });
-
-        // FIXME: we shouldn't be hacking like this
-        $('#link-presentation', $modal).remove();
-
-        ajaxForm(modal.$modal, {
-          buttons: {
-            '.modal-body input[name="form.button.Cancel"]': {},
-            '.modal-body input[name="form.button.Save"]': {},
-            '.modal-body input[name="form.button.Search"]': {
-              onSuccess: function(responseBody, state, xhr, form) {
-                modal.$modal.html(responseBody.html());
-                initModal(modal.$modal);
-                registry.scan(modal.$modal);
-              }
-            }
-          }
-        });
-      }
-
-      initModal(modal.$modal);
-
-    });
 
   });
 
