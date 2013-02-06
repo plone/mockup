@@ -224,8 +224,13 @@ define([
       var self = this;
       if (self.$el.hasClass(self.options.klassActive) &&
           typeof self.$modal !== 'function') {
+
         var postionHorizontal = self.options.position.split(' ')[0],
             postionVertical = self.options.position.split(' ')[1];
+
+        if (self.$wrapper.parent().is('body')) {
+          self.$wrapper.height($(window.parent).height());
+        }
 
         self.$modal.css({
           'width': self.options.width === 'auto' ? self.$modal.width() : self.options.width,
@@ -236,6 +241,7 @@ define([
           'right': '0',
           'top': '0'
         });
+
         self.$wrapperInner.css({ 'margin': '0' });
         var wrapperOffsetBefore = self.$wrapperInner.offset();
         self.$wrapperInner.css({ 'margin': self.options.margin });
