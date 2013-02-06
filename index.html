@@ -126,6 +126,9 @@ cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
 
       <h1>Use it now</h1>
 
+      <p>Only requirement to bootstrap mockup is git and npm</p>
+      <p>Make sure you use latest version of nodejs and npm.</p>
+
       <pre class="brush: bash;toolbar: false;">
 git clone git://github.com/plone/mockup.git
 cd mockup
@@ -144,6 +147,10 @@ cd ..
       <pre class="brush: bash;toolbar: false;">make</pre>
 
       <p>Run tests:</p>
+      <p>Start buster server and capture browser</p>
+      <pre class="brush: bash;toolbar: false;">./node_modules/buster/bin/buster server
+firefox http://localhost:1111/capture</pre>
+      <p>Now you can see tests running with:</p>
       <pre class="brush: bash;toolbar: false;">make test</pre>
       <p>Right now tests are <img src="https://travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" />.</p>
 
