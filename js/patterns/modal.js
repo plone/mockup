@@ -221,7 +221,6 @@ define([
       });
     },
     positionModal: function() {
-      return;
       var self = this;
       if (self.$el.hasClass(self.options.klassActive) &&
           typeof self.$modal !== 'function') {
@@ -291,7 +290,7 @@ define([
           self.$wrapper.parent().css('overflow', 'hidden');
           self.$el.addClass(self.options.klassActive);
           self.$modal.addClass(self.options.klassActive);
-          //registry.scan(self.$modal);
+          registry.scan(self.$modal);
           self.positionModal();
           $(window).off('resize').on('resize', function() {
             self.positionModal();

@@ -30,12 +30,6 @@
 /*global define:false */
 
 
-if (window.jQuery) {
-  define( "jquery", [], function () {
-    "use strict";
-    return window.jQuery;
-  } );
-}
 define([
   'jquery',
   'js/jquery.iframe',
@@ -44,7 +38,6 @@ define([
   'js/patterns/toggle',
   'js/patterns/modal.js',
   'js/bundles/widgets'
-//  'js/overlays'
 ], function($, iframe, registry) {
   "use strict";
 

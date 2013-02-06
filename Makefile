@@ -6,7 +6,7 @@ CSSMIN = ./node_modules/cssmin/bin/cssmin
 BUSTER  = ./node_modules/buster/bin/buster
 UGLIFYJS = ./node_modules/uglify-js/bin/uglifyjs
 
-DOCS = docs/index.html docs/index.js docs/index.css docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png
+DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
 TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar.png
 
@@ -59,6 +59,14 @@ docs/index.css:
 	$(CSSMIN) less/shThemeGitHub.css >> $@
 	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 
+docs/jquery.js:
+	$(UGLIFYJS) jam/jquery/dist/jquery.js > $@
+
+docs/img:
+	mkdir $@
+	cp img/* $@
+	cp jam/bootstrap/img/glyphicons-halflings.png $@
+
 docs/widgets.html:
 	cp widgets.html $@
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
@@ -67,13 +75,13 @@ docs/widgets.html:
 	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/widgets.less" />@<link href="widgets.css" rel="stylesheet" type="text/css" />@g' $@
-	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@<script src="widgets.js"></script>@g' $@
-	sed -i -e 's@<script src="jam/jquery/dist/jquery.js"></script>@@g' $@
+	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@@g' $@
+	sed -i -e 's@jam/jquery/dist/jquery.js@jquery.js@g' $@
 	sed -i -e 's@<script src="jam/require.js"></script>@@g' $@
-	sed -i -e 's@<script src="js/demo/widgets.js"></script>@@g' $@
+	sed -i -e 's@<script src="js/demo/widgets.js"></script>@<script src="widgets.js"></script>@g' $@
 
 docs/widgets.js:
-	$(JAM) compile -i js/demo/widgets -i sinon --no-minify --almond $@
+	$(JAM) compile -i js/demo/widgets -i sinon -e jquery --no-minify --almond $@
 	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
@@ -82,10 +90,11 @@ docs/widgets.css:
 	$(CSSMIN) less/shThemeGitHub.css >> $@
 	$(CSSMIN) jam/select2/select2.css >> $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
-	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 	$(LESSC) less/widgets.less | $(CSSMIN) >> $@
+	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 	sed -i -e 's@select2.png@widgets.png@g' $@
 	sed -i -e 's@select2-spinner.gif@widgets-spinner.gif@g' $@
+	sed -i -e 's@jam/bootstrap/img/glyphicons-halflings.png@img/glyphicons-halflings.png@g' $@
 
 docs/widgets.png:
 	cp jam/select2/select2.png $@
@@ -102,6 +111,7 @@ docs/toolbar.html:
 	sed -i -e 's@jam/pickadate/themes/pickadate.02.classic.css;@@g' $@
 	sed -i -e 's@less/toolbar.less;@@g' $@
 	sed -i -e 's@jam/less/dist/less-1.3.3.js;@@g' $@
+	sed -i -e 's@jam/jquery/dist/jquery.js;@jquery.js;@g' $@
 	sed -i -e 's@jam/require.js;@toolbar.css;@g' $@
 	sed -i -e 's@js/demo/toolbar.js;@toolbar.js;@g' $@
 
@@ -112,7 +122,7 @@ docs/toolbar_init.css:
 	$(LESSC) less/mockup.less | $(CSSMIN) > $@
 
 docs/toolbar.js:
-	$(JAM) compile -i js/demo/toolbar --no-minify --almond $@
+	$(JAM) compile -i js/demo/toolbar -e jquery --no-minify --almond $@
 	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' $@
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
@@ -174,7 +184,7 @@ build/toolbar_init.css:
 
 build/toolbar.js:
 	$(JAM) compile -i js/bundles/toolbar -e jquery --no-minify --almond $@
-	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/bundles/toolbar'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
+	echo "require(['js/bundles/toolbar']);" >> $@
 
 build/toolbar.min.js: build/toolbar.js
 	$(UGLIFYJS) build/toolbar.js > $@

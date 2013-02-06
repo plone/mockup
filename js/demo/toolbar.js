@@ -55,9 +55,4 @@ require([
     server.respond();
   });
 
-  // Initialize patterns
-  $(document).ready(function() {
-    registry.scan($('body'));
-  });
-
 });
