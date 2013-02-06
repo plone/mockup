@@ -25,10 +25,10 @@ test:
 	# ----------------------------------------------------------------------- #
 	# Make sure you're running buster server and that at least one browser    #
 	# captured:                                                               #
-	#   % ./node_modules/buster/bin/buster server                             #
+	#   % ./node_modules/bin/buster-server                             #
 	#   buster-server running on http://localhost:1111                        #
 	# ----------------------------------------------------------------------- #
-	$(BUSTER) test -vv -r specification
+	$(BUSTER)-test -vv -r specification
 
 
 clean_docs:
