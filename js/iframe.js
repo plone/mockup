@@ -209,13 +209,6 @@ window.IFrame.prototype = {
 window.iframe_initialize = function() {
   var i,j, body, matching, iframe;
 
-  // Check for DOM to be ready
-  body = document.getElementsByTagName('body')[0];
-  if (body === undefined) {
-    window.setTimeout(window.iframe_initialize, 23);
-    return;
-  }
-
   // find [data-iframe] elements in context
   matching = [];
   if (document.querySelectorAll !== undefined) {
@@ -246,9 +239,18 @@ window.iframe_initialize = function() {
   }
 };
 
+function domReady(f){
+  if (/(?!.*?compatible|.*?webkit)^mozilla|opera/i.test(navigator.userAgent)){
+    document.addEventListener("DOMContentLoaded", f, false);
+  // Feeling dirty yet?
+  } else {
+    window.setTimeout(f,0);
+  }
+}
+
 if (window.iframe_initialized !== true) {
   window.iframe_initialized = true;
-  window.iframe_initialize();
+  domReady(window.iframe_initialize);
 }
 
 }(window, window.document));
