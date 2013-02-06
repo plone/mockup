@@ -1,10 +1,10 @@
 GIT = git
 NPM = npm
-JAM = ./node_modules/jamjs/bin/jam.js
-LESSC = ./node_modules/less/bin/lessc
-CSSMIN = ./node_modules/cssmin/bin/cssmin
-BUSTER  = ./node_modules/buster/bin/buster
-UGLIFYJS = ./node_modules/uglify-js/bin/uglifyjs
+JAM = ./node_modules/.bin/jam
+LESSC = ./node_modules/.bin/lessc
+CSSMIN = ./node_modules/.bin/cssmin
+BUSTER  = ./node_modules/.bin/buster
+UGLIFYJS = ./node_modules/.bin/uglifyjs
 
 DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
