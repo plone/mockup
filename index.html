@@ -16,6 +16,8 @@
   <script src="jam/SyntaxHighlighter/scripts/XRegExp.js"></script>
   <script src="jam/SyntaxHighlighter/scripts/shCore.js"></script>
   <script src="jam/SyntaxHighlighter/scripts/shBrushBash.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shBrushXml.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shBrushJScript.js"></script>
 </head>
 
 <body>
@@ -54,7 +56,94 @@
         diazo/deliverance it is possible to integrate other backends alongside
         or instead of Plone.</p>
 
+      <h1 id="patterns">Patterns</h1>
+
+      <p>TODO: What are patterns and how they relate to Patternslib.</p>
+      <p>TODO: How patterns are triggered.</p>
+
+      <h3>Pattern options</h3>
+
+      <p>Pattern is invoked with 2 arguments. First is DOM element and second
+        are options. To some extend options can be also passed via HTML data-*
+        attributes. Options are also merged together from whole parent DOM
+        tree. I believe good example can explain things better then pages of
+        documentation.</p>
+
+      <pre class="brush: html; toolbar: false;">
+&lt;body data-datetime="{"format": "mmmm-d-yyyy@HH:MM", "showAMPM": true}"
+      data-datetime-format="d-mmmm-yyyy@HH:MM"&gt;
+  &lt;input class="pat-datetime" data-datetime-pickadateMonthSelector="false"&gt;
+&lt;body&gt;</pre>
+
+      <p>And if initialized via jQuery ...</p>
+      <pre class="brush: javascript; toolbar: false;">
+$('.pat-datetime').datetime({
+  pickadateYearSelector: true
+});</pre>
+
+      <p>... then options are merged into.</p>
+      <pre class="brush: javascript; toolbar: false;">
+{
+  showAMPM: true,
+  format: "d-mmmm-yyyy@HH:MM",
+  pickadateMonthSelector: false,
+  pickadateYearSelector: true
+}</pre>
+
+
+
+      <p>List of custom patterns (not part of Patternslib), listed in
+        alphabetical order:</p>
+
+      <div class="row">
+        <div class="span4">
+          <h2><a href="patterns.html#autotoc">AutoToc</a></h2>
+          <p>Generating Table Of Contents. Can be also used</p>
+          <a href="patterns.html#autotoc" class="btn btn-primary pull-right">Demo</a>
+        </div>
+        <div class="span4">
+          <h2><a href="patterns.html#backdrop">Backdrop</a></h2>
+          <p>Hides content of selected DOM element.</p>
+          <a href="patterns.html#backdrop" class="btn btn-primary pull-right">Demo</a>
+        </div>
+        <div class="span4">
+          <h2><a href="patterns.html#datetime">DateTime</a></h2>
+          <p>Datetime selection widget.</p>
+          <a href="patterns.html#datetime" class="btn btn-primary pull-right">Demo</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4">
+          <h2><a href="patterns.html#expose">Expose</a></h2>
+          <p>Exposing selected DOM element by placing it on top of stretched
+            backdrop.</p>
+          <a href="patterns.html#expose" class="btn btn-primary pull-right">Demo</a>
+        </div>
+        <div class="span4">
+          <h2><a href="patterns.html#modal">Modal</a></h2>
+          <p>Creates and exposes content that was loaded when triggered by
+            selected DOM element.</p>
+          <a href="patterns.html#modal" class="btn btn-primary pull-right">Demo</a>
+        </div>
+        <div class="span4">
+          <h2><a href="patterns.html#select2">Select2</a></h2>
+          <p>Select widget (Tags, Autocomplete, Single select, Multi select)</p>
+          <a href="patterns.html#select2" class="btn btn-primary pull-right">Demo</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4">
+          <h2><a href="patterns.html#toggle">Toggle</a></h2>
+          <p>On event (click by default) toggles value of DOM element. Can
+            toggle classes or any other element attributes.</p>
+          <a href="patterns.html#toggle" class="btn btn-primary pull-right">Demo</a>
+        </div>
+      </div>
+
+
       <h1 id="budles">Bundles</h1>
+
+      <p>TODO: what the hell are bundles!</p>
 
       <div class="row">
         <!--div class="span4">
