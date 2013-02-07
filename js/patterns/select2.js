@@ -36,83 +36,58 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/Patterns/src/core/parser',
   'jam/select2/select2'
-], function($, Base, Parser) {
+], function($, Base) {
   "use strict";
-
-  var parser = new Parser("select2"),
-      options = [
-        "width",
-        "minimumInputLength",
-        "maximumInputLength",
-        "minimumResultsForSearch",
-        "maximumSelectionSize",
-        "placeholder",
-        "separator",
-        "allowClear",
-        "multiple",
-        "closeOnSelect",
-        "openOnEnter",
-        "data",
-        "tags",
-        "ajaxUrl",
-
-        "initSelection"
-      ];
-  $.each(options, function(i, option) {
-    parser.add_argument(option);
-  });
 
   var Select2 = Base.extend({
     name: "select2",
-    parser: parser,
+    defaults: {},
     init: function() {
-      var self = this,
-          select2options = {};
-      $.each(options, function(i, option) {
-        if (self.options[option]) {
-          if (option === 'ajaxUrl') {
-            select2options.ajax = {
-              quietMillis: 300,
-              data: function (term, page) {
-                return {
-                  query: term,
-                  page_limit: 10,
-                  page: page
-                };
-              },
-              results: function (data, page) {
-                var more = (page * 10) < data.total; // whether or not there are more results available
-                return { results: data.results, more: more };
-              }
-            };
-            select2options.ajax.url = self.options[option];
-          } else if (option === 'initSelection') {
-            select2options.initSelection = function ($el, callback) {
-              var data = [], value = $el.val(),
-                  initSelection = JSON.parse(self.options.initSelection);
-              $(value.split(",")).each(function () {
-                var text = this;
-                if (initSelection[this]) {
-                  text = initSelection[this];
-                }
-                data.push({id: this, text: text});
-              });
-              callback(data);
-            };
-          } else if (option === 'tags' || option === 'data') {
-            if (self.options[option].substr(0, 1) === '[') {
-              select2options.tags = JSON.parse(self.options[option]);
-            } else {
-              select2options.tags = self.options[option].split(',');
+      var self = this;
+
+      if (self.options.initSelection) {
+        self.options.initSelection = function ($el, callback) {
+          var data = [], value = $el.val(),
+              initSelection = JSON.parse(self.options.initSelection);
+          $(value.split(",")).each(function () {
+            var text = this;
+            if (initSelection[this]) {
+              text = initSelection[this];
             }
-          } else {
-            select2options[option] = self.options[option];
+            data.push({id: this, text: text});
+          });
+          callback(data);
+        };
+      }
+
+      if (self.options.ajax) {
+        self.options.ajax = $.extend({
+          quietMillis: 300,
+          data: function (term, page) {
+            return {
+              query: term,
+              page_limit: 10,
+              page: page
+            };
+          },
+          results: function (data, page) {
+            // whether or not there are more results available
+            var more = (page * 10) < data.total;
+            return { results: data.results, more: more };
           }
+        }, self.options.ajax);
+      }
+
+      if (self.options.tags) {
+        if (self.options.tags.substr(0, 1) === '[') {
+          self.options.tags = JSON.parse(self.options.tags);
+        } else {
+          self.options.tags = self.options.tags.split(',');
         }
-      });
-      self.$el.select2(select2options);
+      }
+
+      self.$el.select2(self.options);
     }
   });
 

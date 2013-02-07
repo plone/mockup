@@ -30,23 +30,20 @@
 /*global define:false */
 define([
   'jquery',
-  'js/patterns/base',
-  'jam/Patterns/src/core/parser'
+  'js/patterns/base'
 ], function($, Base, Parser) {
   "use strict";
 
-  var parser = new Parser("expose");
-
-  parser.add_argument("zIndex", "1000");
-  parser.add_argument("opacity", "0.8");
-  parser.add_argument("klass", "backdrop");
-  parser.add_argument("klassActive", 'backdrop-active');
-  parser.add_argument("closeOnEsc", true);
-  parser.add_argument("closeOnClick", true);
-
   var Backdrop = Base.extend({
     name: "backdrop",
-    parser: parser,
+    defaults: {
+      zIndex: "1000",
+      opacity: "0.8",
+      klass: "backdrop",
+      klassActive: 'backdrop-active',
+      closeOnEsc: true,
+      closeOnClick: true
+    },
     init: function() {
       var self = this;
       self.$backdrop = $('> .' + self.options.klass, self.$el);

@@ -111,7 +111,7 @@ require([
       expect($('> nav', this.$el).size()).toEqual(1);
     });
     it("can have custom levels", function() {
-      this.$el.attr('data-pat-autotoc', 'levels:h1');
+      this.$el.attr('data-autotoc-levels', 'h1');
       expect($('> nav', this.$el).size()).toEqual(0);
       registry.scan(this.$el);
       expect($('> nav', this.$el).size()).toEqual(1);
@@ -150,7 +150,7 @@ require([
     before(function() {
       this.$el = $('' +
         '<div>' +
-        ' <input class="pat-datetime" data-pat-datetime="" />' +
+        ' <input class="pat-datetime" />' +
         '</div>');
     });
     it('creates initial structure', function() {
@@ -163,7 +163,7 @@ require([
     it('doesn not work on anything else then "input" elements', function() {
       var $el = $('' +
         '<div>' +
-        ' <a class="pat-datetime" data-pat-toggle="" />' +
+        ' <a class="pat-datetime" />' +
         '</div>');
       expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
       registry.scan($el);
@@ -175,7 +175,7 @@ require([
     it("default behaivour", function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <form class="pat-expose" data-pat-expose="backdrop:#body;">' +
+        ' <form class="pat-expose" data-expose-backdrop="#body">' +
         '  <input value="" />' +
         ' </form>' +
         '</div>');
@@ -244,7 +244,7 @@ require([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2" data-pat-select2="tags:Red,Yelow,Blue"' +
+        ' <input class="pat-select2" data-select2-tags="Red,Yelow,Blue"' +
         '      value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).toEqual(0);

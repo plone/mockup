@@ -30,27 +30,23 @@
 
 define([
   'jquery',
-  'js/patterns/base',
-  'jam/Patterns/src/core/parser'
+  'js/patterns/base'
 ], function($, Base, Parser) {
   "use strict";
 
-  var parser = new Parser('autotoc');
-
-  parser.add_argument('section', 'section');
-  parser.add_argument('levels', 'h1,h2,h3');
-  parser.add_argument('IDPrefix', 'autotoc-item-');
-  parser.add_argument('klassTOC', 'autotoc-nav');
-  parser.add_argument('klassSection', 'autotoc-section');
-  parser.add_argument('klassLevelPrefix', 'autotoc-level-');
-  parser.add_argument('klassActive', 'active');
-  parser.add_argument('scrollDuration');
-  parser.add_argument('scrollEasing', 'swing');
-  parser.add_argument('klass');
-
   var AutoTOC = Base.extend({
     name: "autotoc",
-    parser: parser,
+    defaults: {
+      section: 'section',
+      levels: 'h1,h2,h3',
+      IDPrefix: 'autotoc-item-',
+      klassTOC: 'autotoc-nav',
+      klassSection: 'autotoc-section',
+      klassLevelPrefix: 'autotoc-level-',
+      klassActive: 'active',
+      scrollDuration: 'slow',
+      scrollEasing: 'swing'
+    },
     init: function() {
       var self = this;
       self.$toc = $('<nav/>')

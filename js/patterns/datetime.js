@@ -34,33 +34,30 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/Patterns/src/core/parser',
   'jam/pickadate/source/pickadate'
-], function($, Base, Parser) {
+], function($, Base) {
   "use strict";
-
-  var parser = new Parser("select2");
-
-  parser.add_argument("klassWrapper", "pat-datetime-wrapper");
-  parser.add_argument("klassIcon", "pat-datetime-icon");
-  parser.add_argument("klassYearInput", "pat-datetime-year");
-  parser.add_argument("klassMonthInput", "pat-datetime-month");
-  parser.add_argument("klassDayInput", "pat-datetime-day");
-  parser.add_argument("klassHourInput", "pat-datetime-hour");
-  parser.add_argument("klassMinuteInput", "pat-datetime-minute");
-  parser.add_argument("klassAMPMInput", "pat-datetime-ampm");
-  parser.add_argument("klassDelimiter", "pat-datetime-delimiter");
-  parser.add_argument("format", "d-mmmm-yyyy@HH:MM");
-  parser.add_argument("formatSubmit", "yyyy-m-d H:M");
-  parser.add_argument("showAMPM", true);
-  parser.add_argument("AMPM", ['AM', 'PM']);
-  parser.add_argument("minuteStep", 5);
-  parser.add_argument("pickadateMonthSelector", true);
-  parser.add_argument("pickadateYearSelector", true);
 
   var DateTime = Base.extend({
     name: 'datetime',
-    parser: parser,
+    defaults: {
+      klassWrapper: "pat-datetime-wrapper",
+      klassIcon: "pat-datetime-icon",
+      klassYearInput: "pat-datetime-year",
+      klassMonthInput: "pat-datetime-month",
+      klassDayInput: "pat-datetime-day",
+      klassHourInput: "pat-datetime-hour",
+      klassMinuteInput: "pat-datetime-minute",
+      klassAMPMInput: "pat-datetime-ampm",
+      klassDelimiter: "pat-datetime-delimiter",
+      format: "d-mmmm-yyyy@HH:MM",
+      formatSubmit: "yyyy-m-d H:M",
+      showAMPM: true,
+      AMPM: 'AM,PM',
+      minuteStep: '5',
+      pickadateMonthSelector: true,
+      pickadateYearSelector: true
+    },
     init: function() {
       var self = this;
 
@@ -333,9 +330,10 @@ define([
       return days;
     },
     _getAMPM: function() {
+      var AMPM = this.options.AMPM.split(',');
       return [
-        this._createOption(this.options.AMPM[0], this.options.AMPM[0]),
-        this._createOption(this.options.AMPM[1], this.options.AMPM[1])
+        this._createOption(AMPM[0], AMPM[0]),
+        this._createOption(AMPM[1], AMPM[1])
         ];
     },
     _getHours: function(format) {

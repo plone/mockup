@@ -31,26 +31,23 @@
 define([
   'jquery',
   'js/patterns/base',
-  'js/patterns/backdrop',
-  'jam/Patterns/src/core/parser'
-], function($, Base, Backdrop, Parser) {
+  'js/patterns/backdrop'
+], function($, Base, Backdrop) {
   "use strict";
-
-  var parser = new Parser("expose");
-
-  parser.add_argument("triggers", "focusin");
-  parser.add_argument("klassActive", "active");
-  parser.add_argument("backdrop", "body");
-  parser.add_argument("backdropZIndex", "1000");
-  parser.add_argument("backdropOpacity", "0.8");
-  parser.add_argument("backdropKlass", "backdrop");
-  parser.add_argument("backdropKlassActive", 'backdrop-active');
-  parser.add_argument("backdropCloseOnEsc", true);
-  parser.add_argument("backdropCloseOnClick", true);
 
   var Expose = Base.extend({
     name: "expose",
-    parser: parser,
+    defaults: {
+      triggers: "focusin",
+      klassActive: "active",
+      backdrop: "body",
+      backdropZIndex: "1000",
+      backdropOpacity: "0.8",
+      backdropKlass: "backdrop",
+      backdropKlassActive: 'backdrop-active',
+      backdropCloseOnEsc: true,
+      backdropCloseOnClick: true
+    },
     init: function() {
       var self = this;
 
