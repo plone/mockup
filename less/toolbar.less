@@ -29,12 +29,20 @@ body {
     left: 15%;
   }
 
+  .modal-footer {
+    position: relative;
+  }
   .modal-body {
     max-height: none;
     overflow-y: visible;
     padding: 0 15px;   
   }
 
+  .backdrop {
+    background-color: @white;
+    position: absolute;
+    .border-radius(6px);
+  }
   form { margin: 0; }
 
   #sharing-user-group-search {

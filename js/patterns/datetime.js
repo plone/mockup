@@ -41,22 +41,25 @@ define([
   var DateTime = Base.extend({
     name: 'datetime',
     defaults: {
-      klassWrapper: "pat-datetime-wrapper",
-      klassIcon: "pat-datetime-icon",
-      klassYearInput: "pat-datetime-year",
-      klassMonthInput: "pat-datetime-month",
-      klassDayInput: "pat-datetime-day",
-      klassHourInput: "pat-datetime-hour",
-      klassMinuteInput: "pat-datetime-minute",
-      klassAMPMInput: "pat-datetime-ampm",
-      klassDelimiter: "pat-datetime-delimiter",
       format: "d-mmmm-yyyy@HH:MM",
-      formatSubmit: "yyyy-m-d H:M",
-      showAMPM: true,
-      AMPM: 'AM,PM',
-      minuteStep: '5',
-      pickadateMonthSelector: true,
-      pickadateYearSelector: true
+      formatsubmit: "yyyy-m-d H:M",
+      ampm: 'AM,PM',
+      minutestep: '5',
+      klass: {
+        wrapper: "pat-datetime-wrapper",
+        icon: "pat-datetime-icon",
+        year: "pat-datetime-year",
+        month: "pat-datetime-month",
+        day: "pat-datetime-day",
+        hour: "pat-datetime-hour",
+        minute: "pat-datetime-minute",
+        ampm: "pat-datetime-ampm",
+        delimiter: "pat-datetime-delimiter"
+      },
+      pickadate: {
+        monthSelector: true,
+        yearSelector: true
+      }
     },
     init: function() {
       var self = this;
@@ -66,12 +69,8 @@ define([
         return;
       }
 
-      self.pickadateOptions = $.extend({}, $.fn.pickadate.defaults, {
+      self.pickadateOptions = $.extend(true, {}, $.fn.pickadate.defaults, {
         formatSubmit: 'yyyy-mm-dd',
-        monthSelector: self.options.pickadateMonthSelector,
-        yearSelector: self.options.pickadateYearSelector,
-        onOpen: function() {},
-        onClose: function() {},
         onSelect: function(e) {
           var date = this.getDate('yyyy-mm-dd').split('-');
           self.$years.val(parseInt(date[0], 10));
@@ -86,12 +85,12 @@ define([
             self.$ampm.val()
           );
         }
-      });
+      }, self.options.pickadate);
 
       self.$el.hide();
 
       self.$wrapper = $('<div/>')
-        .addClass(self.options.klassWrapper)
+        .addClass(self.options.klass.wrapper)
         .insertAfter(self.$el);
 
       self.pickadate = $('<input/>')
@@ -119,21 +118,21 @@ define([
       }
 
       self.$years = $('<select/>')
-        .addClass(self.options.klassYearInput)
+        .addClass(self.options.klass.year)
         .on('change', changePickadateDate);
       self.$months = $('<select/>')
-        .addClass(self.options.klassMonthInput)
+        .addClass(self.options.klass.month)
         .on('change', changePickadateDate);
       self.$days = $('<select/>')
-        .addClass(self.options.klassDayInput)
+        .addClass(self.options.klass.day)
         .on('change', changePickadateDate);
       self.$hours = $('<select/>')
-        .addClass(self.options.klassHourInput)
+        .addClass(self.options.klass.hour)
         .on('change', changePickadateDate);
       self.$minutes = $('<select/>')
-        .addClass(self.options.klassMinuteInput)
+        .addClass(self.options.klass.minute)
         .on('change', changePickadateDate);
-      self.$icon = $('<span class="' + self.options.klassIcon + '"/>')
+      self.$icon = $('<span class="' + self.options.klass.icon + '"/>')
         .on('click', function(e) {
           e.stopPropagation();
           e.preventDefault();
@@ -167,18 +166,18 @@ define([
               return self.$icon;
             default:
               return $('<span> ' + format + ' </span>')
-                .addClass(self.options.klassDelimiter);
+                .addClass(self.options.klass.delimiter);
           }
         }
       ), function(i, $item) {
         self.$wrapper.append($item);
       });
 
-      self.$ampm = $('<select/>')
-        .addClass(self.options.klassAMPMInput)
-        .append(self._getAMPM())
-        .on('change', changePickadateDate);
-      if (self.options.showAMPM) {
+      if (self.options.ampm) {
+        self.$ampm = $('<select/>')
+          .addClass(self.options.klass.ampm)
+          .append(self._getAMPM())
+          .on('change', changePickadateDate);
         self.$wrapper.append($('<span> </span>'));
         self.$wrapper.append(self.$ampm);
       }
@@ -200,7 +199,9 @@ define([
         self.$days.val('' + parseInt(date[2], 10));
         self.$hours.val('' + parseInt(time[0], 10));
         self.$minutes.val('' + parseInt(time[1], 10));
-        self.$ampm.val(ampm);
+        if (self.options.ampm) {
+          self.$ampm.val(ampm);
+        }
       }
     },
     _strftime: function(format, action, options) {
@@ -330,7 +331,7 @@ define([
       return days;
     },
     _getAMPM: function() {
-      var AMPM = this.options.AMPM.split(',');
+      var AMPM = this.options.ampm.split(',');
       return [
         this._createOption(AMPM[0], AMPM[0]),
         this._createOption(AMPM[1], AMPM[1])
@@ -341,7 +342,7 @@ define([
           current = this.getDate('h'),
           hour = 0;
       hours.push(this._createOption('', '--', current === undefined));
-      while (hour < (this.options.showAMPM && 12 || 24)) {
+      while (hour < (this.options.ampm && 12 || 24)) {
         if (format === 'H') {
           hours.push(this._createOption(hour, hour, current === hour));
         } else {
@@ -363,7 +364,7 @@ define([
           minutes.push(this._createOption(minute, ('0' + minute).slice(-2),
                 current === minute));
         }
-        minute += parseInt(this.options.minuteStep, 10);
+        minute += parseInt(this.options.minutestep, 10);
       }
       return minutes;
     },
@@ -390,7 +391,7 @@ define([
           parseInt(hour, 10) + (ampm === 'PM' && 12 || 0),
           parseInt(minutes, 10)
           );
-        self.$el.attr('value', self.getDate(self.options.formatSubmit));
+        self.$el.attr('value', self.getDate(self.options.formatsubmit));
       }
     },
     getDate: function(format) {

@@ -34,11 +34,12 @@ define([
   'jquery',
   'js/jquery.iframe',
   'jam/Patterns/src/registry',
+  'js/patterns/backdrop',
   'jam/jquery-form/jquery.form.js',
   'js/patterns/toggle',
   'js/patterns/modal.js',
   'js/bundles/widgets'
-], function($, iframe, registry) {
+], function($, iframe, registry, Backdrop) {
   "use strict";
 
   window.plone = window.plone || {};
@@ -116,7 +117,7 @@ define([
           // FIXME: we shouldn't be hacking like this
           $('#link-presentation', $modal).remove();
 
-          ajaxForm(modal.$modal, {
+          ajaxForm(modal, {
             buttons: {
               '.modal-body input[name="form.button.Cancel"]': {},
               '.modal-body input[name="form.button.Save"]': {},
@@ -124,6 +125,7 @@ define([
                 onSuccess: function(responseBody, state, xhr, form) {
                   modal.$modal.html(responseBody.html());
                   initModal(modal.$modal);
+                  modal.positionModal();
                   registry.scan(modal.$modal);
                 }
               }
@@ -198,7 +200,7 @@ define([
     //    }
     //  }));
 
-    function ajaxForm($modal, options) {
+    function ajaxForm(modal, options) {
       options = $.extend({
         buttons: {},
         timeout: 5000,
@@ -206,7 +208,7 @@ define([
       }, options);
 
       $.each(options.buttons, function(button, buttonOptions) {
-        var $button = $(button, $modal);
+        var $button = $(button, modal.$modal);
 
         buttonOptions = $.extend({}, options, buttonOptions);
 
@@ -217,37 +219,41 @@ define([
         $button.on('click', function(e) {
           e.stopPropagation();
           e.preventDefault();
+
+          // loading "spinner"
+          var backdrop = modal.$modal.data('patterns-backdrop');
+          if (!backdrop) {
+            backdrop = new Backdrop(modal.$modal, {
+              closeOnEsc: false,
+              closeOnClick: false
+            });
+            backdrop.$backdrop
+              .html('')
+              .append($('' +
+                  '<div class="progress progress-striped active">' +
+                  '  <div class="bar" style="width: 100%;"></div>' +
+                  '</div>')
+                .css({
+                  position: 'absolute',
+                  left: modal.$modal.width() * 0.1,
+                  top: modal.$modal.height()/2 + 10,
+                  width: modal.$modal.width() * 0.8
+                }));
+            modal.$modal.data('patterns-backdrop', backdrop);
+          }
+          backdrop.show();
+
           $button.parents('form').ajaxSubmit({
             timeout: buttonOptions.timeout,
             dataType: 'html',
             data: extraData,
             url: $button.parents('form').attr('action'),
             error: function(xhr, textStatus, errorStatus) {
-              console.log('error');
               if (textStatus === 'timeout') {
                 if (buttonOptions.onTimeout) {
                   buttonOptions.onTimeout(xhr, errorStatus);
                 } else {
-                  // TODO: show that request timeouted
-                  console.log('TODO: make below code work');
-                  //var $timeout = $('<p/>').html(buttonOptions.timeoutText);
-
-                  //$('a.retry', $timeout).on('click', function(e) {
-                  //  e.stopPropagation();
-                  //  e.preventDefault();
-                  //  self.show();
-                  //});
-                  //$('a.close', $timeout).on('click', function(e) {
-                  //  e.stopPropagation();
-                  //  e.preventDefault();
-                  //  self.hide();
-                  //});
-
-                  //$('.progress', $modal)
-                  //  .removeClass('progress-striped')
-                  //  .addClass('progress-danger')
-                  //  .after($timeout);
-
+                  $button.trigger('close.modal.patterns');
                 }
 
               // on "error", "abort", and "parsererror"
@@ -261,15 +267,16 @@ define([
             success: function(response, state, xhr, form) {
               var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
                       .replace('<body', '<div').replace('</body>', '</div>'));
+              backdrop.hide();
 
               // if error is found
               if ($(buttonOptions.formError, responseBody).size() !== 0) {
                 if (buttonOptions.onFormError) {
                   buttonOptions.onFormError(responseBody, state, xhr, form);
                 } else {
-                  $modal.html(responseBody.html());
-                  modalTemplate($modal);
-                  registry.scan($modal);
+                  modal.$modal.html(responseBody.html());
+                  modalTemplate(modal.$modal);
+                  registry.scan(modal.$modal);
                 }
 
               // custom success function

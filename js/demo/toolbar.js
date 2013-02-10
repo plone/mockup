@@ -7,7 +7,7 @@ require([
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;
-  server.autoRespondAfter = 4000;
+  server.autoRespondAfter = 2000;
 
   function deserialize(text) {
     response = {};
