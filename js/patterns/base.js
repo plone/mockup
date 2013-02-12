@@ -58,18 +58,22 @@ define([
           } else if (value === 'false') {
             value = false;
           }
-          var names = name.split('-'),
-              names_options = options;
-          $.each(names, function(i, name) {
-            if (names.length > i + 1) {
-              if (!names_options[name]) {
-                names_options[name] = {};
+          if (name === '') {
+            options = value;
+          } else {
+            var names = name.split('-'),
+                names_options = options;
+            $.each(names, function(i, name) {
+              if (names.length > i + 1) {
+                if (!names_options[name]) {
+                  names_options[name] = {};
+                }
+                names_options = names_options[name];
+              } else {
+                names_options[name] = value;
               }
-              names_options = names_options[name];
-            } else {
-              names_options[name] = value;
-            }
-          });
+            });
+          }
         }
       });
     }

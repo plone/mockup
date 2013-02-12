@@ -47,6 +47,8 @@ require([
       Select2, Toggle) {
   "use strict";
 
+  // TODO: test default options and jquery integration
+
   describe("Base", function () {
     before(function() {
       this._patterns = $.extend({}, registry.patterns);
@@ -58,7 +60,9 @@ require([
       var $el = $('' +
         '<div data-example="{&quot;name1&quot;: &quot;value1&quot;,' +
         '    &quot;name2&quot;: &quot;value2&quot;}">' +
-        ' <div class="pat-example" data-example-name2="something"></div>' +
+        ' <div class="pat-example"' +
+        '      data-example-name2="something"' +
+        '      data-example-some-name4="value4"></div>' +
         '</div>');
 
       Base.extend({
@@ -70,11 +74,13 @@ require([
           expect(this.options.name1).toEqual('value1');
           expect(this.options.name2).toEqual('something');
           expect(this.options.name3).toEqual('value3');
+          expect(this.options.some.name4).toEqual('value4');
         }
       });
 
       registry.scan($el);
     });
+    // TODO: make sure that pattern is not initialized twice if scanned twice
   });
 
   describe("AutoTOC", function () {
