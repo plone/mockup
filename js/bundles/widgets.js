@@ -52,7 +52,11 @@ define([
       var $match = $root.filter('.enableFormTabbing');
       $match = $match.add($root.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
-      $match.attr('data-pat-autotoc', 'levels:legend;section:fieldset;klass:autotabs');
+      $match.attr({
+        'data-autotoc-levels': 'legend',
+        'data-autotoc-section': 'fieldset',
+        'data-autotoc-klass': 'autotabs'
+      });
 
     }
   };

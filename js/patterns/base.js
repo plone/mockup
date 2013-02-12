@@ -52,14 +52,24 @@ define([
           var name = attr.name.substr(('data-'+prefix).length+1),
               value = attr.value.replace(/^\s+|\s+$/g, '');  // trim
           if (value.substring(0, 1) === '{' || value.substring(0, 1) === '[') {
-            $.extend(options, JSON.parse(value));
-            return;
+            value = JSON.parse(value);
           } else if (value === 'true') {
             value = true;
           } else if (value === 'false') {
             value = false;
           }
-          options[name] = value;
+          var names = name.split('-'),
+              names_options = options;
+          $.each(names, function(i, name) {
+            if (names.length > i + 1) {
+              if (!names_options[name]) {
+                names_options[name] = {};
+              }
+              names_options = names_options[name];
+            } else {
+              names_options[name] = value;
+            }
+          });
         }
       });
     }

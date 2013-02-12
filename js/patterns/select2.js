@@ -46,10 +46,13 @@ define([
     init: function() {
       var self = this;
 
-      if (self.options.initSelection) {
+      if (self.options.initselection) {
         self.options.initSelection = function ($el, callback) {
           var data = [], value = $el.val(),
-              initSelection = JSON.parse(self.options.initSelection);
+              initSelection = self.options.initselection;
+          if (typeof(initSelection) === 'string') {
+              initSelection = JSON.parse(self.options.initselection);
+          }
           $(value.split(",")).each(function () {
             var text = this;
             if (initSelection[this]) {
@@ -79,7 +82,7 @@ define([
         }, self.options.ajax);
       }
 
-      if (self.options.tags) {
+      if (self.options.tags && typeof(self.options) === 'string') {
         if (self.options.tags.substr(0, 1) === '[') {
           self.options.tags = JSON.parse(self.options.tags);
         } else {
