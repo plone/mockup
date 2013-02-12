@@ -72,7 +72,9 @@ define([
         closeOnEsc: self.options.backdropCloseOnEsc,
         closeOnClick: self.options.backdropCloseOnClick
       });
-      self.backdrop.on('hidden', function() { self.hide(); });
+      self.backdrop.on('hidden', function(e) {
+        self.hide();
+      });
 
       self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
@@ -186,7 +188,7 @@ define([
                   e.stopPropagation();
                   e.preventDefault();
                 })
-                .on('close.modal.patterns', function(e) {
+                .on('destroy.modal.patterns', function(e) {
                   e.stopPropagation();
                   self.hide();
                 });

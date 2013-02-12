@@ -77,9 +77,6 @@ define([
 
     // Modals {{{
 
-    // mark buttons which open in modal
-    $('#plone-action-local_roles > a').addClass('modal-trigger').modal();
-
     // make sure we close all dropdowns when iframe is shrinking
     iframe.$el.on('shrink.iframe', function(e) {
       $('.toolbar-dropdown-open > a').each(function() {
@@ -108,32 +105,6 @@ define([
         });
         $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
-
-        function initModal($modal) {
-          modalTemplate($modal, {
-            buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
-          });
-
-          // FIXME: we shouldn't be hacking like this
-          $('#link-presentation', $modal).remove();
-
-          ajaxForm(modal, {
-            buttons: {
-              '.modal-body input[name="form.button.Cancel"]': {},
-              '.modal-body input[name="form.button.Save"]': {},
-              '.modal-body input[name="form.button.Search"]': {
-                onSuccess: function(responseBody, state, xhr, form) {
-                  modal.$modal.html(responseBody.html());
-                  initModal(modal.$modal);
-                  modal.positionModal();
-                  registry.scan(modal.$modal);
-                }
-              }
-            }
-          });
-        }
-
-        initModal(modal.$modal);
       })
       .on('hidden.modal.patterns', 'a.modal-trigger', function(e) {
         $('body', iframe.document).css('overflow', 'visible');
@@ -167,7 +138,7 @@ define([
         .on('click', function(e) {
           e.stopPropagation();
           e.preventDefault();
-          $(e.target).trigger('close.modal.patterns');
+          $(e.target).trigger('destroy.modal.patterns');
         });
 
       // cleanup html
@@ -175,7 +146,12 @@ define([
 
       $(options.buttons, $modal).each(function() {
         var $button = $(this);
-        $button.clone()
+        $button
+          .on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+          })
+          .clone()
           .appendTo($('.modal-footer', $modal))
           .off('click').on('click', function(e) {
             e.stopPropagation();
@@ -187,20 +163,7 @@ define([
 
     }
 
-    // }}}
-
-    // Edit form
-    //$('#plone-toolbar #plone-action-edit > a').ploneOverlay(
-    //  $.extend(window.plone.toolbar, {
-    //    events: {
-    //      'click .modal-body input[name="form.button.cancel"]': {},
-    //      'click .modal-body input[name="form.button.save"]': {
-    //        contentFilters: [ '#portal-column-content' ]
-    //      }
-    //    }
-    //  }));
-
-    function ajaxForm(modal, options) {
+    function modalAjaxForm(modal, modalInit, options) {
       options = $.extend({
         buttons: {},
         timeout: 5000,
@@ -240,6 +203,8 @@ define([
                   width: modal.$modal.width() * 0.8
                 }));
             modal.$modal.data('patterns-backdrop', backdrop);
+          } else {
+            modal.$modal.append(backdrop.$backdrop);
           }
           backdrop.show();
 
@@ -249,42 +214,36 @@ define([
             data: extraData,
             url: $button.parents('form').attr('action'),
             error: function(xhr, textStatus, errorStatus) {
-              if (textStatus === 'timeout') {
-                if (buttonOptions.onTimeout) {
-                  buttonOptions.onTimeout(xhr, errorStatus);
-                } else {
-                  $button.trigger('close.modal.patterns');
-                }
+              if (textStatus === 'timeout' && buttonOptions.onTimeout) {
+                buttonOptions.onTimeout(modal, xhr, errorStatus);
 
               // on "error", "abort", and "parsererror"
               } else if (buttonOptions.onError) {
                 buttonOptions.onError(xhr, textStatus, errorStatus);
               } else {
-                // TODO: notify about error (when notification center is done)
-                $button.trigger('close.modal.patterns');
+                console.log('error happened do something');
               }
             },
             success: function(response, state, xhr, form) {
               var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
                       .replace('<body', '<div').replace('</body>', '</div>'));
-              backdrop.hide();
 
               // if error is found
               if ($(buttonOptions.formError, responseBody).size() !== 0) {
                 if (buttonOptions.onFormError) {
-                  buttonOptions.onFormError(responseBody, state, xhr, form);
+                  buttonOptions.onFormError(modal, responseBody, state, xhr, form);
                 } else {
                   modal.$modal.html(responseBody.html());
-                  modalTemplate(modal.$modal);
+                  modalInit(modal, modalInit);
                   registry.scan(modal.$modal);
                 }
 
               // custom success function
               } else if (buttonOptions.onSuccess) {
-                buttonOptions.onSuccess(responseBody, state, xhr, form);
+                buttonOptions.onSuccess(modal, responseBody, state, xhr, form);
 
               } else {
-                $button.trigger('close.modal.patterns');
+                $button.trigger('destroy.modal.patterns');
               }
             }
           });
@@ -292,7 +251,200 @@ define([
       });
     }
 
+    function modalInit(id, callback) {
+      $('#' + id + ' > a').addClass('modal-trigger').modal();
+      $(document).on('show.modal.patterns', '#' + id +
+            ' > a.modal-trigger', function(e, modal) {
+        callback(modal, callback);
+      });
+    }
+
+    // }}}
+
+    // TODO: Contents
+
+    // Edit
+    modalInit('plone-action-edit', function(modal, modalInit) {
+      modalTemplate(modal.$modal);
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.cancel"]': {},
+          '.modal-body input[name="form.button.save"]': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              $('#portal-column-content', window.parent.document).html(
+                  $('#portal-column-content', responseBody).html());
+              modal.hide();
+            }
+          }
+        }
+      });
+    });
+
+
     // Sharing
+    modalInit('plone-action-local_roles', function(modal, modalInit) {
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
+      });
+      // FIXME: we shouldn't be hacking like this
+      $('#link-presentation', modal.$modal).remove();
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.Cancel"]': {},
+          '.modal-body input[name="form.button.Save"]': {},
+          '.modal-body input[name="form.button.Search"]': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              modal.$modal.html(responseBody.html());
+              modalInit(modal, modalInit);
+              modal.positionModal();
+              registry.scan(modal.$modal);
+            }
+          }
+        }
+      });
+
+    });
+
+    // Rules form
+    // TODO: for now we only open overlay we need to test that forms are
+    //       working
+    modalInit('plone-action-contentrules', function(modal, modalInit) {
+      modalTemplate(modal.$modal);
+      modalAjaxForm(modal, modalInit);
+    });
+
+    // Delete Action
+    modalInit('plone-contentmenu-actions-delete', function(modal, modalInit) {
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.button.Cancel"],input.destructive'
+      });
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.Cancel"]': {},
+          '.modal-body input.destructive': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              window.parent.location.href = window.parent.location.href + '/..';
+            }
+          }
+        }
+      });
+    });
+
+    // Rename Action
+    modalInit('plone-contentmenu-actions-rename', function(modal, modalInit) {
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.button.Cancel"],input[name="form.button.RenameAll"]'
+      });
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.Cancel"]': {},
+          '.modal-body input[name="form.button.RenameAll"]': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              window.parent.location.href = responseBody.data('context-url') || window.parent.location.href;
+            }
+          }
+        }
+      });
+    });
+
+    // Change content item as default view...
+    var changeContentItemAsDefaultView = function(modal, modalInit) {
+      modalTemplate(modal.$modal);
+      // FIXME: we should hack like this
+      $('form > dl', modal.$modal).addClass('default-page-listing');
+      $('input[name="form.button.Cancel"]', modal.$modal).attr('class', 'standalone');
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.Cancel"]': {},
+          '.modal-body input[name="form.button.Save"]': {
+            onSuccess: function(modal, responseBody, state, xhr) {
+              window.parent.location.href = window.parent.location.href;
+            }
+          }
+        }
+      });
+    };
+    modalInit('folderChangeDefaultPage', changeContentItemAsDefaultView);
+    modalInit('contextSetDefaultPage', changeContentItemAsDefaultView);
+
+    // TODO: Add forms
+
+    // "Restrictions..." form
+    modalInit('plone-contentmenu-settings', function(modal, modalInit) {
+      modalTemplate(modal.$modal);
+      // FIXME: we should hack like this
+      var $details = $('#details', modal.$modal)
+        .removeAttr('style')
+        .removeAttr('id')
+        .first().parent();
+
+      function show_submenu($modal) {
+        if ($('#mode_enable', $modal).is(':checked')) {
+          $details.attr({'id': 'details', 'style': ''});
+        } else {
+          $details.attr({'id': 'details', 'style': 'display:none;'});
+        }
+      }
+      function check_mode($modal, value) {
+        // The logic here is that from #6151, comment 12.
+        var $preferred = $('#' + value, $modal),
+            $allowed = $('#' + value + '_allowed', $modal),
+            $allowed_hidden = $('#' + value + '_allowed_hidden', $modal);
+
+        // type is not preferred, so it is not allowed, too.
+        // We uncheck and disable (ghost) the allowed checkbox
+        if (!$preferred.is(':checked')) {
+          $allowed.attr('checked', false);
+          $allowed.attr('disabled', true);
+
+        // type _is_ preferred, so user _may_ want to make it
+        // an "allowed-only" type by checking the "allowed" checkbox.
+        // We need to enable (unghost) the allowed checkbox
+        } else {
+          $allowed.attr('disabled', false);
+        }
+      }
+
+      $('input[name="constrainTypesMode:int"]', modal.$modal)
+        .removeAttr('onclick')
+        .on('click', function() {
+          show_submenu($(this).parents('.modal'));
+        });
+      $('input[name="currentPrefer:list"],input[name="currentAllow:list"]', modal.$modal)
+        .removeAttr('onclick')
+        .on('click', function() {
+          check_mode($(this).parents('.modal'), $(this).attr('id'));
+        });
+      show_submenu(modal.$modal);
+
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.Cancel"]': {},
+          '.modal-body input[name="form.button.Save"]': {
+            onSuccess: function(modal, responseBody, state, xhr) {
+              $('#plone-contentmenu-factories').html(
+                  $('#plone-contentmenu-factories', responseBody).html());
+              modal.hide();
+            }
+          }
+        }
+      });
+    });
+
+    // Advance workflow
+    modalInit('workflow-transition-advanced', function(modal, modalInit) {
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.button.Cancel"],input[name="form.button.Publish"]'
+      });
+      // FIXME: we should hack like this
+      $('#workflow_action', modal.$modal).parent().find('> br').remove();
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.button.Cancel"]': {},
+          '.modal-body input[name="form.button.Publish"]': {}
+        }
+      });
+    });
 
   });
 

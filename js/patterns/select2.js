@@ -91,6 +91,7 @@ define([
       }
 
       self.$el.select2(self.options);
+      self.$el.parent().off('close.modal.patterns');
     }
   });
 
