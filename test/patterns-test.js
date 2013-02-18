@@ -27,12 +27,12 @@
 /*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, require:false, describe:false, it:false, expect:false,
-  before:false, after:false */
+/*global buster:false, define:false, describe:false, it:false, expect:false,
+  beforeEach:false, afterEach:false */
 
 
-buster.spec.expose();
-require([
+define([
+  'jam/chai/chai.js',
   'jquery',
   'jam/Patterns/src/registry',
   'js/patterns/base',
@@ -43,17 +43,22 @@ require([
   'js/patterns/modal',
   'js/patterns/select2',
   'js/patterns/toggle'
-], function($, registry, Base, AutoTOC, Backdrop, DateTime, Expose, Modal,
+], function(chai, $, registry, Base, AutoTOC, Backdrop, DateTime, Expose, Modal,
       Select2, Toggle) {
   "use strict";
+
+  var expect = chai.expect,
+      mocha = window.mocha;
+
+  mocha.setup('bdd');
 
   // TODO: test default options and jquery integration
 
   describe("Base", function () {
-    before(function() {
+    beforeEach(function() {
       this._patterns = $.extend({}, registry.patterns);
     });
-    after(function() {
+    afterEach(function() {
       registry.patterns = this._patterns;
     });
     it("read options from dom tree", function() {
@@ -71,20 +76,20 @@ require([
           name3: 'value3'
         },
         init: function() {
-          expect(this.options.name1).toEqual('value1');
-          expect(this.options.name2).toEqual('something');
-          expect(this.options.name3).toEqual('value3');
-          expect(this.options.some.name4).toEqual('value4');
+          expect(this.options.name1).to.equal('value1');
+          expect(this.options.name2).to.equal('something');
+          expect(this.options.name3).to.equal('value3');
+          expect(this.options.some.name4).to.equal('value4');
         }
       });
 
-      registry.scan($el);
+      registry.scan($el, true);
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
 
   describe("AutoTOC", function () {
-    before(function() {
+    beforeEach(function() {
       this.$el = $('' +
         '<div class="pat-autotoc">' +
         ' <div>' +
@@ -102,27 +107,27 @@ require([
         '</div>');
     });
     it("by default creates TOC from h1/h2/h3", function() {
-      expect($('> nav', this.$el).size()).toEqual(0);
+      expect($('> nav', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('> nav', this.$el).size()).toEqual(1);
-      expect($('> nav > a', this.$el).size()).toEqual(9);
-      expect($('> nav > a.autotoc-level-1', this.$el).size()).toEqual(4);
-      expect($('> nav > a.autotoc-level-2', this.$el).size()).toEqual(4);
-      expect($('> nav > a.autotoc-level-3', this.$el).size()).toEqual(1);
-      expect($('> nav > a.autotoc-level-4', this.$el).size()).toEqual(0);
+      expect($('> nav', this.$el).size()).to.equal(1);
+      expect($('> nav > a', this.$el).size()).to.equal(9);
+      expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
+      expect($('> nav > a.autotoc-level-2', this.$el).size()).to.equal(4);
+      expect($('> nav > a.autotoc-level-3', this.$el).size()).to.equal(1);
+      expect($('> nav > a.autotoc-level-4', this.$el).size()).to.equal(0);
     });
     it("can be used as jQuery plugin as well", function () {
-      expect($('> nav', this.$el).size()).toEqual(0);
+      expect($('> nav', this.$el).size()).to.equal(0);
       this.$el.patAutotoc();
-      expect($('> nav', this.$el).size()).toEqual(1);
+      expect($('> nav', this.$el).size()).to.equal(1);
     });
     it("can have custom levels", function() {
       this.$el.attr('data-autotoc-levels', 'h1');
-      expect($('> nav', this.$el).size()).toEqual(0);
+      expect($('> nav', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('> nav', this.$el).size()).toEqual(1);
-      expect($('> nav > a.autotoc-level-1', this.$el).size()).toEqual(4);
-      expect($('> nav > a.autotoc-level-2', this.$el).size()).toEqual(0);
+      expect($('> nav', this.$el).size()).to.equal(1);
+      expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
+      expect($('> nav > a.autotoc-level-2', this.$el).size()).to.equal(0);
     });
   });
 
@@ -130,50 +135,50 @@ require([
     it("default behaivour", function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
-      expect($('.backdrop', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($('.backdrop', $el).size()).to.equal(1);
+      expect($el.hasClass('backdrop-active')).to.equal(false);
       backdrop.show();
-      expect($el.hasClass('backdrop-active')).toBeTrue();
+      expect($el.hasClass('backdrop-active')).to.equal(true);
       backdrop.hide();
-      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($el.hasClass('backdrop-active')).to.equal(false);
       backdrop.show();
-      expect($el.hasClass('backdrop-active')).toBeTrue();
+      expect($el.hasClass('backdrop-active')).to.equal(true);
       backdrop.$backdrop.trigger('click');
-      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($el.hasClass('backdrop-active')).to.equal(false);
       backdrop.show();
-      expect($el.hasClass('backdrop-active')).toBeTrue();
+      expect($el.hasClass('backdrop-active')).to.equal(true);
       var keydown = $.Event("keydown");
       keydown.keyCode = 50;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeTrue();
+      expect($el.hasClass('backdrop-active')).to.equal(true);
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($el.hasClass('backdrop-active')).to.equal(false);
     });
   });
 
   describe("DateTime", function() {
-    before(function() {
+    beforeEach(function() {
       this.$el = $('' +
         '<div>' +
         ' <input class="pat-datetime" />' +
         '</div>');
     });
     it('creates initial structure', function() {
-      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(0);
+      expect($('.pat-datetime-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-datetime-wrapper', this.$el).size()).toEqual(1);
-      expect($('.pat-datetime-wrapper select', this.$el).size()).toEqual(8);
-      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).toEqual(2);
+      expect($('.pat-datetime-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pat-datetime-wrapper select', this.$el).size()).to.equal(8);
+      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).to.equal(2);
     });
     it('doesn not work on anything else then "input" elements', function() {
       var $el = $('' +
         '<div>' +
         ' <a class="pat-datetime" />' +
         '</div>');
-      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
+      expect($('.pat-datetime-wrapper', $el).size()).to.equal(0);
       registry.scan($el);
-      expect($('.pat-datetime-wrapper', $el).size()).toEqual(0);
+      expect($('.pat-datetime-wrapper', $el).size()).to.equal(0);
     });
   });
 
@@ -186,49 +191,47 @@ require([
         ' </form>' +
         '</div>');
       registry.scan($el);
-      expect($('.backdrop', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($('.backdrop', $el).size()).to.equal(1);
+      expect($el.hasClass('backdrop-active')).to.equal(false);
       $('input', $el).focus();
-      expect($('form', $el).css('z-index')).toEqual('1001');
-      expect($el.hasClass('backdrop-active')).toBeTrue();
+      expect($('form', $el).css('z-index')).to.equal('1001');
+      expect($el.hasClass('backdrop-active')).to.equal(true);
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
+      expect($el.hasClass('backdrop-active')).to.equal(false);
     });
   });
 
   describe("Modal", function() {
-    it("default behaivour", function() {
-      var $el = $('' +
+    beforeEach(function() {
+      this.$el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
         '    data-modal-backdrop="#body">Open</a>' +
         ' <div id="target">Target</div>' +
-        '</div>');
-      registry.scan($el);
-      expect($('.modal-wrapper', $el).size()).toEqual(1);
-      expect($('.modal', $el).size()).toEqual(0);
-      expect($('.backdrop', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      $('a.pat-modal', $el).click();
-      expect($('.modal', $el).size()).toEqual(1);
-      expect($el.hasClass('backdrop-active')).toBeTrue();
+        '</div>').appendTo('body');
+    });
+    afterEach(function() {
+      this.$el.remove();
+    });
+    it("default behaivour", function() {
+      registry.scan(this.$el);
+      expect($('.modal-wrapper', this.$el).size()).to.equal(1);
+      expect($('.modal', this.$el).size()).to.equal(0);
+      expect($('.backdrop', this.$el).size()).to.equal(1);
+      expect(this.$el.hasClass('backdrop-active')).to.equal(false);
+      $('a.pat-modal', this.$el).click();
+      expect($('.modal', this.$el).size()).to.equal(1);
+      expect(this.$el.hasClass('backdrop-active')).to.equal(true);
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).toBeFalse();
-      expect($('.modal', $el).size()).toEqual(0);
+      expect(this.$el.hasClass('backdrop-active')).to.equal(false);
+      expect($('.modal', this.$el).size()).to.equal(0);
     });
     it("modal with custom template", function() {
-      var $el = $('' +
-        '<div id="body">' +
-        ' <a href="#target"' +
-        '    data-modal-backdrop="#body">Open</a>' +
-        ' <div id="target"> Target </div>' +
-        '</div>');
-
-      $('a', $el).modal().on('show.modal.patterns', function(e, modal) {
+      $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
         var contents = modal.$modal.html();
         modal.$modal
           .html('')
@@ -237,12 +240,10 @@ require([
           .append($('<div class="modal-footer"></div>'));
         $('.modal-body', modal.$modal).html(contents);
       }).click();
-
-      expect($('.modal', $el).size()).toEqual(1);
-      expect($('.modal .modal-header', $el).size()).toEqual(1);
-      expect($('.modal .modal-body', $el).size()).toEqual(1);
-      expect($('.modal .modal-footer', $el).size()).toEqual(1);
-
+      expect($('.modal', this.$el).size()).to.equal(1);
+      expect($('.modal .modal-header', this.$el).size()).to.equal(1);
+      expect($('.modal .modal-body', this.$el).size()).to.equal(1);
+      expect($('.modal .modal-footer', this.$el).size()).to.equal(1);
     });
   });
 
@@ -253,15 +254,15 @@ require([
         ' <input class="pat-select2" data-select2-tags="Red,Yelow,Blue"' +
         '      value="Yellow" />' +
         '</div>');
-      expect($('.select2-choices', $el).size()).toEqual(0);
+      expect($('.select2-choices', $el).size()).to.equal(0);
       registry.scan($el);
-      expect($('.select2-choices', $el).size()).toEqual(1);
-      expect($('.select2-choices li', $el).size()).toEqual(2);
+      expect($('.select2-choices', $el).size()).to.equal(1);
+      expect($('.select2-choices li', $el).size()).to.equal(2);
     });
   });
 
   describe("Toggle", function() {
-    before(function() {
+    beforeEach(function() {
       this.$el = $('' +
         '<div>' +
         ' <a class="pat-toggle"' +
@@ -271,33 +272,31 @@ require([
         '</div>');
     });
     it("by default toggles on click event", function() {
-      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('.toggled', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('.toggled', this.$el).size()).to.equal(0);
       $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).toEqual(1);
+      expect($('.toggled', this.$el).size()).to.equal(1);
     });
     it("can also listen to custom event", function() {
       $('.pat-toggle', this.$el).attr('data-toggle-event', 'customEvent');
-      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('.toggled', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('.toggled', this.$el).size()).to.equal(0);
       $('.pat-toggle', this.$el).trigger('customEvent');
-      expect($('.toggled', this.$el).size()).toEqual(1);
+      expect($('.toggled', this.$el).size()).to.equal(1);
     });
     it("can also toggle custom element attribute", function() {
       $('.pat-toggle', this.$el).attr('data-toggle-attribute', 'rel');
-      expect($('.toggled', this.$el).size()).toEqual(0);
-      expect($('[rel="toggled"]', this.$el).size()).toEqual(0);
+      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('[rel="toggled"]', this.$el).size()).toEqual(0);
-      expect($('.toggled', this.$el).size()).toEqual(0);
+      expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).size()).to.equal(0);
       $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).toEqual(0);
-      expect($('[rel="toggled"]', this.$el).size()).toEqual(1);
+      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
     });
   });
-
-  buster.run();
 
 });

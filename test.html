@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Testem Runner</title>
+  <meta charset="utf-8">
+  <script src="/testem/mocha.js"></script>
+  <script src="/testem.js"></script>
+  <link rel="stylesheet" href="/testem/mocha.css">
+</head>
+
+<body>
+  <div id="mocha"></div>
+  <script src="jam/require.js"></script>
+  <script>
+require([
+    'jquery',
+    'test/iframe-test',
+    'test/patterns-test'
+], function($) {
+
+  $(function(){
+    mocha
+      .globals([ 'iframe*', 'jQuery*' ])
+      .run();
+  });
+
+});
+  </script>
+</body>
+</html>

@@ -3,8 +3,8 @@ NPM = npm
 JAM = ./node_modules/.bin/jam
 LESSC = ./node_modules/.bin/lessc
 CSSMIN = ./node_modules/.bin/cssmin
-BUSTER  = ./node_modules/.bin/buster
 UGLIFYJS = ./node_modules/.bin/uglifyjs
+TESTEM = ./node_modules/.bin/testem
 
 DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
@@ -18,17 +18,12 @@ bootstrap:
 	mkdir -p build
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	$(NPM) install jamjs less cssmin uglify-js --prefix=./node_modules
-	$(NPM) install underscore buster buster-coverage buster-amd --prefix=./node_modules
+	$(NPM) install testem --prefix=./node_modules
 	$(JAM) install
 
+
 test:
-	# ----------------------------------------------------------------------- #
-	# Make sure you're running buster server and that at least one browser    #
-	# captured:                                                               #
-	#   % ./node_modules/bin/buster-server                             #
-	#   buster-server running on http://localhost:1111                        #
-	# ----------------------------------------------------------------------- #
-	$(BUSTER)-test -vv -r specification
+	$(TESTEM)
 
 
 clean_docs:
