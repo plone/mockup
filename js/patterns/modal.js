@@ -185,7 +185,10 @@ define([
                 .appendTo(self.$wrapperInner)
                 .on('click', function(e) {
                   e.stopPropagation();
-                  e.preventDefault();
+                  if ($.nodeName(e.target, 'a')) {
+                    e.preventDefault();
+                    // TODO: open links inside modal
+                  }
                 })
                 .on('destroy.modal.patterns', function(e) {
                   e.stopPropagation();
