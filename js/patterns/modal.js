@@ -43,8 +43,8 @@ define([
     defaults: {
       triggers: '',
       position: "center middle",
-      width: "auto",
-      height: "auto",
+      width: "",
+      height: "",
       margin: "20px",
       klass: "modal",
       klassWrapper: "modal-wrapper",
@@ -82,7 +82,7 @@ define([
           .hide()
           .css({
             'z-index': self.options.backdropZIndex + 1,
-            'overflow-y': 'scroll',
+            'overflow-y': 'auto',
             'position': 'fixed',
             'height': '100%',
             'width': '100%',
@@ -105,7 +105,6 @@ define([
         self.$wrapperInner = $('<div/>')
           .addClass(self.options.klassWrapperInner)
           .css({
-            'margin': self.options.margin,
             'position': 'absolute',
             'bottom': '0',
             'left': '0',
@@ -121,7 +120,7 @@ define([
           .addClass(self.options.klassLoading)
           .appendTo(self.$wrapperInner);
       }
-      $(window).resize(function() {
+      $(window.parent).resize(function() {
         self.positionModal();
       });
 
@@ -224,64 +223,111 @@ define([
     },
     positionModal: function() {
       var self = this;
-      if (self.$el.hasClass(self.options.klassActive) &&
-          typeof self.$modal !== 'function') {
+      if (typeof self.$modal !== 'function') {
 
-        var postionHorizontal = self.options.position.split(' ')[0],
-            postionVertical = self.options.position.split(' ')[1];
-
+        self.$modal.removeAttr('style');
+        // if backdrop wrapper is set on body then wrapper should have height
+        // of window so we can do scrolling of inner wrapper
+        self.$wrapperInner.css({
+          'height': '',
+          'width': self.options.width
+        });
         if (self.$wrapper.parent().is('body')) {
           self.$wrapper.height($(window.parent).height());
         }
 
+        // place modal at top left with desired width/height and margin
         self.$modal.css({
-          'width': self.options.width === 'auto' ? self.$modal.width() : self.options.width,
-          'height': self.options.height === 'auto' ? self.$modal.height() : self.options.height,
+          'padding': '0',
+          'margin': '0',
+          'width': '',
+          'height': self.options.height,
           'position': 'absolute',
-          'bottom': '0',
-          'left': '0',
-          'right': '0',
-          'top': '0'
+          'top': '0',
+          'left': '0'
         });
 
-        self.$wrapperInner.css({ 'margin': '0' });
-        var wrapperOffsetBefore = self.$wrapperInner.offset();
-        self.$wrapperInner.css({ 'margin': self.options.margin });
-        var wrapperOffset = self.$wrapperInner.offset(),
-            wrapperOuterWidth = self.$wrapperInner.outerWidth(true),
-            wrapperInnerWidth = self.$wrapperInner.innerWidth(),
-            wrapperOuterHeight = self.$wrapperInner.outerHeight(true),
-            wrapperInnerHeight = self.$wrapperInner.innerHeight();
+        self.$modal.css({'margin': '0'});
+        var modalOffsetBefore = self.$modal.offset();
+        self.$modal.css({ 'margin': self.options.margin });
+        var modalOffset = self.$modal.offset(),
+            modalOuterWidth = self.$modal.outerWidth(true),
+            modalInnerWidth = self.$modal.innerWidth(),
+            modalOuterHeight = self.$modal.outerHeight(true),
+            modalInnerHeight = self.$modal.innerHeight();
+        self.$modal.css({ 'margin': '0' });
 
-        if (wrapperOffset && wrapperOffsetBefore) {
-          var topMargin = wrapperOffset.top - wrapperOffsetBefore.top,
-              bottomMargin = wrapperOuterHeight - wrapperInnerHeight - topMargin,
-              leftMargin = wrapperOffset.left - wrapperOffsetBefore.left,
-              rightMargin = wrapperOuterWidth - wrapperInnerWidth - leftMargin;
+        var topMargin = modalOffset.top - modalOffsetBefore.top,
+            bottomMargin = modalOuterHeight - modalInnerHeight - topMargin,
+            leftMargin = modalOffset.left - modalOffsetBefore.left,
+            rightMargin = modalOuterWidth - modalInnerWidth - leftMargin;
 
-          if (postionHorizontal === 'left') {
-            self.$modal.css('left', leftMargin);
-          } else if (postionHorizontal === 'center') {
-            self.$modal.css('margin-left',
-                self.$wrapper.width()/2 - self.$modal.width()/2 - leftMargin);
-          } else if (postionHorizontal === 'right') {
-            self.$modal.css('right', rightMargin);
-          }
+        // place modal in right position
+        var positionHorizontal = self.options.position.split(' ')[0],
+            positionVertical = self.options.position.split(' ')[1],
+            positionTop, positionBottom, positionLeft, positionRight;
 
-          if (self.$modal.height() > self.$wrapper.height()) {
-            self.$wrapperInner.height(self.$modal.height() + bottomMargin);
+        if (positionHorizontal === 'left') {
+          positionLeft = leftMargin + 'px';
+          if (self.$wrapperInner.width() < self.$modal.width()) {
+            positionRight = rightMargin + 'px';
           } else {
-            if (postionVertical === 'top') {
-              self.$modal.css('margin-top', topMargin);
-            } else if (postionVertical === 'middle') {
-              self.$modal.css('margin-top', self.$wrapper.height()/2 -
-                  self.$modal.height()/2 - topMargin);
-            } else if (postionVertical === 'bottom') {
-              self.$modal.css('margin-top', self.$wrapper.height() -
-                  self.$modal.height() - topMargin);
-            }
+            positionRight = 'auto';
+          }
+        } else if (positionHorizontal === 'bottom') {
+          positionRight = leftMargin + 'px';
+          if (self.$wrapperInner.width() < self.$modal.width()) {
+            positionLeft = leftMargin + 'px';
+          } else {
+            positionLeft = 'auto';
+          }
+        } else {
+          if (self.$wrapperInner.width() < self.$modal.width() + leftMargin + rightMargin) {
+            positionLeft = leftMargin + 'px';
+            positionRight = rightMargin + 'px';
+          } else {
+            positionLeft = positionRight = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.width()/2 - leftMargin - rightMargin) + 'px';
           }
         }
+        self.$modal.css({
+          'left': positionLeft,
+          'right': positionRight
+        });
+
+        // if modal is bigger then wrapperInner then resize wrapperInner to
+        // mach modal height
+        if (self.$wrapperInner.height() < self.$modal.height()) {
+          self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
+        }
+
+        if (positionVertical === 'top') {
+          positionTop = topMargin + 'px';
+          if (self.$wrapperInner.height() < self.$modal.height()) {
+            positionBottom = bottomMargin + 'px';
+          } else {
+            positionBottom = 'auto';
+          }
+        } else if (positionVertical === 'bottom') {
+          positionBottom = bottomMargin + 'px';
+          if (self.$wrapperInner.height() < self.$modal.height()) {
+            positionTop = topMargin + 'px';
+          } else {
+            positionTop= 'auto';
+          }
+        } else {
+          if (self.$wrapperInner.height() < self.$modal.height()) {
+            positionTop = topMargin + 'px';
+            positionBottom = bottomMargin + 'px';
+          } else {
+            positionTop = positionBottom = (self.$wrapperInner.height()/2 -
+                self.$modal.height()/2) + 'px';
+          }
+        }
+        self.$modal.css({
+          'top': positionTop,
+          'bottom': positionBottom
+        });
 
       }
     },
@@ -300,7 +346,7 @@ define([
           self.$modal.addClass(self.options.klassActive);
           registry.scan(self.$modal);
           self.positionModal();
-          $(window).off('resize').on('resize', function() {
+          $(window.parent).on('resize.modal.patterns', function() {
             self.positionModal();
           });
           self.trigger('shown');
@@ -322,7 +368,7 @@ define([
           self.$modal.remove();
           self.initModal();
         }
-        $(window).off('resize');
+        $(window.parent).off('resize.modal.patterns');
         self.trigger('hidden');
       }
     }
