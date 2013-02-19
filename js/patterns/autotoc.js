@@ -85,6 +85,9 @@ define([
                 scrollTop: $level.offset().top
               }, self.options.scrollDuration, self.options.scrollEasing);
             }
+            if (self.$el.parents('.modal').size() !== 0) {
+              self.$el.trigger('resize.modal.patterns');
+            }
           });
       });
 
