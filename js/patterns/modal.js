@@ -156,15 +156,30 @@ define([
         self.hide();
       });
     },
+    initModalElement: function($modal) {
+      var self = this;
+      $modal
+        .addClass(self.options.klass)
+        .on('click', function(e) {
+          e.stopPropagation();
+          if ($.nodeName(e.target, 'a')) {
+            e.preventDefault();
+            // TODO: open links inside modal
+          }
+        })
+        .on('destroy.modal.patterns', function(e) {
+          e.stopPropagation();
+          self.hide();
+        })
+        .on('resize.modal.patterns', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          self.positionModal(true);
+        });
+      return $modal;
+    },
     initModal: function() {
-      var self = this,
-          $modal = $('<div/>')
-            .addClass(self.options.klass)
-            .on('click', function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-            });
-
+      var self = this;
       if (self.options.ajaxUrl) {
         self.$modal = function() {
           self.trigger('before-ajax');
@@ -179,34 +194,23 @@ define([
           }).done(function(response, textStatus, xhr) {
             self.ajaxXHR = undefined;
             self.$loading.hide();
-            self.$modal = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-              .replace('<body', '<div').replace('</body>', '</div>'))
-                .addClass(self.options.klass)
-                .appendTo(self.$wrapperInner)
-                .on('click', function(e) {
-                  e.stopPropagation();
-                  if ($.nodeName(e.target, 'a')) {
-                    e.preventDefault();
-                    // TODO: open links inside modal
-                  }
-                })
-                .on('destroy.modal.patterns', function(e) {
-                  e.stopPropagation();
-                  self.hide();
-                });
+            self.$modal = self.initModalElement(
+              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                .replace('<body', '<div').replace('</body>', '</div>'))[0]))
+              .appendTo(self.$wrapperInner);
             self.trigger('after-ajax', self, textStatus, xhr);
             self.show();
           });
         };
       } else if (self.options.target) {
         self.$modal = function() {
-          self.$modal = $modal
+          self.$modal = self.initModalElement($('<div/>'))
               .html($(self.options.target).clone())
               .appendTo(self.$wrapperInner);
           self.show();
         };
       } else {
-        self.$modal = $modal
+        self.$modal = self.initModalElement($('<div/>'))
               .html(self.$el.clone())
               .appendTo(self.$wrapperInner);
       }
@@ -224,9 +228,13 @@ define([
         'top': '0'
       });
     },
-    positionModal: function() {
+    positionModal: function(preserve_top) {
       var self = this;
       if (typeof self.$modal !== 'function') {
+
+        if (preserve_top) {
+          preserve_top = self.$modal.css('top');
+        }
 
         self.$modal.removeAttr('style');
         // if backdrop wrapper is set on body then wrapper should have height
@@ -246,7 +254,7 @@ define([
           'width': '',
           'height': self.options.height,
           'position': 'absolute',
-          'top': '0',
+          'top': preserve_top ? preserve_top : '0',
           'left': '0'
         });
 
@@ -304,7 +312,7 @@ define([
           self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
         }
 
-        if (positionVertical === 'top') {
+        if (preserve_top || positionVertical === 'top') {
           positionTop = topMargin + 'px';
           if (self.$wrapperInner.height() < self.$modal.height()) {
             positionBottom = bottomMargin + 'px';
