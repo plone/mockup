@@ -6,7 +6,7 @@ CSSMIN = ./node_modules/.bin/cssmin
 UGLIFYJS = ./node_modules/.bin/uglifyjs
 TESTEM = ./node_modules/.bin/testem
 
-DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png
+DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png docs/patterns.html docs/patterns.css docs/patterns.js docs/patterns.png docs/patterns-spinner.gif
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
 TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar.png
 
@@ -132,6 +132,46 @@ docs/toolbar.css:
 
 docs/toolbar.png:
 	cp jam/bootstrap/img/glyphicons-halflings.png $@
+
+docs/patterns.html:
+	cp patterns.html $@
+	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
+	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
+	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />@@g' $@
+	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />@@g' $@
+	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@@g' $@
+	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/widgets.less" />@<link rel="stylesheet" type="text/css" href="patterns.css" />@g' $@
+	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@@g' $@
+	sed -i -e 's@<script src="jam/jquery/dist/jquery.js"></script>@@g' $@
+	sed -i -e 's@<script src="jam/require.js"></script>@@g' $@
+	sed -i -e 's@<script src="js/demo/widgets.js"></script>@<script src="patterns.js"></script>@g' $@
+
+docs/patterns.png:
+	cp jam/select2/select2.png $@
+
+docs/patterns-spinner.gif:
+	cp jam/select2/select2-spinner.gif $@
+
+
+docs/patterns.css:
+	$(CSSMIN) jam/SyntaxHighlighter/styles/shCore.css > $@
+	$(CSSMIN) less/shThemeGitHub.css >> $@
+	$(CSSMIN) jam/select2/select2.css >> $@
+	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
+	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
+	$(LESSC) less/widgets.less | $(CSSMIN) >> $@
+	sed -i -e 's@select2.png@patterns.png@g' $@
+	sed -i -e 's@select2-spinner.gif@patterns-spinner.gif@g' $@
+	sed -i -e 's@jam/bootstrap/img/glyphicons-halflings.png@img/glyphicons-halflings.png@g' $@
+
+docs/patterns.js:
+	$(UGLIFYJS) jam/less/dist/less-1.3.3.js > $@
+	$(UGLIFYJS) jam/jquery/dist/jquery.js >> $@
+	$(JAM) compile -i js/demo/widgets -i sinon -e jquery --no-minify --almond tmp
+	sed -i -e 's@define('\''sinon'\'', \['\''sinon/sinon'\''\], function (main) { return main; });@@g' tmp
+	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' tmp
+	cat tmp >> $@
+	rm tmp
 
 
 clean_widgets:
