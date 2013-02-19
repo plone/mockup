@@ -17,7 +17,7 @@ body {
   display: none !important;
 }
 
-// MODAL {{{
+// MODAL {{{r
 .modal-backdrop { overflow: hidden; }
 .modal-wrapper { left: 15%; margin-left: 0; width: 100%; }
 .modal {
@@ -43,7 +43,7 @@ body {
     position: absolute;
     .border-radius(6px);
   }
-  form { margin: 0; }
+  form { margin: 1em 0 2em 0; }
 
   #sharing-user-group-search {
     width: 20em;
@@ -61,40 +61,28 @@ body {
     padding-top: 1em;
   }
   #atrb_relatedItems { display: none; }
-  .nav-tabs {
-    & > li {
-      & > a:hover {
-        background-color: transparent;
-        color: #0088CC;
-      }
-      & > a:focus{
-        outline-style: none;
-      }
-      &.active > a,
-      &.active > a:hover {
-        border-bottom: 1px solid @white;
-      }
-    }
+  .pat-autotoc.autotabs .autotoc-nav {
+    margin-bottom: 1em;
   }
-  .pattern-calendar {
-    .pattern-calendar-year,
-    .pattern-calendar-month,
-    .pattern-calendar-day,
-    .pattern-calendar-hour,
-    .pattern-calendar-minute,
-    .pattern-calendar-ampm {
+  .pat-datetime-wrapper {
+    .pat-datetime-year,
+    .pat-datetime-month,
+    .pat-datetime-day,
+    .pat-datetime-hour,
+    .pat-datetime-minute,
+    .pat-datetime-ampm {
       height: 2em;
     }
     .pickadate__select--year,
     .pickadate__select--month {
       height: 2em;
     }
-    .pattern-calendar-delimiter {
+    .pat-datetime-delimiter {
       display: inline-block;
       vertical-align: top;
       margin: 0 0.2em;
     }
-    .pattern-calendar-icon {
+    .pat-datetime-icon {
       background-image: url("++resource++plone.app.toolbar.png");
       background-position: 14px 14px;
       background-repeat: no-repeat;
@@ -217,16 +205,6 @@ body {
       margin-top: 0.2em;
       height: 1.2em;
       width: 98%;
-    }
-    input.pattern-autocomplete[type="text"] {
-      width: 40em;
-      height: auto;
-      padding: 3px 5px 4px;
-      margin: 0;
-    }
-    .text-core,
-    .text-wrap {
-      min-height: 1.5em;
     }
     margin-bottom: 1em;
   }
