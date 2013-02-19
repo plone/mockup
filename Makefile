@@ -25,6 +25,9 @@ bootstrap:
 test:
 	$(TESTEM)
 
+test-ci:
+	$(TESTEM) ci
+
 
 clean_docs:
 	rm -rf $(DOCS)
@@ -193,4 +196,4 @@ build/toolbar.png:
 	cp jam/bootstrap/img/glyphicons-halflings.png $@
 
 
-.PHONY: all clean bootstrap test docs publish-demo widgets toolbar 
+.PHONY: all clean bootstrap test test-ci docs publish-demo widgets toolbar 
