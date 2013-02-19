@@ -81,7 +81,7 @@ define([
         self.$wrapper = $('<div/>')
           .hide()
           .css({
-            'z-index': self.options.backdropZIndex + 1,
+            'z-index': parseInt(self.options.backdropZIndex, 10) + 1,
             'overflow-y': 'auto',
             'position': 'fixed',
             'height': '100%',
