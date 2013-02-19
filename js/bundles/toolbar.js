@@ -119,7 +119,7 @@ define([
         title: 'h1.documentFirstHeading',
         buttons: '.formControls > input[type="submit"]',
         content: '#content'
-      }, options);
+      }, options || {});
 
       $modal
         .html('<div class="modal-header">' +
@@ -265,11 +265,14 @@ define([
 
     // Edit
     modalInit('plone-action-edit', function(modal, modalInit) {
-      modalTemplate(modal.$modal);
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
+      });
+      $('span.label', modal.$modal).removeClass('label');
       modalAjaxForm(modal, modalInit, {
         buttons: {
-          '.modal-body input[name="form.button.cancel"]': {},
-          '.modal-body input[name="form.button.save"]': {
+          '.modal-body input[name="form.buttons.cancel"]': {},
+          '.modal-body input[name="form.buttons.save"]': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               $('#portal-column-content', window.parent.document).html(
                   $('#portal-column-content', responseBody).html());
@@ -434,14 +437,29 @@ define([
     // Advance workflow
     modalInit('workflow-transition-advanced', function(modal, modalInit) {
       modalTemplate(modal.$modal, {
-        buttons: 'input[name="form.button.Cancel"],input[name="form.button.Publish"]'
+        buttons: 'input[name="form.button.Cancel"],input[name="form.button.FolderPublish"],input[name="form.button.Publish"]'
       });
-      // FIXME: we should hack like this
+
+      // FIXME: we should _not_ hack like this
       $('#workflow_action', modal.$modal).parent().find('> br').remove();
+
       modalAjaxForm(modal, modalInit, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
-          '.modal-body input[name="form.button.Publish"]': {}
+          '.modal-body input[name="form.button.Publish"], .modal-body input[name="form.button.FolderPublish"]': {
+            onSuccess: function(modal, responseBody, state, xhr) {
+              $('#plone-contentmenu-workflow')
+                .html($('#plone-contentmenu-workflow', responseBody).html());
+              $('#plone-contentmenu-workflow > a').toggle({
+                target: '.toolbar-dropdown',
+                value: 'toolbar-dropdown-open'
+              });
+              $('#plone-contentmenu-workflow #workflow-transition-advanced > a')
+                  .addClass('modal-trigger').modal();
+              $('body', iframe.document).css('overflow', 'visible');
+              modal.hide();
+            }
+          }
         }
       });
     });
