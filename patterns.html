@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Patterns</title>
+  
+  
+  
+  
+  
+  <link rel="stylesheet" type="text/css" href="patterns.css" />
+  
+  
+  
+  <script src="patterns.js"></script>
+  <script type="text/x-ajax-respond" id="something-html">
+    <html>
+    <head></head>
+    <body>
+    <div id="content">
+    <div class="pull-right">
+      Button that triggers "hide" event ->
+      <a class="btn" onclick="$(this).trigger('destroy.modal.patterns')">Close</a>
+    </div>
+    <h1>Content from AJAX</h1>
+    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
+    of logic to it. A flower in my garden, a mystery in my panties. [climbing
+    under trampoline] This shall keep me safe from the hot Mexican sun. This is
+    not me encouraging you to go here and write a review. No. So, what do you
+    say? We got a basket full of father-son fun here. What's Kama Sutra oil?
+    Maybe it's not for us.</p>
+    </body>
+    </html>
+  </script>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div id="portal-logo">
+        <span class="plone-logo">
+          <span class="plone-logo-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Patterns
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+      <h3><a href="index.html">&larr; Back</a></h3>
+
+      <h1 id="autotoc">AutoTOC</h1>
+
+      <div class="row">
+        <div class="span6">
+          <h3>Table of Contents</h3>
+          <div class="pat-autotoc"
+               data-autotoc-scrollDuration="slow"
+               data-autotoc-levels="h4,h5,h6">
+            <h4>Title 1</h4>
+            <p>Mr. Zuckerkorn, you've been warned about touching. You said
+              spanking. It walked on my pillow! How about a turtle? I've always
+              loved those leathery little snappy faces.</p>
+            <h5>Title 1.1</h5>
+            <p>Ah coodle doodle do Caw ca caw, caw ca caw. Butterscotch!</p>
+            <h6>Title 1.1.1</h6>
+            <p>Want a lick? Okay, Lindsay, are you forgetting that I was
+              a professional twice over - an analyst and a therapist.</p>
+            <h4>Title 2</h4>
+            <p>You boys know how to shovel coal? Don't worry, these young
+              beauties have been nowhere near the bananas. I thought the two of
+              us could talk man-on-man.</p>
+          </div>
+          <pre class="brush: html;toolbar: false;">
+&lt;div class="pat-autotoc"
+     data-autotoc-scrollDuration="slow"
+     data-autotoc-levels="h4,h5,h6"&gt;
+&lt;h4&gt;Title 1&lt;/h4&gt;
+...
+&lt;h5&gt;Title 1.1&lt;/h5&gt;
+...
+&lt;h6&gt;Title 1.1.1&lt;/h6&gt;
+...
+&lt;h4&gt;Title 2&lt;/h4&gt;
+...
+&lt;/div&gt;</pre>
+        </div>
+        <div class="span6">
+          <div id="mockup-tabs">
+            <h3>Tabs</h3>
+            <form class="pat-autotoc"
+                  data-autotoc-levels="legend"
+                  data-autotoc-section="fieldset"
+                  data-autotoc-klass="autotabs">
+              <fieldset>
+                <legend>Tab 1</legend>
+                <p>I've used one adjective to describe myself. What is it?
+                  Everybody dance… NOW. Actually, that was a box of Oscar's
+                  legally obtained medical marijuana. Primo bud. Real sticky
+                  weed. Suddenly playing with yourself is a scholarly pursuit? We
+                  need a name. Maybe 'Operation Hot Mother'. O-kay, who'd like
+                  a banger in the mouth? </p>
+              </fieldset>
+              <fieldset>
+                <legend>Tab 2</legend>
+                <p>Don't ask "Can I"… ask "I Can!" Do you have any idea how often
+                  you say the word "afraid"? Well, I know I used it in the
+                  Jacuzzi. It looks like you've been looking for dragons… in the
+                  future. I've been in the film business for a while but I just
+                  can't seem to get one in the can. Oh, I don't have any drugs
+                  for sale, unless… did you want me to follow you to your car?
+                  Turn this skiff around! </p>
+              </fieldset>
+              <fieldset>
+                <legend>Tab 3</legend>
+                <p>I didn't get into this business to please sophomore Tracy
+                  Schwartzman, so… onward and upward. On… Why, Tracy?! Why?!! So
+                  maybe you could start jete-ing, and stop je-terrorizing me!
+                </p>
+              </fieldset>
+            </form>
+            <pre class="brush: html;toolbar: false;">
+&lt;form class="pat-autotoc"
+      data-autotoc-levels="legend"
+      data-autotoc-section="fieldset"
+      data-autotoc-klass="autotabs"&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Tab 1&lt;/legend&gt;
+    ...
+  &lt;/fieldset&gt;
+  ...
+&lt;/form&gt;</pre>
+          </div>
+        </div>
+      </div>
+
+      <h1 id="datetime">Datetime</h1>
+
+      <div class="row">
+        <div class="span6">
+          <h3>DateTime with Calendar</h3>
+          <input class="pat-datetime" data-datetime-format="d-mmmm-yyyy@HH:MM" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input class="pat-datetime" data-datetime-format="d-mmmm-yyyy@HH:MM" /&gt;</pre>
+        </div>
+        <div class="span6">
+          <h3>Datetime witouth Calendar</h3>
+          <input class="pat-datetime" data-datetime-format="d-mmmm-yyyy HH:MM" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input class="pat-datetime" data-datetime-format="d-mmmm-yyyy HH:MM" /&gt;</pre>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span6">
+          <h3>Date only, US. format</h3>
+          <input class="pat-datetime"
+            data-datetime-format="mmmm/dd/yyyy"
+            data-datetime-ampm="false" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input class="pat-datetime"
+  data-datetime-format="mmmm/dd/yyyy"
+  data-datetime-ampm="false"
+  /&gt;</pre>
+        </div>
+      </div>
+
+      <h1 id="select2">Select2</h1>
+
+      <div class="row">
+        <div class="span6">
+          <h3>Autocomplete with search</h3>
+          <select class="pat-select2" data-select2-width="20em">
+            <option value="Acholi">Acholi</option>
+            <option value="Afrikaans">Afrikaans</option>
+            <option value="Akan">Akan</option>
+            <option value="Albanian">Albanian</option>
+            <option value="Amharic">Amharic</option>
+            <option value="Arabic">Arabic</option>
+            <option value="Ashante">Ashante</option>
+            <option value="Asl">Asl</option>
+            <option value="Assyrian">Assyrian</option>
+            <option value="Azerbaijani">Azerbaijani</option>
+            <option value="Azeri">Azeri</option>
+            <option value="Bajuni">Bajuni</option>
+            <option value="Basque">Basque</option>
+            <option value="Behdini">Behdini</option>
+            <option value="Belorussian">Belorussian</option>
+            <option value="Bengali">Bengali</option>
+            <option value="Berber">Berber</option>
+            <option value="Bosnian">Bosnian</option>
+            <option value="Bravanese">Bravanese</option>
+            <option value="Bulgarian">Bulgarian</option>
+            <option value="Burmese">Burmese</option>
+            <option value="Cakchiquel">Cakchiquel</option>
+            <option value="Cambodian">Cambodian</option>
+            <option value="Cantonese">Cantonese</option>
+            <option value="Catalan">Catalan</option>
+            <option value="Chaldean">Chaldean</option>
+            <option value="Chamorro">Chamorro</option>
+            <option value="Chao-chow">Chao-chow</option>
+            <option value="Chavacano">Chavacano</option>
+            <option value="Chin">Chin</option>
+            <option value="Chuukese">Chuukese</option>
+            <option value="Cree">Cree</option>
+            <option value="Croatian">Croatian</option>
+            <option value="Czech">Czech</option>
+            <option value="Dakota">Dakota</option>
+            <option value="Danish">Danish</option>
+            <option value="Dari">Dari</option>
+            <option value="Dinka">Dinka</option>
+            <option value="Diula">Diula</option>
+            <option value="Dutch">Dutch</option>
+            <option value="Edo">Edo</option>
+            <option value="Estonian">Estonian</option>
+            <option value="Ewe">Ewe</option>
+            <option value="Fante">Fante</option>
+            <option value="Farsi">Farsi</option>
+            <option value="Fijian Hindi">Fijian Hindi</option>
+            <option value="Finnish">Finnish</option>
+            <option value="Flemish">Flemish</option>
+            <option value="French">French</option>
+            <option value="French Canadian">French Canadian</option>
+            <option value="Fukienese">Fukienese</option>
+            <option value="Fula">Fula</option>
+            <option value="Fulani">Fulani</option>
+            <option value="Fuzhou">Fuzhou</option>
+            <option value="Ga">Ga</option>
+            <option value="Gaddang">Gaddang</option>
+            <option value="Gaelic">Gaelic</option>
+            <option value="Gaelic-irish">Gaelic-irish</option>
+            <option value="Gaelic-scottish">Gaelic-scottish</option>
+            <option value="Georgian">Georgian</option>
+            <option value="German">German</option>
+            <option value="Gorani">Gorani</option>
+            <option value="Greek">Greek</option>
+            <option value="Gujarati">Gujarati</option>
+            <option value="Haitian Creole">Haitian Creole</option>
+            <option value="Hakka">Hakka</option>
+            <option value="Hakka-chinese">Hakka-chinese</option>
+            <option value="Hausa">Hausa</option>
+            <option value="Hebrew">Hebrew</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Hmong">Hmong</option>
+            <option value="Hungarian">Hungarian</option>
+            <option value="Ibanag">Ibanag</option>
+            <option value="Ibo">Ibo</option>
+            <option value="Icelandic">Icelandic</option>
+            <option value="Igbo">Igbo</option>
+            <option value="Ilocano">Ilocano</option>
+            <option value="Indonesian">Indonesian</option>
+            <option value="Inuktitut">Inuktitut</option>
+            <option value="Italian">Italian</option>
+            <option value="Jakartanese">Jakartanese</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Javanese">Javanese</option>
+            <option value="Kanjobal">Kanjobal</option>
+            <option value="Karen">Karen</option>
+            <option value="Karenni">Karenni</option>
+            <option value="Kashmiri">Kashmiri</option>
+            <option value="Kazakh">Kazakh</option>
+            <option value="Kikuyu">Kikuyu</option>
+            <option value="Kinyarwanda">Kinyarwanda</option>
+            <option value="Kirundi">Kirundi</option>
+            <option value="Korean">Korean</option>
+            <option value="Kosovan">Kosovan</option>
+            <option value="Kotokoli">Kotokoli</option>
+            <option value="Krio">Krio</option>
+            <option value="Kurdish">Kurdish</option>
+            <option value="Kurmanji">Kurmanji</option>
+            <option value="Kyrgyz">Kyrgyz</option>
+            <option value="Lakota">Lakota</option>
+            <option value="Laotian">Laotian</option>
+            <option value="Latvian">Latvian</option>
+            <option value="Lingala">Lingala</option>
+            <option value="Lithuanian">Lithuanian</option>
+            <option value="Luganda">Luganda</option>
+            <option value="Luo">Luo</option>
+            <option value="Maay">Maay</option>
+            <option value="Macedonian">Macedonian</option>
+            <option value="Malay">Malay</option>
+            <option value="Malayalam">Malayalam</option>
+            <option value="Maltese">Maltese</option>
+            <option value="Mandarin">Mandarin</option>
+            <option value="Mandingo">Mandingo</option>
+            <option value="Mandinka">Mandinka</option>
+            <option value="Marathi">Marathi</option>
+            <option value="Marshallese">Marshallese</option>
+            <option value="Mien">Mien</option>
+            <option value="Mina">Mina</option>
+            <option value="Mirpuri">Mirpuri</option>
+            <option value="Mixteco">Mixteco</option>
+            <option value="Moldavan">Moldavan</option>
+            <option value="Mongolian">Mongolian</option>
+            <option value="Montenegrin">Montenegrin</option>
+            <option value="Navajo">Navajo</option>
+            <option value="Neapolitan">Neapolitan</option>
+            <option value="Nepali">Nepali</option>
+            <option value="Nigerian Pidgin">Nigerian Pidgin</option>
+            <option value="Norwegian">Norwegian</option>
+            <option value="Oromo">Oromo</option>
+            <option value="Pahari">Pahari</option>
+            <option value="Papago">Papago</option>
+            <option value="Papiamento">Papiamento</option>
+            <option value="Pashto">Pashto</option>
+            <option value="Patois">Patois</option>
+            <option value="Pidgin English">Pidgin English</option>
+            <option value="Polish">Polish</option>
+            <option value="Portug.creole">Portug.creole</option>
+            <option value="Portuguese">Portuguese</option>
+            <option value="Pothwari">Pothwari</option>
+            <option value="Pulaar">Pulaar</option>
+            <option value="Punjabi">Punjabi</option>
+            <option value="Putian">Putian</option>
+            <option value="Quichua">Quichua</option>
+            <option value="Romanian">Romanian</option>
+            <option value="Russian">Russian</option>
+            <option value="Samoan">Samoan</option>
+            <option value="Serbian">Serbian</option>
+            <option value="Shanghainese">Shanghainese</option>
+            <option value="Shona">Shona</option>
+            <option value="Sichuan">Sichuan</option>
+            <option value="Sicilian">Sicilian</option>
+            <option value="Sinhalese">Sinhalese</option>
+            <option value="Slovak">Slovak</option>
+            <option value="Somali">Somali</option>
+            <option value="Sorani">Sorani</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Sudanese Arabic">Sudanese Arabic</option>
+            <option value="Sundanese">Sundanese</option>
+            <option value="Susu">Susu</option>
+            <option value="Swahili">Swahili</option>
+            <option value="Swedish">Swedish</option>
+            <option value="Sylhetti">Sylhetti</option>
+            <option value="Tagalog">Tagalog</option>
+            <option value="Taiwanese">Taiwanese</option>
+            <option value="Tajik">Tajik</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Thai">Thai</option>
+            <option value="Tibetan">Tibetan</option>
+            <option value="Tigre">Tigre</option>
+            <option value="Tigrinya">Tigrinya</option>
+            <option value="Toishanese">Toishanese</option>
+            <option value="Tongan">Tongan</option>
+            <option value="Toucouleur">Toucouleur</option>
+            <option value="Trique">Trique</option>
+            <option value="Tshiluba">Tshiluba</option>
+            <option value="Turkish">Turkish</option>
+            <option value="Twi">Twi</option>
+            <option value="Ukrainian">Ukrainian</option>
+            <option value="Urdu">Urdu</option>
+            <option value="Uyghur">Uyghur</option>
+            <option value="Uzbek">Uzbek</option>
+            <option value="Vietnamese">Vietnamese</option>
+            <option value="Visayan">Visayan</option>
+            <option value="Welsh">Welsh</option>
+            <option value="Wolof">Wolof</option>
+            <option value="Yiddish">Yiddish</option>
+            <option value="Yoruba">Yoruba</option>
+            <option value="Yupik">Yupik</option>
+          </select>
+          <pre class="brush: html;toolbar: false;">
+&lt;select class="pat-select2" data-select2-width="20em"&gt;
+  ...
+&lt;/select&gt;</pre>
+        </div>
+        <div class="span6">
+          <h3>Tagging</h3>
+          <input type="text" class="pat-select2"
+              data-select2-tags="Red,Yellow,Green"
+              data-select2-width="20em" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input type="text" class="pat-select2"
+    data-select2-tags="Red,Yellow,Green"
+    data-select2-width="20em" /&gt;</pre>
+        </div>
+      </div>
+
+      <h1 id="expose">Expose</h1>
+
+      <div class="row">
+        <div class="span6">
+          <form id="mockup-expose" class="form-horizontal pat-expose">
+            <h3>Expose on focus event (default)</h3>
+            <div class="control-group">
+              <label class="control-label" for="inputEmail">Email</label>
+              <div class="controls">
+                <input type="text" id="inputEmail" placeholder="Email">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="inputPassword">Password</label>
+              <div class="controls">
+                <input type="password" id="inputPassword" placeholder="Password">
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox"> Remember me
+                </label>
+                <button type="submit" class="btn">Sign in</button>
+              </div>
+            </div>
+          </form>
+          <pre class="brush: html;toolbar: false;">
+&lt;form id="mockup-expose" class="form-horizontal pat-expose"&gt;
+  ...
+&lt;/form&gt;</pre>
+        </div>
+        <div class="span6">
+          <h3>Expose on hover</h3>
+          <p>
+            <button type="submit"
+                class="btn btn-large pat-expose"
+                data-expose-triggers="hover">Hover over this button</button>
+          </p>
+          <pre class="brush: html;toolbar: false;">
+&lt;button type="submit"
+    class="btn btn-large pat-expose"
+    data-expose-triggers="hover"&gt;Hover over this button&lt;/button&gt;</pre>
+        </div>
+      </div>
+
+      <h1 id="modal">Modal</h1>
+
+      <div class="row">
+        <div class="span4">
+          <p>
+            <a href="#mockup-expose" class="btn btn-large btn-primary pat-modal">
+                Modal basic</a>
+           <pre class="brush: html;toolbar: false;">
+&lt;a href="#mockup-expose"
+    class="btn btn-large btn-primary pat-modal"&gt;
+    Modal basic&lt;/a&gt;</pre>
+          </p>
+        </div>
+        <div class="span4">
+          <p>
+            <a href="#mockup-tabs" id="modal1"
+               class="btn btn-large btn-primary pat-modal">
+              Modal with Patterns inside</a>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="#mockup-tabs" id="modal1"
+    class="btn btn-large btn-primary pat-modal"&gt;
+  Modal with Patterns inside&lt;/a&gt;</pre>
+          </p>
+        </div>
+        <div class="span4">
+          <p>
+            <a href="something.html#content" id="modal2"
+               class="btn btn-large btn-primary pat-modal">
+              Modal with remote content (AJAX)</a>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="something.html#content" id="modal2"
+    class="btn btn-large btn-primary pat-modal"&gt;
+  Modal with remote content (AJAX)&lt;/a&gt;</pre>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span6">
+          <p>
+            <a href="#modal3"
+               class="btn btn-large btn-primary pat-modal"
+                  data-modal-position="center bottom"
+                  data-modal-height="100px"
+                  data-modal-width="100%">
+              Modal with custom position</a>
+            <div style="display:none">
+              <div id="modal3">
+                <h1>Modal with custom position and also width / height</h1>
+              </div>
+            </div>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="#modal3"
+    class="btn btn-large btn-primary pat-modal"
+    data-modal-position="center bottom"
+    data-modal-height="100px"
+    data-modal-width="100%;"&gt;
+  Modal with custom position&lt;/a&gt;
+&lt;div style="display:none"&gt;
+  &lt;div id="modal3"&gt;
+    &lt;h1&gt;Modal with custom position and also width / height&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+          </p>
+        </div>
+        <div class="span6">
+          <p>
+            <a href="#modal4"
+               class="btn btn-large btn-primary pat-modal">
+              Modal with long text</a>
+            <div style="display:none">
+              <div id="modal4">
+
+                <p>Did you know that more frozen bananas are sold right here on
+                  this boardwalk than anywhere on the OC? You stay on top of
+                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+                  you telling me you have a multi-stage trick with hidden
+                  identities? That coat costs more than your house! Well,
+                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
+                  example. You burn down the storage unit? Oh, most definitely.
+                  Oh…yeah…the guy in the…the $4,000 suit is holding the
+                  elevator for a guy who doesn't make that in three months.
+                  Come on!</p>
+
+
+                <p>No! These are just strippers! Look how hot they are! Michael
+                  was having brunch with Sally Sitwell at a restaurant called
+                  Skip Church's Bistro. In addition to brunch, the restaurant
+                  was known for an item on the menu called the "Skip's
+                  Scramble", an omelet that contained everything on the menu.
+                  Do not order the Skip's Scramble. Look, you are playing
+                  adults…with fully formed libidos, not 2 young men playing
+                  grab-ass in the shower. I just don't want him to point out my
+                  cracker ass in front of Ann. How about a turtle? I've always
+                  loved those leathery little snappy faces. I believe you will
+                  find the dessert to be both engrossing and high-grossing! So
+                  we don't get dessert?</p>
+
+
+                <p>I'm in Vegas this week and would like to point out the Blue
+                  Man Group is *actually* hiring. The support group? Te quiero.
+                  English, please. I love you! Great, now I'm late. We need
+                  a name. Maybe "Operation Hot Mother." No, let's try to top
+                  that. (They never did.) Hey, Dad. Look at you. You're a year
+                  older…and a year closer to death. Buster: Oh yeah, I guess
+                  that's kind of funny. I am going to my spin class. I thought
+                  you had vertigo. Turns out he ended up getting too friendly
+                  with the teddy bear.</p>
+
+
+                <p>And although the intervention didn't work, it turned into
+                  one of the Bluth family's better parties. Te quiero. English,
+                  please. I love you! Great, now I'm late. I call it Tricks –-
+                  wait for it – Around The Office. The only thing I found in
+                  the fridge was a dead dove in a bag. Gob: You didn't eat
+                  that, did you?</p>
+
+
+                <p>I believe you will find the dessert to be both engrossing
+                  and high-grossing! So we don't get dessert? Well excuse me
+                  for liking the way they frame my junk! Did you know that more
+                  frozen bananas are sold right here on this boardwalk than
+                  anywhere in the OC? Buster, what are you doing with mother's
+                  rape-horn?</p>
+
+
+                <p>I believe you will find the dessert to be both engrossing
+                  and high-grossing! So we don't get dessert? Look at us,
+                  crying like a couple of girls on the last day of camp.
+                  Although George Michael had only got to second base, he'd
+                  gone in head first, like Pete Rose. I know she's a brownish
+                  area! With points! And I love her! Let me give that oatmeal
+                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+                  ca caw, caw ca caw! It's as Ann as the nose on plain's
+                  face.</p>
+
+
+                <p>Let me give that oatmeal some brown sugar. So, what do you
+                  say? We got a basket full of father-son fun here. What's Kama
+                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+                <p>So maybe you could start jete-ing, and stop je-terrorizing
+                  me! Don't call my escorts whores.</p>
+
+
+                <p>Yes. Lindsay and I are planning a night of heterosexual
+                  intercourse. Look, you are playing adults…with fully formed
+                  libidos, not 2 young men playing grab-ass in the shower. Ah
+                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
+                  Make love in your *own* hand, Mother! Fried cheese… with club
+                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+                  spicy club sauce. Fried cheese… with club sauce. Popcorn
+                  shrimp… with club sauce. Chicken fingers… with spicy club
+                  sauce. I'm going to buy you the single healthiest call girl
+                  this town has ever seen.</p>
+
+
+                <p>I don't care if it takes from now till the end of
+                  Shrimpfest. You might wanna lean away from that fire since
+                  you're soaked in alcohol.</p>
+
+                <p>Did you know that more frozen bananas are sold right here on
+                  this boardwalk than anywhere on the OC? You stay on top of
+                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+                  you telling me you have a multi-stage trick with hidden
+                  identities? That coat costs more than your house! Well,
+                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
+                  example. You burn down the storage unit? Oh, most definitely.
+                  Oh…yeah…the guy in the…the $4,000 suit is holding the
+                  elevator for a guy who doesn't make that in three months.
+                  Come on!</p>
+
+
+                <p>No! These are just strippers! Look how hot they are! Michael
+                  was having brunch with Sally Sitwell at a restaurant called
+                  Skip Church's Bistro. In addition to brunch, the restaurant
+                  was known for an item on the menu called the "Skip's
+                  Scramble", an omelet that contained everything on the menu.
+                  Do not order the Skip's Scramble. Look, you are playing
+                  adults…with fully formed libidos, not 2 young men playing
+                  grab-ass in the shower. I just don't want him to point out my
+                  cracker ass in front of Ann. How about a turtle? I've always
+                  loved those leathery little snappy faces. I believe you will
+                  find the dessert to be both engrossing and high-grossing! So
+                  we don't get dessert?</p>
+
+
+                <p>I'm in Vegas this week and would like to point out the Blue
+                  Man Group is *actually* hiring. The support group? Te quiero.
+                  English, please. I love you! Great, now I'm late. We need
+                  a name. Maybe "Operation Hot Mother." No, let's try to top
+                  that. (They never did.) Hey, Dad. Look at you. You're a year
+                  older…and a year closer to death. Buster: Oh yeah, I guess
+                  that's kind of funny. I am going to my spin class. I thought
+                  you had vertigo. Turns out he ended up getting too friendly
+                  with the teddy bear.</p>
+
+
+                <p>And although the intervention didn't work, it turned into
+                  one of the Bluth family's better parties. Te quiero. English,
+                  please. I love you! Great, now I'm late. I call it Tricks –-
+                  wait for it – Around The Office. The only thing I found in
+                  the fridge was a dead dove in a bag. Gob: You didn't eat
+                  that, did you?</p>
+
+
+                <p>I believe you will find the dessert to be both engrossing
+                  and high-grossing! So we don't get dessert? Well excuse me
+                  for liking the way they frame my junk! Did you know that more
+                  frozen bananas are sold right here on this boardwalk than
+                  anywhere in the OC? Buster, what are you doing with mother's
+                  rape-horn?</p>
+
+
+                <p>I believe you will find the dessert to be both engrossing
+                  and high-grossing! So we don't get dessert? Look at us,
+                  crying like a couple of girls on the last day of camp.
+                  Although George Michael had only got to second base, he'd
+                  gone in head first, like Pete Rose. I know she's a brownish
+                  area! With points! And I love her! Let me give that oatmeal
+                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+                  ca caw, caw ca caw! It's as Ann as the nose on plain's
+                  face.</p>
+
+
+                <p>Let me give that oatmeal some brown sugar. So, what do you
+                  say? We got a basket full of father-son fun here. What's Kama
+                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+                <p>So maybe you could start jete-ing, and stop je-terrorizing
+                  me! Don't call my escorts whores.</p>
+
+
+                <p>Yes. Lindsay and I are planning a night of heterosexual
+                  intercourse. Look, you are playing adults…with fully formed
+                  libidos, not 2 young men playing grab-ass in the shower. Ah
+                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
+                  Make love in your *own* hand, Mother! Fried cheese… with club
+                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+                  spicy club sauce. Fried cheese… with club sauce. Popcorn
+                  shrimp… with club sauce. Chicken fingers… with spicy club
+                  sauce. I'm going to buy you the single healthiest call girl
+                  this town has ever seen.</p>
+
+
+                <p>I don't care if it takes from now till the end of
+                  Shrimpfest. You might wanna lean away from that fire since
+                  you're soaked in alcohol.</p>
+
+                <p>Did you know that more frozen bananas are sold right here on
+                  this boardwalk than anywhere on the OC? You stay on top of
+                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+                  you telling me you have a multi-stage trick with hidden
+                  identities? That coat costs more than your house! Well,
+                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
+                  example. You burn down the storage unit? Oh, most definitely.
+                  Oh…yeah…the guy in the…the $4,000 suit is holding the
+                  elevator for a guy who doesn't make that in three months.
+                  Come on!</p>
+
+
+                <p>No! These are just strippers! Look how hot they are! Michael
+                  was having brunch with Sally Sitwell at a restaurant called
+                  Skip Church's Bistro. In addition to brunch, the restaurant
+                  was known for an item on the menu called the "Skip's
+                  Scramble", an omelet that contained everything on the menu.
+                  Do not order the Skip's Scramble. Look, you are playing
+                  adults…with fully formed libidos, not 2 young men playing
+                  grab-ass in the shower. I just don't want him to point out my
+                  cracker ass in front of Ann. How about a turtle? I've always
+                  loved those leathery little snappy faces. I believe you will
+                  find the dessert to be both engrossing and high-grossing! So
+                  we don't get dessert?</p>
+
+
+                <p>I'm in Vegas this week and would like to point out the Blue
+                  Man Group is *actually* hiring. The support group? Te quiero.
+                  English, please. I love you! Great, now I'm late. We need
+                  a name. Maybe "Operation Hot Mother." No, let's try to top
+                  that. (They never did.) Hey, Dad. Look at you. You're a year
+                  older…and a year closer to death. Buster: Oh yeah, I guess
+                  that's kind of funny. I am going to my spin class. I thought
+                  you had vertigo. Turns out he ended up getting too friendly
+                  with the teddy bear.</p>
+
+
+                <p>And although the intervention didn't work, it turned into
+                  one of the Bluth family's better parties. Te quiero. English,
+                  please. I love you! Great, now I'm late. I call it Tricks –-
+                  wait for it – Around The Office. The only thing I found in
+                  the fridge was a dead dove in a bag. Gob: You didn't eat
+                  that, did you?</p>
+
+
+                <p>I believe you will find the dessert to be both engrossing
+                  and high-grossing! So we don't get dessert? Well excuse me
+                  for liking the way they frame my junk! Did you know that more
+                  frozen bananas are sold right here on this boardwalk than
+                  anywhere in the OC? Buster, what are you doing with mother's
+                  rape-horn?</p>
+
+
+                <p>I believe you will find the dessert to be both engrossing
+                  and high-grossing! So we don't get dessert? Look at us,
+                  crying like a couple of girls on the last day of camp.
+                  Although George Michael had only got to second base, he'd
+                  gone in head first, like Pete Rose. I know she's a brownish
+                  area! With points! And I love her! Let me give that oatmeal
+                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+                  ca caw, caw ca caw! It's as Ann as the nose on plain's
+                  face.</p>
+
+
+                <p>Let me give that oatmeal some brown sugar. So, what do you
+                  say? We got a basket full of father-son fun here. What's Kama
+                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+                <p>So maybe you could start jete-ing, and stop je-terrorizing
+                  me! Don't call my escorts whores.</p>
+
+
+                <p>Yes. Lindsay and I are planning a night of heterosexual
+                  intercourse. Look, you are playing adults…with fully formed
+                  libidos, not 2 young men playing grab-ass in the shower. Ah
+                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
+                  Make love in your *own* hand, Mother! Fried cheese… with club
+                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+                  spicy club sauce. Fried cheese… with club sauce. Popcorn
+                  shrimp… with club sauce. Chicken fingers… with spicy club
+                  sauce. I'm going to buy you the single healthiest call girl
+                  this town has ever seen.</p>
+
+
+                <p>I don't care if it takes from now till the end of
+                  Shrimpfest. You might wanna lean away from that fire since
+                  you're soaked in alcohol.</p>
+
+              </div>
+            </div>
+            <pre class="brush: html;toolbar: false;">
+&lt;a href="#modal4"
+    class="btn btn-large btn-primary pat-modal"&gt;
+  Modal with long text&lt;/a&gt;
+&lt;div style="display:none"&gt;
+  &lt;div id="modal4"&gt;
+    &lt;p&gt;Did you know ....&lt;/p&gt;
+    ...
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
+
+</body>
+
+</html>
+
+
