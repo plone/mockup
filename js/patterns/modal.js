@@ -251,7 +251,7 @@ define([
         self.$modal.css({
           'padding': '0',
           'margin': '0',
-          'width': '',
+          'width': self.options.width,
           'height': self.options.height,
           'position': 'absolute',
           'top': preserve_top ? preserve_top : '0',
@@ -303,7 +303,8 @@ define([
         }
         self.$modal.css({
           'left': positionLeft,
-          'right': positionRight
+          'right': positionRight,
+          'width': self.$modal.width() - leftMargin - rightMargin
         });
 
         // if modal is bigger then wrapperInner then resize wrapperInner to
