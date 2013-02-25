@@ -34,18 +34,28 @@ define([
   'jquery',
   'js/jquery.iframe',
   'jam/Patterns/src/registry',
+  'js/patterns/base',
   'js/patterns/backdrop',
   'jam/jquery-form/jquery.form.js',
   'js/patterns/toggle',
   'js/patterns/modal.js',
   'js/bundles/widgets'
-], function($, iframe, registry, Backdrop) {
+], function($, iframe, registry, Base, Backdrop) {
   "use strict";
 
   window.plone = window.plone || {};
   window.plone.toolbar = window.plone.toolbar || {};
 
   $(document).ready(function() {
+
+    // tinyMCE integration
+    var TinyMCE = Base.extend({
+      name: 'plone-tinymce',
+      jqueryPlugin: 'ploneTinymce',
+      init: function() {
+        window.initTinyMCE(this.$el.parent());
+      }
+    });
 
     // Dropdown {{{
 
@@ -294,8 +304,8 @@ define([
       });
     }
 
-    function modalInit(selector, callback) {
-      $(selector).addClass('modal-trigger').modal();
+    function modalInit(selector, callback, modalOptions) {
+      $(selector).addClass('modal-trigger').modal(modalOptions);
       $(document).on('show.modal.patterns', selector + '.modal-trigger', function(e, modal) {
         callback(modal, callback);
       });
@@ -317,6 +327,11 @@ define([
         modal.positionModal();
         registry.scan(modal.$modal);
       }
+      $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not(.contenttype-folder)', modal.$modal).css({
+        color: '#333333'
+      }).on('click', function(e) {
+        window.parent.location.href = $(this).attr('href');
+      });
       modalAjaxForm(modal, modalInit, {
         buttons: {
           '.modal-body #folderlisting-main-table > input.standalone': { onSuccess: refreshModal },
@@ -325,6 +340,8 @@ define([
           '.modal-body .formControls > input.context': { onSuccess: refreshModal },
           '.modal-body a#foldercontents-selectall': { onSuccess: refreshModal },
           '.modal-body a#foldercontents-clearselection': { onSuccess: refreshModal },
+          '.modal-body #folderlisting-main-table td:not(.draggable) > a.contenttype-folder': { onSuccess: refreshModal },
+          '.modal-body .link-parent': { onSuccess: refreshModal },
           '.modal-body td.draggable > a': { onSuccess: refreshModal }
         }
       });
@@ -336,6 +353,7 @@ define([
         buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
       });
       $('span.label', modal.$modal).removeClass('label');
+      $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
       modalAjaxForm(modal, modalInit, {
         buttons: {
           '.modal-body input[name="form.buttons.cancel"]': {},
@@ -375,11 +393,30 @@ define([
     });
 
     // Rules form
-    // TODO: for now we only open overlay we need to test that forms are
-    //       working
     modalInit('#plone-action-contentrules > a', function(modal, modalInit) {
-      modalTemplate(modal.$modal);
-      modalAjaxForm(modal, modalInit);
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.button.AddAssignment"],' +
+                 'input[name="form.button.Enable"],' +
+                 'input[name="form.button.Disable"],' +
+                 'input[name="form.button.Bubble"],' +
+                 'input[name="form.button.NoBubble"],' +
+                 'input[name="form.button.Delete"]'
+      });
+      $('.modal-body #content-core > p:first > a', modal.$modal).on('click', function(e) {
+        window.parent.location.href = $(this).attr('href');
+      });
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          'input[name="form.button.AddAssignment"],input[name="form.button.Enable"],input[name="form.button.Disable"],input[name="form.button.Bubble"],input[name="form.button.NoBubble"],input[name="form.button.Delete"]': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              modal.$modal.html(responseBody.html());
+              modalInit(modal, modalInit);
+              modal.positionModal();
+              registry.scan(modal.$modal);
+            }
+          }
+        }
+      });
     });
 
     // Delete Action
@@ -442,6 +479,7 @@ define([
         buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
       });
       $('span.label', modal.$modal).removeClass('label');
+      $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
       modalAjaxForm(modal, modalInit, {
         buttons: {
           '.modal-body input[name="form.buttons.cancel"]': {},
@@ -544,6 +582,21 @@ define([
               modal.hide();
             }
           }
+        }
+      });
+    });
+
+    // personal preferences
+    modalInit('#plone-personal-actions-preferences > a', function(modal, modalInit) {
+      modalTemplate(modal.$modal, {
+        buttons: 'input[name="form.actions.save"],input[name="form.actions.cancel"]'
+      });
+      $('select[name="form.wysiwyg_editor"], select[name="form.language"]', modal.$modal).addClass('pat-select2');
+      $('input[name="form.actions.cancel"]', modal.$modal).attr('class', 'standalone');
+      modalAjaxForm(modal, modalInit, {
+        buttons: {
+          '.modal-body input[name="form.actions.cancel"]': {},
+          '.modal-body input[name="form.actions.save"]': {}
         }
       });
     });
