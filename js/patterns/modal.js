@@ -360,6 +360,9 @@ define([
           self.$modal.addClass(self.options.klassActive);
           registry.scan(self.$modal);
           self.positionModal();
+          $('img', self.$modal).load(function() {
+            self.positionModal();
+          });
           $(window.parent).on('resize.modal.patterns', function() {
             self.positionModal();
           });
