@@ -476,14 +476,14 @@ define([
     // Add forms
     modalInit('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
-        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
+        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
       });
       $('span.label', modal.$modal).removeClass('label');
       $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
       modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
-          '.modal-body input[name="form.buttons.cancel"]': {},
-          '.modal-body input[name="form.buttons.save"]': {
+          '.modal-body input[name="form.buttons.cancel"],.modal-body input[name="form.button.cancel"]': {},
+          '.modal-body input[name="form.buttons.save"],.modal-body input[name="form.button.save"]': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               $('#portal-column-content', window.parent.document).html(
                   $('#portal-column-content', responseBody).html());
