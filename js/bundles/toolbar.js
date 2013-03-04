@@ -379,7 +379,7 @@ define([
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {},
-          '.modal-body input[name="form.button.Search"]': {
+          '.modal-body input[name="form.button.Search"], dl.portalMessage.info > dd > a': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               modal.$modal.html(responseBody.html());
               modalInit(modal, modalInit);
