@@ -240,8 +240,8 @@ define([
         // if backdrop wrapper is set on body then wrapper should have height
         // of window so we can do scrolling of inner wrapper
         self.$wrapperInner.css({
-          'height': '',
-          'width': self.options.width
+          'height': '100%',
+          'width': '100%'
         });
         if (self.$wrapper.parent().is('body')) {
           self.$wrapper.height($(window.parent).height());
@@ -297,18 +297,20 @@ define([
             positionLeft = leftMargin + 'px';
             positionRight = rightMargin + 'px';
           } else {
-            positionLeft = positionRight = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.width()/2 - leftMargin - rightMargin) + 'px';
+            positionLeft = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.outerWidth()/2 - leftMargin) + 'px';
+            positionRight = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.outerWidth()/2 - rightMargin) + 'px';
           }
         }
         self.$modal.css({
           'left': positionLeft,
           'right': positionRight,
-          'width': self.$modal.width() - leftMargin - rightMargin
+          'width': self.$modal.width()
         });
 
         // if modal is bigger then wrapperInner then resize wrapperInner to
-        // mach modal height
+        // match modal height
         if (self.$wrapperInner.height() < self.$modal.height()) {
           self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
         }

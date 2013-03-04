@@ -173,7 +173,7 @@ define([
 
     }
 
-    function modalAjaxForm(modal, modalInit, options) {
+    function modalAjaxForm(modal, modalInit, modalOptions, options) {
       options = $.extend({
         buttons: {},
         timeout: 5000,
@@ -245,7 +245,7 @@ define([
                       buttonsOptions.onFormError(modal, responseBody, state, xhr, form);
                     } else {
                       modal.$modal.html(responseBody.html());
-                      modalInit(modal, modalInit);
+                      modalInit(modal, modalInit, modalOptions);
                       modal.positionModal();
                       registry.scan(modal.$modal);
                     }
@@ -283,7 +283,7 @@ define([
                       buttonsOptions.onFormError(modal, responseBody, state, xhr);
                     } else {
                       modal.$modal.html(responseBody.html());
-                      modalInit(modal, modalInit);
+                      modalInit(modal, modalInit, modalOptions);
                       modal.positionModal();
                       registry.scan(modal.$modal);
                     }
@@ -316,14 +316,14 @@ define([
     // Modals {{{
 
     // Contents
-    modalInit('#plone-action-folderContents > a', function(modal, modalInit) {
+    modalInit('#plone-action-folderContents > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: '#folderlisting-main-table > input.context,#folderlisting-main-table > input.standalone,.modal-body .formControls > input'
       });
       $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
       function refreshModal(modal, responseBody, state, xhr, form) {
         modal.$modal.html(responseBody.html());
-        modalInit(modal, modalInit);
+        modalInit(modal, modalInit, modalOptions);
         modal.positionModal();
         registry.scan(modal.$modal);
       }
@@ -332,7 +332,7 @@ define([
       }).on('click', function(e) {
         window.parent.location.href = $(this).attr('href');
       });
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body #folderlisting-main-table > input.standalone': { onSuccess: refreshModal },
           '.modal-body #folderlisting-main-table > input.context': { onSuccess: refreshModal },
@@ -345,16 +345,16 @@ define([
           '.modal-body td.draggable > a': { onSuccess: refreshModal }
         }
       });
-    });
+    }, { width: '80%' });
 
     // Edit
-    modalInit('#plone-action-edit > a', function(modal, modalInit) {
+    modalInit('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
       });
       $('span.label', modal.$modal).removeClass('label');
       $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.buttons.cancel"]': {},
           '.modal-body input[name="form.buttons.save"]': {
@@ -366,23 +366,23 @@ define([
           }
         }
       });
-    });
+    }, { width: '80%' });
 
     // Sharing
-    modalInit('#plone-action-local_roles > a', function(modal, modalInit) {
+    modalInit('#plone-action-local_roles > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
       });
       // FIXME: we shouldn't be hacking like this
       $('#link-presentation', modal.$modal).remove();
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {},
           '.modal-body input[name="form.button.Search"], dl.portalMessage.info > dd > a': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               modal.$modal.html(responseBody.html());
-              modalInit(modal, modalInit);
+              modalInit(modal, modalInit, modalOptions);
               modal.positionModal();
               registry.scan(modal.$modal);
             }
@@ -393,7 +393,7 @@ define([
     });
 
     // Rules form
-    modalInit('#plone-action-contentrules > a', function(modal, modalInit) {
+    modalInit('#plone-action-contentrules > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.button.AddAssignment"],' +
                  'input[name="form.button.Enable"],' +
@@ -405,12 +405,12 @@ define([
       $('.modal-body #content-core > p:first > a', modal.$modal).on('click', function(e) {
         window.parent.location.href = $(this).attr('href');
       });
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           'input[name="form.button.AddAssignment"],input[name="form.button.Enable"],input[name="form.button.Disable"],input[name="form.button.Bubble"],input[name="form.button.NoBubble"],input[name="form.button.Delete"]': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               modal.$modal.html(responseBody.html());
-              modalInit(modal, modalInit);
+              modalInit(modal, modalInit, modalOptions);
               modal.positionModal();
               registry.scan(modal.$modal);
             }
@@ -420,11 +420,11 @@ define([
     });
 
     // Delete Action
-    modalInit('#plone-contentmenu-actions-delete > a', function(modal, modalInit) {
+    modalInit('#plone-contentmenu-actions-delete > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.button.Cancel"],input.destructive'
       });
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input.destructive': {
@@ -437,11 +437,11 @@ define([
     });
 
     // Rename Action
-    modalInit('#plone-contentmenu-actions-rename > a', function(modal, modalInit) {
+    modalInit('#plone-contentmenu-actions-rename > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.button.Cancel"],input[name="form.button.RenameAll"]'
       });
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.RenameAll"]': {
@@ -454,12 +454,12 @@ define([
     });
 
     // Change content item as default view...
-    var changeContentItemAsDefaultView = function(modal, modalInit) {
+    var changeContentItemAsDefaultView = function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal);
       // FIXME: we should hack like this
       $('form > dl', modal.$modal).addClass('default-page-listing');
       $('input[name="form.button.Cancel"]', modal.$modal).attr('class', 'standalone');
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {
@@ -474,13 +474,13 @@ define([
     modalInit('#contextSetDefaultPage > a', changeContentItemAsDefaultView);
 
     // Add forms
-    modalInit('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit) {
+    modalInit('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
       });
       $('span.label', modal.$modal).removeClass('label');
       $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.buttons.cancel"]': {},
           '.modal-body input[name="form.buttons.save"]': {
@@ -492,10 +492,10 @@ define([
           }
         }
       });
-    });
+    }, { width: '80%' });
 
     // "Restrictions..." form
-    modalInit('#plone-contentmenu-settings > a', function(modal, modalInit) {
+    modalInit('#plone-contentmenu-settings > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal);
       // FIXME: we should hack like this
       var $details = $('#details', modal.$modal)
@@ -542,7 +542,7 @@ define([
         });
       show_submenu(modal.$modal);
 
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {
@@ -557,7 +557,7 @@ define([
     });
 
     // Advance workflow
-    modalInit('#workflow-transition-advanced > a', function(modal, modalInit) {
+    modalInit('#workflow-transition-advanced > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.button.Cancel"],input[name="form.button.FolderPublish"],input[name="form.button.Publish"]'
       });
@@ -565,7 +565,7 @@ define([
       // FIXME: we should _not_ hack like this
       $('#workflow_action', modal.$modal).parent().find('> br').remove();
 
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Publish"], .modal-body input[name="form.button.FolderPublish"]': {
@@ -587,19 +587,19 @@ define([
     });
 
     // personal preferences
-    modalInit('#plone-personal-actions-preferences > a', function(modal, modalInit) {
+    modalInit('#plone-personal-actions-preferences > a', function(modal, modalInit, modalOptions) {
       modalTemplate(modal.$modal, {
         buttons: 'input[name="form.actions.save"],input[name="form.actions.cancel"]'
       });
       $('select[name="form.wysiwyg_editor"], select[name="form.language"]', modal.$modal).addClass('pat-select2');
       $('input[name="form.actions.cancel"]', modal.$modal).attr('class', 'standalone');
-      modalAjaxForm(modal, modalInit, {
+      modalAjaxForm(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.actions.cancel"]': {},
           '.modal-body input[name="form.actions.save"]': {}
         }
       });
-    });
+    }, { width: '80%' });
 
     // }}}
 
