@@ -13,6 +13,6 @@ define([
     }
   });
 
-  return AutoTOC;
+  return Tile;
 
 });
