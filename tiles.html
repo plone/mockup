@@ -11,7 +11,9 @@
   <title>Plone Tiles</title>
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
-  <script src="js/iframe.js"></script>
+  <script src="jam/jquery/dist/jquery.js"></script>
+  <script src="jam/require.js"></script>
+  <script src="js/demo/tiles.js"></script>
 
   <script type="text/x-ajax-respond" data-url="text-tile.html">
     <html>
@@ -73,7 +75,9 @@
 
   <div>
     <h2>Tile Initialized with data attributes</h2>
-    <div class='pat-tile' data-tile='text-tile.html'></div>
+    <div class='pat-tile'
+      data-tile-url='text-tile.html'
+      data-tile-actions-edit-url='text-tile-edit.html'>
   </div>
 
   <footer>
@@ -82,6 +86,7 @@
         the Plone Foundation. You’re looking good today.</p>
     </div>
   </footer>
+
 
 </body>
 
