@@ -2,8 +2,13 @@ require([
   'jquery',
   'sinon',
   'jam/Patterns/src/registry',
+  'js/patterns/tiletype',
   'js/bundles/tiles'
-], function($, sinon, registry) {
+], function($, sinon, registry, TileTypes) {
+
+  // -----------------
+  // fake server setup for ajax requests
+  //
   var server = sinon.fakeServer.create();
     server.autoRespond = true;
     server.autoRespondAfter = 2000;
@@ -30,6 +35,13 @@ require([
   });
 
 
+  // -----------------
+  // register some default tile types
+  TileTypes.register('text');
+  TileTypes.register('image');
+
+
+  // -----------------
   // Initialize patterns
   $(document).ready(function() {
     registry.scan($('body'));

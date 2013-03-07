@@ -10,6 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Tiles</title>
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
+  <link rel="stylesheet/less" type="text/css" href="less/tiles.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
   <script src="jam/jquery/dist/jquery.js"></script>
   <script src="jam/require.js"></script>
@@ -34,6 +35,26 @@
               </p><p>
               Not that they could not have reached it sooner. As a matter of fact, the pole had been crossed and re-crossed, according to the estimate of Tommy Travers, aviator, and nephew of the old millionaire who stood fairy uncle to the expedition. But one of the things that was being sought was the exact site of the pole. Not within a couple of miles or so, but within the fraction of an inch.
               </p>
+            </div>
+          </div>
+        </div>
+        <div id="viewlet-below-content"></div>
+      </div>
+    </body>
+    </html>
+  </script>
+  <script type="text/x-ajax-respond" data-url="footer-tile.html">
+    <html>
+    <head></head>
+    <body>
+      <div id="portal-columns" class="row">
+        <div class="documentEditable">
+          <div id="content">
+            <h1 class="documentFirstHeading">
+            </h1>
+            <div class="documentDescription"></div>
+            <div id="content-core">
+              The footer, force loaded
             </div>
           </div>
         </div>
@@ -76,8 +97,14 @@
   <div>
     <h2>Tile Initialized with data attributes</h2>
     <div class='pat-tile'
-      data-tile-url='text-tile.html'
-      data-tile-actions-edit-url='text-tile-edit.html'>
+        data-tile-type='text'
+        data-tile-url='text-tile.html'>
+      <ul class='tiletype-actions'>
+        <li><a href='text-tile-edit.html'>Edit</a></li>
+        <li><a href='text-tile-edit.html'>Remove</a></li>
+        <li><a href='text-tile-edit.html'>Information</a></li>
+      </ul>
+    </div>
   </div>
 
   <footer>
