@@ -3,6 +3,7 @@ require([
   'sinon',
   'jam/Patterns/src/registry',
   'js/patterns/tiletype',
+  'js/patterns/texttile',
   'js/bundles/tiles'
 ], function($, sinon, registry, TileTypes) {
 
@@ -37,8 +38,8 @@ require([
 
   // -----------------
   // register some default tile types
-  TileTypes.register('text');
-  TileTypes.register('image');
+  //TileTypes.register('text');
+  //TileTypes.register('image');
 
 
   // -----------------

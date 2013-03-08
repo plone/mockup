@@ -12,45 +12,13 @@ define([
 
     styleButtons: function(buttons) {
       buttons.css("cssText", "color: #333333 !important;");
-      buttons.css({
-        'cursor': 'pointer',
-        'text-align': 'center',
-        'text-shadow': '0 1px 1px rgba(255, 255, 255, 0.75)',
-        'font-size': '11px',
-        'line-height': '14px',
-        'vertical-align': 'middle',
-        'padding': '2px 6px',
-        'margin-bottom': '0',
-
-        'background-color': '#f5f5f5',
-        'background-image': 'linear-gradient(top, #ffffff, #e6e6e6)',
-        'background-repeat': 'repeat-x',
-        '-webkit-box-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)',
-        '-moz-box-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)',
-        'box-shadow': 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)',
-
-        'border': '1px solid #cccccc',
-        'border-color': '#e6e6e6 #e6e6e6 #bfbfbf',
-        'border-bottom-color': '#b3b3b3',
-        '-webkit-border-radius': '4px',
-        '-moz-border-radius': '4px',
-        'border-radius': '4px'
-      });
+      buttons.addClass('tile-button');
     },
 
     styleActions: function(actions) {
       var self = this;
       self.styleButtons($('> li > a', actions));
       $('> li', actions).css('display', 'inline');
-      actions.css({
-        'z-index': '700',
-        'position': 'absolute',
-        'top': '0.3em',
-        'right': '0.5em',
-        'list-style': 'none',
-        'margin': '0',
-        'padding': '0'
-      });
     },
 
     getActions: function(el) {
@@ -58,8 +26,7 @@ define([
           actions = $('.tiletype-actions', el).clone();
 
       if (actions.size() === 0) {
-          actions = $('#tiletype-' + self.typeid +
-              ' .tiletype-actions').clone();
+          actions = $('#tiletype-' + self.typeid + ' .tiletype-actions').clone();
       }
 
       self.styleActions(actions);
@@ -90,7 +57,7 @@ define([
 
 
   // API for creating and managing tile types
-  return {
+  var API = {
     // object to use as base class for custom TileTypes
     Base: TileTypeBase,
 
@@ -115,5 +82,6 @@ define([
     }
   };
 
+  return API;
 
 });
