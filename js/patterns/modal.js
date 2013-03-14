@@ -176,6 +176,7 @@ define([
           e.preventDefault();
           self.positionModal(true);
         });
+      $modal.data('pattern-' + self.name, self);
       return $modal;
     },
     initModal: function() {
