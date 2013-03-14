@@ -131,7 +131,39 @@ define([
       modalform.template(modal.$modal, {
         buttons: '#folderlisting-main-table > input.context,#folderlisting-main-table > input.standalone,.modal-body .formControls > input'
       });
+      $('#plone-document-byline', modal.$modal).hide();  // TODO: not sure exectly how to handle this for now we hide it
       $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
+      $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
+        var $el = $(this),                              // create boostrap style pagination
+            $pagination = $('<ul/>'),
+            $previous, $next;
+        console.log($el.html());
+        $('> *', $el).each(function() {
+          if ($(this).hasClass('previous')) {
+            $previous = $('<li/>').append($('a', this).clone());
+          } else if ($(this).hasClass('next')) {
+            $next = $('<li/>').append($('a', this).clone());
+          } else if ($.nodeName(this, 'span')) {
+            if ($('a', this).size() !== 0) {
+              $pagination.append($('<li/>').append($('a', this).clone()));
+              if ($(this).html().indexOf("...") !== -1) {
+                $pagination.append($('<li class="deactive"><span>...</span></li>'));
+              }
+            } else {
+              $pagination.append($('<li class="active"/>').append($(this).clone()));
+            }
+          } else {
+            $pagination.append($('<li/>').append($(this).clone()));
+          }
+        });
+        if ($previous) {
+          $pagination.prepend($previous);
+        }
+        if ($next) {
+          $pagination.append($next);
+        }
+        $el.hide().before($('<div class="pagination pagination-centered"/>').append($pagination));
+      });
       function refreshModal(modal, responseBody, state, xhr, form) {
         modal.$modal.html(responseBody.html());
         modalInit(modal, modalInit, modalOptions);
@@ -145,10 +177,14 @@ define([
       });
       modalform.form(modal, modalInit, modalOptions, {
         buttons: {
+          '.modal-body a#foldercontents-show-batched': { onSuccess: refreshModal },
+          '.modal-body a#foldercontents-show-all': { onSuccess: refreshModal },
+          '.modal-body .pagination a': { onSuccess: refreshModal },
           '.modal-body #folderlisting-main-table > input.standalone': { onSuccess: refreshModal },
           '.modal-body #folderlisting-main-table > input.context': { onSuccess: refreshModal },
           '.modal-body .formControls > input.standalone': { onSuccess: refreshModal },
           '.modal-body .formControls > input.context': { onSuccess: refreshModal },
+          '.modal-body a#foldercontents-selectall-completebatch': { onSuccess: refreshModal },
           '.modal-body a#foldercontents-selectall': { onSuccess: refreshModal },
           '.modal-body a#foldercontents-clearselection': { onSuccess: refreshModal },
           '.modal-body #folderlisting-main-table td:not(.draggable > a.contenttype-folder': { onSuccess: refreshModal },
