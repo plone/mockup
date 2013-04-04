@@ -42,58 +42,35 @@
 
   <div class="container">
     <div id="content" data-panel="content">
-
-      <p>Plone Mockup is an attempt to separate Plone, the user interface, from
-        Plone, the server. It is realised with Patterns
-        (http://patternslib.com), a library of rich interaction patterns.
-        Patterns are triggered by CSS classes and configured via HTML5-data
-        attributes.</p>
-
-      <p>The mockup is a fully functional prototype of Plone and its bundles.
-        As it is realised entirely in HTML+JS, it can be run in a browser
-        without the need for a full Plone installation. Therefore making it
-        easy to showcase Plone's UI or developing a new theme. Using
-        diazo/deliverance it is possible to integrate other backends alongside
-        or instead of Plone.</p>
-
-      <h1 id="patterns">Patterns</h1>
-
-      <p>TODO: What are patterns and how they relate to Patternslib.</p>
-      <p>TODO: How patterns are triggered.</p>
-
-      <h3>Pattern options</h3>
-
-      <p>Pattern is invoked with 2 arguments. First is DOM element and second
-        are options. To some extend options can be also passed via HTML data-*
-        attributes. Options are also merged together from whole parent DOM
-        tree. I believe good example can explain things better then pages of
-        documentation.</p>
-
-      <pre class="brush: html; toolbar: false;">
-&lt;body data-datetime="{"format": "mmmm-d-yyyy@HH:MM", "showAMPM": true}"
-      data-datetime-format="d-mmmm-yyyy@HH:MM"&gt;
-  &lt;input class="pat-datetime" data-datetime-pickadateMonthSelector="false"&gt;
-&lt;body&gt;</pre>
-
-      <p>And if initialized via jQuery ...</p>
-      <pre class="brush: javascript; toolbar: false;">
-$('.pat-datetime').datetime({
-  pickadateYearSelector: true
-});</pre>
-
-      <p>... then options are merged into.</p>
-      <pre class="brush: javascript; toolbar: false;">
-{
-  showAMPM: true,
-  format: "d-mmmm-yyyy@HH:MM",
-  pickadateMonthSelector: false,
-  pickadateYearSelector: true
-}</pre>
+      <h1>Plone mockup</h1>
+      <p>
+        Plone Mockup is an attempt to separate
+        <a href="http://plone.org" title="Plone">Plone</a>, the user interface,
+        from Plone, the server.
+        It leverages <a href="#patterns" title="Patterns">Patterns</a>
+        to create a library of rich interaction patterns
+        triggered by CSS classes
+        and configured via HTML5-data attributes.
+      </p>
+      <p>
+        The mockup is a fully functional prototype of Plone and its bundles.
+        As it is realised entirely in HTML and Javascript,
+        it can be run in a browser
+        without the need for a full Plone installation;
+        therefore making it easy to showcase Plone's UI
+        or developing a new theme.
+        Using <a href="http://diazo.org/" title="Diazo">diazo</a>
+        it is possible to integrate other backends alongside
+        (or instead of)
+        Plone.
+      </p>
 
 
-
-      <p>List of custom patterns (not part of Patternslib), listed in
-        alphabetical order:</p>
+      <h2>See it in action!</h2>
+      <p>
+        Here are all the interactions we have,
+        listed in alphabetical order:
+      </p>
 
       <div class="row">
         <div class="span4">
@@ -140,8 +117,131 @@ $('.pat-datetime').datetime({
         </div>
       </div>
 
+      <h2>Use it now!</h2>
 
-      <h1 id="budles">Bundles</h1>
+      <p>Only requirement to bootstrap mockup is git and npm</p>
+      <p>Make sure you use latest version of nodejs and npm.</p>
+
+      <pre class="brush: bash;toolbar: false;">
+git clone git://github.com/plone/mockup.git
+cd mockup
+make bootstrap</pre>
+
+      <!--p>Until Patterns is under heavy development.</p>
+      <pre class="brush: bash;toolbar: false;">
+cd mockup
+mkdir ext
+cd ext
+git clone git://github.com/Patternslib/Patterns.git
+cd ..
+./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
+
+      <p>To build all bundles:</p>
+      <pre class="brush: bash;toolbar: false;">make</pre>
+
+      <p>Run tests:</p>
+      <p>Start buster server and capture browser</p>
+      <pre class="brush: bash;toolbar: false;">./node_modules/buster/bin/buster server
+firefox http://localhost:1111/capture</pre>
+      <p>Now you can see tests running with:</p>
+      <pre class="brush: bash;toolbar: false;">make test</pre>
+      <p>Right now tests are <img src="https://travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" />.</p>
+
+      <h2 id="patterns">Patterns</h2>
+      <p>
+        Patterns
+        are a set of conventions to configure interaction via markup.
+        If you have developed some Javascript interaction
+        (for example, a dropdown menu)
+        it's quite likely that
+        you've <em>already used the basic concept behind patterns</em>.
+      </p>
+      <p>
+        Basically, almost every <em>jQuery</em> plugin
+        expects a certain kind of markup to be present,
+        and then expects you to initialize the widget
+        by picking out the root element of the widget
+        and pass some options to it.
+        For example you might have this very basic markup
+        for a datetime widget:
+      </p>
+      <pre class="brush: html; toolbar: false;">
+&lt;input id="foo" /&gt;
+</pre>
+      <p>
+        And then you are expected to call some Javascript to initialize it
+        (and set options):
+      </p>
+      <pre class="brush: javascript; toolbar: false;">
+$('#foo').datetime({
+  format: 'mmmm d, yyyy',
+  formatSubmit: 'yyyy-mm-dd'
+});</pre>
+      <p>
+        Then you might find it a little bit tedious
+        to call that Javascript for every date widget that's there,
+        so you mark all the <code>&lt;input /&gt;</code> tags
+        that you want to turn into datepickers with a specific CSS class,
+        and call that line of code just once when the DOM is loaded.
+      </p>
+      <pre class="brush: html; toolbar: false;">
+&lt;input id="date-picker-1" class="date-picker" /&gt;
+&lt;input id="date-picker-2" class="date-picker" /&gt;
+</pre>
+      <pre class="brush: javascript; toolbar: false;">
+$(document).ready(function() {
+  $('input.date-picker').datetime({
+    format: 'mmmm d, yyyy',
+    formatSubmit: 'yyyy-mm-dd'
+  });
+});</pre>
+      <p>
+        If you got at this stage already in your Javascript code,
+        <strong>you are already using the basic idea behind patterns</strong>.
+      </p>
+      <h3>Why is Patterns better than this?</h3>
+      <p>
+        Patterns has of course more to offer than just this basic approach:
+        automatic binding (and re-binding after reloads),
+        taking the options from the DOM via <code>data-*</code> attributes,
+        and a unified, coherent approach.
+      </p>
+      <h3>Is this related to Patternslib?</h3>
+      <dl>
+        <dt>TL;DR</dt>
+        <dd>Yes. But we provide a different set of interactions.</dd>
+        <dt>Long story kept long</dt>
+        <dd>TODO</dd>
+      </dl>
+      <h3>Pattern options</h3>
+      <p>
+        Pattern is invoked with 2 arguments. First is DOM element and second
+        are options. To some extend options can be also passed via HTML data-*
+        attributes. Options are also merged together from whole parent DOM
+        tree. I believe good example can explain things better then pages of
+        documentation.
+      </p>
+      <pre class="brush: html; toolbar: false;">
+&lt;body data-datetime="{"format": "mmmm-d-yyyy@HH:MM", "showAMPM": true}"
+      data-datetime-format="d-mmmm-yyyy@HH:MM"&gt;
+  &lt;input class="pat-datetime" data-datetime-pickadateMonthSelector="false"&gt;
+&lt;body&gt;</pre>
+      <p>And it can also be used as a <em>jQuery</em> plugin:</p>
+      <pre class="brush: javascript; toolbar: false;">
+$('.pat-datetime').datetime({
+  pickadateYearSelector: true
+});</pre>
+
+      <p>... then options are merged into.</p>
+      <pre class="brush: javascript; toolbar: false;">
+{
+  showAMPM: true,
+  format: "d-mmmm-yyyy@HH:MM",
+  pickadateMonthSelector: false,
+  pickadateYearSelector: true
+}</pre>
+
+      <h2 id="budles">Bundles</h2>
 
       <p>TODO: what the hell are bundles!</p>
 
@@ -211,37 +311,6 @@ cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
           <div style="clear:both"></div>
         </div>
       </div-->
-
-
-      <h1>Use it now</h1>
-
-      <p>Only requirement to bootstrap mockup is git and npm</p>
-      <p>Make sure you use latest version of nodejs and npm.</p>
-
-      <pre class="brush: bash;toolbar: false;">
-git clone git://github.com/plone/mockup.git
-cd mockup
-make bootstrap</pre>
-
-      <!--p>Until Patterns is under heavy development.</p>
-      <pre class="brush: bash;toolbar: false;">
-cd mockup
-mkdir ext
-cd ext
-git clone git://github.com/Patternslib/Patterns.git
-cd ..
-./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
-
-      <p>To build all bundles:</p>
-      <pre class="brush: bash;toolbar: false;">make</pre>
-
-      <p>Run tests:</p>
-      <p>Start buster server and capture browser</p>
-      <pre class="brush: bash;toolbar: false;">./node_modules/buster/bin/buster server
-firefox http://localhost:1111/capture</pre>
-      <p>Now you can see tests running with:</p>
-      <pre class="brush: bash;toolbar: false;">make test</pre>
-      <p>Right now tests are <img src="https://travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" />.</p>
 
     </div>
   </div>
