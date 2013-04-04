@@ -5,6 +5,7 @@ require([
   'js/bundles/widgets',
   'js/patterns/expose',
   'js/patterns/modal',
+  'js/patterns/formhelpers',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'

@@ -42,9 +42,12 @@ define([
   'js/patterns/expose',
   'js/patterns/modal',
   'js/patterns/select2',
-  'js/patterns/toggle'
-], function(chai, $, registry, Base, AutoTOC, Backdrop, DateTime, Expose, Modal,
-      Select2, Toggle) {
+  'js/patterns/toggle',
+  'js/patterns/formhelpers'
+], function(chai, $, registry, 
+      Base, AutoTOC, Backdrop,
+      DateTime, Expose, Modal,
+      Select2, Toggle, FormHelpers) {
   "use strict";
 
   var expect = chai.expect,
@@ -87,6 +90,10 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
+
+  /* ==========================
+   TEST: AutoTOC
+  ========================== */
 
   describe("AutoTOC", function () {
     beforeEach(function() {
@@ -131,8 +138,12 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Backdrop
+  ========================== */
+
   describe("Backdrop", function() {
-    it("default behaivour", function() {
+    it("default behaviour", function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
       expect($('.backdrop', $el).size()).to.equal(1);
@@ -156,6 +167,10 @@ define([
       expect($el.hasClass('backdrop-active')).to.equal(false);
     });
   });
+
+  /* ==========================
+   TEST: DateTime
+  ========================== */
 
   describe("DateTime", function() {
     beforeEach(function() {
@@ -182,6 +197,10 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Expose
+  ========================== */
+
   describe("Expose", function() {
     it("default behaivour", function() {
       var $el = $('' +
@@ -202,6 +221,10 @@ define([
       expect($el.hasClass('backdrop-active')).to.equal(false);
     });
   });
+
+  /* ==========================
+   TEST: Modal
+  ========================== */
 
   describe("Modal", function() {
     beforeEach(function() {
@@ -247,6 +270,10 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Select2
+  ========================== */
+
   describe("Select2", function() {
     it('tagging', function() {
       var $el = $('' +
@@ -260,6 +287,10 @@ define([
       expect($('.select2-choices li', $el).size()).to.equal(2);
     });
   });
+
+  /* ==========================
+   TEST: Toggle
+  ========================== */
 
   describe("Toggle", function() {
     beforeEach(function() {
@@ -296,6 +327,42 @@ define([
       $('.pat-toggle', this.$el).trigger('click');
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
+    });
+  });
+
+  describe("FormHelpers", function() {
+    beforeEach(function() {
+      // mock up `_confirm` func
+      this._old_confirm = FormHelpers.prototype._confirm;
+      FormHelpers.prototype._confirm = function(){
+        this.confirmed = true;
+      };
+    });
+    afterEach(function() {
+      FormHelpers.prototype._confirm = this._old_confirm;
+    });
+    it('prevent form to be submitted twice', function() {
+      var $el = $('' +
+        '<form id="helped" class="pat-formhelpers">' +
+        ' <input type="text" value="Yellow" />' +
+        ' <input type="submit" class="aclass" value="Submit" />' +
+        '</form>');
+      registry.scan($el);
+
+      var get_confirmed = function(el){
+        return el.data('pattern-formhelpers-0').confirmed;
+      };
+      expect(get_confirmed($el)).to.be.undefined;
+      $('input:submit', $el).trigger('click');
+      expect(get_confirmed($el)).to.be.undefined;
+      $('input[type="text"]', $el).trigger('keyup');
+      expect($el.hasClass('formhelpers-submitting')).to.be.true;
+      // XXX 2013-04-04: for some reason click on the button 
+      // do not trigger 'submit' on the form. So we need to 
+      // manually fire 'submit' on the form itself
+      // $('input:submit', $el).trigger('click');
+      $el.trigger('submit');
+      expect(get_confirmed($el)).to.be.true;
     });
   });
 
