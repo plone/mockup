@@ -1,1 +1,1 @@
-continue here http://status.plone.org/mockup/
+continue here http://plone.github.com/mockup/
