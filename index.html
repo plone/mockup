@@ -50,11 +50,11 @@
         It leverages <a href="#patterns" title="Patterns">Patterns</a>
         to create a library of rich interaction patterns
         triggered by CSS classes
-        and configured via HTML5-data attributes.
+        and configured via HTML5 <em>data attributes</em>.
       </p>
       <p>
         The mockup is a fully functional prototype of Plone and its bundles.
-        As it is realised entirely in HTML and Javascript,
+        As it is realised entirely in HTML5 and Javascript,
         it can be run in a browser
         without the need for a full Plone installation;
         therefore making it easy to showcase Plone's UI
@@ -65,87 +65,133 @@
         Plone.
       </p>
 
-
-      <h2>See it in action!</h2>
-      <p>
-        Here are all the interactions we have,
-        listed in alphabetical order:
-      </p>
-
       <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#autotoc">AutoToc</a></h2>
-          <p>Generating Table Of Contents. Can be also used</p>
-          <a href="patterns.html#autotoc" class="btn btn-primary pull-right">Demo</a>
+        <div class="span8">
+          <h2>See it in action!</h2>
+          <p>
+            Here are all the interactions we have,
+            listed in alphabetical order:
+          </p>
+
+          <div class="row">
+            <div class="span4">
+              <h2><a href="patterns.html#autotoc">AutoToc</a></h2>
+              <p>
+                Generates a <abbr title="Table of contents">TOC</abbr>
+                by parsing the HTML of the page and identifying sections
+                (via <code>h[123456]</code> tags).
+              </p>
+              <a href="patterns.html#autotoc"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+            <div class="span4">
+              <h2><a href="patterns.html#datetime">DateTime</a></h2>
+              <p>
+                Allows the user to select a date (with or without time)
+                through a calendar.
+              </p>
+              <a href="patterns.html#datetime"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="span4">
+              <h2><a href="patterns.html#expose">Expose</a></h2>
+              <p>
+                Exposes the focused element
+                by darkening everything else on the page.
+                Useful to focus the user attention on a particular area.
+              </p>
+              <a href="patterns.html#expose"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+            <div class="span4">
+              <h2><a href="patterns.html#modal">Modal</a></h2>
+              <p>
+                Creates a modal dialog (also called <em>overlay</em>).
+              </p>
+              <a href="patterns.html#modal"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="span4">
+              <h2><a href="patterns.html#select2">Select2</a></h2>
+              <p>
+                An advanced selection widget,
+                useful for tags, autocompletes,
+                multiple or single selections
+                from any kind of data source (with search!).
+              </p>
+              <a href="patterns.html#select2"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+            <div class="span4">
+              <h2><a href="patterns.html#toggle">Toggle</a></h2>
+              <p>
+                Allows to change some DOM elements attributes
+                when a certain event happens (a click by default).
+                Useful to implement show/hide toggles,
+                dropdown menus, and the like.
+              </p>
+              <a href="patterns.html#toggle"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+          </div>
+          <!-- TODO: This seems to be broken or missing
+          <div class="row">
+            <div class="span4">
+              <h2><a href="patterns.html#backdrop">Backdrop</a></h2>
+              <p>Hides content of selected DOM element.</p>
+              <a href="patterns.html#backdrop"
+                 class="btn btn-primary pull-right">Demo</a>
+            </div>
+          </div>
+          -->
         </div>
         <div class="span4">
-          <h2><a href="patterns.html#backdrop">Backdrop</a></h2>
-          <p>Hides content of selected DOM element.</p>
-          <a href="patterns.html#backdrop" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#datetime">DateTime</a></h2>
-          <p>Datetime selection widget.</p>
-          <a href="patterns.html#datetime" class="btn btn-primary pull-right">Demo</a>
+          <div class="well">
+            <h2>Use it now!</h2>
+            <p>
+              The only requirements to bootstrap <em>Plone mockup</em>
+              are <a href="http://git-scm.org/" title="git">git</a>
+              and <a href="http://www.nodejs.org/" title="npm">
+                <abbr title="Node package manager">npm</abbr>
+              </a>.
+            </p>
+            <p>
+              Make sure you use latest version of <code>nodejs</code>
+              and <code>npm</code>.
+            </p>
+            <p>Then check out the repository from GitHub:</p>
+            <pre class="brush: bash;toolbar: false;">
+              git clone git://github.com/plone/mockup.git</pre>
+            <p>And bootstrap your environment:</p>
+            <pre class="brush: bash;toolbar: false;">
+              cd mockup
+              make bootstrap</pre>
+
+            <!--p>Until Patterns is under heavy development.</p>
+                <pre class="brush: bash;toolbar: false;">
+                  cd mockup
+                  mkdir ext
+                  cd ext
+                  git clone git://github.com/Patternslib/Patterns.git
+                  cd ..
+                  ./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
+
+            <p>To build all bundles just do:</p>
+            <pre class="brush: bash;toolbar: false;">make</pre>
+
+            <p>And you can run tests with:</p>
+            <pre class="brush: bash;toolbar: false;">make test</pre>
+            <p>
+              Right now tests are
+              <img src="https://travis-ci.org/plone/mockup.png?branch=master"
+                   alt="Build Status" />.</p>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#expose">Expose</a></h2>
-          <p>Exposing selected DOM element by placing it on top of stretched
-            backdrop.</p>
-          <a href="patterns.html#expose" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#modal">Modal</a></h2>
-          <p>Creates and exposes content that was loaded when triggered by
-            selected DOM element.</p>
-          <a href="patterns.html#modal" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#select2">Select2</a></h2>
-          <p>Select widget (Tags, Autocomplete, Single select, Multi select)</p>
-          <a href="patterns.html#select2" class="btn btn-primary pull-right">Demo</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#toggle">Toggle</a></h2>
-          <p>On event (click by default) toggles value of DOM element. Can
-            toggle classes or any other element attributes.</p>
-          <a href="patterns.html#toggle" class="btn btn-primary pull-right">Demo</a>
-        </div>
-      </div>
-
-      <h2>Use it now!</h2>
-
-      <p>Only requirement to bootstrap mockup is git and npm</p>
-      <p>Make sure you use latest version of nodejs and npm.</p>
-
-      <pre class="brush: bash;toolbar: false;">
-git clone git://github.com/plone/mockup.git
-cd mockup
-make bootstrap</pre>
-
-      <!--p>Until Patterns is under heavy development.</p>
-      <pre class="brush: bash;toolbar: false;">
-cd mockup
-mkdir ext
-cd ext
-git clone git://github.com/Patternslib/Patterns.git
-cd ..
-./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
-
-      <p>To build all bundles:</p>
-      <pre class="brush: bash;toolbar: false;">make</pre>
-
-      <p>Run tests:</p>
-      <p>Start buster server and capture browser</p>
-      <pre class="brush: bash;toolbar: false;">./node_modules/buster/bin/buster server
-firefox http://localhost:1111/capture</pre>
-      <p>Now you can see tests running with:</p>
-      <pre class="brush: bash;toolbar: false;">make test</pre>
-      <p>Right now tests are <img src="https://travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" />.</p>
 
       <h2 id="patterns">Patterns</h2>
       <p>
@@ -206,7 +252,10 @@ $(document).ready(function() {
         taking the options from the DOM via <code>data-*</code> attributes,
         and a unified, coherent approach.
       </p>
-      <h3>Is this related to Patternslib?</h3>
+      <h3>
+        Is this related to
+        <a href="http://patternslib.com" title="Patternslib">Patternslib</a>?
+      </h3>
       <dl>
         <dt>TL;DR</dt>
         <dd>Yes. But we provide a different set of interactions.</dd>
