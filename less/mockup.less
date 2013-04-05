@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
 
-@import "../jam/bootstrap/less/bootstrap.less";
+@import "bootstrap.less";
 @import "../jam/bootstrap/less/responsive.less";
 
 @import "plonelogo.less";
@@ -33,8 +33,23 @@ footer {
 }
 .pat-datetime-wrapper {
   .pat-datetime-icon {
-    background-image: url("jam/bootstrap/img/glyphicons-halflings.png");
-    .icon-calendar();
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: inherit;
+    display: inline;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    vertical-align: super;
+    background: none;
+    background-image: none;
+    background-position: 0% 0%;
+    background-repeat: repeat;
+    margin: 0 0.4em;
+  }
+  .pat-datetime-icon:before {
+    content: "\f073";
   }
 }
 .syntaxhighlighter {

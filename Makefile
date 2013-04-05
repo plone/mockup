@@ -6,9 +6,9 @@ CSSMIN = ./node_modules/.bin/cssmin
 UGLIFYJS = ./node_modules/.bin/uglifyjs
 TESTEM = ./node_modules/.bin/testem
 
-DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/toolbar.png docs/patterns.html docs/patterns.css docs/patterns.js docs/patterns.png docs/patterns-spinner.gif
+DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/patterns.html docs/patterns.css docs/patterns.js docs/patterns.png docs/patterns-spinner.gif docs/font
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
-TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar.png
+TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar-webfont.eot build/toolbar-webfont.ttf build/toolbar-webfont.woff build/toolbar-webfont.otf
 
 all:: widgets toolbar
 
@@ -56,6 +56,7 @@ docs/index.css:
 	$(CSSMIN) jam/SyntaxHighlighter/styles/shCore.css > $@
 	$(CSSMIN) less/shThemeGitHub.css >> $@
 	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
+	sed -i -e 's@../jam/font-awesome/@@g' $@
 
 docs/jquery.js:
 	$(UGLIFYJS) jam/jquery/dist/jquery.js > $@
@@ -63,7 +64,10 @@ docs/jquery.js:
 docs/img:
 	mkdir $@
 	cp img/* $@
-	cp jam/bootstrap/img/glyphicons-halflings.png $@
+
+docs/font:
+	mkdir $@
+	cp jam/font-awesome/font/* $@
 
 docs/widgets.html:
 	cp widgets.html $@
@@ -92,7 +96,7 @@ docs/widgets.css:
 	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 	sed -i -e 's@select2.png@widgets.png@g' $@
 	sed -i -e 's@select2-spinner.gif@widgets-spinner.gif@g' $@
-	sed -i -e 's@jam/bootstrap/img/glyphicons-halflings.png@img/glyphicons-halflings.png@g' $@
+	sed -i -e 's@../jam/font-awesome/@@g' $@
 
 docs/widgets.png:
 	cp jam/select2/select2.png $@
@@ -118,6 +122,7 @@ docs/toolbar_init.js:
 
 docs/toolbar_init.css:
 	$(LESSC) less/mockup.less | $(CSSMIN) > $@
+	sed -i -e 's@../jam/font-awesome/@@g' $@
 
 docs/toolbar.js:
 	$(JAM) compile -i js/demo/toolbar -e jquery --no-minify --almond $@
@@ -128,10 +133,7 @@ docs/toolbar.css:
 	$(CSSMIN) jam/select2/select2.css > $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
-	sed -i -e 's@../img/glyphicons-halflings.png@toolbar.png@g' $@
-
-docs/toolbar.png:
-	cp jam/bootstrap/img/glyphicons-halflings.png $@
+	sed -i -e 's@../jam/font-awesome/@@g' $@
 
 docs/patterns.html:
 	cp patterns.html $@
@@ -158,11 +160,11 @@ docs/patterns.css:
 	$(CSSMIN) less/shThemeGitHub.css >> $@
 	$(CSSMIN) jam/select2/select2.css >> $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
-	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 	$(LESSC) less/widgets.less | $(CSSMIN) >> $@
+	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
 	sed -i -e 's@select2.png@patterns.png@g' $@
 	sed -i -e 's@select2-spinner.gif@patterns-spinner.gif@g' $@
-	sed -i -e 's@jam/bootstrap/img/glyphicons-halflings.png@img/glyphicons-halflings.png@g' $@
+	sed -i -e 's@../jam/font-awesome/@@g' $@
 
 docs/patterns.js:
 	$(UGLIFYJS) jam/less/dist/less-1.3.3.js > $@
@@ -218,7 +220,7 @@ build/toolbar_init.min.js:
 	$(UGLIFYJS) js/iframe.js > $@
 
 build/toolbar_init.css:
-	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@                           
+	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@
 
 build/toolbar.js:
 	$(JAM) compile -i js/bundles/toolbar -e jquery --no-minify --almond $@
@@ -227,13 +229,26 @@ build/toolbar.js:
 build/toolbar.min.js: build/toolbar.js
 	$(UGLIFYJS) build/toolbar.js > $@
 
+build/toolbar-webfont.eot:
+	cp jam/font-awesome/font/fontawesome-webfont.eot $@
+
+build/toolbar-webfont.ttf:
+	cp jam/font-awesome/font/fontawesome-webfont.ttf $@
+
+build/toolbar-webfont.woff:
+	cp jam/font-awesome/font/fontawesome-webfont.woff $@
+
+build/toolbar-webfont.otf:
+	cp jam/font-awesome/font/FontAwesome.otf $@
+
 build/toolbar.css: build/widgets.css
 	cat build/widgets.css > $@
-	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@                                
-	sed -i -e 's@../img/glyphicons-halflings.png@++resource++plone.app.toolbar.png@g' $@
+	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
+	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.eot@++resource++plone.app.toolbar.eot@g' $@
+	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.ttf@++resource++plone.app.toolbar.ttf@g' $@
+	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.woff@++resource++plone.app.toolbar.woff@g' $@
+	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.otf@++resource++plone.app.toolbar.otf@g' $@
 
-build/toolbar.png:
-	cp jam/bootstrap/img/glyphicons-halflings.png $@
 
 
-.PHONY: all clean bootstrap test test-ci docs publish-demo widgets toolbar 
+.PHONY: all clean bootstrap test test-ci docs publish-demo widgets toolbar
