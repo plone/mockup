@@ -36,36 +36,41 @@ define([
 ], function($, Base, Parser) {
   "use strict";
 
-  var FormHelpers = Base.extend({
-    name: "formhelpers",
+  var PreventDoubleSubmit = Base.extend({
+    name: "preventdoublesubmit",
     defaults: {
       message : 'You already clicked the submit button. ' +
                 'Do you really want to submit this form again?',
-      klass: 'formhelpers-submitting'
+      guardKlass: 'submitting',
+      optOutKlass: 'allowMultiSubmit',
+      changedKlass: 'changed'
     },
     init: function() {
       var self = this;
       // if this is not a form just return
       if(!self.$el.is('form')){ return; }
-      self.$el.on('submit', function(){
-        if(self.$el.hasClass(self.options.klass)){
-          // if 
+
+      $(':submit', self.$el).click(function(){
+        // mark the button as clicked
+        $(':submit').removeAttr('clicked');
+        $(this).attr('clicked', 'clicked');
+        // if submitting and no opt-out klass is found
+        // pop up confirmation dialog
+        if ($(this).hasClass(self.options.guardKlass) &&
+              !$(this).hasClass(self.options.optOutKlass)){
           return self._confirm();
         }
+        $(this).addClass(self.options.guardKlass);
       });
 
-      $('input', self.$el).on('keyup', function(){
-        if(!self.$el.hasClass(self.options.klass)){
-          self.$el.addClass(self.options.klass);
-        }
-      });
     },
 
     _confirm: function(){
       return window.confirm(this.options.message);
     }
+
   });
 
-  return FormHelpers;
+  return PreventDoubleSubmit;
 
 });

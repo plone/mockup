@@ -836,15 +836,15 @@
 
     <!--
 ============================================= 
-  PATTERN: FormHelpers
+  PATTERN: PreventDoubleSubmit
 =============================================
 -->
 
-      <h1 id="formhelpers">FormHelpers</h1>
+      <h1 id="preventdoublesubmit">PreventDoubleSubmit</h1>
 
       <div class="row">
         <div class="span12">
-          <form class="pat-formhelpers" onsubmit="javascript:return false;">
+          <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
             <input
               type="text"
               value="submit this value please!"
@@ -852,7 +852,12 @@
             <input
               class="btn btn-large btn-primary"
               type="submit"
-              value="Submit!"
+              value="Single submit"
+              />
+            <input
+              class="btn btn-large btn-primary allowMultiSubmit" 
+              type="submit"
+              value="Multi submit"
               />
           </form>
         </div>

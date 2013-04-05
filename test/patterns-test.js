@@ -43,11 +43,11 @@ define([
   'js/patterns/modal',
   'js/patterns/select2',
   'js/patterns/toggle',
-  'js/patterns/formhelpers'
+  'js/patterns/preventdoublesubmit'
 ], function(chai, $, registry, 
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
-      Select2, Toggle, FormHelpers) {
+      Select2, Toggle, PreventDoubleSubmit) {
   "use strict";
 
   var expect = chai.expect,
@@ -330,39 +330,57 @@ define([
     });
   });
 
-  describe("FormHelpers", function() {
+  describe("PreventDoubleSubmit", function() {
     beforeEach(function() {
       // mock up `_confirm` func
-      this._old_confirm = FormHelpers.prototype._confirm;
-      FormHelpers.prototype._confirm = function(){
+      this._old_confirm = PreventDoubleSubmit.prototype._confirm;
+      PreventDoubleSubmit.prototype._confirm = function(){
         this.confirmed = true;
       };
     });
     afterEach(function() {
-      FormHelpers.prototype._confirm = this._old_confirm;
+      PreventDoubleSubmit.prototype._confirm = this._old_confirm;
     });
     it('prevent form to be submitted twice', function() {
       var $el = $('' +
-        '<form id="helped" class="pat-formhelpers">' +
+        '<form id="helped" class="pat-preventdoublesubmit">' +
         ' <input type="text" value="Yellow" />' +
-        ' <input type="submit" class="aclass" value="Submit" />' +
+        ' <select name="aselect">' +
+        '    <option value="1">1</option>' +
+        '    <option value="2">2</option>' +
+        '</select>' +
+        ' <input id="b1" type="submit" value="Submit 1" />' +
+        ' <input id="b2" type="submit" class="allowMultiSubmit" value="Submit 2" />' +
         '</form>');
       registry.scan($el);
 
+      var guardKlass = 'submitting';
+      var changedKlass = 'changed';
+      var optOutKlass = 'allowMultiSubmit';
       var get_confirmed = function(el){
-        return el.data('pattern-formhelpers-0').confirmed;
+        return el.data('pattern-preventdoublesubmit-0').confirmed;
       };
+      var reset_confirmed = function(el){
+        el.data('pattern-preventdoublesubmit-0').confirmed = undefined;
+      };
+
+      var $b1 = $('#b1', $el);
+      var $b2 = $('#b2', $el);
+
       expect(get_confirmed($el)).to.be.undefined;
-      $('input:submit', $el).trigger('click');
+      $b1.trigger('click');
       expect(get_confirmed($el)).to.be.undefined;
-      $('input[type="text"]', $el).trigger('keyup');
-      expect($el.hasClass('formhelpers-submitting')).to.be.true;
-      // XXX 2013-04-04: for some reason click on the button 
-      // do not trigger 'submit' on the form. So we need to 
-      // manually fire 'submit' on the form itself
-      // $('input:submit', $el).trigger('click');
-      $el.trigger('submit');
+      expect($b1.hasClass(guardKlass)).to.be.true;
+      $b1.trigger('click');
       expect(get_confirmed($el)).to.be.true;
+
+      // reset confirmed flag
+      reset_confirmed($el);
+
+      $b2.trigger('click');
+      expect($b2.hasClass(guardKlass)).to.be.true;
+      expect(get_confirmed($el)).to.be.undefined;
+
     });
   });
 
