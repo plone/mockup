@@ -355,7 +355,6 @@ define([
       registry.scan($el);
 
       var guardKlass = 'submitting';
-      var changedKlass = 'changed';
       var optOutKlass = 'allowMultiSubmit';
       var get_confirmed = function(el){
         return el.data('pattern-preventdoublesubmit-0').confirmed;

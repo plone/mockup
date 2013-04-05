@@ -843,7 +843,7 @@
       <h1 id="preventdoublesubmit">PreventDoubleSubmit</h1>
 
       <div class="row">
-        <div class="span12">
+        <div class="span6">
           <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
             <input
               type="text"
@@ -860,6 +860,23 @@
               value="Multi submit"
               />
           </form>
+           <pre class="brush: html;toolbar: false;">     
+&lt;form class="pat-preventdoublesubmit"&gt;
+  &lt;input
+    type="text"
+    value="submit this value please!"
+    /&gt;
+  &lt;input
+    class="btn btn-large btn-primary"
+    type="submit"
+    value="Single submit"
+    /&gt;
+  &lt;input
+    class="btn btn-large btn-primary allowMultiSubmit" 
+    type="submit"
+    value="Multi submit"
+    /&gt;
+&lt;/form&gt;</pre>
         </div>
       </div>
 
