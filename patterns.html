@@ -834,16 +834,19 @@
       </div>
 
 
-    <!--
+
+    <h1 id="formhelpers">Form Helpers</h1>
+      
+      <div class="row">
+        <div class="span6">
+
+<!--
 ============================================= 
   PATTERN: PreventDoubleSubmit
 =============================================
 -->
 
-      <h1 id="preventdoublesubmit">PreventDoubleSubmit</h1>
-
-      <div class="row">
-        <div class="span6">
+          <h3 id="preventDoubleSubmit">PreventDoubleSubmit</h1>
           <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
             <input
               type="text"
@@ -878,7 +881,60 @@
     /&gt;
 &lt;/form&gt;</pre>
         </div>
+
+<!--
+============================================= 
+  PATTERN: PreventNoChangeSubmit
+=============================================
+-->
+
+      <h3 id="formUnloadAlert">FormUnloadAlert</h3>
+
+      <div class="span6">
+        <form class="pat-formunloadalert" onsubmit="javascript:return false;">
+          <input
+            type="text"
+            value=""
+            />
+          <select>
+            <option value="1">value 1</option>
+            <option value="2">value 2</option>
+          </select>
+          <input
+            class="btn btn-large btn-primary"
+            type="submit"
+            value="Submit"
+            />
+          <br />
+          <a href="patterns.html">Click here to go somewhere else</a>
+        </form>
+        <pre class="brush: html;toolbar: false;">     
+&lt;form class="pat-formunloadalert" onsubmit="javascript:return false;"&gt;
+  &lt;input
+    type="text"
+    value=""
+    /&gt;
+  &lt;select&gt;
+    &lt;option value="1"&gt;value 1&lt;/option&gt;
+    &lt;option value="2"&gt;value 2&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;input
+    class="btn btn-large btn-primary"
+    type="submit"
+    value="Submit"
+    /&gt;
+  &lt;a href="patterns.html"&gt;Go somewhere else&lt;/a&gt;
+&lt;/form&gt;
+      </pre>
       </div>
+
+    </div>
+
+<!--
+============================================= 
+  ADD MORE PATTERNS BELOW THIS COMMENT...
+=============================================
+-->    
 
     </div> <!-- / #content -->
 

@@ -399,77 +399,74 @@ $('.pat-datetime').datetime({
       <h3>Testing the pattern</h3>
 
       <h2 id="bundles">Bundles</h2>
-
-      <p>TODO: what the hell are bundles!</p>
+      
+      <p>List of custom patterns (not part of Patternslib), listed in
+        alphabetical order:</p>
 
       <div class="row">
-        <!--div class="span4">
-          <h2><a href="#diazo.html">Diazo</a></h2>
-          <p>Diazo toolbar exposes the diazo rules applied to a theme (or not)
-            in order to map it to the backend. This helps when writing and
-            debugging diazo rules. <code>iframe.js</code> is the script used to
-            create the diazo debugging toolbar. </p>
-          <p>To build and use the diazo toolbar bundle, follow the steps
-            below:</p>
-          <pre class="brush: bash;toolbar: false;">
-make diazo
-cp build/diazo* path/to/diazo/lib/diazo/debug_resources</pre>
-          <a href="#diazo.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
-          <div style="clear:both"></div>
-        </div-->
-        <div class="span6">
-          <h2><a href="widgets.html">Widgets</a></h2>
-          <p><code>plone.app.widgets</code> are an alternative to the current
-            Plone widgets, with enhanced features and modern design.</p>
-          <p>To build and use the widgets bundle, follow the steps below:</p>
-          <pre class="brush: bash;toolbar: false;">
-make widgets
-cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static</pre>
-          <a href="widgets.html" class="btn btn-primary pull-right">Demo</a>
-          <div style="clear:both"></div>
+        <div class="span4">
+          <h2><a href="patterns.html#autotoc">AutoToc</a></h2>
+          <p>Generating Table Of Contents. Can be also used</p>
+          <a href="patterns.html#autotoc" class="btn btn-primary pull-right">Demo</a>
         </div>
-        <div class="span6">
-          <h2><a href="toolbar.html">Toolbar</a></h2>
-          <p><code>plone.app.toolbar</code> separates the content management
-            interface elements from the design, placing all functionality
-            neatly into a toolbar at the top. This enormously simplifies
-            theming and also usability for content managers.</p>
-          <p>To build and use the toolbar bundle, follow the steps below:</p>
-          <pre class="brush: bash;toolbar: false;">
-make toolbar
-cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static</pre>
-          <a href="toolbar.html" class="btn btn-primary pull-right">Demo</a>
-          <div style="clear:both"></div>
+        <div class="span4">
+          <h2><a href="patterns.html#backdrop">Backdrop</a></h2>
+          <p>Hides content of selected DOM element.</p>
+          <a href="patterns.html#backdrop" class="btn btn-primary pull-right">Demo</a>
+        </div>
+        <div class="span4">
+          <h2><a href="patterns.html#datetime">DateTime</a></h2>
+          <p>Datetime selection widget.</p>
+          <a href="patterns.html#datetime" class="btn btn-primary pull-right">Demo</a>
         </div>
       </div>
-      <!--div class="row">
-        <div class="span6">
-          <h2><a href="#standardtiles.html">Standard Tiles</a></h2>
-          <p><code>plone.app.standardtiles</code> are reusable visual elements
-            outside content area, eg. logo, footer, ... This will eventually
-            deprecate viewlets and portlets (forever!)</p>
-          <p>To build and use the standardtiles bundle, follow the steps below:</p>
-          <pre class="brush: bash;toolbar: false;">
-make standardtiles
-cp build/standardtiles* path/to/plone.app.standardtiles/plone/app/standardtiles/static</pre>
-          <a href="#standardtiles.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
-          <div style="clear:both"></div>
+      <div class="row">
+        <div class="span4">
+          <h2><a href="patterns.html#expose">Expose</a></h2>
+          <p>Exposing selected DOM element by placing it on top of stretched
+            backdrop.</p>
+          <a href="patterns.html#expose" class="btn btn-primary pull-right">Demo</a>
         </div>
-        <div class="span6">
-          <h2><a href="#deco.html">Deco</a></h2>
-          <p><code>plone.app.deco</code> is the new layout editor for the
-            content area. Provides user friendly way (drag-n-drop) of adjusting
-            the layout of the page.</p>
-          <p>To build and use the deco bundle, follow the steps below:</p>
-          <pre class="brush: bash;toolbar: false;">
-make deco
-cp build/deco* path/to/plone.app.deco/plone/app/deco/static</pre>
-          <a href="#deco.html" class="btn btn-primary pull-right">Demo (not working yet)</a>
-          <div style="clear:both"></div>
+        <div class="span4">
+          <h2><a href="patterns.html#modal">Modal</a></h2>
+          <p>Creates and exposes content that was loaded when triggered by
+            selected DOM element.</p>
+          <a href="patterns.html#modal" class="btn btn-primary pull-right">Demo</a>
         </div>
-      </div-->
+        <div class="span4">
+          <h2><a href="patterns.html#select2">Select2</a></h2>
+          <p>Select widget (Tags, Autocomplete, Single select, Multi select)</p>
+          <a href="patterns.html#select2" class="btn btn-primary pull-right">Demo</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4">
+          <h2><a href="patterns.html#toggle">Toggle</a></h2>
+          <p>On event (click by default) toggles value of DOM element. Can
+            toggle classes or any other element attributes.</p>
+          <a href="patterns.html#toggle" class="btn btn-primary pull-right">Demo</a>
+        </div>
+      </div>
 
+      <h4 id="formhelpers">Form Helpers</h4>
+      <div class="row">
+        <div class="span4">
+          <h2><a href="patterns.html#preventDoubleSubmit">PreventDoubleSubmit</a></h2>
+          <p>Prevent a form to be submitted twice.</p>
+          <a href="patterns.html#preventDoubleSubmit" class="btn btn-primary pull-right">Demo</a>
+        </div>
+        <div class="span4">
+          <h2><a href="patterns.html#formUnloadAlert">FormUnloadAlert</a></h2>
+          <p>Prevent a form to be unloaded without warning if some fields have changed.</p>
+          <a href="patterns.html#formUnloadAlert" class="btn btn-primary pull-right">Demo</a>
+        </div>
+      </div>
     </div>
+    <br />
+    <h1>Current CMFPlone ECMA scripts status</h1>
+    <a href="https://docs.google.com/spreadsheet/ccc?key=0AiJ1qTbr6NdMdDMzNVVqZ1ZIOGFZWHZDV1BPWnM4OEE#gid=0">
+        Google doc for keeping track of current status of CMFPlone/ecma_scripts stuff
+    </a>
   </div>
 
   <footer>
