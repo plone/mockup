@@ -42,6 +42,11 @@
 
   <div class="container">
     <div id="content" data-panel="content">
+      <!-- EDITORS' NOTE
+           In this file we are using "semantic line breaks".
+           See this blog post
+           http://rhodesmill.org/brandon/2012/one-sentence-per-line/
+           in order to learn about it and its many advantages -->
       <h1>Plone mockup</h1>
       <p>
         Plone Mockup is an attempt to separate
@@ -236,7 +241,8 @@ $('#foo').datetime({
 &lt;input id="date-picker-1" class="date-picker" /&gt;
 &lt;input id="date-picker-2" class="date-picker" /&gt;
 </pre>
-      <pre class="brush: javascript; toolbar: false;">
+      <pre id="initialization-a-la-jquery"
+           class="brush: javascript; toolbar: false;">
 $(document).ready(function() {
   $('input.date-picker').datetime({
     format: 'mmmm d, yyyy',
@@ -264,26 +270,122 @@ $(document).ready(function() {
         <dt>Long story kept long</dt>
         <dd>TODO</dd>
       </dl>
+      <h3>Automatic binding</h3>
+      <p>
+        Automatic binding relieves us of the problem
+        of initializing a widget from the markup.
+        In our initial example,
+        we actually had to
+        <a href="#initialization-a-la-jquery"
+           title="Manual binding">manually bind the initialization routine</a>
+        to the page loading
+        (therefore, when the page is loaded,
+        all the elements marked as <em>interactive widgets</em>
+        will be initialized).
+        This works fine as long as we don't start replacing parts of the DOM
+        with HTML coming from the backend or, say, Javascript templates.
+      </p>
+      <p>
+        If we start doing that,
+        and especially if the replaced parts of the DOM
+        contains one or more <em>interactive widgets</em>,
+        we have to rebind them all,
+        which is quite a tedious thing to code.
+      </p>
+      <p>
+        Patterns instead, will automatically initialize,
+        upon page loading,
+        all the <em>interactive widgets</em> it find in the document,
+        and you can also tell it to rebind all the widgets it finds
+        in a particular section of the page,
+        when for example we have replaced the content of that section:
+      </p>
+      <pre class="brush: javascript; toolbar: false;">
+define([
+  'jquery',
+  'js/patterns/base',
+  'jam/Patterns/src/registry'
+], function($, Base, registry, undefined) {
+  // Stuff etc
+  var rerender($element) {
+      $element.load(
+          'http://example.com/my-html',
+          function(response.status, request) {
+              // Rebinds every pattern found in the AJAX-loaded HTML
+              registry.scan($element);
+          }
+      );
+  }
+});</pre>
+      <p>
+        This is a <strong>great improvement over the "manual" way</strong>,
+        where rebinding could take tens of lines of code
+        or even more for complex examples:
+        here, we're down to one line
+        <em>that will always work even if we have no idea of which widgets</em>
+        will get in.
+      </p>
       <h3>Pattern options</h3>
       <p>
-        Pattern is invoked with 2 arguments. First is DOM element and second
-        are options. To some extend options can be also passed via HTML data-*
-        attributes. Options are also merged together from whole parent DOM
-        tree. I believe good example can explain things better then pages of
-        documentation.
+        Patterns can take options in two ways:
+        from the DOM or via the jQuery interface.
+        It is highly recommended to use the DOM interface,
+        since it offers a lot more flexibility compared to the jQuery approach.
+        Also,
+        if we wish to use the automatic binding and rebinding functionality,
+        the DOM approach is more straightforward and hassle-free.
+      </p>
+      <p>
+        If we put options in the DOM,
+        we have to use HTML5 data attributes.
+        It's not necessary to put the options directly on the root node
+        of the widget
+        (the one with the <code>pat-*</code> class),
+        since Patterns will also scan all the parents of that node
+        from the bottom upwards,
+        so we can for example put the options just once
+        on the <code>&lt;body /&gt;</code> tag
+        and have all the widgets use the same set of options:
       </p>
       <pre class="brush: html; toolbar: false;">
-&lt;body data-datetime="{"format": "mmmm-d-yyyy@HH:MM", "showAMPM": true}"
-      data-datetime-format="d-mmmm-yyyy@HH:MM"&gt;
-  &lt;input class="pat-datetime" data-datetime-pickadateMonthSelector="false"&gt;
+&lt;body data-datetime-format="d-mmmm-yyyy@HH:MM"
+      data-datetime-ampm="true"
+      data-datetime-pickadateMonthSelector="false"&gt;
+  &lt;!-- Both widgets use the same options --&gt;
+  &lt;input class="pat-datetime" /&gt;
+  &lt;input class="pat-datetime" /&gt;
 &lt;body&gt;</pre>
-      <p>And it can also be used as a <em>jQuery</em> plugin:</p>
+      <p>
+        But if we need to override some options for a certain widget
+        (or an entire DOM section)
+        we can just put it on the node
+        or on whatever DOM element wraps the section:
+      </p>
+      <pre class="brush: html; toolbar: false;">
+&lt;body data-datetime-format="d-mmmm-yyyy@HH:MM"
+      data-datetime-ampm="true"&gt;
+  &lt;input class="pat-datetime" /&gt;  &lt;!-- There's a month dropdown here --&gt;
+  &lt;div data-datetime-pickadateMonthSelector="false"&gt;
+    &lt;input class="pat-datetime" /&gt; &lt;!-- but no month dropdown here! --&gt;
+    &lt;input class="pat-datetime" /&gt; &lt;!-- And here as well --&gt;
+  &lt;/div&gt;
+&lt;body&gt;</pre>
+      <h3>jQuery interface</h3>
+      <p>
+        Patterns can also be used as a <em>jQuery</em> plugin,
+        passing options as with any other jQuery plugin:
+      </p>
       <pre class="brush: javascript; toolbar: false;">
 $('.pat-datetime').datetime({
   pickadateYearSelector: true
 });</pre>
-
-      <p>... then options are merged into.</p>
+      <p>
+        In this case the options passed to the jQuery function
+        will take precedence over the ones defined in the DOM,
+        although the parents will still be scanned
+        and the options defined there will be picked up
+        if they are not overridden in the jQuery call:
+      </p>
       <pre class="brush: javascript; toolbar: false;">
 {
   showAMPM: true,
@@ -292,7 +394,11 @@ $('.pat-datetime').datetime({
   pickadateYearSelector: true
 }</pre>
 
-      <h2 id="budles">Bundles</h2>
+      <h2 id="make-a-pattern">Making a pattern</h2>
+
+      <h3>Testing the pattern</h3>
+
+      <h2 id="bundles">Bundles</h2>
 
       <p>TODO: what the hell are bundles!</p>
 
