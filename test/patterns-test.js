@@ -42,9 +42,12 @@ define([
   'js/patterns/expose',
   'js/patterns/modal',
   'js/patterns/select2',
-  'js/patterns/toggle'
-], function(chai, $, registry, Base, AutoTOC, Backdrop, DateTime, Expose, Modal,
-      Select2, Toggle) {
+  'js/patterns/toggle',
+  'js/patterns/preventdoublesubmit'
+], function(chai, $, registry, 
+      Base, AutoTOC, Backdrop,
+      DateTime, Expose, Modal,
+      Select2, Toggle, PreventDoubleSubmit) {
   "use strict";
 
   var expect = chai.expect,
@@ -87,6 +90,10 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
+
+  /* ==========================
+   TEST: AutoTOC
+  ========================== */
 
   describe("AutoTOC", function () {
     beforeEach(function() {
@@ -131,8 +138,12 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Backdrop
+  ========================== */
+
   describe("Backdrop", function() {
-    it("default behaivour", function() {
+    it("default behaviour", function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
       expect($('.backdrop', $el).size()).to.equal(1);
@@ -156,6 +167,10 @@ define([
       expect($el.hasClass('backdrop-active')).to.equal(false);
     });
   });
+
+  /* ==========================
+   TEST: DateTime
+  ========================== */
 
   describe("DateTime", function() {
     beforeEach(function() {
@@ -182,6 +197,10 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Expose
+  ========================== */
+
   describe("Expose", function() {
     it("default behaivour", function() {
       var $el = $('' +
@@ -202,6 +221,10 @@ define([
       expect($el.hasClass('backdrop-active')).to.equal(false);
     });
   });
+
+  /* ==========================
+   TEST: Modal
+  ========================== */
 
   describe("Modal", function() {
     beforeEach(function() {
@@ -247,6 +270,10 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Select2
+  ========================== */
+
   describe("Select2", function() {
     it('tagging', function() {
       var $el = $('' +
@@ -260,6 +287,10 @@ define([
       expect($('.select2-choices li', $el).size()).to.equal(2);
     });
   });
+
+  /* ==========================
+   TEST: Toggle
+  ========================== */
 
   describe("Toggle", function() {
     beforeEach(function() {
@@ -296,6 +327,59 @@ define([
       $('.pat-toggle', this.$el).trigger('click');
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
+    });
+  });
+
+  describe("PreventDoubleSubmit", function() {
+    beforeEach(function() {
+      // mock up `_confirm` func
+      this._old_confirm = PreventDoubleSubmit.prototype._confirm;
+      PreventDoubleSubmit.prototype._confirm = function(){
+        this.confirmed = true;
+      };
+    });
+    afterEach(function() {
+      PreventDoubleSubmit.prototype._confirm = this._old_confirm;
+    });
+    it('prevent form to be submitted twice', function() {
+      var $el = $('' +
+        '<form id="helped" class="pat-preventdoublesubmit">' +
+        ' <input type="text" value="Yellow" />' +
+        ' <select name="aselect">' +
+        '    <option value="1">1</option>' +
+        '    <option value="2">2</option>' +
+        '</select>' +
+        ' <input id="b1" type="submit" value="Submit 1" />' +
+        ' <input id="b2" type="submit" class="allowMultiSubmit" value="Submit 2" />' +
+        '</form>');
+      registry.scan($el);
+
+      var guardKlass = 'submitting';
+      var optOutKlass = 'allowMultiSubmit';
+      var get_confirmed = function(el){
+        return el.data('pattern-preventdoublesubmit-0').confirmed;
+      };
+      var reset_confirmed = function(el){
+        el.data('pattern-preventdoublesubmit-0').confirmed = undefined;
+      };
+
+      var $b1 = $('#b1', $el);
+      var $b2 = $('#b2', $el);
+
+      expect(get_confirmed($el)).to.be.undefined;
+      $b1.trigger('click');
+      expect(get_confirmed($el)).to.be.undefined;
+      expect($b1.hasClass(guardKlass)).to.be.true;
+      $b1.trigger('click');
+      expect(get_confirmed($el)).to.be.true;
+
+      // reset confirmed flag
+      reset_confirmed($el);
+
+      $b2.trigger('click');
+      expect($b2.hasClass(guardKlass)).to.be.true;
+      expect(get_confirmed($el)).to.be.undefined;
+
     });
   });
 
