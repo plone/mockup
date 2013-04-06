@@ -6,6 +6,7 @@ require([
   'js/patterns/expose',
   'js/patterns/modal',
   'js/patterns/preventdoublesubmit',
+  'js/patterns/formUnloadAlert',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'

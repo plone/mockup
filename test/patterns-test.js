@@ -43,11 +43,13 @@ define([
   'js/patterns/modal',
   'js/patterns/select2',
   'js/patterns/toggle',
-  'js/patterns/preventdoublesubmit'
+  'js/patterns/preventdoublesubmit',
+  'js/patterns/formUnloadAlert'
 ], function(chai, $, registry, 
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
-      Select2, Toggle, PreventDoubleSubmit) {
+      Select2, Toggle, PreventDoubleSubmit,
+      FormUnloadAlert) {
   "use strict";
 
   var expect = chai.expect,
@@ -330,6 +332,10 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: PreventDoubleSubmit
+  ========================== */
+
   describe("PreventDoubleSubmit", function() {
     beforeEach(function() {
       // mock up `_confirm` func
@@ -380,6 +386,42 @@ define([
       expect($b2.hasClass(guardKlass)).to.be.true;
       expect(get_confirmed($el)).to.be.undefined;
 
+    });
+  });
+
+  /* ==========================
+   TEST: FormUnloadAlert
+  ========================== */
+
+  describe("FormUnloadAlert", function() {
+
+    it('prevent unload of form with changes', function() {
+      var $el = $('' +
+        '<form class="pat-formunloadalert">' +
+        ' <select name="aselect">' +
+        '    <option value="1">1</option>' +
+        '    <option value="2">2</option>' +
+        '</select>' +
+        '<input id="b1" type="submit" value="Submit" />' +
+        '<a href="patterns.html">Click here to go somewhere else</a>' +
+        '</form>');
+      registry.scan($el);
+
+      // current instance of the pattern
+      var pattern = $el.data('pattern-formunloadalert-0');
+      var $select = $('select', $el);
+
+      // expect(pattern.unload_msg).to.be.undefined;
+      // expect(pattern.hasChanges()).to.be.false;
+
+      $select.trigger('change');
+      expect(pattern._changed).to.be.true;
+
+      $('a', $el).click(function(e){
+        pattern._handle_unload(pattern, e);
+        expect(e.returnValue).to.equal(pattern.options.message);
+      });
+      $('a', $el).trigger('click');
     });
   });
 
