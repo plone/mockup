@@ -1,4 +1,5 @@
 @import "widgets.less";
+@import "bootstrap.less";
 @import "plonetoolbar.less";
 
 
@@ -39,7 +40,7 @@ body {
   .modal-body {
     max-height: none;
     overflow-y: visible;
-    padding: 0 15px;   
+    padding: 0 15px;
   }
 
   .backdrop {
@@ -94,17 +95,24 @@ body {
       margin: 0 0.2em;
     }
     .pat-datetime-icon {
-      background-image: url("++resource++plone.app.toolbar.png");
-      background-position: 14px 14px;
-      background-repeat: no-repeat;
-      display: inline-block;
-      height: 14px;
-      line-height: 14px;
-      margin-top: 1px;
-      margin-bottom: 0.5em;
-      vertical-align: middle;
-      width: 14px;
-      .icon-calendar();
+      margin: 0 0.4em;
+      cursor: pointer;
+      font-family: FontAwesome;
+      font-weight: normal;
+      font-style: normal;
+      text-decoration: inherit;
+      display: inline;
+      width: auto;
+      height: auto;
+      line-height: normal;
+      vertical-align: super;
+      background: none;
+      background-image: none;
+      background-position: 0% 0%;
+      background-repeat: repeat;
+    }
+    .pat-datetime-icon:before {
+      content: "\f073";
     }
   }
   input.destructive[type='submit'] {
@@ -133,7 +141,7 @@ body {
       }
     }
     dd {
-      margin-left: 2em;      
+      margin-left: 2em;
     }
   }
   dl.portalMessage {
