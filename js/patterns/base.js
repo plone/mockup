@@ -113,9 +113,7 @@ define([
     }
   };
   Base.extend = function(NewPattern) {
-    var Base = this,
-        jquery_plugin = true;
-    var Constructor;
+    var Base = this, Constructor;
 
     if (NewPattern && NewPattern.hasOwnProperty('constructor')) {
       Constructor = NewPattern.constructor;
@@ -131,8 +129,12 @@ define([
 
     Constructor.__super__ = Base.prototype;
 
+    if (Constructor.prototype.jqueryPlugin === undefined) {
+      Constructor.prototype.jqueryPlugin = "pattern" +
+          Constructor.prototype.name.charAt(0).toUpperCase() +
+          Constructor.prototype.name.slice(1);
+    }
     if (Constructor.prototype.jqueryPlugin) {
-      jquery_plugin = false;
       $.fn[Constructor.prototype.jqueryPlugin] = function(method, options) {
         $(this).each(function() {
           var $el = $(this),
@@ -157,7 +159,7 @@ define([
     registry.register({
       name: Constructor.prototype.name,
       trigger: '.pat-' + Constructor.prototype.name,
-      jquery_plugin: jquery_plugin,
+      jquery_plugin: false,
       init: function($all) {
         return $all.each(function(i) {
           var $el = $(this),
