@@ -37,6 +37,10 @@ define([
 ], function($, registry, logger, undefined) {
   "use strict";
 
+  function getName(name) {
+    return name.replace(/\.(\w)/g, function(match, letter) { return letter.toUpperCase(); });
+  }
+
   function getOptions($el, prefix, options) {
     options = options || {};
 
@@ -64,6 +68,7 @@ define([
             var names = name.split('-'),
                 names_options = options;
             $.each(names, function(i, name) {
+              name = getName(name);
               if (names.length > i + 1) {
                 if (!names_options[name]) {
                   names_options[name] = {};

@@ -58,6 +58,9 @@ define([
         'data-autotoc-klass': 'autotabs'
       });
 
+    },
+    scan: function(selector) {
+      registry.scan($(selector));
     }
   };
 
