@@ -6,7 +6,7 @@ CSSMIN = ./node_modules/.bin/cssmin
 UGLIFYJS = ./node_modules/.bin/uglifyjs
 TESTEM = ./node_modules/.bin/testem
 
-DOCS = docs/index.html docs/index.js docs/index.css docs/jquery.js docs/img docs/widgets.html docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif docs/toolbar.html docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/patterns.html docs/patterns.css docs/patterns.js docs/patterns.png docs/patterns-spinner.gif docs/font
+DOCS = docs/index.html docs/widgets.html docs/toolbar.html docs/patterns.html
 WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
 TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar-webfont.eot build/toolbar-webfont.ttf build/toolbar-webfont.woff build/toolbar-webfont.otf
 
@@ -37,7 +37,7 @@ docs: clean_docs $(DOCS)
 	# commit docs folder to gh-pages                                          #
 	# ----------------------------------------------------------------------- #
 
-docs/index.html:
+docs/index.html: docs/index.js docs/index.css
 	cp index.html $@
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
@@ -65,11 +65,7 @@ docs/img:
 	mkdir $@
 	cp img/* $@
 
-docs/font:
-	mkdir $@
-	cp jam/font-awesome/font/* $@
-
-docs/widgets.html:
+docs/widgets.html: docs/jquery.js docs/widgets.js docs/widgets.css docs/widgets.png docs/widgets-spinner.gif
 	cp widgets.html $@
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
@@ -104,7 +100,7 @@ docs/widgets.png:
 docs/widgets-spinner.gif:
 	cp jam/select2/select2-spinner.gif $@
 
-docs/toolbar.html:
+docs/toolbar.html: docs/jquery.js docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/img docs/font
 	cp toolbar.html $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@<link rel="stylesheet" type="text/css" href="toolbar_init.css" />@g' $@
 	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@<script src="toolbar_init.js"></script>@g' $@
@@ -135,7 +131,11 @@ docs/toolbar.css:
 	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
 	sed -i -e 's@../jam/font-awesome/@@g' $@
 
-docs/patterns.html:
+docs/font:
+	mkdir $@
+	cp jam/font-awesome/font/* $@
+
+docs/patterns.html: docs/patterns.css docs/patterns.js docs/patterns.png docs/patterns-spinner.gif
 	cp patterns.html $@
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
