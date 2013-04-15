@@ -127,7 +127,7 @@ define([
     });
     it("can be used as jQuery plugin as well", function () {
       expect($('> nav', this.$el).size()).to.equal(0);
-      this.$el.patAutotoc();
+      this.$el.patternAutotoc();
       expect($('> nav', this.$el).size()).to.equal(1);
     });
     it("can have custom levels", function() {
