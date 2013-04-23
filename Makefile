@@ -7,7 +7,7 @@ UGLIFYJS = ./node_modules/.bin/uglifyjs
 TESTEM = ./node_modules/.bin/testem
 
 DOCS = docs/index.html docs/widgets.html docs/toolbar.html docs/patterns.html
-WIDGETS = build/widgets.js build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
+WIDGETS = build/widgets.min.js build/widgets.css build/widgets.png build/widgets-spinner.gif
 TOOLBAR = build/toolbar_init.js build/toolbar_init.min.js build/toolbar_init.css build/toolbar.js build/toolbar.min.js build/toolbar.css build/toolbar-webfont.eot build/toolbar-webfont.ttf build/toolbar-webfont.woff build/toolbar-webfont.otf
 
 all:: widgets toolbar
@@ -184,12 +184,9 @@ widgets: clean_widgets $(WIDGETS)
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
 	# ----------------------------------------------------------------------- #
 
-build/widgets.js:
-	$(JAM) compile -i js/bundles/widgets -e jquery --no-minify --almond $@
+build/widgets.min.js:
+	$(JAM) compile -i js/bundles/widgets -e jquery --almond $@
 	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/bundles/widgets'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
-
-build/widgets.min.js: build/widgets.js
-	$(UGLIFYJS) build/widgets.js > $@
 
 build/widgets.css:
 	$(CSSMIN) jam/select2/select2.css > $@
