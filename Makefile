@@ -69,7 +69,7 @@ docs/widgets.html: docs/jquery.js docs/widgets.js docs/widgets.css docs/widgets.
 	cp widgets.html $@
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
-	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />@@g' $@
+	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/widgets.less" />@<link href="widgets.css" rel="stylesheet" type="text/css" />@g' $@
@@ -86,7 +86,7 @@ docs/widgets.js:
 docs/widgets.css:
 	$(CSSMIN) jam/SyntaxHighlighter/styles/shCore.css > $@
 	$(CSSMIN) less/shThemeGitHub.css >> $@
-	$(CSSMIN) jam/select2/select2.css >> $@
+	$(CSSMIN) jam/plone-select2/select2.css >> $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/widgets.less | $(CSSMIN) >> $@
 	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
@@ -95,17 +95,17 @@ docs/widgets.css:
 	sed -i -e 's@../jam/font-awesome/@@g' $@
 
 docs/widgets.png:
-	cp jam/select2/select2.png $@
+	cp jam/plone-select2/select2.png $@
 
 docs/widgets-spinner.gif:
-	cp jam/select2/select2-spinner.gif $@
+	cp jam/plone-select2/select2-spinner.gif $@
 
 docs/toolbar.html: docs/jquery.js docs/toolbar_init.js docs/toolbar_init.css docs/toolbar.js docs/toolbar.css docs/img docs/font
 	cp toolbar.html $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@<link rel="stylesheet" type="text/css" href="toolbar_init.css" />@g' $@
 	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@<script src="toolbar_init.js"></script>@g' $@
 	sed -i -e 's@<script src="js/iframe.js"></script>@@g' $@
-	sed -i -e 's@jam/select2/select2.css;@@g' $@
+	sed -i -e 's@jam/plone-select2/select2.css;@@g' $@
 	sed -i -e 's@jam/pickadate/themes/pickadate.02.classic.css;@@g' $@
 	sed -i -e 's@less/toolbar.less;@@g' $@
 	sed -i -e 's@jam/less/dist/less-1.3.3.js;@@g' $@
@@ -126,7 +126,7 @@ docs/toolbar.js:
 	sed -i -e 's@define("sinon/sinon", function(){});@define("sinon", function(){ return window.sinon; });@g' $@
 
 docs/toolbar.css:
-	$(CSSMIN) jam/select2/select2.css > $@
+	$(CSSMIN) jam/plone-select2/select2.css > $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
 	sed -i -e 's@../jam/font-awesome/@@g' $@
@@ -139,7 +139,7 @@ docs/patterns.html: docs/patterns.css docs/patterns.js docs/patterns.png docs/pa
 	cp patterns.html $@
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
-	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/select2/select2.css" />@@g' $@
+	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/widgets.less" />@<link rel="stylesheet" type="text/css" href="patterns.css" />@g' $@
@@ -149,16 +149,16 @@ docs/patterns.html: docs/patterns.css docs/patterns.js docs/patterns.png docs/pa
 	sed -i -e 's@<script src="js/demo/widgets.js"></script>@<script src="patterns.js"></script>@g' $@
 
 docs/patterns.png:
-	cp jam/select2/select2.png $@
+	cp jam/plone-select2/select2.png $@
 
 docs/patterns-spinner.gif:
-	cp jam/select2/select2-spinner.gif $@
+	cp jam/plone-select2/select2-spinner.gif $@
 
 
 docs/patterns.css:
 	$(CSSMIN) jam/SyntaxHighlighter/styles/shCore.css > $@
 	$(CSSMIN) less/shThemeGitHub.css >> $@
-	$(CSSMIN) jam/select2/select2.css >> $@
+	$(CSSMIN) jam/plone-select2/select2.css >> $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/widgets.less | $(CSSMIN) >> $@
 	$(LESSC) less/mockup.less | $(CSSMIN) >> $@
@@ -189,17 +189,17 @@ build/widgets.min.js:
 	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/bundles/widgets'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
 
 build/widgets.css:
-	$(CSSMIN) jam/select2/select2.css > $@
+	$(CSSMIN) jam/plone-select2/select2.css > $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
 	$(LESSC) less/sunburst.less | $(CSSMIN) >> $@
 	sed -i -e 's@select2.png@++resource++plone.app.widgets.png@g' $@
 	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-spinner.gif@g' $@
 
 build/widgets.png:
-	cp jam/select2/select2.png $@
+	cp jam/plone-select2/select2.png $@
 
 build/widgets-spinner.gif:
-	cp jam/select2/select2-spinner.gif $@
+	cp jam/plone-select2/select2-spinner.gif $@
 
 
 clean_toolbar:

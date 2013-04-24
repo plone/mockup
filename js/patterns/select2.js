@@ -36,7 +36,7 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/select2/select2'
+  'jam/plone-select2/select2'
 ], function($, Base) {
   "use strict";
 

@@ -36,7 +36,6 @@ if (window.jQuery) {
 define([
   'jquery',
   'jam/Patterns/src/registry',
-  'logging',  // should be pullin as dependency of Patterns but is not for some reason
   'js/patterns/select2',
   'js/patterns/datetime',
   'js/patterns/autotoc'
