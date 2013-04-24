@@ -436,25 +436,23 @@ define([
       return self._rawDate;
     },
     toggle: function() {
-      if (this._opened) {
+      if (this.pickadate.isOpen()) {
         this.close();
       } else {
         this.open();
       }
     },
     open: function() {
-      if (!this._opened) {
+      if (!this.pickadate.isOpen()) {
         this.trigger('open');
         this.pickadate.open();
-        this._opened = true;
         this.trigger('opened');
       }
     },
     close: function() {
-      if (this._opened) {
+      if (this.pickadate.isOpen()) {
         this.trigger('close');
         this.pickadate.close();
-        this._opened = false;
         this.trigger('closed');
       }
     }
