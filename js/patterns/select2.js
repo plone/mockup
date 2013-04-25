@@ -36,7 +36,9 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/plone-select2/select2'
+  'jam/plone-select2/select2',
+  'jam/jquery.event.drag/jquery.event.drag',
+  'jam/jquery.event.drop/jquery.event.drop'
 ], function($, Base) {
   "use strict";
 
@@ -119,6 +121,48 @@ define([
         } else {
           self.options.tags = self.options.tags.split(',');
         }
+      }
+
+      if (self.options.orderable) {
+        self.options.formatSelection = function(data, $container) {
+          $container.parents('li')
+            .css({
+              'float': 'none',
+              'margin': '5px',
+              'list-style-position': 'inside',
+              'cursor': 'move'
+            })
+            .drag("start", function(e, dd) {
+              $(this).addClass('dragging');
+              self.$el.select2("onSortStart");
+              $.drop({
+                tolerance: function(event, proxy, target) {
+                  var test = event.pageY > (target.top + target.height / 2);
+                  $.data(target.elem, "drop+reorder",
+                         test ? "insertAfter" : "insertBefore" );
+                  return this.contains(target, [event.pageX, event.pageY]);
+                }
+              });
+            })
+            .drag(function(e, dd) {
+              var drop = dd.drop[0],
+              method = $.data(drop || {}, "drop+reorder");
+              if (drop && (drop != dd.current || method != dd.method)){
+                $(this)[method](drop);
+                dd.current = drop;
+                dd.method = method;
+                dd.update();
+              }
+            })
+            .drag("end", function(e, dd) {
+              $(this).removeClass('dragging');
+              self.$el.select2("onSortEnd");
+            })
+            .drop("init", function(e, dd ) {
+              return !(this == dd.drag);
+            });
+          return data ? data.text : undefined;
+        };
       }
 
       self.$el.select2(self.options);
