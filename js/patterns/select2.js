@@ -126,14 +126,9 @@ define([
       if (self.options.orderable) {
         self.options.formatSelection = function(data, $container) {
           $container.parents('li')
-            .css({
-              'float': 'none',
-              'margin': '5px',
-              'list-style-position': 'inside',
-              'cursor': 'move'
-            })
+            .css({'cursor': 'move'})
             .drag("start", function(e, dd) {
-              $(this).addClass('dragging');
+              $(this).addClass('select2-choice-dragging');
               self.$el.select2("onSortStart");
               $.drop({
                 tolerance: function(event, proxy, target) {
@@ -155,7 +150,7 @@ define([
               }
             })
             .drag("end", function(e, dd) {
-              $(this).removeClass('dragging');
+              $(this).removeClass('select2-choice-dragging');
               self.$el.select2("onSortEnd");
             })
             .drop("init", function(e, dd ) {
