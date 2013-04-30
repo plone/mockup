@@ -1,6 +1,6 @@
 
 /**
- * almond 0.1.1 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
+ * almond 0.2.5 Copyright (c) 2011-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
@@ -11,12 +11,17 @@
 
 var requirejs, require, define;
 (function (undef) {
-    var defined = {},
+    var main, req, makeMap, handlers,
+        defined = {},
         waiting = {},
         config = {},
         defining = {},
-        aps = [].slice,
-        main, req;
+        hasOwn = Object.prototype.hasOwnProperty,
+        aps = [].slice;
+
+    function hasProp(obj, prop) {
+        return hasOwn.call(obj, prop);
+    }
 
     /**
      * Given a relative module name, like ./something, normalize it to
@@ -27,10 +32,11 @@ var requirejs, require, define;
      * @returns {String} normalized name
      */
     function normalize(name, baseName) {
-        var baseParts = baseName && baseName.split("/"),
+        var nameParts, nameSegment, mapValue, foundMap,
+            foundI, foundStarMap, starI, i, j, part,
+            baseParts = baseName && baseName.split("/"),
             map = config.map,
-            starMap = (map && map['*']) || {},
-            nameParts, nameSegment, mapValue, foundMap, i, j, part;
+            starMap = (map && map['*']) || {};
 
         //Adjust any relative paths.
         if (name && name.charAt(0) === ".") {
@@ -48,7 +54,8 @@ var requirejs, require, define;
                 name = baseParts.concat(name.split("/"));
 
                 //start trimDots
-                for (i = 0; (part = name[i]); i++) {
+                for (i = 0; i < name.length; i += 1) {
+                    part = name[i];
                     if (part === ".") {
                         name.splice(i, 1);
                         i -= 1;
@@ -60,7 +67,7 @@ var requirejs, require, define;
                             //no path mapping for a path starting with '..'.
                             //This can still fail, but catches the most reasonable
                             //uses of ..
-                            return true;
+                            break;
                         } else if (i > 0) {
                             name.splice(i - 1, 2);
                             i -= 2;
@@ -70,6 +77,10 @@ var requirejs, require, define;
                 //end trimDots
 
                 name = name.join("/");
+            } else if (name.indexOf('./') === 0) {
+                // No baseName, so this is ID is resolved relative
+                // to baseUrl, pull off the leading dot.
+                name = name.substring(2);
             }
         }
 
@@ -93,19 +104,34 @@ var requirejs, require, define;
                             if (mapValue) {
                                 //Match, update name to the new value.
                                 foundMap = mapValue;
+                                foundI = i;
                                 break;
                             }
                         }
                     }
                 }
 
-                foundMap = foundMap || starMap[nameSegment];
-
                 if (foundMap) {
-                    nameParts.splice(0, i, foundMap);
-                    name = nameParts.join('/');
                     break;
                 }
+
+                //Check for a star map match, but just hold on to it,
+                //if there is a shorter segment match later in a matching
+                //config, then favor over this star map.
+                if (!foundStarMap && starMap && starMap[nameSegment]) {
+                    foundStarMap = starMap[nameSegment];
+                    starI = i;
+                }
+            }
+
+            if (!foundMap && foundStarMap) {
+                foundMap = foundStarMap;
+                foundI = starI;
+            }
+
+            if (foundMap) {
+                nameParts.splice(0, foundI, foundMap);
+                name = nameParts.join('/');
             }
         }
 
@@ -134,17 +160,30 @@ var requirejs, require, define;
     }
 
     function callDep(name) {
-        if (waiting.hasOwnProperty(name)) {
+        if (hasProp(waiting, name)) {
             var args = waiting[name];
             delete waiting[name];
             defining[name] = true;
             main.apply(undef, args);
         }
 
-        if (!defined.hasOwnProperty(name)) {
+        if (!hasProp(defined, name) && !hasProp(defining, name)) {
             throw new Error('No ' + name);
         }
         return defined[name];
+    }
+
+    //Turns a plugin!resource to [plugin, resource]
+    //with the plugin being undefined if the name
+    //did not have a plugin prefix.
+    function splitPrefix(name) {
+        var prefix,
+            index = name ? name.indexOf('!') : -1;
+        if (index > -1) {
+            prefix = name.substring(0, index);
+            name = name.substring(index + 1, name.length);
+        }
+        return [prefix, name];
     }
 
     /**
@@ -152,16 +191,20 @@ var requirejs, require, define;
      * for normalization if necessary. Grabs a ref to plugin
      * too, as an optimization.
      */
-    function makeMap(name, relName) {
-        var prefix, plugin,
-            index = name.indexOf('!');
+    makeMap = function (name, relName) {
+        var plugin,
+            parts = splitPrefix(name),
+            prefix = parts[0];
 
-        if (index !== -1) {
-            prefix = normalize(name.slice(0, index), relName);
-            name = name.slice(index + 1);
+        name = parts[1];
+
+        if (prefix) {
+            prefix = normalize(prefix, relName);
             plugin = callDep(prefix);
+        }
 
-            //Normalize according
+        //Normalize according
+        if (prefix) {
             if (plugin && plugin.normalize) {
                 name = plugin.normalize(name, makeNormalize(relName));
             } else {
@@ -169,15 +212,22 @@ var requirejs, require, define;
             }
         } else {
             name = normalize(name, relName);
+            parts = splitPrefix(name);
+            prefix = parts[0];
+            name = parts[1];
+            if (prefix) {
+                plugin = callDep(prefix);
+            }
         }
 
         //Using ridiculous property names for space reasons
         return {
             f: prefix ? prefix + '!' + name : name, //fullName
             n: name,
+            pr: prefix,
             p: plugin
         };
-    }
+    };
 
     function makeConfig(name) {
         return function () {
@@ -185,10 +235,32 @@ var requirejs, require, define;
         };
     }
 
+    handlers = {
+        require: function (name) {
+            return makeRequire(name);
+        },
+        exports: function (name) {
+            var e = defined[name];
+            if (typeof e !== 'undefined') {
+                return e;
+            } else {
+                return (defined[name] = {});
+            }
+        },
+        module: function (name) {
+            return {
+                id: name,
+                uri: '',
+                exports: defined[name],
+                config: makeConfig(name)
+            };
+        }
+    };
+
     main = function (name, deps, callback, relName) {
-        var args = [],
-            usingExports,
-            cjsModule, depName, ret, map, i;
+        var cjsModule, depName, ret, map, i,
+            args = [],
+            usingExports;
 
         //Use name if no relName
         relName = relName || name;
@@ -200,31 +272,28 @@ var requirejs, require, define;
             //values to the callback.
             //Default to [require, exports, module] if no deps
             deps = !deps.length && callback.length ? ['require', 'exports', 'module'] : deps;
-            for (i = 0; i < deps.length; i++) {
+            for (i = 0; i < deps.length; i += 1) {
                 map = makeMap(deps[i], relName);
                 depName = map.f;
 
                 //Fast path CommonJS standard dependencies.
                 if (depName === "require") {
-                    args[i] = makeRequire(name);
+                    args[i] = handlers.require(name);
                 } else if (depName === "exports") {
                     //CommonJS module spec 1.1
-                    args[i] = defined[name] = {};
+                    args[i] = handlers.exports(name);
                     usingExports = true;
                 } else if (depName === "module") {
                     //CommonJS module spec 1.1
-                    cjsModule = args[i] = {
-                        id: name,
-                        uri: '',
-                        exports: defined[name],
-                        config: makeConfig(name)
-                    };
-                } else if (defined.hasOwnProperty(depName) || waiting.hasOwnProperty(depName)) {
+                    cjsModule = args[i] = handlers.module(name);
+                } else if (hasProp(defined, depName) ||
+                           hasProp(waiting, depName) ||
+                           hasProp(defining, depName)) {
                     args[i] = callDep(depName);
                 } else if (map.p) {
                     map.p.load(map.n, makeRequire(relName, true), makeLoad(depName), {});
                     args[i] = defined[depName];
-                } else if (!defining[depName]) {
+                } else {
                     throw new Error(name + ' missing ' + depName);
                 }
             }
@@ -236,7 +305,7 @@ var requirejs, require, define;
                 //favor that over return value and exports. After that,
                 //favor a non-undefined return value over exports use.
                 if (cjsModule && cjsModule.exports !== undef &&
-                    cjsModule.exports !== defined[name]) {
+                        cjsModule.exports !== defined[name]) {
                     defined[name] = cjsModule.exports;
                 } else if (ret !== undef || !usingExports) {
                     //Use the return value from the function.
@@ -250,8 +319,12 @@ var requirejs, require, define;
         }
     };
 
-    requirejs = require = req = function (deps, callback, relName, forceSync) {
+    requirejs = require = req = function (deps, callback, relName, forceSync, alt) {
         if (typeof deps === "string") {
+            if (handlers[deps]) {
+                //callback in this case is really relName
+                return handlers[deps](callback);
+            }
             //Just return the module wanted. In this scenario, the
             //deps arg is the module name, and second arg (if passed)
             //is just the relName.
@@ -274,13 +347,26 @@ var requirejs, require, define;
         //Support require(['a'])
         callback = callback || function () {};
 
+        //If relName is a function, it is an errback handler,
+        //so remove it.
+        if (typeof relName === 'function') {
+            relName = forceSync;
+            forceSync = alt;
+        }
+
         //Simulate async callback;
         if (forceSync) {
             main(undef, deps, callback, relName);
         } else {
+            //Using a non-zero value because of concern for what old browsers
+            //do, and latest browsers "upgrade" to 4 if lower value is used:
+            //http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-windowtimers-settimeout:
+            //If want a value immediately, use require('id') instead -- something
+            //that works in almond on the global level, but not guaranteed and
+            //unlikely to work in other AMD implementations.
             setTimeout(function () {
                 main(undef, deps, callback, relName);
-            }, 15);
+            }, 4);
         }
 
         return req;
@@ -292,6 +378,9 @@ var requirejs, require, define;
      */
     req.config = function (cfg) {
         config = cfg;
+        if (config.deps) {
+            req(config.deps, config.callback);
+        }
         return req;
     };
 
@@ -306,7 +395,9 @@ var requirejs, require, define;
             deps = [];
         }
 
-        waiting[name] = [name, deps, callback];
+        if (!hasProp(defined, name) && !hasProp(waiting, name)) {
+            waiting[name] = [name, deps, callback];
+        }
     };
 
     define.amd = {
@@ -4774,6 +4865,23 @@ define('jam/Patterns/src/utils',[
         return base.slice(0, base.lastIndexOf("/")+1) + url;
     };
 
+    function findLabel(input) {
+        for (var label=input.parentNode; label && label.nodeType!==11; label=label.parentNode)
+            if (label.tagName==="LABEL")
+                return label;
+
+        var $label;
+
+        if (input.id)
+            $label = $("label[for="+input.id+"]");
+        if ($label && $label.length===0 && input.form)
+            $label = $("label[for="+input.name+"]", input.form);
+        if ($label && $label.length)
+            return $label[0];
+        else
+            return null;
+    }
+
     // Taken from http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
     var escapeRegExp = function(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -4784,7 +4892,8 @@ define('jam/Patterns/src/utils',[
         jquery_plugin: jquery_plugin,
         debounce: debounce,
         escapeRegExp: escapeRegExp,
-        rebaseURL: rebaseURL
+        rebaseURL: rebaseURL,
+        findLabel: findLabel
     };
 
     return utils;
@@ -5263,33 +5372,57 @@ define('jam/Patterns/src/registry',[
     var log = logger.getLogger("registry"),
         jquery_plugin = utils.jquery_plugin;
 
+    var disable_re = /patterns-disable=([^&]+)/g,
+        disabled = {}, match;
+
+    while ((match=disable_re.exec(window.location.search))!==null) {
+        disabled[match[1]] = true;
+        log.info('Pattern disabled via url config:', match[1]);
+    }
+
     var registry = {
         patterns: {},
+        // as long as the registry is not initialized, pattern
+        // registration just registers a pattern. Once init is called,
+        // the DOM is scanned. After that registering a new pattern
+        // results in rescanning the DOM only for this pattern.
+        initialized: false,
         init: function() {
             $(document).ready(function() {
                 log.info('loaded: ' + Object.keys(registry.patterns).sort().join(', '));
                 registry.scan(document.body);
+                registry.initialized = true;
                 log.info('finished initial scan.');
             });
         },
 
-        scan: function(content, do_not_catch_init_exception) {
+        scan: function(content, do_not_catch_init_exception, patterns) {
             var $content = $(content),
                 all = [], allsel,
-                pattern, $match, plog, name;
+                pattern, $match, plog;
+
+            // If no list of patterns was specified, we scan for all
+            // patterns
+            patterns = patterns || Object.keys(registry.patterns);
 
             // selector for all patterns
-            for (name in registry.patterns) {
+            patterns.forEach(function(name) {
+                if (disabled[name]) {
+                    log.debug('Skipping disabled pattern:', name);
+                    return;
+                }
                 pattern = registry.patterns[name];
-                if (pattern.transform)
+                if (pattern.transform) {
                     try {
                         pattern.transform($content);
                     } catch (e) {
                         log.critical("Transform error for pattern" + name, e);
                     }
-                if (pattern.trigger)
+                }
+                if (pattern.trigger) {
                     all.push(pattern.trigger);
-            }
+                }
+            });
             allsel = all.join(",");
 
             // Find all elements that belong to any pattern.
@@ -5359,6 +5492,10 @@ define('jam/Patterns/src/registry',[
             }
 
             log.debug("Registered pattern:", pattern.name, pattern);
+
+            if (registry.initialized) {
+                registry.scan(document.body, false, [pattern.name]);
+            }
             return true;
         }
     };
@@ -5412,6 +5549,10 @@ define('js/patterns/base',[
 ], function($, registry, logger, undefined) {
   
 
+  function getName(name) {
+    return name.replace(/\.(\w)/g, function(match, letter) { return letter.toUpperCase(); });
+  }
+
   function getOptions($el, prefix, options) {
     options = options || {};
 
@@ -5439,6 +5580,7 @@ define('js/patterns/base',[
             var names = name.split('-'),
                 names_options = options;
             $.each(names, function(i, name) {
+              name = getName(name);
               if (names.length > i + 1) {
                 if (!names_options[name]) {
                   names_options[name] = {};
@@ -10789,6 +10931,7 @@ define('js/patterns/modal',[
           e.preventDefault();
           self.positionModal(true);
         });
+      $modal.data('pattern-' + self.name, self);
       return $modal;
     },
     initModal: function() {
@@ -10853,8 +10996,8 @@ define('js/patterns/modal',[
         // if backdrop wrapper is set on body then wrapper should have height
         // of window so we can do scrolling of inner wrapper
         self.$wrapperInner.css({
-          'height': '',
-          'width': self.options.width
+          'height': '100%',
+          'width': '100%'
         });
         if (self.$wrapper.parent().is('body')) {
           self.$wrapper.height($(window.parent).height());
@@ -10864,7 +11007,7 @@ define('js/patterns/modal',[
         self.$modal.css({
           'padding': '0',
           'margin': '0',
-          'width': '',
+          'width': self.options.width,
           'height': self.options.height,
           'position': 'absolute',
           'top': preserve_top ? preserve_top : '0',
@@ -10910,17 +11053,20 @@ define('js/patterns/modal',[
             positionLeft = leftMargin + 'px';
             positionRight = rightMargin + 'px';
           } else {
-            positionLeft = positionRight = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.width()/2 - leftMargin - rightMargin) + 'px';
+            positionLeft = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.outerWidth()/2 - leftMargin) + 'px';
+            positionRight = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.outerWidth()/2 - rightMargin) + 'px';
           }
         }
         self.$modal.css({
           'left': positionLeft,
-          'right': positionRight
+          'right': positionRight,
+          'width': self.$modal.width()
         });
 
         // if modal is bigger then wrapperInner then resize wrapperInner to
-        // mach modal height
+        // match modal height
         if (self.$wrapperInner.height() < self.$modal.height()) {
           self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
         }
@@ -10970,6 +11116,9 @@ define('js/patterns/modal',[
           self.$modal.addClass(self.options.klassActive);
           registry.scan(self.$modal);
           self.positionModal();
+          $('img', self.$modal).load(function() {
+            self.positionModal();
+          });
           $(window.parent).on('resize.modal.patterns', function() {
             self.positionModal();
           });

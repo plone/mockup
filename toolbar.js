@@ -1,6 +1,6 @@
 
 /**
- * almond 0.1.1 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
+ * almond 0.2.5 Copyright (c) 2011-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
@@ -11,12 +11,17 @@
 
 var requirejs, require, define;
 (function (undef) {
-    var defined = {},
+    var main, req, makeMap, handlers,
+        defined = {},
         waiting = {},
         config = {},
         defining = {},
-        aps = [].slice,
-        main, req;
+        hasOwn = Object.prototype.hasOwnProperty,
+        aps = [].slice;
+
+    function hasProp(obj, prop) {
+        return hasOwn.call(obj, prop);
+    }
 
     /**
      * Given a relative module name, like ./something, normalize it to
@@ -27,10 +32,11 @@ var requirejs, require, define;
      * @returns {String} normalized name
      */
     function normalize(name, baseName) {
-        var baseParts = baseName && baseName.split("/"),
+        var nameParts, nameSegment, mapValue, foundMap,
+            foundI, foundStarMap, starI, i, j, part,
+            baseParts = baseName && baseName.split("/"),
             map = config.map,
-            starMap = (map && map['*']) || {},
-            nameParts, nameSegment, mapValue, foundMap, i, j, part;
+            starMap = (map && map['*']) || {};
 
         //Adjust any relative paths.
         if (name && name.charAt(0) === ".") {
@@ -48,7 +54,8 @@ var requirejs, require, define;
                 name = baseParts.concat(name.split("/"));
 
                 //start trimDots
-                for (i = 0; (part = name[i]); i++) {
+                for (i = 0; i < name.length; i += 1) {
+                    part = name[i];
                     if (part === ".") {
                         name.splice(i, 1);
                         i -= 1;
@@ -60,7 +67,7 @@ var requirejs, require, define;
                             //no path mapping for a path starting with '..'.
                             //This can still fail, but catches the most reasonable
                             //uses of ..
-                            return true;
+                            break;
                         } else if (i > 0) {
                             name.splice(i - 1, 2);
                             i -= 2;
@@ -70,6 +77,10 @@ var requirejs, require, define;
                 //end trimDots
 
                 name = name.join("/");
+            } else if (name.indexOf('./') === 0) {
+                // No baseName, so this is ID is resolved relative
+                // to baseUrl, pull off the leading dot.
+                name = name.substring(2);
             }
         }
 
@@ -93,19 +104,34 @@ var requirejs, require, define;
                             if (mapValue) {
                                 //Match, update name to the new value.
                                 foundMap = mapValue;
+                                foundI = i;
                                 break;
                             }
                         }
                     }
                 }
 
-                foundMap = foundMap || starMap[nameSegment];
-
                 if (foundMap) {
-                    nameParts.splice(0, i, foundMap);
-                    name = nameParts.join('/');
                     break;
                 }
+
+                //Check for a star map match, but just hold on to it,
+                //if there is a shorter segment match later in a matching
+                //config, then favor over this star map.
+                if (!foundStarMap && starMap && starMap[nameSegment]) {
+                    foundStarMap = starMap[nameSegment];
+                    starI = i;
+                }
+            }
+
+            if (!foundMap && foundStarMap) {
+                foundMap = foundStarMap;
+                foundI = starI;
+            }
+
+            if (foundMap) {
+                nameParts.splice(0, foundI, foundMap);
+                name = nameParts.join('/');
             }
         }
 
@@ -134,17 +160,30 @@ var requirejs, require, define;
     }
 
     function callDep(name) {
-        if (waiting.hasOwnProperty(name)) {
+        if (hasProp(waiting, name)) {
             var args = waiting[name];
             delete waiting[name];
             defining[name] = true;
             main.apply(undef, args);
         }
 
-        if (!defined.hasOwnProperty(name)) {
+        if (!hasProp(defined, name) && !hasProp(defining, name)) {
             throw new Error('No ' + name);
         }
         return defined[name];
+    }
+
+    //Turns a plugin!resource to [plugin, resource]
+    //with the plugin being undefined if the name
+    //did not have a plugin prefix.
+    function splitPrefix(name) {
+        var prefix,
+            index = name ? name.indexOf('!') : -1;
+        if (index > -1) {
+            prefix = name.substring(0, index);
+            name = name.substring(index + 1, name.length);
+        }
+        return [prefix, name];
     }
 
     /**
@@ -152,16 +191,20 @@ var requirejs, require, define;
      * for normalization if necessary. Grabs a ref to plugin
      * too, as an optimization.
      */
-    function makeMap(name, relName) {
-        var prefix, plugin,
-            index = name.indexOf('!');
+    makeMap = function (name, relName) {
+        var plugin,
+            parts = splitPrefix(name),
+            prefix = parts[0];
 
-        if (index !== -1) {
-            prefix = normalize(name.slice(0, index), relName);
-            name = name.slice(index + 1);
+        name = parts[1];
+
+        if (prefix) {
+            prefix = normalize(prefix, relName);
             plugin = callDep(prefix);
+        }
 
-            //Normalize according
+        //Normalize according
+        if (prefix) {
             if (plugin && plugin.normalize) {
                 name = plugin.normalize(name, makeNormalize(relName));
             } else {
@@ -169,15 +212,22 @@ var requirejs, require, define;
             }
         } else {
             name = normalize(name, relName);
+            parts = splitPrefix(name);
+            prefix = parts[0];
+            name = parts[1];
+            if (prefix) {
+                plugin = callDep(prefix);
+            }
         }
 
         //Using ridiculous property names for space reasons
         return {
             f: prefix ? prefix + '!' + name : name, //fullName
             n: name,
+            pr: prefix,
             p: plugin
         };
-    }
+    };
 
     function makeConfig(name) {
         return function () {
@@ -185,10 +235,32 @@ var requirejs, require, define;
         };
     }
 
+    handlers = {
+        require: function (name) {
+            return makeRequire(name);
+        },
+        exports: function (name) {
+            var e = defined[name];
+            if (typeof e !== 'undefined') {
+                return e;
+            } else {
+                return (defined[name] = {});
+            }
+        },
+        module: function (name) {
+            return {
+                id: name,
+                uri: '',
+                exports: defined[name],
+                config: makeConfig(name)
+            };
+        }
+    };
+
     main = function (name, deps, callback, relName) {
-        var args = [],
-            usingExports,
-            cjsModule, depName, ret, map, i;
+        var cjsModule, depName, ret, map, i,
+            args = [],
+            usingExports;
 
         //Use name if no relName
         relName = relName || name;
@@ -200,31 +272,28 @@ var requirejs, require, define;
             //values to the callback.
             //Default to [require, exports, module] if no deps
             deps = !deps.length && callback.length ? ['require', 'exports', 'module'] : deps;
-            for (i = 0; i < deps.length; i++) {
+            for (i = 0; i < deps.length; i += 1) {
                 map = makeMap(deps[i], relName);
                 depName = map.f;
 
                 //Fast path CommonJS standard dependencies.
                 if (depName === "require") {
-                    args[i] = makeRequire(name);
+                    args[i] = handlers.require(name);
                 } else if (depName === "exports") {
                     //CommonJS module spec 1.1
-                    args[i] = defined[name] = {};
+                    args[i] = handlers.exports(name);
                     usingExports = true;
                 } else if (depName === "module") {
                     //CommonJS module spec 1.1
-                    cjsModule = args[i] = {
-                        id: name,
-                        uri: '',
-                        exports: defined[name],
-                        config: makeConfig(name)
-                    };
-                } else if (defined.hasOwnProperty(depName) || waiting.hasOwnProperty(depName)) {
+                    cjsModule = args[i] = handlers.module(name);
+                } else if (hasProp(defined, depName) ||
+                           hasProp(waiting, depName) ||
+                           hasProp(defining, depName)) {
                     args[i] = callDep(depName);
                 } else if (map.p) {
                     map.p.load(map.n, makeRequire(relName, true), makeLoad(depName), {});
                     args[i] = defined[depName];
-                } else if (!defining[depName]) {
+                } else {
                     throw new Error(name + ' missing ' + depName);
                 }
             }
@@ -236,7 +305,7 @@ var requirejs, require, define;
                 //favor that over return value and exports. After that,
                 //favor a non-undefined return value over exports use.
                 if (cjsModule && cjsModule.exports !== undef &&
-                    cjsModule.exports !== defined[name]) {
+                        cjsModule.exports !== defined[name]) {
                     defined[name] = cjsModule.exports;
                 } else if (ret !== undef || !usingExports) {
                     //Use the return value from the function.
@@ -250,8 +319,12 @@ var requirejs, require, define;
         }
     };
 
-    requirejs = require = req = function (deps, callback, relName, forceSync) {
+    requirejs = require = req = function (deps, callback, relName, forceSync, alt) {
         if (typeof deps === "string") {
+            if (handlers[deps]) {
+                //callback in this case is really relName
+                return handlers[deps](callback);
+            }
             //Just return the module wanted. In this scenario, the
             //deps arg is the module name, and second arg (if passed)
             //is just the relName.
@@ -274,13 +347,26 @@ var requirejs, require, define;
         //Support require(['a'])
         callback = callback || function () {};
 
+        //If relName is a function, it is an errback handler,
+        //so remove it.
+        if (typeof relName === 'function') {
+            relName = forceSync;
+            forceSync = alt;
+        }
+
         //Simulate async callback;
         if (forceSync) {
             main(undef, deps, callback, relName);
         } else {
+            //Using a non-zero value because of concern for what old browsers
+            //do, and latest browsers "upgrade" to 4 if lower value is used:
+            //http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-windowtimers-settimeout:
+            //If want a value immediately, use require('id') instead -- something
+            //that works in almond on the global level, but not guaranteed and
+            //unlikely to work in other AMD implementations.
             setTimeout(function () {
                 main(undef, deps, callback, relName);
-            }, 15);
+            }, 4);
         }
 
         return req;
@@ -292,6 +378,9 @@ var requirejs, require, define;
      */
     req.config = function (cfg) {
         config = cfg;
+        if (config.deps) {
+            req(config.deps, config.callback);
+        }
         return req;
     };
 
@@ -306,7 +395,9 @@ var requirejs, require, define;
             deps = [];
         }
 
-        waiting[name] = [name, deps, callback];
+        if (!hasProp(defined, name) && !hasProp(waiting, name)) {
+            waiting[name] = [name, deps, callback];
+        }
     };
 
     define.amd = {
@@ -4774,6 +4865,23 @@ define('jam/Patterns/src/utils',[
         return base.slice(0, base.lastIndexOf("/")+1) + url;
     };
 
+    function findLabel(input) {
+        for (var label=input.parentNode; label && label.nodeType!==11; label=label.parentNode)
+            if (label.tagName==="LABEL")
+                return label;
+
+        var $label;
+
+        if (input.id)
+            $label = $("label[for="+input.id+"]");
+        if ($label && $label.length===0 && input.form)
+            $label = $("label[for="+input.name+"]", input.form);
+        if ($label && $label.length)
+            return $label[0];
+        else
+            return null;
+    }
+
     // Taken from http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
     var escapeRegExp = function(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -4784,7 +4892,8 @@ define('jam/Patterns/src/utils',[
         jquery_plugin: jquery_plugin,
         debounce: debounce,
         escapeRegExp: escapeRegExp,
-        rebaseURL: rebaseURL
+        rebaseURL: rebaseURL,
+        findLabel: findLabel
     };
 
     return utils;
@@ -5263,33 +5372,57 @@ define('jam/Patterns/src/registry',[
     var log = logger.getLogger("registry"),
         jquery_plugin = utils.jquery_plugin;
 
+    var disable_re = /patterns-disable=([^&]+)/g,
+        disabled = {}, match;
+
+    while ((match=disable_re.exec(window.location.search))!==null) {
+        disabled[match[1]] = true;
+        log.info('Pattern disabled via url config:', match[1]);
+    }
+
     var registry = {
         patterns: {},
+        // as long as the registry is not initialized, pattern
+        // registration just registers a pattern. Once init is called,
+        // the DOM is scanned. After that registering a new pattern
+        // results in rescanning the DOM only for this pattern.
+        initialized: false,
         init: function() {
             $(document).ready(function() {
                 log.info('loaded: ' + Object.keys(registry.patterns).sort().join(', '));
                 registry.scan(document.body);
+                registry.initialized = true;
                 log.info('finished initial scan.');
             });
         },
 
-        scan: function(content, do_not_catch_init_exception) {
+        scan: function(content, do_not_catch_init_exception, patterns) {
             var $content = $(content),
                 all = [], allsel,
-                pattern, $match, plog, name;
+                pattern, $match, plog;
+
+            // If no list of patterns was specified, we scan for all
+            // patterns
+            patterns = patterns || Object.keys(registry.patterns);
 
             // selector for all patterns
-            for (name in registry.patterns) {
+            patterns.forEach(function(name) {
+                if (disabled[name]) {
+                    log.debug('Skipping disabled pattern:', name);
+                    return;
+                }
                 pattern = registry.patterns[name];
-                if (pattern.transform)
+                if (pattern.transform) {
                     try {
                         pattern.transform($content);
                     } catch (e) {
                         log.critical("Transform error for pattern" + name, e);
                     }
-                if (pattern.trigger)
+                }
+                if (pattern.trigger) {
                     all.push(pattern.trigger);
-            }
+                }
+            });
             allsel = all.join(",");
 
             // Find all elements that belong to any pattern.
@@ -5359,6 +5492,10 @@ define('jam/Patterns/src/registry',[
             }
 
             log.debug("Registered pattern:", pattern.name, pattern);
+
+            if (registry.initialized) {
+                registry.scan(document.body, false, [pattern.name]);
+            }
             return true;
         }
     };
@@ -5566,6 +5703,10 @@ define('js/patterns/base',[
 ], function($, registry, logger, undefined) {
   
 
+  function getName(name) {
+    return name.replace(/\.(\w)/g, function(match, letter) { return letter.toUpperCase(); });
+  }
+
   function getOptions($el, prefix, options) {
     options = options || {};
 
@@ -5593,6 +5734,7 @@ define('js/patterns/base',[
             var names = name.split('-'),
                 names_options = options;
             $.each(names, function(i, name) {
+              name = getName(name);
               if (names.length > i + 1) {
                 if (!names_options[name]) {
                   names_options[name] = {};
@@ -5793,6 +5935,608 @@ define('js/patterns/backdrop',[
   });
 
   return Backdrop;
+
+});
+
+// modal pattern.
+//
+// Author: Rok Garbas
+// Contact: rok@garbas.si
+// Version: 1.0
+// Depends: jquery.js patterns.js pickadate.js
+//
+// Description:
+//
+// License:
+//
+// Copyright (C) 2010 Plone Foundation
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 2 of the License.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+// more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program; if not, write to the Free Software Foundation, Inc., 51
+// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
+/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
+  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
+  undef:true, strict:true, trailing:true, browser:true, evil:true */
+/*global define:false */
+define('js/patterns/modal.js',[
+  'jquery',
+  'js/patterns/base',
+  'js/patterns/backdrop',
+  'jam/Patterns/src/registry'
+], function($, Base, Backdrop, registry, undefined) {
+  
+
+  var Modal = Base.extend({
+    name: "modal",
+    jqueryPlugin: "modal",
+    defaults: {
+      triggers: '',
+      position: "center middle",
+      width: "",
+      height: "",
+      margin: "20px",
+      klass: "modal",
+      klassWrapper: "modal-wrapper",
+      klassWrapperInner: "modal-wrapper-inner",
+      klassLoading: "modal-loading",
+      klassActive: "active",
+      backdrop: "body",
+      backdropZIndex: "1000",
+      backdropOpacity: "0.8",
+      backdropKlass: "backdrop",
+      backdropKlassActive: "backdrop-active",
+      backdropCloseOnEsc: true,
+      backdropCloseOnClick: true
+    },
+    init: function() {
+      var self = this;
+
+
+      self.backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
+        zindex: self.options.backdropZIndex,
+        klass: self.options.backdropKlass,
+        klassActive: self.options.backdropKlassActive,
+        styles: self.options.backdropStyles,
+        opacity: self.options.backdropOpacity,
+        closeOnEsc: self.options.backdropCloseOnEsc,
+        closeOnClick: self.options.backdropCloseOnClick
+      });
+      self.backdrop.on('hidden', function(e) {
+        self.hide();
+      });
+
+      self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
+      if (self.$wrapper.size() === 0) {
+        self.$wrapper = $('<div/>')
+          .hide()
+          .css({
+            'z-index': parseInt(self.options.backdropZIndex, 10) + 1,
+            'overflow-y': 'auto',
+            'position': 'fixed',
+            'height': '100%',
+            'width': '100%',
+            'bottom': '0',
+            'left': '0',
+            'right': '0',
+            'top': '0'
+          })
+          .addClass(self.options.klassWrapper)
+          .insertBefore(self.backdrop.$backdrop)
+          .on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            self.backdrop.hide();
+          });
+      }
+
+      self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
+      if (self.$wrapperInner.size() === 0) {
+        self.$wrapperInner = $('<div/>')
+          .addClass(self.options.klassWrapperInner)
+          .css({
+            'position': 'absolute',
+            'bottom': '0',
+            'left': '0',
+            'right': '0',
+            'top': '0'
+          })
+          .appendTo(self.$wrapper);
+      }
+
+      self.$loading = $('> .' + self.options.klassLoading, self.$wrapperInner);
+      if (self.$loading.size() === 0) {
+        self.$loading = $('<div/>').hide()
+          .addClass(self.options.klassLoading)
+          .appendTo(self.$wrapperInner);
+      }
+      $(window.parent).resize(function() {
+        self.positionModal();
+      });
+
+      if (self.options.triggers) {
+        $.each(self.options.triggers, function(i, item) {
+          item = item.split(' ');
+          $(item[1] || self.$el).on(item[0], function() {
+            self.show();
+          });
+        });
+      }
+
+      if (self.$el.is('a')) {
+        if (self.$el.attr('href')) {
+          if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
+            self.options.target = self.$el.attr('href');
+          }
+          if (!self.options.ajaxUrl && self.$el.attr('href').substr(0, 1) !== '#') {
+            self.options.ajaxUrl = self.$el.attr('href');
+          }
+        }
+        self.$el.on('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          self.show();
+        });
+      }
+
+      self.initModal();
+      self.$wrapper.on('hidden', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        self.hide();
+      });
+    },
+    initModalElement: function($modal) {
+      var self = this;
+      $modal
+        .addClass(self.options.klass)
+        .on('click', function(e) {
+          e.stopPropagation();
+          if ($.nodeName(e.target, 'a')) {
+            e.preventDefault();
+            // TODO: open links inside modal
+          }
+        })
+        .on('destroy.modal.patterns', function(e) {
+          e.stopPropagation();
+          self.hide();
+        })
+        .on('resize.modal.patterns', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          self.positionModal(true);
+        });
+      $modal.data('pattern-' + self.name, self);
+      return $modal;
+    },
+    initModal: function() {
+      var self = this;
+      if (self.options.ajaxUrl) {
+        self.$modal = function() {
+          self.trigger('before-ajax');
+          self.$wrapper.parent().css('overflow', 'hidden');
+          self.$wrapper.show();
+          self.backdrop.show();
+          self.$loading.show();
+          self.positionLoading();
+          self.ajaxXHR = $.ajax({
+              url: self.options.ajaxUrl,
+              type: self.options.ajaxType
+          }).done(function(response, textStatus, xhr) {
+            self.ajaxXHR = undefined;
+            self.$loading.hide();
+            self.$modal = self.initModalElement(
+              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                .replace('<body', '<div').replace('</body>', '</div>'))[0]))
+              .appendTo(self.$wrapperInner);
+            self.trigger('after-ajax', self, textStatus, xhr);
+            self.show();
+          });
+        };
+      } else if (self.options.target) {
+        self.$modal = function() {
+          self.$modal = self.initModalElement($('<div/>'))
+              .html($(self.options.target).clone())
+              .appendTo(self.$wrapperInner);
+          self.show();
+        };
+      } else {
+        self.$modal = self.initModalElement($('<div/>'))
+              .html(self.$el.clone())
+              .appendTo(self.$wrapperInner);
+      }
+
+    },
+    positionLoading: function() {
+      var self = this;
+      self.$loading.css({
+        'margin-left': self.$wrapper.width()/2 - self.$loading.width()/2,
+        'margin-top': self.$wrapper.height()/2 - self.$loading.height()/2,
+        'position': 'absolute',
+        'bottom': '0',
+        'left': '0',
+        'right': '0',
+        'top': '0'
+      });
+    },
+    positionModal: function(preserve_top) {
+      var self = this;
+      if (typeof self.$modal !== 'function') {
+
+        if (preserve_top) {
+          preserve_top = self.$modal.css('top');
+        }
+
+        self.$modal.removeAttr('style');
+        // if backdrop wrapper is set on body then wrapper should have height
+        // of window so we can do scrolling of inner wrapper
+        self.$wrapperInner.css({
+          'height': '100%',
+          'width': '100%'
+        });
+        if (self.$wrapper.parent().is('body')) {
+          self.$wrapper.height($(window.parent).height());
+        }
+
+        // place modal at top left with desired width/height and margin
+        self.$modal.css({
+          'padding': '0',
+          'margin': '0',
+          'width': self.options.width,
+          'height': self.options.height,
+          'position': 'absolute',
+          'top': preserve_top ? preserve_top : '0',
+          'left': '0'
+        });
+
+        self.$modal.css({'margin': '0'});
+        var modalOffsetBefore = self.$modal.offset();
+        self.$modal.css({ 'margin': self.options.margin });
+        var modalOffset = self.$modal.offset(),
+            modalOuterWidth = self.$modal.outerWidth(true),
+            modalInnerWidth = self.$modal.innerWidth(),
+            modalOuterHeight = self.$modal.outerHeight(true),
+            modalInnerHeight = self.$modal.innerHeight();
+        self.$modal.css({ 'margin': '0' });
+
+        var topMargin = modalOffset.top - modalOffsetBefore.top,
+            bottomMargin = modalOuterHeight - modalInnerHeight - topMargin,
+            leftMargin = modalOffset.left - modalOffsetBefore.left,
+            rightMargin = modalOuterWidth - modalInnerWidth - leftMargin;
+
+        // place modal in right position
+        var positionHorizontal = self.options.position.split(' ')[0],
+            positionVertical = self.options.position.split(' ')[1],
+            positionTop, positionBottom, positionLeft, positionRight;
+
+        if (positionHorizontal === 'left') {
+          positionLeft = leftMargin + 'px';
+          if (self.$wrapperInner.width() < self.$modal.width()) {
+            positionRight = rightMargin + 'px';
+          } else {
+            positionRight = 'auto';
+          }
+        } else if (positionHorizontal === 'bottom') {
+          positionRight = leftMargin + 'px';
+          if (self.$wrapperInner.width() < self.$modal.width()) {
+            positionLeft = leftMargin + 'px';
+          } else {
+            positionLeft = 'auto';
+          }
+        } else {
+          if (self.$wrapperInner.width() < self.$modal.width() + leftMargin + rightMargin) {
+            positionLeft = leftMargin + 'px';
+            positionRight = rightMargin + 'px';
+          } else {
+            positionLeft = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.outerWidth()/2 - leftMargin) + 'px';
+            positionRight = (self.$wrapperInner.innerWidth()/2 -
+                self.$modal.outerWidth()/2 - rightMargin) + 'px';
+          }
+        }
+        self.$modal.css({
+          'left': positionLeft,
+          'right': positionRight,
+          'width': self.$modal.width()
+        });
+
+        // if modal is bigger then wrapperInner then resize wrapperInner to
+        // match modal height
+        if (self.$wrapperInner.height() < self.$modal.height()) {
+          self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
+        }
+
+        if (preserve_top || positionVertical === 'top') {
+          positionTop = topMargin + 'px';
+          if (self.$wrapperInner.height() < self.$modal.height()) {
+            positionBottom = bottomMargin + 'px';
+          } else {
+            positionBottom = 'auto';
+          }
+        } else if (positionVertical === 'bottom') {
+          positionBottom = bottomMargin + 'px';
+          if (self.$wrapperInner.height() < self.$modal.height()) {
+            positionTop = topMargin + 'px';
+          } else {
+            positionTop= 'auto';
+          }
+        } else {
+          if (self.$wrapperInner.height() < self.$modal.height()) {
+            positionTop = topMargin + 'px';
+            positionBottom = bottomMargin + 'px';
+          } else {
+            positionTop = positionBottom = (self.$wrapperInner.height()/2 -
+                self.$modal.height()/2) + 'px';
+          }
+        }
+        self.$modal.css({
+          'top': positionTop,
+          'bottom': positionBottom
+        });
+
+      }
+    },
+    show: function() {
+      var self = this;
+      if (!self.$el.hasClass(self.options.klassActive)) {
+        if (typeof self.$modal === 'function') {
+          self._$modal = self.$modal;
+          self.$modal();
+        } else {
+          self.trigger('show');
+          self.backdrop.show();
+          self.$wrapper.show();
+          self.$wrapper.parent().css('overflow', 'hidden');
+          self.$el.addClass(self.options.klassActive);
+          self.$modal.addClass(self.options.klassActive);
+          registry.scan(self.$modal);
+          self.positionModal();
+          $('img', self.$modal).load(function() {
+            self.positionModal();
+          });
+          $(window.parent).on('resize.modal.patterns', function() {
+            self.positionModal();
+          });
+          self.trigger('shown');
+        }
+      }
+    },
+    hide: function() {
+      var self = this;
+      if (self.ajaxXHR) {
+        self.ajaxXHR.abort();
+      }
+      if (self.$el.hasClass(self.options.klassActive)) {
+        self.trigger('hide');
+        self.backdrop.hide();
+        self.$wrapper.hide();
+        self.$wrapper.parent().css('overflow', 'visible');
+        self.$el.removeClass(self.options.klassActive);
+        if (self.$modal.remove) {
+          self.$modal.remove();
+          self.initModal();
+        }
+        $(window.parent).off('resize.modal.patterns');
+        self.trigger('hidden');
+      }
+    }
+  });
+
+  return Modal;
+
+});
+
+define('js/patterns/modalform.js',[
+  'jquery',
+  'js/patterns/backdrop',
+  'js/patterns/modal.js'
+], function($, Backdrop) {
+
+  // modal template for plone
+  function createTemplate($modal, options) {
+    var $content = $modal.html();
+
+    options = $.extend({
+      title: 'h1.documentFirstHeading',
+      buttons: '.formControls > input[type="submit"]',
+      content: '#content'
+    }, options || {});
+
+    $modal
+      .html('<div class="modal-header">' +
+            '  <a class="close">&times;</a>' +
+            '  <h3></h3>' +
+            '</div>' +
+            '<div class="modal-body"></div>' +
+            '<div class="modal-footer"></div>');
+
+
+    $('.modal-header > h3', $modal).html($(options.title, $content).html());
+    $('.modal-body', $modal).html($(options.content, $content).html());
+    $(options.title, $modal).remove();
+    $('.modal-header > a.close', $modal)
+      .off('click')
+      .on('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $(e.target).trigger('destroy.modal.patterns');
+      });
+
+    // cleanup html
+    $('.row', $modal).removeClass('row');
+
+    $(options.buttons, $modal).each(function() {
+      var $button = $(this);
+      $button
+        .on('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+        })
+        .clone()
+        .appendTo($('.modal-footer', $modal))
+        .off('click').on('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          $button.trigger('click');
+        });
+      $button.hide();
+    });
+
+  }
+
+  function createAjaxForm(modal, modalInit, modalOptions, options) {
+    options = $.extend({
+      buttons: {},
+      timeout: 5000,
+      formError: '.portalMessage.error'
+    }, options);
+
+    $.each(options.buttons, function(buttons, buttonsOptions) {
+      buttonsOptions = $.extend({}, options, buttonsOptions);
+      $(buttons, modal.$modal).each(function(button) {
+        var $button = $(this);
+
+        // pass button that was clicked when submiting form
+        var extraData = {};
+        extraData[$button.attr('name')] = $button.attr('value');
+
+        $button.on('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          // loading "spinner"
+          var backdrop = modal.$modal.data('patterns-backdrop');
+          if (!backdrop) {
+            backdrop = new Backdrop(modal.$modal, {
+              closeOnEsc: false,
+              closeOnClick: false
+            });
+            backdrop.$backdrop
+              .html('')
+              .append($('' +
+                  '<div class="progress progress-striped active">' +
+                  '  <div class="bar" style="width: 100%;"></div>' +
+                  '</div>')
+                .css({
+                  position: 'absolute',
+                  left: modal.$modal.width() * 0.1,
+                  top: modal.$modal.height()/2 + 10,
+                  width: modal.$modal.width() * 0.8
+                }));
+            modal.$modal.data('patterns-backdrop', backdrop);
+          } else {
+            modal.$modal.append(backdrop.$backdrop);
+          }
+          backdrop.show();
+
+          if ($.nodeName($button[0], 'input')) {
+            $button.parents('form').ajaxSubmit({
+              timeout: buttonsOptions.timeout,
+              dataType: 'html',
+              data: extraData,
+              url: $button.parents('form').attr('action'),
+              error: function(xhr, textStatus, errorStatus) {
+                if (textStatus === 'timeout' && buttonsOptions.onTimeout) {
+                  buttonsOptions.onTimeout(modal, xhr, errorStatus);
+
+                // on "error", "abort", and "parsererror"
+                } else if (buttonsOptions.onError) {
+                  buttonsOptions.onError(xhr, textStatus, errorStatus);
+                } else {
+                  console.log('error happened do something');
+                }
+              },
+              success: function(response, state, xhr, form) {
+                var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                        .replace('<body', '<div').replace('</body>', '</div>'));
+
+                // if error is found
+                if ($(buttonsOptions.formError, responseBody).size() !== 0) {
+                  if (buttonsOptions.onFormError) {
+                    buttonsOptions.onFormError(modal, responseBody, state, xhr, form);
+                  } else {
+                    modal.$modal.html(responseBody.html());
+                    modalInit(modal, modalInit, modalOptions);
+                    modal.positionModal();
+                    registry.scan(modal.$modal);
+                  }
+
+                // custom success function
+                } else if (buttonsOptions.onSuccess) {
+                  buttonsOptions.onSuccess(modal, responseBody, state, xhr, form);
+
+                } else {
+                  $button.trigger('destroy.modal.patterns');
+                }
+              }
+            });
+          } else if ($.nodeName($button[0], 'a')) {
+            $.ajax({
+              url: $button.attr('href'),
+              error: function(xhr, textStatus, errorStatus) {
+                if (textStatus === 'timeout' && buttonsOptions.onTimeout) {
+                  buttonsOptions.onTimeout(modal, xhr, errorStatus);
+
+                // on "error", "abort", and "parsererror"
+                } else if (buttonsOptions.onError) {
+                  buttonsOptions.onError(xhr, textStatus, errorStatus);
+                } else {
+                  console.log('error happened do something');
+                }
+              },
+              success: function(response, state, xhr) {
+                var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                        .replace('<body', '<div').replace('</body>', '</div>'));
+
+                // if error is found
+                if ($(buttonsOptions.formError, responseBody).size() !== 0) {
+                  if (buttonsOptions.onFormError) {
+                    buttonsOptions.onFormError(modal, responseBody, state, xhr);
+                  } else {
+                    modal.$modal.html(responseBody.html());
+                    modalInit(modal, modalInit, modalOptions);
+                    modal.positionModal();
+                    registry.scan(modal.$modal);
+                  }
+
+                // custom success function
+                } else if (buttonsOptions.onSuccess) {
+                  buttonsOptions.onSuccess(modal, responseBody, state, xhr);
+
+                } else {
+                  $button.trigger('destroy.modal.patterns');
+                }
+              }
+            });
+          }
+
+        });
+      });
+    });
+  }
+
+  function init(selector, callback, modalOptions) {
+    $(selector).addClass('modal-trigger').modal(modalOptions);
+    $(document).on('show.modal.patterns', selector + '.modal-trigger', function(e, modal) {
+      callback(modal, callback);
+    });
+  }
+
+  return {
+    template: createTemplate,
+    form: createAjaxForm,
+    init: init
+  };
 
 });
 
@@ -7051,397 +7795,6 @@ define('js/patterns/toggle',[
   });
 
   return Toggle;
-
-});
-
-// modal pattern.
-//
-// Author: Rok Garbas
-// Contact: rok@garbas.si
-// Version: 1.0
-// Depends: jquery.js patterns.js pickadate.js
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
-
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-define('js/patterns/modal.js',[
-  'jquery',
-  'js/patterns/base',
-  'js/patterns/backdrop',
-  'jam/Patterns/src/registry'
-], function($, Base, Backdrop, registry, undefined) {
-  
-
-  var Modal = Base.extend({
-    name: "modal",
-    jqueryPlugin: "modal",
-    defaults: {
-      triggers: '',
-      position: "center middle",
-      width: "",
-      height: "",
-      margin: "20px",
-      klass: "modal",
-      klassWrapper: "modal-wrapper",
-      klassWrapperInner: "modal-wrapper-inner",
-      klassLoading: "modal-loading",
-      klassActive: "active",
-      backdrop: "body",
-      backdropZIndex: "1000",
-      backdropOpacity: "0.8",
-      backdropKlass: "backdrop",
-      backdropKlassActive: "backdrop-active",
-      backdropCloseOnEsc: true,
-      backdropCloseOnClick: true
-    },
-    init: function() {
-      var self = this;
-
-
-      self.backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
-        zindex: self.options.backdropZIndex,
-        klass: self.options.backdropKlass,
-        klassActive: self.options.backdropKlassActive,
-        styles: self.options.backdropStyles,
-        opacity: self.options.backdropOpacity,
-        closeOnEsc: self.options.backdropCloseOnEsc,
-        closeOnClick: self.options.backdropCloseOnClick
-      });
-      self.backdrop.on('hidden', function(e) {
-        self.hide();
-      });
-
-      self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
-      if (self.$wrapper.size() === 0) {
-        self.$wrapper = $('<div/>')
-          .hide()
-          .css({
-            'z-index': parseInt(self.options.backdropZIndex, 10) + 1,
-            'overflow-y': 'auto',
-            'position': 'fixed',
-            'height': '100%',
-            'width': '100%',
-            'bottom': '0',
-            'left': '0',
-            'right': '0',
-            'top': '0'
-          })
-          .addClass(self.options.klassWrapper)
-          .insertBefore(self.backdrop.$backdrop)
-          .on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            self.backdrop.hide();
-          });
-      }
-
-      self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
-      if (self.$wrapperInner.size() === 0) {
-        self.$wrapperInner = $('<div/>')
-          .addClass(self.options.klassWrapperInner)
-          .css({
-            'position': 'absolute',
-            'bottom': '0',
-            'left': '0',
-            'right': '0',
-            'top': '0'
-          })
-          .appendTo(self.$wrapper);
-      }
-
-      self.$loading = $('> .' + self.options.klassLoading, self.$wrapperInner);
-      if (self.$loading.size() === 0) {
-        self.$loading = $('<div/>').hide()
-          .addClass(self.options.klassLoading)
-          .appendTo(self.$wrapperInner);
-      }
-      $(window.parent).resize(function() {
-        self.positionModal();
-      });
-
-      if (self.options.triggers) {
-        $.each(self.options.triggers, function(i, item) {
-          item = item.split(' ');
-          $(item[1] || self.$el).on(item[0], function() {
-            self.show();
-          });
-        });
-      }
-
-      if (self.$el.is('a')) {
-        if (self.$el.attr('href')) {
-          if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
-            self.options.target = self.$el.attr('href');
-          }
-          if (!self.options.ajaxUrl && self.$el.attr('href').substr(0, 1) !== '#') {
-            self.options.ajaxUrl = self.$el.attr('href');
-          }
-        }
-        self.$el.on('click', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          self.show();
-        });
-      }
-
-      self.initModal();
-      self.$wrapper.on('hidden', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        self.hide();
-      });
-    },
-    initModalElement: function($modal) {
-      var self = this;
-      $modal
-        .addClass(self.options.klass)
-        .on('click', function(e) {
-          e.stopPropagation();
-          if ($.nodeName(e.target, 'a')) {
-            e.preventDefault();
-            // TODO: open links inside modal
-          }
-        })
-        .on('destroy.modal.patterns', function(e) {
-          e.stopPropagation();
-          self.hide();
-        })
-        .on('resize.modal.patterns', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          self.positionModal(true);
-        });
-      return $modal;
-    },
-    initModal: function() {
-      var self = this;
-      if (self.options.ajaxUrl) {
-        self.$modal = function() {
-          self.trigger('before-ajax');
-          self.$wrapper.parent().css('overflow', 'hidden');
-          self.$wrapper.show();
-          self.backdrop.show();
-          self.$loading.show();
-          self.positionLoading();
-          self.ajaxXHR = $.ajax({
-              url: self.options.ajaxUrl,
-              type: self.options.ajaxType
-          }).done(function(response, textStatus, xhr) {
-            self.ajaxXHR = undefined;
-            self.$loading.hide();
-            self.$modal = self.initModalElement(
-              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                .replace('<body', '<div').replace('</body>', '</div>'))[0]))
-              .appendTo(self.$wrapperInner);
-            self.trigger('after-ajax', self, textStatus, xhr);
-            self.show();
-          });
-        };
-      } else if (self.options.target) {
-        self.$modal = function() {
-          self.$modal = self.initModalElement($('<div/>'))
-              .html($(self.options.target).clone())
-              .appendTo(self.$wrapperInner);
-          self.show();
-        };
-      } else {
-        self.$modal = self.initModalElement($('<div/>'))
-              .html(self.$el.clone())
-              .appendTo(self.$wrapperInner);
-      }
-
-    },
-    positionLoading: function() {
-      var self = this;
-      self.$loading.css({
-        'margin-left': self.$wrapper.width()/2 - self.$loading.width()/2,
-        'margin-top': self.$wrapper.height()/2 - self.$loading.height()/2,
-        'position': 'absolute',
-        'bottom': '0',
-        'left': '0',
-        'right': '0',
-        'top': '0'
-      });
-    },
-    positionModal: function(preserve_top) {
-      var self = this;
-      if (typeof self.$modal !== 'function') {
-
-        if (preserve_top) {
-          preserve_top = self.$modal.css('top');
-        }
-
-        self.$modal.removeAttr('style');
-        // if backdrop wrapper is set on body then wrapper should have height
-        // of window so we can do scrolling of inner wrapper
-        self.$wrapperInner.css({
-          'height': '',
-          'width': self.options.width
-        });
-        if (self.$wrapper.parent().is('body')) {
-          self.$wrapper.height($(window.parent).height());
-        }
-
-        // place modal at top left with desired width/height and margin
-        self.$modal.css({
-          'padding': '0',
-          'margin': '0',
-          'width': '',
-          'height': self.options.height,
-          'position': 'absolute',
-          'top': preserve_top ? preserve_top : '0',
-          'left': '0'
-        });
-
-        self.$modal.css({'margin': '0'});
-        var modalOffsetBefore = self.$modal.offset();
-        self.$modal.css({ 'margin': self.options.margin });
-        var modalOffset = self.$modal.offset(),
-            modalOuterWidth = self.$modal.outerWidth(true),
-            modalInnerWidth = self.$modal.innerWidth(),
-            modalOuterHeight = self.$modal.outerHeight(true),
-            modalInnerHeight = self.$modal.innerHeight();
-        self.$modal.css({ 'margin': '0' });
-
-        var topMargin = modalOffset.top - modalOffsetBefore.top,
-            bottomMargin = modalOuterHeight - modalInnerHeight - topMargin,
-            leftMargin = modalOffset.left - modalOffsetBefore.left,
-            rightMargin = modalOuterWidth - modalInnerWidth - leftMargin;
-
-        // place modal in right position
-        var positionHorizontal = self.options.position.split(' ')[0],
-            positionVertical = self.options.position.split(' ')[1],
-            positionTop, positionBottom, positionLeft, positionRight;
-
-        if (positionHorizontal === 'left') {
-          positionLeft = leftMargin + 'px';
-          if (self.$wrapperInner.width() < self.$modal.width()) {
-            positionRight = rightMargin + 'px';
-          } else {
-            positionRight = 'auto';
-          }
-        } else if (positionHorizontal === 'bottom') {
-          positionRight = leftMargin + 'px';
-          if (self.$wrapperInner.width() < self.$modal.width()) {
-            positionLeft = leftMargin + 'px';
-          } else {
-            positionLeft = 'auto';
-          }
-        } else {
-          if (self.$wrapperInner.width() < self.$modal.width() + leftMargin + rightMargin) {
-            positionLeft = leftMargin + 'px';
-            positionRight = rightMargin + 'px';
-          } else {
-            positionLeft = positionRight = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.width()/2 - leftMargin - rightMargin) + 'px';
-          }
-        }
-        self.$modal.css({
-          'left': positionLeft,
-          'right': positionRight
-        });
-
-        // if modal is bigger then wrapperInner then resize wrapperInner to
-        // mach modal height
-        if (self.$wrapperInner.height() < self.$modal.height()) {
-          self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
-        }
-
-        if (preserve_top || positionVertical === 'top') {
-          positionTop = topMargin + 'px';
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionBottom = bottomMargin + 'px';
-          } else {
-            positionBottom = 'auto';
-          }
-        } else if (positionVertical === 'bottom') {
-          positionBottom = bottomMargin + 'px';
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionTop = topMargin + 'px';
-          } else {
-            positionTop= 'auto';
-          }
-        } else {
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionTop = topMargin + 'px';
-            positionBottom = bottomMargin + 'px';
-          } else {
-            positionTop = positionBottom = (self.$wrapperInner.height()/2 -
-                self.$modal.height()/2) + 'px';
-          }
-        }
-        self.$modal.css({
-          'top': positionTop,
-          'bottom': positionBottom
-        });
-
-      }
-    },
-    show: function() {
-      var self = this;
-      if (!self.$el.hasClass(self.options.klassActive)) {
-        if (typeof self.$modal === 'function') {
-          self._$modal = self.$modal;
-          self.$modal();
-        } else {
-          self.trigger('show');
-          self.backdrop.show();
-          self.$wrapper.show();
-          self.$wrapper.parent().css('overflow', 'hidden');
-          self.$el.addClass(self.options.klassActive);
-          self.$modal.addClass(self.options.klassActive);
-          registry.scan(self.$modal);
-          self.positionModal();
-          $(window.parent).on('resize.modal.patterns', function() {
-            self.positionModal();
-          });
-          self.trigger('shown');
-        }
-      }
-    },
-    hide: function() {
-      var self = this;
-      if (self.ajaxXHR) {
-        self.ajaxXHR.abort();
-      }
-      if (self.$el.hasClass(self.options.klassActive)) {
-        self.trigger('hide');
-        self.backdrop.hide();
-        self.$wrapper.hide();
-        self.$wrapper.parent().css('overflow', 'visible');
-        self.$el.removeClass(self.options.klassActive);
-        if (self.$modal.remove) {
-          self.$modal.remove();
-          self.initModal();
-        }
-        $(window.parent).off('resize.modal.patterns');
-        self.trigger('hidden');
-      }
-    }
-  });
-
-  return Modal;
 
 });
 
@@ -12349,18 +12702,29 @@ define('js/bundles/toolbar',[
   'jquery',
   'js/jquery.iframe',
   'jam/Patterns/src/registry',
+  'js/patterns/base',
   'js/patterns/backdrop',
+  'js/patterns/modalform.js',
   'jam/jquery-form/jquery.form.js',
   'js/patterns/toggle',
   'js/patterns/modal.js',
   'js/bundles/widgets'
-], function($, iframe, registry, Backdrop) {
+], function($, iframe, registry, Base, Backdrop, modalform) {
   
 
   window.plone = window.plone || {};
   window.plone.toolbar = window.plone.toolbar || {};
 
   $(document).ready(function() {
+
+    // tinyMCE integration
+    var TinyMCE = Base.extend({
+      name: 'plone-tinymce',
+      jqueryPlugin: 'ploneTinymce',
+      init: function() {
+        window.initTinyMCE(this.$el.parent());
+      }
+    });
 
     // Dropdown {{{
 
@@ -12390,7 +12754,7 @@ define('js/bundles/toolbar',[
 
     // }}}
 
-    // Modals {{{
+    // Modals Helpers {{{
 
     // make sure we close all dropdowns when iframe is shrinking
     iframe.$el.on('shrink.iframe', function(e) {
@@ -12426,168 +12790,89 @@ define('js/bundles/toolbar',[
         iframe.shrink();
       });
 
-    // modal template for plone
-    function modalTemplate($modal, options) {
-      var $content = $modal.html();
-
-      options = $.extend({
-        title: 'h1.documentFirstHeading',
-        buttons: '.formControls > input[type="submit"]',
-        content: '#content'
-      }, options || {});
-
-      $modal
-        .html('<div class="modal-header">' +
-              '  <a class="close">&times;</a>' +
-              '  <h3></h3>' +
-              '</div>' +
-              '<div class="modal-body"></div>' +
-              '<div class="modal-footer"></div>');
-
-
-      $('.modal-header > h3', $modal).html($(options.title, $content).html());
-      $('.modal-body', $modal).html($(options.content, $content).html());
-      $(options.title, $modal).remove();
-      $('.modal-header > a.close', $modal)
-        .off('click')
-        .on('click', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          $(e.target).trigger('destroy.modal.patterns');
-        });
-
-      // cleanup html
-      $('.row', $modal).removeClass('row');
-
-      $(options.buttons, $modal).each(function() {
-        var $button = $(this);
-        $button
-          .on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-          })
-          .clone()
-          .appendTo($('.modal-footer', $modal))
-          .off('click').on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            $button.trigger('click');
-          });
-        $button.hide();
-      });
-
-    }
-
-    function modalAjaxForm(modal, modalInit, options) {
-      options = $.extend({
-        buttons: {},
-        timeout: 5000,
-        formError: '.portalMessage.error'
-      }, options);
-
-      $.each(options.buttons, function(button, buttonOptions) {
-        var $button = $(button, modal.$modal);
-
-        buttonOptions = $.extend({}, options, buttonOptions);
-
-        // pass button that was clicked when submiting form
-        var extraData = {};
-        extraData[$button.attr('name')] = $button.attr('value');
-
-        $button.on('click', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-
-          // loading "spinner"
-          var backdrop = modal.$modal.data('patterns-backdrop');
-          if (!backdrop) {
-            backdrop = new Backdrop(modal.$modal, {
-              closeOnEsc: false,
-              closeOnClick: false
-            });
-            backdrop.$backdrop
-              .html('')
-              .append($('' +
-                  '<div class="progress progress-striped active">' +
-                  '  <div class="bar" style="width: 100%;"></div>' +
-                  '</div>')
-                .css({
-                  position: 'absolute',
-                  left: modal.$modal.width() * 0.1,
-                  top: modal.$modal.height()/2 + 10,
-                  width: modal.$modal.width() * 0.8
-                }));
-            modal.$modal.data('patterns-backdrop', backdrop);
-          } else {
-            modal.$modal.append(backdrop.$backdrop);
-          }
-          backdrop.show();
-
-          $button.parents('form').ajaxSubmit({
-            timeout: buttonOptions.timeout,
-            dataType: 'html',
-            data: extraData,
-            url: $button.parents('form').attr('action'),
-            error: function(xhr, textStatus, errorStatus) {
-              if (textStatus === 'timeout' && buttonOptions.onTimeout) {
-                buttonOptions.onTimeout(modal, xhr, errorStatus);
-
-              // on "error", "abort", and "parsererror"
-              } else if (buttonOptions.onError) {
-                buttonOptions.onError(xhr, textStatus, errorStatus);
-              } else {
-                console.log('error happened do something');
-              }
-            },
-            success: function(response, state, xhr, form) {
-              var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                      .replace('<body', '<div').replace('</body>', '</div>'));
-
-              // if error is found
-              if ($(buttonOptions.formError, responseBody).size() !== 0) {
-                if (buttonOptions.onFormError) {
-                  buttonOptions.onFormError(modal, responseBody, state, xhr, form);
-                } else {
-                  modal.$modal.html(responseBody.html());
-                  modalInit(modal, modalInit);
-                  registry.scan(modal.$modal);
-                }
-
-              // custom success function
-              } else if (buttonOptions.onSuccess) {
-                buttonOptions.onSuccess(modal, responseBody, state, xhr, form);
-
-              } else {
-                $button.trigger('destroy.modal.patterns');
-              }
-            }
-          });
-        });
-      });
-    }
-
-    function modalInit(id, callback) {
-      $('#' + id + ' > a').addClass('modal-trigger').modal();
-      $(document).on('show.modal.patterns', '#' + id +
-            ' > a.modal-trigger', function(e, modal) {
-        callback(modal, callback);
-      });
-    }
-
     // }}}
 
-    // TODO: Contents
+    // Modals {{{
+
+    // Contents
+    modalform.init('#plone-action-folderContents > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
+        buttons: '#folderlisting-main-table > input.context,#folderlisting-main-table > input.standalone,.modal-body .formControls > input'
+      });
+      $('#plone-document-byline', modal.$modal).hide();  // TODO: not sure exectly how to handle this for now we hide it
+      $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
+      $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
+        var $el = $(this),                              // create boostrap style pagination
+            $pagination = $('<ul/>'),
+            $previous, $next;
+        console.log($el.html());
+        $('> *', $el).each(function() {
+          if ($(this).hasClass('previous')) {
+            $previous = $('<li/>').append($('a', this).clone());
+          } else if ($(this).hasClass('next')) {
+            $next = $('<li/>').append($('a', this).clone());
+          } else if ($.nodeName(this, 'span')) {
+            if ($('a', this).size() !== 0) {
+              $pagination.append($('<li/>').append($('a', this).clone()));
+              if ($(this).html().indexOf("...") !== -1) {
+                $pagination.append($('<li class="deactive"><span>...</span></li>'));
+              }
+            } else {
+              $pagination.append($('<li class="active"/>').append($(this).clone()));
+            }
+          } else {
+            $pagination.append($('<li/>').append($(this).clone()));
+          }
+        });
+        if ($previous) {
+          $pagination.prepend($previous);
+        }
+        if ($next) {
+          $pagination.append($next);
+        }
+        $el.hide().before($('<div class="pagination pagination-centered"/>').append($pagination));
+      });
+      function refreshModal(modal, responseBody, state, xhr, form) {
+        modal.$modal.html(responseBody.html());
+        modalInit(modal, modalInit, modalOptions);
+        modal.positionModal();
+        registry.scan(modal.$modal);
+      }
+      $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not(.contenttype-folder)', modal.$modal).css({
+        color: '#333333'
+      }).on('click', function(e) {
+        window.parent.location.href = $(this).attr('href');
+      });
+      modalform.form(modal, modalInit, modalOptions, {
+        buttons: {
+          '.modal-body a#foldercontents-show-batched': { onSuccess: refreshModal },
+          '.modal-body a#foldercontents-show-all': { onSuccess: refreshModal },
+          '.modal-body .pagination a': { onSuccess: refreshModal },
+          '.modal-body #folderlisting-main-table > input.standalone': { onSuccess: refreshModal },
+          '.modal-body #folderlisting-main-table > input.context': { onSuccess: refreshModal },
+          '.modal-body .formControls > input.standalone': { onSuccess: refreshModal },
+          '.modal-body .formControls > input.context': { onSuccess: refreshModal },
+          '.modal-body a#foldercontents-selectall-completebatch': { onSuccess: refreshModal },
+          '.modal-body a#foldercontents-selectall': { onSuccess: refreshModal },
+          '.modal-body a#foldercontents-clearselection': { onSuccess: refreshModal },
+          '.modal-body #folderlisting-main-table td:not(.draggable > a.contenttype-folder': { onSuccess: refreshModal },
+          '.modal-body .link-parent': { onSuccess: refreshModal },
+          '.modal-body td.draggable > a': { onSuccess: refreshModal }
+        }
+      });
+    }, { width: '80%' });
 
     // Edit
-    modalInit('plone-action-edit', function(modal, modalInit) {
-      modalTemplate(modal.$modal, {
-        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"]'
+    modalform.init('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
+        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
       });
       $('span.label', modal.$modal).removeClass('label');
-      modalAjaxForm(modal, modalInit, {
+      $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
-          '.modal-body input[name="form.buttons.cancel"]': {},
-          '.modal-body input[name="form.buttons.save"]': {
+          '.modal-body input[name="form.buttons.cancel"],.modal-body input[name="form.button.cancel"]': {},
+          '.modal-body input[name="form.buttons.save"],.modal-body input[name="form.button.save"]': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               $('#portal-column-content', window.parent.document).html(
                   $('#portal-column-content', responseBody).html());
@@ -12596,24 +12881,23 @@ define('js/bundles/toolbar',[
           }
         }
       });
-    });
-
+    }, { width: '80%' });
 
     // Sharing
-    modalInit('plone-action-local_roles', function(modal, modalInit) {
-      modalTemplate(modal.$modal, {
+    modalform.init('#plone-action-local_roles > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
         buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
       });
       // FIXME: we shouldn't be hacking like this
       $('#link-presentation', modal.$modal).remove();
-      modalAjaxForm(modal, modalInit, {
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {},
-          '.modal-body input[name="form.button.Search"]': {
+          '.modal-body input[name="form.button.Search"], dl.portalMessage.info > dd > a': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
               modal.$modal.html(responseBody.html());
-              modalInit(modal, modalInit);
+              modalInit(modal, modalInit, modalOptions);
               modal.positionModal();
               registry.scan(modal.$modal);
             }
@@ -12624,24 +12908,43 @@ define('js/bundles/toolbar',[
     });
 
     // Rules form
-    // TODO: for now we only open overlay we need to test that forms are
-    //       working
-    modalInit('plone-action-contentrules', function(modal, modalInit) {
-      modalTemplate(modal.$modal);
-      modalAjaxForm(modal, modalInit);
+    modalform.init('#plone-action-contentrules > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
+        buttons: 'input[name="form.button.AddAssignment"],' +
+                 'input[name="form.button.Enable"],' +
+                 'input[name="form.button.Disable"],' +
+                 'input[name="form.button.Bubble"],' +
+                 'input[name="form.button.NoBubble"],' +
+                 'input[name="form.button.Delete"]'
+      });
+      $('.modal-body #content-core > p:first > a', modal.$modal).on('click', function(e) {
+        window.parent.location.href = $(this).attr('href');
+      });
+      modalform.form(modal, modalInit, modalOptions, {
+        buttons: {
+          'input[name="form.button.AddAssignment"],input[name="form.button.Enable"],input[name="form.button.Disable"],input[name="form.button.Bubble"],input[name="form.button.NoBubble"],input[name="form.button.Delete"]': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              modal.$modal.html(responseBody.html());
+              modalInit(modal, modalInit, modalOptions);
+              modal.positionModal();
+              registry.scan(modal.$modal);
+            }
+          }
+        }
+      });
     });
 
     // Delete Action
-    modalInit('plone-contentmenu-actions-delete', function(modal, modalInit) {
-      modalTemplate(modal.$modal, {
+    modalform.init('#plone-contentmenu-actions-delete > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
         buttons: 'input[name="form.button.Cancel"],input.destructive'
       });
-      modalAjaxForm(modal, modalInit, {
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input.destructive': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
-              window.parent.location.href = window.parent.location.href + '/..';
+              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href');
             }
           }
         }
@@ -12649,16 +12952,16 @@ define('js/bundles/toolbar',[
     });
 
     // Rename Action
-    modalInit('plone-contentmenu-actions-rename', function(modal, modalInit) {
-      modalTemplate(modal.$modal, {
+    modalform.init('#plone-contentmenu-actions-rename > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
         buttons: 'input[name="form.button.Cancel"],input[name="form.button.RenameAll"]'
       });
-      modalAjaxForm(modal, modalInit, {
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.RenameAll"]': {
             onSuccess: function(modal, responseBody, state, xhr, form) {
-              window.parent.location.href = responseBody.data('context-url') || window.parent.location.href;
+              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href') + '/' + $('input[name="new_ids:list"]', form).val();
             }
           }
         }
@@ -12666,12 +12969,12 @@ define('js/bundles/toolbar',[
     });
 
     // Change content item as default view...
-    var changeContentItemAsDefaultView = function(modal, modalInit) {
-      modalTemplate(modal.$modal);
+    var changeContentItemAsDefaultView = function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal);
       // FIXME: we should hack like this
       $('form > dl', modal.$modal).addClass('default-page-listing');
       $('input[name="form.button.Cancel"]', modal.$modal).attr('class', 'standalone');
-      modalAjaxForm(modal, modalInit, {
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {
@@ -12682,14 +12985,33 @@ define('js/bundles/toolbar',[
         }
       });
     };
-    modalInit('folderChangeDefaultPage', changeContentItemAsDefaultView);
-    modalInit('contextSetDefaultPage', changeContentItemAsDefaultView);
+    modalform.init('#folderChangeDefaultPage > a', changeContentItemAsDefaultView);
+    modalform.init('#contextSetDefaultPage > a', changeContentItemAsDefaultView);
 
-    // TODO: Add forms
+    // Add forms
+    modalform.init('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
+        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
+      });
+      $('span.label', modal.$modal).removeClass('label');
+      $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
+      modalform.form(modal, modalInit, modalOptions, {
+        buttons: {
+          '.modal-body input[name="form.buttons.cancel"],.modal-body input[name="form.button.cancel"]': {},
+          '.modal-body input[name="form.buttons.save"],.modal-body input[name="form.button.save"]': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              $('#portal-column-content', window.parent.document).html(
+                  $('#portal-column-content', responseBody).html());
+              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href');
+            }
+          }
+        }
+      });
+    }, { width: '80%' });
 
     // "Restrictions..." form
-    modalInit('plone-contentmenu-settings', function(modal, modalInit) {
-      modalTemplate(modal.$modal);
+    modalform.init('#plone-contentmenu-settings > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal);
       // FIXME: we should hack like this
       var $details = $('#details', modal.$modal)
         .removeAttr('style')
@@ -12735,7 +13057,7 @@ define('js/bundles/toolbar',[
         });
       show_submenu(modal.$modal);
 
-      modalAjaxForm(modal, modalInit, {
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Save"]': {
@@ -12750,15 +13072,15 @@ define('js/bundles/toolbar',[
     });
 
     // Advance workflow
-    modalInit('workflow-transition-advanced', function(modal, modalInit) {
-      modalTemplate(modal.$modal, {
+    modalform.init('#workflow-transition-advanced > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
         buttons: 'input[name="form.button.Cancel"],input[name="form.button.FolderPublish"],input[name="form.button.Publish"]'
       });
 
       // FIXME: we should _not_ hack like this
       $('#workflow_action', modal.$modal).parent().find('> br').remove();
 
-      modalAjaxForm(modal, modalInit, {
+      modalform.form(modal, modalInit, modalOptions, {
         buttons: {
           '.modal-body input[name="form.button.Cancel"]': {},
           '.modal-body input[name="form.button.Publish"], .modal-body input[name="form.button.FolderPublish"]': {
@@ -12778,6 +13100,23 @@ define('js/bundles/toolbar',[
         }
       });
     });
+
+    // personal preferences
+    modalform.init('#plone-personal-actions-preferences > a', function(modal, modalInit, modalOptions) {
+      modalform.template(modal.$modal, {
+        buttons: 'input[name="form.actions.save"],input[name="form.actions.cancel"]'
+      });
+      $('select[name="form.wysiwyg_editor"], select[name="form.language"]', modal.$modal).addClass('pat-select2');
+      $('input[name="form.actions.cancel"]', modal.$modal).attr('class', 'standalone');
+      modalform.form(modal, modalInit, modalOptions, {
+        buttons: {
+          '.modal-body input[name="form.actions.cancel"]': {},
+          '.modal-body input[name="form.actions.save"]': {}
+        }
+      });
+    }, { width: '80%' });
+
+    // }}}
 
   });
 
