@@ -137,7 +137,6 @@ define([
         var $el = $(this),                              // create boostrap style pagination
             $pagination = $('<ul/>'),
             $previous, $next;
-        console.log($el.html());
         $('> *', $el).each(function() {
           if ($(this).hasClass('previous')) {
             $previous = $('<li/>').append($('a', this).clone());
