@@ -47,7 +47,6 @@
            See this blog post
            http://rhodesmill.org/brandon/2012/one-sentence-per-line/
            in order to learn about it and its many advantages -->
-      <h1>Plone mockup</h1>
       <p>
         Plone Mockup is an attempt to separate
         <a href="http://plone.org" title="Plone">Plone</a>, the user interface,
@@ -71,6 +70,48 @@
       </p>
 
       <div class="row">
+        <div class="span4">
+          <div class="well">
+            <h2>Use it now!</h2>
+            <p>
+              The only requirements to bootstrap <em>Plone mockup</em>
+              are <a href="http://git-scm.org/" title="git">git</a>
+              and <a href="http://www.nodejs.org/" title="npm">
+                <abbr title="Node package manager">npm</abbr>
+              </a>.
+            </p>
+            <p>
+              Make sure you use latest version of <code>nodejs</code>
+              and <code>npm</code>.
+            </p>
+            <p>Then check out the repository from GitHub:</p>
+            <pre class="brush: bash;toolbar: false;">
+              git clone git://github.com/plone/mockup.git</pre>
+            <p>And bootstrap your environment:</p>
+            <pre class="brush: bash;toolbar: false;">
+              cd mockup
+              make bootstrap</pre>
+
+            <!--p>Until Patterns is under heavy development.</p>
+                <pre class="brush: bash;toolbar: false;">
+                  cd mockup
+                  mkdir ext
+                  cd ext
+                  git clone git://github.com/Patternslib/Patterns.git
+                  cd ..
+                  ./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
+
+            <p>To build all bundles just do:</p>
+            <pre class="brush: bash;toolbar: false;">make</pre>
+
+            <p>And you can run tests with:</p>
+            <pre class="brush: bash;toolbar: false;">make test</pre>
+            <p>
+              Right now tests are
+              <img src="https://travis-ci.org/plone/mockup.png?branch=master"
+                   alt="Build Status" />.</p>
+          </div>
+        </div>
         <div class="span8">
           <h2>See it in action!</h2>
           <p>
@@ -156,51 +197,18 @@
           </div>
           -->
         </div>
-        <div class="span4">
-          <div class="well">
-            <h2>Use it now!</h2>
-            <p>
-              The only requirements to bootstrap <em>Plone mockup</em>
-              are <a href="http://git-scm.org/" title="git">git</a>
-              and <a href="http://www.nodejs.org/" title="npm">
-                <abbr title="Node package manager">npm</abbr>
-              </a>.
-            </p>
-            <p>
-              Make sure you use latest version of <code>nodejs</code>
-              and <code>npm</code>.
-            </p>
-            <p>Then check out the repository from GitHub:</p>
-            <pre class="brush: bash;toolbar: false;">
-              git clone git://github.com/plone/mockup.git</pre>
-            <p>And bootstrap your environment:</p>
-            <pre class="brush: bash;toolbar: false;">
-              cd mockup
-              make bootstrap</pre>
-
-            <!--p>Until Patterns is under heavy development.</p>
-                <pre class="brush: bash;toolbar: false;">
-                  cd mockup
-                  mkdir ext
-                  cd ext
-                  git clone git://github.com/Patternslib/Patterns.git
-                  cd ..
-                  ./node_modules/jamjs/bin/jam.js link ext/Patterns</pre-->
-
-            <p>To build all bundles just do:</p>
-            <pre class="brush: bash;toolbar: false;">make</pre>
-
-            <p>And you can run tests with:</p>
-            <pre class="brush: bash;toolbar: false;">make test</pre>
-            <p>
-              Right now tests are
-              <img src="https://travis-ci.org/plone/mockup.png?branch=master"
-                   alt="Build Status" />.</p>
-          </div>
-        </div>
       </div>
 
-      <h2 id="patterns">Patterns</h2>
+      <h1 id="bundles">Bundles</h1>
+      <p>TODO</p>
+      <p>
+        Current CMFPlone ECMA scripts status:
+        <a href="https://docs.google.com/spreadsheet/ccc?key=0AiJ1qTbr6NdMdDMzNVVqZ1ZIOGFZWHZDV1BPWnM4OEE#gid=0">
+          Google doc for keeping track of current status of CMFPlone/ecma_scripts stuff
+        </a>
+      </p>
+
+      <h1 id="patterns">Patterns</h1>
       <p>
         Patterns
         are a set of conventions to configure interaction via markup.
@@ -376,7 +384,7 @@ define([
         passing options as with any other jQuery plugin:
       </p>
       <pre class="brush: javascript; toolbar: false;">
-$('.pat-datetime').datetime({
+$('.pat-datetime').patternDatetime({
   pickadateYearSelector: true
 });</pre>
       <p>
@@ -395,78 +403,13 @@ $('.pat-datetime').datetime({
 }</pre>
 
       <h2 id="make-a-pattern">Making a pattern</h2>
+      <p>TODO</p>
 
-      <h3>Testing the pattern</h3>
+      <h2>Testing the pattern</h2>
+      <p>TODO</p>
 
-      <h2 id="bundles">Bundles</h2>
-      
-      <p>List of custom patterns (not part of Patternslib), listed in
-        alphabetical order:</p>
-
-      <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#autotoc">AutoToc</a></h2>
-          <p>Generating Table Of Contents. Can be also used</p>
-          <a href="patterns.html#autotoc" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#backdrop">Backdrop</a></h2>
-          <p>Hides content of selected DOM element.</p>
-          <a href="patterns.html#backdrop" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#datetime">DateTime</a></h2>
-          <p>Datetime selection widget.</p>
-          <a href="patterns.html#datetime" class="btn btn-primary pull-right">Demo</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#expose">Expose</a></h2>
-          <p>Exposing selected DOM element by placing it on top of stretched
-            backdrop.</p>
-          <a href="patterns.html#expose" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#modal">Modal</a></h2>
-          <p>Creates and exposes content that was loaded when triggered by
-            selected DOM element.</p>
-          <a href="patterns.html#modal" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#select2">Select2</a></h2>
-          <p>Select widget (Tags, Autocomplete, Single select, Multi select)</p>
-          <a href="patterns.html#select2" class="btn btn-primary pull-right">Demo</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#toggle">Toggle</a></h2>
-          <p>On event (click by default) toggles value of DOM element. Can
-            toggle classes or any other element attributes.</p>
-          <a href="patterns.html#toggle" class="btn btn-primary pull-right">Demo</a>
-        </div>
-      </div>
-
-      <h4 id="formhelpers">Form Helpers</h4>
-      <div class="row">
-        <div class="span4">
-          <h2><a href="patterns.html#preventDoubleSubmit">PreventDoubleSubmit</a></h2>
-          <p>Prevent a form to be submitted twice.</p>
-          <a href="patterns.html#preventDoubleSubmit" class="btn btn-primary pull-right">Demo</a>
-        </div>
-        <div class="span4">
-          <h2><a href="patterns.html#formUnloadAlert">FormUnloadAlert</a></h2>
-          <p>Prevent a form to be unloaded without warning if some fields have changed.</p>
-          <a href="patterns.html#formUnloadAlert" class="btn btn-primary pull-right">Demo</a>
-        </div>
-      </div>
     </div>
-    <br />
-    <h1>Current CMFPlone ECMA scripts status</h1>
-    <a href="https://docs.google.com/spreadsheet/ccc?key=0AiJ1qTbr6NdMdDMzNVVqZ1ZIOGFZWHZDV1BPWnM4OEE#gid=0">
-        Google doc for keeping track of current status of CMFPlone/ecma_scripts stuff
-    </a>
+
   </div>
 
   <footer>

@@ -4602,7 +4602,7 @@ define("sinon", function(){ return window.sinon; });
         output:  function(log_name, level, messages) {
             // console.log will magically appear in IE8 when the user opens the
             // F12 Developer Tools, so we have to test for it every time.
-            if (console===undefined || console.log===undefined)
+            if (typeof window.console==="undefined" || typeof console.log==="undefined")
                     return;
             if (log_name)
                 messages.unshift(log_name+":");
@@ -4610,7 +4610,7 @@ define("sinon", function(){ return window.sinon; });
 
             // Under some conditions console.log will be available but the
             // other functions are missing.
-            if (console.info===undefined) {
+            if (typeof console.info===undefined) {
                 var level_name;
                 if (level<=Level.DEBUG)
                     level_name="DEBUG";
@@ -4788,14 +4788,14 @@ define("sinon", function(){ return window.sinon; });
     // Expose as either an AMD module if possible. If not fall back to exposing
     // a global object.
     if (typeof define==="function")
-        define('logging/src/logging',[],function () {
+        define("logging", [], function () {
             return api;
         });
     else
         window.logging=api;
 })();
 
-define('logging', ['logging/src/logging'], function (main) { return main; });
+define("logging/src/logging", function(){});
 
 /**
  * Patterns logger - wrapper around logging library
@@ -4882,10 +4882,23 @@ define('jam/Patterns/src/utils',[
             return null;
     }
 
+    // Taken from http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+    function elementInViewport(el) {
+       var rect = el.getBoundingClientRect(),
+           docEl = document.documentElement,
+           vWidth = window.innerWidth || docEl.clientWidth,
+           vHeight = window.innerHeight || docEl.clientHeight;
+
+        if (rect.right<0 || rect.bottom<0 || rect.left>vWidth || rect.top>vHeight)
+            return false;
+        return true;
+    }
+
+
     // Taken from http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-    var escapeRegExp = function(str) {
+    function escapeRegExp(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-    };
+    }
 
     var utils = {
         // pattern pimping - own module?
@@ -4893,10 +4906,309 @@ define('jam/Patterns/src/utils',[
         debounce: debounce,
         escapeRegExp: escapeRegExp,
         rebaseURL: rebaseURL,
-        findLabel: findLabel
+        findLabel: findLabel,
+        elementInViewport: elementInViewport
     };
 
     return utils;
+});
+
+/**
+ * @license
+ * Patterns @VERSION@ jquery-ext - various jQuery extensions
+ *
+ * Copyright 2011 Humberto Sermeño
+ */
+define('jam/Patterns/src/jquery-ext',["jquery"], function($) {
+    var methods = {
+        init: function( options ) {
+            var settings = {
+                time: 3, /* time it will wait before moving to "timeout" after a move event */
+                initialTime: 8, /* time it will wait before first adding the "timeout" class */
+                exceptionAreas: [] /* IDs of elements that, if the mouse is over them, will reset the timer */
+            };
+            return this.each(function() {
+                var $this = $(this),
+                    data = $this.data("timeout");
+
+                if (!data) {
+                    if ( options ) {
+                        $.extend( settings, options );
+                    }
+                    $this.data("timeout", {
+                        "lastEvent": new Date(),
+                        "trueTime": settings.time,
+                        "time": settings.initialTime,
+                        "untouched": true,
+                        "inExceptionArea": false
+                    });
+
+                    $this.bind( "mouseover.timeout", methods.mouseMoved );
+                    $this.bind( "mouseenter.timeout", methods.mouseMoved );
+
+                    $(settings.exceptionAreas).each(function() {
+                        $this.find(this)
+                            .live( "mouseover.timeout", {"parent":$this}, methods.enteredException )
+                            .live( "mouseleave.timeout", {"parent":$this}, methods.leftException );
+                    });
+
+                    if (settings.initialTime > 0)
+                        $this.timeout("startTimer");
+                    else
+                        $this.addClass("timeout");
+                }
+            });
+        },
+
+        enteredException: function(event) {
+            var data = event.data.parent.data("timeout");
+            data.inExceptionArea = true;
+            event.data.parent.data("timeout", data);
+            event.data.parent.trigger("mouseover");
+        },
+
+        leftException: function(event) {
+            var data = event.data.parent.data("timeout");
+            data.inExceptionArea = false;
+            event.data.parent.data("timeout", data);
+        },
+
+        destroy: function() {
+            return this.each( function() {
+                var $this = $(this),
+                    data = $this.data("timeout");
+
+                $(window).unbind(".timeout");
+                data.timeout.remove();
+                $this.removeData("timeout");
+            });
+        },
+
+        mouseMoved: function() {
+            var $this = $(this), data = $this.data("timeout");
+
+            if ($this.hasClass("timeout")) {
+                $this.removeClass("timeout");
+                $this.timeout("startTimer");
+            } else if ( data.untouched ) {
+                data.untouched = false;
+                data.time = data.trueTime;
+            }
+
+            data.lastEvent = new Date();
+            $this.data("timeout", data);
+        },
+
+        startTimer: function() {
+            var $this = $(this), data = $this.data("timeout");
+            var fn = function(){
+                var data = $this.data("timeout");
+                if ( data && data.lastEvent ) {
+                    if ( data.inExceptionArea ) {
+                        setTimeout( fn, Math.floor( data.time*1000 ) );
+                    } else {
+                        var now = new Date();
+                        var diff = Math.floor(data.time*1000) - ( now - data.lastEvent );
+                        if ( diff > 0 ) {
+                            // the timeout has not ocurred, so set the timeout again
+                            setTimeout( fn, diff+100 );
+                        } else {
+                            // timeout ocurred, so set the class
+                            $this.addClass("timeout");
+                        }
+                    }
+                }
+            };
+
+            setTimeout( fn, Math.floor( data.time*1000 ) );
+        }
+    };
+
+    $.fn.timeout = function( method ) {
+        if ( methods[method] ) {
+            return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+        } else if ( typeof method === "object" || !method ) {
+            return methods.init.apply( this, arguments );
+        } else {
+            $.error( "Method " + method + " does not exist on jQuery.timeout" );
+        }
+    };
+
+    // Custom jQuery selector to find elements with scrollbars
+    $.extend($.expr[":"], {
+        scrollable: function(element) {
+            var vertically_scrollable, horizontally_scrollable;
+            if ($(element).css("overflow") === "scroll" ||
+                $(element).css("overflowX") === "scroll" ||
+                $(element).css("overflowY") === "scroll")
+                return true;
+
+            vertically_scrollable = (element.clientHeight < element.scrollHeight) && (
+                $.inArray($(element).css("overflowY"), ["scroll", "auto"]) !== -1 || $.inArray($(element).css("overflow"), ["scroll", "auto"]) !== -1);
+
+            if (vertically_scrollable)
+                return true;
+
+            horizontally_scrollable = (element.clientWidth < element.scrollWidth) && (
+                $.inArray($(element).css("overflowX"), ["scroll", "auto"]) !== -1 || $.inArray($(element).css("overflow"), ["scroll", "auto"]) !== -1);
+            return horizontally_scrollable;
+        }
+    });
+
+    // Make Visible in scroll
+    $.fn.makeVisibleInScroll = function( parent_id ) {
+        var absoluteParent = null;
+        if ( typeof parent_id === "string" ) {
+            absoluteParent = $("#" + parent_id);
+        } else if ( parent_id ) {
+            absoluteParent = $(parent_id);
+        }
+
+        return this.each(function() {
+            var $this = $(this), parent;
+            if (!absoluteParent) {
+                parent = $this.parents(":scrollable");
+                if (parent.length > 0) {
+                    parent = $(parent[0]);
+                } else {
+                    parent = $(window);
+                }
+            } else {
+                parent = absoluteParent;
+            }
+
+            var elemTop = $this.position().top;
+            var elemBottom = $this.height() + elemTop;
+
+            var viewTop = parent.scrollTop();
+            var viewBottom = parent.height() + viewTop;
+
+            if (elemTop < viewTop) {
+                parent.scrollTop(elemTop);
+            } else if ( elemBottom > viewBottom - parent.height()/2 ) {
+                parent.scrollTop( elemTop - (parent.height() - $this.height())/2 );
+            }
+        });
+    };
+
+    //Make absolute location
+    $.fn.setPositionAbsolute = function(element,offsettop,offsetleft) {
+        return this.each(function() {
+            // set absolute location for based on the element passed
+            // dynamically since every browser has different settings
+            var $this = $(this);
+            var thiswidth = $(this).width();
+            var    pos   = element.offset();
+            var    width = element.width();
+            var    height = element.height();
+            var setleft = (pos.left + width - thiswidth + offsetleft);
+            var settop = (pos.top + height + offsettop);
+            $this.css({ "z-index" : 1, "position": "absolute", "marginLeft": 0, "marginTop": 0, "left": setleft + "px", "top":settop + "px" ,"width":thiswidth});
+            $this.remove().appendTo("body").show();
+        });
+    };
+
+    $.fn.positionAncestor = function(selector) {
+        var left = 0;
+        var top = 0;
+        this.each(function() {
+            // check if current element has an ancestor matching a selector
+            // and that ancestor is positioned
+            var $ancestor = $(this).closest(selector);
+            if ($ancestor.length && $ancestor.css("position") !== "static") {
+                var $child = $(this);
+                var childMarginEdgeLeft = $child.offset().left - parseInt($child.css("marginLeft"), 10);
+                var childMarginEdgeTop = $child.offset().top - parseInt($child.css("marginTop"), 10);
+                var ancestorPaddingEdgeLeft = $ancestor.offset().left + parseInt($ancestor.css("borderLeftWidth"), 10);
+                var ancestorPaddingEdgeTop = $ancestor.offset().top + parseInt($ancestor.css("borderTopWidth"), 10);
+                left = childMarginEdgeLeft - ancestorPaddingEdgeLeft;
+                top = childMarginEdgeTop - ancestorPaddingEdgeTop;
+                // we have found the ancestor and computed the position
+                // stop iterating
+                return false;
+            }
+        });
+        return {
+            left:    left,
+            top:    top
+        };
+    };
+
+
+    // XXX: In compat.js we include things for browser compatibility,
+    // but these two seem to be only convenience. Do we really want to
+    // include these as part of patterns?
+    String.prototype.startsWith = function(str) { return (this.match("^"+str) !== null); };
+    String.prototype.endsWith = function(str) { return (this.match(str+"$") !== null); };
+
+
+    /******************************
+
+     Simple Placeholder
+
+     ******************************/
+
+    $.simplePlaceholder = {
+        placeholder_class: null,
+
+        hide_placeholder: function(){
+            var $this = $(this);
+            if($this.val() === $this.attr("placeholder")){
+                $this.val("").removeClass($.simplePlaceholder.placeholder_class);
+            }
+        },
+
+        show_placeholder: function(){
+            var $this = $(this);
+            if($this.val() === ""){
+                $this.val($this.attr("placeholder")).addClass($.simplePlaceholder.placeholder_class);
+            }
+        },
+
+        prevent_placeholder_submit: function(){
+            $(this).find(".simple-placeholder").each(function() {
+                var $this = $(this);
+                if ($this.val() === $this.attr("placeholder")){
+                    $this.val("");
+                }
+            });
+            return true;
+        }
+    };
+
+    $.fn.simplePlaceholder = function(options) {
+        if(document.createElement("input").placeholder === undefined){
+            var config = {
+                placeholder_class : "placeholding"
+            };
+
+            if(options) $.extend(config, options);
+            $.simplePlaceholder.placeholder_class = config.placeholder_class;
+
+            this.each(function() {
+                var $this = $(this);
+                $this.focus($.simplePlaceholder.hide_placeholder);
+                $this.blur($.simplePlaceholder.show_placeholder);
+                if($this.val() === "") {
+                    $this.val($this.attr("placeholder"));
+                    $this.addClass($.simplePlaceholder.placeholder_class);
+                }
+                $this.addClass("simple-placeholder");
+                $(this.form).submit($.simplePlaceholder.prevent_placeholder_submit);
+            });
+        }
+
+        return this;
+    };
+
+    $.fn.findInclusive = function(selector) {
+        return this.find('*').addBack().filter(selector);
+    };
+
+    // case-insensitive :contains
+    $.expr[":"].Contains = function(a, i, m) {
+        return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+    };
 });
 
 define('jam/Patterns/src/compat',[],function() {
@@ -5367,6 +5679,7 @@ define('jam/Patterns/src/registry',[
     "./core/logger",
     "./utils",
     // below here modules that are only loaded
+    "./jquery-ext",
     "./compat"
 ], function($, logger, utils) {
     var log = logger.getLogger("registry"),
@@ -5416,7 +5729,7 @@ define('jam/Patterns/src/registry',[
                     try {
                         pattern.transform($content);
                     } catch (e) {
-                        log.critical("Transform error for pattern" + name, e);
+                        log.error("Transform error for pattern" + name, e);
                     }
                 }
                 if (pattern.trigger) {
@@ -5426,9 +5739,7 @@ define('jam/Patterns/src/registry',[
             allsel = all.join(",");
 
             // Find all elements that belong to any pattern.
-            $match = $content.find(allsel);
-            if ($content.is(allsel))
-                $match = $match.add($content);
+            $match = $content.findInclusive(allsel);
             $match = $match.filter(function() { return $(this).parents('pre').length === 0; });
             $match = $match.filter(":not(.cant-touch-this)");
 
@@ -5625,9 +5936,7 @@ define('js/patterns/base',[
     }
   };
   Base.extend = function(NewPattern) {
-    var Base = this,
-        jquery_plugin = true;
-    var Constructor;
+    var Base = this, Constructor;
 
     if (NewPattern && NewPattern.hasOwnProperty('constructor')) {
       Constructor = NewPattern.constructor;
@@ -5643,8 +5952,12 @@ define('js/patterns/base',[
 
     Constructor.__super__ = Base.prototype;
 
+    if (Constructor.prototype.jqueryPlugin === undefined) {
+      Constructor.prototype.jqueryPlugin = "pattern" +
+          Constructor.prototype.name.charAt(0).toUpperCase() +
+          Constructor.prototype.name.slice(1);
+    }
     if (Constructor.prototype.jqueryPlugin) {
-      jquery_plugin = false;
       $.fn[Constructor.prototype.jqueryPlugin] = function(method, options) {
         $(this).each(function() {
           var $el = $(this),
@@ -5669,7 +5982,7 @@ define('js/patterns/base',[
     registry.register({
       name: Constructor.prototype.name,
       trigger: '.pat-' + Constructor.prototype.name,
-      jquery_plugin: jquery_plugin,
+      jquery_plugin: false,
       init: function($all) {
         return $all.each(function(i) {
           var $el = $(this),
@@ -5736,7 +6049,7 @@ the specific language governing permissions and limitations under the Apache Lic
     }
 
     var KEY, AbstractSelect2, SingleSelect2, MultiSelect2, nextUid, sizer,
-        lastMousePosition, $document;
+        lastMousePosition, $document, scrollBarDimensions,
 
     KEY = {
         TAB: 9,
@@ -5784,36 +6097,36 @@ the specific language governing permissions and limitations under the Apache Lic
             k = k.which ? k.which : k;
             return k >= 112 && k <= 123;
         }
-    };
+    },
+    MEASURE_SCROLLBAR_TEMPLATE = "<div class='select2-measure-scrollbar'></div>";
 
     $document = $(document);
 
     nextUid=(function() { var counter=1; return function() { return counter++; }; }());
 
     function indexOf(value, array) {
-        var i = 0, l = array.length, v;
-
-        if (typeof value === "undefined") {
-          return -1;
-        }
-
-        if (value.constructor === String) {
-            for (; i < l; i = i + 1) if (value.localeCompare(array[i]) === 0) return i;
-        } else {
-            for (; i < l; i = i + 1) {
-                v = array[i];
-                if (v.constructor === String) {
-                    if (v.localeCompare(value) === 0) return i;
-                } else {
-                    if (v === value) return i;
-                }
-            }
+        var i = 0, l = array.length;
+        for (; i < l; i = i + 1) {
+            if (equal(value, array[i])) return i;
         }
         return -1;
     }
 
+    function measureScrollbar () {
+        var $template = $( MEASURE_SCROLLBAR_TEMPLATE );
+        $template.appendTo('body');
+
+        var dim = {
+            width: $template.width() - $template[0].clientWidth,
+            height: $template.height() - $template[0].clientHeight
+        };
+        $template.remove();
+
+        return dim;
+    }
+
     /**
-     * Compares equality of a and b taking into account that a and b may be strings, in which case localeCompare is used
+     * Compares equality of a and b
      * @param a
      * @param b
      */
@@ -5821,8 +6134,8 @@ the specific language governing permissions and limitations under the Apache Lic
         if (a === b) return true;
         if (a === undefined || b === undefined) return false;
         if (a === null || b === null) return false;
-        if (a.constructor === String) return a.localeCompare(b) === 0;
-        if (b.constructor === String) return b.localeCompare(a) === 0;
+        if (a.constructor === String) return a+'' === b+''; // IE requires a+'' instead of just a
+        if (b.constructor === String) return b+'' === a+''; // IE requires b+'' instead of just b
         return false;
     }
 
@@ -5921,6 +6234,36 @@ the specific language governing permissions and limitations under the Apache Lic
         });
     }
 
+    function focus($el) {
+        if ($el[0] === document.activeElement) return;
+
+        /* set the focus in a 0 timeout - that way the focus is set after the processing
+            of the current event has finished - which seems like the only reliable way
+            to set focus */
+        window.setTimeout(function() {
+            var el=$el[0], pos=$el.val().length, range;
+
+            $el.focus();
+
+            /* make sure el received focus so we do not error out when trying to manipulate the caret.
+                sometimes modals or others listeners may steal it after its set */
+            if ($el.is(":visible") && el === document.activeElement) {
+
+                /* after the focus is set move the caret to the end, necessary when we val()
+                    just before setting focus */
+                if(el.setSelectionRange)
+                {
+                    el.setSelectionRange(pos, pos);
+                }
+                else if (el.createTextRange) {
+                    range = el.createTextRange();
+                    range.collapse(false);
+                    range.select();
+                }
+            }
+        }, 0);
+    }
+
     function killEvent(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -5933,7 +6276,7 @@ the specific language governing permissions and limitations under the Apache Lic
     function measureTextWidth(e) {
         if (!sizer){
         	var style = e[0].currentStyle || window.getComputedStyle(e[0], null);
-        	sizer = $("<div></div>").css({
+        	sizer = $(document.createElement("div")).css({
 	            position: "absolute",
 	            left: "-10000px",
 	            top: "-10000px",
@@ -5946,26 +6289,55 @@ the specific language governing permissions and limitations under the Apache Lic
 	            textTransform: style.textTransform,
 	            whiteSpace: "nowrap"
 	        });
+            sizer.attr("class","select2-sizer");
         	$("body").append(sizer);
         }
         sizer.text(e.val());
         return sizer.width();
     }
 
-    function markMatch(text, term, markup) {
+    function syncCssClasses(dest, src, adapter) {
+        var classes, replacements = [], adapted;
+
+        classes = dest.attr("class");
+        if (classes) {
+            classes = '' + classes; // for IE which returns object
+            $(classes.split(" ")).each2(function() {
+                if (this.indexOf("select2-") === 0) {
+                    replacements.push(this);
+                }
+            });
+        }
+        classes = src.attr("class");
+        if (classes) {
+            classes = '' + classes; // for IE which returns object
+            $(classes.split(" ")).each2(function() {
+                if (this.indexOf("select2-") !== 0) {
+                    adapted = adapter(this);
+                    if (adapted) {
+                        replacements.push(this);
+                    }
+                }
+            });
+        }
+        dest.attr("class", replacements.join(" "));
+    }
+
+
+    function markMatch(text, term, markup, escapeMarkup) {
         var match=text.toUpperCase().indexOf(term.toUpperCase()),
             tl=term.length;
 
         if (match<0) {
-            markup.push(text);
+            markup.push(escapeMarkup(text));
             return;
         }
 
-        markup.push(text.substring(0, match));
+        markup.push(escapeMarkup(text.substring(0, match)));
         markup.push("<span class='select2-match'>");
-        markup.push(text.substring(match, match + tl));
+        markup.push(escapeMarkup(text.substring(match, match + tl)));
         markup.push("</span>");
-        markup.push(text.substring(match + tl, text.length));
+        markup.push(escapeMarkup(text.substring(match + tl, text.length)));
     }
 
     /**
@@ -5976,6 +6348,8 @@ the specific language governing permissions and limitations under the Apache Lic
      * @param options.url url for the data
      * @param options.data a function(searchTerm, pageNumber, context) that should return an object containing query string parameters for the above url.
      * @param options.dataType request data type: ajax, jsonp, other datatatypes supported by jQuery's $.ajax function or the transport function if specified
+     * @param options.cache set to true to disable jquery's cache-busting url parameters
+     * @param options.jsonpCallback set to override the jquery callback function - useful in conjunction with options.cache
      * @param options.traditional a boolean flag that should be true if you wish to use the traditional style of param serialization for the ajax request
      * @param options.quietMillis (optional) milliseconds to wait before making the ajaxRequest, helps debounce the ajax function if invoked too often
      * @param options.results a function(remoteData, pageNumber) that converts data returned form the remote request to the format expected by Select2.
@@ -5988,7 +6362,9 @@ the specific language governing permissions and limitations under the Apache Lic
         var timeout, // current scheduled but not yet executed request
             requestSequence = 0, // sequence used to drop out-of-order responses
             handler = null,
-            quietMillis = options.quietMillis || 100;
+            quietMillis = options.quietMillis || 100,
+            ajaxUrl = options.url,
+            self = this;
 
         return function (query) {
             window.clearTimeout(timeout);
@@ -5996,29 +6372,43 @@ the specific language governing permissions and limitations under the Apache Lic
                 requestSequence += 1; // increment the sequence
                 var requestNumber = requestSequence, // this request's sequence number
                     data = options.data, // ajax data function
+                    url = ajaxUrl, // ajax url string or function
                     transport = options.transport || $.ajax,
-                    traditional = options.traditional || false,
-                    type = options.type || 'GET'; // set type of request (GET or POST)
+                    cache = options.cache || false,
+                    jsonpCallback = options.jsonpCallback || undefined,
+                    type = options.type || 'GET', // set type of request (GET or POST)
+                    params = {};
 
-                data = data.call(this, query.term, query.page, query.context);
+                data = data ? data.call(self, query.term, query.page, query.context) : null;
+                url = (typeof url === 'function') ? url.call(self, query.term, query.page, query.context) : url;
 
                 if( null !== handler) { handler.abort(); }
 
-                handler = transport.call(null, {
-                    url: options.url,
+                if (options.params) {
+                    if ($.isFunction(options.params)) {
+                        $.extend(params, options.params.call(self));
+                    } else {
+                        $.extend(params, options.params);
+                    }
+                }
+
+                $.extend(params, {
+                    url: url,
                     dataType: options.dataType,
                     data: data,
                     type: type,
-                    traditional: traditional,
+                    cache: cache,
+                    jsonpCallback: jsonpCallback,
                     success: function (data) {
                         if (requestNumber < requestSequence) {
                             return;
                         }
-                        // TODO 3.0 - replace query.page with query so users have access to term, page, etc.
+                        // TODO - replace query.page with query so users have access to term, page, etc.
                         var results = options.results(data, query.page);
                         query.callback(results);
                     }
                 });
+                handler = transport.call(self, params);
             }, quietMillis);
         };
     }
@@ -6040,22 +6430,33 @@ the specific language governing permissions and limitations under the Apache Lic
     function local(options) {
         var data = options, // data elements
             dataText,
+            tmp,
             text = function (item) { return ""+item.text; }; // function used to retrieve the text portion of a data item that is matched against the search
 
-        if (!$.isArray(data)) {
-            text = data.text;
+		 if ($.isArray(data)) {
+            tmp = data;
+            data = { results: tmp };
+        }
+
+		 if ($.isFunction(data) === false) {
+            tmp = data;
+            data = function() { return tmp; };
+        }
+
+        var dataItem = data();
+        if (dataItem.text) {
+            text = dataItem.text;
             // if text is not a function we assume it to be a key name
             if (!$.isFunction(text)) {
-              dataText = data.text; // we need to store this in a separate variable because in the next step data gets reset and data.text is no longer available
-              text = function (item) { return item[dataText]; };
+                dataText = dataItem.text; // we need to store this in a separate variable because in the next step data gets reset and data.text is no longer available
+                text = function (item) { return item[dataText]; };
             }
-            data = data.results;
         }
 
         return function (query) {
             var t = query.term, filtered = { results: [] }, process;
             if (t === "") {
-                query.callback({results: data});
+                query.callback(data());
                 return;
             }
 
@@ -6069,34 +6470,27 @@ the specific language governing permissions and limitations under the Apache Lic
                     }
                     group.children=[];
                     $(datum.children).each2(function(i, childDatum) { process(childDatum, group.children); });
-                    if (group.children.length || query.matcher(t, text(group))) {
+                    if (group.children.length || query.matcher(t, text(group), datum)) {
                         collection.push(group);
                     }
                 } else {
-                    if (query.matcher(t, text(datum))) {
+                    if (query.matcher(t, text(datum), datum)) {
                         collection.push(datum);
                     }
                 }
             };
 
-            $(data).each2(function(i, datum) { process(datum, filtered.results); });
+            $(data().results).each2(function(i, datum) { process(datum, filtered.results); });
             query.callback(filtered);
         };
     }
 
     // TODO javadoc
     function tags(data) {
-        // TODO even for a function we should probably return a wrapper that does the same object/string check as
-        // the function for arrays. otherwise only functions that return objects are supported.
-        if ($.isFunction(data)) {
-            return data;
-        }
-
-        // if not a function we assume it to be an array
-
+        var isFunc = $.isFunction(data);
         return function (query) {
             var t = query.term, filtered = {results: []};
-            $(data).each(function () {
+            $(isFunc ? data() : data).each(function () {
                 var isObject = this.text !== undefined,
                     text = isObject ? this.text : this;
                 if (t === "" || query.matcher(t, text)) {
@@ -6187,38 +6581,8 @@ the specific language governing permissions and limitations under the Apache Lic
             }
         }
 
-        if (original.localeCompare(input) != 0) return input;
+        if (original!==input) return input;
     }
-
-    /**
-     * blurs any Select2 container that has focus when an element outside them was clicked or received focus
-     *
-     * also takes care of clicks on label tags that point to the source element
-     */
-    $document.ready(function () {
-        $document.bind("mousedown touchend", function (e) {
-            var target = $(e.target).closest("div.select2-container").get(0), attr;
-            if (target) {
-                $document.find("div.select2-container-active").each(function () {
-                    if (this !== target) $(this).data("select2").blur();
-                });
-            } else {
-                target = $(e.target).closest("div.select2-drop").get(0);
-                $document.find("div.select2-drop-active").each(function () {
-                    if (this !== target) $(this).data("select2").blur();
-                });
-            }
-
-            target=$(e.target);
-            attr = target.attr("for");
-            if ("LABEL" === e.target.tagName && attr && attr.length > 0) {
-                attr = attr.replace(/([\[\].])/g,'\\$1'); /* escapes [, ], and . so properly selects the id */
-                target = $("#"+attr);
-                target = target.data("select2");
-                if (target !== undefined) { target.focus(); e.preventDefault();}
-            }
-        });
-    });
 
     /**
      * Creates a new class
@@ -6247,7 +6611,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // abstract
         init: function (opts) {
-            var results, search, resultsSelector = ".select2-results";
+            var results, search, resultsSelector = ".select2-results", mask;
 
             // prepare options
             this.opts = opts = this.prepareOpts(opts);
@@ -6270,17 +6634,18 @@ the specific language governing permissions and limitations under the Apache Lic
             // cache the body so future lookups are cheap
             this.body = thunk(function() { return opts.element.closest("body"); });
 
-            if (opts.element.attr("class") !== undefined) {
-                this.container.addClass(opts.element.attr("class").replace(/validate\[[\S ]+] ?/, ''));
-            }
+            syncCssClasses(this.container, this.opts.element, this.opts.adaptContainerCssClass);
 
             this.container.css(evaluate(opts.containerCss));
             this.container.addClass(evaluate(opts.containerCssClass));
 
+            this.elementTabIndex = this.opts.element.attr("tabindex");
+
             // swap container for the element
             this.opts.element
                 .data("select2", this)
-                .hide()
+                .bind("focus.select2", function() { $(this).select2("focus"); })
+                .attr("tabindex", "-1")
                 .before(this.container);
             this.container.data("select2", this);
 
@@ -6291,20 +6656,21 @@ the specific language governing permissions and limitations under the Apache Lic
             this.results = results = this.container.find(resultsSelector);
             this.search = search = this.container.find("input.select2-input");
 
-            search.attr("tabIndex", this.opts.element.attr("tabIndex"));
-
             this.resultsPage = 0;
             this.context = null;
 
             // initialize the container
             this.initContainer();
-            this.initContainerWidth();
 
             installFilteredMouseMove(this.results);
-            this.dropdown.delegate(resultsSelector, "mousemove-filtered", this.bind(this.highlightUnderEvent));
+            this.dropdown.delegate(resultsSelector, "mousemove-filtered touchstart touchmove touchend", this.bind(this.highlightUnderEvent));
 
             installDebouncedScroll(80, this.results);
             this.dropdown.delegate(resultsSelector, "scroll-debounced", this.bind(this.loadMoreIfNeeded));
+
+            // do not propagate change event from the search field out of the component
+            $(this.container).delegate(".select2-input", "change", function(e) {e.stopPropagation();});
+            $(this.dropdown).delegate(".select2-input", "change", function(e) {e.stopPropagation();});
 
             // if jquery.mousewheel plugin is installed we can prevent out-of-bounds scrolling of results via mousewheel
             if ($.fn.mousewheel) {
@@ -6321,18 +6687,15 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             installKeyUpChangeEvent(search);
-            search.bind("keyup-change", this.bind(this.updateResults));
-            search.bind("focus", function () { search.addClass("select2-focused"); if (search.val() === " ") search.val(""); });
+            search.bind("keyup-change input paste", this.bind(this.updateResults));
+            search.bind("focus", function () { search.addClass("select2-focused"); });
             search.bind("blur", function () { search.removeClass("select2-focused");});
 
             this.dropdown.delegate(resultsSelector, "mouseup", this.bind(function (e) {
-                if ($(e.target).closest(".select2-result-selectable:not(.select2-disabled)").length > 0) {
+                if ($(e.target).closest(".select2-result-selectable").length > 0) {
                     this.highlightUnderEvent(e);
                     this.selectHighlighted(e);
-                } else {
-                    this.focusSearch();
                 }
-                killEvent(e);
             }));
 
             // trap all mouse events from leaving the dropdown. sometimes there may be a modal that is listening
@@ -6350,24 +6713,54 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             if (opts.element.is(":disabled") || opts.element.is("[readonly='readonly']")) this.disable();
+
+            // Calculate size of scrollbar
+            scrollBarDimensions = scrollBarDimensions || measureScrollbar();
         },
 
         // abstract
         destroy: function () {
             var select2 = this.opts.element.data("select2");
+
+            if (this.propertyObserver) { delete this.propertyObserver; this.propertyObserver = null; }
+
             if (select2 !== undefined) {
+
                 select2.container.remove();
                 select2.dropdown.remove();
                 select2.opts.element
+                    .removeClass("select2-offscreen")
                     .removeData("select2")
                     .unbind(".select2")
+                    .attr({"tabindex": this.elementTabIndex})
                     .show();
             }
         },
 
         // abstract
+        optionToData: function(element) {
+            if (element.is("option")) {
+                return {
+                    id:element.attr("value"),
+                    text:element.text(),
+                    element: element.get(),
+                    css: element.attr("class"),
+                    disabled: equal(element.attr("disabled"), "disabled"),
+                    locked: equal(element.attr("locked"), "locked")
+                };
+            } else if (element.is("optgroup")) {
+                return {
+                    text:element.attr("label"),
+                    children:[],
+                    element: element.get(),
+                    css: element.attr("class")
+                };
+            }
+        },
+
+        // abstract
         prepareOpts: function (opts) {
-            var element, select, idKey, ajaxUrl;
+            var element, select, idKey, ajaxUrl, self = this;
 
             element = opts.element;
 
@@ -6386,30 +6779,37 @@ the specific language governing permissions and limitations under the Apache Lic
 
             opts = $.extend({}, {
                 populateResults: function(container, results, query) {
-                    var populate,  data, result, children, id=this.opts.id, self=this;
+                    var populate,  data, result, children, id=this.opts.id;
 
                     populate=function(results, container, depth) {
 
-                        var i, l, result, selectable, compound, node, label, innerContainer, formatted;
+                        var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted;
+
+                        results = opts.sortResults(results, container, query);
+
                         for (i = 0, l = results.length; i < l; i = i + 1) {
 
                             result=results[i];
-                            selectable=id(result) !== undefined;
+
+                            disabled = (result.disabled === true);
+                            selectable = (!disabled) && (id(result) !== undefined);
+
                             compound=result.children && result.children.length > 0;
 
                             node=$("<li></li>");
                             node.addClass("select2-results-dept-"+depth);
                             node.addClass("select2-result");
                             node.addClass(selectable ? "select2-result-selectable" : "select2-result-unselectable");
+                            if (disabled) { node.addClass("select2-disabled"); }
                             if (compound) { node.addClass("select2-result-with-children"); }
                             node.addClass(self.opts.formatResultCssClass(result));
 
-                            label=$("<div></div>");
+                            label=$(document.createElement("div"));
                             label.addClass("select2-result-label");
 
-                            formatted=opts.formatResult(result, label, query);
+                            formatted=opts.formatResult(result, label, query, self.opts.escapeMarkup);
                             if (formatted!==undefined) {
-                                label.html(self.opts.escapeMarkup(formatted));
+                                label.html(formatted);
                             }
 
                             node.append(label);
@@ -6436,6 +6836,13 @@ the specific language governing permissions and limitations under the Apache Lic
                 opts.id = function (e) { return e[idKey]; };
             }
 
+            if ($.isArray(opts.element.data("select2Tags"))) {
+                if ("tags" in opts) {
+                    throw "tags specified as both an attribute 'data-select2-tags' and in options of Select2 " + opts.element.attr("id");
+                }
+                opts.tags=opts.element.data("select2Tags");
+            }
+
             if (select) {
                 opts.query = this.bind(function (query) {
                     var data = { results: [], more: false },
@@ -6446,10 +6853,10 @@ the specific language governing permissions and limitations under the Apache Lic
                         var group;
                         if (element.is("option")) {
                             if (query.matcher(term, element.text(), element)) {
-                                collection.push({id:element.attr("value"), text:element.text(), element: element.get(), css: element.attr("class")});
+                                collection.push(self.optionToData(element));
                             }
                         } else if (element.is("optgroup")) {
-                            group={text:element.attr("label"), children:[], element: element.get(), css: element.attr("class")};
+                            group=self.optionToData(element);
                             element.children().each2(function(i, elm) { process(elm, group.children); });
                             if (group.children.length>0) {
                                 collection.push(group);
@@ -6473,31 +6880,36 @@ the specific language governing permissions and limitations under the Apache Lic
                 });
                 // this is needed because inside val() we construct choices from options and there id is hardcoded
                 opts.id=function(e) { return e.id; };
-                opts.formatResultCssClass = function(data) { return data.css; }
+                opts.formatResultCssClass = function(data) { return data.css; };
             } else {
                 if (!("query" in opts)) {
+
                     if ("ajax" in opts) {
                         ajaxUrl = opts.element.data("ajax-url");
                         if (ajaxUrl && ajaxUrl.length > 0) {
                             opts.ajax.url = ajaxUrl;
                         }
-                        opts.query = ajax(opts.ajax);
+                        opts.query = ajax.call(opts.element, opts.ajax);
                     } else if ("data" in opts) {
                         opts.query = local(opts.data);
                     } else if ("tags" in opts) {
                         opts.query = tags(opts.tags);
-                        opts.createSearchChoice = function (term) { return {id: term, text: term}; };
-                        opts.initSelection = function (element, callback) {
-                            var data = [];
-                            $(splitVal(element.val(), opts.separator)).each(function () {
-                                var id = this, text = this, tags=opts.tags;
-                                if ($.isFunction(tags)) tags=tags();
-                                $(tags).each(function() { if (equal(this.id, id)) { text = this.text; return false; } });
-                                data.push({id: id, text: text});
-                            });
+                        if (opts.createSearchChoice === undefined) {
+                            opts.createSearchChoice = function (term) { return {id: term, text: term}; };
+                        }
+                        if (opts.initSelection === undefined) {
+                            opts.initSelection = function (element, callback) {
+                                var data = [];
+                                $(splitVal(element.val(), opts.separator)).each(function () {
+                                    var id = this, text = this, tags=opts.tags;
+                                    if ($.isFunction(tags)) tags=tags();
+                                    $(tags).each(function() { if (equal(this.id, id)) { text = this.text; return false; } });
+                                    data.push({id: id, text: text});
+                                });
 
-                            callback(data);
-                        };
+                                callback(data);
+                            };
+                        }
                     }
                 }
             }
@@ -6513,11 +6925,59 @@ the specific language governing permissions and limitations under the Apache Lic
          */
         // abstract
         monitorSource: function () {
-            this.opts.element.bind("change.select2", this.bind(function (e) {
+            var el = this.opts.element, sync;
+
+            el.bind("change.select2", this.bind(function (e) {
                 if (this.opts.element.data("select2-change-triggered") !== true) {
                     this.initSelection();
                 }
             }));
+
+            sync = this.bind(function () {
+
+                var enabled, readonly, self = this;
+
+                // sync enabled state
+
+                enabled = this.opts.element.attr("disabled") !== "disabled";
+                readonly = this.opts.element.attr("readonly") === "readonly";
+
+                enabled = enabled && !readonly;
+
+                if (this.enabled !== enabled) {
+                    if (enabled) {
+                        this.enable();
+                    } else {
+                        this.disable();
+                    }
+                }
+
+
+                syncCssClasses(this.container, this.opts.element, this.opts.adaptContainerCssClass);
+                this.container.addClass(evaluate(this.opts.containerCssClass));
+
+                syncCssClasses(this.dropdown, this.opts.element, this.opts.adaptDropdownCssClass);
+                this.dropdown.addClass(evaluate(this.opts.dropdownCssClass));
+
+            });
+
+            // mozilla and IE
+            el.bind("propertychange.select2 DOMAttrModified.select2", sync);
+            // safari and chrome
+            if (typeof WebKitMutationObserver !== "undefined") {
+                if (this.propertyObserver) { delete this.propertyObserver; this.propertyObserver = null; }
+                this.propertyObserver = new WebKitMutationObserver(function (mutations) {
+                    mutations.forEach(sync);
+                });
+                this.propertyObserver.observe(el.get(0), { attributes:true, subtree:false });
+            }
+        },
+
+        // abstract
+        triggerSelect: function(data) {
+            var evt = $.Event("selected", { val: this.id(data), object: data });
+            this.opts.element.trigger(evt);
+            return !evt.isDefaultPrevented();
         },
 
         /**
@@ -6542,7 +7002,6 @@ the specific language governing permissions and limitations under the Apache Lic
             if (this.opts.blurOnChange)
                 this.opts.element.blur();
         },
-
 
         // abstract
         enable: function() {
@@ -6571,22 +7030,40 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // abstract
         positionDropdown: function() {
-            var offset = this.container.offset(),
+            var $dropdown = this.dropdown,
+                offset = this.container.offset(),
                 height = this.container.outerHeight(false),
                 width = this.container.outerWidth(false),
-                dropHeight = this.dropdown.outerHeight(false),
-                viewportBottom = $(window).scrollTop() + document.documentElement.clientHeight,
+                dropHeight = $dropdown.outerHeight(false),
+	            viewPortRight = $(window).scrollLeft() + $(window).width(),
+                viewportBottom = $(window).scrollTop() + $(window).height(),
                 dropTop = offset.top + height,
                 dropLeft = offset.left,
                 enoughRoomBelow = dropTop + dropHeight <= viewportBottom,
                 enoughRoomAbove = (offset.top - dropHeight) >= this.body().scrollTop(),
-                aboveNow = this.dropdown.hasClass("select2-drop-above"),
+	            dropWidth = $dropdown.outerWidth(false),
+	            enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight,
+                aboveNow = $dropdown.hasClass("select2-drop-above"),
                 bodyOffset,
                 above,
-                css;
+                css,
+                resultsListNode;
 
-            // console.log("below/ droptop:", dropTop, "dropHeight", dropHeight, "sum", (dropTop+dropHeight)+" viewport bottom", viewportBottom, "enough?", enoughRoomBelow);
-            // console.log("above/ offset.top", offset.top, "dropHeight", dropHeight, "top", (offset.top-dropHeight), "scrollTop", this.body().scrollTop(), "enough?", enoughRoomAbove);
+            if (this.opts.dropdownAutoWidth) {
+                resultsListNode = $('.select2-results', $dropdown)[0];
+                $dropdown.addClass('select2-drop-auto-width');
+                $dropdown.css('width', '');
+                // Add scrollbar width to dropdown if vertical scrollbar is present
+                dropWidth = $dropdown.outerWidth(false) + (resultsListNode.scrollHeight === resultsListNode.clientHeight ? 0 : scrollBarDimensions.width);
+                dropWidth > width ? width = dropWidth : dropWidth = width;
+                enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
+            }
+            else {
+                this.container.removeClass('select2-drop-auto-width');
+            }
+
+            //console.log("below/ droptop:", dropTop, "dropHeight", dropHeight, "sum", (dropTop+dropHeight)+" viewport bottom", viewportBottom, "enough?", enoughRoomBelow);
+            //console.log("above/ offset.top", offset.top, "dropHeight", dropHeight, "top", (offset.top-dropHeight), "scrollTop", this.body().scrollTop(), "enough?", enoughRoomAbove);
 
             // fix positioning when body has an offset and is not position: static
 
@@ -6606,14 +7083,18 @@ the specific language governing permissions and limitations under the Apache Lic
                 if (!enoughRoomBelow && enoughRoomAbove) above = true;
             }
 
+            if (!enoughRoomOnRight) {
+               dropLeft = offset.left + width - dropWidth;
+            }
+
             if (above) {
                 dropTop = offset.top - dropHeight;
                 this.container.addClass("select2-drop-above");
-                this.dropdown.addClass("select2-drop-above");
+                $dropdown.addClass("select2-drop-above");
             }
             else {
                 this.container.removeClass("select2-drop-above");
-                this.dropdown.removeClass("select2-drop-above");
+                $dropdown.removeClass("select2-drop-above");
             }
 
             css = $.extend({
@@ -6622,7 +7103,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 width: width
             }, evaluate(this.opts.dropdownCss));
 
-            this.dropdown.css(css);
+            $dropdown.css(css);
         },
 
         // abstract
@@ -6631,7 +7112,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
             if (this.opened()) return false;
 
-            event = $.Event("open");
+            event = $.Event("opening");
             this.opts.element.trigger(event);
             return !event.isDefaultPrevented();
         },
@@ -6664,78 +7145,107 @@ the specific language governing permissions and limitations under the Apache Lic
          */
         // abstract
         opening: function() {
-            var cid = this.containerId, selector = this.containerSelector,
-                scroll = "scroll." + cid, resize = "resize." + cid;
-
-            this.container.parents().each(function() {
-                $(this).bind(scroll, function() {
-                    var s2 = $(selector);
-                    if (s2.length == 0) {
-                        $(this).unbind(scroll);
-                    }
-                    s2.select2("close");
-                });
-            });
-
-            window.setTimeout(function() {
-                // this is done inside a timeout because IE will sometimes fire a resize event while opening
-                // the dropdown and that causes this handler to immediately close it. this way the dropdown
-                // has a chance to fully open before we start listening to resize events
-                $(window).bind(resize, function() {
-                    var s2 = $(selector);
-                    if (s2.length == 0) {
-                        $(window).unbind(resize);
-                    }
-                    s2.select2("close");
-                })
-            }, 10);
-
-            this.clearDropdownAlignmentPreference();
-
-            if (this.search.val() === " ") { this.search.val(""); }
+            var cid = this.containerId,
+                scroll = "scroll." + cid,
+                resize = "resize."+cid,
+                orient = "orientationchange."+cid,
+                mask;
 
             this.container.addClass("select2-dropdown-open").addClass("select2-container-active");
 
-            this.updateResults(true);
+            this.clearDropdownAlignmentPreference();
 
             if(this.dropdown[0] !== this.body().children().last()[0]) {
                 this.dropdown.detach().appendTo(this.body());
             }
 
+            // create the dropdown mask if doesnt already exist
+            mask = $("#select2-drop-mask");
+            if (mask.length == 0) {
+                mask = $(document.createElement("div"));
+                mask.attr("id","select2-drop-mask").attr("class","select2-drop-mask");
+                mask.hide();
+                mask.appendTo(this.body());
+                mask.bind("mousedown touchstart", function (e) {
+                    var dropdown = $("#select2-drop"), self;
+                    if (dropdown.length > 0) {
+                        self=dropdown.data("select2");
+                        if (self.opts.selectOnBlur) {
+                            self.selectHighlighted({noFocus: true});
+                        }
+                        self.close();
+                    }
+                });
+            }
+
+            // ensure the mask is always right before the dropdown
+            if (this.dropdown.prev()[0] !== mask[0]) {
+                this.dropdown.before(mask);
+            }
+
+            // move the global id to the correct dropdown
+            $("#select2-drop").removeAttr("id");
+            this.dropdown.attr("id", "select2-drop");
+
+            // show the elements
+            mask.css(_makeMaskCss());
+            mask.show();
             this.dropdown.show();
-
             this.positionDropdown();
-            this.dropdown.addClass("select2-drop-active");
 
+            this.dropdown.addClass("select2-drop-active");
             this.ensureHighlightVisible();
 
-            this.focusSearch();
+            // attach listeners to events that can change the position of the container and thus require
+            // the position of the dropdown to be updated as well so it does not come unglued from the container
+            var that = this;
+            this.container.parents().add(window).each(function () {
+                $(this).bind(resize+" "+scroll+" "+orient, function (e) {
+                    $("#select2-drop-mask").css(_makeMaskCss());
+                    that.positionDropdown();
+                });
+            });
+
+            function _makeMaskCss() {
+                return {
+                    width  : Math.max(document.documentElement.scrollWidth,  $(window).width()),
+                    height : Math.max(document.documentElement.scrollHeight, $(window).height())
+                }
+            }
         },
 
         // abstract
         close: function () {
             if (!this.opened()) return;
 
-            var self = this;
+            var cid = this.containerId,
+                scroll = "scroll." + cid,
+                resize = "resize."+cid,
+                orient = "orientationchange."+cid;
 
-            this.container.parents().each(function() {
-                $(this).unbind("scroll." + self.containerId);
-            });
-            $(window).unbind("resize." + this.containerId);
+            // unbind event listeners
+            this.container.parents().add(window).each(function () { $(this).unbind(scroll).unbind(resize).unbind(orient); });
 
             this.clearDropdownAlignmentPreference();
 
+            $("#select2-drop-mask").hide();
+            this.dropdown.removeAttr("id"); // only the active dropdown has the select2-drop id
             this.dropdown.hide();
-            this.container.removeClass("select2-dropdown-open").removeClass("select2-container-active");
+            this.container.removeClass("select2-dropdown-open");
             this.results.empty();
             this.clearSearch();
-
+            this.search.removeClass("select2-active");
             this.opts.element.trigger($.Event("close"));
         },
 
         // abstract
         clearSearch: function () {
 
+        },
+
+        //abstract
+        getMaximumSelectionSize: function() {
+            return evaluate(this.opts.maximumSelectionSize);
         },
 
         // abstract
@@ -6756,7 +7266,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 return;
             }
 
-            children = results.find(".select2-result-selectable");
+            children = this.findHighlightableChoices().find('.select2-result-label');
 
             child = $(children[index]);
 
@@ -6777,20 +7287,25 @@ the specific language governing permissions and limitations under the Apache Lic
             y = child.offset().top - results.offset().top;
 
             // make sure the top of the element is visible
-            if (y < 0) {
+            if (y < 0 && child.css('display') != 'none' ) {
                 results.scrollTop(results.scrollTop() + y); // y is negative
             }
         },
 
         // abstract
+        findHighlightableChoices: function() {
+            return this.results.find(".select2-result-selectable:not(.select2-selected):not(.select2-disabled)");
+        },
+
+        // abstract
         moveHighlight: function (delta) {
-            var choices = this.results.find(".select2-result-selectable"),
+            var choices = this.findHighlightableChoices(),
                 index = this.highlight();
 
             while (index > -1 && index < choices.length) {
                 index += delta;
                 var choice = $(choices[index]);
-                if (choice.hasClass("select2-result-selectable") && !choice.hasClass("select2-disabled")) {
+                if (choice.hasClass("select2-result-selectable") && !choice.hasClass("select2-disabled") && !choice.hasClass("select2-selected")) {
                     this.highlight(index);
                     break;
                 }
@@ -6799,7 +7314,9 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // abstract
         highlight: function (index) {
-            var choices = this.results.find(".select2-result-selectable").not(".select2-disabled");
+            var choices = this.findHighlightableChoices(),
+                choice,
+                data;
 
             if (arguments.length === 0) {
                 return indexOf(choices.filter(".select2-highlighted")[0], choices.get());
@@ -6808,23 +7325,29 @@ the specific language governing permissions and limitations under the Apache Lic
             if (index >= choices.length) index = choices.length - 1;
             if (index < 0) index = 0;
 
-            choices.removeClass("select2-highlighted");
+            this.results.find(".select2-highlighted").removeClass("select2-highlighted");
 
-            $(choices[index]).addClass("select2-highlighted");
+            choice = $(choices[index]);
+            choice.addClass("select2-highlighted");
+
             this.ensureHighlightVisible();
 
+            data = choice.data("select2-data");
+            if (data) {
+                this.opts.element.trigger({ type: "highlight", val: this.id(data), choice: data });
+            }
         },
 
         // abstract
         countSelectableResults: function() {
-            return this.results.find(".select2-result-selectable").not(".select2-disabled").length;
+            return this.findHighlightableChoices().length;
         },
 
         // abstract
         highlightUnderEvent: function (event) {
             var el = $(event.target).closest(".select2-result-selectable");
             if (el.length > 0 && !el.is(".select2-highlighted")) {
-        		var choices = this.results.find('.select2-result-selectable');
+        		var choices = this.findHighlightableChoices();
                 this.highlight(choices.index(el));
             } else if (el.length == 0) {
                 // if we are over an unselectable item remove al highlights
@@ -6846,9 +7369,10 @@ the specific language governing permissions and limitations under the Apache Lic
             if (more.length === 0) return;
             below = more.offset().top - results.offset().top - results.height();
 
-            if (below <= 0) {
+            if (below <= this.opts.loadMorePadding) {
                 more.addClass("select2-active");
                 this.opts.query({
+                        element: this.opts.element,
                         term: term,
                         page: page,
                         context: context,
@@ -6860,6 +7384,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
 
                     self.opts.populateResults.call(this, results, data.results, {term: term, page: page, context:context});
+                    self.postprocessResults(data, false, false);
 
                     if (data.more===true) {
                         more.detach().appendTo(results).text(self.opts.formatLoadMore(page+1));
@@ -6869,6 +7394,7 @@ the specific language governing permissions and limitations under the Apache Lic
                     }
                     self.positionDropdown();
                     self.resultsPage = page;
+                    self.context = data.context;
                 })});
             }
         },
@@ -6885,14 +7411,24 @@ the specific language governing permissions and limitations under the Apache Lic
          */
         // abstract
         updateResults: function (initial) {
-            var search = this.search, results = this.results, opts = this.opts, data, self=this, input;
+            var search = this.search,
+                results = this.results,
+                opts = this.opts,
+                data,
+                self = this,
+                input,
+                term = search.val(),
+                lastTerm=$.data(this.container, "select2-last-term");
+
+            // prevent duplicate queries against the same term
+            if (initial !== true && lastTerm && equal(term, lastTerm)) return;
+
+            $.data(this.container, "select2-last-term", term);
 
             // if the search is currently hidden we do not alter the results
             if (initial !== true && (this.showSearchInput === false || !this.opened())) {
                 return;
             }
-
-            search.addClass("select2-active");
 
             function postRender() {
                 results.scrollTop(0);
@@ -6901,14 +7437,15 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             function render(html) {
-                results.html(self.opts.escapeMarkup(html));
+                results.html(html);
                 postRender();
             }
 
-            if (opts.maximumSelectionSize >=1) {
+            var maxSelSize = this.getMaximumSelectionSize();
+            if (maxSelSize >=1) {
                 data = this.data();
-                if ($.isArray(data) && data.length >= opts.maximumSelectionSize && checkFormatter(opts.formatSelectionTooBig, "formatSelectionTooBig")) {
-            	    render("<li class='select2-selection-limit'>" + opts.formatSelectionTooBig(opts.maximumSelectionSize) + "</li>");
+                if ($.isArray(data) && data.length >= maxSelSize && checkFormatter(opts.formatSelectionTooBig, "formatSelectionTooBig")) {
+            	    render("<li class='select2-selection-limit'>" + opts.formatSelectionTooBig(maxSelSize) + "</li>");
             	    return;
                 }
             }
@@ -6921,9 +7458,21 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
                 return;
             }
-            else if (opts.formatSearching()) {
+
+            if (opts.maximumInputLength && search.val().length > opts.maximumInputLength) {
+                if (checkFormatter(opts.formatInputTooLong, "formatInputTooLong")) {
+                    render("<li class='select2-no-results'>" + opts.formatInputTooLong(search.val(), opts.maximumInputLength) + "</li>");
+                } else {
+                    render("");
+                }
+                return;
+            }
+
+            if (opts.formatSearching && this.findHighlightableChoices().length === 0) {
                 render("<li class='select2-searching'>" + opts.formatSearching() + "</li>");
             }
+
+            search.addClass("select2-active");
 
             // give the tokenizer a chance to pre-process the input
             input = this.tokenize();
@@ -6932,7 +7481,9 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             this.resultsPage = 1;
+
             opts.query({
+                element: opts.element,
                     term: search.val(),
                     page: this.resultsPage,
                     context: null,
@@ -6941,11 +7492,13 @@ the specific language governing permissions and limitations under the Apache Lic
                 var def; // default choice
 
                 // ignore a response if the select2 has been closed before it was received
-                if (!this.opened()) return;
+                if (!this.opened()) {
+                    this.search.removeClass("select2-active");
+                    return;
+                }
 
                 // save context, if any
                 this.context = (data.context===undefined) ? null : data.context;
-
                 // create a default choice and prepend it to the list
                 if (this.opts.createSearchChoice && search.val() !== "") {
                     def = this.opts.createSearchChoice.call(null, search.val(), data.results);
@@ -6975,6 +7528,8 @@ the specific language governing permissions and limitations under the Apache Lic
                 this.postprocessResults(data, initial);
 
                 postRender();
+
+                this.opts.element.trigger({ type: "loaded", data:data });
             })});
         },
 
@@ -6985,41 +7540,32 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // abstract
         blur: function () {
+            // if selectOnBlur == true, select the currently highlighted option
+            if (this.opts.selectOnBlur)
+                this.selectHighlighted({noFocus: true});
+
             this.close();
             this.container.removeClass("select2-container-active");
-            this.dropdown.removeClass("select2-drop-active");
             // synonymous to .is(':focus'), which is available in jquery >= 1.6
             if (this.search[0] === document.activeElement) { this.search.blur(); }
             this.clearSearch();
             this.selection.find(".select2-search-choice-focus").removeClass("select2-search-choice-focus");
-            this.opts.element.triggerHandler("blur");
         },
 
         // abstract
         focusSearch: function () {
-            // need to do it here as well as in timeout so it works in IE
-            this.search.show();
-            this.search.focus();
-
-            /* we do this in a timeout so that current event processing can complete before this code is executed.
-             this makes sure the search field is focussed even if the current event would blur it */
-            window.setTimeout(this.bind(function () {
-                // reset the value so IE places the cursor at the end of the input box
-                this.search.show();
-                this.search.focus();
-                this.search.val(this.search.val());
-            }), 10);
+            focus(this.search);
         },
 
         // abstract
-        selectHighlighted: function () {
+        selectHighlighted: function (options) {
             var index=this.highlight(),
-                highlighted=this.results.find(".select2-highlighted").not(".select2-disabled"),
-                data = highlighted.closest('.select2-result-selectable').data("select2-data");
+                highlighted=this.results.find(".select2-highlighted"),
+                data = highlighted.closest('.select2-result').data("select2-data");
+
             if (data) {
-                highlighted.addClass("select2-disabled");
                 this.highlight(index);
-                this.onSelect(data);
+                this.onSelect(data, options);
             }
         },
 
@@ -7053,18 +7599,18 @@ the specific language governing permissions and limitations under the Apache Lic
                         attrs = style.split(';');
                         for (i = 0, l = attrs.length; i < l; i = i + 1) {
                             matches = attrs[i].replace(/\s/g, '')
-                                .match(/width:(([-+]?([0-9]*\.)?[0-9]+)(px|em|ex|%|in|cm|mm|pt|pc))/);
+                                .match(/width:(([-+]?([0-9]*\.)?[0-9]+)(px|em|ex|%|in|cm|mm|pt|pc))/i);
                             if (matches !== null && matches.length >= 1)
                                 return matches[1];
                         }
                     }
 
-                    if (this.opts.width === "resolve") {
-                        // next check if css('width') can resolve a width that is percent based, this is sometimes possible
-                        // when attached to input type=hidden or elements hidden via css
-                        style = this.opts.element.css('width');
-                        if (style.indexOf("%") > 0) return style;
+                    // next check if css('width') can resolve a width that is percent based, this is sometimes possible
+                    // when attached to input type=hidden or elements hidden via css
+                    style = this.opts.element.css('width');
+                    if (style && style.length > 0) return style;
 
+                    if (this.opts.width === "resolve") {
                         // finally, fallback on the calculated width of the element
                         return (this.opts.element.outerWidth(false) === 0 ? 'auto' : this.opts.element.outerWidth(false) + 'px');
                     }
@@ -7079,7 +7625,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
             var width = resolveContainerWidth.call(this);
             if (width !== null) {
-                this.container.attr("style", "width: "+width);
+                this.container.css("width", width);
             }
         }
     });
@@ -7089,14 +7635,15 @@ the specific language governing permissions and limitations under the Apache Lic
         // single
 
 		createContainer: function () {
-            var container = $("<div></div>", {
+            var container = $(document.createElement("div")).attr({
                 "class": "select2-container"
             }).html([
-                "    <a href='javascript:void(0)' onclick='return false;' class='select2-choice'>",
-                "   <span></span><abbr class='select2-search-choice-close' style='display:none;'></abbr>",
+                "<a href='javascript:void(0)' onclick='return false;' class='select2-choice' tabindex='-1'>",
+                "   <span>&nbsp;</span><abbr class='select2-search-choice-close select2-display-none'></abbr>",
                 "   <div><b></b></div>" ,
                 "</a>",
-                "    <div class='select2-drop select2-offscreen'>" ,
+                "<input class='select2-focusser select2-offscreen' type='text'/>",
+                "<div class='select2-drop select2-display-none'>" ,
                 "   <div class='select2-search'>" ,
                 "       <input type='text' autocomplete='off' class='select2-input'/>" ,
                 "   </div>" ,
@@ -7107,34 +7654,63 @@ the specific language governing permissions and limitations under the Apache Lic
         },
 
         // single
+        disable: function() {
+            if (!this.enabled) return;
+
+            this.parent.disable.apply(this, arguments);
+
+            this.focusser.attr("disabled", "disabled");
+        },
+
+        // single
+        enable: function() {
+            if (this.enabled) return;
+
+            this.parent.enable.apply(this, arguments);
+
+            this.focusser.removeAttr("disabled");
+        },
+
+        // single
         opening: function () {
-            this.search.show();
             this.parent.opening.apply(this, arguments);
-            this.dropdown.removeClass("select2-offscreen");
+            if (this.showSearchInput !== false) {
+                this.search.val(this.focusser.val());
+            }
+            this.search.focus();
+            this.focusser.attr("disabled", "disabled").val("");
+            this.updateResults(true);
+            this.opts.element.trigger($.Event("open"));
         },
 
         // single
         close: function () {
             if (!this.opened()) return;
             this.parent.close.apply(this, arguments);
-            this.dropdown.removeAttr("style").addClass("select2-offscreen").insertAfter(this.selection).show();
+            this.focusser.removeAttr("disabled");
+            focus(this.focusser);
         },
 
         // single
         focus: function () {
-            this.close();
-            this.selection.focus();
+            if (this.opened()) {
+                this.close();
+            } else {
+                this.focusser.removeAttr("disabled");
+                this.focusser.focus();
+            }
         },
 
         // single
         isFocused: function () {
-            return this.selection[0] === document.activeElement;
+            return this.container.hasClass("select2-container-active");
         },
 
         // single
         cancel: function () {
             this.parent.cancel.apply(this, arguments);
-            this.selection.focus();
+            this.focusser.removeAttr("disabled");
+            this.focusser.focus();
         },
 
         // single
@@ -7145,7 +7721,19 @@ the specific language governing permissions and limitations under the Apache Lic
                 dropdown = this.dropdown,
                 clickingInside = false;
 
+            this.showSearch(this.opts.minimumResultsForSearch >= 0);
+
             this.selection = selection = container.find(".select2-choice");
+
+            this.focusser = container.find(".select2-focusser");
+
+            // rewrite labels from original element to focusser
+            this.focusser.attr("id", "s2id_autogen"+nextUid());
+
+            $("label[for='" + this.opts.element.attr("id") + "']")
+                .attr('for', this.focusser.attr('id'));
+
+            this.focusser.attr("tabindex", this.elementTabIndex);
 
             this.search.bind("keydown", this.bind(function (e) {
                 if (!this.enabled) return;
@@ -7156,97 +7744,45 @@ the specific language governing permissions and limitations under the Apache Lic
                     return;
                 }
 
-                if (this.opened()) {
-                    switch (e.which) {
-                        case KEY.UP:
-                        case KEY.DOWN:
-                            this.moveHighlight((e.which === KEY.UP) ? -1 : 1);
-                            killEvent(e);
-                            return;
-                        case KEY.TAB:
-                        case KEY.ENTER:
-                            this.selectHighlighted();
-                            killEvent(e);
-                            return;
-                        case KEY.ESC:
-                            this.cancel(e);
-                            killEvent(e);
-                            return;
-                    }
-                } else {
-
-                    if (e.which === KEY.TAB || KEY.isControl(e) || KEY.isFunctionKey(e) || e.which === KEY.ESC) {
+                switch (e.which) {
+                    case KEY.UP:
+                    case KEY.DOWN:
+                        this.moveHighlight((e.which === KEY.UP) ? -1 : 1);
+                        killEvent(e);
                         return;
-                    }
-
-                    if (this.opts.openOnEnter === false && e.which === KEY.ENTER) {
+                    case KEY.TAB:
+                    case KEY.ENTER:
+                        this.selectHighlighted();
+                        killEvent(e);
                         return;
-                    }
-
-                    this.open();
-
-                    if (e.which === KEY.ENTER) {
-                        // do not propagate the event otherwise we open, and propagate enter which closes
+                    case KEY.ESC:
+                        this.cancel(e);
+                        killEvent(e);
                         return;
-                    }
                 }
             }));
 
-            this.search.bind("focus", this.bind(function() {
-                this.selection.attr("tabIndex", "-1");
-            }));
-            this.search.bind("blur", this.bind(function() {
-                if (!this.opened()) this.container.removeClass("select2-container-active");
-                window.setTimeout(this.bind(function() {
-                    // restore original tab index
-                    var ti=this.opts.element.attr("tabIndex");
-                    if (ti) {
-                        this.selection.attr("tabIndex", ti);
-                    } else {
-                        this.selection.removeAttr("tabIndex");
-                    }
-                }), 10);
+            this.search.bind("blur", this.bind(function(e) {
+                // a workaround for chrome to keep the search field focussed when the scroll bar is used to scroll the dropdown.
+                // without this the search field loses focus which is annoying
+                if (document.activeElement === this.body().get(0)) {
+                    window.setTimeout(this.bind(function() {
+                        this.search.focus();
+                    }), 0);
+                }
             }));
 
-            selection.delegate("abbr", "mousedown", this.bind(function (e) {
+            this.focusser.bind("keydown", this.bind(function (e) {
                 if (!this.enabled) return;
-                this.clear();
-                killEventImmediately(e);
-                this.close();
-                this.triggerChange();
-                this.selection.focus();
-            }));
 
-            selection.bind("mousedown", this.bind(function (e) {
-                clickingInside = true;
-
-                if (this.opened()) {
-                    this.close();
-                    this.selection.focus();
-                } else if (this.enabled) {
-                    this.open();
+                if (e.which === KEY.TAB || KEY.isControl(e) || KEY.isFunctionKey(e) || e.which === KEY.ESC) {
+                    return;
                 }
 
-                clickingInside = false;
-            }));
-
-            dropdown.bind("mousedown", this.bind(function() { this.search.focus(); }));
-
-            selection.bind("focus", this.bind(function() {
-                this.container.addClass("select2-container-active");
-                // hide the search so the tab key does not focus on it
-                this.search.attr("tabIndex", "-1");
-            }));
-
-            selection.bind("blur", this.bind(function() {
-                if (!this.opened()) {
-                    this.container.removeClass("select2-container-active");
+                if (this.opts.openOnEnter === false && e.which === KEY.ENTER) {
+                    killEvent(e);
+                    return;
                 }
-                window.setTimeout(this.bind(function() { this.search.attr("tabIndex", this.opts.element.attr("tabIndex")); }), 10);
-            }));
-
-            selection.bind("keydown", this.bind(function(e) {
-                if (!this.enabled) return;
 
                 if (e.which == KEY.DOWN || e.which == KEY.UP
                     || (e.which == KEY.ENTER && this.opts.openOnEnter)) {
@@ -7263,25 +7799,73 @@ the specific language governing permissions and limitations under the Apache Lic
                     return;
                 }
             }));
-            selection.bind("keypress", this.bind(function(e) {
-                var key = String.fromCharCode(e.which);
-                this.search.val(key);
+
+
+            installKeyUpChangeEvent(this.focusser);
+            this.focusser.bind("keyup-change input", this.bind(function(e) {
+                e.stopPropagation();
+                if (this.opened()) return;
                 this.open();
             }));
 
-            this.setPlaceholder();
+            selection.delegate("abbr", "mousedown", this.bind(function (e) {
+                if (!this.enabled) return;
+                this.clear();
+                killEventImmediately(e);
+                this.close();
+                this.selection.focus();
+            }));
 
-            this.search.bind("focus", this.bind(function() {
+            selection.bind("mousedown", this.bind(function (e) {
+                clickingInside = true;
+
+                if (this.opened()) {
+                    this.close();
+                } else if (this.enabled) {
+                    this.open();
+                }
+
+                killEvent(e);
+
+                clickingInside = false;
+            }));
+
+            dropdown.bind("mousedown", this.bind(function() { this.search.focus(); }));
+
+            selection.bind("focus", this.bind(function(e) {
+                killEvent(e);
+            }));
+
+            this.focusser.bind("focus", this.bind(function(){
+                this.container.addClass("select2-container-active");
+            })).bind("blur", this.bind(function() {
+                if (!this.opened()) {
+                    this.container.removeClass("select2-container-active");
+                }
+            }));
+            this.search.bind("focus", this.bind(function(){
                 this.container.addClass("select2-container-active");
             }));
+
+            this.initContainerWidth();
+            this.opts.element.addClass("select2-offscreen");
+            this.setPlaceholder();
         },
 
         // single
-        clear: function() {
-            this.opts.element.val("");
-            this.selection.find("span").empty();
-            this.selection.removeData("select2-data");
-            this.setPlaceholder();
+        clear: function(triggerChange) {
+            var data=this.selection.data("select2-data");
+            if (data) { // guard against queued quick consecutive clicks
+                this.opts.element.val("");
+                this.selection.find("span").empty();
+                this.selection.removeData("select2-data");
+                this.setPlaceholder();
+
+                if (triggerChange !== false){
+                    this.opts.element.trigger({ type: "removed", val: this.id(data), choice: data });
+                    this.triggerChange({removed:data});
+                }
+            }
         },
 
         /**
@@ -7291,6 +7875,7 @@ the specific language governing permissions and limitations under the Apache Lic
         initSelection: function () {
             var selected;
             if (this.opts.element.val() === "" && this.opts.element.text() === "") {
+                this.updateSelection([]);
                 this.close();
                 this.setPlaceholder();
             } else {
@@ -7307,19 +7892,50 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // single
         prepareOpts: function () {
-            var opts = this.parent.prepareOpts.apply(this, arguments);
+            var opts = this.parent.prepareOpts.apply(this, arguments),
+                self=this;
 
             if (opts.element.get(0).tagName.toLowerCase() === "select") {
                 // install the selection initializer
                 opts.initSelection = function (element, callback) {
                     var selected = element.find(":selected");
                     // a single select box always has a value, no need to null check 'selected'
-                    if ($.isFunction(callback))
-                        callback({id: selected.attr("value"), text: selected.text(), element:selected});
+                    callback(self.optionToData(selected));
+                };
+            } else if ("data" in opts) {
+                // install default initSelection when applied to hidden input and data is local
+                opts.initSelection = opts.initSelection || function (element, callback) {
+                    var id = element.val();
+                    //search in data by id, storing the actual matching item
+                    var match = null;
+                    opts.query({
+                        matcher: function(term, text, el){
+                            var is_match = equal(id, opts.id(el));
+                            if (is_match) {
+                                match = el;
+                            }
+                            return is_match;
+                        },
+                        callback: !$.isFunction(callback) ? $.noop : function() {
+                            callback(match);
+                        }
+                    });
                 };
             }
 
             return opts;
+        },
+
+        // single
+        getPlaceholder: function() {
+            // if a placeholder is specified on a single select without the first empty option ignore it
+            if (this.select) {
+                if (this.select.find("option").first().text() !== "") {
+                    return undefined;
+                }
+            }
+
+            return this.parent.getPlaceholder.apply(this, arguments);
         },
 
         // single
@@ -7335,17 +7951,18 @@ the specific language governing permissions and limitations under the Apache Lic
 
                 this.selection.addClass("select2-default");
 
+                this.container.removeClass("select2-allowclear");
                 this.selection.find("abbr").hide();
             }
         },
 
         // single
-        postprocessResults: function (data, initial) {
+        postprocessResults: function (data, initial, noHighlightUpdate) {
             var selected = 0, self = this, showSearchInput = true;
 
             // find the selected element in the result list
 
-            this.results.find(".select2-result-selectable").each2(function (i, elm) {
+            this.findHighlightableChoices().each2(function (i, elm) {
                 if (equal(self.id(elm.data("select2-data")), self.opts.element.val())) {
                     selected = i;
                     return false;
@@ -7353,31 +7970,48 @@ the specific language governing permissions and limitations under the Apache Lic
             });
 
             // and highlight it
-
-            this.highlight(selected);
+            if (noHighlightUpdate !== false) {
+                this.highlight(selected);
+            }
 
             // hide the search box if this is the first we got the results and there are a few of them
 
             if (initial === true) {
-                showSearchInput = this.showSearchInput = countResults(data.results) >= this.opts.minimumResultsForSearch;
-                this.dropdown.find(".select2-search")[showSearchInput ? "removeClass" : "addClass"]("select2-search-hidden");
-
-                //add "select2-with-searchbox" to the container if search box is shown
-                $(this.dropdown, this.container)[showSearchInput ? "addClass" : "removeClass"]("select2-with-searchbox");
+                var min=this.opts.minimumResultsForSearch;
+                showSearchInput  = min < 0 ? false : countResults(data.results) >= min;
+                this.showSearch(showSearchInput);
             }
 
         },
 
         // single
-        onSelect: function (data) {
-            var old = this.opts.element.val();
+        showSearch: function(showSearchInput) {
+            this.showSearchInput = showSearchInput;
+
+            this.dropdown.find(".select2-search")[showSearchInput ? "removeClass" : "addClass"]("select2-search-hidden");
+            //add "select2-with-searchbox" to the container if search box is shown
+            $(this.dropdown, this.container)[showSearchInput ? "addClass" : "removeClass"]("select2-with-searchbox");
+        },
+
+        // single
+        onSelect: function (data, options) {
+
+            if (!this.triggerSelect(data)) { return; }
+
+            var old = this.opts.element.val(),
+                oldData = this.data();
 
             this.opts.element.val(this.id(data));
             this.updateSelection(data);
-            this.close();
-            this.selection.focus();
 
-            if (!equal(old, this.id(data))) { this.triggerChange(); }
+            this.opts.element.trigger({ type: "selected", val: this.id(data), choice: data });
+
+            this.close();
+
+            if (!options || !options.noFocus)
+                this.selection.focus();
+
+            if (!equal(old, this.id(data))) { this.triggerChange({added:data,removed:oldData}); }
         },
 
         // single
@@ -7396,13 +8030,18 @@ the specific language governing permissions and limitations under the Apache Lic
             this.selection.removeClass("select2-default");
 
             if (this.opts.allowClear && this.getPlaceholder() !== undefined) {
+                this.container.addClass("select2-allowclear");
                 this.selection.find("abbr").show();
             }
         },
 
         // single
         val: function () {
-            var val, data = null, self = this;
+            var val,
+                triggerChange = false,
+                data = null,
+                self = this,
+                oldData = this.data();
 
             if (arguments.length === 0) {
                 return this.opts.element.val();
@@ -7410,22 +8049,29 @@ the specific language governing permissions and limitations under the Apache Lic
 
             val = arguments[0];
 
+            if (arguments.length > 1) {
+                triggerChange = arguments[1];
+            }
+
             if (this.select) {
                 this.select
                     .val(val)
                     .find(":selected").each2(function (i, elm) {
-                        data = {id: elm.attr("value"), text: elm.text()};
+                        data = self.optionToData(elm);
                         return false;
                     });
                 this.updateSelection(data);
                 this.setPlaceholder();
+                if (triggerChange) {
+                    this.triggerChange({added: data, removed:oldData});
+                }
             } else {
                 if (this.opts.initSelection === undefined) {
                     throw new Error("cannot call val() if initSelection() is not defined");
                 }
-                // val is an id. !val is true for [undefined,null,'']
-                if (!val) {
-                    this.clear();
+                // val is an id. !val is true for [undefined,null,'',0] - 0 is legal
+                if (!val && val !== 0) {
+                    this.clear(triggerChange);
                     return;
                 }
                 this.opts.element.val(val);
@@ -7433,6 +8079,9 @@ the specific language governing permissions and limitations under the Apache Lic
                     self.opts.element.val(!data ? "" : self.id(data));
                     self.updateSelection(data);
                     self.setPlaceholder();
+                    if (triggerChange) {
+                        self.triggerChange({added: data, removed:oldData});
+                    }
                 });
             }
         },
@@ -7440,10 +8089,11 @@ the specific language governing permissions and limitations under the Apache Lic
         // single
         clearSearch: function () {
             this.search.val("");
+            this.focusser.val("");
         },
 
         // single
-        data: function(value) {
+        data: function(value, triggerChange) {
             var data;
 
             if (arguments.length === 0) {
@@ -7452,10 +8102,14 @@ the specific language governing permissions and limitations under the Apache Lic
                 return data;
             } else {
                 if (!value || value === "") {
-                    this.clear();
+                    this.clear(triggerChange);
                 } else {
+                    data = this.data();
                     this.opts.element.val(!value ? "" : this.id(value));
                     this.updateSelection(value);
+                    if (triggerChange) {
+                        this.triggerChange({added: value, removed:data});
+                    }
                 }
             }
         }
@@ -7465,7 +8119,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // multi
         createContainer: function () {
-            var container = $("<div></div>", {
+            var container = $(document.createElement("div")).attr({
                 "class": "select2-container select2-container-multi"
             }).html([
                 "    <ul class='select2-choices'>",
@@ -7474,7 +8128,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 "    <input type='text' autocomplete='off' class='select2-input'>" ,
                 "  </li>" ,
                 "</ul>" ,
-                "<div class='select2-drop select2-drop-multi' style='display:none;'>" ,
+                "<div class='select2-drop select2-drop-multi select2-display-none'>" ,
                 "   <ul class='select2-results'>" ,
                 "   </ul>" ,
                 "</div>"].join(""));
@@ -7483,21 +8137,42 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // multi
         prepareOpts: function () {
-            var opts = this.parent.prepareOpts.apply(this, arguments);
+            var opts = this.parent.prepareOpts.apply(this, arguments),
+                self=this;
 
             // TODO validate placeholder is a string if specified
 
             if (opts.element.get(0).tagName.toLowerCase() === "select") {
                 // install sthe selection initializer
-                opts.initSelection = function (element,callback) {
+                opts.initSelection = function (element, callback) {
 
                     var data = [];
-                    element.find(":selected").each2(function (i, elm) {
-                        data.push({id: elm.attr("value"), text: elm.text(), element: elm});
-                    });
 
-                    if ($.isFunction(callback))
-                        callback(data);
+                    element.find(":selected").each2(function (i, elm) {
+                        data.push(self.optionToData(elm));
+                    });
+                    callback(data);
+                };
+            } else if ("data" in opts) {
+                // install default initSelection when applied to hidden input and data is local
+                opts.initSelection = opts.initSelection || function (element, callback) {
+                    var ids = splitVal(element.val(), opts.separator);
+                    //search in data by array of ids, storing matching items in a list
+                    var matches = [];
+                    opts.query({
+                        matcher: function(term, text, el){
+                            var is_match = $.grep(ids, function(id) {
+                                return equal(id, opts.id(el));
+                            }).length;
+                            if (is_match) {
+                                matches.push(el);
+                            }
+                            return is_match;
+                        },
+                        callback: !$.isFunction(callback) ? $.noop : function() {
+                            callback(matches);
+                        }
+                    });
                 };
             }
 
@@ -7511,6 +8186,20 @@ the specific language governing permissions and limitations under the Apache Lic
 
             this.searchContainer = this.container.find(".select2-search-field");
             this.selection = selection = this.container.find(selector);
+
+            // rewrite labels from original element to focusser
+            this.search.attr("id", "s2id_autogen"+nextUid());
+            $("label[for='" + this.opts.element.attr("id") + "']")
+                .attr('for', this.search.attr('id'));
+
+            this.search.bind("input paste", this.bind(function() {
+                if (!this.enabled) return;
+                if (!this.opened()) {
+                    this.open();
+                }
+            }));
+
+            this.search.attr("tabindex", this.elementTabIndex);
 
             this.search.bind("keydown", this.bind(function (e) {
                 if (!this.enabled) return;
@@ -7559,8 +8248,12 @@ the specific language governing permissions and limitations under the Apache Lic
                     return;
                 }
 
-                if (this.opts.openOnEnter === false && e.which === KEY.ENTER) {
-                    return;
+                if (e.which === KEY.ENTER) {
+                    if (this.opts.openOnEnter === false) {
+                        return;
+                    } else if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) {
+                        return;
+                    }
                 }
 
                 this.open();
@@ -7569,6 +8262,12 @@ the specific language governing permissions and limitations under the Apache Lic
                     // prevent the page from scrolling
                     killEvent(e);
                 }
+
+                if (e.which === KEY.ENTER) {
+                    // prevent form from being submitted
+                    killEvent(e);
+                }
+
             }));
 
             this.search.bind("keyup", this.bind(this.resizeSearch));
@@ -7576,7 +8275,8 @@ the specific language governing permissions and limitations under the Apache Lic
             this.search.bind("blur", this.bind(function(e) {
                 this.container.removeClass("select2-container-active");
                 this.search.removeClass("select2-focused");
-                this.clearSearch();
+                this.selection.find(".select2-search-choice-focus").removeClass("select2-search-choice-focus");
+                if (!this.opened()) this.clearSearch();
                 e.stopImmediatePropagation();
             }));
 
@@ -7598,6 +8298,9 @@ the specific language governing permissions and limitations under the Apache Lic
                 this.dropdown.addClass("select2-drop-active");
                 this.clearPlaceholder();
             }));
+
+            this.initContainerWidth();
+            this.opts.element.addClass("select2-offscreen");
 
             // set the placeholder if necessary
             this.clearSearch();
@@ -7645,16 +8348,16 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // multi
         clearSearch: function () {
-            var placeholder = this.getPlaceholder();
+            var placeholder = this.getPlaceholder(),
+                maxWidth = this.getMaxSearchWidth();
 
             if (placeholder !== undefined  && this.getVal().length === 0 && this.search.hasClass("select2-focused") === false) {
                 this.search.val(placeholder).addClass("select2-default");
                 // stretch the search box to full width of the container so as much of the placeholder is visible as possible
-                this.resizeSearch();
+                // we could call this.resizeSearch(), but we do not because that requires a sizer and we do not want to create one so early because of a firefox bug, see #944
+                this.search.width(maxWidth > 0 ? maxWidth : this.container.css("width"));
             } else {
-                // we set this to " " instead of "" and later clear it on focus() because there is a firefox bug
-                // that does not properly render the caret when the field starts out blank
-                this.search.val(" ").width(10);
+                this.search.val("").width(10);
             }
         },
 
@@ -7662,19 +8365,21 @@ the specific language governing permissions and limitations under the Apache Lic
         clearPlaceholder: function () {
             if (this.search.hasClass("select2-default")) {
                 this.search.val("").removeClass("select2-default");
-            } else {
-                // work around for the space character we set to avoid firefox caret bug
-                if (this.search.val() === " ") this.search.val("");
             }
         },
 
         // multi
         opening: function () {
+            this.clearPlaceholder(); // should be done before super so placeholder is not used to search
+            this.resizeSearch();
+
             this.parent.opening.apply(this, arguments);
 
-            this.clearPlaceholder();
-			this.resizeSearch();
             this.focusSearch();
+
+            this.updateResults(true);
+            this.search.focus();
+            this.opts.element.trigger($.Event("open"));
         },
 
         // multi
@@ -7687,6 +8392,7 @@ the specific language governing permissions and limitations under the Apache Lic
         focus: function () {
             this.close();
             this.search.focus();
+            //this.opts.element.triggerHandler("focus");
         },
 
         // multi
@@ -7714,6 +8420,7 @@ the specific language governing permissions and limitations under the Apache Lic
             self.postprocessResults();
         },
 
+        // multi
         tokenize: function() {
             var input = this.search.val();
             input = this.opts.tokenizer(input, this.data(), this.bind(this.onSelect), this.opts);
@@ -7727,8 +8434,14 @@ the specific language governing permissions and limitations under the Apache Lic
         },
 
         // multi
-        onSelect: function (data) {
+        onSelect: function (data, options) {
+
+            if (!this.triggerSelect(data)) { return; }
+
             this.addSelectedChoice(data);
+
+            this.opts.element.trigger({ type: "selected", val: this.id(data), choice: data });
+
             if (this.select || !this.opts.closeOnSelect) this.postprocessResults();
 
             if (this.opts.closeOnSelect) {
@@ -7738,10 +8451,16 @@ the specific language governing permissions and limitations under the Apache Lic
                 if (this.countSelectableResults()>0) {
                     this.search.width(10);
                     this.resizeSearch();
+                    if (this.getMaximumSelectionSize() > 0 && this.val().length >= this.getMaximumSelectionSize()) {
+                        // if we reached max selection size repaint the results so choices
+                        // are replaced with the max selection reached message
+                        this.updateResults(true);
+                    }
                     this.positionDropdown();
                 } else {
                     // if nothing left to select close
                     this.close();
+                    this.search.width(10);
                 }
             }
 
@@ -7749,7 +8468,8 @@ the specific language governing permissions and limitations under the Apache Lic
             // added we do not need to check if this is a new element before firing change
             this.triggerChange({ added: data });
 
-            this.focusSearch();
+            if (!options || !options.noFocus)
+                this.focusSearch();
         },
 
         // multi
@@ -7766,14 +8486,14 @@ the specific language governing permissions and limitations under the Apache Lic
                     "    <a href='#' onclick='return false;' class='select2-search-choice-close' tabindex='-1'></a>" +
                     "</li>"),
                 disabledItem = $(
-                    "<li class='select2-search-choice select2-locked'>" + 
+                    "<li class='select2-search-choice select2-locked'>" +
                     "<div></div>" +
                     "</li>");
             var choice = enableChoice ? enabledItem : disabledItem,
                 id = this.id(data),
                 val = this.getVal(),
                 formatted;
-            
+
             formatted=this.opts.formatSelection(data, choice.find("div"));
             if (formatted != undefined) {
                 choice.find("div").replaceWith("<div>"+this.opts.escapeMarkup(formatted)+"</div>");
@@ -7820,6 +8540,12 @@ the specific language governing permissions and limitations under the Apache Lic
 
             data = selected.data("select2-data");
 
+            if (!data) {
+                // prevent a race condition when the 'x' is clicked really fast repeatedly the event can be queued
+                // and invoked on an element already removed
+                return;
+            }
+
             index = indexOf(this.id(data), val);
 
             if (index >= 0) {
@@ -7828,45 +8554,48 @@ the specific language governing permissions and limitations under the Apache Lic
                 if (this.select) this.postprocessResults();
             }
             selected.remove();
+
+            this.opts.element.trigger({ type: "removed", val: this.id(data), choice: data });
             this.triggerChange({ removed: data });
         },
 
         // multi
         postprocessResults: function () {
             var val = this.getVal(),
-                choices = this.results.find(".select2-result-selectable"),
+                choices = this.results.find(".select2-result"),
                 compound = this.results.find(".select2-result-with-children"),
                 self = this;
 
             choices.each2(function (i, choice) {
                 var id = self.id(choice.data("select2-data"));
                 if (indexOf(id, val) >= 0) {
-                    choice.addClass("select2-disabled").removeClass("select2-result-selectable");
-                } else {
-                    choice.removeClass("select2-disabled").addClass("select2-result-selectable");
+                    choice.addClass("select2-selected");
+                    // mark all children of the selected parent as selected
+                    choice.find(".select2-result-selectable").addClass("select2-selected");
                 }
             });
 
-            compound.each2(function(i, e) {
-                if (!e.is('.select2-result-selectable') && e.find(".select2-result-selectable").length==0) {  // FIX FOR HIRECHAL DATA
-                    e.addClass("select2-disabled");
-                } else {
-                    e.removeClass("select2-disabled");
+            compound.each2(function(i, choice) {
+                // hide an optgroup if it doesnt have any selectable children
+                if (!choice.is('.select2-result-selectable')
+                    && choice.find(".select2-result-selectable:not(.select2-selected)").length === 0) {
+                    choice.addClass("select2-selected");
                 }
             });
 
-            choices.each2(function (i, choice) {
-                if (!choice.hasClass("select2-disabled") && choice.hasClass("select2-result-selectable")) {
-                    self.highlight(0);
-                    return false;
-                }
-            });
+            if (this.highlight() == -1){
+                self.highlight(0);
+            }
 
         },
 
         // multi
-        resizeSearch: function () {
+        getMaxSearchWidth: function() {
+            return this.selection.width() - getSideBorderPadding(this.search);
+        },
 
+        // multi
+        resizeSearch: function () {
             var minimumWidth, left, maxWidth, containerLeft, searchWidth,
             	sideBorderPadding = getSideBorderPadding(this.search);
 
@@ -7878,6 +8607,7 @@ the specific language governing permissions and limitations under the Apache Lic
             containerLeft = this.selection.offset().left;
 
             searchWidth = maxWidth - (left - containerLeft) - sideBorderPadding;
+
             if (searchWidth < minimumWidth) {
                 searchWidth = maxWidth - sideBorderPadding;
             }
@@ -7885,6 +8615,11 @@ the specific language governing permissions and limitations under the Apache Lic
             if (searchWidth < 40) {
                 searchWidth = maxWidth - sideBorderPadding;
             }
+
+            if (searchWidth <= 0) {
+              searchWidth = minimumWidth;
+            }
+
             this.search.width(searchWidth);
         },
 
@@ -7916,19 +8651,45 @@ the specific language governing permissions and limitations under the Apache Lic
         },
 
         // multi
-        val: function () {
-            var val, data = [], self=this;
+        buildChangeDetails: function (old, current) {
+            var current = current.slice(0),
+                old = old.slice(0);
+
+            // remove intersection from each array
+            for (var i = 0; i < current.length; i++) {
+                for (var j = 0; j < old.length; j++) {
+                    if (equal(this.opts.id(current[i]), this.opts.id(old[j]))) {
+                        current.splice(i, 1);
+                        i--;
+                        old.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+
+            return {added: current, removed: old};
+        },
+
+
+        // multi
+        val: function (val, triggerChange) {
+            var oldData, self=this, changeDetails;
 
             if (arguments.length === 0) {
                 return this.getVal();
             }
 
-            val = arguments[0];
+            oldData=this.data();
+            if (!oldData.length) oldData=[];
 
-            if (!val) {
+            // val is an id. !val is true for [undefined,null,'',0] - 0 is legal
+            if (!val && val !== 0) {
                 this.opts.element.val("");
                 this.updateSelection([]);
                 this.clearSearch();
+                if (triggerChange) {
+                    this.triggerChange({added: this.data(), removed: oldData});
+                }
                 return;
             }
 
@@ -7936,13 +8697,13 @@ the specific language governing permissions and limitations under the Apache Lic
             this.setVal(val);
 
             if (this.select) {
-                this.select.find(":selected").each(function () {
-                    data.push({id: $(this).attr("value"), text: $(this).text()});
-                });
-                this.updateSelection(data);
+                this.opts.initSelection(this.select, this.bind(this.updateSelection));
+                if (triggerChange) {
+                    this.triggerChange(this.buildChangeDetails(oldData, this.data()));
+                }
             } else {
                 if (this.opts.initSelection === undefined) {
-                    throw new Error("val() cannot be called if initSelection() is not defined")
+                    throw new Error("val() cannot be called if initSelection() is not defined");
                 }
 
                 this.opts.initSelection(this.opts.element, function(data){
@@ -7950,6 +8711,9 @@ the specific language governing permissions and limitations under the Apache Lic
                     self.setVal(ids);
                     self.updateSelection(data);
                     self.clearSearch();
+                    if (triggerChange) {
+                        self.triggerChange(this.buildChangeDetails(oldData, this.data()));
+                    }
                 });
             }
             this.clearSearch();
@@ -7989,19 +8753,23 @@ the specific language governing permissions and limitations under the Apache Lic
         },
 
         // multi
-        data: function(values) {
-            var self=this, ids;
+        data: function(values, triggerChange) {
+            var self=this, ids, old;
             if (arguments.length === 0) {
                  return this.selection
                      .find(".select2-search-choice")
                      .map(function() { return $(this).data("select2-data"); })
                      .get();
             } else {
+                old = this.data();
                 if (!values) { values = []; }
-                ids = $.map(values, function(e) { return self.opts.id(e)});
+                ids = $.map(values, function(e) { return self.opts.id(e); });
                 this.setVal(ids);
                 this.updateSelection(values);
                 this.clearSearch();
+                if (triggerChange) {
+                    this.triggerChange(this.buildChangeDetails(old, this.data()));
+                }
             }
         }
     });
@@ -8052,43 +8820,61 @@ the specific language governing permissions and limitations under the Apache Lic
     // plugin defaults, accessible to users
     $.fn.select2.defaults = {
         width: "copy",
+        loadMorePadding: 0,
         closeOnSelect: true,
         openOnEnter: true,
         containerCss: {},
         dropdownCss: {},
         containerCssClass: "",
         dropdownCssClass: "",
-        formatResult: function(result, container, query) {
+        formatResult: function(result, container, query, escapeMarkup) {
             var markup=[];
-            markMatch(result.text, query.term, markup);
+            markMatch(result.text, query.term, markup, escapeMarkup);
             return markup.join("");
         },
         formatSelection: function (data, container) {
             return data ? data.text : undefined;
         },
+        sortResults: function (results, container, query) {
+            return results;
+        },
         formatResultCssClass: function(data) {return undefined;},
         formatNoMatches: function () { return "No matches found"; },
-        formatInputTooShort: function (input, min) { return "Please enter " + (min - input.length) + " more characters"; },
+        formatInputTooShort: function (input, min) { var n = min - input.length; return "Please enter " + n + " more character" + (n == 1? "" : "s"); },
+        formatInputTooLong: function (input, max) { var n = input.length - max; return "Please delete " + n + " character" + (n == 1? "" : "s"); },
         formatSelectionTooBig: function (limit) { return "You can only select " + limit + " item" + (limit == 1 ? "" : "s"); },
         formatLoadMore: function (pageNumber) { return "Loading more results..."; },
         formatSearching: function () { return "Searching..."; },
         minimumResultsForSearch: 0,
         minimumInputLength: 0,
+        maximumInputLength: null,
         maximumSelectionSize: 0,
         id: function (e) { return e.id; },
         matcher: function(term, text) {
-            return text.toUpperCase().indexOf(term.toUpperCase()) >= 0;
+            return (''+text).toUpperCase().indexOf((''+term).toUpperCase()) >= 0;
         },
         separator: ",",
         tokenSeparators: [],
         tokenizer: defaultTokenizer,
         escapeMarkup: function (markup) {
-            if (markup && typeof(markup) === "string") {
-                return markup.replace(/&/g, "&amp;");
-            }
-            return markup;
+            var replace_map = {
+                '\\': '&#92;',
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&apos;',
+                "/": '&#47;'
+            };
+
+            return String(markup).replace(/[&<>"'\/\\]/g, function (match) {
+                    return replace_map[match[0]];
+            });
         },
-        blurOnChange: false
+        blurOnChange: false,
+        selectOnBlur: false,
+        adaptContainerCssClass: function(c) { return c; },
+        adaptDropdownCssClass: function(c) { return null; }
     };
 
     // exports
@@ -8109,7 +8895,715 @@ the specific language governing permissions and limitations under the Apache Lic
 
 }(jQuery));
 
-define("jam/select2/select2", function(){});
+define("jam/plone-select2/select2", function(){});
+
+/*! 
+ * jquery.event.drag - v 2.2
+ * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+ * Open Source MIT License - http://threedubmedia.com/code/license
+ */
+// Created: 2008-06-04 
+// Updated: 2012-05-21
+// REQUIRES: jquery 1.7.x
+
+;(function( $ ){
+
+// add the jquery instance method
+$.fn.drag = function( str, arg, opts ){
+	// figure out the event type
+	var type = typeof str == "string" ? str : "",
+	// figure out the event handler...
+	fn = $.isFunction( str ) ? str : $.isFunction( arg ) ? arg : null;
+	// fix the event type
+	if ( type.indexOf("drag") !== 0 ) 
+		type = "drag"+ type;
+	// were options passed
+	opts = ( str == fn ? arg : opts ) || {};
+	// trigger or bind event handler
+	return fn ? this.bind( type, opts, fn ) : this.trigger( type );
+};
+
+// local refs (increase compression)
+var $event = $.event, 
+$special = $event.special,
+// configure the drag special event 
+drag = $special.drag = {
+	
+	// these are the default settings
+	defaults: {
+		which: 1, // mouse button pressed to start drag sequence
+		distance: 0, // distance dragged before dragstart
+		not: ':input', // selector to suppress dragging on target elements
+		handle: null, // selector to match handle target elements
+		relative: false, // true to use "position", false to use "offset"
+		drop: true, // false to suppress drop events, true or selector to allow
+		click: false // false to suppress click events after dragend (no proxy)
+	},
+	
+	// the key name for stored drag data
+	datakey: "dragdata",
+	
+	// prevent bubbling for better performance
+	noBubble: true,
+	
+	// count bound related events
+	add: function( obj ){ 
+		// read the interaction data
+		var data = $.data( this, drag.datakey ),
+		// read any passed options 
+		opts = obj.data || {};
+		// count another realted event
+		data.related += 1;
+		// extend data options bound with this event
+		// don't iterate "opts" in case it is a node 
+		$.each( drag.defaults, function( key, def ){
+			if ( opts[ key ] !== undefined )
+				data[ key ] = opts[ key ];
+		});
+	},
+	
+	// forget unbound related events
+	remove: function(){
+		$.data( this, drag.datakey ).related -= 1;
+	},
+	
+	// configure interaction, capture settings
+	setup: function(){
+		// check for related events
+		if ( $.data( this, drag.datakey ) ) 
+			return;
+		// initialize the drag data with copied defaults
+		var data = $.extend({ related:0 }, drag.defaults );
+		// store the interaction data
+		$.data( this, drag.datakey, data );
+		// bind the mousedown event, which starts drag interactions
+		$event.add( this, "touchstart mousedown", drag.init, data );
+		// prevent image dragging in IE...
+		if ( this.attachEvent ) 
+			this.attachEvent("ondragstart", drag.dontstart ); 
+	},
+	
+	// destroy configured interaction
+	teardown: function(){
+		var data = $.data( this, drag.datakey ) || {};
+		// check for related events
+		if ( data.related ) 
+			return;
+		// remove the stored data
+		$.removeData( this, drag.datakey );
+		// remove the mousedown event
+		$event.remove( this, "touchstart mousedown", drag.init );
+		// enable text selection
+		drag.textselect( true ); 
+		// un-prevent image dragging in IE...
+		if ( this.detachEvent ) 
+			this.detachEvent("ondragstart", drag.dontstart ); 
+	},
+		
+	// initialize the interaction
+	init: function( event ){ 
+		// sorry, only one touch at a time
+		if ( drag.touched ) 
+			return;
+		// the drag/drop interaction data
+		var dd = event.data, results;
+		// check the which directive
+		if ( event.which != 0 && dd.which > 0 && event.which != dd.which ) 
+			return; 
+		// check for suppressed selector
+		if ( $( event.target ).is( dd.not ) ) 
+			return;
+		// check for handle selector
+		if ( dd.handle && !$( event.target ).closest( dd.handle, event.currentTarget ).length ) 
+			return;
+
+		drag.touched = event.type == 'touchstart' ? this : null;
+		dd.propagates = 1;
+		dd.mousedown = this;
+		dd.interactions = [ drag.interaction( this, dd ) ];
+		dd.target = event.target;
+		dd.pageX = event.pageX;
+		dd.pageY = event.pageY;
+		dd.dragging = null;
+		// handle draginit event... 
+		results = drag.hijack( event, "draginit", dd );
+		// early cancel
+		if ( !dd.propagates )
+			return;
+		// flatten the result set
+		results = drag.flatten( results );
+		// insert new interaction elements
+		if ( results && results.length ){
+			dd.interactions = [];
+			$.each( results, function(){
+				dd.interactions.push( drag.interaction( this, dd ) );
+			});
+		}
+		// remember how many interactions are propagating
+		dd.propagates = dd.interactions.length;
+		// locate and init the drop targets
+		if ( dd.drop !== false && $special.drop ) 
+			$special.drop.handler( event, dd );
+		// disable text selection
+		drag.textselect( false ); 
+		// bind additional events...
+		if ( drag.touched )
+			$event.add( drag.touched, "touchmove touchend", drag.handler, dd );
+		else 
+			$event.add( document, "mousemove mouseup", drag.handler, dd );
+		// helps prevent text selection or scrolling
+		if ( !drag.touched || dd.live )
+			return false;
+	},	
+	
+	// returns an interaction object
+	interaction: function( elem, dd ){
+		var offset = $( elem )[ dd.relative ? "position" : "offset" ]() || { top:0, left:0 };
+		return {
+			drag: elem, 
+			callback: new drag.callback(), 
+			droppable: [],
+			offset: offset
+		};
+	},
+	
+	// handle drag-releatd DOM events
+	handler: function( event ){ 
+		// read the data before hijacking anything
+		var dd = event.data;	
+		// handle various events
+		switch ( event.type ){
+			// mousemove, check distance, start dragging
+			case !dd.dragging && 'touchmove': 
+				event.preventDefault();
+			case !dd.dragging && 'mousemove':
+				//  drag tolerance, x� + y� = distance�
+				if ( Math.pow(  event.pageX-dd.pageX, 2 ) + Math.pow(  event.pageY-dd.pageY, 2 ) < Math.pow( dd.distance, 2 ) ) 
+					break; // distance tolerance not reached
+				event.target = dd.target; // force target from "mousedown" event (fix distance issue)
+				drag.hijack( event, "dragstart", dd ); // trigger "dragstart"
+				if ( dd.propagates ) // "dragstart" not rejected
+					dd.dragging = true; // activate interaction
+			// mousemove, dragging
+			case 'touchmove':
+				event.preventDefault();
+			case 'mousemove':
+				if ( dd.dragging ){
+					// trigger "drag"		
+					drag.hijack( event, "drag", dd );
+					if ( dd.propagates ){
+						// manage drop events
+						if ( dd.drop !== false && $special.drop )
+							$special.drop.handler( event, dd ); // "dropstart", "dropend"							
+						break; // "drag" not rejected, stop		
+					}
+					event.type = "mouseup"; // helps "drop" handler behave
+				}
+			// mouseup, stop dragging
+			case 'touchend': 
+			case 'mouseup': 
+			default:
+				if ( drag.touched )
+					$event.remove( drag.touched, "touchmove touchend", drag.handler ); // remove touch events
+				else 
+					$event.remove( document, "mousemove mouseup", drag.handler ); // remove page events	
+				if ( dd.dragging ){
+					if ( dd.drop !== false && $special.drop )
+						$special.drop.handler( event, dd ); // "drop"
+					drag.hijack( event, "dragend", dd ); // trigger "dragend"	
+				}
+				drag.textselect( true ); // enable text selection
+				// if suppressing click events...
+				if ( dd.click === false && dd.dragging )
+					$.data( dd.mousedown, "suppress.click", new Date().getTime() + 5 );
+				dd.dragging = drag.touched = false; // deactivate element	
+				break;
+		}
+	},
+		
+	// re-use event object for custom events
+	hijack: function( event, type, dd, x, elem ){
+		// not configured
+		if ( !dd ) 
+			return;
+		// remember the original event and type
+		var orig = { event:event.originalEvent, type:event.type },
+		// is the event drag related or drog related?
+		mode = type.indexOf("drop") ? "drag" : "drop",
+		// iteration vars
+		result, i = x || 0, ia, $elems, callback,
+		len = !isNaN( x ) ? x : dd.interactions.length;
+		// modify the event type
+		event.type = type;
+		// remove the original event
+		event.originalEvent = null;
+		// initialize the results
+		dd.results = [];
+		// handle each interacted element
+		do if ( ia = dd.interactions[ i ] ){
+			// validate the interaction
+			if ( type !== "dragend" && ia.cancelled )
+				continue;
+			// set the dragdrop properties on the event object
+			callback = drag.properties( event, dd, ia );
+			// prepare for more results
+			ia.results = [];
+			// handle each element
+			$( elem || ia[ mode ] || dd.droppable ).each(function( p, subject ){
+				// identify drag or drop targets individually
+				callback.target = subject;
+				// force propagtion of the custom event
+				event.isPropagationStopped = function(){ return false; };
+				// handle the event	
+				result = subject ? $event.dispatch.call( subject, event, callback ) : null;
+				// stop the drag interaction for this element
+				if ( result === false ){
+					if ( mode == "drag" ){
+						ia.cancelled = true;
+						dd.propagates -= 1;
+					}
+					if ( type == "drop" ){
+						ia[ mode ][p] = null;
+					}
+				}
+				// assign any dropinit elements
+				else if ( type == "dropinit" )
+					ia.droppable.push( drag.element( result ) || subject );
+				// accept a returned proxy element 
+				if ( type == "dragstart" )
+					ia.proxy = $( drag.element( result ) || ia.drag )[0];
+				// remember this result	
+				ia.results.push( result );
+				// forget the event result, for recycling
+				delete event.result;
+				// break on cancelled handler
+				if ( type !== "dropinit" )
+					return result;
+			});	
+			// flatten the results	
+			dd.results[ i ] = drag.flatten( ia.results );	
+			// accept a set of valid drop targets
+			if ( type == "dropinit" )
+				ia.droppable = drag.flatten( ia.droppable );
+			// locate drop targets
+			if ( type == "dragstart" && !ia.cancelled )
+				callback.update(); 
+		}
+		while ( ++i < len )
+		// restore the original event & type
+		event.type = orig.type;
+		event.originalEvent = orig.event;
+		// return all handler results
+		return drag.flatten( dd.results );
+	},
+		
+	// extend the callback object with drag/drop properties...
+	properties: function( event, dd, ia ){		
+		var obj = ia.callback;
+		// elements
+		obj.drag = ia.drag;
+		obj.proxy = ia.proxy || ia.drag;
+		// starting mouse position
+		obj.startX = dd.pageX;
+		obj.startY = dd.pageY;
+		// current distance dragged
+		obj.deltaX = event.pageX - dd.pageX;
+		obj.deltaY = event.pageY - dd.pageY;
+		// original element position
+		obj.originalX = ia.offset.left;
+		obj.originalY = ia.offset.top;
+		// adjusted element position
+		obj.offsetX = obj.originalX + obj.deltaX; 
+		obj.offsetY = obj.originalY + obj.deltaY;
+		// assign the drop targets information
+		obj.drop = drag.flatten( ( ia.drop || [] ).slice() );
+		obj.available = drag.flatten( ( ia.droppable || [] ).slice() );
+		return obj;	
+	},
+	
+	// determine is the argument is an element or jquery instance
+	element: function( arg ){
+		if ( arg && ( arg.jquery || arg.nodeType == 1 ) )
+			return arg;
+	},
+	
+	// flatten nested jquery objects and arrays into a single dimension array
+	flatten: function( arr ){
+		return $.map( arr, function( member ){
+			return member && member.jquery ? $.makeArray( member ) : 
+				member && member.length ? drag.flatten( member ) : member;
+		});
+	},
+	
+	// toggles text selection attributes ON (true) or OFF (false)
+	textselect: function( bool ){ 
+		$( document )[ bool ? "unbind" : "bind" ]("selectstart", drag.dontstart )
+			.css("MozUserSelect", bool ? "" : "none" );
+		// .attr("unselectable", bool ? "off" : "on" )
+		document.unselectable = bool ? "off" : "on"; 
+	},
+	
+	// suppress "selectstart" and "ondragstart" events
+	dontstart: function(){ 
+		return false; 
+	},
+	
+	// a callback instance contructor
+	callback: function(){}
+	
+};
+
+// callback methods
+drag.callback.prototype = {
+	update: function(){
+		if ( $special.drop && this.available.length )
+			$.each( this.available, function( i ){
+				$special.drop.locate( this, i );
+			});
+	}
+};
+
+// patch $.event.$dispatch to allow suppressing clicks
+var $dispatch = $event.dispatch;
+$event.dispatch = function( event ){
+	if ( $.data( this, "suppress."+ event.type ) - new Date().getTime() > 0 ){
+		$.removeData( this, "suppress."+ event.type );
+		return;
+	}
+	return $dispatch.apply( this, arguments );
+};
+
+// event fix hooks for touch events...
+var touchHooks = 
+$event.fixHooks.touchstart = 
+$event.fixHooks.touchmove = 
+$event.fixHooks.touchend =
+$event.fixHooks.touchcancel = {
+	props: "clientX clientY pageX pageY screenX screenY".split( " " ),
+	filter: function( event, orig ) {
+		if ( orig ){
+			var touched = ( orig.touches && orig.touches[0] )
+				|| ( orig.changedTouches && orig.changedTouches[0] )
+				|| null; 
+			// iOS webkit: touchstart, touchmove, touchend
+			if ( touched ) 
+				$.each( touchHooks.props, function( i, prop ){
+					event[ prop ] = touched[ prop ];
+				});
+		}
+		return event;
+	}
+};
+
+// share the same special event configuration with related events...
+$special.draginit = $special.dragstart = $special.dragend = drag;
+
+})( jQuery );
+define("jam/jquery.event.drag/jquery.event.drag", function(){});
+
+/*! 
+ * jquery.event.drop - v 2.2
+ * Copyright (c) 2010 Three Dub Media - http://threedubmedia.com
+ * Open Source MIT License - http://threedubmedia.com/code/license
+ */
+// Created: 2008-06-04 
+// Updated: 2012-05-21
+// REQUIRES: jquery 1.7.x, event.drag 2.2
+
+;(function($){ // secure $ jQuery alias
+
+// Events: drop, dropstart, dropend
+
+// add the jquery instance method
+$.fn.drop = function( str, arg, opts ){
+	// figure out the event type
+	var type = typeof str == "string" ? str : "",
+	// figure out the event handler...
+	fn = $.isFunction( str ) ? str : $.isFunction( arg ) ? arg : null;
+	// fix the event type
+	if ( type.indexOf("drop") !== 0 ) 
+		type = "drop"+ type;
+	// were options passed
+	opts = ( str == fn ? arg : opts ) || {};
+	// trigger or bind event handler
+	return fn ? this.bind( type, opts, fn ) : this.trigger( type );
+};
+
+// DROP MANAGEMENT UTILITY
+// returns filtered drop target elements, caches their positions
+$.drop = function( opts ){ 
+	opts = opts || {};
+	// safely set new options...
+	drop.multi = opts.multi === true ? Infinity : 
+		opts.multi === false ? 1 : !isNaN( opts.multi ) ? opts.multi : drop.multi;
+	drop.delay = opts.delay || drop.delay;
+	drop.tolerance = $.isFunction( opts.tolerance ) ? opts.tolerance : 
+		opts.tolerance === null ? null : drop.tolerance;
+	drop.mode = opts.mode || drop.mode || 'intersect';
+};
+
+// local refs (increase compression)
+var $event = $.event, 
+$special = $event.special,
+// configure the drop special event
+drop = $.event.special.drop = {
+
+	// these are the default settings
+	multi: 1, // allow multiple drop winners per dragged element
+	delay: 20, // async timeout delay
+	mode: 'overlap', // drop tolerance mode
+		
+	// internal cache
+	targets: [], 
+	
+	// the key name for stored drop data
+	datakey: "dropdata",
+		
+	// prevent bubbling for better performance
+	noBubble: true,
+	
+	// count bound related events
+	add: function( obj ){ 
+		// read the interaction data
+		var data = $.data( this, drop.datakey );
+		// count another realted event
+		data.related += 1;
+	},
+	
+	// forget unbound related events
+	remove: function(){
+		$.data( this, drop.datakey ).related -= 1;
+	},
+	
+	// configure the interactions
+	setup: function(){
+		// check for related events
+		if ( $.data( this, drop.datakey ) ) 
+			return;
+		// initialize the drop element data
+		var data = { 
+			related: 0,
+			active: [],
+			anyactive: 0,
+			winner: 0,
+			location: {}
+		};
+		// store the drop data on the element
+		$.data( this, drop.datakey, data );
+		// store the drop target in internal cache
+		drop.targets.push( this );
+	},
+	
+	// destroy the configure interaction	
+	teardown: function(){ 
+		var data = $.data( this, drop.datakey ) || {};
+		// check for related events
+		if ( data.related ) 
+			return;
+		// remove the stored data
+		$.removeData( this, drop.datakey );
+		// reference the targeted element
+		var element = this;
+		// remove from the internal cache
+		drop.targets = $.grep( drop.targets, function( target ){ 
+			return ( target !== element ); 
+		});
+	},
+	
+	// shared event handler
+	handler: function( event, dd ){ 
+		// local vars
+		var results, $targets;
+		// make sure the right data is available
+		if ( !dd ) 
+			return;
+		// handle various events
+		switch ( event.type ){
+			// draginit, from $.event.special.drag
+			case 'mousedown': // DROPINIT >>
+			case 'touchstart': // DROPINIT >>
+				// collect and assign the drop targets
+				$targets =  $( drop.targets );
+				if ( typeof dd.drop == "string" )
+					$targets = $targets.filter( dd.drop );
+				// reset drop data winner properties
+				$targets.each(function(){
+					var data = $.data( this, drop.datakey );
+					data.active = [];
+					data.anyactive = 0;
+					data.winner = 0;
+				});
+				// set available target elements
+				dd.droppable = $targets;
+				// activate drop targets for the initial element being dragged
+				$special.drag.hijack( event, "dropinit", dd ); 
+				break;
+			// drag, from $.event.special.drag
+			case 'mousemove': // TOLERATE >>
+			case 'touchmove': // TOLERATE >>
+				drop.event = event; // store the mousemove event
+				if ( !drop.timer )
+					// monitor drop targets
+					drop.tolerate( dd ); 
+				break;
+			// dragend, from $.event.special.drag
+			case 'mouseup': // DROP >> DROPEND >>
+			case 'touchend': // DROP >> DROPEND >>
+				drop.timer = clearTimeout( drop.timer ); // delete timer	
+				if ( dd.propagates ){
+					$special.drag.hijack( event, "drop", dd ); 
+					$special.drag.hijack( event, "dropend", dd ); 
+				}
+				break;
+				
+		}
+	},
+		
+	// returns the location positions of an element
+	locate: function( elem, index ){ 
+		var data = $.data( elem, drop.datakey ),
+		$elem = $( elem ), 
+		posi = $elem.offset() || {}, 
+		height = $elem.outerHeight(), 
+		width = $elem.outerWidth(),
+		location = { 
+			elem: elem, 
+			width: width, 
+			height: height,
+			top: posi.top, 
+			left: posi.left, 
+			right: posi.left + width, 
+			bottom: posi.top + height
+		};
+		// drag elements might not have dropdata
+		if ( data ){
+			data.location = location;
+			data.index = index;
+			data.elem = elem;
+		}
+		return location;
+	},
+	
+	// test the location positions of an element against another OR an X,Y coord
+	contains: function( target, test ){ // target { location } contains test [x,y] or { location }
+		return ( ( test[0] || test.left ) >= target.left && ( test[0] || test.right ) <= target.right
+			&& ( test[1] || test.top ) >= target.top && ( test[1] || test.bottom ) <= target.bottom ); 
+	},
+	
+	// stored tolerance modes
+	modes: { // fn scope: "$.event.special.drop" object 
+		// target with mouse wins, else target with most overlap wins
+		'intersect': function( event, proxy, target ){
+			return this.contains( target, [ event.pageX, event.pageY ] ) ? // check cursor
+				1e9 : this.modes.overlap.apply( this, arguments ); // check overlap
+		},
+		// target with most overlap wins	
+		'overlap': function( event, proxy, target ){
+			// calculate the area of overlap...
+			return Math.max( 0, Math.min( target.bottom, proxy.bottom ) - Math.max( target.top, proxy.top ) )
+				* Math.max( 0, Math.min( target.right, proxy.right ) - Math.max( target.left, proxy.left ) );
+		},
+		// proxy is completely contained within target bounds	
+		'fit': function( event, proxy, target ){
+			return this.contains( target, proxy ) ? 1 : 0;
+		},
+		// center of the proxy is contained within target bounds	
+		'middle': function( event, proxy, target ){
+			return this.contains( target, [ proxy.left + proxy.width * .5, proxy.top + proxy.height * .5 ] ) ? 1 : 0;
+		}
+	},	
+	
+	// sort drop target cache by by winner (dsc), then index (asc)
+	sort: function( a, b ){
+		return ( b.winner - a.winner ) || ( a.index - b.index );
+	},
+		
+	// async, recursive tolerance execution
+	tolerate: function( dd ){		
+		// declare local refs
+		var i, drp, drg, data, arr, len, elem,
+		// interaction iteration variables
+		x = 0, ia, end = dd.interactions.length,
+		// determine the mouse coords
+		xy = [ drop.event.pageX, drop.event.pageY ],
+		// custom or stored tolerance fn
+		tolerance = drop.tolerance || drop.modes[ drop.mode ];
+		// go through each passed interaction...
+		do if ( ia = dd.interactions[x] ){
+			// check valid interaction
+			if ( !ia )
+				return; 
+			// initialize or clear the drop data
+			ia.drop = [];
+			// holds the drop elements
+			arr = []; 
+			len = ia.droppable.length;
+			// determine the proxy location, if needed
+			if ( tolerance )
+				drg = drop.locate( ia.proxy ); 
+			// reset the loop
+			i = 0;
+			// loop each stored drop target
+			do if ( elem = ia.droppable[i] ){ 
+				data = $.data( elem, drop.datakey );
+				drp = data.location;
+				if ( !drp ) continue;
+				// find a winner: tolerance function is defined, call it
+				data.winner = tolerance ? tolerance.call( drop, drop.event, drg, drp ) 
+					// mouse position is always the fallback
+					: drop.contains( drp, xy ) ? 1 : 0; 
+				arr.push( data );	
+			} while ( ++i < len ); // loop 
+			// sort the drop targets
+			arr.sort( drop.sort );			
+			// reset the loop
+			i = 0;
+			// loop through all of the targets again
+			do if ( data = arr[ i ] ){
+				// winners...
+				if ( data.winner && ia.drop.length < drop.multi ){
+					// new winner... dropstart
+					if ( !data.active[x] && !data.anyactive ){
+						// check to make sure that this is not prevented
+						if ( $special.drag.hijack( drop.event, "dropstart", dd, x, data.elem )[0] !== false ){ 	
+							data.active[x] = 1;
+							data.anyactive += 1;
+						}
+						// if false, it is not a winner
+						else
+							data.winner = 0;
+					}
+					// if it is still a winner
+					if ( data.winner )
+						ia.drop.push( data.elem );
+				}
+				// losers... 
+				else if ( data.active[x] && data.anyactive == 1 ){
+					// former winner... dropend
+					$special.drag.hijack( drop.event, "dropend", dd, x, data.elem ); 
+					data.active[x] = 0;
+					data.anyactive -= 1;
+				}
+			} while ( ++i < len ); // loop 		
+		} while ( ++x < end ) // loop
+		// check if the mouse is still moving or is idle
+		if ( drop.last && xy[0] == drop.last.pageX && xy[1] == drop.last.pageY ) 
+			delete drop.timer; // idle, don't recurse
+		else  // recurse
+			drop.timer = setTimeout(function(){ 
+				drop.tolerate( dd ); 
+			}, drop.delay );
+		// remember event, to compare idleness
+		drop.last = drop.event; 
+	}
+	
+};
+
+// share the same special event configuration with related events...
+$special.dropinit = $special.dropstart = $special.dropend = drop;
+
+})(jQuery); // confine scope	;
+define("jam/jquery.event.drop/jquery.event.drop", function(){});
 
 // plone integration for textext.
 //
@@ -8149,7 +9643,9 @@ define("jam/select2/select2", function(){});
 define('js/patterns/select2',[
   'jquery',
   'js/patterns/base',
-  'jam/select2/select2'
+  'jam/plone-select2/select2',
+  'jam/jquery.event.drag/jquery.event.drag',
+  'jam/jquery.event.drop/jquery.event.drop'
 ], function($, Base) {
   
 
@@ -8234,6 +9730,43 @@ define('js/patterns/select2',[
         }
       }
 
+      if (self.options.orderable) {
+        self.options.formatSelection = function(data, $container) {
+          $container.parents('li')
+            .css({'cursor': 'move'})
+            .drag("start", function(e, dd) {
+              $(this).addClass('select2-choice-dragging');
+              self.$el.select2("onSortStart");
+              $.drop({
+                tolerance: function(event, proxy, target) {
+                  var test = event.pageY > (target.top + target.height / 2);
+                  $.data(target.elem, "drop+reorder",
+                         test ? "insertAfter" : "insertBefore" );
+                  return this.contains(target, [event.pageX, event.pageY]);
+                }
+              });
+            })
+            .drag(function(e, dd) {
+              var drop = dd.drop[0],
+              method = $.data(drop || {}, "drop+reorder");
+              if (drop && (drop != dd.current || method != dd.method)){
+                $(this)[method](drop);
+                dd.current = drop;
+                dd.method = method;
+                dd.update();
+              }
+            })
+            .drag("end", function(e, dd) {
+              $(this).removeClass('select2-choice-dragging');
+              self.$el.select2("onSortEnd");
+            })
+            .drop("init", function(e, dd ) {
+              return !(this == dd.drag);
+            });
+          return data ? data.text : undefined;
+        };
+      }
+
       self.$el.select2(self.options);
       self.$el.parent().off('close.modal.patterns');
     }
@@ -8244,7 +9777,7 @@ define('js/patterns/select2',[
 });
 
 /*!
- * pickadate.js v2.0.6 - 20 January, 2013
+ * pickadate.js v2.1.7 - 25 March, 2013
  * By Amsul (http://amsul.ca)
  * Hosted on https://github.com/amsul/pickadate.js
  * Licensed under MIT ("expat" flavour) license.
@@ -8285,7 +9818,7 @@ define('js/patterns/select2',[
 
 
         /**
-         * The picker constructor that acceps the
+         * The picker constructor that accepts the
          * jQuery element and the merged settings
          */
         Picker = function( $ELEMENT, SETTINGS ) {
@@ -8328,6 +9861,13 @@ define('js/patterns/select2',[
                             blur: function() {
                                 $HOLDER.removeClass( CLASSES.focused )
                             },
+                            change: function() {
+
+                                // If there's a hidden input, update the value with formatting or clear it
+                                if ( ELEMENT_HIDDEN ) {
+                                    ELEMENT_HIDDEN.value = ELEMENT.value ? getDateFormatted( SETTINGS.formatSubmit ) : ''
+                                }
+                            },
                             keydown: function( event ) {
 
                                 var
@@ -8337,19 +9877,17 @@ define('js/patterns/select2',[
                                     // Check if one of the delete keys was pressed
                                     isKeycodeDelete = keycode == 8 || keycode == 46
 
-                                // If backspace was pressed or the calendar
-                                // is closed and the keycode warrants a date change,
-                                // prevent it from going any further.
+                                // If backspace was pressed or the calendar is closed and the keycode
+                                // warrants a date change, prevent it from going any further.
                                 if ( isKeycodeDelete || !CALENDAR.isOpen && KEYCODE_TO_DATE[ keycode ] ) {
 
                                     // Prevent it from moving the page
                                     event.preventDefault()
 
                                     // Prevent it from propagating to document
-                                    event.stopPropagation()
+                                    eventPreventPropagation( event )
 
-                                    // If backspace was pressed, clear the values
-                                    // and then close the picker
+                                    // If backspace was pressed, clear the values and close the picker
                                     if ( isKeycodeDelete ) {
                                         P.clear().close()
                                     }
@@ -8369,13 +9907,15 @@ define('js/patterns/select2',[
                         }
 
 
-                        // Do stuff after rendering the calendar
-                        postRender()
+                        // Update the calendar items
+                        CALENDAR.items = getUpdatedCalendarItems()
 
 
-                        // Trigger the onStart method within scope of the picker
+                        // Trigger the `onStart` method within scope of the picker
                         triggerFunction( SETTINGS.onStart, P )
 
+                        // Trigger the `onRender` method within scope of the picker
+                        triggerFunction( SETTINGS.onRender, P )
 
                         return P
                     }, //init
@@ -8391,7 +9931,7 @@ define('js/patterns/select2',[
 
 
                         // Set calendar as open
-                        CALENDAR.isOpen = true
+                        CALENDAR.isOpen = 1
 
 
                         // Toggle the tabindex of "focusable" calendar items
@@ -8435,46 +9975,32 @@ define('js/patterns/select2',[
                                 keycodeToDate = KEYCODE_TO_DATE[ keycode ]
 
 
-                            // On escape
+                            // On escape, focus back onto the element and close the picker
                             if ( keycode == 27 ) {
-
-                                // Focus back onto the element
                                 ELEMENT.focus()
-
-                                // Then close the picker
                                 P.close()
                             }
 
 
-                            // If the target is the element and there's
-                            // a keycode to date translation or the
-                            // enter key was pressed
+                            // If the target is the element and there's a keycode to date
+                            // translation or the enter key was pressed
                             else if ( event.target == ELEMENT && ( keycodeToDate || keycode == 13 ) ) {
 
-                                // Prevent the default action to stop
-                                // it from moving the page
+                                // Prevent the default action to stop it from moving the page
                                 event.preventDefault()
 
-                                // If the keycode translates to a date change
+                                // If the keycode translates to a date change, superficially select
+                                // the date by incrementally (by date change) creating new validated dates.
+                                // * Truthy second argument makes it a superficial selection
                                 if ( keycodeToDate ) {
-
-                                    // Set the selected date by creating new validated
-                                    // dates - incrementing by the date change.
-                                    // And make this just a superficial selection.
-                                    // * Truthy second argument makes it a superficial selection
                                     setDateSelected( createValidatedDate( [ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, DATE_HIGHLIGHTED.DATE + keycodeToDate ], keycodeToDate ), 1 )
                                 }
 
-                                // On enter
+                                // Otherwise it's the enter key so set the element value as the
+                                // highlighted date, render a new calendar, and then close it
                                 else {
-
-                                    // Set the element value as the highlighted date
                                     setElementsValue( DATE_HIGHLIGHTED )
-
-                                    // Render a new calendar
                                     calendarRender()
-
-                                    // And then close it
                                     P.close()
                                 }
 
@@ -8499,7 +10025,7 @@ define('js/patterns/select2',[
 
 
                         // Set calendar as closed
-                        CALENDAR.isOpen = false
+                        CALENDAR.isOpen = 0
 
 
                         // Toggle the tabindex of "focusable" calendar items
@@ -8528,6 +10054,14 @@ define('js/patterns/select2',[
 
 
                     /**
+                     * Return whether the calendar is open
+                     */
+                    isOpen: function() {
+                        return CALENDAR.isOpen === 1;
+                    }, //isOpen
+
+
+                    /**
                      * Show a month in focus with 0index compensation
                      */
                     show: function( month, year ) {
@@ -8552,25 +10086,14 @@ define('js/patterns/select2',[
 
 
                     /**
-                     * Get a date in any format.
-                     * Defaults to getting the selected date
+                     * Get the selected date in any format.
                      */
                     getDate: function( format ) {
 
-                        // If the element has no value,
-                        // just return an empty string
-                        if ( !ELEMENT.value ) {
-                            return ''
-                        }
-
-                        // If the format is a literal true,
-                        // return the underlying JS Date object
-                        if ( format === true ) {
-                            return DATE_SELECTED.OBJ
-                        }
-
-                        // Otherwise return the formatted date
-                        return getDateFormatted( format )
+                        // If the format is a literal true, return the underlying JS Date object.
+                        // If the element has no value, just return an empty string.
+                        // Otherwise return the formatted date.
+                        return format === true ? DATE_SELECTED.OBJ : !ELEMENT.value ? '' : getDateFormatted( format )
                     }, //getDate
 
 
@@ -8579,29 +10102,21 @@ define('js/patterns/select2',[
                      * and an option to do a superficial selection
                      */
                     setDate: function( year, month, date, isSuperficial ) {
-
-                        // Compensate for month 0index and create a validated date.
-                        // Then set it as the date selected
                         setDateSelected( createValidatedDate([ year, --month, date ]), isSuperficial )
-
                         return P
                     }, //setDate
 
 
                     /**
-                     * Get the min or max date based on
-                     * the argument being truthy or falsey
+                     * Get the min or max date based on `upper` being truthy or falsey
                      */
                     getDateLimit: function( upper, format ) {
-
-                        // Get the max or min date depending on the `upper` flag
                         return getDateFormatted( format, upper ? DATE_MAX : DATE_MIN )
                     }, //getDateLimit
 
 
                     /**
-                     * Set the min or max date based on second
-                     * argument being truthy or falsey.
+                     * Set the min or max date based on `upper` being truthy or falsey.
                      */
                     setDateLimit: function( limit, upper ) {
 
@@ -8780,28 +10295,37 @@ define('js/patterns/select2',[
                 DATE_MAX = createBoundaryDate( SETTINGS.dateMax, 1 ),
 
 
+                // Create a pseudo min and max date for disabled
+                // calendars as the respective opposite limit
+                PSEUDO_DATE_MIN = DATE_MAX,
+                PSEUDO_DATE_MAX = DATE_MIN,
+
+
                 // Create a collection of dates to disable
                 DATES_TO_DISABLE = (function( datesCollection ) {
 
-                    // If a collection was passed
-                    // we need to create a calendar date object
+                    // If a collection was passed, we need to create calendar date objects
                     if ( Array.isArray( datesCollection ) ) {
 
-                        // If the "all" flag is true,
-                        // remove the flag from the collection and
-                        // flip the condition of which dates to disable
+                        // If the "all" flag is true, remove the flag from the collection
+                        // and flip the condition of which dates to disable
                         if ( datesCollection[ 0 ] === true ) {
-                            CALENDAR.disabled = datesCollection.shift()
+                            CALENDAR.off = datesCollection.shift()
                         }
 
-                        // Map through the dates passed
-                        // and return the collection
+                        // Map through the dates passed and return the collection
                         return datesCollection.map( function( date ) {
 
-                            // If the date is a number, return the date minus 1
-                            // for weekday 0index plus the first day of the week
+                            // If the date is a number, we need to disable weekdays
                             if ( !isNaN( date ) ) {
-                                return --date + SETTINGS.firstDay
+
+                                // So flip the "off days" boolean
+                                CALENDAR.offDays = 1
+
+                                // If the first day flag is truthy, we maintain the
+                                // 0index of the date by getting the remainder from 7.
+                                // Otherwise return the date with 0index compensation.
+                                return SETTINGS.firstDay ? date % DAYS_IN_WEEK : --date
                             }
 
                             // Otherwise assume it's an array and fix the month 0index
@@ -8827,16 +10351,37 @@ define('js/patterns/select2',[
                     }
 
 
-                    // If all calendar dates should be disabled,
-                    // return a function that maps each date
-                    // in the collection of dates to not disable.
-                    // Otherwise check if this date should be disabled
-                    return CALENDAR.disabled ? function( date, i, collection ) {
+                    // If all calendar dates should be disabled
+                    if ( CALENDAR.off ) {
 
-                            // Map the array of disabled dates
-                            // and check if this is not one
+                        // Map through all the dates to disable
+                        DATES_TO_DISABLE.map( function( loopDate ) {
+
+                            // If the looped date is less than the latest lowest date
+                            // and greater than the minimum date, then set it as the lowest date
+                            if ( loopDate.TIME < PSEUDO_DATE_MIN.TIME && loopDate.TIME > DATE_MIN.TIME ) {
+                                PSEUDO_DATE_MIN = loopDate
+                            }
+
+                            // If the looped date is more than the latest highest date
+                            // and less than the maximum date, then set it as the highest date
+                            if ( loopDate.TIME > PSEUDO_DATE_MAX.TIME && loopDate.TIME <= DATE_MAX.TIME ) {
+                                PSEUDO_DATE_MAX = loopDate
+                            }
+                        })
+
+                        // Finally, return a function that maps each date
+                        // in the collection of dates to not disable.
+                        return function( date, i, collection ) {
+
+                            // Map the array of disabled dates and check if this is not one
                             return ( collection.map( isDisabledDate, this ).indexOf( true ) < 0 )
-                        } : isDisabledDate
+                        }
+                    }
+
+
+                    // Otherwise just return the function that checks if a date is disabled
+                    return isDisabledDate
                 })(), //DISABLED_DATES
 
 
@@ -8905,17 +10450,14 @@ define('js/patterns/select2',[
                 // * We do a copy so we don't mutate the original array.
                 TABLE_HEAD = (function( weekdaysCollection ) {
 
-                    // If the first day should be Monday
+                    // If the first day should be Monday, then grab
+                    // Sunday and push it to the end of the collection
                     if ( SETTINGS.firstDay ) {
-
-                        // Grab Sunday and push it to the end of the collection
                         weekdaysCollection.push( weekdaysCollection.splice( 0, 1 )[ 0 ] )
                     }
 
-                    // Go through each day of the week
-                    // and return a wrapped header row.
-                    // Take the result and apply another
-                    // table head wrapper to group it all.
+                    // Go through each day of the week and return a wrapped header row.
+                    // Take the result and apply anoth table head wrapper to group it all.
                     return createNode( 'thead',
                         createNode( 'tr',
                             weekdaysCollection.map( function( weekday ) {
@@ -8931,11 +10473,17 @@ define('js/patterns/select2',[
 
                     // If the target of the event is not one of the calendar items,
                     // prevent default action to keep focus on the input element
-                    if ( getCalendarItems().indexOf( event.target ) < 0 ) {
+                    if ( CALENDAR.items.indexOf( event.target ) < 0 ) {
                         event.preventDefault()
                     }
-
                 }).on( 'click', function( event ) {
+
+                    // If the calendar is closed and there appears to be no click, do nothing
+                    // * This is done to prevent the "enter" key propagating as a click.
+                    //   On all browsers (except old IEs) the client click x & y are 0.
+                    if ( !CALENDAR.isOpen && !event.clientX && !event.clientY ) {
+                        return
+                    }
 
                     var
                         dateToSelect,
@@ -8948,7 +10496,7 @@ define('js/patterns/select2',[
 
 
                     // Stop the event from bubbling to the document
-                    event.stopPropagation()
+                    eventPreventPropagation( event )
 
 
                     // Put focus back onto the element
@@ -9017,8 +10565,7 @@ define('js/patterns/select2',[
                     return DATE_TODAY
                 }
 
-                // If the limit is an array, construct the date
-                // while fixing month 0index
+                // If the limit is an array, construct the date by fixing month 0index
                 if ( Array.isArray( limit ) ) {
                     --limit[ 1 ]
                     return createDate( limit )
@@ -9038,15 +10585,23 @@ define('js/patterns/select2',[
             /**
              * Create a validated date
              */
-            function createValidatedDate( datePassed, direction ) {
+            function createValidatedDate( datePassed, direction, skipMonthCheck ) {
 
 
                 // If the date passed isn't a date, create one
                 datePassed = !datePassed.TIME ? createDate( datePassed ) : datePassed
 
 
-                // If there are disabled dates
-                if ( DATES_TO_DISABLE ) {
+                // If the calendar "disabled" flag is truthy and there are only disabled weekdays
+                if ( CALENDAR.off && !CALENDAR.offDays ) {
+
+                    // If the date is less than the pseudo min date or greater than pseudo max date,
+                    // set it as the pseudo date limit. Otherwise keep it the same.
+                    datePassed = datePassed.TIME < PSEUDO_DATE_MIN.TIME ? PSEUDO_DATE_MIN : datePassed.TIME > PSEUDO_DATE_MAX.TIME ? PSEUDO_DATE_MAX : datePassed
+                }
+
+                // Otherwise if there are disabled dates
+                else if ( DATES_TO_DISABLE ) {
 
                     // Create a reference to the original date passed
                     var originalDate = datePassed
@@ -9056,15 +10611,15 @@ define('js/patterns/select2',[
                     // until we get to a date that's enabled.
                     while ( DATES_TO_DISABLE.filter( DISABLED_DATES, datePassed ).length ) {
 
-                        // Create the next date based on the direction
+                        // Otherwise create the next date based on the direction
                         datePassed = createDate([ datePassed.YEAR, datePassed.MONTH, datePassed.DATE + ( direction || 1 ) ])
 
-                        // If we've looped through to another month,
-                        // then increase/decrease the date by one and
-                        // continue looping with the new original date
-                        if ( datePassed.MONTH != originalDate.MONTH ) {
-                            datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction > 0 ? ++originalDate.DATE : --originalDate.DATE ])
-                            originalDate = datePassed
+                        // Check if the month check should be skipped to avoid extra loops.
+                        // Otherwise if we've gone through to another month, create a new
+                        // date based on the direction being less than zero (rather than more).
+                        // Then set this new date as the original and looped date.
+                        if ( !skipMonthCheck && datePassed.MONTH != originalDate.MONTH ) {
+                            originalDate = datePassed = createDate([ originalDate.YEAR, originalDate.MONTH, direction < 0 ? --originalDate.DATE : ++originalDate.DATE ])
                         }
                     }
                 }
@@ -9073,16 +10628,18 @@ define('js/patterns/select2',[
                 // If it's less that min date, set it to min date
                 // by creating a validated date by adding one
                 // until we find an enabled date
+                // * A truthy third argument skips the month check
                 if ( datePassed.TIME < DATE_MIN.TIME ) {
-                    datePassed = createValidatedDate( DATE_MIN )
+                    datePassed = createValidatedDate( DATE_MIN, 1, 1 )
                 }
 
 
                 // If it's more than max date, set it to max date
                 // by creating a validated date by subtracting one
                 // until we find an enabled date
+                // * A truthy third argument skips the month check
                 else if ( datePassed.TIME > DATE_MAX.TIME ) {
-                    datePassed = createValidatedDate( DATE_MAX, -1 )
+                    datePassed = createValidatedDate( DATE_MAX, -1, 1 )
                 }
 
 
@@ -9096,20 +10653,14 @@ define('js/patterns/select2',[
              */
             function createMonthNav( next ) {
 
-                // If the focused month is outside the range
-                // return an empty string
+                // If the focused month is outside the range, return an empty string
                 if ( ( next && MONTH_FOCUSED.YEAR >= DATE_MAX.YEAR && MONTH_FOCUSED.MONTH >= DATE_MAX.MONTH ) || ( !next && MONTH_FOCUSED.YEAR <= DATE_MIN.YEAR && MONTH_FOCUSED.MONTH <= DATE_MIN.MONTH ) ) {
                     return ''
                 }
 
+                // Otherwise, return the created month tag
                 var monthTag = 'month' + ( next ? 'Next' : 'Prev' )
-
-                // Otherwise, return the created tag
-                return createNode( STRING_DIV,
-                    SETTINGS[ monthTag ],
-                    CLASSES[ monthTag ],
-                    'data-nav=' + ( next || -1 )
-                ) //endreturn
+                return createNode( STRING_DIV, SETTINGS[ monthTag ], CLASSES[ monthTag ], 'data-nav=' + ( next || -1 ) )
             } //createMonthNav
 
 
@@ -9268,79 +10819,7 @@ define('js/patterns/select2',[
                     // by getting the day the first of the month falls on
                     // and subtracting 1 to compensate for day 1index
                     // or 2 if "Monday" should be the first day.
-                    countShiftby = createDate([ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, 1 ]).DAY + ( SETTINGS.firstDay ? -2 : -1 ),
-
-
-                    // Set the class and binding for each looped date.
-                    // Returns an array with 2 items:
-                    // 1) The classes string
-                    // 2) The data binding string
-                    createDateClassAndBinding = function( loopDate, isMonthFocused ) {
-
-                        var
-                            // State check for date
-                            isDateDisabled,
-
-                            // Create a collection for the classes
-                            // with the default classes already included
-                            klassCollection = [
-
-                                // The generic day class
-                                CLASSES.day,
-
-                                // The class for in or out of focus
-                                ( isMonthFocused ? CLASSES.dayInfocus : CLASSES.dayOutfocus )
-                            ]
-
-
-                        // If it's less than the minimum date
-                        // or greater than the maximum date
-                        // or if there are dates to disable
-                        // and this looped date is one of them
-                        if ( loopDate.TIME < DATE_MIN.TIME || loopDate.TIME > DATE_MAX.TIME || ( DATES_TO_DISABLE && DATES_TO_DISABLE.filter( DISABLED_DATES, loopDate ).length ) ) {
-
-                            // Make the state truthy
-                            isDateDisabled = 1
-
-                            // Add the disabled class
-                            klassCollection.push( CLASSES.dayDisabled )
-                        }
-
-
-                        // If it's today, add the class
-                        if ( loopDate.TIME == DATE_TODAY.TIME ) {
-                            klassCollection.push( CLASSES.dayToday )
-                        }
-
-
-                        // If it's the highlighted date, add the class
-                        if ( loopDate.TIME == DATE_HIGHLIGHTED.TIME ) {
-                            klassCollection.push( CLASSES.dayHighlighted )
-                        }
-
-
-                        // If it's the selected date, add the class
-                        if ( loopDate.TIME == DATE_SELECTED.TIME ) {
-                            klassCollection.push( CLASSES.daySelected )
-                        }
-
-
-                        // Return an array with the classes and data binding
-                        return [
-
-                            // Return the classes joined
-                            // by a single whitespace
-                            klassCollection.join( ' ' ),
-
-                            // Create the data binding object
-                            // with the value as a string
-                            'data-' + ( isDateDisabled ? 'disabled' : 'date' ) + '=' + [
-                                loopDate.YEAR,
-                                loopDate.MONTH + 1, // add 1 to display an accurate date
-                                loopDate.DATE
-                            ].join( '/' )
-                        ]
-                    } //createDateClassAndBinding
+                    countShiftby = createDate([ MONTH_FOCUSED.YEAR, MONTH_FOCUSED.MONTH, 1 ]).DAY + ( SETTINGS.firstDay ? -2 : -1 )
 
 
                 // If the count to shift by is less than the first day
@@ -9392,20 +10871,87 @@ define('js/patterns/select2',[
             } //createTableBody
 
 
+
+            /**
+             * Create the class and data binding for a looped date node.
+             * Returns an array with 2 items:
+             * 1) The classes string
+             * 2) The data binding string
+             */
+            function createDateClassAndBinding( loopDate, isMonthFocused ) {
+
+                var
+                    // State check for date
+                    isDateDisabled,
+
+                    // Create a collection for the classes
+                    // with the default classes already included
+                    klassCollection = [
+
+                        // The generic day class
+                        CLASSES.day,
+
+                        // The class for in or out of focus
+                        ( isMonthFocused ? CLASSES.dayInfocus : CLASSES.dayOutfocus )
+                    ]
+
+
+                // If it's less than the minimum date or greater than the maximum date,
+                // or if there are dates to disable and this looped date is one of them,
+                // flip the "disabled" state to truthy and add the "disabled" class
+                if ( loopDate.TIME < DATE_MIN.TIME || loopDate.TIME > DATE_MAX.TIME || ( DATES_TO_DISABLE && DATES_TO_DISABLE.filter( DISABLED_DATES, loopDate ).length ) ) {
+                    isDateDisabled = 1
+                    klassCollection.push( CLASSES.dayDisabled )
+                }
+
+
+                // If it's today, add the class
+                if ( loopDate.TIME == DATE_TODAY.TIME ) {
+                    klassCollection.push( CLASSES.dayToday )
+                }
+
+
+                // If it's the highlighted date, add the class
+                if ( loopDate.TIME == DATE_HIGHLIGHTED.TIME ) {
+                    klassCollection.push( CLASSES.dayHighlighted )
+                }
+
+
+                // If it's the selected date, add the class
+                if ( loopDate.TIME == DATE_SELECTED.TIME ) {
+                    klassCollection.push( CLASSES.daySelected )
+                }
+
+
+                // Return an array with the classes and data binding
+                return [
+
+                    // Return the classes joined
+                    // by a single whitespace
+                    klassCollection.join( ' ' ),
+
+                    // Create the data binding object
+                    // with the value as a string
+                    'data-' + ( isDateDisabled ? 'disabled' : 'date' ) + '=' + [
+                        loopDate.YEAR,
+                        loopDate.MONTH + 1, // add 1 to display an accurate date
+                        loopDate.DATE
+                    ].join( '/' )
+                ]
+            } //createDateClassAndBinding
+
+
             /**
              * Create the "today" and "clear" buttons
              */
             function createTodayAndClear() {
-
-                // Create and return the button nodes
                 return createNode( 'button', SETTINGS.today, CLASSES.buttonToday, 'data-date=' + getDateFormatted( 'yyyy/mm/dd', DATE_TODAY ) + ' ' + getTabindexState() ) + createNode( 'button', SETTINGS.clear, CLASSES.buttonClear, 'data-clear=1 ' + getTabindexState() )
             } //createTodayAndClear
 
 
             /**
-             * Create the wrapped calendar
-             * using the collection of calendar items
-             * and creating a new table body
+             * Create the wrapped calendar using the collection
+             * of all calendar items and a new table body
              */
             function createCalendarWrapped() {
 
@@ -9457,9 +11003,8 @@ define('js/patterns/select2',[
 
 
             /**
-             * Get the number that's allowed within an
-             * upper or lower limit. A truthy third argument
-             * tests against the upper limit.
+             * Get the number that's allowed within an upper or lower limit.
+             * * A truthy third argument tests against the upper limit.
              */
             function getNumberInRange( number, limit, upper ) {
 
@@ -9474,7 +11019,7 @@ define('js/patterns/select2',[
 
             /**
              * Return a month by comparing with the date range.
-             * If outside the range, returns the value passed.
+             * If outside the range, returns the "alternate" or "range" value.
              * Otherwise returns the "in range" value or the month itself.
              */
             function getMonthInRange( month, year, alternateValue, inRangeValue ) {
@@ -9491,11 +11036,9 @@ define('js/patterns/select2',[
                     return alternateValue || DATE_MAX.MONTH
                 }
 
-                // Otherwise return the "in range" value
-                // or the month itself.
-                // * We test `inRangeValue` against null
-                //   because we need to test against null
-                //   and undefined. 0 should be allowed.
+                // Otherwise return the "in range" value or the month itself.
+                // * We test `inRangeValue` against null because we need to
+                //   test against null and undefined. 0 should be allowed.
                 return inRangeValue != null ? inRangeValue : month
             } //getMonthInRange
 
@@ -9549,7 +11092,7 @@ define('js/patterns/select2',[
 
 
             /**
-             * Set the date in the input element and hidden input
+             * Set the date in the input element and trigger a change event
              */
             function setElementsValue( dateTargeted ) {
 
@@ -9560,12 +11103,6 @@ define('js/patterns/select2',[
                 // if there was a date targeted. Otherwise clear it.
                 // And then broadcast a change event.
                 $ELEMENT.val( dateTargeted ? getDateFormatted() : '' ).trigger( 'change' )
-
-                // If there's a hidden input, set the value with the submit format
-                // if there's a date targeted. Otherwise clear it.
-                if ( ELEMENT_HIDDEN ) {
-                    ELEMENT_HIDDEN.value = dateTargeted ? getDateFormatted( SETTINGS.formatSubmit ) : ''
-                }
 
                 // Trigger the onSelect method within scope of the picker
                 triggerFunction( SETTINGS.onSelect, P )
@@ -9603,29 +11140,64 @@ define('js/patterns/select2',[
 
 
             /**
-             * Toggle the calendar elements as "tab-able"
+             * Toggle the calendar elements as "tab-able" by mapping
+             * through the calendar items and updating the tabindex.
              */
             function toggleCalendarElements( tabindex ) {
-
-                // Create a collection of calendar items and
-                // set each items tabindex
-                getCalendarItems().map( function( item ) {
+                CALENDAR.items.map( function( item ) {
                     if ( item ) item.tabIndex = tabindex
                 })
             } //toggleCalendarElements
 
 
             /**
-             * Return a collection of all the calendar items
+             * Get an updated collection of calendar items.
              */
-            function getCalendarItems() {
+            function getUpdatedCalendarItems() {
+
                 return [
-                    CALENDAR.selectMonth,
-                    CALENDAR.selectYear,
+
+                    // The month selector
+                    $findInHolder( CLASSES.selectMonth ).on({
+
+                        // *** For iOS ***
+                        click: eventPreventPropagation,
+
+                        // Bind the change event
+                        change: function() {
+
+                            // Show the month by floating the option selected
+                            showMonth( +this.value )
+
+                            // Find the new month selector and focus back on it
+                            $findInHolder( CLASSES.selectMonth ).focus()
+                        }
+                    })[ 0 ],
+
+                    // The year selector
+                    $findInHolder( CLASSES.selectYear ).on({
+
+                        // *** For iOS ***
+                        click: eventPreventPropagation,
+
+                        // Bind the change event
+                        change: function() {
+
+                            // Show the year by floating the option selected and month in focus
+                            showMonth( MONTH_FOCUSED.MONTH, +this.value )
+
+                            // Find the new year selector and focus back on it
+                            $findInHolder( CLASSES.selectYear ).focus()
+                        }
+                    })[ 0 ],
+
+                    // The "today" button
                     $findInHolder( CLASSES.buttonToday )[ 0 ],
+
+                    // The "clear" button
                     $findInHolder( CLASSES.buttonClear )[ 0 ]
                 ]
-            } //getCalendarItems
+            } //getUpdatedCalendarItems
 
 
             /**
@@ -9633,56 +11205,23 @@ define('js/patterns/select2',[
              */
             function calendarRender() {
 
-                // Create a new wrapped calendar
-                // and place it within the holder
+                // Create a new wrapped calendar and place it within the holder
                 $HOLDER.html( createCalendarWrapped() )
 
-                // Do stuff after rendering the calendar
-                postRender()
+                // Update the calendar items
+                CALENDAR.items = getUpdatedCalendarItems()
+
+                // Trigger the onRender method within scope of the picker
+                triggerFunction( SETTINGS.onRender, P )
             } //calendarRender
 
 
             /**
-             * Stuff to do after a calendar has been rendered
+             * Prevent an event from propagating further
              */
-            function postRender() {
-
-                // Find and store the month selector
-                CALENDAR.selectMonth = $findInHolder( CLASSES.selectMonth ).on({
-
-                    // *** For iOS ***
-                    click: function( event ) { event.stopPropagation() },
-
-                    // Bind the change event
-                    change: function() {
-
-                        // Show the month based on the option selected
-                        // while parsing as a float
-                        showMonth( +this.value )
-
-                        // Find the new month selector and focus back on it
-                        $findInHolder( CLASSES.selectMonth ).focus()
-                    }
-                })[ 0 ]
-
-                // Find and store the year selector
-                CALENDAR.selectYear = $findInHolder( CLASSES.selectYear ).on({
-
-                    // *** For iOS ***
-                    click: function( event ) { event.stopPropagation() },
-
-                    // Bind the change event
-                    change: function() {
-
-                        // Show the year based on the option selected
-                        // and month currently in focus while parsing as a float
-                        showMonth( MONTH_FOCUSED.MONTH, +this.value )
-
-                        // Find the new year selector and focus back on it
-                        $findInHolder( CLASSES.selectYear ).focus()
-                    }
-                })[ 0 ]
-            } //postRender
+            function eventPreventPropagation( event ) {
+                event.stopPropagation()
+            } //eventPreventPropagation
 
 
             // Return a new initialized picker
@@ -9847,6 +11386,7 @@ define('js/patterns/select2',[
         onClose: 0,
         onSelect: 0,
         onStart: 0,
+        onRender: 0,
 
 
         // Classes
@@ -10347,25 +11887,23 @@ define('js/patterns/datetime',[
       return self._rawDate;
     },
     toggle: function() {
-      if (this._opened) {
+      if (this.pickadate.isOpen()) {
         this.close();
       } else {
         this.open();
       }
     },
     open: function() {
-      if (!this._opened) {
+      if (!this.pickadate.isOpen()) {
         this.trigger('open');
         this.pickadate.open();
-        this._opened = true;
         this.trigger('opened');
       }
     },
     close: function() {
-      if (this._opened) {
+      if (this.pickadate.isOpen()) {
         this.trigger('close');
         this.pickadate.close();
-        this._opened = false;
         this.trigger('closed');
       }
     }
@@ -10525,7 +12063,6 @@ if (window.jQuery) {
 define('js/bundles/widgets',[
   'jquery',
   'jam/Patterns/src/registry',
-  'logging',  // should be pullin as dependency of Patterns but is not for some reason
   'js/patterns/select2',
   'js/patterns/datetime',
   'js/patterns/autotoc'
@@ -10547,6 +12084,9 @@ define('js/bundles/widgets',[
         'data-autotoc-klass': 'autotabs'
       });
 
+    },
+    scan: function(selector) {
+      registry.scan($(selector));
     }
   };
 
@@ -11148,6 +12688,176 @@ define('js/patterns/modal',[
   });
 
   return Modal;
+
+});
+
+// Pattern which provide some basic form helpers:
+// - prevent forms to be submitted twice w/out warning
+// This is going to replace 'Products/CMFPlone/skins/plone_ecmascript/formsubmithelpers.js'
+//
+// Author: Simone Orsi
+// Contact: simahawk@gmail.com
+// Version: 1.0
+//
+// License:
+//
+// Copyright (C) 2013 Plone Foundation
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 2 of the License.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+// more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program; if not, write to the Free Software Foundation, Inc., 51
+// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
+/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
+  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
+  undef:true, strict:true, trailing:true, browser:true, evil:true */
+/*global define:false */
+
+
+define('js/patterns/preventdoublesubmit',[
+  'jquery',
+  'js/patterns/base'
+], function($, Base, Parser) {
+  
+
+  var PreventDoubleSubmit = Base.extend({
+    name: "preventdoublesubmit",
+    defaults: {
+      message : 'You already clicked the submit button. ' +
+                'Do you really want to submit this form again?',
+      guardKlass: 'submitting',
+      optOutKlass: 'allowMultiSubmit',
+      changedKlass: 'changed'
+    },
+    init: function() {
+      var self = this;
+      // if this is not a form just return
+      if(!self.$el.is('form')){ return; }
+
+      $(':submit', self.$el).click(function(){
+        // mark the button as clicked
+        $(':submit').removeAttr('clicked');
+        $(this).attr('clicked', 'clicked');
+        // if submitting and no opt-out klass is found
+        // pop up confirmation dialog
+        if ($(this).hasClass(self.options.guardKlass) &&
+              !$(this).hasClass(self.options.optOutKlass)){
+          return self._confirm();
+        }
+        $(this).addClass(self.options.guardKlass);
+      });
+
+    },
+
+    _confirm: function(){
+      return window.confirm(this.options.message);
+    }
+
+  });
+
+  return PreventDoubleSubmit;
+
+});
+
+// Pattern which provide some basic form helpers:
+// - prevent forms with changed values to be unloaded 
+// This is going to replace 'Products/CMFPlone/skins/plone_ecmascript/formUnload.js'
+// Bits of this come from 
+// https://raw.github.com/mmonteleone/jquery.safetynet/master/jquery.safetynet.js
+//
+// Author: Simone Orsi
+// Contact: simahawk@gmail.com
+// Version: 1.0
+//
+// License:
+//
+// Copyright (C) 2013 Plone Foundation
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 2 of the License.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+// more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program; if not, write to the Free Software Foundation, Inc., 51
+// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
+/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
+  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
+  undef:true, strict:true, trailing:true, browser:true, evil:true */
+/*global define:false */
+
+
+define('js/patterns/formUnloadAlert',[
+  'jquery',
+  'js/patterns/base'
+], function ($, Base, Parser) {
+  
+
+  var FormUnloadAlert = Base.extend({
+    name: "formunloadalert",
+    _changed : false,       // Stores a listing of raised changes by their key
+    _suppressed : false,     // whether or not warning should be suppressed
+    defaults: {
+      message :  "Discard changes? If you click OK, " +
+                 "any changes you have made will be lost.",
+      // events on which to check for changes
+      changingEvents: 'change keyup paste',
+      // fields on which to check for changes
+      changingFields: 'input,select,textarea,fileupload'
+    },
+    init: function () {
+      var self = this;
+      // if this is not a form just return
+      if (!self.$el.is('form')) { return; }
+
+      $(self.options.changingFields, self.$el).on(
+        self.options.changingEvents,
+        function (evt) {
+          self._changed = true;
+        }
+      );
+
+      $(window).on('beforeunload', function(e){
+        return self._handle_unload(self, e);
+      });
+
+      self.$el.on('submit', self.suppress);
+
+    },
+
+    _handle_unload : function (self, e) {
+      if (self._suppressed) {
+        self._suppressed = false;
+        return undefined;
+      }
+      if (self._changed) {
+        var msg = self.options.message;
+        (e || window.event).returnValue = msg;
+        return msg;
+      }
+    },
+
+    suppress: function () {
+        this._suppressed = true;
+    }
+
+  });
+  return FormUnloadAlert;
 
 });
 
@@ -13598,6 +15308,8 @@ require([
   'js/bundles/widgets',
   'js/patterns/expose',
   'js/patterns/modal',
+  'js/patterns/preventdoublesubmit',
+  'js/patterns/formUnloadAlert',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'
