@@ -30,7 +30,7 @@ test-ci:
 
 
 clean_docs:
-	rm -rf $(DOCS)
+	rm -rf docs/*
 
 docs: clean_docs $(DOCS)
 	# ----------------------------------------------------------------------- #
