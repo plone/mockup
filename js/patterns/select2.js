@@ -44,7 +44,9 @@ define([
 
   var Select2 = Base.extend({
     name: "select2",
-    defaults: {},
+    defaults: {
+      separator: ","
+    },
     init: function() {
       var self = this;
 
@@ -55,7 +57,7 @@ define([
           if (typeof(initSelection) === 'string') {
               initSelection = JSON.parse(self.options.initselection);
           }
-          $(value.split(",")).each(function () {
+          $(value.split(self.separator)).each(function () {
             var text = this;
             if (initSelection[this]) {
               text = initSelection[this];
@@ -74,7 +76,7 @@ define([
           self.options.ajax.url = self.options.ajax_suggest;
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
-            $(value.split(",")).each(function () {
+            $(value.split(self.options.separator)).each(function () {
               data.push({id: this, text: this});
             });
             callback(data);
@@ -115,11 +117,11 @@ define([
         }, self.options.ajax);
       }
 
-      if (self.options.tags && typeof(self.options) === 'string') {
+      if (self.options.tags && typeof(self.options.tags) === 'string') {
         if (self.options.tags.substr(0, 1) === '[') {
           self.options.tags = JSON.parse(self.options.tags);
         } else {
-          self.options.tags = self.options.tags.split(',');
+          self.options.tags = self.options.tags.split(self.options.separator);
         }
       }
 
