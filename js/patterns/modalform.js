@@ -1,7 +1,8 @@
 define([
   'jquery',
   'js/patterns/backdrop',
-  'js/patterns/modal'
+  'js/patterns/modal',
+  'jam/jquery-form/jquery.form',
 ], function($, Backdrop) {
 
   // modal template for plone
