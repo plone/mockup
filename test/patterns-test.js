@@ -44,12 +44,13 @@ define([
   'js/patterns/select2',
   'js/patterns/toggle',
   'js/patterns/preventdoublesubmit',
-  'js/patterns/formUnloadAlert'
+  'js/patterns/formUnloadAlert',
+  'js/patterns/accessibility'
 ], function(chai, $, registry, 
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
-      FormUnloadAlert) {
+      FormUnloadAlert, Accessibility) {
   "use strict";
 
   var expect = chai.expect,
@@ -91,6 +92,42 @@ define([
       registry.scan($el, true);
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
+  });
+
+  /* ==========================
+   TEST: Accessibility
+  ========================== */
+
+  describe("Accessibility", function () {
+    beforeEach(function() {
+      $.removeCookie('fontsize');
+      this.$el = $('' +
+        '<div class="pat-accessibility">' +
+        '</div>');
+    });
+    it("test cookie remains set", function() {
+      var accessibility = new Accessibility(this.$el);
+      expect($.cookie('fontsize'), this.$el).to.be.undefined;
+      accessibility.setBaseFontSize("smallText", 1);
+      expect($.cookie('fontsize'), this.$el).to.not.be.undefined;
+    });
+    it("test class is set", function() {
+      var accessibility = new Accessibility(this.$el);
+      expect(this.$el.hasClass("smallText")).to.be.false;
+      expect(this.$el.hasClass("largeText")).to.be.false;
+      accessibility.setBaseFontSize("smallText", 1);
+      expect(this.$el.hasClass("smallText")).to.be.true;
+      expect(this.$el.hasClass("largeText")).to.be.false;
+      accessibility.setBaseFontSize("largeText", 1);
+      expect(this.$el.hasClass("smallText")).to.be.false;
+      expect(this.$el.hasClass("largeText")).to.be.true;
+    });
+    it("test class is set if a cookie is found", function() {
+      $.cookie('fontsize', "smallText");
+      expect(this.$el.hasClass("smallText")).to.be.false;
+      registry.scan(this.$el);
+      expect(this.$el.hasClass("smallText")).to.be.true;
+    });
   });
 
   /* ==========================
