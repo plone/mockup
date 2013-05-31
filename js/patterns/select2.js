@@ -50,23 +50,43 @@ define([
     init: function() {
       var self = this;
 
-      if (self.options.initselection) {
+      // Init Selection ---------------------------------------------
+      if (self.options.initvaluemap) {
         self.options.initSelection = function ($el, callback) {
-          var data = [], value = $el.val(),
-              initSelection = self.options.initselection;
-          if (typeof(initSelection) === 'string') {
-              initSelection = JSON.parse(self.options.initselection);
+          var data = [], value = $el.val(), seldefaults;
+
+          // Create the initSelection value that contains the default selection,
+          // but in a javascript object
+          if (typeof(self.options.initvaluemap) === 'string' && self.options.initvaluemap !== '') {
+            // if default selection value starts with a '{', then treat the value as
+            // a JSON object that needs to be parsed
+            if(self.options.initvaluemap[0] === '{') {
+              seldefaults = JSON.parse(self.options.initvaluemap);
+            }
+            // otherwise, treat the value as a list, separated by the defaults.separator value of
+            // strings in the format "id:text", and convert it to an object
+            else {
+              seldefaults = {}
+              $(self.options.initvaluemap.split(self.options.separator)).each(function() {
+                var selection = this.split(':');
+                var id = selection[0];
+                var text = selection[1];
+                seldefaults[id] = text;
+              });
+            }
           }
-          $(value.split(self.separator)).each(function () {
+
+          $(value.split(self.options.separator)).each(function() {
             var text = this;
-            if (initSelection[this]) {
-              text = initSelection[this];
+            if (seldefaults[this]) {
+              text = seldefaults[this];
             }
             data.push({id: this, text: text});
           });
           callback(data);
-        };
+        }
       }
+
 
 
       if (self.options.ajax || self.options.ajax_suggest) {

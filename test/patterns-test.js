@@ -280,13 +280,36 @@ define([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2" data-select2-tags="Red,Yelow,Blue"' +
+        ' <input class="pat-select2" data-select2-tags="Red,Yellow,Blue"' +
         '      value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
       registry.scan($el);
       expect($('.select2-choices', $el).size()).to.equal(1);
       expect($('.select2-choices li', $el).size()).to.equal(2);
+    });
+
+    it('custom separator', function() {
+      var $el = $(
+        '<div>' +
+        ' <input class="pat-select2"' +
+        '      data-select2-selector=";"' +
+        '      data-select2-tags="Red;Yellow;Blue"' +
+        '      value="Yellow" />' +
+        '</div>');
+    });
+
+    it('init value map', function() {
+        var $el = $(
+        '<div>' +
+        ' <input class="pat-select2"' +
+        '        data-select2-tags="Red,Yellow,Blue"' +
+        '        data-select2-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
+        '        value="Yellow,Red"/>' +
+        '</div>');
+
+        registry.scan($el);
+        expect($('.select2-choices li', $el).size()).to.equal(3);
     });
   });
 
