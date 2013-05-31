@@ -1,7 +1,8 @@
 define([
   'jquery',
   'js/patterns/base',
-  'js/patterns/tiletype'
+  'js/patterns/tiles/tiletype',
+  'js/patterns/modalform.js'
 ], function($, Base, TileType) {
   "use strict";
 
@@ -131,7 +132,7 @@ define([
                               .exec(response)[0]
                               .replace('<body', '<div')
                               .replace('</body>', '</div>');
-          var contentcore = $('#content-core', respcontent).html();
+          var contentcore = $('#content', respcontent).html();
           $(self.wrapper).append(contentcore);
 
           self.trigger('after-ajax', self, textStatus, xhr);

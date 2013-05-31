@@ -1,6 +1,7 @@
 define([
   'jquery',
-], function($) {
+  'js/patterns/modalform'
+], function($, modalform) {
   "use strict";
 
   var TileTypeBase = {

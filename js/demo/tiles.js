@@ -2,8 +2,8 @@ require([
   'jquery',
   'sinon',
   'jam/Patterns/src/registry',
-  'js/patterns/tiletype',
-  'js/patterns/texttile',
+  'js/patterns/tiles/tiletype',
+  'js/patterns/tiles/texttile',
   'js/bundles/tiles'
 ], function($, sinon, registry, TileTypes) {
 
@@ -12,7 +12,7 @@ require([
   //
   var server = sinon.fakeServer.create();
     server.autoRespond = true;
-    server.autoRespondAfter = 2000;
+    server.autoRespondAfter = 500;
 
   function deserialize(text) {
     response = {};
