@@ -20,7 +20,8 @@
       "font-awesome": "==3.0.0",
       "logging": "==1.0.0-jam.2",
       "jquery.event.drag": "==2.2.0",
-      "jquery.event.drop": "==2.2.0"
+      "jquery.event.drop": "==2.2.0",
+      "jquery-cookie": "==1.3.1"
     }
   },
   "maintainers": [
