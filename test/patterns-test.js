@@ -50,7 +50,7 @@ define([
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
-      FormUnloadAlert, Accessibility) {
+      FormUnloadAlert, Accessibility, FontSizeChanger) {
   "use strict";
 
   var expect = chai.expect,
@@ -93,8 +93,7 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
-
-  /* ==========================
+/* ==========================
    TEST: Accessibility
   ========================== */
 
@@ -127,6 +126,23 @@ define([
       expect(this.$el.hasClass("smallText")).to.be.false;
       registry.scan(this.$el);
       expect(this.$el.hasClass("smallText")).to.be.true;
+    });
+  });
+
+  /* ==========================
+   TEST: FontSizeChanger
+  ========================== */
+  describe("FontSizeChanger", function () {
+    beforeEach(function() {
+      this.$anchor = $('<a class="pat-fontsizechanger" data-size="large" />');
+      this.$el = $('<div class="pat-accessibility"></div>');
+      this.$el.append(this.$anchor);
+    });
+    it('test click changes font size', function(){
+      var accessibility = new Accessibility(this.$el);
+      var changefont = new FontSizeChanger(this.$anchor);
+      this.$anchor.trigger('click');
+      expect($.cookie('fontsize'), this.$el).to.not.be.undefined;
     });
   });
 

@@ -59,3 +59,31 @@ define([
   return Accessibility;
 
 });
+
+
+define([
+  'jquery',
+  'js/patterns/base',
+  'jam/jquery-cookie/jquery.cookie'
+], function($, Accessibility, Parser) {
+  "use strict";
+
+  var FontSizeChanger = Base.extend({
+    name: "fontsizechanger",
+    defaults: {
+      'size': 'large'
+    }, 
+    init: function() {
+      var self = this;
+      self.$el.click(function(e){
+        e.preventDefault();
+        self.setBaseFontSize(self.options.size + 'Text', true);
+      });
+    }
+  });
+
+  return FontSizeChanger;
+
+});
+
+
