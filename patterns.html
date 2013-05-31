@@ -199,7 +199,44 @@
 -->
 
       <h1 id="select2">Select2</h1>
+      <div class="row">
+        <div class="span4">
+          <div class='alert alert-info'>
+            <u><strong>Data Attributes</strong></u>
+            <p>
+              Attributes are mostly what you will find on the
+              <a href='http://ivaynberg.github.io/select2/' target='_blank'>Select2</a>,
+              except in the format of the data attributes used by the patternslib.
+            </p>
+            <dl>
+              <dt>data-select2-width<dt>
+              <dd>Sets the width of the Select2 element<dd>
 
+              <dt>data-select2-separator<dt>
+              <dd>
+                Define a custom separator used to distinguish the tag values. Ex: a value of ';' will
+                allow the <em>data-select2-tags</em> and <em>data-select2-initvalmap</em> to have
+                values separated by ';' instead of the default ','.
+              <dd>
+
+              <dt>data-select2-tags<dt>
+              <dd>Valid tag values selectable/enterable by users.<dd>
+
+              <dt>data-select2-initvalmap<dt>
+              <dd>
+                <p>
+                  This can be a json encoded string, or a list of <em>id:text</em>
+                  values. Ex: "Red:The Color Red,Orange:The Color Orange"
+                </p>
+                <p>
+                  Note: this is analagous to the <em>Select2</em> <strong>initSelection</strong>
+                  constructor parameter.
+                </p>
+              <dd>
+            </dl>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="span4">
           <h3>Autocomplete with search</h3>
