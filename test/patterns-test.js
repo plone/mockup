@@ -368,7 +368,7 @@ define([
         expect($('.select2-choices li', $el).size()).to.equal(3);
     });
 
-    it('ajax', function() {
+    it('ajax vocabulary', function() {
         var $el = $(
         ' <input class="pat-select2"' +
         '        data-select2-ajaxvocabulary="select2-users-vocabulary"' +
@@ -377,6 +377,21 @@ define([
 
         var select2 = new Select2($el);
         expect(select2.options.ajax.url).to.equal("select2-users-vocabulary");
+    });
+
+    it('orderable tags', function() {
+        var $el = $(
+        '<div>' +
+        ' <input class="pat-select2"' +
+        '        data-select2-orderable="true"' +
+        '        data-select2-tags="Red,Yellow,Blue"' +
+        '        value="Red"' +
+        '        />' +
+        '</div>'
+        );
+
+        registry.scan($el);
+        expect($('.select2-choices li.select2-search-choice', $el).css('cursor')).to.equal('move');
     });
   });
 
