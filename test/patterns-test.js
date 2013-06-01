@@ -318,7 +318,7 @@ define([
       var $el = $('' +
         '<div>' +
         ' <input class="pat-select2" data-select2-tags="Red,Yellow,Blue"' +
-        '      value="Yellow" />' +
+        '        value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
       registry.scan($el);
@@ -330,9 +330,9 @@ define([
       var $el = $(
         '<div>' +
         ' <input class="pat-select2"' +
-        '      data-select2-selector=";"' +
-        '      data-select2-tags="Red;Yellow;Blue"' +
-        '      value="Yellow" />' +
+        '        data-select2-selector=";"' +
+        '        data-select2-tags="Red;Yellow;Blue"' +
+        '        value="Yellow" />' +
         '</div>');
     });
 
@@ -347,6 +347,17 @@ define([
 
         registry.scan($el);
         expect($('.select2-choices li', $el).size()).to.equal(3);
+    });
+
+    it('ajax', function() {
+        var $el = $(
+        ' <input class="pat-select2"' +
+        '        data-select2-ajaxvocabulary="select2-users-vocabulary"' +
+        '        />'
+        );
+
+        var select2 = new Select2($el);
+        expect(select2.options.ajax.url).to.equal("select2-users-vocabulary");
     });
   });
 

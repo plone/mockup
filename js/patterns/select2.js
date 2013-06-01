@@ -89,11 +89,11 @@ define([
 
 
 
-      if (self.options.ajax || self.options.ajax_suggest) {
-        if (self.options.ajax_suggest) {
+      if (self.options.ajax || self.options.ajaxvocabulary) {
+        if(self.options.ajaxvocabulary) {
           self.options.multiple = true;
           self.options.ajax = self.options.ajax || {};
-          self.options.ajax.url = self.options.ajax_suggest;
+          self.options.ajax.url = self.options.ajaxvocabulary;
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
             $(value.split(self.options.separator)).each(function () {
@@ -102,6 +102,7 @@ define([
             callback(data);
           };
         }
+
         var query_term = '';
         self.options.ajax = $.extend({
           quietMillis: 300,
@@ -115,7 +116,7 @@ define([
           },
           results: function (data, page) {
             var results = data.results;
-            if (self.options.ajax_suggest) {
+            if (self.options.ajaxvocabulary) {
               var data_ids = [];
               $.each(data.results, function(i, item) {
                 data_ids.push(item.id);
@@ -125,7 +126,7 @@ define([
                 results.push({id:query_term, text:query_term});
               }
               $.each(data.results, function(i, item) {
-                if (self.options.ajax_suggest) {
+                if (self.options.ajaxvocabulary) {
                   results.push({ id: item.text, text: item.text });
                 } else {
                   results.push(item);

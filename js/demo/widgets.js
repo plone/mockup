@@ -19,9 +19,12 @@ require([
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;
-  server.autoRespondAfter = 4000;
+  server.autoRespondAfter = 2000;
   server.respondWith(/something.html/, function (xhr, id) {
     xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
+  });
+  server.respondWith(/select2-test.json/, function(xhr, id) {
+    xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
   });
 
   SyntaxHighlighter.all();

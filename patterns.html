@@ -38,6 +38,16 @@
     </body>
     </html>
   </script>
+  <script type="text/x-ajax-respond" id="select2-json">
+    {
+      "more": "false",
+      "results": [
+        {"id": "Red", "text": "Red"},
+        {"id": "Blue", "text": "Blue"},
+        {"id": "Green", "text": "Green"}
+      ]
+    }
+  </script>
 </head>
 
 <body>
@@ -200,7 +210,7 @@
 
       <h1 id="select2">Select2</h1>
       <div class="row">
-        <div class="span4">
+        <div class="span12">
           <div class='alert alert-info'>
             <u><strong>Data Attributes</strong></u>
             <p>
@@ -223,12 +233,16 @@
                 <p>
                   This can be a json encoded string, or a list of <em>id:text</em>
                   values. Ex: "Red:The Color Red,Orange:The Color Orange"
-                </p>
-                <p>
-                  Note: this is analagous to the <em>Select2</em> <strong>initSelection</strong>
-                  constructor parameter.
+                  <br /><br />
+                  This is used inside the initSelection method, if ajax options
+                  are NOT set.
                 </p>
               <dd>
+
+              <dt>data-select2-ajaxvocabulary</dt>
+              <dd>
+                This is a URL to a JSON formatted file used to populate the list
+              </dd>
             </dl>
           </div>
         </div>
@@ -466,6 +480,22 @@
         </div>
 
       </div>
+      <div class='row'>
+        <div class="span4">
+          <h3>AJAX tags</h3>
+          <input type="hidden" class="pat-select2"
+              data-select2-placeholder="Search for a Value"
+              data-select2-ajaxvocabulary="select2-test.json"
+              data-select2-width="20em" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input type="hidden" class="pat-select2"
+    data-select2-placeholder="Search for a Value"
+    data-select2-ajaxvocabulary="select2-test.json"
+    data-select2-width="20em" /&gt;</pre>
+        </div>
+
+      </div>
+
 
 <!--
 ============================================= 
