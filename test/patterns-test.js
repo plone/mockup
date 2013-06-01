@@ -45,7 +45,8 @@ define([
   'js/patterns/toggle',
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
-  'js/patterns/accessibility'
+  'js/patterns/accessibility',
+  'jam/jquery-cookie/jquery.cookie'
 ], function(chai, $, registry, 
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
@@ -93,8 +94,7 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
-
-  /* ==========================
+/* ==========================
    TEST: Accessibility
   ========================== */
 
@@ -103,6 +103,9 @@ define([
       $.removeCookie('fontsize');
       this.$el = $('' +
         '<div class="pat-accessibility">' +
+          '<a id="btn1" />' +
+          '<a id="btn2" />' +
+          '<a id="btn3" />' +
         '</div>');
     });
     it("test cookie remains set", function() {
@@ -128,7 +131,23 @@ define([
       registry.scan(this.$el);
       expect(this.$el.hasClass("smallText")).to.be.true;
     });
+    it("test setting small font size with button works", function(){
+      // add pattern to anchor
+      this.$el.attr("data-accessibility-smallbtn", "#btn1");
+      var accessibility = new Accessibility(this.$el);
+      $('#btn1', this.$el).trigger('click');
+      expect(this.$el.hasClass('smallText')).to.be.true;
+    });
+    it("test setting large font size with button works", function(){
+      // add pattern to anchor
+      this.$el.attr("data-accessibility-largebtn", "#btn3");
+      this.$el.attr("data-accessibility-smallbtn", "#btn1");
+      var accessibility = new Accessibility(this.$el);
+      $('#btn3', this.$el).trigger('click');
+      expect(this.$el.hasClass('largeText')).to.be.true;
+    });
   });
+
 
   /* ==========================
    TEST: AutoTOC
