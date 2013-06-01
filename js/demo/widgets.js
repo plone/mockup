@@ -5,6 +5,7 @@ require([
   'js/bundles/widgets',
   'js/patterns/expose',
   'js/patterns/modal',
+  'js/patterns/accessibility',
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
