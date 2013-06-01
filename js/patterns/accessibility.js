@@ -48,7 +48,7 @@ define([
       if ($reset) {
         this.$el.removeClass('smallText').removeClass('largeText').
             removeClass('mediumText');
-        $.cookie('fontsize', $fontsize, { expires: 365 });
+        $.cookie('fontsize', $fontsize, { expires: 365, path="/" });
       }
       this.$el.addClass($fontsize);
     },
