@@ -50,7 +50,7 @@ define([
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
-      FormUnloadAlert, Accessibility, FontSizeChanger) {
+      FormUnloadAlert, Accessibility) {
   "use strict";
 
   var expect = chai.expect,
@@ -139,8 +139,7 @@ define([
       this.$el.append(this.$anchor);
     });
     it('test click changes font size', function(){
-      var accessibility = new Accessibility(this.$el);
-      var changefont = new FontSizeChanger(this.$anchor);
+      registry.scan(this.$el);
       this.$anchor.trigger('click');
       expect($.cookie('fontsize'), this.$el).to.not.be.undefined;
     });

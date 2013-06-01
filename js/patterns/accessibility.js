@@ -68,7 +68,7 @@ define([
 ], function($, Accessibility, Parser) {
   "use strict";
 
-  var FontSizeChanger = Base.extend({
+  var FontSizeChanger = Accessibility.extend({
     name: "fontsizechanger",
     defaults: {
       'size': 'large'
