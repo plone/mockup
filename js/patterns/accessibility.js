@@ -39,51 +39,53 @@ define([
 
   var Accessibility = Base.extend({
     name: "accessibility",
-    defaults: {}, 
+    defaults: {
+      'smallbtn': null,
+      'normalbtn': null,
+      'largebtn': null
+    },
     setBaseFontSize: function($fontsize, $reset) {
       if ($reset) {
-        this.$el.removeClass('smallText').removeClass('largeText');
+        this.$el.removeClass('smallText').removeClass('largeText').
+            removeClass('mediumText');
         $.cookie('fontsize', $fontsize, { expires: 365 });
       }
       this.$el.addClass($fontsize);
     },
+    initBtn: function(btn){
+      var self = this;
+      btn.el.click(function(e){
+        e.preventDefault();
+        self.setBaseFontSize(btn.name + 'Text', 1);
+      });
+    },
     init: function() {
+      var self = this;
       var $fontsize = $.cookie('fontsize');
       if ($fontsize) {
-          this.setBaseFontSize($fontsize, 0);
+          self.setBaseFontSize($fontsize, 0);
       }
-
+      var btns = ['smallbtn', 'normalbtn', 'largebtn'];
+      for(var i=0; i<btns.length; i++){
+        var btn = btns[i];
+        var btnName = btn.replace('btn', '');
+        var btnSelector = self.options[btn];
+        if(btnSelector !== null){
+          var el = $(btnSelector, self.$el);
+          if(el){
+            btn = {
+              name: btnName,
+              el: el
+            };
+            self[btnName] = btn;
+            self.initBtn(btn);
+          }
+        }
+      }
     }
   });
 
   return Accessibility;
 
 });
-
-
-define([
-  'jquery',
-  'js/patterns/base',
-  'jam/jquery-cookie/jquery.cookie'
-], function($, Accessibility, Parser) {
-  "use strict";
-
-  var FontSizeChanger = Accessibility.extend({
-    name: "fontsizechanger",
-    defaults: {
-      'size': 'large'
-    }, 
-    init: function() {
-      var self = this;
-      self.$el.click(function(e){
-        e.preventDefault();
-        self.setBaseFontSize(self.options.size + 'Text', true);
-      });
-    }
-  });
-
-  return FontSizeChanger;
-
-});
-
 
