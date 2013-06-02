@@ -47,12 +47,14 @@ define([
   'js/patterns/formUnloadAlert',
   'js/patterns/accessibility',
   'js/patterns/cookiedirective',
-  'jam/jquery-cookie/jquery.cookie'
-], function(chai, $, registry, 
+  'js/patterns/relateditems',
+  'jam/jquery-cookie/jquery.cookie',
+], function(chai, $, registry,
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
-      FormUnloadAlert, Accessibility, CookieDirective) {
+      FormUnloadAlert, Accessibility, CookieDirective,
+      RelatedItems) {
   "use strict";
 
   var expect = chai.expect,
@@ -155,7 +157,7 @@ define([
     it("test enable cookies shows", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
-      $.cookie = function (){return undefined};
+      $.cookie = function (){return undefined;};
       this.$el.attr("data-cookiedirective-should_ask", "false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
@@ -166,7 +168,7 @@ define([
     it("test enable cookies can be hidden", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
-      $.cookie = function (){return undefined};
+      $.cookie = function (){return undefined;};
       this.$el.attr("data-cookiedirective-should_ask", "false");
       this.$el.attr("data-cookiedirective-should_enable", "false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -178,7 +180,7 @@ define([
     it("show enable cookies and ask permission", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
-      $.cookie = function (){return undefined};
+      $.cookie = function (){return undefined;};
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
       registry.scan(this.$el);
@@ -190,7 +192,7 @@ define([
     it("test enable cookies shouldn't show if selector is not found", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
-      $.cookie = function (){return undefined};
+      $.cookie = function (){return undefined;};
       this.$el.attr("data-cookiedirective-should_enable_selector", ".another-login");
       this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -202,7 +204,7 @@ define([
     it("show enable cookies message customizable", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
-      $.cookie = function (){return undefined};
+      $.cookie = function (){return undefined;};
       this.$el.attr("data-cookiedirective-should_enable_msg", "Test should_enable_msg");
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test should_enable_msg");
@@ -510,6 +512,13 @@ define([
         registry.scan($el);
         expect($('.select2-choices li.select2-search-choice', $el).css('cursor')).to.equal('move');
     });
+  });
+
+  /* ==========================
+   TEST: Related Items
+  ========================== */
+
+  describe("Related Items", function() {
   });
 
   /* ==========================

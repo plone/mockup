@@ -66,8 +66,7 @@ define([
           self.setBaseFontSize($fontsize, 0);
       }
       var btns = ['smallbtn', 'normalbtn', 'largebtn'];
-      for(var i=0; i<btns.length; i++){
-        var btn = btns[i];
+      $.each(btns, function(idx, btn){
         var btnName = btn.replace('btn', '');
         var btnSelector = self.options[btn];
         if(btnSelector !== null){
@@ -81,7 +80,7 @@ define([
             self.initBtn(btn);
           }
         }
-      }
+      });
     }
   });
 
