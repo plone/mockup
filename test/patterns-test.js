@@ -38,7 +38,7 @@ define([
   'js/patterns/base',
   'js/patterns/autotoc',
   'js/patterns/backdrop',
-  'js/patterns/datetime',
+  'js/patterns/pickadate',
   'js/patterns/expose',
   'js/patterns/modal',
   'js/patterns/select2',
@@ -52,7 +52,7 @@ define([
   'jam/jquery-cookie/jquery.cookie',
 ], function(chai, $, registry,
       Base, AutoTOC, Backdrop,
-      DateTime, Expose, Modal,
+      PickADate, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
       FormUnloadAlert, Accessibility, CookieDirective,
       RelatedItems) {
@@ -466,31 +466,31 @@ define([
   });
 
   /* ==========================
-   TEST: DateTime
+   TEST: PickADate
   ========================== */
 
-  describe("DateTime", function() {
+  describe("PickADate", function() {
     beforeEach(function() {
       this.$el = $('' +
         '<div>' +
-        ' <input class="pat-datetime" />' +
+        ' <input class="pat-pickadate" />' +
         '</div>');
     });
     it('creates initial structure', function() {
-      expect($('.pat-datetime-wrapper', this.$el).size()).to.equal(0);
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-datetime-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-datetime-wrapper select', this.$el).size()).to.equal(8);
-      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).to.equal(2);
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pat-pickadate-wrapper select', this.$el).size()).to.equal(8);
+      expect($('.pat-pickadate-wrapper .pickadate__holder select', this.$el).size()).to.equal(2);
     });
     it('doesn not work on anything else then "input" elements', function() {
       var $el = $('' +
         '<div>' +
-        ' <a class="pat-datetime" />' +
+        ' <a class="pat-pickadate" />' +
         '</div>');
-      expect($('.pat-datetime-wrapper', $el).size()).to.equal(0);
+      expect($('.pat-pickadate-wrapper', $el).size()).to.equal(0);
       registry.scan($el);
-      expect($('.pat-datetime-wrapper', $el).size()).to.equal(0);
+      expect($('.pat-pickadate-wrapper', $el).size()).to.equal(0);
     });
   });
 

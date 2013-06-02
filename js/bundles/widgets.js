@@ -37,7 +37,7 @@ define([
   'jquery',
   'jam/Patterns/src/registry',
   'js/patterns/select2',
-  'js/patterns/datetime',
+  'js/patterns/pickadate',
   'js/patterns/autotoc',
   'js/patterns/accessibility',
   'js/patterns/relateditems'

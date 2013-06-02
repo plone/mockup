@@ -38,23 +38,23 @@ define([
 ], function($, Base) {
   "use strict";
 
-  var DateTime = Base.extend({
-    name: 'datetime',
+  var PickADate = Base.extend({
+    name: 'pickadate',
     defaults: {
       format: "d-mmmm-yyyy@HH:MM",
       formatsubmit: "yyyy-m-d H:M",
       ampm: 'AM,PM',
       minutestep: '5',
       klass: {
-        wrapper: "pat-datetime-wrapper",
-        icon: "pat-datetime-icon",
-        year: "pat-datetime-year",
-        month: "pat-datetime-month",
-        day: "pat-datetime-day",
-        hour: "pat-datetime-hour",
-        minute: "pat-datetime-minute",
-        ampm: "pat-datetime-ampm",
-        delimiter: "pat-datetime-delimiter"
+        wrapper: "pat-pickadate-wrapper",
+        icon: "pat-pickadate-icon",
+        year: "pat-pickadate-year",
+        month: "pat-pickadate-month",
+        day: "pat-pickadate-day",
+        hour: "pat-pickadate-hour",
+        minute: "pat-pickadate-minute",
+        ampm: "pat-pickadate-ampm",
+        delimiter: "pat-pickadate-delimiter"
       },
       pickadate: {
         monthSelector: true,
@@ -458,6 +458,6 @@ define([
     }
   });
 
-  return DateTime;
+  return PickADate;
 
 });
