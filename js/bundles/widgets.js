@@ -39,7 +39,8 @@ define([
   'js/patterns/select2',
   'js/patterns/datetime',
   'js/patterns/autotoc',
-  'js/patterns/accessibility'
+  'js/patterns/accessibility',
+  'js/patterns/relateditems'
 ], function($, registry) {
   "use strict";
 

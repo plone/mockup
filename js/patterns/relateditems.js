@@ -45,13 +45,16 @@ define([
   var RelatedItems = Base.extend({
     name: "relateditems",
     defaults: {
-      query: null
+      multiple: true,
+      tokenSeparators: [",", " "]
     },
     init: function() {
       var self = this;
 
-      self.$el.select2();
+      self.options.tags = []; // for now...
+      self.$el.select2(self.options);
       self.$el.parent().off('close.modal.patterns');
+
     }
   });
 
