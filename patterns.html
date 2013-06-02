@@ -48,6 +48,16 @@
       ]
     }
   </script>
+  <script type="text/x-ajax-respond" id="relateditems-json">
+    {
+      "more": "false",
+      "results": [
+        {"id": "red", "title": "Red", "path": "/red"},
+        {"id": "blue", "title": "Blue", "path": "/blue"},
+        {"id": "green", "title": "Green", "path": "/green"}
+      ]
+    }
+  </script>
 </head>
 
 <body>
@@ -1064,7 +1074,8 @@
     <div class="row">
       <div class="span6">
           <input type="text" class="pat-relateditems"
-              data-relateditems-width="20em" />
+              data-relateditems-width="20em"
+              data-relateditems-url="/relateditems-test.json" />
       </div>
     </div>
 

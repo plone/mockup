@@ -519,7 +519,15 @@ define([
   ========================== */
 
   describe("Related Items", function() {
-
+    it('test initialize', function(){
+      var $el = $(
+        '<div>' +
+        ' <input class="pat-relateditems" />' +
+        '</div>'
+        );
+      registry.scan($el);
+      expect($('.select2-container-multi', $el)).to.not.be.undefined;
+    });
   });
 
   /* ==========================

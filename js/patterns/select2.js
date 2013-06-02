@@ -99,6 +99,12 @@ define([
     initializeOrdering: function(){
       var self = this;
       if (self.options.orderable) {
+        var formatSelection = function(data, $container){
+          return data ? data.text : undefined;
+        };
+        if(self.options.formatSelection){
+          formatSelection = self.options.formatSelection;
+        }
         self.options.formatSelection = function(data, $container) {
           $container.parents('li')
             .css({'cursor': 'move'})
@@ -131,7 +137,7 @@ define([
             .drop("init", function(e, dd ) {
               return !(this !== dd.drag);
             });
-          return data ? data.text : undefined;
+          return formatSelection(data, $container);
         };
       }
     },
