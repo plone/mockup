@@ -142,6 +142,15 @@ define([
         };
       }
     },
+    initializeSelect2: function(){
+      var self = this;
+      self.$el.select2(self.options);
+      self.$el.parent().off('close.modal.patterns');
+      if(self.options.orderable){
+        self.$el.parent().find('.select2-container').addClass(
+            'select2-orderable');
+      }
+    },
     init: function() {
       var self = this;
 
@@ -198,8 +207,7 @@ define([
       }
 
       self.initializeOrdering();
-      self.$el.select2(self.options);
-      self.$el.parent().off('close.modal.patterns');
+      self.initializeSelect2();
     }
   });
 

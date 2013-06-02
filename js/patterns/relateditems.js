@@ -89,8 +89,7 @@ define([
         self.options.tags = [];
       }
 
-      self.$el.select2(self.options);
-      self.$el.parent().off('close.modal.patterns');
+      Select2.prototype.initializeSelect2.call(self);
     }
   });
 
