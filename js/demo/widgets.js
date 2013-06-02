@@ -8,6 +8,7 @@ require([
   'js/patterns/accessibility',
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
+  'js/patterns/tooltip',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'
