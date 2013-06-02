@@ -6,6 +6,7 @@ require([
   'js/patterns/expose',
   'js/patterns/modal',
   'js/patterns/accessibility',
+  'js/patterns/cookiedirective',
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
@@ -33,6 +34,40 @@ require([
   // Initialize patterns
   $(document).ready(function() {
     registry.scan($('body'));
+    
+    // This is used for the cookiedirective pattern
+    function getCookieValue (){
+      var cookie = $.cookie("Allow_Cookies_For_Site");
+      var value;
+      if (cookie === undefined){
+        value = "undefined";
+      }
+      else{
+        if (cookie == "1"){
+          value = "Allow";
+        }
+        else{
+          value = "Deny";
+        }
+      }
+      return value;
+    }
+    $('.cookieallowbutton').live("click", function() {
+      var value = getCookieValue();
+      $('#cookievalue').text(value);
+    });
+    $('.cookiedenybutton').live("click", function() {
+      var value = getCookieValue();
+      $('#cookievalue').text(value);
+    });
+
+    $('#removedemocookie').on("click", function() {
+      $.removeCookie('Allow_Cookies_For_Site');
+      location.reload();
+    });
+                
+    var value = getCookieValue();
+    $('#cookievalue').text(value);
   });
 
 });
