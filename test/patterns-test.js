@@ -46,12 +46,13 @@ define([
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
   'js/patterns/accessibility',
+  'js/patterns/cookiedirective',
   'jam/jquery-cookie/jquery.cookie'
 ], function(chai, $, registry, 
       Base, AutoTOC, Backdrop,
       DateTime, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
-      FormUnloadAlert, Accessibility) {
+      FormUnloadAlert, Accessibility, CookieDirective) {
   "use strict";
 
   var expect = chai.expect,
@@ -94,6 +95,122 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
+  
+/* ==========================
+   TEST: CookieDirective
+  ========================== */
+
+  describe("CookieDirective", function () {
+    beforeEach(function() {
+      $.removeCookie("Allow_Cookies_For_Site");
+      $.removeCookie("_cookiesEnabled");
+      this.$el = $('' +
+        '<div class="pat-cookiedirective">' +
+        '<div class="login"></div>' +
+        '</div>');
+      this.$el.attr("data-cookiedirective-should_ask", "true");
+      this.$el.attr("data-cookiedirective-should_enable", "true");
+    });
+    it("test ask permission shows", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(1);
+    });
+    it("test ask permission can be hidden", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      this.$el.attr("data-cookiedirective-should_ask", "false");
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+    });
+    it("test ask permission don't show if replied yes", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      $.cookie('Allow_Cookies_For_Site', 1);
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+    });
+    it("test ask permission don't show if replied no", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      $.cookie('Allow_Cookies_For_Site', 0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+    });
+    it("test ask permission buttons", function() {
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      registry.scan(this.$el);
+      this.$el.find('.cookieallowbutton').trigger('click');
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("1");
+      this.$el.find('.cookiedenybutton').trigger('click');
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");
+    });
+    it("test ask permission customizable", function() {
+      this.$el.attr("data-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
+      this.$el.attr("data-cookiedirective-allow_msg", "Test allow_msg");
+      this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiemsg').text()).to.equal("Test ask_permission_msg");
+      expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allow_msg");
+      expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test deny_msg");
+      
+    });
+    it("test enable cookies shows", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined};
+      this.$el.attr("data-cookiedirective-should_ask", "false");
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("test enable cookies can be hidden", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined};
+      this.$el.attr("data-cookiedirective-should_ask", "false");
+      this.$el.attr("data-cookiedirective-should_enable", "false");
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("show enable cookies and ask permission", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined};
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(1);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("test enable cookies shouldn't show if selector is not found", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined};
+      this.$el.attr("data-cookiedirective-should_enable_selector", ".another-login");
+      this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("show enable cookies message customizable", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined};
+      this.$el.attr("data-cookiedirective-should_enable_msg", "Test should_enable_msg");
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test should_enable_msg");
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+  });
+
 /* ==========================
    TEST: Accessibility
   ========================== */
