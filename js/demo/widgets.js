@@ -9,6 +9,8 @@ require([
   'js/patterns/cookiedirective',
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
+  'js/patterns/tooltip',
+  'js/patterns/tablesorter',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js'

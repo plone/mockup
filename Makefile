@@ -191,7 +191,8 @@ build/widgets.min.js:
 build/widgets.css:
 	$(CSSMIN) jam/plone-select2/select2.css > $@
 	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
-	$(LESSC) less/sunburst.less | $(CSSMIN) >> $@
+#	$(LESSC) less/sunburst.less | $(CSSMIN) >> $@
+	$(LESSC) less/sunburst.less >> $@
 	sed -i -e 's@select2.png@++resource++plone.app.widgets.png@g' $@
 	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-spinner.gif@g' $@
 
@@ -217,7 +218,8 @@ build/toolbar_init.min.js:
 	$(UGLIFYJS) js/iframe.js > $@
 
 build/toolbar_init.css:
-	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@
+#	$(LESSC) less/toolbar_init.less | $(CSSMIN) >> $@
+	$(LESSC) less/toolbar_init.less >> $@
 
 build/toolbar.js:
 	$(JAM) compile -i js/bundles/toolbar -e jquery --no-minify --almond $@
@@ -240,12 +242,11 @@ build/toolbar-webfont.otf:
 
 build/toolbar.css: build/widgets.css
 	cat build/widgets.css > $@
-	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
+	$(LESSC) less/toolbar.less >> $@	
+#	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
 	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.eot@++resource++plone.app.toolbar.eot@g' $@
 	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.ttf@++resource++plone.app.toolbar.ttf@g' $@
 	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.woff@++resource++plone.app.toolbar.woff@g' $@
 	sed -i -e 's@../jam/font-awesome/font/fontawesome-webfont.otf@++resource++plone.app.toolbar.otf@g' $@
 
 
-
-.PHONY: all clean bootstrap test test-ci docs publish-demo widgets toolbar
