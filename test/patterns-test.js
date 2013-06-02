@@ -630,7 +630,7 @@ define([
         );
 
         registry.scan($el);
-        expect($('.select2-choices li.select2-search-choice', $el).css('cursor')).to.equal('move');
+        expect($('.select2-container', $el).hasClass('select2-orderable')).to.be.true;
     });
   });
 
