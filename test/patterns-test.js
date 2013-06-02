@@ -99,8 +99,8 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
-  
-          
+
+
 /* ==========================
    TEST: TableSorter
   ========================== */
@@ -259,7 +259,7 @@ define([
     });
     it("test ask permission deny button", function() {
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
-      registry.scan(this.$el);      
+      registry.scan(this.$el);
       this.$el.find('.cookiedenybutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");
       expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
@@ -272,7 +272,7 @@ define([
       expect(this.$el.find('.cookiemsg').text()).to.equal("Test ask_permission_msg");
       expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allow_msg");
       expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test deny_msg");
-      
+
     });
     it("test enable cookies shows", function() {
       // Override the cookie function with something that returns undefined
