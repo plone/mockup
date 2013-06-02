@@ -575,7 +575,7 @@ define([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2" data-select2-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2x" data-select2x-tags="Red,Yellow,Blue"' +
         '        value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
@@ -587,9 +587,9 @@ define([
     it('custom separator', function() {
       var $el = $(
         '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-select2-selector=";"' +
-        '        data-select2-tags="Red;Yellow;Blue"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-selector=";"' +
+        '        data-select2x-tags="Red;Yellow;Blue"' +
         '        value="Yellow" />' +
         '</div>');
     });
@@ -597,9 +597,9 @@ define([
     it('init value map', function() {
         var $el = $(
         '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-select2-tags="Red,Yellow,Blue"' +
-        '        data-select2-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-tags="Red,Yellow,Blue"' +
+        '        data-select2x-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
         '        value="Yellow,Red"/>' +
         '</div>');
 
@@ -609,8 +609,8 @@ define([
 
     it('ajax vocabulary', function() {
         var $el = $(
-        ' <input class="pat-select2"' +
-        '        data-select2-ajaxvocabulary="select2-users-vocabulary"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-ajaxvocabulary="select2-users-vocabulary"' +
         '        />'
         );
 
@@ -621,9 +621,9 @@ define([
     it('orderable tags', function() {
         var $el = $(
         '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-select2-orderable="true"' +
-        '        data-select2-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-orderable="true"' +
+        '        data-select2x-tags="Red,Yellow,Blue"' +
         '        value="Red"' +
         '        />' +
         '</div>'
