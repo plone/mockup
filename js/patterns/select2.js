@@ -105,6 +105,7 @@ define([
         if(self.options.formatSelection){
           formatSelection = self.options.formatSelection;
         }
+
         self.options.formatSelection = function(data, $container) {
           $container.parents('li')
             .css({'cursor': 'move'})
@@ -123,7 +124,8 @@ define([
             .drag(function(e, dd) {
               var drop = dd.drop[0],
               method = $.data(drop || {}, "drop+reorder");
-              if (drop && (drop !== dd.current || method !== dd.method)){
+              /* XXX Cannot use triple equals here */
+              if (drop && (drop != dd.current || method != dd.method)){
                 $(this)[method](drop);
                 dd.current = drop;
                 dd.method = method;
@@ -135,7 +137,7 @@ define([
               self.$el.select2("onSortEnd");
             })
             .drop("init", function(e, dd ) {
-              return !(this !== dd.drag);
+              return !(this == dd.drag);
             });
           return formatSelection(data, $container);
         };
