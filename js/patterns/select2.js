@@ -1,7 +1,7 @@
 // plone integration for textext.
 //
-// Author: Rok Garbas
-// Contact: rok@garbas.si
+// Author: Nathan Van Gheem
+// Contact: nathan@vangheem.us
 // Version: 1.0
 // Depends:
 //    ++resource++plone.app.jquery.js
