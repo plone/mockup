@@ -48,6 +48,16 @@
       ]
     }
   </script>
+  <script type="text/x-ajax-respond" id="relateditems-json">
+    {
+      "more": "false",
+      "results": [
+        {"id": "red", "title": "Red", "path": "/red"},
+        {"id": "blue", "title": "Blue", "path": "/blue"},
+        {"id": "green", "title": "Green", "path": "/green"}
+      ]
+    }
+  </script>
 </head>
 
 <body>
@@ -1010,6 +1020,7 @@
 
     </div>
 
+
 <!--
 ============================================= 
   PATTERN: Accessibility 
@@ -1064,11 +1075,108 @@
     <div class="row">
       <div class="span6">
           <input type="text" class="pat-relateditems"
-              data-relateditems-width="20em" />
+              data-relateditems-width="20em"
+              data-relateditems-url="/relateditems-test.json" />
       </div>
     </div>
 
 
+<!--
+============================================= 
+  PATTERN: CookieDirective 
+=============================================
+-->
+
+    <h1 id="cookiedirective">Cookie Directive</h1>
+    <h3>Note: In order to see the "you must enable cookies" message, disable cookies in your browser and refresh this page</h3>
+    <div class="row">
+      <div class="span6">
+          <div class="pat-cookiedirective">
+            <div class="login">
+            </div>
+          </div>
+        <pre class="brush: html;toolbar:false;">
+          &lt;div class=&quot;pat-cookiedirective&quot;&gt;
+            &lt;div class=&quot;login&quot;&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        </pre>
+        
+          <p>The cookie accepting the use of cookies is <strong id="cookievalue">undefined</strong></p>
+          <a class="btn" id="removedemocookie">Remove Cookie & Refresh page</a>
+          
+      </div>
+    </div>
+
+
+
+<!--
+============================================= 
+  PATTERN: tablesorter
+=============================================
+-->    
+
+      <h1 id="tablesorter">Tablesorter</h1>
+      <h3>Click the table headers to rearrange the items</h3>
+      <div class="row">
+        <div class="span6">          
+          <table class="pat-tablesorter">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>AAA</td>
+                <td>ZZZ</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>BBB</td>
+                <td>YYY</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>CCC</td>
+                <td>XXX</td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        
+        <pre class="brush: html;toolbar:false;">
+&lt;table class=&quot;pat-tablesorter&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;First Name&lt;/th&gt;
+      &lt;th&gt;Last Name&lt;/th&gt;
+      &lt;th&gt;Number&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;AAA&lt;/td&gt;
+      &lt;td&gt;ZZZ&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BBB&lt;/td&gt;
+      &lt;td&gt;YYY&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;CCC&lt;/td&gt;
+      &lt;td&gt;XXX&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+        </pre>
 <!--
 ============================================= 
   ADD MORE PATTERNS BELOW THIS COMMENT...

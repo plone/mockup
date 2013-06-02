@@ -1,7 +1,7 @@
 // plone integration for textext.
 //
-// Author: Rok Garbas
-// Contact: rok@garbas.si
+// Author: Nathan Van Gheem
+// Contact: nathan@vangheem.us
 // Version: 1.0
 // Depends:
 //    ++resource++plone.app.jquery.js
@@ -47,9 +47,8 @@ define([
     defaults: {
       separator: ","
     },
-    init: function() {
+    initializeValueMap: function(){
       var self = this;
-
       // Init Selection ---------------------------------------------
       if (self.options.initvaluemap) {
         self.options.initSelection = function ($el, callback) {
@@ -66,7 +65,7 @@ define([
             // otherwise, treat the value as a list, separated by the defaults.separator value of
             // strings in the format "id:text", and convert it to an object
             else {
-              seldefaults = {}
+              seldefaults = {};
               $(self.options.initvaluemap.split(self.options.separator)).each(function() {
                 var selection = this.split(':');
                 var id = selection[0];
@@ -84,10 +83,71 @@ define([
             data.push({id: this, text: text});
           });
           callback(data);
+        };
+      }
+    },
+    initializeTags: function(){
+      var self = this;
+      if (self.options.tags && typeof(self.options.tags) === 'string') {
+        if (self.options.tags.substr(0, 1) === '[') {
+          self.options.tags = JSON.parse(self.options.tags);
+        } else {
+          self.options.tags = self.options.tags.split(self.options.separator);
         }
       }
+    },
+    initializeOrdering: function(){
+      var self = this;
+      if (self.options.orderable) {
+        var formatSelection = function(data, $container){
+          return data ? data.text : undefined;
+        };
+        if(self.options.formatSelection){
+          formatSelection = self.options.formatSelection;
+        }
 
+        self.options.formatSelection = function(data, $container) {
+          $container.parents('li')
+            .css({'cursor': 'move'})
+            .drag("start", function(e, dd) {
+              $(this).addClass('select2-choice-dragging');
+              self.$el.select2("onSortStart");
+              $.drop({
+                tolerance: function(event, proxy, target) {
+                  var test = event.pageY > (target.top + target.height / 2);
+                  $.data(target.elem, "drop+reorder",
+                         test ? "insertAfter" : "insertBefore" );
+                  return this.contains(target, [event.pageX, event.pageY]);
+                }
+              });
+            })
+            .drag(function(e, dd) {
+              var drop = dd.drop[0],
+              method = $.data(drop || {}, "drop+reorder");
+              /* XXX Cannot use triple equals here */
+              if (drop && (drop != dd.current || method != dd.method)){
+                $(this)[method](drop);
+                dd.current = drop;
+                dd.method = method;
+                dd.update();
+              }
+            })
+            .drag("end", function(e, dd) {
+              $(this).removeClass('select2-choice-dragging');
+              self.$el.select2("onSortEnd");
+            })
+            .drop("init", function(e, dd ) {
+              return !(this == dd.drag);
+            });
+          return formatSelection(data, $container);
+        };
+      }
+    },
+    init: function() {
+      var self = this;
 
+      self.initializeValueMap();
+      self.initializeTags();
 
       if (self.options.ajax || self.options.ajaxvocabulary) {
         if(self.options.ajaxvocabulary) {
@@ -138,51 +198,7 @@ define([
         }, self.options.ajax);
       }
 
-      if (self.options.tags && typeof(self.options.tags) === 'string') {
-        if (self.options.tags.substr(0, 1) === '[') {
-          self.options.tags = JSON.parse(self.options.tags);
-        } else {
-          self.options.tags = self.options.tags.split(self.options.separator);
-        }
-      }
-
-      if (self.options.orderable) {
-        self.options.formatSelection = function(data, $container) {
-          $container.parents('li')
-            .css({'cursor': 'move'})
-            .drag("start", function(e, dd) {
-              $(this).addClass('select2-choice-dragging');
-              self.$el.select2("onSortStart");
-              $.drop({
-                tolerance: function(event, proxy, target) {
-                  var test = event.pageY > (target.top + target.height / 2);
-                  $.data(target.elem, "drop+reorder",
-                         test ? "insertAfter" : "insertBefore" );
-                  return this.contains(target, [event.pageX, event.pageY]);
-                }
-              });
-            })
-            .drag(function(e, dd) {
-              var drop = dd.drop[0],
-              method = $.data(drop || {}, "drop+reorder");
-              if (drop && (drop != dd.current || method != dd.method)){
-                $(this)[method](drop);
-                dd.current = drop;
-                dd.method = method;
-                dd.update();
-              }
-            })
-            .drag("end", function(e, dd) {
-              $(this).removeClass('select2-choice-dragging');
-              self.$el.select2("onSortEnd");
-            })
-            .drop("init", function(e, dd ) {
-              return !(this == dd.drag);
-            });
-          return data ? data.text : undefined;
-        };
-      }
-
+      self.initializeOrdering();
       self.$el.select2(self.options);
       self.$el.parent().off('close.modal.patterns');
     }

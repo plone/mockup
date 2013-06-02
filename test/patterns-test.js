@@ -48,6 +48,7 @@ define([
   'js/patterns/accessibility',
   'js/patterns/cookiedirective',
   'js/patterns/relateditems',
+  'js/patterns/tablesorter',
   'jam/jquery-cookie/jquery.cookie',
 ], function(chai, $, registry,
       Base, AutoTOC, Backdrop,
@@ -61,6 +62,7 @@ define([
       mocha = window.mocha;
 
   mocha.setup('bdd');
+  $.fx.off = true;
 
   // TODO: test default options and jquery integration
 
@@ -98,6 +100,118 @@ define([
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
   
+          
+/* ==========================
+   TEST: TableSorter
+  ========================== */
+
+  describe("TableSorter", function () {
+    beforeEach(function() {
+      this.$el = $('' +
+        '<table class="pat-tablesorter">'+
+        '   <thead>'+
+        '     <tr>'+
+        '       <th>First Name</th>'+
+        '       <th>Last Name</th>'+
+        '       <th>Number</th>'+
+        '     </tr>'+
+        '   </thead>'+
+        '   <tbody>'+
+        '     <tr>'+
+        '       <td>AAA</td>'+
+        '       <td>ZZZ</td>'+
+        '       <td>3</td>'+
+        '     </tr>'+
+        '     <tr>'+
+        '       <td>BBB</td>'+
+        '       <td>YYY</td>'+
+        '       <td>1</td>'+
+        '     </tr>'+
+        '     <tr>'+
+        '       <td>CCC</td>'+
+        '       <td>XXX</td>'+
+        '       <td>2</td>'+
+        '     </tr>'+
+        '   </tbody>'+
+        ' </table>');
+    });
+    it("test headers have the sort arrow", function() {
+      registry.scan(this.$el);
+      expect(this.$el.find('.sortdirection').size()).to.equal(3);
+    });
+    it("test sort by second column", function() {
+      registry.scan(this.$el);
+      this.$el.find('thead th').eq(1).trigger("click");
+
+      var should_be = ["CCC", "BBB", "AAA"];
+      var elem;
+      for (var i=0;i<should_be.length;i++){
+        // We are checking first td of each tr of tbody, just to see the
+        // order
+        elem = this.$el.find('tbody tr td').eq(i*3);
+        expect(elem.text()).to.equal(should_be[i]);
+      }
+
+      var trs = this.$el.find('tbody tr');
+      expect(trs.eq(0).hasClass('odd')).to.be.true;
+      expect(trs.eq(1).hasClass('odd')).to.be.false;
+      expect(trs.eq(2).hasClass('odd')).to.be.true;
+      expect(trs.eq(0).hasClass('even')).to.be.false;
+      expect(trs.eq(1).hasClass('even')).to.be.true;
+      expect(trs.eq(2).hasClass('even')).to.be.false;
+
+    });
+    it("test sort by third column", function() {
+      registry.scan(this.$el);
+      this.$el.find('thead th').eq(2).trigger("click");
+
+      var should_be = ["BBB", "CCC", "AAA"];
+      var elem;
+      for (var i=0;i<should_be.length;i++){
+        // We are checking first td of each tr of tbody, just to see the
+        // order
+        elem = this.$el.find('tbody tr td').eq(i*3);
+        expect(elem.text()).to.equal(should_be[i]);
+      }
+
+      var trs = this.$el.find('tbody tr');
+      expect(trs.eq(0).hasClass('odd')).to.be.true;
+      expect(trs.eq(1).hasClass('odd')).to.be.false;
+      expect(trs.eq(2).hasClass('odd')).to.be.true;
+      expect(trs.eq(0).hasClass('even')).to.be.false;
+      expect(trs.eq(1).hasClass('even')).to.be.true;
+      expect(trs.eq(2).hasClass('even')).to.be.false;
+
+    });
+    it("test several sorts and finally back to first column", function() {
+      registry.scan(this.$el);
+      this.$el.find('thead th').eq(2).trigger("click");
+      this.$el.find('thead th').eq(3).trigger("click");
+      this.$el.find('thead th').eq(2).trigger("click");
+      this.$el.find('thead th').eq(1).trigger("click");
+      this.$el.find('thead th').eq(3).trigger("click");
+      this.$el.find('thead th').eq(1).trigger("click");
+
+      var should_be = ["AAA", "BBB", "CCC"];
+      var elem;
+      for (var i=0;i<should_be.length;i++){
+        // We are checking first td of each tr of tbody, just to see the
+        // order
+        elem = this.$el.find('tbody tr td').eq(i*3);
+        expect(elem.text()).to.equal(should_be[i]);
+      }
+
+      var trs = this.$el.find('tbody tr');
+      expect(trs.eq(0).hasClass('odd')).to.be.true;
+      expect(trs.eq(1).hasClass('odd')).to.be.false;
+      expect(trs.eq(2).hasClass('odd')).to.be.true;
+      expect(trs.eq(0).hasClass('even')).to.be.false;
+      expect(trs.eq(1).hasClass('even')).to.be.true;
+      expect(trs.eq(2).hasClass('even')).to.be.false;
+
+    });
+  });
+
 /* ==========================
    TEST: CookieDirective
   ========================== */
@@ -136,13 +250,19 @@ define([
       registry.scan(this.$el);
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
     });
-    it("test ask permission buttons", function() {
+    it("test ask permission allow button", function() {
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
       registry.scan(this.$el);
       this.$el.find('.cookieallowbutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("1");
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
+    });
+    it("test ask permission deny button", function() {
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      registry.scan(this.$el);      
       this.$el.find('.cookiedenybutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
     });
     it("test ask permission customizable", function() {
       this.$el.attr("data-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
@@ -519,7 +639,15 @@ define([
   ========================== */
 
   describe("Related Items", function() {
-
+    it('test initialize', function(){
+      var $el = $(
+        '<div>' +
+        ' <input class="pat-relateditems" />' +
+        '</div>'
+        );
+      registry.scan($el);
+      expect($('.select2-container-multi', $el)).to.not.be.undefined;
+    });
   });
 
   /* ==========================

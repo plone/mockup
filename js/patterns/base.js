@@ -124,6 +124,7 @@ define([
     var Surrogate = function() { this.constructor = Constructor; };
     Surrogate.prototype = Base.prototype;
     Constructor.prototype = new Surrogate();
+    Constructor.extend = Base.extend;
 
     $.extend(true, Constructor.prototype, NewPattern);
 

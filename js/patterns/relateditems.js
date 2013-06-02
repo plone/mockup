@@ -36,29 +36,59 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/plone-select2/select2',
-  'jam/jquery.event.drag/jquery.event.drag',
-  'jam/jquery.event.drop/jquery.event.drop'
-], function($, Base) {
+  'js/patterns/select2'
+], function($, Base, Select2) {
   "use strict";
 
   var RelatedItems = Base.extend({
     name: "relateditems",
     defaults: {
       multiple: true,
-      tokenSeparators: [",", " "]
+      tokenSeparators: [",", " "],
+      separator: ",",
+      orderable: true
     },
     init: function() {
       var self = this;
+      Select2.prototype.initializeValueMap.call(self);
+      Select2.prototype.initializeTags.call(self);
 
-      self.options.tags = []; // for now...
+      self.options.formatResult = function(item){
+        return item.title;
+      };
+      self.options.formatSelection = function(item){
+        return item.title;
+      };
+      Select2.prototype.initializeOrdering.call(self);
+
+      if(self.options.url !== undefined){
+        var query_term = '';
+        self.options.ajax = {
+          url: self.options.url,
+          dataType: 'JSON',
+          quietMillis: 100,
+          data: function (term, page) { // page is the one-based page number tracked by Select2
+            return {
+              q: term, //search term
+              page_limit: 10, // page size
+              page: page // page number
+            };
+          },
+          results: function (data, page) {
+            var more = (page * 10) < data.total; // whether or not there are more results available
+            // notice we return the value of more so Select2 knows if more results can be loaded
+            return {results: data.results, more: more};
+          }
+        };
+      }else{
+        self.options.tags = [];
+      }
+
       self.$el.select2(self.options);
       self.$el.parent().off('close.modal.patterns');
-
     }
   });
 
   return RelatedItems;
-
 });
 

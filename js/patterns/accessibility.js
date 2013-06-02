@@ -1,7 +1,6 @@
 // Pattern which provides accessibility support
 //
-// Author: Franco Pellegrini
-// Contact: frapell@gmail.com
+// Author: Franco Pellegrini<frapell@gmail.com, Nathan Van Gheem<nathan@vangheem.us>
 // Version: 1.0
 //
 // Taken from the original accessibility.js from Plone
