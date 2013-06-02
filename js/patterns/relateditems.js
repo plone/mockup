@@ -52,7 +52,6 @@ define([
       var self = this;
       Select2.prototype.initializeValueMap.call(self);
       Select2.prototype.initializeTags.call(self);
-      debugger;
 
       self.options.formatResult = function(item){
         return item.title;
