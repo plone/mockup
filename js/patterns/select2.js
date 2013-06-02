@@ -108,7 +108,6 @@ define([
 
         self.options.formatSelection = function(data, $container) {
           $container.parents('li')
-            .css({'cursor': 'move'})
             .drag("start", function(e, dd) {
               $(this).addClass('select2-choice-dragging');
               self.$el.select2("onSortStart");

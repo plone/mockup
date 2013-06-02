@@ -46,7 +46,9 @@ define([
       multiple: true,
       tokenSeparators: [",", " "],
       separator: ",",
-      orderable: true
+      orderable: true,
+      cache: true,
+      closeOnSelect: false
     },
     init: function() {
       var self = this;
@@ -54,10 +56,13 @@ define([
       Select2.prototype.initializeTags.call(self);
 
       self.options.formatResult = function(item){
-        return item.title;
+        return item.title + "<span>(" + item.path + ")</span>";
       };
       self.options.formatSelection = function(item){
-        return item.title;
+        return '<span title="' + item.path + '">' + item.title + '</span>';
+      };
+      self.options.escapeMarkup = function(txt){
+        return txt;
       };
       Select2.prototype.initializeOrdering.call(self);
 

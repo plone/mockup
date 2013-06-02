@@ -18,6 +18,10 @@ require([
   $('#modal1').on('show.modal.patterns', function(e, modal) {
     $('.autotoc-nav', modal.$modal).remove();
   });
+  var fakeItems = ['one', 'two', 'three', 'four', 'five', 'six', 'seven',
+                   'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen',
+                   'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
+                   'nineteen', 'twenty', 'twentyone'];
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;
@@ -29,7 +33,29 @@ require([
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
   });
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
-    xhr.respond(200, { "Content-Type": "application/json" }, $('#relateditems-json').html());
+    var data = [];
+    var page = 0;
+    if(xhr.url.indexOf('page=2') !== -1){
+      page = 1;
+    }else if(xhr.url.indexOf('page=3') !== -1){
+      page = 2;
+    }
+    for(var i=page * 10; i<(page + 1) * 10; i++){
+      var number = fakeItems[i];
+      if(number === undefined){
+        continue;
+      }
+      data.push({
+        "id": number,
+        "title": number.charAt(0).toUpperCase() + number.slice(1),
+        "path": "/" + number
+      });
+    }
+    xhr.respond(200, { "Content-Type": "application/json" },
+      JSON.stringify({
+        "total": fakeItems.length,
+        "results": data
+    }));
   });
 
   SyntaxHighlighter.all();
