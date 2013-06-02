@@ -61,6 +61,7 @@ define([
       mocha = window.mocha;
 
   mocha.setup('bdd');
+  $.fx.off = true;
 
   // TODO: test default options and jquery integration
 
@@ -136,13 +137,19 @@ define([
       registry.scan(this.$el);
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
     });
-    it("test ask permission buttons", function() {
+    it("test ask permission allow button", function() {
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
       registry.scan(this.$el);
       this.$el.find('.cookieallowbutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("1");
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
+    });
+    it("test ask permission deny button", function() {
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      registry.scan(this.$el);      
       this.$el.find('.cookiedenybutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
     });
     it("test ask permission customizable", function() {
       this.$el.attr("data-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
