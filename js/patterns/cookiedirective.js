@@ -86,13 +86,17 @@ define([
             .addClass('cookiemsg');
           var button_allow = $('<div><span>'+self.options['allow_msg']+'</span></div>')
             .addClass('cookieallowbutton')
+            .addClass('btn')
             .on('click', function(e) {
                 self.acceptCookies();
+                self.$el.find('.cookiedirective').hide('slow');
               });
           var button_deny = $('<div><span>'+self.options['deny_msg']+'</span></div>')
             .addClass('cookiedenybutton')
+            .addClass('btn')
             .on('click', function(e) {
                 self.denyCookies();
+                self.$el.find('.cookiedirective').hide('slow');
               });
           div.append(msg).append(button_allow).append(button_deny);
           self.$el.prepend(div);
