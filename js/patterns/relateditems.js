@@ -36,13 +36,11 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/plone-select2/select2',
-  'jam/jquery.event.drag/jquery.event.drag',
-  'jam/jquery.event.drop/jquery.event.drop'
-], function($, Base) {
+  'js/patterns/select2'
+], function($, Base, Select2) {
   "use strict";
 
-  var RelatedItems = Base.extend({
+  var RelatedItems = Select2.extend({
     name: "relateditems",
     defaults: {
       multiple: true,
@@ -50,11 +48,13 @@ define([
     },
     init: function() {
       var self = this;
+      self.initializeValueMap();
+      self.initializeTags();
+      self.initializeOrdering();
 
       self.options.tags = []; // for now...
       self.$el.select2(self.options);
       self.$el.parent().off('close.modal.patterns');
-
     }
   });
 
