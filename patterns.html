@@ -219,16 +219,16 @@
               except in the format of the data attributes used by the patternslib.
             </p>
             <dl>
-              <dt>data-select2-separator<dt>
+              <dt>data-select2x-separator<dt>
               <dd>
                 Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.
                 <br/><br/>
                 Defines a custom separator used to distinguish the tag values. Ex: a value of ';' will
-                allow the <em>data-select2-tags</em> and <em>data-select2-initvalmap</em> to have
+                allow the <em>data-select2x-tags</em> and <em>data-select2x-initvalmap</em> to have
                 values separated by ';' instead of the default ','.
               <dd>
 
-              <dt>data-select2-initvalmap<dt>
+              <dt>data-select2x-initvalmap<dt>
               <dd>
                 <p>
                   This can be a json encoded string, or a list of <em>id:text</em>
@@ -239,7 +239,7 @@
                 </p>
               <dd>
 
-              <dt>data-select2-ajaxvocabulary</dt>
+              <dt>data-select2x-ajaxvocabulary</dt>
               <dd>
                 This is a URL to a JSON formatted file used to populate the list
               </dd>
@@ -250,7 +250,7 @@
       <div class="row">
         <div class="span4">
           <h3>Autocomplete with search</h3>
-          <select class="pat-select2" data-select2-width="20em">
+          <select class="pat-select2x" data-select2-width="20em">
             <option value="Acholi">Acholi</option>
             <option value="Afrikaans">Afrikaans</option>
             <option value="Akan">Akan</option>
@@ -441,7 +441,7 @@
             <option value="Yupik">Yupik</option>
           </select>
           <pre class="brush: html;toolbar: false;">
-&lt;select class="pat-select2" data-select2-width="20em"&gt;
+&lt;select class="pat-select2x" data-select2x-width="20em"&gt;
   ...
 &lt;/select&gt;</pre>
         </div>
@@ -453,45 +453,45 @@
 
         <div class="span4">
           <h3>Tagging</h3>
-          <input type="text" class="pat-select2"
-              data-select2-separator=";"
-              data-select2-tags="Red;Yellow;Green;Orange;Purple"
-              data-select2-width="20em"
-              data-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange"
+          <input type="text" class="pat-select2x"
+              data-select2x-separator=";"
+              data-select2x-tags="Red;Yellow;Green;Orange;Purple"
+              data-select2x-width="20em"
+              data-select2x-initvaluemap="Red:The Color Red;Orange:The Color Orange"
               value="Red;Orange"/>
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" class="pat-select2"
-    data-select2-separator=";"
-    data-select2-tags="Red;Yellow;Green;Orange;Purple"
-    data-select2-width="20em"
-    data-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
+&lt;input type="text" class="pat-select2x"
+    data-select2x-separator=";"
+    data-select2x-tags="Red;Yellow;Green;Orange;Purple"
+    data-select2x-width="20em"
+    data-select2x-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
         </div>
         <div class="span4">
           <h3>Orderable tags</h3>
-          <input type="text" class="pat-select2"
-              data-select2-orderable="true"
-              data-select2-tags="Red,Yellow,Green"
-              data-select2-width="20em" />
+          <input type="text" class="pat-select2x"
+              data-select2x-orderable="true"
+              data-select2x-tags="Red,Yellow,Green"
+              data-select2x-width="20em" />
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" class="pat-select2"
-    data-select2-orderable="true"
-    data-select2-tags="Red,Yellow,Green,Orange,Purple"
-    data-select2-width="20em" /&gt;</pre>
+&lt;input type="text" class="pat-select2x"
+    data-select2x-orderable="true"
+    data-select2x-tags="Red,Yellow,Green,Orange,Purple"
+    data-select2x-width="20em" /&gt;</pre>
         </div>
 
       </div>
       <div class='row'>
         <div class="span4">
           <h3>AJAX tags</h3>
-          <input type="hidden" class="pat-select2"
-              data-select2-placeholder="Search for a Value"
-              data-select2-ajaxvocabulary="select2-test.json"
-              data-select2-width="20em" />
+          <input type="hidden" class="pat-select2x"
+              data-select2x-placeholder="Search for a Value"
+              data-select2x-ajaxvocabulary="select2-test.json"
+              data-select2x-width="20em" />
           <pre class="brush: html;toolbar: false;">
-&lt;input type="hidden" class="pat-select2"
-    data-select2-placeholder="Search for a Value"
-    data-select2-ajaxvocabulary="select2-test.json"
-    data-select2-width="20em" /&gt;</pre>
+&lt;input type="hidden" class="pat-select2x"
+    data-select2x-placeholder="Search for a Value"
+    data-select2x-ajaxvocabulary="select2-test.json"
+    data-select2x-width="20em" /&gt;</pre>
         </div>
 
       </div>
@@ -1063,9 +1063,9 @@
     <h1 id="relateditems">RelatedItems</h1>
 
     <div class="row">
-      <div class="span6">
+      <div class="span8">
           <input type="text" class="pat-relateditems"
-              data-relateditems-width="20em"
+              data-relateditems-width="30em"
               data-relateditems-url="/relateditems-test.json" />
       </div>
     </div>

@@ -48,10 +48,26 @@ define([
       separator: ",",
       orderable: true,
       cache: true,
-      closeOnSelect: false
+      closeOnSelect: false,
+      base_path: '/',
+      browse_text: 'Browse'
+    },
+    activateBrowsing: function(){
+      var self = this;
+      self.$browsePath.html(self.options.base_path);
+      self.$browseBtn.html('');
+      self.$browseBtn.addClass('select2-search-choice-close');
+      self.browsing = true;
+    },
+    deactivateBrowsing: function(){
+      var self = this;
+      self.$browseBtn.removeClass('select2-search-choice-close').html(self.options.browse_text);
+      self.$browsePath.html('');
+      self.browsing = false;
     },
     init: function() {
       var self = this;
+      self.browsing = false;
       Select2.prototype.initializeValueMap.call(self);
       Select2.prototype.initializeTags.call(self);
 
@@ -74,9 +90,9 @@ define([
           quietMillis: 100,
           data: function (term, page) { // page is the one-based page number tracked by Select2
             return {
-              q: term, //search term
-              page_limit: 10, // page size
-              page: page // page number
+              q: term,
+              page: page,
+              base_path: self.options.base_path
             };
           },
           results: function (data, page) {
@@ -90,6 +106,26 @@ define([
       }
 
       Select2.prototype.initializeSelect2.call(self);
+
+      // Browsing functionality
+      self.$browse = $('<div class="select2-browse"></div>');
+      self.$browseBtn = $('<a href="#"></a>');
+      self.$browsePath = $('<span />');
+      self.$browse.append(self.$browseBtn);
+      self.$browse.append(self.$browsePath);
+      self.$select2.before(self.$browse);
+      self.deactivateBrowsing();
+
+      self.$browse.click(function(e){
+        e.preventDefault();
+        if(self.browsing){
+          self.$el.select2('close');
+          self.deactivateBrowsing();
+        }else{
+          self.$el.select2('open');
+          self.activateBrowsing();
+        }
+      });
     }
   });
 

@@ -65,7 +65,7 @@ require([
   // Initialize patterns
   $(document).ready(function() {
     registry.scan($('body'));
-    
+
     // This is used for the cookiedirective pattern
     function getCookieValue (){
       var cookie = $.cookie("Allow_Cookies_For_Site");

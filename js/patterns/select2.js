@@ -147,10 +147,10 @@ define([
     initializeSelect2: function(){
       var self = this;
       self.$el.select2(self.options);
+      self.$select2 = self.$el.parent().find('.select2-container');
       self.$el.parent().off('close.modal.patterns');
       if(self.options.orderable){
-        self.$el.parent().find('.select2-container').addClass(
-            'select2-orderable');
+        self.$select2.addClass('select2-orderable');
       }
     },
     init: function() {
