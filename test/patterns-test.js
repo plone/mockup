@@ -529,18 +529,21 @@ define([
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
         '    data-modal-backdrop="#body">Open</a>' +
-        ' <div id="target">Target</div>' +
+        ' <div id="target" style="display:none;">Target</div>' +
         '</div>').appendTo('body');
 
       registry.scan($el);
 
-      expect($('.modal-wrapper', $el).size()).to.equal(1);
+      expect($('.backdrop', $el).is(':hidden')).to.be.true;
+      expect($el.hasClass('backdrop-active')).to.be.false;
+      expect($('.modal-wrapper', $el).is(':hidden')).to.be.true;
       expect($('.modal', $el).size()).to.equal(0);
-      expect($('.backdrop', $el).size()).to.equal(1);
-      expect($el.hasClass('backdrop-active')).to.equal(false);
 
       $('a.pat-modal', $el).click();
 
+      expect($('.backdrop', $el).is(':visible')).to.be.true;
+      expect($el.hasClass('backdrop-active')).to.be.true;
+      expect($('.modal-wrapper', $el).is(':visible')).to.be.true;
       expect($('.modal', $el).size()).to.equal(1);
       expect($('.modal .modal-header', $el).size()).to.equal(1);
       expect($('.modal .modal-body', $el).size()).to.equal(1);
@@ -550,7 +553,7 @@ define([
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).to.equal(false);
+      expect($el.hasClass('backdrop-active')).to.be.false;
       expect($('.modal', $el).size()).to.equal(0);
 
       $el.remove();
