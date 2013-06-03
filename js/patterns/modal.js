@@ -52,12 +52,14 @@ define([
       klassLoading: "modal-loading",
       klassActive: "active",
       backdrop: "body",
-      backdropZIndex: "1000",
-      backdropOpacity: "0.8",
-      backdropKlass: "backdrop",
-      backdropKlassActive: "backdrop-active",
-      backdropCloseOnEsc: true,
-      backdropCloseOnClick: true,
+      backdropOptions: {
+        zIndex: "1000",
+        opacity: "0.8",
+        klass: "backdrop",
+        klassActive: "backdrop-active",
+        closeOnEsc: true,
+        closeOnClick: true,
+      },
       templateOptions: {
         title: 'h1.documentFirstHeading',
         buttons: '.formControls > input[type="submit"]',
@@ -255,15 +257,9 @@ define([
     init: function() {
       var self = this;
 
-      self.backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
-        zindex: self.options.backdropZIndex,
-        klass: self.options.backdropKlass,
-        klassActive: self.options.backdropKlassActive,
-        styles: self.options.backdropStyles,
-        opacity: self.options.backdropOpacity,
-        closeOnEsc: self.options.backdropCloseOnEsc,
-        closeOnClick: self.options.backdropCloseOnClick
-      });
+      self.backdrop = new Backdrop(
+          self.$el.parents(self.options.backdrop),
+          self.options.backdropOptions);
       self.backdrop.on('hidden', function(e) {
         self.hide();
       });
