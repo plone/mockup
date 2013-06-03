@@ -370,7 +370,7 @@ define([
           e.stopPropagation();
           e.preventDefault();
           self.positionModal();
-        });
+        })
         .appendTo(self.$wrapperInner);
       $modal.data('pattern-' + self.name, self);
       return $modal;
