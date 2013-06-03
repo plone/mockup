@@ -524,38 +524,51 @@ define([
   ========================== */
 
   describe("Modal", function() {
-    beforeEach(function() {
-      this.$el = $('' +
+    it("default behaivour", function() {
+      var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
         '    data-modal-backdrop="#body">Open</a>' +
         ' <div id="target">Target</div>' +
         '</div>').appendTo('body');
-    });
-    afterEach(function() {
-      this.$el.remove();
-    });
-    it("default behavior", function() {
-      registry.scan(this.$el);
-      expect($('.modal-wrapper', this.$el).size()).to.equal(1);
-      expect($('.modal', this.$el).size()).to.equal(0);
-      expect($('.backdrop', this.$el).size()).to.equal(1);
-      expect(this.$el.hasClass('backdrop-active')).to.equal(false);
-      $('a.pat-modal', this.$el).click();
-      expect($('.modal', this.$el).size()).to.equal(1);
-      expect(this.$el.hasClass('backdrop-active')).to.equal(true);
+
+      registry.scan($el);
+
+      expect($('.modal-wrapper', $el).size()).to.equal(1);
+      expect($('.modal', $el).size()).to.equal(0);
+      expect($('.backdrop', $el).size()).to.equal(1);
+      expect($el.hasClass('backdrop-active')).to.equal(false);
+
+      $('a.pat-modal', $el).click();
+
+      expect($('.modal', $el).size()).to.equal(1);
+      expect($('.modal .modal-header', $el).size()).to.equal(1);
+      expect($('.modal .modal-body', $el).size()).to.equal(1);
+      expect($('.modal .modal-footer', $el).size()).to.equal(1);
+      expect($el.hasClass('backdrop-active')).to.equal(true);
+
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect(this.$el.hasClass('backdrop-active')).to.equal(false);
-      expect($('.modal', this.$el).size()).to.equal(0);
+      expect($el.hasClass('backdrop-active')).to.equal(false);
+      expect($('.modal', $el).size()).to.equal(0);
+
+      $el.remove();
     });
-    it("customize modal", function() {
-      // TODO: fix this custom te
-      $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
+    it("customize modal on show event", function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <a class="pat-modal" href="#target"' +
+        '    data-modal-backdrop="#body">Open</a>' +
+        ' <div id="target">Target</div>' +
+        '</div>').appendTo('body');
+      $('a', $el).patternModal().on('show.modal.patterns', function(e, modal) {
         $('.modal-header h3', modal.$modal).text('New Title');
       }).click();
-      expect($('.modal .modal-header h3', this.$el).text()).to.equal('New Title');
+      expect($('.modal .modal-header h3', $el).text()).to.equal('New Title');
+      $el.remove();
+    });
+    it("", function() {
     });
 
     describe("modal positioning (findPosition) ", function() {
@@ -966,7 +979,7 @@ define([
     });
   });
 
-  
+
   /* ==========================
    TEST: Select2
   ========================== */
