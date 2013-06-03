@@ -219,16 +219,16 @@
               except in the format of the data attributes used by the patternslib.
             </p>
             <dl>
-              <dt>data-select2-separator<dt>
+              <dt>data-select2x-separator<dt>
               <dd>
                 Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.
                 <br/><br/>
                 Defines a custom separator used to distinguish the tag values. Ex: a value of ';' will
-                allow the <em>data-select2-tags</em> and <em>data-select2-initvalmap</em> to have
+                allow the <em>data-select2x-tags</em> and <em>data-select2x-initvalmap</em> to have
                 values separated by ';' instead of the default ','.
               <dd>
 
-              <dt>data-select2-initvalmap<dt>
+              <dt>data-select2x-initvalmap<dt>
               <dd>
                 <p>
                   This can be a json encoded string, or a list of <em>id:text</em>
@@ -239,7 +239,7 @@
                 </p>
               <dd>
 
-              <dt>data-select2-ajaxvocabulary</dt>
+              <dt>data-select2x-ajaxvocabulary</dt>
               <dd>
                 This is a URL to a JSON formatted file used to populate the list
               </dd>
@@ -250,7 +250,7 @@
       <div class="row">
         <div class="span4">
           <h3>Autocomplete with search</h3>
-          <select class="pat-select2" data-select2-width="20em">
+          <select class="pat-select2x" data-select2-width="20em">
             <option value="Acholi">Acholi</option>
             <option value="Afrikaans">Afrikaans</option>
             <option value="Akan">Akan</option>
@@ -441,7 +441,7 @@
             <option value="Yupik">Yupik</option>
           </select>
           <pre class="brush: html;toolbar: false;">
-&lt;select class="pat-select2" data-select2-width="20em"&gt;
+&lt;select class="pat-select2x" data-select2x-width="20em"&gt;
   ...
 &lt;/select&gt;</pre>
         </div>
@@ -453,45 +453,45 @@
 
         <div class="span4">
           <h3>Tagging</h3>
-          <input type="text" class="pat-select2"
-              data-select2-separator=";"
-              data-select2-tags="Red;Yellow;Green;Orange;Purple"
-              data-select2-width="20em"
-              data-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange"
+          <input type="text" class="pat-select2x"
+              data-select2x-separator=";"
+              data-select2x-tags="Red;Yellow;Green;Orange;Purple"
+              data-select2x-width="20em"
+              data-select2x-initvaluemap="Red:The Color Red;Orange:The Color Orange"
               value="Red;Orange"/>
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" class="pat-select2"
-    data-select2-separator=";"
-    data-select2-tags="Red;Yellow;Green;Orange;Purple"
-    data-select2-width="20em"
-    data-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
+&lt;input type="text" class="pat-select2x"
+    data-select2x-separator=";"
+    data-select2x-tags="Red;Yellow;Green;Orange;Purple"
+    data-select2x-width="20em"
+    data-select2x-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
         </div>
         <div class="span4">
           <h3>Orderable tags</h3>
-          <input type="text" class="pat-select2"
-              data-select2-orderable="true"
-              data-select2-tags="Red,Yellow,Green"
-              data-select2-width="20em" />
+          <input type="text" class="pat-select2x"
+              data-select2x-orderable="true"
+              data-select2x-tags="Red,Yellow,Green"
+              data-select2x-width="20em" />
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" class="pat-select2"
-    data-select2-orderable="true"
-    data-select2-tags="Red,Yellow,Green,Orange,Purple"
-    data-select2-width="20em" /&gt;</pre>
+&lt;input type="text" class="pat-select2x"
+    data-select2x-orderable="true"
+    data-select2x-tags="Red,Yellow,Green,Orange,Purple"
+    data-select2x-width="20em" /&gt;</pre>
         </div>
 
       </div>
       <div class='row'>
         <div class="span4">
           <h3>AJAX tags</h3>
-          <input type="hidden" class="pat-select2"
-              data-select2-placeholder="Search for a Value"
-              data-select2-ajaxvocabulary="select2-test.json"
-              data-select2-width="20em" />
+          <input type="hidden" class="pat-select2x"
+              data-select2x-placeholder="Search for a Value"
+              data-select2x-ajaxvocabulary="select2-test.json"
+              data-select2x-width="20em" />
           <pre class="brush: html;toolbar: false;">
-&lt;input type="hidden" class="pat-select2"
-    data-select2-placeholder="Search for a Value"
-    data-select2-ajaxvocabulary="select2-test.json"
-    data-select2-width="20em" /&gt;</pre>
+&lt;input type="hidden" class="pat-select2x"
+    data-select2x-placeholder="Search for a Value"
+    data-select2x-ajaxvocabulary="select2-test.json"
+    data-select2x-width="20em" /&gt;</pre>
         </div>
 
       </div>
@@ -1010,11 +1010,204 @@
 
     </div>
 
+
+<!--
+============================================= 
+  PATTERN: Accessibility 
+=============================================
+-->
+    <h1 id="accessibility">Accessibility</h1>
+
+    <div class="row">
+      <div class="span6">
+          <h2>Adjust text size</h2>
+          <ul class="pat-accessibility"
+              data-accessibility-smallbtn=".decrease-text"
+              data-accessibility-normalbtn=".normal-text"
+              data-accessibility-largebtn=".increase-text">
+            <li>
+              <a href="." class="decrease-text">Decrease Text Size</a>
+            </li>
+            <li>
+              <a href="." class="normal-text">Normal Text Size</a>
+            </li>
+            <li>
+              <a href="." class="increase-text">Increase Text Size</a>
+            </li>
+        </ul>
+        <pre class="brush: html;toolbar:false;">
+&lt;ul class=&quot;pat-accessibility&quot;
+    data-accessibility-smallbtn=&quot;.decrease-text&quot;
+    data-accessibility-normalbtn=&quot;.normal-text&quot;
+    data-accessibility-largebtn=&quot;.increase-text&quot;&gt;
+    &lt;li&gt;
+        &lt;a href=&quot;.&quot; class=&quot;decrease-text&quot;&gt;Decrease Text Size&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+        &lt;a href=&quot;.&quot; class=&quot;normal-text&quot;&gt;Normal Text Size&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+        &lt;a href=&quot;.&quot; class=&quot;increase-text&quot;&gt;Increase Text Size&lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+        </pre>
+      </div>
+    </div>
+
+
+<!--
+============================================= 
+  PATTERN: Related Items
+=============================================
+-->
+    <h1 id="relateditems">RelatedItems</h1>
+
+    <div class="row">
+      <div class="span8">
+          <input type="text" class="pat-relateditems"
+              data-relateditems-width="30em"
+              data-relateditems-url="/relateditems-test.json" />
+      </div>
+    </div>
+
+
+<!--
+============================================= 
+  PATTERN: CookieDirective 
+=============================================
+-->
+
+    <h1 id="cookiedirective">Cookie Directive</h1>
+    <h3>Note: In order to see the "you must enable cookies" message, disable cookies in your browser and refresh this page</h3>
+    <div class="row">
+      <div class="span6">
+          <div class="pat-cookiedirective">
+            <div class="login">
+            </div>
+          </div>
+        <pre class="brush: html;toolbar:false;">
+          &lt;div class=&quot;pat-cookiedirective&quot;&gt;
+            &lt;div class=&quot;login&quot;&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        </pre>
+        
+          <p>The cookie accepting the use of cookies is <strong id="cookievalue">undefined</strong></p>
+          <a class="btn" id="removedemocookie">Remove Cookie & Refresh page</a>
+          
+      </div>
+    </div>
+
+
+
+<!--
+============================================= 
+  PATTERN: tablesorter
+=============================================
+-->    
+
+      <h1 id="tablesorter">Tablesorter</h1>
+      <h3>Click the table headers to rearrange the items</h3>
+      <div class="row">
+        <div class="span6">          
+          <table class="pat-tablesorter">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>AAA</td>
+                <td>ZZZ</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>BBB</td>
+                <td>YYY</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>CCC</td>
+                <td>XXX</td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        
+        <pre class="brush: html;toolbar:false;">
+&lt;table class=&quot;pat-tablesorter&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;First Name&lt;/th&gt;
+      &lt;th&gt;Last Name&lt;/th&gt;
+      &lt;th&gt;Number&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;AAA&lt;/td&gt;
+      &lt;td&gt;ZZZ&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BBB&lt;/td&gt;
+      &lt;td&gt;YYY&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;CCC&lt;/td&gt;
+      &lt;td&gt;XXX&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+        </pre>
 <!--
 ============================================= 
   ADD MORE PATTERNS BELOW THIS COMMENT...
 =============================================
 -->    
+
+<!--
+============================================= 
+  PATTERN: Tooltip
+=============================================
+-->
+    <h1 id="relateditems">Tooltip</h1>
+    <div class="row">
+        <div class="span1">
+            <a class="pat-tooltip" href="#my-demo-tip">Plone.org</a>
+            <div id="my-demo-tip" class="tooltips">
+                <h4>Plone.org</h4>
+                <img src="https://plone.org/logo@2x.png" />
+                <br />
+                <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+            </div>
+        </div>
+    </div>
+    <pre class="brush: html; toolbar:false;">
+        <a class="pat-tooltip" href="#my-demo-tip">Info on plone...</a>
+        <div id="my-demo-tip" class="tooltips">
+            <h4>Plone.org</h4>
+            <img src="https://plone.org/logo@2x.png" />
+            <br />
+            <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
+        </div>
+    </pre>
+
+
+
+
+
 
     </div> <!-- / #content -->
 

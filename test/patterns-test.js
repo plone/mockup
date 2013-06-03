@@ -38,7 +38,7 @@ define([
   'js/patterns/base',
   'js/patterns/autotoc',
   'js/patterns/backdrop',
-  'js/patterns/datetime',
+  'js/patterns/pickadate',
   'js/patterns/expose',
   'js/patterns/modal',
   'js/patterns/select2',
@@ -46,18 +46,23 @@ define([
   'js/patterns/preventdoublesubmit',
   'js/patterns/formUnloadAlert',
   'js/patterns/accessibility',
-  'jam/jquery-cookie/jquery.cookie'
-], function(chai, $, registry, 
+  'js/patterns/cookiedirective',
+  'js/patterns/relateditems',
+  'js/patterns/tablesorter',
+  'jam/jquery-cookie/jquery.cookie',
+], function(chai, $, registry,
       Base, AutoTOC, Backdrop,
-      DateTime, Expose, Modal,
+      PickADate, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
-      FormUnloadAlert, Accessibility) {
+      FormUnloadAlert, Accessibility, CookieDirective,
+      RelatedItems) {
   "use strict";
 
   var expect = chai.expect,
       mocha = window.mocha;
 
   mocha.setup('bdd');
+  $.fx.off = true;
 
   // TODO: test default options and jquery integration
 
@@ -94,6 +99,240 @@ define([
     });
     // TODO: make sure that pattern is not initialized twice if scanned twice
   });
+
+
+/* ==========================
+   TEST: TableSorter
+  ========================== */
+
+  describe("TableSorter", function () {
+    beforeEach(function() {
+      this.$el = $('' +
+        '<table class="pat-tablesorter">'+
+        '   <thead>'+
+        '     <tr>'+
+        '       <th>First Name</th>'+
+        '       <th>Last Name</th>'+
+        '       <th>Number</th>'+
+        '     </tr>'+
+        '   </thead>'+
+        '   <tbody>'+
+        '     <tr>'+
+        '       <td>AAA</td>'+
+        '       <td>ZZZ</td>'+
+        '       <td>3</td>'+
+        '     </tr>'+
+        '     <tr>'+
+        '       <td>BBB</td>'+
+        '       <td>YYY</td>'+
+        '       <td>1</td>'+
+        '     </tr>'+
+        '     <tr>'+
+        '       <td>CCC</td>'+
+        '       <td>XXX</td>'+
+        '       <td>2</td>'+
+        '     </tr>'+
+        '   </tbody>'+
+        ' </table>');
+    });
+    it("test headers have the sort arrow", function() {
+      registry.scan(this.$el);
+      expect(this.$el.find('.sortdirection').size()).to.equal(3);
+    });
+    it("test sort by second column", function() {
+      registry.scan(this.$el);
+      this.$el.find('thead th').eq(1).trigger("click");
+
+      var should_be = ["CCC", "BBB", "AAA"];
+      var elem;
+      for (var i=0;i<should_be.length;i++){
+        // We are checking first td of each tr of tbody, just to see the
+        // order
+        elem = this.$el.find('tbody tr td').eq(i*3);
+        expect(elem.text()).to.equal(should_be[i]);
+      }
+
+      var trs = this.$el.find('tbody tr');
+      expect(trs.eq(0).hasClass('odd')).to.be.true;
+      expect(trs.eq(1).hasClass('odd')).to.be.false;
+      expect(trs.eq(2).hasClass('odd')).to.be.true;
+      expect(trs.eq(0).hasClass('even')).to.be.false;
+      expect(trs.eq(1).hasClass('even')).to.be.true;
+      expect(trs.eq(2).hasClass('even')).to.be.false;
+
+    });
+    it("test sort by third column", function() {
+      registry.scan(this.$el);
+      this.$el.find('thead th').eq(2).trigger("click");
+
+      var should_be = ["BBB", "CCC", "AAA"];
+      var elem;
+      for (var i=0;i<should_be.length;i++){
+        // We are checking first td of each tr of tbody, just to see the
+        // order
+        elem = this.$el.find('tbody tr td').eq(i*3);
+        expect(elem.text()).to.equal(should_be[i]);
+      }
+
+      var trs = this.$el.find('tbody tr');
+      expect(trs.eq(0).hasClass('odd')).to.be.true;
+      expect(trs.eq(1).hasClass('odd')).to.be.false;
+      expect(trs.eq(2).hasClass('odd')).to.be.true;
+      expect(trs.eq(0).hasClass('even')).to.be.false;
+      expect(trs.eq(1).hasClass('even')).to.be.true;
+      expect(trs.eq(2).hasClass('even')).to.be.false;
+
+    });
+    it("test several sorts and finally back to first column", function() {
+      registry.scan(this.$el);
+      this.$el.find('thead th').eq(2).trigger("click");
+      this.$el.find('thead th').eq(3).trigger("click");
+      this.$el.find('thead th').eq(2).trigger("click");
+      this.$el.find('thead th').eq(1).trigger("click");
+      this.$el.find('thead th').eq(3).trigger("click");
+      this.$el.find('thead th').eq(1).trigger("click");
+
+      var should_be = ["AAA", "BBB", "CCC"];
+      var elem;
+      for (var i=0;i<should_be.length;i++){
+        // We are checking first td of each tr of tbody, just to see the
+        // order
+        elem = this.$el.find('tbody tr td').eq(i*3);
+        expect(elem.text()).to.equal(should_be[i]);
+      }
+
+      var trs = this.$el.find('tbody tr');
+      expect(trs.eq(0).hasClass('odd')).to.be.true;
+      expect(trs.eq(1).hasClass('odd')).to.be.false;
+      expect(trs.eq(2).hasClass('odd')).to.be.true;
+      expect(trs.eq(0).hasClass('even')).to.be.false;
+      expect(trs.eq(1).hasClass('even')).to.be.true;
+      expect(trs.eq(2).hasClass('even')).to.be.false;
+
+    });
+  });
+
+/* ==========================
+   TEST: CookieDirective
+  ========================== */
+
+  describe("CookieDirective", function () {
+    beforeEach(function() {
+      $.removeCookie("Allow_Cookies_For_Site");
+      $.removeCookie("_cookiesEnabled");
+      this.$el = $('' +
+        '<div class="pat-cookiedirective">' +
+        '<div class="login"></div>' +
+        '</div>');
+      this.$el.attr("data-cookiedirective-should_ask", "true");
+      this.$el.attr("data-cookiedirective-should_enable", "true");
+    });
+    it("test ask permission shows", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(1);
+    });
+    it("test ask permission can be hidden", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      this.$el.attr("data-cookiedirective-should_ask", "false");
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+    });
+    it("test ask permission don't show if replied yes", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      $.cookie('Allow_Cookies_For_Site', 1);
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+    });
+    it("test ask permission don't show if replied no", function() {
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      $.cookie('Allow_Cookies_For_Site', 0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+    });
+    it("test ask permission allow button", function() {
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      registry.scan(this.$el);
+      this.$el.find('.cookieallowbutton').trigger('click');
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("1");
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
+    });
+    it("test ask permission deny button", function() {
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      registry.scan(this.$el);
+      this.$el.find('.cookiedenybutton').trigger('click');
+      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
+    });
+    it("test ask permission customizable", function() {
+      this.$el.attr("data-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
+      this.$el.attr("data-cookiedirective-allow_msg", "Test allow_msg");
+      this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
+      registry.scan(this.$el);
+      expect(this.$el.find('.cookiemsg').text()).to.equal("Test ask_permission_msg");
+      expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allow_msg");
+      expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test deny_msg");
+
+    });
+    it("test enable cookies shows", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined;};
+      this.$el.attr("data-cookiedirective-should_ask", "false");
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("test enable cookies can be hidden", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined;};
+      this.$el.attr("data-cookiedirective-should_ask", "false");
+      this.$el.attr("data-cookiedirective-should_enable", "false");
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("show enable cookies and ask permission", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined;};
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
+      expect(this.$el.find('.cookiedirective').size()).to.equal(1);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("test enable cookies shouldn't show if selector is not found", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined;};
+      this.$el.attr("data-cookiedirective-should_enable_selector", ".another-login");
+      this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+    it("show enable cookies message customizable", function() {
+      // Override the cookie function with something that returns undefined
+      $.__old__cookie = $.cookie;
+      $.cookie = function (){return undefined;};
+      this.$el.attr("data-cookiedirective-should_enable_msg", "Test should_enable_msg");
+      registry.scan(this.$el);
+      expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test should_enable_msg");
+      // Restore cookie function
+      $.cookie = $.__old__cookie;
+    });
+  });
+
 /* ==========================
    TEST: Accessibility
   ========================== */
@@ -227,31 +466,31 @@ define([
   });
 
   /* ==========================
-   TEST: DateTime
+   TEST: PickADate
   ========================== */
 
-  describe("DateTime", function() {
+  describe("PickADate", function() {
     beforeEach(function() {
       this.$el = $('' +
         '<div>' +
-        ' <input class="pat-datetime" />' +
+        ' <input class="pat-pickadate" />' +
         '</div>');
     });
     it('creates initial structure', function() {
-      expect($('.pat-datetime-wrapper', this.$el).size()).to.equal(0);
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-datetime-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-datetime-wrapper select', this.$el).size()).to.equal(8);
-      expect($('.pat-datetime-wrapper .pickadate__holder select', this.$el).size()).to.equal(2);
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pat-pickadate-wrapper select', this.$el).size()).to.equal(8);
+      expect($('.pat-pickadate-wrapper .pickadate__holder select', this.$el).size()).to.equal(2);
     });
     it('doesn not work on anything else then "input" elements', function() {
       var $el = $('' +
         '<div>' +
-        ' <a class="pat-datetime" />' +
+        ' <a class="pat-pickadate" />' +
         '</div>');
-      expect($('.pat-datetime-wrapper', $el).size()).to.equal(0);
+      expect($('.pat-pickadate-wrapper', $el).size()).to.equal(0);
       registry.scan($el);
-      expect($('.pat-datetime-wrapper', $el).size()).to.equal(0);
+      expect($('.pat-pickadate-wrapper', $el).size()).to.equal(0);
     });
   });
 
@@ -336,7 +575,7 @@ define([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2" data-select2-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2x" data-select2x-tags="Red,Yellow,Blue"' +
         '        value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
@@ -348,9 +587,9 @@ define([
     it('custom separator', function() {
       var $el = $(
         '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-select2-selector=";"' +
-        '        data-select2-tags="Red;Yellow;Blue"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-selector=";"' +
+        '        data-select2x-tags="Red;Yellow;Blue"' +
         '        value="Yellow" />' +
         '</div>');
     });
@@ -358,9 +597,9 @@ define([
     it('init value map', function() {
         var $el = $(
         '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-select2-tags="Red,Yellow,Blue"' +
-        '        data-select2-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-tags="Red,Yellow,Blue"' +
+        '        data-select2x-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
         '        value="Yellow,Red"/>' +
         '</div>');
 
@@ -370,8 +609,8 @@ define([
 
     it('ajax vocabulary', function() {
         var $el = $(
-        ' <input class="pat-select2"' +
-        '        data-select2-ajaxvocabulary="select2-users-vocabulary"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-ajaxvocabulary="select2-users-vocabulary"' +
         '        />'
         );
 
@@ -382,16 +621,32 @@ define([
     it('orderable tags', function() {
         var $el = $(
         '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-select2-orderable="true"' +
-        '        data-select2-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2x"' +
+        '        data-select2x-orderable="true"' +
+        '        data-select2x-tags="Red,Yellow,Blue"' +
         '        value="Red"' +
         '        />' +
         '</div>'
         );
 
         registry.scan($el);
-        expect($('.select2-choices li.select2-search-choice', $el).css('cursor')).to.equal('move');
+        expect($('.select2-container', $el).hasClass('select2-orderable')).to.be.true;
+    });
+  });
+
+  /* ==========================
+   TEST: Related Items
+  ========================== */
+
+  describe("Related Items", function() {
+    it('test initialize', function(){
+      var $el = $(
+        '<div>' +
+        ' <input class="pat-relateditems" />' +
+        '</div>'
+        );
+      registry.scan($el);
+      expect($('.select2-container-multi', $el)).to.not.be.undefined;
     });
   });
 

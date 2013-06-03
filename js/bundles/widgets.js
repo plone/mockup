@@ -37,8 +37,10 @@ define([
   'jquery',
   'jam/Patterns/src/registry',
   'js/patterns/select2',
-  'js/patterns/datetime',
-  'js/patterns/autotoc'
+  'js/patterns/pickadate',
+  'js/patterns/autotoc',
+  'js/patterns/accessibility',
+  'js/patterns/relateditems'
 ], function($, registry) {
   "use strict";
 
@@ -57,6 +59,13 @@ define([
         'data-autotoc-klass': 'autotabs'
       });
 
+      // activate accessibility pattern by default
+      $root.addClass('pat-accessibility');
+      $root.attr({
+        'data-accessibility-smallbtn': "#accessibility-smallText",
+        'data-accessibility-normalbtn': "#accessibility-normalText",
+        'data-accessibility-largebtn': "#accessibility-largeText"
+      });
     },
     scan: function(selector) {
       registry.scan($(selector));

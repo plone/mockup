@@ -1,7 +1,6 @@
 // Pattern which provides accessibility support
 //
-// Author: Franco Pellegrini
-// Contact: frapell@gmail.com
+// Author: Franco Pellegrini<frapell@gmail.com, Nathan Van Gheem<nathan@vangheem.us>
 // Version: 1.0
 //
 // Taken from the original accessibility.js from Plone
@@ -48,7 +47,7 @@ define([
       if ($reset) {
         this.$el.removeClass('smallText').removeClass('largeText').
             removeClass('mediumText');
-        $.cookie('fontsize', $fontsize, { expires: 365 });
+        $.cookie('fontsize', $fontsize, { expires: 365, path:"/" });
       }
       this.$el.addClass($fontsize);
     },
@@ -66,8 +65,7 @@ define([
           self.setBaseFontSize($fontsize, 0);
       }
       var btns = ['smallbtn', 'normalbtn', 'largebtn'];
-      for(var i=0; i<btns.length; i++){
-        var btn = btns[i];
+      $.each(btns, function(idx, btn){
         var btnName = btn.replace('btn', '');
         var btnSelector = self.options[btn];
         if(btnSelector !== null){
@@ -81,7 +79,7 @@ define([
             self.initBtn(btn);
           }
         }
-      }
+      });
     }
   });
 

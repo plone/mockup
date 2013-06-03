@@ -4,6 +4,7 @@
 @import "../jam/bootstrap/less/responsive.less";
 
 @import "plonelogo.less";
+@import "pattern.tooltip.less";
 
 
 header {
@@ -31,8 +32,8 @@ footer {
 #mockup-expose {
   padding: 1em;
 }
-.pat-datetime-wrapper {
-  .pat-datetime-icon {
+.pat-pickadate-wrapper {
+  .pat-pickadate-icon {
     font-family: FontAwesome;
     font-weight: normal;
     font-style: normal;
@@ -48,7 +49,7 @@ footer {
     background-repeat: repeat;
     margin: 0 0.4em;
   }
-  .pat-datetime-icon:before {
+  .pat-pickadate-icon:before {
     content: "\f073";
   }
 }
@@ -81,4 +82,29 @@ footer {
       content: none;
     }
   }
+}
+
+.largeText {
+    font-size: 120%;
+}
+
+.smallText {
+    font-size: 80%;
+}
+
+.cookiedirective {
+  background-color: yellow;
+  padding: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;  
+}
+
+.shouldenablecookies {
+  background-color: yellow;
+  padding: 10px;
+  margin: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;  
 }
