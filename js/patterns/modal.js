@@ -42,10 +42,10 @@ define([
     jqueryPlugin: "modal",
     defaults: {
       triggers: '',
-      position: "center middle",
+      position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
       width: "",
       height: "",
-      margin: "20px",
+      margin: function() { return 20; }, // can be int or function that returns an int -- int is a pixel value
       klass: "modal",
       klassWrapper: "modal-wrapper",
       klassWrapperInner: "modal-wrapper-inner",
@@ -174,7 +174,7 @@ define([
         .on('resize.modal.patterns', function(e) {
           e.stopPropagation();
           e.preventDefault();
-          self.positionModal(true);
+          self.positionModal();
         });
       $modal.data('pattern-' + self.name, self);
       return $modal;
@@ -229,121 +229,101 @@ define([
         'top': '0'
       });
     },
-    positionModal: function(preserve_top) {
+    // re-position modal at any point.
+    //
+    // Uses:
+    //  options.margin
+    //  options.width
+    //  options.height
+    //  options.position
+    positionModal: function() {
       var self = this;
-      if (typeof self.$modal !== 'function') {
 
-        if (preserve_top) {
-          preserve_top = self.$modal.css('top');
+      // modal isn't initialized
+      if(typeof self.$modal === 'function') { return; }
+
+      // clear out any previously set styling
+      self.$modal.removeAttr('style');
+
+      // make sure the (inner) wrapper fills it's container
+      //self.$wrapperInner.css({height:'100%', width:'100%'});
+
+      // if backdrop wrapper is set on body, then wrapper should have height of
+      // the window, so we can do scrolling of inner wrapper
+      if(self.$wrapper.parent().is('body')) {
+        self.$wrapper.height($(window.parent).height());
+      }
+
+      var margin = typeof self.options.margin === 'function' ? self.options.margin() : self.options.margin;
+      self.$modal.css({
+        'padding': '0',
+        'margin': margin,
+        'width': self.options.width, // defaults to "", which doesn't override other css
+        'height': self.options.height, // defaults to "", which doesn't override other css
+        'position': 'absolute',
+      });
+
+      var posopt = self.options.position.split(' '),
+          horpos = posopt[0],
+          vertpos = posopt[1];
+      var absTop, absBottom, absLeft, absRight;
+      absRight = absLeft = absTop = absLeft = 'auto';
+      var modalWidth = self.$modal.outerWidth(true);
+      var modalHeight = self.$modal.outerHeight(true);
+      var wrapperInnerWidth = self.$wrapperInner.width();
+      var wrapperInnerHeight = self.$wrapperInner.height();
+
+
+      // -- HORIZONTAL POSITION -----------------------------------------------
+      if(horpos === 'left') {
+        absLeft = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the left to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absLeft = '0';
         }
-
-        self.$modal.removeAttr('style');
-        // if backdrop wrapper is set on body then wrapper should have height
-        // of window so we can do scrolling of inner wrapper
-        self.$wrapperInner.css({
-          'height': '100%',
-          'width': '100%'
-        });
-        if (self.$wrapper.parent().is('body')) {
-          self.$wrapper.height($(window.parent).height());
+        self.$modal.css('left', absLeft);
+      }
+      else if(horpos === 'right') {
+        absRight =  margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the right to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absRight = '0';
         }
+        self.$modal.css('right', absRight);
+        self.$modal.css('left', 'auto');
+      }
+      // default, no specified location, is to center
+      else {
+        absLeft = ((wrapperInnerWidth / 2) - (modalWidth / 2)) + 'px';
+        self.$modal.css('left', absLeft);
+      }
 
-        // place modal at top left with desired width/height and margin
-        self.$modal.css({
-          'padding': '0',
-          'margin': '0',
-          'width': self.options.width,
-          'height': self.options.height,
-          'position': 'absolute',
-          'top': preserve_top ? preserve_top : '0',
-          'left': '0'
-        });
-
-        self.$modal.css({'margin': '0'});
-        var modalOffsetBefore = self.$modal.offset();
-        self.$modal.css({ 'margin': self.options.margin });
-        var modalOffset = self.$modal.offset(),
-            modalOuterWidth = self.$modal.outerWidth(true),
-            modalInnerWidth = self.$modal.innerWidth(),
-            modalOuterHeight = self.$modal.outerHeight(true),
-            modalInnerHeight = self.$modal.innerHeight();
-        self.$modal.css({ 'margin': '0' });
-
-        var topMargin = modalOffset.top - modalOffsetBefore.top,
-            bottomMargin = modalOuterHeight - modalInnerHeight - topMargin,
-            leftMargin = modalOffset.left - modalOffsetBefore.left,
-            rightMargin = modalOuterWidth - modalInnerWidth - leftMargin;
-
-        // place modal in right position
-        var positionHorizontal = self.options.position.split(' ')[0],
-            positionVertical = self.options.position.split(' ')[1],
-            positionTop, positionBottom, positionLeft, positionRight;
-
-        if (positionHorizontal === 'left') {
-          positionLeft = leftMargin + 'px';
-          if (self.$wrapperInner.width() < self.$modal.width()) {
-            positionRight = rightMargin + 'px';
-          } else {
-            positionRight = 'auto';
-          }
-        } else if (positionHorizontal === 'bottom') {
-          positionRight = leftMargin + 'px';
-          if (self.$wrapperInner.width() < self.$modal.width()) {
-            positionLeft = leftMargin + 'px';
-          } else {
-            positionLeft = 'auto';
-          }
-        } else {
-          if (self.$wrapperInner.width() < self.$modal.width() + leftMargin + rightMargin) {
-            positionLeft = leftMargin + 'px';
-            positionRight = rightMargin + 'px';
-          } else {
-            positionLeft = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.outerWidth()/2 - leftMargin) + 'px';
-            positionRight = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.outerWidth()/2 - rightMargin) + 'px';
-          }
+      // -- VERTICAL POSITION -------------------------------------------------
+      if(vertpos === 'top') {
+        absTop = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the top to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absTop = '0';
         }
-        self.$modal.css({
-          'left': positionLeft,
-          'right': positionRight,
-          'width': self.$modal.width()
-        });
-
-        // if modal is bigger then wrapperInner then resize wrapperInner to
-        // match modal height
-        if (self.$wrapperInner.height() < self.$modal.height()) {
-          self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
+        self.$modal.css('top', absTop);
+      }
+      else if(vertpos === 'bottom') {
+        absBottom = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the bottom to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absBottom = '0';
         }
-
-        if (preserve_top || positionVertical === 'top') {
-          positionTop = topMargin + 'px';
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionBottom = bottomMargin + 'px';
-          } else {
-            positionBottom = 'auto';
-          }
-        } else if (positionVertical === 'bottom') {
-          positionBottom = bottomMargin + 'px';
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionTop = topMargin + 'px';
-          } else {
-            positionTop= 'auto';
-          }
-        } else {
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionTop = topMargin + 'px';
-            positionBottom = bottomMargin + 'px';
-          } else {
-            positionTop = positionBottom = (self.$wrapperInner.height()/2 -
-                self.$modal.height()/2) + 'px';
-          }
-        }
-        self.$modal.css({
-          'top': positionTop,
-          'bottom': positionBottom
-        });
-
+        self.$modal.css('bottom', absBottom);
+        self.$modal.css('top', 'auto');
+      }
+      else {
+        // default case, no specified location, is to center
+        absTop = ((wrapperInnerHeight / 2) - (modalHeight / 2)) + 'px';
+        self.$modal.css('top', absTop);
       }
     },
     show: function() {
