@@ -1,3 +1,18 @@
+function getQueryVariable(url, variable) {
+    var query = url.split('?')[1];
+    if(query === undefined){
+      return null;
+    }
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return null;
+}
+
 require([
   'jquery',
   'sinon',
@@ -13,9 +28,9 @@ require([
   'js/patterns/tablesorter',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
-  'jam/SyntaxHighlighter/scripts/shBrushXml.js'
-], function($, sinon, registry) {
-
+  'jam/SyntaxHighlighter/scripts/shBrushXml.js',
+], function($, sinon, registry, uri) {
+  var URI = uri;
   // before demo patterns in overlay remove html created by autotoc pattern
   $('#modal1').on('show.modal.patterns', function(e, modal) {
     $('.autotoc-nav', modal.$modal).remove();
@@ -37,10 +52,15 @@ require([
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
     var data = [];
     var page = 0;
-    if(xhr.url.indexOf('page=2') !== -1){
+    var reqpage = getQueryVariable(xhr.url, 'page');
+    if(reqpage === "2"){
       page = 1;
-    }else if(xhr.url.indexOf('page=3') !== -1){
+    }else if(reqpage === "3"){
       page = 2;
+    }
+    var base = getQueryVariable(xhr.url, 'base_path');
+    if(base === null || base === "/"){
+      base = "";
     }
     for(var i=page * 10; i<(page + 1) * 10; i++){
       var number = fakeItems[i];
@@ -50,7 +70,8 @@ require([
       data.push({
         "id": number,
         "title": number.charAt(0).toUpperCase() + number.slice(1),
-        "path": "/" + number
+        "path": base + "/" + number,
+        "folder": true
       });
     }
     xhr.respond(200, { "Content-Type": "application/json" },
@@ -96,7 +117,7 @@ require([
       $.removeCookie('Allow_Cookies_For_Site');
       location.reload();
     });
-                
+
     var value = getCookieValue();
     $('#cookievalue').text(value);
   });

@@ -72,7 +72,18 @@ define([
       Select2.prototype.initializeTags.call(self);
 
       self.options.formatResult = function(item){
-        return item.title + "<span>(" + item.path + ")</span>";
+        var el = $('<div />');
+        if(item.folder){
+          var folder = $('<a href="#" class="folder"></a>');
+          folder.click(function(e){
+            e.preventDefault();
+            // XXX need to get this before the item is added...
+          });
+          el.append(folder);
+        }
+        el.append($('<span>' + item.title + '</span><span class="path">(' +
+            item.path + ")</span>"));
+        return el;
       };
       self.options.formatSelection = function(item){
         return '<span title="' + item.path + '">' + item.title + '</span>';
@@ -89,11 +100,14 @@ define([
           dataType: 'JSON',
           quietMillis: 100,
           data: function (term, page) { // page is the one-based page number tracked by Select2
-            return {
+            var opts = {
               q: term,
-              page: page,
-              base_path: self.options.base_path
+              page: page
             };
+            if(self.browsing){
+              opts.base_path = self.options.base_path;
+            }
+            return opts;
           },
           results: function (data, page) {
             var more = (page * 10) < data.total; // whether or not there are more results available
@@ -115,15 +129,17 @@ define([
       self.$browse.append(self.$browsePath);
       self.$select2.before(self.$browse);
       self.deactivateBrowsing();
+      self.$el.on('loaded', function(data){
+      });
 
       self.$browse.click(function(e){
         e.preventDefault();
         if(self.browsing){
-          self.$el.select2('close');
           self.deactivateBrowsing();
+          self.$el.select2('close');
         }else{
-          self.$el.select2('open');
           self.activateBrowsing();
+          self.$el.select2('open');
         }
       });
     }
