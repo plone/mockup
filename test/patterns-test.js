@@ -535,7 +535,7 @@ define([
     afterEach(function() {
       this.$el.remove();
     });
-    it("default behaivour", function() {
+    it("default behavior", function() {
       registry.scan(this.$el);
       expect($('.modal-wrapper', this.$el).size()).to.equal(1);
       expect($('.modal', this.$el).size()).to.equal(0);
@@ -565,8 +565,416 @@ define([
       expect($('.modal .modal-body', this.$el).size()).to.equal(1);
       expect($('.modal .modal-footer', this.$el).size()).to.equal(1);
     });
+
+    describe("modal positioning (findPosition) ", function() {
+      //
+      // -- CHANGE POSITION ONLY ----------------------------------------------
+      //
+      it('position: center middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'middle', 0, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          // half wrapper height - half modal height - margin
+          // 300/2 - 280/2 - 0 = 150 - 140 = 10
+          expect(pos['top']).to.equal('10px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          // half wrapper width - half modal width - margin
+          // 400/2 - 340/2 - 0 = 200 - 170 = 30
+          expect(pos['left']).to.equal('30px');
+        }).click();
+      });
+      it('position: left middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'middle', 0, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          // half wrapper height - half modal height - margin
+          // 300/2 - 280/2 - 0 = 150 - 140 = 10
+          expect(pos['top']).to.equal('10px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: right middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'middle', 0, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          // half wrapper height - half modal height - margin
+          // 300/2 - 280/2 - 0 = 150 - 140 = 10
+          expect(pos['top']).to.equal('10px');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('0px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+      it('position: center top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'top', 0, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          // half wrapper width - half modal width - margin
+          // 400/2 - 340/2 - 0 = 200 - 170 = 30
+          expect(pos['left']).to.equal('30px');
+        }).click();
+      });
+      it('position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'bottom', 0, 340, 280, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('0px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          // half wrapper width - half modal width - margin
+          // 400/2 - 340/2 - 0 = 200 - 170 = 30
+          expect(pos['left']).to.equal('30px');
+        }).click();
+      });
+      it('position: left top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'top', 0, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'bottom', 0, 340, 280, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('0px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: right top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'top', 0, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('0px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+      it('position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'bottom', 0, 340, 280, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('0px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('0px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+
+      //
+      // -- NON-ZERO MARGIN ---------------------------------------------------
+      //
+      it('position: center middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'middle', 5, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          // half wrapper height - half modal height - margin
+          // 300/2 - 280/2 - 5 = 150 - 140 - 5 = 5
+          expect(pos['top']).to.equal('5px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          // half wrapper width - half modal width - margin
+          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25
+          expect(pos['left']).to.equal('25px');
+        }).click();
+      });
+      it('position: left middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'middle', 5, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          // half wrapper height - half modal height - margin
+          // 300/2 - 280/2 - 5 = 150 - 140 = 5
+          expect(pos['top']).to.equal('5px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('5px');
+        }).click();
+      });
+      it('position: right middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'middle', 5, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          // half wrapper height - half modal height - margin
+          // 300/2 - 280/2 - 5 = 150 - 140 - 5 = 5
+          expect(pos['top']).to.equal('5px');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('5px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+      it('position: center top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'top', 5, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('5px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          // half wrapper width - half modal width - margin
+          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25 
+          expect(pos['left']).to.equal('25px');
+        }).click();
+      });
+      it('position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'bottom', 5, 340, 280, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('5px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          // half wrapper width - half modal width - margin
+          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25
+          expect(pos['left']).to.equal('25px');
+        }).click();
+      });
+      it('position: left top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'top', 5, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('5px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('5px');
+        }).click();
+      });
+      it('position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'bottom', 5, 340, 280, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('5px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('5px');
+        }).click();
+      });
+      it('position: right top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'top', 5, 340, 280, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('5px');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('5px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+      it('position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'bottom', 5, 340, 280, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('5px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('5px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+
+      //
+      // -- WRAPPER SMALLER THAN MODAL ----------------------------------------
+      //
+      it('position: center middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'middle', 0, 450, 350, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: left middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'middle', 0, 450, 350, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: right middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'middle', 0, 450, 350, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('0px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+      it('position: center top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'top', 0, 450, 350, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('center', 'bottom', 0, 450, 350, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('0px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: left top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'top', 0, 450, 350, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('left', 'bottom', 0, 450, 350, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('0px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).not.to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['left']).to.equal('0px');
+        }).click();
+      });
+      it('position: right top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'top', 0, 450, 350, 400, 300);
+          expect(pos).not.to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['top']).to.equal('0px');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('0px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+      it('position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
+        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+          var modal =  modal.$modal.data('patternModal');
+          var pos = modal.findPosition('right', 'bottom', 0, 450, 350, 400, 300);
+          expect(pos).to.have.property('bottom');
+          expect(pos).to.have.property('top');
+          expect(pos['bottom']).to.equal('0px');
+          expect(pos['top']).to.equal('auto');
+
+          expect(pos).to.have.property('right');
+          expect(pos).to.have.property('left');
+          expect(pos['right']).to.equal('0px');
+          expect(pos['left']).to.equal('auto');
+        }).click();
+      });
+    });
   });
 
+  
   /* ==========================
    TEST: Select2
   ========================== */

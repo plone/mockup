@@ -229,6 +229,76 @@ define([
         'top': '0'
       });
     },
+    findPosition: function(horpos, vertpos, margin, modalWidth, modalHeight,
+                           wrapperInnerWidth, wrapperInnerHeight) {
+      var returnpos = {};
+      var absTop, absBottom, absLeft, absRight;
+      absRight = absLeft = absTop = absLeft = 'auto';
+
+      // -- HORIZONTAL POSITION -----------------------------------------------
+      if(horpos === 'left') {
+        absLeft = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the left to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absLeft = '0px';
+        }
+        returnpos['left'] = absLeft;
+      }
+      else if(horpos === 'right') {
+        absRight =  margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the right to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absRight = '0px';
+        }
+        returnpos['right'] = absRight;
+        returnpos['left'] = 'auto';
+      }
+      // default, no specified location, is to center
+      else {
+        absLeft = ((wrapperInnerWidth / 2) - (modalWidth / 2) - margin) + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the left to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absLeft = '0px';
+        }
+        returnpos['left'] = absLeft;
+      }
+
+      // -- VERTICAL POSITION -------------------------------------------------
+      if(vertpos === 'top') {
+        absTop = margin + 'px';
+        // if the height of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the top to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absTop = '0px';
+        }
+        returnpos['top'] = absTop;
+      }
+      else if(vertpos === 'bottom') {
+        absBottom = margin + 'px';
+        // if the height of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the bottom to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absBottom = '0px';
+        }
+        returnpos['bottom'] = absBottom;
+        returnpos['top'] = 'auto';
+      }
+      else {
+        // default case, no specified location, is to center
+        absTop = ((wrapperInnerHeight / 2) - (modalHeight / 2) - margin) + 'px';
+        // if the height of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the top to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absTop = '0px';
+        }
+        returnpos['top'] = absTop;
+      }
+
+      return returnpos;
+    },
     // re-position modal at any point.
     //
     // Uses:
@@ -266,64 +336,15 @@ define([
       var posopt = self.options.position.split(' '),
           horpos = posopt[0],
           vertpos = posopt[1];
-      var absTop, absBottom, absLeft, absRight;
-      absRight = absLeft = absTop = absLeft = 'auto';
       var modalWidth = self.$modal.outerWidth(true);
       var modalHeight = self.$modal.outerHeight(true);
       var wrapperInnerWidth = self.$wrapperInner.width();
       var wrapperInnerHeight = self.$wrapperInner.height();
 
-
-      // -- HORIZONTAL POSITION -----------------------------------------------
-      if(horpos === 'left') {
-        absLeft = margin + 'px';
-        // if the width of the wrapper is smaller than the modal, and thus the
-        // screen is smaller than the modal, force the left to simply be 0
-        if(modalWidth > wrapperInnerWidth) {
-          absLeft = '0';
-        }
-        self.$modal.css('left', absLeft);
-      }
-      else if(horpos === 'right') {
-        absRight =  margin + 'px';
-        // if the width of the wrapper is smaller than the modal, and thus the
-        // screen is smaller than the modal, force the right to simply be 0
-        if(modalWidth > wrapperInnerWidth) {
-          absRight = '0';
-        }
-        self.$modal.css('right', absRight);
-        self.$modal.css('left', 'auto');
-      }
-      // default, no specified location, is to center
-      else {
-        absLeft = ((wrapperInnerWidth / 2) - (modalWidth / 2)) + 'px';
-        self.$modal.css('left', absLeft);
-      }
-
-      // -- VERTICAL POSITION -------------------------------------------------
-      if(vertpos === 'top') {
-        absTop = margin + 'px';
-        // if the width of the wrapper is smaller than the modal, and thus the
-        // screen is smaller than the modal, force the top to simply be 0
-        if(modalHeight > wrapperInnerHeight) {
-          absTop = '0';
-        }
-        self.$modal.css('top', absTop);
-      }
-      else if(vertpos === 'bottom') {
-        absBottom = margin + 'px';
-        // if the width of the wrapper is smaller than the modal, and thus the
-        // screen is smaller than the modal, force the bottom to simply be 0
-        if(modalHeight > wrapperInnerHeight) {
-          absBottom = '0';
-        }
-        self.$modal.css('bottom', absBottom);
-        self.$modal.css('top', 'auto');
-      }
-      else {
-        // default case, no specified location, is to center
-        absTop = ((wrapperInnerHeight / 2) - (modalHeight / 2)) + 'px';
-        self.$modal.css('top', absTop);
+      var pos = self.findPosition(horpos, vertpos, margin, modalWidth, modalHeight,
+                                  wrapperInnerWidth, wrapperInnerHeight);
+      for(var key in pos) {
+        self.$modal.css(key, pos[key]);
       }
     },
     show: function() {
