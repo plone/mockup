@@ -52,8 +52,8 @@ define([
     // collect all options from element
     if($el.length) {
       $.each($el[0].attributes, function(index, attr) {
-        if (attr.name.substr(0, ('data-'+prefix).length) === 'data-'+prefix) {
-          var name = attr.name.substr(('data-'+prefix).length+1),
+        if (attr.name.substr(0, ('data-pat-'+prefix).length) === 'data-pat-'+prefix) {
+          var name = attr.name.substr(('data-pat-'+prefix).length+1),
               value = attr.value.replace(/^\s+|\s+$/g, '');  // trim
           if (value.substring(0, 1) === '{' || value.substring(0, 1) === '[') {
             value = JSON.parse(value);

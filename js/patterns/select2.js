@@ -43,9 +43,7 @@ define([
   "use strict";
 
   var Select2 = Base.extend({
-    name: "select2x",  // reason for adding x to the end is because its
-                       // conflicting with object data that is going to be
-                       // stored by select2 jquery plugin
+    name: "select2",
     defaults: {
       separator: ","
     },

@@ -87,8 +87,8 @@
         <div class="span6">
           <h3>Table of Contents</h3>
           <div class="pat-autotoc"
-               data-autotoc-scrollDuration="slow"
-               data-autotoc-levels="h4,h5,h6">
+               data-pat-autotoc-scrollDuration="slow"
+               data-pat-autotoc-levels="h4,h5,h6">
             <h4>Title 1</h4>
             <p>Mr. Zuckerkorn, you've been warned about touching. You said
               spanking. It walked on my pillow! How about a turtle? I've always
@@ -105,8 +105,8 @@
           </div>
           <pre class="brush: html;toolbar: false;">
 &lt;div class="pat-autotoc"
-     data-autotoc-scrollDuration="slow"
-     data-autotoc-levels="h4,h5,h6"&gt;
+     data-pat-autotoc-scrollDuration="slow"
+     data-pat-autotoc-levels="h4,h5,h6"&gt;
 &lt;h4&gt;Title 1&lt;/h4&gt;
 ...
 &lt;h5&gt;Title 1.1&lt;/h5&gt;
@@ -121,9 +121,9 @@
           <div id="mockup-tabs">
             <h3>Tabs</h3>
             <form class="pat-autotoc"
-                  data-autotoc-levels="legend"
-                  data-autotoc-section="fieldset"
-                  data-autotoc-klass="autotabs">
+                  data-pat-autotoc-levels="legend"
+                  data-pat-autotoc-section="fieldset"
+                  data-pat-autotoc-klass="autotabs">
               <fieldset>
                 <legend>Tab 1</legend>
                 <p>I've used one adjective to describe myself. What is it?
@@ -153,9 +153,9 @@
             </form>
             <pre class="brush: html;toolbar: false;">
 &lt;form class="pat-autotoc"
-      data-autotoc-levels="legend"
-      data-autotoc-section="fieldset"
-      data-autotoc-klass="autotabs"&gt;
+      data-pat-autotoc-levels="legend"
+      data-pat-autotoc-section="fieldset"
+      data-pat-autotoc-klass="autotabs"&gt;
   &lt;fieldset&gt;
     &lt;legend&gt;Tab 1&lt;/legend&gt;
     ...
@@ -177,27 +177,27 @@
       <div class="row">
         <div class="span6">
           <h3>DateTime with Calendar</h3>
-          <input class="pat-datetime" data-datetime-format="d-mmmm-yyyy@HH:MM" />
+          <input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy@HH:MM" />
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-datetime" data-datetime-format="d-mmmm-yyyy@HH:MM" /&gt;</pre>
+&lt;input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy@HH:MM" /&gt;</pre>
         </div>
         <div class="span6">
           <h3>Datetime witouth Calendar</h3>
-          <input class="pat-datetime" data-datetime-format="d-mmmm-yyyy HH:MM" />
+          <input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy HH:MM" />
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-datetime" data-datetime-format="d-mmmm-yyyy HH:MM" /&gt;</pre>
+&lt;input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy HH:MM" /&gt;</pre>
         </div>
       </div>
       <div class="row">
         <div class="span6">
           <h3>Date only, US. format</h3>
           <input class="pat-datetime"
-            data-datetime-format="mmmm/dd/yyyy"
-            data-datetime-ampm="false" />
+            data-pat-datetime-format="mmmm/dd/yyyy"
+            data-pat-datetime-ampm="false" />
           <pre class="brush: html;toolbar: false;">
 &lt;input class="pat-datetime"
-  data-datetime-format="mmmm/dd/yyyy"
-  data-datetime-ampm="false"
+  data-pat-datetime-format="mmmm/dd/yyyy"
+  data-pat-datetime-ampm="false"
   /&gt;</pre>
         </div>
       </div>
@@ -219,16 +219,16 @@
               except in the format of the data attributes used by the patternslib.
             </p>
             <dl>
-              <dt>data-select2x-separator<dt>
+              <dt>data-pat-select2-separator<dt>
               <dd>
                 Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.
                 <br/><br/>
                 Defines a custom separator used to distinguish the tag values. Ex: a value of ';' will
-                allow the <em>data-select2x-tags</em> and <em>data-select2x-initvalmap</em> to have
+                allow the <em>data-pat-select2-tags</em> and <em>data-pat-select2-initvalmap</em> to have
                 values separated by ';' instead of the default ','.
               <dd>
 
-              <dt>data-select2x-initvalmap<dt>
+              <dt>data-path-select2-initvalmap<dt>
               <dd>
                 <p>
                   This can be a json encoded string, or a list of <em>id:text</em>
@@ -239,7 +239,7 @@
                 </p>
               <dd>
 
-              <dt>data-select2x-ajaxvocabulary</dt>
+              <dt>data-pat-select2-ajaxvocabulary</dt>
               <dd>
                 This is a URL to a JSON formatted file used to populate the list
               </dd>
@@ -250,7 +250,7 @@
       <div class="row">
         <div class="span4">
           <h3>Autocomplete with search</h3>
-          <select class="pat-select2x" data-select2-width="20em">
+          <select class="pat-select2" data-pat-select2-width="20em">
             <option value="Acholi">Acholi</option>
             <option value="Afrikaans">Afrikaans</option>
             <option value="Akan">Akan</option>
@@ -441,7 +441,7 @@
             <option value="Yupik">Yupik</option>
           </select>
           <pre class="brush: html;toolbar: false;">
-&lt;select class="pat-select2x" data-select2x-width="20em"&gt;
+&lt;select class="pat-select2" data-pat-select2-width="20em"&gt;
   ...
 &lt;/select&gt;</pre>
         </div>
@@ -453,45 +453,45 @@
 
         <div class="span4">
           <h3>Tagging</h3>
-          <input type="text" class="pat-select2x"
-              data-select2x-separator=";"
-              data-select2x-tags="Red;Yellow;Green;Orange;Purple"
-              data-select2x-width="20em"
-              data-select2x-initvaluemap="Red:The Color Red;Orange:The Color Orange"
+          <input type="text" class="pat-select2"
+              data-pat-select2-separator=";"
+              data-pat-select2-tags="Red;Yellow;Green;Orange;Purple"
+              data-pat-select2-width="20em"
+              data-pat-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange"
               value="Red;Orange"/>
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" class="pat-select2x"
-    data-select2x-separator=";"
-    data-select2x-tags="Red;Yellow;Green;Orange;Purple"
-    data-select2x-width="20em"
-    data-select2x-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
+&lt;input type="text" class="pat-select2"
+    data-pat-select2-separator=";"
+    data-pat-select2-tags="Red;Yellow;Green;Orange;Purple"
+    data-pat-select2-width="20em"
+    data-pat-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
         </div>
         <div class="span4">
           <h3>Orderable tags</h3>
-          <input type="text" class="pat-select2x"
-              data-select2x-orderable="true"
-              data-select2x-tags="Red,Yellow,Green"
-              data-select2x-width="20em" />
+          <input type="text" class="pat-select2"
+              data-pat-select2-orderable="true"
+              data-pat-select2-tags="Red,Yellow,Green"
+              data-pat-select2-width="20em" />
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" class="pat-select2x"
-    data-select2x-orderable="true"
-    data-select2x-tags="Red,Yellow,Green,Orange,Purple"
-    data-select2x-width="20em" /&gt;</pre>
+&lt;input type="text" class="pat-select2"
+    data-pat-select2-orderable="true"
+    data-pat-select2-tags="Red,Yellow,Green,Orange,Purple"
+    data-pat-select2-width="20em" /&gt;</pre>
         </div>
 
       </div>
       <div class='row'>
         <div class="span4">
           <h3>AJAX tags</h3>
-          <input type="hidden" class="pat-select2x"
-              data-select2x-placeholder="Search for a Value"
-              data-select2x-ajaxvocabulary="select2-test.json"
-              data-select2x-width="20em" />
+          <input type="hidden" class="pat-select2"
+              data-pat-select2-placeholder="Search for a Value"
+              data-pat-select2-ajaxvocabulary="select2-test.json"
+              data-pat-select2-width="20em" />
           <pre class="brush: html;toolbar: false;">
-&lt;input type="hidden" class="pat-select2x"
-    data-select2x-placeholder="Search for a Value"
-    data-select2x-ajaxvocabulary="select2-test.json"
-    data-select2x-width="20em" /&gt;</pre>
+&lt;input type="hidden" class="pat-select2"
+    data-pat-select2-placeholder="Search for a Value"
+    data-pat-select2-ajaxvocabulary="select2-test.json"
+    data-pat-select2-width="20em" /&gt;</pre>
         </div>
 
       </div>
@@ -540,12 +540,12 @@
           <p>
             <button type="submit"
                 class="btn btn-large pat-expose"
-                data-expose-triggers="hover">Hover over this button</button>
+                data-pat-expose-triggers="hover">Hover over this button</button>
           </p>
           <pre class="brush: html;toolbar: false;">
 &lt;button type="submit"
     class="btn btn-large pat-expose"
-    data-expose-triggers="hover"&gt;Hover over this button&lt;/button&gt;</pre>
+    data-pat-expose-triggers="hover"&gt;Hover over this button&lt;/button&gt;</pre>
         </div>
       </div>
 
@@ -564,7 +564,7 @@
               Below are some notes about <em>some</em> of the available data attributes.
             </p>
             <dl>
-              <dt>data-modal-position<dt>
+              <dt>data-pat-modal-position<dt>
               <dd>
                 Optional, the default being <em>center middle</em>.
                 <br /><br />
@@ -575,10 +575,10 @@
                 <br /><br />
                 If you wanted to position a modal on the left side of the page,
                 but didn't want it positioned 0px from the left, you'd want to use
-                the <em><strong>data-modal-margin</strong></em> option.
+                the <em><strong>data-pat-modal-margin</strong></em> option.
               <dd>
 
-              <dt>data-modal-margin</dt>
+              <dt>data-pat-modal-margin</dt>
               <dd>
                 This is ultimately an integer value. Defined through a data attribute
                 it must be an integer value -- but defined through javascript, it
@@ -631,9 +631,9 @@
           <p>
             <a href="#modal3"
                class="btn btn-large btn-primary pat-modal"
-                  data-modal-position="center bottom"
-                  data-modal-height="30%"
-                  data-modal-width="80%">
+                  data-pat-modal-position="center bottom"
+                  data-pat-modal-height="30%"
+                  data-pat-modal-width="80%">
               Modal with custom position</a>
             <div style="display:none">
               <div id="modal3">
@@ -643,9 +643,9 @@
             <pre class="brush: html;toolbar: false;">
 &lt;a href="#modal3"
     class="btn btn-large btn-primary pat-modal"
-    data-modal-position="center bottom"
-    data-modal-height="30%"
-    data-modal-width="80%;"&gt;
+    data-pat-modal-position="center bottom"
+    data-pat-modal-height="30%"
+    data-pat-modal-width="80%;"&gt;
   Modal with custom position&lt;/a&gt;
 &lt;div style="display:none"&gt;
   &lt;div id="modal3"&gt;
@@ -949,7 +949,7 @@
         <div class="span4">
           <div id='body'>
             <a href="#embededmodal"
-               data-modal-backdrop="#body"
+               data-pat-modal-backdrop="#body"
                class="btn btn-large btn-primary pat-modal">
                 Embedded Modal
             </a>
@@ -961,7 +961,7 @@
           <pre class="brush: html;toolbar: false;">
 &lt;div id='body'&gt;
   &lt;a href="#embededmodal"
-     data-modal-backdrop="#body"
+     data-pat-modal-backdrop="#body"
      class="btn btn-large btn-primary pat-modal"&gt;
       Embedded Modal
   &lt;/a&gt;
@@ -1082,9 +1082,9 @@
       <div class="span6">
           <h2>Adjust text size</h2>
           <ul class="pat-accessibility"
-              data-accessibility-smallbtn=".decrease-text"
-              data-accessibility-normalbtn=".normal-text"
-              data-accessibility-largebtn=".increase-text">
+              data-pat-accessibility-smallbtn=".decrease-text"
+              data-pat-accessibility-normalbtn=".normal-text"
+              data-pat-accessibility-largebtn=".increase-text">
             <li>
               <a href="." class="decrease-text">Decrease Text Size</a>
             </li>
@@ -1097,9 +1097,9 @@
         </ul>
         <pre class="brush: html;toolbar:false;">
 &lt;ul class=&quot;pat-accessibility&quot;
-    data-accessibility-smallbtn=&quot;.decrease-text&quot;
-    data-accessibility-normalbtn=&quot;.normal-text&quot;
-    data-accessibility-largebtn=&quot;.increase-text&quot;&gt;
+    data-pat-accessibility-smallbtn=&quot;.decrease-text&quot;
+    data-pat-accessibility-normalbtn=&quot;.normal-text&quot;
+    data-pat-accessibility-largebtn=&quot;.increase-text&quot;&gt;
     &lt;li&gt;
         &lt;a href=&quot;.&quot; class=&quot;decrease-text&quot;&gt;Decrease Text Size&lt;/a&gt;
     &lt;/li&gt;
@@ -1125,8 +1125,8 @@
     <div class="row">
       <div class="span8">
           <input type="text" class="pat-relateditems"
-              data-relateditems-width="30em"
-              data-relateditems-url="/relateditems-test.json" />
+              data-pat-relateditems-width="30em"
+              data-pat-relateditems-url="/relateditems-test.json" />
       </div>
     </div>
 

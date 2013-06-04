@@ -302,7 +302,7 @@ $(document).ready(function() {
       <p>
         Patterns has of course more to offer than just this basic approach:
         automatic binding (and re-binding after reloads),
-        taking the options from the DOM via <code>data-*</code> attributes,
+        taking the options from the DOM via <code>data-pat-*</code> attributes,
         and a unified, coherent approach.
       </p>
       <h3>
@@ -393,9 +393,9 @@ define([
         and have all the widgets use the same set of options:
       </p>
       <pre class="brush: html; toolbar: false;">
-&lt;body data-datetime-format="d-mmmm-yyyy@HH:MM"
-      data-datetime-ampm="true"
-      data-datetime-pickadateMonthSelector="false"&gt;
+&lt;body data-pat-datetime-format="d-mmmm-yyyy@HH:MM"
+      data-pat-datetime-ampm="true"
+      data-pat-datetime-pickadateMonthSelector="false"&gt;
   &lt;!-- Both widgets use the same options --&gt;
   &lt;input class="pat-datetime" /&gt;
   &lt;input class="pat-datetime" /&gt;
@@ -407,10 +407,10 @@ define([
         or on whatever DOM element wraps the section:
       </p>
       <pre class="brush: html; toolbar: false;">
-&lt;body data-datetime-format="d-mmmm-yyyy@HH:MM"
-      data-datetime-ampm="true"&gt;
+&lt;body data-pat-datetime-format="d-mmmm-yyyy@HH:MM"
+      data-pat-datetime-ampm="true"&gt;
   &lt;input class="pat-datetime" /&gt;  &lt;!-- There's a month dropdown here --&gt;
-  &lt;div data-datetime-pickadateMonthSelector="false"&gt;
+  &lt;div data-pat-datetime-pickadateMonthSelector="false"&gt;
     &lt;input class="pat-datetime" /&gt; &lt;!-- but no month dropdown here! --&gt;
     &lt;input class="pat-datetime" /&gt; &lt;!-- And here as well --&gt;
   &lt;/div&gt;

@@ -75,11 +75,11 @@ define([
     });
     it("read options from dom tree", function() {
       var $el = $('' +
-        '<div data-example="{&quot;name1&quot;: &quot;value1&quot;,' +
+        '<div data-pat-example="{&quot;name1&quot;: &quot;value1&quot;,' +
         '    &quot;name2&quot;: &quot;value2&quot;}">' +
         ' <div class="pat-example"' +
-        '      data-example-name2="something"' +
-        '      data-example-some-name4="value4"></div>' +
+        '      data-pat-example-name2="something"' +
+        '      data-pat-example-some-name4="value4"></div>' +
         '</div>');
 
       Base.extend({
@@ -224,8 +224,8 @@ define([
         '<div class="pat-cookiedirective">' +
         '<div class="login"></div>' +
         '</div>');
-      this.$el.attr("data-cookiedirective-should_ask", "true");
-      this.$el.attr("data-cookiedirective-should_enable", "true");
+      this.$el.attr("data-pat-cookiedirective-should_ask", "true");
+      this.$el.attr("data-pat-cookiedirective-should_enable", "true");
     });
     it("test ask permission shows", function() {
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
@@ -234,7 +234,7 @@ define([
     });
     it("test ask permission can be hidden", function() {
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
-      this.$el.attr("data-cookiedirective-should_ask", "false");
+      this.$el.attr("data-pat-cookiedirective-should_ask", "false");
       registry.scan(this.$el);
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
     });
@@ -265,9 +265,9 @@ define([
       expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
     });
     it("test ask permission customizable", function() {
-      this.$el.attr("data-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
-      this.$el.attr("data-cookiedirective-allow_msg", "Test allow_msg");
-      this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
+      this.$el.attr("data-pat-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
+      this.$el.attr("data-pat-cookiedirective-allow_msg", "Test allow_msg");
+      this.$el.attr("data-pat-cookiedirective-deny_msg", "Test deny_msg");
       registry.scan(this.$el);
       expect(this.$el.find('.cookiemsg').text()).to.equal("Test ask_permission_msg");
       expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allow_msg");
@@ -278,7 +278,7 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-cookiedirective-should_ask", "false");
+      this.$el.attr("data-pat-cookiedirective-should_ask", "false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
@@ -289,8 +289,8 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-cookiedirective-should_ask", "false");
-      this.$el.attr("data-cookiedirective-should_enable", "false");
+      this.$el.attr("data-pat-cookiedirective-should_ask", "false");
+      this.$el.attr("data-pat-cookiedirective-should_enable", "false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -313,8 +313,8 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-cookiedirective-should_enable_selector", ".another-login");
-      this.$el.attr("data-cookiedirective-deny_msg", "Test deny_msg");
+      this.$el.attr("data-pat-cookiedirective-should_enable_selector", ".another-login");
+      this.$el.attr("data-pat-cookiedirective-deny_msg", "Test deny_msg");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -325,7 +325,7 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-cookiedirective-should_enable_msg", "Test should_enable_msg");
+      this.$el.attr("data-pat-cookiedirective-should_enable_msg", "Test should_enable_msg");
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test should_enable_msg");
       // Restore cookie function
@@ -372,15 +372,15 @@ define([
     });
     it("test setting small font size with button works", function(){
       // add pattern to anchor
-      this.$el.attr("data-accessibility-smallbtn", "#btn1");
+      this.$el.attr("data-pat-accessibility-smallbtn", "#btn1");
       var accessibility = new Accessibility(this.$el);
       $('#btn1', this.$el).trigger('click');
       expect(this.$el.hasClass('smallText')).to.be.true;
     });
     it("test setting large font size with button works", function(){
       // add pattern to anchor
-      this.$el.attr("data-accessibility-largebtn", "#btn3");
-      this.$el.attr("data-accessibility-smallbtn", "#btn1");
+      this.$el.attr("data-pat-accessibility-largebtn", "#btn3");
+      this.$el.attr("data-pat-accessibility-smallbtn", "#btn1");
       var accessibility = new Accessibility(this.$el);
       $('#btn3', this.$el).trigger('click');
       expect(this.$el.hasClass('largeText')).to.be.true;
@@ -426,7 +426,7 @@ define([
       expect($('> nav', this.$el).size()).to.equal(1);
     });
     it("can have custom levels", function() {
-      this.$el.attr('data-autotoc-levels', 'h1');
+      this.$el.attr('data-pat-autotoc-levels', 'h1');
       expect($('> nav', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(1);
@@ -502,7 +502,7 @@ define([
     it("default behaivour", function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <form class="pat-expose" data-expose-backdrop="#body">' +
+        ' <form class="pat-expose" data-pat-expose-backdrop="#body">' +
         '  <input value="" />' +
         ' </form>' +
         '</div>');
@@ -528,7 +528,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
-        '    data-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal-backdrop="#body">Open</a>' +
         ' <div id="target" style="display:none;">Target</div>' +
         '</div>').appendTo('body');
 
@@ -548,7 +548,6 @@ define([
       expect($('.modal .modal-header', $el).size()).to.equal(1);
       expect($('.modal .modal-body', $el).size()).to.equal(1);
       expect($('.modal .modal-footer', $el).size()).to.equal(1);
-      expect($el.hasClass('backdrop-active')).to.equal(true);
 
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;
@@ -562,7 +561,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
-        '    data-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal-backdrop="#body">Open</a>' +
         ' <div id="target">Target</div>' +
         '</div>').appendTo('body');
 
@@ -576,417 +575,15 @@ define([
 
       $el.remove();
     });
-    it("", function() {
-    });
-
-    describe("modal positioning (findPosition) ", function() {
-      //
-      // -- CHANGE POSITION ONLY ----------------------------------------------
-      //
-      it('position: center middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'middle', 0, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          // half wrapper height - half modal height - margin
-          // 300/2 - 280/2 - 0 = 150 - 140 = 10
-          expect(pos['top']).to.equal('10px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 0 = 200 - 170 = 30
-          expect(pos['left']).to.equal('30px');
-        }).click();
-      });
-      it('position: left middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'middle', 0, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          // half wrapper height - half modal height - margin
-          // 300/2 - 280/2 - 0 = 150 - 140 = 10
-          expect(pos['top']).to.equal('10px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: right middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'middle', 0, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          // half wrapper height - half modal height - margin
-          // 300/2 - 280/2 - 0 = 150 - 140 = 10
-          expect(pos['top']).to.equal('10px');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('0px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-      it('position: center top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'top', 0, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 0 = 200 - 170 = 30
-          expect(pos['left']).to.equal('30px');
-        }).click();
-      });
-      it('position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'bottom', 0, 340, 280, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('0px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 0 = 200 - 170 = 30
-          expect(pos['left']).to.equal('30px');
-        }).click();
-      });
-      it('position: left top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'top', 0, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'bottom', 0, 340, 280, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('0px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: right top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'top', 0, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('0px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-      it('position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'bottom', 0, 340, 280, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('0px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('0px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-
-      //
-      // -- NON-ZERO MARGIN ---------------------------------------------------
-      //
-      it('position: center middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'middle', 5, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          // half wrapper height - half modal height - margin
-          // 300/2 - 280/2 - 5 = 150 - 140 - 5 = 5
-          expect(pos['top']).to.equal('5px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25
-          expect(pos['left']).to.equal('25px');
-        }).click();
-      });
-      it('position: left middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'middle', 5, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          // half wrapper height - half modal height - margin
-          // 300/2 - 280/2 - 5 = 150 - 140 = 5
-          expect(pos['top']).to.equal('5px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('5px');
-        }).click();
-      });
-      it('position: right middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'middle', 5, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          // half wrapper height - half modal height - margin
-          // 300/2 - 280/2 - 5 = 150 - 140 - 5 = 5
-          expect(pos['top']).to.equal('5px');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('5px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-      it('position: center top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'top', 5, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('5px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25 
-          expect(pos['left']).to.equal('25px');
-        }).click();
-      });
-      it('position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'bottom', 5, 340, 280, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('5px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25
-          expect(pos['left']).to.equal('25px');
-        }).click();
-      });
-      it('position: left top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'top', 5, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('5px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('5px');
-        }).click();
-      });
-      it('position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'bottom', 5, 340, 280, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('5px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('5px');
-        }).click();
-      });
-      it('position: right top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'top', 5, 340, 280, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('5px');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('5px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-      it('position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'bottom', 5, 340, 280, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('5px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('5px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-
-      //
-      // -- WRAPPER SMALLER THAN MODAL ----------------------------------------
-      //
-      it('position: center middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'middle', 0, 450, 350, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: left middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'middle', 0, 450, 350, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: right middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'middle', 0, 450, 350, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('0px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-      it('position: center top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'top', 0, 450, 350, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('center', 'bottom', 0, 450, 350, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('0px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: left top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'top', 0, 450, 350, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('left', 'bottom', 0, 450, 350, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('0px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).not.to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['left']).to.equal('0px');
-        }).click();
-      });
-      it('position: right top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'top', 0, 450, 350, 400, 300);
-          expect(pos).not.to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['top']).to.equal('0px');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('0px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
-      it('position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
-          var modal =  modal.$modal.data('patternModal');
-          var pos = modal.findPosition('right', 'bottom', 0, 450, 350, 400, 300);
-          expect(pos).to.have.property('bottom');
-          expect(pos).to.have.property('top');
-          expect(pos['bottom']).to.equal('0px');
-          expect(pos['top']).to.equal('auto');
-
-          expect(pos).to.have.property('right');
-          expect(pos).to.have.property('left');
-          expect(pos['right']).to.equal('0px');
-          expect(pos['left']).to.equal('auto');
-        }).click();
-      });
+    it("load modal content via ajax", function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <a class="pat-modal" href=""' +
+        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '</div>').appendTo('body');
+      $el.remove();
     });
   });
-
 
   /* ==========================
    TEST: Select2
@@ -996,7 +593,7 @@ define([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2x" data-select2x-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2" data-pat-select2-tags="Red,Yellow,Blue"' +
         '        value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
@@ -1008,9 +605,9 @@ define([
     it('custom separator', function() {
       var $el = $(
         '<div>' +
-        ' <input class="pat-select2x"' +
-        '        data-select2x-selector=";"' +
-        '        data-select2x-tags="Red;Yellow;Blue"' +
+        ' <input class="pat-select2"' +
+        '        data-pat-select2-selector=";"' +
+        '        data-pat-select2-tags="Red;Yellow;Blue"' +
         '        value="Yellow" />' +
         '</div>');
     });
@@ -1018,9 +615,9 @@ define([
     it('init value map', function() {
         var $el = $(
         '<div>' +
-        ' <input class="pat-select2x"' +
-        '        data-select2x-tags="Red,Yellow,Blue"' +
-        '        data-select2x-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
+        ' <input class="pat-select2"' +
+        '        data-pat-select2-tags="Red,Yellow,Blue"' +
+        '        data-pat-select2-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
         '        value="Yellow,Red"/>' +
         '</div>');
 
@@ -1030,8 +627,8 @@ define([
 
     it('ajax vocabulary', function() {
         var $el = $(
-        ' <input class="pat-select2x"' +
-        '        data-select2x-ajaxvocabulary="select2-users-vocabulary"' +
+        ' <input class="pat-select2"' +
+        '        data-pat-select2-ajaxvocabulary="select2-users-vocabulary"' +
         '        />'
         );
 
@@ -1042,9 +639,9 @@ define([
     it('orderable tags', function() {
         var $el = $(
         '<div>' +
-        ' <input class="pat-select2x"' +
-        '        data-select2x-orderable="true"' +
-        '        data-select2x-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2"' +
+        '        data-pat-select2-orderable="true"' +
+        '        data-pat-select2-tags="Red,Yellow,Blue"' +
         '        value="Red"' +
         '        />' +
         '</div>'
@@ -1080,8 +677,8 @@ define([
       this.$el = $('' +
         '<div>' +
         ' <a class="pat-toggle"' +
-        '    data-toggle-target="#target"' +
-        '    data-toggle-value="toggled">Button</a>' +
+        '    data-pat-toggle-target="#target"' +
+        '    data-pat-toggle-value="toggled">Button</a>' +
         ' <div id="target"></div>' +
         '</div>');
     });
@@ -1093,7 +690,7 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(1);
     });
     it("can also listen to custom event", function() {
-      $('.pat-toggle', this.$el).attr('data-toggle-event', 'customEvent');
+      $('.pat-toggle', this.$el).attr('data-pat-toggle-event', 'customEvent');
       expect($('.toggled', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('.toggled', this.$el).size()).to.equal(0);
@@ -1101,7 +698,7 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(1);
     });
     it("can also toggle custom element attribute", function() {
-      $('.pat-toggle', this.$el).attr('data-toggle-attribute', 'rel');
+      $('.pat-toggle', this.$el).attr('data-pat-toggle-attribute', 'rel');
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
