@@ -4,4 +4,4 @@ node_js:
 before_install:
   - make bootstrap
 script:
-  - xvfb-run -a make test-ci
+  - xvfb-run -a make tests-ci
