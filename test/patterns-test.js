@@ -565,10 +565,15 @@ define([
         '    data-modal-backdrop="#body">Open</a>' +
         ' <div id="target">Target</div>' +
         '</div>').appendTo('body');
-      $('a', $el).patternModal().on('show.modal.patterns', function(e, modal) {
-        $('.modal-header h3', modal.$modal).text('New Title');
-      }).click();
+
+      $('a', $el)
+        .patternModal()
+        .on('show.modal.patterns', function(e, modal) {
+            $('.modal-header h3', modal.$modal).text('New Title');
+          })
+        .click();
       expect($('.modal .modal-header h3', $el).text()).to.equal('New Title');
+
       $el.remove();
     });
     it("", function() {
