@@ -22,10 +22,10 @@ bootstrap:
 	$(JAM) install
 
 
-test:
+tests:
 	$(TESTEM)
 
-test-ci:
+tests-ci:
 	$(TESTEM) ci
 
 
