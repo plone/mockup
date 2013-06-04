@@ -66,10 +66,11 @@ define([
         return self._handle_unload(self, e);
       });
 
-      self.$el.on('submit', self.suppress);
+      self.$el.on('submit', function(e){
+        self._suppressed = true;
+      });
 
     },
-
     _handle_unload : function (self, e) {
       if (self._suppressed) {
         self._suppressed = false;
@@ -80,12 +81,7 @@ define([
         (e || window.event).returnValue = msg;
         return msg;
       }
-    },
-
-    suppress: function () {
-        this._suppressed = true;
     }
-
   });
   return FormUnloadAlert;
 

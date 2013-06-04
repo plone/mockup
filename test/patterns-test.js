@@ -772,9 +772,8 @@ define([
   ========================== */
 
   describe("FormUnloadAlert", function() {
-
-    it('prevent unload of form with changes', function() {
-      var $el = $('' +
+    beforeEach(function() {
+      this.$el = $('' +
         '<form class="pat-formunloadalert">' +
         ' <select name="aselect">' +
         '    <option value="1">1</option>' +
@@ -783,11 +782,17 @@ define([
         '<input id="b1" type="submit" value="Submit" />' +
         '<a href="patterns.html">Click here to go somewhere else</a>' +
         '</form>');
-      registry.scan($el);
+    });
+    afterEach(function() {
+      var pattern = this.$el.data('pattern-formunloadalert-0');
+      pattern._changed = false;
+    });
+    it('prevent unload of form with changes', function() {
+      registry.scan(this.$el);
 
       // current instance of the pattern
-      var pattern = $el.data('pattern-formunloadalert-0');
-      var $select = $('select', $el);
+      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var $select = $('select', this.$el);
 
       // expect(pattern.unload_msg).to.be.undefined;
       // expect(pattern.hasChanges()).to.be.false;
@@ -795,11 +800,30 @@ define([
       $select.trigger('change');
       expect(pattern._changed).to.be.true;
 
-      $('a', $el).click(function(e){
+      $('a', this.$el).click(function(e){
         pattern._handle_unload(pattern, e);
         expect(e.returnValue).to.equal(pattern.options.message);
       });
-      $('a', $el).trigger('click');
+      $('a', this.$el).trigger('click');
+    });
+    it('do not show message if submitting', function() {
+      registry.scan(this.$el);
+
+      // current instance of the pattern
+      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var $select = $('select', this.$el);
+
+      // expect(pattern.unload_msg).to.be.undefined;
+      // expect(pattern.hasChanges()).to.be.false;
+
+      $select.trigger('change');
+      expect(pattern._changed).to.be.true;
+
+      $(this.$el).on('submit', function(e){
+        pattern._handle_unload(pattern, e);
+        expect(e.returnValue).to.not.equal(pattern.options.message);
+      });
+      $(this.$el).trigger('submit');
     });
   });
 
