@@ -41,7 +41,8 @@ define([
   'js/patterns/autotoc',
   'js/patterns/accessibility',
   'js/patterns/relateditems',
-  'js/patterns/formUnloadAlert'
+  'js/patterns/formUnloadAlert',
+  'js/patterns/toggle'
 ], function($, registry) {
   "use strict";
 
@@ -75,6 +76,21 @@ define([
       $match.attr({
         'data-pat-formunloadalert-message': window.form_modified_message
       });
+      
+      // apply formUnloadAlert pattern where enableUnloadProtection exists
+      var $match = $root.filter('dl.actionMenu dt.actionMenuHeader a');
+      $match = $match.add($root.find('dl.actionMenu dt.actionMenuHeader a'));
+      $match.addClass('pat-toggle');
+      $match.attr({
+        'data-pat-toggle-target': 'dl.actionMenu',
+        'data-pat-toggle-value': 'activated'
+      });
+      $root.find('dl.actionMenu').removeClass('deactivated');
+      
+      $root.on('mousedown', function(e) {
+          $('dl.actionMenu').removeClass('activated');
+      });
+      
 
     },
     scan: function(selector) {
