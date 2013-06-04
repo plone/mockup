@@ -54,17 +54,17 @@ define([
       $match = $match.add($root.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
       $match.attr({
-        'data-autotoc-levels': 'legend',
-        'data-autotoc-section': 'fieldset',
-        'data-autotoc-klass': 'autotabs'
+        'data-pat-autotoc-levels': 'legend',
+        'data-pat-autotoc-section': 'fieldset',
+        'data-pat-autotoc-klass': 'autotabs'
       });
 
       // activate accessibility pattern by default
       $root.addClass('pat-accessibility');
       $root.attr({
-        'data-accessibility-smallbtn': "#accessibility-smallText",
-        'data-accessibility-normalbtn': "#accessibility-normalText",
-        'data-accessibility-largebtn': "#accessibility-largeText"
+        'data-pat-accessibility-smallbtn': "#accessibility-smallText",
+        'data-pat-accessibility-normalbtn': "#accessibility-normalText",
+        'data-pat-accessibility-largebtn': "#accessibility-largeText"
       });
     },
     scan: function(selector) {
