@@ -33,19 +33,19 @@ define([
   'jquery',
   'js/patterns/base',
   'js/patterns/backdrop',
-  'jam/Patterns/src/registry'
-], function($, Base, Backdrop, registry, undefined) {
+  'jam/Patterns/src/registry',
+  'jam/jquery-form/jquery.form'
+], function($, Base, Backdrop, registry) {
   "use strict";
 
   var Modal = Base.extend({
     name: "modal",
-    jqueryPlugin: "modal",
     defaults: {
       triggers: '',
-      position: "center middle",
+      position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
       width: "",
       height: "",
-      margin: "20px",
+      margin: function() { return 20; }, // can be int or function that returns an int -- int is a pixel value
       klass: "modal",
       klassWrapper: "modal-wrapper",
       klassWrapperInner: "modal-wrapper-inner",
@@ -57,11 +57,203 @@ define([
       backdropKlass: "backdrop",
       backdropKlassActive: "backdrop-active",
       backdropCloseOnEsc: true,
-      backdropCloseOnClick: true
+      backdropCloseOnClick: true,
+      templateOptions: {
+        title: 'h1.documentFirstHeading',
+        buttons: '.formControls > input[type="submit"]',
+        content: '#content',
+        actions: [],
+        actionsOptions: {
+          timeout: 5000,
+          error: '.portalMessage.error',
+          loading: '' +
+            '<div class="progress progress-striped active">' +
+            '  <div class="bar" style="width: 100%;"></div>' +
+            '</div>'
+        },
+        form: function($modal, actions, defaultOptions) {
+          var self = this;
+
+          $.each(actions, function(action, options) {
+            options = $.extend({}, defaultOptions, options);
+            $(action, $modal).each(function(action) {
+              var $action = $(this);
+              $action.on('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                // loading "spinner"
+                var backdrop = $modal.data('patterns-backdrop');
+                if (!backdrop) {
+                  backdrop = new Backdrop(self.$modal, {
+                    closeOnEsc: false,
+                    closeOnClick: false
+                  });
+                  backdrop.$backdrop
+                    .html('')
+                    .append(
+                      $(options.loading)
+                        .css({
+                          position: 'absolute',
+                          left: self.$modal.width() * 0.1,
+                          top: self.$modal.height()/2 + 10,
+                          width: self.$modal.width() * 0.8
+                        })
+                    );
+                  self.$modal.data('patterns-backdrop', backdrop);
+                } else {
+                  self.$modal.append(backdrop.$backdrop);
+                }
+                backdrop.show();
+
+                // handle click on input/button using jquery.form library
+                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button')) {
+
+                  // pass action that was clicked when submiting form
+                  var extraData = {};
+                  extraData[$action.attr('name')] = $action.attr('value');
+
+                  $action.parents('form').ajaxSubmit({
+                    timeout: options.timeout,
+                    dataType: 'html',
+                    data: extraData,
+                    url: $action.parents('form').attr('action'),
+                      error: function(xhr, textStatus, errorStatus) {
+                        if (textStatus === 'timeout' && options.onTimeout) {
+                          options.onTimeout.apply(self, xhr, errorStatus);
+                        // on "error", "abort", and "parsererror"
+                        } else if (options.onError) {
+                          options.onError(xhr, textStatus, errorStatus);
+                        } else {
+                          console.log('error happened do something');
+                        }
+                      },
+                      success: function(response, state, xhr, form) {
+                        var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                                .replace('<body', '<div').replace('</body>', '</div>'));
+
+                        // if error is found
+                        if ($(options.formError, responseBody).size() !== 0) {
+                          if (options.onFormError) {
+                            options.onFormError(self, responseBody, state, xhr, form);
+                          } else {
+                            $modal.html(responseBody.html());
+                            // FIXME: modalInit .. wtf is this??? maybe not
+                            // needed anymore
+                            //modalInit(modal, modalInit, modalOptions);
+                            self.positionModal();
+                            registry.scan($modal);
+                          }
+
+                        // custom success function
+                        } else if (options.onSuccess) {
+                          options.onSuccess(self, responseBody, state, xhr, form);
+
+                        } else {
+                          $action.trigger('destroy.modal.patterns');
+                        }
+                      }
+                  });
+
+                // handle click on link with jQuery.ajax
+                } else if ($.nodeName($action[0], 'a')) {
+                  $.ajax({
+                    url: $action.attr('href'),
+                    error: function(xhr, textStatus, errorStatus) {
+                      if (textStatus === 'timeout' && options.onTimeout) {
+                        options.onTimeout(modal, xhr, errorStatus);
+
+                      // on "error", "abort", and "parsererror"
+                      } else if (options.onError) {
+                        options.onError(xhr, textStatus, errorStatus);
+                      } else {
+                        console.log('error happened do something');
+                      }
+                    },
+                    success: function(response, state, xhr) {
+                      var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                              .replace('<body', '<div').replace('</body>', '</div>'));
+
+                      // if error is found
+                      if ($(options.formError, responseBody).size() !== 0) {
+                        if (options.onFormError) {
+                          options.onFormError(self, responseBody, state, xhr);
+                        } else {
+                          $modal.html(responseBody.html());
+                          // FIXME: modalInit .. wtf is this??? maybe not
+                          // needed anymore
+                          //modalInit(modal, modalInit, modalOptions);
+                          self.positionModal();
+                          registry.scan($modal);
+                        }
+
+                      // custom success function
+                      } else if (options.onSuccess) {
+                        options.onSuccess(self, responseBody, state, xhr);
+
+                      } else {
+                        $action.trigger('destroy.modal.patterns');
+                      }
+                    }
+                  });
+                }
+
+              });
+            });
+          });
+
+        }
+      },
+      template: function($modal, options) {
+        var $content = $modal.html();
+        $modal.html('' +
+          '<div class="modal-header">' +
+          '  <a class="close">&times;</a>' +
+          '  <h3></h3>' +
+          '</div>' +
+          '<div class="modal-body"></div>' +
+          '<div class="modal-footer"></div>');
+
+        $('.modal-header > h3', $modal).html($(options.title, $content).html());
+        $('.modal-body', $modal).html($(options.content, $content).html());
+        $(options.title, $modal).remove();
+        $('.modal-header > a.close', $modal)
+          .off('click')
+          .on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $(e.target).trigger('destroy.modal.patterns');
+          });
+
+        // cleanup html
+        $('.row', $modal).removeClass('row');
+
+        $(options.buttons, $modal).each(function() {
+          var $button = $(this);
+          $button
+            .on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+            })
+            .clone()
+            .appendTo($('.modal-footer', $modal))
+            .off('click').on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+              $button.trigger('click');
+            });
+          $button.hide();
+        });
+
+        // form
+        if (options.form) {
+          options.form.apply(self,
+              [$modal, options.actions, options.actionsOptions]);
+        }
+      },
     },
     init: function() {
       var self = this;
-
 
       self.backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
         zindex: self.options.backdropZIndex,
@@ -99,6 +291,11 @@ define([
             self.backdrop.hide();
           });
       }
+      self.$wrapper.on('hidden', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        self.hide();
+      });
 
       self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
       if (self.$wrapperInner.size() === 0) {
@@ -120,6 +317,7 @@ define([
           .addClass(self.options.klassLoading)
           .appendTo(self.$wrapperInner);
       }
+
       $(window.parent).resize(function() {
         self.positionModal();
       });
@@ -150,11 +348,6 @@ define([
       }
 
       self.initModal();
-      self.$wrapper.on('hidden', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        self.hide();
-      });
     },
     initModalElement: function($modal) {
       var self = this;
@@ -164,7 +357,9 @@ define([
           e.stopPropagation();
           if ($.nodeName(e.target, 'a')) {
             e.preventDefault();
+
             // TODO: open links inside modal
+            // and slide modal body
           }
         })
         .on('destroy.modal.patterns', function(e) {
@@ -174,8 +369,9 @@ define([
         .on('resize.modal.patterns', function(e) {
           e.stopPropagation();
           e.preventDefault();
-          self.positionModal(true);
-        });
+          self.positionModal();
+        })
+        .appendTo(self.$wrapperInner);
       $modal.data('pattern-' + self.name, self);
       return $modal;
     },
@@ -197,8 +393,7 @@ define([
             self.$loading.hide();
             self.$modal = self.initModalElement(
               $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                .replace('<body', '<div').replace('</body>', '</div>'))[0]))
-              .appendTo(self.$wrapperInner);
+                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
             self.trigger('after-ajax', self, textStatus, xhr);
             self.show();
           });
@@ -207,13 +402,11 @@ define([
         self.$modal = function() {
           self.$modal = self.initModalElement($('<div/>'))
               .html($(self.options.target).clone())
-              .appendTo(self.$wrapperInner);
           self.show();
         };
       } else {
         self.$modal = self.initModalElement($('<div/>'))
-              .html(self.$el.clone())
-              .appendTo(self.$wrapperInner);
+              .html(self.$el.clone());
       }
 
     },
@@ -229,121 +422,101 @@ define([
         'top': '0'
       });
     },
-    positionModal: function(preserve_top) {
+    // re-position modal at any point.
+    //
+    // Uses:
+    //  options.margin
+    //  options.width
+    //  options.height
+    //  options.position
+    positionModal: function() {
       var self = this;
-      if (typeof self.$modal !== 'function') {
 
-        if (preserve_top) {
-          preserve_top = self.$modal.css('top');
+      // modal isn't initialized
+      if(typeof self.$modal === 'function') { return; }
+
+      // clear out any previously set styling
+      self.$modal.removeAttr('style');
+
+      // make sure the (inner) wrapper fills it's container
+      //self.$wrapperInner.css({height:'100%', width:'100%'});
+
+      // if backdrop wrapper is set on body, then wrapper should have height of
+      // the window, so we can do scrolling of inner wrapper
+      if(self.$wrapper.parent().is('body')) {
+        self.$wrapper.height($(window.parent).height());
+      }
+
+      var margin = typeof self.options.margin === 'function' ? self.options.margin() : self.options.margin;
+      self.$modal.css({
+        'padding': '0',
+        'margin': margin,
+        'width': self.options.width, // defaults to "", which doesn't override other css
+        'height': self.options.height, // defaults to "", which doesn't override other css
+        'position': 'absolute',
+      });
+
+      var posopt = self.options.position.split(' '),
+          horpos = posopt[0],
+          vertpos = posopt[1];
+      var absTop, absBottom, absLeft, absRight;
+      absRight = absLeft = absTop = absLeft = 'auto';
+      var modalWidth = self.$modal.outerWidth(true);
+      var modalHeight = self.$modal.outerHeight(true);
+      var wrapperInnerWidth = self.$wrapperInner.width();
+      var wrapperInnerHeight = self.$wrapperInner.height();
+
+
+      // -- HORIZONTAL POSITION -----------------------------------------------
+      if(horpos === 'left') {
+        absLeft = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the left to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absLeft = '0';
         }
-
-        self.$modal.removeAttr('style');
-        // if backdrop wrapper is set on body then wrapper should have height
-        // of window so we can do scrolling of inner wrapper
-        self.$wrapperInner.css({
-          'height': '100%',
-          'width': '100%'
-        });
-        if (self.$wrapper.parent().is('body')) {
-          self.$wrapper.height($(window.parent).height());
+        self.$modal.css('left', absLeft);
+      }
+      else if(horpos === 'right') {
+        absRight =  margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the right to simply be 0
+        if(modalWidth > wrapperInnerWidth) {
+          absRight = '0';
         }
+        self.$modal.css('right', absRight);
+        self.$modal.css('left', 'auto');
+      }
+      // default, no specified location, is to center
+      else {
+        absLeft = ((wrapperInnerWidth / 2) - (modalWidth / 2)) + 'px';
+        self.$modal.css('left', absLeft);
+      }
 
-        // place modal at top left with desired width/height and margin
-        self.$modal.css({
-          'padding': '0',
-          'margin': '0',
-          'width': self.options.width,
-          'height': self.options.height,
-          'position': 'absolute',
-          'top': preserve_top ? preserve_top : '0',
-          'left': '0'
-        });
-
-        self.$modal.css({'margin': '0'});
-        var modalOffsetBefore = self.$modal.offset();
-        self.$modal.css({ 'margin': self.options.margin });
-        var modalOffset = self.$modal.offset(),
-            modalOuterWidth = self.$modal.outerWidth(true),
-            modalInnerWidth = self.$modal.innerWidth(),
-            modalOuterHeight = self.$modal.outerHeight(true),
-            modalInnerHeight = self.$modal.innerHeight();
-        self.$modal.css({ 'margin': '0' });
-
-        var topMargin = modalOffset.top - modalOffsetBefore.top,
-            bottomMargin = modalOuterHeight - modalInnerHeight - topMargin,
-            leftMargin = modalOffset.left - modalOffsetBefore.left,
-            rightMargin = modalOuterWidth - modalInnerWidth - leftMargin;
-
-        // place modal in right position
-        var positionHorizontal = self.options.position.split(' ')[0],
-            positionVertical = self.options.position.split(' ')[1],
-            positionTop, positionBottom, positionLeft, positionRight;
-
-        if (positionHorizontal === 'left') {
-          positionLeft = leftMargin + 'px';
-          if (self.$wrapperInner.width() < self.$modal.width()) {
-            positionRight = rightMargin + 'px';
-          } else {
-            positionRight = 'auto';
-          }
-        } else if (positionHorizontal === 'bottom') {
-          positionRight = leftMargin + 'px';
-          if (self.$wrapperInner.width() < self.$modal.width()) {
-            positionLeft = leftMargin + 'px';
-          } else {
-            positionLeft = 'auto';
-          }
-        } else {
-          if (self.$wrapperInner.width() < self.$modal.width() + leftMargin + rightMargin) {
-            positionLeft = leftMargin + 'px';
-            positionRight = rightMargin + 'px';
-          } else {
-            positionLeft = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.outerWidth()/2 - leftMargin) + 'px';
-            positionRight = (self.$wrapperInner.innerWidth()/2 -
-                self.$modal.outerWidth()/2 - rightMargin) + 'px';
-          }
+      // -- VERTICAL POSITION -------------------------------------------------
+      if(vertpos === 'top') {
+        absTop = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the top to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absTop = '0';
         }
-        self.$modal.css({
-          'left': positionLeft,
-          'right': positionRight,
-          'width': self.$modal.width()
-        });
-
-        // if modal is bigger then wrapperInner then resize wrapperInner to
-        // match modal height
-        if (self.$wrapperInner.height() < self.$modal.height()) {
-          self.$wrapperInner.height(self.$modal.height() + topMargin + bottomMargin);
+        self.$modal.css('top', absTop);
+      }
+      else if(vertpos === 'bottom') {
+        absBottom = margin + 'px';
+        // if the width of the wrapper is smaller than the modal, and thus the
+        // screen is smaller than the modal, force the bottom to simply be 0
+        if(modalHeight > wrapperInnerHeight) {
+          absBottom = '0';
         }
-
-        if (preserve_top || positionVertical === 'top') {
-          positionTop = topMargin + 'px';
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionBottom = bottomMargin + 'px';
-          } else {
-            positionBottom = 'auto';
-          }
-        } else if (positionVertical === 'bottom') {
-          positionBottom = bottomMargin + 'px';
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionTop = topMargin + 'px';
-          } else {
-            positionTop= 'auto';
-          }
-        } else {
-          if (self.$wrapperInner.height() < self.$modal.height()) {
-            positionTop = topMargin + 'px';
-            positionBottom = bottomMargin + 'px';
-          } else {
-            positionTop = positionBottom = (self.$wrapperInner.height()/2 -
-                self.$modal.height()/2) + 'px';
-          }
-        }
-        self.$modal.css({
-          'top': positionTop,
-          'bottom': positionBottom
-        });
-
+        self.$modal.css('bottom', absBottom);
+        self.$modal.css('top', 'auto');
+      }
+      else {
+        // default case, no specified location, is to center
+        absTop = ((wrapperInnerHeight / 2) - (modalHeight / 2)) + 'px';
+        self.$modal.css('top', absTop);
       }
     },
     show: function() {
@@ -353,6 +526,10 @@ define([
           self._$modal = self.$modal;
           self.$modal();
         } else {
+          if (self.options.template) {
+            self.options.template.apply(self,
+                [self.$modal, self.options.templateOptions]);
+          }
           self.trigger('show');
           self.backdrop.show();
           self.$wrapper.show();
@@ -389,6 +566,13 @@ define([
         $(window.parent).off('resize.modal.patterns');
         self.trigger('hidden');
       }
+    },
+
+    prepareModal: function(selector, callback, modalOptions) {
+      $(selector).addClass('modal-trigger').modal(modalOptions);
+      $(document).on('show.modal.patterns', selector + '.modal-trigger', function(e, modal) {
+        callback(modal, callback);
+      });
     }
   });
 
