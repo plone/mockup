@@ -40,7 +40,8 @@ define([
   'js/patterns/pickadate',
   'js/patterns/autotoc',
   'js/patterns/accessibility',
-  'js/patterns/relateditems'
+  'js/patterns/relateditems',
+  'js/patterns/formUnloadAlert'
 ], function($, registry) {
   "use strict";
 
@@ -66,6 +67,15 @@ define([
         'data-pat-accessibility-normalbtn': "#accessibility-normalText",
         'data-pat-accessibility-largebtn': "#accessibility-largeText"
       });
+      
+      // apply formUnloadAlert pattern where enableUnloadProtection exists
+      var $match = $root.filter('.enableUnloadProtection');
+      $match = $match.add($root.find('.enableUnloadProtection'));
+      $match.addClass('pat-formunloadalert');
+      $match.attr({
+        'data-pat-formunloadalert-message': window.form_modified_message
+      });
+
     },
     scan: function(selector) {
       registry.scan($(selector));
