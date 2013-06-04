@@ -39,7 +39,6 @@ define([
 
   var Toggle = Base.extend({
     name: 'toggle',
-    jqueryPlugin: 'toggle',
     defaults: {
       attribute: 'class',
       event: 'click'
