@@ -5,6 +5,3 @@ before_install:
   - make bootstrap
 script:
   - xvfb-run -a make test-ci
-notifications:
-  irc:
-    - irc.freenode.org#sprint
