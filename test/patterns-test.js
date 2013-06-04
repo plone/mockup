@@ -563,7 +563,7 @@ define([
       // -- CHANGE POSITION ONLY ----------------------------------------------
       //
       it('position: center middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'middle', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -580,7 +580,7 @@ define([
         }).click();
       });
       it('position: left middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'middle', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -595,7 +595,7 @@ define([
         }).click();
       });
       it('position: right middle, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'middle', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -611,7 +611,7 @@ define([
         }).click();
       });
       it('position: center top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'top', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -626,7 +626,7 @@ define([
         }).click();
       });
       it('position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'bottom', 0, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -642,7 +642,7 @@ define([
         }).click();
       });
       it('position: left top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'top', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -655,7 +655,7 @@ define([
         }).click();
       });
       it('position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'bottom', 0, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -669,7 +669,7 @@ define([
         }).click();
       });
       it('position: right top, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'top', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -683,7 +683,7 @@ define([
         }).click();
       });
       it('position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'bottom', 0, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -702,7 +702,7 @@ define([
       // -- NON-ZERO MARGIN ---------------------------------------------------
       //
       it('position: center middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'middle', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -719,7 +719,7 @@ define([
         }).click();
       });
       it('position: left middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'middle', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -734,7 +734,7 @@ define([
         }).click();
       });
       it('position: right middle, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'middle', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -750,7 +750,7 @@ define([
         }).click();
       });
       it('position: center top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'top', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -765,7 +765,7 @@ define([
         }).click();
       });
       it('position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'bottom', 5, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -781,7 +781,7 @@ define([
         }).click();
       });
       it('position: left top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'top', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -794,7 +794,7 @@ define([
         }).click();
       });
       it('position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'bottom', 5, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -808,7 +808,7 @@ define([
         }).click();
       });
       it('position: right top, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'top', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -822,7 +822,7 @@ define([
         }).click();
       });
       it('position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'bottom', 5, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -841,7 +841,7 @@ define([
       // -- WRAPPER SMALLER THAN MODAL ----------------------------------------
       //
       it('position: center middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'middle', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -854,7 +854,7 @@ define([
         }).click();
       });
       it('position: left middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'middle', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -867,7 +867,7 @@ define([
         }).click();
       });
       it('position: right middle, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'middle', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -881,7 +881,7 @@ define([
         }).click();
       });
       it('position: center top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'top', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -894,7 +894,7 @@ define([
         }).click();
       });
       it('position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('center', 'bottom', 0, 450, 350, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -908,7 +908,7 @@ define([
         }).click();
       });
       it('position: left top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'top', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -921,7 +921,7 @@ define([
         }).click();
       });
       it('position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('left', 'bottom', 0, 450, 350, 400, 300);
           expect(pos).to.have.property('bottom');
@@ -935,7 +935,7 @@ define([
         }).click();
       });
       it('position: right top, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'top', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
@@ -949,7 +949,7 @@ define([
         }).click();
       });
       it('position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300', function() {
-        $('a', this.$el).modal().on('show.modal.patterns', function(e, modal) {
+        $('a', this.$el).patternModal().on('show.modal.patterns', function(e, modal) {
           var modal =  modal.$modal.data('patternModal');
           var pos = modal.findPosition('right', 'bottom', 0, 450, 350, 400, 300);
           expect(pos).to.have.property('bottom');
