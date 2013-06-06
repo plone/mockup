@@ -76,7 +76,7 @@
       <h3><a href="index.html">&larr; Back</a></h3>
 
 <!--
-============================================= 
+=============================================
   PATTERN: AUTOTOC
 =============================================
 -->
@@ -167,7 +167,7 @@
       </div>
 
 <!--
-============================================= 
+=============================================
   PATTERN: DATETIME
 =============================================
 -->
@@ -203,7 +203,7 @@
       </div>
 
 <!--
-============================================= 
+=============================================
   PATTERN: SELECT2
 =============================================
 -->
@@ -446,7 +446,7 @@
 &lt;/select&gt;</pre>
         </div>
 <!--
-============================================= 
+=============================================
   PATTERN: TAGGING
 =============================================
 -->
@@ -498,7 +498,7 @@
 
 
 <!--
-============================================= 
+=============================================
   PATTERN: EXPOSE
 =============================================
 -->
@@ -550,7 +550,7 @@
       </div>
 
 <!--
-============================================= 
+=============================================
   PATTERN: MODAL
 =============================================
 -->
@@ -981,7 +981,7 @@
         <div class="span6">
 
 <!--
-============================================= 
+=============================================
   PATTERN: PreventDoubleSubmit
 =============================================
 -->
@@ -998,12 +998,12 @@
               value="Single submit"
               />
             <input
-              class="btn btn-large btn-primary allowMultiSubmit" 
+              class="btn btn-large btn-primary allowMultiSubmit"
               type="submit"
               value="Multi submit"
               />
           </form>
-           <pre class="brush: html;toolbar: false;">     
+           <pre class="brush: html;toolbar: false;">
 &lt;form class="pat-preventdoublesubmit"&gt;
   &lt;input
     type="text"
@@ -1015,7 +1015,7 @@
     value="Single submit"
     /&gt;
   &lt;input
-    class="btn btn-large btn-primary allowMultiSubmit" 
+    class="btn btn-large btn-primary allowMultiSubmit"
     type="submit"
     value="Multi submit"
     /&gt;
@@ -1023,7 +1023,7 @@
         </div>
 
 <!--
-============================================= 
+=============================================
   PATTERN: PreventNoChangeSubmit
 =============================================
 -->
@@ -1048,7 +1048,7 @@
           <br />
           <a href="patterns.html">Click here to go somewhere else</a>
         </form>
-        <pre class="brush: html;toolbar: false;">     
+        <pre class="brush: html;toolbar: false;">
 &lt;form class="pat-formunloadalert" onsubmit="javascript:return false;"&gt;
   &lt;input
     type="text"
@@ -1072,8 +1072,8 @@
 
 
 <!--
-============================================= 
-  PATTERN: Accessibility 
+=============================================
+  PATTERN: Accessibility
 =============================================
 -->
     <h1 id="accessibility">Accessibility</h1>
@@ -1116,7 +1116,7 @@
 
 
 <!--
-============================================= 
+=============================================
   PATTERN: Related Items
 =============================================
 -->
@@ -1132,8 +1132,8 @@
 
 
 <!--
-============================================= 
-  PATTERN: CookieDirective 
+=============================================
+  PATTERN: CookieDirective
 =============================================
 -->
 
@@ -1151,25 +1151,25 @@
             &lt;/div&gt;
           &lt;/div&gt;
         </pre>
-        
+
           <p>The cookie accepting the use of cookies is <strong id="cookievalue">undefined</strong></p>
           <a class="btn" id="removedemocookie">Remove Cookie & Refresh page</a>
-          
+
       </div>
     </div>
 
 
 
 <!--
-============================================= 
+=============================================
   PATTERN: tablesorter
 =============================================
--->    
+-->
 
       <h1 id="tablesorter">Tablesorter</h1>
       <h3>Click the table headers to rearrange the items</h3>
       <div class="row">
-        <div class="span6">          
+        <div class="span6">
           <table class="pat-tablesorter">
             <thead>
               <tr>
@@ -1198,7 +1198,7 @@
           </table>
           </div>
         </div>
-        
+
         <pre class="brush: html;toolbar:false;">
 &lt;table class=&quot;pat-tablesorter&quot;&gt;
   &lt;thead&gt;
@@ -1228,13 +1228,13 @@
 &lt;/table&gt;
         </pre>
 <!--
-============================================= 
+=============================================
   ADD MORE PATTERNS BELOW THIS COMMENT...
 =============================================
--->    
+-->
 
 <!--
-============================================= 
+=============================================
   PATTERN: Tooltip
 =============================================
 -->
@@ -1256,7 +1256,7 @@
         <a class="pat-tooltip" href="#my-demo-tip">Info on plone...</a>
         <div id="my-demo-tip" class="tooltips">
             <h4>Plone.org</h4>
-            <img src="https://plone.org/logo@2x.png" />
+            <!-- <img src="https://plone.org/logo@2x.png" /> -->
             <br />
             <p>
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
@@ -1264,6 +1264,66 @@
         </div>
     </pre>
 
+<!--
+=============================================
+  PATTERN: Picture
+=============================================
+-->
+    <h1 id="picture">Picture</h1>
+    <div class="row">
+      <div class="span12">
+        <div class="alert alert-info">
+          <u><strong>Responsive images pattern</strong></u>
+          <p>This pattern load the last image that fulfill the media-query criteria.
+            When multiple pictures are displayed it loads the images within the
+            visible viewport first. Will update images on <abbr>resize</abbr> event.</p>
+          <p></p>
+          <u><strong>Data Attributes</strong></u>
+          <p>Below are some notes about some of the available data attributes.</p>
+          <dl>
+            <dt>data-pat-picture-alt</dt>
+            <dd>Alternative text used on img tag</dd>
+            <dt>data-pat-picture-klass-loading</dt>
+            <dd>CSS class added to element while loading the image</dd>
+            <dt>data-pat-picture-klass-error</dt>
+            <dd>CSS class added to element if error occured while loading the image</dd>
+            <dt>data-pat-picture-attribute-src</dt>
+            <dd>Which attribute to fetch image source information from, defaults to <strong>data-src</strong></dd>
+            <dt>data-pat-picture-attribute-media</dt>
+            <dd>Which attribute to fetch image mediaquery information from, defaults to <strong>data-media</strong></dd>
+
+          </dl>
+        </div>
+        <div class="pat-picture" data-pat-picture-alt="Alternative text">
+          <div data-src="http://placehold.it/480x320"></div>
+          <div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"></div>
+          <div data-src="http://placehold.it/800x533" data-media="(min-width: 640px)"></div>
+          <div data-src="http://placehold.it/960x640" data-media="(min-width: 800px)"></div>
+          <div data-src="http://placehold.it/1200x800" data-media="(min-width: 960px)"></div>
+          <!--[if (lt IE 9) & (!IEMobile)]>
+            <div data-src="http://placehold.it/800x533"></div>
+          <![endif]-->
+          <noscript>
+              <img src="http://placehold.it/800x533" alt="Alternative text" />
+            </noscript>
+          </div>
+        </div>
+    </div>
+    <pre class="brush: html; toolbar:false;">
+      &lt;div class="pat-picture" data-pat-picture-alt="Alternative text"&gt;
+       &lt;div data-src="http://placehold.it/480x320"&gt;&lt;/div&gt;
+       &lt;div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"&gt;&lt;/div&gt;
+       &lt;div data-src="http://placehold.it/800x533" data-media="(min-width: 640px)"&gt;&lt;/div&gt;
+       &lt;div data-src="http://placehold.it/960x640" data-media="(min-width: 800px)"&gt;&lt;/div&gt;
+       &lt;div data-src="http://placehold.it/1200x800" data-media="(min-width: 960px)"&gt;&lt;/div&gt;
+       &lt;!--[if (lt IE 9) & (!IEMobile)]&gt;
+         &lt;div data-src="http://placehold.it/800x533"&gt;&lt;/div&gt;
+       &lt;![endif]--&gt;
+       &lt;noscript&gt;
+         &lt;img src="http://placehold.it/800x533" alt="Alternative text" /&gt;
+       &lt;/noscript&gt;
+      &lt;/div&gt;
+    </pre>
 
 
 
