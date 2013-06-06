@@ -2,7 +2,7 @@
 // Contact: rok@garbas.si
 // Version: 1.0
 // Description:
-// 
+//
 // License:
 //
 // Copyright (C) 2010 Plone Foundation
@@ -24,7 +24,7 @@
 /*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
+/*global define:false, window:false */
 
 if (window.jQuery) {
   define( "jquery", [], function () {
@@ -42,7 +42,8 @@ define([
   'js/patterns/accessibility',
   'js/patterns/relateditems',
   'js/patterns/formUnloadAlert',
-  'js/patterns/toggle'
+  'js/patterns/toggle',
+  'js/patterns/picture',
 ], function($, registry) {
   "use strict";
 
@@ -68,7 +69,7 @@ define([
         'data-pat-accessibility-normalbtn': "#accessibility-normalText",
         'data-pat-accessibility-largebtn': "#accessibility-largeText"
       });
-      
+
       // apply formUnloadAlert pattern where enableUnloadProtection exists
       var $match = $root.filter('.enableUnloadProtection');
       $match = $match.add($root.find('.enableUnloadProtection'));
@@ -76,7 +77,7 @@ define([
       $match.attr({
         'data-pat-formunloadalert-message': window.form_modified_message
       });
-      
+
       // apply formUnloadAlert pattern where enableUnloadProtection exists
       var $match = $root.filter('dl.actionMenu dt.actionMenuHeader a');
       $match = $match.add($root.find('dl.actionMenu dt.actionMenuHeader a'));
@@ -86,11 +87,11 @@ define([
         'data-pat-toggle-value': 'activated'
       });
       $root.find('dl.actionMenu').removeClass('deactivated');
-      
+
       $root.on('mousedown', function(e) {
           $('dl.actionMenu').removeClass('activated');
       });
-      
+
 
     },
     scan: function(selector) {
