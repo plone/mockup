@@ -1122,8 +1122,33 @@
   PATTERN: Related Items
 =============================================
 -->
-    <h1 id="relateditems">RelatedItems</h1>
-
+    <h1 id="relateditems">Related Items</h1>
+    <div class="row"><div class="span12">
+        <div class="alert alert-info">
+            <p>
+                The <em>Related Items</em> widget is intended to make it easy for a
+                user editing content to locate content that is related to the current
+                piece of content.
+            </p>
+            <p>
+                To this end, the widget has two "modes" -- the first is when a user
+                is entering text that they'd like to match against content in
+                their website, and the second is when a user is point-and-click
+                browsing through the hierarchy of their website.
+            </p>
+            <p>
+                The widget makes use of the <a href='#select2'>Select2</a> by customizing
+                it's interface for this specific purpose.
+            </p>
+            <p>
+                A request to a service that returns a JSON file is used to gather
+                information by the Select2 widget. The service understands a few
+                parameters that get past to it in order to return the relevant
+                set of data based on the query and location within the query results
+                the desired data resides.
+            </p>
+        </div>
+    </div></div>
     <div class="row">
       <div class="span8">
           <input type="text" class="pat-relateditems"
@@ -1240,7 +1265,7 @@
   PATTERN: Tooltip
 =============================================
 -->
-    <h1 id="relateditems">Tooltip</h1>
+    <h1 id="tooltip">Tooltip</h1>
     <div class="row">
         <div class="span1">
             <a class="pat-tooltip" href="#my-demo-tip">Plone.org</a>
