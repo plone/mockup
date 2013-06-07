@@ -521,6 +521,7 @@
       <h1 id="livesearch">Live Search</h1>
       <div class="row">
         <div class="span6">
+          <h2>Default</h2>
           <div class="pat-livesearch"
               data-pat-livesearch-url="/search.html">
             <input type="text" class="pat-livesearch-input" placeholder="Search" />
@@ -530,7 +531,101 @@
               </div>
             </div>
           </div>
+          <pre class="brush: html;toolbar: false;">
+&lt;div class="pat-livesearch"
+  data-pat-livesearch-url="/search.html"&gt;
+  &lt;input type="text" class="pat-livesearch-input"
+    placeholder="Search" /&gt;
+  &lt;div class="pat-livesearch-container"&gt;
+    &lt;div class="pat-livesearch-results"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
         </div>
+      </div>
+      <div>
+        <h4>Data Attributes</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                Attribute
+              </th>
+              <th>
+                Default
+              </th>
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>data-pat-livesearch-url</td>
+              <td></td>
+              <td>The url that will be of the server side page that will be queried.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-delay</td>
+              <td>400</td>
+              <td>Delay in ms after user types before searching.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-param</td>
+              <td>SearchableText</td>
+              <td>The query string parameter which will be set with the value of the input.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-highlight</td>
+              <td>pat-livesearch-highlight</td>
+              <td>CSS class that will be used to highlight items on keyboard navigation.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-chars</td>
+              <td>3</td>
+              <td>Number of characters user must type before search begins.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-input</td>
+              <td>.pat-livesearch-input</td>
+              <td>Selector for element that will be used for the livesearch input.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-toggle-target</td>
+              <td>.pat-livesearch-container</td>
+              <td>Selector for element that will be shown when results are found.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-toggle-klass</td>
+              <td>show</td>
+              <td>CSS class that will be added to target toggle element when results are found.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-results-target</td>
+              <td>.pat-livesearch-results</td>
+              <td>Selector for element where results from the server will be inserted.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-results-content</td>
+              <td></td>
+              <td>
+                Selector for element inside in the HTML from the server which contains the results.
+              </td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-results-item</td>
+              <td>li</td>
+              <td>Selector to match items that will match individual results within the response 
+                from the server.</td>
+            </tr>
+            <tr>
+              <td>data-pat-livesearch-results-link</td>
+              <td>a</td>
+              <td>Selector for element within an <strong>item</strong> that will be "clicked" when
+                the enter key is used during keyboard navigation.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
 <!--
