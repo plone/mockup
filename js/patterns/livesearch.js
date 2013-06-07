@@ -42,7 +42,7 @@ define([
     timeout: null,
     $results: null,
     $input: null,
-    toggle: null,
+    $toggle: null,
     cache: {},
     defaults: {
       delay: 400, // ms after keyup before search
@@ -51,8 +51,7 @@ define([
       chars: 3, // number of chars user should type before searching
       toggle: {
         target: '.pat-livesearch-container', // the element to show/hide when performing search
-        value: 'show',
-        event: 'foo'
+        klass: 'show'
       },
       results: {
         target: '.pat-livesearch-results', // the element to fill with results
@@ -79,11 +78,15 @@ define([
         $.error('Input element not found ' + self.$el);
       }
 
-      if (self.options.toggle) {
-        $toggle = $(self.options.toggle.target);
-        if ($toggle.length > 0) {
-          self.toggle = new Toggle(self.$input, self.options.toggle);
-          self.toggle.remove();
+      if (self.options.toggle.target) {
+        self.$toggle = $(self.options.toggle.target, self.$el);
+        if (self.$toggle.length) {
+          self.$toggle.on('click.livesearch.patterns', function(event) {
+            event.stopPropagation();
+          });
+          $('html').on('click.livesearch.patterns', function() {
+            self.hide();
+          });
         }
       }
 
@@ -129,14 +132,14 @@ define([
     },
 
     show: function() {
-      if (this.toggle) {
-        this.toggle.add();
+      if (this.$toggle) {
+        this.$toggle.addClass(this.options.toggle.klass);
       }
     },
 
     hide: function() {
-      if (this.toggle) {
-        this.toggle.remove();
+      if (this.$toggle) {
+        this.$toggle.removeClass(this.options.toggle.klass);
       }
     },
 
