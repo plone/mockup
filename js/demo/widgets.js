@@ -36,10 +36,6 @@ require([
   $('#modal1').on('show.modal.patterns', function(e, modal) {
     $('.autotoc-nav', modal.$modal).remove();
   });
-  var fakeItems = ['one', 'two', 'three', 'four', 'five', 'six', 'seven',
-                   'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen',
-                   'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
-                   'nineteen', 'twenty', 'twentyone'];
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;
@@ -54,34 +50,75 @@ require([
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
   });
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
-    var data = [];
-    var page = 0;
-    var reqpage = getQueryVariable(xhr.url, 'page');
-    if(reqpage === "2"){
-      page = 1;
-    }else if(reqpage === "3"){
-      page = 2;
+    var fakeItems = ['one', 'two', 'three', 'four', 'five', 'six', 'seven',
+                     'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen',
+                     'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
+                     'nineteen', 'twenty', 'twentyone'];
+    var directoryToSearch = {
+      'one': {
+        'one.one': {'one.one.itemone': 'One', 'one.one.itemtwo': 'Two'},
+        'one.two': {'one.two.itemone': 'One', 'one.two.itemtwo': 'Two'}
+      },
+      'two': {'two.itemone': 'One'},
+      'three': 'Three',
+      'five': 'Five',
+      'six': 'Six',
+      'seven': 'Seven',
+      'eight': 'Eight',
+      'nine': 'Nine',
+      'ten': 'Ten',
+      'eleven': 'Eleven',
+      'twelve': 'Twelve',
+      'thirteen': 'Thirteen',
+      'fourteen': 'Fourteen',
+      'fifteen': 'Fifteen',
+      'sixteen': 'Sixteen',
+      'seventeen': 'Seventeen',
+      'eighteen': 'Eighteen',
+      'nineteen': 'Nineteen',
+      'twenty': 'Twenty',
+      'twentyone': 'Twenty One'
+    };
+    var results = [];
+
+    // grab the page number and number of items per page -- note, page is 1-based from Select2
+    var page = Number(getQueryVariable(xhr.url, 'page')) - 1;
+    var page_size = Number(getQueryVariable(xhr.url, 'page_limit'));
+
+    // just return an empty result set if no page is found
+    if(page < 0) {
+      xhr.respond(200, {"Content-Type": "application/json"}, JSON.stringify({"total": 0, "results": []}));
+      return;
     }
-    var base = getQueryVariable(xhr.url, 'base_path');
-    if(base === null || base === "/"){
-      base = "";
-    }
-    for(var i=page * 10; i<(page + 1) * 10; i++){
-      var number = fakeItems[i];
-      if(number === undefined){
-        continue;
+
+    var query = getQueryVariable(xhr.url, 'q');
+    var results = [];
+    // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
+    function search(idprefix, pathprefix, sobj) {
+      var cnt = 0;
+      for(var key in sobj) {
+        if(key.toLowerCase().indexOf(query.toLowerCase()) >= 0 || (typeof sobj[key] === "string" && sobj[key].toLowerCase().indexOf(query.toLowerCase()) >= 0)) {
+          results.push({
+            'id': idprefix+''+cnt,
+            'title': typeof sobj[key] === "string" ? sobj[key] : key,
+            'path': pathprefix + '/' + key,
+            'folder': typeof sobj[key] !== "string"
+          });
+        }
+        if(typeof sobj[key] !== "string") {
+          search(idprefix+''+cnt,
+                              pathprefix+'/'+key,
+                              sobj[key]);
+        }
       }
-      data.push({
-        "id": number,
-        "title": number.charAt(0).toUpperCase() + number.slice(1),
-        "path": base + "/" + number,
-        "folder": true
-      });
     }
+
+    search('', '', directoryToSearch);
+
     xhr.respond(200, { "Content-Type": "application/json" },
       JSON.stringify({
-        "total": fakeItems.length,
-        "results": data
+        "total": results.length,
+        "results": results.slice(page*page_size, (page*page_size)+(page_size-1))
     }));
   });
 

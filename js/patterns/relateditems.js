@@ -72,18 +72,21 @@ define([
       Select2.prototype.initializeTags.call(self);
 
       self.options.formatResult = function(item){
-        var el = $('<div />');
-        if(item.folder){
-          var folder = $('<a href="#" class="folder"></a>');
-          folder.click(function(e){
-            e.preventDefault();
-            // XXX need to get this before the item is added...
-          });
-          el.append(folder);
-        }
-        el.append($('<span>' + item.title + '</span><span class="path">(' +
-            item.path + ")</span>"));
-        return el;
+        var $resultel = $(  '<div>'
+                    +   '<div class="folder">'
+                    +     '<a href="#">' + item.title + '</a>'
+                    +     '<span class="add"><a href="#">add</a></span>'
+                    +   '</div>'
+                    +   '<div class="folderpath">'
+                    +     item.path
+                    +   '</div>'
+                    + '</div>');
+
+        self.$el.on('selecting', function(evt) {
+          evt.preventDefault();
+        });
+
+        return $resultel;
       };
       self.options.formatSelection = function(item){
         return '<span title="' + item.path + '">' + item.title + '</span>';
@@ -99,10 +102,11 @@ define([
           url: self.options.url,
           dataType: 'JSON',
           quietMillis: 100,
-          data: function (term, page) { // page is the one-based page number tracked by Select2
+          data: function(term, page) { // page is the one-based page number tracked by Select2
             var opts = {
               q: term,
-              page: page
+              page: page,
+              page_limit: 10 // page size
             };
             if(self.browsing){
               opts.base_path = self.options.base_path;
@@ -115,7 +119,8 @@ define([
             return {results: data.results, more: more};
           }
         };
-      }else{
+      }
+      else {
         self.options.tags = [];
       }
 
@@ -146,5 +151,6 @@ define([
   });
 
   return RelatedItems;
+
 });
 
