@@ -38,7 +38,6 @@ define([
   var TinyMCE = Base.extend({
     name: 'tinymce',
     init: function() {
-      debugger;
       var self = this;
       self.$el.tinymce(self.options);
     }
