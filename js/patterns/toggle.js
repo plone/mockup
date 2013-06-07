@@ -47,8 +47,14 @@ define([
       var self = this;
 
       if (!self.options.target) {
-        self.$target = self.$el;
-      } else {
+        if (self.options.globaltarget) {
+          self.$target = $(self.options.globaltarget);
+        }
+        else{
+          self.$target = self.$el;
+        }
+      }
+      else {
         self.$target = self.$el.closest(self.options.target);
         if (self.$target.size() === 0) {
           self.$target = self.closest(self.$el, self.options.target);
@@ -58,7 +64,7 @@ define([
       if (!self.$target) {
         $.error('No target found for "' + self.options.target + '".');
       }
-
+      
       self.on(self.options.event, function(e) {
         self.toggle();
 
