@@ -60,11 +60,14 @@ define([
       }
 
       self.on(self.options.event, function(e) {
-        e.stopPropagation();
-        if ($(e.target).is('a') || $(e.target).parents('a').size() !== 0) {
-          e.preventDefault();
-        }
         self.toggle();
+
+        e.stopPropagation();
+
+        return false;
+      });
+      $('html').on(self.options.event, function () {
+        self.remove();
       });
     },
     closest: function($el, selector) {

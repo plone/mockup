@@ -39,8 +39,7 @@ define([
     name: 'tinymce',
     init: function() {
       var self = this;
-      self.$el.tinymce({});
-      //tinymce.init({ selector: 'textarea' });
+      self.$el.tinymce(self.options);
     }
   });
 

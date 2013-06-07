@@ -44,7 +44,7 @@ define([
   'js/patterns/formUnloadAlert',
   'js/patterns/toggle',
   'js/patterns/tinymce',
-  'js/patterns/picture',
+  'js/patterns/picture'
 ], function($, registry) {
   "use strict";
 
@@ -90,10 +90,16 @@ define([
       $root.find('dl.actionMenu').removeClass('deactivated');
 
       $root.on('mousedown', function(e) {
+        if ($(e.toElement).parents('dd.actionMenuContent').size() == 0){
+          // If we are not clicking inside a content menu, then remove the
+          // attribute from all other elements
           $('dl.actionMenu').removeClass('activated');
+        }
       });
 
 
+      // add tinymce pattern
+      $root.find('.mce_editable').addClass('pat-tinymce');
     },
     scan: function(selector) {
       registry.scan($(selector));

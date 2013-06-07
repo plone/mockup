@@ -20,7 +20,6 @@
   <script src="jam/jquery/dist/jquery.js"></script>
   <script src="jam/require.js"></script>
   <script src="js/demo/widgets.js"></script>
-  <script src="js/demo/tinymce.js"></script>
   <script type="text/x-ajax-respond" id="something-html">
     <html>
     <head></head>
@@ -37,6 +36,22 @@
     not me encouraging you to go here and write a review. No. So, what do you
     say? We got a basket full of father-son fun here. What\'s Kama Sutra oil?
     Maybe it's not for us.</p>
+    </body>
+    </html>
+  </script>
+  <script type="text/x-ajax-respond" id="search-html">
+    <html>
+    <body>
+      <ul>
+        <li>
+          <a href="http://localhost:8080/plone/front-page">Welcome to Plone</a>
+          <p>Congratulations! You have successfully installed Plone.</p>
+        </li>
+        <li>
+          <a href="http://localhost:8080/plone/front-page">Example Item</a>
+          <p>This is an example item from the depths of somewhere.</p>
+        </li>
+      </ul>
     </body>
     </html>
   </script>
@@ -179,27 +194,27 @@
       <div class="row">
         <div class="span6">
           <h3>DateTime with Calendar</h3>
-          <input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy@HH:MM" />
+          <input class="pat-pickadate" data-pat-pickadate-format="d-mmmm-yyyy@HH:MM" />
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy@HH:MM" /&gt;</pre>
+&lt;input class="pat-pickadate" data-pat-pickadate-format="d-mmmm-yyyy@HH:MM" /&gt;</pre>
         </div>
         <div class="span6">
           <h3>Datetime witouth Calendar</h3>
-          <input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy HH:MM" />
+          <input class="pat-pickadate" data-pat-pickadate-format="d-mmmm-yyyy HH:MM" />
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-datetime" data-pat-datetime-format="d-mmmm-yyyy HH:MM" /&gt;</pre>
+&lt;input class="pat-pickadate" data-pat-pickadate-format="d-mmmm-yyyy HH:MM" /&gt;</pre>
         </div>
       </div>
       <div class="row">
         <div class="span6">
           <h3>Date only, US. format</h3>
-          <input class="pat-datetime"
-            data-pat-datetime-format="mmmm/dd/yyyy"
-            data-pat-datetime-ampm="false" />
+          <input class="pat-pickadate"
+            data-pat-pickadate-format="mmmm/dd/yyyy"
+            data-pat-pickadate-ampm="false" />
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-datetime"
-  data-pat-datetime-format="mmmm/dd/yyyy"
-  data-pat-datetime-ampm="false"
+&lt;input class="pat-pickadate"
+  data-pat-pickadate-format="mmmm/dd/yyyy"
+  data-pat-pickadate-ampm="false"
   /&gt;</pre>
         </div>
       </div>
@@ -498,6 +513,25 @@
 
       </div>
 
+<!--
+============================================= 
+  PATTERN: LIVESEARCH
+=============================================
+-->
+      <h1 id="livesearch">Live Search</h1>
+      <div class="row">
+        <div class="span6">
+          <div class="pat-livesearch"
+              data-pat-livesearch-url="/search.html">
+            <input type="text" class="pat-livesearch-input" placeholder="Search" />
+            <div class="pat-livesearch-container">
+              <div class="pat-livesearch-results">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
 <!--
 =============================================
@@ -1358,12 +1392,24 @@ Tiny MCE
 
 -->
 
-    <h1>Tiny MCE</h1>
+    <h1 id="tinymce">Tiny MCE</h1>
     <div class="row">
-      <div class="span6">
+      <div class="span12">
+        Simple example
         <form>
           <textarea class="pat-tinymce"></textarea>
         </form>
+        <pre class="brush: html; toolbar:false;">
+ &lt;textarea class=&quot;pat-tinymce&quot;&gt;&lt;/textarea&gt;<br/>
+        </pre>
+        Example with options
+        <form>
+          <textarea class="pat-tinymce" data-pat-tinymce-height="500"></textarea>
+        </form>
+        <pre class="brush: html; toolbar:false;">
+&lt;textarea class=&quot;pat-tinymce&quot; data-pat-tinymce-height=&quot;500&quot;&gt;&lt;/textarea&gt;
+        </pre>
+
       </div>
     </div>
 
