@@ -44,7 +44,7 @@ define([
   'js/patterns/formUnloadAlert',
   'js/patterns/toggle',
   'js/patterns/tinymce',
-  'js/patterns/picture',
+  'js/patterns/picture'
 ], function($, registry) {
   "use strict";
 
@@ -94,6 +94,8 @@ define([
       });
 
 
+      // add tinymce pattern
+      $root.find('.mce_editable').addClass('pat-tinymce');
     },
     scan: function(selector) {
       registry.scan($(selector));
