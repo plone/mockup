@@ -30,14 +30,17 @@
 
 define([
   'jquery',
-  'js/patterns/base'
+  'js/patterns/base',
+  'jam/tinymce/tinymce.min'
 ], function($, Base) {
   "use strict";
 
   var TinyMCE = Base.extend({
     name: 'tinymce',
     init: function() {
-      window.initTinyMCE(this.$el.parent());
+      debugger;
+      var self = this;
+      self.$el.tinymce();
     }
   });
 

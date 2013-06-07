@@ -42,7 +42,8 @@ define([
   'js/patterns/accessibility',
   'js/patterns/relateditems',
   'js/patterns/formUnloadAlert',
-  'js/patterns/toggle'
+  'js/patterns/toggle',
+  'js/patterns/tinymce'
 ], function($, registry) {
   "use strict";
 
