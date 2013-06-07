@@ -583,13 +583,6 @@ define([
         $(window.parent).off('resize.modal.patterns');
         self.trigger('hidden');
       }
-    },
-
-    prepareModal: function(selector, callback, modalOptions) {
-      $(selector).addClass('modal-trigger').modal(modalOptions);
-      $(document).on('show.modal.patterns', selector + '.modal-trigger', function(e, modal) {
-        callback(modal, callback);
-      });
     }
   });
 
