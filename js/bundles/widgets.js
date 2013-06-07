@@ -90,7 +90,11 @@ define([
       $root.find('dl.actionMenu').removeClass('deactivated');
 
       $root.on('mousedown', function(e) {
+        if ($(e.toElement).parents('dd.actionMenuContent').size() == 0){
+          // If we are not clicking inside a content menu, then remove the
+          // attribute from all other elements
           $('dl.actionMenu').removeClass('activated');
+        }
       });
 
 
