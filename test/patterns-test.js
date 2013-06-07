@@ -1127,6 +1127,29 @@ define([
       $('div a', this.$el).trigger("click");
       expect($('.toggled', this.$el).size()).to.equal(1);
     });
+    it("toggle multiple targets", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle"' +
+        '          data-pat-toggle-globaltarget=".target"' +
+        '          data-pat-toggle-value="toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target"></div>' +
+        '    </div>' +
+        '    <div class="target"></div>' +
+        '    <div class="target"></div>' +
+        '  </div>' +
+        '  <div class="target"></div>' +
+        '  <div class="target"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(5);
+      $el.remove();
+    });
   });
 
   /* ==========================
