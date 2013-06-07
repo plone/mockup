@@ -1,0 +1,55 @@
+.pat-livesearch {
+  position: relative;
+}
+.pat-livesearch-container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: @zindexDropdown;
+  display: none; // none by default, but block on "open" of the menu
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0; // override default ul
+  list-style: none;
+  background-color: @dropdownBackground;
+  border: 1px solid #ccc; // Fallback for IE7-8
+  border: 1px solid @dropdownBorder;
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  .border-radius(6px);
+  .box-shadow(0 5px 10px rgba(0,0,0,.2));
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+
+  // Aligns the dropdown menu to right
+  &.pull-right {
+    right: 0;
+    left: auto;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+
+    li {
+      padding: 5px;
+      .border-radius(3px);
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
+.pat-livesearch-container.show {
+  display: block;
+}
+.pat-livesearch-results {
+  padding: 0 10px;
+}
+.pat-livesearch-highlight {
+  background-color: #f8f8f8;
+}

@@ -26,6 +26,7 @@ require([
   'js/patterns/formUnloadAlert',
   'js/patterns/tooltip',
   'js/patterns/tablesorter',
+  'js/patterns/livesearch',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
   'jam/SyntaxHighlighter/scripts/shBrushXml.js',
@@ -45,6 +46,9 @@ require([
   server.autoRespondAfter = 500;
   server.respondWith(/something.html/, function (xhr, id) {
     xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
+  });
+  server.respondWith(/search.html/, function (xhr, id) {
+    xhr.respond(200, { "Content-Type": "html/html" }, $('#search-html').html());
   });
   server.respondWith(/select2-test.json/, function(xhr, id) {
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
