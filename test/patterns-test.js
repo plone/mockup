@@ -48,6 +48,7 @@ define([
   'js/patterns/accessibility',
   'js/patterns/cookiedirective',
   'js/patterns/relateditems',
+  'js/patterns/tinymce',
   'js/patterns/tablesorter',
   'jam/jquery-cookie/jquery.cookie',
 ], function(chai, $, registry,
@@ -55,7 +56,7 @@ define([
       PickADate, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
       FormUnloadAlert, Accessibility, CookieDirective,
-      RelatedItems) {
+      RelatedItems, TinyMCE) {
   "use strict";
 
   var expect = chai.expect,
@@ -1233,5 +1234,24 @@ define([
       $(this.$el).trigger('submit');
     });
   });
+
+
+  /* ==========================
+   TEST: TinyMCE
+  ========================== */
+
+  describe("TinyMCE", function() {
+    beforeEach(function() {
+      this.$el = $('<div><textarea class="pat-tinymce"></textarea></div>');
+    });
+    afterEach(function() {
+    });
+    it('test tinymce loaded', function() {
+      registry.scan(this.$el);
+
+      expect(this.$el.parent().find('.mce-tinymce').length).to.equal(1);
+    });
+  });
+
 
 });
