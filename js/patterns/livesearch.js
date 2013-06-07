@@ -184,7 +184,6 @@ define([
     _keyEnter: function() {
       var self = this;
       var hl = self.options.highlight;
-      debugger;
       self.$results.find('.'+hl)
         .find(self.options.results.link)
         .trigger('click');
