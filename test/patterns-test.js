@@ -1087,7 +1087,9 @@ define([
         ' <a class="pat-toggle"' +
         '    data-pat-toggle-target="#target"' +
         '    data-pat-toggle-value="toggled">Button</a>' +
-        ' <div id="target"></div>' +
+        ' <div id="target">' +
+        '   <a href="patterns.html">Click here to go somewhere else</a>' +
+        ' </div>' +
         '</div>');
     });
     it("by default toggles on click event", function() {
@@ -1096,6 +1098,8 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(0);
       $('.pat-toggle', this.$el).trigger('click');
       expect($('.toggled', this.$el).size()).to.equal(1);
+      $('.pat-toggle', this.$el).trigger('click');
+      expect($('.toggled', this.$el).size()).to.equal(0);
     });
     it("can also listen to custom event", function() {
       $('.pat-toggle', this.$el).attr('data-pat-toggle-event', 'customEvent');
@@ -1115,6 +1119,13 @@ define([
       $('.pat-toggle', this.$el).trigger('click');
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
+    });
+    it("if the toggle was for a menu, do not close it when clicking on internal links", function() {
+      registry.scan(this.$el);
+      $('.pat-toggle', this.$el).trigger('click');
+      expect($('.toggled', this.$el).size()).to.equal(1);
+      $('div a', this.$el).trigger("click");
+      expect($('.toggled', this.$el).size()).to.equal(1);
     });
   });
 
