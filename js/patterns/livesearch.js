@@ -43,6 +43,7 @@ define([
     $results: null,
     $input: null,
     $toggle: null,
+    $selected: null,
     cache: {},
     defaults: {
       delay: 400, // ms after keyup before search
@@ -64,15 +65,14 @@ define([
 
     init: function() {
       var self = this;
-      var $toggle, $results;
 
-      this.$results = $(self.options.results.target);
+      this.$results = $(self.options.results.target, self.$el);
 
       if (!self.options.url) {
         $.error('No url provided for livesearch results ' + self.$el);
       }
 
-      self.$input = $(self.options.input);
+      self.$input = $(self.options.input, self.$el);
 
       if (self.$input.length < 1) {
         $.error('Input element not found ' + self.$el);
@@ -124,7 +124,7 @@ define([
         if (self.options.results.content !== null) {
           content = $(data).find(self.options.results.content);
         }
-        $(content).find(self.options.results.item)
+        $(content).find(self.options.results.item);
         self.$results.html(content);
         self.show();
         window.clearInterval(self.timeout);
@@ -143,41 +143,45 @@ define([
       }
     },
 
+    items: function() {
+      return this.$results.find(this.options.results.item);
+    },
+
     _keyUp: function() {
       var self = this;
       var hl = self.options.highlight;
-      var $selected = self.$results.find('.'+hl);
-      if ($selected.length < 1) {
-        $selected = self.$results.find(self.options.results.item).last();
-        $selected.addClass(hl);
+      self.$selected = self.$results.find('.'+hl);
+      if (self.$selected.length < 1) {
+        self.$selected = self.items().last();
+        self.$selected.addClass(hl);
         return;
       } else {
-        $selected.removeClass(hl);
-        if ($selected.prev().length) {
-          $selected = $selected.prev();
+        self.$selected.removeClass(hl);
+        if (self.$selected.prev().length) {
+          self.$selected = self.$selected.prev();
         } else {
-          $selected = self.$results.find(self.options.results.item).last();
+          self.$selected = self.items().last();
         }
-        $selected.addClass(hl);
+        self.$selected.addClass(hl);
       }
     },
 
     _keyDown: function() {
       var self = this;
       var hl = self.options.highlight;
-      var $selected = self.$results.find('.'+hl);
-      if ($selected.length < 1) {
-        $selected = self.$results.find(self.options.results.item).first();
-        $selected.addClass(hl);
+      self.$selected = self.$results.find('.'+hl);
+      if (self.$selected.length < 1) {
+        self.$selected = self.items().first();
+        self.$selected.addClass(hl);
         return;
       } else {
-        $selected.removeClass(hl);
-        if ($selected.next().length) {
-          $selected = $selected.next();  
+        self.$selected.removeClass(hl);
+        if (self.$selected.next().length) {
+          self.$selected = self.$selected.next();
         } else {
-          $selected = self.$results.find(self.options.results.item).first();
+          self.$selected = self.items().first();
         }
-        $selected.addClass(hl);
+        self.$selected.addClass(hl);
       }
     },
 

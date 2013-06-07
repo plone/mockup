@@ -34,6 +34,7 @@
 define([
   'jam/chai/chai.js',
   'jquery',
+  'sinon',
   'jam/Patterns/src/registry',
   'js/patterns/base',
   'js/patterns/autotoc',
@@ -50,13 +51,14 @@ define([
   'js/patterns/relateditems',
   'js/patterns/tinymce',
   'js/patterns/tablesorter',
-  'jam/jquery-cookie/jquery.cookie',
-], function(chai, $, registry,
+  'js/patterns/livesearch',
+  'jam/jquery-cookie/jquery.cookie'
+], function(chai, $, sinon, registry,
       Base, AutoTOC, Backdrop,
       PickADate, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
       FormUnloadAlert, Accessibility, CookieDirective,
-      RelatedItems, TinyMCE) {
+      RelatedItems, TinyMCE, Tablesorter, Livesearch) {
   "use strict";
 
   var expect = chai.expect,
@@ -1246,6 +1248,118 @@ define([
     });
   });
 
+  /* ==========================
+   TEST: Livesearch
+  ========================== */
+
+  describe('Livesearch', function() {
+    beforeEach(function() {
+      this.$el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch-url="/search.html">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>');
+
+      var search = '' +
+        '<html>' +
+        '<body>'+
+        ' <ul>'+
+        '   <li>'+
+        '     <a href="http://localhost:8080/plone/front-page">Welcome to Plone</a>'+
+        '     <p>Congratulations! You have successfully installed Plone.</p>'+
+        '   </li>'+
+        '   <li>'+
+        '     <a href="http://localhost:8080/plone/front-page">Example Item</a>'+
+        '     <p>This is an example item from the depths of somewhere.</p>'+
+        '   </li>'+
+        ' </ul>'+
+        '</body>'+
+        '</html>';
+
+      var server = sinon.fakeServer.create();
+      server.autoRespond = true;
+      server.autoRespondAfter = 500;
+      server.respondWith(/search.html/, function (xhr, id) {
+        xhr.respond(200, { "Content-Type": "html/html" }, search);
+      });
+    });
+    afterEach(function() {
+      
+    });
+
+    it('test default elements', function() {
+      
+      registry.scan(this.$el);
+      var pattern = this.$el.data('pattern-livesearch-0');
+      
+      expect(pattern.$toggle).to.have.length(1);
+      expect(pattern.$input).to.have.length(1);
+      expect(pattern.$results).to.have.length(1);
+    });
+
+    it('search after 3 characters and after delay', function() {
+
+      var clock = sinon.useFakeTimers();
+
+      registry.scan(this.$el);
+      var pattern = this.$el.data('pattern-livesearch-0');
+
+      expect(pattern.items()).to.have.length(0);
+      
+      pattern.$input.val('123');
+      pattern.$input.trigger('keyup');
+
+      expect(pattern.timeout).to.not.be.null;
+      expect(pattern.items()).to.have.length(0);
+
+      clock.tick(1000);
+      
+      expect(pattern.items()).to.have.length(2);
+
+    });
+
+    it('keyboard navigation', function() {
+      var clock = sinon.useFakeTimers();
+
+      registry.scan(this.$el);
+      var pattern = this.$el.data('pattern-livesearch-0');
+
+      pattern.$input.val('123');
+      pattern.$input.trigger('keyup');
+
+      clock.tick(1000);
+
+      expect(pattern.$selected).to.be.null;
+
+      // Arrow down
+      pattern._keyDown();
+      expect(pattern.$selected).to.have.length(1);
+      expect(pattern.$selected.index()).to.equal(0);
+      pattern._keyDown();
+      expect(pattern.$selected.index()).to.equal(1);
+      // We are at the end and should end up on the first item
+      pattern._keyDown();
+      expect(pattern.$selected.index()).to.equal(0);
+
+      // Arrow up, starting from the top will move us to the bottom
+      pattern._keyUp();
+      expect(pattern.$selected.index()).to.equal(1);
+      pattern._keyUp();
+      expect(pattern.$selected.index()).to.equal(0);
+
+      // Escape
+      expect(pattern.$toggle.hasClass('show')).to.be.true;
+
+      pattern._keyEscape();
+      expect(pattern.$toggle.hasClass('show')).to.be.false;
+    });
+
+  });
+
 
   /* ==========================
    TEST: TinyMCE
@@ -1263,6 +1377,5 @@ define([
       expect(this.$el.parent().find('.mce-tinymce').length).to.equal(1);
     });
   });
-
 
 });
