@@ -51,7 +51,8 @@ define([
       chars: 3, // number of chars user should type before searching
       toggle: {
         target: '.pat-livesearch-container', // the element to show/hide when performing search
-        value: 'show'
+        value: 'show',
+        event: 'foo'
       },
       results: {
         target: '.pat-livesearch-results', // the element to fill with results
@@ -81,12 +82,13 @@ define([
       if (self.options.toggle) {
         $toggle = $(self.options.toggle.target);
         if ($toggle.length > 0) {
-          self.toggle = new Toggle($toggle, self.options.toggle);
+          self.toggle = new Toggle(self.$input, self.options.toggle);
+          self.toggle.remove();
         }
       }
 
       self.$input.on('keyup', function(event) {
-        self._handler(event);
+        return self._handler(event);
       });
     },
 
@@ -102,7 +104,6 @@ define([
       var query;
       params[self.options.param] = term;
       query = $.param(params);
-
       $.get(
         self.options.url,
         query,
@@ -184,9 +185,9 @@ define([
     _keyEnter: function() {
       var self = this;
       var hl = self.options.highlight;
-      self.$results.find('.'+hl)
-        .find(self.options.results.link)
-        .trigger('click');
+      var target = self.$results.find('.'+hl)
+        .find(self.options.results.link).attr('href');
+      window.location = target;
     },
 
     _handler: function(event) {
@@ -195,16 +196,16 @@ define([
       switch (event.keyCode) {
         case 13:
           self._keyEnter();
-          return;
+          break;
         case 38:
           self._keyUp();
-          return;
+          return false;
         case 40:
           self._keyDown();
-          return;
+          return false;
         case 27:
           self._keyEscape();
-          return;
+          break;
         case 37: break; // keyLeft
         case 39: break; // keyRight
         default:
@@ -222,4 +223,3 @@ define([
   return Livesearch;
 
 });
-
