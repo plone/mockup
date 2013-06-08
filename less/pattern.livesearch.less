@@ -1,3 +1,15 @@
+/* TEMPORARY */
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow;
+     -moz-box-shadow: @shadow;
+          box-shadow: @shadow;
+}
+
 .pat-livesearch {
   position: relative;
 }
@@ -6,16 +18,16 @@
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: @zindexDropdown;
+  z-index: 500;
   display: none; // none by default, but block on "open" of the menu
   float: left;
   min-width: 160px;
   padding: 5px 0;
   margin: 2px 0 0; // override default ul
   list-style: none;
-  background-color: @dropdownBackground;
+  background-color: #FFF;
   border: 1px solid #ccc; // Fallback for IE7-8
-  border: 1px solid @dropdownBorder;
+  border: 1px solid #DDD;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
   .border-radius(6px);
