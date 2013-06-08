@@ -22,7 +22,8 @@
       "jquery.event.drag": "==2.2.0",
       "jquery.event.drop": "==2.2.0",
       "jquery-cookie": "==1.3.1",
-      "tinymce": "==4.0.0-b3"
+      "tinymce": "==4.0.0-b3",
+      "underscore": "==1.4.4"
     }
   },
   "maintainers": [
