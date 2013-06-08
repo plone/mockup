@@ -45,6 +45,7 @@ define([
     $toggle: null,
     $selected: null,
     cache: {},
+    index: null,
     defaults: {
       delay: 400, // ms after keyup before search
       param: 'SearchableText', // query string param to pass to search url
@@ -152,40 +153,28 @@ define([
       var self = this;
       var item = self.options.results.item;
       var hl = self.options.highlight;
-      self.$selected = self.$results.find('.'+hl);
-      if (self.$selected.length < 1) {
-        self.$selected = self.items().last();
-        self.$selected.addClass(hl);
-        return;
+      if (self.index === null || self.index === 0) {
+        self.index = self.items().length - 1;
       } else {
-        self.$selected.removeClass(hl);
-        if (self.$selected.prev(item).length) {
-          self.$selected = self.$selected.prev(item);
-        } else {
-          self.$selected = self.items().last();
-        }
-        self.$selected.addClass(hl);
+        self.index -= 1;
       }
+      if (self.$selected !== null) self.$selected.removeClass(hl);
+      self.$selected = $(self.items()[self.index]);
+      self.$selected.addClass(hl);
     },
 
     _keyDown: function() {
       var self = this;
       var item = self.options.results.item;
       var hl = self.options.highlight;
-      self.$selected = self.$results.find('.'+hl);
-      if (self.$selected.length < 1) {
-        self.$selected = self.items().first();
-        self.$selected.addClass(hl);
-        return;
+      if (self.index === null || self.index === self.items().length-1) {
+        self.index = 0;
       } else {
-        self.$selected.removeClass(hl);
-        if (self.$selected.next(item).length) {
-          self.$selected = self.$selected.next(item);
-        } else {
-          self.$selected = self.items().first();
-        }
-        self.$selected.addClass(hl);
+        self.index += 1;
       }
+      if (self.$selected !== null) self.$selected.removeClass(hl);
+      self.$selected = $(self.items()[self.index]);
+      self.$selected.addClass(hl);
     },
 
     _keyEscape: function() {
