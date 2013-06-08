@@ -87,9 +87,57 @@
             </p>
         </div>
     </pre>
+    
+    <h2>Directions</h2> 
+    You can use this inside Plone or on any static page. Please check below for additional directions for non-Plone sites as there are some lines of code you need to add to the header of your webpage.
+    <h3>Adding tooltip using Plone</h3>
+    <ul>
+      <li> Make sure your viewing the page you want to add the tool tip too.</li>
+      <li> Log in </li>
+      <li> Create some text that you want to be the link that will reveal the tooltip. </li>
+      <li> Select the view html button</li>
+      <li>Find your text. and wrap that text with an href tag, and add a class and the href tag. <br>
+      It should look like &lt; a class=&quot;pat-tooltip&quot; href=&quot;#my-demo-tip&quot;&gt; My link text &lt;/a&gt;</li>
+      <li>Choose Save</li>
+      </ul>
+    <p>Now that we have added our link we now need to add our tooltip. </p>
+    <ul>
+      <li>Choose &quot;edit&quot;</li>
+      <li>Immediently following the link click to add some text and hit your &quot;return&quot; key</li>
+      <li>Add the text that you want to be the tip.</li>
+      <li>Choose the &quot;edit html&quot; button</li>
+      <li>Find the tip text and wrap that text with a div tag, an ID tag and a class.<br>
+      It should look like &lt;div id=&quot;my-demo-tip&quot; class=&quot;tooltips&quot;&gt; My Tip Text here &lt;/div&gt;</li>
+      <li>Choose Save and test your tooltip.</li>
+      </ul>
+    <p>Note: it's important that the href AND the ID be named exactly the same thing. This is what links them together.</p>
+    <h3>Adding tooltip not using Plone</h3>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper <strong>tincidunt nunc</strong>, at interdum est vehicula non. Phasellus viverra laoreet sapien, quis bibendum enim facilisis eget. Praesent rhoncus nisi lectus, vitae blandit magna posuere vitae. Cras sagittis placerat leo, nec faucibus urna fermentum non. 
+<ul>
+<li>Step 1 <br />
+<p>Do this first. Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet <strong> Strong Text Here</strong>. Duis imperdiet malesuada mauris ac bl</p>
+</li>
+<li>Step 2 <br />
+Do this second. Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet sit amet justo eu vestibulum. Duis imperdiet malesuada mauris ac bl</li>
+</ul>
 
-
-
+<p>Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet sit amet justo eu vestibulum. Duis imperdiet malesuada mauris ac blandit. Nulla id lorem quis leo interdum lacinia. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse dictum posuere nibh, sit amet vestibulum massa hendrerit ac.
+  
+  Donec sagittis, elit sit amet faucibus bibendum
+  </p>
+  
+  
+  
+</p>
+<h2>Parameters</h2>
+<dl>
+<dt>class=&quot;pat-tooltip&quot; </dt>
+<dd>this is the name of the script</dd>
+<dt>href=&quot;#anyUniqueIdentifierHere&quot; </dt>
+<dd>lables the tooltip</dd>
+<dt>id=&quot;#anyUniqueIdentiferHere&quot;</dt>
+<dd>links the link to the tooltip</dd>
+</dl>
     </div> <!-- / #content -->
 
 
