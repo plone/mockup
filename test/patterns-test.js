@@ -1479,15 +1479,36 @@ define([
 
   describe("TinyMCE", function() {
     beforeEach(function() {
-      this.$el = $('<div><textarea class="pat-tinymce"></textarea></div>');
+      this.$el = $('<div><textarea class="pat-tinymce"></textarea></div>')
+        .appendTo('body');
     });
     afterEach(function() {
     });
     it('test tinymce loaded', function() {
       registry.scan(this.$el);
-
-      expect(this.$el.parent().find('.mce-tinymce').length).to.equal(1);
+      expect(this.$el.attr('id')).to.not.be.null;
     });
   });
+
+  /* ==========================
+   TEST: RE
+  ========================== */
+  describe("Regular expressions", function() {
+    beforeEach(function() {
+    });
+    afterEach(function() {
+    });
+    it('test parses escaped semi-colon', function() {
+      var options = "foo:bar; foo2:\;; bar: foo;";
+      var optRegex = new RegExp("[^\\;];"); 
+      var result = options.split(optRegex);
+      expect(result[0]).to.be.equal('foo:bar');
+      expect(result[1]).to.be.equal('foo2:\;');
+      expect(result[2]).to.be.equal('bar:foo');
+    });
+
+  });
+
+
 
 });
