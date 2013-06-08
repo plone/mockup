@@ -44,7 +44,8 @@ define([
   'js/patterns/formUnloadAlert',
   'js/patterns/toggle',
   'js/patterns/tinymce',
-  'js/patterns/picture'
+  'js/patterns/picture',
+  'js/patterns/livesearch'
 ], function($, registry) {
   "use strict";
 
@@ -96,6 +97,22 @@ define([
           $('dl.actionMenu').removeClass('activated');
         }
       });
+
+      // Live Search
+      $match = $root.find('.LSBox');
+      var url = $('#searchGadget_form').attr('action').replace('@@search', '@@updated_search');
+      $match.attr({
+        'class': 'pat-livesearch',
+        'data-pat-livesearch-url': url,
+        'data-put-livesearch-results-content': '#search-results'
+      });
+      $match.find('.searchSection').remove();
+      $match.find('.LSResult').attr({
+        'class': 'pat-livesearch-container pull-right',
+        'id': ''
+      });
+      $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
+      $match.find('#searchGadget').addClass('pat-livesearch-input');
 
 
       // add tinymce pattern
