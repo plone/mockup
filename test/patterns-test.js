@@ -1101,12 +1101,15 @@ define([
       this.$el = $('' +
         '<div>' +
         ' <a class="pat-toggle"' +
-        '    data-pat-toggle-target="#target"' +
-        '    data-pat-toggle-value="toggled">Button</a>' +
+        '    data-pat-toggle="target: #target;' +
+        '                     value: toggled">Button</a>' +
         ' <div id="target">' +
         '   <a href="patterns.html">Click here to go somewhere else</a>' +
         ' </div>' +
-        '</div>');
+        '</div>').appendTo('body');
+    });
+    afterEach(function() {
+      this.$el.remove();
     });
     it("by default toggles on click event", function() {
       expect($('.toggled', this.$el).size()).to.equal(0);
@@ -1118,7 +1121,7 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(0);
     });
     it("can also listen to custom event", function() {
-      $('.pat-toggle', this.$el).attr('data-pat-toggle-event', 'customEvent');
+      $('.pat-toggle', this.$el).attr('data-pat-toggle', 'target: #target; value: toggled; event: customEvent');
       expect($('.toggled', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('.toggled', this.$el).size()).to.equal(0);
@@ -1126,7 +1129,7 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(1);
     });
     it("can also toggle custom element attribute", function() {
-      $('.pat-toggle', this.$el).attr('data-pat-toggle-attribute', 'rel');
+      $('.pat-toggle', this.$el).attr('data-pat-toggle', 'target: #target; value: toggled; attribute: rel');
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
@@ -1136,13 +1139,6 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
     });
-    it("if the toggle was for a menu, do not close it when clicking on internal links", function() {
-      registry.scan(this.$el);
-      $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).to.equal(1);
-      $('div a', this.$el).trigger("click");
-      expect($('.toggled', this.$el).size()).to.equal(1);
-    });
     it("toggle multiple targets", function() {
        var $el = $('' +
         '<div>' +
@@ -1150,8 +1146,8 @@ define([
         '    <div>' +
         '      <div>' +
         '        <a class="pat-toggle"' +
-        '          data-pat-toggle-globaltarget=".target"' +
-        '          data-pat-toggle-value="toggled">Button</a>' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
         '      </div>' +
         '      <div class="target"></div>' +
         '    </div>' +
@@ -1162,8 +1158,87 @@ define([
         '  <div class="target"></div>' +
         '</div>').appendTo('body');
       registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(0);
       $('.pat-toggle', $el).trigger('click');
       expect($('.toggled', $el).size()).to.equal(5);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
+      $el.remove();
+    });
+    it("if some elements already marked, mark all with first click", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle"' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target toggled"></div>' +
+        '    </div>' +
+        '    <div class="target"></div>' +
+        '    <div class="target toggled"></div>' +
+        '  </div>' +
+        '  <div class="target toggled"></div>' +
+        '  <div class="target"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(3);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(5);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
+      $el.remove();
+    });
+    it("if all elements already marked, unmark all with first click", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle"' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target toggled"></div>' +
+        '    </div>' +
+        '    <div class="target toggled"></div>' +
+        '    <div class="target toggled"></div>' +
+        '  </div>' +
+        '  <div class="target toggled"></div>' +
+        '  <div class="target toggled"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(5);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
+      $el.remove();
+    });
+    it("should also be able to mark the toggle itself", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle target"' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target"></div>' +
+        '    </div>' +
+        '    <div class="target"></div>' +
+        '    <div class="target"></div>' +
+        '  </div>' +
+        '  <div class="target"></div>' +
+        '  <div class="target"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(0);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(6);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
       $el.remove();
     });
   });
