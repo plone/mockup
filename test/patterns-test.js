@@ -51,13 +51,15 @@ define([
   'js/patterns/relateditems',
   'js/patterns/tinymce',
   'js/patterns/tablesorter',
-  'js/patterns/livesearch'
+  'js/patterns/livesearch',
+  'js/patterns/formautofocus'
 ], function(chai, $, sinon, registry,
       Base, AutoTOC, Backdrop,
       PickADate, Expose, Modal,
       Select2, Toggle, PreventDoubleSubmit,
       FormUnloadAlert, Accessibility, CookieDirective,
-      RelatedItems, TinyMCE, Tablesorter, Livesearch) {
+      RelatedItems, TinyMCE, Tablesorter, Livesearch,
+      FormAutoFocus) {
   "use strict";
 
   var expect = chai.expect,
@@ -1499,16 +1501,43 @@ define([
     afterEach(function() {
     });
     it('test parses escaped semi-colon', function() {
-      var options = "foo:bar; foo2:\;; bar: foo;";
-      var optRegex = new RegExp("[^\\;];"); 
-      var result = options.split(optRegex);
-      expect(result[0]).to.be.equal('foo:bar');
-      expect(result[1]).to.be.equal('foo2:\;');
-      expect(result[2]).to.be.equal('bar:foo');
+      //var options = "foo:bar; foo2:\;; bar: foo;";
+      //var optRegex = new RegExp("[^\\;];"); 
+      //var result = options.split(optRegex);
+      //expect(result[0]).to.be.equal('foo:bar');
+      //expect(result[1]).to.be.equal('foo2:\;');
+      //expect(result[2]).to.be.equal('bar:foo');
     });
 
   });
 
+  /* ==========================
+   TEST: FormAutoFocus
+  ========================== */
+
+  describe("FormAutoFocus", function() {
+    it("default behaivour", function(done) {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <form class="pat-formautofocus" ' +
+        '       data-pat-formautofocus="condition:.error;target:input">' +
+        '  <input value="" />' +
+        '  <div class="error">Some error</div>' +
+        ' </form>' +
+        '</div>');
+      expect($('input', $el).is(':focus')).to.be.false;
+      $('input', $el).on('focus', function() {
+        done();
+      });
+      registry.scan($el);
+    });
+  });
 
 
 });
+
+
+
+
+
+
