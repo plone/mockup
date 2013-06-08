@@ -89,7 +89,8 @@ define([
         '    &quot;name2&quot;: &quot;value2&quot;}">' +
         ' <div class="pat-example"' +
         '      data-pat-example="name2: something;' +
-        '                        some-thing-name4: value4"/>' +
+        '                        some-thing-name4: value4;' +
+        '                        some-stuff: value5"/>' +
         '</div>');
 
       Base.extend({
@@ -102,6 +103,7 @@ define([
           expect(this.options.name2).to.equal('something');
           expect(this.options.name3).to.equal('value3');
           expect(this.options.some.thing.name4).to.equal('value4');
+          expect(this.options.some.stuff).to.equal('value5');
         }
       });
 
@@ -231,11 +233,11 @@ define([
       $.removeCookie("Allow_Cookies_For_Site");
       $.removeCookie("_cookiesEnabled");
       this.$el = $('' +
-        '<div class="pat-cookiedirective">' +
-        '<div class="login"></div>' +
+        '<div class="pat-cookiedirective"' +
+        '     data-pat-cookiedirective="shouldAsk: true;' +
+        '                               shouldEnable: true;">' +
+        '  <div class="login"></div>' +
         '</div>');
-      this.$el.attr("data-pat-cookiedirective",
-        "should_ask: true; should_enable: true;");
     });
     it("test ask permission shows", function() {
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
@@ -244,7 +246,7 @@ define([
     });
     it("test ask permission can be hidden", function() {
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
-      this.$el.attr("data-pat-cookiedirective", "should_ask: false");
+      this.$el.attr("data-pat-cookiedirective", "shouldAsk: false");
       registry.scan(this.$el);
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
     });
@@ -276,20 +278,20 @@ define([
     });
     it("test ask permission customizable", function() {
       this.$el.attr("data-pat-cookiedirective",
-        "ask_permission_msg: Test ask_permission_msg;" +
-        "allow_msg: Test allow_msg" +
-        "deny_msg: Test deny_msg");
+        "askPermissionMsg: Test askPermissionMsg;" +
+        "allowMsg: Test allowMsg" +
+        "denyMsg: Test denyMsg");
       registry.scan(this.$el);
-      expect(this.$el.find('.cookiemsg').text()).to.equal("Test ask_permission_msg");
-      expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allow_msg");
-      expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test deny_msg");
+      expect(this.$el.find('.cookiemsg').text()).to.equal("Test askPermissionMsg");
+      expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allowMsg");
+      expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test denyMsg");
 
     });
     it("test enable cookies shows", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-pat-cookiedirective", "should_ask: false");
+      this.$el.attr("data-pat-cookiedirective", "shouldAsk: false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
@@ -301,7 +303,7 @@ define([
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
       this.$el.attr("data-pat-cookiedirective",
-        "should_ask: false; should_enable: false");
+        "shouldAsk: false; shouldEnable: false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -325,7 +327,7 @@ define([
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
       this.$el.attr("data-pat-cookiedirective",
-        "should_enable_selector: .another-login; deny_msg: Test deny_msg");
+        "shouldEnableSelector: .another-login; denyMsg: Test denyMsg");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -337,9 +339,9 @@ define([
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
       this.$el.attr("data-pat-cookiedirective",
-        "should_enable_msg: Test should_enable_msg");
+        "shouldEnableMsg: Test shouldEnableMsg");
       registry.scan(this.$el);
-      expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test should_enable_msg");
+      expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test shouldEnableMsg");
       // Restore cookie function
       $.cookie = $.__old__cookie;
     });
