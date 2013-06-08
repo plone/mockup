@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Mockup(s)</title>
+  <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />
+  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
+  <link rel="stylesheet" type="text/css" href="jam/tinymce/skins/lightgray/skin.min.css" />
+  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
+  <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
+  <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/jquery/dist/jquery.js"></script>
+  <script src="jam/require.js"></script>
+  <script src="js/demo/widgets.js"></script>
+  <script src="js/demo/tinymce.js"></script>
+  <script type="text/x-ajax-respond" id="something-html">
+    <html>
+    <head></head>
+    <body>
+    <div id="content">
+    <div class="pull-right">
+      Button that triggers "hide" event ->
+      <a class="btn" onclick="$(this).trigger('destroy.modal.patterns')">Close</a>
+    </div>
+    <h1>Content from AJAX</h1>
+    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
+    of logic to it. A flower in my garden, a mystery in my panties. [climbing
+    under trampoline] This shall keep me safe from the hot Mexican sun. This is
+    not me encouraging you to go here and write a review. No. So, what do you
+    say? We got a basket full of father-son fun here. What\'s Kama Sutra oil?
+    Maybe it's not for us.</p>
+    </body>
+    </html>
+  </script>
+  <script type="text/x-ajax-respond" id="select2-json">
+    {
+      "more": "false",
+      "results": [
+        {"id": "Red", "text": "Red"},
+        {"id": "Blue", "text": "Blue"},
+        {"id": "Green", "text": "Green"}
+      ]
+    }
+  </script>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div id="portal-logo">
+        <span class="plone-logo">
+          <span class="plone-logo-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Mockup(s)
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+      <div id="nav">
+      <ul>
+          <li><a href="index.html"><i class="icon-home"></i> Home</a></li>
+          <li><a href="#"><i class="icon-eye-open"></i> User</a></li>
+          <li><a href="#"><i class="icon-cogs"></i> Creator</a></li>
+          <li><a href="ploneContributor.html"><i class="icon-globe selected"></i> Contributor</a></li>
+      </ul>
+  </div>
+
+<!--
+=============================================
+  PATTERN: Related Items
+=============================================
+-->
+    <h1 id="relateditems">RelatedItems</h1>
+
+    <div class="row">
+      <div class="span8">
+          <input type="text" class="pat-relateditems"
+              data-pat-relateditems-width="30em"
+              data-pat-relateditems-url="/relateditems-test.json" />
+      </div>
+    </div>
+
+
+
+    </div> <!-- / #content -->
+
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
+
+</body>
+
+</html>
+
+

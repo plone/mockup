@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Mockup(s)</title>
+  <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />
+  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
+  <link rel="stylesheet" type="text/css" href="jam/tinymce/skins/lightgray/skin.min.css" />
+  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
+  <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
+  <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/jquery/dist/jquery.js"></script>
+  <script src="jam/require.js"></script>
+  <script src="js/demo/widgets.js"></script>
+  <script src="js/demo/tinymce.js"></script>
+  <script type="text/x-ajax-respond" id="something-html">
+    <html>
+    <head></head>
+    <body>
+    <div id="content">
+    <div class="pull-right">
+      Button that triggers "hide" event ->
+      <a class="btn" onclick="$(this).trigger('destroy.modal.patterns')">Close</a>
+    </div>
+    <h1>Content from AJAX</h1>
+    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
+    of logic to it. A flower in my garden, a mystery in my panties. [climbing
+    under trampoline] This shall keep me safe from the hot Mexican sun. This is
+    not me encouraging you to go here and write a review. No. So, what do you
+    say? We got a basket full of father-son fun here. What\'s Kama Sutra oil?
+    Maybe it's not for us.</p>
+    </body>
+    </html>
+  </script>
+  <script type="text/x-ajax-respond" id="select2-json">
+    {
+      "more": "false",
+      "results": [
+        {"id": "Red", "text": "Red"},
+        {"id": "Blue", "text": "Blue"},
+        {"id": "Green", "text": "Green"}
+      ]
+    }
+  </script>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div id="portal-logo">
+        <span class="plone-logo">
+          <span class="plone-logo-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Mockup(s)
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+      <div id="nav">
+      <ul>
+          <li><a href="index.html"><i class="icon-home"></i> Home</a></li>
+          <li><a href="#"><i class="icon-eye-open"></i> User</a></li>
+          <li><a href="#"><i class="icon-cogs"></i> Creator</a></li>
+          <li><a href="ploneContributor.html"><i class="icon-globe selected"></i> Contributor</a></li>
+      </ul>
+  </div>
+
+<!--
+=============================================
+  PATTERN: SELECT2
+=============================================
+-->
+
+      <h1 id="select2">Select2</h1>
+      <div class="row">
+        <div class="span12">
+          <div class='alert alert-info'>
+            <u><strong>Data Attributes</strong></u>
+            <p>
+              Attributes are mostly what you will find on the
+              <a href='http://ivaynberg.github.io/select2/' target='_blank'>Select2</a>,
+              except in the format of the data attributes used by the patternslib.
+            </p>
+            <dl>
+              <dt>data-pat-select2-separator<dt>
+              <dd>
+                Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.
+                <br/><br/>
+                Defines a custom separator used to distinguish the tag values. Ex: a value of ';' will
+                allow the <em>data-pat-select2-tags</em> and <em>data-pat-select2-initvalmap</em> to have
+                values separated by ';' instead of the default ','.
+              <dd>
+
+              <dt>data-path-select2-initvalmap<dt>
+              <dd>
+                <p>
+                  This can be a json encoded string, or a list of <em>id:text</em>
+                  values. Ex: "Red:The Color Red,Orange:The Color Orange"
+                  <br /><br />
+                  This is used inside the initSelection method, if ajax options
+                  are NOT set.
+                </p>
+              <dd>
+
+              <dt>data-pat-select2-ajaxvocabulary</dt>
+              <dd>
+                This is a URL to a JSON formatted file used to populate the list
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4">
+          <h3>Autocomplete with search</h3>
+          <select class="pat-select2" data-pat-select2-width="20em">
+            <option value="Acholi">Acholi</option>
+            <option value="Afrikaans">Afrikaans</option>
+            <option value="Akan">Akan</option>
+            <option value="Albanian">Albanian</option>
+            <option value="Amharic">Amharic</option>
+            <option value="Arabic">Arabic</option>
+            <option value="Ashante">Ashante</option>
+            <option value="Asl">Asl</option>
+            <option value="Assyrian">Assyrian</option>
+            <option value="Azerbaijani">Azerbaijani</option>
+            <option value="Azeri">Azeri</option>
+            <option value="Bajuni">Bajuni</option>
+            <option value="Basque">Basque</option>
+            <option value="Behdini">Behdini</option>
+            <option value="Belorussian">Belorussian</option>
+            <option value="Bengali">Bengali</option>
+            <option value="Berber">Berber</option>
+            <option value="Bosnian">Bosnian</option>
+            <option value="Bravanese">Bravanese</option>
+            <option value="Bulgarian">Bulgarian</option>
+            <option value="Burmese">Burmese</option>
+            <option value="Cakchiquel">Cakchiquel</option>
+            <option value="Cambodian">Cambodian</option>
+            <option value="Cantonese">Cantonese</option>
+            <option value="Catalan">Catalan</option>
+            <option value="Chaldean">Chaldean</option>
+            <option value="Chamorro">Chamorro</option>
+            <option value="Chao-chow">Chao-chow</option>
+            <option value="Chavacano">Chavacano</option>
+            <option value="Chin">Chin</option>
+            <option value="Chuukese">Chuukese</option>
+            <option value="Cree">Cree</option>
+            <option value="Croatian">Croatian</option>
+            <option value="Czech">Czech</option>
+            <option value="Dakota">Dakota</option>
+            <option value="Danish">Danish</option>
+            <option value="Dari">Dari</option>
+            <option value="Dinka">Dinka</option>
+            <option value="Diula">Diula</option>
+            <option value="Dutch">Dutch</option>
+            <option value="Edo">Edo</option>
+            <option value="Estonian">Estonian</option>
+            <option value="Ewe">Ewe</option>
+            <option value="Fante">Fante</option>
+            <option value="Farsi">Farsi</option>
+            <option value="Fijian Hindi">Fijian Hindi</option>
+            <option value="Finnish">Finnish</option>
+            <option value="Flemish">Flemish</option>
+            <option value="French">French</option>
+            <option value="French Canadian">French Canadian</option>
+            <option value="Fukienese">Fukienese</option>
+            <option value="Fula">Fula</option>
+            <option value="Fulani">Fulani</option>
+            <option value="Fuzhou">Fuzhou</option>
+            <option value="Ga">Ga</option>
+            <option value="Gaddang">Gaddang</option>
+            <option value="Gaelic">Gaelic</option>
+            <option value="Gaelic-irish">Gaelic-irish</option>
+            <option value="Gaelic-scottish">Gaelic-scottish</option>
+            <option value="Georgian">Georgian</option>
+            <option value="German">German</option>
+            <option value="Gorani">Gorani</option>
+            <option value="Greek">Greek</option>
+            <option value="Gujarati">Gujarati</option>
+            <option value="Haitian Creole">Haitian Creole</option>
+            <option value="Hakka">Hakka</option>
+            <option value="Hakka-chinese">Hakka-chinese</option>
+            <option value="Hausa">Hausa</option>
+            <option value="Hebrew">Hebrew</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Hmong">Hmong</option>
+            <option value="Hungarian">Hungarian</option>
+            <option value="Ibanag">Ibanag</option>
+            <option value="Ibo">Ibo</option>
+            <option value="Icelandic">Icelandic</option>
+            <option value="Igbo">Igbo</option>
+            <option value="Ilocano">Ilocano</option>
+            <option value="Indonesian">Indonesian</option>
+            <option value="Inuktitut">Inuktitut</option>
+            <option value="Italian">Italian</option>
+            <option value="Jakartanese">Jakartanese</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Javanese">Javanese</option>
+            <option value="Kanjobal">Kanjobal</option>
+            <option value="Karen">Karen</option>
+            <option value="Karenni">Karenni</option>
+            <option value="Kashmiri">Kashmiri</option>
+            <option value="Kazakh">Kazakh</option>
+            <option value="Kikuyu">Kikuyu</option>
+            <option value="Kinyarwanda">Kinyarwanda</option>
+            <option value="Kirundi">Kirundi</option>
+            <option value="Korean">Korean</option>
+            <option value="Kosovan">Kosovan</option>
+            <option value="Kotokoli">Kotokoli</option>
+            <option value="Krio">Krio</option>
+            <option value="Kurdish">Kurdish</option>
+            <option value="Kurmanji">Kurmanji</option>
+            <option value="Kyrgyz">Kyrgyz</option>
+            <option value="Lakota">Lakota</option>
+            <option value="Laotian">Laotian</option>
+            <option value="Latvian">Latvian</option>
+            <option value="Lingala">Lingala</option>
+            <option value="Lithuanian">Lithuanian</option>
+            <option value="Luganda">Luganda</option>
+            <option value="Luo">Luo</option>
+            <option value="Maay">Maay</option>
+            <option value="Macedonian">Macedonian</option>
+            <option value="Malay">Malay</option>
+            <option value="Malayalam">Malayalam</option>
+            <option value="Maltese">Maltese</option>
+            <option value="Mandarin">Mandarin</option>
+            <option value="Mandingo">Mandingo</option>
+            <option value="Mandinka">Mandinka</option>
+            <option value="Marathi">Marathi</option>
+            <option value="Marshallese">Marshallese</option>
+            <option value="Mien">Mien</option>
+            <option value="Mina">Mina</option>
+            <option value="Mirpuri">Mirpuri</option>
+            <option value="Mixteco">Mixteco</option>
+            <option value="Moldavan">Moldavan</option>
+            <option value="Mongolian">Mongolian</option>
+            <option value="Montenegrin">Montenegrin</option>
+            <option value="Navajo">Navajo</option>
+            <option value="Neapolitan">Neapolitan</option>
+            <option value="Nepali">Nepali</option>
+            <option value="Nigerian Pidgin">Nigerian Pidgin</option>
+            <option value="Norwegian">Norwegian</option>
+            <option value="Oromo">Oromo</option>
+            <option value="Pahari">Pahari</option>
+            <option value="Papago">Papago</option>
+            <option value="Papiamento">Papiamento</option>
+            <option value="Pashto">Pashto</option>
+            <option value="Patois">Patois</option>
+            <option value="Pidgin English">Pidgin English</option>
+            <option value="Polish">Polish</option>
+            <option value="Portug.creole">Portug.creole</option>
+            <option value="Portuguese">Portuguese</option>
+            <option value="Pothwari">Pothwari</option>
+            <option value="Pulaar">Pulaar</option>
+            <option value="Punjabi">Punjabi</option>
+            <option value="Putian">Putian</option>
+            <option value="Quichua">Quichua</option>
+            <option value="Romanian">Romanian</option>
+            <option value="Russian">Russian</option>
+            <option value="Samoan">Samoan</option>
+            <option value="Serbian">Serbian</option>
+            <option value="Shanghainese">Shanghainese</option>
+            <option value="Shona">Shona</option>
+            <option value="Sichuan">Sichuan</option>
+            <option value="Sicilian">Sicilian</option>
+            <option value="Sinhalese">Sinhalese</option>
+            <option value="Slovak">Slovak</option>
+            <option value="Somali">Somali</option>
+            <option value="Sorani">Sorani</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Sudanese Arabic">Sudanese Arabic</option>
+            <option value="Sundanese">Sundanese</option>
+            <option value="Susu">Susu</option>
+            <option value="Swahili">Swahili</option>
+            <option value="Swedish">Swedish</option>
+            <option value="Sylhetti">Sylhetti</option>
+            <option value="Tagalog">Tagalog</option>
+            <option value="Taiwanese">Taiwanese</option>
+            <option value="Tajik">Tajik</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Thai">Thai</option>
+            <option value="Tibetan">Tibetan</option>
+            <option value="Tigre">Tigre</option>
+            <option value="Tigrinya">Tigrinya</option>
+            <option value="Toishanese">Toishanese</option>
+            <option value="Tongan">Tongan</option>
+            <option value="Toucouleur">Toucouleur</option>
+            <option value="Trique">Trique</option>
+            <option value="Tshiluba">Tshiluba</option>
+            <option value="Turkish">Turkish</option>
+            <option value="Twi">Twi</option>
+            <option value="Ukrainian">Ukrainian</option>
+            <option value="Urdu">Urdu</option>
+            <option value="Uyghur">Uyghur</option>
+            <option value="Uzbek">Uzbek</option>
+            <option value="Vietnamese">Vietnamese</option>
+            <option value="Visayan">Visayan</option>
+            <option value="Welsh">Welsh</option>
+            <option value="Wolof">Wolof</option>
+            <option value="Yiddish">Yiddish</option>
+            <option value="Yoruba">Yoruba</option>
+            <option value="Yupik">Yupik</option>
+          </select>
+          <pre class="brush: html;toolbar: false;">
+&lt;select class="pat-select2" data-pat-select2-width="20em"&gt;
+  ...
+&lt;/select&gt;</pre>
+        </div>
+<!--
+=============================================
+  PATTERN: TAGGING
+=============================================
+-->
+
+        <div class="span4">
+          <h3>Tagging</h3>
+          <input type="text" class="pat-select2"
+              data-pat-select2-separator=";"
+              data-pat-select2-tags="Red;Yellow;Green;Orange;Purple"
+              data-pat-select2-width="20em"
+              data-pat-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange"
+              value="Red;Orange"/>
+          <pre class="brush: html;toolbar: false;">
+&lt;input type="text" class="pat-select2"
+    data-pat-select2-separator=";"
+    data-pat-select2-tags="Red;Yellow;Green;Orange;Purple"
+    data-pat-select2-width="20em"
+    data-pat-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
+        </div>
+        <div class="span4">
+          <h3>Orderable tags</h3>
+          <input type="text" class="pat-select2"
+              data-pat-select2-orderable="true"
+              data-pat-select2-tags="Red,Yellow,Green"
+              data-pat-select2-width="20em" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input type="text" class="pat-select2"
+    data-pat-select2-orderable="true"
+    data-pat-select2-tags="Red,Yellow,Green,Orange,Purple"
+    data-pat-select2-width="20em" /&gt;</pre>
+        </div>
+
+      </div>
+      <div class='row'>
+        <div class="span4">
+          <h3>AJAX tags</h3>
+          <input type="hidden" class="pat-select2"
+              data-pat-select2-placeholder="Search for a Value"
+              data-pat-select2-ajaxvocabulary="select2-test.json"
+              data-pat-select2-width="20em" />
+          <pre class="brush: html;toolbar: false;">
+&lt;input type="hidden" class="pat-select2"
+    data-pat-select2-placeholder="Search for a Value"
+    data-pat-select2-ajaxvocabulary="select2-test.json"
+    data-pat-select2-width="20em" /&gt;</pre>
+        </div>
+
+      </div>
+
+
+
+    </div> <!-- / #content -->
+
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
+
+</body>
+
+</html>
+
+
