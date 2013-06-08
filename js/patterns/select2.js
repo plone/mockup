@@ -52,7 +52,7 @@ define([
       // Init Selection ---------------------------------------------
       if (self.options.initvaluemap) {
         self.options.initSelection = function ($el, callback) {
-          var data = [], value = $el.val(), seldefaults;
+          var data = [], value = $el.val(), seldefaults = {};
 
           // Create the initSelection value that contains the default selection,
           // but in a javascript object

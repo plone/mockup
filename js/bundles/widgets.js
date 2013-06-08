@@ -60,17 +60,13 @@ define([
       $match = $match.add($root.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
       $match.attr({
-        'data-pat-autotoc-levels': 'legend',
-        'data-pat-autotoc-section': 'fieldset',
-        'data-pat-autotoc-klass': 'autotabs'
+        'data-pat-autotoc':'levels: legend;section: fieldset;klass: autotabs'
       });
 
       // activate accessibility pattern by default
       $root.addClass('pat-accessibility');
       $root.attr({
-        'data-pat-accessibility-smallbtn': "#accessibility-smallText",
-        'data-pat-accessibility-normalbtn': "#accessibility-normalText",
-        'data-pat-accessibility-largebtn': "#accessibility-largeText"
+        'data-pat-accessibility': 'smallbtn: #accessibility-smallText;normalbtn: #accessibility-normalText;largebtn: #accessibility-largeText'
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
@@ -78,7 +74,7 @@ define([
       $match = $match.add($root.find('.enableUnloadProtection'));
       $match.addClass('pat-formunloadalert');
       $match.attr({
-        'data-pat-formunloadalert-message': window.form_modified_message
+        'data-pat-formunloadalert':'message: '+window.form_modified_message
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
@@ -86,8 +82,7 @@ define([
       $match = $match.add($root.find('dl.actionMenu dt.actionMenuHeader a'));
       $match.addClass('pat-toggle');
       $match.attr({
-        'data-pat-toggle-target': 'dl.actionMenu',
-        'data-pat-toggle-value': 'activated'
+        'data-pat-toggle': 'target: dl.actionMenu;value: activated'
       });
       $root.find('dl.actionMenu').removeClass('deactivated');
 
@@ -124,6 +119,18 @@ define([
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce');
+      
+      // Use toggle to replace the toggleSelect from the select_all.js
+      // First, remove the previous onclick
+      $("[onclick^='toggleSelect']").attr('onclick', null);
+      
+      // Assign the class and data attributes for the "select all of the content_status_history template
+      var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]');
+      select_all.addClass('pat-toggle');
+      select_all.attr({
+        'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      });
+      
     },
     scan: function(selector) {
       registry.scan($(selector));

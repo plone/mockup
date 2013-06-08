@@ -440,7 +440,7 @@ define([
       expect($('> nav', this.$el).size()).to.equal(1);
     });
     it("can have custom levels", function() {
-      this.$el.attr('data-pat-autotoc-levels', 'h1');
+      this.$el.attr("data-pat-autotoc", "levels: h1");
       expect($('> nav', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(1);
@@ -516,7 +516,7 @@ define([
     it("default behaivour", function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <form class="pat-expose" data-pat-expose-backdrop="#body">' +
+        ' <form class="pat-expose" data-pat-expose="backdrop: #body">' +
         '  <input value="" />' +
         ' </form>' +
         '</div>');
@@ -542,7 +542,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal="backdrop: #body">Open</a>' +
         ' <div id="target" style="display:none;">Target</div>' +
         '</div>').appendTo('body');
 
@@ -575,7 +575,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal="backdrop: #body">Open</a>' +
         ' <div id="target">Target</div>' +
         '</div>').appendTo('body');
 
@@ -593,7 +593,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="patterns-modal-load-via-ajax"' +
-        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal="backdrop: #body">Open</a>' +
         '</div>').appendTo('body');
 
       $('a', $el)
@@ -809,7 +809,7 @@ define([
           expect(pos).not.to.have.property('right');
           expect(pos).to.have.property('left');
           // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25 
+          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25
           expect(pos['left']).to.equal('25px');
         }).click();
       });
@@ -1023,7 +1023,7 @@ define([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2" data-pat-select2-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2" data-pat-select2="tags: Red,Yellow,Blue"' +
         '        value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
@@ -1032,22 +1032,17 @@ define([
       expect($('.select2-choices li', $el).size()).to.equal(2);
     });
 
-    it('custom separator', function() {
-      var $el = $(
-        '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-pat-select2-selector=";"' +
-        '        data-pat-select2-tags="Red;Yellow;Blue"' +
-        '        value="Yellow" />' +
-        '</div>');
-    });
-
     it('init value map', function() {
         var $el = $(
         '<div>' +
         ' <input class="pat-select2"' +
-        '        data-pat-select2-tags="Red,Yellow,Blue"' +
-        '        data-pat-select2-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
+        '        data-pat-select2="{' +
+        '          &quot;tags&quot;: &quot;Red,Yellow,Blue&quot;,' +
+        '          &quot;initvaluemap&quot;: {' +
+        '            &quot;Yellow&quot;: &quot;YellowTEXT&quot;,' +
+        '            &quot;Red&quot;: &quot;RedTEXT&quot;' +
+        '          }' +
+        '        }"' +
         '        value="Yellow,Red"/>' +
         '</div>');
 
@@ -1058,7 +1053,7 @@ define([
     it('ajax vocabulary', function() {
         var $el = $(
         ' <input class="pat-select2"' +
-        '        data-pat-select2-ajaxvocabulary="select2-users-vocabulary"' +
+        '        data-pat-select2="ajaxvocabulary: select2-users-vocabulary"' +
         '        />'
         );
 
@@ -1070,8 +1065,7 @@ define([
         var $el = $(
         '<div>' +
         ' <input class="pat-select2"' +
-        '        data-pat-select2-orderable="true"' +
-        '        data-pat-select2-tags="Red,Yellow,Blue"' +
+        '        data-pat-select2="orderable: true; tags: Red,Yellow,Blue"' +
         '        value="Red"' +
         '        />' +
         '</div>'
@@ -1107,12 +1101,15 @@ define([
       this.$el = $('' +
         '<div>' +
         ' <a class="pat-toggle"' +
-        '    data-pat-toggle-target="#target"' +
-        '    data-pat-toggle-value="toggled">Button</a>' +
+        '    data-pat-toggle="target: #target;' +
+        '                     value: toggled">Button</a>' +
         ' <div id="target">' +
         '   <a href="patterns.html">Click here to go somewhere else</a>' +
         ' </div>' +
-        '</div>');
+        '</div>').appendTo('body');
+    });
+    afterEach(function() {
+      this.$el.remove();
     });
     it("by default toggles on click event", function() {
       expect($('.toggled', this.$el).size()).to.equal(0);
@@ -1124,7 +1121,7 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(0);
     });
     it("can also listen to custom event", function() {
-      $('.pat-toggle', this.$el).attr('data-pat-toggle-event', 'customEvent');
+      $('.pat-toggle', this.$el).attr('data-pat-toggle', 'target: #target; value: toggled; event: customEvent');
       expect($('.toggled', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('.toggled', this.$el).size()).to.equal(0);
@@ -1132,7 +1129,7 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(1);
     });
     it("can also toggle custom element attribute", function() {
-      $('.pat-toggle', this.$el).attr('data-pat-toggle-attribute', 'rel');
+      $('.pat-toggle', this.$el).attr('data-pat-toggle', 'target: #target; value: toggled; attribute: rel');
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
@@ -1142,13 +1139,6 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
     });
-    it("if the toggle was for a menu, do not close it when clicking on internal links", function() {
-      registry.scan(this.$el);
-      $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).to.equal(1);
-      $('div a', this.$el).trigger("click");
-      expect($('.toggled', this.$el).size()).to.equal(1);
-    });
     it("toggle multiple targets", function() {
        var $el = $('' +
         '<div>' +
@@ -1156,8 +1146,8 @@ define([
         '    <div>' +
         '      <div>' +
         '        <a class="pat-toggle"' +
-        '          data-pat-toggle-globaltarget=".target"' +
-        '          data-pat-toggle-value="toggled">Button</a>' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
         '      </div>' +
         '      <div class="target"></div>' +
         '    </div>' +
@@ -1168,8 +1158,87 @@ define([
         '  <div class="target"></div>' +
         '</div>').appendTo('body');
       registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(0);
       $('.pat-toggle', $el).trigger('click');
       expect($('.toggled', $el).size()).to.equal(5);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
+      $el.remove();
+    });
+    it("if some elements already marked, mark all with first click", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle"' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target toggled"></div>' +
+        '    </div>' +
+        '    <div class="target"></div>' +
+        '    <div class="target toggled"></div>' +
+        '  </div>' +
+        '  <div class="target toggled"></div>' +
+        '  <div class="target"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(3);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(5);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
+      $el.remove();
+    });
+    it("if all elements already marked, unmark all with first click", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle"' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target toggled"></div>' +
+        '    </div>' +
+        '    <div class="target toggled"></div>' +
+        '    <div class="target toggled"></div>' +
+        '  </div>' +
+        '  <div class="target toggled"></div>' +
+        '  <div class="target toggled"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(5);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
+      $el.remove();
+    });
+    it("should also be able to mark the toggle itself", function() {
+       var $el = $('' +
+        '<div>' +
+        '  <div>' +
+        '    <div>' +
+        '      <div>' +
+        '        <a class="pat-toggle target"' +
+        '          data-pat-toggle="target: .target;' +
+        '                           value: toggled">Button</a>' +
+        '      </div>' +
+        '      <div class="target"></div>' +
+        '    </div>' +
+        '    <div class="target"></div>' +
+        '    <div class="target"></div>' +
+        '  </div>' +
+        '  <div class="target"></div>' +
+        '  <div class="target"></div>' +
+        '</div>').appendTo('body');
+      registry.scan($el);
+      expect($('.toggled', $el).size()).to.equal(0);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(6);
+      $('.pat-toggle', $el).trigger('click');
+      expect($('.toggled', $el).size()).to.equal(0);
       $el.remove();
     });
   });
@@ -1299,7 +1368,7 @@ define([
     beforeEach(function() {
       this.$el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch-url="/search.html">'+
+              'data-pat-livesearch="url:/search.html">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -1331,14 +1400,14 @@ define([
       });
     });
     afterEach(function() {
-      
+
     });
 
     it('test default elements', function() {
-      
+
       registry.scan(this.$el);
       var pattern = this.$el.data('pattern-livesearch-0');
-      
+
       expect(pattern.$toggle).to.have.length(1);
       expect(pattern.$input).to.have.length(1);
       expect(pattern.$results).to.have.length(1);
@@ -1352,7 +1421,7 @@ define([
       var pattern = this.$el.data('pattern-livesearch-0');
 
       expect(pattern.items()).to.have.length(0);
-      
+
       pattern.$input.val('123');
       pattern.$input.trigger('keyup');
 
@@ -1360,7 +1429,7 @@ define([
       expect(pattern.items()).to.have.length(0);
 
       clock.tick(1000);
-      
+
       expect(pattern.items()).to.have.length(2);
 
     });
