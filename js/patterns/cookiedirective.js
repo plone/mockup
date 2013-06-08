@@ -40,14 +40,14 @@ define([
   var CookieDirective = Base.extend({
     name: "cookiedirective",
     defaults: {
-      'should_enable': true,
-      'should_enable_msg': "You should enable cookies to be able to login.",
-      'should_enable_selector': ".login",
-      'should_ask': true,
-      'ask_permission_msg': "This site uses cookies to provide additional functionality, do you accept?",
-      'allow_msg': "Allow",
-      'deny_msg': "Deny",
-      'cookie_name': "Allow_Cookies_For_Site"
+      'shouldEnable': true,
+      'shouldEnable_msg': "You should enable cookies to be able to login.",
+      'shouldEnable_selector': ".login",
+      'shouldAsk': true,
+      'askPermissionMsg': "This site uses cookies to provide additional functionality, do you accept?",
+      'allowMsg': "Allow",
+      'denyMsg': "Deny",
+      'cookieName': "Allow_Cookies_For_Site"
     },
     cookiesEnabled: function() {
       $.cookie("_cookiesEnabled", 1);
@@ -58,7 +58,7 @@ define([
       return true;
     },
     acceptedCookies: function() {
-      var cookie = $.cookie(this.options['cookie_name']);
+      var cookie = $.cookie(this.options.cookieName);
       if (cookie === undefined){
         return undefined;
       }
@@ -70,28 +70,39 @@ define([
       }
     },
     acceptCookies: function() {
-      $.cookie(this.options['cookie_name'], 1);
+      $.cookie(this.options.cookieName, 1);
     },
     denyCookies: function() {
-      $.cookie(this.options['cookie_name'], 0);
+      $.cookie(this.options.cookieName, 0);
+    },
+    ensureBool: function(value) {
+      if (typeof(value) === 'string') {
+        if (value === 'true') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return value;
     },
     init: function() {
       var self = this;
-      if (self.options['should_ask']){
+      self.options.shouldAsk = self.ensureBool(self.options.shouldAsk);
+      if (self.options.shouldAsk || self.options.shouldAsk === 'true' ) {
         var accepted = self.acceptedCookies();
         if (accepted === undefined){
           var div = $('<div></div>')
             .addClass('cookiedirective');
-          var msg = $('<div><span>'+self.options['ask_permission_msg']+'</span></div>')
+          var msg = $('<div><span>'+self.options.askPermissionMsg+'</span></div>')
             .addClass('cookiemsg');
-          var button_allow = $('<div><span>'+self.options['allow_msg']+'</span></div>')
+          var button_allow = $('<div><span>'+self.options.allowMsg+'</span></div>')
             .addClass('cookieallowbutton')
             .addClass('btn')
             .on('click', function(e) {
                 self.acceptCookies();
                 self.$el.find('.cookiedirective').hide('slow');
               });
-          var button_deny = $('<div><span>'+self.options['deny_msg']+'</span></div>')
+          var button_deny = $('<div><span>'+self.options.denyMsg+'</span></div>')
             .addClass('cookiedenybutton')
             .addClass('btn')
             .on('click', function(e) {
@@ -102,12 +113,13 @@ define([
           self.$el.prepend(div);
         }
       }
-      if (self.options['should_enable']){
-        if (self.$el.find(self.options['should_enable_selector']).size() > 0){
+      self.options.shouldEnable = self.ensureBool(self.options.shouldEnable);
+      if (self.options.shouldEnable || self.options.shouldEnable === 'true') {
+        if (self.$el.find(self.options.shouldEnableSelector).size() > 0){
           if (!self.cookiesEnabled()){
             var div = $('<div></div>')
               .addClass('shouldenablecookies');
-            var msg = $('<div><span>'+self.options['should_enable_msg']+'</span></div>')
+            var msg = $('<div><span>'+self.options.shouldEnableMsg+'</span></div>')
               .addClass('shouldenablecookiesmsg');
             div.append(msg).append(msg);
             self.$el.prepend(div);
