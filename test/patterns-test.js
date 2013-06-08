@@ -440,7 +440,7 @@ define([
       expect($('> nav', this.$el).size()).to.equal(1);
     });
     it("can have custom levels", function() {
-      this.$el.attr('data-pat-autotoc-levels', 'h1');
+      this.$el.attr("data-pat-autotoc", "levels: h1");
       expect($('> nav', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(1);
@@ -516,7 +516,7 @@ define([
     it("default behaivour", function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <form class="pat-expose" data-pat-expose-backdrop="#body">' +
+        ' <form class="pat-expose" data-pat-expose="backdrop: #body">' +
         '  <input value="" />' +
         ' </form>' +
         '</div>');
@@ -542,7 +542,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal="backdrop: #body">Open</a>' +
         ' <div id="target" style="display:none;">Target</div>' +
         '</div>').appendTo('body');
 
@@ -575,7 +575,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal="backdrop: #body">Open</a>' +
         ' <div id="target">Target</div>' +
         '</div>').appendTo('body');
 
@@ -593,7 +593,7 @@ define([
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="patterns-modal-load-via-ajax"' +
-        '    data-pat-modal-backdrop="#body">Open</a>' +
+        '    data-pat-modal="backdrop: #body">Open</a>' +
         '</div>').appendTo('body');
 
       $('a', $el)
@@ -1023,7 +1023,7 @@ define([
     it('tagging', function() {
       var $el = $('' +
         '<div>' +
-        ' <input class="pat-select2" data-pat-select2-tags="Red,Yellow,Blue"' +
+        ' <input class="pat-select2" data-pat-select2="tags: Red,Yellow,Blue"' +
         '        value="Yellow" />' +
         '</div>');
       expect($('.select2-choices', $el).size()).to.equal(0);
@@ -1032,22 +1032,17 @@ define([
       expect($('.select2-choices li', $el).size()).to.equal(2);
     });
 
-    it('custom separator', function() {
-      var $el = $(
-        '<div>' +
-        ' <input class="pat-select2"' +
-        '        data-pat-select2-selector=";"' +
-        '        data-pat-select2-tags="Red;Yellow;Blue"' +
-        '        value="Yellow" />' +
-        '</div>');
-    });
-
     it('init value map', function() {
         var $el = $(
         '<div>' +
         ' <input class="pat-select2"' +
-        '        data-pat-select2-tags="Red,Yellow,Blue"' +
-        '        data-pat-select2-initvaluemap="Yellow:YellowTEXT,Red:RedTEXT"' +
+        '        data-pat-select2="{' +
+        '          &quot;tags&quot;: &quot;Red,Yellow,Blue&quot;,' +
+        '          &quot;initvaluemap&quot;: {' +
+        '            &quot;Yellow&quot;: &quot;YellowTEXT&quot;,' +
+        '            &quot;Red&quot;: &quot;RedTEXT&quot;' +
+        '          }' +
+        '        }"' +
         '        value="Yellow,Red"/>' +
         '</div>');
 
@@ -1058,7 +1053,7 @@ define([
     it('ajax vocabulary', function() {
         var $el = $(
         ' <input class="pat-select2"' +
-        '        data-pat-select2-ajaxvocabulary="select2-users-vocabulary"' +
+        '        data-pat-select2="ajaxvocabulary: select2-users-vocabulary"' +
         '        />'
         );
 
@@ -1070,8 +1065,7 @@ define([
         var $el = $(
         '<div>' +
         ' <input class="pat-select2"' +
-        '        data-pat-select2-orderable="true"' +
-        '        data-pat-select2-tags="Red,Yellow,Blue"' +
+        '        data-pat-select2="orderable: true; tags: Red,Yellow,Blue"' +
         '        value="Red"' +
         '        />' +
         '</div>'
