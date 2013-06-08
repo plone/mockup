@@ -101,12 +101,12 @@
               except in the format of the data attributes used by the patternslib.
             </p>
             <dl>
-              <dt>data-pat-select2-separator<dt>
+              <dt>separator<dt>
               <dd>
                 Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.
                 <br/><br/>
                 Defines a custom separator used to distinguish the tag values. Ex: a value of ';' will
-                allow the <em>data-pat-select2-tags</em> and <em>data-pat-select2-initvalmap</em> to have
+                allow the <em>tags</em> and <em>initvalmap</em> to have
                 values separated by ';' instead of the default ','.
               <dd>
 
@@ -121,7 +121,7 @@
                 </p>
               <dd>
 
-              <dt>data-pat-select2-ajaxvocabulary</dt>
+              <dt>ajaxvocabulary</dt>
               <dd>
                 This is a URL to a JSON formatted file used to populate the list
               </dd>
@@ -132,7 +132,7 @@
       <div class="row">
         <div class="span4">
           <h3>Autocomplete with search</h3>
-          <select class="pat-select2" data-pat-select2-width="20em">
+          <select class="pat-select2" data-pat-select2="width:20em">
             <option value="Acholi">Acholi</option>
             <option value="Afrikaans">Afrikaans</option>
             <option value="Akan">Akan</option>
@@ -323,7 +323,7 @@
             <option value="Yupik">Yupik</option>
           </select>
           <pre class="brush: html;toolbar: false;">
-&lt;select class="pat-select2" data-pat-select2-width="20em"&gt;
+&lt;select class="pat-select2" data-pat-select2="width:20em"&gt;
   ...
 &lt;/select&gt;</pre>
         </div>
@@ -336,29 +336,29 @@
         <div class="span4">
           <h3>Tagging</h3>
           <input type="text" class="pat-select2"
-              data-pat-select2-separator=";"
-              data-pat-select2-tags="Red;Yellow;Green;Orange;Purple"
-              data-pat-select2-width="20em"
-              data-pat-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange"
-              value="Red;Orange"/>
+              data-pat-select2="separator:,;
+                                tags:Red,Yellow,Green,Orange,Purple;
+                                width:20em;
+                                initvaluemap:Red:The Color Red,Orange:The Color Orange"
+              value="Red,Orange"/>
           <pre class="brush: html;toolbar: false;">
 &lt;input type="text" class="pat-select2"
-    data-pat-select2-separator=";"
-    data-pat-select2-tags="Red;Yellow;Green;Orange;Purple"
-    data-pat-select2-width="20em"
-    data-pat-select2-initvaluemap="Red:The Color Red;Orange:The Color Orange" /&gt;</pre>
+    data-pat-select2="separator:,;
+                      tags:Red,Yellow,Green,Orange,Purple;
+                      width:20em;
+                      initvaluemap:Red:The Color Red,Orange:The Color Orange" /&gt;</pre>
         </div>
         <div class="span4">
           <h3>Orderable tags</h3>
           <input type="text" class="pat-select2"
-              data-pat-select2-orderable="true"
-              data-pat-select2-tags="Red,Yellow,Green"
-              data-pat-select2-width="20em" />
+              data-pat-select2="orderable:true;
+                                tags:Red,Yellow,Green;
+                                width:20em" />
           <pre class="brush: html;toolbar: false;">
 &lt;input type="text" class="pat-select2"
-    data-pat-select2-orderable="true"
-    data-pat-select2-tags="Red,Yellow,Green,Orange,Purple"
-    data-pat-select2-width="20em" /&gt;</pre>
+    data-pat-select2="orderable:true
+                      tags:Red,Yellow,Green,Orange,Purple;
+                      width:20em" /&gt;</pre>
         </div>
 
       </div>
@@ -366,14 +366,14 @@
         <div class="span4">
           <h3>AJAX tags</h3>
           <input type="hidden" class="pat-select2"
-              data-pat-select2-placeholder="Search for a Value"
-              data-pat-select2-ajaxvocabulary="select2-test.json"
-              data-pat-select2-width="20em" />
+              data-pat-select2="placeholder:Search for a Value;
+                                ajaxvocabulary:select2-test.json;
+                                width:20em" />
           <pre class="brush: html;toolbar: false;">
 &lt;input type="hidden" class="pat-select2"
-    data-pat-select2-placeholder="Search for a Value"
-    data-pat-select2-ajaxvocabulary="select2-test.json"
-    data-pat-select2-width="20em" /&gt;</pre>
+    data-pat-select2="placeholder:Search for a Value;
+                      ajaxvocabulary:select2-test.json;
+                      width:20em" /&gt;</pre>
         </div>
 
       </div>
