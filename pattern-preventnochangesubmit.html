@@ -21,35 +21,6 @@
   <script src="jam/require.js"></script>
   <script src="js/demo/widgets.js"></script>
   <script src="js/demo/tinymce.js"></script>
-  <script type="text/x-ajax-respond" id="something-html">
-    <html>
-    <head></head>
-    <body>
-    <div id="content">
-    <div class="pull-right">
-      Button that triggers "hide" event ->
-      <a class="btn" onclick="$(this).trigger('destroy.modal.patterns')">Close</a>
-    </div>
-    <h1>Content from AJAX</h1>
-    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
-    of logic to it. A flower in my garden, a mystery in my panties. [climbing
-    under trampoline] This shall keep me safe from the hot Mexican sun. This is
-    not me encouraging you to go here and write a review. No. So, what do you
-    say? We got a basket full of father-son fun here. What\'s Kama Sutra oil?
-    Maybe it's not for us.</p>
-    </body>
-    </html>
-  </script>
-  <script type="text/x-ajax-respond" id="select2-json">
-    {
-      "more": "false",
-      "results": [
-        {"id": "Red", "text": "Red"},
-        {"id": "Blue", "text": "Blue"},
-        {"id": "Green", "text": "Green"}
-      ]
-    }
-  </script>
 </head>
 
 <body>
@@ -108,7 +79,7 @@
             value="Submit"
             />
           <br />
-          <a href="patterns.html">Click here to go somewhere else</a>
+          <a href="/">Click here to go somewhere else</a>
         </form>
         <pre class="brush: html;toolbar: false;">
 &lt;form class="pat-formunloadalert" onsubmit="javascript:return false;"&gt;
@@ -125,7 +96,7 @@
     type="submit"
     value="Submit"
     /&gt;
-  &lt;a href="patterns.html"&gt;Go somewhere else&lt;/a&gt;
+  &lt;a href="/"&gt;Go somewhere else&lt;/a&gt;
 &lt;/form&gt;
       </pre>
       </div>
