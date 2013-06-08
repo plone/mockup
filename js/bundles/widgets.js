@@ -155,6 +155,14 @@ define([
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
       
+      // Assign the class and data attributes for the "select all of the usergroup-usermembership view
+      var select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]');
+      select_all.addClass('pat-toggle');
+      select_all.attr({
+        'data-pat-toggle': 'target:form[action*=usergroup-usermembership] table.listing:last input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      });
+      
+      
     },
     scan: function(selector) {
       registry.scan($(selector));
