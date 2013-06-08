@@ -279,7 +279,7 @@ define([
     it("test ask permission customizable", function() {
       this.$el.attr("data-pat-cookiedirective",
         "askPermissionMsg: Test askPermissionMsg;" +
-        "allowMsg: Test allowMsg" +
+        "allowMsg: Test allowMsg;" +
         "denyMsg: Test denyMsg");
       registry.scan(this.$el);
       expect(this.$el.find('.cookiemsg').text()).to.equal("Test askPermissionMsg");

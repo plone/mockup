@@ -41,8 +41,8 @@ define([
     name: "cookiedirective",
     defaults: {
       'shouldEnable': true,
-      'shouldEnable_msg': "You should enable cookies to be able to login.",
-      'shouldEnable_selector': ".login",
+      'shouldEnableMsg': "You should enable cookies to be able to login.",
+      'shouldEnableSelector': ".login",
       'shouldAsk': true,
       'askPermissionMsg': "This site uses cookies to provide additional functionality, do you accept?",
       'allowMsg': "Allow",
@@ -88,7 +88,7 @@ define([
     init: function() {
       var self = this;
       self.options.shouldAsk = self.ensureBool(self.options.shouldAsk);
-      if (self.options.shouldAsk || self.options.shouldAsk === 'true' ) {
+      if (self.options.shouldAsk) {
         var accepted = self.acceptedCookies();
         if (accepted === undefined){
           var div = $('<div></div>')
@@ -114,7 +114,7 @@ define([
         }
       }
       self.options.shouldEnable = self.ensureBool(self.options.shouldEnable);
-      if (self.options.shouldEnable || self.options.shouldEnable === 'true') {
+      if (self.options.shouldEnable) {
         if (self.$el.find(self.options.shouldEnableSelector).size() > 0){
           if (!self.cookiesEnabled()){
             var div = $('<div></div>')
