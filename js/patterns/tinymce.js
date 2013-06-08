@@ -31,7 +31,6 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/tinymce/tinymce.min'
 ], function($, Base) {
   "use strict";
 
@@ -39,7 +38,15 @@ define([
     name: 'tinymce',
     init: function() {
       var self = this;
-      self.$el.tinymce(self.options);
+      // tiny needs an id in order to initialize. Creat it if not set.
+      var id = self.$el.attr('id');
+      if(id === undefined){
+        id = 'tiny' + (Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16).substring(1));
+        self.$el.attr('id', id);
+      }
+      self.options.selector = '#' + id;
+      self.tiny = tinymce.init(self.options);
     }
   });
 
