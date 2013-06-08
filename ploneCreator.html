@@ -9,18 +9,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Mockup(s)</title>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
   <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
   <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />
-  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
-  <link rel="stylesheet" type="text/css" href="jam/tinymce/skins/lightgray/skin.min.css" />
-  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
-  <script src="jam/jquery/dist/jquery.js"></script>
-  <script src="jam/require.js"></script>
-  <script src="js/demo/widgets.js"></script>
-  <script src="js/demo/tinymce.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/XRegExp.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shCore.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shBrushBash.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shBrushXml.js"></script>
+  <script src="jam/SyntaxHighlighter/scripts/shBrushJScript.js"></script>
 </head>
 
 <body>
@@ -44,48 +43,19 @@
   </header>
 
   <div class="container">
-    <div id="content" data-panel="content">
-
-      <div id="nav">
-       <ul>
+  <div id="nav">
+      <ul>
           <li><a href="index.html"><i class="icon-home"></i> Home</a></li>
-          <li><a href="ploneUser.html"><i class="icon-eye-open"></i> User</a></li>
-          <li><a href="ploneCreator.html"><i class="icon-cogs"></i> Creator</a></li>
+          <li><a href="#"><i class="icon-eye-open"></i> User</a></li>
+          <li><a href="#"><i class="icon-cogs"></i> Creator</a></li>
           <li><a href="ploneContributor.html"><i class="icon-globe selected"></i> Contributor</a></li>
       </ul>
   </div>
+    <div id="content" data-panel="content">
+    <h1><i class="icon-cogs"></i> Creator</h1>
+      <p>um dolor sit amet chuck salami meatball prosciutto pig bresaola tri-tip corned beef brisket sirloin tenderloin meatloaf pork chop shoulder ham hock. Jowl ground round bresaola sausage filet mignon fatback boudin pork loin pancetta pork chop short ribs. Beef ribs meatloaf brisket, shankle spare ribs turducken jerky pancetta short ribs. Ham drumstick cow andouille t-bone boudin fatback tenderloin venison pork chop capicola kielbasa swine spare ribs bresaola. Meatball boudin strip steak pig short ribs. Prosciutto sirloin shankle meatloaf. Venison beef ribs ribeye pastrami, pork loin prosciutto salami bacon fatback ham hock rump chuc</p>
 
-<!--
-=============================================
-  PATTERN: CookieDirective
-=============================================
--->
-
-    <h1 id="cookiedirective">Cookie Directive</h1>
-    <h3>Note: In order to see the "you must enable cookies" message, disable cookies in your browser and refresh this page</h3>
-    <div class="row">
-      <div class="span6">
-          <div class="pat-cookiedirective">
-            <div class="login">
-            </div>
-          </div>
-        <pre class="brush: html;toolbar:false;">
-          &lt;div class=&quot;pat-cookiedirective&quot;&gt;
-            &lt;div class=&quot;login&quot;&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        </pre>
-
-          <p>The cookie accepting the use of cookies is <strong id="cookievalue">undefined</strong></p>
-          <a class="btn" id="removedemocookie">Remove Cookie & Refresh page</a>
-
-      </div>
     </div>
-
-
-
-    </div> <!-- / #content -->
-
 
   </div>
 
@@ -96,7 +66,9 @@
     </div>
   </footer>
 
-
+  <script type="text/javascript">
+     SyntaxHighlighter.all()
+  </script>
 </body>
 
 </html>
