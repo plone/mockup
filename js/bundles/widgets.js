@@ -113,7 +113,7 @@ define([
 
       // Live Search
       $match = $root.find('.LSBox');
-      var url = $('#searchGadget_form').attr('action').replace('@@search', '@@updated_search');
+      var url = $match.parents('form').attr('action').replace('@@search', '@@updated_search');
       var attrs = {
         'url': url,
         'results': {
