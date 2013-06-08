@@ -386,15 +386,15 @@ define([
     });
     it("test setting small font size with button works", function(){
       // add pattern to anchor
-      this.$el.attr("data-pat-accessibility-smallbtn", "#btn1");
+      this.$el.attr("data-pat-accessibility", "smallbtn: #btn1");
       var accessibility = new Accessibility(this.$el);
       $('#btn1', this.$el).trigger('click');
       expect(this.$el.hasClass('smallText')).to.be.true;
     });
     it("test setting large font size with button works", function(){
       // add pattern to anchor
-      this.$el.attr("data-pat-accessibility-largebtn", "#btn3");
-      this.$el.attr("data-pat-accessibility-smallbtn", "#btn1");
+      this.$el.attr("data-pat-accessibility",
+        "largebtn: #btn3; smallbtn: #btn1");
       var accessibility = new Accessibility(this.$el);
       $('#btn3', this.$el).trigger('click');
       expect(this.$el.hasClass('largeText')).to.be.true;
