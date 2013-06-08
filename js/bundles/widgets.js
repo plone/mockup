@@ -44,7 +44,8 @@ define([
   'js/patterns/formUnloadAlert',
   'js/patterns/toggle',
   'js/patterns/tinymce',
-  'js/patterns/picture'
+  'js/patterns/picture',
+  'js/patterns/querystring'
 ], function($, registry) {
   "use strict";
 
