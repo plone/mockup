@@ -150,6 +150,7 @@ define([
 
     _keyUp: function() {
       var self = this;
+      var item = self.options.results.item;
       var hl = self.options.highlight;
       self.$selected = self.$results.find('.'+hl);
       if (self.$selected.length < 1) {
@@ -158,8 +159,8 @@ define([
         return;
       } else {
         self.$selected.removeClass(hl);
-        if (self.$selected.prev().length) {
-          self.$selected = self.$selected.prev();
+        if (self.$selected.prev(item).length) {
+          self.$selected = self.$selected.prev(item);
         } else {
           self.$selected = self.items().last();
         }
@@ -169,6 +170,7 @@ define([
 
     _keyDown: function() {
       var self = this;
+      var item = self.options.results.item;
       var hl = self.options.highlight;
       self.$selected = self.$results.find('.'+hl);
       if (self.$selected.length < 1) {
@@ -177,8 +179,8 @@ define([
         return;
       } else {
         self.$selected.removeClass(hl);
-        if (self.$selected.next().length) {
-          self.$selected = self.$selected.next();
+        if (self.$selected.next(item).length) {
+          self.$selected = self.$selected.next(item);
         } else {
           self.$selected = self.items().first();
         }
@@ -204,7 +206,7 @@ define([
       switch (event.keyCode) {
         case 13:
           self._keyEnter();
-          break;
+          return false;
         case 38:
           self._keyUp();
           return false;
