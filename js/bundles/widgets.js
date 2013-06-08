@@ -102,10 +102,16 @@ define([
       // Live Search
       $match = $root.find('.LSBox');
       var url = $('#searchGadget_form').attr('action').replace('@@search', '@@updated_search');
+      var attrs = {
+        'url': url,
+        'results': {
+          'content': '#search-results',
+          'item': 'dt'
+        }
+      };
       $match.attr({
         'class': 'pat-livesearch',
-        'data-pat-livesearch-url': url,
-        'data-put-livesearch-results-content': '#search-results'
+        'data-pat-livesearch': JSON.stringify(attrs)
       });
       $match.find('.searchSection').remove();
       $match.find('.LSResult').attr({
@@ -113,8 +119,8 @@ define([
         'id': ''
       });
       $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
-      $match.find('#searchGadget').addClass('pat-livesearch-input');
-
+      $match.find('#searchGadget').addClass('pat-livesearch-input')
+        .attr('autocomplete', 'off');
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce');

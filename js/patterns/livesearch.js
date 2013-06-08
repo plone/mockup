@@ -122,7 +122,8 @@ define([
       if (self.$results.length > 0) {
         var content = data;
         if (self.options.results.content !== null) {
-          content = $(data).find(self.options.results.content);
+          var html = data.replace('<body>', '<div>').replace('</body>', '</div>');
+          content = $(html).find(self.options.results.content);
         }
         $(content).find(self.options.results.item);
         self.$results.html(content);
