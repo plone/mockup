@@ -51,8 +51,7 @@ define([
   'js/patterns/relateditems',
   'js/patterns/tinymce',
   'js/patterns/tablesorter',
-  'js/patterns/livesearch',
-  'jam/jquery-cookie/jquery.cookie'
+  'js/patterns/livesearch'
 ], function(chai, $, sinon, registry,
       Base, AutoTOC, Backdrop,
       PickADate, Expose, Modal,
@@ -67,7 +66,15 @@ define([
   mocha.setup('bdd');
   $.fx.off = true;
 
-  // TODO: test default options and jquery integration
+  var server = sinon.fakeServer.create();
+  server.autoRespond = true;
+  server.autoRespondAfter = 0;
+  server.respondWith("patterns-modal-load-via-ajax", function (xhr, id) {
+    xhr.respond(200, { "Content-Type": "text/html" }, '' +
+      '<html><body>' +
+      '<div id="content">Exampel</div>' +
+      '</body></html>');
+  });
 
   describe("Base", function () {
     beforeEach(function() {
@@ -81,8 +88,9 @@ define([
         '<div data-pat-example="{&quot;name1&quot;: &quot;value1&quot;,' +
         '    &quot;name2&quot;: &quot;value2&quot;}">' +
         ' <div class="pat-example"' +
-        '      data-pat-example-name2="something"' +
-        '      data-pat-example-some-name4="value4"></div>' +
+        '      data-pat-example="name2: something;' +
+        '                        some-thing-name4: value4;' +
+        '                        some-stuff: value5"/>' +
         '</div>');
 
       Base.extend({
@@ -94,7 +102,8 @@ define([
           expect(this.options.name1).to.equal('value1');
           expect(this.options.name2).to.equal('something');
           expect(this.options.name3).to.equal('value3');
-          expect(this.options.some.name4).to.equal('value4');
+          expect(this.options.some.thing.name4).to.equal('value4');
+          expect(this.options.some.stuff).to.equal('value5');
         }
       });
 
@@ -224,11 +233,11 @@ define([
       $.removeCookie("Allow_Cookies_For_Site");
       $.removeCookie("_cookiesEnabled");
       this.$el = $('' +
-        '<div class="pat-cookiedirective">' +
-        '<div class="login"></div>' +
+        '<div class="pat-cookiedirective"' +
+        '     data-pat-cookiedirective="shouldAsk: true;' +
+        '                               shouldEnable: true;">' +
+        '  <div class="login"></div>' +
         '</div>');
-      this.$el.attr("data-pat-cookiedirective-should_ask", "true");
-      this.$el.attr("data-pat-cookiedirective-should_enable", "true");
     });
     it("test ask permission shows", function() {
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
@@ -237,7 +246,7 @@ define([
     });
     it("test ask permission can be hidden", function() {
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
-      this.$el.attr("data-pat-cookiedirective-should_ask", "false");
+      this.$el.attr("data-pat-cookiedirective", "shouldAsk: false");
       registry.scan(this.$el);
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
     });
@@ -268,20 +277,21 @@ define([
       expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
     });
     it("test ask permission customizable", function() {
-      this.$el.attr("data-pat-cookiedirective-ask_permission_msg", "Test ask_permission_msg");
-      this.$el.attr("data-pat-cookiedirective-allow_msg", "Test allow_msg");
-      this.$el.attr("data-pat-cookiedirective-deny_msg", "Test deny_msg");
+      this.$el.attr("data-pat-cookiedirective",
+        "askPermissionMsg: Test askPermissionMsg;" +
+        "allowMsg: Test allowMsg;" +
+        "denyMsg: Test denyMsg");
       registry.scan(this.$el);
-      expect(this.$el.find('.cookiemsg').text()).to.equal("Test ask_permission_msg");
-      expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allow_msg");
-      expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test deny_msg");
+      expect(this.$el.find('.cookiemsg').text()).to.equal("Test askPermissionMsg");
+      expect(this.$el.find('.cookieallowbutton').text()).to.equal("Test allowMsg");
+      expect(this.$el.find('.cookiedenybutton').text()).to.equal("Test denyMsg");
 
     });
     it("test enable cookies shows", function() {
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-pat-cookiedirective-should_ask", "false");
+      this.$el.attr("data-pat-cookiedirective", "shouldAsk: false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(1);
@@ -292,8 +302,8 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-pat-cookiedirective-should_ask", "false");
-      this.$el.attr("data-pat-cookiedirective-should_enable", "false");
+      this.$el.attr("data-pat-cookiedirective",
+        "shouldAsk: false; shouldEnable: false");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -316,8 +326,8 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-pat-cookiedirective-should_enable_selector", ".another-login");
-      this.$el.attr("data-pat-cookiedirective-deny_msg", "Test deny_msg");
+      this.$el.attr("data-pat-cookiedirective",
+        "shouldEnableSelector: .another-login; denyMsg: Test denyMsg");
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
       registry.scan(this.$el);
       expect(this.$el.find('.shouldenablecookies').size()).to.equal(0);
@@ -328,9 +338,10 @@ define([
       // Override the cookie function with something that returns undefined
       $.__old__cookie = $.cookie;
       $.cookie = function (){return undefined;};
-      this.$el.attr("data-pat-cookiedirective-should_enable_msg", "Test should_enable_msg");
+      this.$el.attr("data-pat-cookiedirective",
+        "shouldEnableMsg: Test shouldEnableMsg");
       registry.scan(this.$el);
-      expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test should_enable_msg");
+      expect(this.$el.find('.shouldenablecookiesmsg').text()).to.equal("Test shouldEnableMsg");
       // Restore cookie function
       $.cookie = $.__old__cookie;
     });
@@ -375,15 +386,15 @@ define([
     });
     it("test setting small font size with button works", function(){
       // add pattern to anchor
-      this.$el.attr("data-pat-accessibility-smallbtn", "#btn1");
+      this.$el.attr("data-pat-accessibility", "smallbtn: #btn1");
       var accessibility = new Accessibility(this.$el);
       $('#btn1', this.$el).trigger('click');
       expect(this.$el.hasClass('smallText')).to.be.true;
     });
     it("test setting large font size with button works", function(){
       // add pattern to anchor
-      this.$el.attr("data-pat-accessibility-largebtn", "#btn3");
-      this.$el.attr("data-pat-accessibility-smallbtn", "#btn1");
+      this.$el.attr("data-pat-accessibility",
+        "largebtn: #btn3; smallbtn: #btn1");
       var accessibility = new Accessibility(this.$el);
       $('#btn3', this.$el).trigger('click');
       expect(this.$el.hasClass('largeText')).to.be.true;
@@ -578,13 +589,22 @@ define([
 
       $el.remove();
     });
-    it("load modal content via ajax", function() {
+    it("load modal content via ajax", function(done) {
       var $el = $('' +
         '<div id="body">' +
-        ' <a class="pat-modal" href=""' +
+        ' <a class="pat-modal" href="patterns-modal-load-via-ajax"' +
         '    data-pat-modal-backdrop="#body">Open</a>' +
         '</div>').appendTo('body');
-      $el.remove();
+
+      $('a', $el)
+        .patternModal()
+        .on('show.modal.patterns', function() {
+          console.log('works');
+
+          $el.remove();
+          done();
+        })
+        .click();
     });
 
     describe("modal positioning (findPosition) ", function() {

@@ -46,6 +46,7 @@ define([
   'js/patterns/tinymce',
   'js/patterns/picture',
   'js/patterns/livesearch'
+  'js/patterns/querystring'
 ], function($, registry) {
   "use strict";
 

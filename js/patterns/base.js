@@ -41,49 +41,51 @@ define([
     return name.replace(/\.(\w)/g, function(match, letter) { return letter.toUpperCase(); });
   }
 
-  function getOptions($el, prefix, options) {
+  function _keysToObject(object, keys, value) {
+    if (keys.length === 1) {
+      return object[keys[0]] = value;
+    } else {
+      var key = keys.shift();
+      if (!object[key]) {
+        object[key] = {};
+      }
+      return _keysToObject(object[key], keys, value);
+    }
+  }
+
+  function getOptions($el, name, options) {
     options = options || {};
 
     // get options from parent element first, stop if element tag name is 'body'
-    if ($el.size() !== 0 && !$.nodeName($el[0], 'body')) {
-      options = getOptions($el.parent(), prefix, options);
+    if ($el.length !== 0 && !$.nodeName($el[0], 'body')) {
+      options = getOptions($el.parent(), name, options);
     }
 
     // collect all options from element
-    if($el.length) {
-      $.each($el[0].attributes, function(index, attr) {
-        if (attr.name.substr(0, ('data-pat-'+prefix).length) === 'data-pat-'+prefix) {
-          var name = attr.name.substr(('data-pat-'+prefix).length+1),
-              value = attr.value.replace(/^\s+|\s+$/g, '');  // trim
-          if (value.substring(0, 1) === '{' || value.substring(0, 1) === '[') {
-            value = JSON.parse(value);
-          } else if (value === 'true') {
-            value = true;
-          } else if (value === 'false') {
-            value = false;
-          }
-          if (name === '') {
-            options = value;
-          } else {
-            var names = name.split('-'),
-                names_options = options;
-            $.each(names, function(i, name) {
-              name = getName(name);
-              if (names.length > i + 1) {
-                if (!names_options[name]) {
-                  names_options[name] = {};
-                }
-                names_options = names_options[name];
-              } else {
-                names_options[name] = value;
-              }
-            });
-          }
+    var elOptions = {};
+    if ($el.length !== 0) {
+      elOptions = $el.data('pat-' + name);
+      if (elOptions) {
+        // parse options if string
+        if (typeof(elOptions) === 'string') {
+          var tmpOptions = {};
+          $.each(elOptions.split(';'), function(i, item) {
+            item = item.split(':');
+            if (item.length === 2) {
+              item[0] = item[0].replace(/^\s+|\s+$/g, '');  // trim
+              item[1] = item[1].replace(/^\s+|\s+$/g, '');  // trim
+              tmpOptions[item[0]] = item[1];
+            }
+          });
+          elOptions = {};
+          $.each(tmpOptions, function(key, value) {
+            _keysToObject(elOptions, key.split('-'), value);
+          });
         }
-      });
+      }
     }
 
-    return options;
+    return $.extend(true, {}, options, elOptions)
   }
 
   // Base Pattern

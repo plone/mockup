@@ -13,7 +13,6 @@
   <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />
   <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
-  <link rel="stylesheet" type="text/css" href="jam/tinymce/skins/lightgray/skin.min.css" />
   <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
@@ -1505,6 +1504,27 @@ Tiny MCE
 &lt;textarea class=&quot;pat-tinymce&quot; data-pat-tinymce-height=&quot;500&quot;&gt;&lt;/textarea&gt;
         </pre>
 
+      </div>
+    </div>
+
+<!---
+
+QueryString
+-->
+
+    <h1>Query String</h1>
+    <div class="row">
+      <div class="span12">
+        <textarea class="pat-querystring"
+          data-pat-querystring="">
+          [{"i": "portal_type",
+            "o": "plone.app.querystring.operation.selection.is",
+            "v": ["News Item"]},
+           {"i": "review_state",
+            "o": "plone.app.querystring.operation.selection.is",
+            "v": ["published"]}
+          ]
+        </textarea>
       </div>
     </div>
 
