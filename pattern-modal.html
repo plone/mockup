@@ -96,10 +96,11 @@
           <div class='alert alert-info'>
             <u><strong>Data Attributes</strong></u>
             <p>
-              Below are some notes about <em>some</em> of the available data attributes.
+              Below are some notes about <em>some</em> of the available pattern
+              options. These are options that will be placed in the data-pat-modal attribute.
             </p>
             <dl>
-              <dt>data-pat-modal-position<dt>
+              <dt>position<dt>
               <dd>
                 Optional, the default being <em>center middle</em>.
                 <br /><br />
@@ -113,7 +114,7 @@
                 the <em><strong>data-pat-modal-margin</strong></em> option.
               <dd>
 
-              <dt>data-pat-modal-margin</dt>
+              <dt>margin</dt>
               <dd>
                 This is ultimately an integer value. Defined through a data attribute
                 it must be an integer value -- but defined through javascript, it
@@ -166,9 +167,9 @@
           <p>
             <a href="#modal3"
                class="btn btn-large btn-primary pat-modal"
-                  data-pat-modal-position="center bottom"
-                  data-pat-modal-height="30%"
-                  data-pat-modal-width="80%">
+                  data-pat-modal="position:center bottom;
+                                  height:30%;
+                                  width:80%">
               Modal with custom position</a>
             <div style="display:none">
               <div id="modal3">
@@ -178,9 +179,9 @@
             <pre class="brush: html;toolbar: false;">
 &lt;a href="#modal3"
     class="btn btn-large btn-primary pat-modal"
-    data-pat-modal-position="center bottom"
-    data-pat-modal-height="30%"
-    data-pat-modal-width="80%;"&gt;
+    data-pat-modal="position:center bottom;
+                    height:30%;
+                    width:80%;"&gt;
   Modal with custom position&lt;/a&gt;
 &lt;div style="display:none"&gt;
   &lt;div id="modal3"&gt;
@@ -484,7 +485,7 @@
         <div class="span4">
           <div id='body'>
             <a href="#embededmodal"
-               data-pat-modal-backdrop="#body"
+               data-pat-modal="backdrop:#body"
                class="btn btn-large btn-primary pat-modal">
                 Embedded Modal
             </a>
@@ -496,7 +497,7 @@
           <pre class="brush: html;toolbar: false;">
 &lt;div id='body'&gt;
   &lt;a href="#embededmodal"
-     data-pat-modal-backdrop="#body"
+     data-pat-modal="backdrop:#body"
      class="btn btn-large btn-primary pat-modal"&gt;
       Embedded Modal
   &lt;/a&gt;
