@@ -71,9 +71,11 @@ define([
           var tmpOptions = {};
           $.each(elOptions.split(';'), function(i, item) {
             item = item.split(':');
-            item[0] = item[0].replace(/^\s+|\s+$/g, '');  // trim
-            item[1] = item[1].replace(/^\s+|\s+$/g, '');  // trim
-            tmpOptions[item[0]] = item[1];
+            if (item.length === 2) {
+              item[0] = item[0].replace(/^\s+|\s+$/g, '');  // trim
+              item[1] = item[1].replace(/^\s+|\s+$/g, '');  // trim
+              tmpOptions[item[0]] = item[1];
+            }
           });
           elOptions = {};
           $.each(tmpOptions, function(key, value) {
