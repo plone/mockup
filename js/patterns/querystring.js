@@ -40,6 +40,7 @@ define([
   var QueryString = Base.extend({
     name: 'querystring',
     defaults: {
+      indexes: [],
       klassWrapper: 'querystring-wrapper',
       klassCriteriaWrapper: 'querystring-criteria-wrapper',
       klassCriteriaIndex: 'querystring-criteria-index',
@@ -93,20 +94,58 @@ define([
     },
     addIndex: function($wrapper, item) {
       var self = this,
+          groups = {},
           $el = $('<select/>')
                     .addClass(self.options.klassCriteriaIndex);
-      $el.select2();
+
+      $.each(self.options.indexes, function(index, options) {
+        if (options.enabled) {
+          if (!groups[options.group]) {
+            groups[options.group] = $('<optgroup/>')
+                .attr('label', options.group)
+                .appendTo($el);
+          }
+          groups[options.group].append(
+            $('<option/>')
+                .attr('value', index)
+                .attr('selected', index === item.i)
+                .html(options.title));
+        }
+      });
+
       $wrapper.append($el);
+      return $el;
     },
     addOperator: function($wrapper, item) {
       var self = this,
           $el = $('<select/>').addClass(self.options.klassCriteriaOperator);
-      $el.select2();
+
+      if (item.o && self.options.indexes[item.i]) {
+        $.each(self.options.indexes[item.i].operators, function(operator, options) {
+          $('<option/>')
+              .attr('value', operator)
+              .attr('selected', operator === item.o)
+              .html(options.title)
+              .appendTo($el);
+        });
+      }
+
       $wrapper.append($el);
     },
     addValue: function($wrapper, item) {
-      var self = this,
-          $el = $('<input/>').addClass(self.options.klassCriteriaValue);
+      var self = this, $el;
+      if (item.v && self.options.indexes[item.i]) {
+        $el = $('<select/>')
+            .attr('multiple', true)
+            .addClass(self.options.klassCriteriaValue);
+        $.each(self.options.indexes[item.i].values, function(value, options) {
+          $('<option/>')
+              .attr('value', value)
+              .attr('selected', item.v.indexOf(value) !== -1)
+              .html(options.title)
+              .appendTo($el);
+        });
+      }
       $wrapper.append($el);
     }
   });
