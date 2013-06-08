@@ -35,13 +35,16 @@
 
 define([
   'jquery',
+  'underscore',
   'js/patterns/base',
   'js/patterns/select2'
-], function($, Base, Select2) {
+], function($, _, Base, Select2) {
   "use strict";
 
   var RelatedItems = Base.extend({
     name: "relateditems",
+    browsing: false,
+    currentPath: null,
     defaults: {
       multiple: true,
       tokenSeparators: [",", " "],
@@ -49,54 +52,62 @@ define([
       orderable: true,
       cache: true,
       closeOnSelect: false,
-      base_path: '/',
-      browse_text: 'Browse'
+      basePath: '/',
+      browseText: 'Browse',
+      resultTemplate: '' +
+        '<div class="pat-relateditems-result pat-relateditems-type-<%= type %>">' +
+        ' <% if (type === "folder") { %>' +
+        '   <a class="pat-relateditems-result-browse">' +
+        '     <i class="icon-folder-open"></i>' +
+        '   </a>' +
+        ' <% } %>' +
+        ' <a class="pat-relateditems-result-select" href="#">' +
+        '   <span class="pat-relateditems-result-title"><%= title %></span>' +
+        '   <span class="pat-relateditems-result-path"><%= path %></span>' +
+        ' </a>' +
+        '</div>',
+      formatResult: function(item) {
+        return item.resultMarkup;
+      },
+      selectionTemplate: '' +
+        '<span class="pat-relateditems-item pat-relateditems-type-<%= type %>">' +
+        ' <span class="pat-relateditems-item-title"><%= title %></span>' +
+        ' <span class="pat-relateditems-item-path"><%= path %></span>' +
+        '</span>',
+      formatSelection: function(item) {
+        return item.selectionMarkup;
+      },
+      escapeMarkup: function(text) {
+        return text;
+      }
+    },
+    applyTemplate: function(tpl, item) {
+      return _.template(tpl, item);
     },
     activateBrowsing: function(){
       var self = this;
-      self.$browsePath.html(self.options.base_path);
+      self.$browsePath.html(self.options.basePath);
       self.$browseBtn.html('');
       self.$browseBtn.addClass('select2-search-choice-close');
       self.browsing = true;
     },
     deactivateBrowsing: function(){
       var self = this;
-      self.$browseBtn.removeClass('select2-search-choice-close').html(self.options.browse_text);
+      self.$browseBtn.removeClass('select2-search-choice-close').html(self.options.browseText);
       self.$browsePath.html('');
       self.browsing = false;
     },
+    browseTo: function(data) {
+      console.log(data);
+    },
     init: function() {
       var self = this;
-      self.browsing = false;
+
       Select2.prototype.initializeValueMap.call(self);
       Select2.prototype.initializeTags.call(self);
-
-      self.options.formatResult = function(item){
-        var $resultel = $(  '<div>'
-                    +   '<div class="folder">'
-                    +     '<a href="#">' + item.title + '</a>'
-                    +     '<span class="add"><a href="#">add</a></span>'
-                    +   '</div>'
-                    +   '<div class="folderpath">'
-                    +     item.path
-                    +   '</div>'
-                    + '</div>');
-
-        self.$el.on('selecting', function(evt) {
-          evt.preventDefault();
-        });
-
-        return $resultel;
-      };
-      self.options.formatSelection = function(item){
-        return '<span title="' + item.path + '">' + item.title + '</span>';
-      };
-      self.options.escapeMarkup = function(txt){
-        return txt;
-      };
       Select2.prototype.initializeOrdering.call(self);
 
-      if(self.options.url !== undefined){
+      if(self.options.url !== undefined  && self.options.url !== null){
         var query_term = '';
         self.options.ajax = {
           url: self.options.url,
@@ -109,14 +120,20 @@ define([
               page_limit: 10 // page size
             };
             if(self.browsing){
-              opts.base_path = self.options.base_path;
+              opts.browse = self.currentPath ? self.currentPath : self.options.basePath;
             }
             return opts;
           },
           results: function (data, page) {
             var more = (page * 10) < data.total; // whether or not there are more results available
             // notice we return the value of more so Select2 knows if more results can be loaded
-            return {results: data.results, more: more};
+            var results = [];
+            _.each(data.results, function(item) {
+              item.selectionMarkup = self.applyTemplate(self.options.selectionTemplate, item);
+              item.resultMarkup = self.applyTemplate(self.options.resultTemplate, item);
+              results.push(item);
+            });
+            return {results: results, more: more};
           }
         };
       }
@@ -135,6 +152,7 @@ define([
       self.$select2.before(self.$browse);
       self.deactivateBrowsing();
       self.$el.on('loaded', function(data){
+        debugger;
       });
 
       self.$browse.click(function(e){
@@ -146,6 +164,10 @@ define([
           self.activateBrowsing();
           self.$el.select2('open');
         }
+      });
+
+      self.$el.on("select", function(event) {
+        debugger;
       });
     }
   });

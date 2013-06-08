@@ -16,6 +16,7 @@ function getQueryVariable(url, variable) {
 require([
   'jquery',
   'sinon',
+  'underscore',
   'jam/Patterns/src/registry',
   'js/bundles/widgets',
   'js/patterns/expose',
@@ -29,8 +30,8 @@ require([
   'js/patterns/livesearch',
   'jam/SyntaxHighlighter/scripts/XRegExp.js',
   'jam/SyntaxHighlighter/scripts/shCore.js',
-  'jam/SyntaxHighlighter/scripts/shBrushXml.js',
-], function($, sinon, registry, uri) {
+  'jam/SyntaxHighlighter/scripts/shBrushXml.js'
+], function($, sinon, _, registry, uri) {
   var URI = uri;
   // before demo patterns in overlay remove html created by autotoc pattern
   $('#modal1').on('show.modal.patterns', function(e, modal) {
@@ -50,35 +51,24 @@ require([
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
   });
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
-    var fakeItems = ['one', 'two', 'three', 'four', 'five', 'six', 'seven',
-                     'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen',
-                     'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
-                     'nineteen', 'twenty', 'twentyone'];
-    var directoryToSearch = {
-      'one': {
-        'one.one': {'one.one.itemone': 'One', 'one.one.itemtwo': 'Two'},
-        'one.two': {'one.two.itemone': 'One', 'one.two.itemtwo': 'Two'}
-      },
-      'two': {'two.itemone': 'One'},
-      'three': 'Three',
-      'five': 'Five',
-      'six': 'Six',
-      'seven': 'Seven',
-      'eight': 'Eight',
-      'nine': 'Nine',
-      'ten': 'Ten',
-      'eleven': 'Eleven',
-      'twelve': 'Twelve',
-      'thirteen': 'Thirteen',
-      'fourteen': 'Fourteen',
-      'fifteen': 'Fifteen',
-      'sixteen': 'Sixteen',
-      'seventeen': 'Seventeen',
-      'eighteen': 'Eighteen',
-      'nineteen': 'Nineteen',
-      'twenty': 'Twenty',
-      'twentyone': 'Twenty One'
-    };
+    var root = [
+      {"id": "news", "title": "News", "path": "/news", "type": "folder"},
+      {"id": "about", "title": "About", "path": "/about", "type": "page"},
+      {"id": "projects", "title": "Projects", "path": "/projects", "type": "folder"},
+      {"id": "contact", "title": "Contact", "path": "/contact", "type": "page"},
+      {"id": "policy", "title": "Privacy Policy", "path": "/policy", "type": "page"},
+      {"id": "our-process", "title": "Our Process", "path": "/our-process", "type": "folder"},
+      {"id": "donate-now", "title": "Donate", "path": "/donate-now", "type": "page"}
+    ];
+    var about = [
+      {"id": "about-us", "title": "About Us", "path": "/about/about-us", "type": "page"},
+      {"id": "philosophy", "title": "Philosophy", "path": "/about/philosophy", "type": "page"},
+      {"id": "staff", "title": "Staff", "path": "/about/staff", "type": "page"},
+      {"id": "board-of-directors", "title": "Board of Directors", "path": "/about/board-of-directors", "type": "page"}
+    ];
+
+    var searchables = about.concat(root);
+
     var results = [];
 
     // grab the page number and number of items per page -- note, page is 1-based from Select2
@@ -92,28 +82,39 @@ require([
     }
 
     var query = getQueryVariable(xhr.url, 'q');
-    var results = [];
+    var path = getQueryVariable(xhr.url, 'browse');
+
     // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
-    function search(idprefix, pathprefix, sobj) {
-      var cnt = 0;
-      for(var key in sobj) {
-        if(key.toLowerCase().indexOf(query.toLowerCase()) >= 0 || (typeof sobj[key] === "string" && sobj[key].toLowerCase().indexOf(query.toLowerCase()) >= 0)) {
-          results.push({
-            'id': idprefix+''+cnt,
-            'title': typeof sobj[key] === "string" ? sobj[key] : key,
-            'path': pathprefix + '/' + key,
-            'folder': typeof sobj[key] !== "string"
-          });
-        }
-        if(typeof sobj[key] !== "string") {
-          search(idprefix+''+cnt,
-                              pathprefix+'/'+key,
-                              sobj[key]);
-        }
-      }
+    function search(items, q) {
+      results = [];
+      if (q === undefined) return searchables;
+      _.each(items, function(item) {
+        var keys = (item.id + ' ' + item.title + ' ' + item.path).toLowerCase();
+        var query = q.toLowerCase();
+        if (keys.indexOf(query) > -1) results.push(item);
+      });
     }
 
-    search('', '', directoryToSearch);
+    function browse(items, q, path) {
+      results = [];
+      var splitPath = path.split('/');
+      var fromPath = [];
+      _.each(items, function(item) {
+        var itemSplit = item.path.split('/');
+        if (itemSplit.slice(0, splitPath.length-1).join('/') === splitPath[splitPath.length-1] &&
+            itemSplit.length === splitPath.length) {
+          fromPath.push(item);
+        }
+      });
+      if (q === undefined) return fromPath;
+      search(fromPath, q);
+    }
+
+    if (path) {
+      browse(searchables, query, path);
+    } else {
+      search(searchables, query);
+    }
 
     xhr.respond(200, { "Content-Type": "application/json" },
       JSON.stringify({
