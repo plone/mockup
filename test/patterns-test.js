@@ -809,7 +809,7 @@ define([
           expect(pos).not.to.have.property('right');
           expect(pos).to.have.property('left');
           // half wrapper width - half modal width - margin
-          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25 
+          // 400/2 - 340/2 - 5 = 200 - 170 - 5 = 25
           expect(pos['left']).to.equal('25px');
         }).click();
       });
@@ -1293,7 +1293,7 @@ define([
     beforeEach(function() {
       this.$el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch-url="/search.html">'+
+              'data-pat-livesearch="url:/search.html">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -1325,14 +1325,14 @@ define([
       });
     });
     afterEach(function() {
-      
+
     });
 
     it('test default elements', function() {
-      
+
       registry.scan(this.$el);
       var pattern = this.$el.data('pattern-livesearch-0');
-      
+
       expect(pattern.$toggle).to.have.length(1);
       expect(pattern.$input).to.have.length(1);
       expect(pattern.$results).to.have.length(1);
@@ -1346,7 +1346,7 @@ define([
       var pattern = this.$el.data('pattern-livesearch-0');
 
       expect(pattern.items()).to.have.length(0);
-      
+
       pattern.$input.val('123');
       pattern.$input.trigger('keyup');
 
@@ -1354,7 +1354,7 @@ define([
       expect(pattern.items()).to.have.length(0);
 
       clock.tick(1000);
-      
+
       expect(pattern.items()).to.have.length(2);
 
     });
