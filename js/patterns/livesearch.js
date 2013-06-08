@@ -105,7 +105,7 @@ define([
 
       var params = {};
       var query;
-      params[self.options.param] = term;
+      params[self.options.param] = term + '*';
       query = $.param(params);
       $.get(
         self.options.url,
