@@ -40,24 +40,18 @@ define([
     name: 'toggle',
     defaults: {
       attribute: 'class',
-      event: 'click'
+      event: 'click',
+      externalClose: true,
+      preventDefault: true
     },
     init: function() {
       var self = this;
 
       if (!self.options.target) {
-        if (self.options.globaltarget) {
-          self.$target = $(self.options.globaltarget);
-        }
-        else{
-          self.$target = self.$el;
-        }
+        self.$target = self.$el;
       }
       else {
-        self.$target = self.$el.closest(self.options.target);
-        if (self.$target.size() === 0) {
-          self.$target = self.closest(self.$el, self.options.target);
-        }
+        self.$target = $(self.options.target);
       }
 
       if (!self.$target) {
@@ -66,33 +60,46 @@ define([
       
       self.on(self.options.event, function(e) {
         self.toggle();
-
         e.stopPropagation();
-
-        return false;
-      });
-      $('html').on(self.options.event, function () {
-        self.remove();
-      });
-    },
-    closest: function($el, selector) {
-      var self = this,
-          $target = $(selector, $el);
-      if ($target.size() === 0) {
-        if ($el.size() === 0 || $.nodeName($el[0], 'body')) {
-          return;
+        if (self.options.preventDefault){
+          return false;
         }
-        $target = self.closest($el.parent(), selector);
+      });
+      if (self.options.externalClose) {
+        $('html').on(self.options.event, function () {
+          self.remove();
+        });
       }
-      return $target;
     },
     isMarked: function() {
       var self = this;
-      if (self.options.attribute === 'class') {
-        return this.$target.hasClass(this.options.value);
-      } else {
-        return this.$target.attr(this.options.attribute) === this.options.value;
+      var marked = false;
+      
+      for (var i=0;i<this.$target.length;i++){
+        if (this.$target.eq(i)[0] === self.$el[0]){
+          // If this is the toggle button, ignore checking
+          continue
+        }
+        if (self.options.attribute === 'class') {
+          if (this.$target.eq(i).hasClass(this.options.value)){
+            marked = true;
+          }
+          else{ 
+            marked = false;
+            break;
+          }
+        } 
+        else{
+          if (this.$target.eq(i).attr(this.options.attribute) === this.options.value){
+            marked = true;
+          }
+          else{
+            marked = false;
+            break;
+          }
+        }
       }
+      return marked;
     },
     toggle: function() {
       var self = this;
