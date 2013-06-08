@@ -44,9 +44,21 @@ define([
       externalClose: true,
       preventDefault: true
     },
+    ensureBool: function(value) {
+      if (typeof(value) === 'string') {
+        if (value === 'true') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return value;
+    },
     init: function() {
       var self = this;
 
+      self.options.externalClose = self.ensureBool(self.options.externalClose);
+      self.options.preventDefault = self.ensureBool(self.options.preventDefault);
       if (!self.options.target) {
         self.$target = self.$el;
       }
