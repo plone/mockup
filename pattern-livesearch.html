@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Mockup(s)</title>
+  <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />
+  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
+  <link rel="stylesheet" type="text/css" href="jam/tinymce/skins/lightgray/skin.min.css" />
+  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
+  <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
+  <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/jquery/dist/jquery.js"></script>
+  <script src="jam/require.js"></script>
+  <script src="js/demo/widgets.js"></script>
+  <script src="js/demo/tinymce.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div id="portal-logo">
+        <span class="plone-logo">
+          <span class="plone-logo-circle">
+            <span class="plone-circle-inner">
+              <span class="plone-dot-1"></span>
+              <span class="plone-dot-2"></span>
+              <span class="plone-dot-3"></span>
+            </span>
+          </span>
+          <span class="plone-text">Plone</span>
+        </span>
+        Mockup(s)
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+      <div id="nav">
+      <ul>
+          <li><a href="index.html"><i class="icon-home"></i> Home</a></li>
+          <li><a href="ploneUser.html"><i class="icon-eye-open"></i> User</a></li>
+          <li><a href="ploneCreator.html"><i class="icon-cogs"></i> Creator</a></li>
+          <li><a href="ploneContributor.html"><i class="icon-globe selected"></i> Contributor</a></li>
+      </ul>
+  </div>
+
+<!--
+=============================================
+  PATTERN: AUTOTOC
+=============================================
+-->
+      <h1 id="livesearch">Live Search</h1>
+      <div class="row">
+        <div class="span6">
+          <h2>Default</h2>
+          <div class="pat-livesearch"
+              data-pat-livesearch="url: /search.html">
+            <input type="text" class="pat-livesearch-input" placeholder="Search" />
+            <div class="pat-livesearch-container">
+              <div class="pat-livesearch-results">
+
+              </div>
+            </div>
+          </div>
+          <pre class="brush: html;toolbar: false;">
+&lt;div class="pat-livesearch"
+  data-pat-livesearch="url: /search.html"&gt;
+  &lt;input type="text" class="pat-livesearch-input"
+    placeholder="Search" /&gt;
+  &lt;div class="pat-livesearch-container"&gt;
+    &lt;div class="pat-livesearch-results"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+        </div>
+      </div>
+      <div>
+        <h4>Data Attributes</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                Attribute
+              </th>
+              <th>
+                Default
+              </th>
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>url</td>
+              <td></td>
+              <td>The url that will be of the server side page that will be queried.</td>
+            </tr>
+            <tr>
+              <td>delay</td>
+              <td>400</td>
+              <td>Delay in ms after user types before searching.</td>
+            </tr>
+            <tr>
+              <td>param</td>
+              <td>SearchableText</td>
+              <td>The query string parameter which will be set with the value of the input.</td>
+            </tr>
+            <tr>
+              <td>highlight</td>
+              <td>pat-livesearch-highlight</td>
+              <td>CSS class that will be used to highlight items on keyboard navigation.</td>
+            </tr>
+            <tr>
+              <td>chars</td>
+              <td>3</td>
+              <td>Number of characters user must type before search begins.</td>
+            </tr>
+            <tr>
+              <td>input</td>
+              <td>.pat-livesearch-input</td>
+              <td>Selector for element that will be used for the livesearch input.</td>
+            </tr>
+            <tr>
+              <td>toggle-target</td>
+              <td>.pat-livesearch-container</td>
+              <td>Selector for element that will be shown when results are found.</td>
+            </tr>
+            <tr>
+              <td>toggle-klass</td>
+              <td>show</td>
+              <td>CSS class that will be added to target toggle element when results are found.</td>
+            </tr>
+            <tr>
+              <td>results-target</td>
+              <td>.pat-livesearch-results</td>
+              <td>Selector for element where results from the server will be inserted.</td>
+            </tr>
+            <tr>
+              <td>results-content</td>
+              <td></td>
+              <td>
+                Selector for element inside in the HTML from the server which contains the results.
+              </td>
+            </tr>
+            <tr>
+              <td>results-item</td>
+              <td>li</td>
+              <td>Selector to match items that will match individual results within the response 
+                from the server.</td>
+            </tr>
+            <tr>
+              <td>results-link</td>
+              <td>a</td>
+              <td>Selector for element within an <strong>item</strong> that will be "clicked" when
+                the enter key is used during keyboard navigation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- / #content -->
+
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
+
+</body>
+
+</html>
+
+
+
