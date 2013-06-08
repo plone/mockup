@@ -77,19 +77,36 @@ define([
         'data-pat-formunloadalert':'message: '+window.form_modified_message
       });
 
-      // apply formUnloadAlert pattern where enableUnloadProtection exists
-      var $match = $root.filter('dl.actionMenu dt.actionMenuHeader a');
-      $match = $match.add($root.find('dl.actionMenu dt.actionMenuHeader a'));
-      $match.addClass('pat-toggle');
-      $match.attr({
-        'data-pat-toggle': 'target: dl.actionMenu;value: activated'
+      // Fix drop downs
+      var personal_tools = $('dl.actionMenu#portal-personaltools dt.actionMenuHeader a');
+      personal_tools.addClass('pat-toggle');
+      personal_tools.attr({
+        'data-pat-toggle': 'target: dl.actionMenu#portal-personaltools;value: activated'
       });
-      $root.find('dl.actionMenu').removeClass('deactivated');
+      
+      var add_new = $('dl.actionMenu#plone-contentmenu-factories dt.actionMenuHeader a');
+      add_new.addClass('pat-toggle');
+      add_new.attr({
+        'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-factories;value: activated'
+      });
+      
+      var display = $('dl.actionMenu#plone-contentmenu-display dt.actionMenuHeader a');
+      display.addClass('pat-toggle');
+      display.attr({
+        'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-display;value: activated'
+      });
+      
+      var workflow = $('dl.actionMenu#plone-contentmenu-workflow dt.actionMenuHeader a');
+      workflow.addClass('pat-toggle');
+      workflow.attr({
+        'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-workflow;value: activated'
+      });
+      
+      $('dl.actionMenu').removeClass('deactivated');
 
-      $root.on('mousedown', function(e) {
-        if ($(e.toElement).parents('dd.actionMenuContent').size() == 0){
-          // If we are not clicking inside a content menu, then remove the
-          // attribute from all other elements
+      $('html').on('mousedown', function(e) {
+        if (!$(e.toElement).parents('dl.actionMenu').hasClass('activated')){
+          // Means we clicked an opened menu, do not close
           $('dl.actionMenu').removeClass('activated');
         }
       });
