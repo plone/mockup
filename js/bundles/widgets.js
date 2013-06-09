@@ -102,6 +102,13 @@ define([
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-workflow;value: activated'
       });
       
+      // plone/app/search/search.pt
+      var filter_results = $('form[name=searchform] dl.actionMenu dt.actionMenuHeader a');
+      filter_results.addClass('pat-toggle');
+      filter_results.attr({
+        'data-pat-toggle': 'target: form[name=searchform] dl.actionMenu;value: activated'
+      });
+      
       $('dl.actionMenu').removeClass('deactivated');
 
       $('html').on('mousedown', function(e) {
