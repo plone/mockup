@@ -52,22 +52,26 @@ require([
   });
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
     var root = [
-      {"id": "news", "title": "News", "path": "/news", "type": "folder"},
-      {"id": "about", "title": "About", "path": "/about", "type": "page"},
-      {"id": "projects", "title": "Projects", "path": "/projects", "type": "folder"},
-      {"id": "contact", "title": "Contact", "path": "/contact", "type": "page"},
-      {"id": "policy", "title": "Privacy Policy", "path": "/policy", "type": "page"},
-      {"id": "our-process", "title": "Our Process", "path": "/our-process", "type": "folder"},
-      {"id": "donate-now", "title": "Donate", "path": "/donate-now", "type": "page"}
+      {"id": "asdlfkjasdlfkjasdf", "title": "News", "path": "/news", "type": "folder"},
+      {"id": "124asdf", "title": "About", "path": "/about", "type": "folder"},
+      {"id": "asdf1234", "title": "Projects", "path": "/projects", "type": "folder"},
+      {"id": "asdf1234gsad", "title": "Contact", "path": "/contact", "type": "page"},
+      {"id": "asdv34sdfs", "title": "Privacy Policy", "path": "/policy", "type": "page"},
+      {"id": "asdfasdf234sdf", "title": "Our Process", "path": "/our-process", "type": "folder"},
+      {"id": "asdhsfghyt45", "title": "Donate", "path": "/donate-now", "type": "page"}
     ];
     var about = [
-      {"id": "about-us", "title": "About Us", "path": "/about/about-us", "type": "page"},
-      {"id": "philosophy", "title": "Philosophy", "path": "/about/philosophy", "type": "page"},
-      {"id": "staff", "title": "Staff", "path": "/about/staff", "type": "page"},
-      {"id": "board-of-directors", "title": "Board of Directors", "path": "/about/board-of-directors", "type": "page"}
+      {"id": "gfn5634f", "title": "About Us", "path": "/about/about-us", "type": "page"},
+      {"id": "45dsfgsdcd", "title": "Philosophy", "path": "/about/philosophy", "type": "page"},
+      {"id": "dfgsdfgj675", "title": "Staff", "path": "/about/staff", "type": "folder"},
+      {"id": "sdfbsfdh345", "title": "Board of Directors", "path": "/about/board-of-directors", "type": "page"}
     ];
 
-    var searchables = about.concat(root);
+    var staff = [
+      {"id": "asdfasdf9sdf", "title": "Mike", "path": "/about/staff/mike", "type": "page"},
+      {"id": "cvbcvb82345", "title": "Joe", "path": "/about/staff/joe", "type": "page"}
+    ];
+    var searchables = about.concat(root).concat(staff);
 
     var results = [];
 
@@ -95,14 +99,14 @@ require([
       });
     }
 
-    function browse(items, q, path) {
+    function browse(items, q, p) {
       results = [];
+      var path = p.substring(0, p.length-1);
       var splitPath = path.split('/');
       var fromPath = [];
       _.each(items, function(item) {
         var itemSplit = item.path.split('/');
-        if (itemSplit.slice(0, splitPath.length-1).join('/') === splitPath[splitPath.length-1] &&
-            itemSplit.length === splitPath.length) {
+        if (item.path.indexOf(path) === 0 && itemSplit.length-1 == splitPath.length) {
           fromPath.push(item);
         }
       });
