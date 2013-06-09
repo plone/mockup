@@ -59,8 +59,11 @@ define([
       },
       results: {
         target: '.pat-livesearch-results', // the element to fill with results
+        container: 'ul',
+        item: 'li'
       },
       input: '.pat-livesearch-input', // input selector
+      resultContainerTemplate: '<ul></ul>',
       resultTemplate: '' +
         '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
           '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
@@ -147,9 +150,13 @@ define([
     fillResults: function(data) {
       var self = this;
       if (self.$results.length > 0) {
-        var content = $('<ul></ul>');
+        var content = $(self.applyTemplate(self.options.resultContainerTemplate, self));
+        var container = content.find(self.options.results.container);
+        if(container.length === 0){
+          container = content;
+        }
         $.each(data, function(index, value){
-          content.append(self.applyTemplate(self.options.resultTemplate, value));
+          container.append(self.applyTemplate(self.options.resultTemplate, value));
         });
         self.$results.html(content);
         self.show();
@@ -170,7 +177,7 @@ define([
     },
 
     items: function() {
-      return this.$results.find('li');
+      return this.$results.find(this.options.results.item);
     },
 
     _keyUp: function() {

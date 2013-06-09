@@ -125,7 +125,22 @@ define([
       var url = $match.parents('form').attr('action').replace('@@search',
           '@@getVocabulary?name=plone.app.vocabularies.Catalog');
       var attrs = {
-        'url': url
+        'url': url,
+        'resultContainerTemplate': '<div class="LSResult" id="LSResult">' +
+          '<div class="LSShadow" id="LSShadow">' +
+            '<fieldset class="livesearchContainer">' +
+            '<legend id="livesearchLegend">LiveSearch ↓</legend>' +
+              '<div class="LSIEFix">' +
+                '<ul class="LSTable"></ul>' +
+              '</div>' +
+            '</legend>' +
+          '</div>',
+        'resultTemplate': '<li class="LSRow">' +
+          '<a href="<%= getURL %>" title="<%= Title %>" class="contenttype-<%= Type %>">' +
+            '<%= Title %>' +
+          '</a>' +
+          '<div class="LSDescr"><%= Description %></div>' +
+          '</li>'
       };
       $match.attr({
         'class': 'pat-livesearch',
