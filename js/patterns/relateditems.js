@@ -27,6 +27,13 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
+/* TODO:
+  [ ] Figure out how to disable select2 auto positioning (above)
+  [ ] Use new universal vocab view (when it exists, requires updates to parameters)
+  [ ] use valuemap for initial values
+  [ ] Add ability to pass selector for templates or the template string
+*/
+
 /*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   undef:true, strict:true, trailing:true, browser:true, evil:true */
