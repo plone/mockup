@@ -45,7 +45,8 @@ require([
     xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
   });
   server.respondWith(/search.html/, function (xhr, id) {
-    xhr.respond(200, { "Content-Type": "html/html" }, $('#search-html').html());
+    var search = '{"total": 2, "results": [{"getURL": "http://localhost:8081/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}, {"getURL": "http://localhost:8081/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}]}';
+    xhr.respond(200, { "Content-Type": "application/json" }, search);
   });
   server.respondWith(/select2-test.json/, function(xhr, id) {
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
