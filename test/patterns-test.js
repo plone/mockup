@@ -1378,27 +1378,13 @@ define([
             '</div>'+
           '</div>');
 
-      var search = '' +
-        '<html>' +
-        '<body>'+
-        ' <ul>'+
-        '   <li>'+
-        '     <a href="http://localhost:8080/plone/front-page">Welcome to Plone</a>'+
-        '     <p>Congratulations! You have successfully installed Plone.</p>'+
-        '   </li>'+
-        '   <li>'+
-        '     <a href="http://localhost:8080/plone/front-page">Example Item</a>'+
-        '     <p>This is an example item from the depths of somewhere.</p>'+
-        '   </li>'+
-        ' </ul>'+
-        '</body>'+
-        '</html>';
+      var search = '{"total": 2, "results": [{"getURL": "http://localhost:8081/mockup3/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}, {"getURL": "http://localhost:8081/mockup3/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}]}';
 
       var server = sinon.fakeServer.create();
       server.autoRespond = true;
       server.autoRespondAfter = 500;
       server.respondWith(/search.html/, function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "html/html" }, search);
+        xhr.respond(200, { "Content-Type": "application/json" }, search);
       });
     });
     afterEach(function() {
@@ -1424,7 +1410,7 @@ define([
 
       expect(pattern.items()).to.have.length(0);
 
-      pattern.$input.val('123');
+      pattern.$input.val('news');
       pattern.$input.trigger('keyup');
 
       expect(pattern.timeout).to.not.be.null;
@@ -1442,7 +1428,7 @@ define([
       registry.scan(this.$el);
       var pattern = this.$el.data('pattern-livesearch-0');
 
-      pattern.$input.val('123');
+      pattern.$input.val('news');
       pattern.$input.trigger('keyup');
 
       clock.tick(1000);

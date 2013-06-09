@@ -113,13 +113,10 @@ define([
 
       // Live Search
       $match = $root.find('.LSBox');
-      var url = $match.parents('form').attr('action').replace('@@search', '@@updated_search');
+      var url = $match.parents('form').attr('action').replace('@@search',
+          '@@getVocabulary?name=plone.app.vocabularies.Catalog');
       var attrs = {
-        'url': url,
-        'results': {
-          'content': '#search-results',
-          'item': 'dt'
-        }
+        'url': url
       };
       $match.attr({
         'class': 'pat-livesearch',

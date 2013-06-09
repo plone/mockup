@@ -33,8 +33,9 @@
 define([
   'jquery',
   'js/patterns/base',
-  'js/patterns/toggle'
-], function($, Base, Toggle) {
+  'js/patterns/toggle',
+  'underscore'
+], function($, Base, Toggle, _) {
   "use strict";
 
   var Livesearch = Base.extend({
@@ -49,6 +50,7 @@ define([
     defaults: {
       delay: 400, // ms after keyup before search
       param: 'SearchableText', // query string param to pass to search url
+      attributes: ['Title', 'Description', 'getURL', 'Type'],
       highlight: 'pat-livesearch-highlight', // class to add to items when selected
       chars: 3, // number of chars user should type before searching
       toggle: {
@@ -57,11 +59,15 @@ define([
       },
       results: {
         target: '.pat-livesearch-results', // the element to fill with results
-        content: null, // element from the result to grab
-        item: 'li', // selector for items in results
-        link: 'a' // selector for primary link element inside of item
       },
-      input: '.pat-livesearch-input' // input selector
+      input: '.pat-livesearch-input', // input selector
+      resultTemplate: '' +
+        '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
+          '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
+            '<%= Title %>' +
+          '</a>' +
+          '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
+        '</li>'
     },
 
     init: function() {
@@ -101,32 +107,50 @@ define([
       var term = this.$input.val();
 
       if (self.cache[term]) {
+        // already have results, do not load ajax
         self.fillResults(self.cache[term]);
+        return;
       }
 
-      var params = {};
-      var query;
-      params[self.options.param] = term + '*';
-      query = $.param(params);
+      var params = {
+        query: JSON.stringify({
+          criteria: [{
+            i: self.options.param,
+            o: 'plone.app.querystring.operation.string.contains',
+            v: term + '*'
+          }]
+        }),
+        batch: JSON.stringify({
+          page: 0,
+          size: 10
+        }),
+        attributes: JSON.stringify(self.options.attributes)
+      };
       $.get(
         self.options.url,
-        query,
+        $.param(params),
         function(data) {
-          self.cache[term] = data;
-          self.fillResults(data);
+          self.cache[term] = data.results;
+          if(data.results !== undefined){
+            self.fillResults(data.results);
+          }else{
+            console.log('error from server returning result');
+          }
         }
       );
+    },
+
+    applyTemplate: function(tpl, item) {
+      return _.template(tpl, item);
     },
 
     fillResults: function(data) {
       var self = this;
       if (self.$results.length > 0) {
-        var content = data;
-        if (self.options.results.content !== null) {
-          var html = data.replace('<body>', '<div>').replace('</body>', '</div>');
-          content = $(html).find(self.options.results.content);
-        }
-        $(content).find(self.options.results.item);
+        var content = $('<ul></ul>');
+        $.each(data, function(index, value){
+          content.append(self.applyTemplate(self.options.resultTemplate, value));
+        });
         self.$results.html(content);
         self.show();
         window.clearInterval(self.timeout);
@@ -146,12 +170,11 @@ define([
     },
 
     items: function() {
-      return this.$results.find(this.options.results.item);
+      return this.$results.find('li');
     },
 
     _keyUp: function() {
       var self = this;
-      var item = self.options.results.item;
       var hl = self.options.highlight;
       if (self.index === null || self.index === 0) {
         self.index = self.items().length - 1;
@@ -165,7 +188,6 @@ define([
 
     _keyDown: function() {
       var self = this;
-      var item = self.options.results.item;
       var hl = self.options.highlight;
       if (self.index === null || self.index === self.items().length-1) {
         self.index = 0;
@@ -185,7 +207,7 @@ define([
       var self = this;
       var hl = self.options.highlight;
       var target = self.$results.find('.'+hl)
-        .find(self.options.results.link).attr('href');
+        .find('a').attr('href');
       window.location = target;
     },
 
@@ -209,10 +231,13 @@ define([
         case 39: break; // keyRight
         default:
           if (self.$input.val().length >= self.options.chars) {
-            self.timeout = window.setInterval(
-              function(){
+            self.timeout = window.setInterval(function(){
+              try{
                 self.search();
-              }, self.options.delay);
+              }catch(e){
+                console.log('error trying to search');
+              }
+            }, self.options.delay);
           }
       }
     }
