@@ -46,7 +46,8 @@ define([
   'js/patterns/tinymce',
   'js/patterns/picture',
   'js/patterns/livesearch',
-  'js/patterns/querystring'
+  'js/patterns/querystring',
+  'js/patterns/preventdoublesubmit'
 ], function($, registry) {
   "use strict";
 
@@ -176,6 +177,11 @@ define([
         'data-pat-toggle': 'target:form[name=searchform] dd.actionMenuContent input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
       
+      // Apply the preventdoublesubmit pattern to forms
+      $('form').addClass('pat-preventdoublesubmit');
+      $('form').attr({
+        'data-pat-preventdoublesubmit': 'message:'+window.form_resubmit_message
+      });
       
     },
     scan: function(selector) {
