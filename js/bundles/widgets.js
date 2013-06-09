@@ -47,7 +47,8 @@ define([
   'js/patterns/picture',
   'js/patterns/livesearch',
   'js/patterns/querystring',
-  'js/patterns/preventdoublesubmit'
+  'js/patterns/preventdoublesubmit',
+  'js/patterns/formautofocus'
 ], function($, registry) {
   "use strict";
 
@@ -182,6 +183,12 @@ define([
       $('form').attr({
         'data-pat-preventdoublesubmit': 'message:'+window.form_resubmit_message
       });
+      
+      // Add the form auto focus for the add or edit forms
+      var add_form = $('form[action*="++add++"]');
+      add_form.addClass('pat-formautofocus');
+      var edit_form = $('form[action*="@@edit"]');
+      edit_form.addClass('pat-formautofocus');
       
     },
     scan: function(selector) {
