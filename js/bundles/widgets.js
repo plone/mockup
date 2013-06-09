@@ -46,7 +46,9 @@ define([
   'js/patterns/tinymce',
   'js/patterns/picture',
   'js/patterns/livesearch',
-  'js/patterns/querystring'
+  'js/patterns/querystring',
+  'js/patterns/preventdoublesubmit',
+  'js/patterns/formautofocus'
 ], function($, registry) {
   "use strict";
 
@@ -102,6 +104,13 @@ define([
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-workflow;value: activated'
       });
       
+      // plone/app/search/search.pt
+      var filter_results = $('form[name=searchform] dl.actionMenu dt.actionMenuHeader a');
+      filter_results.addClass('pat-toggle');
+      filter_results.attr({
+        'data-pat-toggle': 'target: form[name=searchform] dl.actionMenu;value: activated'
+      });
+      
       $('dl.actionMenu').removeClass('deactivated');
 
       $('html').on('mousedown', function(e) {
@@ -146,19 +155,37 @@ define([
       });
       
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
-      var select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]');
+      select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]');
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
       
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
-      var select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]');
+      select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]');
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target:form[action*=usergroup-usermembership] table.listing:last input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
       
+      // plone/app/search/search.pt
+      select_all = $("[onchange*='toggleSelect']").attr('onchange', null);
+      select_all.addClass('pat-toggle');
+      select_all.attr({
+        'data-pat-toggle': 'target:form[name=searchform] dd.actionMenuContent input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      });
+      
+      // Apply the preventdoublesubmit pattern to forms
+      $('form').addClass('pat-preventdoublesubmit');
+      $('form').attr({
+        'data-pat-preventdoublesubmit': 'message:'+window.form_resubmit_message
+      });
+      
+      // Add the form auto focus for the add or edit forms
+      var add_form = $('form[action*="++add++"]');
+      add_form.addClass('pat-formautofocus');
+      var edit_form = $('form[action*="@@edit"]');
+      edit_form.addClass('pat-formautofocus');
       
     },
     scan: function(selector) {

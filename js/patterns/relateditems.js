@@ -54,29 +54,38 @@ define([
       closeOnSelect: false,
       basePath: '/',
       browseText: 'Browse',
+      searchText: 'Search',
+      homeText: 'home',
+      dropdownCssClass: 'pat-relateditems-dropdown',
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= type %>">' +
-        ' <% if (type === "folder") { %>' +
-        '   <a class="pat-relateditems-result-browse">' +
-        '     <i class="icon-folder-open"></i>' +
+        ' <span class="pat-relateditems-buttons">' +
+        '  <% if (type === "folder") { %>' +
+        '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>">' +
+        '       <i class="icon-folder-open"></i>' +
+        '    </a>' +
+        '   <% } %>' +
+        '   <a class="pat-relateditems-result-select" href="#">' +
+        '       <i class="icon-plus-sign"></i>' +
         '   </a>' +
-        ' <% } %>' +
-        ' <a class="pat-relateditems-result-select" href="#">' +
-        '   <span class="pat-relateditems-result-title"><%= title %></span>' +
-        '   <span class="pat-relateditems-result-path"><%= path %></span>' +
-        ' </a>' +
+        ' </span>' +
+        ' <span class="pat-relateditems-result-title"><%= title %></span>' +
+        ' <span class="pat-relateditems-result-path"><%= path %></span>' +
         '</div>',
-      formatResult: function(item) {
-        return item.resultMarkup;
-      },
       selectionTemplate: '' +
         '<span class="pat-relateditems-item pat-relateditems-type-<%= type %>">' +
         ' <span class="pat-relateditems-item-title"><%= title %></span>' +
         ' <span class="pat-relateditems-item-path"><%= path %></span>' +
         '</span>',
-      formatSelection: function(item) {
-        return item.selectionMarkup;
-      },
+      tabsTemplate: '' +
+        '<div class="pat-relateditems-tabs tabs">' +
+        ' <a href="#" class="pat-relateditems-tabs-search tab active"><%= searchText %></a>' +
+        ' <a href="#" class="pat-relateditems-tabs-browse tab"><%= browseText %></a>' +
+        '</div>',
+      breadCrumbsTemplate: '' +
+        '<span><a href="/"><i class="icon-home"></i></a><%= items %></span>',
+      breadCrumbTemplate: '' +
+        '/<a href="<%= path %>"><%= text %></a>',
       escapeMarkup: function(text) {
         return text;
       }
@@ -86,22 +95,71 @@ define([
     },
     activateBrowsing: function(){
       var self = this;
-      self.$browsePath.html(self.options.basePath);
-      self.$browseBtn.html('');
-      self.$browseBtn.addClass('select2-search-choice-close');
       self.browsing = true;
+      self.setBreadCrumbs();
+      self.setTabs();
     },
     deactivateBrowsing: function(){
       var self = this;
-      self.$browseBtn.removeClass('select2-search-choice-close').html(self.options.browseText);
-      self.$browsePath.html('');
       self.browsing = false;
+      self.setBreadCrumbs();
+      self.setTabs();
     },
-    browseTo: function(data) {
-      console.log(data);
+    browseTo: function(path) {
+      var self = this;
+      self.currentPath = path;
+      self.activateBrowsing();
+      self.$el.select2('close');
+      self.$el.select2('open');
+    },
+    setTabs: function() {
+      var self = this;
+      if (self.browsing) {
+        self.$browseBtn.addClass('active');
+        self.$searchBtn.removeClass('active');
+      } else {
+        self.$browseBtn.removeClass('active');
+        self.$searchBtn.addClass('active');
+      }
+    },
+    setBreadCrumbs: function() {
+      var self = this;
+      var path = self.currentPath ? self.currentPath : self.options.basePath;
+      if (self.browsing) {
+        var html;
+        if (path === '/') {
+          html = self.applyTemplate(self.options.breadCrumbsTemplate, {items:''});
+        } else {
+          var paths = path.split('/');
+          var itemPath = '';
+          var itemsHtml = '';
+          _.each(paths, function(node) {
+            if (node !== '') {
+              var item = {};
+              itemPath = itemPath + '/' + node;
+              item.text = node;
+              item.path = itemPath;
+              itemsHtml = itemsHtml + self.applyTemplate(self.options.breadCrumbTemplate, item);
+            }
+          });
+          html = self.applyTemplate(self.options.breadCrumbsTemplate, {items:itemsHtml});
+        }
+        var $crumbs = $(html);
+        $('a', $crumbs).on('click', function(event) {
+          self.browseTo($(this).attr('href'));
+          return false;
+        });
+        self.$browsePath.html($crumbs);
+      } else {
+        self.$browsePath.html('');
+      }
     },
     init: function() {
       var self = this;
+
+      self.$el.wrap('<div class="pat-relateditems-container" />');
+      self.$container = self.$el.parents('.pat-relateditems-container');
+      self.$container.width(self.options.width);
 
       Select2.prototype.initializeValueMap.call(self);
       Select2.prototype.initializeTags.call(self);
@@ -127,13 +185,7 @@ define([
           results: function (data, page) {
             var more = (page * 10) < data.total; // whether or not there are more results available
             // notice we return the value of more so Select2 knows if more results can be loaded
-            var results = [];
-            _.each(data.results, function(item) {
-              item.selectionMarkup = self.applyTemplate(self.options.selectionTemplate, item);
-              item.resultMarkup = self.applyTemplate(self.options.resultTemplate, item);
-              results.push(item);
-            });
-            return {results: results, more: more};
+            return {results: data.results, more: more};
           }
         };
       }
@@ -141,34 +193,89 @@ define([
         self.options.tags = [];
       }
 
+      self.options.formatSelection = function(item) {
+        var tpl = self.options.selectionTemplate;
+        return self.applyTemplate(tpl, item);
+      };
+
+      self.options.formatResult = function(item) {
+        var tpl = self.options.resultTemplate;
+        var result = $(self.applyTemplate(tpl, item));
+
+        $('.pat-relateditems-result-select', result).on('click', function(event) {
+          var data = self.$el.select2("data");
+          data.push(item);
+          self.$el.select2("data", data);
+          return false;
+        });
+
+        $('.pat-relateditems-result-browse', result).on('click', function(event) {
+          var path = $(this).data('path');
+          self.browseTo(path);
+          return false;
+        });
+
+        return $(result);
+      };
+
+      self.options.initSelection = function(element, callback) {
+        var data = [];
+        var value = $(element).val();
+        if (value !== '') {
+          var ids = value.split(',');
+          _.each(ids, function(id) {
+            $.ajax(self.options.url, {
+              data: {
+                q: id,
+                page: 1,
+                page_limit: 999
+              },
+              success: function(results) {
+                if (results.results.length === 1) {
+                  data.push(results.results[0]);
+                  callback(data);
+                }
+              }
+            });
+          });
+        }
+
+      };
+
       Select2.prototype.initializeSelect2.call(self);
 
       // Browsing functionality
-      self.$browse = $('<div class="select2-browse"></div>');
-      self.$browseBtn = $('<a href="#"></a>');
-      self.$browsePath = $('<span />');
-      self.$browse.append(self.$browseBtn);
-      self.$browse.append(self.$browsePath);
-      self.$select2.before(self.$browse);
+      var browseOpts = {
+        browseText: self.options.browseText,
+        searchText: self.options.searchText
+      };
+      self.$browse = $(self.applyTemplate(self.options.tabsTemplate, browseOpts));
+      self.$container.prepend(self.$browse);
+      self.$browseBtn = $('.pat-relateditems-tabs-browse', self.$browse);
+      self.$searchBtn = $('.pat-relateditems-tabs-search', self.$browse);
+      self.$browsePath = $('<span class="pat-relateditems-path" />');
+      self.$browse.after(self.$browsePath);
+      self.$browsePath.width(self.$container.width()-2);
       self.deactivateBrowsing();
-      self.$el.on('loaded', function(data){
-        debugger;
+
+      self.$browseBtn.click(function(e){
+        self.activateBrowsing();
+        self.$el.select2('close');
+        self.$el.select2('open');
+        return false;
       });
 
-      self.$browse.click(function(e){
-        e.preventDefault();
-        if(self.browsing){
-          self.deactivateBrowsing();
-          self.$el.select2('close');
-        }else{
-          self.activateBrowsing();
-          self.$el.select2('open');
-        }
+      self.$searchBtn.click(function(e){
+        self.deactivateBrowsing();
+        self.$el.select2('close');
+        self.$el.select2('open');
+        return false;
       });
 
-      self.$el.on("select", function(event) {
-        debugger;
+      self.$el.on("select2-selecting", function(event) {
+        event.preventDefault();
       });
+
     }
   });
 

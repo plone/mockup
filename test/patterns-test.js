@@ -1502,20 +1502,65 @@ define([
   ========================== */
 
   describe("FormAutoFocus", function() {
-    it("default behaivour", function(done) {
-      var $el = $('' +
-        '<div id="body">' +
-        ' <form class="pat-formautofocus" ' +
-        '       data-pat-formautofocus="condition:.error;target:input">' +
-        '  <input value="" />' +
-        '  <div class="error">Some error</div>' +
+    beforeEach(function() {
+      // We are including another form to the DOM, just to be sure we focus
+      // inside the form that actually has the pattern
+      this.$el = $('' +
+        '<div>' +
+        ' <form>' +
+        '  <input value="" id="first-input-should-not-focus"/>' +
+        '  <div class="error">' +
+        '    <input value="" id="input-inside-error-should-not-focus" />' +
+        '  </div>' +
         ' </form>' +
-        '</div>');
-      expect($('input', $el).is(':focus')).to.be.false;
-      $('input', $el).on('focus', function() {
+        '</div>')
+        .appendTo('body');
+    });
+    afterEach(function() {
+      this.$el.remove();
+    });
+    it("when the condition is met, focus on the first one", function(done) {
+      var $el = $('' +
+        '<div>' +
+        ' <form class="pat-formautofocus">' +
+        '  <input value="" id="first-input"/>' +
+        '  <div class="error">' +
+        '    <input value="" id="input1-inside-error" />' +
+        '  </div>' +
+        '  <div class="error">' +
+        '    <input value="" id="input2-inside-error" />' +
+        '  </div>' +
+        ' </form>' +
+        '</div>')
+        .appendTo('body');
+      expect($('input#first-input').is(':focus')).to.be.false;
+      $('input').on('focus', function() {
+        expect($(this).attr('id')).to.equal('input1-inside-error');
+        expect($('input#first-input-should-not-focus').is(':focus')).to.be.false;
+        expect($('input#input-inside-error-should-not-focus').is(':focus')).to.be.false;
         done();
       });
       registry.scan($el);
+      $el.remove();
+    });
+    it("when the condition is not met, focus on the first input", function() {
+      var $el = $('' +
+        '<div>' +
+        ' <form class="pat-formautofocus">' +
+        '  <input value="" id="first-input"/>' +
+        '  <input value="" id="second-input"/>' +
+        ' </form>' +
+        '</div>')
+        .appendTo('body');
+      expect($('input#first-input').is(':focus')).to.be.false;
+      $('input').on('focus', function() {
+        expect($(this).attr('id')).to.equal('first-input');
+        expect($('input#first-input-should-not-focus').is(':focus')).to.be.false;
+        expect($('input#input-inside-error-should-not-focus').is(':focus')).to.be.false;
+        done();
+      });
+      registry.scan($el);
+      $el.remove();
     });
   });
 
