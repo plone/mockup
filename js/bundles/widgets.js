@@ -156,17 +156,24 @@ define([
       });
       
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
-      var select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]');
+      select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]');
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
       
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
-      var select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]');
+      select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]');
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target:form[action*=usergroup-usermembership] table.listing:last input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      });
+      
+      // plone/app/search/search.pt
+      select_all = $("[onchange*='toggleSelect']").attr('onchange', null);
+      select_all.addClass('pat-toggle');
+      select_all.attr({
+        'data-pat-toggle': 'target:form[name=searchform] dd.actionMenuContent input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
       
       
