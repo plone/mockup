@@ -27,13 +27,6 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/* TODO:
-  [ ] Figure out how to disable select2 auto positioning (above)
-  [ ] Use new universal vocab view (when it exists, requires updates to parameters)
-  [ ] use valuemap for initial values
-  [ ] Add ability to pass selector for templates or the template string
-*/
-
 /*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   undef:true, strict:true, trailing:true, browser:true, evil:true */
@@ -63,17 +56,21 @@ define([
       browseText: 'Browse',
       searchText: 'Search',
       homeText: 'home',
+      dropdownCssClass: 'pat-relateditems-dropdown',
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= type %>">' +
-        ' <% if (type === "folder") { %>' +
-        '   <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>">' +
-        '     <i class="icon-folder-open"></i>' +
+        ' <span class="pat-relateditems-buttons">' +
+        '  <% if (type === "folder") { %>' +
+        '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>">' +
+        '       <i class="icon-folder-open"></i>' +
+        '    </a>' +
+        '   <% } %>' +
+        '   <a class="pat-relateditems-result-select" href="#">' +
+        '       <i class="icon-plus-sign"></i>' +
         '   </a>' +
-        ' <% } %>' +
-        ' <a class="pat-relateditems-result-select" href="#">' +
-        '   <span class="pat-relateditems-result-title"><%= title %></span>' +
-        '   <span class="pat-relateditems-result-path"><%= path %></span>' +
-        ' </a>' +
+        ' </span>' +
+        ' <span class="pat-relateditems-result-title"><%= title %></span>' +
+        ' <span class="pat-relateditems-result-path"><%= path %></span>' +
         '</div>',
       selectionTemplate: '' +
         '<span class="pat-relateditems-item pat-relateditems-type-<%= type %>">' +
@@ -111,7 +108,7 @@ define([
     browseTo: function(path) {
       var self = this;
       self.currentPath = path;
-      self.setBreadCrumbs();
+      self.activateBrowsing();
       self.$el.select2('close');
       self.$el.select2('open');
     },
@@ -263,12 +260,14 @@ define([
 
       self.$browseBtn.click(function(e){
         self.activateBrowsing();
+        self.$el.select2('close');
         self.$el.select2('open');
         return false;
       });
 
       self.$searchBtn.click(function(e){
         self.deactivateBrowsing();
+        self.$el.select2('close');
         self.$el.select2('open');
         return false;
       });
