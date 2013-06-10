@@ -169,17 +169,19 @@ define([
     },
 
     show: function() {
+      var self = this;
       self.trigger('showing');
-      if (this.$toggle) {
-        this.$toggle.addClass(this.options.toggle.klass);
+      if (self.$toggle) {
+        self.$toggle.addClass(self.options.toggle.klass);
       }
       self.trigger('shown');
     },
 
     hide: function() {
+      var self = this;
       self.trigger('hiding');
-      if (this.$toggle) {
-        this.$toggle.removeClass(this.options.toggle.klass);
+      if (self.$toggle) {
+        self.$toggle.removeClass(self.options.toggle.klass);
       }
       self.trigger('hidden');
     },
