@@ -107,10 +107,12 @@ define([
     },
     browseTo: function(path) {
       var self = this;
+      self.$el.trigger('before-browse');
       self.currentPath = path;
       self.activateBrowsing();
       self.$el.select2('close');
       self.$el.select2('open');
+      self.$el.trigger('after-browse');
     },
     setTabs: function() {
       var self = this;
@@ -153,6 +155,13 @@ define([
       } else {
         self.$browsePath.html('');
       }
+    },
+    selectItem: function(item) {
+      self.$el.trigger('selecting');
+      var data = self.$el.select2("data");
+      data.push(item);
+      self.$el.select2("data", data);
+      self.$el.trigger('selected');
     },
     init: function() {
       var self = this;
@@ -203,9 +212,7 @@ define([
         var result = $(self.applyTemplate(tpl, item));
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
-          var data = self.$el.select2("data");
-          data.push(item);
-          self.$el.select2("data", data);
+          self.selectItem(item);
           return false;
         });
 
