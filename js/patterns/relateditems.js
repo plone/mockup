@@ -72,26 +72,38 @@ define([
         ' <span class="pat-relateditems-result-title"><%= title %></span>' +
         ' <span class="pat-relateditems-result-path"><%= path %></span>' +
         '</div>',
+      resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pat-relateditems-item pat-relateditems-type-<%= type %>">' +
         ' <span class="pat-relateditems-item-title"><%= title %></span>' +
         ' <span class="pat-relateditems-item-path"><%= path %></span>' +
         '</span>',
+      selectionTemplateSelector: null,
       tabsTemplate: '' +
         '<div class="pat-relateditems-tabs tabs">' +
         ' <a href="#" class="pat-relateditems-tabs-search tab active"><%= searchText %></a>' +
         ' <a href="#" class="pat-relateditems-tabs-browse tab"><%= browseText %></a>' +
         '</div>',
+      tabsTemplateSelector: null,
       breadCrumbsTemplate: '' +
         '<span><a href="/"><i class="icon-home"></i></a><%= items %></span>',
+      breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
         '/<a href="<%= path %>"><%= text %></a>',
+      breadCrumbTemplateSelector: null,
       escapeMarkup: function(text) {
         return text;
       }
     },
     applyTemplate: function(tpl, item) {
-      return _.template(tpl, item);
+      var self = this;
+      var template;
+      if (self.options[tpl+'TemplateSelector'] !== null && self.options[tpl+'Selector'] !== undefined) {
+        template = $(self.options[tpl+'Selector']).html();
+      } else {
+        template = self.options[tpl+'Template'];
+      }
+      return _.template(template, item);
     },
     activateBrowsing: function(){
       var self = this;
@@ -130,7 +142,7 @@ define([
       if (self.browsing) {
         var html;
         if (path === '/') {
-          html = self.applyTemplate(self.options.breadCrumbsTemplate, {items:''});
+          html = self.applyTemplate('breadCrumbs', {items:''});
         } else {
           var paths = path.split('/');
           var itemPath = '';
@@ -141,10 +153,10 @@ define([
               itemPath = itemPath + '/' + node;
               item.text = node;
               item.path = itemPath;
-              itemsHtml = itemsHtml + self.applyTemplate(self.options.breadCrumbTemplate, item);
+              itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
             }
           });
-          html = self.applyTemplate(self.options.breadCrumbsTemplate, {items:itemsHtml});
+          html = self.applyTemplate('breadCrumbs', {items:itemsHtml});
         }
         var $crumbs = $(html);
         $('a', $crumbs).on('click', function(event) {
@@ -203,13 +215,11 @@ define([
       }
 
       self.options.formatSelection = function(item) {
-        var tpl = self.options.selectionTemplate;
-        return self.applyTemplate(tpl, item);
+        return self.applyTemplate('selection', item);
       };
 
       self.options.formatResult = function(item) {
-        var tpl = self.options.resultTemplate;
-        var result = $(self.applyTemplate(tpl, item));
+        var result = $(self.applyTemplate('result', item));
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
           self.selectItem(item);
@@ -256,7 +266,7 @@ define([
         browseText: self.options.browseText,
         searchText: self.options.searchText
       };
-      self.$browse = $(self.applyTemplate(self.options.tabsTemplate, browseOpts));
+      self.$browse = $(self.applyTemplate('tabs', browseOpts));
       self.$container.prepend(self.$browse);
       self.$browseBtn = $('.pat-relateditems-tabs-browse', self.$browse);
       self.$searchBtn = $('.pat-relateditems-tabs-search', self.$browse);
