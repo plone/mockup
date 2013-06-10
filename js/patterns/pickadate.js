@@ -44,19 +44,19 @@ define([
     name: 'pickadate',
     defaults: {
       separator: ' ',
+      date: {
+        formatSubmit: 'dd-mm-yyyy'
+      },
+      time: {
+        formatSubmit: 'HH:i'
+      },
       klassWrapper: 'pat-pickadate-wrapper',
       klassSeparator: 'pat-pickadate-separator',
       klassDate: 'pat-pickadate-date',
       klassDateWrapper: 'pat-pickadate-date-wrapper',
       klassTime: 'pat-pickadate-time',
       klassTimeWrapper: 'pat-pickadate-time-wrapper',
-      klassClear: 'pat-pickadate-clear',
-      date: {
-        formatSubmit: 'dd-mm-yyyy'
-      },
-      time: {
-        formatSubmit: 'HH:i'
-      }
+      klassClear: 'pat-pickadate-clear'
     },
     ensureBool: function(value) {
       if (typeof(value) === 'string') {
