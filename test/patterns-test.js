@@ -1378,7 +1378,7 @@ define([
             '</div>'+
           '</div>');
 
-      var search = '{"total": 2, "results": [{"getURL": "http://localhost:8081/mockup3/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}, {"getURL": "http://localhost:8081/mockup3/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}]}';
+      var search = '{"total": 2, "results": [{"getURL": "http://localhost:8081/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}, {"getURL": "http://localhost:8081/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}]}';
 
       var server = sinon.fakeServer.create();
       server.autoRespond = true;
