@@ -108,6 +108,7 @@ define([
     search: function() {
       var self = this;
       var term = this.$input.val();
+      self.trigger('searching');
 
       if (self.cache[term]) {
         // already have results, do not load ajax
@@ -139,6 +140,9 @@ define([
           }else{
             console.log('error from server returning result');
           }
+          self.cache[term] = data;
+          self.fillResults(data);
+          self.trigger('searched');
         }
       );
     },
@@ -165,15 +169,19 @@ define([
     },
 
     show: function() {
+      self.trigger('showing');
       if (this.$toggle) {
         this.$toggle.addClass(this.options.toggle.klass);
       }
+      self.trigger('shown');
     },
 
     hide: function() {
+      self.trigger('hiding');
       if (this.$toggle) {
         this.$toggle.removeClass(this.options.toggle.klass);
       }
+      self.trigger('hidden');
     },
 
     items: function() {
