@@ -34,427 +34,115 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/pickadate/source/pickadate'
+  'jam/pickadate/_raw/lib/picker.js',
+  'jam/pickadate/_raw/lib/picker.date.js',
+  'jam/pickadate/_raw/lib/picker.time.js'
 ], function($, Base) {
   "use strict";
 
   var PickADate = Base.extend({
     name: 'pickadate',
     defaults: {
-      format: "d-mmmm-yyyy@HH:MM",
-      formatsubmit: "yyyy-m-d H:M",
-      ampm: 'AM,PM',
-      minutestep: '5',
-      klass: {
-        wrapper: "pat-pickadate-wrapper",
-        icon: "pat-pickadate-icon",
-        year: "pat-pickadate-year",
-        month: "pat-pickadate-month",
-        day: "pat-pickadate-day",
-        hour: "pat-pickadate-hour",
-        minute: "pat-pickadate-minute",
-        ampm: "pat-pickadate-ampm",
-        delimiter: "pat-pickadate-delimiter"
+      separator: ' ',
+      klassWrapper: 'pat-pickadate-wrapper',
+      klassSeparator: 'pat-pickadate-separator',
+      klassDate: 'pat-pickadate-date',
+      klassDateWrapper: 'pat-pickadate-date-wrapper',
+      klassTime: 'pat-pickadate-time',
+      klassTimeWrapper: 'pat-pickadate-time-wrapper',
+      klassClear: 'pat-pickadate-clear',
+      date: {
+        formatSubmit: 'dd-mm-yyyy'
       },
-      pickadate: {
-        monthSelector: true,
-        yearSelector: true
+      time: {
+        formatSubmit: 'HH:i'
       }
     },
-    init: function() {
-      var self = this;
-
-      // only initialize on "input" elements
-      if (!self.$el.is('input')) {
-        return;
-      }
-
-      self.pickadateOptions = $.extend(true, {}, $.fn.pickadate.defaults, {
-        formatSubmit: 'yyyy-mm-dd',
-        onSelect: function(e) {
-          var date = this.getDate('yyyy-mm-dd').split('-');
-          self.$years.val(parseInt(date[0], 10));
-          self.$months.val(parseInt(date[1], 10));
-          self.$days.val(parseInt(date[2], 10));
-          self.setDate(
-            self.$years.val(),
-            self.$months.val(),
-            self.$days.val(),
-            self.$hours.val(),
-            self.$minutes.val(),
-            self.$ampm.val()
-          );
+    ensureBool: function(value) {
+      if (typeof(value) === 'string') {
+        if (value === 'true') {
+          return true;
+        } else if (value === 'false') {
+          return false;
         }
-      }, self.options.pickadate);
+      }
+      return value;
+    },
+    init: function() {
+      var self = this,
+          onSetDate = self.options.date.onSet,
+          onSetTime = self.options.time.onSet;
 
       self.$el.hide();
 
       self.$wrapper = $('<div/>')
-        .addClass(self.options.klass.wrapper)
-        .insertAfter(self.$el);
+            .addClass(self.options.klassWrapper)
+            .insertAfter(self.$el);
 
-      self.pickadate = $('<input/>')
-        .hide().appendTo(self.$wrapper)
-        .pickadate(self.pickadateOptions).data('pickadate');
+      self.options.date = self.ensureBool(self.options.date);
+      self.options.time = self.ensureBool(self.options.time);
 
-      function changePickadateDate() {
-        if (self.$years.val() !== '' &&
-            self.$months.val() !== '' &&
-            self.$days.val() !== '') {
-          self.pickadate.setDate(
-              parseInt(self.$years.val(), 10),
-              parseInt(self.$months.val(), 10),
-              parseInt(self.$days.val(), 10),
-              true);
-        }
-        self.setDate(
-          self.$years.val(),
-          self.$months.val(),
-          self.$days.val(),
-          self.$hours.val(),
-          self.$minutes.val(),
-          self.$ampm.val()
-        );
+      if (self.options.date !== false) {
+        self.$date = $('<input type="text"/>')
+              .addClass(self.options.klassDate)
+              .appendTo($('<div/>')
+                  .addClass(self.options.klassDateWrapper)
+                  .appendTo(self.$wrapper))
+              .pickadate($.extend(true, self.options.date, {
+                onSet: function() {
+                  self.setDateTime();
+                  if (onSetDate) {
+                    onSetDate.apply(this, arguments);
+                  }
+                }
+              }));
+
       }
 
-      self.$years = $('<select/>')
-        .addClass(self.options.klass.year)
-        .on('change', changePickadateDate);
-      self.$months = $('<select/>')
-        .addClass(self.options.klass.month)
-        .on('change', changePickadateDate);
-      self.$days = $('<select/>')
-        .addClass(self.options.klass.day)
-        .on('change', changePickadateDate);
-      self.$hours = $('<select/>')
-        .addClass(self.options.klass.hour)
-        .on('change', changePickadateDate);
-      self.$minutes = $('<select/>')
-        .addClass(self.options.klass.minute)
-        .on('change', changePickadateDate);
-      self.$icon = $('<span class="' + self.options.klass.icon + '"/>')
-        .on('click', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          self.toggle();
-        });
-
-      // append elements in correct order according to self.options.format
-      $.each(self._strftime(self.options.format,
-        function(format) {
-          switch (format) {
-            case 'yy':
-            case 'yyyy':
-              return self.$years.append(self._getYears(format));
-            case 'm':
-            case 'mm':
-            case 'mmm':
-            case 'mmmm':
-              return self.$months.append(self._getMonths(format));
-            case 'd':
-            case 'dd':
-            case 'ddd':
-            case 'dddd':
-              return self.$days.append(self._getDays(format));
-            case 'H':
-            case 'HH':
-              return self.$hours.append(self._getHours(format));
-            case 'M':
-            case 'MM':
-              return self.$minutes.append(self._getMinutes(format));
-            case '@':
-              return self.$icon;
-            default:
-              return $('<span> ' + format + ' </span>')
-                .addClass(self.options.klass.delimiter);
-          }
-        }
-      ), function(i, $item) {
-        self.$wrapper.append($item);
-      });
-
-      if (self.options.ampm) {
-        self.$ampm = $('<select/>')
-          .addClass(self.options.klass.ampm)
-          .append(self._getAMPM())
-          .on('change', changePickadateDate);
-        self.$wrapper.append($('<span> </span>'));
-        self.$wrapper.append(self.$ampm);
+      if (self.options.date !== false && self.options.time !== false) {
+        self.$separator = $('<span/>')
+              .addClass(self.options.klassSeparator)
+              .html(self.options.separator === ' ' ? '&nbsp;'
+                                                   : self.options.separator)
+              .appendTo(self.$wrapper);
       }
 
-      // populate dropdowns and calendar
-      // TODO: should be done with self._strtime
-      if (self.$el.val() !== '') {
-        var tmp = self.$el.val().split(' '),
-            date = tmp[0].split('-'),
-            time = tmp[1].split(':'),
-            ampm = (parseInt(time[0], 10) >= 12) && 'PM' || 'AM';
-        time[0] -= (parseInt(time[0], 10) >= 12) && 12 || 0;
-        self.setDate(
-            date[0], date[1], date[2],
-            time[0], time[1], ampm
-            );
-        self.$years.val('' + parseInt(date[0], 10));
-        self.$months.val('' + parseInt(date[1], 10));
-        self.$days.val('' + parseInt(date[2], 10));
-        self.$hours.val('' + parseInt(time[0], 10));
-        self.$minutes.val('' + parseInt(time[1], 10));
-        if (self.options.ampm) {
-          self.$ampm.val(ampm);
-        }
+      if (self.options.time !== false) {
+        self.$time = $('<input type="text"/>')
+              .addClass(self.options.klassTime)
+              .appendTo($('<div/>')
+                  .addClass(self.options.klassTimeWrapper)
+                  .appendTo(self.$wrapper))
+              .pickatime($.extend(true, self.options.time, {
+                onSet: function() {
+                  self.setDateTime();
+                  if (onSetTime) {
+                    onSetTime.apply(this, arguments);
+                  }
+                }
+              }));
       }
+
+      self.$clear = $('<div/>')
+            .addClass(self.options.klassClear)
+            .appendTo(self.$wrapper);
+
     },
-    _strftime: function(format, action, options) {
-      var self = this, result = [];
-      // Rule   | Result                    | Example
-      // -------+---------------------------+--------------
-      // yy     | Year - short              | 00-99
-      // yyyy   | Year - full               | 2000-2999
-      // m      | Month                     | 1-12
-      // mm     | Month with leading zero   | 01-12
-      // mmm    | Month name - short        | Jan-Dec
-      // mmmm   | Month name - full         | January-December
-      // d      | Day                       | 1-31
-      // dd     | Date with leading zero    | 01-31
-      // ddd    | Weekday - short           | Sun-Sat
-      // dddd   | Weekday - full            | Sunday-Saturday
-      // H      | Hour                      | 0-23
-      // HH     | Hour with leading zero    | 00-23
-      // M      | Minute                    | 0-59
-      // MM     | Minute with leading zero  | 00-59
-      // @      | Calendar icon
-      options = options || [
-        'dddd', 'ddd', 'dd', 'd',
-        'mmmm', 'mmm', 'mm', 'm',
-        'yyyy', 'yy',
-        'HH', 'H',
-        'MM', 'M',
-        '@'];
-      $.each(options, function(i, itemFormat) {
-        if (format.indexOf(itemFormat) !== -1) {
-          var temp = format.split(itemFormat), new_result;
-          if (options.length > 0 && temp[0] !== '') {
-            new_result = result.concat(self._strftime(temp[0], action, options.slice(i)));
-            if (new_result.length === result.length) {
-              result.push(action(temp[0]));
-            } else {
-              result = new_result;
-            }
-          }
-          result.push(action(itemFormat));
-          if (options.length > 0 && temp[1] !== '') {
-            new_result = result.concat(self._strftime(temp[1], action, options.slice(i)));
-            if (new_result.length === result.length) {
-              result.push(action(temp[1]));
-            } else {
-              result = new_result;
-            }
-          }
-          return false;
-        }
-        if (options.length === 0) {
-          return false;
-        }
-      });
-      return result;
-    },
-    _getYears: function(format) {
-      var years = [],
-          current = this.getDate('yyyy'),
-          _current = current,
-          min,
-          max;
-      if (!current) {
-        current = (new Date()).getFullYear();
-        min = current - 10;
-        max = current + 10;
-      } else {
-        min = this.pickadate.getdatelimit('yyyy'),
-        max = this.pickadate.getDateLimit(true, 'yyyy');
+    setDateTime: function() {
+      var self = this,
+          value = '';
+
+      if (self.$date) {
+        value += self.$date.val();
       }
-      years.push(this._createOption('', '--', _current === undefined));
-      while (min <= max) {
-        if (format === 'yy') {
-          years.push(this._createOption(min, ('' + min).slice(-2), min === _current));
-        } else {
-          years.push(this._createOption(min, min, min === _current));
-        }
-        min += 1;
+      if (self.$date && self.$time) {
+        value += self.options.separator;
       }
-      return years;
-    },
-    _getMonths: function(format) {
-      var months = [],
-          current = this.getDate('m'),
-          month = 1;
-      months.push(this._createOption('', '--', current === undefined));
-      while (month <= 12) {
-        if (format === 'm') {
-          months.push(this._createOption(month, month, current === month));
-        } else if (format === 'mm') {
-          months.push(this._createOption(month,
-              ('0' + month).slice(-2), current === month));
-        } else if (format === 'mmm') {
-          months.push(this._createOption(month,
-              this.pickadateOptions.monthsShort[month - 1], current === month));
-        } else {
-          months.push(this._createOption(month,
-              this.pickadateOptions.monthsFull[month - 1], current === month));
-        }
-        month += 1;
+      if (self.$time) {
+        value += self.$time.val();
       }
-      return months;
-    },
-    _getDays: function(format) {
-      var days = [],
-          current = this.getDate('d'),
-          currentMonth = this.getDate('m'),
-          maxDays = 31,
-          day = 1;
-      days.push(this._createOption('', '--', current === undefined));
-      if (currentMonth) {
-        if ($.inArray(currentMonth, [4, 6, 9, 11])) {
-          maxDays = 30;
-        } else if ($.inArray(currentMonth, [2])) {
-          maxDays = 29;
-        }
-      }
-      while (day <= maxDays) {
-        if (format === 'd') {
-          days.push(this._createOption(day, day, current === day));
-        // formating of weekdays doesn't make sense in this case
-        } else {
-          days.push(this._createOption(day, ('0' + day).slice(-2), current === day));
-        }
-        day += 1;
-      }
-      return days;
-    },
-    _getAMPM: function() {
-      var AMPM = this.options.ampm.split(',');
-      return [
-        this._createOption(AMPM[0], AMPM[0]),
-        this._createOption(AMPM[1], AMPM[1])
-        ];
-    },
-    _getHours: function(format) {
-      var hours = [],
-          current = this.getDate('h'),
-          hour = 0;
-      hours.push(this._createOption('', '--', current === undefined));
-      while (hour < (this.options.ampm && 12 || 24)) {
-        if (format === 'H') {
-          hours.push(this._createOption(hour, hour, current === hour));
-        } else {
-          hours.push(this._createOption(hour, ('0' + hour).slice(-2), current === hour));
-        }
-        hour += 1;
-      }
-      return hours;
-    },
-    _getMinutes: function(format) {
-      var minutes = [],
-          current = this.getDate('m'),
-          minute = 0;
-      minutes.push(this._createOption('', '--', current === undefined));
-      while (minute < 60) {
-        if (format === 'M') {
-          minutes.push(this._createOption(minute, minute, current === minute));
-        } else {
-          minutes.push(this._createOption(minute, ('0' + minute).slice(-2),
-                current === minute));
-        }
-        minute += parseInt(this.options.minutestep, 10);
-      }
-      return minutes;
-    },
-    _createOption: function(token, title, selected) {
-      var $el = $('<option/>').attr('value', token).html(title);
-      if (selected) {
-        $el.attr('selected', 'selected');
-      }
-      return $el;
-    },
-    setDate: function(year, month, day, hour, minutes, ampm) {
-      var self = this;
-      self._rawDate = undefined;
-      self.$el.attr('value', '');
-      if (year !== '' &&
-          month !== '' &&
-          day !== '' &&
-          hour !== '' &&
-          minutes !== '') {
-        self._rawDate = new Date(
-          parseInt(year, 10),
-          parseInt(month, 10),
-          parseInt(day, 10),
-          parseInt(hour, 10) + (ampm === 'PM' && 12 || 0),
-          parseInt(minutes, 10)
-          );
-        self.$el.attr('value', self.getDate(self.options.formatsubmit));
-      }
-    },
-    getDate: function(format) {
-      var self = this;
-      if (!self._rawDate) { return; }
-      if (format) {
-        return self._strftime(format, function(format) {
-          switch (format) {
-            case 'yy':
-              return ('' + self._rawDate.getFullYear()).slice(-2);
-            case 'yyyy':
-              return '' + self._rawDate.getFullYear();
-            case 'm':
-              return '' + self._rawDate.getMonth();
-            case 'mm':
-              return ('0' + self._rawDate.getMonth()).slice(-2);
-            case 'mmm':
-              return self.pickadateOptions.monthsShort[self._rawDate.getMonth()];
-            case 'mmmm':
-              return self.pickadateOptions.monthsFull[self._rawDate.getMonth()];
-            case 'd':
-              return '' + self._rawDate.getDate();
-            case 'dd':
-              return ('0' + self._rawDate.getDate()).slice(-2);
-            case 'ddd':
-              return self.pickadateOptions.weekdaysShort[self._rawDate.getDay()];
-            case 'dddd':
-              return self.pickadateOptions.weekdaysFull[self._rawDate.getDay()];
-            case 'H':
-              return '' + self._rawDate.getHours();
-            case 'HH':
-              return ('0' + self._rawDate.getHours()).slice(-2);
-            case 'M':
-              return '' + self._rawDate.getMinutes();
-            case 'MM':
-              return ('0' + self._rawDate.getMinutes()).slice(-2);
-            default:
-              return format;
-          }
-        }).join('');
-      }
-      return self._rawDate;
-    },
-    toggle: function() {
-      if (this.pickadate.isOpen()) {
-        this.close();
-      } else {
-        this.open();
-      }
-    },
-    open: function() {
-      if (!this.pickadate.isOpen()) {
-        this.trigger('open');
-        this.pickadate.open();
-        this.trigger('opened');
-      }
-    },
-    close: function() {
-      if (this.pickadate.isOpen()) {
-        this.trigger('close');
-        this.pickadate.close();
-        this.trigger('closed');
-      }
+
+      self.$el.val(value);
     }
   });
 

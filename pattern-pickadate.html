@@ -11,16 +11,19 @@
   <title>Datetime patterns - Plone Mockup(s)</title>
   <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
   <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />
-  <link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />
-  <link rel="stylesheet" type="text/css" href="jam/tinymce/skins/lightgray/skin.min.css" />
-  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
+
+  <link rel="stylesheet/less" type="text/css" href="less/pattern.pickadate.less" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
-  <script src="jam/jquery/dist/jquery.js"></script>
   <script src="jam/require.js"></script>
-  <script src="js/demo/widgets.js"></script>
-  <script src="js/demo/tinymce.js"></script>
+  <script>
+require([
+  'jam/Patterns/src/registry',
+  'js/patterns/pickadate.js'
+], function(registry, PickADate, undefined) {
+  registry.scan('body');
+});
+  </script>
 </head>
 
 <body>
@@ -65,30 +68,26 @@
       <h1 id="datetime">Datetime</h1>
 
       <div class="row">
-        <div class="span6">
-          <h3>DateTime with Calendar</h3>
-          <input class="pat-pickadate" data-pat-pickadate="format:d-mmmm-yyyy@HH:MM" />
+        <div class="span12">
+          <h3>Date and Time</h3>
+          <input class="pat-pickadate"/>
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-pickadate" data-pat-pickadate="format:d-mmmm-yyyy@HH:MM" /&gt;</pre>
-        </div>
-        <div class="span6">
-          <h3>Datetime witouth Calendar</h3>
-          <input class="pat-pickadate" data-pat-pickadate="format:d-mmmm-yyyy HH:MM" />
-          <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-pickadate" data-pat-pickadate="format="d-mmmm-yyyy HH:MM" /&gt;</pre>
+&lt;input class="pat-pickadate" /&gt;</pre>
         </div>
       </div>
+
       <div class="row">
         <div class="span6">
-          <h3>Date only, US. format</h3>
-          <input class="pat-pickadate"
-            data-pat-pickadate="format:mmmm/dd/yyyy;
-                                ampm:false;" />
+          <h3>Date</h3>
+          <input class="pat-pickadate" data-pat-pickadate="time:false"/>
           <pre class="brush: html;toolbar: false;">
-&lt;input class="pat-pickadate"
-  data-pat-pickadate="format: mmmm/dd/yyyy;
-                      ampm:false"
-  /&gt;</pre>
+&lt;input class="pat-pickadate" data-pat-pickadate="time:false" /&gt;</pre>
+        </div>
+        <div class="span6">
+          <h3>Time</h3>
+          <input class="pat-pickadate" data-pat-pickadate="date:false"/>
+          <pre class="brush: html;toolbar: false;">
+&lt;input class="pat-pickadate" data-pat-pickadate="date:false" /&gt;</pre>
         </div>
       </div>
 

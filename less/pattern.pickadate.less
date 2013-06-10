@@ -1,56 +1,47 @@
+@import "../jam/pickadate/_raw/lib/themes/base.less";
+@import "../jam/pickadate/_raw/lib/themes/base.date.less";
+@import "../jam/pickadate/_raw/lib/themes/base.time.less";
+@import "../jam/pickadate/_raw/lib/themes/classic.less";
+@import "../jam/pickadate/_raw/lib/themes/classic.date.less";
+@import "../jam/pickadate/_raw/lib/themes/classic.time.less";
 
 .pat-pickadate-wrapper {
-
-  .pat-pickadate-day,
-  .pat-pickadate-hour,
-  .pat-pickadate-minute,
-  .pat-pickadate-ampm {
-    width: 4em;
+  position: relative;
+  margin-bottom: 0.5em;
+  .pat-pickadate-date-wrapper {
+    float: left;
+    .picker__input {
+      width: 300px;
+      margin-bottom: 0.2em;
+      text-align: center;
+      cursor: context-menu;
+    }
+    .picker__holder {
+      width: 300px;
+      font-size: 12px;
+      margin: 0 0.5em;
+    }
   }
-  .pat-pickadate-year {
-    width: 5em;
-  }
-  .pat-pickadate-month {
-    width: 8em;
-  }
-  .pat-pickadate-icon {
-    display: inline-block;
-    line-height: 1em;
-    height: 16px;
-    width: 16px;
-    background: url('widgets.png') 0 0 no-repeat;   
-    vertical-align: baseline;
-    margin: 0 0.2em;
-    cursor: pointer;
-  }
-  .pat-pickadate-delimiter {
-    position: relative;
-    top: -0.3em;
-    display: inline-block;
+  .pat-pickadate-separator {
+    float: left;
+    display: block;
     margin: 0 0.2em;
   }
-
-  .pickadate__holder--opened .pickadate__frame {
-    top: 1.5em;
+  .pat-pickadate-time-wrapper {
+    float: left;
+    .picker__input {
+      width: 180px;
+      margin-bottom: 0.2em;
+      text-align: center;
+      cursor: context-menu;
+    }
+    .picker__holder {
+      width: 180px;
+      font-size: 11px;
+      margin: 0 0.5em;
+    }
   }
-  .pickadate__frame {
-    max-width: 320px;
+  .pat-pickadate-clear {
+    clear: both;
   }
-  .pickadate__select--month,
-  .pickadate__select--year {
-    height: 2em;
-    margin-top: 0;
-  }
-  .pickadate__table {
-    text-align: right;
-  }
-  .pickadate__day {
-    font-size: 0.8em;
-    padding: 0.33em;
-  }
-  .pickadate__button--today,
-  .pickadate__button--clear {
-    font-size: 0.7em;
-  }
-
 }

@@ -487,26 +487,30 @@ define([
 
   describe("PickADate", function() {
     beforeEach(function() {
-      this.$el = $('' +
-        '<div>' +
-        ' <input class="pat-pickadate" />' +
-        '</div>');
+      this.$el = $('<div><input class="pat-pickadate" /></div>');
     });
-    it('creates initial structure', function() {
+    it('datetime', function() {
       expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
       expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-wrapper select', this.$el).size()).to.equal(8);
-      expect($('.pat-pickadate-wrapper .pickadate__holder select', this.$el).size()).to.equal(2);
+      expect($('.pat-pickadate-date', this.$el).size()).to.equal(1);
+      expect($('.pat-pickadate-time', this.$el).size()).to.equal(1);
     });
-    it('doesn not work on anything else then "input" elements', function() {
-      var $el = $('' +
-        '<div>' +
-        ' <a class="pat-pickadate" />' +
-        '</div>');
-      expect($('.pat-pickadate-wrapper', $el).size()).to.equal(0);
-      registry.scan($el);
-      expect($('.pat-pickadate-wrapper', $el).size()).to.equal(0);
+    it('date', function() {
+      $('input', this.$el).attr('data-pat-pickadate', 'time:false');
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+      registry.scan(this.$el);
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pat-pickadate-date', this.$el).size()).to.equal(1);
+      expect($('.pat-pickadate-time', this.$el).size()).to.equal(0);
+    });
+    it('time', function() {
+      $('input', this.$el).attr('data-pat-pickadate', 'date:false');
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+      registry.scan(this.$el);
+      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pat-pickadate-date', this.$el).size()).to.equal(0);
+      expect($('.pat-pickadate-time', this.$el).size()).to.equal(1);
     });
   });
 
