@@ -107,12 +107,12 @@ define([
     },
     browseTo: function(path) {
       var self = this;
-      self.$el.trigger('before-browse');
+      self.trigger('before-browse');
       self.currentPath = path;
       self.activateBrowsing();
       self.$el.select2('close');
       self.$el.select2('open');
-      self.$el.trigger('after-browse');
+      self.trigger('after-browse');
     },
     setTabs: function() {
       var self = this;
@@ -157,11 +157,11 @@ define([
       }
     },
     selectItem: function(item) {
-      self.$el.trigger('selecting');
+      self.trigger('selecting');
       var data = self.$el.select2("data");
       data.push(item);
       self.$el.select2("data", data);
-      self.$el.trigger('selected');
+      self.trigger('selected');
     },
     init: function() {
       var self = this;
