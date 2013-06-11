@@ -119,12 +119,12 @@ define([
     },
     browseTo: function(path) {
       var self = this;
-      self.trigger('before-browse');
+      self.$el.trigger('before-browse');
       self.currentPath = path;
       self.activateBrowsing();
       self.$el.select2('close');
       self.$el.select2('open');
-      self.trigger('after-browse');
+      self.$el.trigger('after-browse');
     },
     setTabs: function() {
       var self = this;
@@ -169,11 +169,12 @@ define([
       }
     },
     selectItem: function(item) {
-      self.trigger('selecting');
+      var self = this;
+      self.$el.trigger('selecting');
       var data = self.$el.select2("data");
       data.push(item);
       self.$el.select2("data", data);
-      self.trigger('selected');
+      self.$el.trigger('selected');
     },
     init: function() {
       var self = this;
