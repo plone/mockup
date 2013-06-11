@@ -70,7 +70,6 @@ docs/widgets.html: docs/jquery.js docs/widgets.js docs/widgets.css docs/widgets.
 	sed -i -e 's@<link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/plone-select2/select2.css" />@@g' $@
-	sed -i -e 's@<link rel="stylesheet" type="text/css" href="jam/pickadate/themes/pickadate.02.classic.css" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/mockup.less" />@@g' $@
 	sed -i -e 's@<link rel="stylesheet/less" type="text/css" href="less/widgets.less" />@<link href="widgets.css" rel="stylesheet" type="text/css" />@g' $@
 	sed -i -e 's@<script src="jam/less/dist/less-1.3.3.js"></script>@@g' $@
@@ -127,7 +126,7 @@ docs/toolbar.js:
 
 docs/toolbar.css:
 	$(CSSMIN) jam/plone-select2/select2.css > $@
-	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
+	$(CSSMIN) jam/pickadate.02.classic.css >> $@
 	$(LESSC) less/toolbar.less | $(CSSMIN) >> $@
 	sed -i -e 's@../jam/font-awesome/@@g' $@
 
@@ -190,8 +189,6 @@ build/widgets.min.js:
 
 build/widgets.css:
 	$(CSSMIN) jam/plone-select2/select2.css > $@
-	$(CSSMIN) jam/pickadate/themes/pickadate.02.classic.css >> $@
-#	$(LESSC) less/sunburst.less | $(CSSMIN) >> $@
 	$(LESSC) less/sunburst.less >> $@
 	sed -i -e 's@select2.png@++resource++plone.app.widgets.png@g' $@
 	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-spinner.gif@g' $@
