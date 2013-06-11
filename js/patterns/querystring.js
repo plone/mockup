@@ -33,24 +33,237 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/plone-select2/select2'
-], function($, Base, undefined) {
+  'js/patterns/select2',
+  'js/patterns/pickadate'
+], function($, Base, Select2, PickADate, undefined) {
   "use strict";
+
+  var Criteria = function() { this.init.apply(this, arguments); };
+  Criteria.prototype = {
+    defaults: {
+      indexWidth: '20em',
+      placeholder: 'Select criteria',
+      remove: 'Remove line',
+      results: ' items matching your search.',
+      days: 'days',
+      klassWrapper: 'querystring-criteria-wrapper',
+      klassIndex: 'querystring-criteria-index',
+      klassOperator: 'querystring-criteria-operator',
+      klassValue: 'querystring-criteria-value',
+      klassRemove: 'querystring-criteria-remove',
+      klassResults: 'querystring-criteria-results',
+      klassClear: 'querystring-criteria-clear'
+    },
+    init: function($el, options, indexes, index, operator, value) {
+      var self = this;
+
+      self.options = $.extend(true, {}, self.defaults, options);
+      self.indexes = indexes;
+      self.indexGroups = {};
+
+      // create wrapper criteria and append it to DOM
+      self.$wrapper = $('<div/>')
+              .addClass(self.options.klassWrapper)
+              .appendTo($el);
+
+      // Remove button
+      self.$remove = $('<div/>')
+              .addClass(self.options.klassRemove)
+              .appendTo(self.$wrapper)
+              .on('click', function(e) {
+                self.remove();
+                self.trigger('remove');
+              });
+
+      // Index selection
+      self.$index = $('<select/>')
+
+      // list of indexes
+      $.each(self.indexes, function(value, options) {
+        if (options.enabled) {
+          if (!self.indexGroups[options.group]) {
+            self.indexGroups[options.group] = $('<optgroup/>')
+                .attr('label', options.group)
+                .appendTo(self.$index);
+          }
+          self.indexGroups[options.group].append(
+            $('<option/>')
+                .attr('value', value)
+                .html(options.title));
+        }
+      });
+
+      // attach index select to DOM
+      self.$wrapper.append(
+          $('<div/>')
+              .addClass(self.options.klassIndex)
+              .append(self.$index));
+
+      // add blink (select2)
+      self.$index
+        .patternSelect2({
+            width: self.options.indexWidth,
+            placeholder: self.options.placeholder
+        })
+        .on("change", function(e) {
+          self.removeValue();
+          self.createOperator(e.val);
+          self.createClear();
+          self.trigger('index-changed');
+        });
+
+      if (index !== undefined) {
+        self.$index.select2('val', index);
+        self.createOperator(index, operator, value);
+        self.createClear();
+      }
+    },
+    createOperator: function(index, operator, value) {
+      var self = this;
+
+      self.removeOperator();
+      self.$operator = $('<select/>');
+
+      if (self.indexes[index]) {
+        $.each(self.indexes[index].operators, function(value, options) {
+          $('<option/>')
+              .attr('value', value)
+              .html(options.title)
+              .appendTo(self.$operator);
+        });
+      }
+
+      // attach operators select to DOM
+      self.$wrapper.append(
+          $('<div/>')
+              .addClass(self.options.klassOperator)
+              .append(self.$operator));
+
+      // add blink (select2)
+      self.$operator
+        .patternSelect2({ width: '10em' })
+        .on("change", function(e) {
+          self.createValue(index);
+          self.createClear();
+          self.trigger('operator-changed');
+        });
+
+      if (operator === undefined) {
+        operator = self.$operator.select2('val');
+      }
+
+      self.$operator.select2('val', operator);
+      self.createValue(index, value);
+    },
+    createValue: function(index, value) {
+      var self = this,
+          widget = self.indexes[index].operators[self.$operator.val()].widget,
+          $wrapper = $('<div/>')
+            .addClass(self.options.klassValue)
+            .appendTo(self.$wrapper);
+
+      self.removeValue();
+
+      if (widget === 'StringWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.klassValue + '-' + widget)
+                .appendTo($wrapper);
+
+      } else if (widget === 'DateWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.klassValue + '-' + widget)
+                .appendTo($wrapper)
+                .patternPickadate({
+                  time: false,
+                  date: { format: "dd/mm/yyyy" }
+                });
+
+      } else if (widget === 'DateRangeWidget') {
+        self.$value = $('<input type="text"/>').appendTo($wrapper);
+
+      } else if (widget === 'RelativeDateWidget') {
+        self.$value = $('<input type="text"/>')
+                .after($('<span/>').html(self.options.days))
+                .addClass(self.options.klassValue + '-' + widget)
+                .appendTo($wrapper);
+
+      } else if (widget === 'ReferenceWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.klassValue + '-' + widget)
+                .appendTo($wrapper);
+
+      } else if (widget === 'RelativePathWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.klassValue + '-' + widget)
+                .appendTo($wrapper);
+
+      } else if (widget === 'MultipleSelectionWidget') {
+        self.$value = $('<select/>').attr('multiple', true)
+                .addClass(self.options.klassValue + '-' + widget)
+                .appendTo($wrapper);
+        if (self.indexes[index]) {
+          $.each(self.indexes[index].values, function(value, options) {
+            $('<option/>')
+                .attr('value', value)
+                .html(options.title)
+                .appendTo(self.$value);
+          });
+        }
+        self.$value.patternSelect2({ width: '250px' });
+      }
+
+      if (value !== undefined) {
+        self.$value.select2('val', value);
+      }
+
+    },
+    createClear: function() {
+      var self = this;
+      self.removeClear();
+      self.$clear = $('<div/>')
+        .addClass(self.options.klassClear)
+        .appendTo(self.$wrapper);
+    },
+    remove: function() {
+      var self = this;
+      self.$remove.remove();
+      self.$index.parent().remove();
+      self.removeOperator();
+      self.removeValue();
+      self.removeClear();
+    },
+    removeClear: function() {
+      var self = this;
+      if (self.$clear) {
+        self.$clear.remove();
+      }
+    },
+    removeOperator: function() {
+      var self = this;
+      if (self.$operator) {
+        self.$operator.parent().remove();
+      }
+    },
+    removeValue: function() {
+      var self = this;
+      if (self.$value) {
+        self.$value.parent().remove();
+      }
+    },
+    trigger: function(name) {
+      this.$wrapper.trigger(name + '-criteria.querystring.patterns', [ this ]);
+    },
+    on: function(name, callback) {
+      this.$wrapper.on(name + '-criteria.querystring.patterns', callback);
+    }
+  };
 
   var QueryString = Base.extend({
     name: 'querystring',
     defaults: {
       indexes: [],
       klassWrapper: 'querystring-wrapper',
-      klassCriteriaWrapper: 'querystring-criteria-wrapper',
-      klassCriteriaIndex: 'querystring-criteria-index',
-      klassCriteriaOperator: 'querystring-critaria-operator',
-      klassCriteriaValue: 'querystring-criteria-value',
-      klassCriteriaRemove: 'querystring-criteria-remove',
-      klassCriteriaResults: 'querystring-criteria-results',
-      i18n: {
-        remove: 'Remove line',
-        results: ' items matching your search.'
+      criteria: {
       }
     },
     init: function() {
@@ -63,90 +276,32 @@ define([
       self.$wrapper = $('<div/>').addClass(self.options.klassWrapper);
       self.$el.after(self.$wrapper);
 
-      // create initial criteria ui
+      self.criterias = [];
+      // create populated criterias
       $.each(JSON.parse(self.$el.val()), function(i, item) {
-        self.addCriteria(item);
+        self.createCriteria(item.i, item.o, item.v);
       });
+
+      // add empty criteria which enables users to create new cr
+      self.createCriteria();
     },
-    addCriteria: function(item) {
+    createCriteria: function(index, operator, value) {
       var self = this,
-          $wrapper = $('<div/>').addClass(self.options.klassCriteriaWrapper);
+          criteria = new Criteria(self.$wrapper, self.options.criteria,
+            self.options.indexes, index, operator, value);
 
-      self.addIndex($wrapper, item);
-      self.addOperator($wrapper, item);
-      self.addValue($wrapper, item);
-
-      // Remove button
-      $wrapper.append(
-          $('<div/>')
-            .addClass(self.options.klassCriteriaRemove)
-            .html(self.options.i18n.remove)
-          );
-
-      // Results
-      $wrapper.append(
-          $('<div/>')
-            .addClass(self.options.klassCriteriaRemove)
-            .html(self.options.i18n.results)
-          );
-
-      self.$wrapper.append($wrapper);
-    },
-    addIndex: function($wrapper, item) {
-      var self = this,
-          groups = {},
-          $el = $('<select/>')
-                    .addClass(self.options.klassCriteriaIndex);
-
-      $.each(self.options.indexes, function(index, options) {
-        if (options.enabled) {
-          if (!groups[options.group]) {
-            groups[options.group] = $('<optgroup/>')
-                .attr('label', options.group)
-                .appendTo($el);
-          }
-          groups[options.group].append(
-            $('<option/>')
-                .attr('value', index)
-                .attr('selected', index === item.i)
-                .html(options.title));
+      criteria.on('remove', function(e) {
+        if (self.criterias[self.criterias.length-1] === criteria) {
+          self.createCriteria();
         }
       });
 
-      $wrapper.append($el);
-      return $el;
-    },
-    addOperator: function($wrapper, item) {
-      var self = this,
-          $el = $('<select/>').addClass(self.options.klassCriteriaOperator);
-
-      if (item.o && self.options.indexes[item.i]) {
-        $.each(self.options.indexes[item.i].operators, function(operator, options) {
-          $('<option/>')
-              .attr('value', operator)
-              .attr('selected', operator === item.o)
-              .html(options.title)
-              .appendTo($el);
-        });
-      }
-
-      $wrapper.append($el);
-    },
-    addValue: function($wrapper, item) {
-      var self = this, $el;
-      if (item.v && self.options.indexes[item.i]) {
-        $el = $('<select/>')
-            .attr('multiple', true)
-            .addClass(self.options.klassCriteriaValue);
-        $.each(self.options.indexes[item.i].values, function(value, options) {
-          $('<option/>')
-              .attr('value', value)
-              .attr('selected', item.v.indexOf(value) !== -1)
-              .html(options.title)
-              .appendTo($el);
-        });
-      }
-      $wrapper.append($el);
+      criteria.on('index-changed', function(e) {
+        if (self.criterias[self.criterias.length-1] === criteria) {
+          self.createCriteria();
+        }
+      });
+      self.criterias.push(criteria);
     }
   });
 
