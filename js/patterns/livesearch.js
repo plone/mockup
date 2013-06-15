@@ -50,7 +50,7 @@ define([
       param: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       dropdownCssClass: 'pat-livesearch-dropdown',
-      resultLinkSelector: 'pat-livesearch-result-title',
+      linkAttribute: 'pat-livesearch-result-title',
       resultTemplate: '' +
         '<div class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
           '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
