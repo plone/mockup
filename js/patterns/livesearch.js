@@ -34,190 +34,105 @@ define([
   'jquery',
   'js/patterns/base',
   'js/patterns/toggle',
-  'underscore'
-], function($, Base, Toggle, _) {
+  'underscore',
+  'js/patterns/select2'
+], function($, Base, Toggle, _, Select2) {
   "use strict";
 
   var Livesearch = Base.extend({
     name: "livesearch",
-    timeout: null,
-    $results: null,
-    $input: null,
-    $toggle: null,
-    $selected: null,
-    cache: {},
-    index: null,
     defaults: {
-      delay: 400, // ms after keyup before search
+      multiple: true,
+      batchSize: 10, // number of results to retrive
+      closeOnSelect: false,
+      minimumInputLength: 3,
+      tokenSeparators: [",", " "],
       param: 'SearchableText', // query string param to pass to search url
-      attributes: ['Title', 'Description', 'getURL', 'Type'],
-      highlight: 'pat-livesearch-highlight', // class to add to items when selected
-      chars: 3, // number of chars user should type before searching
-      toggle: {
-        target: '.pat-livesearch-container', // the element to show/hide when performing search
-        klass: 'show'
-      },
-      results: {
-        target: '.pat-livesearch-results', // the element to fill with results
-        container: 'ul',
-        item: 'li'
-      },
-      input: '.pat-livesearch-input', // input selector
-      resultContainerTemplate: '<ul></ul>',
+      attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
+      dropdownCssClass: 'pat-livesearch-dropdown',
+      resultLinkSelector: 'pat-livesearch-result-title',
       resultTemplate: '' +
-        '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
+        '<div class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
           '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
             '<%= Title %>' +
           '</a>' +
           '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
-        '</li>'
+        '</div>',
+      id: function(object) {
+        return object.UID;
+      }
     },
 
     init: function() {
       var self = this;
 
-      this.$results = $(self.options.results.target, self.$el);
-
       if (!self.options.url) {
         $.error('No url provided for livesearch results ' + self.$el);
       }
 
-      self.$input = $(self.options.input, self.$el);
+      Select2.prototype.initializeValueMap.call(self);
+      Select2.prototype.initializeTags.call(self);
+      Select2.prototype.initializeOrdering.call(self);
 
-      if (self.$input.length < 1) {
-        $.error('Input element not found ' + self.$el);
+      if(self.options.url !== undefined  && self.options.url !== null){
+        var query_term = '';
+        self.options.ajax = {
+          url: self.options.url,
+          dataType: 'JSON',
+          quietMillis: 100,
+          data: function(term, page) { // page is the one-based page number tracked by Select2
+            var opts = {
+              query: JSON.stringify({
+                criteria: [{
+                  i: self.options.param,
+                  o: 'plone.app.querystring.operation.string.contains',
+                  v: term + '*'
+                }]
+              }),
+              batch: JSON.stringify({
+                page: page,
+                size: self.options.batchSize
+              }),
+              attributes: JSON.stringify(self.options.attributes)
+            };
+            return opts;
+          },
+          results: function (data, page) {
+            var more = (page * 10) < data.total; // whether or not there are more results available
+            // notice we return the value of more so Select2 knows if more results can be loaded
+            return {results: data.results, more: more};
+          }
+        };
+      }
+      else {
+        self.options.tags = [];
       }
 
-      if (self.options.toggle.target) {
-        self.$toggle = $(self.options.toggle.target, self.$el);
-        if (self.$toggle.length) {
-          self.$toggle.on('click.livesearch.patterns', function(event) {
-            event.stopPropagation();
-          });
-          $('html').on('click.livesearch.patterns', function() {
-            self.hide();
-          });
-        }
-      }
+      self.options.formatResult = function(item) {
+        var result = $(self.applyTemplate('result', item));
+        return $(result);
+      };
 
-      self.$input.on('keyup', function(event) {
-        return self._handler(event);
+      Select2.prototype.initializeSelect2.call(self);
+
+      self.$el.on("keyup", function(event) {
+
+      });
+
+      self.$el.on("select2-selecting", function(event, data) {
+        event.preventDefault();
       });
     },
 
-    search: function() {
-      var self = this;
-      var term = this.$input.val();
-      self.trigger('searching');
-
-      if (self.cache[term]) {
-        // already have results, do not load ajax
-        self.fillResults(self.cache[term]);
-        return;
-      }
-
-      var params = {
-        query: JSON.stringify({
-          criteria: [{
-            i: self.options.param,
-            o: 'plone.app.querystring.operation.string.contains',
-            v: term + '*'
-          }]
-        }),
-        batch: JSON.stringify({
-          page: 0,
-          size: 10
-        }),
-        attributes: JSON.stringify(self.options.attributes)
-      };
-      $.get(
-        self.options.url,
-        $.param(params),
-        function(data) {
-          self.cache[term] = data.results;
-          if(data.results !== undefined){
-            self.fillResults(data.results);
-          }else{
-            console.log('error from server returning result');
-          }
-          self.cache[term] = data;
-          self.fillResults(data);
-          self.trigger('searched');
-        }
-      );
-    },
-
     applyTemplate: function(tpl, item) {
-      return _.template(tpl, item);
-    },
-
-    fillResults: function(data) {
       var self = this;
-      if (self.$results.length > 0) {
-        var content = $(self.applyTemplate(self.options.resultContainerTemplate, self));
-        var container = content.find(self.options.results.container);
-        if(container.length === 0){
-          container = content;
-        }
-        $.each(data, function(index, value){
-          container.append(self.applyTemplate(self.options.resultTemplate, value));
-        });
-        self.$results.html(content);
-        self.show();
-        window.clearInterval(self.timeout);
-      }
-    },
-
-    show: function() {
-      var self = this;
-      self.trigger('showing');
-      if (self.$toggle) {
-        self.$toggle.addClass(self.options.toggle.klass);
-      }
-      self.trigger('shown');
-    },
-
-    hide: function() {
-      var self = this;
-      self.trigger('hiding');
-      if (self.$toggle) {
-        self.$toggle.removeClass(self.options.toggle.klass);
-      }
-      self.trigger('hidden');
-    },
-
-    items: function() {
-      return this.$results.find(this.options.results.item);
-    },
-
-    _keyUp: function() {
-      var self = this;
-      var hl = self.options.highlight;
-      if (self.index === null || self.index === 0) {
-        self.index = self.items().length - 1;
+      var template;
+      if (self.options[tpl+'TemplateSelector'] !== null && self.options[tpl+'Selector'] !== undefined) {
+        template = $(self.options[tpl+'Selector']).html();
       } else {
-        self.index -= 1;
+        template = self.options[tpl+'Template'];
       }
-      if (self.$selected !== null) self.$selected.removeClass(hl);
-      self.$selected = $(self.items()[self.index]);
-      self.$selected.addClass(hl);
-    },
-
-    _keyDown: function() {
-      var self = this;
-      var hl = self.options.highlight;
-      if (self.index === null || self.index === self.items().length-1) {
-        self.index = 0;
-      } else {
-        self.index += 1;
-      }
-      if (self.$selected !== null) self.$selected.removeClass(hl);
-      self.$selected = $(self.items()[self.index]);
-      self.$selected.addClass(hl);
-    },
-
-    _keyEscape: function() {
-      this.hide();
+      return _.template(template, item);
     },
 
     _keyEnter: function() {
@@ -226,37 +141,6 @@ define([
       var target = self.$results.find('.'+hl)
         .find('a').attr('href');
       window.location = target;
-    },
-
-    _handler: function(event) {
-      var self = this;
-      window.clearTimeout(self.timeout);
-      switch (event.keyCode) {
-        case 13:
-          self._keyEnter();
-          return false;
-        case 38:
-          self._keyUp();
-          return false;
-        case 40:
-          self._keyDown();
-          return false;
-        case 27:
-          self._keyEscape();
-          break;
-        case 37: break; // keyLeft
-        case 39: break; // keyRight
-        default:
-          if (self.$input.val().length >= self.options.chars) {
-            self.timeout = window.setInterval(function(){
-              try{
-                self.search();
-              }catch(e){
-                console.log('error trying to search');
-              }
-            }, self.options.delay);
-          }
-      }
     }
 
   });

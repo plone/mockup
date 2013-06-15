@@ -44,9 +44,96 @@ require([
   server.respondWith(/something.html/, function (xhr, id) {
     xhr.respond(200, { "Content-Type": "html/html" }, $('#something-html').html());
   });
-  server.respondWith(/search.html/, function (xhr, id) {
-    var search = '{"total": 2, "results": [{"getURL": "http://localhost:8081/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}, {"getURL": "http://localhost:8081/news/aggregator", "Type": "Collection", "Description": "Site News", "Title": "News"}]}';
-    xhr.respond(200, { "Content-Type": "application/json" }, search);
+  server.respondWith(/search.json/, function (xhr, id) {
+    var items = [
+      {
+        "UID": "123sdfasdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdf1123asZ",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasdf1231as",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdf12231451",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasdf1235dsd",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasd345345f",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasdf465",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooaewrwsdfasdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasd123f",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdas123f",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      { 
+        "UID": "fooasdfasdfsdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      }
+    ];
+
+    var results = [];
+    var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+
+    if (batch) {
+      var start, end;
+      start = batch.page * batch.size;
+      end = start + batch.size;
+      results = items.slice(start, end);
+    }
+
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+      total: results.length,
+      results: results
+    }));
   });
   server.respondWith(/select2-test.json/, function(xhr, id) {
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());

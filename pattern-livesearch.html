@@ -65,25 +65,14 @@
       <div class="row">
         <div class="span6">
           <h2>Default</h2>
-          <div class="pat-livesearch"
-              data-pat-livesearch="url: /search.html">
-            <input type="text" class="pat-livesearch-input" placeholder="Search" />
-            <div class="pat-livesearch-container">
-              <div class="pat-livesearch-results">
-
-              </div>
-            </div>
-          </div>
+          <input type="text" placeholder="Search"
+                 class="pat-livesearch"
+                 data-pat-livesearch="url: /search.json;" />
+            
           <pre class="brush: html;toolbar: false;">
-&lt;div class="pat-livesearch"
-  data-pat-livesearch="url: /search.html"&gt;
-  &lt;input type="text" class="pat-livesearch-input"
-    placeholder="Search" /&gt;
-  &lt;div class="pat-livesearch-container"&gt;
-    &lt;div class="pat-livesearch-results"&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;input type="text" placeholder="Search"
+       class="pat-livesearch"
+       data-pat-livesearch="url: /search.json" /&gt;</pre>
         </div>
       </div>
       <div>
@@ -134,22 +123,22 @@
               <td>Selector for element that will be used for the livesearch input.</td>
             </tr>
             <tr>
-              <td>toggle-target</td>
+              <td>toggleTarget</td>
               <td>.pat-livesearch-container</td>
               <td>Selector for element that will be shown when results are found.</td>
             </tr>
             <tr>
-              <td>toggle-klass</td>
+              <td>toggleClass</td>
               <td>show</td>
               <td>CSS class that will be added to target toggle element when results are found.</td>
             </tr>
             <tr>
-              <td>results-target</td>
+              <td>resultsTarget</td>
               <td>.pat-livesearch-results</td>
               <td>Selector for element where results from the server will be inserted.</td>
             </tr>
             <tr>
-              <td>results-content</td>
+              <td>resultsContent</td>
               <td></td>
               <td>
                 Selector for element inside in the HTML from the server which contains the results.
