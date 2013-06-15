@@ -77,6 +77,8 @@
       </div>
       <div>
         <h4>Data Attributes</h4>
+        <p>The livesearch pattern is built on top of the select2 pattern which means that many of the same options
+          and attributes will work here as well. For more information on select2 refer to the <a href="pattern-select2.html">Select2 pattern docs</a> and the overall <a href="http://ivaynberg.github.io/select2/">select2 library docs</a>.</p>
         <table class="table">
           <thead>
             <tr>
@@ -95,54 +97,12 @@
             <tr>
               <td>url</td>
               <td></td>
-              <td>The url that will be of the server side page that will be queried.</td>
+              <td>The url of the server side page that will be queried.</td>
             </tr>
             <tr>
-              <td>delay</td>
-              <td>400</td>
-              <td>Delay in ms after user types before searching.</td>
-            </tr>
-            <tr>
-              <td>param</td>
-              <td>SearchableText</td>
-              <td>The query string parameter which will be set with the value of the input.</td>
-            </tr>
-            <tr>
-              <td>highlight</td>
-              <td>pat-livesearch-highlight</td>
-              <td>CSS class that will be used to highlight items on keyboard navigation.</td>
-            </tr>
-            <tr>
-              <td>chars</td>
+              <td>minimumInputLength</td>
               <td>3</td>
               <td>Number of characters user must type before search begins.</td>
-            </tr>
-            <tr>
-              <td>input</td>
-              <td>.pat-livesearch-input</td>
-              <td>Selector for element that will be used for the livesearch input.</td>
-            </tr>
-            <tr>
-              <td>toggleTarget</td>
-              <td>.pat-livesearch-container</td>
-              <td>Selector for element that will be shown when results are found.</td>
-            </tr>
-            <tr>
-              <td>toggleClass</td>
-              <td>show</td>
-              <td>CSS class that will be added to target toggle element when results are found.</td>
-            </tr>
-            <tr>
-              <td>resultsTarget</td>
-              <td>.pat-livesearch-results</td>
-              <td>Selector for element where results from the server will be inserted.</td>
-            </tr>
-            <tr>
-              <td>resultsContent</td>
-              <td></td>
-              <td>
-                Selector for element inside in the HTML from the server which contains the results.
-              </td>
             </tr>
           </tbody>
         </table>
