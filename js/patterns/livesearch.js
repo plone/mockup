@@ -50,7 +50,7 @@ define([
       param: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       dropdownCssClass: 'pat-livesearch-dropdown',
-      linkAttribute: 'pat-livesearch-result-title',
+      linkSelector: 'pat-livesearch-result-title',
       resultTemplate: '' +
         '<div class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
           '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
@@ -116,11 +116,12 @@ define([
       Select2.prototype.initializeSelect2.call(self);
 
       self.$el.on("keyup", function(event) {
-
+        self._keyEnter();
       });
 
       self.$el.on("select2-selecting", function(event, data) {
         event.preventDefault();
+        self.select();
       });
     },
 
@@ -135,12 +136,16 @@ define([
       return _.template(template, item);
     },
 
-    _keyEnter: function() {
+    select: function() {
       var self = this;
-      var hl = self.options.highlight;
-      var target = self.$results.find('.'+hl)
-        .find('a').attr('href');
-      window.location = target;
+      var select2 = self.$el.data().select2;
+      var dropdown = select2.dropdown;
+      var selected = $('.select2-highlighted', dropdown);
+      var link = $('.'+self.options.linkSelector, selected);
+      var target = link.attr('href');
+      if (target) {
+        window.location = target;
+      }
     }
 
   });
