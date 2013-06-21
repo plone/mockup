@@ -125,7 +125,7 @@ require([
 
     if (batch) {
       var start, end;
-      start = batch.page * batch.size;
+      start = (batch.page-1) * batch.size;
       end = start + batch.size;
       results = items.slice(start, end);
     }

@@ -115,10 +115,6 @@ define([
 
       Select2.prototype.initializeSelect2.call(self);
 
-      self.$el.on("keyup", function(event) {
-        self._keyEnter();
-      });
-
       self.$el.on("select2-selecting", function(event, data) {
         event.preventDefault();
         self.select();
