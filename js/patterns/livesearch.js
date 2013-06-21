@@ -59,6 +59,7 @@ define([
           '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
         '</div>',
       resultTemplateSelector: null,
+      isTest: false,
       id: function(object) {
         return object.UID;
       }
@@ -144,7 +145,12 @@ define([
       var link = $('.'+self.options.linkSelector, selected);
       var target = link.attr('href');
       if (target) {
-        window.location = target;
+        // There may be a better way to do this
+        if (self.options.isTest) {
+          self.testTarget = target;
+        } else {
+          window.location = target;
+        }
       }
     }
 

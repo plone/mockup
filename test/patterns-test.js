@@ -1651,22 +1651,35 @@ define([
       var $el = $(''+
           '<input type="text" placeholder="Search"' +
           '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="url: /search.json;" />').appendTo('body');
+          '       data-pat-livesearch="url: /search.json;' +
+          '                            minimumInputLength: 0;' +
+          '                            isTest: true;" />').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
       var clock = sinon.useFakeTimers();      
 
-      /* var $search = $('.select2-input');
+      var $search = $('.select2-input');
       $el.select2("open");
       $search.val('abcd').trigger('keyup-change').focus();
 
       clock.tick(500);
 
-      expect($('.select2-results > li').length > 0).to.be.true; */
+      var $results = $('.select2-results > li');
 
-      // TODO: when we have a working select2, make this test work
-      console.log('when we have a working select2, fix the livesearch tests');
+      var down = $.Event('keydown');
+      down.which = 40;
+
+      var enter = $.Event('keydown');
+      down.which = 13;
+
+      expect(pattern.testTarget).to.be.undefined;
+
+      $search.trigger(down);
+      $search.trigger(down);
+      $search.trigger(enter);
+
+      expect(pattern.testTarget).to.not.be.undefined;
 
       $el.remove();
       $('.select2-sizer, .select2-drop, .pat-livesearch').remove();
