@@ -1672,6 +1672,41 @@ define([
       $('.select2-sizer, .select2-drop, .pat-livesearch').remove();
     });
 
+    it('template from selector', function() {
+      var $el = $(''+
+          '<input type="text" placeholder="Search"' +
+          '       class="pat-livesearch" ' +
+          '       data-pat-livesearch="url: /search.json; '+
+          '                            resultTemplateSelector: #tpl_livesearch;' +
+          '                            minimumInputLength: 0;" />').appendTo('body');
+      var tpl = $('<script type="text/template" id="tpl_livesearch">' +
+        '<div class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
+          '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
+            '<%= Title %>' +
+          '</a> Money Honey' +
+          '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
+        '</div></script>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+
+      var clock = sinon.useFakeTimers();
+
+      var $search = $('.select2-input');
+      $el.select2("open");
+      $search.val('abcd').trigger('keyup-change').focus();
+
+      clock.tick(500);
+
+      var $results = $('.select2-results > li');
+
+      expect($results.length).to.be.gt(1);
+      expect($results.first().text().indexOf('Money Honey')).to.be.gt(-1);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop, .pat-livesearch').remove();
+      tpl.remove();
+    });
+
   });
 
 

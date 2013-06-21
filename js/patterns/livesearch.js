@@ -58,6 +58,7 @@ define([
           '</a>' +
           '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
         '</div>',
+      resultTemplateSelector: null,
       id: function(object) {
         return object.UID;
       }
@@ -124,8 +125,11 @@ define([
     applyTemplate: function(tpl, item) {
       var self = this;
       var template;
-      if (self.options[tpl+'TemplateSelector'] !== null && self.options[tpl+'Selector'] !== undefined) {
-        template = $(self.options[tpl+'Selector']).html();
+      if (self.options[tpl+'TemplateSelector']) {
+        template = $(self.options[tpl+'TemplateSelector']).html();
+        if (!template) {
+          template = self.options[tpl+'Template'];
+        }
       } else {
         template = self.options[tpl+'Template'];
       }
