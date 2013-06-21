@@ -87,7 +87,7 @@ define([
                 // loading "spinner"
                 var backdrop = $modal.data('patterns-backdrop');
                 if (!backdrop) {
-                  backdrop = new Backdrop(self.$modal, {
+                  backdrop = new Backdrop($modal, {
                     closeOnEsc: false,
                     closeOnClick: false
                   });
@@ -97,14 +97,14 @@ define([
                       $(options.loading)
                         .css({
                           position: 'absolute',
-                          left: self.$modal.width() * 0.1,
-                          top: self.$modal.height()/2 + 10,
-                          width: self.$modal.width() * 0.8
+                          left: $modal.width() * 0.1,
+                          top: $modal.height()/2 + 10,
+                          width: $modal.width() * 0.8
                         })
                     );
-                  self.$modal.data('patterns-backdrop', backdrop);
+                  $modal.data('patterns-backdrop', backdrop);
                 } else {
-                  self.$modal.append(backdrop.$backdrop);
+                  $modal.append(backdrop.$backdrop);
                 }
                 backdrop.show();
 
