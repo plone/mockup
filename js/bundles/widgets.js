@@ -125,35 +125,14 @@ define([
       var url = $match.parents('form').attr('action').replace('@@search',
           '@@getVocabulary?name=plone.app.vocabularies.Catalog');
       var attrs = {
-        'url': url,
-        'resultContainerTemplate': '<div class="LSResult" id="LSResult">' +
-          '<div class="LSShadow" id="LSShadow">' +
-            '<fieldset class="livesearchContainer">' +
-            '<legend id="livesearchLegend">LiveSearch ↓</legend>' +
-              '<div class="LSIEFix">' +
-                '<ul class="LSTable"></ul>' +
-              '</div>' +
-            '</legend>' +
-          '</div>',
-        'resultTemplate': '<li class="LSRow">' +
-          '<a href="<%= getURL %>" title="<%= Title %>" class="contenttype-<%= Type %>">' +
-            '<%= Title %>' +
-          '</a>' +
-          '<div class="LSDescr"><%= Description %></div>' +
-          '</li>'
+        'url': url
       };
       $match.attr({
         'class': 'pat-livesearch',
         'data-pat-livesearch': JSON.stringify(attrs)
       });
       $match.find('.searchSection').remove();
-      $match.find('.LSResult').attr({
-        'class': 'pat-livesearch-container pull-right',
-        'id': ''
-      });
-      $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
-      $match.find('#searchGadget').addClass('pat-livesearch-input')
-        .attr('autocomplete', 'off');
+      
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce');
