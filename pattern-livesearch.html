@@ -54,25 +54,31 @@
       </ul>
   </div>
 
-<!--
-=============================================
-  PATTERN: AUTOTOC
-=============================================
--->
 <div class="backButton"><a href="pattern-index.html"><i class="icon-circle-arrow-left"></i> Back to the pattern index</a></div>
 
       <h1 id="livesearch">Live Search</h1>
       <div class="row">
         <div class="span6">
           <h2>Default</h2>
-          <input type="text" placeholder="Search"
-                 class="pat-livesearch"
-                 data-pat-livesearch="ajaxvocabulary: /search.json;" />
-            
+          <div class="pat-livesearch"
+              data-pat-livesearch="ajaxvocabulary: /search.json;">
+            <input type="text" class="pat-livesearch-input" placeholder="Search" />
+            <div class="pat-livesearch-container">
+              <div class="pat-livesearch-results">
+
+              </div>
+            </div>
+          </div>
           <pre class="brush: html;toolbar: false;">
-&lt;input type="text" placeholder="Search"
-       class="pat-livesearch"
-       data-pat-livesearch="ajaxvocabulary: /search.json" /&gt;</pre>
+&lt;div class="pat-livesearch"
+  data-pat-livesearch="ajaxvocabulary: /search.json;"&gt;
+  &lt;input type="text" class="pat-livesearch-input"
+    placeholder="Search" /&gt;
+  &lt;div class="pat-livesearch-container"&gt;
+    &lt;div class="pat-livesearch-results"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
         </div>
       </div>
       <div>
