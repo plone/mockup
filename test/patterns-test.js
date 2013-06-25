@@ -1275,7 +1275,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        pat-relateditems="width: 300px;' +
-        '                          url: /relateditems-test.json" />' +
+        '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
       
@@ -1293,7 +1293,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        pat-relateditems="width: 300px;' +
-        '                          url: /relateditems-test.json" />' +
+        '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -1319,7 +1319,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        pat-relateditems="width: 300px;' +
-        '                          url: /relateditems-test.json" />' +
+        '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -1341,7 +1341,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        pat-relateditems="width: 300px;' +
-        '                          url: /relateditems-test.json" />' +
+        '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 

@@ -190,10 +190,10 @@ define([
       Select2.prototype.initializeTags.call(self);
       Select2.prototype.initializeOrdering.call(self);
 
-      if(self.options.url !== undefined  && self.options.url !== null){
+      if(self.options.ajaxvocabulary !== undefined  && self.options.ajaxvocabulary !== null){
         var query_term = '';
         self.options.ajax = {
-          url: self.options.url,
+          url: self.options.ajaxvocabulary,
           dataType: 'JSON',
           quietMillis: 100,
           data: function(term, page) { // page is the one-based page number tracked by Select2
@@ -245,7 +245,7 @@ define([
         if (value !== '') {
           var ids = value.split(',');
           _.each(ids, function(id) {
-            $.ajax(self.options.url, {
+            $.ajax(self.options.ajaxvocabulary, {
               data: {
                 q: id,
                 page: 1,
