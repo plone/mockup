@@ -1,9 +1,11 @@
- @import "less/pattern.autotoc.less";
- @import "less/pattern.pickadate.less";
- @import "less/pattern.expose.less";
- @import "less/pattern.livesearch.less";
- @import "less/pattern.querystring.less";
- @import "less/pattern.relateditems.less";
+ @import "pattern.autotoc.less";
+ @import "pattern.pickadate.less";
+ @import "pattern.expose.less";
+ @import "pattern.livesearch.less";
+ @import "pattern.querystring.less";
+ @import "pattern.relateditems.less";
+ @import "../jam/font-awesome/less/font-awesome.less";
+ @FontAwesomePath: "++resource++plone.app.widgets/font";
 
 
 #content {
@@ -101,6 +103,13 @@
       font-size: 1em;
       margin: 1em auto 1em;
     }
+  }
+
+  ul.select2-choices{
+    margin-left: 0;
+  }
+  .pat-relateditems-container a{
+    border-bottom: none;
   }
 }
 
