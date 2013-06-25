@@ -86,7 +86,7 @@ define([
             criteria.push({
               i: 'path',
               o: 'plone.app.querystring.operation.string.path',
-              v: pattern.currentPath ? pattern.currentPath : pattern.basePath
+              v: pattern.currentPath ? pattern.currentPath : pattern.options.basePath
             });
           }
 
