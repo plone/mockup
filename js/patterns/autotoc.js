@@ -75,8 +75,8 @@ define([
           .on('click', function(e, doScroll) {
             e.stopPropagation();
             e.preventDefault();
-            $('.' + self.options.klassActive, self.$el)
-                .removeClass(self.options.klassActive);
+            self.$el.children('.' + self.options.klassActive).removeClass(
+              self.options.klassActive);
             $(e.target).addClass(self.options.klassActive);
             $level.parents(self.options.section)
                 .addClass(self.options.klassActive);
