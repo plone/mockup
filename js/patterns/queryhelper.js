@@ -65,13 +65,13 @@ define([
           var opts = {
             query: JSON.stringify({
               criteria: [{
-                i: self.options.param,
+                i: self.options.searchParam,
                 o: 'plone.app.querystring.operation.string.contains',
                 v: term + '*'
               }]
             }),
             batch: JSON.stringify({
-              page: page,
+              page: page, // select2 is 1 based for pages
               size: self.options.batchSize
             }),
             attributes: JSON.stringify(self.options.attributes)
