@@ -140,50 +140,72 @@ require([
   });
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
     var root = [
-      {"id": "asdlfkjasdlfkjasdf", "title": "News", "path": "/news", "type": "folder"},
-      {"id": "124asdf", "title": "About", "path": "/about", "type": "folder"},
-      {"id": "asdf1234", "title": "Projects", "path": "/projects", "type": "folder"},
-      {"id": "asdf1234gsad", "title": "Contact", "path": "/contact", "type": "page"},
-      {"id": "asdv34sdfs", "title": "Privacy Policy", "path": "/policy", "type": "page"},
-      {"id": "asdfasdf234sdf", "title": "Our Process", "path": "/our-process", "type": "folder"},
-      {"id": "asdhsfghyt45", "title": "Donate", "path": "/donate-now", "type": "page"}
+      {"id": "asdlfkjasdlfkjasdf", "title": "News", "path": "/news", "Type": "Folder"},
+      {"id": "124asdf", "title": "About", "path": "/about", "Type": "Folder"},
+      {"id": "asdf1234", "title": "Projects", "path": "/projects", "Type": "Folder"},
+      {"id": "asdf1234gsad", "title": "Contact", "path": "/contact", "Type": "page"},
+      {"id": "asdv34sdfs", "title": "Privacy Policy", "path": "/policy", "Type": "page"},
+      {"id": "asdfasdf234sdf", "title": "Our Process", "path": "/our-process", "Type": "folder"},
+      {"id": "asdhsfghyt45", "title": "Donate", "path": "/donate-now", "Type": "page"}
     ];
     var about = [
-      {"id": "gfn5634f", "title": "About Us", "path": "/about/about-us", "type": "page"},
-      {"id": "45dsfgsdcd", "title": "Philosophy", "path": "/about/philosophy", "type": "page"},
-      {"id": "dfgsdfgj675", "title": "Staff", "path": "/about/staff", "type": "folder"},
-      {"id": "sdfbsfdh345", "title": "Board of Directors", "path": "/about/board-of-directors", "type": "page"}
+      {"id": "gfn5634f", "title": "About Us", "path": "/about/about-us", "Type": "page"},
+      {"id": "45dsfgsdcd", "title": "Philosophy", "path": "/about/philosophy", "Type": "page"},
+      {"id": "dfgsdfgj675", "title": "Staff", "path": "/about/staff", "Type": "Folder"},
+      {"id": "sdfbsfdh345", "title": "Board of Directors", "path": "/about/board-of-directors", "Type": "page"}
     ];
 
     var staff = [
-      {"id": "asdfasdf9sdf", "title": "Mike", "path": "/about/staff/mike", "type": "page"},
-      {"id": "cvbcvb82345", "title": "Joe", "path": "/about/staff/joe", "type": "page"}
+      {"id": "asdfasdf9sdf", "title": "Mike", "path": "/about/staff/mike", "Type": "page"},
+      {"id": "cvbcvb82345", "title": "Joe", "path": "/about/staff/joe", "Type": "page"}
     ];
     var searchables = about.concat(root).concat(staff);
 
     var results = [];
 
     // grab the page number and number of items per page -- note, page is 1-based from Select2
-    var page = Number(getQueryVariable(xhr.url, 'page')) - 1;
-    var page_size = Number(getQueryVariable(xhr.url, 'page_limit'));
-
-    // just return an empty result set if no page is found
-    if(page < 0) {
-      xhr.respond(200, {"Content-Type": "application/json"}, JSON.stringify({"total": 0, "results": []}));
-      return;
+    var batch = getQueryVariable(xhr.url, 'batch');
+    var page = 1;
+    var page_size = 10;
+    if(batch){
+      batch = $.parseJSON(batch);
+      page = batch.page;
+      page_size = batch.size;
     }
+    page = page - 1;
 
-    var query = getQueryVariable(xhr.url, 'q');
-    var path = getQueryVariable(xhr.url, 'browse');
+    var query = getQueryVariable(xhr.url, 'query');
+    var path = null;
+    var term = '';
+    if(query){
+      query = $.parseJSON(query);
+      term = query.criteria[0].v;
+      if(query.criteria.length > 1){
+        path = query.criteria[1].v;
+      }
+    }
+    //var query = getQueryVariable(xhr.url, 'q');
+    //var path = getQueryVariable(xhr.url, 'browse');
 
     // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
-    function search(items, q) {
+    function search(items, term) {
       results = [];
-      if (q === undefined) return searchables;
+      if (term === undefined) return searchables;
       _.each(items, function(item) {
+        var q;
         var keys = (item.id + ' ' + item.title + ' ' + item.path).toLowerCase();
-        var query = q.toLowerCase();
-        if (keys.indexOf(query) > -1) results.push(item);
+        if(typeof(term) === 'object'){
+          for(var i=0; i<term.length; i++){
+            q = term[i].toLowerCase();
+            if (keys.indexOf(q) > -1){
+              results.push(item);
+              break;
+            }
+          }
+        }else{
+          q = term.toLowerCase();
+          if (keys.indexOf(q) > -1) results.push(item);
+        }
       });
     }
 
@@ -203,9 +225,9 @@ require([
     }
 
     if (path) {
-      browse(searchables, query, path);
+      browse(searchables, term, path);
     } else {
-      search(searchables, query);
+      search(searchables, term);
     }
 
     xhr.respond(200, { "Content-Type": "application/json" },

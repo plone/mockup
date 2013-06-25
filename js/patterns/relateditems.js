@@ -37,8 +37,9 @@ define([
   'jquery',
   'underscore',
   'js/patterns/base',
-  'js/patterns/select2'
-], function($, _, Base, Select2) {
+  'js/patterns/select2',
+  'js/patterns/queryhelper'
+], function($, _, Base, Select2, QueryHelper) {
   "use strict";
 
   var RelatedItems = Base.extend({
@@ -56,6 +57,8 @@ define([
       browseText: 'Browse',
       searchText: 'Search',
       homeText: 'home',
+      folderTypes: ['Folder'],
+      attributes: ['id:UID','title:Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= type %>">' +
@@ -182,6 +185,9 @@ define([
     init: function() {
       var self = this;
 
+      self.query = new QueryHelper(self.$el, self.options);
+      self.query.init(self);
+
       self.$el.wrap('<div class="pat-relateditems-container" />');
       self.$container = self.$el.parents('.pat-relateditems-container');
       self.$container.width(self.options.width);
@@ -190,31 +196,9 @@ define([
       Select2.prototype.initializeTags.call(self);
       Select2.prototype.initializeOrdering.call(self);
 
-      if(self.options.ajaxvocabulary !== undefined  && self.options.ajaxvocabulary !== null){
-        var query_term = '';
-        self.options.ajax = {
-          url: self.options.ajaxvocabulary,
-          dataType: 'JSON',
-          quietMillis: 100,
-          data: function(term, page) { // page is the one-based page number tracked by Select2
-            var opts = {
-              q: term,
-              page: page,
-              page_limit: 10 // page size
-            };
-            if(self.browsing){
-              opts.browse = self.currentPath ? self.currentPath : self.options.basePath;
-            }
-            return opts;
-          },
-          results: function (data, page) {
-            var more = (page * 10) < data.total; // whether or not there are more results available
-            // notice we return the value of more so Select2 knows if more results can be loaded
-            return {results: data.results, more: more};
-          }
-        };
-      }
-      else {
+      if(self.query.valid){
+        self.options.ajax = self.query.selectAjax();
+      } else {
         self.options.tags = [];
       }
 
@@ -223,6 +207,12 @@ define([
       };
 
       self.options.formatResult = function(item) {
+        /* all we care about is if it's a folder or not really */
+        if(!item.Type || self.options.folderTypes.indexOf(item.Type) === -1){
+          item.type = 'page';
+        }else{
+          item.type = 'folder';
+        }
         var result = $(self.applyTemplate('result', item));
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
@@ -244,23 +234,12 @@ define([
         var value = $(element).val();
         if (value !== '') {
           var ids = value.split(',');
-          _.each(ids, function(id) {
-            $.ajax(self.options.ajaxvocabulary, {
-              data: {
-                q: id,
-                page: 1,
-                page_limit: 999
-              },
-              success: function(results) {
-                if (results.results.length === 1) {
-                  data.push(results.results[0]);
-                  callback(data);
-                }
-              }
-            });
+          self.query.search(
+            'UID', 'plone.app.querystring.operation.list.contains', ids,
+            function(data){
+              callback(data.results);
           });
         }
-
       };
 
       Select2.prototype.initializeSelect2.call(self);

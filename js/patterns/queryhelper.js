@@ -45,8 +45,19 @@ define([
       batchSize: 10 // number of results to retrive
     },
 
-    init: function() {
+    init: function(basePattern) {
+      /* if basePattern argument provided, it can implement the interface of:
+       *    - browsing: boolean if currently browsing
+       *    - currentPath: string of current path to apply to search if browsing
+       *    - basePath: default path to provide if no subpath used
+       */
       var self = this;
+      if(basePattern === undefined){
+        basePattern = {
+          browsing: false
+        };
+      }
+      self.basePattern = basePattern;
       if(self.options.ajaxvocabulary !== undefined &&
           self.options.ajaxvocabulary !== null){
         self.valid = true;
@@ -62,13 +73,26 @@ define([
         dataType: 'JSON',
         quietMillis: 100,
         data: function(term, page) {
+          if(term){
+            term += '*';
+          }
+          var criteria = [{
+            i: self.options.searchParam,
+            o: 'plone.app.querystring.operation.string.contains',
+            v: term
+          }];
+          var pattern = self.basePattern;
+          if(pattern.browsing){
+            criteria.push({
+              i: 'path',
+              o: 'plone.app.querystring.operation.string.path',
+              v: pattern.currentPath ? pattern.currentPath : pattern.basePath
+            });
+          }
+
           var opts = {
             query: JSON.stringify({
-              criteria: [{
-                i: self.options.searchParam,
-                o: 'plone.app.querystring.operation.string.contains',
-                v: term + '*'
-              }]
+              criteria: criteria
             }),
             batch: JSON.stringify({
               page: page, // select2 is 1 based for pages
@@ -84,6 +108,26 @@ define([
           return {results: data.results, more: more};
         }
       };
+    },
+
+    search: function(term, operation, value, callback){
+      var self = this;
+      var data = {
+        query: JSON.stringify({
+          criteria: [{
+            i: term,
+            o: operation,
+            v: value
+          }]
+        }),
+        attributes: JSON.stringify(self.options.attributes)
+      };
+      $.ajax({
+        url: self.options.ajaxvocabulary,
+        dataType: 'JSON',
+        data: data,
+        success: callback
+      });
     }
   });
 
