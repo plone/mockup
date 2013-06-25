@@ -1639,7 +1639,7 @@ define([
       var $el = $(''+
           '<input type="text" placeholder="Search"' +
           '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="url: /search.json;" />').appendTo('body');
+          '       data-pat-livesearch="ajaxvocabulary: /search.json;" />').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
@@ -1651,7 +1651,7 @@ define([
       var $el = $(''+
           '<input type="text" placeholder="Search"' +
           '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="url: /search.json;' +
+          '       data-pat-livesearch="ajaxvocabulary: /search.json;' +
           '                            minimumInputLength: 0;' +
           '                            isTest: true;" />').appendTo('body');
 
@@ -1689,7 +1689,7 @@ define([
       var $el = $(''+
           '<input type="text" placeholder="Search"' +
           '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="url: /search.json; '+
+          '       data-pat-livesearch="ajaxvocabulary: /search.json; '+
           '                            resultTemplateSelector: #tpl_livesearch;' +
           '                            minimumInputLength: 0;" />').appendTo('body');
       var tpl = $('<script type="text/template" id="tpl_livesearch">' +

@@ -35,20 +35,18 @@ define([
   'js/patterns/base',
   'js/patterns/toggle',
   'underscore',
-  'js/patterns/select2'
-], function($, Base, Toggle, _, Select2) {
+  'js/patterns/select2',
+  'js/patterns/queryhelper'
+], function($, Base, Toggle, _, Select2, QueryHelper) {
   "use strict";
 
   var Livesearch = Base.extend({
     name: "livesearch",
     defaults: {
       multiple: true,
-      batchSize: 10, // number of results to retrive
       closeOnSelect: false,
       minimumInputLength: 3,
       tokenSeparators: [",", " "],
-      param: 'SearchableText', // query string param to pass to search url
-      attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       dropdownCssClass: 'pat-livesearch-dropdown',
       linkSelector: 'pat-livesearch-result-title',
       resultTemplate: '' +
@@ -67,8 +65,10 @@ define([
 
     init: function() {
       var self = this;
+      self.query = new QueryHelper(self.$el, self.options);
+      self.query.init();
 
-      if (!self.options.url) {
+      if (!self.query.valid) {
         $.error('No url provided for livesearch results ' + self.$el);
       }
 
@@ -76,35 +76,8 @@ define([
       Select2.prototype.initializeTags.call(self);
       Select2.prototype.initializeOrdering.call(self);
 
-      if(self.options.url !== undefined  && self.options.url !== null){
-        var query_term = '';
-        self.options.ajax = {
-          url: self.options.url,
-          dataType: 'JSON',
-          quietMillis: 100,
-          data: function(term, page) { // page is the one-based page number tracked by Select2
-            var opts = {
-              query: JSON.stringify({
-                criteria: [{
-                  i: self.options.param,
-                  o: 'plone.app.querystring.operation.string.contains',
-                  v: term + '*'
-                }]
-              }),
-              batch: JSON.stringify({
-                page: page,
-                size: self.options.batchSize
-              }),
-              attributes: JSON.stringify(self.options.attributes)
-            };
-            return opts;
-          },
-          results: function (data, page) {
-            var more = (page * 10) < data.total; // whether or not there are more results available
-            // notice we return the value of more so Select2 knows if more results can be loaded
-            return {results: data.results, more: more};
-          }
-        };
+      if(self.query.valid){
+        self.options.ajax = self.query.selectAjax();
       }
       else {
         self.options.tags = [];

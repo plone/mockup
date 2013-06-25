@@ -125,7 +125,7 @@ define([
       var url = $match.parents('form').attr('action').replace('@@search',
           '@@getVocabulary?name=plone.app.vocabularies.Catalog');
       var attrs = {
-        'url': url
+        'ajaxvocabulary': url
       };
       $match.attr({
         'class': 'pat-livesearch',
