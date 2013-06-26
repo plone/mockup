@@ -58,12 +58,12 @@ define([
       searchText: 'Search',
       homeText: 'home',
       folderTypes: ['Folder'],
-      attributes: ['id:UID','title:Title', 'Type', 'path'],
+      attributes: ['UID','Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
       resultTemplate: '' +
-        '<div class="pat-relateditems-result pat-relateditems-type-<%= type %>">' +
+        '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %>">' +
         ' <span class="pat-relateditems-buttons">' +
-        '  <% if (type === "folder") { %>' +
+        '  <% if (folderish) { %>' +
         '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>">' +
         '       <i class="icon-folder-open"></i>' +
         '    </a>' +
@@ -72,13 +72,13 @@ define([
         '       <i class="icon-plus-sign"></i>' +
         '   </a>' +
         ' </span>' +
-        ' <span class="pat-relateditems-result-title"><%= title %></span>' +
+        ' <span class="pat-relateditems-result-title"><%= Title %></span>' +
         ' <span class="pat-relateditems-result-path"><%= path %></span>' +
         '</div>',
       resultTemplateSelector: null,
       selectionTemplate: '' +
-        '<span class="pat-relateditems-item pat-relateditems-type-<%= type %>">' +
-        ' <span class="pat-relateditems-item-title"><%= title %></span>' +
+        '<span class="pat-relateditems-item pat-relateditems-type-<%= Type %>">' +
+        ' <span class="pat-relateditems-item-title"><%= Title %></span>' +
         ' <span class="pat-relateditems-item-path"><%= path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
@@ -207,11 +207,10 @@ define([
       };
 
       self.options.formatResult = function(item) {
-        /* all we care about is if it's a folder or not really */
-        if(!item.Type || self.options.folderTypes.indexOf(item.Type) === -1){
-          item.type = 'page';
+        if(!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1){
+          item.folderish = false;
         }else{
-          item.type = 'folder';
+          item.folderish = true;
         }
         var result = $(self.applyTemplate('result', item));
 
@@ -240,6 +239,31 @@ define([
               callback(data.results);
           });
         }
+      };
+
+      self.options.id = function(item) {
+        var folderish = item.folderish;
+        /* Trick select2 into not removing a folder from the list if it has been added.
+           Allows user to browse folders that have been selected. */
+        if (item.Title === 'About Us') {
+          var foo = 0;
+        }
+        if (folderish) {
+          var data = self.$el.select2("data");
+          var selected = false;
+          if (item.Title === 'About Us') {
+            selected = false;
+          }
+          _.each(data, function(selItem) {
+            if (item.UID === selItem.UID) {
+              selected = true;
+            }
+          }, self);
+          if (selected) {
+            return item.UID + Math.random() + '' + Math.random();
+          }
+        }
+        return item.UID;
       };
 
       Select2.prototype.initializeSelect2.call(self);

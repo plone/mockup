@@ -146,24 +146,24 @@ require([
   });
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
     var root = [
-      {"id": "asdlfkjasdlfkjasdf", "title": "News", "path": "/news", "Type": "Folder"},
-      {"id": "124asdf", "title": "About", "path": "/about", "Type": "Folder"},
-      {"id": "asdf1234", "title": "Projects", "path": "/projects", "Type": "Folder"},
-      {"id": "asdf1234gsad", "title": "Contact", "path": "/contact", "Type": "page"},
-      {"id": "asdv34sdfs", "title": "Privacy Policy", "path": "/policy", "Type": "page"},
-      {"id": "asdfasdf234sdf", "title": "Our Process", "path": "/our-process", "Type": "folder"},
-      {"id": "asdhsfghyt45", "title": "Donate", "path": "/donate-now", "Type": "page"}
+      {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
+      {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
+      {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
+      {"UID": "asdf1234gsad", "Title": "Contact", "path": "/contact", "Type": "page"},
+      {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "page"},
+      {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "folder"},
+      {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "page"}
     ];
     var about = [
-      {"id": "gfn5634f", "title": "About Us", "path": "/about/about-us", "Type": "page"},
-      {"id": "45dsfgsdcd", "title": "Philosophy", "path": "/about/philosophy", "Type": "page"},
-      {"id": "dfgsdfgj675", "title": "Staff", "path": "/about/staff", "Type": "Folder"},
-      {"id": "sdfbsfdh345", "title": "Board of Directors", "path": "/about/board-of-directors", "Type": "page"}
+      {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "page"},
+      {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "page"},
+      {"UID": "dfgsdfgj675", "Title": "Staff", "path": "/about/staff", "Type": "Folder"},
+      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "page"}
     ];
 
     var staff = [
-      {"id": "asdfasdf9sdf", "title": "Mike", "path": "/about/staff/mike", "Type": "page"},
-      {"id": "cvbcvb82345", "title": "Joe", "path": "/about/staff/joe", "Type": "page"}
+      {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "page"},
+      {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "page"}
     ];
     var searchables = about.concat(root).concat(staff);
 
