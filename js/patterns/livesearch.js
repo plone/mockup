@@ -52,6 +52,7 @@ define([
     results: '',
     index: null,
     defaults: {
+      ajaxvocabulary: null, // must be set in order to work
       delay: 200,
       highlight: 'pat-livesearch-highlight', // class to add to items when selected
       minimumInputLength: 3, // number of chars user should type before searching

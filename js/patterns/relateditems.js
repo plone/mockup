@@ -47,6 +47,7 @@ define([
     browsing: false,
     currentPath: null,
     defaults: {
+      ajaxvocabulary: null, // must be set to work
       multiple: true,
       tokenSeparators: [",", " "],
       separator: ",",
