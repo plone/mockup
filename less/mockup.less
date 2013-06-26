@@ -241,41 +241,40 @@ padding:5px;
         TABLE STYLING
 ====================================*/
 
-table.table th {
-background-color:#0083be;
-color:white
+.table th {
+  background-color:#0083be;
+  color:white;
 }
 
-table.table th:nth-of-type(1){
+.table th:first-of-type {
         -webkit-border-top-left-radius: 10px;
 -moz-border-radius-topleft: 10px;
 border-top-left-radius: 10px;
-border-right:solid 1px 
 }
 
-table.table th:nth-of-type(3){
+.table th:last-of-type {
         -webkit-border-top-right-radius: 10px;
 -moz-border-radius-topright: 10px;
 border-top-right-radius: 10px;
-border-left:1px solid;
+border-right: none;
 }
 
-table.table td {
+.table td {
      
      
 }
 
-table.table td:nth-of-type(1){
-    border-right:solid 1px lightgrey
+.table td {
+    border-right:solid 1px lightgrey;
 }
 
-table.table td:nth-of-type(3){
-    border-left:solid 1px lightgrey
+.table td:last-of-type {
+    border-right: none;
 }
 
-table.table tr:nth-of-type(odd){
-    background-color:#dddddd;
+.table tr:nth-of-type(odd){
+    background-color: transparent;
 }
-table.table tr:nth-of-type(even){
+.table tr:nth-of-type(even){
     background-color:#f4f4f4;
 }

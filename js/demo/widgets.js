@@ -123,11 +123,17 @@ require([
     var results = [];
     var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
 
-    if (batch) {
-      var start, end;
-      start = (batch.page-1) * batch.size;
-      end = start + batch.size;
-      results = items.slice(start, end);
+    var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
+
+    if (query.criteria[0].v === 'none*') {
+      results = [];
+    } else {
+      if (batch) {
+        var start, end;
+        start = (batch.page-1) * batch.size;
+        end = start + batch.size;
+        results = items.slice(start, end);
+      }
     }
 
     xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
