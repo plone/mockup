@@ -51,6 +51,7 @@ define([
     renderedTerm: '',
     results: '',
     index: null,
+    testTarget: null,
     defaults: {
       ajaxvocabulary: null, // must be set in order to work
       delay: 200,
@@ -115,11 +116,11 @@ define([
         $.error('Input element not found ' + self.$el);
       }
 
-      self.$input.on('focus.livesearch.patters', function(e) {
+      self.$input.on('focus.livesearch.patterns', function(e) {
         self.show();
       });
 
-      self.$input.on('blur.livesearch.patters', function(e) {
+      self.$input.on('blur.livesearch.patterns', function(e) {
         self.hide();
       });
 
@@ -144,16 +145,19 @@ define([
       });
 
       // TODO: Figure out why can't these be in one line.
-      self.on('showing', function(event) {
+      self.on('showing.livesearch.patterns', function(event) {
         self.render(event);
       });
-      self.on('searched', function(event) {
+      self.on('searched.livesearch.patterns', function(event) {
         self.render(event);
       });
-      self.on('render', function(event) {
+      self.on('render.livesearch.patterns', function(event) {
         self.render(event);
       });
-      self.on('searching', function(event) {
+      self.on('searching.livesearch.patterns', function(event) {
+        self.render(event);
+      });
+      self.on('cachedresult.livesearch.patterns', function(event) {
         self.render(event);
       });
     },
@@ -163,9 +167,9 @@ define([
       var term = self.currentTerm;
       self.trigger('searching');
 
-      if (self.cache[term]) {
+      if (self.cache[term] !== undefined) {
         // already have results, do not load ajax
-        self.fillResults(self.cache[term]);
+        self.trigger('cachedresult');
         return;
       }
 
@@ -243,11 +247,11 @@ define([
             $.each(data, function(index, value){
               appendTo.append(self.applyTemplate('result', value));
             });
+            self.renderedTerm = self.currentTerm;
           } else {
             container.html(self.renderHelp('noResults', {}));
           }
         }
-        self.renderedTerm = self.currentTerm;
       }
 
       self.options.setPosition.apply(self);
@@ -276,7 +280,7 @@ define([
     },
 
     items: function() {
-      return this.$results.find(this.options.itemSelector);
+      return this.$results.find(this.options.resultSelector);
     },
 
     _keyUp: function() {
@@ -316,6 +320,10 @@ define([
       var hl = self.options.highlight;
       var target = self.$results.find('.'+hl)
         .find('a').attr('href');
+      if (self.options.isTest) {
+        self.testTarget = target;
+        return;
+      }
       window.location = target;
     },
 

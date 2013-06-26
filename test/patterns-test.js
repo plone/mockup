@@ -230,7 +230,7 @@ define([
         "Type": "Collection", "Description": "Site News",
         "Title": "Another Item"
       },
-      {
+      { 
         "UID": "fooasdfasdfsdf",
         "getURL": "http://localhost:8081/news/aggregator",
         "Type": "Collection", "Description": "Site News",
@@ -247,11 +247,17 @@ define([
     var results = [];
     var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
 
-    if (batch) {
-      var start, end;
-      start = batch.page * batch.size;
-      end = start + batch.size;
-      results = items.slice(start, end);
+    var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
+
+    if (query.criteria[0].v === 'none*') {
+      results = [];
+    } else {
+      if (batch) {
+        var start, end;
+        start = (batch.page-1) * batch.size;
+        end = start + batch.size;
+        results = items.slice(start, end);
+      }
     }
 
     xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
@@ -1637,86 +1643,194 @@ define([
 
     it('test default elements', function() {
       var $el = $(''+
-          '<input type="text" placeholder="Search"' +
-          '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="ajaxvocabulary: /search.json;" />').appendTo('body');
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
+      expect(pattern.$results).to.have.length(1);
+      expect(pattern.$input).to.have.length(1);
+      expect(pattern.$toggle).to.have.length(1);
+
       $el.remove();
-      $('.select2-sizer, .select2-drop, .pat-livesearch').remove();
     });
 
     it('keyboard navigation and selection', function() {
       var $el = $(''+
-          '<input type="text" placeholder="Search"' +
-          '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="ajaxvocabulary: /search.json;' +
-          '                            minimumInputLength: 0;' +
-          '                            isTest: true;" />').appendTo('body');
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json; isTest: true">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
       var clock = sinon.useFakeTimers();      
 
-      var $search = $('.select2-input');
-      $el.select2("open");
-      $search.val('abcd').trigger('keyup-change').focus();
+      var $input = pattern.$input;
 
-      clock.tick(500);
+      var d = $.Event('keyup');
+      d.which = 68;
 
-      var $results = $('.select2-results > li');
+      $input.val('ddd').trigger(d);
 
-      var down = $.Event('keydown');
-      down.which = 40;
+      clock.tick(1000);
 
-      var enter = $.Event('keydown');
-      down.which = 13;
+      pattern._keyDown();
+      pattern._keyDown();
+      pattern._keyDown();
+      pattern._keyDown();
 
-      expect(pattern.testTarget).to.be.undefined;
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(3);
 
-      $search.trigger(down);
-      $search.trigger(down);
-      $search.trigger(enter);
+      pattern._keyUp();
+      pattern._keyUp();
 
-      expect(pattern.testTarget).to.not.be.undefined;
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      expect(pattern.testTarget).to.be.null;
+
+      pattern._keyEnter();
+
+      expect(pattern.testTarget).to.not.be.null;
 
       $el.remove();
-      $('.select2-sizer, .select2-drop, .pat-livesearch').remove();
+
+    });
+
+    it('user help is shown indicating how many chars to type', function() {
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json;">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+
+      var clock = sinon.useFakeTimers();      
+
+      var $input = pattern.$input;
+
+      var d = $.Event('keyup');
+      d.which = 68;
+
+      $input.trigger('focus');
+      expect(pattern.$results.text()).to.contain('Type 3');
+
+      $input.val('d').trigger(d);
+      expect(pattern.$results.text()).to.contain('Type 2');
+
+      $input.val('dd').trigger(d);
+      expect(pattern.$results.text()).to.contain('Type 1');
+      expect(pattern.$results.text()).not.to.contain('characters');
+
+      $el.remove();
+
+    });
+
+    it('no results found message', function() {
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json;">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+
+      var clock = sinon.useFakeTimers();      
+
+      var $input = pattern.$input;
+
+      var d = $.Event('keyup');
+      d.which = 68;
+
+      $input.val('none').trigger(d);
+      
+      clock.tick(1000);
+
+      expect(pattern.$results.text()).to.contain('No results');
+
+      $el.remove();
+    });
+
+    it('searching message is displayed', function() {
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json;">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      var clock = sinon.useFakeTimers();      
+      var $input = pattern.$input;
+
+      var d = $.Event('keyup');
+      d.which = 68;
+
+      $input.val('123').trigger(d);
+      
+      clock.tick(pattern.options.delay+5);
+
+      expect(pattern.$results.text()).to.contain('Searching...');
+
+      $el.remove();
     });
 
     it('template from selector', function() {
       var $el = $(''+
-          '<input type="text" placeholder="Search"' +
-          '       class="pat-livesearch" ' +
-          '       data-pat-livesearch="ajaxvocabulary: /search.json; '+
-          '                            resultTemplateSelector: #tpl_livesearch;' +
-          '                            minimumInputLength: 0;" />').appendTo('body');
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json;' +
+          '                          resultTemplateSelector: #tpl_livesearch">'+
+          ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+          ' <div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
       var tpl = $('<script type="text/template" id="tpl_livesearch">' +
-        '<div class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
+        '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
           '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
             '<%= Title %>' +
           '</a> Money Honey' +
           '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
-        '</div></script>').appendTo('body');
+        '</li></script>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
       var clock = sinon.useFakeTimers();
 
-      var $search = $('.select2-input');
-      $el.select2("open");
-      $search.val('abcd').trigger('keyup-change').focus();
+      var $input= pattern.$input;
+      $input.val('abcd').trigger('keyup').focus();
 
-      clock.tick(500);
+      clock.tick(1000);
 
-      var $results = $('.select2-results > li');
+      var $results = pattern.items();
 
       expect($results.length).to.be.gt(1);
       expect($results.first().text().indexOf('Money Honey')).to.be.gt(-1);
 
       $el.remove();
-      $('.select2-sizer, .select2-drop, .pat-livesearch').remove();
       tpl.remove();
     });
 
