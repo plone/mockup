@@ -1805,7 +1805,7 @@ define([
       registry.scan($el);
       $el.remove();
     });
-    it("when the condition is not met, focus on the first input", function() {
+    it("when the condition is not met, focus on the first input", function(done) {
       var $el = $('' +
         '<div>' +
         ' <form class="pat-formautofocus">' +
