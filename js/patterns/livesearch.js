@@ -57,6 +57,7 @@ define([
       minimumInputLength: 3, // number of chars user should type before searching
       toggleTarget: '.pat-livesearch-container', // the element to show/hide when performing search
       toggleClass: 'show',
+      positionToggleWithInput: true,
       resultsTarget: '.pat-livesearch-results', // the element to fill with results
       input: '.pat-livesearch-input', // input selector
       resultContainerTemplate: '<ul></ul>',
@@ -80,7 +81,14 @@ define([
       noResultsTemplateSelector: null,
       searchingTemplate: 'Searching...',
       searchingTemplateSelector: null,
-      isTest: false
+      isTest: false,
+      setPosition: function() {
+        var self = this;
+        if (self.options.positionToggleWithInput) {
+          var top = self.$input.position().top + self.$input.outerHeight();
+          self.$toggle.css({'top': top+'px'});
+        }
+      }
     },
 
     init: function() {
@@ -238,6 +246,7 @@ define([
         self.renderedTerm = self.currentTerm;
       }
 
+      self.options.setPosition.apply(self);
       self.$results.html(container);
       self.trigger('rendered');
     },
@@ -253,10 +262,12 @@ define([
 
     hide: function() {
       var self = this;
+      var klass = self.options.highlight;
       self.trigger('hiding');
       if (self.$toggle) {
         self.$toggle.removeClass(self.options.toggleClass);
       }
+      $('.'+klass, self.$results).removeClass(klass);
       self.trigger('hidden');
     },
 
@@ -315,6 +326,8 @@ define([
           case 27:
             self._keyEscape();
             break;
+          case 38: break;
+          case 40: break;
           case 37: break; // keyLeft
           case 39: break; // keyRight
           default:
@@ -341,23 +354,6 @@ define([
           case 40:
             self._keyDown();
             return false;
-        }
-      }
-    },
-
-    select: function() {
-      var self = this;
-      var select2 = self.$el.data().select2;
-      var dropdown = select2.dropdown;
-      var selected = $('.select2-highlighted', dropdown);
-      var link = $('.'+self.options.linkSelector, selected);
-      var target = link.attr('href');
-      if (target) {
-        // There may be a better way to do this
-        if (self.options.isTest) {
-          self.testTarget = target;
-        } else {
-          window.location = target;
         }
       }
     }

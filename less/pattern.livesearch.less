@@ -16,17 +16,14 @@
 .pat-livesearch-container {
   display: none;
   position: absolute;
-  top: 100%;
   left: 0;
+  margin-top: 3px;
   z-index: 500;
-  display: none; // none by default, but block on "open" of the menu
+  display: none;
   float: left;
   min-width: 300px;
-  padding: 5px 0;
-  margin: 2px 0 0; // override default ul
   list-style: none;
   background-color: #FFF;
-  border: 1px solid #ccc; // Fallback for IE7-8
   border: 1px solid #DDD;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
@@ -42,6 +39,14 @@
     left: auto;
   }
 
+  &.show {
+    display: block;
+  }
+
+}
+.pat-livesearch-results {
+  padding: 5px;
+
   ul {
     list-style: none;
     margin: 0;
@@ -56,13 +61,6 @@
     }
   }
 }
-.pat-livesearch-container.show {
-  display: block;
-}
-.pat-livesearch-results {
-  padding: 0 10px;
-}
-.pat-livesearch-highlight,
-.pat-livesearch-result:hover {
-  background-color: #d8d8d8;
+.pat-livesearch-highlight {
+  background-color: #f2f2f2;
 }
