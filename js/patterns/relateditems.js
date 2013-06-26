@@ -69,9 +69,11 @@ define([
         '       <i class="icon-folder-open"></i>' +
         '    </a>' +
         '   <% } %>' +
-        '   <a class="pat-relateditems-result-select" href="#">' +
-        '       <i class="icon-plus-sign"></i>' +
-        '   </a>' +
+        '  <% if (!selected) { %>' +
+        '     <a class="pat-relateditems-result-select" href="#">' +
+        '         <i class="icon-plus-sign"></i>' +
+        '     </a>' +
+        '  <% } %>' +
         ' </span>' +
         ' <span class="pat-relateditems-result-title"><%= Title %></span>' +
         ' <span class="pat-relateditems-result-path"><%= path %></span>' +
@@ -181,6 +183,7 @@ define([
       var data = self.$el.select2("data");
       data.push(item);
       self.$el.select2("data", data);
+      item.selected = true;
       self.trigger('selected');
     },
     init: function() {
@@ -213,10 +216,22 @@ define([
         }else{
           item.folderish = true;
         }
+
+        if (item.selected === undefined) {
+          var data = self.$el.select2("data");
+          item.selected = false;
+          _.each(data, function(obj) {
+            if (obj.UID === item.UID) {
+              item.selected = true;
+            }
+          });
+        }
+
         var result = $(self.applyTemplate('result', item));
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
           self.selectItem(item);
+          $(this).remove();
           return false;
         });
 
