@@ -185,8 +185,8 @@ define([
     init: function() {
       var self = this;
 
-      self.query = new QueryHelper(self.$el, self.options);
-      self.query.init(self);
+      self.query = new QueryHelper(self.$el,
+          $.extend(true, {}, self.options, {basePattern: self}));
 
       self.$el.wrap('<div class="pat-relateditems-container" />');
       self.$container = self.$el.parents('.pat-relateditems-container');

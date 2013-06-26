@@ -39,25 +39,26 @@ define([
   var QueryHelper = Base.extend({
     name: "queryhelper",
     defaults: {
+      basePattern: null, // must be passed in
       ajaxvocabulary: null,
       searchParam: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       batchSize: 10 // number of results to retrive
     },
 
-    init: function(basePattern) {
+    init: function() {
       /* if basePattern argument provided, it can implement the interface of:
        *    - browsing: boolean if currently browsing
        *    - currentPath: string of current path to apply to search if browsing
        *    - basePath: default path to provide if no subpath used
        */
       var self = this;
-      if(basePattern === undefined){
-        basePattern = {
+      self.basePattern = self.options.basePattern;
+      if(self.basePattern === undefined){
+        self.basePattern = {
           browsing: false
         };
       }
-      self.basePattern = basePattern;
       if(self.options.ajaxvocabulary !== undefined &&
           self.options.ajaxvocabulary !== null){
         self.valid = true;

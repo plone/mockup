@@ -65,8 +65,8 @@ define([
 
     init: function() {
       var self = this;
-      self.query = new QueryHelper(self.$el, self.options);
-      self.query.init(self);
+      self.query = new QueryHelper(self.$el,
+        $.extend(true, {}, self.options, {basePattern: self}));
 
       if (!self.query.valid) {
         $.error('No url provided for livesearch results ' + self.$el);
