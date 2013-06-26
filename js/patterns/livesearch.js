@@ -46,17 +46,17 @@ define([
     $results: null,
     $input: null,
     $toggle: null,
-    $selected: null,
     cache: {},
+    currentTerm: null,
+    renderedTerm: '',
+    results: '',
     index: null,
     defaults: {
-      delay: 400,
+      delay: 200,
       highlight: 'pat-livesearch-highlight', // class to add to items when selected
-      chars: 3, // number of chars user should type before searching
-      toggle: {
-        target: '.pat-livesearch-container', // the element to show/hide when performing search
-        klass: 'show'
-      },
+      minimumInputLength: 3, // number of chars user should type before searching
+      toggleTarget: '.pat-livesearch-container', // the element to show/hide when performing search
+      toggleClass: 'show',
       resultsTarget: '.pat-livesearch-results', // the element to fill with results
       input: '.pat-livesearch-input', // input selector
       resultContainerTemplate: '<ul></ul>',
@@ -72,12 +72,14 @@ define([
           '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
         '</li>',
       resultTemplateSelector: null,
-      searchHelpTemplate: '<div class="pat-livesearch-help"><%= help %></div>',
-      searchHelpTemplateSelector: null,
+      helpTemplate: '<div class="pat-livesearch-help"><%= help %></div>',
+      helpTemplateSelector: null,
       typeMoreTemplate: 'Type <%= more %> more characters to search.',
       typeMoreTemplateSelector: null,
       noResultsTemplate: 'No results found.',
       noResultsTemplateSelector: null,
+      searchingTemplate: 'Searching...',
+      searchingTemplateSelector: null,
       isTest: false
     },
 
@@ -105,30 +107,52 @@ define([
         $.error('Input element not found ' + self.$el);
       }
 
-      if (self.options.toggle.target) {
-        self.$toggle = $(self.options.toggle.target, self.$el);
+      self.$input.on('focus.livesearch.patters', function(e) {
+        self.show();
+      });
+
+      self.$input.on('blur.livesearch.patters', function(e) {
+        self.hide();
+      });
+
+      if (self.options.toggleTarget) {
+        self.$toggle = $(self.options.toggleTarget, self.$el);
         if (self.$toggle.length) {
-          self.$toggle.on('click.livesearch.patterns', function(event) {
-            event.stopPropagation();
-          });
           $('html').on('click.livesearch.patterns', function() {
             self.hide();
           });
-          self.$input.on('click.livesearch.patterns', function(e) {
-            e.stopPropagation();
+          self.$toggle.on('click.livesearch.patterns', function(event) {
+            event.stopPropagation();
+          });
+          self.$input.on('click.livesearch.patterns', function(event) {
+            event.stopPropagation();
           });
         }
 
       }
 
-      self.$input.on('keyup', function(event) {
+      self.$input.on('keyup keydown', function(event) {
         return self._handler(event);
+      });
+
+      // TODO: Figure out why can't these be in one line.
+      self.on('showing', function(event) {
+        self.render(event);
+      });
+      self.on('searched', function(event) {
+        self.render(event);
+      });
+      self.on('render', function(event) {
+        self.render(event);
+      });
+      self.on('searching', function(event) {
+        self.render(event);
       });
     },
 
     search: function() {
       var self = this;
-      var term = this.$input.val();
+      var term = self.currentTerm;
       self.trigger('searching');
 
       if (self.cache[term]) {
@@ -143,13 +167,12 @@ define([
         self.options.ajax.url,
         $.param(params),
         function(data) {
-          self.cache[term] = data.results;
           if(data.results !== undefined){
-            self.fillResults(data.results);
+            self.cache[term] = data.results;
           }else{
             console.log('error from server returning result');
           }
-          self.cache[term] = data;
+          window.clearInterval(self.timeout);
           self.trigger('searched');
         }
       );
@@ -169,24 +192,61 @@ define([
       return _.template(template, item);
     },
 
-    fillResults: function(data) {
+    getCache: function() {
       var self = this;
-      if (self.$results.length > 0) {
-        var container = $(self.applyTemplate('resultContainer', self));
-        $.each(data, function(index, value){
-          container.append(self.applyTemplate('result', value));
-        });
-        self.$results.html(container);
-        self.show();
-        window.clearInterval(self.timeout);
+      var data = [];
+      if (self.currentTerm !== null && self.currentTerm.length >= self.options.minimumInputLength) {
+        if (self.cache[self.currentTerm] !== undefined) {
+          data = self.cache[self.currentTerm];
+        }
       }
+      return data;
+    },
+
+    renderHelp: function(tpl, data) {
+      var self = this;
+      var msg = self.applyTemplate(tpl, data);
+      return self.applyTemplate('help', {help: msg});
+    },
+
+    render: function(event) {
+      var self = this;
+
+      // Don't do anything if we have already rendered for this term
+      if (self.currentTerm === self.renderedTerm) {
+        return;
+      }
+
+      var container = $(self.applyTemplate('resultContainer', self));
+
+      if (event.type === 'searching') {
+        container.html(self.renderHelp('searching', {}));
+      } else {
+        if (self.currentTerm === null || self.currentTerm.length < self.options.minimumInputLength) {
+          var chars = self.currentTerm !== null ? self.options.minimumInputLength - self.currentTerm.length : self.options.minimumInputLength;
+          container.html(self.renderHelp('typeMore', {more: chars}));
+        } else {
+          var data = self.getCache();
+          if (data.length > 0) {
+            $.each(data, function(index, value){
+              container.append(self.applyTemplate('result', value));
+            });
+          } else {
+            container.html(self.renderHelp('noResults', {}));
+          }
+        }
+        self.renderedTerm = self.currentTerm;
+      }
+
+      self.$results.html(container);
+      self.trigger('rendered');
     },
 
     show: function() {
       var self = this;
       self.trigger('showing');
       if (self.$toggle) {
-        self.$toggle.addClass(self.options.toggle.klass);
+        self.$toggle.addClass(self.options.toggleClass);
       }
       self.trigger('shown');
     },
@@ -195,7 +255,7 @@ define([
       var self = this;
       self.trigger('hiding');
       if (self.$toggle) {
-        self.$toggle.removeClass(self.options.toggle.klass);
+        self.$toggle.removeClass(self.options.toggleClass);
       }
       self.trigger('hidden');
     },
@@ -206,28 +266,30 @@ define([
 
     _keyUp: function() {
       var self = this;
-      var hl = self.options.highlight;
-      if (self.index === null || self.index === 0) {
-        self.index = self.items().length - 1;
-      } else {
-        self.index -= 1;
+      var klass = self.options.highlight;
+      var selected = $('.'+klass, self.$results);
+
+      if (selected.length > 0) {
+        if (selected.prev().length > 0) {
+          selected.removeClass(klass);
+          selected = selected.prev().addClass(klass);
+        }
       }
-      if (self.$selected !== null) self.$selected.removeClass(hl);
-      self.$selected = $(self.items()[self.index]);
-      self.$selected.addClass(hl);
     },
 
     _keyDown: function() {
       var self = this;
-      var hl = self.options.highlight;
-      if (self.index === null || self.index === self.items().length-1) {
-        self.index = 0;
+      var klass = self.options.highlight;
+      var selected = $('.'+klass, self.$results);
+
+      if (selected.length === 0) {
+        selected = self.items().first().addClass(klass);
       } else {
-        self.index += 1;
+        if (selected.next().length > 0) {
+          selected.removeClass(klass);
+          selected = selected.next().addClass(klass);
+        }
       }
-      if (self.$selected !== null) self.$selected.removeClass(hl);
-      self.$selected = $(self.items()[self.index]);
-      self.$selected.addClass(hl);
     },
 
     _keyEscape: function() {
@@ -245,31 +307,41 @@ define([
     _handler: function(event) {
       var self = this;
       window.clearTimeout(self.timeout);
-      switch (event.keyCode) {
-        case 13:
-          self._keyEnter();
-          return false;
-        case 38:
-          self._keyUp();
-          return false;
-        case 40:
-          self._keyDown();
-          return false;
-        case 27:
-          self._keyEscape();
-          break;
-        case 37: break; // keyLeft
-        case 39: break; // keyRight
-        default:
-          if (self.$input.val().length >= self.options.chars) {
-            self.timeout = window.setInterval(function(){
-              try{
-                self.search();
-              }catch(e){
-                console.log('error trying to search');
-              }
-            }, self.options.delay);
-          }
+      if (event.type === 'keyup') {
+        switch (event.keyCode) {
+          case 13:
+            self._keyEnter();
+            return false;
+          case 27:
+            self._keyEscape();
+            break;
+          case 37: break; // keyLeft
+          case 39: break; // keyRight
+          default:
+            self.currentTerm = self.$input.val();
+            if (self.$input.val().length >= self.options.minimumInputLength) {
+              self.timeout = window.setInterval(function(){
+                try{
+                  self.search();
+                }catch(e){
+                  console.log('error trying to search');
+                  window.clearInterval(self.timeout);
+                }
+              }, self.options.delay);
+            } else {
+              self.trigger('render');
+            }
+
+        }
+      } else if (event.type === 'keydown') {
+        switch (event.keyCode) {
+          case 38:
+            self._keyUp();
+            return false;
+          case 40:
+            self._keyDown();
+            return false;
+        }
       }
     },
 
