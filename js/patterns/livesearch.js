@@ -144,7 +144,6 @@ define([
         return self._handler(event);
       });
 
-      // TODO: Figure out why can't these be in one line.
       self.on('showing.livesearch.patterns', function(event) {
         self.render(event);
       });
