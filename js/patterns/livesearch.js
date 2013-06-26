@@ -61,8 +61,9 @@ define([
       positionToggleWithInput: true,
       resultsTarget: '.pat-livesearch-results', // the element to fill with results
       input: '.pat-livesearch-input', // input selector
-      resultContainerTemplate: '<ul></ul>',
-      resultContainerTemplateSelector: null,
+      resultsContainerTemplate: '<ul></ul>',
+      resultsContainerTemplateSelector: null,
+      resultsAppendTo: 'ul', // selector for element within results to append to.
       resultSelector: '.pat-livesearch-result',
       resultTemplate: '' +
         '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
@@ -74,7 +75,7 @@ define([
       resultTemplateSelector: null,
       helpTemplate: '<div class="pat-livesearch-help"><%= help %></div>',
       helpTemplateSelector: null,
-      typeMoreTemplate: 'Type <%= more %> more characters to search.',
+      typeMoreTemplate: 'Type <%= more %> more character<%= more === 1 ? "" : "s" %> to search.',
       typeMoreTemplateSelector: null,
       noResultsTemplate: 'No results found.',
       noResultsTemplateSelector: null,
@@ -224,7 +225,7 @@ define([
         return;
       }
 
-      var container = $(self.applyTemplate('resultContainer', self));
+      var container = $(self.applyTemplate('resultsContainer', self));
 
       if (event.type === 'searching') {
         container.html(self.renderHelp('searching', {}));
@@ -234,9 +235,13 @@ define([
           container.html(self.renderHelp('typeMore', {more: chars}));
         } else {
           var data = self.getCache();
+          var appendTo = container.find(self.options.resultsAppendTo);
+          if (appendTo.length === 0) {
+            appendTo = container;
+          }
           if (data.length > 0) {
             $.each(data, function(index, value){
-              container.append(self.applyTemplate('result', value));
+              appendTo.append(self.applyTemplate('result', value));
             });
           } else {
             container.html(self.renderHelp('noResults', {}));

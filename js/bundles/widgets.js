@@ -120,7 +120,6 @@ define([
         }
       });
 
-      // Live Search
       $match = $root.find('.LSBox');
       var url = $match.parents('form').attr('action').replace('@@search',
           '@@getVocabulary?name=plone.app.vocabularies.Catalog');
@@ -132,7 +131,14 @@ define([
         'data-pat-livesearch': JSON.stringify(attrs)
       });
       $match.find('.searchSection').remove();
-      
+      $match.find('.LSResult').attr({
+        'class': 'pat-livesearch-container pull-right',
+        'id': ''
+      });
+      $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
+      $match.find('#searchGadget').addClass('pat-livesearch-input')
+        .attr('autocomplete', 'off');
+      $match.find('.searchButton').hide();     
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce');
