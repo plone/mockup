@@ -92,6 +92,9 @@
                 Attribute
               </th>
               <th>
+                Type
+              </th>
+              <th>
                 Default
               </th>
               <th>
@@ -99,19 +102,172 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+                    <tbody>
             <tr>
               <td>ajaxvocabulary</td>
+              <td>String</td>
               <td></td>
-              <td>The url of the server side page that will be queried.</td>
+              <td>The url that will be of the server side page that will be queried.</td>
+            </tr>
+            <tr>
+              <td>delay</td>
+              <td>Integer</td>
+              <td>200</td>
+              <td>Delay in ms after user types before searching.</td>
+            </tr>
+            <tr>
+              <td>highlight</td>
+              <td>String</td>
+              <td>'pat-livesearch-highlight'</td>
+              <td>CSS class that will be used to highlight items on keyboard navigation.</td>
             </tr>
             <tr>
               <td>minimumInputLength</td>
+              <td>Integer</td>
               <td>3</td>
               <td>Number of characters user must type before search begins.</td>
             </tr>
+            <tr>
+              <td>input</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-input'</td>
+              <td>Selector for element that will be used for the livesearch input.</td>
+            </tr>
+            <tr>
+              <td>toggleTarget</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-container'</td>
+              <td>Selector for element that will be shown when results are found.</td>
+            </tr>
+            <tr>
+              <td>toggleClass</td>
+              <td>String</td>
+              <td>'show'</td>
+              <td>CSS class that will be added to target toggle element when results are found.</td>
+            </tr>
+            <tr>
+              <td>positionToggleWithInput</td>
+              <td>Boolean</td>
+              <td>true</td>
+              <td>Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.</td>
+            </tr>
+            <tr>
+              <td>setPosition</td>
+              <td>Function</td>
+              <td>
+<pre class="brush: javascript;toolbar: false;">
+setPosition: function() {
+  var self = this;
+  if (self.options.positionToggleWithInput) {
+    var top = self.$input.position().top + self.$input.outerHeight();
+    self.$toggle.css({'top': top+'px'});
+  }
+}</pre>
+              </td>
+              <td>Function which will be used to set the position of the toggle element.</td>
+            </tr>
+            <tr>
+              <td>resultsTarget</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-results'</td>
+              <td>Selector for element where results from the server will be inserted.</td>
+            </tr>
+            <tr>
+              <td>resultContainerTemplate</td>
+              <td>String</td>
+              <td>'&lt;ul&gt;&lt;/ul&gt;'</td>
+              <td>Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used.</td>
+            </tr>
+            <tr>
+              <td>resultContainerTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Selector for an element in the DOM to use in place of resultContainerTemplate.</td>
+            </tr>
+            <tr>
+              <td>resultSelector</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-result'</td>
+              <td>Will be used to select result items from within the result container.</td>
+            </tr>
+            <tr>
+              <td>resultTemplate</td>
+              <td>String</td>
+              <td>
+<pre>
+'&lt;li class="pat-livesearch-result pat-livesearch-type-&lt;%= Type %&gt;"&gt;' +
+  '&lt;a class="pat-livesearch-result-title" href="&lt;%= getURL %&gt;"&gt;' +
+    '&lt;%= Title %&gt;' +
+  '&lt;/a&gt;' +
+  '&lt;p class="pat-livesearch-result-desc"&gt;&lt;%= Description %&gt;&lt;/p&gt;' +
+'&lt;/li&gt;'</pre>
+              </td>
+              <td>Template for a single result.</td>
+            </tr>
+            <tr>
+              <td>resultTemplateSelector</td>
+              <td>String</td>
+              <td></td>
+              <td>Selector for element to be used in place of resultTemplate.</td>
+            </tr>
+            <tr>
+              <td>helpTemplate</td>
+              <td>String</td>
+              <td>'&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;'</td>
+              <td>Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.'</td>
+            </tr>
+            <tr>
+              <td>helpTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of helpTemplate.</td>
+            </tr>
+            <tr>
+              <td>typeMoreTemplate</td>
+              <td>String</td>
+              <td>'Type <%= more %> more characters to search.'</td>
+              <td>Template for message which is displayed if the current input length is less than minimumInputLength.</td>
+            </tr>
+            <tr>
+              <td>typeMoreTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of typeMoreTemplate.</td>
+            </tr>
+            <tr>
+              <td>typeMoreTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of typeMoreTemplate.</td>
+            </tr>
+            <tr>
+              <td>noResultsTemplate</td>
+              <td>String</td>
+              <td>'No results found.'</td>
+              <td>Template for message that is displayed after a search when no results were found.</td>
+            </tr>
+            <tr>
+              <td>noResultsTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of noResultsTemplate.</td>
+            </tr>
+            <tr>
+              <td>searchingTemplate</td>
+              <td>String</td>
+              <td>'Searching...'</td>
+              <td>Template for message which will be displayed after a search has started and before it has ended.</td>
+            </tr>
+            <tr>
+              <td>searchingTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of searchingTemplate.</td>
+            </tr>
           </tbody>
         </table>
+        <h4>Events</h4>
+        <p>TODO: Document the events.</p>
       </div>
     </div> <!-- / #content -->
 

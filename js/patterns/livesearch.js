@@ -62,9 +62,7 @@ define([
       input: '.pat-livesearch-input', // input selector
       resultContainerTemplate: '<ul></ul>',
       resultContainerTemplateSelector: null,
-      dropdownCssClass: 'pat-livesearch-dropdown',
-      linkSelector: '.pat-livesearch-result-title',
-      itemSelector: '.pat-livesearch-result',
+      resultSelector: '.pat-livesearch-result',
       resultTemplate: '' +
         '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
           '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
