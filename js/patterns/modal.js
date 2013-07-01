@@ -117,7 +117,6 @@ define([
 
                   $action.parents('form').ajaxSubmit({
                     timeout: options.timeout,
-                    dataType: 'html',
                     data: extraData,
                     url: $action.parents('form').attr('action'),
                       error: function(xhr, textStatus, errorStatus) {
@@ -131,15 +130,12 @@ define([
                         }
                       },
                       success: function(response, state, xhr, form) {
-                        var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'));
-
                         // if error is found
-                        if ($(options.formError, responseBody).size() !== 0) {
+                        if ($(options.formError, response).size() !== 0) {
                           if (options.onFormError) {
-                            options.onFormError(self, responseBody, state, xhr, form);
+                            options.onFormError(self, response, state, xhr, form);
                           } else {
-                            $modal.html(responseBody.html());
+                            $modal.html(response.html());
                             // FIXME: modalInit .. wtf is this??? maybe not
                             // needed anymore
                             //modalInit(modal, modalInit, modalOptions);
@@ -149,7 +145,7 @@ define([
 
                         // custom success function
                         } else if (options.onSuccess) {
-                          options.onSuccess(self, responseBody, state, xhr, form);
+                          options.onSuccess(self, response, state, xhr, form);
 
                         } else {
                           $action.trigger('destroy.modal.patterns');
@@ -173,15 +169,12 @@ define([
                       }
                     },
                     success: function(response, state, xhr) {
-                      var responseBody = $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                              .replace('<body', '<div').replace('</body>', '</div>'));
-
                       // if error is found
-                      if ($(options.formError, responseBody).size() !== 0) {
+                      if ($(options.formError, response).size() !== 0) {
                         if (options.onFormError) {
-                          options.onFormError(self, responseBody, state, xhr);
+                          options.onFormError(self, response, state, xhr);
                         } else {
-                          $modal.html(responseBody.html());
+                          $modal.html(response.html());
                           // FIXME: modalInit .. wtf is this??? maybe not
                           // needed anymore
                           //modalInit(modal, modalInit, modalOptions);
@@ -191,7 +184,7 @@ define([
 
                       // custom success function
                       } else if (options.onSuccess) {
-                        options.onSuccess(self, responseBody, state, xhr);
+                        options.onSuccess(self, response, state, xhr);
 
                       } else {
                         $action.trigger('destroy.modal.patterns');
