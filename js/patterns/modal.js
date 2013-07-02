@@ -3,7 +3,7 @@
 // Author: Rok Garbas
 // Contact: rok@garbas.si
 // Version: 1.0
-// Depends: jquery.js patterns.js pickadate.js
+// Depends: jquery.js patterns.js jquery.form.js
 //
 // Description:
 //
@@ -262,7 +262,7 @@ define([
         self.$wrapper = $('<div/>')
           .hide()
           .css({
-            'z-index': parseInt(self.options.backdropZIndex, 10) + 1,
+            'z-index': parseInt(self.options.backdropOptions.zIndex, 10) + 1,
             'overflow-y': 'auto',
             'position': 'fixed',
             'height': '100%',
