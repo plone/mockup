@@ -131,16 +131,18 @@ define([
                       },
                       success: function(response, state, xhr, form) {
                         // if error is found
-                        if ($(options.formError, response).size() !== 0) {
+                        if ($(options.error, response).size() !== 0) {
                           if (options.onFormError) {
                             options.onFormError(self, response, state, xhr, form);
                           } else {
-                            $modal.html(response.html());
-                            // FIXME: modalInit .. wtf is this??? maybe not
-                            // needed anymore
-                            //modalInit(modal, modalInit, modalOptions);
+                            self.$modal.remove();
+                            self.$modal = self.initModalElement(
+                              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+                            self.options.template.apply(self,
+                              [self.$modal, self.options.templateOptions]);
                             self.positionModal();
-                            registry.scan($modal);
+                            registry.scan(self.$modal);
                           }
 
                         // custom success function
@@ -170,16 +172,18 @@ define([
                     },
                     success: function(response, state, xhr) {
                       // if error is found
-                      if ($(options.formError, response).size() !== 0) {
+                      if ($(options.error, response).size() !== 0) {
                         if (options.onFormError) {
                           options.onFormError(self, response, state, xhr);
                         } else {
-                          $modal.html(response.html());
-                          // FIXME: modalInit .. wtf is this??? maybe not
-                          // needed anymore
-                          //modalInit(modal, modalInit, modalOptions);
-                          self.positionModal();
-                          registry.scan($modal);
+                            self.$modal.remove();
+                            self.$modal = self.initModalElement(
+                              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+                            self.options.template.apply(self,
+                              [self.$modal, self.options.templateOptions]);
+                            self.positionModal();
+                            registry.scan(self.$modal);
                         }
 
                       // custom success function
