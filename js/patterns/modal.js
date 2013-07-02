@@ -61,7 +61,7 @@ define([
         closeOnClick: true,
       },
       templateOptions: {
-        title: 'h1.documentFirstHeading',
+        title: 'h1:first',
         buttons: '.formControls > input[type="submit"]',
         content: '#content',
         actions: [],
@@ -210,7 +210,11 @@ define([
           '<div class="modal-footer"></div>');
 
         $('.modal-header > h3', $modal).html($(options.title, $content).html());
-        $('.modal-body', $modal).html($(options.content, $content).html());
+        if (options.content) {
+          $('.modal-body', $modal).html($(options.content, $content).html());
+        } else {
+          $('.modal-body', $modal).html($content);
+        }
         $(options.title, $modal).remove();
         $('.modal-header > a.close', $modal)
           .off('click')
@@ -324,6 +328,7 @@ define([
         if (self.$el.attr('href')) {
           if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
             self.options.target = self.$el.attr('href');
+            self.options.templateOptions.content = '';
           }
           if (!self.options.ajaxUrl && self.$el.attr('href').substr(0, 1) !== '#') {
             self.options.ajaxUrl = self.$el.attr('href');
