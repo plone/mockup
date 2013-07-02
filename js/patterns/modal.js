@@ -200,6 +200,7 @@ define([
         }
       },
       template: function($modal, options) {
+        var self = this;
         var $content = $modal.html();
         $modal.html('' +
           '<div class="modal-header">' +
