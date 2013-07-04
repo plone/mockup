@@ -612,7 +612,13 @@ define([
         '   <h4>Title 3.1.1.1</h4>' +
         '   <h1>Title 4</h1>' +
         ' </div>' +
-        '</div>');
+        ' <div class="placeholder">' +
+        '   <div id="first-elem"></div>' +
+        ' </div>' +
+        '</div>').appendTo('body');
+    });
+    afterEach(function() {
+      this.$el.remove();
     });
     it("by default creates TOC from h1/h2/h3", function() {
       expect($('> nav', this.$el).size()).to.equal(0);
@@ -636,6 +642,26 @@ define([
       expect($('> nav', this.$el).size()).to.equal(1);
       expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
       expect($('> nav > a.autotoc-level-2', this.$el).size()).to.equal(0);
+    });
+    it("can be appended anywhere", function() {
+      this.$el.attr("data-pat-autotoc", "levels: h1;appendTo:.placeholder");
+      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).size()).to.equal(0);
+      registry.scan(this.$el);
+      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
+      expect($('div.placeholder', this.$el).children().eq(0).attr('id')).to.equal("first-elem");
+      expect($('div.placeholder', this.$el).children().eq(1).attr('class')).to.equal("autotoc-nav");
+    });
+    it("can be prepended anywhere", function() {
+      this.$el.attr("data-pat-autotoc", "levels: h1;prependTo:.placeholder");
+      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).size()).to.equal(0);
+      registry.scan(this.$el);
+      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
+      expect($('div.placeholder', this.$el).children().eq(0).attr('class')).to.equal("autotoc-nav");
+      expect($('div.placeholder', this.$el).children().eq(1).attr('id')).to.equal("first-elem");
     });
   });
 

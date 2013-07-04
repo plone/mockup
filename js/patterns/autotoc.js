@@ -49,9 +49,18 @@ define([
     },
     init: function() {
       var self = this;
-      self.$toc = $('<nav/>')
-          .prependTo(self.$el)
-          .addClass(self.options.klassTOC);
+      
+      self.$toc = $('<nav/>').addClass(self.options.klassTOC);
+      
+      if (self.options.prependTo) {
+        self.$toc.prependTo(self.options.prependTo);
+      }
+      else if (self.options.appendTo) {
+        self.$toc.appendTo(self.options.appendTo);
+      }
+      else{
+        self.$toc.prependTo(self.$el);
+      }
 
       if (self.options.klass) {
         self.$el.addClass(self.options.klass);
