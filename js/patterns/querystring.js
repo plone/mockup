@@ -76,7 +76,7 @@ define([
               });
 
       // Index selection
-      self.$index = $('<select/>')
+      self.$index = $('<select/>').attr('placeholder', 'Select...');
 
       // list of indexes
       $.each(self.indexes, function(value, options) {
@@ -103,7 +103,7 @@ define([
       self.$index
         .patternSelect2({
             width: self.options.indexWidth,
-            placeholder: self.options.placeholder
+            placeholder: 'Select...'  //self.options.placeholder
         })
         .on("change", function(e) {
           self.removeValue();
@@ -231,6 +231,7 @@ define([
       self.removeOperator();
       self.removeValue();
       self.removeClear();
+      self.$wrapper.remove();
     },
     removeClear: function() {
       var self = this;
@@ -277,10 +278,13 @@ define([
       self.$el.after(self.$wrapper);
 
       self.criterias = [];
+
       // create populated criterias
-      $.each(JSON.parse(self.$el.val()), function(i, item) {
-        self.createCriteria(item.i, item.o, item.v);
-      });
+      if (self.$el.val()) {
+        $.each(JSON.parse(self.$el.val()), function(i, item) {
+          self.createCriteria(item.i, item.o, item.v);
+        });
+      }
 
       // add empty criteria which enables users to create new cr
       self.createCriteria();
