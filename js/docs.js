@@ -55,7 +55,7 @@ define([
     },
     render: function() {
       var self = this;
-      var tpl = $('#tpl_page').html();
+      var tpl = $('#tpl_pattern').html();
       require(["js/patterns/"+self.model.get('id')], function (MainRouter) {
         self.$el.html(_.template(tpl, _.extend({
           examples: self.renderExamples()
