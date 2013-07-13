@@ -42,7 +42,11 @@ define([
       attribute: 'class',
       event: 'click',
       externalClose: true,
-      preventDefault: true
+      preventDefault: true,
+      menu: 'global' // global, parent, parents, children, child, siblings -- optional,
+                     // a jquery selector function that specifies where in
+                     // relation to $el the list to use is. 'global' is special
+                     // and will be the default and select in the entire document
     },
     ensureBool: function(value) {
       if (typeof(value) === 'string') {
@@ -62,14 +66,17 @@ define([
       if (!self.options.target) {
         self.$target = self.$el;
       }
-      else {
+      else if(self.options.menu === 'global') {
         self.$target = $(self.options.target);
+      }
+      else {
+        self.$target = self.$el[self.options.menu](self.options.target);
       }
 
       if (!self.$target) {
         $.error('No target found for "' + self.options.target + '".');
       }
-      
+
       self.on(self.options.event, function(e) {
         self.toggle();
         e.stopPropagation();
@@ -86,7 +93,7 @@ define([
     isMarked: function() {
       var self = this;
       var marked = false;
-      
+
       for (var i=0;i<this.$target.length;i++){
         if (this.$target.eq(i)[0] === self.$el[0]){
           // If this is the toggle button, ignore checking
@@ -96,11 +103,11 @@ define([
           if (this.$target.eq(i).hasClass(this.options.value)){
             marked = true;
           }
-          else{ 
+          else{
             marked = false;
             break;
           }
-        } 
+        }
         else{
           if (this.$target.eq(i).attr(this.options.attribute) === this.options.value){
             marked = true;
