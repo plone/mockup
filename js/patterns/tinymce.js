@@ -151,9 +151,13 @@ define([
         self.linkModal.on('shown', function(){
           self.linkModal.select = $('input.pat-relateditems', self.linkModal.$modal);
           self.linkModal.button = $('input[name="insert"]', self.linkModal.$modal);
-          self.linkModal.button.click(function(e){
-            var href = 'resolveuid/' + self.linkModal.select.val();
-            e.preventDefault();
+          self.linkModal.button.off('click').on('click', function(e){
+            // get the url, only get one uid
+            var val = self.linkModal.select.select2('val');
+            if(typeof(val) === 'object'){
+              val = val[0];
+            }
+            var href = 'resolveuid/' + val;
             if (data.text !== initialText) {
               if (anchorElm) {
                 editor.focus();

@@ -61,6 +61,7 @@ define([
       folderTypes: ['Folder'],
       attributes: ['UID','Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
+      maximumSelectionSize: -1,
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %>">' +
         ' <span class="pat-relateditems-buttons">' +
@@ -232,6 +233,12 @@ define([
         $('.pat-relateditems-result-select', result).on('click', function(event) {
           self.selectItem(item);
           $(this).remove();
+          if(self.options.maximumSelectionSize > 0){
+            var items = self.$select2.select2('data');
+            if(items.length >= self.options.maximumSelectionSize){
+              self.$select2.select2('close');
+            }
+          }
           return false;
         });
 
