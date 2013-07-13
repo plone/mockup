@@ -53,9 +53,11 @@ define([
 
     // toggle class on click (shows dropdown)
     $('.toolbar-dropdown > a').each(function() {
-      new Toggle($(this), {
+      var self = this;
+      new Toggle($(self), {
         target: '.toolbar-dropdown',
-        value: 'toolbar-dropdown-open'
+        value: 'toolbar-dropdown-open',
+        menu: 'parent'
       });
     });
 
