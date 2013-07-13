@@ -10,17 +10,244 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Mockup(s)</title>
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
   <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
   <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
-  <script src="jam/SyntaxHighlighter/scripts/XRegExp.js"></script>
-  <script src="jam/SyntaxHighlighter/scripts/shCore.js"></script>
-  <script src="jam/SyntaxHighlighter/scripts/shBrushBash.js"></script>
-  <script src="jam/SyntaxHighlighter/scripts/shBrushXml.js"></script>
-  <script src="jam/SyntaxHighlighter/scripts/shBrushJScript.js"></script>
+  <script src="jam/require.js"></script>
+
+    <script>
+require([
+  'jquery',
+  'js/docs'
+], function($, DocsApp) {
+  
+});
+  </script>
+
+  <!-- TEMPLATES -->
+  <script type="text/template" id="tpl_page">
+    <h2><%= title %></h2>
+    <p><%= description %></p>
+    <div><%= content %></div>
+  </script>
+
+  <!-- DOCS CONTENT -->
+  <script type="text/template" id="page_livesearch">
+    <div class="row">
+        <div class="span6">
+          <h2>Default</h2>
+          <div class="pat-livesearch"
+              data-pat-livesearch="ajaxvocabulary: /search.json;">
+            <input type="text" class="pat-livesearch-input" placeholder="Search" />
+            <div class="pat-livesearch-container">
+              <div class="pat-livesearch-results">
+
+              </div>
+            </div>
+          </div>
+          <pre class="brush: html;toolbar: false;">
+&lt;div class="pat-livesearch"
+  data-pat-livesearch="ajaxvocabulary: /search.json;"&gt;
+  &lt;input type="text" class="pat-livesearch-input"
+    placeholder="Search" /&gt;
+  &lt;div class="pat-livesearch-container"&gt;
+    &lt;div class="pat-livesearch-results"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+        </div>
+      </div>
+      <div>
+        <h4>Data Attributes</h4>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                Attribute
+              </th>
+              <th>
+                Type
+              </th>
+              <th>
+                Default
+              </th>
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+                    <tbody>
+            <tr>
+              <td>ajaxvocabulary</td>
+              <td>String</td>
+              <td></td>
+              <td>The url that will be of the server side page that will be queried.</td>
+            </tr>
+            <tr>
+              <td>delay</td>
+              <td>Integer</td>
+              <td>200</td>
+              <td>Delay in ms after user types before searching.</td>
+            </tr>
+            <tr>
+              <td>highlight</td>
+              <td>String</td>
+              <td>'pat-livesearch-highlight'</td>
+              <td>CSS class that will be used to highlight items on keyboard navigation.</td>
+            </tr>
+            <tr>
+              <td>minimumInputLength</td>
+              <td>Integer</td>
+              <td>3</td>
+              <td>Number of characters user must type before search begins.</td>
+            </tr>
+            <tr>
+              <td>input</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-input'</td>
+              <td>Selector for element that will be used for the livesearch input.</td>
+            </tr>
+            <tr>
+              <td>toggleTarget</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-container'</td>
+              <td>Selector for element that will be shown when results are found.</td>
+            </tr>
+            <tr>
+              <td>toggleClass</td>
+              <td>String</td>
+              <td>'show'</td>
+              <td>CSS class that will be added to target toggle element when results are found.</td>
+            </tr>
+            <tr>
+              <td>positionToggleWithInput</td>
+              <td>Boolean</td>
+              <td>true</td>
+              <td>Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.</td>
+            </tr>
+            <tr>
+              <td>setPosition</td>
+              <td>Function</td>
+              <td>
+<pre class="brush: javascript;toolbar: false;">
+setPosition: function() {
+  var self = this;
+  if (self.options.positionToggleWithInput) {
+    var top = self.$input.position().top + self.$input.outerHeight();
+    self.$toggle.css({'top': top+'px'});
+  }
+}</pre>
+              </td>
+              <td>Function which will be used to set the position of the toggle element.</td>
+            </tr>
+            <tr>
+              <td>resultsTarget</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-results'</td>
+              <td>Selector for element where results from the server will be inserted.</td>
+            </tr>
+            <tr>
+              <td>resultContainerTemplate</td>
+              <td>String</td>
+              <td>'&lt;ul&gt;&lt;/ul&gt;'</td>
+              <td>Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used.</td>
+            </tr>
+            <tr>
+              <td>resultContainerTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Selector for an element in the DOM to use in place of resultContainerTemplate.</td>
+            </tr>
+            <tr>
+              <td>resultSelector</td>
+              <td>Selector</td>
+              <td>'.pat-livesearch-result'</td>
+              <td>Will be used to select result items from within the result container.</td>
+            </tr>
+            <tr>
+              <td>resultTemplate</td>
+              <td>String</td>
+              <td>
+<pre>
+'&lt;li class="pat-livesearch-result pat-livesearch-type-&lt;%= Type %&gt;"&gt;' +
+  '&lt;a class="pat-livesearch-result-title" href="&lt;%= getURL %&gt;"&gt;' +
+    '&lt;%= Title %&gt;' +
+  '&lt;/a&gt;' +
+  '&lt;p class="pat-livesearch-result-desc"&gt;&lt;%= Description %&gt;&lt;/p&gt;' +
+'&lt;/li&gt;'</pre>
+              </td>
+              <td>Template for a single result.</td>
+            </tr>
+            <tr>
+              <td>resultTemplateSelector</td>
+              <td>String</td>
+              <td></td>
+              <td>Selector for element to be used in place of resultTemplate.</td>
+            </tr>
+            <tr>
+              <td>helpTemplate</td>
+              <td>String</td>
+              <td>'&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;'</td>
+              <td>Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.'</td>
+            </tr>
+            <tr>
+              <td>helpTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of helpTemplate.</td>
+            </tr>
+            <tr>
+              <td>typeMoreTemplate</td>
+              <td>String</td>
+              <td>'Type <%= more %> more characters to search.'</td>
+              <td>Template for message which is displayed if the current input length is less than minimumInputLength.</td>
+            </tr>
+            <tr>
+              <td>typeMoreTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of typeMoreTemplate.</td>
+            </tr>
+            <tr>
+              <td>typeMoreTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of typeMoreTemplate.</td>
+            </tr>
+            <tr>
+              <td>noResultsTemplate</td>
+              <td>String</td>
+              <td>'No results found.'</td>
+              <td>Template for message that is displayed after a search when no results were found.</td>
+            </tr>
+            <tr>
+              <td>noResultsTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of noResultsTemplate.</td>
+            </tr>
+            <tr>
+              <td>searchingTemplate</td>
+              <td>String</td>
+              <td>'Searching...'</td>
+              <td>Template for message which will be displayed after a search has started and before it has ended.</td>
+            </tr>
+            <tr>
+              <td>searchingTemplateSelector</td>
+              <td>Selector</td>
+              <td></td>
+              <td>Element in the DOM to be used instead of searchingTemplate.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h4>Events</h4>
+        <p>TODO: Document the events.</p>
+      </div>
+    </div>
+  </script>
 </head>
 
 <body>
@@ -45,63 +272,6 @@
 
   <div class="container">
     <div id="content" data-panel="content">
-      <!-- EDITORS' NOTE
-           In this file we are using "semantic line breaks".
-           See this blog post
-           http://rhodesmill.org/brandon/2012/one-sentence-per-line/
-           in order to learn about it and its many advantages -->
-      <p>
-        Plone Mockup is an attempt to separate
-        <a href="http://plone.org" title="Plone">Plone</a>, the user interface,
-        from Plone, the server.
-        It leverages <a href="#patterns" title="Patterns">Patterns</a>
-        to create a library of rich interaction patterns
-        triggered by CSS classes
-        and configured via HTML5 <em>data attributes</em>.
-      </p>
-      <p>
-        The mockup is a fully functional prototype of Plone and its bundles.
-        As it is realised entirely in HTML5 and Javascript,
-        it can be run in a browser
-        without the need for a full Plone installation;
-        therefore making it easy to showcase Plone's UI
-        or developing a new theme.
-        Using <a href="http://diazo.org/" title="Diazo">diazo</a>
-        it is possible to integrate other backends alongside
-        (or instead of)
-        Plone.
-      </p>
-      <h2>We have something for everyone. Who are you?</h2>
-      <div id="audienceNav">
-      <ul>
-      <li class="well"><h3><i class="icon-eye-open"></i><br /><a href="ploneUser.html">User</a></h3> <br />
-      	<ul>
-        	<li><i class="icon-circle"></i>Use <strong>existing patterns</strong></li>
-      		<li><i class="icon-circle"></i>Enrich your users expeirence.</li>
-        </ul>
-      </li>
-      <li class="well"><h3><i class="icon-cogs"></i><br /><a href="ploneCreator.html">Creator</a> </h3><br />
-          <ul>
-            <li><i class="icon-circle"></i>Add <strong>your own modules</strong></li>
-            <li><i class="icon-circle"></i>blah2</li>
-          </ul>
-      </li>
-      <li class="well"><h3><i class="icon-globe"></i><br /><a href="ploneContributor.html">Plone Contributor</a> </h3><br />
-      	<ul>
-        	<li><i class="icon-circle"></i><strong>Add to plone</strong></li>
-            <li><i class="icon-circle"></i>You are a Dragon</li>
-        </ul>
-      </li>
-      </ul></div>
-      
-<div class="clear"></div>
-<div class="importantButton"><a href="pattern-index.html"><i class="icon-exclamation-sign"></i> Just show me the pattern index already!</a></div>
-      <div class="row">
-
-        
-      </div>
-
-      
 
     </div>
 
@@ -114,9 +284,6 @@
     </div>
   </footer>
 
-  <script type="text/javascript">
-     SyntaxHighlighter.all()
-  </script>
 </body>
 
 </html>
