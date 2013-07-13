@@ -45,6 +45,7 @@ define([
     console.log('Warning: tinymce not loaded.');
     return;
   }
+  var editor = null;
 
   var Modal_ = Modal;
   tinymce.PluginManager.add('plonelink', function(editor) {
@@ -79,10 +80,18 @@ define([
   var TinyMCE = Base.extend({
     name: 'tinymce',
     defaults: {
-      attributes: ['UID', 'title:Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
-      batchSize: 20,
-      basePath: '/',
-      breadcrumbsTemplate: '<span><a href="/"><i class="icon-home"></i></a><%= items %></span>',
+      relatedItems: {
+        attributes: ['UID', 'title:Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
+        batchSize: 20,
+        basePath: '/',
+        ajaxvocabulary: null,
+        width: 500,
+        maximumSelectionSize: 1
+      },
+      targetList: [
+        {text: 'None', value: ''},
+        {text: 'New window', value: '_blank'},
+      ],
       tiny: {
         plugins: [
           "advlist autolink lists link image charmap print preview anchor",
@@ -94,12 +103,90 @@ define([
     },
     openLink: function(){
       var self = this;
+
+      var editor = self.tiny;
+      var dom = editor.dom;
+      var selection = editor.selection;
+      var data = {};
+      var initialText;
+      editor.focus();
+
+      var selectedElm = selection.getNode();
+      var anchorElm = dom.getParent(selectedElm, 'a[href]');
+      if (anchorElm) {
+        selection.select(anchorElm);
+      }
+
+      data.text = initialText = selection.getContent({format: 'text'});
+      data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
+      data.target = anchorElm ? dom.getAttrib(anchorElm, 'target') : '';
+      data.rel = anchorElm ? dom.getAttrib(anchorElm, 'rel') : '';
+
+      if (selectedElm.nodeName == "IMG") {
+        data.text = initialText = " ";
+      }
+
       if(self.linkModal === null){
         self.linkModal = new Modal_(self.$el, {
-          html: '<div><p class="content">foobar</p></div>',
+          html: '<div>' +
+            '<div>' +
+              '<h1>Select Item</h1>' +
+              "<input type='text' class='pat-relateditems' data-pat-relateditems='" +
+                JSON.stringify(self.options.relatedItems) + "' />" +
+              '<div class="control-group">' +
+                '<label class="control-label">Target</label>' +
+                '<div class="controls">' +
+                  '<select name="target"><option>None</option><option value="_blank">New window</option></select>' +
+                '</div>' +
+              '</div>' +
+              '<input type="submit" class="btn" name="cancel" value="Cancel" />' +
+              '<input type="submit" class="btn btn-primary" name="insert" value="Insert" />' +
+            '</div>' +
+          '</div>',
           templateOptions: {
-            content: null
+            content: null,
+            buttons: '.btn'
           }
+        });
+        self.linkModal.on('shown', function(){
+          self.linkModal.select = $('input.pat-relateditems', self.linkModal.$modal);
+          self.linkModal.button = $('input[name="insert"]', self.linkModal.$modal);
+          self.linkModal.button.click(function(e){
+            var href = 'resolveuid/' + self.linkModal.select.val();
+            e.preventDefault();
+            if (data.text !== initialText) {
+              if (anchorElm) {
+                editor.focus();
+                anchorElm.innerHTML = data.text;
+
+                dom.setAttribs(anchorElm, {
+                  href: href,
+                  target: data.target ? data.target : null,
+                  rel: data.rel ? data.rel : null
+                });
+
+                selection.select(anchorElm);
+              } else {
+                editor.insertContent(dom.createHTML('a', {
+                  href: href,
+                  target: data.target ? data.target : null,
+                  rel: data.rel ? data.rel : null
+                }, data.text));
+              }
+            } else {
+              editor.execCommand('mceInsertLink', false, {
+                href: href,
+                target: data.target,
+                rel: data.rel ? data.rel : null
+              });
+            }
+
+            self.linkModal.hide();
+          });
+          $('input[name="cancel"]', self.linkModal.$modal).click(function(e){
+            e.preventDefault();
+            self.linkModal.hide();
+          });
         });
       }
       self.linkModal.show();
@@ -119,7 +206,8 @@ define([
       tinyOptions.openLink = function(){
         self.openLink.apply(self, []);
       };
-      self.tiny = tinymce.init(tinyOptions);
+      tinymce.init(tinyOptions);
+      self.tiny = tinymce.get(id);
     }
   });
 
