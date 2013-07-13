@@ -86,7 +86,8 @@ define([
         basePath: '/',
         ajaxvocabulary: null,
         width: 500,
-        maximumSelectionSize: 1
+        maximumSelectionSize: 1,
+        placeholder: 'Search for item on site...'
       },
       targetList: [
         {text: 'None', value: ''},
@@ -150,6 +151,7 @@ define([
         });
         self.linkModal.on('shown', function(){
           self.linkModal.select = $('input.pat-relateditems', self.linkModal.$modal);
+          self.linkModal.target = $('select[name="target"]', self.linkModal.$modal);
           self.linkModal.button = $('input[name="insert"]', self.linkModal.$modal);
           self.linkModal.button.off('click').on('click', function(e){
             // get the url, only get one uid
@@ -158,6 +160,7 @@ define([
               val = val[0];
             }
             var href = 'resolveuid/' + val;
+            data.target = self.linkModal.target.val();
             if (data.text !== initialText) {
               if (anchorElm) {
                 editor.focus();
