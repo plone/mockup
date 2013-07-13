@@ -66,6 +66,45 @@ require([
     <h1><%= title %></h1>
     <p><%= description %></p>
     <div><%= content %></div>
+    <div class="docs-examples">
+      <h2>Examples</h2>
+      <%= examples %>
+    </div>
+    <div class="docs-attributes">
+      <h2>Data Attributes</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(attributes, function(attr) { %>
+            <tr>
+              <td><%= attr.attribute %></td>
+              <td><%= attr.type %></td>
+              <td><% _.escape(attr.default) %></td>
+              <td><%= attr.description %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </script>
+
+  <script type="text/template" id="tpl_example">
+    <% if (title !== '') { %>
+      <h3><%= title %></h3>
+    <% } %>
+    <div>
+      <%= html %>
+    </div>
+    <div>
+      <pre class="brush: html;toolbar: false;"><%= pre %></pre>
+    </div>
   </script>
 
   <!--  ** DOCS CONTENT ** -->
@@ -74,10 +113,10 @@ require([
   [ ] Getting started
 
   Move Patterns:
-  [x] Adjust text size
-  [x] Cookie directive
-  [x] Expose
-  [x] live search
+  [ ] Adjust text size
+  [ ] Cookie directive
+  [ ] Expose
+  [ ] live search
   [ ] modal
   [ ] pickadate
   [ ] prevent double submit
@@ -94,99 +133,35 @@ require([
 
   <!--  **** Adjust Text Size (accessibility) **** -->
   <script>
-    addPage({id: 'accessibility', title: 'Adjust Text Size', description: 'Easily change text size on a page.'});
+    addPage({
+      id: 'accessibility',
+      title: 'Adjust Text Size',
+      description: 'Easily change text size on a page.',
+      attributes: [
+        {attribute: 'smallbtn', type: 'Selector', 'default': '', description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'Selector', 'default': '', description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'Selector', 'default': '', description: 'Selector used to activate large text on click.'}
+      ]
+    });
   </script>
   <script type="text/template" id="page_accessibility">
-    <div class="row">
-      <div class="span6">
-          <ul id="textAdjust" class="pat-accessibility"
-              data-pat-accessibility="smallbtn:.decrease-text;
-                                      normalbtn:.normal-text;
-                                      largebtn:.increase-text;">
-            <li>
-              <a href="." class="decrease-text"><i class="icon-minus-sign"></i>Decrease Text Size</a>
-            </li>
-            <li>
-              <a href="." class="normal-text"><i class="icon-circle"></i>Normal Text Size</a>
-            </li>
-            <li>
-              <a href="." class="increase-text"><i class="icon-plus-sign"></i>Increase Text Size</a>
-            </li>
-        </ul>
-        <pre class="brush: html;toolbar:false;">
-&lt;ul class=&quot;pat-accessibility&quot;
-              data-pat-accessibility=&quot;smallbtn:.decrease-text;
-                                      normalbtn:.normal-text;
-                                      largebtn:.increase-text;&quot;&gt;
-    &lt;li&gt;
-      &lt;a href=&quot;.&quot; class=&quot;decrease-text&quot;&gt;Decrease Text Size&lt;/a&gt;
-    &lt;/li&gt;
-    &lt;li&gt;
-      &lt;a href=&quot;.&quot; class=&quot;normal-text&quot;&gt;Normal Text Size&lt;/a&gt;
-    &lt;/li&gt;
-    &lt;li&gt;
-      &lt;a href=&quot;.&quot; class=&quot;increase-text&quot;&gt;Increase Text Size&lt;/a&gt;
-    &lt;/li&gt;
-&lt;/ul&gt;
-        </pre>
-      </div>
-    </div>
 
-<h2>Directions</h2> 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper <strong>tincidunt nunc</strong>, at interdum est vehicula non. Phasellus viverra laoreet sapien, quis bibendum enim facilisis eget. Praesent rhoncus nisi lectus, vitae blandit magna posuere vitae. Cras sagittis placerat leo, nec faucibus urna fermentum non. 
-<ul>
-<li>Step 1 <br />
-<p>Do this first. Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet <strong> Strong Text Here</strong>. Duis imperdiet malesuada mauris ac bl</p>
-</li>
-<li>Step 2 <br />
-Do this second. Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet sit amet justo eu vestibulum. Duis imperdiet malesuada mauris ac bl</li>
-</ul>
-
-Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet sit amet justo eu vestibulum. Duis imperdiet malesuada mauris ac blandit. Nulla id lorem quis leo interdum lacinia. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse dictum posuere nibh, sit amet vestibulum massa hendrerit ac.
-
-Donec sagittis, elit sit amet faucibus bibendum</p>
-
-<h4>Data Attributes</h4>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>
-                Attribute
-              </th>
-              <th>
-                Default
-              </th>
-              <th>
-                Description
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>smallbtn</td>
-              <td></td>
-              <td>selector used to set small text size</td>
-            </tr>
-            <tr>
-              <td>normalbtn</td>
-              <td></td>
-              <td>selector used to set normal text size</td>
-            </tr>
-            <tr>
-              <td>largebtn</td>
-              <td></td>
-              <td>selector used to set large text size</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-          </tbody>
-        </table>
-
-
-    </div>
+  </script>
+  <script type="text/example" class="example-accessibility" data-title="Default">
+    <ul id="textAdjust" class="pat-accessibility"
+        data-pat-accessibility="smallbtn:.decrease-text;
+                                normalbtn:.normal-text;
+                                largebtn:.increase-text;">
+      <li>
+        <a href="." class="decrease-text"><i class="icon-minus-sign"></i>Decrease Text Size</a>
+      </li>
+      <li>
+        <a href="." class="normal-text"><i class="icon-circle"></i>Normal Text Size</a>
+      </li>
+      <li>
+        <a href="." class="increase-text"><i class="icon-plus-sign"></i>Increase Text Size</a>
+      </li>
+    </ul>
   </script>
  
   <!--  **** Cookie Directive **** -->
