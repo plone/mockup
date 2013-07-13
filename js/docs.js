@@ -23,27 +23,44 @@ define([
   });
 
   var PageView = Backbone.View.extend({
-
+    initialize: function() {
+      this.exampleClass = 'example-' + this.model.get('id');
+      this.$examples = $('script.'+this.exampleClass);
+    },
+    renderExamples: function() {
+      var tpl = $('#tpl_example').html();
+      var html = '';
+      examples = this.buildExamples();
+      _.each(examples, function(example) {
+        html += _.template(tpl, example);
+      }, this);
+      return html;
+    },
+    buildExamples: function() {
+      var self = this,
+          built = [];
+      self.$examples.each(function() {
+        var obj = {
+          title: ''
+        };
+        obj.html = $(this).html();
+        obj.pre = _.escape(obj.html);
+        if ($(this).data().title !== undefined) obj.title = $(this).data().title;
+        built.push(obj);
+      });
+      return built;
+    },
     render: function() {
       var self = this;
       var tpl = $('#tpl_page').html();
       require(["js/patterns/"+self.model.get('id')], function (MainRouter) {
-        self.$el.html(_.template(tpl, self.model.toJSON()));
+        self.$el.html(_.template(tpl, _.extend({
+          examples: self.renderExamples()
+        }, self.model.toJSON())));
         registry.scan(self.$el);
       });
     }
   });
-
-  var pages = new Pages();
-/*
-  pages.add([
-    ,
-    {id: 'cookiedirective', title: 'Cookie Directive', description: 'A pattern that checks cookies enabled and asks permission for the user to allow cookies or not.'},
-    {id: 'expose', title: 'Expose', description: 'Exposes the focused element by darkening everything else on the page. Useful to focus the user attention on a particular area.'},
-    {id: 'livesearch', title: 'Live Search', description: 'AJAX based customizable search functionality.'},
-    {id: 'modal', title: 'Modal', description: 'Creates a modal dialog (also called overlay).'}
-  ]);
-*/
 
   App = {
     pages: new Pages(),
