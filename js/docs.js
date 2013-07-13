@@ -1,9 +1,8 @@
-require([
+define([
   'jquery',
   'jam/Patterns/src/registry',
   'underscore',
-  'backbone',
-  'js/patterns/livesearch'
+  'backbone'
 ], function($, registry, _, Backbone) {
 
   var Page = Backbone.Model.extend({
@@ -26,19 +25,44 @@ require([
   var PageView = Backbone.View.extend({
 
     render: function() {
+      var self = this;
       var tpl = $('#tpl_page').html();
-      this.$el.html(_.template(tpl, this.model.toJSON()));
-      registry.scan(this.$el);
+      require(["js/patterns/"+self.model.get('id')], function (MainRouter) {
+        self.$el.html(_.template(tpl, self.model.toJSON()));
+        registry.scan(self.$el);
+      });
     }
   });
 
   var pages = new Pages();
-
+/*
   pages.add([
-    {id: 'livesearch', title: 'Live Search', description: 'AJAX based customizable search functionality.'}
+    ,
+    {id: 'cookiedirective', title: 'Cookie Directive', description: 'A pattern that checks cookies enabled and asks permission for the user to allow cookies or not.'},
+    {id: 'expose', title: 'Expose', description: 'Exposes the focused element by darkening everything else on the page. Useful to focus the user attention on a particular area.'},
+    {id: 'livesearch', title: 'Live Search', description: 'AJAX based customizable search functionality.'},
+    {id: 'modal', title: 'Modal', description: 'Creates a modal dialog (also called overlay).'}
   ]);
+*/
 
-  App = {};
+  App = {
+    pages: new Pages(),
+    initialize: function() {
+      Backbone.history.start({pushState: false});
+      return App;
+    },
+    show: function(view) {
+      if (this.view !== undefined) {
+        this.view.remove();
+        delete this.view;
+      }
+      this.view = view;
+      this.view.render();
+    },
+    add: function(page) {
+      this.pages.add(page);
+    }
+  };
 
   var Router = Backbone.Router.extend({
     routes: {
@@ -52,33 +76,18 @@ require([
       } else {
         page_id = ''; // Default page
       }
-      var page = pages.get(page_id);
+      var page = App.pages.get(page_id);
       if (page) {
         var view = new PageView({model: page});
         view.setElement($('#content'));
-        this.show(view);
+        App.show(view);
       }
-    },
-
-    show: function(view) {
-      if (App.view !== undefined) {
-        App.view.remove();
-        delete App.view;
-      }
-      App.view = view;
-      App.view.render();
     }
   });
 
   _.extend(App, Backbone.Events);
   App.router = new Router();
-  App.initialize = function() {
-    Backbone.history.start({pushState: false});
-    return App;
-  };
 
-  $(document).ready(function() {
-    App.initialize();
-  });
+  return App;
 
 });

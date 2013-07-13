@@ -16,8 +16,22 @@ function getQueryVariable(url, variable) {
 require([
   'jquery',
   'sinon',
-  'js/docs'
-], function($, sinon, DocsApp, registry, uri) {
+  'underscore',
+  'jam/Patterns/src/registry',
+  'js/bundles/widgets',
+  'js/patterns/expose',
+  'js/patterns/modal',
+  'js/patterns/accessibility',
+  'js/patterns/cookiedirective',
+  'js/patterns/preventdoublesubmit',
+  'js/patterns/formUnloadAlert',
+  'js/patterns/tooltip',
+  'js/patterns/tablesorter',
+  'js/patterns/livesearch',
+  'jam/SyntaxHighlighter/scripts/XRegExp.js',
+  'jam/SyntaxHighlighter/scripts/shCore.js',
+  'jam/SyntaxHighlighter/scripts/shBrushXml.js'
+], function($, sinon, _, registry, uri) {
   var URI = uri;
   // before demo patterns in overlay remove html created by autotoc pattern
   $('#modal1').on('show.modal.patterns', function(e, modal) {
@@ -229,10 +243,11 @@ require([
     }));
   });
 
-  //SyntaxHighlighter.all();
+  SyntaxHighlighter.all();
 
   // Initialize patterns
   $(document).ready(function() {
+    registry.scan($('body'));
 
     // This is used for the cookiedirective pattern
     function getCookieValue (){
@@ -267,9 +282,6 @@ require([
 
     var value = getCookieValue();
     $('#cookievalue').text(value);
-
-    DocsApp.initialize();
-
   });
 
 });
