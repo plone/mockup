@@ -20,13 +20,18 @@
 
     <script>
 var pages = [];
+var patterns = [];
+addPattern = function(page) {
+  patterns.push(page);
+};
 addPage = function(page) {
   pages.push(page);
 };
 require([
   'js/docs'
 ], function(DocsApp) {
-  DocsApp.add(pages);
+  DocsApp.patterns.add(patterns);
+  DocsApp.pages.add(patterns);
   DocsApp.initialize();
 });
   </script>
@@ -63,8 +68,9 @@ require([
 
   <!-- TEMPLATES -->
   <script type="text/template" id="tpl_page">
-    <h1><%= title %></h1>
-    <p><%= description %></p>
+    <div class="page-header">
+      <h1><%= title %> <small><%= description %></small></h1>
+    </div>
     <div><%= content %></div>
     <div class="docs-examples">
       <h2>Examples</h2>
@@ -109,11 +115,33 @@ require([
 
   <!--  ** DOCS CONTENT ** -->
 
+
+
+  <!--  ** Patterns  ** -->
+  <script>
+    addPage({
+      'id': 'patterns',
+      'description': 'The full list of patterns.'
+    });
+  </script>
+  <script type="text/template" id="tpl_patterns_list">
+    <div class="page-header">
+      <h1>Patterns <small>The complete list</small></h1>
+    </div>
+  </script>
+  <script type="text/template" id="tpl_patterns_list_item">
+    <div class="media-body">
+      <h4><a href="#pattern/<%= id %>" title="<%= title %>"><%= title %></a></h4>
+      <%= description %>
+    </div>
+  </script>
+
+
   <!-- TODO:
   [ ] Getting started
 
   Move Patterns:
-  [ ] Adjust text size
+  [x] Adjust text size
   [ ] Cookie directive
   [ ] Expose
   [ ] live search
@@ -133,7 +161,7 @@ require([
 
   <!--  **** Adjust Text Size (accessibility) **** -->
   <script>
-    addPage({
+    addPattern({
       id: 'accessibility',
       title: 'Adjust Text Size',
       description: 'Easily change text size on a page.',
@@ -959,19 +987,26 @@ setPosition: function() {
 <body>
 
   <header>
-    <div class="container">
-      <div id="portal-logo">
-        <span class="plone-logo">
-          <span class="plone-logo-circle">
-            <span class="plone-circle-inner">
-              <span class="plone-dot-1"></span>
-              <span class="plone-dot-2"></span>
-              <span class="plone-dot-3"></span>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">
+            <span class="plone-logo">
+              <span class="plone-logo-circle">
+                <span class="plone-circle-inner">
+                  <span class="plone-dot-1"></span>
+                  <span class="plone-dot-2"></span>
+                  <span class="plone-dot-3"></span>
+                </span>
+              </span>
             </span>
-          </span>
-          <span class="plone-text">Plone</span>
-        </span>
-        Mockup(s)
+            Mockup
+          </a>
+          <ul class="nav">
+            <li><a href="#">Getting Started</a></li>
+            <li><a href="#patterns">Patterns</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>

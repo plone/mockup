@@ -8,13 +8,10 @@
 
 
 header {
-  #portal-logo {
-    margin: 0.5em 0 0.25em 0;
-    font-style: italic;
-    font-size: 0.797 * 100px;
-    line-height: 100px;
-    .plone-logo { .makePloneLogo(); }
-  }
+  padding-top: 50px;
+}
+.brand {
+  .plone-logo { .makePloneLogo(20px); }
 }
 footer {
   background-color: #F5F5F5;
@@ -237,44 +234,4 @@ padding:5px;
 	clear:both;
 	}
 
-/*====================================
-        TABLE STYLING
-====================================*/
 
-.table th {
-  background-color:#0083be;
-  color:white;
-}
-
-.table th:first-of-type {
-        -webkit-border-top-left-radius: 10px;
--moz-border-radius-topleft: 10px;
-border-top-left-radius: 10px;
-}
-
-.table th:last-of-type {
-        -webkit-border-top-right-radius: 10px;
--moz-border-radius-topright: 10px;
-border-top-right-radius: 10px;
-border-right: none;
-}
-
-.table td {
-     
-     
-}
-
-.table td {
-    border-right:solid 1px lightgrey;
-}
-
-.table td:last-of-type {
-    border-right: none;
-}
-
-.table tr:nth-of-type(odd){
-    background-color: transparent;
-}
-.table tr:nth-of-type(even){
-    background-color:#f4f4f4;
-}
