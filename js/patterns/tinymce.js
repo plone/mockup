@@ -1,5 +1,5 @@
-// Author: Rok Garbas
-// Contact: rok@garbas.si
+// Author: Nathan Van Gheem
+// Contact: nathan@vangheem.us
 // Version: 1.0
 //
 // Description:
@@ -27,17 +27,86 @@
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   undef:true, strict:true, trailing:true, browser:true, evil:true */
 /*global define:false */
+/*global tinymce:true */
+
 
 define([
   'jquery',
   'js/patterns/base',
-], function($, Base) {
+  'js/patterns/relateditems',
+  'js/patterns/modal'
+], function($, Base, RelatedItems, Modal) {
   "use strict";
+
+  try{
+    // XXX if tinymce not loading, let's bail instead of giving errors.
+    if(tinymce === undefined){}
+  }catch(e){
+    console.log('Warning: tinymce not loaded.');
+    return;
+  }
+
+  var Modal_ = Modal;
+  tinymce.PluginManager.add('plonelink', function(editor) {
+    editor.addButton('plonelink', {
+      icon: 'link',
+      tooltip: 'Insert/edit link',
+      shortcut: 'Ctrl+K',
+      onclick: editor.settings.openLink,
+      stateSelector: 'a[href]'
+    });
+
+    editor.addButton('unlink', {
+      icon: 'unlink',
+      tooltip: 'Remove link(s)',
+      cmd: 'unlink',
+      stateSelector: 'a[href]'
+    });
+
+    editor.addShortcut('Ctrl+K', '', editor.settings.openLink);
+
+    editor.addMenuItem('plonelink', {
+      icon: 'link',
+      text: 'Insert link',
+      shortcut: 'Ctrl+K',
+      onclick: editor.settings.openLink,
+      stateSelector: 'a[href]',
+      context: 'insert',
+      prependToContext: true
+    });
+  });
 
   var TinyMCE = Base.extend({
     name: 'tinymce',
+    defaults: {
+      attributes: ['UID', 'title:Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
+      batchSize: 20,
+      basePath: '/',
+      breadcrumbsTemplate: '<span><a href="/"><i class="icon-home"></i></a><%= items %></span>',
+      tiny: {
+        plugins: [
+          "advlist autolink lists link image charmap print preview anchor",
+          "searchreplace visualblocks code fullscreen",
+          "insertdatetime media table contextmenu paste plonelink"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"
+      }
+    },
+    openLink: function(){
+      var self = this;
+      if(self.linkModal === null){
+        self.linkModal = new Modal_(self.$el, {
+          html: '<div><p class="content">foobar</p></div>',
+          templateOptions: {
+            content: null
+          }
+        });
+      }
+      self.linkModal.show();
+    },
     init: function() {
       var self = this;
+      self.linkModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
       var id = self.$el.attr('id');
       if(id === undefined){
@@ -45,8 +114,12 @@ define([
           .toString(16).substring(1));
         self.$el.attr('id', id);
       }
-      self.options.selector = '#' + id;
-      self.tiny = tinymce.init(self.options);
+      var tinyOptions = self.options.tiny;
+      tinyOptions.selector = '#' + id;
+      tinyOptions.openLink = function(){
+        self.openLink.apply(self, []);
+      };
+      self.tiny = tinymce.init(tinyOptions);
     }
   });
 
