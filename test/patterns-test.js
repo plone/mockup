@@ -1823,6 +1823,36 @@ define([
       $el.remove();
     });
 
+    it('type more chars count bug', function() {
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      var clock = sinon.useFakeTimers();
+      var $input = pattern.$input;
+
+      pattern.currentTerm = null
+      pattern.render({type: "render"})
+      expect(pattern.$results.text()).to.contain('Type 3');
+
+      pattern.currentTerm = "x"
+      pattern.render({type: "render"})
+      expect(pattern.$results.text()).to.contain('Type 2');
+
+      pattern.currentTerm = ""
+      pattern.render({type: "render"})
+      expect(pattern.$results.text()).to.contain('Type 3');
+
+      $el.remove();
+    });
+
     it('template from selector', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+

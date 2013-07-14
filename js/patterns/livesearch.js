@@ -233,6 +233,7 @@ define([
       if (event.type === 'searching') {
         container.html(self.renderHelp('searching', {}));
       } else {
+        self.renderedTerm = self.currentTerm;
         if (self.currentTerm === null || self.currentTerm.length < self.options.minimumInputLength) {
           var chars = self.currentTerm !== null ? self.options.minimumInputLength - self.currentTerm.length : self.options.minimumInputLength;
           container.html(self.renderHelp('typeMore', {more: chars}));
@@ -246,7 +247,6 @@ define([
             $.each(data, function(index, value){
               appendTo.append(self.applyTemplate('result', value));
             });
-            self.renderedTerm = self.currentTerm;
           } else {
             container.html(self.renderHelp('noResults', {}));
           }
