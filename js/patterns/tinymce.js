@@ -53,7 +53,7 @@ define([
       icon: 'link',
       tooltip: 'Insert/edit link',
       shortcut: 'Ctrl+K',
-      onclick: editor.settings.openLink,
+      onclick: editor.settings.addLinkClicked,
       stateSelector: 'a[href]'
     });
 
@@ -64,13 +64,13 @@ define([
       stateSelector: 'a[href]'
     });
 
-    editor.addShortcut('Ctrl+K', '', editor.settings.openLink);
+    editor.addShortcut('Ctrl+K', '', editor.settings.addLinkClicked);
 
     editor.addMenuItem('plonelink', {
       icon: 'link',
       text: 'Insert link',
       shortcut: 'Ctrl+K',
-      onclick: editor.settings.openLink,
+      onclick: editor.settings.addLinkClicked,
       stateSelector: 'a[href]',
       context: 'insert',
       prependToContext: true
@@ -98,6 +98,12 @@ define([
             '<div class="controls">' +
               self.buildTargetElement() +
             '</div>' +
+            '<div class="control-group">' +
+              '<label>' + self.options.text.title + '</label>' +
+              '<div class="controls">' +
+                '<input type="text" name="title" value="' + self.title + '" />' +
+              '</div>' +
+            '</div>' +
             '<input type="submit" class="btn" name="cancel" value="' + self.options.text.cancelBtn + '" />' +
             '<input type="submit" class="btn btn-primary" name="insert" value="' + self.options.text.insertBtn + '" />' +
           '</div>' +
@@ -110,24 +116,37 @@ define([
       self.modal.on('shown', function(){
         self.modalShown.apply(self, []);
       });
+      self.initElements();
     },
-    modalShown: function(){
+    initElements: function(){
       var self = this;
       self.$select = $('input.pat-relateditems', self.modal.$modal);
       self.$target = $('select[name="target"]', self.modal.$modal);
       self.$button = $('input[name="insert"]', self.modal.$modal);
+      self.$title = $('input[name="title"]', self.modal.$modal);
+    },
+    getLinkUrl: function(){
+      // get the url, only get one uid
+      var self = this;
+      var val = self.$select.select2('val');
+      if(!val){
+        return;
+      }
+      if(typeof(val) === 'object'){
+        val = val[0];
+      }
+      return 'resolveuid/' + val;
+    },
+    modalShown: function(){
+      var self = this;
+      self.initElements();
       self.$button.off('click').on('click', function(e){
-        // get the url, only get one uid
-        var val = self.$select.select2('val');
-        if(!val){
-          self.hide();
-          return; // No value select, cut out.
+        var href = self.getLinkUrl();
+        if(!href){
+          return; // just cut out if no url
         }
-        if(typeof(val) === 'object'){
-          val = val[0];
-        }
-        var href = 'resolveuid/' + val;
         var target = self.$target.val();
+        var title = self.$title.val();
         if (self.text !== self.initialText) {
           if (self.anchorElm) {
             self.tiny.focus();
@@ -136,7 +155,8 @@ define([
             self.dom.setAttribs(self.anchorElm, {
               href: href,
               target: target ? target : null,
-              rel: self.rel ? self.rel : null
+              rel: self.rel ? self.rel : null,
+              title: title ? title : null
             });
 
             self.selection.select(self.anchorElm);
@@ -144,14 +164,16 @@ define([
             self.tiny.insertContent(self.dom.createHTML('a', {
               href: href,
               target: target ? target : null,
-              rel: self.rel ? self.rel : null
+              rel: self.rel ? self.rel : null,
+              title: title ? title : null
             }, self.text));
           }
         } else {
           self.tiny.execCommand('mceInsertLink', false, {
             href: href,
             target: target,
-            rel: self.rel ? self.rel : null
+            rel: self.rel ? self.rel : null,
+            title: title ? title : null
           });
         }
 
@@ -186,6 +208,7 @@ define([
       self.href = self.anchorElm ? self.dom.getAttrib(self.anchorElm, 'href') : '';
       self.target = self.anchorElm ? self.dom.getAttrib(self.anchorElm, 'target') : '';
       self.rel = self.anchorElm ? self.dom.getAttrib(self.anchorElm, 'rel') : '';
+      self.title = self.anchorElm ? self.dom.getAttrib(self.anchorElm, 'title') : '';
 
       if (self.selectedElm.nodeName === "IMG") {
         self.text = self.initialText = " ";
@@ -195,6 +218,11 @@ define([
         self.uid = self.href.replace('resolveuid/', '');
       }
     },
+    buildLinkTypeElement: function(){
+      var self = this;
+      var html = '';
+      return html;
+    },
     buildTargetElement: function(){
       var self = this;
       var html = '<select name="target">';
@@ -202,6 +230,7 @@ define([
         var target = self.options.targetList[i];
         html += '<option value="' + target.value + '">' + target.text + '</option>';
       }
+      html += '</select>';
       return html;
     },
     reinitialize: function(){
@@ -211,10 +240,22 @@ define([
        * be abel to privde default values for the overlay
        */
       var self = this;
+      self.initElements();
+      self.initData();
       if(self.uid){
         self.$select.attr('value', self.uid);
       }else{
         self.$select.attr('value', '');
+      }
+      self.$title.attr('value', self.title);
+
+      // unselect existing
+      self.$target.find('option:selected').attr('selected', '');
+      if(self.target){
+        // update
+        var selectedTarget = self.$target
+          .find('option[value="' + self.target + '"]')
+          .attr('selected', "true");
       }
     }
   });
@@ -235,7 +276,8 @@ define([
       text: {
         insertBtn: 'Insert', // so this can be configurable for different languages
         cancelBtn: 'Cancel',
-        insertHeading: 'Insert link'
+        insertHeading: 'Insert link',
+        title: 'Title'
       },
       targetList: [
         {text: 'Open in this window / frame', value: ''},
@@ -252,11 +294,7 @@ define([
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"
       }
     },
-    openLink: function(){
-      /*
-       * XXX ONLY working with linking by resolveuid. IMO, this should be the
-       * only supported way.
-       */
+    addLinkClicked: function(){
       var self = this;
       if(self.linkModal === null){
         self.linkModal = new LinkModal(self.$el,
@@ -279,8 +317,8 @@ define([
       }
       var tinyOptions = self.options.tiny;
       tinyOptions.selector = '#' + id;
-      tinyOptions.openLink = function(){
-        self.openLink.apply(self, []);
+      tinyOptions.addLinkClicked = function(){
+        self.addLinkClicked.apply(self, []);
       };
       tinymce.init(tinyOptions);
       self.tiny = tinymce.get(id);
