@@ -49,7 +49,7 @@ define([
   'jam/chai/chai.js',
   'jquery',
   'sinon',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'js/patterns/base',
   'js/patterns/autotoc',
   'js/patterns/backdrop',

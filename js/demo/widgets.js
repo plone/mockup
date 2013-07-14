@@ -17,7 +17,7 @@ require([
   'jquery',
   'sinon',
   'underscore',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'js/bundles/widgets',
   'js/patterns/expose',
   'js/patterns/modal',

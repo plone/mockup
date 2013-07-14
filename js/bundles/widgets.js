@@ -35,7 +35,7 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'js/patterns/select2',
   'js/patterns/pickadate',
   'js/patterns/autotoc',

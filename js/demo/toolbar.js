@@ -1,7 +1,7 @@
 require([
   'jquery',
   'sinon',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'js/bundles/toolbar'
 ], function($, sinon, registry) {
 

@@ -32,7 +32,7 @@
 
 define([
   'jquery',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'jam/Patterns/src/core/logger'
 ], function($, registry, logger, undefined) {
   "use strict";

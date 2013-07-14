@@ -1,7 +1,7 @@
 require([
   'jquery',
   'sinon',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'js/patterns/tiles/tiletype',
   'js/patterns/tiles/texttile',
   'js/bundles/tiles'

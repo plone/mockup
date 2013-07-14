@@ -39,7 +39,7 @@ if (window.jQuery) {
 define([
   'jquery',
   'js/jquery.iframe',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'js/patterns/toggle',
   'js/patterns/modal',
   'js/patterns/tinymce',

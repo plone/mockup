@@ -33,7 +33,7 @@ define([
   'jquery',
   'js/patterns/base',
   'js/patterns/backdrop',
-  'jam/Patterns/src/registry',
+  'js/registry',
   'jam/jquery-form/jquery.form'
 ], function($, Base, Backdrop, registry) {
   "use strict";
