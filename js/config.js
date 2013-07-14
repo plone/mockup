@@ -6,7 +6,7 @@ requirejs.config({
         'jquery-form': '../bower_components/jquery-form/jquery.form',
         'jquery.cookie': '../bower_components/jquery.cookie/jquery.cookie',
         select2: '../bower_components/select2/select2',
-        tinymce: '../lib/tinymce/tinymce.min'
+        tinymce: '../lib/tinymce/tinymce'
     }
     shim: {
       tinyMCE: {
