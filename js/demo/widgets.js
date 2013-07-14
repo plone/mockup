@@ -199,7 +199,7 @@ require([
       if (term === undefined) return searchables;
       _.each(items, function(item) {
         var q;
-        var keys = (item.id + ' ' + item.title + ' ' + item.path).toLowerCase();
+        var keys = (item.UID + ' ' + item.Title + ' ' + item.path).toLowerCase();
         if(typeof(term) === 'object'){
           for(var i=0; i<term.length; i++){
             q = term[i].toLowerCase();

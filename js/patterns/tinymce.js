@@ -45,8 +45,8 @@ define([
     console.log('Warning: tinymce not loaded.');
     return;
   }
-  var editor = null;
 
+  /* register the tinymce plugin */
   var Modal_ = Modal;
   tinymce.PluginManager.add('plonelink', function(editor) {
     editor.addButton('plonelink', {
@@ -77,6 +77,7 @@ define([
     });
   });
 
+
   var TinyMCE = Base.extend({
     name: 'tinymce',
     defaults: {
@@ -105,12 +106,10 @@ define([
     openLink: function(){
       var self = this;
 
-      var editor = self.tiny;
-      var dom = editor.dom;
-      var selection = editor.selection;
-      var data = {};
-      var initialText;
-      editor.focus();
+      var dom = self.tiny.dom;
+      var selection = self.tiny.selection;
+      var initialText, text;
+      self.tiny.focus();
 
       var selectedElm = selection.getNode();
       var anchorElm = dom.getParent(selectedElm, 'a[href]');
@@ -118,13 +117,17 @@ define([
         selection.select(anchorElm);
       }
 
-      data.text = initialText = selection.getContent({format: 'text'});
-      data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
-      data.target = anchorElm ? dom.getAttrib(anchorElm, 'target') : '';
-      data.rel = anchorElm ? dom.getAttrib(anchorElm, 'rel') : '';
+      text = initialText = selection.getContent({format: 'text'});
+      var href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
+      var target = anchorElm ? dom.getAttrib(anchorElm, 'target') : '';
+      var rel = anchorElm ? dom.getAttrib(anchorElm, 'rel') : '';
 
-      if (selectedElm.nodeName == "IMG") {
-        data.text = initialText = " ";
+      if (selectedElm.nodeName === "IMG") {
+        text = initialText = " ";
+      }
+      var uid = '';
+      if(href){
+        uid = href.replace('resolveuid/', '');
       }
 
       if(self.linkModal === null){
@@ -133,7 +136,7 @@ define([
             '<div>' +
               '<h1>Select Item</h1>' +
               "<input type='text' class='pat-relateditems' data-pat-relateditems='" +
-                JSON.stringify(self.options.relatedItems) + "' />" +
+                JSON.stringify(self.options.relatedItems) + "' value='" + uid + "' />" +
               '<div class="control-group">' +
                 '<label class="control-label">Target</label>' +
                 '<div class="controls">' +
@@ -160,31 +163,31 @@ define([
               val = val[0];
             }
             var href = 'resolveuid/' + val;
-            data.target = self.linkModal.target.val();
-            if (data.text !== initialText) {
+            target = self.linkModal.target.val();
+            if (text !== initialText) {
               if (anchorElm) {
-                editor.focus();
-                anchorElm.innerHTML = data.text;
+                self.tiny.focus();
+                anchorElm.innerHTML = text;
 
                 dom.setAttribs(anchorElm, {
                   href: href,
-                  target: data.target ? data.target : null,
-                  rel: data.rel ? data.rel : null
+                  target: target ? target : null,
+                  rel: rel ? rel : null
                 });
 
                 selection.select(anchorElm);
               } else {
-                editor.insertContent(dom.createHTML('a', {
+                self.tiny.insertContent(dom.createHTML('a', {
                   href: href,
-                  target: data.target ? data.target : null,
-                  rel: data.rel ? data.rel : null
-                }, data.text));
+                  target: target ? target : null,
+                  rel: rel ? rel : null
+                }, text));
               }
             } else {
-              editor.execCommand('mceInsertLink', false, {
+              self.tiny.execCommand('mceInsertLink', false, {
                 href: href,
-                target: data.target,
-                rel: data.rel ? data.rel : null
+                target: target,
+                rel: rel ? rel : null
               });
             }
 
@@ -195,8 +198,16 @@ define([
             self.linkModal.hide();
           });
         });
+        self.linkModal.show();
+      }else{
+        var select = $('input.pat-relateditems', self.linkModal.$modal);
+        if(uid){
+          select.attr('value', uid);
+        }else{
+          select.attr('value', '');
+        }
+        self.linkModal.show();
       }
-      self.linkModal.show();
     },
     init: function() {
       var self = this;
