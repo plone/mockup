@@ -19,6 +19,7 @@
   <script src="node_modules/less/dist/less-1.4.1.js"></script>
   <script src="bower_components/jquery/jquery.js"></script>
   <script src="bower_components/requirejs/require.js"></script>
+  <script src="js/config.js"></script>
   <script>
 
 // Helper utilities
@@ -33,7 +34,7 @@ addPage = function(page) {
 
 // 
 require([
-  'sinon',
+  'sinon-fakeserver',
   'js/docs'
 ], function(sinon, DocsApp) {
 

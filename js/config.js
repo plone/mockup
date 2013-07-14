@@ -1,16 +1,25 @@
 requirejs.config({
-    baseUrl: '../',
+    baseUrl: './',
     paths: {
-        jquery: '../bower_components/jquery/jquery',
-        bootstrap: '../bower_components/bootstrap/docs/assets/js/bootstrap',
-        'jquery-form': '../bower_components/jquery-form/jquery.form',
-        'jquery.cookie': '../bower_components/jquery.cookie/jquery.cookie',
-        select2: '../bower_components/select2/select2',
-        tinymce: '../lib/tinymce/tinymce'
-    }
+      'jquery': 'bower_components/jquery/jquery',
+      'jquery.form': '/bower_components/jquery-form/jquery.form',
+      'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
+      'underscore': 'bower_components/underscore/underscore',
+      'backbone': 'bower_components/backbone/backbone',
+      'select2': 'bower_components/select2/select2',
+      'tinymce': 'lib/tinymce/tinymce',
+      'sinon': 'bower_components/sinon/lib/sinon',
+      'sinon-fakexmlhttprequest': 'bower_components/sinon/lib/sinon/util/fake_xml_http_request',
+      'sinon-fakeserver' :'bower_components/sinon/lib/sinon/util/fake_server'
+    },
     shim: {
-      tinyMCE: {
-        exports: 'tinyMCE',
+      'underscore': { exports: 'window._' },
+      'backbone': { exports: 'window.Backbone' },
+      'sinon': { exports: 'window.sinon' },
+      'sinon-fakexmlhttprequest': { exports: 'window.sinon',  deps: [ 'sinon' ] },
+      'sinon-fakeserver': { exports: 'window.sinon',  deps: [ 'sinon', 'sinon-fakexmlhttprequest' ] },
+      'tinymce': {
+        exports: 'window.tinyMCE',
         init: function () {
           this.tinyMCE.DOM.events.domLoaded = true;
           return this.tinyMCE;

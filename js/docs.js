@@ -1,9 +1,9 @@
 define([
   'jquery',
-  'jam/Patterns/src/registry',
   'underscore',
-  'backbone'
-], function($, registry, _, Backbone) {
+  'backbone',
+  'js/registry'
+], function($, _, Backbone, registry) {
 
   var Page = Backbone.Model.extend({
     defaults: {
