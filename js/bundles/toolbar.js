@@ -196,6 +196,19 @@ define([
       });
     });
 
+    // site setup
+    $('#plone-personal-actions-plone_setup a').on('show.modal.patterns', function(evt, modal) {
+      $('a[href$=controlpanel]', modal.$modal).each(function(){
+        var fixedhref = this.href;
+        fixedhref = fixedhref.replace(/@@/g, "++nodiazo++/@@")
+
+        $(this).attr('href', fixedhref);
+        $(this).click(function(){
+          window.open(fixedhref);
+        });
+      });
+    });
+
 //    // Edit
 //    Modal.prepareModal('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
 //      Modal.createTemplate(modal.$modal, {
