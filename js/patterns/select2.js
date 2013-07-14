@@ -30,7 +30,7 @@
 
 define([
   'jquery',
-  'js/patterns/base',
+  './base.js',
   'select2',
   'jquery.event.drag',
   'jquery.event.drop'

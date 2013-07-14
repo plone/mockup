@@ -17,20 +17,17 @@ require([
   'jquery',
   'sinon',
   'underscore',
-  'js/registry',
-  'js/bundles/widgets',
-  'js/patterns/expose',
-  'js/patterns/modal',
-  'js/patterns/accessibility',
-  'js/patterns/cookiedirective',
-  'js/patterns/preventdoublesubmit',
-  'js/patterns/formUnloadAlert',
-  'js/patterns/tooltip',
-  'js/patterns/tablesorter',
-  'js/patterns/livesearch',
-  'jam/SyntaxHighlighter/scripts/XRegExp.js',
-  'jam/SyntaxHighlighter/scripts/shCore.js',
-  'jam/SyntaxHighlighter/scripts/shBrushXml.js'
+  './../registry.js',
+  './../bundles/widgets.js',
+  './../patterns/expose.js',
+  './../patterns/modal.js',
+  './../patterns/accessibility.js',
+  './../patterns/cookiedirective.js',
+  './../patterns/preventdoublesubmit.js',
+  './../patterns/formUnloadAlert.js',
+  './../patterns/tooltip.js',
+  './../patterns/tablesorter.js',
+  './../patterns/livesearch.js'
 ], function($, sinon, _, registry, uri) {
   var URI = uri;
   // before demo patterns in overlay remove html created by autotoc pattern

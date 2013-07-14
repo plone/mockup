@@ -31,20 +31,20 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'js/registry',
-  'js/patterns/select2',
-  'js/patterns/pickadate',
-  'js/patterns/autotoc',
-  'js/patterns/accessibility',
-  'js/patterns/relateditems',
-  'js/patterns/formUnloadAlert',
-  'js/patterns/toggle',
-  'js/patterns/tinymce',
-  'js/patterns/picture',
-  'js/patterns/livesearch',
-  'js/patterns/querystring',
-  'js/patterns/preventdoublesubmit',
-  'js/patterns/formautofocus'
+  './../registry.js',
+  './../patterns/select2.js',
+  './../patterns/pickadate.js',
+  './../patterns/autotoc.js',
+  './../patterns/accessibility.js',
+  './../patterns/relateditems.js',
+  './../patterns/formUnloadAlert.js',
+  './../patterns/toggle.js',
+  './../patterns/tinymce.js',
+  './../patterns/picture.js',
+  './../patterns/livesearch.js',
+  './../patterns/querystring.js',
+  './../patterns/preventdoublesubmit.js',
+  './../patterns/formautofocus.js'
 ], function($, registry) {
   "use strict";
 

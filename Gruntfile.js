@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
-      all: ['Gruntfile.js', 'js/**/*.js', 'test/*.js']
+      all: ['Gruntfile.js', 'js/**/*.js', 'tests/*.js']
     },
     bower: {
       target: {
@@ -18,7 +18,8 @@ module.exports = function(grunt) {
         browsers: ['Chrome']
       },
       dev: {
-        autoWatch: true
+        autoWatch: true,
+        //singleRun: true
       }
     },
     requirejs: {
@@ -74,8 +75,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('test', ['karma']);
-  grunt.registerTask('test-all', ['karma', 'jshint']);
+  grunt.registerTask('test', ['karma:dev']);
+  grunt.registerTask('test-ci', ['karma:dev', 'jshint']);
   grunt.registerTask('default', ['bower']);
   grunt.registerTask('compile-js', ['requirejs']);
   grunt.registerTask('compile-less', ['less']);

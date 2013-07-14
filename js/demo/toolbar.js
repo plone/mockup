@@ -1,8 +1,8 @@
 require([
   'jquery',
   'sinon',
-  'js/registry',
-  'js/bundles/toolbar'
+  './../registry.js',
+  './../bundles/toolbar.js'
 ], function($, sinon, registry) {
 
   var server = sinon.fakeServer.create();

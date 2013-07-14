@@ -31,11 +31,11 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/accessibility'
-], function(chai, $, sinon, registry, Accessibility) {
+  './../js/registry.js',
+  './../js/patterns/accessibility.js'
+], function(chai, $, registry, Accessibility) {
   "use strict";
 
   var expect = chai.expect,

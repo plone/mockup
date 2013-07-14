@@ -27,12 +27,12 @@
 
 define([
   'jquery',
-  'js/patterns/base',
-  'js/patterns/toggle',
   'underscore',
-  'js/patterns/select2',
-  'js/patterns/queryhelper'
-], function($, Base, Toggle, _, Select2, QueryHelper) {
+  './base.js',
+  './toggle.js',
+  './select2.js',
+  './queryhelper.js'
+], function($, _, Base, Toggle, Select2, QueryHelper) {
   "use strict";
 
   var Livesearch = Base.extend({

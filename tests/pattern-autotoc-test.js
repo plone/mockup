@@ -31,10 +31,10 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/autotoc'
+  './../js/registry.js',
+  './../js/patterns/autotoc.js'
 ], function(chai, $, registry, AutoTOC) {
   "use strict";
 

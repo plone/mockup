@@ -31,11 +31,11 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'sinon',
-  'js/registry',
-  'js/livesearch'
+  'sinon-fakeserver',
+  './../js/registry.js',
+  './../js/patterns/livesearch.js'
 ], function(chai, $, sinon, registry, Livesearch) {
   "use strict";
 

@@ -8,6 +8,7 @@ requirejs.config({
       'backbone': 'bower_components/backbone/backbone',
       'select2': 'bower_components/select2/select2',
       'tinymce': 'lib/tinymce/tinymce',
+      'chai': 'bower_components/chai/chai',
       'sinon': 'bower_components/sinon/lib/sinon',
       'sinon-fakexmlhttprequest': 'bower_components/sinon/lib/sinon/util/fake_xml_http_request',
       'sinon-fakeserver': 'bower_components/sinon/lib/sinon/util/fake_server',
@@ -15,7 +16,8 @@ requirejs.config({
       'picker.date': 'bower_components/pickadate/lib/picker.date',
       'picker.time': 'bower_components/pickadate/lib/picker.time',
       'jquery.event.drag': 'lib/jquery.event.drag',
-      'jquery.event.drop': 'lib/jquery.event.drop'
+      'jquery.event.drop': 'lib/jquery.event.drop',
+      'mockup-registry': 'js/registry'
     },
     shim: {
       'underscore': { exports: 'window._' },

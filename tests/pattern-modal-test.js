@@ -31,11 +31,11 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'sinon',
-  'js/registry',
-  'js/modal'
+  'sinon-fakeserver',
+  './../js/registry.js',
+  './../js/patterns/modal.js'
 ], function(chai, $, sinon, registry, Modal) {
   "use strict";
 

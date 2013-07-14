@@ -32,8 +32,8 @@
   define:false, describe:false, it:false, beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
-  'js/iframe.js'
+  'chai',
+  './../js/iframe.js'
 ], function(chai) {
   "use strict";
 
@@ -134,7 +134,7 @@ define([
   describe("iframe.js", function() {
     beforeEach(function() {
       this.el = createElement('example',
-          'test/example-resource.js;test/example-resource.css',
+          '/base/tests/example-resource.js;/base/tests/example-resource.css',
           '<p>example content</p>');
     });
     afterEach(function() {
@@ -167,13 +167,13 @@ define([
 
         var link = iframe_doc.getElementsByTagName('link')[0];
         expect(iframe_doc.getElementsByTagName('link').length ).to.equal(1);
-        expect(link.getAttribute('href') ).to.equal('test/example-resource.css');
+        expect(link.getAttribute('href') ).to.equal('/base/tests/example-resource.css');
         expect(link.getAttribute('type') ).to.equal('text/css');
         expect(link.getAttribute('rel') ).to.equal('stylesheet');
 
         var script = iframe_doc.getElementsByTagName('script')[0];
         expect(iframe_doc.getElementsByTagName('script').length ).to.equal(1);
-        expect(script.getAttribute('src') ).to.equal('test/example-resource.js');
+        expect(script.getAttribute('src') ).to.equal('/base/tests/example-resource.js');
         expect(script.getAttribute('type') ).to.equal('text/javascript');
 
         expect(iframe_el.getAttribute('frameBorder') ).to.equal('0');
@@ -192,7 +192,7 @@ define([
     });
     it("less resources", function(done) {
       expect(document.getElementsByTagName('iframe').length).to.equal(0);
-      createElement('example2', 'test/example-resource.less');
+      createElement('example2', '/base/tests/example-resource.less');
       window.iframe_initialize();
       onLoad(done, [
           window.iframe.example,
@@ -203,7 +203,7 @@ define([
             link = iframe2_doc.getElementsByTagName('link')[0];
 
         expect(iframe2_doc.getElementsByTagName('link').length).to.equal(1);
-        expect(link.getAttribute('href')).to.equal('test/example-resource.less');
+        expect(link.getAttribute('href')).to.equal('/base/tests/example-resource.less');
         expect(link.getAttribute('type')).to.equal('text/css');
         expect(link.getAttribute('rel')).to.equal('stylesheet/less');
       });
@@ -219,7 +219,7 @@ define([
     });
     it("2 elements gets content into DIFFERENT iframe", function(done) {
       createElement('example3',
-          'test/example-resource.js;test/example-resource.css',
+          '/base/tests/example-resource.js;/base/tests/example-resource.css',
               '<p>example content</p>');
       window.iframe_initialize();
       onLoad(done, [
@@ -230,7 +230,7 @@ define([
     });
     it("2 elements gets content into SAME iframe", function(done) {
       createElement('example',
-          'test/example-resource.js;test/example-resource.css',
+          '/base/tests/example-resource.js;/base/tests/example-resource.css',
               '<p>example content</p>');
       window.iframe_initialize();
       onLoad(done, window.iframe.example, function() {
@@ -239,11 +239,11 @@ define([
     });
     it("Bottom-aligned iFrame does not add to height", function(done) {
       createElement('example_top',
-          'test/example-resource.js;test/example-resource.css',
+          '/base/tests/example-resource.js;/base/tests/example-resource.css',
               "<p>I'm on top of the world!</p>",
               { 'data-iframe-position': 'top' });
       createElement('example_bottom',
-          'test/example-resource.js;test/example-resource.css',
+          '/base/tests/example-resource.js;/base/tests/example-resource.css',
               "<p>I'm.......<br/><br/><br/>Not.</p>",
               { 'data-iframe-position': 'bottom' });
       window.iframe_initialize();
@@ -285,7 +285,7 @@ define([
     });
     it("extra attributes passed via url", function(done) {
       createElement('example2',
-          'test/example-resource.js?data-main="example";');
+          '/base/tests/example-resource.js?data-main="example";');
       window.iframe_initialize();
       onLoad(done, [
           window.iframe.example,

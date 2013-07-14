@@ -28,9 +28,9 @@
 
 define([
   'jquery',
-  'js/patterns/base',
-  'js/patterns/backdrop',
-  'js/registry',
+  './base.js',
+  './backdrop.js',
+  './../registry.js',
   'jquery.form'
 ], function($, Base, Backdrop, registry) {
   "use strict";

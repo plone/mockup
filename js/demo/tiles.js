@@ -1,10 +1,10 @@
 require([
   'jquery',
   'sinon',
-  'js/registry',
-  'js/patterns/tiles/tiletype',
-  'js/patterns/tiles/texttile',
-  'js/bundles/tiles'
+  './../registry.js',
+  './../patterns/tiles/tiletype.js',
+  './../patterns/tiles/texttile.js',
+  './../bundles/tiles.js'
 ], function($, sinon, registry, TileTypes) {
 
   // -----------------

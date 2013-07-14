@@ -26,9 +26,9 @@
 
 define([
   'jquery',
-  'js/patterns/base',
+  './base.js',
   'jquery.cookie'
-], function($, Base, Parser) {
+], function($, Base) {
   "use strict";
 
   var Accessibility = Base.extend({

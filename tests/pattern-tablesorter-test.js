@@ -31,10 +31,10 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/patterns/tablesorter'
+  './../js/registry.js',
+  './../js/patterns/tablesorter.js'
 ], function(chai, $, registry, Tablesorter) {
   "use strict";
 

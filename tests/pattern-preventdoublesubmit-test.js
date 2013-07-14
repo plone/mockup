@@ -31,10 +31,10 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/preventdoublesubmit'
+  './../js/registry.js',
+  './../js/patterns/preventdoublesubmit.js'
 ], function(chai, $, registry, PreventDoubleSubmit) {
   "use strict";
 

@@ -27,8 +27,8 @@
 
 define([
   'jquery',
-  'js/patterns/base'
-], function($, Base, Parser) {
+  './base.js'
+], function($, Base) {
   "use strict";
 
   var Backdrop = Base.extend({

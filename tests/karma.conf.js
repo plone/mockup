@@ -1,7 +1,7 @@
 // Karma configuration
 
 // base path, that will be used to resolve files and exclude
-basePath = '';
+basePath = '../';
 
 // list of files / patterns to load in the browser
 files = [
@@ -11,16 +11,25 @@ files = [
   REQUIRE_ADAPTER,
 
   {pattern: 'lib/**/*.js', included: false},
-  {pattern: 'js/**/*.js', included: false},
+  {pattern: 'bower_components/**/*.js', included: false},
+  {pattern: 'js/registry.js', included: false},
+  {pattern: 'js/iframe.js', included: false},
+  {pattern: 'js/patterns/*.js', included: false},
+  {pattern: 'tests/example-resource*', included: false},
   {pattern: 'tests/**/*-test.js', included: false},
+
+  'js/config.js',
+  'tests/config.js'
 ];
 
 preprocessors = {
-  '../js/**/*.js': 'coverage'
+  'js/**/*.js': 'coverage'
 };
 
 // list of files to exclude
-exclude = [];
+exclude = [
+  'tests/jquery.iframe-test.js'  // TODO: we need to fix this test
+];
 
 // test results reporter to use
 // possible values: dots || progress || growl

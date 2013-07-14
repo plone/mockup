@@ -31,9 +31,9 @@
 define([
   'jquery',
   'underscore',
-  'js/patterns/base',
-  'js/patterns/select2',
-  'js/patterns/queryhelper'
+  './base.js',
+  './select2.js',
+  './queryhelper.js'
 ], function($, _, Base, Select2, QueryHelper) {
   "use strict";
 

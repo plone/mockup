@@ -34,12 +34,12 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'js/jquery.iframe',
-  'js/registry',
-  'js/patterns/toggle',
-  'js/patterns/modal',
-  'js/patterns/tinymce',
-  'js/bundles/widgets'
+  './../jquery.iframe.js',
+  './../registry.js',
+  './../patterns/toggle.js',
+  './../patterns/modal.js',
+  './../patterns/tinymce.js',
+  './../bundles/widgets.js'
 ], function($, iframe, registry, Toggle, Modal, TinyMCE) {
   "use strict";
 

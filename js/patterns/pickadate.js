@@ -28,7 +28,7 @@
 
 define([
   'jquery',
-  'js/patterns/base',
+  './base.js',
   'picker',
   'picker.date',
   'picker.time'

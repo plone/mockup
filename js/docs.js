@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/registry'
+  './registry.js'
 ], function($, _, Backbone, registry) {
 
   var Page = Backbone.Model.extend({

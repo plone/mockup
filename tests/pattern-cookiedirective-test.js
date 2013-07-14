@@ -31,11 +31,11 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/cookiedirective'
-], function(chai, $, sinon, registry, CookieDirective) {
+  './../js/registry.js',
+  './../js/patterns/cookiedirective.js'
+], function(chai, $, registry, CookieDirective) {
   "use strict";
 
   var expect = chai.expect,

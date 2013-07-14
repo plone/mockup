@@ -31,10 +31,10 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/formautofocus'
+  './../js/registry.js',
+  './../js/patterns/formautofocus.js'
 ], function(chai, $, registry, FormAutoFocus) {
   "use strict";
 

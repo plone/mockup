@@ -28,7 +28,7 @@
 
 define([
   'jquery',
-  'js/registry'
+  'mockup-registry'
 ], function($, registry) {
   "use strict";
 

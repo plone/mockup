@@ -31,10 +31,10 @@
   beforeEach:false, afterEach:false */
 
 define([
-  'jam/chai/chai.js',
+  'chai',
   'jquery',
-  'js/registry',
-  'js/formUnloadAlert'
+  './../js/registry.js',
+  './../js/patterns/formunloadalert.js'
 ], function(chai, $, registry, FormUnloadAlert) {
   "use strict";
 
