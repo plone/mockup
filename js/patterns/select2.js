@@ -27,11 +27,6 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
@@ -121,6 +116,7 @@ define([
               });
             })
             .drag(function(e, dd) {
+              /*jshint eqeqeq:false */
               var drop = dd.drop[0],
               method = $.data(drop || {}, "drop+reorder");
               /* XXX Cannot use triple equals here */
