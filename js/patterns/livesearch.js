@@ -311,7 +311,7 @@ define([
     },
 
     _keyEscape: function() {
-      this.hide();
+      this.$input.trigger('blur');
     },
 
     _keyEnter: function() {

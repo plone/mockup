@@ -1853,6 +1853,30 @@ define([
       $el.remove();
     });
 
+    it('blur on escape', function() {
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="ajaxvocabulary:/search.json">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      var clock = sinon.useFakeTimers();
+      var $input = pattern.$input;
+
+      $input.val('c').focus();
+      expect($(document.activeElement).attr('class')).to.be.eql('pat-livesearch-input');
+      pattern._keyEscape();
+
+      expect($(document.activeElement).attr('class')).not.to.be.eql('pat-livesearch-input');
+
+      $el.remove();
+    });
+
     it('template from selector', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
