@@ -20,7 +20,7 @@
  */
 define([
     "jquery"
-], function($, utils) {
+], function($) {
 
     $.fn.findInclusive = function(selector) {
         return this.find('*').addBack().filter(selector);
