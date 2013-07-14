@@ -83,18 +83,53 @@ define([
     * only supported way.
     */
     name: 'linkmodal',
+    linkTypes: [
+      'internal',
+      'external',
+      'email',
+      'anchor'
+    ],
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
       self.tiny = self.tinypattern.tiny;
+      self.linkType = 'internal';
       self.initData();
 
       self.modal = new Modal_(self.$el, {
         html: '<div>' +
-          '<div>' +
+          '<div class="linkModal">' +
             '<h1>' + self.options.text.insertHeading + '</h1>' +
-            "<input type='text' class='pat-relateditems' data-pat-relateditems='" +
+            self.buildLinkTypeElement() +
+            '<hr style="clear:both" />' +
+            '<div class="internal">' +
+              "<input type='text' class='pat-relateditems' data-pat-relateditems='" +
               JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
+            '</div>' +
+            '<div class="external">' +
+              '<div class="control-group">' +
+                '<label>' + self.options.text.external + '</label>' +
+                '<div class="controls">' +
+                  '<input type="text" name="external" value="' + self.external + '" />' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="email">' +
+              '<div class="control-group">' +
+                '<label>' + self.options.text.email + '</label>' +
+                '<div class="controls">' +
+                  '<input type="text" name="email" value="' + self.email + '" />' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="email">' +
+              '<div class="control-group">' +
+                '<label>' + self.options.text.subject + '</label>' +
+                '<div class="controls">' +
+                  '<input type="text" name="subject" value="' + self.subject + '" />' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
             '<div class="controls">' +
               self.buildTargetElement() +
             '</div>' +
@@ -124,18 +159,42 @@ define([
       self.$target = $('select[name="target"]', self.modal.$modal);
       self.$button = $('input[name="insert"]', self.modal.$modal);
       self.$title = $('input[name="title"]', self.modal.$modal);
+      self.$external = $('input[name="external"]', self.modal.$modal);
+      self.$email = $('input[name="email"]', self.modal.$modal);
+      self.$subject = $('input[name="subject"]', self.modal.$modal);
+      self.$linkTypes = $('.linkTypes', self.modal.$modal);
+      self.$linkTypes.find('input[value="' + self.linkType + '"]')[0].checked = true;
+      self.activateLinkTypeElements();
+    },
+    activateLinkTypeElements: function(){
+      /* handle specify url types */
+      var self = this;
+      $('.' + self.linkTypes.join(',.'), self.modal.$modal).hide();
+      $('.' + self.linkType).show();
     },
     getLinkUrl: function(){
       // get the url, only get one uid
       var self = this;
-      var val = self.$select.select2('val');
-      if(!val){
-        return;
+      if(self.linkType === 'internal'){
+        var val = self.$select.select2('val');
+        if(!val){
+          return;
+        }
+        if(typeof(val) === 'object'){
+          val = val[0];
+        }
+        return 'resolveuid/' + val;
+      } else if(self.linkType === 'external'){
+        return self.$external.val();
+      } else if(self.linkType === 'email'){
+        var subject = self.$subject.val();
+        var href = 'mailto:' + self.$email.val();
+        if(subject){
+          href += '?subject=' + subject;
+        }
+        return href;
       }
-      if(typeof(val) === 'object'){
-        val = val[0];
-      }
-      return 'resolveuid/' + val;
+      return null;
     },
     modalShown: function(){
       var self = this;
@@ -183,7 +242,10 @@ define([
         e.preventDefault();
         self.hide();
       });
-
+      $('.linkTypes input:radio', self.modal.$modal).change(function(){
+        self.linkType = $(this).val();
+        self.activateLinkTypeElements();
+      });
     },
     show: function(){
       this.modal.show();
@@ -196,6 +258,7 @@ define([
 
       self.dom = self.tiny.dom;
       self.selection = self.tiny.selection;
+      self.external = self.email = self.subject = '';
       self.tiny.focus();
 
       self.selectedElm = self.selection.getNode();
@@ -215,12 +278,40 @@ define([
       }
       self.uid = '';
       if(self.href){
-        self.uid = self.href.replace('resolveuid/', '');
+        if(self.href.indexOf('resolveuid/') !== -1){
+          self.uid = self.href.replace('resolveuid/', '');
+          self.linkType = 'internal';
+        } else if(self.href.indexOf('mailto:') !== -1){
+          self.linkType = 'email';
+          var email = self.href.substring("mailto:".length, self.href.length);
+          var split = email.split('?subject=');
+          self.email = split[0];
+          if(split.length > 1){
+            self.subject = decodeURIComponent(split[1]);
+          }
+        } else if(self.href[0] === '#'){
+          self.linkType = 'anchor';
+        } else {
+          self.linkType = 'external';
+          self.external = self.href;
+        }
       }
     },
     buildLinkTypeElement: function(){
       var self = this;
-      var html = '';
+      var linkTypes = [
+        ['internal', self.options.text.internal],
+        ['external', self.options.text.external],
+        ['email', self.options.text.email],
+        ['anchor', self.options.text.anchor]
+      ];
+      var html = '<div class="linkTypes">';
+      for(var i=0; i<linkTypes.length; i=i+1){
+        var type = linkTypes[i];
+        html += '<label><input name="linktype" type="radio" ' +
+          ' value="' + type[0] + '" />' + type[1] + '</label>';
+      }
+      html += '</div>';
       return html;
     },
     buildTargetElement: function(){
@@ -240,6 +331,7 @@ define([
        * be abel to privde default values for the overlay
        */
       var self = this;
+      self.linkType = 'internal'; // reset this since we won't know...
       self.initElements();
       self.initData();
       if(self.uid){
@@ -248,6 +340,9 @@ define([
         self.$select.attr('value', '');
       }
       self.$title.attr('value', self.title);
+      self.$external.attr('value', self.external);
+      self.$email.attr('value', self.email);
+      self.$subject.attr('value', self.subject);
 
       // unselect existing
       self.$target.find('option:selected').attr('selected', '');
@@ -257,6 +352,7 @@ define([
           .find('option[value="' + self.target + '"]')
           .attr('selected', "true");
       }
+      self.$external.attr('value', self.external);
     }
   });
 
@@ -277,7 +373,12 @@ define([
         insertBtn: 'Insert', // so this can be configurable for different languages
         cancelBtn: 'Cancel',
         insertHeading: 'Insert link',
-        title: 'Title'
+        title: 'Title',
+        internal: 'Internal',
+        external: 'External',
+        email: 'Email',
+        anchor: 'Anchor',
+        subject: 'Subject'
       },
       targetList: [
         {text: 'Open in this window / frame', value: ''},
