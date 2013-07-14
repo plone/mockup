@@ -18,3 +18,8 @@ test:
 
 test-ci:
 	CHROME_BIN=$(BOWER_CHROME) $(GRUNT) test-ci
+
+compile:
+	$(GRUNT) compile-js
+	$(GRUNT) compile-less
+	$(GRUNT) compile-css

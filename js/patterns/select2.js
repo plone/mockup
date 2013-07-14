@@ -31,7 +31,7 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/plone-select2/select2',
+  'select2',
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, Base) {
