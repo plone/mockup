@@ -85,7 +85,7 @@ define([
       }
     }
 
-    return $.extend(true, {}, options, elOptions)
+    return $.extend(true, {}, options, elOptions);
   }
 
   // Base Pattern

@@ -71,8 +71,8 @@ define([
       $($this).children('.sortdirection').html(
           reverse ? '&#x25bc;': '&#x25b2;' );
 
-      index = $($this).parent().children('th').index($this),
-      data = [],
+      index = $($this).parent().children('th').index($this);
+      data = [];
       usenumbers = true;
       tbody.find('tr').each(function() {
           var cells, sortableitem;

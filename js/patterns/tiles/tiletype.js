@@ -8,7 +8,7 @@ define([
     init: function(name) {
       var self = this;
       self.name = name;
-      self.typeid = self.name.replace(/\./g, '-')
+      self.typeid = self.name.replace(/\./g, '-');
     },
 
     styleButtons: function(buttons) {

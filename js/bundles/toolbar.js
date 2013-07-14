@@ -59,7 +59,7 @@ define([
 
     // make sure clicking on anything in the menu closes the toggled element
     $('.toolbar-dropdown .toolbar-dropdown-menu a').click(function(e) {
-        $(this).parents('.toolbar-dropdown').children('a').trigger('click')
+        $(this).parents('.toolbar-dropdown').children('a').trigger('click');
     });
 
     // at opening toolbar dropdown:

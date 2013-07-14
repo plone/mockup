@@ -92,7 +92,7 @@ define([
       for (var i=0;i<this.$target.length;i++){
         if (this.$target.eq(i)[0] === self.$el[0]){
           // If this is the toggle button, ignore checking
-          continue
+          continue;
         }
         if (self.options.attribute === 'class') {
           if (this.$target.eq(i).hasClass(this.options.value)){
