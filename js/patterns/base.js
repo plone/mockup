@@ -32,9 +32,8 @@
 
 define([
   'jquery',
-  'js/registry',
-  'jam/Patterns/src/core/logger'
-], function($, registry, logger, undefined) {
+  'js/registry'
+], function($, registry) {
   "use strict";
 
   function getName(name) {
@@ -95,7 +94,6 @@ define([
 
   // Base Pattern
   var Base = function($el, options) {
-    this.log = logger.getLogger(this.name);
     this.$el = $el;
     if (this.parser) {
       this.options = $.extend(true, {},
