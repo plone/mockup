@@ -89,12 +89,17 @@ define([
       'email',
       'anchor'
     ],
+    defaults: {
+      anchor_selector: 'h1,h2,h3'
+    },
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
       self.tiny = self.tinypattern.tiny;
       self.linkType = 'internal';
       self.initData();
+      self.anchor_nodes = [];
+      self.anchor_data = [];
 
       self.modal = new Modal_(self.$el, {
         html: '<div>' +
@@ -130,6 +135,14 @@ define([
                 '</div>' +
               '</div>' +
             '</div>' +
+            '<div class="anchor">' +
+              '<div class="control-group">' +
+                '<label>Select an anchor</label>' +
+                '<div class="controls">' +
+                  '<select name="anchor" class="pat-select2" data-pat-select2="width:500px" value="' + self.anchor + '" />' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
             '<div class="controls">' +
               self.buildTargetElement() +
             '</div>' +
@@ -162,8 +175,10 @@ define([
       self.$external = $('input[name="external"]', self.modal.$modal);
       self.$email = $('input[name="email"]', self.modal.$modal);
       self.$subject = $('input[name="subject"]', self.modal.$modal);
+      self.$anchor = $('select[name="anchor"]', self.modal.$modal);
       self.$linkTypes = $('.linkTypes', self.modal.$modal);
       self.$linkTypes.find('input[value="' + self.linkType + '"]')[0].checked = true;
+      self.populateAnchorList();
       self.activateLinkTypeElements();
     },
     activateLinkTypeElements: function(){
@@ -175,26 +190,50 @@ define([
     getLinkUrl: function(){
       // get the url, only get one uid
       var self = this;
+      var val;
       if(self.linkType === 'internal'){
-        var val = self.$select.select2('val');
-        if(!val){
-          return;
+        val = self.$select.select2('val');
+        if(val){
+          if(typeof(val) === 'object'){
+            val = val[0];
+          }
+          return 'resolveuid/' + val;
         }
-        if(typeof(val) === 'object'){
-          val = val[0];
-        }
-        return 'resolveuid/' + val;
       } else if(self.linkType === 'external'){
         return self.$external.val();
       } else if(self.linkType === 'email'){
-        var subject = self.$subject.val();
-        var href = 'mailto:' + self.$email.val();
-        if(subject){
-          href += '?subject=' + subject;
+        val = self.$email.val();
+        if(val){
+          var subject = self.$subject.val();
+          var href = 'mailto:' + self.$email.val();
+          if(subject){
+            href += '?subject=' + subject;
+          }
+          return href;
         }
-        return href;
+      } else if(self.linkType === 'anchor'){
+        val = self.$anchor.select2('val');
+        if(val){
+          var index = parseInt(val);
+          var node = self.anchor_nodes[index];
+          var data = self.anchor_data[index];
+          if(data.newAnchor){
+            node.innerHTML = '<a name="' + data.name + '" class="mce-item-anchor"></a>' + node.innerHTML;
+          }
+          return '#' + data.name;
+        }
       }
       return null;
+    },
+    getAnchorIndex: function(name){
+      var self = this;
+      for(var i=0; i<self.anchor_data.length; i=i+1){
+        var data = self.anchor_data[i];
+        if(data.name === name){
+          return i;
+        }
+      }
+      return 0;
     },
     modalShown: function(){
       var self = this;
@@ -247,6 +286,61 @@ define([
         self.activateLinkTypeElements();
       });
     },
+    populateAnchorList: function(){
+      /* 
+       * initialize form data that needs to be calculated
+       */
+      var self = this;
+      self.$anchor.find('option').remove();
+      self.anchor_nodes = [];
+      self.anchor_data = [];
+      var node, i, name, title;
+
+      var nodes = self.tiny.dom.select('a.mceItemAnchor,img.mceItemAnchor,a.mce-item-anchor,img.mce-item-anchor');
+      for (i = 0; i < nodes.length; i=i+1) {
+        node = nodes[i];
+        name = self.tiny.dom.getAttrib(node, "name");
+        if(!name){
+          name = self.tiny.dom.getAttrib(node, "id");
+        }
+        if (name !== "") {
+          self.anchor_nodes.push(node);
+          self.anchor_data.push({name: name, title: name});
+        }
+      }
+
+      nodes = self.tiny.dom.select(self.options.anchor_selector);
+      if (nodes.length > 0) {
+        for (i = 0; i < nodes.length; i=i+1) {
+          node = nodes[i];
+          title = $(node).text().replace(/^\s+|\s+$/g, '');
+          if (title==='') {
+            continue;
+          }
+          name = title.toLowerCase().substring(0,1024);
+          name = name.replace(/[^a-z0-9]/g, '-');
+          /* okay, ugly, but we need to first check that this anchor isn't already available */
+          var found = false;
+          for(i=0; i<self.anchor_nodes.length; i=i+1){
+            var anode = self.anchor_data[i];
+            if(anode.name === name){
+              found = true;
+              // so it's also found, let's update the title to be more presentable
+              anode.title = title;
+              break;
+            }
+          }
+          if(!found){
+            self.anchor_data.push({name: name, title:title, newAnchor: true});
+            self.anchor_nodes.push(node);
+          }
+        }
+      }
+      for(i = 0; i < self.anchor_data.length; i=i+1){
+        var data = self.anchor_data[i];
+        self.$anchor.append("<option value='" + i + "'>" + data.title + '</option>');
+      }
+    },
     show: function(){
       this.modal.show();
     },
@@ -258,7 +352,7 @@ define([
 
       self.dom = self.tiny.dom;
       self.selection = self.tiny.selection;
-      self.external = self.email = self.subject = '';
+      self.external = self.email = self.subject = self.anchor = '';
       self.tiny.focus();
 
       self.selectedElm = self.selection.getNode();
@@ -291,6 +385,7 @@ define([
           }
         } else if(self.href[0] === '#'){
           self.linkType = 'anchor';
+          self.anchor = self.getAnchorIndex(self.href.substring(1));
         } else {
           self.linkType = 'external';
           self.external = self.href;
@@ -343,16 +438,21 @@ define([
       self.$external.attr('value', self.external);
       self.$email.attr('value', self.email);
       self.$subject.attr('value', self.subject);
+      self.$external.attr('value', self.external);
 
       // unselect existing
       self.$target.find('option:selected').attr('selected', '');
       if(self.target){
         // update
-        var selectedTarget = self.$target
+        self.$target
           .find('option[value="' + self.target + '"]')
           .attr('selected', "true");
       }
-      self.$external.attr('value', self.external);
+      self.$anchor.find('option').attr('selected', '');
+      if(self.anchor !== ''){
+        self.$anchor.find('option[value="' + self.anchor + '"]')
+          .attr('selected', 'true');
+      }
     }
   });
 
