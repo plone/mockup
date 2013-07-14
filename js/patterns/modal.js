@@ -158,7 +158,7 @@ define([
                     url: $action.attr('href'),
                     error: function(xhr, textStatus, errorStatus) {
                       if (textStatus === 'timeout' && options.onTimeout) {
-                        options.onTimeout(modal, xhr, errorStatus);
+                        options.onTimeout(self.$modal, xhr, errorStatus);
 
                       // on "error", "abort", and "parsererror"
                       } else if (options.onError) {
