@@ -68,7 +68,7 @@ define([
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
-      var $match = $root.filter('.enableUnloadProtection');
+      $match = $root.filter('.enableUnloadProtection');
       $match = $match.add($root.find('.enableUnloadProtection'));
       $match.addClass('pat-formunloadalert');
       $match.attr({
@@ -134,7 +134,7 @@ define([
       $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
       $match.find('#searchGadget').addClass('pat-livesearch-input')
         .attr('autocomplete', 'off');
-      $match.find('.searchButton').hide();     
+      $match.find('.searchButton').hide();
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce').attr({
