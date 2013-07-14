@@ -104,6 +104,10 @@ define([
       }
     },
     openLink: function(){
+      /*
+       * XXX ONLY working with linking by resolveuid. IMO, this should be the
+       * only supported way.
+       */
       var self = this;
 
       var dom = self.tiny.dom;
