@@ -111,40 +111,34 @@ define([
               "<input type='text' class='pat-relateditems' data-pat-relateditems='" +
               JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
             '</div>' +
-            '<div class="external">' +
-              '<div class="control-group">' +
-                '<label>' + self.options.text.external + '</label>' +
-                '<div class="controls">' +
-                  '<input type="text" name="external" value="' + self.external + '" />' +
-                '</div>' +
+            '<div class="control-group external">' +
+              '<label>' + self.options.text.external + '</label>' +
+              '<div class="controls">' +
+                '<input type="text" name="external" value="' + self.external + '" />' +
               '</div>' +
             '</div>' +
-            '<div class="email">' +
-              '<div class="control-group">' +
-                '<label>' + self.options.text.email + '</label>' +
-                '<div class="controls">' +
-                  '<input type="text" name="email" value="' + self.email + '" />' +
-                '</div>' +
+            '<div class="control-group email">' +
+              '<label>' + self.options.text.email + '</label>' +
+              '<div class="controls">' +
+                '<input type="text" name="email" value="' + self.email + '" />' +
               '</div>' +
             '</div>' +
-            '<div class="email">' +
-              '<div class="control-group">' +
-                '<label>' + self.options.text.subject + '</label>' +
-                '<div class="controls">' +
-                  '<input type="text" name="subject" value="' + self.subject + '" />' +
-                '</div>' +
+            '<div class="control-group email">' +
+              '<label>' + self.options.text.subject + '</label>' +
+              '<div class="controls">' +
+                '<input type="text" name="subject" value="' + self.subject + '" />' +
               '</div>' +
             '</div>' +
-            '<div class="anchor">' +
-              '<div class="control-group">' +
-                '<label>Select an anchor</label>' +
-                '<div class="controls">' +
-                  '<select name="anchor" class="pat-select2" data-pat-select2="width:500px" value="' + self.anchor + '" />' +
-                '</div>' +
+            '<div class="control-group anchor">' +
+              '<label>Select an anchor</label>' +
+              '<div class="controls">' +
+                '<select name="anchor" class="pat-select2" data-pat-select2="width:500px" value="' + self.anchor + '" />' +
               '</div>' +
             '</div>' +
-            '<div class="controls">' +
-              self.buildTargetElement() +
+            '<div class="control-group">' +
+              '<div class="controls">' +
+                self.buildTargetElement() +
+              '</div>' +
             '</div>' +
             '<div class="control-group">' +
               '<label>' + self.options.text.title + '</label>' +
