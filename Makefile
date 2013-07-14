@@ -188,7 +188,6 @@ build/widgets.min.js:
 	echo "require(['jquery', 'jam/Patterns/src/registry', 'js/bundles/widgets'], function(jQuery, registry) { jQuery(document).ready(function() { registry.scan(jQuery('body')); }); });" >> $@
 
 build/widgets.css:
-	$(CSSMIN) jam/plone-select2/select2.css > $@
 	$(LESSC) less/sunburst.less >> $@
 	sed -i -e 's@select2.png@++resource++plone.app.widgets.png@g' $@
 	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-spinner.gif@g' $@
