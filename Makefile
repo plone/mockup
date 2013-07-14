@@ -8,7 +8,6 @@ bootstrap:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	$(NPM) link
 	$(BOWER) install
-	$(GRUNT) bower
 
 test:
 	$(GRUNT) test
