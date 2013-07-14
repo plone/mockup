@@ -10,13 +10,24 @@ module.exports = function(grunt) {
       target: {
         rjsConfig: 'js/config.js'
       }
+    },
+    karma: {
+      options: {
+        configFile: 'tests/karma.conf.js',
+        runnerPort: 9999,
+        browsers: ['Chrome']
+      },
+      dev: {
+        autoWatch: true,
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-bower-requirejs');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('test', ['jshint']);
+  grunt.registerTask('test', ['karma']);
+  grunt.registerTask('test-all', ['karma', 'jshint']);
   grunt.registerTask('default', ['bower']);
 
 };
