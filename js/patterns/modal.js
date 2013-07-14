@@ -400,9 +400,11 @@ define([
       } else if (self.options.target) {
         self.$modal = function() {
           self.$modal = self.initModalElement($('<div/>'))
-              .html($(self.options.target).clone())
-          self.show();
+              .html($(self.options.target).clone());
         };
+      } else if (self.options.html) {
+        var $el = $(self.options.html);
+        self.$modal = self.initModalElement($('<div/>')).html($el);
       } else {
         self.$modal = self.initModalElement($('<div/>'))
               .html(self.$el.clone());

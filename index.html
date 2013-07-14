@@ -16,19 +16,146 @@
   <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
   <script src="jam/less/dist/less-1.3.3.js"></script>
+  <script src="jam/jquery/dist/jquery.js"></script>
   <script src="jam/require.js"></script>
 
     <script>
 var pages = [];
+var patterns = [];
+addPattern = function(page) {
+  patterns.push(page);
+};
 addPage = function(page) {
   pages.push(page);
 };
 require([
+  'sinon',
   'js/docs'
-], function(DocsApp) {
-  DocsApp.add(pages);
+], function(sinon, DocsApp) {
+
+  function getQueryVariable(url, variable) {
+    var query = url.split('?')[1];
+    if(query === undefined){
+      return null;
+    }
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return null;
+  }
+
+  var server = sinon.fakeServer.create();
+  server.autoRespond = true;
+  server.autoRespondAfter = 500;
+
+  server.respondWith(/search.json/, function (xhr, id) {
+    var items = [
+      {
+        "UID": "123sdfasdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdf1123asZ",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasdf1231as",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdf12231451",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasdf1235dsd",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasd345345f",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasdf465",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooaewrwsdfasdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      {
+        "UID": "fooasdfasd123f",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdas123f",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      },
+      { 
+        "UID": "fooasdfasdfsdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "News"
+      },
+      {
+        "UID": "fooasdfasdf",
+        "getURL": "http://localhost:8081/news/aggregator",
+        "Type": "Collection", "Description": "Site News",
+        "Title": "Another Item"
+      }
+    ];
+
+    var results = [];
+    var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+
+    var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
+
+    if (query.criteria[0].v === 'none*') {
+      results = [];
+    } else {
+      if (batch) {
+        var start, end;
+        start = (batch.page-1) * batch.size;
+        end = start + batch.size;
+        results = items.slice(start, end);
+      }
+    }
+
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+      total: results.length,
+      results: results
+    }));
+  });
+
+  DocsApp.patterns.add(patterns);
+  DocsApp.pages.add(patterns);
   DocsApp.initialize();
 });
+
+
   </script>
 
   <script type="text/x-ajax-respond" id="something-html">
@@ -63,12 +190,81 @@ require([
 
   <!-- TEMPLATES -->
   <script type="text/template" id="tpl_page">
-    <h1><%= title %></h1>
-    <p><%= description %></p>
+    <div class="page-header">
+      <h1><%= title %> <small><%= description %></small></h1>
+    </div>
     <div><%= content %></div>
   </script>
 
+  <script type="text/template" id="tpl_pattern">
+    <ul class="breadcrumb">
+      <li><a href="#">Home</a> <span class="divider">/</span></li>
+      <li><a href="#patterns">Patterns</a> <span class="divider">/</span></li>
+      <li class="active"><%= title %></li>
+    </ul>
+    <div class="page-header">
+      <h1><%= title %> <small><%= description %></small></h1>
+    </div>
+    <div><%= content %></div>
+    <div class="docs-examples">
+      <h2>Examples</h2>
+      <%= examples %>
+    </div>
+
+    <% if (attributes.length > 0) { %>
+      <div class="docs-attributes">
+        <h2>Data Options</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Attribute</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% _.each(attributes, function(attr) { %>
+              <tr>
+                <td><%= attr.attribute %></td>
+                <td><%= attr.type %></td>
+                <td><%= attr.default %></td>
+                <td><%= attr.description %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </script>
+
+  <script type="text/template" id="tpl_example">
+    <% if (title !== '') { %>
+      <h3><%= title %></h3>
+    <% } %>
+    <div>
+      <%= html %>
+    </div>
+    <div>
+      <pre class="brush: html;toolbar: false;"><%= pre %></pre>
+    </div>
+  </script>
+
+  <script type="text/template" id="tpl_patterns_list">
+    <div class="page-header">
+      <h1>Patterns <small>The complete list</small></h1>
+    </div>
+  </script>
+  <script type="text/template" id="tpl_patterns_list_item">
+    <div class="media-body">
+      <h4><a href="#patterns/<%= id %>" title="<%= title %>"><%= title %></a></h4>
+      <%= description %>
+    </div>
+  </script>
+
   <!--  ** DOCS CONTENT ** -->
+
+  <!--  ** Patterns  ** -->
 
   <!-- TODO:
   [ ] Getting started
@@ -94,430 +290,152 @@ require([
 
   <!--  **** Adjust Text Size (accessibility) **** -->
   <script>
-    addPage({id: 'accessibility', title: 'Adjust Text Size', description: 'Easily change text size on a page.'});
+    addPattern({
+      id: 'accessibility',
+      title: 'Adjust Text Size',
+      description: 'Easily change text size on a page.',
+      attributes: [
+        {attribute: 'smallbtn', type: 'Selector', 'default': '', description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'Selector', 'default': '', description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'Selector', 'default': '', description: 'Selector used to activate large text on click.'}
+      ]
+    });
   </script>
   <script type="text/template" id="page_accessibility">
-    <div class="row">
-      <div class="span6">
-          <ul id="textAdjust" class="pat-accessibility"
-              data-pat-accessibility="smallbtn:.decrease-text;
-                                      normalbtn:.normal-text;
-                                      largebtn:.increase-text;">
-            <li>
-              <a href="." class="decrease-text"><i class="icon-minus-sign"></i>Decrease Text Size</a>
-            </li>
-            <li>
-              <a href="." class="normal-text"><i class="icon-circle"></i>Normal Text Size</a>
-            </li>
-            <li>
-              <a href="." class="increase-text"><i class="icon-plus-sign"></i>Increase Text Size</a>
-            </li>
-        </ul>
-        <pre class="brush: html;toolbar:false;">
-&lt;ul class=&quot;pat-accessibility&quot;
-              data-pat-accessibility=&quot;smallbtn:.decrease-text;
-                                      normalbtn:.normal-text;
-                                      largebtn:.increase-text;&quot;&gt;
-    &lt;li&gt;
-      &lt;a href=&quot;.&quot; class=&quot;decrease-text&quot;&gt;Decrease Text Size&lt;/a&gt;
-    &lt;/li&gt;
-    &lt;li&gt;
-      &lt;a href=&quot;.&quot; class=&quot;normal-text&quot;&gt;Normal Text Size&lt;/a&gt;
-    &lt;/li&gt;
-    &lt;li&gt;
-      &lt;a href=&quot;.&quot; class=&quot;increase-text&quot;&gt;Increase Text Size&lt;/a&gt;
-    &lt;/li&gt;
-&lt;/ul&gt;
-        </pre>
-      </div>
-    </div>
 
-<h2>Directions</h2> 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper <strong>tincidunt nunc</strong>, at interdum est vehicula non. Phasellus viverra laoreet sapien, quis bibendum enim facilisis eget. Praesent rhoncus nisi lectus, vitae blandit magna posuere vitae. Cras sagittis placerat leo, nec faucibus urna fermentum non. 
-<ul>
-<li>Step 1 <br />
-<p>Do this first. Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet <strong> Strong Text Here</strong>. Duis imperdiet malesuada mauris ac bl</p>
-</li>
-<li>Step 2 <br />
-Do this second. Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet sit amet justo eu vestibulum. Duis imperdiet malesuada mauris ac bl</li>
-</ul>
-
-Sed turpis mi, facilisis non enim at, posuere aliquam est. Sed imperdiet sit amet justo eu vestibulum. Duis imperdiet malesuada mauris ac blandit. Nulla id lorem quis leo interdum lacinia. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse dictum posuere nibh, sit amet vestibulum massa hendrerit ac.
-
-Donec sagittis, elit sit amet faucibus bibendum</p>
-
-<h4>Data Attributes</h4>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>
-                Attribute
-              </th>
-              <th>
-                Default
-              </th>
-              <th>
-                Description
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>smallbtn</td>
-              <td></td>
-              <td>selector used to set small text size</td>
-            </tr>
-            <tr>
-              <td>normalbtn</td>
-              <td></td>
-              <td>selector used to set normal text size</td>
-            </tr>
-            <tr>
-              <td>largebtn</td>
-              <td></td>
-              <td>selector used to set large text size</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-          </tbody>
-        </table>
-
-
-    </div>
+  </script>
+  <script type="text/example" class="example-accessibility" data-title="Default">
+    <ul id="textAdjust" class="pat-accessibility"
+        data-pat-accessibility="smallbtn:.decrease-text;
+                                normalbtn:.normal-text;
+                                largebtn:.increase-text;">
+      <li>
+        <a href="." class="decrease-text"><i class="icon-minus-sign"></i>Decrease Text Size</a>
+      </li>
+      <li>
+        <a href="." class="normal-text"><i class="icon-circle"></i>Normal Text Size</a>
+      </li>
+      <li>
+        <a href="." class="increase-text"><i class="icon-plus-sign"></i>Increase Text Size</a>
+      </li>
+    </ul>
   </script>
  
   <!--  **** Cookie Directive **** -->
+  <script>
+    addPattern({
+      id: 'cookiedirective',
+      title: 'Cookie Directive',
+      description: 'Check for cookies, ask to permit them.',
+      attributes: []
+    });
+  </script>
   <script type="text/template" id="page_cookiedirective">
-    <h3>Note: In order to see the "you must enable cookies" message, disable cookies in your browser and refresh this page</h3>
-    <div class="row">
-      <div class="span6">
-          <div class="pat-cookiedirective">
-            <div class="login">
-            </div>
-          </div>
-        <pre class="brush: html;toolbar:false;">
-          &lt;div class=&quot;pat-cookiedirective&quot;&gt;
-            &lt;div class=&quot;login&quot;&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        </pre>
 
-          <p>The cookie accepting the use of cookies is <strong id="cookievalue">undefined</strong></p>
-          <a class="btn" id="removedemocookie">Remove Cookie & Refresh page</a>
-
+  </script>
+  <script type="text/example" class="example-cookiedirective" data-title="Default">
+    <div class="pat-cookiedirective">
+      <div class="login">
       </div>
     </div>
   </script>
 
   <!--  **** Expose **** -->
+  <script>
+    addPattern({
+      id: 'expose',
+      title: 'Expose',
+      description: 'Highlight the focused element.',
+      attributes: []
+    });
+  </script>
   <script type="text/template" id="page_expose">
-    <div class="row">
-        <div class="span6">
-          <form id="mockup-expose" class="form-horizontal pat-expose">
-            <h3>Expose on focus event (default)</h3>
-            <div class="control-group">
-              <label class="control-label" for="inputEmail">Email</label>
-              <div class="controls">
-                <input type="text" id="inputEmail" placeholder="Email">
-              </div>
-            </div>
-            <div class="control-group">
-              <label class="control-label" for="inputPassword">Password</label>
-              <div class="controls">
-                <input type="password" id="inputPassword" placeholder="Password">
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="controls">
-                <label class="checkbox">
-                  <input type="checkbox"> Remember me
-                </label>
-                <button type="submit" class="btn">Sign in</button>
-              </div>
-            </div>
-          </form>
-          <pre class="brush: html;toolbar: false;">
-&lt;form id="mockup-expose" class="form-horizontal pat-expose"&gt;
-  ...
-&lt;/form&gt;</pre>
-        </div>
-        <div class="span6">
-          <h3>Expose on hover</h3>
-          <p>
-            <button type="submit"
-                class="btn btn-large pat-expose"
-                data-pat-expose="triggers:hover">Hover over this button</button>
-          </p>
-          <pre class="brush: html;toolbar: false;">
-&lt;button type="submit"
-    class="btn btn-large pat-expose"
-    data-pat-expose="triggers:hover"&gt;Hover over this button&lt;/button&gt;</pre>
+
+  </script>
+  <script type="text/example" class="example-expose" data-title="Expose on focus event (default)">
+    <form id="mockup-expose" class="form-horizontal pat-expose">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Email</label>
+        <div class="controls">
+          <input type="text" id="inputEmail" placeholder="Email">
         </div>
       </div>
-
-      <h4>Data Attributes</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>
-              Attribute
-            </th>
-            <th>
-              Default
-            </th>
-            <th>
-              Description
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>blah attribute</td>
-            <td></td>
-            <td>something</td>
-          </tr>
-          <tr>
-            <td>blahh attribute 2</td>
-            <td></td>
-            <td>something</td>
-          </tr>
-          <tr>
-            <td>blahh attribute 3</td>
-            <td></td>
-            <td>something</td>
-          </tr>
-          <tr>
-            <td>blahh attribute 4</td>
-            <td></td>
-            <td>something</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">Password</label>
+        <div class="controls">
+          <input type="password" id="inputPassword" placeholder="Password">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox"> Remember me
+          </label>
+          <button type="submit" class="btn">Sign in</button>
+        </div>
+      </div>
+    </form>
+  </script>
+  <script type="text/example" class="example-expose" data-title="Expose on hover">
+    <button type="submit"
+            class="btn btn-large pat-expose"
+            data-pat-expose="triggers:hover">Hover over this button</button>
   </script>
 
   <!--  **** Livesearch **** -->
-  <script type="text/template" id="page_livesearch">
-    <div class="row">
-        <div class="span6">
-          <h2>Default</h2>
-          <div class="pat-livesearch"
-              data-pat-livesearch="ajaxvocabulary: /search.json;">
-            <input type="text" class="pat-livesearch-input" placeholder="Search" />
-            <div class="pat-livesearch-container">
-              <div class="pat-livesearch-results">
-
-              </div>
-            </div>
-          </div>
-          <pre class="brush: html;toolbar: false;">
-&lt;div class="pat-livesearch"
-  data-pat-livesearch="ajaxvocabulary: /search.json;"&gt;
-  &lt;input type="text" class="pat-livesearch-input"
-    placeholder="Search" /&gt;
-  &lt;div class="pat-livesearch-container"&gt;
-    &lt;div class="pat-livesearch-results"&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-        </div>
-      </div>
-      <div>
-        <h4>Data Attributes</h4>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>
-                Attribute
-              </th>
-              <th>
-                Type
-              </th>
-              <th>
-                Default
-              </th>
-              <th>
-                Description
-              </th>
-            </tr>
-          </thead>
-                    <tbody>
-            <tr>
-              <td>ajaxvocabulary</td>
-              <td>String</td>
-              <td></td>
-              <td>The url that will be of the server side page that will be queried.</td>
-            </tr>
-            <tr>
-              <td>delay</td>
-              <td>Integer</td>
-              <td>200</td>
-              <td>Delay in ms after user types before searching.</td>
-            </tr>
-            <tr>
-              <td>highlight</td>
-              <td>String</td>
-              <td>'pat-livesearch-highlight'</td>
-              <td>CSS class that will be used to highlight items on keyboard navigation.</td>
-            </tr>
-            <tr>
-              <td>minimumInputLength</td>
-              <td>Integer</td>
-              <td>3</td>
-              <td>Number of characters user must type before search begins.</td>
-            </tr>
-            <tr>
-              <td>input</td>
-              <td>Selector</td>
-              <td>'.pat-livesearch-input'</td>
-              <td>Selector for element that will be used for the livesearch input.</td>
-            </tr>
-            <tr>
-              <td>toggleTarget</td>
-              <td>Selector</td>
-              <td>'.pat-livesearch-container'</td>
-              <td>Selector for element that will be shown when results are found.</td>
-            </tr>
-            <tr>
-              <td>toggleClass</td>
-              <td>String</td>
-              <td>'show'</td>
-              <td>CSS class that will be added to target toggle element when results are found.</td>
-            </tr>
-            <tr>
-              <td>positionToggleWithInput</td>
-              <td>Boolean</td>
-              <td>true</td>
-              <td>Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.</td>
-            </tr>
-            <tr>
-              <td>setPosition</td>
-              <td>Function</td>
-              <td>
-<pre class="brush: javascript;toolbar: false;">
-setPosition: function() {
-  var self = this;
-  if (self.options.positionToggleWithInput) {
-    var top = self.$input.position().top + self.$input.outerHeight();
-    self.$toggle.css({'top': top+'px'});
-  }
-}</pre>
-              </td>
-              <td>Function which will be used to set the position of the toggle element.</td>
-            </tr>
-            <tr>
-              <td>resultsTarget</td>
-              <td>Selector</td>
-              <td>'.pat-livesearch-results'</td>
-              <td>Selector for element where results from the server will be inserted.</td>
-            </tr>
-            <tr>
-              <td>resultContainerTemplate</td>
-              <td>String</td>
-              <td>'&lt;ul&gt;&lt;/ul&gt;'</td>
-              <td>Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used.</td>
-            </tr>
-            <tr>
-              <td>resultContainerTemplateSelector</td>
-              <td>Selector</td>
-              <td></td>
-              <td>Selector for an element in the DOM to use in place of resultContainerTemplate.</td>
-            </tr>
-            <tr>
-              <td>resultSelector</td>
-              <td>Selector</td>
-              <td>'.pat-livesearch-result'</td>
-              <td>Will be used to select result items from within the result container.</td>
-            </tr>
-            <tr>
-              <td>resultTemplate</td>
-              <td>String</td>
-              <td>
+  <script type="text/example" id="ls_attr_resultTemplate">
 <pre>
 '&lt;li class="pat-livesearch-result pat-livesearch-type-&lt;%= Type %&gt;"&gt;' +
   '&lt;a class="pat-livesearch-result-title" href="&lt;%= getURL %&gt;"&gt;' +
     '&lt;%= Title %&gt;' +
   '&lt;/a&gt;' +
   '&lt;p class="pat-livesearch-result-desc"&gt;&lt;%= Description %&gt;&lt;/p&gt;' +
-'&lt;/li&gt;'</pre>
-              </td>
-              <td>Template for a single result.</td>
-            </tr>
-            <tr>
-              <td>resultTemplateSelector</td>
-              <td>String</td>
-              <td></td>
-              <td>Selector for element to be used in place of resultTemplate.</td>
-            </tr>
-            <tr>
-              <td>helpTemplate</td>
-              <td>String</td>
-              <td>'&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;'</td>
-              <td>Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.'</td>
-            </tr>
-            <tr>
-              <td>helpTemplateSelector</td>
-              <td>Selector</td>
-              <td></td>
-              <td>Element in the DOM to be used instead of helpTemplate.</td>
-            </tr>
-            <tr>
-              <td>typeMoreTemplate</td>
-              <td>String</td>
-              <td>'Type <%= more %> more characters to search.'</td>
-              <td>Template for message which is displayed if the current input length is less than minimumInputLength.</td>
-            </tr>
-            <tr>
-              <td>typeMoreTemplateSelector</td>
-              <td>Selector</td>
-              <td></td>
-              <td>Element in the DOM to be used instead of typeMoreTemplate.</td>
-            </tr>
-            <tr>
-              <td>typeMoreTemplateSelector</td>
-              <td>Selector</td>
-              <td></td>
-              <td>Element in the DOM to be used instead of typeMoreTemplate.</td>
-            </tr>
-            <tr>
-              <td>noResultsTemplate</td>
-              <td>String</td>
-              <td>'No results found.'</td>
-              <td>Template for message that is displayed after a search when no results were found.</td>
-            </tr>
-            <tr>
-              <td>noResultsTemplateSelector</td>
-              <td>Selector</td>
-              <td></td>
-              <td>Element in the DOM to be used instead of noResultsTemplate.</td>
-            </tr>
-            <tr>
-              <td>searchingTemplate</td>
-              <td>String</td>
-              <td>'Searching...'</td>
-              <td>Template for message which will be displayed after a search has started and before it has ended.</td>
-            </tr>
-            <tr>
-              <td>searchingTemplateSelector</td>
-              <td>Selector</td>
-              <td></td>
-              <td>Element in the DOM to be used instead of searchingTemplate.</td>
-            </tr>
-          </tbody>
-        </table>
-        <h4>Events</h4>
-        <p>TODO: Document the events.</p>
-      </div>
+'&lt;/li&gt;'</pre></script>
+  <script>
+    addPattern({
+      id: 'livesearch',
+      title: 'Live Search',
+      description: 'Dynamically query the server and display results.',
+      attributes: [
+        {attribute: 'ajaxvocabulary', type: 'String', 'default': '', description: 'The url that will be of the server side page that will be queried.'},
+        {attribute: 'delay', type: 'Integer', '200': '', description: 'Delay in ms after user types before searching.'},
+        {attribute: 'highlight', type: 'String', 'default': '"pat-livesearch-highlight"', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
+        {attribute: 'minimumInputLength', type: 'Integer', 'default': '3', description: 'Number of characters user must type before search begins.'},
+        {attribute: 'input', type: 'Selector', 'default': '".pat-livesearch-input"', description: 'Selector for element that will be used for the livesearch input.'},
+        {attribute: 'toggleTarget', type: 'Selector', 'default': '".pat-livesearch-container"', description: 'Selector for element that will be shown when results are found.'},
+        {attribute: 'toggleClass', type: 'String', 'default': '"show"', description: 'CSS class that will be added to target toggle element when results are found.'},
+        {attribute: 'positionToggleWithInput', type: 'Boolean', 'default': 'true', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
+        {attribute: 'setPosition', type: 'Function', 'default': '', description: 'Function which will be used to set the position of the toggle element.'},
+        {attribute: 'resultsTarget', type: 'Selector', 'default': '".pat-livesearch-results"', description: 'Selector for element where results from the server will be inserted.'},
+        {attribute: 'resultContainerTemplate', type: 'String', 'default': '"&lt;ul&gt;&lt;/ul&gt;"', description: 'Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used.'},
+        {attribute: 'resultContainerTemplateSelector', type: 'Selector', 'default': '', description: 'Selector for an element in the DOM to use in place of resultContainerTemplate.'},
+        {attribute: 'resultSelector', type: 'Selector', 'default': '".pat-livesearch-result"', description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultTemplate', type: 'String', 'default': $('#ls_attr_resultTemplate').html(), description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultTemplateSelector', type: 'Selector', 'default': '', description: 'Selector for element to be used in place of resultTemplate.'},
+        {attribute: 'helpTemplate', type: 'String', 'default': '"&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;"', description: "Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.'"},
+        {attribute: 'helpTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of helpTemplate."},
+        {attribute: 'typeMoreTemplate', type: 'String', 'default': '"Type <%= more %> more characters to search."', description: "Template for message which is displayed if the current input length is less than minimumInputLength."},
+        {attribute: 'typeMoreTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of typeMoreTemplate."},
+        {attribute: 'noResultsTemplate', type: 'String', 'default': '"No results found."', description: "Template for message that is displayed after a search when no results were found."},
+        {attribute: 'noResultsTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of noResultsTemplate."},
+        {attribute: 'searchingTemplate', type: 'String', 'default': '"Searching..."', description: "Template for message which will be displayed after a search has started and before it has ended."},
+        {attribute: 'searchingTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of searchingTemplate."}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_livesearch">
+
+  </script>
+  <script type="text/example" class="example-livesearch" data-title="Default">
+<div class="pat-livesearch"
+    data-pat-livesearch="ajaxvocabulary: /search.json;">
+  <input type="text" class="pat-livesearch-input" placeholder="Search" />
+  <div class="pat-livesearch-container">
+    <div class="pat-livesearch-results">
+
     </div>
+  </div>
+</div>
   </script>
 
   <!--  **** Modal **** -->
@@ -984,19 +902,26 @@ setPosition: function() {
 <body>
 
   <header>
-    <div class="container">
-      <div id="portal-logo">
-        <span class="plone-logo">
-          <span class="plone-logo-circle">
-            <span class="plone-circle-inner">
-              <span class="plone-dot-1"></span>
-              <span class="plone-dot-2"></span>
-              <span class="plone-dot-3"></span>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">
+            <span class="plone-logo">
+              <span class="plone-logo-circle">
+                <span class="plone-circle-inner">
+                  <span class="plone-dot-1"></span>
+                  <span class="plone-dot-2"></span>
+                  <span class="plone-dot-3"></span>
+                </span>
+              </span>
             </span>
-          </span>
-          <span class="plone-text">Plone</span>
-        </span>
-        Mockup(s)
+            Mockup
+          </a>
+          <ul class="nav">
+            <li><a href="#">Getting Started</a></li>
+            <li><a href="#patterns">Patterns</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
