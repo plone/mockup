@@ -141,8 +141,14 @@ define([
       $match.find('.searchButton').hide();     
 
       // add tinymce pattern
-      $root.find('.mce_editable').addClass('pat-tinymce');
-      
+      $root.find('.mce_editable').addClass('pat-tinymce').attr({
+        'data-pat-tinymce': JSON.stringify({
+          relatedItems: {
+            ajaxvocabulary: portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+          }
+        })
+      });
+
       // Use toggle to replace the toggleSelect from the select_all.js
       // First, remove the previous onclick
       $("[onclick^='toggleSelect']").attr('onclick', null);

@@ -82,7 +82,7 @@ define([
     name: 'tinymce',
     defaults: {
       relatedItems: {
-        attributes: ['UID', 'title:Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
+        attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
         batchSize: 20,
         basePath: '/',
         ajaxvocabulary: null,
