@@ -83,7 +83,7 @@ define([
           data.push([
               sortableitem,
               // crude way to sort by surname and name after first choice
-              self.sortable.apply(self, [cells.slice(1,2)]), 
+              self.sortable.apply(self, [cells.slice(1,2)]),
               self.sortable.apply(self, [cells.slice(0,1)]),
               this]);
       });
