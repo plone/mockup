@@ -89,7 +89,7 @@ define([
       var self = this;
       var marked = false;
 
-      for (var i=0;i<this.$target.length;i++){
+      for (var i=0;i<this.$target.length;i+=1){
         if (this.$target.eq(i)[0] === self.$el[0]){
           // If this is the toggle button, ignore checking
           continue;
