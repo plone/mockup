@@ -33,7 +33,7 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/jquery-cookie/jquery.cookie'
+  'jquery.cookie'
 ], function($, Base, Parser) {
   "use strict";
 

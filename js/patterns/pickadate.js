@@ -34,9 +34,9 @@
 define([
   'jquery',
   'js/patterns/base',
-  'jam/pickadate/_raw/lib/picker',
-  'jam/pickadate/_raw/lib/picker.date',
-  'jam/pickadate/_raw/lib/picker.time'
+  'picker',
+  'picker.date',
+  'picker.time'
 ], function($, Base) {
   "use strict";
 

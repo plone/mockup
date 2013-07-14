@@ -37,8 +37,8 @@ define([
   'jquery',
   'js/patterns/base',
   'jam/plone-select2/select2',
-  'jam/jquery.event.drag/jquery.event.drag',
-  'jam/jquery.event.drop/jquery.event.drop'
+  'jquery.event.drag',
+  'jquery.event.drop'
 ], function($, Base) {
   "use strict";
 

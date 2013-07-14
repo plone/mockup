@@ -10,7 +10,10 @@ requirejs.config({
       'tinymce': 'lib/tinymce/tinymce',
       'sinon': 'bower_components/sinon/lib/sinon',
       'sinon-fakexmlhttprequest': 'bower_components/sinon/lib/sinon/util/fake_xml_http_request',
-      'sinon-fakeserver' :'bower_components/sinon/lib/sinon/util/fake_server'
+      'sinon-fakeserver' :'bower_components/sinon/lib/sinon/util/fake_server',
+      'picker' :'bower_components/pickadate/lib/picker',
+      'picker.date' :'bower_components/pickadate/lib/picker.date',
+      'picker.time' :'bower_components/pickadate/lib/picker.time'
     },
     shim: {
       'underscore': { exports: 'window._' },
