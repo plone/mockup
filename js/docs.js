@@ -138,9 +138,10 @@ define([
 
   var Router = Backbone.Router.extend({
     routes: {
+      'patterns/(:id)': 'pattern',
       'patterns': 'patterns',
-      ':id': 'page',
-      'pattern/(:id)': 'pattern'
+      '': 'patterns',
+      ':id': 'page'
     },
 
     patterns: function() {
