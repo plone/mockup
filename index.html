@@ -15,11 +15,13 @@
   <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
   <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
-  <script src="node_modules/less/dist/less-1.4.1.js"></script>
-  <script src="jam/jquery/dist/jquery.js"></script>
-  <script src="bower_components/requirejs/require.js"></script>
 
-    <script>
+  <script src="node_modules/less/dist/less-1.4.1.js"></script>
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/requirejs/require.js"></script>
+  <script>
+
+// Helper utilities
 var pages = [];
 var patterns = [];
 addPattern = function(page) {
@@ -28,6 +30,8 @@ addPattern = function(page) {
 addPage = function(page) {
   pages.push(page);
 };
+
+// 
 require([
   'sinon',
   'js/docs'
