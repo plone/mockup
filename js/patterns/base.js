@@ -38,7 +38,8 @@ define([
 
   function _keysToObject(object, keys, value) {
     if (keys.length === 1) {
-      return object[keys[0]] = value;
+      object[keys[0]] = value;
+      return value;
     } else {
       var key = keys.shift();
       if (!object[key]) {
