@@ -166,7 +166,7 @@ define([
       }
       var page = collection.get(page_id);
       if (page) {
-        var view
+        var view;
         view = type === 'page' ? new PageView({model: page}) : new PatternView({model: page});
         App.show(view);
       }

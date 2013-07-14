@@ -151,7 +151,7 @@ require([
   });
 
   DocsApp.patterns.add(patterns);
-  DocsApp.pages.add(patterns);
+  DocsApp.pages.add(pages);
   DocsApp.initialize();
 });
 
@@ -264,6 +264,43 @@ require([
 
   <!--  ** DOCS CONTENT ** -->
 
+  <script>
+    addPage({
+      id: 'getting-started',
+      title: 'Getting Started',
+    });
+  </script>
+  <script type="text/template" id="page_getting-started">
+<p>
+  The only requirements to bootstrap <em>Plone mockup</em>
+  are <a href="http://git-scm.org/" title="git">git</a>
+  and <a href="http://www.nodejs.org/" title="npm">
+    <abbr title="Node package manager">npm</abbr>
+  </a>.
+</p>
+<p>
+  Make sure you use latest version of <code>nodejs</code>
+  and <code>npm</code>.
+</p>
+<p>Then check out the repository from GitHub:</p>
+<pre>
+git clone git://github.com/plone/mockup.git</pre>
+<p>And bootstrap your environment:</p>
+<pre>
+cd mockup
+make bootstrap</pre>
+
+<p>To build all bundles just do:</p>
+<pre>make</pre>
+
+<p>And you can run tests with:</p>
+<pre>make test</pre>
+<p>
+  Right now tests are
+  <img src="https://api.travis-ci.org/plone/mockup.png?branch=master"
+       alt="Build Status" />.
+</p>
+  </script>
   <!--  ** Patterns  ** -->
 
   <!-- TODO:
@@ -918,7 +955,7 @@ require([
             Mockup
           </a>
           <ul class="nav">
-            <li><a href="#">Getting Started</a></li>
+            <li><a href="#getting-started">Getting Started</a></li>
             <li><a href="#patterns">Patterns</a></li>
           </ul>
         </div>
