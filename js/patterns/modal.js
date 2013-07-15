@@ -28,8 +28,8 @@
 
 define([
   'jquery',
-  './base.js',
-  './backdrop.js',
+  'mockup-patterns-base',
+  'mockup-patterns-backdrop',
   'mockup-registry',
   'jquery.form'
 ], function($, Base, Backdrop, registry) {

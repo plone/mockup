@@ -43,6 +43,7 @@ define([
   var expect = chai.expect,
       mocha = window.mocha;
 
+  mocha.setup({globals: ['setTimeout', 'setInterval', 'clearTimeout', 'clearInterval']});
   mocha.setup('bdd');
   $.fx.off = true;
 

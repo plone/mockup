@@ -27,7 +27,7 @@
 
 define([
   'jquery',
-  './base.js'
+  'mockup-patterns-base'
 ], function($, Base) {
   "use strict";
 
@@ -37,8 +37,7 @@ define([
       message : 'You already clicked the submit button. ' +
                 'Do you really want to submit this form again?',
       guardKlass: 'submitting',
-      optOutKlass: 'allowMultiSubmit',
-      changedKlass: 'changed'
+      optOutKlass: 'allowMultiSubmit'
     },
     init: function() {
       var self = this;
