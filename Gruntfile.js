@@ -47,24 +47,26 @@ module.exports = function(grunt) {
           paths: ["less"]
         },
         files: {
+          "build/widgets.css": "less/widgets.less"
+        }
+      },
+      toolbar: {
+        options: {
+          paths: ["less"]
+        },
+        files: {
           "build/toolbar.css": "less/toolbar.less"
         }
       }
     },
     cssmin: {
-      widgets: {
-        combine: {
-          files: {
-            'build/widgets.min.css': ['build/widgets.css']
-          }
-        }
-      },
-      toolbar: {
-        combine: {
-          files: {
-            'build/toolbar.min.css': ['build/toolbar.css']
-          }
-        }
+      minify: {
+        expand: true,
+        cwd: 'build/',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/',
+        ext: '.min.css',
+        report: 'min'
       }
     }
   });

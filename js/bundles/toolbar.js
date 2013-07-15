@@ -34,7 +34,7 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'mokcup-jquery.iframe',
+  'mockup-jquery.iframe',
   'mockup-registry',
   'mockup-patterns-toggle',
   'mockup-patterns-modal',
