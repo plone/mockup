@@ -166,13 +166,19 @@ define([
                 '<input type="text" name="title" value="' + self.title + '" />' +
               '</div>' +
             '</div>' +
-            '<div class="control-group linkType image">' +
+            '<div class="control-group linkType externalImage">' +
+              '<label>' + self.options.text.externalImage + '</label>' +
+              '<div class="controls">' +
+                '<input type="text" name="externalImage" value="' + self.externalImage + '" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="control-group linkType image externalImage">' +
               '<label>' + self.options.text.alt + '</label>' +
               '<div class="controls">' +
                 '<input type="text" name="alt" value="' + self.alt + '" />' +
               '</div>' +
             '</div>' +
-            '<div class="control-group linkType image">' +
+            '<div class="control-group linkType image externalImage">' +
               '<label>' + self.options.text.imageAlign + '</label>' +
               '<div class="controls">' +
                 '<select name="align">' +
@@ -188,7 +194,6 @@ define([
                 self.buildScalesElement() +
               '</div>' +
             '</div>' +
-
             '<input type="submit" class="btn" name="cancel" value="' + self.options.text.cancelBtn + '" />' +
             '<input type="submit" class="btn btn-primary" name="insert" value="' + self.options.text.insertBtn + '" />' +
           '</div>' +
@@ -219,6 +224,7 @@ define([
       self.$alt = $('input[name="alt"]', self.modal.$modal);
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
+      self.$externalImage = $('input[name="externalImage"]', self.modal.$modal);
 
       /* modal els */
       self.$linkTypes = $('.linkTypes', self.modal.$modal);
@@ -282,6 +288,11 @@ define([
             url += '/@@images/image/' + scale;
           }
           return url;
+        }
+      } else if(self.linkType === 'externalImage'){
+        val = self.$externalImage.val();
+        if(val){
+          return val;
         }
       }
       return null;
@@ -371,7 +382,7 @@ define([
         if(!href){
           return; // just cut out if no url
         }
-        if(['image', 'externalimage'].indexOf(self.linkType) !== -1){
+        if(['image', 'externalImage'].indexOf(self.linkType) !== -1){
           self.updateImage(href);
         } else {
           /* regular anchor */
@@ -458,7 +469,7 @@ define([
 
       self.dom = self.tiny.dom;
       self.selection = self.tiny.selection;
-      self.external = self.email = self.subject = self.anchor = self.scale = self.align ='';
+      self.external = self.externalImage = self.email = self.subject = self.anchor = self.scale = self.align ='';
       self.tiny.focus();
 
       self.selectedElm = self.imgElm = self.selection.getNode();
@@ -516,7 +527,7 @@ define([
           }
           self.uid = self.uid.split('/@@images')[0].split('/image_')[0];
         } else {
-          self.linkType = 'internalImage';
+          self.linkType = 'externalImage';
           self.externalImage = self.src;
         }
         var klasses = self.klass.split(' ');
@@ -592,6 +603,7 @@ define([
       self.$subject.attr('value', self.subject);
       self.$external.attr('value', self.external);
       self.$alt.attr('value', self.alt);
+      self.$externalImage.attr('value', self.externalImage);
 
       // unselect existing
       self.setSelectElement(self.$target, self.target);
@@ -627,7 +639,8 @@ define([
         image: 'Image',
         imageAlign: 'Align',
         scale: 'Size',
-        alt: 'Alternative Text'
+        alt: 'Alternative Text',
+        externalImage: 'External Image URI'
       },
       scales: 'Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
               'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
@@ -675,7 +688,7 @@ define([
       if(self.imageModal === null){
         var options = $.extend(true, {}, self.options, {
           tinypattern: self,
-          linkTypes: ['image'],
+          linkTypes: ['image', 'externalImage'],
           initialLinkType: 'image',
           relatedItems: {
             baseCriteria: [{
