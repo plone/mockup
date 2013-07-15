@@ -519,415 +519,337 @@ make bootstrap</pre>
       ]
     });
   </script>
-  <script type="text/template" id="page_modal">
-    <div class="row">
-        <div class="span12">
-          <div class='alert alert-info'>
-            <u><strong>Data Attributes</strong></u>
-            <p>
-              Below are some notes about <em>some</em> of the available pattern
-              options. These are options that will be placed in the data-pat-modal attribute.
-            </p>
-            <dl>
-              <dt>position<dt>
-              <dd>
-                Optional, the default being <em>center middle</em>.
-                <br /><br />
-                In the form <em>&lt;horizontal position&gt; &lt;vertical position&gt;</em>,
-                where "&lt;horizontal position&gt;" is one of <em>center</em>, <em>left</em>,
-                <em>right</em>, and where "&lt;vertical position&gt;" is one of
-                <em>middle</em>, <em>top</em>, <em>bottom</em>. Ex: "center middle"
-                <br /><br />
-                If you wanted to position a modal on the left side of the page,
-                but didn't want it positioned 0px from the left, you'd want to use
-                the <em><strong>margin</strong></em> option.
-              <dd>
-
-              <dt>margin</dt>
-              <dd>
-                This is ultimately an integer value. Defined through a data attribute
-                it must be an integer value -- but defined through javascript, it
-                can be an integer value or a function that takes no arguments and
-                returns an integer value.
-                <br /><br />
-                The integer value represents a unit amount in pixels for a margin
-                on all 4 sides of the modal dialog.
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <p>
-            <a href="#data-attributes" class="btn btn-large btn-primary pat-modal">
-                Modal basic</a>
-           <pre class="brush: html;toolbar: false;">
-&lt;a href="#data-attributes"
-    class="btn btn-large btn-primary pat-modal"&gt;
-    Modal basic&lt;/a&gt;</pre>
-          </p>
-        </div>
-        <div class="span4">
-          <p>
-            <a href="something.html#content" id="modal2"
+  <script type="text/example" class="example-modal" title="">
+<a href="#data-attributes"
+   class="btn btn-large btn-primary pat-modal">Modal basic</a>
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="something.html#content" id="modal2"
                class="btn btn-large btn-primary pat-modal">
               Modal with remote content (AJAX)</a>
-            <pre class="brush: html;toolbar: false;">
-&lt;a href="something.html#content" id="modal2"
-    class="btn btn-large btn-primary pat-modal"&gt;
-  Modal with remote content (AJAX)&lt;/a&gt;</pre>
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <p>
-            <a href="#modal3"
-               class="btn btn-large btn-primary pat-modal"
-                  data-pat-modal="position:center bottom;
-                                  height:30%;
-                                  width:80%">
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal3"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="position:center bottom;
+                   height:30%;
+                   width:80%">
               Modal with custom position</a>
-            <div style="display:none">
-              <div id="modal3">
-                <h1>Modal with custom position and also width / height</h1>
-              </div>
-            </div>
-            <pre class="brush: html;toolbar: false;">
-&lt;a href="#modal3"
-    class="btn btn-large btn-primary pat-modal"
-    data-pat-modal="position:center bottom;
-                    height:30%;
-                    width:80%;"&gt;
-  Modal with custom position&lt;/a&gt;
-&lt;div style="display:none"&gt;
-  &lt;div id="modal3"&gt;
-    &lt;h1&gt;Modal with custom position and also width / height&lt;/h1&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-          </p>
-        </div>
-        <div class="span4">
-          <p>
-            <a href="#modal4"
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal4"
                class="btn btn-large btn-primary pat-modal">
               Modal with long text</a>
-            <div style="display:none">
-              <div id="modal4">
+  </script>
+  <script type="text/template" id="page_modal">
+  <div class='alert alert-info'>
+    <u><strong>Data Attributes</strong></u>
+    <p>
+      Below are some notes about <em>some</em> of the available pattern
+      options. These are options that will be placed in the data-pat-modal attribute.
+    </p>
+    <dl>
+      <dt>position<dt>
+      <dd>
+        Optional, the default being <em>center middle</em>.
+        <br /><br />
+        In the form <em>&lt;horizontal position&gt; &lt;vertical position&gt;</em>,
+        where "&lt;horizontal position&gt;" is one of <em>center</em>, <em>left</em>,
+        <em>right</em>, and where "&lt;vertical position&gt;" is one of
+        <em>middle</em>, <em>top</em>, <em>bottom</em>. Ex: "center middle"
+        <br /><br />
+        If you wanted to position a modal on the left side of the page,
+        but didn't want it positioned 0px from the left, you'd want to use
+        the <em><strong>margin</strong></em> option.
+      <dd>
 
-                <p>Did you know that more frozen bananas are sold right here on
-                  this boardwalk than anywhere on the OC? You stay on top of
-                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-                  you telling me you have a multi-stage trick with hidden
-                  identities? That coat costs more than your house! Well,
-                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
-                  example. You burn down the storage unit? Oh, most definitely.
-                  Oh…yeah…the guy in the…the $4,000 suit is holding the
-                  elevator for a guy who doesn't make that in three months.
-                  Come on!</p>
+      <dt>margin</dt>
+      <dd>
+        This is ultimately an integer value. Defined through a data attribute
+        it must be an integer value -- but defined through javascript, it
+        can be an integer value or a function that takes no arguments and
+        returns an integer value.
+        <br /><br />
+        The integer value represents a unit amount in pixels for a margin
+        on all 4 sides of the modal dialog.
+      </dd>
+    </dl>
+  </div>
+  <div style="display:none">
+    <div id="modal4">
 
-
-                <p>No! These are just strippers! Look how hot they are! Michael
-                  was having brunch with Sally Sitwell at a restaurant called
-                  Skip Church's Bistro. In addition to brunch, the restaurant
-                  was known for an item on the menu called the "Skip's
-                  Scramble", an omelet that contained everything on the menu.
-                  Do not order the Skip's Scramble. Look, you are playing
-                  adults…with fully formed libidos, not 2 young men playing
-                  grab-ass in the shower. I just don't want him to point out my
-                  cracker ass in front of Ann. How about a turtle? I've always
-                  loved those leathery little snappy faces. I believe you will
-                  find the dessert to be both engrossing and high-grossing! So
-                  we don't get dessert?</p>
-
-
-                <p>I'm in Vegas this week and would like to point out the Blue
-                  Man Group is *actually* hiring. The support group? Te quiero.
-                  English, please. I love you! Great, now I'm late. We need
-                  a name. Maybe "Operation Hot Mother." No, let's try to top
-                  that. (They never did.) Hey, Dad. Look at you. You're a year
-                  older…and a year closer to death. Buster: Oh yeah, I guess
-                  that's kind of funny. I am going to my spin class. I thought
-                  you had vertigo. Turns out he ended up getting too friendly
-                  with the teddy bear.</p>
-
-
-                <p>And although the intervention didn't work, it turned into
-                  one of the Bluth family's better parties. Te quiero. English,
-                  please. I love you! Great, now I'm late. I call it Tricks –-
-                  wait for it – Around The Office. The only thing I found in
-                  the fridge was a dead dove in a bag. Gob: You didn't eat
-                  that, did you?</p>
-
-
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Well excuse me
-                  for liking the way they frame my junk! Did you know that more
-                  frozen bananas are sold right here on this boardwalk than
-                  anywhere in the OC? Buster, what are you doing with mother's
-                  rape-horn?</p>
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Look at us,
-                  crying like a couple of girls on the last day of camp.
-                  Although George Michael had only got to second base, he'd
-                  gone in head first, like Pete Rose. I know she's a brownish
-                  area! With points! And I love her! Let me give that oatmeal
-                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
-                  ca caw, caw ca caw! It's as Ann as the nose on plain's
-                  face.</p>
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
 
 
-                <p>Let me give that oatmeal some brown sugar. So, what do you
-                  say? We got a basket full of father-son fun here. What's Kama
-                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
 
 
-                <p>So maybe you could start jete-ing, and stop je-terrorizing
-                  me! Don't call my escorts whores.</p>
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
 
 
-                <p>Yes. Lindsay and I are planning a night of heterosexual
-                  intercourse. Look, you are playing adults…with fully formed
-                  libidos, not 2 young men playing grab-ass in the shower. Ah
-                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
-                  Make love in your *own* hand, Mother! Fried cheese… with club
-                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
-                  spicy club sauce. Fried cheese… with club sauce. Popcorn
-                  shrimp… with club sauce. Chicken fingers… with spicy club
-                  sauce. I'm going to buy you the single healthiest call girl
-                  this town has ever seen.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
 
 
-                <p>I don't care if it takes from now till the end of
-                  Shrimpfest. You might wanna lean away from that fire since
-                  you're soaked in alcohol.</p>
-
-                <p>Did you know that more frozen bananas are sold right here on
-                  this boardwalk than anywhere on the OC? You stay on top of
-                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-                  you telling me you have a multi-stage trick with hidden
-                  identities? That coat costs more than your house! Well,
-                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
-                  example. You burn down the storage unit? Oh, most definitely.
-                  Oh…yeah…the guy in the…the $4,000 suit is holding the
-                  elevator for a guy who doesn't make that in three months.
-                  Come on!</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
 
 
-                <p>No! These are just strippers! Look how hot they are! Michael
-                  was having brunch with Sally Sitwell at a restaurant called
-                  Skip Church's Bistro. In addition to brunch, the restaurant
-                  was known for an item on the menu called the "Skip's
-                  Scramble", an omelet that contained everything on the menu.
-                  Do not order the Skip's Scramble. Look, you are playing
-                  adults…with fully formed libidos, not 2 young men playing
-                  grab-ass in the shower. I just don't want him to point out my
-                  cracker ass in front of Ann. How about a turtle? I've always
-                  loved those leathery little snappy faces. I believe you will
-                  find the dessert to be both engrossing and high-grossing! So
-                  we don't get dessert?</p>
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
 
 
-                <p>I'm in Vegas this week and would like to point out the Blue
-                  Man Group is *actually* hiring. The support group? Te quiero.
-                  English, please. I love you! Great, now I'm late. We need
-                  a name. Maybe "Operation Hot Mother." No, let's try to top
-                  that. (They never did.) Hey, Dad. Look at you. You're a year
-                  older…and a year closer to death. Buster: Oh yeah, I guess
-                  that's kind of funny. I am going to my spin class. I thought
-                  you had vertigo. Turns out he ended up getting too friendly
-                  with the teddy bear.</p>
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
 
 
-                <p>And although the intervention didn't work, it turned into
-                  one of the Bluth family's better parties. Te quiero. English,
-                  please. I love you! Great, now I'm late. I call it Tricks –-
-                  wait for it – Around The Office. The only thing I found in
-                  the fridge was a dead dove in a bag. Gob: You didn't eat
-                  that, did you?</p>
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Well excuse me
-                  for liking the way they frame my junk! Did you know that more
-                  frozen bananas are sold right here on this boardwalk than
-                  anywhere in the OC? Buster, what are you doing with mother's
-                  rape-horn?</p>
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Look at us,
-                  crying like a couple of girls on the last day of camp.
-                  Although George Michael had only got to second base, he'd
-                  gone in head first, like Pete Rose. I know she's a brownish
-                  area! With points! And I love her! Let me give that oatmeal
-                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
-                  ca caw, caw ca caw! It's as Ann as the nose on plain's
-                  face.</p>
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
 
 
-                <p>Let me give that oatmeal some brown sugar. So, what do you
-                  say? We got a basket full of father-son fun here. What's Kama
-                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
 
 
-                <p>So maybe you could start jete-ing, and stop je-terrorizing
-                  me! Don't call my escorts whores.</p>
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
 
 
-                <p>Yes. Lindsay and I are planning a night of heterosexual
-                  intercourse. Look, you are playing adults…with fully formed
-                  libidos, not 2 young men playing grab-ass in the shower. Ah
-                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
-                  Make love in your *own* hand, Mother! Fried cheese… with club
-                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
-                  spicy club sauce. Fried cheese… with club sauce. Popcorn
-                  shrimp… with club sauce. Chicken fingers… with spicy club
-                  sauce. I'm going to buy you the single healthiest call girl
-                  this town has ever seen.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
 
 
-                <p>I don't care if it takes from now till the end of
-                  Shrimpfest. You might wanna lean away from that fire since
-                  you're soaked in alcohol.</p>
-
-                <p>Did you know that more frozen bananas are sold right here on
-                  this boardwalk than anywhere on the OC? You stay on top of
-                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-                  you telling me you have a multi-stage trick with hidden
-                  identities? That coat costs more than your house! Well,
-                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
-                  example. You burn down the storage unit? Oh, most definitely.
-                  Oh…yeah…the guy in the…the $4,000 suit is holding the
-                  elevator for a guy who doesn't make that in three months.
-                  Come on!</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
 
 
-                <p>No! These are just strippers! Look how hot they are! Michael
-                  was having brunch with Sally Sitwell at a restaurant called
-                  Skip Church's Bistro. In addition to brunch, the restaurant
-                  was known for an item on the menu called the "Skip's
-                  Scramble", an omelet that contained everything on the menu.
-                  Do not order the Skip's Scramble. Look, you are playing
-                  adults…with fully formed libidos, not 2 young men playing
-                  grab-ass in the shower. I just don't want him to point out my
-                  cracker ass in front of Ann. How about a turtle? I've always
-                  loved those leathery little snappy faces. I believe you will
-                  find the dessert to be both engrossing and high-grossing! So
-                  we don't get dessert?</p>
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
 
 
-                <p>I'm in Vegas this week and would like to point out the Blue
-                  Man Group is *actually* hiring. The support group? Te quiero.
-                  English, please. I love you! Great, now I'm late. We need
-                  a name. Maybe "Operation Hot Mother." No, let's try to top
-                  that. (They never did.) Hey, Dad. Look at you. You're a year
-                  older…and a year closer to death. Buster: Oh yeah, I guess
-                  that's kind of funny. I am going to my spin class. I thought
-                  you had vertigo. Turns out he ended up getting too friendly
-                  with the teddy bear.</p>
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
 
 
-                <p>And although the intervention didn't work, it turned into
-                  one of the Bluth family's better parties. Te quiero. English,
-                  please. I love you! Great, now I'm late. I call it Tricks –-
-                  wait for it – Around The Office. The only thing I found in
-                  the fridge was a dead dove in a bag. Gob: You didn't eat
-                  that, did you?</p>
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Well excuse me
-                  for liking the way they frame my junk! Did you know that more
-                  frozen bananas are sold right here on this boardwalk than
-                  anywhere in the OC? Buster, what are you doing with mother's
-                  rape-horn?</p>
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Look at us,
-                  crying like a couple of girls on the last day of camp.
-                  Although George Michael had only got to second base, he'd
-                  gone in head first, like Pete Rose. I know she's a brownish
-                  area! With points! And I love her! Let me give that oatmeal
-                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
-                  ca caw, caw ca caw! It's as Ann as the nose on plain's
-                  face.</p>
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
 
 
-                <p>Let me give that oatmeal some brown sugar. So, what do you
-                  say? We got a basket full of father-son fun here. What's Kama
-                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
 
 
-                <p>So maybe you could start jete-ing, and stop je-terrorizing
-                  me! Don't call my escorts whores.</p>
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
 
 
-                <p>Yes. Lindsay and I are planning a night of heterosexual
-                  intercourse. Look, you are playing adults…with fully formed
-                  libidos, not 2 young men playing grab-ass in the shower. Ah
-                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
-                  Make love in your *own* hand, Mother! Fried cheese… with club
-                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
-                  spicy club sauce. Fried cheese… with club sauce. Popcorn
-                  shrimp… with club sauce. Chicken fingers… with spicy club
-                  sauce. I'm going to buy you the single healthiest call girl
-                  this town has ever seen.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
 
 
-                <p>I don't care if it takes from now till the end of
-                  Shrimpfest. You might wanna lean away from that fire since
-                  you're soaked in alcohol.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
 
-              </div>
-            </div>
-            <pre class="brush: html;toolbar: false;">
-&lt;a href="#modal4"
-    class="btn btn-large btn-primary pat-modal"&gt;
-  Modal with long text&lt;/a&gt;
-&lt;div style="display:none"&gt;
-  &lt;div id="modal4"&gt;
-    &lt;p&gt;Did you know ....&lt;/p&gt;
-    ...
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-          </p>
-        </div>
-        <div class="span4">
-          <div id='body'>
-            <a href="#embededmodal"
-               data-pat-modal="backdrop:#body"
-               class="btn btn-large btn-primary pat-modal">
-                Embedded Modal
-            </a>
-            <div id="embededmodal">
-              <p>This is text for an embedded modal.</p>
-              <p>It isn't very long...</p>
-            </div>
-          </div>
-          <pre class="brush: html;toolbar: false;">
-&lt;div id='body'&gt;
-  &lt;a href="#embededmodal"
-     data-pat-modal="backdrop:#body"
-     class="btn btn-large btn-primary pat-modal"&gt;
-      Embedded Modal
-  &lt;/a&gt;
-  &lt;div id="embededmodal"&gt;
-    &lt;p&gt;This is text for an embedded modal.&lt;/p&gt;
-    &lt;p&gt;It isn't very long...&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-        </div>
-      </div>
+
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
+
+
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
+
+
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
 
     </div>
+  </div>
   </script>
 
   <!--  **** Query String (Creating a Query for Collections) **** -->
