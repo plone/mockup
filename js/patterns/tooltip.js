@@ -39,7 +39,7 @@ define([
     defaults: {
       attribute: 'class',
       event_enter: 'mouseenter',
-      event_exit: 'mouseleave',
+      event_exit: 'mouseleave'
     },
     init: function() {
       var self = this;
