@@ -22,6 +22,8 @@ requirejs.config({
     shim: {
       'underscore': { exports: 'window._' },
       'backbone': { exports: 'window.Backbone' },
+      'picker.date': { deps: [ 'picker' ] },
+      'picker.time': { deps: [ 'picker' ] },
       'sinon': { exports: 'window.sinon' },
       'sinon-fakexmlhttprequest': { exports: 'window.sinon',  deps: [ 'sinon' ] },
       'sinon-fakeserver': { exports: 'window.sinon',  deps: [ 'sinon', 'sinon-fakexmlhttprequest' ] },

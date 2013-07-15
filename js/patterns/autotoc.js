@@ -44,9 +44,9 @@ define([
     },
     init: function() {
       var self = this;
-      
+
       self.$toc = $('<nav/>').addClass(self.options.klassTOC);
-      
+
       if (self.options.prependTo) {
         self.$toc.prependTo(self.options.prependTo);
       }
