@@ -420,7 +420,7 @@ make bootstrap</pre>
   [ ] tablesorter
   [ ] tinymce
   [ ] toc
-  [ ] tooltip
+  [x] tooltip
 
   -->
 
@@ -1212,6 +1212,29 @@ make bootstrap</pre>
   </tr>
 </table>
   </script>
+
+  <!--  **** Tooltip -->
+  <script>
+    addPattern({
+      id: 'tooltip',
+      title: 'Tooltip',
+      description: 'Show a tool tip on hover'
+    });
+  </script>
+  <script type="text/template" id="page_tooltip">
+
+  </script>
+  <script type="text/example" class="example-tooltip" data-title="Default">
+
+    <p href=".example-class" class="pat-tooltip">
+     Hover over this line to see a tooltip
+    </p>
+
+    <p class="tooltips example-class">
+      Setting the .example-class in the href makes this show up
+    </p>
+  </script>
+
 </head>
 
 <body>
