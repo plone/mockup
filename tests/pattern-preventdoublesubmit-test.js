@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/preventdoublesubmit.js'
+  'mockup-registry',
+  'mockup-patterns-preventdoublesubmit'
 ], function(chai, $, registry, PreventDoubleSubmit) {
   "use strict";
 

@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/tablesorter.js'
+  'mockup-registry',
+  'mockup-patterns-tablesorter'
 ], function(chai, $, registry, Tablesorter) {
   "use strict";
 

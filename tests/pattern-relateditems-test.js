@@ -34,8 +34,8 @@ define([
   'chai',
   'jquery',
   'sinon-fakeserver',
-  './../js/registry.js',
-  './../js/patterns/relateditems.js'
+  'mockup-registry',
+  'mockup-patterns-relateditems'
 ], function(chai, $, registry, RelatedItems) {
   "use strict";
 

@@ -28,7 +28,10 @@ preprocessors = {
 
 // list of files to exclude
 exclude = [
-  'tests/jquery.iframe-test.js'  // TODO: we need to fix this test
+  // TODO: we need to fix this tests
+  'tests/jquery.iframe-test.js',
+  'tests/pattern-formunloadalert-test.js',
+  'tests/pattern-preventdoublesubmit-test.js'
 ];
 
 // test results reporter to use
