@@ -7,7 +7,7 @@ requirejs.config({
       'underscore': 'bower_components/underscore/underscore',
       'backbone': 'bower_components/backbone/backbone',
       'select2': 'bower_components/select2/select2',
-      'tinymce': 'lib/tinymce/tinymce',
+      'tinymce': 'lib/tinymce/tinymce.min',
       'chai': 'bower_components/chai/chai',
       'sinon': 'bower_components/sinon/lib/sinon',
       'sinon-fakexmlhttprequest': 'bower_components/sinon/lib/sinon/util/fake_xml_http_request',

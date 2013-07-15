@@ -34,17 +34,10 @@ define([
   'jquery',
   './base.js',
   './relateditems.js',
-  './modal.js'
-], function($, Base, RelatedItems, Modal) {
+  './modal.js',
+  'tinymce'
+], function($, Base, RelatedItems, Modal, tinymce) {
   "use strict";
-
-  try{
-    // XXX if tinymce not loading, let's bail instead of giving errors.
-    if(tinymce === undefined){}
-  }catch(e){
-    console.log('Warning: tinymce not loaded.');
-    return;
-  }
 
   /* register the tinymce plugin */
   var Modal_ = Modal;
