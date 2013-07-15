@@ -21,10 +21,6 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false, window:false */
 
 if (window.jQuery) {
   define( "jquery", [], function () {
@@ -35,20 +31,20 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'jam/Patterns/src/registry',
-  'js/patterns/select2',
-  'js/patterns/pickadate',
-  'js/patterns/autotoc',
-  'js/patterns/accessibility',
-  'js/patterns/relateditems',
-  'js/patterns/formUnloadAlert',
-  'js/patterns/toggle',
-  'js/patterns/tinymce',
-  'js/patterns/picture',
-  'js/patterns/livesearch',
-  'js/patterns/querystring',
-  'js/patterns/preventdoublesubmit',
-  'js/patterns/formautofocus'
+  'mockup-registry',
+  'mockup-patterns-select2',
+  'mockup-patterns-pickadate',
+  'mockup-patterns-autotoc',
+  'mockup-patterns-accessibility',
+  'mockup-patterns-relateditems',
+  'mockup-patterns-formunloadalert',
+  'mockup-patterns-toggle',
+  'mockup-patterns-tinymce',
+  'mockup-patterns-picture',
+  'mockup-patterns-livesearch',
+  'mockup-patterns-querystring',
+  'mockup-patterns-preventdoublesubmit',
+  'mockup-patterns-formautofocus'
 ], function($, registry) {
   "use strict";
 
@@ -72,7 +68,7 @@ define([
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
-      var $match = $root.filter('.enableUnloadProtection');
+      $match = $root.filter('.enableUnloadProtection');
       $match = $match.add($root.find('.enableUnloadProtection'));
       $match.addClass('pat-formunloadalert');
       $match.attr({
@@ -138,7 +134,7 @@ define([
       $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
       $match.find('#searchGadget').addClass('pat-livesearch-input')
         .attr('autocomplete', 'off');
-      $match.find('.searchButton').hide();     
+      $match.find('.searchButton').hide();
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce').attr({

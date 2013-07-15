@@ -27,18 +27,13 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
   'underscore',
-  'js/patterns/base',
-  'js/patterns/select2',
-  'js/patterns/queryhelper'
+  'mockup-patterns-base',
+  'mockup-patterns-select2',
+  'mockup-patterns-queryhelper'
 ], function($, _, Base, Select2, QueryHelper) {
   "use strict";
 

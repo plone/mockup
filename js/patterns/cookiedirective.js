@@ -24,17 +24,12 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
-  'js/patterns/base',
-  'jam/jquery-cookie/jquery.cookie'
-], function($, Base, Parser) {
+  'mockup-patterns-base',
+  'jquery.cookie'
+], function($, Base) {
   "use strict";
 
   var CookieDirective = Base.extend({
@@ -58,6 +53,7 @@ define([
       return true;
     },
     acceptedCookies: function() {
+      /*jshint eqeqeq:false */
       var cookie = $.cookie(this.options.cookieName);
       if (cookie === undefined){
         return undefined;
@@ -117,12 +113,12 @@ define([
       if (self.options.shouldEnable) {
         if (self.$el.find(self.options.shouldEnableSelector).size() > 0){
           if (!self.cookiesEnabled()){
-            var div = $('<div></div>')
+            var new_div = $('<div></div>')
               .addClass('shouldenablecookies');
-            var msg = $('<div><span>'+self.options.shouldEnableMsg+'</span></div>')
+            var new_msg = $('<div><span>'+self.options.shouldEnableMsg+'</span></div>')
               .addClass('shouldenablecookiesmsg');
-            div.append(msg).append(msg);
-            self.$el.prepend(div);
+            new_div.append(new_msg).append(new_msg);
+            self.$el.prepend(new_div);
           }
         }
       }

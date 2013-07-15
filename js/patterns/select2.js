@@ -27,18 +27,13 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
-  'js/patterns/base',
-  'jam/plone-select2/select2',
-  'jam/jquery.event.drag/jquery.event.drag',
-  'jam/jquery.event.drop/jquery.event.drop'
+  'mockup-patterns-base',
+  'select2',
+  'jquery.event.drag',
+  'jquery.event.drop'
 ], function($, Base) {
   "use strict";
 
@@ -121,6 +116,7 @@ define([
               });
             })
             .drag(function(e, dd) {
+              /*jshint eqeqeq:false */
               var drop = dd.drop[0],
               method = $.data(drop || {}, "drop+reorder");
               /* XXX Cannot use triple equals here */
@@ -136,6 +132,8 @@ define([
               self.$el.select2("onSortEnd");
             })
             .drop("init", function(e, dd ) {
+              /*jshint eqeqeq:false */
+              /* XXX Cannot use triple equals here */
               return !(this == dd.drag);
             });
           return formatSelection(data, $container);

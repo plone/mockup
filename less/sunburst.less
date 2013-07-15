@@ -5,7 +5,7 @@
  @import "pattern.querystring.less";
  @import "pattern.relateditems.less";
  @import "pattern.tinymce.less";
- @import "../jam/font-awesome/less/font-awesome.less";
+ @import "../bower_components/font-awesome/less/font-awesome.less";
  @FontAwesomePath: "++resource++plone.app.widgets/font";
 
 
@@ -178,3 +178,23 @@ dl.actionMenu.activated dd {
     min-height: 5em;
   }
 }
+
+.modal-body .linkModal{
+    hr {
+        border-color: #eee;
+        border-style: solid;
+    }
+    .linkTypes{
+        label:hover{
+            cursor: pointer;
+        }
+    }
+    .control-group{
+        margin-top: 10px;
+    }
+    select, input{
+        font-size: 120%;
+        min-width: 300px;
+    }
+}
+

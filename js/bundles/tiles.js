@@ -1,7 +1,7 @@
 define([
   'jquery',
-  'jam/Patterns/src/registry',
-  'js/patterns/tiles/tile'
+  './../registry.js',
+  './../patterns/tiles/tile.js'
 ], function($, registry) {
   "use strict";
 

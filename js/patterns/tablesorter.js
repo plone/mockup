@@ -24,16 +24,11 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
-  'js/patterns/base',
-], function($, Base, Parser) {
+  'mockup-patterns-base'
+], function($, Base) {
   "use strict";
 
   var TableSorter = Base.extend({
@@ -76,8 +71,8 @@ define([
       $($this).children('.sortdirection').html(
           reverse ? '&#x25bc;': '&#x25b2;' );
 
-      index = $($this).parent().children('th').index($this),
-      data = [],
+      index = $($this).parent().children('th').index($this);
+      data = [];
       usenumbers = true;
       tbody.find('tr').each(function() {
           var cells, sortableitem;
@@ -88,7 +83,7 @@ define([
           data.push([
               sortableitem,
               // crude way to sort by surname and name after first choice
-              self.sortable.apply(self, [cells.slice(1,2)]), 
+              self.sortable.apply(self, [cells.slice(1,2)]),
               self.sortable.apply(self, [cells.slice(0,1)]),
               this]);
       });

@@ -73,7 +73,7 @@ define([
       self.type = TileType.get(self.options.type);
 
       // Get a COPY of the actions appropriate for this tile from it's type
-      self.actions = self.type.getActions(self.$el)
+      self.actions = self.type.getActions(self.$el);
 
       // Grab the element that should contain all the tile content, if it does
       // not exist, create it and append it to the tiles child list

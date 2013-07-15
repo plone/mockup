@@ -9,17 +9,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Mockup(s)</title>
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
-  <link href="jam/SyntaxHighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
-  <link href="less/shThemeGitHub.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet/less" type="text/css" href="less/widgets.less" />
-  <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
-  <script src="jam/less/dist/less-1.3.3.js"></script>
-  <script src="jam/jquery/dist/jquery.js"></script>
-  <script src="jam/require.js"></script>
 
-    <script>
+  <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
+
+  <script src="node_modules/less/dist/less-1.4.1.min.js"></script>
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/requirejs/require.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+
+// helper utilities
 var pages = [];
 var patterns = [];
 addPattern = function(page) {
@@ -28,11 +27,12 @@ addPattern = function(page) {
 addPage = function(page) {
   pages.push(page);
 };
+
+// 
 require([
   'sinon',
   'js/docs'
 ], function(sinon, DocsApp) {
-
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
     if(query === undefined){
@@ -50,7 +50,7 @@ require([
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;
-  server.autoRespondAfter = 500;
+  server.autoRespondAfter = 200;
 
   server.respondWith(/search.json/, function (xhr, id) {
     var items = [
@@ -149,6 +149,105 @@ require([
       results: results
     }));
   });
+
+  server.respondWith('GET', /relateditems-test.json/, function(xhr, id) {
+    var root = [
+      {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
+      {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
+      {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
+      {"UID": "asdf1234gsad", "Title": "Contact", "path": "/contact", "Type": "page"},
+      {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "page"},
+      {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "folder"},
+      {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "page"}
+    ];
+    var about = [
+      {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "page"},
+      {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "page"},
+      {"UID": "dfgsdfgj675", "Title": "Staff", "path": "/about/staff", "Type": "Folder"},
+      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "page"}
+    ];
+
+    var staff = [
+      {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "page"},
+      {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "page"}
+    ];
+    var searchables = about.concat(root).concat(staff);
+
+    var results = [];
+
+    // grab the page number and number of items per page -- note, page is 1-based from Select2
+    var batch = getQueryVariable(xhr.url, 'batch');
+    var page = 1;
+    var page_size = 10;
+    if(batch){
+      batch = $.parseJSON(batch);
+      page = batch.page;
+      page_size = batch.size;
+    }
+    page = page - 1;
+
+    var query = getQueryVariable(xhr.url, 'query');
+    var path = null;
+    var term = '';
+    if(query){
+      query = $.parseJSON(query);
+      term = query.criteria[0].v;
+      if(query.criteria.length > 1){
+        path = query.criteria[1].v;
+      }
+    }
+
+    // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
+    function search(items, term) {
+      results = [];
+      if (term === undefined) return searchables;
+      _.each(items, function(item) {
+        var q;
+        var keys = (item.UID + ' ' + item.Title + ' ' + item.path).toLowerCase();
+        if(typeof(term) === 'object'){
+          for(var i=0; i<term.length; i++){
+            q = term[i].toLowerCase();
+            if (keys.indexOf(q) > -1){
+              results.push(item);
+              break;
+            }
+          }
+        }else{
+          q = term.toLowerCase();
+          if (keys.indexOf(q) > -1) results.push(item);
+        }
+      });
+    }
+
+    function browse(items, q, p) {
+      results = [];
+      var path = p.substring(0, p.length-1);
+      var splitPath = path.split('/');
+      var fromPath = [];
+      _.each(items, function(item) {
+        var itemSplit = item.path.split('/');
+        if (item.path.indexOf(path) === 0 && itemSplit.length-1 == splitPath.length) {
+          fromPath.push(item);
+        }
+      });
+      if (q === undefined) return fromPath;
+      search(fromPath, q);
+    }
+
+    if (path) {
+      browse(searchables, term, path);
+    } else {
+      search(searchables, term);
+    }
+
+    xhr.respond(200, { "Content-Type": "application/json" },
+      JSON.stringify({
+        "total": results.length,
+        "results": results.slice(page*page_size, (page*page_size)+(page_size-1))
+    }));
+  });
+
+
 
   DocsApp.patterns.add(patterns);
   DocsApp.pages.add(pages);
@@ -312,11 +411,11 @@ make bootstrap</pre>
   [x] Expose
   [x] live search
   [ ] modal
-  [ ] pickadate
-  [ ] prevent double submit
-  [ ] prevent no change submit
+  [x] pickadate
+  [x] prevent double submit
+  [x] form unload alert
   [x] querystring
-  [ ] relateditems
+  [x] relateditems
   [ ] select2
   [ ] tablesorter
   [ ] tinymce
@@ -364,7 +463,16 @@ make bootstrap</pre>
       id: 'cookiedirective',
       title: 'Cookie Directive',
       description: 'Check for cookies, ask to permit them.',
-      attributes: []
+      attributes: [
+        {attribute: 'allowMsg', type: 'String', 'default': 'Allow', description: 'Text on button used to allow cookies.'},
+        {attribute: 'askPermissionMsg', type: 'String', 'default': 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
+        {attribute: 'cookieName', type: 'String', 'default': 'Allow_Cookies_For_Site', description: 'Name of cookie used to store the value of this setting.'},
+        {attribute: 'denyMsg', type: 'String', 'default': 'Deny', description: 'Text on button used to deny cookies.'},
+        {attribute: 'shouldAsk', type: 'Boolean', 'default': 'true', description: 'Should user be prompted about cookies?'},
+        {attribute: 'shouldEnable', type: 'Boolean', 'default': 'true', description: 'Display a message about enabling cookies if they are disabled.'},
+        {attribute: 'shouldEnableMsg', type: 'String', 'default': 'You should enable cookies to be able to login.', description: 'A message about enabling cookies if they are disabled, which will be displayed if shouldEnable is true.'},
+        {attribute: 'shouldEnableSelector', type: 'String', 'default': '.login', description: 'shouldEnable message selector.'}
+      ]
     });
   </script>
   <script type="text/template" id="page_cookiedirective">
@@ -383,7 +491,17 @@ make bootstrap</pre>
       id: 'expose',
       title: 'Expose',
       description: 'Highlight the focused element.',
-      attributes: []
+      attributes: [
+        {attribute: 'backdrop', type: 'String', 'default': 'body', description: 'Selector of parent element to use as backdrop.'},
+        {attribute: 'backdropCloseOnClick', type: 'Boolean', 'default': 'true', description: 'Cancel expose on click if true.'},
+        {attribute: 'backdropCloseOnEsc', type: 'Boolean', 'default': 'true', description: 'Cancel expose on escape if true.'},
+        {attribute: 'backdropKlass', type: 'String', 'default': 'backdrop', description: 'TODO'},
+        {attribute: 'backdropKlassActive', type: 'String', 'default': 'backdrop-active', description: 'TODO'},
+        {attribute: 'backdropOpacity', type: 'Float', 'default': '0.8', description: 'Backdrop opacity value between 0 and 1.'},
+        {attribute: 'backdropZIndex', type: 'Integer', 'default': '1000', description: 'Z-index of backdrop overlay.'},
+        {attribute: 'klassActive', type: 'String', 'default': 'active', description: 'TODO'},
+        {attribute: 'triggers', type: 'String', 'default': 'focusin', description: 'Events that cause the expose feature to be triggered.'}
+      ]
     });
   </script>
   <script type="text/template" id="page_expose">
@@ -476,462 +594,463 @@ make bootstrap</pre>
   </script>
 
   <!--  **** Modal **** -->
-  <script type="text/template" id="page_modal">
-    <div class="row">
-        <div class="span12">
-          <div class='alert alert-info'>
-            <u><strong>Data Attributes</strong></u>
-            <p>
-              Below are some notes about <em>some</em> of the available pattern
-              options. These are options that will be placed in the data-pat-modal attribute.
-            </p>
-            <dl>
-              <dt>position<dt>
-              <dd>
-                Optional, the default being <em>center middle</em>.
-                <br /><br />
-                In the form <em>&lt;horizontal position&gt; &lt;vertical position&gt;</em>,
-                where "&lt;horizontal position&gt;" is one of <em>center</em>, <em>left</em>,
-                <em>right</em>, and where "&lt;vertical position&gt;" is one of
-                <em>middle</em>, <em>top</em>, <em>bottom</em>. Ex: "center middle"
-                <br /><br />
-                If you wanted to position a modal on the left side of the page,
-                but didn't want it positioned 0px from the left, you'd want to use
-                the <em><strong>margin</strong></em> option.
-              <dd>
-
-              <dt>margin</dt>
-              <dd>
-                This is ultimately an integer value. Defined through a data attribute
-                it must be an integer value -- but defined through javascript, it
-                can be an integer value or a function that takes no arguments and
-                returns an integer value.
-                <br /><br />
-                The integer value represents a unit amount in pixels for a margin
-                on all 4 sides of the modal dialog.
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <p>
-            <a href="#data-attributes" class="btn btn-large btn-primary pat-modal">
-                Modal basic</a>
-           <pre class="brush: html;toolbar: false;">
-&lt;a href="#data-attributes"
-    class="btn btn-large btn-primary pat-modal"&gt;
-    Modal basic&lt;/a&gt;</pre>
-          </p>
-        </div>
-        <div class="span4">
-          <p>
-            <a href="something.html#content" id="modal2"
+  <script>
+    addPattern({
+      id: 'modal',
+      title: 'Modal',
+      description: 'A modal dialog.',
+      attributes: [
+        {attribute: 'backdrop', type: 'String', 'default': 'body', description: 'TODO'},
+        {attribute: 'backdropOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
+        {attribute: 'height', type: 'String', 'default': '', description: 'Example: 300px'},
+        {attribute: 'klass', type: 'String', 'default': 'modal', description: 'TODO'},
+        {attribute: 'klassLoading', type: 'String', 'default': 'modal-loading', description: 'TODO'},
+        {attribute: 'klassWrapper', type: 'String', 'default': 'modal-wrapper', description: 'TODO'},
+        {attribute: 'klassWrapperInner', type: 'String', 'default': 'modal-wrapper-inner', description: 'TODO'},
+        {attribute: 'margin', type: 'Function', 'default': '', description: 'TODO'},
+        {attribute: 'position', type: 'String', 'default': 'center middle', description: 'TODO'},
+        {attribute: 'template', type: 'Function', 'default': '', description: 'TODO'},
+        {attribute: 'templateOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
+        {attribute: 'triggers', type: 'String', 'default': 'focusin', description: 'TODO'},
+        {attribute: 'width', type: 'String', 'default': '', description: 'TODO'}
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="#data-attributes"
+   class="btn btn-large btn-primary pat-modal">Modal basic</a>
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="something.html#content" id="modal2"
                class="btn btn-large btn-primary pat-modal">
               Modal with remote content (AJAX)</a>
-            <pre class="brush: html;toolbar: false;">
-&lt;a href="something.html#content" id="modal2"
-    class="btn btn-large btn-primary pat-modal"&gt;
-  Modal with remote content (AJAX)&lt;/a&gt;</pre>
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="span4">
-          <p>
-            <a href="#modal3"
-               class="btn btn-large btn-primary pat-modal"
-                  data-pat-modal="position:center bottom;
-                                  height:30%;
-                                  width:80%">
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal3"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="position:center bottom;
+                   height:30%;
+                   width:80%">
               Modal with custom position</a>
-            <div style="display:none">
-              <div id="modal3">
-                <h1>Modal with custom position and also width / height</h1>
-              </div>
-            </div>
-            <pre class="brush: html;toolbar: false;">
-&lt;a href="#modal3"
-    class="btn btn-large btn-primary pat-modal"
-    data-pat-modal="position:center bottom;
-                    height:30%;
-                    width:80%;"&gt;
-  Modal with custom position&lt;/a&gt;
-&lt;div style="display:none"&gt;
-  &lt;div id="modal3"&gt;
-    &lt;h1&gt;Modal with custom position and also width / height&lt;/h1&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-          </p>
-        </div>
-        <div class="span4">
-          <p>
-            <a href="#modal4"
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal4"
                class="btn btn-large btn-primary pat-modal">
               Modal with long text</a>
-            <div style="display:none">
-              <div id="modal4">
+  </script>
+  <script type="text/template" id="page_modal">
+  <div class='alert alert-info'>
+    <u><strong>Data Attributes</strong></u>
+    <p>
+      Below are some notes about <em>some</em> of the available pattern
+      options. These are options that will be placed in the data-pat-modal attribute.
+    </p>
+    <dl>
+      <dt>position<dt>
+      <dd>
+        Optional, the default being <em>center middle</em>.
+        <br /><br />
+        In the form <em>&lt;horizontal position&gt; &lt;vertical position&gt;</em>,
+        where "&lt;horizontal position&gt;" is one of <em>center</em>, <em>left</em>,
+        <em>right</em>, and where "&lt;vertical position&gt;" is one of
+        <em>middle</em>, <em>top</em>, <em>bottom</em>. Ex: "center middle"
+        <br /><br />
+        If you wanted to position a modal on the left side of the page,
+        but didn't want it positioned 0px from the left, you'd want to use
+        the <em><strong>margin</strong></em> option.
+      <dd>
 
-                <p>Did you know that more frozen bananas are sold right here on
-                  this boardwalk than anywhere on the OC? You stay on top of
-                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-                  you telling me you have a multi-stage trick with hidden
-                  identities? That coat costs more than your house! Well,
-                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
-                  example. You burn down the storage unit? Oh, most definitely.
-                  Oh…yeah…the guy in the…the $4,000 suit is holding the
-                  elevator for a guy who doesn't make that in three months.
-                  Come on!</p>
+      <dt>margin</dt>
+      <dd>
+        This is ultimately an integer value. Defined through a data attribute
+        it must be an integer value -- but defined through javascript, it
+        can be an integer value or a function that takes no arguments and
+        returns an integer value.
+        <br /><br />
+        The integer value represents a unit amount in pixels for a margin
+        on all 4 sides of the modal dialog.
+      </dd>
+    </dl>
+  </div>
+  <div style="display:none">
+    <div id="modal4">
 
-
-                <p>No! These are just strippers! Look how hot they are! Michael
-                  was having brunch with Sally Sitwell at a restaurant called
-                  Skip Church's Bistro. In addition to brunch, the restaurant
-                  was known for an item on the menu called the "Skip's
-                  Scramble", an omelet that contained everything on the menu.
-                  Do not order the Skip's Scramble. Look, you are playing
-                  adults…with fully formed libidos, not 2 young men playing
-                  grab-ass in the shower. I just don't want him to point out my
-                  cracker ass in front of Ann. How about a turtle? I've always
-                  loved those leathery little snappy faces. I believe you will
-                  find the dessert to be both engrossing and high-grossing! So
-                  we don't get dessert?</p>
-
-
-                <p>I'm in Vegas this week and would like to point out the Blue
-                  Man Group is *actually* hiring. The support group? Te quiero.
-                  English, please. I love you! Great, now I'm late. We need
-                  a name. Maybe "Operation Hot Mother." No, let's try to top
-                  that. (They never did.) Hey, Dad. Look at you. You're a year
-                  older…and a year closer to death. Buster: Oh yeah, I guess
-                  that's kind of funny. I am going to my spin class. I thought
-                  you had vertigo. Turns out he ended up getting too friendly
-                  with the teddy bear.</p>
-
-
-                <p>And although the intervention didn't work, it turned into
-                  one of the Bluth family's better parties. Te quiero. English,
-                  please. I love you! Great, now I'm late. I call it Tricks –-
-                  wait for it – Around The Office. The only thing I found in
-                  the fridge was a dead dove in a bag. Gob: You didn't eat
-                  that, did you?</p>
-
-
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Well excuse me
-                  for liking the way they frame my junk! Did you know that more
-                  frozen bananas are sold right here on this boardwalk than
-                  anywhere in the OC? Buster, what are you doing with mother's
-                  rape-horn?</p>
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Look at us,
-                  crying like a couple of girls on the last day of camp.
-                  Although George Michael had only got to second base, he'd
-                  gone in head first, like Pete Rose. I know she's a brownish
-                  area! With points! And I love her! Let me give that oatmeal
-                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
-                  ca caw, caw ca caw! It's as Ann as the nose on plain's
-                  face.</p>
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
 
 
-                <p>Let me give that oatmeal some brown sugar. So, what do you
-                  say? We got a basket full of father-son fun here. What's Kama
-                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
 
 
-                <p>So maybe you could start jete-ing, and stop je-terrorizing
-                  me! Don't call my escorts whores.</p>
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
 
 
-                <p>Yes. Lindsay and I are planning a night of heterosexual
-                  intercourse. Look, you are playing adults…with fully formed
-                  libidos, not 2 young men playing grab-ass in the shower. Ah
-                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
-                  Make love in your *own* hand, Mother! Fried cheese… with club
-                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
-                  spicy club sauce. Fried cheese… with club sauce. Popcorn
-                  shrimp… with club sauce. Chicken fingers… with spicy club
-                  sauce. I'm going to buy you the single healthiest call girl
-                  this town has ever seen.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
 
 
-                <p>I don't care if it takes from now till the end of
-                  Shrimpfest. You might wanna lean away from that fire since
-                  you're soaked in alcohol.</p>
-
-                <p>Did you know that more frozen bananas are sold right here on
-                  this boardwalk than anywhere on the OC? You stay on top of
-                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-                  you telling me you have a multi-stage trick with hidden
-                  identities? That coat costs more than your house! Well,
-                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
-                  example. You burn down the storage unit? Oh, most definitely.
-                  Oh…yeah…the guy in the…the $4,000 suit is holding the
-                  elevator for a guy who doesn't make that in three months.
-                  Come on!</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
 
 
-                <p>No! These are just strippers! Look how hot they are! Michael
-                  was having brunch with Sally Sitwell at a restaurant called
-                  Skip Church's Bistro. In addition to brunch, the restaurant
-                  was known for an item on the menu called the "Skip's
-                  Scramble", an omelet that contained everything on the menu.
-                  Do not order the Skip's Scramble. Look, you are playing
-                  adults…with fully formed libidos, not 2 young men playing
-                  grab-ass in the shower. I just don't want him to point out my
-                  cracker ass in front of Ann. How about a turtle? I've always
-                  loved those leathery little snappy faces. I believe you will
-                  find the dessert to be both engrossing and high-grossing! So
-                  we don't get dessert?</p>
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
 
 
-                <p>I'm in Vegas this week and would like to point out the Blue
-                  Man Group is *actually* hiring. The support group? Te quiero.
-                  English, please. I love you! Great, now I'm late. We need
-                  a name. Maybe "Operation Hot Mother." No, let's try to top
-                  that. (They never did.) Hey, Dad. Look at you. You're a year
-                  older…and a year closer to death. Buster: Oh yeah, I guess
-                  that's kind of funny. I am going to my spin class. I thought
-                  you had vertigo. Turns out he ended up getting too friendly
-                  with the teddy bear.</p>
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
 
 
-                <p>And although the intervention didn't work, it turned into
-                  one of the Bluth family's better parties. Te quiero. English,
-                  please. I love you! Great, now I'm late. I call it Tricks –-
-                  wait for it – Around The Office. The only thing I found in
-                  the fridge was a dead dove in a bag. Gob: You didn't eat
-                  that, did you?</p>
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Well excuse me
-                  for liking the way they frame my junk! Did you know that more
-                  frozen bananas are sold right here on this boardwalk than
-                  anywhere in the OC? Buster, what are you doing with mother's
-                  rape-horn?</p>
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Look at us,
-                  crying like a couple of girls on the last day of camp.
-                  Although George Michael had only got to second base, he'd
-                  gone in head first, like Pete Rose. I know she's a brownish
-                  area! With points! And I love her! Let me give that oatmeal
-                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
-                  ca caw, caw ca caw! It's as Ann as the nose on plain's
-                  face.</p>
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
 
 
-                <p>Let me give that oatmeal some brown sugar. So, what do you
-                  say? We got a basket full of father-son fun here. What's Kama
-                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
 
 
-                <p>So maybe you could start jete-ing, and stop je-terrorizing
-                  me! Don't call my escorts whores.</p>
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
 
 
-                <p>Yes. Lindsay and I are planning a night of heterosexual
-                  intercourse. Look, you are playing adults…with fully formed
-                  libidos, not 2 young men playing grab-ass in the shower. Ah
-                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
-                  Make love in your *own* hand, Mother! Fried cheese… with club
-                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
-                  spicy club sauce. Fried cheese… with club sauce. Popcorn
-                  shrimp… with club sauce. Chicken fingers… with spicy club
-                  sauce. I'm going to buy you the single healthiest call girl
-                  this town has ever seen.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
 
 
-                <p>I don't care if it takes from now till the end of
-                  Shrimpfest. You might wanna lean away from that fire since
-                  you're soaked in alcohol.</p>
-
-                <p>Did you know that more frozen bananas are sold right here on
-                  this boardwalk than anywhere on the OC? You stay on top of
-                  her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-                  of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-                  you telling me you have a multi-stage trick with hidden
-                  identities? That coat costs more than your house! Well,
-                  obviously, I'm not a big guy. I'm not a Carl Weathers, par
-                  example. You burn down the storage unit? Oh, most definitely.
-                  Oh…yeah…the guy in the…the $4,000 suit is holding the
-                  elevator for a guy who doesn't make that in three months.
-                  Come on!</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
 
 
-                <p>No! These are just strippers! Look how hot they are! Michael
-                  was having brunch with Sally Sitwell at a restaurant called
-                  Skip Church's Bistro. In addition to brunch, the restaurant
-                  was known for an item on the menu called the "Skip's
-                  Scramble", an omelet that contained everything on the menu.
-                  Do not order the Skip's Scramble. Look, you are playing
-                  adults…with fully formed libidos, not 2 young men playing
-                  grab-ass in the shower. I just don't want him to point out my
-                  cracker ass in front of Ann. How about a turtle? I've always
-                  loved those leathery little snappy faces. I believe you will
-                  find the dessert to be both engrossing and high-grossing! So
-                  we don't get dessert?</p>
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
 
 
-                <p>I'm in Vegas this week and would like to point out the Blue
-                  Man Group is *actually* hiring. The support group? Te quiero.
-                  English, please. I love you! Great, now I'm late. We need
-                  a name. Maybe "Operation Hot Mother." No, let's try to top
-                  that. (They never did.) Hey, Dad. Look at you. You're a year
-                  older…and a year closer to death. Buster: Oh yeah, I guess
-                  that's kind of funny. I am going to my spin class. I thought
-                  you had vertigo. Turns out he ended up getting too friendly
-                  with the teddy bear.</p>
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
 
 
-                <p>And although the intervention didn't work, it turned into
-                  one of the Bluth family's better parties. Te quiero. English,
-                  please. I love you! Great, now I'm late. I call it Tricks –-
-                  wait for it – Around The Office. The only thing I found in
-                  the fridge was a dead dove in a bag. Gob: You didn't eat
-                  that, did you?</p>
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Well excuse me
-                  for liking the way they frame my junk! Did you know that more
-                  frozen bananas are sold right here on this boardwalk than
-                  anywhere in the OC? Buster, what are you doing with mother's
-                  rape-horn?</p>
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
 
 
-                <p>I believe you will find the dessert to be both engrossing
-                  and high-grossing! So we don't get dessert? Look at us,
-                  crying like a couple of girls on the last day of camp.
-                  Although George Michael had only got to second base, he'd
-                  gone in head first, like Pete Rose. I know she's a brownish
-                  area! With points! And I love her! Let me give that oatmeal
-                  some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
-                  ca caw, caw ca caw! It's as Ann as the nose on plain's
-                  face.</p>
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
 
 
-                <p>Let me give that oatmeal some brown sugar. So, what do you
-                  say? We got a basket full of father-son fun here. What's Kama
-                  Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
 
 
-                <p>So maybe you could start jete-ing, and stop je-terrorizing
-                  me! Don't call my escorts whores.</p>
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
 
 
-                <p>Yes. Lindsay and I are planning a night of heterosexual
-                  intercourse. Look, you are playing adults…with fully formed
-                  libidos, not 2 young men playing grab-ass in the shower. Ah
-                  coodle doodle doo, ah coodle doodle doo. One for the ladies.
-                  Make love in your *own* hand, Mother! Fried cheese… with club
-                  sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
-                  spicy club sauce. Fried cheese… with club sauce. Popcorn
-                  shrimp… with club sauce. Chicken fingers… with spicy club
-                  sauce. I'm going to buy you the single healthiest call girl
-                  this town has ever seen.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
 
 
-                <p>I don't care if it takes from now till the end of
-                  Shrimpfest. You might wanna lean away from that fire since
-                  you're soaked in alcohol.</p>
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
 
-              </div>
-            </div>
-            <pre class="brush: html;toolbar: false;">
-&lt;a href="#modal4"
-    class="btn btn-large btn-primary pat-modal"&gt;
-  Modal with long text&lt;/a&gt;
-&lt;div style="display:none"&gt;
-  &lt;div id="modal4"&gt;
-    &lt;p&gt;Did you know ....&lt;/p&gt;
-    ...
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-          </p>
-        </div>
-        <div class="span4">
-          <div id='body'>
-            <a href="#embededmodal"
-               data-pat-modal="backdrop:#body"
-               class="btn btn-large btn-primary pat-modal">
-                Embedded Modal
-            </a>
-            <div id="embededmodal">
-              <p>This is text for an embedded modal.</p>
-              <p>It isn't very long...</p>
-            </div>
-          </div>
-          <pre class="brush: html;toolbar: false;">
-&lt;div id='body'&gt;
-  &lt;a href="#embededmodal"
-     data-pat-modal="backdrop:#body"
-     class="btn btn-large btn-primary pat-modal"&gt;
-      Embedded Modal
-  &lt;/a&gt;
-  &lt;div id="embededmodal"&gt;
-    &lt;p&gt;This is text for an embedded modal.&lt;/p&gt;
-    &lt;p&gt;It isn't very long...&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-        </div>
-      </div>
 
-      <div id="data-attributes">
-        <h4>Data Attributes</h4>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>
-                Attribute
-              </th>
-              <th>
-                Default
-              </th>
-              <th>
-                Description
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>blah attribute</td>
-              <td></td>
-              <td>something</td>
-            </tr>
-            <tr>
-              <td>blahh attribute 2</td>
-              <td></td>
-              <td>something</td>
-            </tr>
-            <tr>
-              <td>blahh attribute 3</td>
-              <td></td>
-              <td>something</td>
-            </tr>
-            <tr>
-              <td>blahh attribute 4</td>
-              <td></td>
-              <td>something</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
 
+
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
+
+
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
+
+
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
 
     </div>
+  </div>
+  </script>
+
+  <!--  **** Pick A Date **** -->
+  <script>
+    addPattern({
+      id: 'pickadate',
+      title: 'Pick A Date',
+      description: 'Date picker.',
+      attributes: [
+        {attribute: 'date', type: 'Object', 'default': '{formatSubmit: "dd-mm-yyyy"}', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
+        {attribute: 'time', type: 'Object', 'default': '{formatSubmit: "HH:i"}', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
+        {attribute: 'separator', type: 'String', 'default': '" " (space)', description: 'Separator between date and time if both are enabled.'},
+        {attribute: 'klassClear', type: 'String', 'default': 'pat-pickadate-clear', description: 'Class name of element that is generated by pattern.'},
+        {attribute: 'klassDate', type: 'String', 'default': 'pat-pickadate-date', description: 'Class applied to date input.'},
+        {attribute: 'klassDateWrapper', type: 'String', 'default': 'pat-pickadate-date-wrapper', description: 'Class applied to extra wrapper div around date input.'},
+        {attribute: 'klassSeparator', type: 'String', 'default': 'pat-pickadate-separator', description: 'Class applied to separator.'},
+        {attribute: 'klassTime', type: 'String', 'default': 'pat-pickadate-time', description: 'Class applied to time input.'},
+        {attribute: 'klassTimeWrapper', type: 'String', 'default': 'pat-pickadate-time-wrapper', description: 'Class applied to wrapper div around time input.'},
+        {attribute: 'klassWrapper', type: 'String', 'default': 'pat-pickadate-wrapper', description: 'Class name of element that is generated by pattern.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_pickadate">
+
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Date and Time">
+    <input class="pat-pickadate"/>
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Date">
+    <input class="pat-pickadate" data-pat-pickadate="time:false"/>
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Time">
+    <input class="pat-pickadate" data-pat-pickadate="date:false"/>
+  </script>
+
+  <!--  **** Prevent Double Submit **** -->
+  <script>
+    addPattern({
+      id: 'preventdoublesubmit',
+      title: 'Prevent Double Submit',
+      description: 'Prevent a form from being submitted twice.',
+      attributes: [
+        {attribute: 'guardKlass', type: 'String', 'default': 'submitting', description: 'Class applied to submit button after it is clicked once.'},
+        {attribute: 'optOutKlass', type: 'String', 'default': 'allowMultiSubmit', description: 'Class used to opt-out a submit button from double-submit prevention.'},
+        {attribute: 'message', type: 'String', 'default': 'You already clicked the submit button. Do you really want to submit this form again?', description: 'Message to be displayed when "opt-out" submit button is clicked a second time.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_preventdoublesubmit">
+
+  </script>
+  <script type="text/example" class="example-preventdoublesubmit">
+    <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
+      <input
+        type="text"
+        value="submit this value please!"
+        />
+      <input
+        class="btn btn-large btn-primary"
+        type="submit"
+        value="Single submit"
+        />
+      <input
+        class="btn btn-large btn-primary allowMultiSubmit"
+        type="submit"
+        value="Multi submit"
+        />
+    </form>
+  </script>
+
+  <!--  **** Form Unload Alert **** -->
+  <script>
+    addPattern({
+      id: 'formunloadalert',
+      title: 'Form Unload Alert',
+      description: 'Alert user of possible data loss on unload form.',
+      attributes: [
+        {attribute: 'changingEvents', type: 'String', 'default': 'change keyup paste', description: 'Events on which to check for changes.'},
+        {attribute: 'changingFields', type: 'String', 'default': 'input,select,textarea,fileupload', description: 'Fields on which to check for changes.'},
+        {attribute: 'message', type: 'String', 'default': 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_formunloadalert">
+
+  </script>
+  <script type="text/example" class="example-formunloadalert">
+    <form class="pat-formunloadalert" onsubmit="javascript:return false;">
+      <input
+        type="text"
+        value=""
+        />
+      <select>
+        <option value="1">value 1</option>
+        <option value="2">value 2</option>
+      </select>
+      <input
+        class="btn btn-large btn-primary"
+        type="submit"
+        value="Submit"
+        />
+      <br />
+      <a href="/">Click here to go somewhere else</a>
+    </form>
   </script>
 
   <!--  **** Query String (Creating a Query for Collections) **** -->
@@ -968,6 +1087,71 @@ make bootstrap</pre>
     //-->
     <input class="pat-querystring"
            data-pat-querystring="{&quot;sortable_indexes&quot;: {&quot;sortable_title&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;, &quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;The item's title, transformed for sorting&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Sortable Title&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;end&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The end date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event end date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;effective&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was first published&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Effective date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;created&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The date an item was created&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creation date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;expires&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was expired&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Expiration date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;modified&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was last modified&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Modification date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;getId&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The short name of an item (used in the url)&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Short name (id)&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;start&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The start date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event start date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Creator&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;, &quot;plone.app.querystring.operation.string.currentUser&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The person that created an item&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creator&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.currentUser&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._currentUser&quot;, &quot;description&quot;: &quot;The user viewing the querystring results&quot;, &quot;title&quot;: &quot;Current logged in user&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;review_state&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;An item's workflow state (e.g.published)&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.WorkflowStates&quot;, &quot;title&quot;: &quot;Review state&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {&quot;private&quot;: {&quot;title&quot;: &quot;Private [private]&quot;}, &quot;visible&quot;: {&quot;title&quot;: &quot;Public draft [visible]&quot;}, &quot;internal&quot;: {&quot;title&quot;: &quot;Internal draft [internal]&quot;}, &quot;external&quot;: {&quot;title&quot;: &quot;Externally visible [external]&quot;}, &quot;published&quot;: {&quot;title&quot;: &quot;Published [published]&quot;}, &quot;internally_published&quot;: {&quot;title&quot;: &quot;Internally published [internally_published]&quot;}, &quot;pending&quot;: {&quot;title&quot;: &quot;Pending [pending]&quot;}}, &quot;sortable&quot;: true}, &quot;Subject&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Tags are used for organization of content&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.Keywords&quot;, &quot;title&quot;: &quot;Tag&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}}, &quot;indexes&quot;: {&quot;start&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The start date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event start date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;expires&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was expired&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Expiration date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;end&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The end date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event end date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Description&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;An item's description&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Description&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;effective&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was first published&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Effective date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Title&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Text search of an item's title&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Title&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;portal_type&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;An item's type (e.g. Event)&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.ReallyUserFriendlyTypes&quot;, &quot;title&quot;: &quot;Type&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {&quot;Document&quot;: {&quot;title&quot;: &quot;Page&quot;}, &quot;Image&quot;: {&quot;title&quot;: &quot;Image&quot;}, &quot;Collection&quot;: {&quot;title&quot;: &quot;Collection&quot;}, &quot;Event&quot;: {&quot;title&quot;: &quot;Event&quot;}, &quot;Link&quot;: {&quot;title&quot;: &quot;Link&quot;}, &quot;File&quot;: {&quot;title&quot;: &quot;File&quot;}, &quot;Discussion Item&quot;: {&quot;title&quot;: &quot;Comment&quot;}, &quot;News Item&quot;: {&quot;title&quot;: &quot;News Item&quot;}, &quot;Folder&quot;: {&quot;title&quot;: &quot;Folder&quot;}}, &quot;sortable&quot;: false}, &quot;created&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The date an item was created&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creation date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;modified&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was last modified&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Modification date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;getId&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The short name of an item (used in the url)&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Short name (id)&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;SearchableText&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Text search of an item's contents&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Searchable text&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;effectiveRange&quot;: {&quot;operations&quot;: [], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;Querying this is undefined&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Effective range&quot;, &quot;operators&quot;: {}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;sortable_title&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;, &quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;The item's title, transformed for sorting&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Sortable Title&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Creator&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;, &quot;plone.app.querystring.operation.string.currentUser&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The person that created an item&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creator&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.currentUser&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._currentUser&quot;, &quot;description&quot;: &quot;The user viewing the querystring results&quot;, &quot;title&quot;: &quot;Current logged in user&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;getObjPositionInParent&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.int.is&quot;, &quot;plone.app.querystring.operation.int.lessThan&quot;, &quot;plone.app.querystring.operation.int.greaterThan&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The order of an item in its parent folder&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Order in folder&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.int.lessThan&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Less than&quot;}, &quot;plone.app.querystring.operation.int.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Equals&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;isFolderish&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.boolean.isTrue&quot;, &quot;plone.app.querystring.operation.boolean.isFalse&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;Find items that can contain other objects&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Folder-like&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.boolean.isFalse&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isFalse&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;No&quot;}, &quot;plone.app.querystring.operation.boolean.isTrue&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isTrue&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Yes&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;path&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.relativePath&quot;, &quot;plone.app.querystring.operation.string.path&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The location of an item &quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Location&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.relativePath&quot;: {&quot;widget&quot;: &quot;RelativePathWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._relativePath&quot;, &quot;description&quot;: &quot;Use '../' to navigate to parent objects.&quot;, &quot;title&quot;: &quot;Relative path&quot;}, &quot;plone.app.querystring.operation.string.path&quot;: {&quot;widget&quot;: &quot;ReferenceWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._path&quot;, &quot;description&quot;: &quot;Location in the site structure&quot;, &quot;title&quot;: &quot;Absolute path&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;getRawRelatedItems&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.reference.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;Find items related to the selected items&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Related To&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.reference.is&quot;: {&quot;widget&quot;: &quot;ReferenceWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._referenceIs&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Equals&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;isDefaultPage&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.boolean.isTrue&quot;, &quot;plone.app.querystring.operation.boolean.isFalse&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;Find items that are the default view for their containing folder.&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Default Page&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.boolean.isFalse&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isFalse&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;No&quot;}, &quot;plone.app.querystring.operation.boolean.isTrue&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isTrue&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Yes&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;review_state&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;An item's workflow state (e.g.published)&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.WorkflowStates&quot;, &quot;title&quot;: &quot;Review state&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {&quot;private&quot;: {&quot;title&quot;: &quot;Private [private]&quot;}, &quot;visible&quot;: {&quot;title&quot;: &quot;Public draft [visible]&quot;}, &quot;internal&quot;: {&quot;title&quot;: &quot;Internal draft [internal]&quot;}, &quot;external&quot;: {&quot;title&quot;: &quot;Externally visible [external]&quot;}, &quot;published&quot;: {&quot;title&quot;: &quot;Published [published]&quot;}, &quot;internally_published&quot;: {&quot;title&quot;: &quot;Internally published [internally_published]&quot;}, &quot;pending&quot;: {&quot;title&quot;: &quot;Pending [pending]&quot;}}, &quot;sortable&quot;: true}, &quot;Subject&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Tags are used for organization of content&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.Keywords&quot;, &quot;title&quot;: &quot;Tag&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}}}"/>
+  </script>
+
+  <!--  **** TinyMCE -->
+  <script>
+    addPattern({
+      id: 'tinymce',
+      title: 'TinyMCE 4',
+      description: 'WYSIWYG Editor',
+      attributes: [
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-tinymce" data-title="Default">
+    <textarea class="pat-tinymce" data-pat-tinymce='{"relatedItems": { "ajaxvocabulary": "/relateditems-test.json"} }'></textarea>
+  </script>
+
+  <!--  **** Related Items **** -->
+  <script>
+    addPattern({
+      id: 'relateditems',
+      title: 'Related Items',
+      description: 'Group related items.',
+      attributes: [
+        {attribute: 'ajaxvocabulary', type: 'String', 'default': 'NO DEFAULT', description: 'TODO'},
+        {attribute: 'attributes', type: 'List', 'default': '["UID","Title", "Type", "path"]', description: 'TODO'},
+        {attribute: 'basePath', type: 'String', 'default': '/', description: 'TODO'},
+        {attribute: 'breadCrumbTemplate', type: 'String', 'default': '/&lt;a href="&lt;%= path %&gt;"&gt;&lt;%= text %&gt;&lt;/a&gt;', description: 'TODO'},
+        {attribute: 'breadCrumbTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
+        {attribute: 'breadCrumbsTemplate', type: 'String', 'default': '&lt;span&gt;&lt;a href="/"&gt;&lt;i class="icon-home"&gt;&lt;/i&gt;&lt;/a&gt;&lt;%= items %&gt;&lt;/span&gt;', description: 'TODO'},
+        {attribute: 'breadCrumbsTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
+        {attribute: 'browseText', type: 'String', 'default': 'Browse', description: 'TODO'},
+        {attribute: 'cache', type: 'Boolean', 'default': 'true', description: 'TODO'},
+        {attribute: 'closeOnSelect', type: 'Boolean', 'default': 'false', description: 'TODO'},
+        {attribute: 'dropdownCssClass', type: 'String', 'default': 'pat-relateditems-dropdown', description: 'TODO'},
+        {attribute: 'escapeMarkup', type: 'Function', 'default': 'function(text) { return text; }', description: 'TODO'},
+        {attribute: 'folderTypes', type: 'List', 'default': '["Folder"]', description: 'TODO'},
+        {attribute: 'homeText', type: 'String', 'default': 'home', description: 'TODO'},
+        {attribute: 'maximumSelectionSize', type: 'Integer', 'default': '-1', description: 'TODO'},
+        {attribute: 'multiple', type: 'Boolean', 'default': 'true', description: 'TODO'},
+        {attribute: 'orderable', type: 'Boolean', 'default': 'true', description: 'TODO'},
+        {attribute: 'resultTemplate', type: 'String', 'default': '', description: 'TODO'},
+        {attribute: 'resultTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
+        {attribute: 'searchText', type: 'String', 'default': 'Search', description: 'TODO'},
+        {attribute: 'selectionTemplate', type: 'String', 'default': '', description: 'TODO'},
+        {attribute: 'selectionTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
+        {attribute: 'separator', type: 'String', 'default': ',', description: 'TODO'},
+        {attribute: 'tabsTemplate', type: 'String', 'default': '', description: 'TODO'},
+        {attribute: 'tabsTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
+        {attribute: 'tokenSeparators', type: 'List', 'default': '[",", " "]', description: 'TODO'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_relateditems">
+
+  </script>
+  <script type="text/example" class="example-relateditems">
+    <input type="text" class="pat-relateditems"
+        data-pat-relateditems="width:30em;
+                               ajaxvocabulary:/relateditems-test.json" />
+  </script>
+  <script type="text/example" class="example-relateditems" data-title="Existing values, some bad">
+    <input type="text" class="pat-relateditems"
+        value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
+        data-pat-relateditems="width:30em;
+                               ajaxvocabulary:/relateditems-test.json" />
   </script>
 
 </head>

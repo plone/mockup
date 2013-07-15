@@ -25,16 +25,11 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
 
 define([
   'jquery',
-  'jam/Patterns/src/registry',
-  'jam/Patterns/src/core/logger'
-], function($, registry, logger, undefined) {
+  'mockup-registry'
+], function($, registry) {
   "use strict";
 
   function getName(name) {
@@ -43,7 +38,8 @@ define([
 
   function _keysToObject(object, keys, value) {
     if (keys.length === 1) {
-      return object[keys[0]] = value;
+      object[keys[0]] = value;
+      return value;
     } else {
       var key = keys.shift();
       if (!object[key]) {
@@ -90,12 +86,11 @@ define([
       }
     }
 
-    return $.extend(true, {}, options, elOptions)
+    return $.extend(true, {}, options, elOptions);
   }
 
   // Base Pattern
   var Base = function($el, options) {
-    this.log = logger.getLogger(this.name);
     this.$el = $el;
     if (this.parser) {
       this.options = $.extend(true, {},

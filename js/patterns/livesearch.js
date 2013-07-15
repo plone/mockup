@@ -24,20 +24,15 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
-  'js/patterns/base',
-  'js/patterns/toggle',
   'underscore',
-  'js/patterns/select2',
-  'js/patterns/queryhelper'
-], function($, Base, Toggle, _, Select2, QueryHelper) {
+  'mockup-patterns-base',
+  'mockup-patterns-toggle',
+  'mockup-patterns-select2',
+  'mockup-patterns-queryhelper'
+], function($, _, Base, Toggle, Select2, QueryHelper) {
   "use strict";
 
   var Livesearch = Base.extend({
@@ -233,6 +228,7 @@ define([
       if (event.type === 'searching') {
         container.html(self.renderHelp('searching', {}));
       } else {
+        self.renderedTerm = self.currentTerm;
         if (self.currentTerm === null || self.currentTerm.length < self.options.minimumInputLength) {
           var chars = self.currentTerm !== null ? self.options.minimumInputLength - self.currentTerm.length : self.options.minimumInputLength;
           container.html(self.renderHelp('typeMore', {more: chars}));
@@ -246,7 +242,6 @@ define([
             $.each(data, function(index, value){
               appendTo.append(self.applyTemplate('result', value));
             });
-            self.renderedTerm = self.currentTerm;
           } else {
             container.html(self.renderHelp('noResults', {}));
           }
@@ -311,7 +306,7 @@ define([
     },
 
     _keyEscape: function() {
-      this.hide();
+      this.$input.trigger('blur');
     },
 
     _keyEnter: function() {

@@ -1,9 +1,9 @@
 define([
   'jquery',
-  'jam/Patterns/src/registry',
   'underscore',
-  'backbone'
-], function($, registry, _, Backbone) {
+  'backbone',
+  'mockup-registry'
+], function($, _, Backbone, registry) {
 
   var Page = Backbone.Model.extend({
     defaults: {
@@ -56,7 +56,7 @@ define([
     render: function() {
       var self = this;
       var tpl = $('#tpl_pattern').html();
-      require(["js/patterns/"+self.model.get('id')], function (MainRouter) {
+      require(["mockup-patterns-"+self.model.get('id')], function (MainRouter) {
         self.$el.html(_.template(tpl, _.extend({
           examples: self.renderExamples()
         }, self.model.toJSON())));

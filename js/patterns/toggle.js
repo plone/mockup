@@ -24,15 +24,10 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
-  'js/patterns/base'
+  'mockup-patterns-base'
 ], function($, Base, undefined) {
   "use strict";
 
@@ -94,10 +89,10 @@ define([
       var self = this;
       var marked = false;
 
-      for (var i=0;i<this.$target.length;i++){
+      for (var i=0;i<this.$target.length;i+=1){
         if (this.$target.eq(i)[0] === self.$el[0]){
           // If this is the toggle button, ignore checking
-          continue
+          continue;
         }
         if (self.options.attribute === 'class') {
           if (this.$target.eq(i).hasClass(this.options.value)){

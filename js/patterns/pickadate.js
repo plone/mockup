@@ -25,18 +25,13 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-
 
 define([
   'jquery',
-  'js/patterns/base',
-  'jam/pickadate/_raw/lib/picker',
-  'jam/pickadate/_raw/lib/picker.date',
-  'jam/pickadate/_raw/lib/picker.time'
+  'mockup-patterns-base',
+  'picker',
+  'picker.date',
+  'picker.time'
 ], function($, Base) {
   "use strict";
 

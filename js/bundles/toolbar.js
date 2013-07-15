@@ -24,10 +24,6 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
 
 if (window.jQuery) {
   define( "jquery", [], function () {
@@ -38,12 +34,12 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'js/jquery.iframe',
-  'jam/Patterns/src/registry',
-  'js/patterns/toggle',
-  'js/patterns/modal',
-  'js/patterns/tinymce',
-  'js/bundles/widgets'
+  'mokcup-jquery.iframe',
+  'mockup-registry',
+  'mockup-patterns-toggle',
+  'mockup-patterns-modal',
+  'mockup-patterns-tinymce',
+  'mockup-bundles-widgets'
 ], function($, iframe, registry, Toggle, Modal, TinyMCE) {
   "use strict";
 
@@ -63,7 +59,7 @@ define([
 
     // make sure clicking on anything in the menu closes the toggled element
     $('.toolbar-dropdown .toolbar-dropdown-menu a').click(function(e) {
-        $(this).parents('.toolbar-dropdown').children('a').trigger('click')
+        $(this).parents('.toolbar-dropdown').children('a').trigger('click');
     });
 
     // at opening toolbar dropdown:

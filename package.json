@@ -1,41 +1,32 @@
 {
   "name": "plone-mockup",
   "version": "0.0.1",
-  "description": "Plone CMS mockup",
-  "homepage": "http://github.com/plone/mockup",
-  "jam": {
-    "dependencies": {
-      "sinon": ">=1.5.0",
-      "less": ">=1.3.1",
-      "SyntaxHighlighter": ">=3.0.83",
-      "chai":">=1.5.0",
-      "mocha":">=1.9.0",
-
-      "jquery": "==1.8.3",
-      "underscore": "==1.4.4",
-      "backbone": "==1.0.0",
-      "Patterns": "==1.3.0",
-      "plone-select2": "==3.4.0",
-      "pickadate": "==3.0.4",
-      "jquery-form": "==3.32.0",
-      "bootstrap": "==2.3.1",
-      "font-awesome": "==3.0.0",
-      "logging": "==1.0.0-jam.2",
-      "jquery.event.drag": "==2.2.0",
-      "jquery.event.drop": "==2.2.0",
-      "jquery-cookie": "==1.3.1",
-      "tinymce": "==4.0.0"
-    }
+  "description": "Plone CMS Mockup",
+  "homepage": "http://plone.github.io/mockup",
+  "devDependencies": {
+    "bower": "~0.10.0",
+    "grunt-cli": "~0.1.9",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-requirejs": "~0.4.0",
+    "grunt-contrib-less": "~0.5.0",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-karma": "~0.4.5",
+    "less": "1.4.1"
   },
   "maintainers": [
     {
       "name": "Rok Garbas",
       "email": "rok@garbas.si",
-      "web": "http://garbas.si"
+      "url": "http://garbas.si"
     }
   ],
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/plone/mockup.git"
+  },
   "bugs": {
-    "mail": "rok@garbas.si"
+    "url" : "https://github.com/plone/mockup/issues",
+    "email": "rok@garbas.si"
   },
   "licenses": [
     {

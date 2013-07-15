@@ -25,16 +25,13 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
+
 define([
   'jquery',
-  'js/patterns/base',
-  'js/patterns/backdrop',
-  'jam/Patterns/src/registry',
-  'jam/jquery-form/jquery.form'
+  'mockup-patterns-base',
+  'mockup-patterns-backdrop',
+  'mockup-registry',
+  'jquery.form'
 ], function($, Base, Backdrop, registry) {
   "use strict";
 
@@ -161,7 +158,7 @@ define([
                     url: $action.attr('href'),
                     error: function(xhr, textStatus, errorStatus) {
                       if (textStatus === 'timeout' && options.onTimeout) {
-                        options.onTimeout(modal, xhr, errorStatus);
+                        options.onTimeout(self.$modal, xhr, errorStatus);
 
                       // on "error", "abort", and "parsererror"
                       } else if (options.onError) {
@@ -437,7 +434,7 @@ define([
         if(modalWidth > wrapperInnerWidth) {
           absLeft = '0px';
         }
-        returnpos['left'] = absLeft;
+        returnpos.left = absLeft;
       }
       else if(horpos === 'right') {
         absRight =  margin + 'px';
@@ -446,8 +443,8 @@ define([
         if(modalWidth > wrapperInnerWidth) {
           absRight = '0px';
         }
-        returnpos['right'] = absRight;
-        returnpos['left'] = 'auto';
+        returnpos.right = absRight;
+        returnpos.left = 'auto';
       }
       // default, no specified location, is to center
       else {
@@ -457,7 +454,7 @@ define([
         if(modalWidth > wrapperInnerWidth) {
           absLeft = '0px';
         }
-        returnpos['left'] = absLeft;
+        returnpos.left = absLeft;
       }
 
       // -- VERTICAL POSITION -------------------------------------------------
@@ -468,7 +465,7 @@ define([
         if(modalHeight > wrapperInnerHeight) {
           absTop = '0px';
         }
-        returnpos['top'] = absTop;
+        returnpos.top = absTop;
       }
       else if(vertpos === 'bottom') {
         absBottom = margin + 'px';
@@ -477,8 +474,8 @@ define([
         if(modalHeight > wrapperInnerHeight) {
           absBottom = '0px';
         }
-        returnpos['bottom'] = absBottom;
-        returnpos['top'] = 'auto';
+        returnpos.bottom = absBottom;
+        returnpos.top = 'auto';
       }
       else {
         // default case, no specified location, is to center
@@ -488,7 +485,7 @@ define([
         if(modalHeight > wrapperInnerHeight) {
           absTop = '0px';
         }
-        returnpos['top'] = absTop;
+        returnpos.top = absTop;
       }
 
       return returnpos;
