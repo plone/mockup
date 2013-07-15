@@ -76,7 +76,7 @@ define([
               });
 
       // Index selection
-      self.$index = $('<select/>').attr('placeholder', 'Select...');
+      self.$index = $('<select><option></option></select>').attr('placeholder', self.options.placeholder);
 
       // list of indexes
       $.each(self.indexes, function(value, options) {
@@ -103,7 +103,7 @@ define([
       self.$index
         .patternSelect2({
             width: self.options.indexWidth,
-            placeholder: 'Select...'  //self.options.placeholder
+            placeholder: self.options.placeholder
         })
         .on("change", function(e) {
           self.removeValue();
