@@ -419,7 +419,7 @@ make bootstrap</pre>
   [x] select2
   [x] tablesorter
   [x] tinymce
-  [ ] toc
+  [x] toc
   [x] tooltip
 
   -->
@@ -1457,6 +1457,48 @@ make bootstrap</pre>
                             { "ajaxvocabulary": "/relateditems-test.json"} }'
         ></textarea>
     </form>
+  </script>
+
+  <!--  **** Table of Contents **** -->
+  <script>
+    addPattern({
+      id: 'autotoc',
+      title: 'Table of Contents',
+      description: 'Automatically generate a table of contents.',
+      attributes: [
+        {attribute: 'IDPrefix', type: 'String', 'default': 'autotoc-item-', description: 'Prefix used to generate ID.'},
+        {attribute: 'klassActive', type: 'String', 'default': 'active', description: 'Class used for active level.'},
+        {attribute: 'klassLevelPrefix', type: 'String', 'default': 'autotoc-level-', description: 'Class prefix used for the TOC levels.'},
+        {attribute: 'klassSection', type: 'String', 'default': 'autotoc-section', description: 'Class used for section in TOC.'},
+        {attribute: 'klassTOC', type: 'String', 'default': 'autotoc-nav', description: 'Class used for the TOC.'},
+        {attribute: 'levels', type: 'String', 'default': 'h1,h2,h3', description: 'Selectors used to find levels.'},
+        {attribute: 'scrollDuration', type: 'String', 'default': 'slow', description: 'Speed of scrolling.'},
+        {attribute: 'scrollEasing', type: 'String', 'default': 'swing', description: 'Easing to use while scrolling.'},
+        {attribute: 'section', type: 'String', 'default': 'section', description: 'Tag type to use for TOC.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_autotoc">
+
+  </script>
+  <script type="text/example" class="example-autotoc" data-title="Default">
+    <div class="pat-autotoc"
+         data-pat-autotoc="scrollDuration:slow;
+                           levels:h4,h5,h6;">
+      <h4>Title 1</h4>
+      <p>Mr. Zuckerkorn, you've been warned about touching. You said
+        spanking. It walked on my pillow! How about a turtle? I've always
+        loved those leathery little snappy faces.</p>
+      <h5>Title 1.1</h5>
+      <p>Ah coodle doodle do Caw ca caw, caw ca caw. Butterscotch!</p>
+      <h6>Title 1.1.1</h6>
+      <p>Want a lick? Okay, Lindsay, are you forgetting that I was
+        a professional twice over - an analyst and a therapist.</p>
+      <h4>Title 2</h4>
+      <p>You boys know how to shovel coal? Don't worry, these young
+        beauties have been nowhere near the bananas. I thought the two of
+        us could talk man-on-man.</p>
+    </div>
   </script>
 
   <!--  **** Tooltip **** -->
