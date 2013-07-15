@@ -27,7 +27,7 @@
 
 define([
   'jquery',
-  'js/patterns/base'
+  './base.js'
 ], function($, Base) {
   "use strict";
 
