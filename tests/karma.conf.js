@@ -10,15 +10,13 @@ files = [
   REQUIRE,
   REQUIRE_ADAPTER,
 
+  'js/config.js',
   {pattern: 'lib/**/*.js', included: false},
   {pattern: 'bower_components/**/*.js', included: false},
-  {pattern: 'js/registry.js', included: false},
-  {pattern: 'js/iframe.js', included: false},
-  {pattern: 'js/patterns/*.js', included: false},
+  {pattern: 'js/**/*.js', included: false},
   {pattern: 'tests/example-resource*', included: false},
   {pattern: 'tests/**/*-test.js', included: false},
 
-  'js/config.js',
   'tests/config.js'
 ];
 
@@ -29,7 +27,7 @@ preprocessors = {
 // list of files to exclude
 exclude = [
   // TODO: we need to fix this tests
-  'tests/jquery.iframe-test.js',
+  'tests/iframe-test.js',
   'tests/pattern-formunloadalert-test.js',
   'tests/pattern-preventdoublesubmit-test.js'
 ];

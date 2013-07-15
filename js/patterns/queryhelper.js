@@ -38,7 +38,8 @@ define([
       ajaxvocabulary: null,
       searchParam: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
-      batchSize: 10 // number of results to retrive
+      batchSize: 10, // number of results to retrive
+      baseCriteria: []
     },
 
     init: function() {
@@ -72,11 +73,12 @@ define([
           if(term){
             term += '*';
           }
-          var criteria = [{
+          var criteria = self.options.baseCriteria.slice(0);
+          criteria.push({
             i: self.options.searchParam,
             o: 'plone.app.querystring.operation.string.contains',
             v: term
-          }];
+          });
           var pattern = self.basePattern;
           if(pattern.browsing){
             criteria.push({
@@ -106,16 +108,22 @@ define([
       };
     },
 
-    search: function(term, operation, value, callback){
+    search: function(term, operation, value, callback, useBaseCriteria){
+      if(useBaseCriteria === undefined){
+        useBaseCriteria = true;
+      }
       var self = this;
+      var criteria = [];
+      if(useBaseCriteria){
+        criteria = self.options.baseCriteria.slice(0);
+      }
+      criteria.push({
+        i: term,
+        o: operation,
+        v: value
+      });
       var data = {
-        query: JSON.stringify({
-          criteria: [{
-            i: term,
-            o: operation,
-            v: value
-          }]
-        }),
+        query: JSON.stringify({ criteria: criteria }),
         attributes: JSON.stringify(self.options.attributes)
       };
       $.ajax({

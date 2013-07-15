@@ -17,7 +17,7 @@ requirejs.config({
       'jquery.event.drop': 'lib/jquery.event.drop',
       'mockup-registry': 'js/registry',
       'mockup-iframe': 'js/iframe',
-      'mockup-jquery.iframe': 'js/jquery.iframe',
+      'mockup-iframe_init': 'js/iframe_init',
       'mockup-patterns-accessibility': 'js/patterns/accessibility',
       'mockup-patterns-autotoc': 'js/patterns/autotoc',
       'mockup-patterns-backdrop': 'js/patterns/backdrop',
@@ -40,7 +40,7 @@ requirejs.config({
       'mockup-patterns-toggle': 'js/patterns/toggle',
       'mockup-patterns-tooltip': 'js/patterns/tooltip',
       'mockup-bundles-widgets': 'js/bundles/widgets',
-      'mockup-bundles-toolbar': 'js/bundles/widgets',
+      'mockup-bundles-toolbar': 'js/bundles/toolbar',
       'mockup-bundles-tiles': 'js/bundles/widgets'
     },
     shim: {

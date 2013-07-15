@@ -25,18 +25,22 @@ module.exports = function(grunt) {
     requirejs: {
       options: {
         baseUrl: './',
+        wrap: true,
+        name: 'node_modules/almond/almond.js',
         mainConfigFile: 'js/config.js',
       },
       widgets: {
         options: {
-          name: 'js/bundles/widgets.js',
+          include: 'js/bundles/widgets',
+          insertRequire: ['mockup-bundles-widgets'],
           out: 'build/widgets.min.js',
           excludeShallow: ['jquery']
         }
       },
       toolbar: {
         options: {
-          name: 'js/bundles/toolbar.js',
+          include: 'js/bundles/toolbar',
+          insertRequire: ['mockup-bundles-toolbar'],
           out: 'build/toolbar.min.js'
         }
       }
@@ -56,14 +60,14 @@ module.exports = function(grunt) {
         },
         files: {
           'build/toolbar.css': 'less/toolbar.less',
-          'build/toolbar_init.css': 'less/toolbar_init.less'
+          'build/toolbar_init.css': 'less/iframe_init.less'
         }
       }
     },
     uglify: {
       minify: {
         files: {
-          'build/toolbar_init.min.js': ['js/iframe.js']
+          'build/toolbar_init.min.js': ['js/iframe_init.js']
         }
       }
     },
