@@ -327,8 +327,11 @@ define([
       klassWrapper: 'querystring-wrapper',
       criteria: {},
       previewurl: '', // base url to use to request preview information from
+      sorttxt: 'Sort On',
+      reversetxt: 'Reversed Order',
       klassPreviewWrapper: 'querystring-preview-wrapper',
-      klassPreview: 'querystring-preview'
+      klassPreview: 'querystring-preview',
+      klassSortWrapper: 'querystring-sort-wrapper'
     },
     init: function() {
       var self = this;
@@ -342,6 +345,10 @@ define([
 
       self.$criteriaWrapper = $('<div/>')
         .addClass(self.options.klassWrapper)
+        .appendTo(self.$wrapper);
+
+      self.$sortWrapper = $('<div/>')
+        .addClass(self.options.klassSortWrapper)
         .appendTo(self.$wrapper);
 
       self.$previewWrapper = $('<div/>')
@@ -359,6 +366,9 @@ define([
 
       // add empty criteria which enables users to create new cr
       self.createCriteria();
+
+      // add sort/order fields
+      self.createSort();
 
       // add criteria preview pane to see results from criteria query
       self.refreshPreviewEvent(self);
@@ -416,6 +426,32 @@ define([
             
           });
       */
+    },
+    createSort: function() {
+      var self = this;
+      $('<span>'+self.options.sorttxt+'</span>')
+        .appendTo(self.$sortWrapper);
+      var $sortsel = $('<select/>')
+        .appendTo(self.$sortWrapper)
+        .change(function(){
+          self.refreshPreviewEvent(self);
+        });
+
+      for(var key in self.options.indexes) {
+        $sortsel.append(
+          $('<option/>')
+            .attr('value', key)
+            .html(self.options.indexes[key].title));
+      }
+      $sortsel.patternSelect2();
+
+      $("<input type='checkbox' />")
+        .appendTo(self.$sortWrapper)
+        .change(function(){
+          self.refreshPreviewEvent(self);
+        });
+      $('<span>'+self.options.reversetxt+'</span>')
+        .appendTo(self.$sortWrapper);
     }
   });
 
