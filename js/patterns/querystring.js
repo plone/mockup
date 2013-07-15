@@ -329,8 +329,12 @@ define([
       previewurl: '', // base url to use to request preview information from
       sorttxt: 'Sort On',
       reversetxt: 'Reversed Order',
+      previewTitle: 'Preview',
+      previewDescription: 'Preview of at most 10 items',
       klassPreviewWrapper: 'querystring-preview-wrapper',
       klassPreview: 'querystring-preview',
+      klassPreviewTitle: 'querystring-preview-title',
+      klassPreviewDescription: 'querystring-preview-description',
       klassSortWrapper: 'querystring-sort-wrapper'
     },
     init: function() {
@@ -354,6 +358,16 @@ define([
       self.$previewWrapper = $('<div/>')
         .addClass(self.options.klassPreviewWrapper)
         .appendTo(self.$wrapper);
+
+      // preview title and description
+      $('<div/>')
+        .addClass(self.options.klassPreviewTitle)
+        .html(self.options.previewTitle)
+        .appendTo(self.$previewWrapper);
+      $('<div/>')
+        .addClass(self.options.klassPreviewDescription)
+        .html(self.options.previewDescription)
+        .appendTo(self.$previewWrapper);
 
       self.criterias = [];
 

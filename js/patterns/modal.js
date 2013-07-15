@@ -541,30 +541,29 @@ define([
     show: function() {
       var self = this;
       if (!self.$el.hasClass(self.options.klassActive)) {
+        self._$modal = self.$modal;
         if (typeof self.$modal === 'function') {
-          self._$modal = self.$modal;
           self.$modal();
-        } else {
-          if (self.options.template) {
-            self.options.template.apply(self,
-                [self.$modal, self.options.templateOptions]);
-          }
-          self.trigger('show');
-          self.backdrop.show();
-          self.$wrapper.show();
-          self.$wrapper.parent().css('overflow', 'hidden');
-          self.$el.addClass(self.options.klassActive);
-          self.$modal.addClass(self.options.klassActive);
-          registry.scan(self.$modal);
-          self.positionModal();
-          $('img', self.$modal).load(function() {
-            self.positionModal();
-          });
-          $(window.parent).on('resize.modal.patterns', function() {
-            self.positionModal();
-          });
-          self.trigger('shown');
         }
+        if (self.options.template) {
+          self.options.template.apply(self,
+              [self.$modal, self.options.templateOptions]);
+        }
+        self.trigger('show');
+        self.backdrop.show();
+        self.$wrapper.show();
+        self.$wrapper.parent().css('overflow', 'hidden');
+        self.$el.addClass(self.options.klassActive);
+        self.$modal.addClass(self.options.klassActive);
+        registry.scan(self.$modal);
+        self.positionModal();
+        $('img', self.$modal).load(function() {
+          self.positionModal();
+        });
+        $(window.parent).on('resize.modal.patterns', function() {
+          self.positionModal();
+        });
+        self.trigger('shown');
       }
     },
     hide: function() {
