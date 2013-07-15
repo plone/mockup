@@ -32,9 +32,9 @@
 
 define([
   'jquery',
-  'js/patterns/base',
-  'js/patterns/relateditems',
-  'js/patterns/modal'
+  './base.js',
+  './relateditems.js',
+  './modal.js'
 ], function($, Base, RelatedItems, Modal) {
   "use strict";
 
