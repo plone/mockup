@@ -60,19 +60,13 @@ module.exports = function(grunt) {
       }
     },
     cssmin: {
-      widgets: {
-        combine: {
-          files: {
-            'build/widgets.min.css': ['build/widgets.css']
-          }
-        }
-      },
-      toolbar: {
-        combine: {
-          files: {
-            'build/toolbar.min.css': ['build/toolbar.css']
-          }
-        }
+      minify: {
+        expand: true,
+        cwd: 'build/',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/',
+        ext: '.min.css',
+        report: 'min'
       }
     }
   });
