@@ -2,7 +2,13 @@ GIT = git
 NPM = npm
 GRUNT = ./node_modules/.bin/grunt
 BOWER = ./node_modules/.bin/bower
-BOWER_CHROME = `which chromium`
+
+UNAME := $(shell uname)
+BOWER_CHROME=`which chrome`
+ifeq ($(UNAME), Linux)
+	BOWER_CHROME=`which chromium`
+endif
+
 
 bootstrap:
 	mkdir -p build
