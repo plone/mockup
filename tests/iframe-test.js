@@ -33,7 +33,7 @@
 
 define([
   'chai',
-  './../js/iframe.js'
+  'mockup-iframe'
 ], function(chai) {
   "use strict";
 

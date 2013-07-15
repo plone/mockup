@@ -27,8 +27,8 @@
 
 define([
   'jquery',
-  './base.js',
-  './backdrop.js'
+  'mockup-patterns-base',
+  'mockup-patterns-backdrop'
 ], function($, Base, Backdrop) {
   "use strict";
 

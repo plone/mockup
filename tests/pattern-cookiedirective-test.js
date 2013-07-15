@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/cookiedirective.js'
+  'mockup-registry',
+  'mockup-patterns-cookiedirective'
 ], function(chai, $, registry, CookieDirective) {
   "use strict";
 

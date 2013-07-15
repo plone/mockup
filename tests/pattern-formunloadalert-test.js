@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/formunloadalert.js'
+  'mockup-registry',
+  'mockup-patterns-formunloadalert'
 ], function(chai, $, registry, FormUnloadAlert) {
   "use strict";
 

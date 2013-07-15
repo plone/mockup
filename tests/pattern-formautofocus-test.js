@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/formautofocus.js'
+  'mockup-registry',
+  'mockup-patterns-formautofocus'
 ], function(chai, $, registry, FormAutoFocus) {
   "use strict";
 

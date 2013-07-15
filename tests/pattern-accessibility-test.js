@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/accessibility.js'
+  'mockup-registry',
+  'mockup-patterns-accessibility'
 ], function(chai, $, registry, Accessibility) {
   "use strict";
 
@@ -60,9 +60,9 @@ define([
     });
     it("test cookie remains set", function() {
       var accessibility = new Accessibility(this.$el);
-      expect($.cookie('fontsize'), this.$el).to.be.undefined;
+      expect($.cookie('fontsize'), this.$el).to.be.null;
       accessibility.setBaseFontSize("smallText", 1);
-      expect($.cookie('fontsize'), this.$el).to.not.be.undefined;
+      expect($.cookie('fontsize'), this.$el).to.not.be.null;
     });
     it("test class is set", function() {
       var accessibility = new Accessibility(this.$el);

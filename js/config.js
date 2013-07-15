@@ -12,12 +12,32 @@ requirejs.config({
       'sinon': 'bower_components/sinon/lib/sinon',
       'sinon-fakexmlhttprequest': 'bower_components/sinon/lib/sinon/util/fake_xml_http_request',
       'sinon-fakeserver': 'bower_components/sinon/lib/sinon/util/fake_server',
+      'sinon-faketimers': 'bower_components/sinon/lib/sinon/util/fake_timers',
       'picker': 'bower_components/pickadate/lib/picker',
       'picker.date': 'bower_components/pickadate/lib/picker.date',
       'picker.time': 'bower_components/pickadate/lib/picker.time',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
-      'mockup-registry': 'js/registry'
+      'mockup-registry': 'js/registry',
+      'mockup-iframe': 'js/iframe',
+      'mockup-jquery.iframe': 'js/jquery.iframe',
+      'mockup-patterns-accessibility': 'js/patterns/accessibility',
+      'mockup-patterns-autotoc': 'js/patterns/autotoc',
+      'mockup-patterns-backdrop': 'js/patterns/backdrop',
+      'mockup-patterns-base': 'js/patterns/base',
+      'mockup-patterns-cookiedirective': 'js/patterns/cookiedirective',
+      'mockup-patterns-expose': 'js/patterns/expose',
+      'mockup-patterns-formautofocus': 'js/patterns/formautofocus',
+      'mockup-patterns-formunloadalert': 'js/patterns/formunloadalert',
+      'mockup-patterns-livesearch': 'js/patterns/livesearch',
+      'mockup-patterns-modal': 'js/patterns/modal',
+      'mockup-patterns-pickadate': 'js/patterns/pickadate',
+      'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
+      'mockup-patterns-relateditems': 'js/patterns/relateditems',
+      'mockup-patterns-queryhelper': 'js/patterns/queryhelper',
+      'mockup-patterns-select2': 'js/patterns/select2',
+      'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
+      'mockup-patterns-toggle': 'js/patterns/toggle'
     },
     shim: {
       'underscore': { exports: 'window._' },
@@ -26,7 +46,14 @@ requirejs.config({
       'picker.time': { deps: [ 'picker' ] },
       'sinon': { exports: 'window.sinon' },
       'sinon-fakexmlhttprequest': { exports: 'window.sinon',  deps: [ 'sinon' ] },
-      'sinon-fakeserver': { exports: 'window.sinon',  deps: [ 'sinon', 'sinon-fakexmlhttprequest' ] },
+      'sinon-fakeserver': {
+        exports: 'window.sinon.fakeServer',
+        deps: [ 'sinon', 'sinon-fakexmlhttprequest' ]
+      },
+      'sinon-faketimers': {
+        exports: 'window.sinon.useFakeTimers',
+        deps: [ 'sinon', 'sinon-fakexmlhttprequest' ]
+      },
       'tinymce': {
         exports: 'window.tinyMCE',
         init: function () {

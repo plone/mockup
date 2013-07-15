@@ -28,10 +28,10 @@
 define([
   'jquery',
   'underscore',
-  './base.js',
-  './toggle.js',
-  './select2.js',
-  './queryhelper.js'
+  'mockup-patterns-base',
+  'mockup-patterns-toggle',
+  'mockup-patterns-select2',
+  'mockup-patterns-queryhelper'
 ], function($, _, Base, Toggle, Select2, QueryHelper) {
   "use strict";
 
