@@ -68,12 +68,13 @@ define([
               .appendTo($el);
 
       // Remove button
-      self.$remove = $('<div/>')
+      self.$remove = $('<div>'+self.options.remove+'</div>')
               .addClass(self.options.klassRemove)
+              .addClass('span1')
               .appendTo(self.$wrapper)
               .on('click', function(e) {
-                self.remove();
                 self.trigger('remove');
+                self.remove();
               });
 
       // Index selection
