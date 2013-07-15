@@ -183,7 +183,6 @@ define([
       self.trigger('selected');
     },
     init: function() {
-      debugger;
       var self = this;
 
       self.query = new QueryHelper(self.$el,

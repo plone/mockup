@@ -30,7 +30,7 @@ define([
   'jquery',
   './base.js',
   './backdrop.js',
-  './../registry.js',
+  'mockup-registry',
   'jquery.form'
 ], function($, Base, Backdrop, registry) {
   "use strict";
