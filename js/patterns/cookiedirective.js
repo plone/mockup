@@ -55,7 +55,7 @@ define([
     acceptedCookies: function() {
       /*jshint eqeqeq:false */
       var cookie = $.cookie(this.options.cookieName);
-      if (cookie === undefined){
+      if (cookie === undefined || cookie === null){
         return undefined;
       }
       if (cookie == 1) {
