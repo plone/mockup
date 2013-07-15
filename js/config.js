@@ -40,7 +40,7 @@ requirejs.config({
       'mockup-patterns-toggle': 'js/patterns/toggle',
       'mockup-patterns-tooltip': 'js/patterns/tooltip',
       'mockup-bundles-widgets': 'js/bundles/widgets',
-      'mockup-bundles-toolbar': 'js/bundles/widgets',
+      'mockup-bundles-toolbar': 'js/bundles/toolbar',
       'mockup-bundles-tiles': 'js/bundles/widgets'
     },
     shim: {
