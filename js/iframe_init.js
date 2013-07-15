@@ -28,6 +28,63 @@
 (function(window, document, undefined) {
 "use strict";
 
+
+/*!
+ * domready (c) Dustin Diaz 2012 - License MIT
+ * https://github.com/ded/domready
+ *
+ * Modified just a bit by Rok Garbas 2013
+ */
+var domready = function (ready) {
+
+  var fns = [], fn, f = false
+    , doc = document
+    , testEl = doc.documentElement
+    , hack = testEl.doScroll
+    , domContentLoaded = 'DOMContentLoaded'
+    , addEventListener = 'addEventListener'
+    , onreadystatechange = 'onreadystatechange'
+    , readyState = 'readyState'
+    , loadedRgx = hack ? /^loaded|^c/ : /^loaded|c/
+    , loaded = loadedRgx.test(doc[readyState])
+
+  function flush(f) {
+    loaded = 1
+    while (f = fns.shift()) f()
+  }
+
+  doc[addEventListener] && doc[addEventListener](domContentLoaded, fn = function () {
+    doc.removeEventListener(domContentLoaded, fn, f)
+    flush()
+  }, f)
+
+
+  hack && doc.attachEvent(onreadystatechange, fn = function () {
+    if (/^c/.test(doc[readyState])) {
+      doc.detachEvent(onreadystatechange, fn)
+      flush()
+    }
+  })
+
+  return (ready = hack ?
+    function (fn) {
+      self != top ?
+        loaded ? fn() : fns.push(fn) :
+        function () {
+          try {
+            testEl.doScroll('left')
+          } catch (e) {
+            return setTimeout(function() { ready(fn) }, 50)
+          }
+          fn()
+        }()
+    } :
+    function (fn) {
+      loaded ? fn() : fns.push(fn)
+    })
+}();
+
+
 // # IFrame Object
 window.IFrame = function(el) { this.init(el); };
 window.IFrame.prototype = {
@@ -127,6 +184,7 @@ window.IFrame.prototype = {
 
     // Create iframe
     var iframe = document.createElement('iframe');
+
     iframe.setAttribute('frameBorder', '0');
     iframe.setAttribute('border', '0');
     iframe.setAttribute('allowTransparency', 'true');
@@ -134,6 +192,7 @@ window.IFrame.prototype = {
     iframe.setAttribute('id', self.options.name);
     iframe.setAttribute('name', self.options.name);
     iframe.setAttribute('style', 'display:none;');
+    iframe.setAttribute('src', 'javascript:false');
 
     document.body.appendChild(iframe);
 
@@ -235,18 +294,9 @@ window.iframe_initialize = function() {
   }
 };
 
-function domReady(f){
-  if (/(?!.*?compatible|.*?webkit)^mozilla|opera/i.test(navigator.userAgent)){
-    document.addEventListener("DOMContentLoaded", f, false);
-  // Feeling dirty yet?
-  } else {
-    window.setTimeout(f,0);
-  }
-}
-
 if (window.iframe_initialized !== true) {
   window.iframe_initialized = true;
-  domReady(window.iframe_initialize);
+  domready(window.iframe_initialize);
 }
 
 }(window, window.document));
