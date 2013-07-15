@@ -33,7 +33,7 @@ addPage = function(page) {
 require([
   'sinon-fakeserver',
   'js/docs'
-], function(sinon, DocsApp) {
+], function(fakeServer, DocsApp) {
 
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
@@ -50,7 +50,7 @@ require([
     return null;
   }
 
-  var server = sinon.fakeServer.create();
+  var server = fakeServer.create();
   server.autoRespond = true;
   server.autoRespondAfter = 500;
 
