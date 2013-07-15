@@ -24,38 +24,50 @@ module.exports = function(grunt) {
     },
     requirejs: {
       options: {
-        baseUrl: "./",
-        mainConfigFile: "js/config.js"
+        baseUrl: './',
+        wrap: true,
+        name: 'node_modules/almond/almond.js',
+        mainConfigFile: 'js/config.js',
       },
       widgets: {
         options: {
-          name: "js/bundles/widgets.js",
-          out: "build/widgets.min.js",
+          include: 'js/bundles/widgets',
+          insertRequire: ['mockup-bundles-widgets'],
+          out: 'build/widgets.min.js',
           excludeShallow: ['jquery']
         }
       },
       toolbar: {
         options: {
-          name: "js/bundles/toolbar.js",
-          out: "build/toolbar.min.js"
+          include: 'js/bundles/toolbar',
+          insertRequire: ['mockup-bundles-toolbar'],
+          out: 'build/toolbar.min.js'
         }
       }
     },
     less: {
       widgets: {
         options: {
-          paths: ["less"]
+          paths: ['less']
         },
         files: {
-          "build/widgets.css": "less/widgets.less"
+          'build/widgets.css': 'less/widgets.less'
         }
       },
       toolbar: {
         options: {
-          paths: ["less"]
+          paths: ['less']
         },
         files: {
-          "build/toolbar.css": "less/toolbar.less"
+          'build/toolbar.css': 'less/toolbar.less',
+          'build/toolbar_init.css': 'less/iframe_init.less'
+        }
+      }
+    },
+    uglify: {
+      minify: {
+        files: {
+          'build/toolbar_init.min.js': ['js/iframe_init.js']
         }
       }
     },
@@ -75,12 +87,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('test', ['karma:dev']);
   grunt.registerTask('test-ci', ['karma:dev', 'jshint']);
   grunt.registerTask('default', ['bower']);
-  grunt.registerTask('compile-js', ['requirejs']);
+  grunt.registerTask('compile-js', ['requirejs', 'uglify']);
   grunt.registerTask('compile-less', ['less']);
   grunt.registerTask('compile-css', ['cssmin']);
 

@@ -17,7 +17,7 @@ requirejs.config({
       'jquery.event.drop': 'lib/jquery.event.drop',
       'mockup-registry': 'js/registry',
       'mockup-iframe': 'js/iframe',
-      'mockup-jquery.iframe': 'js/jquery.iframe',
+      'mockup-iframe_init': 'js/iframe_init',
       'mockup-patterns-accessibility': 'js/patterns/accessibility',
       'mockup-patterns-autotoc': 'js/patterns/autotoc',
       'mockup-patterns-backdrop': 'js/patterns/backdrop',

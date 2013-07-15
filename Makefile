@@ -10,9 +10,29 @@ ifeq ($(UNAME), Linux)
 endif
 
 compile:
+	mkdir -p build
+
 	$(GRUNT) compile-js
 	$(GRUNT) compile-less
 	$(GRUNT) compile-css
+
+	rm build/widgets.css build/toolbar.css build/toolbar_init.css
+
+	cp bower_components/select2/select2.png build/widgets-select2.png
+	cp bower_components/select2/select2-spinner.gif build/widgets-select2-spinner.gif
+	sed -i -e 's@select2.png@++resource++plone.app.widgets-select2.png@g' build/widgets.min.css
+	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-select2-spinner.gif@g' build/widgets.min.css
+
+	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/toolbar-fontawesome.eot
+	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/toolbar-fontawesome.ttf
+	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/toolbar-fontawesome.woff
+	cp bower_components/font-awesome/font/FontAwesome.otf build/toolbar-fontawesome.otf
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.eot@++resource++plone.app.toolbar-fontawesome.eot@g' build/toolbar.min.css
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.ttf@++resource++plone.app.toolbar-fontawesome.ttf@g' build/toolbar.min.css
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.woff@++resource++plone.app.toolbar-fontawesome.woff@g' build/toolbar.min.css
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.otf@++resource++plone.app.toolbar-fontawesome.otf@g' build/toolbar.min.css
+
+
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
 	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
@@ -32,3 +52,9 @@ test:
 
 test-ci:
 	CHROME_BIN=$(BOWER_CHROME) $(GRUNT) test-ci
+
+clean:
+	mkdir -p build
+	rm build/* -rf
+	rmdir build
+

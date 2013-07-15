@@ -413,34 +413,12 @@ make bootstrap</pre>
   </script>
   <!--  ** Patterns  ** -->
 
-  <!-- TODO:
-  [x] Getting started
-
-  Move Patterns:
-  [x] Adjust text size
-  [x] Cookie directive
-  [x] Expose
-  [x] live search
-  [ ] modal
-  [x] pickadate
-  [x] prevent double submit
-  [x] form unload alert
-  [x] querystring
-  [x] relateditems
-  [ ] select2
-  [ ] tablesorter
-  [ ] tinymce
-  [ ] toc
-  [x] tooltip
-
-  -->
-
   <!--  **** Adjust Text Size (accessibility) **** -->
   <script>
     addPattern({
       id: 'accessibility',
       title: 'Adjust Text Size',
-      description: 'Easily change text size on a page.',
+      description: 'Easily change <strong>text size</strong> on a page.',
       attributes: [
         {attribute: 'smallbtn', type: 'Selector', 'default': '', description: 'Selector used to activate small text on click.'},
         {attribute: 'normalbtn', type: 'Selector', 'default': '', description: 'Selector used to activate normal text on click.'},
@@ -473,7 +451,7 @@ make bootstrap</pre>
     addPattern({
       id: 'cookiedirective',
       title: 'Cookie Directive',
-      description: 'Check for cookies, ask to permit them.',
+      description: 'A pattern that <strong>checks cookies</strong> enabled and asks permission for the user to allow cookies or not.',
       attributes: [
         {attribute: 'allowMsg', type: 'String', 'default': 'Allow', description: 'Text on button used to allow cookies.'},
         {attribute: 'askPermissionMsg', type: 'String', 'default': 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
@@ -501,7 +479,7 @@ make bootstrap</pre>
     addPattern({
       id: 'expose',
       title: 'Expose',
-      description: 'Highlight the focused element.',
+      description: 'Exposes the focused element by <strong>darkening everything else on the page</strong>. Useful to focus the user attention on a particular area.',
       attributes: [
         {attribute: 'backdrop', type: 'String', 'default': 'body', description: 'Selector of parent element to use as backdrop.'},
         {attribute: 'backdropCloseOnClick', type: 'Boolean', 'default': 'true', description: 'Cancel expose on click if true.'},
@@ -548,6 +526,42 @@ make bootstrap</pre>
             data-pat-expose="triggers:hover">Hover over this button</button>
   </script>
 
+  <!--  **** Form Unload Alert **** -->
+  <script>
+    addPattern({
+      id: 'formunloadalert',
+      title: 'Form Unload Alert',
+      description: 'A pattern to <strong>warn user when changes are unsaved</strong> and they try to navigate away from page.',
+      attributes: [
+        {attribute: 'changingEvents', type: 'String', 'default': 'change keyup paste', description: 'Events on which to check for changes.'},
+        {attribute: 'changingFields', type: 'String', 'default': 'input,select,textarea,fileupload', description: 'Fields on which to check for changes.'},
+        {attribute: 'message', type: 'String', 'default': 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_formunloadalert">
+
+  </script>
+  <script type="text/example" class="example-formunloadalert">
+    <form class="pat-formunloadalert" onsubmit="javascript:return false;">
+      <input
+        type="text"
+        value=""
+        />
+      <select>
+        <option value="1">value 1</option>
+        <option value="2">value 2</option>
+      </select>
+      <input
+        class="btn btn-large btn-primary"
+        type="submit"
+        value="Submit"
+        />
+      <br />
+      <a href="/">Click here to go somewhere else</a>
+    </form>
+  </script>
+
   <!--  **** Livesearch **** -->
   <script type="text/example" id="ls_attr_resultTemplate">
 <pre>
@@ -563,7 +577,7 @@ make bootstrap</pre>
       title: 'Live Search',
       description: 'Dynamically query the server and display results.',
       attributes: [
-        {attribute: 'ajaxvocabulary', type: 'String', 'default': '', description: 'The url that will be of the server side page that will be queried.'},
+        {attribute: 'url', type: 'String', 'default': '', description: 'The url that will be of the server side page that will be queried.'},
         {attribute: 'delay', type: 'Integer', '200': '', description: 'Delay in ms after user types before searching.'},
         {attribute: 'highlight', type: 'String', 'default': '"pat-livesearch-highlight"', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
         {attribute: 'minimumInputLength', type: 'Integer', 'default': '3', description: 'Number of characters user must type before search begins.'},
@@ -594,7 +608,7 @@ make bootstrap</pre>
   </script>
   <script type="text/example" class="example-livesearch" data-title="Default">
 <div class="pat-livesearch"
-    data-pat-livesearch="ajaxvocabulary: /search.json;">
+    data-pat-livesearch="url: /search.json;">
   <input type="text" class="pat-livesearch-input" placeholder="Search" />
   <div class="pat-livesearch-container">
     <div class="pat-livesearch-results">
@@ -609,7 +623,7 @@ make bootstrap</pre>
     addPattern({
       id: 'modal',
       title: 'Modal',
-      description: 'A modal dialog.',
+      description: 'Creates a modal dialog (also called <strong>overlay</strong>).',
       attributes: [
         {attribute: 'backdrop', type: 'String', 'default': 'body', description: 'TODO'},
         {attribute: 'backdropOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
@@ -965,7 +979,7 @@ make bootstrap</pre>
     addPattern({
       id: 'pickadate',
       title: 'Pick A Date',
-      description: 'Date picker.',
+      description: 'Allows the user to <strong>select a date</strong> (with or without time) through a calendar.',
       attributes: [
         {attribute: 'date', type: 'Object', 'default': '{formatSubmit: "dd-mm-yyyy"}', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
         {attribute: 'time', type: 'Object', 'default': '{formatSubmit: "HH:i"}', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
@@ -993,12 +1007,65 @@ make bootstrap</pre>
     <input class="pat-pickadate" data-pat-pickadate="date:false"/>
   </script>
 
+  <!--  **** Picture **** -->
+  <script>
+    addPattern({
+      id: 'picture',
+      title: 'Picture',
+      description: 'A responsive image widget.',
+      attributes: [
+        {attribute: 'alt', type: 'String', 'default': '', description: 'Alternate text.'},
+        {attribute: 'attribute', type: 'Object', 'default': '{src: "data-src", media: "data-media"}', description: 'TODO'},
+        {attribute: 'klass', type: 'Object', 'default': '{loading: "picture-loading", error: "picture-error"}', description: 'TODO'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_picture">
+    <div class="alert alert-info">
+      <u><strong>Responsive images pattern</strong></u>
+      <p>This pattern load the last image that fulfill the media-query criteria.
+        When multiple pictures are displayed it loads the images within the
+        visible viewport first. Will update images on <abbr>resize</abbr> event.</p>
+      <p></p>
+      <u><strong>Data Attributes</strong></u>
+      <p>Below are some notes about some of the available data attributes.</p>
+      <dl>
+        <dt>data-pat-picture-alt</dt>
+        <dd>Alternative text used on img tag</dd>
+        <dt>data-pat-picture-klass-loading</dt>
+        <dd>CSS class added to element while loading the image</dd>
+        <dt>data-pat-picture-klass-error</dt>
+        <dd>CSS class added to element if error occured while loading the image</dd>
+        <dt>data-pat-picture-attribute-src</dt>
+        <dd>Which attribute to fetch image source information from, defaults to <strong>data-src</strong></dd>
+        <dt>data-pat-picture-attribute-media</dt>
+        <dd>Which attribute to fetch image mediaquery information from, defaults to <strong>data-media</strong></dd>
+      </dl>
+    </div>
+  </script>
+  <script type="text/example" class="example-picture">
+<div class="pat-picture" data-pat-picture-alt="Alternative text">
+  <div data-src="http://placehold.it/480x320"></div>
+  <div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"></div>
+  <div data-src="http://placehold.it/800x533" data-media="(min-width: 640px)"></div>
+  <div data-src="http://placehold.it/960x640" data-media="(min-width: 800px)"></div>
+  <div data-src="http://placehold.it/1200x800" data-media="(min-width: 960px)"></div>
+  <!--[if (lt IE 9) & (!IEMobile)]>
+    <div data-src="http://placehold.it/800x533"></div>
+  <![endif]-->
+  <noscript>
+      <img src="http://placehold.it/800x533" alt="Alternative text" />
+    </noscript>
+  </div>
+</div>
+  </script>
+
   <!--  **** Prevent Double Submit **** -->
   <script>
     addPattern({
       id: 'preventdoublesubmit',
       title: 'Prevent Double Submit',
-      description: 'Prevent a form from being submitted twice.',
+      description: 'A pattern to <strong>prevent submitting a form twice</strong>.',
       attributes: [
         {attribute: 'guardKlass', type: 'String', 'default': 'submitting', description: 'Class applied to submit button after it is clicked once.'},
         {attribute: 'optOutKlass', type: 'String', 'default': 'allowMultiSubmit', description: 'Class used to opt-out a submit button from double-submit prevention.'},
@@ -1025,42 +1092,6 @@ make bootstrap</pre>
         type="submit"
         value="Multi submit"
         />
-    </form>
-  </script>
-
-  <!--  **** Form Unload Alert **** -->
-  <script>
-    addPattern({
-      id: 'formunloadalert',
-      title: 'Form Unload Alert',
-      description: 'Alert user of possible data loss on unload form.',
-      attributes: [
-        {attribute: 'changingEvents', type: 'String', 'default': 'change keyup paste', description: 'Events on which to check for changes.'},
-        {attribute: 'changingFields', type: 'String', 'default': 'input,select,textarea,fileupload', description: 'Fields on which to check for changes.'},
-        {attribute: 'message', type: 'String', 'default': 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
-      ]
-    });
-  </script>
-  <script type="text/template" id="page_formunloadalert">
-
-  </script>
-  <script type="text/example" class="example-formunloadalert">
-    <form class="pat-formunloadalert" onsubmit="javascript:return false;">
-      <input
-        type="text"
-        value=""
-        />
-      <select>
-        <option value="1">value 1</option>
-        <option value="2">value 2</option>
-      </select>
-      <input
-        class="btn btn-large btn-primary"
-        type="submit"
-        value="Submit"
-        />
-      <br />
-      <a href="/">Click here to go somewhere else</a>
     </form>
   </script>
 
@@ -1097,26 +1128,12 @@ make bootstrap</pre>
            data-pat-querystring="{&quot;sortable_indexes&quot;: {&quot;sortable_title&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;, &quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;The item's title, transformed for sorting&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Sortable Title&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;end&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The end date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event end date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;effective&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was first published&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Effective date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;created&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The date an item was created&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creation date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;expires&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was expired&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Expiration date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;modified&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was last modified&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Modification date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;getId&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The short name of an item (used in the url)&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Short name (id)&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;start&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The start date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event start date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Creator&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;, &quot;plone.app.querystring.operation.string.currentUser&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The person that created an item&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creator&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.currentUser&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._currentUser&quot;, &quot;description&quot;: &quot;The user viewing the querystring results&quot;, &quot;title&quot;: &quot;Current logged in user&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;review_state&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;An item's workflow state (e.g.published)&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.WorkflowStates&quot;, &quot;title&quot;: &quot;Review state&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {&quot;private&quot;: {&quot;title&quot;: &quot;Private [private]&quot;}, &quot;visible&quot;: {&quot;title&quot;: &quot;Public draft [visible]&quot;}, &quot;internal&quot;: {&quot;title&quot;: &quot;Internal draft [internal]&quot;}, &quot;external&quot;: {&quot;title&quot;: &quot;Externally visible [external]&quot;}, &quot;published&quot;: {&quot;title&quot;: &quot;Published [published]&quot;}, &quot;internally_published&quot;: {&quot;title&quot;: &quot;Internally published [internally_published]&quot;}, &quot;pending&quot;: {&quot;title&quot;: &quot;Pending [pending]&quot;}}, &quot;sortable&quot;: true}, &quot;Subject&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Tags are used for organization of content&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.Keywords&quot;, &quot;title&quot;: &quot;Tag&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}}, &quot;indexes&quot;: {&quot;start&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The start date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event start date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;expires&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was expired&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Expiration date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;end&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The end date and time of an event&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Event end date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Description&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;An item's description&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Description&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;effective&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was first published&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Effective date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Title&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Text search of an item's title&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Title&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;portal_type&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;An item's type (e.g. Event)&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.ReallyUserFriendlyTypes&quot;, &quot;title&quot;: &quot;Type&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {&quot;Document&quot;: {&quot;title&quot;: &quot;Page&quot;}, &quot;Image&quot;: {&quot;title&quot;: &quot;Image&quot;}, &quot;Collection&quot;: {&quot;title&quot;: &quot;Collection&quot;}, &quot;Event&quot;: {&quot;title&quot;: &quot;Event&quot;}, &quot;Link&quot;: {&quot;title&quot;: &quot;Link&quot;}, &quot;File&quot;: {&quot;title&quot;: &quot;File&quot;}, &quot;Discussion Item&quot;: {&quot;title&quot;: &quot;Comment&quot;}, &quot;News Item&quot;: {&quot;title&quot;: &quot;News Item&quot;}, &quot;Folder&quot;: {&quot;title&quot;: &quot;Folder&quot;}}, &quot;sortable&quot;: false}, &quot;created&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The date an item was created&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creation date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;modified&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.date.lessThan&quot;, &quot;plone.app.querystring.operation.date.largerThan&quot;, &quot;plone.app.querystring.operation.date.between&quot;, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;, &quot;plone.app.querystring.operation.date.today&quot;, &quot;plone.app.querystring.operation.date.beforeToday&quot;, &quot;plone.app.querystring.operation.date.afterToday&quot;], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;The time and date an item was last modified&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Modification date&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.date.today&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._today&quot;, &quot;description&quot;: &quot;The current day&quot;, &quot;title&quot;: &quot;Today&quot;}, &quot;plone.app.querystring.operation.date.largerThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._moreThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within last&quot;}, &quot;plone.app.querystring.operation.date.lessThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Before date&quot;}, &quot;plone.app.querystring.operation.date.largerThan&quot;: {&quot;widget&quot;: &quot;DateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._largerThan&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;After date&quot;}, &quot;plone.app.querystring.operation.date.lessThanRelativeDate&quot;: {&quot;widget&quot;: &quot;RelativeDateWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThanRelativeDate&quot;, &quot;description&quot;: &quot;Please enter the number in days.&quot;, &quot;title&quot;: &quot;Within next&quot;}, &quot;plone.app.querystring.operation.date.beforeToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._beforeToday&quot;, &quot;description&quot;: &quot;Before the current day&quot;, &quot;title&quot;: &quot;Before today&quot;}, &quot;plone.app.querystring.operation.date.between&quot;: {&quot;widget&quot;: &quot;DateRangeWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._between&quot;, &quot;description&quot;: &quot;Please use YYYY/MM/DD.&quot;, &quot;title&quot;: &quot;Between dates&quot;}, &quot;plone.app.querystring.operation.date.afterToday&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._afterToday&quot;, &quot;description&quot;: &quot;After the current day&quot;, &quot;title&quot;: &quot;After today&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;getId&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The short name of an item (used in the url)&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Short name (id)&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;SearchableText&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Text search of an item's contents&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Searchable text&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;effectiveRange&quot;: {&quot;operations&quot;: [], &quot;group&quot;: &quot;Dates&quot;, &quot;description&quot;: &quot;Querying this is undefined&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Effective range&quot;, &quot;operators&quot;: {}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;sortable_title&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.contains&quot;, &quot;plone.app.querystring.operation.string.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;The item's title, transformed for sorting&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Sortable Title&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.contains&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._contains&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Contains&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;Creator&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.is&quot;, &quot;plone.app.querystring.operation.string.currentUser&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The person that created an item&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Creator&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.currentUser&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._currentUser&quot;, &quot;description&quot;: &quot;The user viewing the querystring results&quot;, &quot;title&quot;: &quot;Current logged in user&quot;}, &quot;plone.app.querystring.operation.string.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}, &quot;getObjPositionInParent&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.int.is&quot;, &quot;plone.app.querystring.operation.int.lessThan&quot;, &quot;plone.app.querystring.operation.int.greaterThan&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The order of an item in its parent folder&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Order in folder&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.int.lessThan&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._lessThan&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Less than&quot;}, &quot;plone.app.querystring.operation.int.is&quot;: {&quot;widget&quot;: &quot;StringWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Equals&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;isFolderish&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.boolean.isTrue&quot;, &quot;plone.app.querystring.operation.boolean.isFalse&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;Find items that can contain other objects&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Folder-like&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.boolean.isFalse&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isFalse&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;No&quot;}, &quot;plone.app.querystring.operation.boolean.isTrue&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isTrue&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Yes&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;path&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.string.relativePath&quot;, &quot;plone.app.querystring.operation.string.path&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;The location of an item &quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Location&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.string.relativePath&quot;: {&quot;widget&quot;: &quot;RelativePathWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._relativePath&quot;, &quot;description&quot;: &quot;Use '../' to navigate to parent objects.&quot;, &quot;title&quot;: &quot;Relative path&quot;}, &quot;plone.app.querystring.operation.string.path&quot;: {&quot;widget&quot;: &quot;ReferenceWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._path&quot;, &quot;description&quot;: &quot;Location in the site structure&quot;, &quot;title&quot;: &quot;Absolute path&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;getRawRelatedItems&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.reference.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;Find items related to the selected items&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Related To&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.reference.is&quot;: {&quot;widget&quot;: &quot;ReferenceWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._referenceIs&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Equals&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;isDefaultPage&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.boolean.isTrue&quot;, &quot;plone.app.querystring.operation.boolean.isFalse&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;Find items that are the default view for their containing folder.&quot;, &quot;vocabulary&quot;: null, &quot;title&quot;: &quot;Default Page&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.boolean.isFalse&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isFalse&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;No&quot;}, &quot;plone.app.querystring.operation.boolean.isTrue&quot;: {&quot;widget&quot;: null, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._isTrue&quot;, &quot;description&quot;: null, &quot;title&quot;: &quot;Yes&quot;}}, &quot;enabled&quot;: false, &quot;values&quot;: {}, &quot;sortable&quot;: false}, &quot;review_state&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Metadata&quot;, &quot;description&quot;: &quot;An item's workflow state (e.g.published)&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.WorkflowStates&quot;, &quot;title&quot;: &quot;Review state&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {&quot;private&quot;: {&quot;title&quot;: &quot;Private [private]&quot;}, &quot;visible&quot;: {&quot;title&quot;: &quot;Public draft [visible]&quot;}, &quot;internal&quot;: {&quot;title&quot;: &quot;Internal draft [internal]&quot;}, &quot;external&quot;: {&quot;title&quot;: &quot;Externally visible [external]&quot;}, &quot;published&quot;: {&quot;title&quot;: &quot;Published [published]&quot;}, &quot;internally_published&quot;: {&quot;title&quot;: &quot;Internally published [internally_published]&quot;}, &quot;pending&quot;: {&quot;title&quot;: &quot;Pending [pending]&quot;}}, &quot;sortable&quot;: true}, &quot;Subject&quot;: {&quot;operations&quot;: [&quot;plone.app.querystring.operation.selection.is&quot;], &quot;group&quot;: &quot;Text&quot;, &quot;description&quot;: &quot;Tags are used for organization of content&quot;, &quot;vocabulary&quot;: &quot;plone.app.vocabularies.Keywords&quot;, &quot;title&quot;: &quot;Tag&quot;, &quot;operators&quot;: {&quot;plone.app.querystring.operation.selection.is&quot;: {&quot;widget&quot;: &quot;MultipleSelectionWidget&quot;, &quot;operation&quot;: &quot;plone.app.querystring.queryparser._equal&quot;, &quot;description&quot;: &quot;Tip: you can use * to autocomplete.&quot;, &quot;title&quot;: &quot;Is&quot;}}, &quot;enabled&quot;: true, &quot;values&quot;: {}, &quot;sortable&quot;: true}}}"/>
   </script>
 
-  <!--  **** TinyMCE -->
-  <script>
-    addPattern({
-      id: 'tinymce',
-      title: 'TinyMCE 4',
-      description: 'WYSIWYG Editor',
-      attributes: [
-      ]
-    });
-  </script>
-  <script type="text/example" class="example-tinymce" data-title="Default">
-    <textarea class="pat-tinymce" data-pat-tinymce='{"relatedItems": { "ajaxvocabulary": "/relateditems-test.json"} }'></textarea>
-  </script>
-
   <!--  **** Related Items **** -->
   <script>
     addPattern({
       id: 'relateditems',
       title: 'Related Items',
-      description: 'Group related items.',
+      description: 'An advanced widget for <strong>selecting related items</strong>.',
       attributes: [
         {attribute: 'ajaxvocabulary', type: 'String', 'default': 'NO DEFAULT', description: 'TODO'},
         {attribute: 'attributes', type: 'List', 'default': '["UID","Title", "Type", "path"]', description: 'TODO'},
@@ -1162,12 +1179,251 @@ make bootstrap</pre>
                                ajaxvocabulary:/relateditems-test.json" />
   </script>
 
-  <!--  **** Tablesorter -->
+  <!--  **** Select2 **** -->
+  <script>
+    addPattern({
+      id: 'select2',
+      title: 'Select2',
+      description: '<strong>Autocompletes, multiple or single selections</strong> from any kind of data source (with search!).',
+      attributes: [
+        {attribute: 'separator', type: 'String', 'default': ', (comma)', description: ''
+          + 'Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.'
+          + '<br/><br/>'
+          + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will'
+          + 'allow the <em>tags</em> and <em>initvalmap</em> to have'
+          + 'values separated by ";" instead of the default ",".'},
+        {attribute: 'data-path-select2-initvalmap', type: 'String', 'default': '', description: ''
+          + 'This can be a json encoded string, or a list of <em>id:text</em>'
+          + 'values. Ex: "Red:The Color Red,Orange:The Color Orange"'
+          + '<br /><br />'
+          + 'This is used inside the initSelection method, if ajax options'
+          + 'are NOT set.'},
+        {attribute: 'ajaxvocabulary', type: 'String', 'default': '', description: 'This is a URL to a JSON formatted file used to populate the list'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_select2">
+
+  </script>
+  <script type="text/example" class="example-select2" data-title="Autocomplete with search">
+    <select class="pat-select2" data-pat-select2="width:20em">
+      <option value="Acholi">Acholi</option>
+      <option value="Afrikaans">Afrikaans</option>
+      <option value="Akan">Akan</option>
+      <option value="Albanian">Albanian</option>
+      <option value="Amharic">Amharic</option>
+      <option value="Arabic">Arabic</option>
+      <option value="Ashante">Ashante</option>
+      <option value="Asl">Asl</option>
+      <option value="Assyrian">Assyrian</option>
+      <option value="Azerbaijani">Azerbaijani</option>
+      <option value="Azeri">Azeri</option>
+      <option value="Bajuni">Bajuni</option>
+      <option value="Basque">Basque</option>
+      <option value="Behdini">Behdini</option>
+      <option value="Belorussian">Belorussian</option>
+      <option value="Bengali">Bengali</option>
+      <option value="Berber">Berber</option>
+      <option value="Bosnian">Bosnian</option>
+      <option value="Bravanese">Bravanese</option>
+      <option value="Bulgarian">Bulgarian</option>
+      <option value="Burmese">Burmese</option>
+      <option value="Cakchiquel">Cakchiquel</option>
+      <option value="Cambodian">Cambodian</option>
+      <option value="Cantonese">Cantonese</option>
+      <option value="Catalan">Catalan</option>
+      <option value="Chaldean">Chaldean</option>
+      <option value="Chamorro">Chamorro</option>
+      <option value="Chao-chow">Chao-chow</option>
+      <option value="Chavacano">Chavacano</option>
+      <option value="Chin">Chin</option>
+      <option value="Chuukese">Chuukese</option>
+      <option value="Cree">Cree</option>
+      <option value="Croatian">Croatian</option>
+      <option value="Czech">Czech</option>
+      <option value="Dakota">Dakota</option>
+      <option value="Danish">Danish</option>
+      <option value="Dari">Dari</option>
+      <option value="Dinka">Dinka</option>
+      <option value="Diula">Diula</option>
+      <option value="Dutch">Dutch</option>
+      <option value="Edo">Edo</option>
+      <option value="Estonian">Estonian</option>
+      <option value="Ewe">Ewe</option>
+      <option value="Fante">Fante</option>
+      <option value="Farsi">Farsi</option>
+      <option value="Fijian Hindi">Fijian Hindi</option>
+      <option value="Finnish">Finnish</option>
+      <option value="Flemish">Flemish</option>
+      <option value="French">French</option>
+      <option value="French Canadian">French Canadian</option>
+      <option value="Fukienese">Fukienese</option>
+      <option value="Fula">Fula</option>
+      <option value="Fulani">Fulani</option>
+      <option value="Fuzhou">Fuzhou</option>
+      <option value="Ga">Ga</option>
+      <option value="Gaddang">Gaddang</option>
+      <option value="Gaelic">Gaelic</option>
+      <option value="Gaelic-irish">Gaelic-irish</option>
+      <option value="Gaelic-scottish">Gaelic-scottish</option>
+      <option value="Georgian">Georgian</option>
+      <option value="German">German</option>
+      <option value="Gorani">Gorani</option>
+      <option value="Greek">Greek</option>
+      <option value="Gujarati">Gujarati</option>
+      <option value="Haitian Creole">Haitian Creole</option>
+      <option value="Hakka">Hakka</option>
+      <option value="Hakka-chinese">Hakka-chinese</option>
+      <option value="Hausa">Hausa</option>
+      <option value="Hebrew">Hebrew</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Hmong">Hmong</option>
+      <option value="Hungarian">Hungarian</option>
+      <option value="Ibanag">Ibanag</option>
+      <option value="Ibo">Ibo</option>
+      <option value="Icelandic">Icelandic</option>
+      <option value="Igbo">Igbo</option>
+      <option value="Ilocano">Ilocano</option>
+      <option value="Indonesian">Indonesian</option>
+      <option value="Inuktitut">Inuktitut</option>
+      <option value="Italian">Italian</option>
+      <option value="Jakartanese">Jakartanese</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Javanese">Javanese</option>
+      <option value="Kanjobal">Kanjobal</option>
+      <option value="Karen">Karen</option>
+      <option value="Karenni">Karenni</option>
+      <option value="Kashmiri">Kashmiri</option>
+      <option value="Kazakh">Kazakh</option>
+      <option value="Kikuyu">Kikuyu</option>
+      <option value="Kinyarwanda">Kinyarwanda</option>
+      <option value="Kirundi">Kirundi</option>
+      <option value="Korean">Korean</option>
+      <option value="Kosovan">Kosovan</option>
+      <option value="Kotokoli">Kotokoli</option>
+      <option value="Krio">Krio</option>
+      <option value="Kurdish">Kurdish</option>
+      <option value="Kurmanji">Kurmanji</option>
+      <option value="Kyrgyz">Kyrgyz</option>
+      <option value="Lakota">Lakota</option>
+      <option value="Laotian">Laotian</option>
+      <option value="Latvian">Latvian</option>
+      <option value="Lingala">Lingala</option>
+      <option value="Lithuanian">Lithuanian</option>
+      <option value="Luganda">Luganda</option>
+      <option value="Luo">Luo</option>
+      <option value="Maay">Maay</option>
+      <option value="Macedonian">Macedonian</option>
+      <option value="Malay">Malay</option>
+      <option value="Malayalam">Malayalam</option>
+      <option value="Maltese">Maltese</option>
+      <option value="Mandarin">Mandarin</option>
+      <option value="Mandingo">Mandingo</option>
+      <option value="Mandinka">Mandinka</option>
+      <option value="Marathi">Marathi</option>
+      <option value="Marshallese">Marshallese</option>
+      <option value="Mien">Mien</option>
+      <option value="Mina">Mina</option>
+      <option value="Mirpuri">Mirpuri</option>
+      <option value="Mixteco">Mixteco</option>
+      <option value="Moldavan">Moldavan</option>
+      <option value="Mongolian">Mongolian</option>
+      <option value="Montenegrin">Montenegrin</option>
+      <option value="Navajo">Navajo</option>
+      <option value="Neapolitan">Neapolitan</option>
+      <option value="Nepali">Nepali</option>
+      <option value="Nigerian Pidgin">Nigerian Pidgin</option>
+      <option value="Norwegian">Norwegian</option>
+      <option value="Oromo">Oromo</option>
+      <option value="Pahari">Pahari</option>
+      <option value="Papago">Papago</option>
+      <option value="Papiamento">Papiamento</option>
+      <option value="Pashto">Pashto</option>
+      <option value="Patois">Patois</option>
+      <option value="Pidgin English">Pidgin English</option>
+      <option value="Polish">Polish</option>
+      <option value="Portug.creole">Portug.creole</option>
+      <option value="Portuguese">Portuguese</option>
+      <option value="Pothwari">Pothwari</option>
+      <option value="Pulaar">Pulaar</option>
+      <option value="Punjabi">Punjabi</option>
+      <option value="Putian">Putian</option>
+      <option value="Quichua">Quichua</option>
+      <option value="Romanian">Romanian</option>
+      <option value="Russian">Russian</option>
+      <option value="Samoan">Samoan</option>
+      <option value="Serbian">Serbian</option>
+      <option value="Shanghainese">Shanghainese</option>
+      <option value="Shona">Shona</option>
+      <option value="Sichuan">Sichuan</option>
+      <option value="Sicilian">Sicilian</option>
+      <option value="Sinhalese">Sinhalese</option>
+      <option value="Slovak">Slovak</option>
+      <option value="Somali">Somali</option>
+      <option value="Sorani">Sorani</option>
+      <option value="Spanish">Spanish</option>
+      <option value="Sudanese Arabic">Sudanese Arabic</option>
+      <option value="Sundanese">Sundanese</option>
+      <option value="Susu">Susu</option>
+      <option value="Swahili">Swahili</option>
+      <option value="Swedish">Swedish</option>
+      <option value="Sylhetti">Sylhetti</option>
+      <option value="Tagalog">Tagalog</option>
+      <option value="Taiwanese">Taiwanese</option>
+      <option value="Tajik">Tajik</option>
+      <option value="Tamil">Tamil</option>
+      <option value="Telugu">Telugu</option>
+      <option value="Thai">Thai</option>
+      <option value="Tibetan">Tibetan</option>
+      <option value="Tigre">Tigre</option>
+      <option value="Tigrinya">Tigrinya</option>
+      <option value="Toishanese">Toishanese</option>
+      <option value="Tongan">Tongan</option>
+      <option value="Toucouleur">Toucouleur</option>
+      <option value="Trique">Trique</option>
+      <option value="Tshiluba">Tshiluba</option>
+      <option value="Turkish">Turkish</option>
+      <option value="Twi">Twi</option>
+      <option value="Ukrainian">Ukrainian</option>
+      <option value="Urdu">Urdu</option>
+      <option value="Uyghur">Uyghur</option>
+      <option value="Uzbek">Uzbek</option>
+      <option value="Vietnamese">Vietnamese</option>
+      <option value="Visayan">Visayan</option>
+      <option value="Welsh">Welsh</option>
+      <option value="Wolof">Wolof</option>
+      <option value="Yiddish">Yiddish</option>
+      <option value="Yoruba">Yoruba</option>
+      <option value="Yupik">Yupik</option>
+    </select>
+  </script>
+  <script type="text/example" class="example-select2" data-title="Tagging">
+<input type="text" class="pat-select2"
+    data-pat-select2="separator:,;
+                      tags:Red,Yellow,Green,Orange,Purple;
+                      width:20em;
+                      initvaluemap:Red:The Color Red,Orange:The Color Orange"
+    value="Red,Orange"/>
+  </script>
+  <script type="text/example" class="example-select2" data-title="Orderable tags">
+<input type="text" class="pat-select2"
+    data-pat-select2="orderable:true;
+                      tags:Red,Yellow,Green;
+                      width:20em" />
+  </script>
+  <script type="text/example" class="example-select2" data-title="AJAX tags">
+<input type="hidden" class="pat-select2"
+    data-pat-select2="placeholder:Search for a Value;
+                      ajaxvocabulary:select2-test.json;
+                      width:20em" />
+  </script>
+
+  <!--  **** Table Sorter **** -->
   <script>
     addPattern({
       id: 'tablesorter',
       title: 'Table Sorter',
-      description: 'Sort a table',
+      description: 'A pattern you can apply to a <strong>table so it can have its items rearranged</strong> when clicking the header.',
       attributes: []
     });
   </script>
@@ -1175,65 +1431,190 @@ make bootstrap</pre>
 
   </script>
   <script type="text/example" class="example-tablesorter" data-title="Default">
-<table class="pat-tablesorter">
-  <thead>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Occupation</th>
-    <th>Age</th>
-  </thead>
-  <tr>
-    <td>Buster</td>
-    <td>Bluth</td>
-    <td>Army</td>
-    <td>35</td>
-  </tr>
-  <tr>
-    <td>Michael</td>
-    <td>Bluth</td>
-    <td>Company President</td>
-    <td>39</td>
-  </tr>
-  <tr>
-    <td>GOB</td>
-    <td>Bluth</td>
-    <td>Magician</td>
-    <td>37</td>
-  </tr>
-  <tr>
-    <td>Lindsay</td>
-    <td>Fünke</td>
-    <td>Protester</td>
-    <td>36</td>
-  </tr>
-  <tr>
-    <td>Tony</td>
-    <td>Wonder</td>
-    <td>Magician</td>
-    <td>35</td>
-  </tr>
-  <tr>
-    <td>Tobias</td>
-    <td>Fünke</td>
-    <td>Therapist</td>
-    <td>40</td>
-  </tr>
-</table>
+    <table class="pat-tablesorter">
+      <thead>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Occupation</th>
+        <th>Age</th>
+      </thead>
+      <tr>
+        <td>Buster</td>
+        <td>Bluth</td>
+        <td>Army</td>
+        <td>35</td>
+      </tr>
+      <tr>
+        <td>Michael</td>
+        <td>Bluth</td>
+        <td>Company President</td>
+        <td>39</td>
+      </tr>
+      <tr>
+        <td>GOB</td>
+        <td>Bluth</td>
+        <td>Magician</td>
+        <td>37</td>
+      </tr>
+      <tr>
+        <td>Lindsay</td>
+        <td>Fünke</td>
+        <td>Protester</td>
+        <td>36</td>
+      </tr>
+      <tr>
+        <td>Tony</td>
+        <td>Wonder</td>
+        <td>Magician</td>
+        <td>35</td>
+      </tr>
+      <tr>
+        <td>Tobias</td>
+        <td>Fünke</td>
+        <td>Therapist</td>
+        <td>40</td>
+      </tr>
+    </table>
   </script>
 
-  <!--  **** Tooltip -->
+  <!--  **** TinyMCE **** -->
+  <script>
+    addPattern({
+      id: 'tinymce',
+      title: 'TinyMCE',
+      description: 'Rich text editor.',
+      attributes: [
+        {attribute: 'relatedItems', type: 'Object', 'default': '<pre>{\n'
+          + '  attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"],\n'
+          + '  batchSize: 20,\n'
+          + '  basePath: "/",\n'
+          + '  ajaxvocabulary: null,\n'
+          + '  width: 500,\n'
+          + '  maximumSelectionSize: 1,\n'
+          + '  placeholder: "Search for item on site..."\n'
+          + '}</pre>', description: 'TODO.'},
+        {attribute: 'targetList', type: 'List', 'default': '<pre>[\n'
+          + '  {text: "Open in this window / frame", value: ""},\n'
+          + '  {text: "Open in new window", value: "_blank"},\n'
+          + '  {text: "Open in parent window / frame", value: "_parent"},\n'
+          + '  {text: "Open in top frame (replaces all frames)", value: "_top"}\n'
+          + ']</pre>', description: 'TODO.'},
+        {attribute: 'text', type: 'List', 'default': '<pre>{\n'
+          + '  insertBtn: "Insert", // so this can be configurable for different languages\n'
+          + '  cancelBtn: "Cancel",\n'
+          + '  insertHeading: "Insert link",\n'
+          + '  title: "Title",\n'
+          + '  internal: "Internal",\n'
+          + '  external: "External",\n'
+          + '  email: "Email",\n'
+          + '  anchor: "Anchor",\n'
+          + '  subject: "Subject"\n'
+          + '}</pre>', description: 'TODO.'},
+        {attribute: 'tiny', type: 'Object', 'default': '<pre>{\n'
+          + '  plugins: [\n'
+          + '    "advlist autolink lists link image charmap print preview anchor",\n'
+          + '    "searchreplace visualblocks code fullscreen",\n'
+          + '    "insertdatetime media table contextmenu paste plonelink"\n'
+          + '  ],\n'
+          + '  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"\n'
+          + '}</pre>', description: 'TODO.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_tinymce">
+
+  </script>
+  <script type="text/example" class="example-tinymce" data-title="Default">
+    <form>
+      <textarea class="pat-tinymce"
+        data-pat-tinymce='{"relatedItems":
+                            { "ajaxvocabulary": "/relateditems-test.json"} }'
+        ></textarea>
+    </form>
+  </script>
+
+  <!--  **** Table of Contents **** -->
+  <script>
+    addPattern({
+      id: 'autotoc',
+      title: 'Table of Contents',
+      description: 'Automatically <strong>generate a table of contents</strong>.',
+      attributes: [
+        {attribute: 'IDPrefix', type: 'String', 'default': 'autotoc-item-', description: 'Prefix used to generate ID.'},
+        {attribute: 'klassActive', type: 'String', 'default': 'active', description: 'Class used for active level.'},
+        {attribute: 'klassLevelPrefix', type: 'String', 'default': 'autotoc-level-', description: 'Class prefix used for the TOC levels.'},
+        {attribute: 'klassSection', type: 'String', 'default': 'autotoc-section', description: 'Class used for section in TOC.'},
+        {attribute: 'klassTOC', type: 'String', 'default': 'autotoc-nav', description: 'Class used for the TOC.'},
+        {attribute: 'levels', type: 'String', 'default': 'h1,h2,h3', description: 'Selectors used to find levels.'},
+        {attribute: 'scrollDuration', type: 'String', 'default': 'slow', description: 'Speed of scrolling.'},
+        {attribute: 'scrollEasing', type: 'String', 'default': 'swing', description: 'Easing to use while scrolling.'},
+        {attribute: 'section', type: 'String', 'default': 'section', description: 'Tag type to use for TOC.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_autotoc">
+
+  </script>
+  <script type="text/example" class="example-autotoc" data-title="Default">
+    <div class="pat-autotoc"
+         data-pat-autotoc="scrollDuration:slow;
+                           levels:h4,h5,h6;">
+      <h4>Title 1</h4>
+      <p>Mr. Zuckerkorn, you've been warned about touching. You said
+        spanking. It walked on my pillow! How about a turtle? I've always
+        loved those leathery little snappy faces.</p>
+      <h5>Title 1.1</h5>
+      <p>Ah coodle doodle do Caw ca caw, caw ca caw. Butterscotch!</p>
+      <h6>Title 1.1.1</h6>
+      <p>Want a lick? Okay, Lindsay, are you forgetting that I was
+        a professional twice over - an analyst and a therapist.</p>
+      <h4>Title 2</h4>
+      <p>You boys know how to shovel coal? Don't worry, these young
+        beauties have been nowhere near the bananas. I thought the two of
+        us could talk man-on-man.</p>
+    </div>
+  </script>
+
+  <!--  **** Tooltip **** -->
   <script>
     addPattern({
       id: 'tooltip',
       title: 'Tooltip',
-      description: 'Show a tool tip on hover'
+      description: 'A pattern to show a tooltip on hover.',
+      attributes: [
+        {attribute: 'event_enter', type: 'String', 'default': 'mouseenter', description: 'Event used to trigger tooltip.'},
+        {attribute: 'event_exit', type: 'String', 'default': 'mouseleave', description: 'Event used to dismiss tooltip.'}
+      ]
     });
   </script>
   <script type="text/template" id="page_tooltip">
-
+    <h2>Directions</h2> 
+    You can use this inside Plone or on any static page. Please check below for additional directions for non-Plone sites as there are some lines of code you need to add to the header of your webpage.
+    <h3>Adding tooltip using Plone</h3>
+    <ul>
+      <li> Make sure your viewing the page you want to add the tool tip too.</li>
+      <li> Log in </li>
+      <li> Create some text that you want to be the link that will reveal the tooltip. </li>
+      <li> Select the view html button</li>
+      <li>Find your text. and wrap that text with an href tag, and add a class and the href tag. <br>
+      It should look like &lt; a class=&quot;pat-tooltip&quot; href=&quot;#my-demo-tip&quot;&gt; My link text &lt;/a&gt;</li>
+      <li>Choose Save</li>
+      </ul>
+    <p>Now that we have added our link we now need to add our tooltip. </p>
+    <ul>
+      <li>Choose &quot;edit&quot;</li>
+      <li>Immediently following the link click to add some text and hit your &quot;return&quot; key</li>
+      <li>Add the text that you want to be the tip.</li>
+      <li>Choose the &quot;edit html&quot; button</li>
+      <li>Find the tip text and wrap that text with a div tag, an ID tag and a class.<br>
+      It should look like &lt;div id=&quot;my-demo-tip&quot; class=&quot;tooltips&quot;&gt; My Tip Text here &lt;/div&gt;</li>
+      <li>Choose Save and test your tooltip.</li>
+      </ul>
+    <p>Note: it's important that the href AND the ID be named exactly the same thing. This is what links them together.</p>
+    <h3>Adding tooltip not using Plone</h3>
+    <p>TODO</p>
   </script>
-  <script type="text/example" class="example-tooltip" data-title="Default">
-
+  <script type="text/example" class="example-tooltip">
     <p href=".example-class" class="pat-tooltip">
      Hover over this line to see a tooltip
     </p>
