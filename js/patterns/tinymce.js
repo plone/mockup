@@ -323,9 +323,13 @@ define([
           }
         }
       }
-      for(i = 0; i < self.anchor_data.length; i=i+1){
-        var data = self.anchor_data[i];
-        self.$anchor.append("<option value='" + i + "'>" + data.title + '</option>');
+      if(self.anchor_nodes.length > 0){
+        for(i = 0; i < self.anchor_data.length; i=i+1){
+          var data = self.anchor_data[i];
+          self.$anchor.append("<option value='" + i + "'>" + data.title + '</option>');
+        }
+      } else {
+        self.$anchor.append('<option>No anchors found..</option>');
       }
     },
     show: function(){
