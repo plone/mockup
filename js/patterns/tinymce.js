@@ -32,9 +32,9 @@
 
 define([
   'jquery',
-  './base.js',
-  './relateditems.js',
-  './modal.js',
+  'mockup-patterns-base',
+  'mockup-patterns-relateditems',
+  'mockup-patterns-modal',
   'tinymce'
 ], function($, Base, RelatedItems, Modal, tinymce) {
   "use strict";

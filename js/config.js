@@ -29,13 +29,18 @@ requirejs.config({
       'mockup-patterns-livesearch': 'js/patterns/livesearch',
       'mockup-patterns-modal': 'js/patterns/modal',
       'mockup-patterns-pickadate': 'js/patterns/pickadate',
+      'mockup-patterns-picture': 'js/patterns/picture',
       'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
       'mockup-patterns-relateditems': 'js/patterns/relateditems',
       'mockup-patterns-queryhelper': 'js/patterns/queryhelper',
+      'mockup-patterns-querystring': 'js/patterns/querystring',
       'mockup-patterns-select2': 'js/patterns/select2',
       'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
+      'mockup-patterns-tinymce': 'js/patterns/tinymce',
       'mockup-patterns-toggle': 'js/patterns/toggle',
-      'mockup-bundle-widgets': 'js/bundles/widgets'
+      'mockup-bundles-widgets': 'js/bundles/widgets',
+      'mockup-bundles-toolbar': 'js/bundles/widgets',
+      'mockup-bundles-tiles': 'js/bundles/widgets'
     },
     shim: {
       'underscore': { exports: 'window._' },

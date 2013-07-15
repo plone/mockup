@@ -9,6 +9,10 @@ ifeq ($(UNAME), Linux)
 	BOWER_CHROME=`which chromium`
 endif
 
+compile:
+	$(GRUNT) compile-js
+	$(GRUNT) compile-less
+	$(GRUNT) compile-css
 
 bootstrap:
 	mkdir -p build
@@ -24,8 +28,3 @@ test:
 
 test-ci:
 	CHROME_BIN=$(BOWER_CHROME) $(GRUNT) test-ci
-
-compile:
-	$(GRUNT) compile-js
-	$(GRUNT) compile-less
-	$(GRUNT) compile-css
