@@ -201,7 +201,7 @@ define([
       } else if(self.linkType === 'anchor'){
         val = self.$anchor.select2('val');
         if(val){
-          var index = parseInt(val);
+          var index = parseInt(val, 10);
           var node = self.anchor_nodes[index];
           var data = self.anchor_data[index];
           if(data.newAnchor){
