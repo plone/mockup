@@ -152,26 +152,38 @@ require([
 
   server.respondWith('GET', /relateditems-test.json/, function(xhr, id) {
     var root = [
+      {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
       {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
       {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
       {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
-      {"UID": "asdf1234gsad", "Title": "Contact", "path": "/contact", "Type": "page"},
-      {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "page"},
-      {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "folder"},
-      {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "page"}
+      {"UID": "asdf1234gsad", "Title": "Contact", "path": "/contact", "Type": "Document"},
+      {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "Document"},
+      {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "Folder"},
+      {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "Document"},
     ];
     var about = [
-      {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "page"},
-      {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "page"},
+      {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "Document"},
+      {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "Document"},
       {"UID": "dfgsdfgj675", "Title": "Staff", "path": "/about/staff", "Type": "Folder"},
-      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "page"}
+      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "Document"}
     ];
 
     var staff = [
-      {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "page"},
-      {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "page"}
+      {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "Document"},
+      {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "Document"}
     ];
     var searchables = about.concat(root).concat(staff);
+
+    var addUrls = function(list){
+      /* add getURL value */
+      for(var i=0; i<list.length; i=i+1){
+        var data = list[i];
+        data.getURL = window.location.origin + data.path;
+      }
+    }
+    addUrls(searchables);
+    addUrls(root);
+    root[0].getURL = window.location.origin + '/exampledata/test.png';
 
     var results = [];
 
@@ -203,7 +215,7 @@ require([
       if (term === undefined) return searchables;
       _.each(items, function(item) {
         var q;
-        var keys = (item.UID + ' ' + item.Title + ' ' + item.path).toLowerCase();
+        var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
         if(typeof(term) === 'object'){
           for(var i=0; i<term.length; i++){
             q = term[i].toLowerCase();
@@ -233,7 +245,6 @@ require([
       if (q === undefined) return fromPath;
       search(fromPath, q);
     }
-
     if (path) {
       browse(searchables, term, path);
     } else {

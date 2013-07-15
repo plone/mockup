@@ -255,7 +255,7 @@ define([
             'UID', 'plone.app.querystring.operation.list.contains', ids,
             function(data){
               callback(data.results);
-          });
+          }, false);
         }
       };
 
