@@ -552,7 +552,7 @@ make bootstrap</pre>
       title: 'Live Search',
       description: 'Dynamically query the server and display results.',
       attributes: [
-        {attribute: 'ajaxvocabulary', type: 'String', 'default': '', description: 'The url that will be of the server side page that will be queried.'},
+        {attribute: 'url', type: 'String', 'default': '', description: 'The url that will be of the server side page that will be queried.'},
         {attribute: 'delay', type: 'Integer', '200': '', description: 'Delay in ms after user types before searching.'},
         {attribute: 'highlight', type: 'String', 'default': '"pat-livesearch-highlight"', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
         {attribute: 'minimumInputLength', type: 'Integer', 'default': '3', description: 'Number of characters user must type before search begins.'},
@@ -583,7 +583,7 @@ make bootstrap</pre>
   </script>
   <script type="text/example" class="example-livesearch" data-title="Default">
 <div class="pat-livesearch"
-    data-pat-livesearch="ajaxvocabulary: /search.json;">
+    data-pat-livesearch="url: /search.json;">
   <input type="text" class="pat-livesearch-input" placeholder="Search" />
   <div class="pat-livesearch-container">
     <div class="pat-livesearch-results">
