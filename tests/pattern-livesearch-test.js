@@ -33,11 +33,10 @@
 define([
   'chai',
   'jquery',
-  'sinon-fakeserver',
-  'sinon-faketimers',
+  'sinon',
   'mockup-registry',
   'mockup-patterns-livesearch'
-], function(chai, $, fakeServer, useFakeTimers, registry, Livesearch) {
+], function(chai, $, sinon, registry, Livesearch) {
   "use strict";
 
   var expect = chai.expect,
@@ -47,7 +46,7 @@ define([
   mocha.setup('bdd');
   $.fx.off = true;
 
-  var server = fakeServer.create();
+  var server = sinon.fakeServer.create();
   server.autoRespond = true;
   server.autoRespondAfter = 0;
   server.respondWith(/search.json/, function (xhr, id) {
@@ -187,7 +186,7 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = useFakeTimers();
+      var clock = sinon.useFakeTimers();
 
       var $input = pattern.$input;
 
@@ -233,7 +232,7 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = useFakeTimers();
+      var clock = sinon.useFakeTimers();
 
       var $input = pattern.$input;
 
@@ -267,7 +266,7 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = useFakeTimers();
+      var clock = sinon.useFakeTimers();
 
       var $input = pattern.$input;
 
@@ -295,7 +294,7 @@ define([
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
-      var clock = useFakeTimers();
+      var clock = sinon.useFakeTimers();
       var $input = pattern.$input;
 
       var d = $.Event('keyup');
@@ -331,7 +330,7 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = useFakeTimers();
+      var clock = sinon.useFakeTimers();
 
       var $input= pattern.$input;
       $input.val('abcd').trigger('keyup').focus();

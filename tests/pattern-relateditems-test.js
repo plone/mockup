@@ -33,10 +33,10 @@
 define([
   'chai',
   'jquery',
-  'sinon-fakeserver',
+  'sinon',
   'mockup-registry',
   'mockup-patterns-relateditems'
-], function(chai, $, registry, RelatedItems) {
+], function(chai, $, sinon, registry, RelatedItems) {
   "use strict";
 
   var expect = chai.expect,

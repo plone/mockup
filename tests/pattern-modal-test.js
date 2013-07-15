@@ -33,10 +33,10 @@
 define([
   'chai',
   'jquery',
-  'sinon-fakeserver',
+  'sinon',
   'mockup-registry',
   'mockup-patterns-modal'
-], function(chai, $, fakeServer, registry, Modal) {
+], function(chai, $, sinon, registry, Modal) {
   "use strict";
 
   var expect = chai.expect,
@@ -45,7 +45,7 @@ define([
   mocha.setup('bdd');
   $.fx.off = true;
 
-  var server = fakeServer.create();
+  var server = sinon.fakeServer.create();
   server.autoRespond = true;
   server.autoRespondAfter = 0;
   server.respondWith("patterns-modal-load-via-ajax", function (xhr, id) {
