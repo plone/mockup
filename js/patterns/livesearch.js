@@ -48,7 +48,8 @@ define([
     index: null,
     testTarget: null,
     defaults: {
-      ajaxvocabulary: null, // must be set in order to work
+      url: null, // must be set in order to work
+      dataType: 'json', // 'json' or 'html'
       delay: 200,
       highlight: 'pat-livesearch-highlight', // class to add to items when selected
       minimumInputLength: 3, // number of chars user should type before searching
@@ -168,17 +169,28 @@ define([
       }
 
       var params = self.options.ajax.data(term, 1);
-
+      window.clearInterval(self.timeout);
       $.get(
         self.options.ajax.url,
         $.param(params),
         function(data) {
-          if(data.results !== undefined){
-            self.cache[term] = data.results;
-          }else{
-            console.log('error from server returning result');
+          var dataType = self.options.dataType;
+
+          if (dataType === 'json') {
+
+            if(data.results !== undefined){
+              self.cache[term] = data.results;
+            }else{
+              console.log('error from server returning result');
+            }
+
+          } else if (dataType === 'html') {
+            if(data.results !== undefined){
+              self.cache[term] = data.results;
+            }else{
+              console.log('error from server returning result');
+            }
           }
-          window.clearInterval(self.timeout);
           self.trigger('searched');
         }
       );
@@ -215,6 +227,23 @@ define([
       return self.applyTemplate('help', {help: msg});
     },
 
+    renderJsonResults: function(data) {
+      var self = this;
+      var html = '';
+      if (data.length > 0) {
+        $.each(data, function(index, value){
+          html += self.applyTemplate('result', value);
+        });
+      } else {
+        html = self.renderHelp('noResults', {});
+      }
+      return html;
+    },
+
+    renderhtmlResults: function(data) {
+      return data;
+    },
+
     render: function(event) {
       var self = this;
 
@@ -238,10 +267,12 @@ define([
           if (appendTo.length === 0) {
             appendTo = container;
           }
-          if (data.length > 0) {
-            $.each(data, function(index, value){
-              appendTo.append(self.applyTemplate('result', value));
-            });
+          if (data) {
+            if (self.options.dataType === 'json') {
+              appendTo.append(self.renderJsonResults(data));
+            } else if (self.options.dataType === 'html') {
+              appendTo.append(self.renderHtmlResults(data));
+            }
           } else {
             container.html(self.renderHelp('noResults', {}));
           }
