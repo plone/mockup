@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plone Mockup(s)</title>
 
-  <link rel="stylesheet/less" type="text/css" href="less/mockup.less" />
+  <link rel="stylesheet/less" type="text/css" href="less/docs.less" />
 
   <script src="node_modules/less/dist/less-1.4.1.min.js"></script>
   <script src="bower_components/jquery/jquery.js"></script>
@@ -420,7 +420,7 @@ make bootstrap</pre>
   [ ] tablesorter
   [ ] tinymce
   [ ] toc
-  [ ] tooltip
+  [x] tooltip
 
   -->
 
@@ -1151,6 +1151,87 @@ make bootstrap</pre>
                                ajaxvocabulary:/relateditems-test.json" />
   </script>
 
+  <!--  **** Tablesorter -->
+  <script>
+    addPattern({
+      id: 'tablesorter',
+      title: 'Table Sorter',
+      description: 'Sort a table',
+      attributes: []
+    });
+  </script>
+  <script type="text/template" id="page_tablesorter">
+
+  </script>
+  <script type="text/example" class="example-tablesorter" data-title="Default">
+<table class="pat-tablesorter">
+  <thead>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Occupation</th>
+    <th>Age</th>
+  </thead>
+  <tr>
+    <td>Buster</td>
+    <td>Bluth</td>
+    <td>Army</td>
+    <td>35</td>
+  </tr>
+  <tr>
+    <td>Michael</td>
+    <td>Bluth</td>
+    <td>Company President</td>
+    <td>39</td>
+  </tr>
+  <tr>
+    <td>GOB</td>
+    <td>Bluth</td>
+    <td>Magician</td>
+    <td>37</td>
+  </tr>
+  <tr>
+    <td>Lindsay</td>
+    <td>Fünke</td>
+    <td>Protester</td>
+    <td>36</td>
+  </tr>
+  <tr>
+    <td>Tony</td>
+    <td>Wonder</td>
+    <td>Magician</td>
+    <td>35</td>
+  </tr>
+  <tr>
+    <td>Tobias</td>
+    <td>Fünke</td>
+    <td>Therapist</td>
+    <td>40</td>
+  </tr>
+</table>
+  </script>
+
+  <!--  **** Tooltip -->
+  <script>
+    addPattern({
+      id: 'tooltip',
+      title: 'Tooltip',
+      description: 'Show a tool tip on hover'
+    });
+  </script>
+  <script type="text/template" id="page_tooltip">
+
+  </script>
+  <script type="text/example" class="example-tooltip" data-title="Default">
+
+    <p href=".example-class" class="pat-tooltip">
+     Hover over this line to see a tooltip
+    </p>
+
+    <p class="tooltips example-class">
+      Setting the .example-class in the href makes this show up
+    </p>
+  </script>
+
 </head>
 
 <body>
@@ -1175,6 +1256,7 @@ make bootstrap</pre>
             <li><a href="#getting-started">Getting Started</a></li>
             <li><a href="#patterns">Patterns</a></li>
           </ul>
+          <img class="pull-right" src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" />
         </div>
       </div>
     </div>
