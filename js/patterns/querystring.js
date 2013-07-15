@@ -73,7 +73,6 @@ define([
               .addClass('span1')
               .appendTo(self.$wrapper)
               .on('click', function(e) {
-                self.trigger('remove');
                 self.remove();
               });
 
@@ -120,6 +119,8 @@ define([
         self.createOperator(index, operator, value);
         self.createClear();
       }
+
+      self.trigger('create-criteria');
     },
     createOperator: function(index, operator, value) {
       var self = this;
@@ -158,6 +159,8 @@ define([
 
       self.$operator.select2('val', operator);
       self.createValue(index, value);
+
+      self.trigger('create-operator');
     },
     createValue: function(index, value) {
       var self = this,
@@ -172,7 +175,10 @@ define([
       if (widget === 'StringWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.klassValue + '-' + widget)
-                .appendTo($wrapper);
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
 
       } else if (widget === 'DateWidget') {
         self.$value = $('<input type="text"/>')
@@ -181,6 +187,9 @@ define([
                 .patternPickadate({
                   time: false,
                   date: { format: "dd/mm/yyyy" }
+                })
+                .change(function(){
+                  self.trigger('value-changed');
                 });
 
       } else if (widget === 'DateRangeWidget') {
@@ -192,6 +201,9 @@ define([
                         .patternPickadate({
                           time: false,
                           date: { format: "dd/mm/yyyy" }
+                        })
+                        .change(function(){
+                          self.trigger('value-changed');
                         });
         $wrapper.append(' to ');
         var enddt = $('<input type="text"/>')
@@ -201,6 +213,9 @@ define([
                         .patternPickadate({
                           time: false,
                           date: { format: "dd/mm/yyyy" }
+                        })
+                        .change(function(){
+                          self.trigger('value-changed');
                         });
         self.$value = [startdt, enddt];
 
@@ -208,22 +223,34 @@ define([
         self.$value = $('<input type="text"/>')
                 .after($('<span/>').html(self.options.days))
                 .addClass(self.options.klassValue + '-' + widget)
-                .appendTo($wrapper);
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
 
       } else if (widget === 'ReferenceWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.klassValue + '-' + widget)
-                .appendTo($wrapper);
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
 
       } else if (widget === 'RelativePathWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.klassValue + '-' + widget)
-                .appendTo($wrapper);
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
 
       } else if (widget === 'MultipleSelectionWidget') {
         self.$value = $('<select/>').attr('multiple', true)
                 .addClass(self.options.klassValue + '-' + widget)
-                .appendTo($wrapper);
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
         if (self.indexes[index]) {
           $.each(self.indexes[index].values, function(value, options) {
             $('<option/>')
@@ -239,6 +266,8 @@ define([
         self.$value.select2('val', value);
       }
 
+      self.trigger('create-value');
+
     },
     createClear: function() {
       var self = this;
@@ -249,6 +278,7 @@ define([
     },
     remove: function() {
       var self = this;
+      self.trigger('remove');
       self.$remove.remove();
       self.$index.parent().remove();
       self.removeOperator();
@@ -258,18 +288,21 @@ define([
     },
     removeClear: function() {
       var self = this;
+      self.trigger('remove-clear');
       if (self.$clear) {
         self.$clear.remove();
       }
     },
     removeOperator: function() {
       var self = this;
+      self.trigger('remove-operator');
       if (self.$operator) {
         self.$operator.parent().remove();
       }
     },
     removeValue: function() {
       var self = this;
+      self.trigger('remove-value');
       if (self.$value) {
         if($.isArray(self.$value)) { // date ranges have 2 values
           self.$value[0].parent().remove();
@@ -293,6 +326,9 @@ define([
       indexes: [],
       klassWrapper: 'querystring-wrapper',
       criteria: {},
+      previewurl: '', // base url to use to request preview information from
+      klassPreviewWrapper: 'querystring-preview-wrapper',
+      klassPreview: 'querystring-preview'
     },
     init: function() {
       var self = this;
@@ -301,9 +337,16 @@ define([
       self.$el.hide();
 
       // create wrapper for out criteria
-      self.$wrapper = $('<div/>')
-        .addClass(self.options.klassWrapper);
+      self.$wrapper = $('<div/>');
       self.$el.after(self.$wrapper);
+
+      self.$criteriaWrapper = $('<div/>')
+        .addClass(self.options.klassWrapper)
+        .appendTo(self.$wrapper);
+
+      self.$previewWrapper = $('<div/>')
+        .addClass(self.options.klassPreviewWrapper)
+        .appendTo(self.$wrapper);
 
       self.criterias = [];
 
@@ -316,10 +359,13 @@ define([
 
       // add empty criteria which enables users to create new cr
       self.createCriteria();
+
+      // add criteria preview pane to see results from criteria query
+      self.refreshPreviewEvent(self);
     },
     createCriteria: function(index, operator, value) {
       var self = this,
-          criteria = new Criteria(self.$wrapper, self.options.criteria,
+          criteria = new Criteria(self.$criteriaWrapper, self.options.criteria,
             self.options.indexes, index, operator, value);
 
       criteria.on('remove', function(e) {
@@ -333,7 +379,43 @@ define([
           self.createCriteria();
         }
       });
+
+      criteria.on('remove', function(){self.refreshPreviewEvent(self);})
+      criteria.on('remove-clear', function(){self.refreshPreviewEvent(self);})
+      criteria.on('remove-operator', function(){self.refreshPreviewEvent(self);})
+      criteria.on('remove-value', function(){self.refreshPreviewEvent(self);})
+      criteria.on('index-changed', function(){self.refreshPreviewEvent(self);})
+      criteria.on('operator-changed', function(){self.refreshPreviewEvent(self);})
+      criteria.on('create-criteria', function(){self.refreshPreviewEvent(self);})
+      criteria.on('create-operator', function(){self.refreshPreviewEvent(self);})
+      criteria.on('create-value', function(){self.refreshPreviewEvent(self);})
+      criteria.on('value-changed', function(){self.refreshPreviewEvent(self);})
+
       self.criterias.push(criteria);
+    },
+    refreshPreviewEvent: function(self) {
+      if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
+      self._tmpcnt++;
+
+      if(typeof self._preview_xhr !== "undefined") {
+        self._preview_xhr.abort();
+      }
+      if(typeof self.$previewPane !== "undefined") {
+        self.$previewPane.remove();
+      }
+      self.$previewPane = $('<div/>')
+        .addClass(self.options.klassPreview)
+        .appendTo(self.$previewWrapper);
+      self.$previewPane.text('refreshed ' + self._tmpcnt + ' times');
+      /*
+      $.get(self.options.previewurl)
+          .done(function(data, stat){
+            
+          })
+          .fail(function(xhr, stat, err){
+            
+          });
+      */
     }
   });
 
