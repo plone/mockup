@@ -79,6 +79,8 @@ define([
           .on('click', function(e, doScroll) {
             e.stopPropagation();
             e.preventDefault();
+            self.$toc.children('.' + self.options.klassActive).removeClass(
+              self.options.klassActive);
             self.$el.children('.' + self.options.klassActive).removeClass(
               self.options.klassActive);
             $(e.target).addClass(self.options.klassActive);
