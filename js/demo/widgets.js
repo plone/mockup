@@ -15,9 +15,9 @@ function getQueryVariable(url, variable) {
 
 require([
   'jquery',
-  'sinon',
+  'sinon-fakeserver',
   'underscore',
-  './../registry.js',
+  'mockup-registry',
   './../bundles/widgets.js',
   './../patterns/expose.js',
   './../patterns/modal.js',
@@ -28,14 +28,15 @@ require([
   './../patterns/tooltip.js',
   './../patterns/tablesorter.js',
   './../patterns/livesearch.js'
-], function($, sinon, _, registry, uri) {
+], function($, fakeServer, _, registry, uri) {
+  debugger;
   var URI = uri;
   // before demo patterns in overlay remove html created by autotoc pattern
   $('#modal1').on('show.modal.patterns', function(e, modal) {
     $('.autotoc-nav', modal.$modal).remove();
   });
 
-  var server = sinon.fakeServer.create();
+  var server = fakeServer.create();
   server.autoRespond = true;
   server.autoRespondAfter = 500;
   server.respondWith(/something.html/, function (xhr, id) {
