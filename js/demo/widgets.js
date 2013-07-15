@@ -18,16 +18,16 @@ require([
   'sinon-fakeserver',
   'underscore',
   'mockup-registry',
-  './../bundles/widgets.js',
-  './../patterns/expose.js',
-  './../patterns/modal.js',
-  './../patterns/accessibility.js',
-  './../patterns/cookiedirective.js',
-  './../patterns/preventdoublesubmit.js',
-  './../patterns/formUnloadAlert.js',
-  './../patterns/tooltip.js',
-  './../patterns/tablesorter.js',
-  './../patterns/livesearch.js'
+  'mockup-bundle-widgets',
+  'mockup-patterns-expose',
+  'mockup-patterns-modal',
+  'mockup-patterns-accessibility',
+  'mockup-patterns-cookiedirective',
+  'mockup-patterns-preventdoublesubmit',
+  'mockup-patterns-formUnloadAlert',
+  'mockup-patterns-tooltip',
+  'mockup-patterns-tablesorter',
+  'mockup-patterns-livesearch'
 ], function($, fakeServer, _, registry, uri) {
   debugger;
   var URI = uri;
@@ -142,7 +142,8 @@ require([
   server.respondWith(/select2-test.json/, function(xhr, id) {
     xhr.respond(200, { "Content-Type": "application/json" }, $('#select2-json').html());
   });
-  server.respondWith(/relateditems-test.json/, function(xhr, id) {
+  server.respondWith('GET', /relateditems-test.json/, function(xhr, id) {
+    debugger;
     var root = [
       {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
       {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},

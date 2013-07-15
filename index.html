@@ -17,10 +17,9 @@
   <script src="bower_components/jquery/jquery.js"></script>
   <script src="bower_components/requirejs/require.js"></script>
   <script src="js/config.js"></script>
-  <script src="js/demo/widgets.js"></script>
   <script>
 
-// Helper utilities
+// helper utilities
 var pages = [];
 var patterns = [];
 addPattern = function(page) {
@@ -32,10 +31,9 @@ addPage = function(page) {
 
 // 
 require([
-  'sinon-fakeserver',
+  'sinon',
   'js/docs'
-], function(fakeServer, DocsApp) {
-
+], function(sinon, DocsApp) {
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
     if(query === undefined){
@@ -51,9 +49,9 @@ require([
     return null;
   }
 
-  var server = fakeServer.create();
+  var server = sinon.fakeServer.create();
   server.autoRespond = true;
-  server.autoRespondAfter = 500;
+  server.autoRespondAfter = 200;
 
   server.respondWith(/search.json/, function (xhr, id) {
     var items = [

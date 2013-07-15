@@ -14,7 +14,7 @@
     "jquery-form": "a83d4a19f620dc1d7bf617a3caef06d28f77c289"
   },
   "devDependencies": {
-    "sinon": "1.7.3",
+    "sinon": "1.5.0",
     "chai": "1.7.2"
   }
 }

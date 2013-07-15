@@ -9,10 +9,7 @@ requirejs.config({
       'select2': 'bower_components/select2/select2',
       'tinymce': 'lib/tinymce/tinymce.min',
       'chai': 'bower_components/chai/chai',
-      'sinon': 'bower_components/sinon/lib/sinon',
-      'sinon-fakexmlhttprequest': 'bower_components/sinon/lib/sinon/util/fake_xml_http_request',
-      'sinon-fakeserver': 'bower_components/sinon/lib/sinon/util/fake_server',
-      'sinon-faketimers': 'bower_components/sinon/lib/sinon/util/fake_timers',
+      'sinon': 'lib/sinon',
       'picker': 'bower_components/pickadate/lib/picker',
       'picker.date': 'bower_components/pickadate/lib/picker.date',
       'picker.time': 'bower_components/pickadate/lib/picker.time',
@@ -37,7 +34,8 @@ requirejs.config({
       'mockup-patterns-queryhelper': 'js/patterns/queryhelper',
       'mockup-patterns-select2': 'js/patterns/select2',
       'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
-      'mockup-patterns-toggle': 'js/patterns/toggle'
+      'mockup-patterns-toggle': 'js/patterns/toggle',
+      'mockup-bundle-widgets': 'js/bundles/widgets'
     },
     shim: {
       'underscore': { exports: 'window._' },
