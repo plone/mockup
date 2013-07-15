@@ -15,6 +15,7 @@ compile:
 	$(GRUNT) compile-css
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
+	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
 	# ----------------------------------------------------------------------- #
 
 bootstrap:
