@@ -64,6 +64,7 @@ define([
       // create wrapper criteria and append it to DOM
       self.$wrapper = $('<div/>')
               .addClass(self.options.klassWrapper)
+              .addClass("row")
               .appendTo($el);
 
       // Remove button
@@ -97,6 +98,7 @@ define([
       self.$wrapper.append(
           $('<div/>')
               .addClass(self.options.klassIndex)
+              .addClass("span4")
               .append(self.$index));
 
       // add blink (select2)
@@ -137,6 +139,7 @@ define([
       self.$wrapper.append(
           $('<div/>')
               .addClass(self.options.klassOperator)
+              .addClass("span2")
               .append(self.$operator));
 
       // add blink (select2)
@@ -160,6 +163,7 @@ define([
           widget = self.indexes[index].operators[self.$operator.val()].widget,
           $wrapper = $('<div/>')
             .addClass(self.options.klassValue)
+            .addClass("span6")
             .appendTo(self.$wrapper);
 
       self.removeValue();
@@ -264,8 +268,7 @@ define([
     defaults: {
       indexes: [],
       klassWrapper: 'querystring-wrapper',
-      criteria: {
-      }
+      criteria: {},
     },
     init: function() {
       var self = this;
@@ -274,7 +277,8 @@ define([
       self.$el.hide();
 
       // create wrapper for out criteria
-      self.$wrapper = $('<div/>').addClass(self.options.klassWrapper);
+      self.$wrapper = $('<div/>')
+        .addClass(self.options.klassWrapper);
       self.$el.after(self.$wrapper);
 
       self.criterias = [];
