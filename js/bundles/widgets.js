@@ -41,7 +41,6 @@ define([
   'mockup-patterns-toggle',
   'mockup-patterns-tinymce',
   'mockup-patterns-picture',
-  'mockup-patterns-livesearch',
   'mockup-patterns-querystring',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus'
@@ -116,6 +115,9 @@ define([
         }
       });
 
+      /* 
+      Commenting out Livesearch for now
+      
       $match = $root.find('.LSBox');
       var url = $match.parents('form').attr('action').replace('@@search',
           '@@getVocabulary?name=plone.app.vocabularies.Catalog');
@@ -144,6 +146,7 @@ define([
           }
         })
       });
+      */
 
       // Use toggle to replace the toggleSelect from the select_all.js
       // First, remove the previous onclick
