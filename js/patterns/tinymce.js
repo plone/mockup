@@ -754,6 +754,9 @@ define([
       tinyOptions.addImageClicked = function(){
         self.addImageClicked.apply(self, []);
       };
+      // XXX: disabled skin means it wont load css files which we already
+      // include in widgets.min.css
+      tinyOptions.skin = false;
       tinymce.init(tinyOptions);
       self.tiny = tinymce.get(id);
     }
