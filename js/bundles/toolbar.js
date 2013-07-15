@@ -49,8 +49,7 @@ define([
 
     // toggle class on click (shows dropdown)
     $('.toolbar-dropdown > a').each(function() {
-      var self = this;
-      new Toggle($(self), {
+      $(this).patternToggle({
         target: '.toolbar-dropdown',
         value: 'toolbar-dropdown-open',
         menu: 'parent'
