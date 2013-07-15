@@ -183,7 +183,25 @@ define([
                 });
 
       } else if (widget === 'DateRangeWidget') {
-        self.$value = $('<input type="text"/>').appendTo($wrapper);
+        //self.$value = $('<input type="text"/>').appendTo($wrapper);
+        var startdt = $('<input type="text"/>')
+                        .addClass(self.options.klassValue + '-' + widget)
+                        .addClass(self.options.klassValue + '-' + widget + '-start')
+                        .appendTo($wrapper)
+                        .patternPickadate({
+                          time: false,
+                          date: { format: "dd/mm/yyyy" }
+                        });
+        $wrapper.append(' to ');
+        var enddt = $('<input type="text"/>')
+                        .addClass(self.options.klassValue + '-' + widget)
+                        .addClass(self.options.klassValue + '-' + widget + '-end')
+                        .appendTo($wrapper)
+                        .patternPickadate({
+                          time: false,
+                          date: { format: "dd/mm/yyyy" }
+                        });
+        self.$value = [startdt, enddt];
 
       } else if (widget === 'RelativeDateWidget') {
         self.$value = $('<input type="text"/>')
@@ -252,7 +270,12 @@ define([
     removeValue: function() {
       var self = this;
       if (self.$value) {
-        self.$value.parent().remove();
+        if($.isArray(self.$value)) { // date ranges have 2 values
+          self.$value[0].parent().remove();
+        }
+        else {
+          self.$value.parent().remove();
+        }
       }
     },
     trigger: function(name) {
