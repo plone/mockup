@@ -38,6 +38,7 @@ requirejs.config({
       'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
       'mockup-patterns-tinymce': 'js/patterns/tinymce',
       'mockup-patterns-toggle': 'js/patterns/toggle',
+      'mockup-patterns-tooltip': 'js/patterns/tooltip',
       'mockup-bundles-widgets': 'js/bundles/widgets',
       'mockup-bundles-toolbar': 'js/bundles/widgets',
       'mockup-bundles-tiles': 'js/bundles/widgets'
