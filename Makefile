@@ -23,6 +23,15 @@ compile:
 	sed -i -e 's@select2.png@++resource++plone.app.widgets-select2.png@g' build/widgets.min.css
 	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-select2-spinner.gif@g' build/widgets.min.css
 
+	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/widgets-fontawesome.eot
+	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/widgets-fontawesome.ttf
+	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/widgets-fontawesome.woff
+	cp bower_components/font-awesome/font/FontAwesome.otf build/widgets-fontawesome.otf
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.eot@++resource++plone.app.widgets-fontawesome.eot@g' build/widgets.min.css
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.ttf@++resource++plone.app.widgets-fontawesome.ttf@g' build/widgets.min.css
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.woff@++resource++plone.app.widgets-fontawesome.woff@g' build/widgets.min.css
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.otf@++resource++plone.app.widgets-fontawesome.otf@g' build/widgets.min.css
+
 	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/toolbar-fontawesome.eot
 	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/toolbar-fontawesome.ttf
 	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/toolbar-fontawesome.woff
