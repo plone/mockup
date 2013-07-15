@@ -47,6 +47,7 @@ module.exports = function(grunt) {
           paths: ["less"]
         },
         files: {
+          "build/widgets.css": "less/widgets.less",
           "build/toolbar.css": "less/toolbar.less"
         }
       }

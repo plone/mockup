@@ -13,6 +13,9 @@ compile:
 	$(GRUNT) compile-js
 	$(GRUNT) compile-less
 	$(GRUNT) compile-css
+	# ----------------------------------------------------------------------- #
+	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
+	# ----------------------------------------------------------------------- #
 
 bootstrap:
 	mkdir -p build
