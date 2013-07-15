@@ -56,14 +56,14 @@ module.exports = function(grunt) {
         },
         files: {
           'build/toolbar.css': 'less/toolbar.less',
-          'build/toolbar_init.css': 'less/toolbar_init.less'
+          'build/toolbar_init.css': 'less/iframe_init.less'
         }
       }
     },
     uglify: {
       minify: {
         files: {
-          'build/toolbar_init.min.js': ['js/iframe.js']
+          'build/toolbar_init.min.js': ['js/iframe_init.js']
         }
       }
     },

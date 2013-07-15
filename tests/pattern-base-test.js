@@ -33,8 +33,8 @@
 define([
   'chai',
   'jquery',
-  './../js/registry.js',
-  './../js/patterns/base.js'
+  'mockup-registry',
+  'mockup-patterns-base'
 ], function(chai, $, registry, Base) {
   "use strict";
 
