@@ -66,7 +66,7 @@ define([
         buttons: '.formControls > input[type="submit"]',
         automaticallyAddActions: true,
         content: '#content',
-        prependContent: null,
+        prependContent: '.portalMessage',
         actions: {},
         actionsOptions: {
           timeout: 5000,
