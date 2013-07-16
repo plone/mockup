@@ -201,7 +201,7 @@ define([
         [ ] Add new user/group
         [ ] Register
         [x] change default page (toolbar)
-        [ ] Contact form
+        [x] Contact form
       */
 
 
@@ -216,6 +216,9 @@ define([
       $('#personaltools-login')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(loginOptions));
+
+      /*** Contact form ***/
+      $('#siteaction-contact > a').addClass('pat-modal');
     },
     scan: function(selector) {
       registry.scan($(selector));
