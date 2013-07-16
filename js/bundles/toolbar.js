@@ -305,24 +305,16 @@ define([
 
 //
 //    // Change content item as default view...
-//    var changeContentItemAsDefaultView = function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal);
-//      // FIXME: we should hack like this
-//      $('form > dl', modal.$modal).addClass('default-page-listing');
-//      $('input[name="form.button.Cancel"]', modal.$modal).attr('class', 'standalone');
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.Save"]': {
-//            onSuccess: function(modal, responseBody, state, xhr) {
-//              window.parent.location.href = window.parent.location.href;
-//            }
-//          }
-//        }
-//      });
-//    };
-//    Modal.prepareModal('#folderChangeDefaultPage > a', changeContentItemAsDefaultView);
-//    Modal.prepareModal('#contextSetDefaultPage > a', changeContentItemAsDefaultView);
+
+    var default_view_action = $('#contextSetDefaultPage > a, #folderChangeDefaultPage > a');
+    var default_view_options = {
+        templateOptions: {
+            prependContent: '.portalMessage'
+        }
+    };
+    default_view_action.addClass('pat-modal');
+    default_view_action.attr('data-pat-modal', JSON.stringify(default_view_options));
+
 //
 //    // Add forms
 //    Modal.prepareModal('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
