@@ -387,8 +387,10 @@ define([
 //      });
 //    });
 //
-//    // Advance workflow
-    $('#workflow-transition-advanced > a').addClass('pat-modal');
+//    // Advanced workflow
+//    // This form needs additional JS and CSS for the calendar widget.
+//    // The AJAX form doesn't load it from the javascript_head_slot.
+    // $('#workflow-transition-advanced > a').addClass('pat-modal');
 //
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
