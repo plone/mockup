@@ -192,6 +192,9 @@ define([
       add_form.addClass('pat-formautofocus');
       var edit_form = $('form[action*="@@edit"]');
       edit_form.addClass('pat-formautofocus');
+
+      // Modals
+      $('#personaltools-login').addClass('pat-modal'); // Login
       
     },
     scan: function(selector) {
