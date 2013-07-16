@@ -1381,15 +1381,42 @@ make bootstrap</pre>
       description: "Drag 'n drop file upload",
       attributes: [
         {attribute: 'url', type: 'String', 'default': 'null', description: 'Required option dropzone if not used with a form'},
+        {attribute: 'clickable', type: 'String', 'default': 'false', description: 'If you can click on container to also upload'}
       ]
     });
   </script>
   <script type="text/template" id="page_dropzone">
   </script>
   <script type="text/example" class="example-dropzone" data-title="With a form">
-    <form method="post" action="/upload" enctype="multipart/form-data" class="pat-dropzone">
+    <form method="post" action="/upload" enctype="multipart/form-data" class="pat-dropzone"
+          data-pat-dropzone="clickable:true">
     </form>
   </script>
+  <script type="text/example" class="example-dropzone" data-title="With a div">
+    <div class="pat-dropzone" data-pat-dropzone="url: /upload">
+      <div>
+        <p>Something here that is useful</p>
+        <p>Something else here that is useful</p>
+        <p>Another thing here that is useful</p>
+      </div>
+    </div>
+  </script>
+  <script type="text/example" class="example-dropzone" data-title="With custom styles">
+    <style>
+      .mydropzone{
+        width: 400px;
+        height: 300px;
+        background-color: gray;
+      }
+      .mydropzone.dz-drag-hover{
+        background-color: red;
+      }
+    </style>
+    <div class="pat-dropzone" data-pat-dropzone="url: /upload; klass: mydropzone">
+      Drop here...
+    </div>
+  </script>
+
 
 </head>
 

@@ -38,11 +38,18 @@ define([
       url: null, // XXX MUST provide url to submit to OR be in a form
       klass: 'dropzone',
       paramName: "file",
-      uploadMultiple: false
+      uploadMultiple: false,
+      clickable: false
     },
     init: function() {
       var self = this;
-
+      if(typeof(self.options.clickable) === "string"){
+        if(self.options.clickable === 'true'){
+          self.options.clickable = true;
+        } else {
+          self.options.clickable = false;
+        }
+      }
       if(!self.options.url && self.$el[0].tagName === 'FORM'){
         var url = self.$el.attr('action');
         if(!url){
