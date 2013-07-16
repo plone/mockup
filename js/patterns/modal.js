@@ -39,6 +39,7 @@ define([
   var Modal = Base.extend({
     name: "modal",
     createModal: null,
+    $model: null,
     defaults: {
       triggers: '',
       position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
@@ -538,7 +539,7 @@ define([
       var self = this;
 
       // modal isn't initialized
-      if(typeof self.$modal === 'function') { return; }
+      if(self.$modal === null || self.$modal === undefined) { return; }
 
       // clear out any previously set styling
       self.$modal.removeAttr('style');
