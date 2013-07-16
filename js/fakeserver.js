@@ -247,6 +247,15 @@ require([
 
   });
 
+  server.respondWith('GET', /@@querybuilder_html_results/, function(xhr, id) {
+    var content = $('#querystring-example-results').text();
+    xhr.respond(200, {"content-Type": "text/html"}, content);
+  });
+  server.respondWith('GET', /@@querybuildernumberofresults/, function(xhr, id) {
+    var content = $('#querystring-number-results-example-results').text();
+    xhr.respond(200, {"content-Type": "text/html"}, content);
+  });
+
   return server;
 
 });

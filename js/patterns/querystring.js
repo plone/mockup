@@ -362,7 +362,8 @@ define([
       indexes: [],
       klassWrapper: 'querystring-wrapper',
       criteria: {},
-      previewurl: '', // base url to use to request preview information from
+      previewURL: '@@querybuilder_html_results', // base url to use to request preview information from
+      previewCountURL: '@@querybuildernumberofresults',
       sorttxt: 'Sort On',
       reversetxt: 'Reversed Order',
       previewTitle: 'Preview',
@@ -370,6 +371,8 @@ define([
       klassSortLabel: 'querystring-sort-label',
       klassSortReverse: 'querystring-sortreverse',
       klassSortReverseLabel: 'querystring-sortreverse-label',
+      klassPreviewCountWrapper: 'querystring-previewcount-wrapper',
+      klassPreviewResultsWrapper: 'querystring-previewresults-wrapper',
       klassPreviewWrapper: 'querystring-preview-wrapper',
       klassPreview: 'querystring-preview',
       klassPreviewTitle: 'querystring-preview-title',
@@ -458,13 +461,18 @@ define([
     },
     refreshPreviewEvent: function(self) {
       /* TEMPORARY */
-      if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
-      self._tmpcnt++;
+      //if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
+      //self._tmpcnt++;
       /* /TEMPORARY */
 
       if(typeof self._preview_xhr !== "undefined") {
         self._preview_xhr.abort();
       }
+      /*
+      if(typeof self._count_xhr !== "undefined") {
+        self._count_xhr.abort();
+      }
+      */
       if(typeof self.$previewPane !== "undefined") {
         self.$previewPane.remove();
       }
@@ -481,21 +489,42 @@ define([
         .addClass(self.options.klassPreview)
         .appendTo(self.$previewWrapper);
 
+      if(query.length <= 0) {
+        $('<div/>')
+          .addClass(self.options.klassPreviewCountWrapper)
+          .html("No results to preview")
+          .prependTo(self.$previewPane);
+        return; // no query means nothing to send out requests for
+      }
+
+      query.push('sort_on='+self.$sortOn.val());
+      var sortorder = self.$sortOrder.attr('checked');
+      if(sortorder === "checked") {
+        query.push('sort_order=reverse');
+      }
+
       /* TEMPORARY */
-      self.$previewPane.html(
-          'refreshed ' + self._tmpcnt + ' times<br />'
-          + (query.length > 1 ? query.join('<br />&') : query));
+      //self.$previewPane.html(
+      //    'refreshed ' + self._tmpcnt + ' times<br />'
+      //    + (query.length > 1 ? query.join('<br />&') : query));
       /* /TEMPORARY */
 
       /*
-      $.get(self.options.previewurl)
+      self._count_xhr = $.get(self.options.previewCountURL + '?' + query.join('&'))
           .done(function(data, stat){
-            
-          })
-          .fail(function(xhr, stat, err){
-            
+            $('<div/>')
+              .addClass(self.options.klassPreviewCountWrapper)
+              .html(data)
+              .prependTo(self.$previewPane);
           });
       */
+      self._preview_xhr = $.get(self.options.previewURL + '?' + query.join('&'))
+          .done(function(data, stat){
+            $('<div/>')
+              .addClass(self.options.klassPreviewResultsWrapper)
+              .html(data)
+              .appendTo(self.$previewPane);
+          });
     },
     createSort: function() {
       var self = this;
@@ -503,29 +532,30 @@ define([
         .addClass(self.options.klassSortLabel)
         .html(self.options.sorttxt)
         .appendTo(self.$sortWrapper);
-      var $sortsel = $('<select/>')
+      self.$sortOn = $('<select/>')
         .appendTo(self.$sortWrapper)
         .change(function(){
           self.refreshPreviewEvent(self);
         });
 
       for(var key in self.options.indexes) {
-        $sortsel.append(
+        self.$sortOn.append(
           $('<option/>')
             .attr('value', key)
             .html(self.options.indexes[key].title));
       }
-      $sortsel.patternSelect2();
+      self.$sortOn.patternSelect2();
+
+      self.$sortOrder = $("<input type='checkbox' />")
+                          .change(function(){
+                            self.refreshPreviewEvent(self);
+                          })
+
 
       $('<span/>')
         .addClass(self.options.klassSortReverse)
         .appendTo(self.$sortWrapper)
-        .append(
-          $("<input type='checkbox' />")
-            .change(function(){
-              self.refreshPreviewEvent(self);
-            })
-          )
+        .append(self.$sortOrder)
         .append(
           $('<span/>')
             .html(self.options.reversetxt)
