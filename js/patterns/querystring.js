@@ -77,7 +77,8 @@ define([
               });
 
       // Index selection
-      self.$index = $('<select><option></option></select>').attr('placeholder', self.options.placeholder);
+      self.$index = $('<select><option></option></select>')
+          .attr('placeholder', self.options.placeholder);
 
       // list of indexes
       $.each(self.indexes, function(value, options) {
@@ -124,8 +125,11 @@ define([
     createOperator: function(index, operator, value) {
       var self = this;
 
+      self.$index.attr('name', 'query.i:records');
+
       self.removeOperator();
-      self.$operator = $('<select/>');
+      self.$operator = $('<select/>')
+                          .attr('name', 'query.o:records');
 
       if (self.indexes[index]) {
         $.each(self.indexes[index].operators, function(value, options) {
@@ -172,6 +176,7 @@ define([
       if (widget === 'StringWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.klassValue + '-' + widget)
+                .attr('name', 'query.v:records')
                 .appendTo($wrapper)
                 .change(function(){
                   self.trigger('value-changed');
@@ -179,6 +184,7 @@ define([
 
       } else if (widget === 'DateWidget') {
         self.$value = $('<input type="text"/>')
+                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .patternPickadate({
@@ -192,6 +198,7 @@ define([
       } else if (widget === 'DateRangeWidget') {
         var startwrap = $('<span/>').appendTo($wrapper);
         var startdt = $('<input type="text"/>')
+                        .attr('name', 'query.v:records:list')
                         .addClass(self.options.klassValue + '-' + widget)
                         .addClass(self.options.klassValue + '-' + widget + '-start')
                         .appendTo(startwrap)
@@ -206,6 +213,7 @@ define([
         );
         var endwrap = $('<span/>').appendTo($wrapper);
         var enddt = $('<input type="text"/>')
+                        .attr('name', 'query.v:records:list')
                         .addClass(self.options.klassValue + '-' + widget)
                         .addClass(self.options.klassValue + '-' + widget + '-end')
                         .appendTo(endwrap)
@@ -220,6 +228,7 @@ define([
 
       } else if (widget === 'RelativeDateWidget') {
         self.$value = $('<input type="text"/>')
+                .attr('name', 'query.v:records')
                 .after($('<span/>').html(self.options.days))
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
@@ -229,6 +238,7 @@ define([
 
       } else if (widget === 'ReferenceWidget') {
         self.$value = $('<input type="text"/>')
+                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
@@ -237,6 +247,7 @@ define([
 
       } else if (widget === 'RelativePathWidget') {
         self.$value = $('<input type="text"/>')
+                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
@@ -245,6 +256,7 @@ define([
 
       } else if (widget === 'MultipleSelectionWidget') {
         self.$value = $('<select/>').attr('multiple', true)
+                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
@@ -533,6 +545,7 @@ define([
         .html(self.options.sorttxt)
         .appendTo(self.$sortWrapper);
       self.$sortOn = $('<select/>')
+        .attr('name', 'sort_on')
         .appendTo(self.$sortWrapper)
         .change(function(){
           self.refreshPreviewEvent(self);
@@ -547,6 +560,7 @@ define([
       self.$sortOn.patternSelect2();
 
       self.$sortOrder = $("<input type='checkbox' />")
+                          .attr('name', 'sort_reversed:boolean')
                           .change(function(){
                             self.refreshPreviewEvent(self);
                           })
