@@ -209,26 +209,17 @@ define([
             self.$loading.hide();
           },
           success: function(response, state, xhr) {
-            // if error is found
-            if ($(options.error, response).size() !== 0) {
-              if (options.onFormError) {
-                options.onFormError(self, response, state, xhr);
-              } else {
-                self.$modal.remove();
-                self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                    .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                self.options.render.apply(self, [self.options.templateOptions]);
-                self.positionModal();
-                registry.scan(self.$modal);
-              }
+            self.$modal.remove();
+            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+            self.options.render.apply(self, [self.options.templateOptions]);
+            self.positionModal();
+            registry.scan(self.$modal);
 
-            // custom success function
-            } else if (options.onSuccess) {
+            if (options.onSuccess) {
               options.onSuccess(self, response, state, xhr);
-
-            } else {
-              $action.trigger('destroy.modal.patterns');
             }
+
             self.$loading.hide();
           }
         });

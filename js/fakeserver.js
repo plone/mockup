@@ -250,7 +250,7 @@ require([
 '    </body> '+
 '    </html>']);
 
-  server.respondWith("GET", /something-link.html/,
+  server.respondWith("GET", /something-else.html/,
                                 [200, { "Content-Type": "text/html" },
                                  ''+
 '    <html> '+
