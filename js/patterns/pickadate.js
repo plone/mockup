@@ -51,7 +51,9 @@ define([
       klassDateWrapper: 'pat-pickadate-date-wrapper',
       klassTime: 'pat-pickadate-time',
       klassTimeWrapper: 'pat-pickadate-time-wrapper',
-      klassClear: 'pat-pickadate-clear'
+      klassClear: 'pat-pickadate-clear',
+      placeholderDate: 'enter date...',
+      placeholderTime: 'enter time...'
     },
     ensureBool: function(value) {
       if (typeof(value) === 'string') {
@@ -89,6 +91,9 @@ define([
                   if (onSetDate) {
                     onSetDate.apply(this, arguments);
                   }
+                },
+                onStart: function(){
+                  this.$node.attr('placeholder', self.options.placeholderDate);
                 }
               }));
 
@@ -114,6 +119,9 @@ define([
                   if (onSetTime) {
                     onSetTime.apply(this, arguments);
                   }
+                },
+                onStart: function(){
+                  this.$node.attr('placeholder', self.options.placeholderTime);
                 }
               }));
       }
