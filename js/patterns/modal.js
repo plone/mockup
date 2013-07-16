@@ -28,11 +28,12 @@
 
 define([
   'jquery',
+  'underscore',
   'mockup-patterns-base',
   'mockup-patterns-backdrop',
   'mockup-registry',
   'jquery.form'
-], function($, Base, Backdrop, registry) {
+], function($, _, Base, Backdrop, registry) {
   "use strict";
 
   var Modal = Base.extend({
@@ -62,8 +63,9 @@ define([
         title: null,
         titleSelector: 'h1:first',
         buttons: '.formControls > input[type="submit"]',
+        automaticallyAddActions: true,
         content: '#content',
-        actions: [],
+        actions: {},
         actionsOptions: {
           timeout: 5000,
           error: '.portalMessage.error',
@@ -74,8 +76,14 @@ define([
         },
         form: function($modal, actions, defaultOptions) {
           var self = this;
+          var templateOptions = self.options.templateOptions;
+          var combinedActions = actions;
 
-          $.each(actions, function(action, options) {
+          if (templateOptions.automaticallyAddActions) {
+            combinedActions[templateOptions.buttons] = {};
+          }
+
+          $.each(combinedActions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
             $(action, $modal).each(function(action) {
               var $action = $(this);
@@ -150,6 +158,7 @@ define([
 
                         } else {
                           $action.trigger('destroy.modal.patterns');
+                          location.reload();
                         }
                       }
                   });
