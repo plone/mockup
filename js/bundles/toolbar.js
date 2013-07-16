@@ -292,12 +292,6 @@ define([
 //      });
 //    });
 //
-        templateOptions: {
-            prependContent: '.portalMessage'
-        }
-    };
-
-//
 //    // Rename Action
     $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
 //
