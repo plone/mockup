@@ -60,6 +60,20 @@ define([
         closeOnEsc: true,
         closeOnClick: true
       },
+      modalTemplate: '' +
+        '<div class="modal">' +
+        '  <div class="modal-header">' +
+        '    <a class="close">&times;</a>' +
+        '    <% if (title) { %><h3><%= title %></h3><% } %>' +
+        '  </div>' +
+        '  <div class="modal-body">' +
+        '    <%= prepend %> ' +
+        '    <%= content %> ' +
+        '  </div>' +
+        '  <div class="modal-footer"> ' +
+        '    <%= buttons %> ' +
+        '  </div>' +
+        '</div>',
       templateOptions: {
         title: null,
         titleSelector: 'h1:first',
@@ -68,13 +82,19 @@ define([
         content: '#content',
         prependContent: '.portalMessage',
         actions: {},
+        preventLinkDefaults: false,
         actionsOptions: {
           timeout: 5000,
+          displayInModal: true,
           error: '.portalMessage.error',
           loading: '' +
             '<div class="progress progress-striped active">' +
             '  <div class="bar" style="width: 100%;"></div>' +
-            '</div>'
+            '</div>',
+          onSuccess: null,
+          onError: null,
+          onFormError: null,
+          onTimeout: null
         },
         form: function($modal, actions, defaultOptions) {
           var self = this;
@@ -145,11 +165,9 @@ define([
                             options.onFormError(self, response, state, xhr, form);
                           } else {
                             self.$modal.remove();
-                            self.$modal = self.initModalElement(
-                              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
-                            self.options.template.apply(self,
-                              [self.$modal, self.options.templateOptions]);
+                            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+                            self.options.render.apply(self, [self.options.templateOptions]);
                             self.positionModal();
                             registry.scan(self.$modal);
                           }
@@ -158,7 +176,9 @@ define([
                         } else if (options.onSuccess) {
                           options.onSuccess(self, response, state, xhr, form);
 
-                        } else {
+                        }
+
+                        else {
                           $action.trigger('destroy.modal.patterns');
                           location.reload();
                         }
@@ -187,11 +207,9 @@ define([
                           options.onFormError(self, response, state, xhr);
                         } else {
                             self.$modal.remove();
-                            self.$modal = self.initModalElement(
-                              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
-                            self.options.template.apply(self,
-                              [self.$modal, self.options.templateOptions]);
+                            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+                            self.options.render.apply(self, [self.options.templateOptions]);
                             self.positionModal();
                             registry.scan(self.$modal);
                         }
@@ -213,49 +231,28 @@ define([
 
         }
       },
-      template: function($modal, options) {
+      render: function(options) {
         var self = this;
-        var $content = $modal.html();
-        $modal.html('' +
-          '<div class="modal-header">' +
-          '  <a class="close">&times;</a>' +
-          '  <h3></h3>' +
-          '</div>' +
-          '<div class="modal-body"></div>' +
-          '<div class="modal-footer"></div>');
 
-        if (options.content) {
-          $('.modal-body', $modal).html($(options.content, $content).html());
-        } else {
-          $('.modal-body', $modal).html($content);
+        if (!self.$raw) {
+          return;
         }
+        var $raw = self.$raw.clone();
 
-        if (options.prependContent) {
-          $('.modal-body', $modal).prepend($(options.prependContent, $content));
-        }
+        // Object that will be passed to the template
+        var tpl_object = {
+          title: '',
+          prepend: '<div />',
+          content: '',
+          buttons: '<div />'
+        };
 
-        self.renderTitle($modal, options);
-
-        $('.modal-header > a.close', $modal)
-          .off('click')
-          .on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            $(e.target).trigger('destroy.modal.patterns');
-          });
-
-        // cleanup html
-        $('.row', $modal).removeClass('row');
-
-        $(options.buttons, $modal).each(function() {
+        // Setup buttons
+        $(options.buttons, $raw).each(function() {
           var $button = $(this);
           $button
-            .on('click', function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-            })
             .clone()
-            .appendTo($('.modal-footer', $modal))
+            .appendTo($(tpl_object.buttons))
             .off('click').on('click', function(e) {
               e.stopPropagation();
               e.preventDefault();
@@ -264,11 +261,70 @@ define([
           $button.hide();
         });
 
+        // setup the Title
+        if (options.title === null) {
+          var $title = $(options.titleSelector, $raw);
+          tpl_object.title = $title.html();
+          $(options.titleSelector, $raw).remove();
+        } else {
+          tpl_object.title = options.title;
+        }
+
+        // Filter out the content if there is a selector provided
+        if (options.content) {
+          tpl_object.content = $(options.content, $raw).html();
+        } else {
+          tpl_object.content = $raw.html();
+        }
+
+        // Grab items to to insert into the prepend area
+        if (options.prependContent) {
+          $(tpl_object.prepend).append($(options.prependContent, $raw));
+          $(options.prependContent, $raw).remove();
+        }
+
+        // Render html
+        self.$modal = $(_.template(self.options.modalTemplate, tpl_object));
+
+        // Wire up events
+        $('.modal-header > a.close', self.$modal)
+          .off('click')
+          .on('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $(e.target).trigger('destroy.modal.patterns');
+          });
+
+        // cleanup html
+        $('.row', self.$modal).removeClass('row');
+
         // form
         if (options.form) {
-          options.form.apply(self,
-              [$modal, options.actions, options.actionsOptions]);
+          options.form.apply(self, [options.actions, options.actionsOptions]);
         }
+
+        self.$modal
+          .addClass(self.options.klass)
+          .on('click', function(e) {
+            e.stopPropagation();
+            if ($.nodeName(e.target, 'a')) {
+              e.preventDefault();
+
+              // TODO: open links inside modal
+              // and slide modal body
+            }
+          })
+          .on('destroy.modal.patterns', function(e) {
+            e.stopPropagation();
+            self.hide();
+          })
+          .on('resize.modal.patterns', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            self.positionModal();
+          })
+          .appendTo(self.$wrapperInner);
+        self.$modal.data('pattern-' + self.name, self);
       }
     },
     init: function() {
@@ -363,43 +419,6 @@ define([
 
       self.initModal();
     },
-    initModalElement: function($modal) {
-      var self = this;
-      $modal
-        .addClass(self.options.klass)
-        .on('click', function(e) {
-          e.stopPropagation();
-          if ($.nodeName(e.target, 'a')) {
-            e.preventDefault();
-
-            // TODO: open links inside modal
-            // and slide modal body
-          }
-        })
-        .on('destroy.modal.patterns', function(e) {
-          e.stopPropagation();
-          self.hide();
-        })
-        .on('resize.modal.patterns', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          self.positionModal();
-        })
-        .appendTo(self.$wrapperInner);
-      $modal.data('pattern-' + self.name, self);
-      return $modal;
-    },
-    renderTitle: function($modal, options) {
-      var self = this;
-      var $content = $modal.html();
-      if (self.options.title === null) {
-        var $title = $(options.titleSelector, $content);
-        $('.modal-header > h3', $modal).html($title.html());
-        $(options.titleSelector, $modal).remove();
-      } else {
-        $('.modal-header > h3', $modal).html(options.title);
-      }
-    },
     createAjaxModal: function() {
       var self = this;
       self.trigger('before-ajax');
@@ -414,29 +433,26 @@ define([
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
         self.$loading.hide();
-        self.$modal = self.initModalElement(
-          $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+        self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]);
         self.trigger('after-ajax', self, textStatus, xhr);
         self._show();
       });
     },
     createTargetModal: function() {
       var self = this;
-      self.$modal = self.initModalElement($('<div/>'))
-              .html($(self.options.target).clone());
+      self.$raw = $(self.options.target).clone();
       self._show();
     },
     createBasicModal: function() {
       var self = this;
-      self.$modal = self.initModalElement($('<div/>'))
-              .html(self.$el.clone());
+      self.$raw = $('<div/>').html(self.$el.clone());
       self._show();
     },
     createHtmlModal: function() {
       var self = this;
       var $el = $(self.options.html);
-      self.$modal = self.initModalElement($('<div/>')).html($el);
+      self.$raw = $el;
       self._show();
     },
     initModal: function() {
@@ -587,27 +603,23 @@ define([
     },
     _show: function() {
       var self = this;
-      if (!self.$el.hasClass(self.options.klassActive)) {
-        if (self.options.template) {
-          self.options.template.apply(self,
-              [self.$modal, self.options.templateOptions]);
-        }
-        self.trigger('show');
-        self.backdrop.show();
-        self.$wrapper.show();
-        self.$wrapper.parent().css('overflow', 'hidden');
-        self.$el.addClass(self.options.klassActive);
-        self.$modal.addClass(self.options.klassActive);
-        registry.scan(self.$modal);
+      self.options.render.apply(self,
+          [self.options.templateOptions]);
+      self.trigger('show');
+      self.backdrop.show();
+      self.$wrapper.show();
+      self.$wrapper.parent().css('overflow', 'hidden');
+      self.$el.addClass(self.options.klassActive);
+      self.$modal.addClass(self.options.klassActive);
+      registry.scan(self.$modal);
+      self.positionModal();
+      $('img', self.$modal).load(function() {
         self.positionModal();
-        $('img', self.$modal).load(function() {
-          self.positionModal();
-        });
-        $(window.parent).on('resize.modal.patterns', function() {
-          self.positionModal();
-        });
-        self.trigger('shown');
-      }
+      });
+      $(window.parent).on('resize.modal.patterns', function() {
+        self.positionModal();
+      });
+      self.trigger('shown');
     },
     hide: function() {
       var self = this;
