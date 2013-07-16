@@ -52,6 +52,10 @@ define([
     name: "plone-widgets",
     transform: function($root) {
 
+      // margin-top is hardcoded in template 
+      // Products/TinyMCE/skins/tinymce/tinymce_wysiwyg_support.pt
+      $('.suppressVisualEditor').removeAttr('style');
+
       // apply autotoc pattern where enableFormTabbing exists
       var $match = $root.filter('.enableFormTabbing');
       $match = $match.add($root.find('.enableFormTabbing'));
