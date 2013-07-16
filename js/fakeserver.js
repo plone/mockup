@@ -1,6 +1,7 @@
 require([
-  'sinon'
-], function(sinon) {
+  'sinon',
+  'jquery'
+], function(sinon, $) {
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
     if(query === undefined){
