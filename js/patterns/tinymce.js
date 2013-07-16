@@ -208,6 +208,9 @@ define([
       });
       self.initElements();
     },
+    isImageMode: function(){
+      return ['image', 'externalImage'].indexOf(this.linkType) !== -1;
+    },
     initElements: function(){
       var self = this;
       self.$internal = $('input[name="internal"]', self.modal.$modal);
@@ -382,7 +385,7 @@ define([
         if(!href){
           return; // just cut out if no url
         }
-        if(['image', 'externalImage'].indexOf(self.linkType) !== -1){
+        if(self.isImageMode()){
           self.updateImage(href);
         } else {
           /* regular anchor */
@@ -477,7 +480,7 @@ define([
       if (self.anchorElm) {
         self.selection.select(self.anchorElm);
       }
-      if(self.imgElm.nodeName !== 'IMG'){
+      if(self.imgElm.nodeName !== 'IMG' || !self.isImageMode()){
         self.imgElm = null;
       }
 
@@ -495,7 +498,7 @@ define([
       }
 
       self.uid = '';
-      if(self.href){
+      if(self.href && !self.isImageMode()){
         if(self.href.indexOf('resolveuid/') !== -1){
           self.uid = self.href.replace('resolveuid/', '');
           self.linkType = 'internal';
