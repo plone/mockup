@@ -394,6 +394,8 @@ define([
 //
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
+//    // Content history
+    $('#plone-action-history > a').addClass('pat-modal');
 //
 //    // }}}
 //
