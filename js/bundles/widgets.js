@@ -193,7 +193,17 @@ define([
       var edit_form = $('form[action*="@@edit"]');
       edit_form.addClass('pat-formautofocus');
 
-      /* Modals */
+      /* Modals
+      
+        TODO:
+        [x] Login
+        [ ] Content history
+        [ ] Add new user/group
+        [ ] Register
+        [ ] change default page (toolbar)
+        [ ] Contact form
+      */
+
 
       /*** Login ***/
       var loginOptions = {

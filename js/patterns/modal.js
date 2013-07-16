@@ -96,8 +96,9 @@ define([
           onFormError: null,
           onTimeout: null
         },
-        form: function($modal, actions, defaultOptions) {
+        form: function(actions, defaultOptions) {
           var self = this;
+          var $modal = self.$modal;
           var templateOptions = self.options.templateOptions;
           var combinedActions = actions;
 
@@ -244,22 +245,8 @@ define([
           title: '',
           prepend: '<div />',
           content: '',
-          buttons: '<div />'
+          buttons: '<div class="pat-modal-buttons"></div>'
         };
-
-        // Setup buttons
-        $(options.buttons, $raw).each(function() {
-          var $button = $(this);
-          $button
-            .clone()
-            .appendTo($(tpl_object.buttons))
-            .off('click').on('click', function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              $button.trigger('click');
-            });
-          $button.hide();
-        });
 
         // setup the Title
         if (options.title === null) {
@@ -285,6 +272,24 @@ define([
 
         // Render html
         self.$modal = $(_.template(self.options.modalTemplate, tpl_object));
+
+        // Setup buttons
+        $(options.buttons, self.$modal).each(function() {
+          var $button = $(this);
+          $button
+            .on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+            })
+            .clone()
+            .appendTo($('.pat-modal-buttons', self.$modal))
+            .off('click').on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+              $button.trigger('click');
+            });
+          $button.hide();
+        });
 
         // Wire up events
         $('.modal-header > a.close', self.$modal)
