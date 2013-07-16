@@ -16,6 +16,7 @@ requirejs.config({
       'picker.time': 'bower_components/pickadate/lib/picker.time',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
+      'dropzone': "lib/dropzone/dropzone.min",
       'mockup-registry': 'js/registry',
       'mockup-iframe': 'js/iframe',
       'mockup-iframe_init': 'js/iframe_init',
@@ -40,6 +41,7 @@ requirejs.config({
       'mockup-patterns-tinymce': 'js/patterns/tinymce',
       'mockup-patterns-toggle': 'js/patterns/toggle',
       'mockup-patterns-tooltip': 'js/patterns/tooltip',
+      'mockup-patterns-dropzone': 'js/patterns/dropzone',
       'mockup-bundles-widgets': 'js/bundles/widgets',
       'mockup-bundles-toolbar': 'js/bundles/toolbar',
       'mockup-bundles-tiles': 'js/bundles/widgets'

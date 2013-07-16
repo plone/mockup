@@ -1370,6 +1370,25 @@ make bootstrap</pre>
     </p>
   </script>
 
+
+   <!--  **** DropZone **** -->
+  <script>
+    addPattern({
+      id: 'dropzone',
+      title: 'DropZone',
+      description: 'Drag \' drop file upload',
+      attributes: [
+        {attribute: 'url', type: 'String', 'default': 'null', description: 'Required option dropzone if not used with a form'},
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_dropzone">
+  </script>
+  <script type="text/example" class="example-dropzone" data-title="With a form">
+    <form method="post" enctype="multipart/form-data" class="pat-dropzone">
+    </form>
+  </script>
+
 </head>
 
 <body>
