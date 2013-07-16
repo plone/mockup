@@ -314,12 +314,12 @@ define([
     removeValue: function() {
       var self = this;
       self.trigger('remove-value');
-      if (self.$value) {
+      if(self.$value) {
         if($.isArray(self.$value)) { // date ranges have 2 values
-          self.$value[0].parent().remove();
+          self.$value[0].parents('.querystring-criteria-value').remove();
         }
         else {
-          self.$value.parent().remove();
+          self.$value.parents('.querystring-criteria-value').remove();
         }
       }
     },
