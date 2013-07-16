@@ -238,7 +238,7 @@ define([
     activateLinkTypeElements: function(){
       /* handle specify url types */
       var self = this;
-      $('.' + self.linkTypes.join(',.'), self.modal.$modal).hide();
+      $('.linkType', self.modal.$modal).hide();
       $('.' + self.linkType).show();
     },
     getLinkUrl: function(){
@@ -666,7 +666,8 @@ define([
     addLinkClicked: function(){
       var self = this;
       if(self.linkModal === null){
-        self.linkModal = new LinkModal(self.$el,
+        var $el = $('<div/>').insertAfter(self.$el);
+        self.linkModal = new LinkModal($el,
           $.extend(true, {}, self.options, {
             tinypattern: self,
             linkTypes: [
@@ -729,7 +730,8 @@ define([
 
           }
         });
-        self.imageModal = new LinkModal(self.$el, options);
+        var $el = $('<div/>').insertAfter(self.$el);
+        self.imageModal = new LinkModal($el, options);
         self.imageModal.show();
       } else {
         self.imageModal.reinitialize();
