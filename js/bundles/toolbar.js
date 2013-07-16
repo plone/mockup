@@ -430,19 +430,16 @@ define([
 //    });
 //
 //    // personal preferences
-//    Modal.prepareModal('#plone-personal-actions-preferences > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.actions.save"],input[name="form.actions.cancel"]'
-//      });
-//      $('select[name="form.wysiwyg_editor"], select[name="form.language"]', modal.$modal).addClass('pat-select2');
-//      $('input[name="form.actions.cancel"]', modal.$modal).attr('class', 'standalone');
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.actions.cancel"]': {},
-//          '.modal-body input[name="form.actions.save"]': {}
-//        }
-//      });
-//    }, { width: '80%' });
+
+    var prefs_action = $('#plone-personal-actions-preferences > a');
+    var prefs_options = {
+        templateOptions: {
+            prependContent: '.portalMessage'
+        }
+    };
+    prefs_action.addClass('pat-modal');
+    prefs_action.attr('data-pat-modal', JSON.stringify(prefs_options));
+
 //
 //    // }}}
 //
