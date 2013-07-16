@@ -110,6 +110,13 @@
       margin: 1em auto 1em;
     }
   }
+  /* XXX hack because opacity is not getting calculated correctly? */
+  .picker--opened {
+
+    .picker__holder {
+      opacity: 1;
+    }
+  }
 
   ul.select2-choices{
     margin-left: 0;
