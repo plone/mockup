@@ -51,12 +51,12 @@ define([
       klassActive: "active",
       backdrop: "body",
       backdropOptions: {
-        zIndex: "1000",
+        zIndex: "1040",
         opacity: "0.8",
         klass: "backdrop",
         klassActive: "backdrop-active",
         closeOnEsc: true,
-        closeOnClick: true,
+        closeOnClick: true
       },
       templateOptions: {
         title: 'h1:first',
