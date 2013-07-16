@@ -744,8 +744,12 @@ define([
       if(id === undefined){
         id = 'tiny' + (Math.floor((1 + Math.random()) * 0x10000)
           .toString(16).substring(1));
-        self.$el.attr('id', id);
+      } else {
+        /* hopefully we don't screw anything up here... changing the id 
+         * in some cases so we get a decent selector */
+        id = id.replace(/\./g, '-');
       }
+      self.$el.attr('id', id);
       var tinyOptions = self.options.tiny;
       tinyOptions.selector = '#' + id;
       tinyOptions.addLinkClicked = function(){
