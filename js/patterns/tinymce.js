@@ -656,11 +656,12 @@ define([
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
         plugins: [
-          "advlist autolink lists link image charmap print preview anchor",
+          "advlist autolink lists charmap print preview anchor",
           "searchreplace visualblocks code fullscreen",
           "insertdatetime media table contextmenu paste plonelink ploneimage"
         ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage"
+        menubar: "edit table format tools view insert",
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage"
       }
     },
     addLinkClicked: function(){
