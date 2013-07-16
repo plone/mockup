@@ -121,7 +121,6 @@ define([
 
     // Modals {{{
 
-
     // Contents
     function refreshModal(modal, responseBody, state, xhr, form) {
       modal.$modal.html(responseBody.html());
@@ -293,28 +292,17 @@ define([
 //      });
 //    });
 //
-//    // Rename Action
-    var rename_action = $('#plone-contentmenu-actions-rename > a');
-    var rename_options = {
         templateOptions: {
             prependContent: '.portalMessage'
         }
     };
-    rename_action.addClass('pat-modal');
-    rename_action.attr('data-pat-modal', JSON.stringify(rename_options));
 
 //
+//    // Rename Action
+    $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
+//
 //    // Change content item as default view...
-
-    var default_view_action = $('#contextSetDefaultPage > a, #folderChangeDefaultPage > a');
-    var default_view_options = {
-        templateOptions: {
-            prependContent: '.portalMessage'
-        }
-    };
-    default_view_action.addClass('pat-modal');
-    default_view_action.attr('data-pat-modal', JSON.stringify(default_view_options));
-
+    $('#contextSetDefaultPage > a, #folderChangeDefaultPage > a').addClass('pat-modal');
 //
 //    // Add forms
 //    Modal.prepareModal('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
@@ -430,16 +418,7 @@ define([
 //    });
 //
 //    // personal preferences
-
-    var prefs_action = $('#plone-personal-actions-preferences > a');
-    var prefs_options = {
-        templateOptions: {
-            prependContent: '.portalMessage'
-        }
-    };
-    prefs_action.addClass('pat-modal');
-    prefs_action.attr('data-pat-modal', JSON.stringify(prefs_options));
-
+    $('#plone-personal-actions-preferences > a').addClass('pat-modal');
 //
 //    // }}}
 //
