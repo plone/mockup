@@ -1265,7 +1265,9 @@ make bootstrap</pre>
           + '    "insertdatetime media table contextmenu paste plonelink"\n'
           + '  ],\n'
           + '  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"\n'
-          + '}</pre>', description: 'TODO.'}
+          + '}</pre>', description: 'TODO.'},
+        {attribute: 'dropzone_url', type: 'String', 'default': 'null',
+         description: 'To provide drag and drop support for tinymc'}
       ]
     });
   </script>
@@ -1277,6 +1279,15 @@ make bootstrap</pre>
       <textarea class="pat-tinymce"
         data-pat-tinymce='{"relatedItems":
                             { "ajaxvocabulary": "/relateditems-test.json"} }'
+        ></textarea>
+    </form>
+  </script>
+  <script type="text/example" class="example-tinymce" data-title="With Dropzone">
+    <form>
+      <textarea class="pat-tinymce"
+        data-pat-tinymce='{"relatedItems":
+                            { "ajaxvocabulary": "/relateditems-test.json"},
+                           "dropzone_url": "/upload"}'
         ></textarea>
     </form>
   </script>
@@ -1416,7 +1427,6 @@ make bootstrap</pre>
       Drop here...
     </div>
   </script>
-
 
 </head>
 

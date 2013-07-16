@@ -3,6 +3,7 @@
 @import "../bower_components/bootstrap/less/buttons.less";
 @import "../bower_components/bootstrap/less/button-groups.less";
 @import "../bower_components/bootstrap/less/close.less";
+@import "pattern.dropzone.less";
 
 div.linkModal {
     .pat-relateditems-container{
@@ -25,5 +26,55 @@ div.linkModal {
     }
     input[name="external"],input[name="externalImage"]{
         width: 95%;
+    }
+}
+
+.tinymce-dropzone{
+    position: relative;
+
+    .dz-notice {
+        display: none;
+        -ms-filter: none;
+        filter: none;
+
+    }
+    * {
+        opacity: 1;
+    }
+
+    .dropzone-previews{
+        background-color: #f5f5f5;
+    }
+}
+
+.tinymce-dropzone.dz-drag-hover{
+    box-sizing: border-box;
+
+    * {
+        opacity: 0.7;
+    }
+    p{
+        display: none;
+    }
+    .dz-notice{
+        display: block;
+        opacity: 1;
+        -ms-filter: none;
+        filter: none;
+        -webkit-transition: opacity 0.3s ease-in-out;
+        -moz-transition: opacity 0.3s ease-in-out;
+        -o-transition: opacity 0.3s ease-in-out;
+        -ms-transition: opacity 0.3s ease-in-out;
+        transition: opacity 0.3s ease-in-out;
+        background-image: url("../lib/dropzone/downloads/images/spritemap.png");
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        position: absolute;
+        width: 428px;
+        height: 90px;
+        margin-left: -214px;
+        margin-top: -45px;
+        top: 50%;
+        left: 50%;
     }
 }

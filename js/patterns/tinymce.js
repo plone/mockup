@@ -35,8 +35,9 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
-  'tinymce'
-], function($, Base, RelatedItems, Modal, tinymce) {
+  'tinymce',
+  'mockup-patterns-dropzone'
+], function($, Base, RelatedItems, Modal, tinymce, DropZone) {
   "use strict";
 
   /* register the tinymce plugin */
@@ -401,6 +402,19 @@ define([
         self.linkType = $(this).val();
         self.activateLinkTypeElements();
       });
+      self.setupDropzone();
+    },
+    setupDropzone: function(){
+      var self = this;
+      if(self.options.dropzone_url){
+        self.dropzone = new DropZone(self.modal.$modal, {
+          klass: 'tinymce-dropzone',
+          clickable: false,
+          url: self.options.dropzone_url,
+          wrap: 'inner',
+          autoCleanResults: true
+        });
+      }
     },
     populateAnchorList: function(){
       /* 
@@ -665,7 +679,8 @@ define([
         ],
         menubar: "edit table format tools view insert",
         toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage"
-      }
+      },
+      dropzone_url: null
     },
     addLinkClicked: function(){
       var self = this;
@@ -767,6 +782,17 @@ define([
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
       tinyOptions.skin = false;
+
+      if(self.options.dropzone_url){
+        self.dropzone = new DropZone(self.$el, {
+          klass: 'tinymce-dropzone',
+          clickable: false,
+          url: self.options.dropzone_url,
+          wrap: true,
+          autoCleanResults: true
+        });
+      }
+
       tinymce.init(tinyOptions);
       self.tiny = tinymce.get(id);
     }

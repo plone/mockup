@@ -16,7 +16,7 @@ requirejs.config({
       'picker.time': 'bower_components/pickadate/lib/picker.time',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
-      'dropzone': "lib/dropzone/dropzone.min",
+      'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
       'mockup-registry': 'js/registry',
       'mockup-iframe': 'js/iframe',
       'mockup-iframe_init': 'js/iframe_init',

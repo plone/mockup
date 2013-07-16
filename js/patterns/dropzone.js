@@ -29,7 +29,7 @@ define([
   'jquery',
   'mockup-patterns-base',
   'dropzone'
-], function($, Base, dropzone) {
+], function($, Base, Dropzone) {
   "use strict";
 
   var DropZone = Base.extend({
@@ -39,7 +39,13 @@ define([
       klass: 'dropzone',
       paramName: "file",
       uploadMultiple: false,
-      clickable: false
+      clickable: false,
+      wrap: false,
+      wrapperTemplate: '<div class="tinymce-dropzone-container"/>',
+      resultTemplate: '<div class="dz-notice">' +
+          '<p>Drop files here...</p></div><div class="dropzone-previews"/>',
+      autoCleanResults: false,
+      previewsContainer: '.dropzone-previews'
     },
     init: function() {
       var self = this;
@@ -58,24 +64,52 @@ define([
         }
         self.options.url = url;
       }
-      self.$el.addClass(self.options.klass);
-      self.dropzone = self.$el.dropzone(self.options);
-      self.dropzone.on('dragstart', function(){
-        console.log('dragstart');
-      });
-      self.dropzone.on('dragend', function(){
-        console.log('dragend');
-      });
-      self.dropzone.on('dragenter', function(){
-        console.log('dragenter');
-      });
-      self.dropzone.on('dragover', function(){
-        console.log('dragover');
-      });
-      self.dropzone.on('dragleave', function(){
-        console.log('dragleave');
-      });
+      var $el = self.$el;
+      if(self.options.wrap){
+        var wrapFunc = $el.wrap;
+        if(self.options.wrap === 'inner'){
+          $el.wrapInner(self.options.wrapperTemplate);
+          $el = $el.children().eq(0);
+        } else {
+          $el.wrap(self.options.wrapperTemplate);
+          $el = $el.parent();
+        }
+      }
+      $el.append('<div class="dz-notice"><p>Drop files here...</p></div>');
+      if(self.options.previewsContainer === '.dropzone-previews'){
+        $el.append('<div class="dropzone-previews"/>');
+      }
 
+      var autoClean = self.options.autoCleanResults;
+      $el.addClass(self.options.klass);
+
+      // clean up options
+      var options = $.extend({}, self.options);
+      delete options.wrap;
+      delete options.wrapperTemplate;
+      delete options.resultTemplate;
+      delete options.autoCleanResults;
+
+      if(self.options.previewsContainer){
+        /*
+         * if they have a select but it's not an id, let's make an id selector
+         * so we can target the correct container. dropzone is weird here...
+         */
+        var $preview = $el.find(self.options.previewsContainer);
+        if($preview.length > 0){
+          options.previewsContainer = $preview[0];
+        }
+      }
+
+      self.dropzone = new Dropzone($el[0], options);
+
+      if(autoClean){
+        self.dropzone.on('complete', function(file){
+          setTimeout(function(){
+            $(file.previewElement).fadeOut();
+          }, 3000);
+        });
+      }
     }
   });
 
