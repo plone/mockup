@@ -199,7 +199,7 @@ define([
         [x] Login
         [x] Content history (toolbar)
         [ ] Add new user/group
-        [ ] Register
+        [x] Register
         [x] change default page (toolbar)
         [x] Contact form
       */
@@ -219,6 +219,9 @@ define([
 
       /*** Contact form ***/
       $('#siteaction-contact > a').addClass('pat-modal');
+
+      /*** Register form ***/
+      $('#personaltools-join').addClass('pat-modal');
     },
     scan: function(selector) {
       registry.scan($(selector));
