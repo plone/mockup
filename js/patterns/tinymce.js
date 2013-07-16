@@ -106,7 +106,10 @@ define([
         'anchor',
         'image'*/
       ],
-      initialLinkType: 'internal'
+      initialLinkType: 'internal',
+      text: {
+        insertHeading: 'Insert Link'
+      }
     },
     init: function(){
       var self = this;
@@ -710,6 +713,9 @@ define([
           tinypattern: self,
           linkTypes: ['image', 'externalImage'],
           initialLinkType: 'image',
+          text: {
+            insertHeading: 'Insert Image'
+          },
           relatedItems: {
             baseCriteria: [{
               i: 'Type',

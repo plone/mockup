@@ -96,16 +96,16 @@ define([
           onFormError: null,
           onTimeout: null
         },
-        form: function($modal, actions, defaultOptions) {
+        form: function(actions, defaultOptions) {
           var self = this;
+          var $modal = self.$modal;
           var templateOptions = self.options.templateOptions;
-          var combinedActions = actions;
 
           if (templateOptions.automaticallyAddActions) {
-            combinedActions[templateOptions.buttons] = {};
+            actions[templateOptions.buttons] = {};
           }
 
-          $.each(combinedActions, function(action, options) {
+          $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
             $(action, $modal).each(function(action) {
               var $action = $(this);
@@ -139,90 +139,10 @@ define([
 
                 // handle click on input/button using jquery.form library
                 if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button')) {
-
-                  // pass action that was clicked when submiting form
-                  var extraData = {};
-                  extraData[$action.attr('name')] = $action.attr('value');
-
-                  $action.parents('form').ajaxSubmit({
-                    timeout: options.timeout,
-                    data: extraData,
-                    url: $action.parents('form').attr('action'),
-                      error: function(xhr, textStatus, errorStatus) {
-                        if (textStatus === 'timeout' && options.onTimeout) {
-                          options.onTimeout.apply(self, xhr, errorStatus);
-                        // on "error", "abort", and "parsererror"
-                        } else if (options.onError) {
-                          options.onError(xhr, textStatus, errorStatus);
-                        } else {
-                          console.log('error happened do something');
-                        }
-                      },
-                      success: function(response, state, xhr, form) {
-                        // if error is found
-                        if ($(options.error, response).size() !== 0) {
-                          if (options.onFormError) {
-                            options.onFormError(self, response, state, xhr, form);
-                          } else {
-                            self.$modal.remove();
-                            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                            self.options.render.apply(self, [self.options.templateOptions]);
-                            self.positionModal();
-                            registry.scan(self.$modal);
-                          }
-
-                        // custom success function
-                        } else if (options.onSuccess) {
-                          options.onSuccess(self, response, state, xhr, form);
-
-                        }
-
-                        else {
-                          $action.trigger('destroy.modal.patterns');
-                          location.reload();
-                        }
-                      }
-                  });
-
+                  self.options.handleFormAction.apply(self, [$action, options]);
                 // handle click on link with jQuery.ajax
                 } else if ($.nodeName($action[0], 'a')) {
-                  $.ajax({
-                    url: $action.attr('href'),
-                    error: function(xhr, textStatus, errorStatus) {
-                      if (textStatus === 'timeout' && options.onTimeout) {
-                        options.onTimeout(self.$modal, xhr, errorStatus);
-
-                      // on "error", "abort", and "parsererror"
-                      } else if (options.onError) {
-                        options.onError(xhr, textStatus, errorStatus);
-                      } else {
-                        console.log('error happened do something');
-                      }
-                    },
-                    success: function(response, state, xhr) {
-                      // if error is found
-                      if ($(options.error, response).size() !== 0) {
-                        if (options.onFormError) {
-                          options.onFormError(self, response, state, xhr);
-                        } else {
-                            self.$modal.remove();
-                            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                            self.options.render.apply(self, [self.options.templateOptions]);
-                            self.positionModal();
-                            registry.scan(self.$modal);
-                        }
-
-                      // custom success function
-                      } else if (options.onSuccess) {
-                        options.onSuccess(self, response, state, xhr);
-
-                      } else {
-                        $action.trigger('destroy.modal.patterns');
-                      }
-                    }
-                  });
+                  self.options.handleLinkAction.apply(self, [$action, options]);
                 }
 
               });
@@ -230,6 +150,92 @@ define([
           });
 
         }
+      },
+      handleFormAction: function($action, options) {
+        var self = this;
+        // pass action that was clicked when submiting form
+        var extraData = {};
+        extraData[$action.attr('name')] = $action.attr('value');
+
+        $action.parents('form').ajaxSubmit({
+          timeout: options.timeout,
+          data: extraData,
+          url: $action.parents('form').attr('action'),
+            error: function(xhr, textStatus, errorStatus) {
+              if (textStatus === 'timeout' && options.onTimeout) {
+                options.onTimeout.apply(self, xhr, errorStatus);
+              // on "error", "abort", and "parsererror"
+              } else if (options.onError) {
+                options.onError(xhr, textStatus, errorStatus);
+              } else {
+                console.log('error happened do something');
+              }
+            },
+            success: function(response, state, xhr, form) {
+              // if error is found
+              if ($(options.error, response).size() !== 0) {
+                if (options.onFormError) {
+                  options.onFormError(self, response, state, xhr, form);
+                } else {
+                  self.$modal.remove();
+                  self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                      .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+                  self.options.render.apply(self, [self.options.templateOptions]);
+                  self.positionModal();
+                  registry.scan(self.$modal);
+                }
+
+              // custom success function
+              } else if (options.onSuccess) {
+                options.onSuccess(self, response, state, xhr, form);
+
+              }
+
+              else {
+                $action.trigger('destroy.modal.patterns');
+                location.reload();
+              }
+            }
+        });
+      },
+      handleLinkAction: function($action, options) {
+        var self = this;
+        $.ajax({
+          url: $action.attr('href'),
+          error: function(xhr, textStatus, errorStatus) {
+            if (textStatus === 'timeout' && options.onTimeout) {
+              options.onTimeout(self.$modal, xhr, errorStatus);
+
+            // on "error", "abort", and "parsererror"
+            } else if (options.onError) {
+              options.onError(xhr, textStatus, errorStatus);
+            } else {
+              console.log('error happened do something');
+            }
+          },
+          success: function(response, state, xhr) {
+            // if error is found
+            if ($(options.error, response).size() !== 0) {
+              if (options.onFormError) {
+                options.onFormError(self, response, state, xhr);
+              } else {
+                  self.$modal.remove();
+                  self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                      .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+                  self.options.render.apply(self, [self.options.templateOptions]);
+                  self.positionModal();
+                  registry.scan(self.$modal);
+              }
+
+            // custom success function
+            } else if (options.onSuccess) {
+              options.onSuccess(self, response, state, xhr);
+
+            } else {
+              $action.trigger('destroy.modal.patterns');
+            }
+          }
+        });
       },
       render: function(options) {
         var self = this;
@@ -244,22 +250,8 @@ define([
           title: '',
           prepend: '<div />',
           content: '',
-          buttons: '<div />'
+          buttons: '<div class="pat-modal-buttons"></div>'
         };
-
-        // Setup buttons
-        $(options.buttons, $raw).each(function() {
-          var $button = $(this);
-          $button
-            .clone()
-            .appendTo($(tpl_object.buttons))
-            .off('click').on('click', function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              $button.trigger('click');
-            });
-          $button.hide();
-        });
 
         // setup the Title
         if (options.title === null) {
@@ -279,12 +271,30 @@ define([
 
         // Grab items to to insert into the prepend area
         if (options.prependContent) {
-          $(tpl_object.prepend).append($(options.prependContent, $raw));
+          tpl_object.prepend = $('<div />').append($(options.prependContent, $raw).clone()).html();
           $(options.prependContent, $raw).remove();
         }
 
         // Render html
         self.$modal = $(_.template(self.options.modalTemplate, tpl_object));
+
+        // Setup buttons
+        $(options.buttons, self.$modal).each(function() {
+          var $button = $(this);
+          $button
+            .on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+            })
+            .clone()
+            .appendTo($('.pat-modal-buttons', self.$modal))
+            .off('click').on('click', function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+              $button.trigger('click');
+            });
+          $button.hide();
+        });
 
         // Wire up events
         $('.modal-header > a.close', self.$modal)
