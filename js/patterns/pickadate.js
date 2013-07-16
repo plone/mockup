@@ -40,7 +40,9 @@ define([
     defaults: {
       separator: ' ',
       date: {
-        formatSubmit: 'dd-mm-yyyy'
+        formatSubmit: 'dd-mm-yyyy',
+        selectYears: true,
+        selectMonths: true
       },
       time: {
         formatSubmit: 'HH:i'
