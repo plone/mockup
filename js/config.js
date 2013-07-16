@@ -10,6 +10,7 @@ requirejs.config({
       'tinymce': 'lib/tinymce/tinymce.min',
       'chai': 'bower_components/chai/chai',
       'sinon': 'lib/sinon',
+      'mockupFakeServer': 'js/fakeserver',
       'picker': 'bower_components/pickadate/lib/picker',
       'picker.date': 'bower_components/pickadate/lib/picker.date',
       'picker.time': 'bower_components/pickadate/lib/picker.time',

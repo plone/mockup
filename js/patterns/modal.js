@@ -37,6 +37,7 @@ define([
 
   var Modal = Base.extend({
     name: "modal",
+    mode: null,
     defaults: {
       triggers: '',
       position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
@@ -321,7 +322,7 @@ define([
         $.each(self.options.triggers, function(i, item) {
           item = item.split(' ');
           $(item[1] || self.$el).on(item[0], function() {
-            self.show();
+            self.activateModal();
           });
         });
       }
@@ -339,7 +340,7 @@ define([
         self.$el.on('click', function(e) {
           e.stopPropagation();
           e.preventDefault();
-          self.show();
+          self.activateModal();
         });
       }
 
@@ -371,42 +372,56 @@ define([
       $modal.data('pattern-' + self.name, self);
       return $modal;
     },
+    createAjaxModal: function() {
+      var self = this;
+      self.trigger('before-ajax');
+      self.$wrapper.parent().css('overflow', 'hidden');
+      self.$wrapper.show();
+      self.backdrop.show();
+      self.$loading.show();
+      self.positionLoading();
+      self.ajaxXHR = $.ajax({
+          url: self.options.ajaxUrl,
+          type: self.options.ajaxType
+      }).done(function(response, textStatus, xhr) {
+        self.ajaxXHR = undefined;
+        self.$loading.hide();
+        self.$modal = self.initModalElement(
+          $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+        self.trigger('after-ajax', self, textStatus, xhr);
+        self.show();
+      });
+    },
+    createTargetModal: function() {
+      var self = this;
+      self.$modal = self.initModalElement($('<div/>'))
+              .html($(self.options.target).clone());
+      self.show();
+    },
+    createBasicModal: function() {
+      var self = this;
+      self.$modal = self.initModalElement($('<div/>'))
+              .html(self.$el.clone());
+      self.show();
+    },
+    createHtmlModal: function() {
+      var self = this;
+      var $el = $(self.options.html);
+      self.$modal = self.initModalElement($('<div/>')).html($el);
+      self.show();
+    },
     initModal: function() {
       var self = this;
       if (self.options.ajaxUrl) {
-        self.$modal = function() {
-          self.trigger('before-ajax');
-          self.$wrapper.parent().css('overflow', 'hidden');
-          self.$wrapper.show();
-          self.backdrop.show();
-          self.$loading.show();
-          self.positionLoading();
-          self.ajaxXHR = $.ajax({
-              url: self.options.ajaxUrl,
-              type: self.options.ajaxType
-          }).done(function(response, textStatus, xhr) {
-            self.ajaxXHR = undefined;
-            self.$loading.hide();
-            self.$modal = self.initModalElement(
-              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
-            self.trigger('after-ajax', self, textStatus, xhr);
-            self.show();
-          });
-        };
+        self.createModal = self.createAjaxModal;
       } else if (self.options.target) {
-        self.$modal = function() {
-          self.$modal = self.initModalElement($('<div/>'))
-              .html($(self.options.target).clone());
-        };
+        self.createModal = self.createTargetModal;
       } else if (self.options.html) {
-        var $el = $(self.options.html);
-        self.$modal = self.initModalElement($('<div/>')).html($el);
+        self.createModal = self.createHtmlModal;
       } else {
-        self.$modal = self.initModalElement($('<div/>'))
-              .html(self.$el.clone());
+        self.createModal = self.createBasicModal;
       }
-
     },
     positionLoading: function() {
       var self = this;
@@ -521,7 +536,7 @@ define([
         'margin': margin,
         'width': self.options.width, // defaults to "", which doesn't override other css
         'height': self.options.height, // defaults to "", which doesn't override other css
-        'position': 'absolute',
+        'position': 'absolute'
       });
 
       var posopt = self.options.position.split(' '),
@@ -538,13 +553,13 @@ define([
         self.$modal.css(key, pos[key]);
       }
     },
+    activateModal: function() {
+      var self = this;
+      self.createModal();
+    },
     show: function() {
       var self = this;
       if (!self.$el.hasClass(self.options.klassActive)) {
-        self._$modal = self.$modal;
-        if (typeof self.$modal === 'function') {
-          self.$modal();
-        }
         if (self.options.template) {
           self.options.template.apply(self,
               [self.$modal, self.options.templateOptions]);
@@ -571,19 +586,18 @@ define([
       if (self.ajaxXHR) {
         self.ajaxXHR.abort();
       }
-      if (self.$el.hasClass(self.options.klassActive)) {
-        self.trigger('hide');
-        self.backdrop.hide();
-        self.$wrapper.hide();
-        self.$wrapper.parent().css('overflow', 'visible');
-        self.$el.removeClass(self.options.klassActive);
-        if (self.$modal.remove) {
-          self.$modal.remove();
-          self.initModal();
-        }
-        $(window.parent).off('resize.modal.patterns');
-        self.trigger('hidden');
+      self.trigger('hide');
+      self.backdrop.hide();
+      self.$wrapper.hide();
+      self.$loading.hide();
+      self.$wrapper.parent().css('overflow', 'visible');
+      self.$el.removeClass(self.options.klassActive);
+      if (self.$modal !== undefined) {
+        self.$modal.remove();
+        self.initModal();
       }
+      $(window.parent).off('resize.modal.patterns');
+      self.trigger('hidden');
     }
   });
 
