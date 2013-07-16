@@ -242,6 +242,11 @@ require([
 '    </body> '+
 '    </html>']);
 
+  server.respondWith('POST', /upload/, function(xhr, id) {
+    xhr.respond(200);
+
+  });
+
   return server;
 
 });

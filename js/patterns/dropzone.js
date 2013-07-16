@@ -36,10 +36,13 @@ define([
     name: "dropzone",
     defaults: {
       url: null, // XXX MUST provide url to submit to OR be in a form
-      klass: 'dropzone'
+      klass: 'dropzone',
+      paramName: "file",
+      uploadMultiple: false
     },
     init: function() {
       var self = this;
+
       if(!self.options.url && self.$el[0].tagName === 'FORM'){
         var url = self.$el.attr('action');
         if(!url){
@@ -50,6 +53,22 @@ define([
       }
       self.$el.addClass(self.options.klass);
       self.dropzone = self.$el.dropzone(self.options);
+      self.dropzone.on('dragstart', function(){
+        console.log('dragstart');
+      });
+      self.dropzone.on('dragend', function(){
+        console.log('dragend');
+      });
+      self.dropzone.on('dragenter', function(){
+        console.log('dragenter');
+      });
+      self.dropzone.on('dragover', function(){
+        console.log('dragover');
+      });
+      self.dropzone.on('dragleave', function(){
+        console.log('dragleave');
+      });
+
     }
   });
 
