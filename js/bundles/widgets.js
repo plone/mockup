@@ -52,10 +52,6 @@ define([
     name: "plone-widgets",
     transform: function($root) {
 
-      // margin-top is hardcoded in template 
-      // Products/TinyMCE/skins/tinymce/tinymce_wysiwyg_support.pt
-      $('.suppressVisualEditor').removeAttr('style');
-
       // apply autotoc pattern where enableFormTabbing exists
       var $match = $root.filter('.enableFormTabbing');
       $match = $match.add($root.find('.enableFormTabbing'));
@@ -142,6 +138,8 @@ define([
         .attr('autocomplete', 'off');
       $match.find('.searchButton').hide();
 
+      */
+
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce').attr({
         'data-pat-tinymce': JSON.stringify({
@@ -150,7 +148,6 @@ define([
           }
         })
       });
-      */
 
       // Use toggle to replace the toggleSelect from the select_all.js
       // First, remove the previous onclick
