@@ -294,21 +294,15 @@ define([
 //    });
 //
 //    // Rename Action
-//    Modal.prepareModal('#plone-contentmenu-actions-rename > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Cancel"],input[name="form.button.RenameAll"]'
-//      });
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.RenameAll"]': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href') + '/' + $('input[name="new_ids:list"]', form).val();
-//            }
-//          }
-//        }
-//      });
-//    });
+    var rename_action = $('#plone-contentmenu-actions-rename > a');
+    var rename_options = {
+        templateOptions: {
+            prependContent: '.portalMessage'
+        }
+    };
+    rename_action.addClass('pat-modal');
+    rename_action.attr('data-pat-modal', JSON.stringify(rename_options));
+
 //
 //    // Change content item as default view...
 //    var changeContentItemAsDefaultView = function(modal, modalInit, modalOptions) {
