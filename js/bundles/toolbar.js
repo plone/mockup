@@ -388,34 +388,7 @@ define([
 //    });
 //
 //    // Advance workflow
-//    Modal.prepareModal('#workflow-transition-advanced > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Cancel"],input[name="form.button.FolderPublish"],input[name="form.button.Publish"]'
-//      });
-//
-//      // FIXME: we should _not_ hack like this
-//      $('#workflow_action', modal.$modal).parent().find('> br').remove();
-//
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.Publish"], .modal-body input[name="form.button.FolderPublish"]': {
-//            onSuccess: function(modal, responseBody, state, xhr) {
-//              $('#plone-contentmenu-workflow')
-//                .html($('#plone-contentmenu-workflow', responseBody).html());
-//              $('#plone-contentmenu-workflow > a').toggle({
-//                target: '.toolbar-dropdown',
-//                value: 'toolbar-dropdown-open'
-//              });
-//              $('#plone-contentmenu-workflow #workflow-transition-advanced > a')
-//                  .addClass('modal-trigger').modal();
-//              $('body', iframe.document).css('overflow', 'visible');
-//              modal.hide();
-//            }
-//          }
-//        }
-//      });
-//    });
+    $('#workflow-transition-advanced > a').addClass('pat-modal');
 //
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
