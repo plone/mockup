@@ -55,8 +55,10 @@ define([
           browsing: false
         };
       }
-      if(self.options.ajaxvocabulary !== undefined &&
-          self.options.ajaxvocabulary !== null){
+      if((self.options.ajaxvocabulary !== undefined &&
+          self.options.ajaxvocabulary !== null) ||
+         (self.options.url !== undefined &&
+          self.options.url !== null)){
         self.valid = true;
       }else{
         self.valid = false;
