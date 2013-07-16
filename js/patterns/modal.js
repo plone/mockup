@@ -84,6 +84,9 @@ define([
         actions: {},
         preventLinkDefaults: false,
         actionsOptions: {
+          target: null,
+          ajaxUrl: null,
+          isForm: false,
           timeout: 5000,
           displayInModal: true,
           error: '.portalMessage.error',
@@ -113,29 +116,7 @@ define([
                 e.stopPropagation();
                 e.preventDefault();
 
-                // loading "spinner"
-                var backdrop = $modal.data('patterns-backdrop');
-                if (!backdrop) {
-                  backdrop = new Backdrop($modal, {
-                    closeOnEsc: false,
-                    closeOnClick: false
-                  });
-                  backdrop.$backdrop
-                    .html('')
-                    .append(
-                      $(options.loading)
-                        .css({
-                          position: 'absolute',
-                          left: $modal.width() * 0.1,
-                          top: $modal.height()/2 + 10,
-                          width: $modal.width() * 0.8
-                        })
-                    );
-                  $modal.data('patterns-backdrop', backdrop);
-                } else {
-                  $modal.append(backdrop.$backdrop);
-                }
-                backdrop.show();
+                self.showLoading(false);
 
                 // handle click on input/button using jquery.form library
                 if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button')) {
@@ -212,6 +193,7 @@ define([
             } else {
               console.log('error happened do something');
             }
+            self.$loading.hide();
           },
           success: function(response, state, xhr) {
             // if error is found
@@ -219,12 +201,12 @@ define([
               if (options.onFormError) {
                 options.onFormError(self, response, state, xhr);
               } else {
-                  self.$modal.remove();
-                  self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                      .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                  self.options.render.apply(self, [self.options.templateOptions]);
-                  self.positionModal();
-                  registry.scan(self.$modal);
+                self.$modal.remove();
+                self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+                    .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+                self.options.render.apply(self, [self.options.templateOptions]);
+                self.positionModal();
+                registry.scan(self.$modal);
               }
 
             // custom success function
@@ -234,6 +216,7 @@ define([
             } else {
               $action.trigger('destroy.modal.patterns');
             }
+            self.$loading.hide();
           }
         });
       },
@@ -429,14 +412,27 @@ define([
 
       self.initModal();
     },
-    createAjaxModal: function() {
+    showLoading: function(closable) {
       var self = this;
-      self.trigger('before-ajax');
+
+      if (closable === undefined) {
+        closable = true;
+      }
+
+      self.backdrop.closeOnClick = closable;
+      self.backdrop.closeOnEsc = closable;
+      self.backdrop.init();
+
       self.$wrapper.parent().css('overflow', 'hidden');
       self.$wrapper.show();
       self.backdrop.show();
       self.$loading.show();
       self.positionLoading();
+    },
+    createAjaxModal: function() {
+      var self = this;
+      self.trigger('before-ajax');
+      self.showLoading();
       self.ajaxXHR = $.ajax({
           url: self.options.ajaxUrl,
           type: self.options.ajaxType
@@ -618,6 +614,7 @@ define([
       self.trigger('show');
       self.backdrop.show();
       self.$wrapper.show();
+      self.$loading.hide();
       self.$wrapper.parent().css('overflow', 'hidden');
       self.$el.addClass(self.options.klassActive);
       self.$modal.addClass(self.options.klassActive);
