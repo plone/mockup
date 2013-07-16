@@ -197,10 +197,10 @@ define([
       
         TODO:
         [x] Login
-        [ ] Content history
+        [x] Content history (toolbar)
         [ ] Add new user/group
         [ ] Register
-        [ ] change default page (toolbar)
+        [x] change default page (toolbar)
         [ ] Contact form
       */
 
