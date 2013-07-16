@@ -43,9 +43,11 @@ define([
     defaults: {
       indexWidth: '20em',
       placeholder: 'Select criteria',
-      remove: 'Remove line',
+      remove: 'remove line',
       results: ' items matching your search.',
       days: 'days',
+      betweendt: 'to',
+      klassBetweenDt: 'querystring-criteria-betweendt',
       klassWrapper: 'querystring-criteria-wrapper',
       klassIndex: 'querystring-criteria-index',
       klassOperator: 'querystring-criteria-operator',
@@ -64,13 +66,11 @@ define([
       // create wrapper criteria and append it to DOM
       self.$wrapper = $('<div/>')
               .addClass(self.options.klassWrapper)
-              .addClass("row")
               .appendTo($el);
 
       // Remove button
       self.$remove = $('<div>'+self.options.remove+'</div>')
               .addClass(self.options.klassRemove)
-              .addClass('span1')
               .appendTo(self.$wrapper)
               .on('click', function(e) {
                 self.remove();
@@ -98,7 +98,6 @@ define([
       self.$wrapper.append(
           $('<div/>')
               .addClass(self.options.klassIndex)
-              .addClass("span4")
               .append(self.$index));
 
       // add blink (select2)
@@ -141,7 +140,6 @@ define([
       self.$wrapper.append(
           $('<div/>')
               .addClass(self.options.klassOperator)
-              .addClass("span2")
               .append(self.$operator));
 
       // add blink (select2)
@@ -167,7 +165,6 @@ define([
           widget = self.indexes[index].operators[self.$operator.val()].widget,
           $wrapper = $('<div/>')
             .addClass(self.options.klassValue)
-            .addClass("span6")
             .appendTo(self.$wrapper);
 
       self.removeValue();
@@ -193,30 +190,32 @@ define([
                 });
 
       } else if (widget === 'DateRangeWidget') {
-        //self.$value = $('<input type="text"/>').appendTo($wrapper);
+        var startwrap = $('<span/>').appendTo($wrapper);
         var startdt = $('<input type="text"/>')
                         .addClass(self.options.klassValue + '-' + widget)
                         .addClass(self.options.klassValue + '-' + widget + '-start')
-                        .appendTo($wrapper)
+                        .appendTo(startwrap)
                         .patternPickadate({
                           time: false,
                           date: { format: "dd/mm/yyyy" }
                         })
-                        .change(function(){
-                          self.trigger('value-changed');
-                        });
-        $wrapper.append(' to ');
+        $wrapper.append(
+          $('<span/>')
+            .html(self.options.betweendt)
+            .addClass(self.options.klassBetweenDt)
+        );
+        var endwrap = $('<span/>').appendTo($wrapper);
         var enddt = $('<input type="text"/>')
                         .addClass(self.options.klassValue + '-' + widget)
                         .addClass(self.options.klassValue + '-' + widget + '-end')
-                        .appendTo($wrapper)
+                        .appendTo(endwrap)
                         .patternPickadate({
                           time: false,
                           date: { format: "dd/mm/yyyy" }
                         })
-                        .change(function(){
-                          self.trigger('value-changed');
-                        });
+        $wrapper.find('.picker__input').change(function() {
+          self.trigger('value-changed');
+        });
         self.$value = [startdt, enddt];
 
       } else if (widget === 'RelativeDateWidget') {
@@ -312,6 +311,43 @@ define([
         }
       }
     },
+    // builds the parameters to go into the http querystring for requesting
+    // results from the query builder
+    buildQueryPart: function() {
+      var self = this;
+
+      // index
+      var ival = self.$index.select2('val');
+      if(ival === "") { // no index selected, no query
+        return "";
+      }
+      var istr = 'query.i:records='+ival;
+
+      // operator
+      if(typeof self.$operator === "undefined") { // no operator, no query
+        return "";
+      }
+      var oval = self.$operator.val(),
+          ostr = 'query.o:records='+oval;
+
+      // value(s)
+      var vstrbase = 'query.v:records=',
+          vstrlistbase = 'query.v:records:list=',
+          vstr = [];
+      if(typeof self.$value === "undefined") {
+        vstr.push(vstrbase);
+      }
+      else if($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
+        $.each(self.$value, function(i, v) {
+          vstr.push(vstrlistbase + $(this).parent().find('.picker__input').val());
+        });
+      }
+      else {
+        vstr.push(vstrbase + self.$value.val());
+      }
+
+      return istr + '&' + ostr + '&' + vstr.join('&');
+    },
     trigger: function(name) {
       this.$wrapper.trigger(name + '-criteria.querystring.patterns', [ this ]);
     },
@@ -331,6 +367,9 @@ define([
       reversetxt: 'Reversed Order',
       previewTitle: 'Preview',
       previewDescription: 'Preview of at most 10 items',
+      klassSortLabel: 'querystring-sort-label',
+      klassSortReverse: 'querystring-sortreverse',
+      klassSortReverseLabel: 'querystring-sortreverse-label',
       klassPreviewWrapper: 'querystring-preview-wrapper',
       klassPreview: 'querystring-preview',
       klassPreviewTitle: 'querystring-preview-title',
@@ -418,8 +457,10 @@ define([
       self.criterias.push(criteria);
     },
     refreshPreviewEvent: function(self) {
+      /* TEMPORARY */
       if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
       self._tmpcnt++;
+      /* /TEMPORARY */
 
       if(typeof self._preview_xhr !== "undefined") {
         self._preview_xhr.abort();
@@ -427,10 +468,25 @@ define([
       if(typeof self.$previewPane !== "undefined") {
         self.$previewPane.remove();
       }
+
+      var query = [], querypart;
+      $.each(self.criterias, function(i, criteria) {
+        querypart = criteria.buildQueryPart();
+        if(querypart !== "") {
+          query.push(criteria.buildQueryPart());
+        }
+      });
+
       self.$previewPane = $('<div/>')
         .addClass(self.options.klassPreview)
         .appendTo(self.$previewWrapper);
-      self.$previewPane.text('refreshed ' + self._tmpcnt + ' times');
+
+      /* TEMPORARY */
+      self.$previewPane.html(
+          'refreshed ' + self._tmpcnt + ' times<br />'
+          + (query.length > 1 ? query.join('<br />&') : query));
+      /* /TEMPORARY */
+
       /*
       $.get(self.options.previewurl)
           .done(function(data, stat){
@@ -443,7 +499,9 @@ define([
     },
     createSort: function() {
       var self = this;
-      $('<span>'+self.options.sorttxt+'</span>')
+      $('<span/>')
+        .addClass(self.options.klassSortLabel)
+        .html(self.options.sorttxt)
         .appendTo(self.$sortWrapper);
       var $sortsel = $('<select/>')
         .appendTo(self.$sortWrapper)
@@ -459,13 +517,20 @@ define([
       }
       $sortsel.patternSelect2();
 
-      $("<input type='checkbox' />")
+      $('<span/>')
+        .addClass(self.options.klassSortReverse)
         .appendTo(self.$sortWrapper)
-        .change(function(){
-          self.refreshPreviewEvent(self);
-        });
-      $('<span>'+self.options.reversetxt+'</span>')
-        .appendTo(self.$sortWrapper);
+        .append(
+          $("<input type='checkbox' />")
+            .change(function(){
+              self.refreshPreviewEvent(self);
+            })
+          )
+        .append(
+          $('<span/>')
+            .html(self.options.reversetxt)
+            .addClass(self.options.klassSortReverseLabel)
+        )
     }
   });
 
