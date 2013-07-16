@@ -244,7 +244,6 @@ require([
 
   server.respondWith('POST', /upload/, function(xhr, id) {
     xhr.respond(200);
-
   });
 
   server.respondWith('GET', /portal_factory\/@@querybuilder_html_results/, function(xhr, id) {
