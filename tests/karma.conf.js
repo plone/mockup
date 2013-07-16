@@ -36,7 +36,7 @@ exclude = [
 // possible values: dots || progress || growl
 reporters = ['progress', 'coverage'];
 coverageReporter = {
-  type : 'text-summary',
+  type : 'html',
   dir : 'coverage/'
 }
 
