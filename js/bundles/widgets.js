@@ -193,9 +193,17 @@ define([
       var edit_form = $('form[action*="@@edit"]');
       edit_form.addClass('pat-formautofocus');
 
-      // Modals
-      $('#personaltools-login').addClass('pat-modal'); // Login
-      
+      /* Modals */
+
+      /*** Login ***/
+      var loginOptions = {
+        templateOptions: {
+          title: 'Login'
+        }
+      };
+      $('#personaltools-login')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(loginOptions));
     },
     scan: function(selector) {
       registry.scan($(selector));

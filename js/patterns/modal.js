@@ -59,7 +59,8 @@ define([
         closeOnClick: true
       },
       templateOptions: {
-        title: 'h1:first',
+        title: null,
+        titleSelector: 'h1:first',
         buttons: '.formControls > input[type="submit"]',
         content: '#content',
         actions: [],
@@ -212,13 +213,14 @@ define([
           '<div class="modal-body"></div>' +
           '<div class="modal-footer"></div>');
 
-        $('.modal-header > h3', $modal).html($(options.title, $content).html());
         if (options.content) {
           $('.modal-body', $modal).html($(options.content, $content).html());
         } else {
           $('.modal-body', $modal).html($content);
         }
-        $(options.title, $modal).remove();
+
+        self.renderTitle($modal, options);
+
         $('.modal-header > a.close', $modal)
           .off('click')
           .on('click', function(e) {
@@ -252,7 +254,7 @@ define([
           options.form.apply(self,
               [$modal, options.actions, options.actionsOptions]);
         }
-      },
+      }
     },
     init: function() {
       var self = this;
@@ -371,6 +373,17 @@ define([
         .appendTo(self.$wrapperInner);
       $modal.data('pattern-' + self.name, self);
       return $modal;
+    },
+    renderTitle: function($modal, options) {
+      var self = this;
+      var $content = $modal.html();
+      if (self.options.title === null) {
+        var $title = $(options.titleSelector, $content);
+        $('.modal-header > h3', $modal).html($title.html());
+        $(options.titleSelector, $modal).remove();
+      } else {
+        $('.modal-header > h3', $modal).html(options.title);
+      }
     },
     createAjaxModal: function() {
       var self = this;

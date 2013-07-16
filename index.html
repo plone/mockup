@@ -410,6 +410,8 @@ make bootstrap</pre>
         {attribute: 'position', type: 'String', 'default': 'center middle', description: 'TODO'},
         {attribute: 'template', type: 'Function', 'default': '', description: 'TODO'},
         {attribute: 'templateOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
+        {attribute: 'templateOptions.title', type: 'String', 'default': 'null', description: 'If not equal to null this will be inserted into the modal header.'},
+        {attribute: 'templateOptions.titleSelector', type: 'Selector', 'default': 'h1:first', description: 'Selector for an element within the modal content that will be extracted and inserted into the modal header.'},
         {attribute: 'triggers', type: 'String', 'default': 'focusin', description: 'TODO'},
         {attribute: 'width', type: 'String', 'default': '', description: 'TODO'}
       ]
