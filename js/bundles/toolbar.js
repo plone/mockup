@@ -121,7 +121,6 @@ define([
 
     // Modals {{{
 
-
     // Contents
     function refreshModal(modal, responseBody, state, xhr, form) {
       modal.$modal.html(responseBody.html());
@@ -195,7 +194,7 @@ define([
     $('#plone-personal-actions-plone_setup a').on('show.modal.patterns', function(evt, modal) {
       $('a[href$=controlpanel]', modal.$modal).each(function(){
         var fixedhref = this.href;
-        fixedhref = fixedhref.replace(/@@/g, "++nodiazo++/@@")
+        fixedhref = fixedhref.replace(/@@/g, "++nodiazo++/@@");
 
         $(this).attr('href', fixedhref);
         $(this).click(function(){
@@ -293,42 +292,17 @@ define([
 //      });
 //    });
 //
+        templateOptions: {
+            prependContent: '.portalMessage'
+        }
+    };
+
+//
 //    // Rename Action
-//    Modal.prepareModal('#plone-contentmenu-actions-rename > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Cancel"],input[name="form.button.RenameAll"]'
-//      });
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.RenameAll"]': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href') + '/' + $('input[name="new_ids:list"]', form).val();
-//            }
-//          }
-//        }
-//      });
-//    });
+    $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
 //
 //    // Change content item as default view...
-//    var changeContentItemAsDefaultView = function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal);
-//      // FIXME: we should hack like this
-//      $('form > dl', modal.$modal).addClass('default-page-listing');
-//      $('input[name="form.button.Cancel"]', modal.$modal).attr('class', 'standalone');
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.Save"]': {
-//            onSuccess: function(modal, responseBody, state, xhr) {
-//              window.parent.location.href = window.parent.location.href;
-//            }
-//          }
-//        }
-//      });
-//    };
-//    Modal.prepareModal('#folderChangeDefaultPage > a', changeContentItemAsDefaultView);
-//    Modal.prepareModal('#contextSetDefaultPage > a', changeContentItemAsDefaultView);
+    $('#contextSetDefaultPage > a, #folderChangeDefaultPage > a').addClass('pat-modal');
 //
 //    // Add forms
 //    Modal.prepareModal('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
@@ -413,50 +387,13 @@ define([
 //      });
 //    });
 //
-//    // Advance workflow
-//    Modal.prepareModal('#workflow-transition-advanced > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Cancel"],input[name="form.button.FolderPublish"],input[name="form.button.Publish"]'
-//      });
-//
-//      // FIXME: we should _not_ hack like this
-//      $('#workflow_action', modal.$modal).parent().find('> br').remove();
-//
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.Publish"], .modal-body input[name="form.button.FolderPublish"]': {
-//            onSuccess: function(modal, responseBody, state, xhr) {
-//              $('#plone-contentmenu-workflow')
-//                .html($('#plone-contentmenu-workflow', responseBody).html());
-//              $('#plone-contentmenu-workflow > a').toggle({
-//                target: '.toolbar-dropdown',
-//                value: 'toolbar-dropdown-open'
-//              });
-//              $('#plone-contentmenu-workflow #workflow-transition-advanced > a')
-//                  .addClass('modal-trigger').modal();
-//              $('body', iframe.document).css('overflow', 'visible');
-//              modal.hide();
-//            }
-//          }
-//        }
-//      });
-//    });
+//    // Advanced workflow
+//    // This form needs additional JS and CSS for the calendar widget.
+//    // The AJAX form doesn't load it from the javascript_head_slot.
+    // $('#workflow-transition-advanced > a').addClass('pat-modal');
 //
 //    // personal preferences
-//    Modal.prepareModal('#plone-personal-actions-preferences > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.actions.save"],input[name="form.actions.cancel"]'
-//      });
-//      $('select[name="form.wysiwyg_editor"], select[name="form.language"]', modal.$modal).addClass('pat-select2');
-//      $('input[name="form.actions.cancel"]', modal.$modal).attr('class', 'standalone');
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.actions.cancel"]': {},
-//          '.modal-body input[name="form.actions.save"]': {}
-//        }
-//      });
-//    }, { width: '80%' });
+    $('#plone-personal-actions-preferences > a').addClass('pat-modal');
 //
 //    // }}}
 //

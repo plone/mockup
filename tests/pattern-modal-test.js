@@ -104,7 +104,7 @@ define([
       $('a', $el)
         .patternModal()
         .on('show.modal.patterns', function(e, modal) {
-            $('.modal-header h3', modal.$modal).text('New Title');
+            $('.modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
           })
         .click();
       expect($('.modal .modal-header h3', $el).text()).to.equal('New Title');

@@ -246,6 +246,15 @@ require([
     xhr.respond(200);
   });
 
+  server.respondWith('GET', /portal_factory\/@@querybuilder_html_results/, function(xhr, id) {
+    var content = $('#querystring-example-results').text();
+    xhr.respond(200, {"content-Type": "text/html"}, content);
+  });
+  server.respondWith('GET', /portal_factory\/@@querybuildernumberofresults/, function(xhr, id) {
+    var content = $('#querystring-number-results-example-results').text();
+    xhr.respond(200, {"content-Type": "text/html"}, content);
+  });
+
   return server;
 
 });

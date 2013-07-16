@@ -4,16 +4,19 @@
   .querystring-criteria-remove {
     float: left;
     display: block;
-    width: 12px;
+    xwidth: 12px;
+    width: 80px;
     height: 13px;
     right: 3px;
     top: 4px;
-    font-size: 1px;
+    xfont-size: 1px;
+    font-style: italic;
     outline: 0;
     margin: 8px 4px;
     cursor: pointer;
-    background: url('select2.png') right top no-repeat;
+    xbackground: url('select2.png') right top no-repeat;
   }
+
   .querystring-criteria-index {
     float: left;
     margin-right: 0.3em;
@@ -49,6 +52,17 @@
     line-height: 1.5em;
     width: 200px;
   }
+
+  .querystring-criteria-betweendt {
+    float: left;
+    padding: 5px 8px;
+    display: inline-block;
+  }
+
+  .pat-pickadate-wrapper {
+    display: inline-block;
+    float: left;
+  }
 }
 
 
@@ -56,6 +70,58 @@
 
   .querystring-preview {
     border: 2px solid #eee;
+    padding: 5px;
+    margin: 5px;
+    height: 258px;
+    overflow-y: scroll;
+  }
+
+  .querystring-preview-title {
+    font-weight: bold;
+    font-size: larger;
+  }
+
+  .querystring-preview-description {
+    color: #bbb;
+  }
+
+  .querystring-previewcount-wrapper {
+    font-style: italic;
+  }
+
+  .querystring-previewcount-value {
+    font-weight: bold;
+  }
+
+}
+
+
+.querystring-sort-wrapper {
+
+  margin: 10px 0;
+  clear: both;
+
+  .querystring-sort-label {
+    padding-right: 10px;
+    font-weight: bold;
+  }
+
+  .querystring-sortreverse-label {
+    padding-left: 5px;
+    font-weight: bold;
+  }
+
+  .querystring-sortreverse {
+    padding-left: 10px;
+  }
+
+  .querystring-sortreverse input {
+    padding: 0;
+    margin: 0;
+  }
+
+  .select2-container {
+    margin-bottom: 0;
   }
 
 }
