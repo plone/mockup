@@ -66,6 +66,7 @@ define([
         buttons: '.formControls > input[type="submit"]',
         automaticallyAddActions: true,
         content: '#content',
+        prependContent: null,
         actions: {},
         actionsOptions: {
           timeout: 5000,
@@ -227,6 +228,10 @@ define([
           $('.modal-body', $modal).html($(options.content, $content).html());
         } else {
           $('.modal-body', $modal).html($content);
+        }
+
+        if (options.prependContent) {
+          $('.modal-body', $modal).prepend($(options.prependContent, $content));
         }
 
         self.renderTitle($modal, options);

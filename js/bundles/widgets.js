@@ -198,7 +198,9 @@ define([
       /*** Login ***/
       var loginOptions = {
         templateOptions: {
-          title: 'Login'
+          title: 'Login',
+          content: '#content',
+          prependContent: '.portalMessage'
         }
       };
       $('#personaltools-login')
