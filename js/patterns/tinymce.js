@@ -208,6 +208,9 @@ define([
       });
       self.initElements();
     },
+    isImageMode: function(){
+      return ['image', 'externalImage'].indexOf(this.linkType) !== -1;
+    },
     initElements: function(){
       var self = this;
       self.$internal = $('input[name="internal"]', self.modal.$modal);
@@ -238,7 +241,7 @@ define([
     activateLinkTypeElements: function(){
       /* handle specify url types */
       var self = this;
-      $('.' + self.linkTypes.join(',.'), self.modal.$modal).hide();
+      $('.linkType', self.modal.$modal).hide();
       $('.' + self.linkType).show();
     },
     getLinkUrl: function(){
@@ -382,7 +385,7 @@ define([
         if(!href){
           return; // just cut out if no url
         }
-        if(['image', 'externalImage'].indexOf(self.linkType) !== -1){
+        if(self.isImageMode()){
           self.updateImage(href);
         } else {
           /* regular anchor */
@@ -477,7 +480,7 @@ define([
       if (self.anchorElm) {
         self.selection.select(self.anchorElm);
       }
-      if(self.imgElm.nodeName !== 'IMG'){
+      if(self.imgElm.nodeName !== 'IMG' || !self.isImageMode()){
         self.imgElm = null;
       }
 
@@ -495,7 +498,7 @@ define([
       }
 
       self.uid = '';
-      if(self.href){
+      if(self.href && !self.isImageMode()){
         if(self.href.indexOf('resolveuid/') !== -1){
           self.uid = self.href.replace('resolveuid/', '');
           self.linkType = 'internal';
@@ -656,17 +659,19 @@ define([
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
         plugins: [
-          "advlist autolink lists link image charmap print preview anchor",
+          "advlist autolink lists charmap print preview anchor",
           "searchreplace visualblocks code fullscreen",
           "insertdatetime media table contextmenu paste plonelink ploneimage"
         ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage"
+        menubar: "edit table format tools view insert",
+        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage"
       }
     },
     addLinkClicked: function(){
       var self = this;
       if(self.linkModal === null){
-        self.linkModal = new LinkModal(self.$el,
+        var $el = $('<div/>').insertAfter(self.$el);
+        self.linkModal = new LinkModal($el,
           $.extend(true, {}, self.options, {
             tinypattern: self,
             linkTypes: [
@@ -729,7 +734,8 @@ define([
 
           }
         });
-        self.imageModal = new LinkModal(self.$el, options);
+        var $el = $('<div/>').insertAfter(self.$el);
+        self.imageModal = new LinkModal($el, options);
         self.imageModal.show();
       } else {
         self.imageModal.reinitialize();
@@ -744,8 +750,12 @@ define([
       if(id === undefined){
         id = 'tiny' + (Math.floor((1 + Math.random()) * 0x10000)
           .toString(16).substring(1));
-        self.$el.attr('id', id);
+      } else {
+        /* hopefully we don't screw anything up here... changing the id 
+         * in some cases so we get a decent selector */
+        id = id.replace(/\./g, '-');
       }
+      self.$el.attr('id', id);
       var tinyOptions = self.options.tiny;
       tinyOptions.selector = '#' + id;
       tinyOptions.addLinkClicked = function(){

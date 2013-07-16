@@ -30,235 +30,9 @@ addPage = function(page) {
 
 // 
 require([
-  'sinon',
+  'mockupFakeServer',
   'js/docs'
-], function(sinon, DocsApp) {
-  function getQueryVariable(url, variable) {
-    var query = url.split('?')[1];
-    if(query === undefined){
-      return null;
-    }
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) == variable) {
-            return decodeURIComponent(pair[1]);
-        }
-    }
-    return null;
-  }
-
-  var server = sinon.fakeServer.create();
-  server.autoRespond = true;
-  server.autoRespondAfter = 200;
-
-  server.respondWith(/search.json/, function (xhr, id) {
-    var items = [
-      {
-        "UID": "123sdfasdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdf1123asZ",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdf1231as",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdf12231451",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdf1235dsd",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasd345345f",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdf465",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooaewrwsdfasdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasd123f",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdas123f",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      { 
-        "UID": "fooasdfasdfsdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      }
-    ];
-
-    var results = [];
-    var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
-
-    var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
-
-    if (query.criteria[0].v === 'none*') {
-      results = [];
-    } else {
-      if (batch) {
-        var start, end;
-        start = (batch.page-1) * batch.size;
-        end = start + batch.size;
-        results = items.slice(start, end);
-      }
-    }
-
-    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-      total: results.length,
-      results: results
-    }));
-  });
-
-  server.respondWith('GET', /relateditems-test.json/, function(xhr, id) {
-    var root = [
-      {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
-      {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
-      {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
-      {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
-      {"UID": "asdf1234gsad", "Title": "Contact", "path": "/contact", "Type": "Document"},
-      {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "Document"},
-      {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "Folder"},
-      {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "Document"},
-    ];
-    var about = [
-      {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "Document"},
-      {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "Document"},
-      {"UID": "dfgsdfgj675", "Title": "Staff", "path": "/about/staff", "Type": "Folder"},
-      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "Document"}
-    ];
-
-    var staff = [
-      {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "Document"},
-      {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "Document"}
-    ];
-    var searchables = about.concat(root).concat(staff);
-
-    var addUrls = function(list){
-      /* add getURL value */
-      for(var i=0; i<list.length; i=i+1){
-        var data = list[i];
-        data.getURL = window.location.origin + data.path;
-      }
-    }
-    addUrls(searchables);
-    addUrls(root);
-    root[0].getURL = window.location.origin + '/exampledata/test.png';
-
-    var results = [];
-
-    // grab the page number and number of items per page -- note, page is 1-based from Select2
-    var batch = getQueryVariable(xhr.url, 'batch');
-    var page = 1;
-    var page_size = 10;
-    if(batch){
-      batch = $.parseJSON(batch);
-      page = batch.page;
-      page_size = batch.size;
-    }
-    page = page - 1;
-
-    var query = getQueryVariable(xhr.url, 'query');
-    var path = null;
-    var term = '';
-    if(query){
-      query = $.parseJSON(query);
-      term = query.criteria[0].v;
-      if(query.criteria.length > 1){
-        path = query.criteria[1].v;
-      }
-    }
-
-    // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
-    function search(items, term) {
-      results = [];
-      if (term === undefined) return searchables;
-      _.each(items, function(item) {
-        var q;
-        var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
-        if(typeof(term) === 'object'){
-          for(var i=0; i<term.length; i++){
-            q = term[i].toLowerCase();
-            if (keys.indexOf(q) > -1){
-              results.push(item);
-              break;
-            }
-          }
-        }else{
-          q = term.toLowerCase();
-          if (keys.indexOf(q) > -1) results.push(item);
-        }
-      });
-    }
-
-    function browse(items, q, p) {
-      results = [];
-      var path = p.substring(0, p.length-1);
-      var splitPath = path.split('/');
-      var fromPath = [];
-      _.each(items, function(item) {
-        var itemSplit = item.path.split('/');
-        if (item.path.indexOf(path) === 0 && itemSplit.length-1 == splitPath.length) {
-          fromPath.push(item);
-        }
-      });
-      if (q === undefined) return fromPath;
-      search(fromPath, q);
-    }
-    if (path) {
-      browse(searchables, term, path);
-    } else {
-      search(searchables, term);
-    }
-
-    xhr.respond(200, { "Content-Type": "application/json" },
-      JSON.stringify({
-        "total": results.length,
-        "results": results.slice(page*page_size, (page*page_size)+(page_size-1))
-    }));
-  });
-
-
+], function(server, DocsApp) {
 
   DocsApp.patterns.add(patterns);
   DocsApp.pages.add(pages);
@@ -322,7 +96,7 @@ require([
     </div>
 
     <% if (attributes.length > 0) { %>
-      <div class="docs-attributes">
+      <div class="docs-attributes" id="data-options">
         <h2>Data Options</h2>
         <table class="table">
           <thead>
@@ -636,13 +410,15 @@ make bootstrap</pre>
         {attribute: 'position', type: 'String', 'default': 'center middle', description: 'TODO'},
         {attribute: 'template', type: 'Function', 'default': '', description: 'TODO'},
         {attribute: 'templateOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
+        {attribute: 'templateOptions.title', type: 'String', 'default': 'null', description: 'If not equal to null this will be inserted into the modal header.'},
+        {attribute: 'templateOptions.titleSelector', type: 'Selector', 'default': 'h1:first', description: 'Selector for an element within the modal content that will be extracted and inserted into the modal header.'},
         {attribute: 'triggers', type: 'String', 'default': 'focusin', description: 'TODO'},
         {attribute: 'width', type: 'String', 'default': '', description: 'TODO'}
       ]
     });
   </script>
   <script type="text/example" class="example-modal" title="">
-<a href="#data-attributes"
+<a href="#data-options"
    class="btn btn-large btn-primary pat-modal">Modal basic</a>
   </script>
   <script type="text/example" class="example-modal" title="">
@@ -664,40 +440,11 @@ make bootstrap</pre>
               Modal with long text</a>
   </script>
   <script type="text/template" id="page_modal">
-  <div class='alert alert-info'>
-    <u><strong>Data Attributes</strong></u>
-    <p>
-      Below are some notes about <em>some</em> of the available pattern
-      options. These are options that will be placed in the data-pat-modal attribute.
-    </p>
-    <dl>
-      <dt>position<dt>
-      <dd>
-        Optional, the default being <em>center middle</em>.
-        <br /><br />
-        In the form <em>&lt;horizontal position&gt; &lt;vertical position&gt;</em>,
-        where "&lt;horizontal position&gt;" is one of <em>center</em>, <em>left</em>,
-        <em>right</em>, and where "&lt;vertical position&gt;" is one of
-        <em>middle</em>, <em>top</em>, <em>bottom</em>. Ex: "center middle"
-        <br /><br />
-        If you wanted to position a modal on the left side of the page,
-        but didn't want it positioned 0px from the left, you'd want to use
-        the <em><strong>margin</strong></em> option.
-      <dd>
-
-      <dt>margin</dt>
-      <dd>
-        This is ultimately an integer value. Defined through a data attribute
-        it must be an integer value -- but defined through javascript, it
-        can be an integer value or a function that takes no arguments and
-        returns an integer value.
-        <br /><br />
-        The integer value represents a unit amount in pixels for a margin
-        on all 4 sides of the modal dialog.
-      </dd>
-    </dl>
-  </div>
   <div style="display:none">
+    <div id="modal3">
+      <h1>This modal is positioned</h1>
+      <p>The end is near, do not jump the bunny.</p>
+    </div>
     <div id="modal4">
 
       <p>Did you know that more frozen bananas are sold right here on
@@ -1623,6 +1370,25 @@ make bootstrap</pre>
     <p class="tooltips example-class">
       Setting the .example-class in the href makes this show up
     </p>
+  </script>
+
+
+   <!--  **** DropZone **** -->
+  <script>
+    addPattern({
+      id: 'dropzone',
+      title: 'DropZone',
+      description: "Drag 'n drop file upload",
+      attributes: [
+        {attribute: 'url', type: 'String', 'default': 'null', description: 'Required option dropzone if not used with a form'},
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_dropzone">
+  </script>
+  <script type="text/example" class="example-dropzone" data-title="With a form">
+    <form method="post" action="/upload" enctype="multipart/form-data" class="pat-dropzone">
+    </form>
   </script>
 
 </head>

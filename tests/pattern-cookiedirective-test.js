@@ -83,14 +83,22 @@ define([
       expect(this.$el.find('.cookiedirective').size()).to.equal(0);
     });
     it("test ask permission allow button", function() {
-      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      var cookie = $.cookie('Allow_Cookies_For_Site');
+      if(cookie === null){
+        cookie = undefined;
+      }
+      expect(cookie).to.be.undefined;
       registry.scan(this.$el);
       this.$el.find('.cookieallowbutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("1");
       expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
     });
     it("test ask permission deny button", function() {
-      expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.be.undefined;
+      var cookie = $.cookie('Allow_Cookies_For_Site');
+      if(cookie === null){
+        cookie = undefined;
+      }
+      expect(cookie).to.be.undefined;
       registry.scan(this.$el);
       this.$el.find('.cookiedenybutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");

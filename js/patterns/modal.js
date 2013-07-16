@@ -28,15 +28,18 @@
 
 define([
   'jquery',
+  'underscore',
   'mockup-patterns-base',
   'mockup-patterns-backdrop',
   'mockup-registry',
   'jquery.form'
-], function($, Base, Backdrop, registry) {
+], function($, _, Base, Backdrop, registry) {
   "use strict";
 
   var Modal = Base.extend({
     name: "modal",
+    createModal: null,
+    $model: null,
     defaults: {
       triggers: '',
       position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
@@ -50,18 +53,21 @@ define([
       klassActive: "active",
       backdrop: "body",
       backdropOptions: {
-        zIndex: "1000",
+        zIndex: "1040",
         opacity: "0.8",
         klass: "backdrop",
         klassActive: "backdrop-active",
         closeOnEsc: true,
-        closeOnClick: true,
+        closeOnClick: true
       },
       templateOptions: {
-        title: 'h1:first',
+        title: null,
+        titleSelector: 'h1:first',
         buttons: '.formControls > input[type="submit"]',
+        automaticallyAddActions: true,
         content: '#content',
-        actions: [],
+        prependContent: null,
+        actions: {},
         actionsOptions: {
           timeout: 5000,
           error: '.portalMessage.error',
@@ -72,8 +78,14 @@ define([
         },
         form: function($modal, actions, defaultOptions) {
           var self = this;
+          var templateOptions = self.options.templateOptions;
+          var combinedActions = actions;
 
-          $.each(actions, function(action, options) {
+          if (templateOptions.automaticallyAddActions) {
+            combinedActions[templateOptions.buttons] = {};
+          }
+
+          $.each(combinedActions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
             $(action, $modal).each(function(action) {
               var $action = $(this);
@@ -148,6 +160,7 @@ define([
 
                         } else {
                           $action.trigger('destroy.modal.patterns');
+                          location.reload();
                         }
                       }
                   });
@@ -211,13 +224,18 @@ define([
           '<div class="modal-body"></div>' +
           '<div class="modal-footer"></div>');
 
-        $('.modal-header > h3', $modal).html($(options.title, $content).html());
         if (options.content) {
           $('.modal-body', $modal).html($(options.content, $content).html());
         } else {
           $('.modal-body', $modal).html($content);
         }
-        $(options.title, $modal).remove();
+
+        if (options.prependContent) {
+          $('.modal-body', $modal).prepend($(options.prependContent, $content));
+        }
+
+        self.renderTitle($modal, options);
+
         $('.modal-header > a.close', $modal)
           .off('click')
           .on('click', function(e) {
@@ -251,7 +269,7 @@ define([
           options.form.apply(self,
               [$modal, options.actions, options.actionsOptions]);
         }
-      },
+      }
     },
     init: function() {
       var self = this;
@@ -371,42 +389,67 @@ define([
       $modal.data('pattern-' + self.name, self);
       return $modal;
     },
+    renderTitle: function($modal, options) {
+      var self = this;
+      var $content = $modal.html();
+      if (self.options.title === null) {
+        var $title = $(options.titleSelector, $content);
+        $('.modal-header > h3', $modal).html($title.html());
+        $(options.titleSelector, $modal).remove();
+      } else {
+        $('.modal-header > h3', $modal).html(options.title);
+      }
+    },
+    createAjaxModal: function() {
+      var self = this;
+      self.trigger('before-ajax');
+      self.$wrapper.parent().css('overflow', 'hidden');
+      self.$wrapper.show();
+      self.backdrop.show();
+      self.$loading.show();
+      self.positionLoading();
+      self.ajaxXHR = $.ajax({
+          url: self.options.ajaxUrl,
+          type: self.options.ajaxType
+      }).done(function(response, textStatus, xhr) {
+        self.ajaxXHR = undefined;
+        self.$loading.hide();
+        self.$modal = self.initModalElement(
+          $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+        self.trigger('after-ajax', self, textStatus, xhr);
+        self._show();
+      });
+    },
+    createTargetModal: function() {
+      var self = this;
+      self.$modal = self.initModalElement($('<div/>'))
+              .html($(self.options.target).clone());
+      self._show();
+    },
+    createBasicModal: function() {
+      var self = this;
+      self.$modal = self.initModalElement($('<div/>'))
+              .html(self.$el.clone());
+      self._show();
+    },
+    createHtmlModal: function() {
+      var self = this;
+      var $el = $(self.options.html);
+      self.$modal = self.initModalElement($('<div/>')).html($el);
+      self._show();
+    },
     initModal: function() {
       var self = this;
       if (self.options.ajaxUrl) {
-        self.$modal = function() {
-          self.trigger('before-ajax');
-          self.$wrapper.parent().css('overflow', 'hidden');
-          self.$wrapper.show();
-          self.backdrop.show();
-          self.$loading.show();
-          self.positionLoading();
-          self.ajaxXHR = $.ajax({
-              url: self.options.ajaxUrl,
-              type: self.options.ajaxType
-          }).done(function(response, textStatus, xhr) {
-            self.ajaxXHR = undefined;
-            self.$loading.hide();
-            self.$modal = self.initModalElement(
-              $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                .replace('<body', '<div').replace('</body>', '</div>'))[0]));
-            self.trigger('after-ajax', self, textStatus, xhr);
-            self.show();
-          });
-        };
+        self.createModal = self.createAjaxModal;
       } else if (self.options.target) {
-        self.$modal = function() {
-          self.$modal = self.initModalElement($('<div/>'))
-              .html($(self.options.target).clone());
-        };
+        self.createModal = self.createTargetModal;
       } else if (self.options.html) {
-        var $el = $(self.options.html);
-        self.$modal = self.initModalElement($('<div/>')).html($el);
+        self.createModal = self.createHtmlModal;
       } else {
-        self.$modal = self.initModalElement($('<div/>'))
-              .html(self.$el.clone());
+        self.createModal = self.createBasicModal;
       }
-
     },
     positionLoading: function() {
       var self = this;
@@ -501,7 +544,7 @@ define([
       var self = this;
 
       // modal isn't initialized
-      if(typeof self.$modal === 'function') { return; }
+      if(self.$modal === null || self.$modal === undefined) { return; }
 
       // clear out any previously set styling
       self.$modal.removeAttr('style');
@@ -521,7 +564,7 @@ define([
         'margin': margin,
         'width': self.options.width, // defaults to "", which doesn't override other css
         'height': self.options.height, // defaults to "", which doesn't override other css
-        'position': 'absolute',
+        'position': 'absolute'
       });
 
       var posopt = self.options.position.split(' '),
@@ -540,31 +583,30 @@ define([
     },
     show: function() {
       var self = this;
+      self.createModal();
+    },
+    _show: function() {
+      var self = this;
       if (!self.$el.hasClass(self.options.klassActive)) {
-        if (typeof self.$modal === 'function') {
-          self._$modal = self.$modal;
-          self.$modal();
-        } else {
-          if (self.options.template) {
-            self.options.template.apply(self,
-                [self.$modal, self.options.templateOptions]);
-          }
-          self.trigger('show');
-          self.backdrop.show();
-          self.$wrapper.show();
-          self.$wrapper.parent().css('overflow', 'hidden');
-          self.$el.addClass(self.options.klassActive);
-          self.$modal.addClass(self.options.klassActive);
-          registry.scan(self.$modal);
-          self.positionModal();
-          $('img', self.$modal).load(function() {
-            self.positionModal();
-          });
-          $(window.parent).on('resize.modal.patterns', function() {
-            self.positionModal();
-          });
-          self.trigger('shown');
+        if (self.options.template) {
+          self.options.template.apply(self,
+              [self.$modal, self.options.templateOptions]);
         }
+        self.trigger('show');
+        self.backdrop.show();
+        self.$wrapper.show();
+        self.$wrapper.parent().css('overflow', 'hidden');
+        self.$el.addClass(self.options.klassActive);
+        self.$modal.addClass(self.options.klassActive);
+        registry.scan(self.$modal);
+        self.positionModal();
+        $('img', self.$modal).load(function() {
+          self.positionModal();
+        });
+        $(window.parent).on('resize.modal.patterns', function() {
+          self.positionModal();
+        });
+        self.trigger('shown');
       }
     },
     hide: function() {
@@ -572,19 +614,18 @@ define([
       if (self.ajaxXHR) {
         self.ajaxXHR.abort();
       }
-      if (self.$el.hasClass(self.options.klassActive)) {
-        self.trigger('hide');
-        self.backdrop.hide();
-        self.$wrapper.hide();
-        self.$wrapper.parent().css('overflow', 'visible');
-        self.$el.removeClass(self.options.klassActive);
-        if (self.$modal.remove) {
-          self.$modal.remove();
-          self.initModal();
-        }
-        $(window.parent).off('resize.modal.patterns');
-        self.trigger('hidden');
+      self.trigger('hide');
+      self.backdrop.hide();
+      self.$wrapper.hide();
+      self.$loading.hide();
+      self.$wrapper.parent().css('overflow', 'visible');
+      self.$el.removeClass(self.options.klassActive);
+      if (self.$modal !== undefined) {
+        self.$modal.remove();
+        self.initModal();
       }
+      $(window.parent).off('resize.modal.patterns');
+      self.trigger('hidden');
     }
   });
 

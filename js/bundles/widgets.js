@@ -138,6 +138,8 @@ define([
         .attr('autocomplete', 'off');
       $match.find('.searchButton').hide();
 
+      */
+
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce').attr({
         'data-pat-tinymce': JSON.stringify({
@@ -146,7 +148,6 @@ define([
           }
         })
       });
-      */
 
       // Use toggle to replace the toggleSelect from the select_all.js
       // First, remove the previous onclick
@@ -191,7 +192,20 @@ define([
       add_form.addClass('pat-formautofocus');
       var edit_form = $('form[action*="@@edit"]');
       edit_form.addClass('pat-formautofocus');
-      
+
+      /* Modals */
+
+      /*** Login ***/
+      var loginOptions = {
+        templateOptions: {
+          title: 'Login',
+          content: '#content',
+          prependContent: '.portalMessage'
+        }
+      };
+      $('#personaltools-login')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(loginOptions));
     },
     scan: function(selector) {
       registry.scan($(selector));
