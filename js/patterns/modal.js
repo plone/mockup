@@ -37,7 +37,7 @@ define([
 
   var Modal = Base.extend({
     name: "modal",
-    mode: null,
+    createModal: null,
     defaults: {
       triggers: '',
       position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
@@ -322,7 +322,7 @@ define([
         $.each(self.options.triggers, function(i, item) {
           item = item.split(' ');
           $(item[1] || self.$el).on(item[0], function() {
-            self.activateModal();
+            self.show();
           });
         });
       }
@@ -340,7 +340,7 @@ define([
         self.$el.on('click', function(e) {
           e.stopPropagation();
           e.preventDefault();
-          self.activateModal();
+          self.show();
         });
       }
 
@@ -390,26 +390,26 @@ define([
           $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
             .replace('<body', '<div').replace('</body>', '</div>'))[0]));
         self.trigger('after-ajax', self, textStatus, xhr);
-        self.show();
+        self._show();
       });
     },
     createTargetModal: function() {
       var self = this;
       self.$modal = self.initModalElement($('<div/>'))
               .html($(self.options.target).clone());
-      self.show();
+      self._show();
     },
     createBasicModal: function() {
       var self = this;
       self.$modal = self.initModalElement($('<div/>'))
               .html(self.$el.clone());
-      self.show();
+      self._show();
     },
     createHtmlModal: function() {
       var self = this;
       var $el = $(self.options.html);
       self.$modal = self.initModalElement($('<div/>')).html($el);
-      self.show();
+      self._show();
     },
     initModal: function() {
       var self = this;
@@ -553,11 +553,11 @@ define([
         self.$modal.css(key, pos[key]);
       }
     },
-    activateModal: function() {
+    show: function() {
       var self = this;
       self.createModal();
     },
-    show: function() {
+    _show: function() {
       var self = this;
       if (!self.$el.hasClass(self.options.klassActive)) {
         if (self.options.template) {
