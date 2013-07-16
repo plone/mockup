@@ -233,12 +233,32 @@ require([
 '    <head></head>'+
 '    <body> '+
 '    <div id="content">'+
-'    <div class="pull-right"> '+
-'      Button that triggers "hide" event -> '+
-'      <a class="btn" onclick="$(this).trigger(\'destroy.modal.patterns\')">Close</a> ' +
-'    </div> '+
 '    <h1>Content from AJAX</h1>'+
 '    <p>Ah, it is a rock, though. Should beat everything.</p>'+
+'    </body> '+
+'    </html>']);
+
+  server.respondWith("GET", /something-link.html/,
+                                [200, { "Content-Type": "text/html" },
+                                 ''+
+'    <html> '+
+'    <head></head>'+
+'    <body> '+
+'    <div id="content">'+
+'    <h1>Content from AJAX with a link</h1>'+
+'    <p>Ah, it is a rock, though. Should beat <a href="something-else.html">link</a> everything.</p>'+
+'    </body> '+
+'    </html>']);
+
+  server.respondWith("GET", /something-link.html/,
+                                [200, { "Content-Type": "text/html" },
+                                 ''+
+'    <html> '+
+'    <head></head>'+
+'    <body> '+
+'    <div id="content">'+
+'    <h1>Something else</h1>'+
+'    <p>We loaded a link.</p>'+
 '    </body> '+
 '    </html>']);
 

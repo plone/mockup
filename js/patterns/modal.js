@@ -78,12 +78,13 @@ define([
         title: null,
         titleSelector: 'h1:first',
         buttons: '.formControls > input[type="submit"]',
-        automaticallyAddActions: true,
+        automaticallyAddButtonActions: true,
+        loadLinksWithinModal: true,
         content: '#content',
         prependContent: '.portalMessage',
         actions: {},
-        preventLinkDefaults: false,
         actionsOptions: {
+          eventType: 'click',
           target: null,
           ajaxUrl: null,
           isForm: false,
@@ -104,22 +105,26 @@ define([
           var $modal = self.$modal;
           var templateOptions = self.options.templateOptions;
 
-          if (templateOptions.automaticallyAddActions) {
+          if (templateOptions.automaticallyAddButtonActions) {
             actions[templateOptions.buttons] = {};
+          }
+
+          if (templateOptions.loadLinksWithinModal) {
+            actions['.modal-body a'] = {};
           }
 
           $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
             $(action, $modal).each(function(action) {
               var $action = $(this);
-              $action.on('click', function(e) {
+              $action.on(options.eventType, function(e) {
                 e.stopPropagation();
                 e.preventDefault();
 
                 self.showLoading(false);
 
                 // handle click on input/button using jquery.form library
-                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button')) {
+                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
                   self.options.handleFormAction.apply(self, [$action, options]);
                 // handle click on link with jQuery.ajax
                 } else if ($.nodeName($action[0], 'a')) {
@@ -138,7 +143,15 @@ define([
         var extraData = {};
         extraData[$action.attr('name')] = $action.attr('value');
 
-        $action.parents('form').ajaxSubmit({
+        var $form;
+
+        if ($.nodeName($action[0], 'form')) {
+          $form = $action;
+        } else {
+          $form = $action.parents('form');
+        }
+
+        $form.ajaxSubmit({
           timeout: options.timeout,
           data: extraData,
           url: $action.parents('form').attr('action'),
