@@ -362,8 +362,8 @@ define([
       indexes: [],
       klassWrapper: 'querystring-wrapper',
       criteria: {},
-      previewURL: '@@querybuilder_html_results', // base url to use to request preview information from
-      previewCountURL: '@@querybuildernumberofresults',
+      previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
+      previewCountURL: 'portal_factory/@@querybuildernumberofresults',
       sorttxt: 'Sort On',
       reversetxt: 'Reversed Order',
       previewTitle: 'Preview',
