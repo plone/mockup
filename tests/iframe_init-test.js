@@ -208,6 +208,15 @@ define([
         expect(link.getAttribute('rel')).to.equal('stylesheet/less');
       });
     });
+    it("z-index can be custom", function(done) {
+      createElement('example2', '', '', {'data-iframe-zindex': '1000'});
+      window.iframe_initialize();
+      onLoad(done, [
+          window.iframe.example,
+          window.iframe.example2 ], function() {
+        expect(getElementStyle(window.iframe.example2.el, 'z-index')).to.equal('1000');
+      });
+    });
     it("height of empty iframe should be 0px", function(done) {
       createElement('example2', '', '');
       window.iframe_initialize();
