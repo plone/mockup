@@ -243,6 +243,7 @@ define([
 
     // Edit
     var editOptions = {
+      width: '80%',
       templateOptions: {
         content: '#content-core'
       }
@@ -252,25 +253,28 @@ define([
       .attr('data-pat-modal', JSON.stringify(editOptions));
 
 
-//    Modal.prepareModal('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
-//      });
-//      $('span.label', modal.$modal).removeClass('label');
-//      $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.buttons.cancel"],.modal-body input[name="form.button.cancel"]': {},
-//          '.modal-body input[name="form.buttons.save"],.modal-body input[name="form.button.save"]': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              $('#portal-column-content', window.parent.document).html(
-//                  $('#portal-column-content', responseBody).html());
-//              modal.hide();
-//            }
-//          }
-//        }
-//      });
-//    }, { width: '80%' });
+    // Content Rules
+    var rulesOptions = {
+      templateOptions: {
+        content: '#content-core',
+        loadLinksWithinModal: false
+      }
+    };
+    $('#plone-action-contentrules > a')
+      .addClass('pat-modal')
+      .attr('data-pat-modal', JSON.stringify(rulesOptions)).
+      on('render.modal.patterns', function(e, modal) {
+        modal.options.templateOptions.actions = {
+          'table.listing a': {
+            ajaxUrl: function($action, options) {
+              return $action.attr('href').replace(/@@/g, "++nodiazo++/@@");
+            },
+            displayInModal: false
+          }
+        };
+      });
+
+
 //
 //    // Sharing
 //    Modal.prepareModal('#plone-action-local_roles > a', function(modal, modalInit, modalOptions) {
