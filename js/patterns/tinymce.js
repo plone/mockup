@@ -27,7 +27,7 @@
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   undef:true, strict:true, trailing:true, browser:true, evil:true */
 /*global define:false */
-/*global tinymce:true,console:true */
+/*global alert,console:true */
 
 
 define([
@@ -521,7 +521,10 @@ define([
           clickable: false,
           url: self.options.upload_url,
           wrap: 'inner',
-          autoCleanResults: true
+          autoCleanResults: true,
+          success: function(e, data){
+            self.tinypattern.fileUploaded($.parseJSON(data));
+          }
         });
       }
     },
@@ -897,6 +900,38 @@ define([
         self.imageModal.show();
       }
     },
+    fileUploaded: function(data){
+      var self = this;
+      var filename = data.filename;
+      var ext = filename.split('.');
+      ext = ext[ext.length-1].toLowerCase();
+      if(['png', 'jpg', 'gif', 'jpeg'].indexOf(ext) === -1){
+        /* bail out of here for regular files */
+        return;
+      }
+      var attr = {
+        src: 'resolveuid/' + data.uid + '/@@images/image/preview',
+        class: 'image-inline'
+      };
+      function waitLoad(imgElm) {
+        imgElm.onload = imgElm.onerror = function() {
+          imgElm.onload = imgElm.onerror = null;
+          self.tiny.selection.select(imgElm);
+          self.tiny.nodeChanged();
+        };
+      }
+
+      attr.id = '__mcenew';
+      self.tiny.insertContent(self.tiny.dom.createHTML('img', attr));
+      var imgElm = self.tiny.dom.get('__mcenew');
+      self.tiny.dom.setAttrib(imgElm, 'id', null);
+    },
+    fileUploadError: function(){
+      /* XXX need to be able to handle errors better? */
+      alert('There was an error attempting to upload file. ' +
+            'It is possible the file you are uploading is not allowed ' +
+            'in the folder you are trying to add it to.');
+    },
     init: function() {
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
@@ -935,7 +970,13 @@ define([
           clickable: false,
           url: self.options.upload_url,
           wrap: true,
-          autoCleanResults: true
+          autoCleanResults: true,
+          success: function(e, data){
+            self.fileUploaded($.parseJSON(data));
+          },
+          error: function(){
+            self.fileUploadError();
+          }
         });
 
         tinyOptions.uploadFileClicked = function(){
