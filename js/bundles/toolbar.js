@@ -291,30 +291,31 @@ define([
       });
 
 
-//
-//    // Sharing
-    var sharingOptions = {
+
+    /***  Sharing  ***/
+    $('#plone-action-local_roles > a').addClass('modal-trigger').patternModal({
+      width: '80%',
       templateOptions: {
-        actions: '#sharing-search-button, a',
+        actions: {
+          '#sharing-search-button': function(){},
+          'a': function(){}
+        },
         buttons: '#sharing-save-button, input[name="form.button.Cancel"]'
       }
-    };
-    function redirectUp(modal, responseBody, state, xhr, form) {
-        modal.redraw(responseBody);
-        modal.$el.on('hidden.modal.patterns', function(e) {
+    }).on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actions['.modal-footer #sharing-save-button'] = {
+        onSucess: function redirectUp(modal, responseBody, state, xhr, form) {
+          modal.redraw(responseBody);
+          modal.$el.on('hidden.modal.patterns', function(e) {
             // We want to send the user to the original object *after* the status messages
             // have been displayed, and the user has closed the modal
             window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -1).join('/');
-        });
-    }
-    var local_roles = $('#plone-action-local_roles > a');
-    local_roles.addClass('pat-modal');
-    local_roles.attr('data-pat-modal', JSON.stringify(sharingOptions));
-    local_roles.on('render.modal.patterns', function(e, modal) {
-      modal.options.templateOptions.actions['.modal-footer #sharing-save-button'] = {
-          onSucess: redirectUp
+          });
+        }
       };
     });
+
+
 //
 //    // Rules form
 //    Modal.prepareModal('#plone-action-contentrules > a', function(modal, modalInit, modalOptions) {
