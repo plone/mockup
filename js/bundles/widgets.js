@@ -311,11 +311,20 @@ define([
         }
       });
 
+      // personal preferences
+      var prefs = $('#plone-personal-actions-preferences > a, #personaltools-preferences > a');
+      var prefsOptions = {
+        templateOptions: {
+          buttons: 'input[type="submit"]'
+        }
+      };
+      prefs.addClass('pat-modal');
+      prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
+      },
 
-    },
-    scan: function(selector) {
-      registry.scan($(selector));
-    }
+      scan: function(selector) {
+        registry.scan($(selector));
+      }
   };
 
   registry.register(Widgets);

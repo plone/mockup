@@ -156,8 +156,25 @@ require([
     });
   </script>
   <script type="text/template" id="page_getting-started">
-    <div class='pat-autotoc' data-pat-autotoc="levels:h2">
-      <h2>Step 1: Get the tools</h2>
+    <style type='text/css'>
+      .getting-started .autotoc-nav {
+        background-color: white;
+      }
+    </style>
+    <div class='getting-started pat-autotoc' data-pat-autotoc="levels:h2,h3,h4">
+      <h2>Quick-start </h2>
+<pre>
+Install Git
+Install Node/NPM
+$ git clone git://github.com/plone/mockup.git
+$ cd mockup
+$ make bootstrap</pre>
+      <p>
+        And you're environment is ready to start working on testable, modular, Javascript!
+      </p>
+
+      <h2>Slower-start</h2>
+      <h3>Step 1: Get the tools</h3>
       <p>
         Download and install the latest versions of <a href='http://git-scm.org' title='git'>git</a> and
         <a href='http://www.nodejs.org/' title='node and npm'>Node/<abbr title="Node Package Manager">NPM</abbr></a>.
@@ -170,7 +187,7 @@ require([
         versions for that platform, so with a little effort, it should work!
       </p>
 
-      <h2>Step 2: Checkout the Mockup project from GitHub</h2>
+      <h3>Step 2: Checkout the Mockup project from GitHub</h3>
       <p>
         This will give you a starting point, and a lot of example code. It's used
         to build <em>bundles</em> which are then added to various Plone products.
@@ -180,7 +197,7 @@ require([
   <pre>
   git clone git://github.com/plone/mockup.git</pre>
 
-      <h2>Step 3: Bootstrap the environment</h2>
+      <h3>Step 3: Bootstrap the environment</h3>
       <p>
         Run the following commands:
       </p>
@@ -193,10 +210,25 @@ require([
         build the patterns developed within the framework of the mockup project.
       </p>
 
-      <h2>Step 4: Get hacking!</h2>
-      <p>
-        TODO: Explain folder layout
+      <h3>Step 4: Get hacking!</h3>
+      <h4>Mockup Project Structure</h4>
+      <p class='alert alert-info'>
+        <strong>NOTE</strong>: The project is under heavy development, so expect
+        things to move around a bit.
       </p>
+      <ul>
+        <li><strong>build/</strong> All combined, optimized, and minimized javascript code, as well as compiled less and media are copied and placed here</li>
+        <li><strong>js/</strong> This directory contains all of the modularized javascript code</li>
+        <li><strong>js/config.js</strong> This file contains the RequireJS configuration</li>
+        <li><strong>js/fakeserver.js</strong> This file is useful for development -- it contains the code for setting up fake responses to XHR</li>
+        <li><strong>js/bundles</strong> This is where a bundle is defined -- it is a set of requirements and code that provide the features being packaged into a Plone product</li>
+        <li><strong>js/patterns</strong> This is a directory that contains all individual, encapsulated patterns (ie widgets/javascript)</li>
+        <li><strong>less/</strong> This directory contains all the <a href='http://lesscss.org/'>less</a> code for all the patterns and bundles</li>
+        <li><strong>lib/</strong> This directory contains external libraries not necessarily found in the bower repositories</li>
+        <li><strong>tests/</strong> This directory contains all tests for patterns and bundles, including gernal setup and configuration code</li>
+        <li><strong>index.html</strong> This is the main source of documentation for the mockup project.</li>
+        <li><strong>Makefile</strong> This is the Makefile used to define what tasks should run when you want to build a bundle, or bootstrap the environment</li>
+      </ul>
       <p>
         TODO: Explain bundles -- creating a custom bundle, and how plone.app.widgets/toolbar bundles are added to those projects
       </p>
@@ -212,11 +244,11 @@ require([
               how to contribute to both of those bundles as well.
       </p>
 
-      <h2>Step 5: Bundling</h2>
+      <h3>Step 5: Bundling</h3>
       <p>To build bundles</p>
       <pre>make</pre>
 
-      <h2>Step 6: Testing</h2>
+      <h3>Step 6: Testing</h3>
       <p>And you can run tests with:</p>
   <pre>make test</pre>
       <p>
@@ -225,7 +257,7 @@ require([
              alt="Build Status" />.
       </p>
 
-      <h2>Step 7: Releasing/Passing bundles on to Plone developers</h2>
+      <h3>Step 7: Releasing/Passing bundles on to Plone developers</h3>
       <p>
         This is the part that developers in the Plone community are currently
         familiar with, and the step that purely front-end developers will have to
