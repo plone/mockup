@@ -182,7 +182,7 @@ define([
 
               else {
                 $action.trigger('destroy.modal.patterns');
-                location.parent.reload();
+                window.parent.location.reload();
               }
             }
         });
