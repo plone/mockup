@@ -314,12 +314,12 @@ define([
     removeValue: function() {
       var self = this;
       self.trigger('remove-value');
-      if (self.$value) {
+      if(self.$value) {
         if($.isArray(self.$value)) { // date ranges have 2 values
-          self.$value[0].parent().remove();
+          self.$value[0].parents('.querystring-criteria-value').remove();
         }
         else {
-          self.$value.parent().remove();
+          self.$value.parents('.querystring-criteria-value').remove();
         }
       }
     },
@@ -359,6 +359,44 @@ define([
       }
 
       return istr + '&' + ostr + '&' + vstr.join('&');
+    },
+    getJSONListStr: function() {
+      var self = this;
+
+      // index
+      var ival = self.$index.select2('val');
+      if(ival === "") { // no index selected, no query
+        return "";
+      }
+
+      // operator
+      if(typeof self.$operator === "undefined") { // no operator, no query
+        return "";
+      }
+      var oval = self.$operator.val();
+
+      // value(s)
+      var varr = [];
+      if($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
+        $.each(self.$value, function(i, v) {
+          varr.push($(this).parent().find('.picker__input').val());
+        });
+      }
+      else if(typeof self.$value !== "undefined") {
+        varr.push(self.$value.val());
+      }
+      var vval;
+      if(varr.length > 1) {
+        vval = '["'+varr.join('","')+'"]';
+      }
+      else if(varr.length === 1) {
+        vval = '"'+varr[0]+'"';
+      }
+      else {
+        vval = '""';
+      }
+
+      return '{"i":"'+ival+'", "o":"'+oval+'", "v":'+vval+'}';
     },
     trigger: function(name) {
       this.$wrapper.trigger(name + '-criteria.querystring.patterns', [ this ]);
@@ -458,20 +496,65 @@ define([
         }
       });
 
-      criteria.on('remove', function(){self.refreshPreviewEvent(self);})
-      criteria.on('remove-clear', function(){self.refreshPreviewEvent(self);})
-      criteria.on('remove-operator', function(){self.refreshPreviewEvent(self);})
-      criteria.on('remove-value', function(){self.refreshPreviewEvent(self);})
-      criteria.on('index-changed', function(){self.refreshPreviewEvent(self);})
-      criteria.on('operator-changed', function(){self.refreshPreviewEvent(self);})
-      criteria.on('create-criteria', function(){self.refreshPreviewEvent(self);})
-      criteria.on('create-operator', function(){self.refreshPreviewEvent(self);})
-      criteria.on('create-value', function(){self.refreshPreviewEvent(self);})
-      criteria.on('value-changed', function(){self.refreshPreviewEvent(self);})
+      var doupdates = function() {
+        self.refreshPreviewEvent();
+        self.updateValue();
+      };
+
+      criteria.on('remove', doupdates);
+      criteria.on('remove-clear', doupdates);
+      criteria.on('remove-operator', doupdates);
+      criteria.on('remove-value', doupdates);
+      criteria.on('index-changed', doupdates);
+      criteria.on('operator-changed', doupdates);
+      criteria.on('create-criteria', doupdates);
+      criteria.on('create-operator', doupdates);
+      criteria.on('create-value', doupdates);
+      criteria.on('value-changed', doupdates);
 
       self.criterias.push(criteria);
     },
+    createSort: function() {
+      var self = this;
+      $('<span/>')
+        .addClass(self.options.klassSortLabel)
+        .html(self.options.sorttxt)
+        .appendTo(self.$sortWrapper);
+      self.$sortOn = $('<select/>')
+        .attr('name', 'sort_on')
+        .appendTo(self.$sortWrapper)
+        .change(function(){
+          self.refreshPreviewEvent(self);
+        });
+
+      for(var key in self.options.indexes) {
+        self.$sortOn.append(
+          $('<option/>')
+            .attr('value', key)
+            .html(self.options.indexes[key].title));
+      }
+      self.$sortOn.patternSelect2();
+
+      self.$sortOrder = $("<input type='checkbox' />")
+                          .attr('name', 'sort_reversed:boolean')
+                          .change(function(){
+                            self.refreshPreviewEvent(self);
+                          })
+
+
+      $('<span/>')
+        .addClass(self.options.klassSortReverse)
+        .appendTo(self.$sortWrapper)
+        .append(self.$sortOrder)
+        .append(
+          $('<span/>')
+            .html(self.options.reversetxt)
+            .addClass(self.options.klassSortReverseLabel)
+        )
+    },
     refreshPreviewEvent: function(self) {
+      var self = this;
+
       /* TEMPORARY */
       //if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
       //self._tmpcnt++;
@@ -538,43 +621,21 @@ define([
               .appendTo(self.$previewPane);
           });
     },
-    createSort: function() {
+    updateValue: function() {
+      // updating the original input with json data in the form:
+      // [
+      //    {i:'index', o:'operator', v:'value'}
+      // ]
+
       var self = this;
-      $('<span/>')
-        .addClass(self.options.klassSortLabel)
-        .html(self.options.sorttxt)
-        .appendTo(self.$sortWrapper);
-      self.$sortOn = $('<select/>')
-        .attr('name', 'sort_on')
-        .appendTo(self.$sortWrapper)
-        .change(function(){
-          self.refreshPreviewEvent(self);
-        });
 
-      for(var key in self.options.indexes) {
-        self.$sortOn.append(
-          $('<option/>')
-            .attr('value', key)
-            .html(self.options.indexes[key].title));
-      }
-      self.$sortOn.patternSelect2();
+      var list = "[";
+      $.each(self.criterias, function(i, criteria) {
+        list += criteria.getJSONListStr();
+      });
+      list += "]";
 
-      self.$sortOrder = $("<input type='checkbox' />")
-                          .attr('name', 'sort_reversed:boolean')
-                          .change(function(){
-                            self.refreshPreviewEvent(self);
-                          })
-
-
-      $('<span/>')
-        .addClass(self.options.klassSortReverse)
-        .appendTo(self.$sortWrapper)
-        .append(self.$sortOrder)
-        .append(
-          $('<span/>')
-            .html(self.options.reversetxt)
-            .addClass(self.options.klassSortReverseLabel)
-        )
+      self.$el.val(list);
     }
   });
 

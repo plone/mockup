@@ -78,12 +78,16 @@ define([
         title: null,
         titleSelector: 'h1:first',
         buttons: '.formControls > input[type="submit"]',
-        automaticallyAddActions: true,
+        automaticallyAddButtonActions: true,
+        loadLinksWithinModal: true,
         content: '#content',
         prependContent: '.portalMessage',
         actions: {},
-        preventLinkDefaults: false,
         actionsOptions: {
+          eventType: 'click',
+          target: null,
+          ajaxUrl: null,
+          isForm: false,
           timeout: 5000,
           displayInModal: true,
           error: '.portalMessage.error',
@@ -100,129 +104,31 @@ define([
           var self = this;
           var $modal = self.$modal;
           var templateOptions = self.options.templateOptions;
-          var combinedActions = actions;
 
-          if (templateOptions.automaticallyAddActions) {
-            combinedActions[templateOptions.buttons] = {};
+          if (templateOptions.automaticallyAddButtonActions) {
+            actions[templateOptions.buttons] = {};
           }
 
-          $.each(combinedActions, function(action, options) {
+          if (templateOptions.loadLinksWithinModal) {
+            actions['.modal-body a'] = {};
+          }
+
+          $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
             $(action, $modal).each(function(action) {
               var $action = $(this);
-              $action.on('click', function(e) {
+              $action.on(options.eventType, function(e) {
                 e.stopPropagation();
                 e.preventDefault();
 
-                // loading "spinner"
-                var backdrop = $modal.data('patterns-backdrop');
-                if (!backdrop) {
-                  backdrop = new Backdrop($modal, {
-                    closeOnEsc: false,
-                    closeOnClick: false
-                  });
-                  backdrop.$backdrop
-                    .html('')
-                    .append(
-                      $(options.loading)
-                        .css({
-                          position: 'absolute',
-                          left: $modal.width() * 0.1,
-                          top: $modal.height()/2 + 10,
-                          width: $modal.width() * 0.8
-                        })
-                    );
-                  $modal.data('patterns-backdrop', backdrop);
-                } else {
-                  $modal.append(backdrop.$backdrop);
-                }
-                backdrop.show();
+                self.showLoading(false);
 
                 // handle click on input/button using jquery.form library
-                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button')) {
-
-                  // pass action that was clicked when submiting form
-                  var extraData = {};
-                  extraData[$action.attr('name')] = $action.attr('value');
-                  $action.parents('form:not(.disableAutoSubmit)').ajaxSubmit({
-                    timeout: options.timeout,
-                    data: extraData,
-                    url: $action.parents('form').attr('action'),
-                      error: function(xhr, textStatus, errorStatus) {
-                        if (textStatus === 'timeout' && options.onTimeout) {
-                          options.onTimeout.apply(self, xhr, errorStatus);
-                        // on "error", "abort", and "parsererror"
-                        } else if (options.onError) {
-                          options.onError(xhr, textStatus, errorStatus);
-                        } else {
-                          console.log('error happened do something');
-                        }
-                      },
-                      success: function(response, state, xhr, form) {
-                        // if error is found
-                        if ($(options.error, response).size() !== 0) {
-                          if (options.onFormError) {
-                            options.onFormError(self, response, state, xhr, form);
-                          } else {
-                            self.$modal.remove();
-                            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                            self.options.render.apply(self, [self.options.templateOptions]);
-                            self.positionModal();
-                            registry.scan(self.$modal);
-                          }
-
-                        // custom success function
-                        } else if (options.onSuccess) {
-                          options.onSuccess(self, response, state, xhr, form);
-
-                        }
-
-                        else {
-                          $action.trigger('destroy.modal.patterns');
-                          location.reload();
-                        }
-                      }
-                  });
-
+                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
+                  self.options.handleFormAction.apply(self, [$action, options]);
                 // handle click on link with jQuery.ajax
                 } else if ($.nodeName($action[0], 'a')) {
-                  $.ajax({
-                    url: $action.attr('href'),
-                    error: function(xhr, textStatus, errorStatus) {
-                      if (textStatus === 'timeout' && options.onTimeout) {
-                        options.onTimeout(self.$modal, xhr, errorStatus);
-
-                      // on "error", "abort", and "parsererror"
-                      } else if (options.onError) {
-                        options.onError(xhr, textStatus, errorStatus);
-                      } else {
-                        console.log('error happened do something');
-                      }
-                    },
-                    success: function(response, state, xhr) {
-                      // if error is found
-                      if ($(options.error, response).size() !== 0) {
-                        if (options.onFormError) {
-                          options.onFormError(self, response, state, xhr);
-                        } else {
-                            self.$modal.remove();
-                            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                            self.options.render.apply(self, [self.options.templateOptions]);
-                            self.positionModal();
-                            registry.scan(self.$modal);
-                        }
-
-                      // custom success function
-                      } else if (options.onSuccess) {
-                        options.onSuccess(self, response, state, xhr);
-
-                      } else {
-                        $action.trigger('destroy.modal.patterns');
-                      }
-                    }
-                  });
+                  self.options.handleLinkAction.apply(self, [$action, options]);
                 }
 
               });
@@ -230,6 +136,81 @@ define([
           });
 
         }
+      },
+      handleFormAction: function($action, options) {
+        var self = this;
+        // pass action that was clicked when submiting form
+        var extraData = {};
+        extraData[$action.attr('name')] = $action.attr('value');
+
+        var $form;
+
+        if ($.nodeName($action[0], 'form')) {
+          $form = $action;
+        } else {
+          $form = $action.parents('form:not(.disableAutoSubmit)');
+        }
+
+        $form.ajaxSubmit({
+          timeout: options.timeout,
+          data: extraData,
+          url: $action.parents('form').attr('action'),
+            error: function(xhr, textStatus, errorStatus) {
+              if (textStatus === 'timeout' && options.onTimeout) {
+                options.onTimeout.apply(self, xhr, errorStatus);
+              // on "error", "abort", and "parsererror"
+              } else if (options.onError) {
+                options.onError(xhr, textStatus, errorStatus);
+              } else {
+                console.log('error happened do something');
+              }
+            },
+            success: function(response, state, xhr, form) {
+              // if error is found
+              if ($(options.error, response).size() !== 0) {
+                if (options.onFormError) {
+                  options.onFormError(self, response, state, xhr, form);
+                } else {
+                  self.redraw(response);
+                }
+
+              // custom success function
+              } else if (options.onSuccess) {
+                options.onSuccess(self, response, state, xhr, form);
+
+              }
+
+              else {
+                $action.trigger('destroy.modal.patterns');
+                location.reload();
+              }
+            }
+        });
+      },
+      handleLinkAction: function($action, options) {
+        var self = this;
+        $.ajax({
+          url: $action.attr('href'),
+          error: function(xhr, textStatus, errorStatus) {
+            if (textStatus === 'timeout' && options.onTimeout) {
+              options.onTimeout(self.$modal, xhr, errorStatus);
+
+            // on "error", "abort", and "parsererror"
+            } else if (options.onError) {
+              options.onError(xhr, textStatus, errorStatus);
+            } else {
+              console.log('error happened do something');
+            }
+            self.$loading.hide();
+          },
+          success: function(response, state, xhr) {
+            self.redraw(response);
+            if (options.onSuccess) {
+              options.onSuccess(self, response, state, xhr);
+            }
+            self.$loading.hide();
+          }
+        });
       },
       render: function(options) {
         var self = this;
@@ -265,7 +246,7 @@ define([
 
         // Grab items to to insert into the prepend area
         if (options.prependContent) {
-          $(tpl_object.prepend).append($(options.prependContent, $raw));
+          tpl_object.prepend = $('<div />').append($(options.prependContent, $raw).clone()).html();
           $(options.prependContent, $raw).remove();
         }
 
@@ -423,14 +404,27 @@ define([
 
       self.initModal();
     },
-    createAjaxModal: function() {
+    showLoading: function(closable) {
       var self = this;
-      self.trigger('before-ajax');
+
+      if (closable === undefined) {
+        closable = true;
+      }
+
+      self.backdrop.closeOnClick = closable;
+      self.backdrop.closeOnEsc = closable;
+      self.backdrop.init();
+
       self.$wrapper.parent().css('overflow', 'hidden');
       self.$wrapper.show();
       self.backdrop.show();
       self.$loading.show();
       self.positionLoading();
+    },
+    createAjaxModal: function() {
+      var self = this;
+      self.trigger('before-ajax');
+      self.showLoading();
       self.ajaxXHR = $.ajax({
           url: self.options.ajaxUrl,
           type: self.options.ajaxType
@@ -612,6 +606,7 @@ define([
       self.trigger('show');
       self.backdrop.show();
       self.$wrapper.show();
+      self.$loading.hide();
       self.$wrapper.parent().css('overflow', 'hidden');
       self.$el.addClass(self.options.klassActive);
       self.$modal.addClass(self.options.klassActive);
@@ -642,6 +637,15 @@ define([
       }
       $(window.parent).off('resize.modal.patterns');
       self.trigger('hidden');
+    },
+    redraw: function(response) {
+      var self = this;
+      self.$modal.remove();
+      self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+          .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+      self.options.render.apply(self, [self.options.templateOptions]);
+      self.positionModal();
+      registry.scan(self.$modal);
     }
   });
 

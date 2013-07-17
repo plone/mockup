@@ -92,7 +92,7 @@ define([
 
     // integration of toolbar and modals
     $(document)
-      .on('before-ajax.modal.patterns', 'a.modal-trigger', function(e) {
+      .on('before-ajax.modal.patterns', 'a.modal-trigger, a.pat-modal', function(e) {
         var $el = $(this);
         $('.toolbar-dropdown-open > a').each(function() {
           if ($el[0] !== $(this)[0]) {
@@ -102,7 +102,7 @@ define([
         $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
       })
-      .on('show.modal.patterns', 'a.modal-trigger', function(e, modal) {
+      .on('show.modal.patterns', 'a.modal-trigger, a.pat-modal', function(e, modal) {
         var $el = $(this);
         $('.toolbar-dropdown-open > a').each(function() {
           if ($el[0] !== $(this)[0]) {
@@ -112,7 +112,7 @@ define([
         $('body', iframe.document).css('overflow', 'hidden');
         iframe.stretch();
       })
-      .on('hidden.modal.patterns', 'a.modal-trigger', function(e) {
+      .on('hidden.modal.patterns', 'a.modal-trigger, a.pat-modal', function(e) {
         $('body', iframe.document).css('overflow', 'visible');
         iframe.shrink();
       });
@@ -292,12 +292,6 @@ define([
 //      });
 //    });
 //
-        templateOptions: {
-            prependContent: '.portalMessage'
-        }
-    };
-
-//
 //    // Rename Action
     $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
 //
@@ -394,6 +388,8 @@ define([
 //
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
+//    // Content history
+    $('#plone-action-content-history > a').addClass('pat-modal');
 //
 //    // }}}
 //
