@@ -217,33 +217,43 @@ define([
 
     var portletOptions = {
       templateOptions: {
-        actions: {
-          // Handle the main portlets listing screen submit
-          '.section form': {
-            eventType: 'submit',
-            isForm: true
-          },
-          '.actionButtons input': {
-            // Handle errors on portlet submission
-            error: '.fieldErrorBox'
-          }
-        }
+        buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
+        automaticallyAddButtonActions: false,
       }
     };
     $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('show.modal.patterns', function(evt, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select').removeAttr('onchange');
-      $('.section select').on('change', function(e) {
-          var portlet = $(this).val();
-          var form_action = $(this).parents('form').attr('action');
-          // Load the value of the selected portlet as a link
-          modal.options.handleLinkAction.apply(
-            modal,
-            [$('<a href="' + form_action + portlet + '">foo</a>'), {}]
-          );
-      });
-    });
+    })
+    .on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actions = {
+          // Handle adding portlets via the select
+          '.section select': {
+            eventType: 'change',
+            ajaxUrl: function($action, options) {
+              var portlet = $action.val();
+              var form_action = $action.parents('form').attr('action');
+              return form_action + portlet;
+            }
+          },
+          '.actionButtons input': {
+            // Handle errors on portlet submission
+            error: '.fieldErrorBox',
+            onSuccess: function(modal, response, state, xhr, form) {
+              modal.reloadWindow();
+            }
+          },
+          // Handle moving and hiding portlets
+          '.portlet-action': {
+            isForm: true
+          }
+        };
+    })
+    .on('hidden.modal.patterns', function(e, modal) {
+        modal.reloadWindow();
+      }
+    );
 
     // Edit/Add
     var editOptions = {
