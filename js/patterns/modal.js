@@ -168,7 +168,7 @@ define([
         }
 
         // We want to trigger the form submit event but NOT use the default
-        $form.off('submit').on('submit', function(e){
+        $form.on('submit', function(e){
           e.preventDefault();
         });
         $form.trigger('submit');
