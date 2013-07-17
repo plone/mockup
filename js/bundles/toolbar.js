@@ -221,7 +221,9 @@ define([
         automaticallyAddButtonActions: false
       }
     };
-    $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    $('#toolbar-manage-portlets a,#manage-dashboard a')
+    .addClass('pat-modal')
+    .attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('render.modal.patterns', function(e, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select', modal.$raw).removeAttr('onchange');
@@ -229,6 +231,12 @@ define([
           // Handle adding portlets via the select
           '.section select': {
             eventType: 'change',
+            onSuccess: function(modal, response, state, xhr, form) {
+                if (modal.$modal.find('.pat-modal-buttons input').length === 0) {
+                    // The portlet didn't have an edit form (e.g. calendar)
+                    modal.reloadWindow();
+                }
+            },
             ajaxUrl: function($action, options) {
               var portlet = $action.val();
               var form_action = $action.parents('form').attr('action');
