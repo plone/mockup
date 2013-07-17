@@ -24,6 +24,7 @@
 //          this page.
 //
 
+/*jshint laxcomma:true */
 
 (function(window, document, undefined) {
 "use strict";
