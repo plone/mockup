@@ -202,7 +202,7 @@ define([
                 self.redraw(response);
               } else {
                 $action.trigger('destroy.modal.patterns');
-                window.parent.location.reload();
+                self.reloadWindow();
               }
               self.trigger('formActionSuccess', [response, state, xhr, form]);
             }
@@ -354,6 +354,9 @@ define([
           .appendTo(self.$wrapperInner);
         self.$modal.data('pattern-' + self.name, self);
       }
+    },
+    reloadWindow: function() {
+      window.parent.location.reload();
     },
     init: function() {
       var self = this;
