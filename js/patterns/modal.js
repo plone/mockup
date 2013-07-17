@@ -488,8 +488,8 @@ define([
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
         self.$loading.hide();
-        self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+        self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
         self.trigger('after-ajax', self, textStatus, xhr);
         self._show();
       });
@@ -705,8 +705,8 @@ define([
       var self = this;
       self.trigger('beforeDraw');
       self.$modal.remove();
-      self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-          .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+      self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
       self.render.apply(self, [self.options.templateOptions]);
       self.positionModal();
       registry.scan(self.$modal);

@@ -241,24 +241,24 @@ define([
       });
     });
 
-    // Edit
+    // Edit/Add
     var editOptions = {
       width: '80%',
       templateOptions: {
-        content: '#content-core',
+        content: '.template-edit #content-core, .template-atct_edit #content',
         automaticallyAddButtonActions: false,
         actionsOptions: {
           displayInModal: false
         },
         actions: {
-          'input#form-buttons-save': {},
-          'input#form-buttons-cancel': {
+          'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
+          'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
             modalFunction: 'hide'
           }
         }
       }
     };
-    $('#plone-action-edit > a')
+    $('#plone-action-edit > a, #plone-contentmenu-factories ul a')
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(editOptions));
 
@@ -289,6 +289,7 @@ define([
 
 //
 //    // Sharing
+    $('#plone-action-local_roles > a').addClass('pat-modal');
 //    Modal.prepareModal('#plone-action-local_roles > a', function(modal, modalInit, modalOptions) {
 //      Modal.createTemplate(modal.$modal, {
 //        buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
@@ -341,20 +342,18 @@ define([
 //
 //    // Delete Action
     function processDelete(modal, responseBody, state, xhr, form) {
-        console.log('Deleted!');
+        modal.redraw(responseBody);
+        modal.$el.on('hidden.modal.patterns', function(e) {
+            // We want to send the user to the containing folder *after* the status messages
+            // have been displayed, and the user has closed the modal
+            window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
+        });
     }
     var delete_action = $('#plone-contentmenu-actions-delete > a');
-    var delete_options = {
-        templateOptions: {
-            actions: {
-              '.modal-footer input.destructive': { onSuccess: processDelete },
-            },
-            content: '#content',
-            prependContent: '.portalMessage'
-        }
-    };
     delete_action.addClass('pat-modal');
-    delete_action.attr('data-pat-modal', JSON.stringify(delete_options));
+    delete_action.on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
+    });
 //
 //    // Rename Action
     $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
