@@ -206,8 +206,9 @@ define([
       
         TODO:
         [x] Login
-        [x] Content history (toolbar)
-        [ ] Add new user/group
+        [x] Content history
+        [ ] Add new user
+        [ ] Add new group
         [x] Register
         [x] change default page (toolbar)
         [x] Contact form
@@ -230,7 +231,28 @@ define([
       $('#siteaction-contact > a').addClass('pat-modal');
 
       /*** Register form ***/
-      $('#personaltools-join').addClass('pat-modal');
+      var registerOptions = {
+        templateOptions: {
+          buttons: '.actionButtons > input[type="submit"]'
+        }
+      };
+      $('#personaltools-join')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(registerOptions));
+
+      /*** Content History ***/
+      var contentHistoryOptions = {
+        templateOptions: {
+          titleSelector: 'h2:first',
+          content: '#content-core'
+        }
+      };
+      $('#content-history > a')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
+
+      /*** Default Page ***/
+      $('#folderChangeDefaultPage').addClass('pat-modal');
 
       /*** Add user form ***/
       var addUserOptions = {
@@ -245,6 +267,7 @@ define([
       $('input[name="form.button.AddUser"]')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(addUserOptions));
+
     },
     scan: function(selector) {
       registry.scan($(selector));
