@@ -168,7 +168,9 @@ define([
     }).on('shown.modal.patterns linkActionSuccess.modal.patterns', function(e, modal){
       $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not([href$="folder_contents"])', modal.$modal).css({
         color: '#333333'
-      }).on('click', function(e) {
+      }).off('click').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         window.parent.location.href = $(this).attr('href');
       });
     });
