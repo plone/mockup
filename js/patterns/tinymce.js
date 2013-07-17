@@ -173,7 +173,7 @@ define([
         var locationData = self.modal.$modal.find('[name="location"]').select2('data');
         if(locationData.length > 0){
           self.$form.attr('action',
-            locationData[0].getURL + '/' + self.options.rel_upload_url);
+            locationData[0].getURL + '/' + self.options.rel_upload_path);
         }
         self.modal.$loading.show();
         self.$iframe.on('load', function(){
@@ -802,8 +802,8 @@ define([
                  "bullist numlist outdent indent | " +
                  "unlink plonelink ploneimage | ploneupload"
       },
-      rel_upload_url: null,
-      base_url: null
+      rel_upload_path: null,
+      folder_url: null
     },
     uploadFileClicked: function(){
       var self = this;
@@ -964,8 +964,11 @@ define([
       // include in widgets.min.css
       tinyOptions.skin = false;
 
-      if(self.options.rel_upload_url){
-        self.options.upload_url = self.options.base_url + '/' + self.options.rel_upload_url;
+      if(!self.options.base_url){
+        self.options.base_url = window.location.href;
+      }
+      if(self.options.rel_upload_path){
+        self.options.upload_url = self.options.folder_url + '/' + self.options.rel_upload_path;
       } else {
         self.options.upload_url = null;
       }
