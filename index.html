@@ -229,8 +229,31 @@ $ make bootstrap</pre>
         <li><strong>index.html</strong> This is the main source of documentation for the mockup project.</li>
         <li><strong>Makefile</strong> This is the Makefile used to define what tasks should run when you want to build a bundle, or bootstrap the environment</li>
       </ul>
+      <h4>What's a Pattern? What Are Bundles? How do they relate?</h4>
       <p>
-        TODO: Explain bundles -- creating a custom bundle, and how plone.app.widgets/toolbar bundles are added to those projects
+        <em>Pattern's</em> are unit's of javascript, defined by a RequireJS/AMD style module.
+        Patterns may require other patterns to operate, and may require third
+        party libraries. Think of patterns as a module -- encapsulated and
+        separate, and providing a widget or tool to use by other patterns or
+        in html.
+      </p>
+      <p>
+        <em>Bundle's</em> are defined similar to <em>Pattern's</em> -- they are
+        encapsulated bits of javascript that define requirements for a bundle,
+        and have some extra code in them that's useful for integrating the
+        required patterns into Plone products.
+      </p>
+      <p>
+        So, the end result is that a front-end developer might spend their time
+        creating patterns, while a Plone developer might create a bundle and
+        integrate it into a Plone product.
+      </p>
+      <p>
+        <em>plone.app.widgets</em> is a good example of a bundle. The
+        <strong>js/bundles/widges.js</strong> file contains a RequireJS module
+        that defines the all the requirements for the plone.app.widgets, and
+        adds some specific code to make the requirements work nicely in the
+        <em>plone.app.widgets</em> Plone module.
       </p>
       <p>
         TODO: Explain documentation
