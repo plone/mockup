@@ -253,7 +253,7 @@ define([
 
 
       /*** Content Type Restrctions form ***/
-      $('#plone-contentmenu-settings > a').addClass('modal-trigger').patternModal({
+      $('#plone-contentmenu-settings > a,a#plone-contentmenu-settings').addClass('modal-trigger').patternModal({
         width: '80%',
         templateOptions: {
           actionsOptions: {
@@ -302,7 +302,7 @@ define([
       /*** Advanced workflow
       // This form needs additional JS and CSS for the calendar widget.
       // The AJAX form doesn't load it from the javascript_head_slot. */
-      $('#workflow-transition-advanced > a').addClass('modal-trigger').patternModal({
+      $('#workflow-transition-advanced > a,a#workflow-transition-advanced').addClass('modal-trigger').patternModal({
         width: '80%',
         templateOptions: {
           actionsOptions: {
