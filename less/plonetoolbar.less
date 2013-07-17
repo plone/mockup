@@ -141,10 +141,19 @@
   .gradient(@leftBgColor, darken(@leftBgColor,8%), @leftBgColor);
   .box-shadow(0 @radiusSize/4 @radiusSize/2 @shadowColor);
   min-height: @size;
-  overflow: auto;
   background-color: @leftBgColor;
   border: 0;
   border-bottom: @borderSize solid @leftBorderColor;
+  zoom: 1; /* IE < 8 clearfix */
+
+  // clearfix
+  &:after {
+    content: "\25BC";
+    display: block;
+    overflow: hidden;
+    height: 0;
+    clear: both;
+  }
 
   & > div {
 

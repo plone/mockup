@@ -1,6 +1,0 @@
-{
-  "framework": "mocha",
-  "test_page": "test.html",
-  "launch_in_ci": [ "Firefox" ],
-  "launch_in_dev": [ "Chromium" ]
-}

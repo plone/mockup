@@ -199,14 +199,18 @@ define([
     // }}}
 
     // site setup
-    $('#plone-personal-actions-plone_setup a').on('show.modal.patterns', function(evt, modal) {
-      $('a[href$=controlpanel]', modal.$modal).each(function(){
-        var fixedhref = this.href;
-        fixedhref = fixedhref.replace(/@@/g, "++nodiazo++/@@");
+    $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
+      width: '80%'
+    }).on('show.modal.patterns', function(evt, modal) {
+      $('a[href]', modal.$modal).each(function(){
+        var href = this.href;
+        var parts = href.split('/');
+        parts.splice(parts.length-1, 0, '++nodiazo++');
+        href = parts.join('/');
 
-        $(this).attr('href', fixedhref);
+        $(this).attr('href', href);
         $(this).click(function(){
-          window.open(fixedhref);
+          window.open(href);
         });
       });
     });
@@ -226,7 +230,7 @@ define([
         }
       }
     };
-    $('#toolbar-manage-portlets a,#plone-action-content-history > a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('show.modal.patterns', function(evt, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select').removeAttr('onchange');
@@ -287,30 +291,31 @@ define([
       });
 
 
-//
-//    // Sharing
-    var sharingOptions = {
+
+    /***  Sharing  ***/
+    $('#plone-action-local_roles > a').addClass('modal-trigger').patternModal({
+      width: '80%',
       templateOptions: {
-        actions: '#sharing-search-button, a',
+        actions: {
+          '#sharing-search-button': function(){},
+          'a': function(){}
+        },
         buttons: '#sharing-save-button, input[name="form.button.Cancel"]'
       }
-    };
-    function redirectUp(modal, responseBody, state, xhr, form) {
-        modal.redraw(responseBody);
-        modal.$el.on('hidden.modal.patterns', function(e) {
+    }).on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actions['.modal-footer #sharing-save-button'] = {
+        onSucess: function redirectUp(modal, responseBody, state, xhr, form) {
+          modal.redraw(responseBody);
+          modal.$el.on('hidden.modal.patterns', function(e) {
             // We want to send the user to the original object *after* the status messages
             // have been displayed, and the user has closed the modal
             window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -1).join('/');
-        });
-    }
-    var local_roles = $('#plone-action-local_roles > a');
-    local_roles.addClass('pat-modal');
-    local_roles.attr('data-pat-modal', JSON.stringify(sharingOptions));
-    local_roles.on('render.modal.patterns', function(e, modal) {
-      modal.options.templateOptions.actions['.modal-footer #sharing-save-button'] = {
-          onSucess: redirectUp
+          });
+        }
       };
     });
+
+
 //
 //    // Rules form
 //    Modal.prepareModal('#plone-action-contentrules > a', function(modal, modalInit, modalOptions) {
@@ -381,12 +386,16 @@ define([
 //      });
 //    }, { width: '80%' });
 
-    $('#manage-dashboard a').addClass('modal-trigger').patternModal({
-      width: '80%',
-    });
 
 //    // personal preferences
-    $('#plone-personal-actions-preferences > a').addClass('pat-modal');
+    var prefs = $('#plone-personal-actions-preferences > a');
+    var prefsOptions = {
+      templateOptions: {
+        buttons: 'input[type="submit"]'
+      }
+    };
+    prefs.addClass('pat-modal');
+    prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
 //    // Content history
     $('#plone-action-content-history > a').addClass('pat-modal');
 //
