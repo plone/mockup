@@ -131,7 +131,8 @@ define([
         actionsOptions: {
           onSuccess: function(modal, response, state, xhr, form){
             // handle content_status_history differently than other buttons
-            var action = form.attr('action');
+            var hasForm = form && form.attr;
+            var action = hasForm ? form.attr('action'): null;
             if(action && action.indexOf('content_status_history') !== -1){
               // load back the folder contents
               var $action = $('<a href="' +
@@ -140,9 +141,11 @@ define([
               modal.options.handleLinkAction.apply(modal, [$action]);
             } else {
               // XXX hack the rename form action url
-              var current = form.attr('action');
-              response = response.replace('action="folder_rename_form',
-                                          'action="' + current + '/folder_rename_form');
+              if(hasForm){
+                var current = form.attr('action');
+                response = response.replace('action="folder_rename_form',
+                                            'action="' + current + '/folder_rename_form');
+              }
               modal.redraw(response);
             }
           }
