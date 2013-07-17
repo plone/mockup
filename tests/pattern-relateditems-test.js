@@ -104,7 +104,7 @@ define([
       var fromPath = [];
       _.each(items, function(item) {
         var itemSplit = item.path.split('/');
-        if (item.path.indexOf(path) === 0 && itemSplit.length-1 == splitPath.length) {
+        if (item.path.indexOf(path) === 0 && itemSplit.length-1 === splitPath.length) {
           fromPath.push(item);
         }
       });
