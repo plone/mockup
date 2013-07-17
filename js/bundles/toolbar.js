@@ -226,7 +226,7 @@ define([
         }
       }
     };
-    $('#toolbar-manage-portlets a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    $('#toolbar-manage-portlets a,#plone-action-content-history > a').attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('show.modal.patterns', function(evt, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select').removeAttr('onchange');
@@ -445,6 +445,8 @@ define([
 //      });
 //    });
 //
+
+
    // Advanced workflow
    // This form needs additional JS and CSS for the calendar widget.
    // The AJAX form doesn't load it from the javascript_head_slot.
@@ -456,7 +458,11 @@ define([
         }
       }
     });
-//
+
+    $('#manage-dashboard a').addClass('modal-trigger').patternModal({
+      width: '80%',
+    });
+
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
 //    // Content history
