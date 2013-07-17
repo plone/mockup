@@ -152,38 +152,88 @@ require([
     addPage({
       id: 'getting-started',
       title: 'Getting Started',
+      requiredPatterns: ['autotoc']
     });
   </script>
   <script type="text/template" id="page_getting-started">
-<p>
-  The only requirements to bootstrap <em>Plone mockup</em>
-  are <a href="http://git-scm.org/" title="git">git</a>
-  and <a href="http://www.nodejs.org/" title="npm">
-    <abbr title="Node package manager">npm</abbr>
-  </a>.
-</p>
-<p>
-  Make sure you use latest version of <code>nodejs</code>
-  and <code>npm</code>.
-</p>
-<p>Then check out the repository from GitHub:</p>
-<pre>
-git clone git://github.com/plone/mockup.git</pre>
-<p>And bootstrap your environment:</p>
-<pre>
-cd mockup
-make bootstrap</pre>
+    <div class='pat-autotoc' data-pat-autotoc="levels:h2">
+      <h2>Step 1: Get the tools</h2>
+      <p>
+        Download and install the latest versions of <a href='http://git-scm.org' title='git'>git</a> and
+        <a href='http://www.nodejs.org/' title='node and npm'>Node/<abbr title="Node Package Manager">NPM</abbr></a>.
+      </p>
+      <p>
+        Also make certain your system supports the <code>make</code> command.
+        Right now development of this project is being done primarily on Linux
+        and OS X, so setting up the tooling on MS Windows might be an
+        adventure for you to explore -- though, all of the tools used have equivalent
+        versions for that platform, so with a little effort, it should work!
+      </p>
 
-<p>To build all bundles just do:</p>
-<pre>make</pre>
+      <h2>Step 2: Checkout the Mockup project from GitHub</h2>
+      <p>
+        This will give you a starting point, and a lot of example code. It's used
+        to build <em>bundles</em> which are then added to various Plone products.
+        You do not need to develop code for the existing Plone products when you
+        use the Mockup project.
+      </p>
+  <pre>
+  git clone git://github.com/plone/mockup.git</pre>
 
-<p>And you can run tests with:</p>
-<pre>make test</pre>
-<p>
-  Right now tests are
-  <img src="https://api.travis-ci.org/plone/mockup.png?branch=master"
-       alt="Build Status" />.
-</p>
+      <h2>Step 3: Bootstrap the environment</h2>
+      <p>
+        Run the following commands:
+      </p>
+  <pre>
+  cd mockup
+  make bootstrap</pre>
+      <p>
+        This will use Node/NPM to download and install all the requirements for
+        building and bundling, as well as all the external libraries needed to
+        build the patterns developed within the framework of the mockup project.
+      </p>
+
+      <h2>Step 4: Get hacking!</h2>
+      <p>
+        TODO: Explain folder layout
+      </p>
+      <p>
+        TODO: Explain bundles -- creating a custom bundle, and how plone.app.widgets/toolbar bundles are added to those projects
+      </p>
+      <p>
+        TODO: Explain documentation
+      </p>
+      <p>
+        TODO: Explain the creation of a pattern for a custom product
+      </p>
+      <p>
+        TODO: Explicitly explain how front-end dev's can use this project to develop
+              non-plone.app.widgets and non-plone.app.toolbar code, but also explain
+              how to contribute to both of those bundles as well.
+      </p>
+
+      <h2>Step 5: Bundling</h2>
+      <p>To build bundles</p>
+      <pre>make</pre>
+
+      <h2>Step 6: Testing</h2>
+      <p>And you can run tests with:</p>
+  <pre>make test</pre>
+      <p>
+        Right now tests are
+        <img src="https://api.travis-ci.org/plone/mockup.png?branch=master"
+             alt="Build Status" />.
+      </p>
+
+      <h2>Step 7: Releasing/Passing bundles on to Plone developers</h2>
+      <p>
+        This is the part that developers in the Plone community are currently
+        familiar with, and the step that purely front-end developers will have to
+        pass off their products. This step is all about taking the bundled
+        javascript and adding it to Plone products in the ways javascript has
+        always been added.
+      </p>
+    </div>
   </script>
   <script>
     addPage({
@@ -198,6 +248,9 @@ make bootstrap</pre>
         width: 100%;
         float: none;
       }
+      .about h2 {
+        font-size: 1.5em;
+      }
     </style>
     <div class='alert alert-block'>
       <h3>
@@ -209,7 +262,7 @@ make bootstrap</pre>
         Please help to improve it!
       </p>
     </div>
-    <div class='pat-autotoc' data-pat-autotoc="levels:h2">
+    <div class='about pat-autotoc' data-pat-autotoc="levels:h2">
       <div>
         <h2>What's the purpose of this project?</h2>
         <p>
@@ -364,6 +417,25 @@ make bootstrap</pre>
         <p>
           Check out the <a href='/#getting-started'>getting started</a> page to
           learn how to get started with developing your own custom patterns!
+        </p>
+
+        <h2>What is a bundle?</h2>
+        <p>
+          A bundle is a combination of javascript, css, and other media that
+          are meant to be delivered into a specific Plone product.
+        </p>
+        <p>
+          For instance,
+          the <em>plone.app.widgets</em> product is a bundle consisting of the
+          combined, optimized, and minimized javascript, the compiled css (from
+          less), and other resource (such as images)
+        </p>
+        <p>
+          In practice, developers will only add to the widgets and toolbar
+          bundles if they are contributing to the <em>plone.app.widgets</em>
+          or <em>plone.app.toolbar</em> projects. Normally developers creating
+          code for new products will create new bundles for their specific
+          product.
         </p>
       </div>
     </div>
