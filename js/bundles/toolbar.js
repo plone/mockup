@@ -300,21 +300,21 @@ define([
 //    });
 //
 //    // Delete Action
-//    Modal.prepareModal('#plone-contentmenu-actions-delete > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Cancel"],input.destructive'
-//      });
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input.destructive': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href');
-//            }
-//          }
-//        }
-//      });
-//    });
+    function processDelete(modal, responseBody, state, xhr, form) {
+        console.log('Deleted!');
+    }
+    var delete_action = $('#plone-contentmenu-actions-delete > a');
+    var delete_options = {
+        templateOptions: {
+            actions: {
+              '.modal-footer input.destructive': { onSuccess: processDelete },
+            },
+            content: '#content',
+            prependContent: '.portalMessage'
+        }
+    };
+    delete_action.addClass('pat-modal');
+    delete_action.attr('data-pat-modal', JSON.stringify(delete_options));
 //
 //    // Rename Action
     $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
