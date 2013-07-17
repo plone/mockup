@@ -908,6 +908,9 @@ define([
     },
     fileUploaded: function(data){
       var self = this;
+      if(data === null){
+        return; // bail, something is wrong here...
+      }
       var filename = data.filename;
       var ext = filename.split('.');
       ext = ext[ext.length-1].toLowerCase();
