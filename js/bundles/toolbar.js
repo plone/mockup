@@ -245,7 +245,17 @@ define([
     var editOptions = {
       width: '80%',
       templateOptions: {
-        content: '#content-core'
+        content: '#content-core',
+        automaticallyAddButtonActions: false,
+        actionsOptions: {
+          displayInModal: false
+        },
+        actions: {
+          'input#form-buttons-save': {},
+          'input#form-buttons-cancel': {
+            modalFunction: 'hide'
+          }
+        }
       }
     };
     $('#plone-action-edit > a')
