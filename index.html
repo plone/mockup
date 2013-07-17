@@ -189,16 +189,28 @@ make bootstrap</pre>
     addPage({
       id: 'about',
       title: 'About the Mockup Project',
+      requiredPatterns: ['autotoc']
     });
   </script>
   <script type='text/template' id='page_about'>
-    <div class='row'>
-      <div class='span6'>
-        <h3 class='alert alert-block'>
-          **WORKING DRAFT** Please Contribute! Things are almost garaunteed to
-          be misspelled, grammatically incorrect, missing, wrong and misleading.
-          Please help to improve it!
-        </h3>
+    <style type='text/css'>
+      .autotoc-nav {
+        width: 100%;
+        float: none;
+      }
+    </style>
+    <div class='alert alert-block'>
+      <h3>
+        **WORKING DRAFT** Please Contribute!
+      </h3>
+      <p>
+        Things are almost garaunteed to
+        be misspelled, grammatically incorrect, missing, wrong and misleading.
+        Please help to improve it!
+      </p>
+    </div>
+    <div class='pat-autotoc' data-pat-autotoc="levels:h2">
+      <div>
         <h2>What's the purpose of this project?</h2>
         <p>
           The <em>mockup</em> project intends to improve the testing and modularization
@@ -207,7 +219,7 @@ make bootstrap</pre>
           familiar with javascript and related tooling.
         </p>
 
-        <h2>How does this project acheive better modularization of javascript, and what kind of benefits come from it?</h2>
+        <h2>How does this project achieve better modularization of javascript, and what kind of benefits come from it?</h2>
         <p>
           Specifically, this project uses
           <a href='http://requirejs.org/' target='_blank'>RequireJS</a>, a library
@@ -241,7 +253,7 @@ make bootstrap</pre>
           when all is said and done, which makes for very light overhead.
         </p>
 
-        <h2>How does this project acheive better testing of javascript, and why should anyone care?</h2>
+        <h2>How does this project achieve better testing of javascript, and why should anyone care?</h2>
         <p>
           Currently javascript in Plone is <em>not tested all</em>. So, to begin,
           *any* testing is an improvement. Beyond that, it's a nightmare to upgrade
@@ -256,11 +268,11 @@ make bootstrap</pre>
         <h2>How does this project make developing widgets and front-end tooling more approachable?</h2>
         <p>
           There are two big things that make this project really approachable
-          for frontend developers: using tools commonly used for javascript
+          for front-end developers: using tools commonly used for javascript
           development, and no need to install understand Plone.
         </p>
         <p>
-          If frontend developers already have a suite of awesome tools to use,
+          If front-end developers already have a suite of awesome tools to use,
           why bother creating custom ones that are only used in the Plone
           community? Certainly there is a time and place for specialized tools,
           but people who specialize in javascript and front-end development
@@ -286,7 +298,7 @@ make bootstrap</pre>
           Plone knowledge.
         </p>
 
-        <h3>Why is this better than the status quo?</h3>
+        <h2>Why is this better than the status quo?</h2>
         <p>
           Plone has zero tests for javascript, people are scared to poke it, and
           knowledge of Plone development is required. This means that only people
@@ -298,21 +310,21 @@ make bootstrap</pre>
           inovative when it comes to javascript.
         </p>
 
-        <h3>Isn't this a lot of work and code just to hack some javasript?</h3>
+        <h2>Isn't this a lot of work and code just to hack some javasript?</h2>
         <p>
           Yes, this process does break things up a bit -- but think of the
           advantages. Testable code, more potential developers, and a better
           front-end workflow.
         </p>
 
-        <h3>What's this projects relation to the Patternslib project?</h3>
+        <h2>What's this projects relation to the Patternslib project?</h2>
         <p>
           This project draws heavy inspiration from
           <a href='http://patternslib.com/' target='_blank'>PatternsLib</a>,
           but does not share any code.
         </p>
 
-        <h3>Can I use this in Plone right now?</h3>
+        <h2>Can I use this in Plone right now?</h2>
         <p>
           Sort of. It's in heavy development, so installing the related Plone
           packages are on the edge of what this project aims to become.
@@ -324,14 +336,14 @@ make bootstrap</pre>
           <a href='https://github.com/plone/plone.app.toolbar' target='_blank'>plone.app.toolbar</a>.
         </p>
 
-        <h3>How can I contribute?</h3>
+        <h2>How can I contribute?</h2>
         <p>
           Checkout the
           <a href='https://github.com/plone/mockup' target='_blank'>mockup</a>
           project on github.
         </p>
 
-        <h3>What's the relation to plone.app.toolbar? plone.app.widgets?</h3>
+        <h2>What's the relation to plone.app.toolbar? plone.app.widgets?</h2>
         <p>
           They provide Plone integration with the javascript developed
           and tested in the <em>mockup</em> project. Javascript is bundled,
@@ -340,7 +352,7 @@ make bootstrap</pre>
           aspects with their newer equivalents.
         </p>
 
-        <h3>What about plone.app.tiles, plone.app.deco, etc?</h3>
+        <h2>What about plone.app.tiles, plone.app.deco, etc?</h2>
         <p>
           These are a much larger topic, and need a lot of work. The core of
           this initiative is found within <em>plone.app.widgets</em> and
@@ -348,7 +360,7 @@ make bootstrap</pre>
           won't be far behind.
         </p>
 
-        <h3>I just want add a custom widget, but I don't want to contribute it to this project, what do I do?</h3>
+        <h2>I just want add a custom widget, but I don't want to contribute it to this project, what do I do?</h2>
         <p>
           Check out the <a href='/#getting-started'>getting started</a> page to
           learn how to get started with developing your own custom patterns!
