@@ -121,7 +121,7 @@ define([
 
     // Modals {{{
 
-    // Contents
+    // Contents {{{
     function refreshModal(modal, responseBody, state, xhr, form) {
       modal.$modal.html(responseBody.html());
       modalInit(modal, modalInit, modalOptions);
@@ -189,6 +189,7 @@ define([
         window.parent.location.href = $(this).attr('href');
       });
     });
+    // }}}
 
     // site setup
     $('#plone-personal-actions-plone_setup a').on('show.modal.patterns', function(evt, modal) {

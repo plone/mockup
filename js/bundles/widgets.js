@@ -43,7 +43,8 @@ define([
   'mockup-patterns-picture',
   'mockup-patterns-querystring',
   'mockup-patterns-preventdoublesubmit',
-  'mockup-patterns-formautofocus'
+  'mockup-patterns-formautofocus',
+  'mockup-patterns-livesearch'
 ], function($, registry) {
   "use strict";
 
@@ -105,7 +106,7 @@ define([
       filter_results.attr({
         'data-pat-toggle': 'target: form[name=searchform] dl.actionMenu;value: activated'
       });
-      
+
       $('dl.actionMenu').removeClass('deactivated');
 
       $('html').on('mousedown', function(e) {
@@ -114,31 +115,6 @@ define([
           $('dl.actionMenu').removeClass('activated');
         }
       });
-
-      /* 
-      Commenting out Livesearch for now
-      
-      $match = $root.find('.LSBox');
-      var url = $match.parents('form').attr('action').replace('@@search',
-          '@@getVocabulary?name=plone.app.vocabularies.Catalog');
-      var attrs = {
-        'ajaxvocabulary': url
-      };
-      $match.attr({
-        'class': 'pat-livesearch',
-        'data-pat-livesearch': JSON.stringify(attrs)
-      });
-      $match.find('.searchSection').remove();
-      $match.find('.LSResult').attr({
-        'class': 'pat-livesearch-container pull-right',
-        'id': ''
-      });
-      $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
-      $match.find('#searchGadget').addClass('pat-livesearch-input')
-        .attr('autocomplete', 'off');
-      $match.find('.searchButton').hide();
-
-      */
 
       // add tinymce pattern
       $root.find('.mce_editable').addClass('pat-tinymce').each(function(){
