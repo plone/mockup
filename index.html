@@ -226,6 +226,7 @@ $ make bootstrap</pre>
         <li><strong>less/</strong> This directory contains all the <a href='http://lesscss.org/'>less</a> code for all the patterns and bundles</li>
         <li><strong>lib/</strong> This directory contains external libraries not necessarily found in the bower repositories</li>
         <li><strong>tests/</strong> This directory contains all tests for patterns and bundles, including gernal setup and configuration code</li>
+        <li><strong>Gruntfile.js</strong> This file contains the directives for compiling less, and combining/optimizing/minimizing javascript for the defined bundles</li>
         <li><strong>index.html</strong> This is the main source of documentation for the mockup project.</li>
         <li><strong>Makefile</strong> This is the Makefile used to define what tasks should run when you want to build a bundle, or bootstrap the environment</li>
       </ul>
@@ -255,11 +256,24 @@ $ make bootstrap</pre>
         adds some specific code to make the requirements work nicely in the
         <em>plone.app.widgets</em> Plone module.
       </p>
+      <h4>What's up with this documentation?</h4>
       <p>
-        TODO: Explain documentation
+        Most of the documentation found outside of code comments is found in this
+        single HTML file. Take a look at it, and if you want to contribute, hack
+        away!
       </p>
       <p>
-        TODO: Explain the creation of a pattern for a custom product
+        Why is it done this way? It's convenient for the time being.
+      </p>
+      <h4>How are patterns created that DON'T belong to plone.app.*?</h4>
+      <p>
+        Check out some of the other patterns in <strong>js/patterns/</strong>,
+        then check out the bundle code in <strong>js/bundles</strong>. Once
+        you have a bundle, and maybe some patterns created for your own product,
+        you'll want to add some configuration directives to the <strong>Gruntfile.js</strong>
+        file. Then, you can run <code>$ make</code> to build your bundle into
+        the <strong>build/</strong> directory, and from there, copy over the
+        releasable code into your Plone product.
       </p>
       <p>
         TODO: Explicitly explain how front-end dev's can use this project to develop
