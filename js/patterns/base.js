@@ -110,8 +110,19 @@ define([
     on: function(eventName, eventCallback) {
       this.$el.on(eventName + '.' + this.name + '.patterns', eventCallback);
     },
-    trigger: function(eventName) {
-      this.$el.trigger(eventName + '.' + this.name + '.patterns', [ this ]);
+    trigger: function(eventName, args) {
+      /* args should be a list */
+      if(args === undefined){
+        args = [];
+      }
+      try{
+        args.splice(0, 0, this);
+      }catch(e){
+        // let's not fail here but do our best to pass the args even
+        // if it's trigger incorrectly
+        args = [this];
+      }
+      this.$el.trigger(eventName + '.' + this.name + '.patterns', args);
     }
   };
   Base.extend = function(NewPattern) {

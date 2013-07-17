@@ -122,34 +122,16 @@ define([
     // Modals {{{
 
     // Contents {{{
-    function refreshModal(modal, responseBody, state, xhr, form) {
-      modal.$modal.html(responseBody.html());
-      modalInit(modal, modalInit, modalOptions);
-      modal.positionModal();
-      registry.scan(modal.$modal);
-    }
     $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
       width: '80%',
       templateOptions: {
-        buttons: '#folderlisting-main-table > input.context,#folderlisting-main-table > input.standalone,.modal-body .formControls > input',
-        actions: {
-          '.modal-body a#foldercontents-show-batched': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-show-all': { onSuccess: refreshModal },
-          '.modal-body .pagination a': { onSuccess: refreshModal },
-          '.modal-body #folderlisting-main-table > input.standalone': { onSuccess: refreshModal },
-          '.modal-body #folderlisting-main-table > input.context': { onSuccess: refreshModal },
-          '.modal-body .formControls > input.standalone': { onSuccess: refreshModal },
-          '.modal-body .formControls > input.context': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-selectall-completebatch': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-selectall': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-clearselection': { onSuccess: refreshModal },
-          '.modal-body #folderlisting-main-table td:not(.draggable) > a.contenttype-folder': { onSuccess: refreshModal },
-          '.modal-body .link-parent': { onSuccess: refreshModal },
-          '.modal-body td.draggable > a': { onSuccess: refreshModal }
-        }
+        buttons: '#folderlisting-main-table > input.context,' +
+                 '#folderlisting-main-table > input.standalone,' +
+                 '.modal-body .formControls > input',
       },
     }).on('show.modal.patterns', function(e, modal) {
-      $('#plone-document-byline', modal.$modal).hide();  // TODO: not sure exectly how to handle this for now we hide it
+      // TODO: not sure exectly how to handle this for now we hide it
+      $('#plone-document-byline', modal.$modal).hide();
       $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
       $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
         var $el = $(this),
@@ -183,7 +165,8 @@ define([
         }
         $el.hide().before($('<div class="pagination pagination-centered"/>').append($pagination));
       });
-      $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not(.contenttype-folder)', modal.$modal).css({
+    }).on('shown.modal.patterns linkActionSuccess.modal.patterns', function(e, modal){
+      $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not([href$="folder_contents"])', modal.$modal).css({
         color: '#333333'
       }).on('click', function(e) {
         window.parent.location.href = $(this).attr('href');

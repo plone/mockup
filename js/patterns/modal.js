@@ -164,6 +164,7 @@ define([
               } else {
                 console.log('error happened do something');
               }
+              self.trigger('formActionError', [xhr, textStatus, errorStatus]);
             },
             success: function(response, state, xhr, form) {
               // if error is found
@@ -178,12 +179,11 @@ define([
               } else if (options.onSuccess) {
                 options.onSuccess(self, response, state, xhr, form);
 
-              }
-
-              else {
+              } else {
                 $action.trigger('destroy.modal.patterns');
                 location.reload();
               }
+              self.trigger('formActionSuccess', [response, state, xhr, form]);
             }
         });
       },
@@ -202,6 +202,7 @@ define([
               console.log('error happened do something');
             }
             self.$loading.hide();
+            self.trigger('linkActionError', [xhr, textStatus, errorStatus]);
           },
           success: function(response, state, xhr) {
             self.redraw(response);
@@ -209,6 +210,7 @@ define([
               options.onSuccess(self, response, state, xhr);
             }
             self.$loading.hide();
+            self.trigger('linkActionSuccess', [response, state, xhr]);
           }
         });
       },
@@ -642,12 +644,14 @@ define([
     },
     redraw: function(response) {
       var self = this;
+      self.trigger('beforeDraw');
       self.$modal.remove();
       self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
           .replace('<body', '<div').replace('</body>', '</div>'))[0]);
       self.options.render.apply(self, [self.options.templateOptions]);
       self.positionModal();
       registry.scan(self.$modal);
+      self.trigger('afterDraw');
     }
   });
 
