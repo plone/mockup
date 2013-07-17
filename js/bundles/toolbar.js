@@ -320,20 +320,6 @@ define([
       };
     });
 
-    function processDelete(modal, responseBody, state, xhr, form) {
-        modal.redraw(responseBody);
-        modal.$el.on('hidden.modal.patterns', function(e) {
-            // We want to send the user to the containing folder *after* the status messages
-            // have been displayed, and the user has closed the modal
-            window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
-        });
-    }
-    var delete_action = $('#plone-contentmenu-actions-delete > a');
-    delete_action.addClass('pat-modal');
-    delete_action.on('render.modal.patterns', function(e, modal) {
-      modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
-    });
-
   });
 
   return {
