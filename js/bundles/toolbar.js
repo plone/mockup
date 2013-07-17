@@ -218,15 +218,13 @@ define([
     var portletOptions = {
       templateOptions: {
         buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
-        automaticallyAddButtonActions: false,
+        automaticallyAddButtonActions: false
       }
     };
     $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
-    .on('show.modal.patterns', function(evt, modal) {
-      // Kill the onchange method so we can wire up our own
-      $('.section select').removeAttr('onchange');
-    })
     .on('render.modal.patterns', function(e, modal) {
+      // Kill the onchange method so we can wire up our own
+      $('.section select', modal.$raw).removeAttr('onchange');
       modal.options.templateOptions.actions = {
           // Handle adding portlets via the select
           '.section select': {
