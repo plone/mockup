@@ -112,7 +112,7 @@ define([
           }
 
           if (templateOptions.loadLinksWithinModal) {
-            actions['.modal-body a'] = {};
+            actions['a'] = {};
           }
 
           $.each(actions, function(action, options) {
