@@ -435,10 +435,17 @@ define([
 //      });
 //    });
 //
-//    // Advanced workflow
-//    // This form needs additional JS and CSS for the calendar widget.
-//    // The AJAX form doesn't load it from the javascript_head_slot.
-    // $('#workflow-transition-advanced > a').addClass('pat-modal');
+   // Advanced workflow
+   // This form needs additional JS and CSS for the calendar widget.
+   // The AJAX form doesn't load it from the javascript_head_slot.
+    $('#workflow-transition-advanced > a').addClass('modal-trigger').patternModal({
+      width: '80%',
+      templateOptions: {
+        actionsOptions: {
+          displayInModal: false
+        }
+      }
+    });
 //
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
