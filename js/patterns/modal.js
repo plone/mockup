@@ -86,7 +86,7 @@ define([
         actionsOptions: {
           eventType: 'click',
           target: null,
-          ajaxUrl: null,
+          ajaxUrl: null, // string, or function($el, options) that returns a string
           isForm: false,
           timeout: 5000,
           displayInModal: true,
@@ -151,10 +151,21 @@ define([
           $form = $action.parents('form:not(.disableAutoSubmit)');
         }
 
+        var url;
+        if (options.ajaxUrl !== null) {
+          if (typeof options.ajaxUrl === 'function') {
+            url = options.ajaxUrl.apply(self, [$action, options]);
+          } else {
+            url = options.ajaxUrl;
+          }
+        } else {
+          url = $action.parents('form').attr('action');
+        }
+
         $form.ajaxSubmit({
           timeout: options.timeout,
           data: extraData,
-          url: $action.parents('form').attr('action'),
+          url: url,
             error: function(xhr, textStatus, errorStatus) {
               if (textStatus === 'timeout' && options.onTimeout) {
                 options.onTimeout.apply(self, xhr, errorStatus);
@@ -189,8 +200,28 @@ define([
       },
       handleLinkAction: function($action, options) {
         var self = this;
+        var url;
+
+        // Figure out URL
+        if (options.ajaxUrl !== null) {
+          if (typeof options.ajaxUrl === 'function') {
+            url = options.ajaxUrl.apply(self, [$action, options]);
+          } else {
+            url = options.ajaxUrl;
+          }
+        } else {
+          url = $action.attr('href');
+        }
+
+        // Non-ajax link (I know it says "ajaxUrl" ...)
+        if (options.displayInModal === false) {
+          window.parent.location.href = url;
+          return;
+        }
+
+        // ajax version
         $.ajax({
-          url: $action.attr('href'),
+          url: url,
           error: function(xhr, textStatus, errorStatus) {
             if (textStatus === 'timeout' && options.onTimeout) {
               options.onTimeout(self.$modal, xhr, errorStatus);
@@ -599,13 +630,19 @@ define([
         self.$modal.css(key, pos[key]);
       }
     },
+    render: function(options) {
+      var self = this;
+      self.trigger('render');
+      self.options.render.apply(self, [options]);
+      self.trigger('rendered');
+    },
     show: function() {
       var self = this;
       self.createModal();
     },
     _show: function() {
       var self = this;
-      self.options.render.apply(self,
+      self.render.apply(self,
           [self.options.templateOptions]);
       self.trigger('show');
       self.backdrop.show();
@@ -648,7 +685,7 @@ define([
       self.$modal.remove();
       self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
           .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-      self.options.render.apply(self, [self.options.templateOptions]);
+      self.render.apply(self, [self.options.templateOptions]);
       self.positionModal();
       registry.scan(self.$modal);
       self.trigger('afterDraw');
