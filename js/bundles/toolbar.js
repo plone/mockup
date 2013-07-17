@@ -255,6 +255,7 @@ define([
 
     // Content Rules
     var rulesOptions = {
+      width: '80%',
       templateOptions: {
         content: '#content-core',
         loadLinksWithinModal: false
@@ -270,7 +271,8 @@ define([
               return $action.attr('href').replace(/@@/g, "++nodiazo++/@@");
             },
             displayInModal: false
-          }
+          },
+          'input[name="form.button.AddAssignment"]': {}
         };
       });
 
