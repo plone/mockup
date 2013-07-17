@@ -147,7 +147,7 @@ define([
         value += self.$time.val();
       }
 
-      self.$el.val(value);
+      self.$el.attr('value', value);
     }
   });
 
