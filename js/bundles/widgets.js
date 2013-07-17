@@ -76,6 +76,12 @@ define([
       });
 
       // Fix drop downs
+      var actions = $('dl.actionMenu#plone-contentmenu-actions dt.actionMenuHeader a');
+      actions.addClass('pat-toggle');
+      actions.attr({
+        'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-actions;value: activated'
+      });
+
       var personal_tools = $('dl.actionMenu#portal-personaltools dt.actionMenuHeader a');
       personal_tools.addClass('pat-toggle');
       personal_tools.attr({
@@ -311,7 +317,7 @@ define([
         }
       });
 
-      // personal preferences
+      /*** Personal preferences ***/
       var prefs = $('#plone-personal-actions-preferences > a, #personaltools-preferences > a');
       var prefsOptions = {
         templateOptions: {
@@ -320,8 +326,23 @@ define([
       };
       prefs.addClass('pat-modal');
       prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
-      },
 
+      /*** Delete action ***/
+      function processDelete(modal, responseBody, state, xhr, form) {
+        modal.redraw(responseBody);
+        modal.$el.on('hidden.modal.patterns', function(e) {
+            // We want to send the user to the containing folder *after* the status messages
+            // have been displayed, and the user has closed the modal
+            window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
+        });
+      }
+      var delete_action = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete');
+      delete_action.addClass('pat-modal');
+      delete_action.on('render.modal.patterns', function(e, modal) {
+        modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
+      });
+
+      },
       scan: function(selector) {
         registry.scan($(selector));
       }

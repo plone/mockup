@@ -18,6 +18,7 @@
       "console": true,
       "define": false,
       "tinymce": true,
+      "document": false,
       "window": false
    }
 }
