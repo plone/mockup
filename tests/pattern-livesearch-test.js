@@ -111,7 +111,7 @@ define([
         "Type": "Collection", "Description": "Site News",
         "Title": "Another Item"
       },
-      { 
+      {
         "UID": "fooasdfasdfsdf",
         "getURL": "http://localhost:8081/news/aggregator",
         "Type": "Collection", "Description": "Site News",
