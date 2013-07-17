@@ -177,6 +177,7 @@ define([
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.klassValue + '-' + widget)
                 .attr('name', 'query.v:records')
+                .val(value)
                 .appendTo($wrapper)
                 .change(function(){
                   self.trigger('value-changed');
@@ -273,7 +274,7 @@ define([
         self.$value.patternSelect2({ width: '250px' });
       }
 
-      if (value !== undefined) {
+      if(value !== undefined && typeof self.$value !== 'undefined') {
         self.$value.select2('val', value);
       }
 
@@ -516,6 +517,11 @@ define([
     },
     createSort: function() {
       var self = this;
+
+      // elements that may exist already on the page
+      var existingSortOn = $('#formfield-form-widgets-sort_on');
+      var existingSortOrder = $('#formfield-form-widgets-sort_reversed');
+
       $('<span/>')
         .addClass(self.options.klassSortLabel)
         .html(self.options.sorttxt)
@@ -525,9 +531,10 @@ define([
         .appendTo(self.$sortWrapper)
         .change(function(){
           self.refreshPreviewEvent(self);
+          $("#form-widgets-sort_on", existingSortOn).val($(this).val());
         });
 
-      for(var key in self.options.indexes) {
+      for(var key in self.options.sortable_indexes) {
         self.$sortOn.append(
           $('<option/>')
             .attr('value', key)
@@ -539,6 +546,14 @@ define([
                           .attr('name', 'sort_reversed:boolean')
                           .change(function(){
                             self.refreshPreviewEvent(self);
+                            if($(this).attr('checked') === "checked") {
+                              $('.option input[type="checkbox"]', existingSortOrder)
+                                .attr('checked', 'checked');
+                            }
+                            else {
+                              $('.option input[type="checkbox"]', existingSortOrder)
+                                .removeAttr('checked');
+                            }
                           })
 
 
@@ -551,6 +566,19 @@ define([
             .html(self.options.reversetxt)
             .addClass(self.options.klassSortReverseLabel)
         )
+
+      // if the form already contains the sort fields, hide them! Their values
+      // will be synced back and forth between the querystring's form elements
+      if(existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
+        var reversed = $('.option input[type="checkbox"]', existingSortOrder).attr('checked') === "checked";
+        var sort_on = $('#form-widgets-sort_on', existingSortOn).val();
+        if(reversed) {
+          self.$sortOrder.attr('checked', 'checked');
+        }
+        self.$sortOn.select2('val', sort_on);
+        $(existingSortOn).hide();
+        $(existingSortOrder).hide();
+      }
     },
     refreshPreviewEvent: function(self) {
       var self = this;
@@ -629,13 +657,15 @@ define([
 
       var self = this;
 
-      var list = "[";
+      var criteriastrs = [];
       $.each(self.criterias, function(i, criteria) {
-        list += criteria.getJSONListStr();
+        var jsonstr = criteria.getJSONListStr();
+        if(jsonstr !== "") {
+          criteriastrs.push(jsonstr);
+        }
       });
-      list += "]";
 
-      self.$el.val(list);
+      self.$el.val('['+criteriastrs.join(',')+']');
     }
   });
 
