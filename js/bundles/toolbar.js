@@ -397,15 +397,6 @@ define([
 //    }, { width: '80%' });
 
 
-//    // personal preferences
-    var prefs = $('#plone-personal-actions-preferences > a');
-    var prefsOptions = {
-      templateOptions: {
-        buttons: 'input[type="submit"]'
-      }
-    };
-    prefs.addClass('pat-modal');
-    prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
 //    // Content history
     $('#plone-action-content-history > a').addClass('pat-modal');
 //
