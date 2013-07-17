@@ -1002,10 +1002,10 @@ define([
 
       tinymce.init(tinyOptions);
 
-      /*if(self.options.upload_url){
-         XXX sort of working but drop is NOT firing! 
-         * disable until we can figure it out...
-        var iframe = self.$el.prev().find('.mce-edit-area iframe');
+      /*XXX sort of working but drop is NOT firing! 
+       * disable until we can figure it out...
+      if(self.options.upload_url){
+       var iframe = self.$el.prev().find('.mce-edit-area iframe');
         var win = $(window.frames[iframe.attr('id')]);
         $.each(dropzone.prototype.events, function(index, ev){
           win.on(ev, function(e){
