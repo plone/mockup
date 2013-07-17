@@ -76,6 +76,12 @@ define([
       });
 
       // Fix drop downs
+      var actions = $('dl.actionMenu#plone-contentmenu-actions dt.actionMenuHeader a');
+      actions.addClass('pat-toggle');
+      actions.attr({
+        'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-actions;value: activated'
+      });
+
       var personal_tools = $('dl.actionMenu#portal-personaltools dt.actionMenuHeader a');
       personal_tools.addClass('pat-toggle');
       personal_tools.attr({
