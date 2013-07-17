@@ -94,8 +94,7 @@ define([
     editor.addButton('ploneupload', {
       icon: 'newdocument',
       tooltip: 'Upload file',
-      onclick: editor.settings.uploadFileClicked,
-      stateSelector: 'img:not([data-mce-object])'
+      onclick: editor.settings.uploadFileClicked
     });
 
     editor.addMenuItem('ploneupload', {
@@ -121,6 +120,7 @@ define([
     },
     init: function(){
       var self = this;
+      self.tinypattern = self.options.tinypattern;
       self.modal = new Modal(self.$el, {
         html: '<div>' +
           '<div class="linkModal">' +
@@ -170,15 +170,21 @@ define([
       self.$iframe = $('iframe', self.modal.$modal);
       self.$form.on('submit', function(e){
         /* handle file upload */
-        var locationData = self.modal.$modal.find('[name="internal"]').select2('data');
+        var locationData = self.modal.$modal.find('[name="location"]').select2('data');
         if(locationData.length > 0){
           self.$form.attr('action',
-            locationData.getURL + '/' + self.options.rel_upload_url);
+            locationData[0].getURL + '/' + self.options.rel_upload_url);
         }
         self.modal.$loading.show();
         self.$iframe.on('load', function(){
+          var response = self.$iframe.contents();
           self.modal.$loading.hide();
           self.hide();
+          if (!response.length || !response[0].firstChild) {
+            self.tinypattern.fileUploadError();
+          }
+          response = $(response[0].body).text();
+          self.tinypattern.fileUploaded($.parseJSON(response));
         });
         self.$form[0].target = 'upload_target';
       });
