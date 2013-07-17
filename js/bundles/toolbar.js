@@ -241,24 +241,24 @@ define([
       });
     });
 
-    // Edit
+    // Edit/Add
     var editOptions = {
       width: '80%',
       templateOptions: {
-        content: '#content-core',
+        content: '.template-edit #content-core, .template-atct_edit #content',
         automaticallyAddButtonActions: false,
         actionsOptions: {
           displayInModal: false
         },
         actions: {
-          'input#form-buttons-save': {},
-          'input#form-buttons-cancel': {
+          'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
+          'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
             modalFunction: 'hide'
           }
         }
       }
     };
-    $('#plone-action-edit > a')
+    $('#plone-action-edit > a, #plone-contentmenu-factories a')
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(editOptions));
 
