@@ -228,6 +228,20 @@ define([
 
       /*** Register form ***/
       $('#personaltools-join').addClass('pat-modal');
+
+      /*** Add user form ***/
+      var addUserOptions = {
+        ajaxUrl: $('form[name="users_add"]')[0].action,
+        triggers: ['click input[name="form.button.AddUser"]'],
+        templateOptions: {
+          buttons: 'input[name="form.actions.register"]',
+          content: '#content',
+          prependContent: '.portalMessage'
+        }
+      };
+      $('input[name="form.button.AddUser"]')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(addUserOptions));
     },
     scan: function(selector) {
       registry.scan($(selector));
