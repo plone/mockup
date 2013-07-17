@@ -132,7 +132,7 @@ define([
                 } else if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
                   self.options.handleFormAction.apply(self, [$action, options]);
                 // handle event on link with jQuery.ajax
-                } else if ($.nodeName($action[0], 'a')) {
+                } else if (options.ajaxUrl !== null || $.nodeName($action[0], 'a')) {
                   self.options.handleLinkAction.apply(self, [$action, options]);
                 }
 
