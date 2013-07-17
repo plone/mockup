@@ -210,7 +210,7 @@ define([
           content: '#content-core'
         }
       };
-      $('#content-history > a')
+      $('#content-history > a, #plone-action-content-history > a')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
 
