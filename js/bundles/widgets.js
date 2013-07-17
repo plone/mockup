@@ -150,7 +150,10 @@ define([
               ajaxvocabulary: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
             },
             rel_upload_url: '@@fileUpload',
-            base_url: config.document_base_url
+            base_url: config.document_base_url,
+            tiny: {
+              content_css: config.portal_url + '/base.css'
+            }
           })
         });
       });
