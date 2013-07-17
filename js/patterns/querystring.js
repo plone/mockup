@@ -206,7 +206,7 @@ define([
                         .patternPickadate({
                           time: false,
                           date: { format: "dd/mm/yyyy" }
-                        })
+                        });
         $wrapper.append(
           $('<span/>')
             .html(self.options.betweendt)
@@ -221,7 +221,7 @@ define([
                         .patternPickadate({
                           time: false,
                           date: { format: "dd/mm/yyyy" }
-                        })
+                        });
         $wrapper.find('.picker__input').change(function() {
           self.trigger('value-changed');
         });
@@ -554,7 +554,7 @@ define([
                               $('.option input[type="checkbox"]', existingSortOrder)
                                 .removeAttr('checked');
                             }
-                          })
+                          });
 
 
       $('<span/>')
@@ -565,7 +565,7 @@ define([
           $('<span/>')
             .html(self.options.reversetxt)
             .addClass(self.options.klassSortReverseLabel)
-        )
+        );
 
       // if the form already contains the sort fields, hide them! Their values
       // will be synced back and forth between the querystring's form elements

@@ -149,7 +149,7 @@ require([
         var data = list[i];
         data.getURL = window.location.origin + data.path;
       }
-    }
+    };
     addUrls(searchables);
     addUrls(root);
     root[0].getURL = window.location.origin + '/exampledata/test.png';

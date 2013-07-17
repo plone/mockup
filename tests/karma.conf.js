@@ -38,7 +38,7 @@ reporters = ['progress', 'coverage'];
 coverageReporter = {
   type : 'html',
   dir : 'coverage/'
-}
+};
 
 // web server port
 port = 8080;
