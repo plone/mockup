@@ -88,7 +88,7 @@ define([
 
       var should_be = ["CCC", "BBB", "AAA"];
       var elem;
-      for (var i=0;i<should_be.length;i++){
+      for (var i=0;i<should_be.length;i+=1){
         // We are checking first td of each tr of tbody, just to see the
         // order
         elem = this.$el.find('tbody tr td').eq(i*3);
@@ -110,7 +110,7 @@ define([
 
       var should_be = ["BBB", "CCC", "AAA"];
       var elem;
-      for (var i=0;i<should_be.length;i++){
+      for (var i=0;i<should_be.length;i+=1){
         // We are checking first td of each tr of tbody, just to see the
         // order
         elem = this.$el.find('tbody tr td').eq(i*3);
@@ -137,7 +137,7 @@ define([
 
       var should_be = ["AAA", "BBB", "CCC"];
       var elem;
-      for (var i=0;i<should_be.length;i++){
+      for (var i=0;i<should_be.length;i+=1){
         // We are checking first td of each tr of tbody, just to see the
         // order
         elem = this.$el.find('tbody tr td').eq(i*3);
