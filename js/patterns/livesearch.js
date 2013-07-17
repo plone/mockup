@@ -259,7 +259,7 @@ define([
         return;
       }
 
-      var container = $(self.applyTemplate('resultsContainer', self));
+      var container = $('<div />');
 
       if (event.type === 'searching') {
         container.html(self.renderHelp('searching', {}));
@@ -270,6 +270,7 @@ define([
           container.html(self.renderHelp('typeMore', {more: chars}));
         } else {
           var data = self.getCache();
+          container.html(self.applyTemplate('resultsContainer', self));
           var appendTo = container.find(self.options.resultsAppendTo);
           if (appendTo.length === 0) {
             appendTo = container;
