@@ -336,17 +336,6 @@ define([
       modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
     });
 
-    // Rename Action
-    $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
-
-    // Change content item as default view...
-    $('#contextSetDefaultPage > a, #folderChangeDefaultPage > a').addClass('pat-modal');
-
-    // personal preferences
-    $('#plone-personal-actions-preferences > a').addClass('pat-modal');
-
-    // }}}
-
   });
 
   return {
