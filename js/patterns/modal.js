@@ -373,9 +373,6 @@ define([
       self.backdrop = new Backdrop(
           self.$el.parents(self.options.backdrop),
           self.options.backdropOptions);
-      self.backdrop.on('hidden', function(e) {
-        self.hide();
-      });
 
       self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
@@ -689,10 +686,12 @@ define([
         self.ajaxXHR.abort();
       }
       self.trigger('hide');
-      self.backdrop.hide();
-      self.$wrapper.hide();
-      self.$loading.hide();
-      self.$wrapper.parent().css('overflow', 'visible');
+      if ($('.modal', self.$wrapper).size() < 2) {
+        self.backdrop.hide();
+        self.$wrapper.hide();
+        self.$loading.hide();
+        self.$wrapper.parent().css('overflow', 'visible');
+      }
       self.$el.removeClass(self.options.klassActive);
       if (self.$modal !== undefined) {
         self.$modal.remove();
