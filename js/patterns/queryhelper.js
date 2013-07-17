@@ -55,10 +55,12 @@ define([
           browsing: false
         };
       }
-      if((self.options.ajaxvocabulary !== undefined &&
-          self.options.ajaxvocabulary !== null) ||
-         (self.options.url !== undefined &&
-          self.options.url !== null)){
+
+      if (self.options.url && !self.options.ajaxvocabulary) {
+        self.options.ajaxvocabulary = self.options.url;
+      }
+      if(self.options.ajaxvocabulary !== undefined &&
+          self.options.ajaxvocabulary !== null){
         self.valid = true;
       }else{
         self.valid = false;
