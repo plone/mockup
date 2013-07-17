@@ -139,6 +139,10 @@ define([
                 '"/>');
               modal.options.handleLinkAction.apply(modal, [$action]);
             } else {
+              // XXX hack the rename form action url
+              var current = modal.$modal.find('form').attr('action');
+              response = response.replace('action="folder_rename_form',
+                                          'action="' + current + '/folder_rename_form');
               modal.redraw(response);
             }
           }
