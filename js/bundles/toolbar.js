@@ -258,7 +258,7 @@ define([
         }
       }
     };
-    $('#plone-action-edit > a, #plone-contentmenu-factories ul a')
+    $('#plone-action-edit > a, #plone-contentmenu-factories ul li:not(#plone-contentmenu-settings) a')
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(editOptions));
 
@@ -381,130 +381,6 @@ define([
 //        }
 //      });
 //    }, { width: '80%' });
-
-
-    // "Restrictions..." form
-    $('#plone-contentmenu-settings > a').addClass('modal-trigger').patternModal({
-      width: '80%',
-      templateOptions: {
-        actionsOptions: {
-          displayInModal: false
-        }
-      }
-    }).on('shown.modal.patterns', function(modal){
-      var $modal = modal.$modal;
-      var prefered = $(".current_prefer_form", $modal),
-          allowed = $(".current_allow_form", $modal),
-          constrain_mode = $(".constrain_types_mode_form", $modal),
-          prefered_field = prefered.parents('.field'),
-          allowed_field = allowed.parents('.field'),
-          ACQUIRE = -1,
-          DISABLED = 0,
-          ENABLED = 1;
-      function updateVisibility(){
-        var mode = parseInt(constrain_mode.val(), 10);
-        if(mode === ENABLED){
-          prefered_field.show();
-          allowed_field.show();
-        }else{
-          prefered_field.hide();
-          allowed_field.hide();
-        }
-      }
-      function updateSelectable(){
-        prefered.each(function(){
-          var allowed_id = this.id.replace('prefer', 'allow'),
-              allowed_item = allowed_field.find("#" + allowed_id);
-          if (this.checked){
-            allowed_item[0].disabled = false;
-          }else{
-            allowed_item[0].disabled = true;
-            allowed_item[0].checked = false;
-          }
-        });
-      }
-      constrain_mode.change(updateVisibility);
-      updateVisibility();
-      prefered_field.change(updateSelectable);
-      updateSelectable();
-    });
-
-
-/*
-    Modal.prepareModal('#plone-contentmenu-settings > a', function(modal, modalInit, modalOptions) {
-      Modal.createTemplate(modal.$modal);
-      // FIXME: we should hack like this
-      var $details = $('#details', modal.$modal)
-        .removeAttr('style')
-        .removeAttr('id')
-        .first().parent();
-
-      function show_submenu($modal) {
-        if ($('#mode_enable', $modal).is(':checked')) {
-          $details.attr({'id': 'details', 'style': ''});
-        } else {
-          $details.attr({'id': 'details', 'style': 'display:none;'});
-        }
-      }
-      function check_mode($modal, value) {
-        // The logic here is that from #6151, comment 12.
-        var $preferred = $('#' + value, $modal),
-            $allowed = $('#' + value + '_allowed', $modal),
-            $allowed_hidden = $('#' + value + '_allowed_hidden', $modal);
-
-        // type is not preferred, so it is not allowed, too.
-        // We uncheck and disable (ghost) the allowed checkbox
-        if (!$preferred.is(':checked')) {
-          $allowed.attr('checked', false);
-          $allowed.attr('disabled', true);
-
-        // type _is_ preferred, so user _may_ want to make it
-        // an "allowed-only" type by checking the "allowed" checkbox.
-        // We need to enable (unghost) the allowed checkbox
-        } else {
-          $allowed.attr('disabled', false);
-        }
-      }
-
-      $('input[name="constrainTypesMode:int"]', modal.$modal)
-        .removeAttr('onclick')
-        .on('click', function() {
-          show_submenu($(this).parents('.modal'));
-        });
-      $('input[name="currentPrefer:list"],input[name="currentAllow:list"]', modal.$modal)
-        .removeAttr('onclick')
-        .on('click', function() {
-          check_mode($(this).parents('.modal'), $(this).attr('id'));
-        });
-      show_submenu(modal.$modal);
-
-      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-        buttons: {
-          '.modal-body input[name="form.button.Cancel"]': {},
-          '.modal-body input[name="form.button.Save"]': {
-            onSuccess: function(modal, responseBody, state, xhr) {
-              $('#plone-contentmenu-factories').html(
-                  $('#plone-contentmenu-factories', responseBody).html());
-              modal.hide();
-            }
-          }
-        }
-      });
-    });
-*/
-
-
-   // Advanced workflow
-   // This form needs additional JS and CSS for the calendar widget.
-   // The AJAX form doesn't load it from the javascript_head_slot.
-    $('#workflow-transition-advanced > a').addClass('modal-trigger').patternModal({
-      width: '80%',
-      templateOptions: {
-        actionsOptions: {
-          displayInModal: false
-        }
-      }
-    });
 
     $('#manage-dashboard a').addClass('modal-trigger').patternModal({
       width: '80%',
