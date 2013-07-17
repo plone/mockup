@@ -32,7 +32,10 @@ define([
 ], function($, Base, Dropzone) {
   "use strict";
 
-  var DropZone = Base.extend({
+  /* we do not want this plugin to auto discover */
+  Dropzone.autoDiscover = false;
+
+  var DropzonePattern = Base.extend({
     name: "dropzone",
     defaults: {
       url: null, // XXX MUST provide url to submit to OR be in a form
@@ -102,6 +105,7 @@ define([
       }
 
       self.dropzone = new Dropzone($el[0], options);
+      self.$dropzone = $el;
 
       if(autoClean){
         self.dropzone.on('complete', function(file){
@@ -113,7 +117,7 @@ define([
     }
   });
 
-  return DropZone;
+  return DropzonePattern;
 
 });
 

@@ -148,7 +148,7 @@ define([
         if ($.nodeName($action[0], 'form')) {
           $form = $action;
         } else {
-          $form = $action.parents('form');
+          $form = $action.parents('form:not(.disableAutoSubmit)');
         }
 
         $form.ajaxSubmit({
