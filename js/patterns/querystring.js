@@ -125,11 +125,8 @@ define([
     createOperator: function(index, operator, value) {
       var self = this;
 
-      self.$index.attr('name', 'query.i:records');
-
       self.removeOperator();
-      self.$operator = $('<select/>')
-                          .attr('name', 'query.o:records');
+      self.$operator = $('<select/>');
 
       if (self.indexes[index]) {
         $.each(self.indexes[index].operators, function(value, options) {
@@ -176,7 +173,6 @@ define([
       if (widget === 'StringWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.klassValue + '-' + widget)
-                .attr('name', 'query.v:records')
                 .val(value)
                 .appendTo($wrapper)
                 .change(function(){
@@ -185,7 +181,6 @@ define([
 
       } else if (widget === 'DateWidget') {
         self.$value = $('<input type="text"/>')
-                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .patternPickadate({
@@ -199,7 +194,6 @@ define([
       } else if (widget === 'DateRangeWidget') {
         var startwrap = $('<span/>').appendTo($wrapper);
         var startdt = $('<input type="text"/>')
-                        .attr('name', 'query.v:records:list')
                         .addClass(self.options.klassValue + '-' + widget)
                         .addClass(self.options.klassValue + '-' + widget + '-start')
                         .appendTo(startwrap)
@@ -214,7 +208,6 @@ define([
         );
         var endwrap = $('<span/>').appendTo($wrapper);
         var enddt = $('<input type="text"/>')
-                        .attr('name', 'query.v:records:list')
                         .addClass(self.options.klassValue + '-' + widget)
                         .addClass(self.options.klassValue + '-' + widget + '-end')
                         .appendTo(endwrap)
@@ -229,7 +222,6 @@ define([
 
       } else if (widget === 'RelativeDateWidget') {
         self.$value = $('<input type="text"/>')
-                .attr('name', 'query.v:records')
                 .after($('<span/>').html(self.options.days))
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
@@ -239,7 +231,6 @@ define([
 
       } else if (widget === 'ReferenceWidget') {
         self.$value = $('<input type="text"/>')
-                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
@@ -248,7 +239,6 @@ define([
 
       } else if (widget === 'RelativePathWidget') {
         self.$value = $('<input type="text"/>')
-                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
@@ -257,7 +247,6 @@ define([
 
       } else if (widget === 'MultipleSelectionWidget') {
         self.$value = $('<select/>').attr('multiple', true)
-                .attr('name', 'query.v:records')
                 .addClass(self.options.klassValue + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
