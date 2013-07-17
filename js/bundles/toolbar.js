@@ -258,7 +258,7 @@ define([
         }
       }
     };
-    $('#plone-action-edit > a, #plone-contentmenu-factories a')
+    $('#plone-action-edit > a, #plone-contentmenu-factories ul a')
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(editOptions));
 
