@@ -1,6 +1,6 @@
 var tests = Object.keys(window.__karma__.files).filter(function (file) {
       console.log(file);
-      return /\-test\.js$/.test(file);
+      return (/\-test\.js$/).test(file);
 });
 
 requirejs.config({
