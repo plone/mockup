@@ -144,8 +144,7 @@ define([
                   // pass action that was clicked when submiting form
                   var extraData = {};
                   extraData[$action.attr('name')] = $action.attr('value');
-
-                  $action.parents('form').ajaxSubmit({
+                  $action.parents('form:not(.disableAutoSubmit)').ajaxSubmit({
                     timeout: options.timeout,
                     data: extraData,
                     url: $action.parents('form').attr('action'),

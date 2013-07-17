@@ -36,8 +36,9 @@ define([
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
   'tinymce',
-  'mockup-patterns-dropzone'
-], function($, Base, RelatedItems, Modal, tinymce, DropZone) {
+  'mockup-patterns-dropzone',
+  'dropzone'
+], function($, Base, RelatedItems, Modal, tinymce, DropZone, dropzone) {
   "use strict";
 
   /* register the tinymce plugin */
@@ -86,6 +87,103 @@ define([
       context: 'insert',
       prependToContext: true
     });
+  });
+
+
+  tinymce.PluginManager.add('ploneupload', function(editor) {
+    editor.addButton('ploneupload', {
+      icon: 'newdocument',
+      tooltip: 'Upload file',
+      onclick: editor.settings.uploadFileClicked,
+      stateSelector: 'img:not([data-mce-object])'
+    });
+
+    editor.addMenuItem('ploneupload', {
+      icon: 'newdocument',
+      text: 'Upload file',
+      onclick: editor.settings.uploadFileClicked,
+      context: 'insert',
+      prependToContext: true
+    });
+  });
+
+
+  var UploadModal = Base.extend({
+    name: 'uploadmodal',
+    defaults: {
+      text: {
+        uploadHeading: 'Upload file',
+        file: 'File',
+        uploadBtn: 'Upload',
+        uploadLocationWarning: 'If you do not select a folder to upload to, ' +
+                               "the file will be uploaded to the current folder."
+      }
+    },
+    init: function(){
+      var self = this;
+      self.modal = new Modal(self.$el, {
+        html: '<div>' +
+          '<div class="linkModal">' +
+            '<form method="POST" class="disableAutoSubmit" ' +
+                   'action="' + self.options.dropzone_url + '" ' +
+                   'enctype="multipart/form-data">' +
+              '<h1>' + self.options.text.uploadHeading + '</h1>' +
+              '<div class="">' +
+                "<input type='text' name='internal' class='pat-relateditems' data-pat-relateditems='" +
+                JSON.stringify(self.options.relatedItems) + "' />" +
+              '</div>' +
+              '<p>' + self.options.text.uploadLocationWarning + '</p>' +
+              '<div class="control-group">' +
+                '<label>' + self.options.text.file + '</label>' +
+                '<div class="controls">' +
+                  "<input type='file' name='file' />" +
+                '</div>' +
+              '</div>' +
+              '<input type="submit" class="btn btn-primary" name="upload" value="' +
+                self.options.text.uploadBtn +
+              '" />' +
+              '<iframe id="upload_target" name="upload_target" src="" ' +
+                       'style="width:0;height:0;border:0px solid #fff;"></iframe>' +
+            '</form>' +
+          '</div>' +
+        '</div>',
+        templateOptions: {
+          content: null,
+          buttons: '.btn'
+        }
+      });
+      self.modal.on('shown', function(e){
+        self.modalShown.apply(self, [e]);
+      });
+    },
+    show: function(){
+      this.modal.show();
+    },
+    hide: function(){
+      this.modal.hide();
+    },
+    modalShown: function(){
+      var self = this;
+      /* initialize elements so submit does the right thing.. */
+      self.$uploadBtn = $('input[type="submit"]', self.modal.$modal);
+      self.$form = $('form', self.modal.$modal);
+      self.$iframe = $('iframe', self.modal.$modal);
+      self.$form.on('submit', function(e){
+        /* handle file upload */
+        self.modal.$loading.show();
+        self.$iframe.on('load', function(){
+          self.modal.$loading.hide();
+          self.hide();
+        });
+        self.$form[0].target = 'upload_target';
+      });
+      self.$uploadBtn.on('click', function(e){
+        e.preventDefault();
+        self.$form.trigger('submit');
+      });
+    },
+    reinitialize: function(){
+    }
   });
 
 
@@ -676,14 +774,40 @@ define([
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
         plugins: [
-          "advlist autolink lists charmap print preview anchor",
-          "searchreplace visualblocks code fullscreen",
+          "advlist autolink lists charmap print preview anchor ploneupload",
+          "searchreplace visualblocks code fullscreen ",
           "insertdatetime media table contextmenu paste plonelink ploneimage"
         ],
         menubar: "edit table format tools view insert",
-        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage"
+        toolbar: "undo redo | styleselect | bold italic | " +
+                 "alignleft aligncenter alignright alignjustify | " +
+                 "bullist numlist outdent indent | " +
+                 "unlink plonelink ploneimage | ploneupload"
       },
       dropzone_url: null
+    },
+    uploadFileClicked: function(){
+      var self = this;
+      if(self.uploadModal === null){
+        var $el = $('<div/>').insertAfter(self.$el);
+        self.uploadModal = new UploadModal($el,
+          $.extend(true, {}, self.options, {
+            tinypattern: self,
+            relatedItems: {
+              baseCriteria: [{
+                i: 'Type',
+                o: 'plone.app.querystring.operation.list.contains',
+                v: self.options.folderTypes.split(',')
+              }],
+              placeholder: 'Select a folder to upload to...'
+            }
+          })
+        );
+        self.uploadModal.show();
+      } else {
+        self.uploadModal.reinitialize();
+        self.uploadModal.show();
+      }
     },
     addLinkClicked: function(){
       var self = this;
@@ -765,7 +889,7 @@ define([
     },
     init: function() {
       var self = this;
-      self.linkModal = self.imageModal = null;
+      self.linkModal = self.imageModal = self.uploadModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
       var id = self.$el.attr('id');
       if(id === undefined){
@@ -797,9 +921,30 @@ define([
           wrap: true,
           autoCleanResults: true
         });
+
+        tinyOptions.uploadFileClicked = function(){
+          self.uploadFileClicked.apply(self, []);
+        };
+      } else {
+        // disable upload button
+        tinyOptions.plugins[0] = tinyOptions.plugins[0].replace('ploneupload', '');
+        tinyOptions.toolbar = tinyOptions.toolbar.replace('ploneupload', '');
       }
 
       tinymce.init(tinyOptions);
+
+      if(self.options.dropzone_url){
+        /* XXX sort of working but drop is NOT firing! 
+         * disable until we can figure it out...
+        var iframe = self.$el.prev().find('.mce-edit-area iframe');
+        var win = $(window.frames[iframe.attr('id')]);
+        $.each(dropzone.prototype.events, function(index, ev){
+          win.on(ev, function(e){
+            self.dropzone.dropzone.emit(ev);
+          });
+        });
+        */
+      }
       self.tiny = tinymce.get(id);
     }
   });
