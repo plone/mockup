@@ -100,8 +100,17 @@ define([
     render: function() {
       var self = this;
       var tpl = $('#tpl_page').html();
-      self.$el.html(_.template(tpl, self.model.toJSON()));
-      registry.scan(self.$el);
+      var modelJSON = self.model.toJSON();
+      var builtreq = [];
+      if($.isArray(modelJSON.requiredPatterns) && modelJSON.requiredPatterns.length > 0) {
+        $.each(modelJSON.requiredPatterns, function(i, v) {
+          builtreq.push('mockup-patterns-'+v);
+        });
+      }
+      require(builtreq, function(MainRouter) {
+        self.$el.html(_.template(tpl, modelJSON));
+        registry.scan(self.$el);
+      });
       return this;
     }
   });
