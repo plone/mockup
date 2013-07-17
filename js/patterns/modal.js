@@ -148,7 +148,7 @@ define([
         if ($.nodeName($action[0], 'form')) {
           $form = $action;
         } else {
-          $form = $action.parents('form');
+          $form = $action.parents('form:not(.disableAutoSubmit)');
         }
 
         $form.ajaxSubmit({
@@ -171,12 +171,7 @@ define([
                 if (options.onFormError) {
                   options.onFormError(self, response, state, xhr, form);
                 } else {
-                  self.$modal.remove();
-                  self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                      .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-                  self.options.render.apply(self, [self.options.templateOptions]);
-                  self.positionModal();
-                  registry.scan(self.$modal);
+                  self.redraw(response);
                 }
 
               // custom success function
@@ -209,17 +204,10 @@ define([
             self.$loading.hide();
           },
           success: function(response, state, xhr) {
-            self.$modal.remove();
-            self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-                .replace('<body', '<div').replace('</body>', '</div>'))[0]);
-            self.options.render.apply(self, [self.options.templateOptions]);
-            self.positionModal();
-            registry.scan(self.$modal);
-
+            self.redraw(response);
             if (options.onSuccess) {
               options.onSuccess(self, response, state, xhr);
             }
-
             self.$loading.hide();
           }
         });
@@ -391,7 +379,9 @@ define([
       if (self.options.triggers) {
         $.each(self.options.triggers, function(i, item) {
           item = item.split(' ');
-          $(item[1] || self.$el).on(item[0], function() {
+          $(item[1] || self.$el).on(item[0], function(e) {
+            e.stopPropagation();
+            e.preventDefault();
             self.show();
           });
         });
@@ -649,6 +639,15 @@ define([
       }
       $(window.parent).off('resize.modal.patterns');
       self.trigger('hidden');
+    },
+    redraw: function(response) {
+      var self = this;
+      self.$modal.remove();
+      self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+          .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+      self.options.render.apply(self, [self.options.templateOptions]);
+      self.positionModal();
+      registry.scan(self.$modal);
     }
   });
 
