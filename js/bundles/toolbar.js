@@ -128,7 +128,22 @@ define([
         buttons: '#folderlisting-main-table > input.context,' +
                  '#folderlisting-main-table > input.standalone,' +
                  '.modal-body .formControls > input',
-      },
+        actionsOptions: {
+          onSuccess: function(modal, response, state, xhr, form){
+            // handle content_status_history differently than other buttons
+            var action = form.attr('action');
+            if(action && action.indexOf('content_status_history') !== -1){
+              // load back the folder contents
+              var $action = $('<a href="' +
+                action.replace('content_status_history', 'folder_contents') +
+                '"/>');
+              modal.options.handleLinkAction.apply(modal, [$action]);
+            } else {
+              modal.redraw(response);
+            }
+          }
+        }
+      }
     }).on('show.modal.patterns', function(e, modal) {
       // TODO: not sure exectly how to handle this for now we hide it
       $('#plone-document-byline', modal.$modal).hide();
