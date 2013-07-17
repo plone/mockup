@@ -191,11 +191,15 @@ define([
                 } else {
                   self.redraw(response);
                 }
+                return;
+              }
 
-              // custom success function
-              } else if (options.onSuccess) {
+              if (options.onSuccess) {
                 options.onSuccess(self, response, state, xhr, form);
+              }
 
+              if (options.displayInModal === true) {
+                self.redraw(response);
               } else {
                 $action.trigger('destroy.modal.patterns');
                 window.parent.location.reload();
