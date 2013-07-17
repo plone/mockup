@@ -178,19 +178,6 @@ define([
       var edit_form = $('form[action*="@@edit"]');
       edit_form.addClass('pat-formautofocus');
 
-      /* Modals
-      
-        TODO:
-        [x] Login
-        [x] Content history
-        [ ] Add new user
-        [ ] Add new group
-        [x] Register
-        [x] change default page (toolbar)
-        [x] Contact form
-      */
-
-
       /*** Login ***/
       var loginOptions = {
         templateOptions: {
@@ -231,19 +218,38 @@ define([
       $('#folderChangeDefaultPage').addClass('pat-modal');
 
       /*** Add user form ***/
-      var addUserOptions = {
-        ajaxUrl: $('form[name="users_add"]')[0].action,
-        triggers: ['click input[name="form.button.AddUser"]'],
-        templateOptions: {
-          buttons: 'input[name="form.actions.register"]',
-          content: '#content',
-          prependContent: '.portalMessage'
-        }
-      };
-      $('input[name="form.button.AddUser"]')
-        .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(addUserOptions));
+      var users_add = $('form[name="users_add"]');
+      if ( users_add.length > 0) {
+        var addUserOptions = {
+          ajaxUrl: users_add[0].action,
+          triggers: ['click input[name="form.button.AddUser"]'],
+          templateOptions: {
+            buttons: 'input[name="form.actions.register"]',
+            content: '#content',
+            prependContent: '.portalMessage'
+          }
+        };
+        $('input[name="form.button.AddUser"]')
+          .addClass('pat-modal')
+          .attr('data-pat-modal', JSON.stringify(addUserOptions));
+      }
 
+      /*** Add group form ***/
+      var groups_add = $('form[name="groups_add"]');
+      if ( groups_add.length > 0) {
+        var addGroupOptions = {
+          ajaxUrl: groups_add[0].action,
+          triggers: ['click input[name="form.button.AddGroup"]'],
+          templateOptions: {
+            buttons: 'input[name="form.button.Save"]',
+            content: '#content',
+            prependContent: '.portalMessage'
+          }
+        };
+        $('input[name="form.button.AddGroup"]')
+          .addClass('pat-modal')
+          .attr('data-pat-modal', JSON.stringify(addGroupOptions));
+      }
     },
     scan: function(selector) {
       registry.scan($(selector));

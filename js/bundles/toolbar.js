@@ -187,7 +187,47 @@ define([
       });
     });
 
-//    // Edit
+    var portletOptions = {
+      templateOptions: {
+        actions: {
+          // Handle the main portlets listing screen submit
+          '.section form': {
+            eventType: 'submit',
+            isForm: true
+          },
+          '.actionButtons input': {
+            // Handle errors on portlet submission
+            error: '.fieldErrorBox'
+          }
+        }
+      }
+    };
+    $('#toolbar-manage-portlets a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    .on('show.modal.patterns', function(evt, modal) {
+      // Kill the onchange method so we can wire up our own
+      $('.section select').removeAttr('onchange');
+      $('.section select').on('change', function(e) {
+          var portlet = $(this).val();
+          var form_action = $(this).parents('form').attr('action');
+          // Load the value of the selected portlet as a link
+          modal.options.handleLinkAction.apply(
+            modal,
+            [$('<a href="' + form_action + portlet + '">foo</a>'), {}]
+          );
+      });
+    });
+
+    // Edit
+    var editOptions = {
+      templateOptions: {
+        content: '#content-core'
+      }
+    };
+    $('#plone-action-edit > a')
+      .addClass('pat-modal')
+      .attr('data-pat-modal', JSON.stringify(editOptions));
+
+
 //    Modal.prepareModal('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
 //      Modal.createTemplate(modal.$modal, {
 //        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'

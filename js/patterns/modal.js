@@ -181,7 +181,7 @@ define([
 
               } else {
                 $action.trigger('destroy.modal.patterns');
-                location.reload();
+                window.parent.location.reload();
               }
               self.trigger('formActionSuccess', [response, state, xhr, form]);
             }
@@ -239,17 +239,17 @@ define([
           tpl_object.title = options.title;
         }
 
+        // Grab items to to insert into the prepend area
+        if (options.prependContent) {
+          tpl_object.prepend = $('<div />').append($(options.prependContent, $raw).clone()).html();
+          $(options.prependContent, $raw).remove();
+        }
+
         // Filter out the content if there is a selector provided
         if (options.content) {
           tpl_object.content = $(options.content, $raw).html();
         } else {
           tpl_object.content = $raw.html();
-        }
-
-        // Grab items to to insert into the prepend area
-        if (options.prependContent) {
-          tpl_object.prepend = $('<div />').append($(options.prependContent, $raw).clone()).html();
-          $(options.prependContent, $raw).remove();
         }
 
         // Render html
