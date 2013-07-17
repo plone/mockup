@@ -162,6 +162,12 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+        // We want to trigger the form submit event but NOT use the default
+        $form.off('submit').on('submit', function(e){
+          e.preventDefault();
+        });
+        $form.trigger('submit');
+
         $form.ajaxSubmit({
           timeout: options.timeout,
           data: extraData,
