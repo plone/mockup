@@ -234,7 +234,17 @@ define([
       });
     });
 
-//    // Edit
+    // Edit
+    var editOptions = {
+      templateOptions: {
+        content: '#content-core'
+      }
+    };
+    $('#plone-action-edit > a')
+      .addClass('pat-modal')
+      .attr('data-pat-modal', JSON.stringify(editOptions));
+
+
 //    Modal.prepareModal('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
 //      Modal.createTemplate(modal.$modal, {
 //        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
