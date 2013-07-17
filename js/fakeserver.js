@@ -264,7 +264,16 @@ require([
 '    </html>']);
 
   server.respondWith('POST', /upload/, function(xhr, id) {
-    xhr.respond(200);
+    xhr.respond(200, {"content-Type": "application/json"},
+      JSON.stringify({
+        url: 'http://localhost:8000/blah.png',
+        uid: 'sldlfkjsldkjlskdjf',
+        name: 'blah.png',
+        filename: 'blah.png',
+        type: 'Image',
+        size: 239292
+      })
+    );
   });
 
   server.respondWith('GET', /portal_factory\/@@querybuilder_html_results/, function(xhr, id) {

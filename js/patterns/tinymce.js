@@ -27,7 +27,7 @@
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   undef:true, strict:true, trailing:true, browser:true, evil:true */
 /*global define:false */
-/*global tinymce:true,console:true */
+/*global alert,console:true */
 
 
 define([
@@ -94,8 +94,7 @@ define([
     editor.addButton('ploneupload', {
       icon: 'newdocument',
       tooltip: 'Upload file',
-      onclick: editor.settings.uploadFileClicked,
-      stateSelector: 'img:not([data-mce-object])'
+      onclick: editor.settings.uploadFileClicked
     });
 
     editor.addMenuItem('ploneupload', {
@@ -121,15 +120,16 @@ define([
     },
     init: function(){
       var self = this;
+      self.tinypattern = self.options.tinypattern;
       self.modal = new Modal(self.$el, {
         html: '<div>' +
           '<div class="linkModal">' +
             '<form method="POST" class="disableAutoSubmit" ' +
-                   'action="' + self.options.dropzone_url + '" ' +
+                   'action="' + self.options.upload_url + '" ' +
                    'enctype="multipart/form-data">' +
               '<h1>' + self.options.text.uploadHeading + '</h1>' +
               '<div class="">' +
-                "<input type='text' name='internal' class='pat-relateditems' data-pat-relateditems='" +
+                "<input type='text' name='location' class='pat-relateditems' data-pat-relateditems='" +
                 JSON.stringify(self.options.relatedItems) + "' />" +
               '</div>' +
               '<p>' + self.options.text.uploadLocationWarning + '</p>' +
@@ -170,10 +170,21 @@ define([
       self.$iframe = $('iframe', self.modal.$modal);
       self.$form.on('submit', function(e){
         /* handle file upload */
+        var locationData = self.modal.$modal.find('[name="location"]').select2('data');
+        if(locationData.length > 0){
+          self.$form.attr('action',
+            locationData[0].getURL + '/' + self.options.rel_upload_path);
+        }
         self.modal.$loading.show();
         self.$iframe.on('load', function(){
+          var response = self.$iframe.contents();
           self.modal.$loading.hide();
           self.hide();
+          if (!response.length || !response[0].firstChild) {
+            self.tinypattern.fileUploadError();
+          }
+          response = $(response[0].body).text();
+          self.tinypattern.fileUploaded($.parseJSON(response));
         });
         self.$form[0].target = 'upload_target';
       });
@@ -218,88 +229,10 @@ define([
       self.initData();
       self.anchor_nodes = [];
       self.anchor_data = [];
+      self.$_modal = null;
 
       self.modal = new Modal(self.$el, {
-        html: '<div>' +
-          '<div class="linkModal">' +
-            '<h1>' + self.options.text.insertHeading + '</h1>' +
-            self.buildLinkTypeElement() +
-            '<hr style="clear:both" />' +
-            '<div class="internal linkType">' +
-              "<input type='text' name='internal' class='pat-relateditems' data-pat-relateditems='" +
-              JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
-            '</div>' +
-            '<div class="image linkType">' +
-              "<input type='text' name='image' class='pat-relateditems' data-pat-relateditems='" +
-              JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
-            '</div>' +
-            '<div class="control-group external linkType">' +
-              '<label>' + self.options.text.external + '</label>' +
-              '<div class="controls">' +
-                '<input type="text" name="external" value="' + self.external + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group email linkType">' +
-              '<label>' + self.options.text.email + '</label>' +
-              '<div class="controls">' +
-                '<input type="text" name="email" value="' + self.email + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group email linkType">' +
-              '<label>' + self.options.text.subject + '</label>' +
-              '<div class="controls">' +
-                '<input type="text" name="subject" value="' + self.subject + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group anchor linkType">' +
-              '<label>Select an anchor</label>' +
-              '<div class="controls">' +
-                '<select name="anchor" class="pat-select2" data-pat-select2="width:500px" value="' + self.anchor + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group linkType anchor email external internal">' +
-              '<div class="controls">' +
-                self.buildTargetElement() +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group linkType anchor email external internal">' +
-              '<label>' + self.options.text.title + '</label>' +
-              '<div class="controls">' +
-                '<input type="text" name="title" value="' + self.title + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group linkType externalImage">' +
-              '<label>' + self.options.text.externalImage + '</label>' +
-              '<div class="controls">' +
-                '<input type="text" name="externalImage" value="' + self.externalImage + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group linkType image externalImage">' +
-              '<label>' + self.options.text.alt + '</label>' +
-              '<div class="controls">' +
-                '<input type="text" name="alt" value="' + self.alt + '" />' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group linkType image externalImage">' +
-              '<label>' + self.options.text.imageAlign + '</label>' +
-              '<div class="controls">' +
-                '<select name="align">' +
-                  '<option value="inline">Inline</option>' +
-                  '<option value="right">Right</option>' +
-                  '<option value="left">Left</option>' +
-                '</select>' +
-              '</div>' +
-            '</div>' +
-            '<div class="control-group linkType image">' +
-              '<label>' + self.options.text.scale + '</label>' +
-              '<div class="controls">' +
-                self.buildScalesElement() +
-              '</div>' +
-            '</div>' +
-            '<input type="submit" class="btn" name="cancel" value="' + self.options.text.cancelBtn + '" />' +
-            '<input type="submit" class="btn btn-primary" name="insert" value="' + self.options.text.insertBtn + '" />' +
-          '</div>' +
-        '</div>',
+        html: self.generateModalHtml(),
         templateOptions: {
           content: null,
           buttons: '.btn'
@@ -309,6 +242,87 @@ define([
         self.modalShown.apply(self, [e]);
       });
       self.initElements();
+    },
+    generateModalHtml: function(){
+      var self = this;
+      return '<div>' +
+        '<div class="linkModal">' +
+          '<h1>' + self.options.text.insertHeading + '</h1>' +
+          self.buildLinkTypeElement() +
+          '<hr style="clear:both" />' +
+          '<div class="internal linkType">' +
+            "<input type='text' name='internal' class='pat-relateditems' data-pat-relateditems='" +
+            JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
+          '</div>' +
+          '<div class="image linkType">' +
+            "<input type='text' name='image' class='pat-relateditems' data-pat-relateditems='" +
+            JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
+          '</div>' +
+          '<div class="control-group external linkType">' +
+            '<label>' + self.options.text.external + '</label>' +
+            '<div class="controls">' +
+              '<input type="text" name="external" value="' + self.external + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group email linkType">' +
+            '<label>' + self.options.text.email + '</label>' +
+            '<div class="controls">' +
+              '<input type="text" name="email" value="' + self.email + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group email linkType">' +
+            '<label>' + self.options.text.subject + '</label>' +
+            '<div class="controls">' +
+              '<input type="text" name="subject" value="' + self.subject + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group anchor linkType">' +
+            '<label>Select an anchor</label>' +
+            '<div class="controls">' +
+              '<select name="anchor" class="pat-select2" data-pat-select2="width:500px" ' +
+              '        value="' + self.anchor + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group linkType anchor email external internal">' +
+            '<div class="controls">' +
+              self.buildTargetElement() +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group linkType anchor email external internal">' +
+            '<label>' + self.options.text.title + '</label>' +
+            '<div class="controls">' +
+              '<input type="text" name="title" value="' + self.title + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group linkType externalImage">' +
+            '<label>' + self.options.text.externalImage + '</label>' +
+            '<div class="controls">' +
+              '<input type="text" name="externalImage" ' +
+              '       value="' + self.externalImage + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group linkType image externalImage">' +
+            '<label>' + self.options.text.alt + '</label>' +
+            '<div class="controls">' +
+              '<input type="text" name="alt" value="' + self.alt + '" />' +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group linkType image externalImage">' +
+            '<label>' + self.options.text.imageAlign + '</label>' +
+            '<div class="controls">' +
+              self.buildAlignElement() +
+            '</div>' +
+          '</div>' +
+          '<div class="control-group linkType image">' +
+            '<label>' + self.options.text.scale + '</label>' +
+            '<div class="controls">' +
+              self.buildScalesElement() +
+            '</div>' +
+          '</div>' +
+          '<input type="submit" class="btn" name="cancel" value="' + self.options.text.cancelBtn + '" />' +
+          '<input type="submit" class="btn btn-primary" name="insert" value="' + self.options.text.insertBtn + '" />' +
+        '</div>' +
+      '</div>';
     },
     isImageMode: function(){
       return ['image', 'externalImage'].indexOf(this.linkType) !== -1;
@@ -507,13 +521,16 @@ define([
     },
     setupDropzone: function(){
       var self = this;
-      if(self.options.dropzone_url){
+      if(self.options.upload_url){
         self.dropzone = new DropZone(self.modal.$modal, {
           klass: 'tinymce-dropzone',
           clickable: false,
-          url: self.options.dropzone_url,
+          url: self.options.upload_url,
           wrap: 'inner',
-          autoCleanResults: true
+          autoCleanResults: true,
+          success: function(e, data){
+            self.tinypattern.fileUploaded($.parseJSON(data));
+          }
         });
       }
     },
@@ -657,13 +674,33 @@ define([
         }
       }
     },
+    buildAlignElement: function(){
+      var self = this;
+      var aligns = ['inline', 'right', 'left'];
+      var html = '<select name="align">';
+      for(var i=0; i<aligns.length; i=i+1){
+        var align = aligns[i];
+        html += '<option value="' + align + '" ';
+        if(align === self.align){
+          html += 'selected="selected"';
+        }
+        html += '>' + align.charAt(0).toUpperCase() + align.slice(1) +
+                '</option>';
+      }
+      html += '</select>';
+      return html;
+    },
     buildScalesElement: function(){
       var self = this;
       var html = '<select name="scale"><option value="">Original</option>';
       var scales = self.options.scales.split(',');
       for(var i=0; i<scales.length; i=i+1){
         var scale = scales[i].split(':');
-        html += '<option value="' + scale[1] + '">' + scale[0] + '</option>';
+        html += '<option value="' + scale[1] + '" ';
+        if(scale[1] === self.scale){
+          html += 'selected="selected" ';
+        }
+        html += '>' + scale[0] + '</option>';
       }
       html += '</select>';
       return html;
@@ -684,7 +721,11 @@ define([
       var html = '<select name="target">';
       for(var i=0; i<self.options.targetList.length; i=i+1){
         var target = self.options.targetList[i];
-        html += '<option value="' + target.value + '">' + target.text + '</option>';
+        html += '<option value="' + target.value + '" ';
+        if(target.value === self.target){
+          html += 'selected="selected"';
+        }
+        html += '>' + target.text + '</option>';
       }
       html += '</select>';
       return html;
@@ -700,34 +741,11 @@ define([
       /*
        * This will probably be called before show is run.
        * It will overwrite the base html template given to
-       * be abel to privde default values for the overlay
+       * be able to privde default values for the overlay
        */
       var self = this;
-      self.linkType = self.$linkTypes.find('input:first').val(); // reset this since we won't know...
-      self.initElements();
       self.initData();
-      var relatedEl = self.$internal;
-      if(self.linkType === 'image'){
-        relatedEl = self.$image;
-      }
-      if(self.uid){
-        relatedEl.attr('value', self.uid);
-      }else{
-        relatedEl.attr('value', '');
-      }
-      self.$title.attr('value', self.title);
-      self.$external.attr('value', self.external);
-      self.$email.attr('value', self.email);
-      self.$subject.attr('value', self.subject);
-      self.$external.attr('value', self.external);
-      self.$alt.attr('value', self.alt);
-      self.$externalImage.attr('value', self.externalImage);
-
-      // unselect existing
-      self.setSelectElement(self.$target, self.target);
-      self.setSelectElement(self.$anchor, self.anchor);
-      self.setSelectElement(self.$scale, self.scale);
-      self.setSelectElement(self.$align, self.align);
+      self.modal.options.html = self.generateModalHtml();
     }
   });
 
@@ -784,7 +802,8 @@ define([
                  "bullist numlist outdent indent | " +
                  "unlink plonelink ploneimage | ploneupload"
       },
-      dropzone_url: null
+      rel_upload_path: null,
+      folder_url: null
     },
     uploadFileClicked: function(){
       var self = this;
@@ -887,6 +906,41 @@ define([
         self.imageModal.show();
       }
     },
+    fileUploaded: function(data){
+      var self = this;
+      if(data === null){
+        return; // bail, something is wrong here...
+      }
+      var filename = data.filename;
+      var ext = filename.split('.');
+      ext = ext[ext.length-1].toLowerCase();
+      if(['png', 'jpg', 'gif', 'jpeg'].indexOf(ext) === -1){
+        /* bail out of here for regular files */
+        return;
+      }
+      var attr = {
+        src: 'resolveuid/' + data.uid + '/@@images/image/preview',
+        class: 'image-inline'
+      };
+      function waitLoad(imgElm) {
+        imgElm.onload = imgElm.onerror = function() {
+          imgElm.onload = imgElm.onerror = null;
+          self.tiny.selection.select(imgElm);
+          self.tiny.nodeChanged();
+        };
+      }
+
+      attr.id = '__mcenew';
+      self.tiny.insertContent(self.tiny.dom.createHTML('img', attr));
+      var imgElm = self.tiny.dom.get('__mcenew');
+      self.tiny.dom.setAttrib(imgElm, 'id', null);
+    },
+    fileUploadError: function(){
+      /* XXX need to be able to handle errors better? */
+      alert('There was an error attempting to upload file. ' +
+            'It is possible the file you are uploading is not allowed ' +
+            'in the folder you are trying to add it to.');
+    },
     init: function() {
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
@@ -913,13 +967,28 @@ define([
       // include in widgets.min.css
       tinyOptions.skin = false;
 
-      if(self.options.dropzone_url){
+      if(!self.options.base_url){
+        self.options.base_url = window.location.href;
+      }
+      if(self.options.rel_upload_path){
+        self.options.upload_url = self.options.folder_url + '/' + self.options.rel_upload_path;
+      } else {
+        self.options.upload_url = null;
+      }
+
+      if(self.options.upload_url){
         self.dropzone = new DropZone(self.$el, {
           klass: 'tinymce-dropzone',
           clickable: false,
-          url: self.options.dropzone_url,
+          url: self.options.upload_url,
           wrap: true,
-          autoCleanResults: true
+          autoCleanResults: true,
+          success: function(e, data){
+            self.fileUploaded($.parseJSON(data));
+          },
+          error: function(){
+            self.fileUploadError();
+          }
         });
 
         tinyOptions.uploadFileClicked = function(){
@@ -933,18 +1002,18 @@ define([
 
       tinymce.init(tinyOptions);
 
-      if(self.options.dropzone_url){
-        /* XXX sort of working but drop is NOT firing! 
-         * disable until we can figure it out...
-        var iframe = self.$el.prev().find('.mce-edit-area iframe');
+      /*XXX sort of working but drop is NOT firing! 
+       * disable until we can figure it out...
+      if(self.options.upload_url){
+       var iframe = self.$el.prev().find('.mce-edit-area iframe');
         var win = $(window.frames[iframe.attr('id')]);
         $.each(dropzone.prototype.events, function(index, ev){
           win.on(ev, function(e){
             self.dropzone.dropzone.emit(ev);
           });
         });
-        */
       }
+      */
       self.tiny = tinymce.get(id);
     }
   });

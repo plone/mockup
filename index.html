@@ -1571,8 +1571,10 @@ make bootstrap</pre>
           + '  ],\n'
           + '  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'dropzone_url', type: 'String', 'default': 'null',
-         description: 'To provide drag and drop support for tinymc'}
+        {attribute: 'rel_upload_url', type: 'String', 'default': 'null',
+         description: 'To provide upload support.'},
+        {attribute: 'folder_url', type: 'String', 'default': 'null',
+         description: 'Base url to provide upload url off of.'}
       ]
     });
   </script>
@@ -1590,9 +1592,11 @@ make bootstrap</pre>
   <script type="text/example" class="example-tinymce" data-title="With Dropzone">
     <form>
       <textarea class="pat-tinymce"
-        data-pat-tinymce='{"relatedItems":
-                            { "ajaxvocabulary": "/relateditems-test.json"},
-                           "dropzone_url": "/upload"}'
+        data-pat-tinymce='{"relatedItems": {
+                             "ajaxvocabulary": "/relateditems-test.json"
+                           },
+                           "rel_upload_path": "upload",
+                           "folder_url": "http://localhost:8000/"}'
         ></textarea>
     </form>
   </script>

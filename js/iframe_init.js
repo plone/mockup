@@ -105,6 +105,7 @@ window.IFrame.prototype = {
     self.updateOption(el, 'position', 'top');
     self.updateOption(el, 'resources', '');
     self.updateOption(el, 'styles', '');
+    self.updateOption(el, 'zindex', '500');
 
   },
   updateOption: function(el, name, _default) {
@@ -234,8 +235,8 @@ window.IFrame.prototype = {
 
     self.el.setAttribute('style', 'border:0;overflow:hidden;' +
         'position:absolute;left:0px;position:fixed;overflow:hidden;' +
-        'width:100%;background-color:transparent;z-index:500;' +
-        self.options.style);
+        'width:100%;background-color:transparent;z-index:'+
+        self.options.zindex + ';' +self.options.style);
 
     self.el.setAttribute('style', self.el.getAttribute('style') +
         'height:' + self.document.body.offsetHeight + 'px;');

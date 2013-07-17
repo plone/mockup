@@ -43,7 +43,8 @@ define([
   'mockup-patterns-picture',
   'mockup-patterns-querystring',
   'mockup-patterns-preventdoublesubmit',
-  'mockup-patterns-formautofocus'
+  'mockup-patterns-formautofocus',
+  'mockup-patterns-livesearch'
 ], function($, registry) {
   "use strict";
 
@@ -105,7 +106,7 @@ define([
       filter_results.attr({
         'data-pat-toggle': 'target: form[name=searchform] dl.actionMenu;value: activated'
       });
-      
+
       $('dl.actionMenu').removeClass('deactivated');
 
       $('html').on('mousedown', function(e) {
@@ -115,38 +116,22 @@ define([
         }
       });
 
-      /* 
-      Commenting out Livesearch for now
-      
-      $match = $root.find('.LSBox');
-      var url = $match.parents('form').attr('action').replace('@@search',
-          '@@getVocabulary?name=plone.app.vocabularies.Catalog');
-      var attrs = {
-        'ajaxvocabulary': url
-      };
-      $match.attr({
-        'class': 'pat-livesearch',
-        'data-pat-livesearch': JSON.stringify(attrs)
-      });
-      $match.find('.searchSection').remove();
-      $match.find('.LSResult').attr({
-        'class': 'pat-livesearch-container pull-right',
-        'id': ''
-      });
-      $match.find('.LSShadow').attr('class', 'pat-livesearch-results');
-      $match.find('#searchGadget').addClass('pat-livesearch-input')
-        .attr('autocomplete', 'off');
-      $match.find('.searchButton').hide();
-
-      */
-
       // add tinymce pattern
-      $root.find('.mce_editable').addClass('pat-tinymce').attr({
-        'data-pat-tinymce': JSON.stringify({
-          relatedItems: {
-            ajaxvocabulary: portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
-          }
-        })
+      $root.find('.mce_editable').addClass('pat-tinymce').each(function(){
+        var $tiny = $(this);
+        var config = $.parseJSON($tiny.attr('data-mce-config'));
+        $tiny.attr({
+          'data-pat-tinymce': JSON.stringify({
+            relatedItems: {
+              ajaxvocabulary: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+            },
+            rel_upload_path: '@@fileUpload',
+            folder_url: config.document_base_url,
+            tiny: {
+              content_css: config.portal_url + '/base.css'
+            }
+          })
+        });
       });
 
       // Use toggle to replace the toggleSelect from the select_all.js
@@ -193,18 +178,6 @@ define([
       var edit_form = $('form[action*="@@edit"]');
       edit_form.addClass('pat-formautofocus');
 
-      /* Modals
-      
-        TODO:
-        [x] Login
-        [x] Content history (toolbar)
-        [ ] Add new user/group
-        [x] Register
-        [x] change default page (toolbar)
-        [x] Contact form
-      */
-
-
       /*** Login ***/
       var loginOptions = {
         templateOptions: {
@@ -221,21 +194,62 @@ define([
       $('#siteaction-contact > a').addClass('pat-modal');
 
       /*** Register form ***/
-      $('#personaltools-join').addClass('pat-modal');
-
-      /*** Add user form ***/
-      var addUserOptions = {
-        ajaxUrl: $('form[name="users_add"]')[0].action,
-        triggers: ['click input[name="form.button.AddUser"]'],
+      var registerOptions = {
         templateOptions: {
-          buttons: 'input[name="form.actions.register"]',
-          content: '#content',
-          prependContent: '.portalMessage'
+          buttons: '.actionButtons > input[type="submit"]'
         }
       };
-      $('input[name="form.button.AddUser"]')
+      $('#personaltools-join')
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(addUserOptions));
+        .attr('data-pat-modal', JSON.stringify(registerOptions));
+
+      /*** Content History ***/
+      var contentHistoryOptions = {
+        templateOptions: {
+          titleSelector: 'h2:first',
+          content: '#content-core'
+        }
+      };
+      $('#content-history > a')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
+
+      /*** Default Page ***/
+      $('#folderChangeDefaultPage').addClass('pat-modal');
+
+      /*** Add user form ***/
+      var users_add = $('form[name="users_add"]');
+      if ( users_add.length > 0) {
+        var addUserOptions = {
+          ajaxUrl: users_add[0].action,
+          triggers: ['click input[name="form.button.AddUser"]'],
+          templateOptions: {
+            buttons: 'input[name="form.actions.register"]',
+            content: '#content',
+            prependContent: '.portalMessage'
+          }
+        };
+        $('input[name="form.button.AddUser"]')
+          .addClass('pat-modal')
+          .attr('data-pat-modal', JSON.stringify(addUserOptions));
+      }
+
+      /*** Add group form ***/
+      var groups_add = $('form[name="groups_add"]');
+      if ( groups_add.length > 0) {
+        var addGroupOptions = {
+          ajaxUrl: groups_add[0].action,
+          triggers: ['click input[name="form.button.AddGroup"]'],
+          templateOptions: {
+            buttons: 'input[name="form.button.Save"]',
+            content: '#content',
+            prependContent: '.portalMessage'
+          }
+        };
+        $('input[name="form.button.AddGroup"]')
+          .addClass('pat-modal')
+          .attr('data-pat-modal', JSON.stringify(addGroupOptions));
+      }
     },
     scan: function(selector) {
       registry.scan($(selector));

@@ -121,35 +121,36 @@ define([
 
     // Modals {{{
 
-    // Contents
-    function refreshModal(modal, responseBody, state, xhr, form) {
-      modal.$modal.html(responseBody.html());
-      modalInit(modal, modalInit, modalOptions);
-      modal.positionModal();
-      registry.scan(modal.$modal);
-    }
+    // Contents {{{
     $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
       width: '80%',
       templateOptions: {
-        buttons: '#folderlisting-main-table > input.context,#folderlisting-main-table > input.standalone,.modal-body .formControls > input',
-        actions: {
-          '.modal-body a#foldercontents-show-batched': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-show-all': { onSuccess: refreshModal },
-          '.modal-body .pagination a': { onSuccess: refreshModal },
-          '.modal-body #folderlisting-main-table > input.standalone': { onSuccess: refreshModal },
-          '.modal-body #folderlisting-main-table > input.context': { onSuccess: refreshModal },
-          '.modal-body .formControls > input.standalone': { onSuccess: refreshModal },
-          '.modal-body .formControls > input.context': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-selectall-completebatch': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-selectall': { onSuccess: refreshModal },
-          '.modal-body a#foldercontents-clearselection': { onSuccess: refreshModal },
-          '.modal-body #folderlisting-main-table td:not(.draggable) > a.contenttype-folder': { onSuccess: refreshModal },
-          '.modal-body .link-parent': { onSuccess: refreshModal },
-          '.modal-body td.draggable > a': { onSuccess: refreshModal }
+        buttons: '#folderlisting-main-table > input.context,' +
+                 '#folderlisting-main-table > input.standalone,' +
+                 '.modal-body .formControls > input',
+        actionsOptions: {
+          onSuccess: function(modal, response, state, xhr, form){
+            // handle content_status_history differently than other buttons
+            var action = form.attr('action');
+            if(action && action.indexOf('content_status_history') !== -1){
+              // load back the folder contents
+              var $action = $('<a href="' +
+                action.replace('content_status_history', 'folder_contents') +
+                '"/>');
+              modal.options.handleLinkAction.apply(modal, [$action]);
+            } else {
+              // XXX hack the rename form action url
+              var current = modal.$modal.find('form').attr('action');
+              response = response.replace('action="folder_rename_form',
+                                          'action="' + current + '/folder_rename_form');
+              modal.redraw(response);
+            }
+          }
         }
-      },
+      }
     }).on('show.modal.patterns', function(e, modal) {
-      $('#plone-document-byline', modal.$modal).hide();  // TODO: not sure exectly how to handle this for now we hide it
+      // TODO: not sure exectly how to handle this for now we hide it
+      $('#plone-document-byline', modal.$modal).hide();
       $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
       $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
         var $el = $(this),
@@ -183,12 +184,16 @@ define([
         }
         $el.hide().before($('<div class="pagination pagination-centered"/>').append($pagination));
       });
-      $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not(.contenttype-folder)', modal.$modal).css({
+    }).on('shown.modal.patterns linkActionSuccess.modal.patterns', function(e, modal){
+      $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not([href$="folder_contents"])', modal.$modal).css({
         color: '#333333'
-      }).on('click', function(e) {
+      }).off('click').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         window.parent.location.href = $(this).attr('href');
       });
     });
+    // }}}
 
     // site setup
     $('#plone-personal-actions-plone_setup a').on('show.modal.patterns', function(evt, modal) {
@@ -203,7 +208,47 @@ define([
       });
     });
 
-//    // Edit
+    var portletOptions = {
+      templateOptions: {
+        actions: {
+          // Handle the main portlets listing screen submit
+          '.section form': {
+            eventType: 'submit',
+            isForm: true
+          },
+          '.actionButtons input': {
+            // Handle errors on portlet submission
+            error: '.fieldErrorBox'
+          }
+        }
+      }
+    };
+    $('#toolbar-manage-portlets a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    .on('show.modal.patterns', function(evt, modal) {
+      // Kill the onchange method so we can wire up our own
+      $('.section select').removeAttr('onchange');
+      $('.section select').on('change', function(e) {
+          var portlet = $(this).val();
+          var form_action = $(this).parents('form').attr('action');
+          // Load the value of the selected portlet as a link
+          modal.options.handleLinkAction.apply(
+            modal,
+            [$('<a href="' + form_action + portlet + '">foo</a>'), {}]
+          );
+      });
+    });
+
+    // Edit
+    var editOptions = {
+      templateOptions: {
+        content: '#content-core'
+      }
+    };
+    $('#plone-action-edit > a')
+      .addClass('pat-modal')
+      .attr('data-pat-modal', JSON.stringify(editOptions));
+
+
 //    Modal.prepareModal('#plone-action-edit > a', function(modal, modalInit, modalOptions) {
 //      Modal.createTemplate(modal.$modal, {
 //        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
@@ -276,21 +321,21 @@ define([
 //    });
 //
 //    // Delete Action
-//    Modal.prepareModal('#plone-contentmenu-actions-delete > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Cancel"],input.destructive'
-//      });
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input.destructive': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href');
-//            }
-//          }
-//        }
-//      });
-//    });
+    function processDelete(modal, responseBody, state, xhr, form) {
+        console.log('Deleted!');
+    }
+    var delete_action = $('#plone-contentmenu-actions-delete > a');
+    var delete_options = {
+        templateOptions: {
+            actions: {
+              '.modal-footer input.destructive': { onSuccess: processDelete },
+            },
+            content: '#content',
+            prependContent: '.portalMessage'
+        }
+    };
+    delete_action.addClass('pat-modal');
+    delete_action.attr('data-pat-modal', JSON.stringify(delete_options));
 //
 //    // Rename Action
     $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');

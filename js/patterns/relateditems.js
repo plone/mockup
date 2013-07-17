@@ -245,7 +245,6 @@ define([
 
         return $(result);
       };
-
       self.options.initSelection = function(element, callback) {
         var data = [];
         var value = $(element).val();
