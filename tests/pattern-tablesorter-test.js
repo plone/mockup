@@ -24,7 +24,7 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
+/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
   newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
   regexp:true, undef:true, strict:true, trailing:true, browser:true */
 /*global buster:false, define:false, describe:false, it:false, expect:false,
@@ -88,7 +88,7 @@ define([
 
       var should_be = ["CCC", "BBB", "AAA"];
       var elem;
-      for (var i=0;i<should_be.length;i++){
+      for (var i=0;i<should_be.length;i+=1){
         // We are checking first td of each tr of tbody, just to see the
         // order
         elem = this.$el.find('tbody tr td').eq(i*3);
@@ -110,7 +110,7 @@ define([
 
       var should_be = ["BBB", "CCC", "AAA"];
       var elem;
-      for (var i=0;i<should_be.length;i++){
+      for (var i=0;i<should_be.length;i+=1){
         // We are checking first td of each tr of tbody, just to see the
         // order
         elem = this.$el.find('tbody tr td').eq(i*3);
@@ -137,7 +137,7 @@ define([
 
       var should_be = ["AAA", "BBB", "CCC"];
       var elem;
-      for (var i=0;i<should_be.length;i++){
+      for (var i=0;i<should_be.length;i+=1){
         // We are checking first td of each tr of tbody, just to see the
         // order
         elem = this.$el.find('tbody tr td').eq(i*3);

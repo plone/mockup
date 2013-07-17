@@ -121,7 +121,7 @@ define([
 
     // Modals {{{
 
-    // Contents {{{
+    // Contents
     $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
       width: '80%',
       templateOptions: {
@@ -196,7 +196,6 @@ define([
         window.parent.location.href = $(this).attr('href');
       });
     });
-    // }}}
 
     // site setup
     $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
@@ -215,35 +214,46 @@ define([
       });
     });
 
+    // Manage portlets
     var portletOptions = {
       templateOptions: {
-        actions: {
-          // Handle the main portlets listing screen submit
-          '.section form': {
-            eventType: 'submit',
-            isForm: true
-          },
-          '.actionButtons input': {
-            // Handle errors on portlet submission
-            error: '.fieldErrorBox'
-          }
-        }
+        buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
+        automaticallyAddButtonActions: false,
       }
     };
     $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('show.modal.patterns', function(evt, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select').removeAttr('onchange');
-      $('.section select').on('change', function(e) {
-          var portlet = $(this).val();
-          var form_action = $(this).parents('form').attr('action');
-          // Load the value of the selected portlet as a link
-          modal.options.handleLinkAction.apply(
-            modal,
-            [$('<a href="' + form_action + portlet + '">foo</a>'), {}]
-          );
-      });
-    });
+    })
+    .on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actions = {
+          // Handle adding portlets via the select
+          '.section select': {
+            eventType: 'change',
+            ajaxUrl: function($action, options) {
+              var portlet = $action.val();
+              var form_action = $action.parents('form').attr('action');
+              return form_action + portlet;
+            }
+          },
+          '.actionButtons input': {
+            // Handle errors on portlet submission
+            error: '.fieldErrorBox',
+            onSuccess: function(modal, response, state, xhr, form) {
+              modal.reloadWindow();
+            }
+          },
+          // Handle moving and hiding portlets
+          '.portlet-action': {
+            isForm: true
+          }
+        };
+    })
+    .on('hidden.modal.patterns', function(e, modal) {
+        modal.reloadWindow();
+      }
+    );
 
     // Edit/Add
     var editOptions = {
@@ -265,7 +275,6 @@ define([
     $('#plone-action-edit > a, #plone-contentmenu-factories ul li:not(#plone-contentmenu-settings) a')
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(editOptions));
-
 
     // Content Rules
     var rulesOptions = {
@@ -290,8 +299,6 @@ define([
         };
       });
 
-
-
     /***  Sharing  ***/
     $('#plone-action-local_roles > a').addClass('modal-trigger').patternModal({
       width: '80%',
@@ -315,36 +322,6 @@ define([
       };
     });
 
-
-//
-//    // Rules form
-//    Modal.prepareModal('#plone-action-contentrules > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.AddAssignment"],' +
-//                 'input[name="form.button.Enable"],' +
-//                 'input[name="form.button.Disable"],' +
-//                 'input[name="form.button.Bubble"],' +
-//                 'input[name="form.button.NoBubble"],' +
-//                 'input[name="form.button.Delete"]'
-//      });
-//      $('.modal-body #content-core > p:first > a', modal.$modal).on('click', function(e) {
-//        window.parent.location.href = $(this).attr('href');
-//      });
-//      Modal.createTemplate(modal, modalInit, modalOptions, {
-//        buttons: {
-//          'input[name="form.button.AddAssignment"],input[name="form.button.Enable"],input[name="form.button.Disable"],input[name="form.button.Bubble"],input[name="form.button.NoBubble"],input[name="form.button.Delete"]': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              modal.$modal.html(responseBody.html());
-//              modalInit(modal, modalInit, modalOptions);
-//              modal.positionModal();
-//              registry.scan(modal.$modal);
-//            }
-//          }
-//        }
-//      });
-//    });
-//
-//    // Delete Action
     function processDelete(modal, responseBody, state, xhr, form) {
         modal.redraw(responseBody);
         modal.$el.on('hidden.modal.patterns', function(e) {
@@ -358,49 +335,7 @@ define([
     delete_action.on('render.modal.patterns', function(e, modal) {
       modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
     });
-//
-//    // Rename Action
-    $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
-//
-//    // Change content item as default view...
-    $('#contextSetDefaultPage > a, #folderChangeDefaultPage > a').addClass('pat-modal');
-//
-//    // Add forms
-//    Modal.prepareModal('#plone-contentmenu-factories > ul > li > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.buttons.save"],input[name="form.buttons.cancel"],input[name="form.button.save"],input[name="form.button.cancel"]'
-//      });
-//      $('span.label', modal.$modal).removeClass('label');
-//      $('.mce_editable', modal.$modal).addClass('pat-plone-tinymce');
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.buttons.cancel"],.modal-body input[name="form.button.cancel"]': {},
-//          '.modal-body input[name="form.buttons.save"],.modal-body input[name="form.button.save"]': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              $('#portal-column-content', window.parent.document).html(
-//                  $('#portal-column-content', responseBody).html());
-//              window.parent.location.href = $($(xhr.responseText).filter('base')[0]).attr('href');
-//            }
-//          }
-//        }
-//      });
-//    }, { width: '80%' });
 
-
-//    // personal preferences
-    var prefs = $('#plone-personal-actions-preferences > a');
-    var prefsOptions = {
-      templateOptions: {
-        buttons: 'input[type="submit"]'
-      }
-    };
-    prefs.addClass('pat-modal');
-    prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
-//    // Content history
-    $('#plone-action-content-history > a').addClass('pat-modal');
-//
-//    // }}}
-//
   });
 
   return {

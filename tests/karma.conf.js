@@ -1,3 +1,9 @@
+/* global basePath, files, MOCHA, MOCHA_ADAPTER, REQUIRE, REQUIRE_ADAPTER,
+ *   preprocessors, exclude, reporters, coverageReporter, port, runnerPort,
+ *   colors, logLevel, LOG_INFO, autoWatch, browsers, captureTimeout,
+ *   singleRun
+ *   */
+
 // Karma configuration
 
 // base path, that will be used to resolve files and exclude
@@ -38,7 +44,7 @@ reporters = ['progress', 'coverage'];
 coverageReporter = {
   type : 'html',
   dir : 'coverage/'
-}
+};
 
 // web server port
 port = 8080;

@@ -24,6 +24,7 @@
 //          this page.
 //
 
+/*jshint laxcomma:true */
 
 (function(window, document, undefined) {
 "use strict";
@@ -46,25 +47,25 @@ var domready = function (ready) {
     , onreadystatechange = 'onreadystatechange'
     , readyState = 'readyState'
     , loadedRgx = hack ? /^loaded|^c/ : /^loaded|c/
-    , loaded = loadedRgx.test(doc[readyState])
+    , loaded = loadedRgx.test(doc[readyState]);
 
   function flush(f) {
-    loaded = 1
-    while (f = fns.shift()) f()
+    loaded = 1;
+    while (f = fns.shift()) f();
   }
 
   doc[addEventListener] && doc[addEventListener](domContentLoaded, fn = function () {
-    doc.removeEventListener(domContentLoaded, fn, f)
-    flush()
-  }, f)
+    doc.removeEventListener(domContentLoaded, fn, f);
+    flush();
+  }, f);
 
 
   hack && doc.attachEvent(onreadystatechange, fn = function () {
     if (/^c/.test(doc[readyState])) {
-      doc.detachEvent(onreadystatechange, fn)
-      flush()
+      doc.detachEvent(onreadystatechange, fn);
+      flush();
     }
-  })
+  });
 
   return (ready = hack ?
     function (fn) {
@@ -72,16 +73,16 @@ var domready = function (ready) {
         loaded ? fn() : fns.push(fn) :
         function () {
           try {
-            testEl.doScroll('left')
+            testEl.doScroll('left');
           } catch (e) {
-            return setTimeout(function() { ready(fn) }, 50)
+            return setTimeout(function() { ready(fn); }, 50);
           }
-          fn()
-        }()
+          fn();
+        }();
     } :
     function (fn) {
-      loaded ? fn() : fns.push(fn)
-    })
+      loaded ? fn() : fns.push(fn);
+    });
 }();
 
 
