@@ -379,7 +379,9 @@ define([
       if (self.options.triggers) {
         $.each(self.options.triggers, function(i, item) {
           item = item.split(' ');
-          $(item[1] || self.$el).on(item[0], function() {
+          $(item[1] || self.$el).on(item[0], function(e) {
+            e.stopPropagation();
+            e.preventDefault();
             self.show();
           });
         });
