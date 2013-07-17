@@ -141,12 +141,18 @@ define([
       */
 
       // add tinymce pattern
-      $root.find('.mce_editable').addClass('pat-tinymce').attr({
-        'data-pat-tinymce': JSON.stringify({
-          relatedItems: {
-            ajaxvocabulary: portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
-          }
-        })
+      $root.find('.mce_editable').addClass('pat-tinymce').each(function(){
+        var $tiny = $(this);
+        var config = $.parseJSON($tiny.attr('data-mce-config'));
+        $tiny.attr({
+          'data-pat-tinymce': JSON.stringify({
+            relatedItems: {
+              ajaxvocabulary: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+            },
+            rel_upload_url: '@@fileUpload',
+            base_url: config.document_base_url
+          })
+        });
       });
 
       // Use toggle to replace the toggleSelect from the select_all.js
