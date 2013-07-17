@@ -218,7 +218,7 @@ define([
     var portletOptions = {
       templateOptions: {
         buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
-        automaticallyAddButtonActions: false,
+        automaticallyAddButtonActions: false
       }
     };
     $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
