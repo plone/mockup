@@ -38,6 +38,7 @@ define([
   var Livesearch = Base.extend({
     name: "livesearch",
     timeout: null,
+    blurTimout: null,
     $results: null,
     $input: null,
     $toggle: null,
@@ -51,6 +52,7 @@ define([
       url: null, // must be set in order to work
       dataType: 'json', // 'json' or 'html'
       delay: 200,
+      blurDelay: 200,
       highlight: 'pat-livesearch-highlight', // class to add to items when selected
       minimumInputLength: 3, // number of chars user should type before searching
       toggleTarget: '.pat-livesearch-container', // the element to show/hide when performing search
@@ -113,11 +115,15 @@ define([
       }
 
       self.$input.on('focus.livesearch.patterns', function(e) {
+        window.clearInterval(self.blurTimeout);
         self.show();
       });
 
       self.$input.on('blur.livesearch.patterns', function(e) {
-        self.hide();
+        self.blurTimeout = window.setInterval(function(){
+          self.hide();
+          window.clearInterval(self.blurTimeout);
+        }, self.options.blurDelay);
       });
 
       if (self.options.toggleTarget) {
@@ -128,6 +134,7 @@ define([
           });
           self.$toggle.on('click.livesearch.patterns', function(event) {
             event.stopPropagation();
+            window.clearInterval(self.blurTimeout);
           });
           self.$input.on('click.livesearch.patterns', function(event) {
             event.stopPropagation();
@@ -252,7 +259,7 @@ define([
         return;
       }
 
-      var container = $(self.applyTemplate('resultsContainer', self));
+      var container = $('<div />');
 
       if (event.type === 'searching') {
         container.html(self.renderHelp('searching', {}));
@@ -263,6 +270,7 @@ define([
           container.html(self.renderHelp('typeMore', {more: chars}));
         } else {
           var data = self.getCache();
+          container.html(self.applyTemplate('resultsContainer', self));
           var appendTo = container.find(self.options.resultsAppendTo);
           if (appendTo.length === 0) {
             appendTo = container;

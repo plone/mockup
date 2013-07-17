@@ -226,7 +226,7 @@ define([
         }
       }
     };
-    $('#toolbar-manage-portlets a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    $('#toolbar-manage-portlets a,#plone-action-content-history > a').attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('show.modal.patterns', function(evt, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select').removeAttr('onchange');
@@ -241,20 +241,31 @@ define([
       });
     });
 
-    // Edit
+    // Edit/Add
     var editOptions = {
       width: '80%',
       templateOptions: {
-        content: '#content-core'
+        content: '.template-edit #content-core, .template-atct_edit #content',
+        automaticallyAddButtonActions: false,
+        actionsOptions: {
+          displayInModal: false
+        },
+        actions: {
+          'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
+          'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
+            modalFunction: 'hide'
+          }
+        }
       }
     };
-    $('#plone-action-edit > a')
+    $('#plone-action-edit > a, #plone-contentmenu-factories ul li:not(#plone-contentmenu-settings) a')
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(editOptions));
 
 
     // Content Rules
     var rulesOptions = {
+      width: '80%',
       templateOptions: {
         content: '#content-core',
         loadLinksWithinModal: false
@@ -270,35 +281,36 @@ define([
               return $action.attr('href').replace(/@@/g, "++nodiazo++/@@");
             },
             displayInModal: false
-          }
+          },
+          'input[name="form.button.AddAssignment"]': {}
         };
       });
 
 
 //
 //    // Sharing
-//    Modal.prepareModal('#plone-action-local_roles > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal, {
-//        buttons: 'input[name="form.button.Save"],input[name="form.button.Cancel"]'
-//      });
-//      // FIXME: we shouldn't be hacking like this
-//      $('#link-presentation', modal.$modal).remove();
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.Save"]': {},
-//          '.modal-body input[name="form.button.Search"], dl.portalMessage.info > dd > a': {
-//            onSuccess: function(modal, responseBody, state, xhr, form) {
-//              modal.$modal.html(responseBody.html());
-//              modalInit(modal, modalInit, modalOptions);
-//              modal.positionModal();
-//              registry.scan(modal.$modal);
-//            }
-//          }
-//        }
-//      });
-//
-//    });
+    var sharingOptions = {
+      templateOptions: {
+        actions: '#sharing-search-button, a',
+        buttons: '#sharing-save-button, input[name="form.button.Cancel"]'
+      }
+    };
+    function redirectUp(modal, responseBody, state, xhr, form) {
+        modal.redraw(responseBody);
+        modal.$el.on('hidden.modal.patterns', function(e) {
+            // We want to send the user to the original object *after* the status messages
+            // have been displayed, and the user has closed the modal
+            window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -1).join('/');
+        });
+    }
+    var local_roles = $('#plone-action-local_roles > a');
+    local_roles.addClass('pat-modal');
+    local_roles.attr('data-pat-modal', JSON.stringify(sharingOptions));
+    local_roles.on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actions['.modal-footer #sharing-save-button'] = {
+          onSucess: redirectUp
+      };
+    });
 //
 //    // Rules form
 //    Modal.prepareModal('#plone-action-contentrules > a', function(modal, modalInit, modalOptions) {
@@ -329,20 +341,18 @@ define([
 //
 //    // Delete Action
     function processDelete(modal, responseBody, state, xhr, form) {
-        console.log('Deleted!');
+        modal.redraw(responseBody);
+        modal.$el.on('hidden.modal.patterns', function(e) {
+            // We want to send the user to the containing folder *after* the status messages
+            // have been displayed, and the user has closed the modal
+            window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
+        });
     }
     var delete_action = $('#plone-contentmenu-actions-delete > a');
-    var delete_options = {
-        templateOptions: {
-            actions: {
-              '.modal-footer input.destructive': { onSuccess: processDelete },
-            },
-            content: '#content',
-            prependContent: '.portalMessage'
-        }
-    };
     delete_action.addClass('pat-modal');
-    delete_action.attr('data-pat-modal', JSON.stringify(delete_options));
+    delete_action.on('render.modal.patterns', function(e, modal) {
+      modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
+    });
 //
 //    // Rename Action
     $('#plone-contentmenu-actions-rename > a').addClass('pat-modal');
@@ -370,74 +380,11 @@ define([
 //        }
 //      });
 //    }, { width: '80%' });
-//
-//    // "Restrictions..." form
-//    Modal.prepareModal('#plone-contentmenu-settings > a', function(modal, modalInit, modalOptions) {
-//      Modal.createTemplate(modal.$modal);
-//      // FIXME: we should hack like this
-//      var $details = $('#details', modal.$modal)
-//        .removeAttr('style')
-//        .removeAttr('id')
-//        .first().parent();
-//
-//      function show_submenu($modal) {
-//        if ($('#mode_enable', $modal).is(':checked')) {
-//          $details.attr({'id': 'details', 'style': ''});
-//        } else {
-//          $details.attr({'id': 'details', 'style': 'display:none;'});
-//        }
-//      }
-//      function check_mode($modal, value) {
-//        // The logic here is that from #6151, comment 12.
-//        var $preferred = $('#' + value, $modal),
-//            $allowed = $('#' + value + '_allowed', $modal),
-//            $allowed_hidden = $('#' + value + '_allowed_hidden', $modal);
-//
-//        // type is not preferred, so it is not allowed, too.
-//        // We uncheck and disable (ghost) the allowed checkbox
-//        if (!$preferred.is(':checked')) {
-//          $allowed.attr('checked', false);
-//          $allowed.attr('disabled', true);
-//
-//        // type _is_ preferred, so user _may_ want to make it
-//        // an "allowed-only" type by checking the "allowed" checkbox.
-//        // We need to enable (unghost) the allowed checkbox
-//        } else {
-//          $allowed.attr('disabled', false);
-//        }
-//      }
-//
-//      $('input[name="constrainTypesMode:int"]', modal.$modal)
-//        .removeAttr('onclick')
-//        .on('click', function() {
-//          show_submenu($(this).parents('.modal'));
-//        });
-//      $('input[name="currentPrefer:list"],input[name="currentAllow:list"]', modal.$modal)
-//        .removeAttr('onclick')
-//        .on('click', function() {
-//          check_mode($(this).parents('.modal'), $(this).attr('id'));
-//        });
-//      show_submenu(modal.$modal);
-//
-//      Modal.createAjaxForm(modal, modalInit, modalOptions, {
-//        buttons: {
-//          '.modal-body input[name="form.button.Cancel"]': {},
-//          '.modal-body input[name="form.button.Save"]': {
-//            onSuccess: function(modal, responseBody, state, xhr) {
-//              $('#plone-contentmenu-factories').html(
-//                  $('#plone-contentmenu-factories', responseBody).html());
-//              modal.hide();
-//            }
-//          }
-//        }
-//      });
-//    });
-//
-//    // Advanced workflow
-//    // This form needs additional JS and CSS for the calendar widget.
-//    // The AJAX form doesn't load it from the javascript_head_slot.
-    // $('#workflow-transition-advanced > a').addClass('pat-modal');
-//
+
+    $('#manage-dashboard a').addClass('modal-trigger').patternModal({
+      width: '80%',
+    });
+
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
 //    // Content history

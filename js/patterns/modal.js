@@ -87,9 +87,11 @@ define([
           eventType: 'click',
           target: null,
           ajaxUrl: null, // string, or function($el, options) that returns a string
+          modalFunction: null, // String, function name on self to call
           isForm: false,
           timeout: 5000,
           displayInModal: true,
+          reloadWindowOnClose: true,
           error: '.portalMessage.error',
           loading: '' +
             '<div class="progress progress-striped active">' +
@@ -115,7 +117,7 @@ define([
 
           $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
-            $(action, $modal).each(function(action) {
+            $(action, $('.modal-body', $modal)).each(function(action) {
               var $action = $(this);
               $action.on(options.eventType, function(e) {
                 e.stopPropagation();
@@ -123,10 +125,13 @@ define([
 
                 self.showLoading(false);
 
-                // handle click on input/button using jquery.form library
-                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
+                // handle event on $action using a function on self
+                if (options.modalFunction !== null) {
+                  self[options.modalFunction]();
+                // handle event on input/button using jquery.form library
+                } else if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
                   self.options.handleFormAction.apply(self, [$action, options]);
-                // handle click on link with jQuery.ajax
+                // handle event on link with jQuery.ajax
                 } else if ($.nodeName($action[0], 'a')) {
                   self.options.handleLinkAction.apply(self, [$action, options]);
                 }
@@ -162,6 +167,12 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+        // We want to trigger the form submit event but NOT use the default
+        $form.on('submit', function(e){
+          e.preventDefault();
+        });
+        $form.trigger('submit');
+
         $form.ajaxSubmit({
           timeout: options.timeout,
           data: extraData,
@@ -185,14 +196,22 @@ define([
                 } else {
                   self.redraw(response);
                 }
+                return;
+              }
 
-              // custom success function
-              } else if (options.onSuccess) {
+              if (options.onSuccess) {
                 options.onSuccess(self, response, state, xhr, form);
+              }
 
+              if (options.displayInModal === true) {
+                self.redraw(response);
               } else {
                 $action.trigger('destroy.modal.patterns');
-                window.parent.location.reload();
+                if (options.reloadWindowOnClose) {
+                  self.reloadWindow();
+                } else {
+                  self.hide();
+                }
               }
               self.trigger('formActionSuccess', [response, state, xhr, form]);
             }
@@ -345,6 +364,9 @@ define([
         self.$modal.data('pattern-' + self.name, self);
       }
     },
+    reloadWindow: function() {
+      window.parent.location.reload();
+    },
     init: function() {
       var self = this;
 
@@ -466,8 +488,8 @@ define([
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
         self.$loading.hide();
-        self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+        self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
         self.trigger('after-ajax', self, textStatus, xhr);
         self._show();
       });
@@ -683,8 +705,8 @@ define([
       var self = this;
       self.trigger('beforeDraw');
       self.$modal.remove();
-      self.$raw = $($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-          .replace('<body', '<div').replace('</body>', '</div>'))[0]);
+      self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
+            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
       self.render.apply(self, [self.options.templateOptions]);
       self.positionModal();
       registry.scan(self.$modal);

@@ -250,6 +250,68 @@ define([
           .addClass('pat-modal')
           .attr('data-pat-modal', JSON.stringify(addGroupOptions));
       }
+
+
+      /*** Content Type Restrctions form ***/
+      $('#plone-contentmenu-settings > a').addClass('modal-trigger').patternModal({
+        width: '80%',
+        templateOptions: {
+          actionsOptions: {
+            displayInModal: false
+          }
+        }
+      }).on('shown.modal.patterns', function(modal){
+        var $modal = modal.$modal;
+        var prefered = $(".current_prefer_form", $modal),
+            allowed = $(".current_allow_form", $modal),
+            constrain_mode = $(".constrain_types_mode_form", $modal),
+            prefered_field = prefered.parents('.field'),
+            allowed_field = allowed.parents('.field'),
+            ACQUIRE = -1,
+            DISABLED = 0,
+            ENABLED = 1;
+        function updateVisibility(){
+          var mode = parseInt(constrain_mode.val(), 10);
+          if(mode === ENABLED){
+            prefered_field.show();
+            allowed_field.show();
+          }else{
+            prefered_field.hide();
+            allowed_field.hide();
+          }
+        }
+        function updateSelectable(){
+          prefered.each(function(){
+            var allowed_id = this.id.replace('prefer', 'allow'),
+                allowed_item = allowed_field.find("#" + allowed_id);
+            if (this.checked){
+              allowed_item[0].disabled = false;
+            }else{
+              allowed_item[0].disabled = true;
+              allowed_item[0].checked = false;
+            }
+          });
+        }
+        constrain_mode.change(updateVisibility);
+        updateVisibility();
+        prefered_field.change(updateSelectable);
+        updateSelectable();
+      });
+
+
+      /*** Advanced workflow
+      // This form needs additional JS and CSS for the calendar widget.
+      // The AJAX form doesn't load it from the javascript_head_slot. */
+      $('#workflow-transition-advanced > a').addClass('modal-trigger').patternModal({
+        width: '80%',
+        templateOptions: {
+          actionsOptions: {
+            displayInModal: false
+          }
+        }
+      });
+
+
     },
     scan: function(selector) {
       registry.scan($(selector));
