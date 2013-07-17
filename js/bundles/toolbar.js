@@ -199,14 +199,18 @@ define([
     // }}}
 
     // site setup
-    $('#plone-personal-actions-plone_setup a').on('show.modal.patterns', function(evt, modal) {
-      $('a[href$=controlpanel]', modal.$modal).each(function(){
-        var fixedhref = this.href;
-        fixedhref = fixedhref.replace(/@@/g, "++nodiazo++/@@");
+    $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
+      width: '80%'
+    }).on('show.modal.patterns', function(evt, modal) {
+      $('a[href]', modal.$modal).each(function(){
+        var href = this.href;
+        var parts = href.split('/');
+        parts.splice(parts.length-1, 0, '++nodiazo++');
+        href = parts.join('/');
 
-        $(this).attr('href', fixedhref);
+        $(this).attr('href', href);
         $(this).click(function(){
-          window.open(fixedhref);
+          window.open(href);
         });
       });
     });
@@ -226,7 +230,7 @@ define([
         }
       }
     };
-    $('#toolbar-manage-portlets a,#plone-action-content-history > a').attr('data-pat-modal', JSON.stringify(portletOptions))
+    $('#toolbar-manage-portlets a,#manage-dashboard a').attr('data-pat-modal', JSON.stringify(portletOptions))
     .on('show.modal.patterns', function(evt, modal) {
       // Kill the onchange method so we can wire up our own
       $('.section select').removeAttr('onchange');
@@ -381,9 +385,6 @@ define([
 //      });
 //    }, { width: '80%' });
 
-    $('#manage-dashboard a').addClass('modal-trigger').patternModal({
-      width: '80%',
-    });
 
 //    // personal preferences
     $('#plone-personal-actions-preferences > a').addClass('pat-modal');
