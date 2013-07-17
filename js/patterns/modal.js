@@ -87,9 +87,11 @@ define([
           eventType: 'click',
           target: null,
           ajaxUrl: null, // string, or function($el, options) that returns a string
+          modalFunction: null, // String, function name on self to call
           isForm: false,
           timeout: 5000,
           displayInModal: true,
+          reloadWindowOnClose: true,
           error: '.portalMessage.error',
           loading: '' +
             '<div class="progress progress-striped active">' +
@@ -115,7 +117,7 @@ define([
 
           $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
-            $(action, $modal).each(function(action) {
+            $(action, $('.modal-body', $modal)).each(function(action) {
               var $action = $(this);
               $action.on(options.eventType, function(e) {
                 e.stopPropagation();
@@ -123,10 +125,13 @@ define([
 
                 self.showLoading(false);
 
-                // handle click on input/button using jquery.form library
-                if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
+                // handle event on $action using a function on self
+                if (options.modalFunction !== null) {
+                  self[options.modalFunction]();
+                // handle event on input/button using jquery.form library
+                } else if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
                   self.options.handleFormAction.apply(self, [$action, options]);
-                // handle click on link with jQuery.ajax
+                // handle event on link with jQuery.ajax
                 } else if ($.nodeName($action[0], 'a')) {
                   self.options.handleLinkAction.apply(self, [$action, options]);
                 }
@@ -202,7 +207,11 @@ define([
                 self.redraw(response);
               } else {
                 $action.trigger('destroy.modal.patterns');
-                self.reloadWindow();
+                if (options.reloadWindowOnClose) {
+                  self.reloadWindow();
+                } else {
+                  self.hide();
+                }
               }
               self.trigger('formActionSuccess', [response, state, xhr, form]);
             }
