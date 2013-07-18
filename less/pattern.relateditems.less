@@ -1,3 +1,5 @@
+@import "../bower_components/bootstrap/less/mixins.less";
+@import "../bower_components/font-awesome/less/mixins.less";
 @import "pattern.select2.less";
 
 .pat-relateditems-dropdown {
@@ -5,25 +7,26 @@
 
   .select2-results {
     .select2-highlighted {
-      color: #999;
-      background: #ddd;
+      color: #000;
+      background: #d8d8d8;
     }
   }
 }
 .pat-relateditems {
 
 }
+
 .pat-relateditems-container {
   display: inline-block;
   position: relative;
   padding-top: 20px;
 
-  .tabs {
+  .pat-relateditems-tabs {
 
-    z-index: 9000;
+    z-index: 10000;
     position: relative;
 
-    .tab {
+    .pat-relateditems-tab {
       padding-top: 6px;
       padding-right: 12px;
       padding-bottom: 6px;
@@ -31,9 +34,7 @@
       line-height: 18px;
       border: 1px solid transparent;
       border-bottom-style: none;
-      -webkit-border-radius: 4px 4px 0 0;
-      -moz-border-radius: 4px 4px 0 0;
-      border-radius: 4px 4px 0 0;
+      .border-top-radius(4px);
       display: inline-block;
       background-color: transparent;
       margin-bottom: -1px;
@@ -42,7 +43,7 @@
         border-color: #aaa;
       }
 
-      &.active {
+      &.pat-active {
         color: #555555;
         border-color: #aaa;
         background-color: #f1f1f1;
@@ -72,15 +73,55 @@
   }
 }
 .pat-relateditems-result {
-  padding-left: 40px;
+  padding-right: 30px;
+  position: relative;
+
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .pat-relateditems-result-select {
+    display: block;
+    padding-left: 20px;
+
+    &:after {
+      .icon(@circle-blank);
+      position: absolute;
+      left: 0;
+      font-size: 14px;
+      right: 0;
+      top: 50%;
+      margin-top: -14px;
+
+      color: @linkColor;
+    }
+
+    &.pat-active {
+      &:after {
+        .icon(@circle);
+      }
+    }
+
+  }
 
   .pat-relateditems-buttons {
-    margin-left: -44px;
+    position: absolute;
     display: inline-block;
-    width: 40px;
     text-align: right;
-    font-size: 14px;
-    margin-top: 5px;
+    font-size: 18px;
+    right: 0;
+    top: 50%;
+    margin-top: -16px;
+    a {
+      display: block;
+      height: 36px;
+      line-height: 36px;
+      &:after {
+        .icon(@chevron-right);
+      }
+    }
   }
 
   .pat-relateditems-result-path {
