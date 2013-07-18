@@ -12,7 +12,7 @@
 
   <link rel="stylesheet/less" type="text/css" href="less/docs.less" />
 
-  <script src="node_modules/less/dist/less-1.4.1.min.js"></script>
+  <script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.4.1.js"></script>
   <script src="bower_components/jquery/jquery.js"></script>
   <script src="bower_components/requirejs/require.js"></script>
   <script src="js/config.js"></script>
@@ -30,8 +30,8 @@ addPage = function(page) {
 
 //
 require([
-  'mockupFakeServer',
-  'js/docs'
+  'mockup-fakeserver',
+  'mockup-docsapp'
 ], function(server, DocsApp) {
 
   DocsApp.patterns.add(patterns);
