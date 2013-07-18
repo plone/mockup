@@ -68,7 +68,7 @@ define([
         '  </div>' +
         '  <div class="modal-body">' +
         '    <%= prepend %> ' +
-        '    <%= content %> ' +
+        '    <div class="<%= contentClass %>"><%= content %></div>' +
         '  </div>' +
         '  <div class="modal-footer"> ' +
         '    <%= buttons %> ' +
@@ -81,6 +81,7 @@ define([
         automaticallyAddButtonActions: true,
         loadLinksWithinModal: true,
         content: '#content',
+        contentClass: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         prependContent: '.portalMessage',
         actions: {},
         actionsOptions: {
@@ -286,7 +287,8 @@ define([
           title: '',
           prepend: '<div />',
           content: '',
-          buttons: '<div class="pat-modal-buttons"></div>'
+          buttons: '<div class="pat-modal-buttons"></div>',
+          contentClass: options.contentClass
         };
 
         // setup the Title
@@ -407,10 +409,15 @@ define([
             e.preventDefault();
             if (self.options.backdropOptions.closeOnClick) {
               self.backdrop.hide();
-              self.hide();
             }
           });
       }
+
+      self.backdrop.on('hidden', function(e) {
+        if (self.$modal !== undefined && self.$modal.hasClass(self.options.klassActive)) {
+          self.hide();
+        }
+      });
 
       if (self.options.backdropOptions.closeOnEsc === true) {
         $(document).on('keydown', function(e, data) {
