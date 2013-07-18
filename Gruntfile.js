@@ -123,8 +123,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('test', ['karma:dev']);
-  grunt.registerTask('test-ci', ['jshint', 'karma:ci']);
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
       'less:widgets',
