@@ -114,7 +114,6 @@ define([
           if (templateOptions.loadLinksWithinModal) {
             actions['a'] = {};
           }
-
           $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
             $(action, $('.modal-body', $modal)).each(function(action) {
@@ -222,7 +221,7 @@ define([
         var url;
 
         // Figure out URL
-        if (options.ajaxUrl !== null) {
+        if (options.ajaxUrl) {
           if (typeof options.ajaxUrl === 'function') {
             url = options.ajaxUrl.apply(self, [$action, options]);
           } else {

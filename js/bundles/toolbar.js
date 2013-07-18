@@ -127,7 +127,7 @@ define([
       templateOptions: {
         buttons: '#folderlisting-main-table > input.context,' +
                  '#folderlisting-main-table > input.standalone,' +
-                 '.modal-body .formControls > input',
+                 '.formControls > input',
         actionsOptions: {
           onSuccess: function(modal, response, state, xhr, form){
             // handle content_status_history differently than other buttons
@@ -138,7 +138,7 @@ define([
               var $action = $('<a href="' +
                 action.replace('content_status_history', 'folder_contents') +
                 '"/>');
-              modal.options.handleLinkAction.apply(modal, [$action]);
+              modal.options.handleLinkAction.apply(modal, [$action, {}]);
             } else {
               // XXX hack the rename form action url
               if(hasForm){
