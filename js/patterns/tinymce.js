@@ -978,6 +978,10 @@ define([
       }
 
       if(self.options.upload_url){
+        /*
+         * disable until it works better
+         * can still upload via link and file overlays
+         
         self.dropzone = new DropZone(self.$el, {
           klass: 'tinymce-dropzone',
           clickable: false,
@@ -991,6 +995,7 @@ define([
             self.fileUploadError();
           }
         });
+        */
 
         tinyOptions.uploadFileClicked = function(){
           self.uploadFileClicked.apply(self, []);
