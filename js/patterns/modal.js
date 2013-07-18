@@ -167,7 +167,6 @@ define([
           url = $action.parents('form').attr('action');
         }
 
-
         // We want to trigger the form submit event but NOT use the default
         $form.on('submit', function(e){
           e.preventDefault();
