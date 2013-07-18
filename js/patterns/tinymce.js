@@ -1009,11 +1009,16 @@ define([
          */
         var events = ["drop", "dragstart", "dragend", "dragenter", "dragover",
                       "dragleave"];
-
         var iframe = self.$el.prev().find('.mce-edit-area iframe');
         var win = $(window.frames[iframe.attr('id')]);
-        $.each(dropzone.prototype.events, function(index, ev){
+        var body = iframe.contents().find('body');
+        $.each(events, function(index, ev){
           win.on(ev, function(e){
+            self.dropzone.dropzone.emit(ev);
+          });
+          /* XXX firefox doesn't listen to the window events above?
+           * And this doesn't work as well as the window event, bah */
+          body.on(ev, function(e){
             self.dropzone.dropzone.emit(ev);
           });
         });
