@@ -17,7 +17,7 @@ var config = {
     'jquery.event.drop': 'lib/jquery.event.drop',
     'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
     'mockup-docsapp': 'js/docsapp',
-    'mockup-fakeserver': 'js/fakeserver',
+    'mockup-fakeserver': 'tests/fakeserver',
     'mockup-registry': 'js/registry',
     'mockup-iframe': 'js/iframe',
     'mockup-iframe_init': 'js/iframe_init',
