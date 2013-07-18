@@ -105,10 +105,9 @@ docs:
 
 clean:
 	mkdir -p build
-	rm build/* -rf
-	rmdir build
-	rm node_modules -rf
-	rm bower_components -rf
+	rm -rf build
+	rm -rf node_modules
+	rm -rf bower_components
 
 	if test -f $(BOWER); then $(BOWER) cache-clean; fi
 
