@@ -1003,10 +1003,9 @@ define([
 
       tinymce.init(tinyOptions);
 
+      /* fixes chrome at least,
+       * still not working quite right in firefox
       if(self.options.upload_url){
-        /* fixes chrome at least,
-         * still not working quite right in firefox
-         */
         var events = ["drop", "dragstart", "dragend", "dragenter", "dragover",
                       "dragleave"];
         var iframe = self.$el.prev().find('.mce-edit-area iframe');
@@ -1015,14 +1014,14 @@ define([
         $.each(events, function(index, ev){
           win.on(ev, function(e){
             self.dropzone.dropzone.emit(ev);
+            console.log(ev);
           });
-          /* XXX firefox doesn't listen to the window events above?
-           * And this doesn't work as well as the window event, bah */
           body.on(ev, function(e){
             self.dropzone.dropzone.emit(ev);
+            console.log(ev);
           });
         });
-      }
+      }*/
       self.tiny = tinymce.get(id);
     }
   });
