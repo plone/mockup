@@ -2,6 +2,7 @@
 @FontAwesomePath: "../bower_components/font-awesome/font";
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @import "../bower_components/bootstrap/less/responsive.less";
+@import "../bower_components/font-awesome/less/mixins.less";
 
 @import "pattern.autotoc.less";
 @import "pattern.pickadate.less";
@@ -115,10 +116,9 @@ body {
     .pat-pickadate-icon {
       margin: 0 0.4em;
       cursor: pointer;
-      font-family: FontAwesome;
-      font-weight: normal;
-      font-style: normal;
-      text-decoration: inherit;
+      
+      .icon(@calendar);
+
       display: inline;
       width: auto;
       height: auto;
@@ -129,8 +129,11 @@ body {
       background-position: 0% 0%;
       background-repeat: repeat;
     }
-    .pat-pickadate-icon:before {
-      content: "\f073";
+
+    .modal div.field label span {
+      font-size: 0.8em;
+      font-weight: normal;
+      display: block;
     }
   }
   input.destructive[type='submit'] {
@@ -210,6 +213,14 @@ body {
       font-size: 1.2em;
       font-weight: bold;
       display: block;
+      .label {
+        background: transparent;
+        color: black;
+        text-shadow: none;
+        -moz-text-shadow: none;
+        -webkit-text-shadow: none;
+        -o-text-shadow: none;
+      }
       span {
         font-size: 0.8em;
         font-weight: normal;
@@ -274,5 +285,14 @@ body {
   padding: 5px 15px;
 }
 
+.modal-constrain-types {
+  .option {
+    display: inline-block;
+    padding: 3px 10px;
+  }
+  div.field label {
+    display: inline;
+  }
+}
 
 // }}}

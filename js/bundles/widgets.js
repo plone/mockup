@@ -276,6 +276,7 @@ define([
       $('#plone-contentmenu-settings > a,a#plone-contentmenu-settings').addClass('modal-trigger').patternModal({
         width: '80%',
         templateOptions: {
+          contentClass: 'modal-constrain-types',
           actionsOptions: {
             displayInModal: false
           }
