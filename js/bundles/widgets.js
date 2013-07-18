@@ -221,7 +221,7 @@ define([
         .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
 
       /*** Default Page ***/
-      $('#folderChangeDefaultPage').addClass('pat-modal');
+      $('#folderChangeDefaultPage, #folderChangeDefaultPage a').addClass('pat-modal');
 
       /*** Add user form ***/
       var users_add = $('form[name="users_add"]');

@@ -88,6 +88,7 @@ define([
           target: null,
           ajaxUrl: null, // string, or function($el, options) that returns a string
           modalFunction: null, // String, function name on self to call
+          redirectToResponseUrl: false, // Boolean, whether or not to redirect to the response URL on ajaxSubmit
           isForm: false,
           timeout: 5000,
           displayInModal: true,
@@ -167,6 +168,7 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+
         // We want to trigger the form submit event but NOT use the default
         $form.on('submit', function(e){
           e.preventDefault();
@@ -196,6 +198,13 @@ define([
                 } else {
                   self.redraw(response);
                 }
+                return;
+              }
+
+              if (options.redirectToResponseUrl) {
+                var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
+                              .replace('<base', '<div').replace('</base>', '</div>'))[0]);
+                window.parent.location.href = $base.attr('href');
                 return;
               }
 
