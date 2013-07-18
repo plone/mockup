@@ -335,7 +335,10 @@ define([
       var prefs = $('#plone-personal-actions-preferences > a, #personaltools-preferences > a');
       var prefsOptions = {
         templateOptions: {
-          buttons: 'input[type="submit"]'
+          buttons: 'input[type="submit"]',
+          actionsOptions: {
+            displayInModal: false
+          }
         }
       };
       prefs.addClass('pat-modal');
