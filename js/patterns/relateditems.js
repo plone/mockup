@@ -263,7 +263,7 @@ define([
         var data = [];
         var value = $(element).val();
         if (value !== '') {
-          var ids = value.split(',');
+          var ids = value.split(self.options.separator);
           self.query.search(
             'UID', 'plone.app.querystring.operation.list.contains', ids,
             function(data){
