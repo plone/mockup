@@ -1,3 +1,5 @@
+@import "../bower_components/font-awesome/less/mixins.less";
+
 #content .field .querystring-criteria-wrapper .picker__input {
   font-size: 16px;
   margin: 1px;
@@ -13,18 +15,19 @@
   .querystring-criteria-remove {
     float: left;
     display: block;
-    xwidth: 12px;
+    
     width: 80px;
     height: 13px;
     right: 3px;
     top: 4px;
-    xfont-size: 1px;
+    
     line-height: 13px;
     font-style: italic;
     outline: 0;
     margin: 8px 4px;
     cursor: pointer;
-    xbackground: url('select2.png') right top no-repeat;
+    
+    .icon(@remove);
   }
 
   .querystring-criteria-index {
