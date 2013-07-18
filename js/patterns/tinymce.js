@@ -365,12 +365,12 @@ define([
       var self = this;
       var val;
       if(self.linkType === 'internal'){
-        val = self.$internal.select2('val');
+        val = self.$internal.select2('data');
         if(val){
           if(typeof(val) === 'object'){
             val = val[0];
           }
-          return 'resolveuid/' + val;
+          return 'resolveuid/' + val.UID;
         }
       } else if(self.linkType === 'external'){
         return self.$external.val();
@@ -396,12 +396,12 @@ define([
           return '#' + data.name;
         }
       } else if(self.linkType === 'image'){
-        val = self.$image.select2('val');
+        val = self.$image.select2('data');
         if(val){
           if(typeof(val) === 'object'){
             val = val[0];
           }
-          var url = 'resolveuid/' + val;
+          var url = 'resolveuid/' + val.UID;
           var scale = self.$scale.val();
           if(scale){
             url += '/@@images/image/' + scale;
