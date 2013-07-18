@@ -292,7 +292,6 @@ define([
       self.$searchBtn = $('.pat-relateditems-tabs-search', self.$browse);
       self.$browsePath = $('<span class="pat-relateditems-path" />');
       self.$browse.after(self.$browsePath);
-      self.$browsePath.width(self.$container.width()-2);
       self.deactivateBrowsing();
 
       self.$browseBtn.click(function(e){
