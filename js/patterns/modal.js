@@ -403,14 +403,22 @@ define([
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            self.backdrop.hide();
+            if (self.options.backdropOptions.closeOnClick) {
+              self.backdrop.hide();
+              self.hide();
+            }
           });
       }
-      self.$wrapper.on('hidden', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        self.hide();
-      });
+
+      if (self.options.backdropOptions.closeOnEsc === true) {
+        $(document).on('keydown', function(e, data) {
+          if (self.$el.is('.' + self.options.klassActive)) {
+            if (e.keyCode === 27) {  // ESC key pressed
+              self.hide();
+            }
+          }
+        });
+      }
 
       self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
       if (self.$wrapperInner.size() === 0) {
