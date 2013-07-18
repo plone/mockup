@@ -1,12 +1,11 @@
 language: node_js
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq chromium-browser
 node_js:
   - 0.8
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq chromium-browser
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
   - make bootstrap
 script:
   - make test-ci BOWER_CHROME=`which chromium-browser`
