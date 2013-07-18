@@ -88,6 +88,7 @@ define([
           target: null,
           ajaxUrl: null, // string, or function($el, options) that returns a string
           modalFunction: null, // String, function name on self to call
+          redirectToResponseUrl: false, // Boolean, whether or not to redirect to the response URL on ajaxSubmit
           isForm: false,
           timeout: 5000,
           displayInModal: true,
@@ -166,6 +167,7 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+
         // We want to trigger the form submit event but NOT use the default
         $form.on('submit', function(e){
           e.preventDefault();
@@ -195,6 +197,13 @@ define([
                 } else {
                   self.redraw(response);
                 }
+                return;
+              }
+
+              if (options.redirectToResponseUrl) {
+                var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
+                              .replace('<base', '<div').replace('</base>', '</div>'))[0]);
+                window.parent.location.href = $base.attr('href');
                 return;
               }
 
@@ -376,9 +385,6 @@ define([
       self.backdrop = new Backdrop(
           self.$el.parents(self.options.backdrop),
           self.options.backdropOptions);
-      self.backdrop.on('hidden', function(e) {
-        self.hide();
-      });
 
       self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
@@ -400,14 +406,22 @@ define([
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            self.backdrop.hide();
+            if (self.options.backdropOptions.closeOnClick) {
+              self.backdrop.hide();
+              self.hide();
+            }
           });
       }
-      self.$wrapper.on('hidden', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        self.hide();
-      });
+
+      if (self.options.backdropOptions.closeOnEsc === true) {
+        $(document).on('keydown', function(e, data) {
+          if (self.$el.is('.' + self.options.klassActive)) {
+            if (e.keyCode === 27) {  // ESC key pressed
+              self.hide();
+            }
+          }
+        });
+      }
 
       self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
       if (self.$wrapperInner.size() === 0) {
@@ -692,10 +706,12 @@ define([
         self.ajaxXHR.abort();
       }
       self.trigger('hide');
-      self.backdrop.hide();
-      self.$wrapper.hide();
-      self.$loading.hide();
-      self.$wrapper.parent().css('overflow', 'visible');
+      if ($('.modal', self.$wrapper).size() < 2) {
+        self.backdrop.hide();
+        self.$wrapper.hide();
+        self.$loading.hide();
+        self.$wrapper.parent().css('overflow', 'visible');
+      }
       self.$el.removeClass(self.options.klassActive);
       if (self.$modal !== undefined) {
         self.$modal.remove();

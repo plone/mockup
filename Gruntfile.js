@@ -1,15 +1,22 @@
 module.exports = function(grunt) {
 
+  var config = require('./js/config'),
+      docs = {};
+
+  for (var key in config.paths) {
+    if (key !== 'tinymce') {
+      docs['docs/dev/' + config.paths[key] + '.js'] = [config.paths[key] + '.js'];
+    }
+  }
+
+  docs['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
+  docs['docs/dev/js/config.js'] = 'js/config.js';
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
       all: ['Gruntfile.js', 'js/**/*.js', 'tests/*.js']
-    },
-    bower: {
-      target: {
-        rjsConfig: 'js/config.js'
-      }
     },
     karma: {
       options: {
@@ -18,19 +25,22 @@ module.exports = function(grunt) {
         browsers: ['Chrome']
       },
       dev: {
-        autoWatch: true,
-        //singleRun: true
+        autoWatch: true
+      },
+      ci: {
+        singleRun: true
+        // SauceLabs stuff comes here
       }
     },
     requirejs: {
       options: {
         baseUrl: './',
         wrap: true,
-        name: 'node_modules/almond/almond.js',
         mainConfigFile: 'js/config.js',
       },
       widgets: {
         options: {
+          name: 'node_modules/almond/almond.js',
           include: 'js/bundles/widgets',
           insertRequire: ['mockup-bundles-widgets'],
           out: 'build/widgets.min.js',
@@ -39,10 +49,21 @@ module.exports = function(grunt) {
       },
       toolbar: {
         options: {
+          name: 'node_modules/almond/almond.js',
           include: 'js/bundles/toolbar',
           insertRequire: ['mockup-bundles-toolbar'],
           out: 'build/toolbar.min.js'
         }
+      }
+    },
+    uglify: {
+      toolbar: {
+        files: {
+          'build/toolbar_init.min.js': ['js/iframe_init.js']
+        }
+      },
+      docs: {
+        files: docs
       }
     },
     less: {
@@ -62,21 +83,38 @@ module.exports = function(grunt) {
           'build/toolbar.css': 'less/toolbar.less',
           'build/toolbar_init.css': 'less/iframe_init.less'
         }
-      }
-    },
-    uglify: {
-      minify: {
+      },
+      docs: {
+        options: {
+          paths: ['less']
+        },
         files: {
-          'build/toolbar_init.min.js': ['js/iframe_init.js']
+          'docs/dev/docs.css': 'less/docs.less'
         }
       }
     },
     cssmin: {
-      minify: {
+      widgets: {
         expand: true,
         cwd: 'build/',
-        src: ['*.css', '!*.min.css'],
+        src: ['widgets.css'],
         dest: 'build/',
+        ext: '.min.css',
+        report: 'min'
+      },
+      toolbar: {
+        expand: true,
+        cwd: 'build/',
+        src: ['toolbar.css'],
+        dest: 'build/',
+        ext: '.min.css',
+        report: 'min'
+      },
+      docs: {
+        expand: true,
+        cwd: 'docs/dev/',
+        src: ['docs.css'],
+        dest: 'docs/dev/',
         ext: '.min.css',
         report: 'min'
       }
@@ -91,10 +129,24 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('test', ['karma:dev']);
-  grunt.registerTask('test-ci', ['karma:dev', 'jshint']);
-  grunt.registerTask('default', ['bower']);
-  grunt.registerTask('compile-js', ['requirejs', 'uglify']);
-  grunt.registerTask('compile-less', ['less']);
-  grunt.registerTask('compile-css', ['cssmin']);
+  grunt.registerTask('test-ci', ['jshint', 'karma:ci']);
+  grunt.registerTask('compile-widgets', [
+      'requirejs:widgets',
+      'uglify:widgets',
+      'less:widgets',
+      'cssmin:widgets'
+      ]);
+  grunt.registerTask('compile-toolbar', [
+      'requirejs:toolbar',
+      'uglify:toolbar',
+      'less:toolbar',
+      'cssmin:toolbar'
+      ]);
+  grunt.registerTask('docs', [
+      'uglify:docs',
+      'less:docs',
+      'cssmin:docs'
+      ]);
+  grunt.registerTask('default', ['test-ci', 'compile', 'docs']);
 
 };

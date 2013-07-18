@@ -189,7 +189,12 @@ define([
         templateOptions: {
           title: 'Login',
           content: '#content',
-          prependContent: '.portalMessage'
+          prependContent: '.portalMessage',
+          actions: {
+            '#login_form input[type="submit"]': {
+              displayInModal: false
+            }
+          }
         }
       };
       $('#personaltools-login')
@@ -221,7 +226,16 @@ define([
         .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
 
       /*** Default Page ***/
-      $('#folderChangeDefaultPage').addClass('pat-modal');
+      var defaultPage = {
+        templateOptions: {
+          actionsOptions: {
+            displayInModal: false
+          }
+        }
+      };
+      $('#folderChangeDefaultPage, #folderChangeDefaultPage a, #contextSetDefaultPage a')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(defaultPage));
 
       /*** Add user form ***/
       var users_add = $('form[name="users_add"]');
@@ -326,6 +340,18 @@ define([
       };
       prefs.addClass('pat-modal');
       prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
+
+      /*** Rename Action ***/
+      var renameOptions = {
+        templateOptions: {
+          actionsOptions: {
+            displayInModal: false
+          }
+        }
+      };
+      $('#plone-contentmenu-actions-rename a')
+        .addClass('pat-modal')
+        .attr('data-pat-modal', JSON.stringify(renameOptions));
 
       /*** Delete action ***/
       function processDelete(modal, responseBody, state, xhr, form) {
