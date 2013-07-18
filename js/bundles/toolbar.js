@@ -123,7 +123,7 @@ define([
 
     // Contents
     $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
-      width: '80%',
+      width: '60%',
       templateOptions: {
         buttons: '#folderlisting-main-table > input.context,' +
                  '#folderlisting-main-table > input.standalone,' +
