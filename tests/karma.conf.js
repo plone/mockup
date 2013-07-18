@@ -2,7 +2,7 @@
  *   preprocessors, exclude, reporters, coverageReporter, port, runnerPort,
  *   colors, logLevel, LOG_INFO, autoWatch, browsers, captureTimeout,
  *   singleRun
- *   */
+ */
 
 // Karma configuration
 

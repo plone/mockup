@@ -467,7 +467,7 @@ define([
       self.createSort();
 
       // add criteria preview pane to see results from criteria query
-      self.refreshPreviewEvent(self);
+      self.refreshPreviewEvent();
     },
     createCriteria: function(index, operator, value) {
       var self = this,
@@ -519,7 +519,7 @@ define([
         .attr('name', 'sort_on')
         .appendTo(self.$sortWrapper)
         .change(function(){
-          self.refreshPreviewEvent(self);
+          self.refreshPreviewEvent.call(self);
           $("#form-widgets-sort_on", existingSortOn).val($(this).val());
         });
 
@@ -534,7 +534,7 @@ define([
       self.$sortOrder = $("<input type='checkbox' />")
                           .attr('name', 'sort_reversed:boolean')
                           .change(function(){
-                            self.refreshPreviewEvent(self);
+                            self.refreshPreviewEvent.call(self);
                             if($(this).attr('checked') === "checked") {
                               $('.option input[type="checkbox"]', existingSortOrder)
                                 .attr('checked', 'checked');
@@ -569,7 +569,7 @@ define([
         $(existingSortOrder).hide();
       }
     },
-    refreshPreviewEvent: function(self) {
+    refreshPreviewEvent: function() {
       var self = this;
 
       /* TEMPORARY */

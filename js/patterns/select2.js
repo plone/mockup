@@ -134,7 +134,7 @@ define([
             .drop("init", function(e, dd ) {
               /*jshint eqeqeq:false */
               /* XXX Cannot use triple equals here */
-              return !(this == dd.drag);
+              return (this == dd.drag) ? false: true;
             });
           return formatSelection(data, $container);
         };

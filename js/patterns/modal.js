@@ -114,7 +114,7 @@ define([
           }
 
           if (templateOptions.loadLinksWithinModal) {
-            actions['a'] = {};
+            actions.a = {};
           }
           $.each(actions, function(action, options) {
             options = $.extend({}, defaultOptions, options);
