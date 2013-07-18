@@ -1,9 +1,19 @@
-@import (less) "../lib/tinymce/skins/lightgray/skin.min.css";
+@import "mixins.less";
+
+.importCSS() when not (@isBrowser) {
+  @import (less) "../lib/tinymce/skins/lightgray/skin.min.css";
+}
+.importCSS() when (@isBrowser) {
+  @import (css) "../lib/tinymce/skins/lightgray/skin.min.css";
+}
+.importCSS();
+
 @import "pattern.modal.less";
 @import "../bower_components/bootstrap/less/buttons.less";
 @import "../bower_components/bootstrap/less/button-groups.less";
 @import "../bower_components/bootstrap/less/close.less";
 @import "pattern.dropzone.less";
+
 
 div.linkModal {
     .pat-relateditems-container{

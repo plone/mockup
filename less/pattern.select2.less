@@ -1,4 +1,12 @@
-@import (less) "../bower_components/select2/select2.css";
+@import "mixins.less";
+
+.importCSS() when not (@isBrowser) {
+  @import (less) "../bower_components/select2/select2.css";
+}
+.importCSS() when (@isBrowser) {
+  @import (css) "../bower_components/select2/select2.css";
+}
+.importCSS();
 
 .select2-container {
   margin-bottom: 1em;

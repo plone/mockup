@@ -1,2 +1,10 @@
-@import (less) "../lib/dropzone/downloads/css/dropzone.css";
+@import "mixins.less";
+
+.importCSS() when not (@isBrowser) {
+  @import (less) "../lib/dropzone/downloads/css/dropzone.css";
+}
+.importCSS() when (@isBrowser) {
+  @import (css) "../lib/dropzone/downloads/css/dropzone.css";
+}
+.importCSS();
 

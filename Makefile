@@ -72,8 +72,7 @@ docs:
 
 	cp index.html docs/dev/index.html
 	sed -i -e 's@<script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.4.1.js"></script>@@g' docs/dev/index.html
-	sed -i -e 's@stylesheet/less@stylesheet@g' docs/dev/index.html
-	sed -i -e 's@less/docs.less@docs.min.css@g' docs/dev/index.html
+	sed -i -e 's:<style type="text/less">@import "less/docs.less";@isBrowser\: true;</style>:<link rel="stylesheet" type="text/css" href="docs.min.css" />:g' docs/dev/index.html
 
 	cp bower_components/bootstrap/img/glyphicons-halflings.png docs/dev/
 	cp bower_components/bootstrap/img/glyphicons-halflings-white.png docs/dev/
