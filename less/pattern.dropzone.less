@@ -4,7 +4,7 @@
   @import (less) "../lib/dropzone/downloads/css/dropzone.css";
 }
 .importCSS() when (@isBrowser) {
-  @import (css) "../lib/dropzone/downloads/css/dropzone.css";
+  @import (css) "@{pathPrefix}../lib/dropzone/downloads/css/dropzone.css";
 }
 .importCSS();
 
