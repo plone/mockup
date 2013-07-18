@@ -1,5 +1,8 @@
-var config = {
+(function() {
+
+var requirejsOptions = {
   baseUrl: './',
+  wrap: true,
   paths: {
     'jquery': 'bower_components/jquery/jquery',
     'jquery.form': 'bower_components/jquery-form/jquery.form',
@@ -73,8 +76,10 @@ var config = {
 };
 
 if (typeof exports !== "undefined" && typeof module !== "undefined") {
-  module.exports = config;
+  module.exports = requirejsOptions;
 }
-else if (typeof require !== "undefined" && require.config) {
-  require.config(config);
+if (typeof requirejs !== "undefined" && requirejs.config) {
+  requirejs.config(requirejsOptions);
 }
+
+}());

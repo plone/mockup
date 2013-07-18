@@ -1,14 +1,13 @@
 module.exports = function(grunt) {
 
-  var config = require('./js/config'),
+  var requirejsOptions = require('./js/config'),
       docs = {};
 
-  for (var key in config.paths) {
+  for (var key in requirejsOptions.paths) {
     if (key !== 'tinymce') {
-      docs['docs/dev/' + config.paths[key] + '.js'] = [config.paths[key] + '.js'];
+      docs['docs/dev/' + requirejsOptions.paths[key] + '.js'] = [requirejsOptions.paths[key] + '.js'];
     }
   }
-
   docs['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
   docs['docs/dev/js/config.js'] = 'js/config.js';
 
@@ -33,11 +32,7 @@ module.exports = function(grunt) {
       }
     },
     requirejs: {
-      options: {
-        baseUrl: './',
-        wrap: true,
-        mainConfigFile: 'js/config.js',
-      },
+      options: requirejsOptions,
       widgets: {
         options: {
           name: 'node_modules/almond/almond.js',
@@ -132,7 +127,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test-ci', ['jshint', 'karma:ci']);
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
-      'uglify:widgets',
       'less:widgets',
       'cssmin:widgets'
       ]);
