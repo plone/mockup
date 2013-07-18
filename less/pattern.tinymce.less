@@ -1,4 +1,4 @@
-@import (less) "../lib/tinymce/skins/lightgray/skin.min.css";
+@import "../lib/tinymce/skins/lightgray/skin.min.css";
 @import "pattern.modal.less";
 @import "../bower_components/bootstrap/less/buttons.less";
 @import "../bower_components/bootstrap/less/button-groups.less";
@@ -36,7 +36,7 @@ div.linkModal {
         display: none;
         -ms-filter: none;
         filter: none;
-
+        pointer-events: none;
     }
     * {
         opacity: 1;
@@ -49,6 +49,10 @@ div.linkModal {
         /* do not display fallback, just don't work for these weirdos */
         display: none;
     }
+    > input[type="file"] {
+        /* hide any fallback.. */
+        display: none;
+    }
 }
 
 .tinymce-dropzone.dz-drag-hover{
@@ -57,8 +61,20 @@ div.linkModal {
     * {
         opacity: 0.7;
     }
+    iframe {
+        pointer-events: none;
+    }
     p{
-        display: none;
+        font-size: 250%;
+        position: absolute;
+        width: 400px;
+        height: 50px;
+        top: 50%;
+        left: 50%;
+        margin-left: -200px;
+        display: block;
+        text-align: center;
+        opacity: 1;
     }
     .dz-notice{
         display: block;
@@ -70,15 +86,11 @@ div.linkModal {
         -o-transition: opacity 0.3s ease-in-out;
         -ms-transition: opacity 0.3s ease-in-out;
         transition: opacity 0.3s ease-in-out;
-        background-image: url("../lib/dropzone/downloads/images/spritemap.png");
-        background-repeat: no-repeat;
         background-position: 0 0;
         position: absolute;
-        width: 428px;
-        height: 90px;
-        margin-left: -214px;
-        margin-top: -45px;
-        top: 50%;
-        left: 50%;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
     }
 }

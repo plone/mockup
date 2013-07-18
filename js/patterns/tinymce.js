@@ -1003,10 +1003,14 @@ define([
 
       tinymce.init(tinyOptions);
 
-      /*XXX sort of working but drop is NOT firing! 
-       * disable until we can figure it out...
       if(self.options.upload_url){
-       var iframe = self.$el.prev().find('.mce-edit-area iframe');
+        /* fixes chrome at least,
+         * still not working quite right in firefox
+         */
+        var events = ["drop", "dragstart", "dragend", "dragenter", "dragover",
+                      "dragleave"];
+
+        var iframe = self.$el.prev().find('.mce-edit-area iframe');
         var win = $(window.frames[iframe.attr('id')]);
         $.each(dropzone.prototype.events, function(index, ev){
           win.on(ev, function(e){
@@ -1014,7 +1018,6 @@ define([
           });
         });
       }
-      */
       self.tiny = tinymce.get(id);
     }
   });
