@@ -189,7 +189,12 @@ define([
         templateOptions: {
           title: 'Login',
           content: '#content',
-          prependContent: '.portalMessage'
+          prependContent: '.portalMessage',
+          actions: {
+            '#login_form input[type="submit"]': {
+              displayInModal: false
+            }
+          }
         }
       };
       $('#personaltools-login')
