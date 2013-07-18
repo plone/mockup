@@ -794,14 +794,15 @@ define([
       tiny: {
         plugins: [
           "advlist autolink lists charmap print preview anchor ploneupload",
-          "searchreplace visualblocks code fullscreen ",
+          "searchreplace visualblocks code fullscreen autoresize",
           "insertdatetime media table contextmenu paste plonelink ploneimage"
         ],
         menubar: "edit table format tools view insert",
         toolbar: "undo redo | styleselect | bold italic | " +
                  "alignleft aligncenter alignright alignjustify | " +
                  "bullist numlist outdent indent | " +
-                 "unlink plonelink ploneimage | ploneupload"
+                 "unlink plonelink ploneimage | ploneupload",
+        autoresize_max_height: 1500
       },
       rel_upload_path: null,
       folder_url: null
