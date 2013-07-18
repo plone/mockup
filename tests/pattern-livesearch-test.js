@@ -34,9 +34,10 @@ define([
   'chai',
   'jquery',
   'sinon',
+  'mockup-fakeserver',
   'mockup-registry',
   'mockup-patterns-livesearch'
-], function(chai, $, sinon, registry, Livesearch) {
+], function(chai, $, sinon, server, registry, Livesearch) {
   "use strict";
 
   var expect = chai.expect,
@@ -45,107 +46,6 @@ define([
   mocha.setup({globals: ['setTimeout', 'setInterval', 'clearTimeout', 'clearInterval']});
   mocha.setup('bdd');
   $.fx.off = true;
-
-  var server = sinon.fakeServer.create();
-  server.autoRespond = true;
-  server.autoRespondAfter = 0;
-  server.respondWith(/search.json/, function (xhr, id) {
-    var items = [
-      {
-        "UID": "123sdfasdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdf1123asZ",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdf1231as",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdf12231451",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdf1235dsd",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasd345345f",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdf465",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooaewrwsdfasdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasd123f",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdas123f",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      },
-      {
-        "UID": "fooasdfasdfsdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "News"
-      },
-      {
-        "UID": "fooasdfasdf",
-        "getURL": "http://localhost:8081/news/aggregator",
-        "Type": "Collection", "Description": "Site News",
-        "Title": "Another Item"
-      }
-    ];
-
-    var results = [];
-    var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
-
-    var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
-
-    if (query.criteria[0].v === 'none*') {
-      results = [];
-    } else {
-      if (batch) {
-        var start, end;
-        start = (batch.page-1) * batch.size;
-        end = start + batch.size;
-        results = items.slice(start, end);
-      }
-    }
-
-    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-      total: results.length,
-      results: results
-    }));
-  });
 
   /* ==========================
    TEST: Livesearch
@@ -156,7 +56,7 @@ define([
     it('test default elements', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch="ajaxvocabulary:/search.json">'+
+              'data-pat-livesearch="url:/search.json">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -176,7 +76,7 @@ define([
     it('keyboard navigation and selection', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch="ajaxvocabulary:/search.json; isTest: true">'+
+              'data-pat-livesearch="url:/search.json; isTest: true">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -222,7 +122,7 @@ define([
     it('user help is shown indicating how many chars to type', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch="ajaxvocabulary:/search.json;">'+
+              'data-pat-livesearch="url:/search.json;">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -231,9 +131,7 @@ define([
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
-
       var clock = sinon.useFakeTimers();
-
       var $input = pattern.$input;
 
       var d = $.Event('keyup');
@@ -256,7 +154,7 @@ define([
     it('no results found message', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch="ajaxvocabulary:/search.json;">'+
+              'data-pat-livesearch="url:/search.json;">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -274,7 +172,6 @@ define([
       d.which = 68;
 
       $input.val('none').trigger(d);
-      
       clock.tick(1000);
 
       expect(pattern.$results.text()).to.contain('No results');
@@ -285,7 +182,7 @@ define([
     it('searching message is displayed', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch="ajaxvocabulary:/search.json;">'+
+              'data-pat-livesearch="url:/search.json;">'+
             '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
             '<div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -301,7 +198,6 @@ define([
       d.which = 68;
 
       $input.val('123').trigger(d);
-      
       clock.tick(pattern.options.delay+5);
 
       expect(pattern.$results.text()).to.contain('Searching...');
@@ -312,7 +208,7 @@ define([
     it('template from selector', function() {
       var $el = $(''+
           '<div class="pat-livesearch"'+
-              'data-pat-livesearch="ajaxvocabulary:/search.json;' +
+              'data-pat-livesearch="url:/search.json;' +
           '                          resultTemplateSelector: #tpl_livesearch">'+
           ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
           ' <div class="pat-livesearch-container">'+
@@ -335,7 +231,7 @@ define([
       var $input= pattern.$input;
       $input.val('abcd').trigger('keyup').focus();
 
-      clock.tick(1000);
+      clock.tick(1500);
 
       var $results = pattern.items();
 
