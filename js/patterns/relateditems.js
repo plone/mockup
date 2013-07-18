@@ -58,21 +58,16 @@ define([
       dropdownCssClass: 'pat-relateditems-dropdown',
       maximumSelectionSize: -1,
       resultTemplate: '' +
-        '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %>">' +
-        ' <span class="pat-relateditems-buttons">' +
+        '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">' +
+        '  <a href="#" class="pat-relateditems-result-select">' +
+        '    <span class="pat-relateditems-result-title"><%= Title %></span>' +
+        '    <span class="pat-relateditems-result-path"><%= path %></span>' +
+        '  </a>' +
+        '  <span class="pat-relateditems-buttons">' +
         '  <% if (folderish) { %>' +
-        '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>">' +
-        '       <i class="icon-folder-open"></i>' +
-        '    </a>' +
+        '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>"></a>' +
         '   <% } %>' +
-        '  <% if (!selected) { %>' +
-        '     <a class="pat-relateditems-result-select" href="#">' +
-        '         <i class="icon-plus-sign"></i>' +
-        '     </a>' +
-        '  <% } %>' +
         ' </span>' +
-        ' <span class="pat-relateditems-result-title"><%= Title %></span>' +
-        ' <span class="pat-relateditems-result-path"><%= path %></span>' +
         '</div>',
       resultTemplateSelector: null,
       selectionTemplate: '' +
@@ -82,13 +77,13 @@ define([
         '</span>',
       selectionTemplateSelector: null,
       tabsTemplate: '' +
-        '<div class="pat-relateditems-tabs tabs">' +
-        ' <a href="#" class="pat-relateditems-tabs-search tab active"><%= searchText %></a>' +
-        ' <a href="#" class="pat-relateditems-tabs-browse tab"><%= browseText %></a>' +
+        '<div class="pat-relateditems-tabs">' +
+        ' <a href="#" class="pat-relateditems-tabs-search pat-relateditems-tab pat-active"><%= searchText %></a>' +
+        ' <a href="#" class="pat-relateditems-tabs-browse pat-relateditems-tab"><%= browseText %></a>' +
         '</div>',
       tabsTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<span><a href="/"><i class="icon-home"></i></a><%= items %></span>',
+        '<span><a class="icon-home" href="/"></a><%= items %></span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
         '/<a href="<%= path %>"><%= text %></a>',
@@ -134,11 +129,11 @@ define([
     setTabs: function() {
       var self = this;
       if (self.browsing) {
-        self.$browseBtn.addClass('active');
-        self.$searchBtn.removeClass('active');
+        self.$browseBtn.addClass('pat-active');
+        self.$searchBtn.removeClass('pat-active');
       } else {
-        self.$browseBtn.removeClass('active');
-        self.$searchBtn.addClass('active');
+        self.$browseBtn.removeClass('pat-active');
+        self.$searchBtn.addClass('pat-active');
       }
     },
     setBreadCrumbs: function() {
@@ -181,6 +176,19 @@ define([
       self.$el.select2("data", data);
       item.selected = true;
       self.trigger('selected');
+    },
+    deselectItem: function(item) {
+      var self = this;
+      self.trigger('deselecting');
+      var data = self.$el.select2("data");
+      _.each(data, function(obj, i) {
+        if (obj.id === item.id) {
+          data.splice(i, 1);
+        }
+      });
+      self.$el.select2("data", data);
+      item.selected = false;
+      self.trigger('deselected');
     },
     init: function() {
       var self = this;
@@ -226,21 +234,27 @@ define([
         var result = $(self.applyTemplate('result', item));
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
-          self.selectItem(item);
-          $(this).remove();
-          if(self.options.maximumSelectionSize > 0){
-            var items = self.$select2.select2('data');
-            if(items.length >= self.options.maximumSelectionSize){
-              self.$select2.select2('close');
+          event.preventDefault();
+          if ($(this).is('.pat-active')) {
+            $(this).removeClass('pat-active');
+            self.deselectItem(item);
+          } else {
+            self.selectItem(item);
+            $(this).addClass('pat-active');
+            if(self.options.maximumSelectionSize > 0){
+              var items = self.$select2.select2('data');
+              if(items.length >= self.options.maximumSelectionSize){
+                self.$select2.select2('close');
+              }
             }
           }
-          return false;
         });
 
         $('.pat-relateditems-result-browse', result).on('click', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
           var path = $(this).data('path');
           self.browseTo(path);
-          return false;
         });
 
         return $(result);
@@ -260,27 +274,9 @@ define([
 
       self.options.id = function(item) {
         var folderish = item.folderish;
-        /* Trick select2 into not removing a folder from the list if it has been added.
+        /* Trick select2 into not removing an item from the list if it has been added.
            Allows user to browse folders that have been selected. */
-        if (item.Title === 'About Us') {
-          var foo = 0;
-        }
-        if (folderish) {
-          var data = self.$el.select2("data");
-          var selected = false;
-          if (item.Title === 'About Us') {
-            selected = false;
-          }
-          _.each(data, function(selItem) {
-            if (item.UID === selItem.UID) {
-              selected = true;
-            }
-          }, self);
-          if (selected) {
-            return item.UID + Math.random() + '' + Math.random();
-          }
-        }
-        return item.UID;
+        return item.UID + Math.random() + '' + Math.random();
       };
 
       Select2.prototype.initializeSelect2.call(self);
