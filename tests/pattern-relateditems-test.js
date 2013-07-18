@@ -34,9 +34,10 @@ define([
   'chai',
   'jquery',
   'sinon',
+  'mockup-fakeserver',
   'mockup-registry',
   'mockup-patterns-relateditems'
-], function(chai, $, sinon, registry, RelatedItems) {
+], function(chai, $, sinon, server, registry, RelatedItems) {
   "use strict";
 
   var expect = chai.expect,
@@ -44,86 +45,6 @@ define([
 
   mocha.setup('bdd');
   $.fx.off = true;
-
-  var server = sinon.fakeServer.create();
-  server.autoRespond = true;
-  server.autoRespondAfter = 0;
-  server.respondWith(/relateditems-test.json/, function(xhr, id) {
-    var root = [
-      {"id": "asdlfkjasdlfkjasdf", "title": "News", "path": "/news", "type": "folder"},
-      {"id": "124asdf", "title": "About", "path": "/about", "type": "folder"},
-      {"id": "asdf1234", "title": "Projects", "path": "/projects", "type": "folder"},
-      {"id": "asdf1234gsad", "title": "Contact", "path": "/contact", "type": "page"},
-      {"id": "asdv34sdfs", "title": "Privacy Policy", "path": "/policy", "type": "page"},
-      {"id": "asdfasdf234sdf", "title": "Our Process", "path": "/our-process", "type": "folder"},
-      {"id": "asdhsfghyt45", "title": "Donate", "path": "/donate-now", "type": "page"}
-    ];
-    var about = [
-      {"id": "gfn5634f", "title": "About Us", "path": "/about/about-us", "type": "page"},
-      {"id": "45dsfgsdcd", "title": "Philosophy", "path": "/about/philosophy", "type": "page"},
-      {"id": "dfgsdfgj675", "title": "Staff", "path": "/about/staff", "type": "folder"},
-      {"id": "sdfbsfdh345", "title": "Board of Directors", "path": "/about/board-of-directors", "type": "page"}
-    ];
-
-    var staff = [
-      {"id": "asdfasdf9sdf", "title": "Mike", "path": "/about/staff/mike", "type": "page"},
-      {"id": "cvbcvb82345", "title": "Joe", "path": "/about/staff/joe", "type": "page"}
-    ];
-    var searchables = about.concat(root).concat(staff);
-
-    var results = [];
-
-    // grab the page number and number of items per page -- note, page is 1-based from Select2
-    var page = Number(getQueryVariable(xhr.url, 'page')) - 1;
-    var page_size = Number(getQueryVariable(xhr.url, 'page_limit'));
-
-    // just return an empty result set if no page is found
-    if(page < 0) {
-      xhr.respond(200, {"Content-Type": "application/json"}, JSON.stringify({"total": 0, "results": []}));
-      return;
-    }
-
-    var query = getQueryVariable(xhr.url, 'q');
-    var path = getQueryVariable(xhr.url, 'browse');
-
-    // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
-    function search(items, q) {
-      results = [];
-      if (q === undefined) return searchables;
-      _.each(items, function(item) {
-        var keys = (item.id + ' ' + item.title + ' ' + item.path).toLowerCase();
-        var query = q.toLowerCase();
-        if (keys.indexOf(query) > -1) results.push(item);
-      });
-    }
-
-    function browse(items, q, p) {
-      results = [];
-      var path = p.substring(0, p.length-1);
-      var splitPath = path.split('/');
-      var fromPath = [];
-      _.each(items, function(item) {
-        var itemSplit = item.path.split('/');
-        if (item.path.indexOf(path) === 0 && itemSplit.length-1 === splitPath.length) {
-          fromPath.push(item);
-        }
-      });
-      if (q === undefined) return fromPath;
-      search(fromPath, q);
-    }
-
-    if (path) {
-      browse(searchables, query, path);
-    } else {
-      search(searchables, query);
-    }
-
-    xhr.respond(200, { "Content-Type": "application/json" },
-      JSON.stringify({
-        "total": results.length,
-        "results": results.slice(page*page_size, (page*page_size)+(page_size-1))
-    }));
-  });
 
   /* ==========================
    TEST: Related Items
@@ -160,14 +81,14 @@ define([
 
       $('.pat-relateditems-tabs-search', $el).on('click', function(){
         expect(pattern.browsing).to.be.false;
-        expect($(this).hasClass('active')).to.be.true;
-        expect($('.pat-relateditems-tabs-browse', $el).hasClass('active')).to.be.false;
+        expect($(this).hasClass('pat-active')).to.be.true;
+        expect($('.pat-relateditems-tabs-browse', $el).hasClass('pat-active')).to.be.false;
         expect(pattern.$browsePath.html()).to.equal('');
       }).click();
       $('.pat-relateditems-tabs-browse', $el).on('click', function(){
         expect(pattern.browsing).to.be.true;
-        expect($(this).hasClass('active')).to.be.true;
-        expect($('.pat-relateditems-tabs-search', $el).hasClass('active')).to.be.false;
+        expect($(this).hasClass('pat-active')).to.be.true;
+        expect($('.pat-relateditems-tabs-search', $el).hasClass('pat-active')).to.be.false;
         expect(pattern.$browsePath.html()).to.not.equal('');
       }).click();
 
