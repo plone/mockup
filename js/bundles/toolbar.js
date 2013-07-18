@@ -203,7 +203,13 @@ define([
 
     // site setup
     $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
-      width: '80%'
+      width: '80%',
+      templateOptions: {
+        loadLinksWithinModal: false,
+        actionsOptions: {
+          displayInModal: false
+        }
+      }
     }).on('show.modal.patterns', function(evt, modal) {
       $('a[href]', modal.$modal).each(function(){
         var href = this.href;
