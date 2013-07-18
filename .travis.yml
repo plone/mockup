@@ -9,4 +9,4 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
   - make bootstrap
 script:
-  - make test-ci
+  - make test-ci BOWER_CHROME=`which chromium-browser`
