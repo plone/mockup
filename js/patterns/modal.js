@@ -266,6 +266,8 @@ define([
       render: function(options) {
         var self = this;
 
+        self.trigger('before-render');
+
         if (!self.$raw) {
           return;
         }
@@ -361,6 +363,8 @@ define([
           })
           .appendTo(self.$wrapperInner);
         self.$modal.data('pattern-' + self.name, self);
+
+        self.trigger('after-render');
       }
     },
     reloadWindow: function() {

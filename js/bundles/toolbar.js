@@ -151,11 +151,11 @@ define([
           }
         }
       }
-    }).on('show.modal.patterns', function(e, modal) {
+    }).on('before-render.modal.patterns', function(e, modal){
       // TODO: not sure exectly how to handle this for now we hide it
-      $('#plone-document-byline', modal.$modal).hide();
-      $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
-      $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
+      $('#plone-document-byline', modal.$raw).hide();
+      $('.modal-footer input.context', modal.$raw).removeClass('context').addClass('standalone');
+      $('.listingBar', modal.$raw).each(function() {  // TODO: we shouldn't hack like this
         var $el = $(this),
             $pagination = $('<ul/>'),
             $previous, $next;
@@ -187,7 +187,10 @@ define([
         }
         $el.hide().before($('<div class="pagination pagination-centered"/>').append($pagination));
       });
-    }).on('shown.modal.patterns linkActionSuccess.modal.patterns', function(e, modal){
+
+    }).on('after-render.modal.patterns', function(e, modal){
+      // normalize buttons
+      modal.$modal.find('input[type="submit"]').addClass('standalone').removeClass('context');
       $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not([href$="folder_contents"])', modal.$modal).css({
         color: '#333333'
       }).off('click').on('click', function(e) {
@@ -196,6 +199,7 @@ define([
         window.parent.location.href = $(this).attr('href');
       });
     });
+
 
     // site setup
     $('#plone-sitesetup a').addClass('modal-trigger').patternModal({

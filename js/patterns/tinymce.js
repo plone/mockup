@@ -530,6 +530,7 @@ define([
           autoCleanResults: true,
           success: function(e, data){
             self.tinypattern.fileUploaded($.parseJSON(data));
+            self.hide();
           }
         });
       }
