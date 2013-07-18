@@ -273,10 +273,19 @@ define([
       };
 
       self.options.id = function(item) {
-        var folderish = item.folderish;
         /* Trick select2 into not removing an item from the list if it has been added.
            Allows user to browse folders that have been selected. */
-        return item.UID + Math.random() + '' + Math.random();
+        var data = self.$el.select2("data");
+        var selected = false;
+        _.each(data, function(selItem) {
+          if (item.UID === selItem.UID) {
+            selected = true;
+          }
+        }, self);
+        if (selected) {
+          return item.UID + Math.random() + '' + Math.random();
+        }
+        return item.UID;
       };
 
       Select2.prototype.initializeSelect2.call(self);
