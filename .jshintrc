@@ -17,6 +17,7 @@
    "globals": {
       "console": true,
       "define": false,
+      "require": false,
       "tinymce": true,
       "document": false,
       "window": false

@@ -1,7 +1,10 @@
-require([
+define([
   'sinon',
-  'jquery'
-], function(sinon, $) {
+  'jquery',
+  'underscore'
+], function(sinon, $, _) {
+  "use strict";
+
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
     if(query === undefined){
@@ -10,7 +13,7 @@ require([
     var vars = query.split('&');
     for (var i = 0; i < vars.length; i += 1) {
         var pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) == variable) {
+        if (decodeURIComponent(pair[0]) === variable) {
             return decodeURIComponent(pair[1]);
         }
     }
@@ -181,12 +184,14 @@ require([
     // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
     function search(items, term) {
       results = [];
-      if (term === undefined) return searchables;
+      if (term === undefined){
+        return searchables;
+      }
       _.each(items, function(item) {
         var q;
         var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
         if(typeof(term) === 'object'){
-          for(var i=0; i<term.length; i++){
+          for(var i=0; i<term.length; i=i+1){
             q = term[i].toLowerCase();
             if (keys.indexOf(q) > -1){
               results.push(item);
@@ -195,7 +200,9 @@ require([
           }
         }else{
           q = term.toLowerCase();
-          if (keys.indexOf(q) > -1) results.push(item);
+          if (keys.indexOf(q) > -1){
+            results.push(item);
+          }
         }
       });
     }
@@ -207,11 +214,13 @@ require([
       var fromPath = [];
       _.each(items, function(item) {
         var itemSplit = item.path.split('/');
-        if (item.path.indexOf(path) === 0 && itemSplit.length-1 == splitPath.length) {
+        if (item.path.indexOf(path) === 0 && itemSplit.length-1 === splitPath.length) {
           fromPath.push(item);
         }
       });
-      if (q === undefined) return fromPath;
+      if (q === undefined){
+        return fromPath;
+      }
       search(fromPath, q);
     }
     if (path) {
