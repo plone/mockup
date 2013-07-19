@@ -330,7 +330,10 @@ define([
               },
               displayInModal: false
             },
-            'input[name="form.button.AddAssignment"]': {}
+            'input[name="form.button.AddAssignment"]': {},
+            'a[href$="@@rules-controlpanel"]': {
+              displayInModal: false
+            }
           };
         });
 
