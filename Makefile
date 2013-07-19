@@ -10,43 +10,84 @@ ifeq ($(UNAME), Linux)
 	BOWER_CHROME=`which chromium`
 endif
 
-all: compile jsint test-ci docs
+all: compile jshint test-ci docs
 
-compile:
+compile: compile-widgets compile-toolbar
+	# ----------------------------------------------------------------------- #
+	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
+	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
+	# ----------------------------------------------------------------------- #
+
+compile-widgets:
 	mkdir -p build
 
 	$(GRUNT) compile-widgets
-	$(GRUNT) compile-toolbar
+	cp js/bundles/widgets_develop.js build/widgets.js
 
-	rm build/widgets.css build/toolbar.css build/toolbar_init.css
+	rm build/widgets.css
+
+	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/widgets-fontawesome-webfont.eot
+	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/widgets-fontawesome-webfont.woff
+	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/widgets-fontawesome-webfont.ttf
+	cp bower_components/font-awesome/font/fontawesome-webfont.svg build/widgets-fontawesome-webfont.svg
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont@++resource++plone.app.widgets-fontawesome-webfont@g' build/widgets.min.css
 
 	cp bower_components/select2/select2.png build/widgets-select2.png
 	cp bower_components/select2/select2-spinner.gif build/widgets-select2-spinner.gif
 	sed -i -e 's@select2.png@++resource++plone.app.widgets-select2.png@g' build/widgets.min.css
 	sed -i -e 's@select2-spinner.gif@++resource++plone.app.widgets-select2-spinner.gif@g' build/widgets.min.css
 
-	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/widgets-fontawesome.eot
-	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/widgets-fontawesome.ttf
-	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/widgets-fontawesome.woff
-	cp bower_components/font-awesome/font/FontAwesome.otf build/widgets-fontawesome.otf
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.eot@++resource++plone.app.widgets-fontawesome.eot@g' build/widgets.min.css
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.ttf@++resource++plone.app.widgets-fontawesome.ttf@g' build/widgets.min.css
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.woff@++resource++plone.app.widgets-fontawesome.woff@g' build/widgets.min.css
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.otf@++resource++plone.app.widgets-fontawesome.otf@g' build/widgets.min.css
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.eot build/widgets-icomoon.eot
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.svg build/widgets-icomoon.svg
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.woff build/widgets-icomoon.woff
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.ttf build/widgets-icomoon.ttf
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.eot build/widgets-icomoon-small.eot
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.svg build/widgets-icomoon-small.svg
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.woff build/widgets-icomoon-small.woff
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf build/widgets-icomoon-small.ttf
+	sed -i -e 's@fonts/icomoon@++resource++plone.app.widgets-icomoon@g' build/widgets.min.css
 
-	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/toolbar-fontawesome.eot
-	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/toolbar-fontawesome.ttf
-	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/toolbar-fontawesome.woff
-	cp bower_components/font-awesome/font/FontAwesome.otf build/toolbar-fontawesome.otf
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.eot@++resource++plone.app.toolbar-fontawesome.eot@g' build/toolbar.min.css
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.ttf@++resource++plone.app.toolbar-fontawesome.ttf@g' build/toolbar.min.css
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.woff@++resource++plone.app.toolbar-fontawesome.woff@g' build/toolbar.min.css
-	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont.otf@++resource++plone.app.toolbar-fontawesome.otf@g' build/toolbar.min.css
+	cp lib/dropzone/downloads/images/spritemap.png build/widgets-spritemap.png
+	cp lib/dropzone/downloads/images/spritemap@2x.png build/widgets-spritemap@2x.png
+	sed -i -e 's@images/spritemap@spritemap@g' build/widgets.min.css
 
-	# ----------------------------------------------------------------------- #
-	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
-	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
-	# ----------------------------------------------------------------------- #
+compile-toolbar:
+	mkdir -p build
+
+	$(GRUNT) compile-toolbar
+	cp js/bundles/toolbar_develop.js build/toolbar.js
+
+	rm build/toolbar.css build/toolbar_init.css
+
+	cp bower_components/bootstrap/img/glyphicons-halflings.png build/toolbar-glyphicons-halflings.png
+	cp bower_components/bootstrap/img/glyphicons-halflings-white.png build/toolbar-glyphicons-halflings-white.png
+	sed -i -e 's@../img/glyphicons-halflings.png@++resource++plone.app.toolbar-glyphicons-halflings.png@g' build/toolbar.min.css
+	sed -i -e 's@../img/glyphicons-halflings-white.png@++resource++plone.app.toolbar-glyphicons-halflings-white.png@g' build/toolbar.min.css
+
+	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/toolbar-fontawesome-webfont.eot
+	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/toolbar-fontawesome-webfont.woff
+	cp bower_components/font-awesome/font/fontawesome-webfont.ttf build/toolbar-fontawesome-webfont.ttf
+	cp bower_components/font-awesome/font/fontawesome-webfont.svg build/toolbar-fontawesome-webfont.svg
+	sed -i -e 's@../bower_components/font-awesome/font/fontawesome-webfont@++resource++plone.app.toolbar-fontawesome-webfont@g' build/toolbar.min.css
+
+	cp bower_components/select2/select2.png build/toolbar-select2.png
+	cp bower_components/select2/select2-spinner.gif build/toolbar-select2-spinner.gif
+	sed -i -e 's@select2.png@++resource++plone.app.toolbar-select2.png@g' build/toolbar.min.css
+	sed -i -e 's@select2-spinner.gif@++resource++plone.app.toolbar-select2-spinner.gif@g' build/toolbar.min.css
+
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.eot build/toolbar-icomoon.eot
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.svg build/toolbar-icomoon.svg
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.woff build/toolbar-icomoon.woff
+	cp lib/tinymce/skins/lightgray/fonts/icomoon.ttf build/toolbar-icomoon.ttf
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.eot build/toolbar-icomoon-small.eot
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.svg build/toolbar-icomoon-small.svg
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.woff build/toolbar-icomoon-small.woff
+	cp lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf build/toolbar-icomoon-small.ttf
+	sed -i -e 's@fonts/icomoon@++resource++plone.app.toolbar-icomoon@g' build/toolbar.min.css
+
+	cp lib/dropzone/downloads/images/spritemap.png build/toolbar-spritemap.png
+	cp lib/dropzone/downloads/images/spritemap@2x.png build/toolbar-spritemap@2x.png
+	sed -i -e 's@images/spritemap@spritemap@g' build/toolbar.min.css
 
 bootstrap:
 	mkdir -p build

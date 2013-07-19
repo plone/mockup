@@ -11,6 +11,8 @@ module.exports = function(grunt) {
   docs['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
   docs['docs/dev/js/config.js'] = 'js/config.js';
 
+  requirejsOptions.optimize = 'none';
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -36,7 +38,7 @@ module.exports = function(grunt) {
       widgets: {
         options: {
           name: 'node_modules/almond/almond.js',
-          include: 'js/bundles/widgets',
+          include: 'mockup-bundles-widgets',
           insertRequire: ['mockup-bundles-widgets'],
           out: 'build/widgets.min.js',
           excludeShallow: ['jquery']
@@ -45,7 +47,7 @@ module.exports = function(grunt) {
       toolbar: {
         options: {
           name: 'node_modules/almond/almond.js',
-          include: 'js/bundles/toolbar',
+          include: 'mockup-bundles-toolbar',
           insertRequire: ['mockup-bundles-toolbar'],
           out: 'build/toolbar.min.js'
         }
@@ -100,7 +102,7 @@ module.exports = function(grunt) {
       toolbar: {
         expand: true,
         cwd: 'build/',
-        src: ['toolbar.css'],
+        src: ['toolbar.css', 'toolbar_init.css'],
         dest: 'build/',
         ext: '.min.css',
         report: 'min'

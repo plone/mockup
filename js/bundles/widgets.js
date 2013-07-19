@@ -372,13 +372,17 @@ define([
         modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
       });
 
-      },
-      scan: function(selector) {
-        registry.scan($(selector));
       }
   };
 
   registry.register(Widgets);
+
+  // initialize only if we are in top frame
+  if (window.parent === window) {
+    $(document).ready(function() {
+      registry.scan($('body'));
+    });
+  }
 
   return Widgets;
 });
