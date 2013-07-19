@@ -8,7 +8,11 @@
     script2.setAttribute('src', '/++resource++mockup/js/config.js');
     script2.onload = function() {
       requirejs.config({ baseUrl: '++resource++mockup/' });
-      require(['mockup-bundles-widgets']);
+      if ($('[data-iframe="plone-toolbar"]').size() === 0) {
+        require(['mockup-bundles-widgets']);
+      } else {
+        require(['mockup-bundles-widgets', 'mockup-iframe_init']);
+      }
     };
 
     var script1 = document.createElement('script');
@@ -23,6 +27,13 @@
     style1.setAttribute('type', 'text/less');
     style1.innerHTML = '@import (less) "/++resource++mockup/less/widgets.less"; @isBrowser: true; @pathPrefix: \'/++resource++mockup/less/\';';
     document.getElementsByTagName("head")[0].appendChild(style1);
+
+    if ($('[data-iframe="plone-toolbar"]').size() !== 0) {
+      var style2 = document.createElement('style');
+      style2.setAttribute('type', 'text/less');
+      style2.innerHTML = '@import (less) "/++resource++mockup/less/iframe_init.less"; @isBrowser: true; @pathPrefix: \'/++resource++mockup/less/\';';
+      document.getElementsByTagName("head")[0].appendChild(style2);
+    }
 
     var script3 = document.createElement('script');
     script3.setAttribute('type', 'text/javascript');

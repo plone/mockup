@@ -25,6 +25,7 @@ compile-widgets:
 	cp js/bundles/widgets_develop.js build/widgets.js
 
 	rm build/widgets.css
+	touch build/widgets.css
 
 	cp bower_components/font-awesome/font/fontawesome-webfont.eot build/widgets-fontawesome-webfont.eot
 	cp bower_components/font-awesome/font/fontawesome-webfont.woff build/widgets-fontawesome-webfont.woff
@@ -58,6 +59,9 @@ compile-toolbar:
 	cp js/bundles/toolbar_develop.js build/toolbar.js
 
 	rm build/toolbar.css build/toolbar_init.css
+	touch build/toolbar.css
+	touch build/toolbar_init.css
+	touch build/toolbar_init.js
 
 	cp bower_components/bootstrap/img/glyphicons-halflings.png build/toolbar-glyphicons-halflings.png
 	cp bower_components/bootstrap/img/glyphicons-halflings-white.png build/toolbar-glyphicons-halflings-white.png
