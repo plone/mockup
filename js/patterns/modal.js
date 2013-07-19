@@ -41,17 +41,12 @@ define([
     createModal: null,
     $model: null,
     defaults: {
-      triggers: '',
-      position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
       width: "",
       height: "",
       margin: function() { return 20; }, // can be int or function that returns an int -- int is a pixel value
-      klass: "modal",
-      klassWrapper: "modal-wrapper",
-      klassWrapperInner: "modal-wrapper-inner",
-      klassLoading: "modal-loading",
-      klassActive: "active",
-      backdrop: "body",
+      position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
+      triggers: [],
+      backdrop: "body", // Element to initiate the Backdrop on.
       backdropOptions: {
         zIndex: "1040",
         opacity: "0.8",
@@ -60,20 +55,6 @@ define([
         closeOnEsc: true,
         closeOnClick: true
       },
-      modalTemplate: '' +
-        '<div class="modal">' +
-        '  <div class="modal-header">' +
-        '    <a class="close">&times;</a>' +
-        '    <% if (title) { %><h3><%= title %></h3><% } %>' +
-        '  </div>' +
-        '  <div class="modal-body">' +
-        '    <%= prepend %> ' +
-        '    <div class="<%= contentClass %>"><%= content %></div>' +
-        '  </div>' +
-        '  <div class="modal-footer"> ' +
-        '    <%= buttons %> ' +
-        '  </div>' +
-        '</div>',
       templateOptions: {
         title: null,
         titleSelector: 'h1:first',
@@ -81,8 +62,31 @@ define([
         automaticallyAddButtonActions: true,
         loadLinksWithinModal: true,
         content: '#content',
-        contentClass: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
+        klass: "modal",
+        klassHeader: "modal-header",
+        klassBody: "modal-body",
+        klassFooter: "modal-footer",
+        klassWrapper: "modal-wrapper",
+        klassWrapperInner: "modal-wrapper-inner",
+        klassLoading: "modal-loading",
+        klassActive: "active",
+        klassPrepend: "", // String, css class to be applied to the wrapper of the prepended content
+        klassContent: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         prependContent: '.portalMessage',
+        template: '' +
+          '<div class="<%= options.klass %>">' +
+          '  <div class="<%= options.klassHeader %>">' +
+          '    <a class="close">&times;</a>' +
+          '    <% if (title) { %><h3><%= title %></h3><% } %>' +
+          '  </div>' +
+          '  <div class="<%= options.klassBody %>">' +
+          '    <div class="<%= options.klassPrepend %>"><%= prepend %></div> ' +
+          '    <div class="<%= options.klassContent %>"><%= content %></div>' +
+          '  </div>' +
+          '  <div class="options.klassFooter"> ' +
+          '    <%= buttons %> ' +
+          '  </div>' +
+          '</div>',
         actions: {},
         actionsOptions: {
           eventType: 'click',
@@ -288,7 +292,7 @@ define([
           prepend: '<div />',
           content: '',
           buttons: '<div class="pat-modal-buttons"></div>',
-          contentClass: options.contentClass
+          options: options
         };
 
         // setup the Title
@@ -314,7 +318,7 @@ define([
         }
 
         // Render html
-        self.$modal = $(_.template(self.options.modalTemplate, tpl_object));
+        self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
 
         // Setup buttons
         $(options.buttons, self.$modal).each(function() {
@@ -352,7 +356,7 @@ define([
         }
 
         self.$modal
-          .addClass(self.options.klass)
+          .addClass(self.options.templateOptions.klass)
           .on('click', function(e) {
             e.stopPropagation();
             if ($.nodeName(e.target, 'a')) {
@@ -387,7 +391,7 @@ define([
           self.$el.parents(self.options.backdrop),
           self.options.backdropOptions);
 
-      self.$wrapper = $('> .' + self.options.klassWrapper, self.backdrop.$el);
+      self.$wrapper = $('> .' + self.options.templateOptions.klassWrapper, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
         self.$wrapper = $('<div/>')
           .hide()
@@ -402,7 +406,7 @@ define([
             'right': '0',
             'top': '0'
           })
-          .addClass(self.options.klassWrapper)
+          .addClass(self.options.templateOptions.klassWrapper)
           .insertBefore(self.backdrop.$backdrop)
           .on('click', function(e) {
             e.stopPropagation();
@@ -421,7 +425,7 @@ define([
 
       if (self.options.backdropOptions.closeOnEsc === true) {
         $(document).on('keydown', function(e, data) {
-          if (self.$el.is('.' + self.options.klassActive)) {
+          if (self.$el.is('.' + self.options.templateOptions.klassActive)) {
             if (e.keyCode === 27) {  // ESC key pressed
               self.hide();
             }
@@ -429,7 +433,7 @@ define([
         });
       }
 
-      self.$wrapperInner = $('> .' + self.options.klassWrapperInner, self.$wrapper);
+      self.$wrapperInner = $('> .' + self.options.templateOptions.klassWrapperInner, self.$wrapper);
       if (self.$wrapperInner.size() === 0) {
         self.$wrapperInner = $('<div/>')
           .addClass(self.options.klassWrapperInner)
@@ -443,10 +447,10 @@ define([
           .appendTo(self.$wrapper);
       }
 
-      self.$loading = $('> .' + self.options.klassLoading, self.$wrapperInner);
+      self.$loading = $('> .' + self.options.templateOptions.klassLoading, self.$wrapperInner);
       if (self.$loading.size() === 0) {
         self.$loading = $('<div/>').hide()
-          .addClass(self.options.klassLoading)
+          .addClass(self.options.templateOptions.klassLoading)
           .appendTo(self.$wrapperInner);
       }
 
@@ -456,8 +460,9 @@ define([
 
       if (self.options.triggers) {
         $.each(self.options.triggers, function(i, item) {
-          item = item.split(' ');
-          $(item[1] || self.$el).on(item[0], function(e) {
+          var e = item.substring(0, item.indexOf(' '));
+          var selector = item.substring(item.indexOf(' '), item.length);
+          $(selector || self.$el).on(e, function(e) {
             e.stopPropagation();
             e.preventDefault();
             self.show();
@@ -694,8 +699,8 @@ define([
       self.$wrapper.show();
       self.$loading.hide();
       self.$wrapper.parent().css('overflow', 'hidden');
-      self.$el.addClass(self.options.klassActive);
-      self.$modal.addClass(self.options.klassActive);
+      self.$el.addClass(self.options.templateOptions.klassActive);
+      self.$modal.addClass(self.options.templateOptions.klassActive);
       registry.scan(self.$modal);
       self.positionModal();
       $('img', self.$modal).load(function() {
@@ -718,7 +723,7 @@ define([
         self.$loading.hide();
         self.$wrapper.parent().css('overflow', 'visible');
       }
-      self.$el.removeClass(self.options.klassActive);
+      self.$el.removeClass(self.options.templateOptions.klassActive);
       if (self.$modal !== undefined) {
         self.$modal.remove();
         self.initModal();
