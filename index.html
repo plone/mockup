@@ -13,7 +13,8 @@
   <style type="text/less">@import "less/docs.less";@isBrowser: true;</style>
 
   <script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.4.1.js"></script>
-  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/jquery/jquery.min.js"></script>
+  <script src="bower_components/underscore/underscore-min.js"></script>
   <script src="bower_components/requirejs/require.js"></script>
   <script src="js/config.js"></script>
   <script>
@@ -751,6 +752,21 @@ $ make bootstrap</pre>
   </script>
 
   <!--  **** Modal **** -->
+  <script type="text/example" id="example_template">
+<div class="<%= options.klass %>">
+  <div class="<%= options.klassHeader %>">
+    <a class="close">&times;</a>
+    <% if (title) { %><h3><%= title %></h3><% } %>
+  </div>
+  <div class="<%= options.klassBody %>">
+    <div class="<%= options.klassPrepend %>"><%= prepend %></div> 
+    <div class="<%= options.klassContent %>"><%= content %></div>
+  </div>
+  <div class="options.klassFooter"> 
+    <%= buttons %> 
+  </div>
+</div>
+  </script>
   <script>
     addPattern({
       id: 'modal',
@@ -777,7 +793,24 @@ $ make bootstrap</pre>
         {
           attribute: 'templateOptions',
           type: 'Object',
-          attributes: []
+          description: 'The template options are used to configure how HTML provided to the modal is handled as it is merged into the modal template. For example, you might extract buttons to place in the modal footer, or customize the template for styling.',
+          attributes: [
+            {attribute: 'title', type: 'String', defaultValue: null, description: 'A string to place in the modal header. If title is provided titleSelector is not used.'},
+            {attribute: 'titleSelector', type: 'Selector', defaultValue: '"h1:first"', description: 'Selector for an element to extract from the content provided to the modal and place in the modal header.'},
+            {attribute: 'content', type: 'Selector', defaultValue: '"#content"', description: 'Selector for an element within the content provided to the modal to use as the modal body.'},
+            {attribute: 'prependContent', type: 'Selector', defaultValue: '".portalMessage"', description: 'Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.'},
+            {attribute: 'klass', type: 'String', defaultValue: '"modal"', description: 'CSS class applied to the modal element.'},
+            {attribute: 'klassHeader', type: 'String', defaultValue: '"modal-header"', description: 'CSS class applied to the modal header element.'},
+            {attribute: 'klassBody', type: 'String', defaultValue: '"modal-body"', description: 'CSS class applied to the modal body element.'},
+            {attribute: 'klassFooter', type: 'String', defaultValue: '"modal-footer"', description: 'CSS class applied to the modal footer element.'},
+            {attribute: 'klassWrapper', type: 'String', defaultValue: '"modal-wrapper"', description: 'CSS class applied to the invisible by default element that contains the modal. This element is used for precise styling of the modal and to capture links. During modal initialization, if an existing element is found with this class it will be used as the wrapper and the modal will be appended to it. This allows for multiple modals to share the same wrapper. If no element is found a new element will be created with this class applied.'},
+            {attribute: 'klassWrapperInner', type: 'String', defaultValue: '"modal-wrapper-inner"', description: 'CSS class applied to an element that is created within the wrapper. Like the wrapper element the wrapperInner element will be matched with an existing item in the DOM or created during initial modal setup.'},
+            {attribute: 'klassPrepend', type: 'String', defaultValue: '""', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
+            {attribute: 'klassContent', type: 'String', defaultValue: '""', description: 'This CSS class will be applied to the element where content matched using the `content` selector will be merged into the template.'},
+            {attribute: 'template', type: 'String', defaultValue: '<pre>'+_.escape($('#example_template').html())+'</pre>', description: 'An <a href="http://underscorejs.org">underscore</a> template which will be used during render. Options passed to the template are: title (either the string set using `title`, or html matched from the content using `titleSelector`), prepend (html extracted from the content matching `prependContent` selector), content (extracted from the content using the `content` option), options (all of the `templateOptions` set on the modal).'},
+            {attribute: 'actions', type: 'Object', defaultValue: '{}', description: 'A hash of selector to options. Where options can include any of the defaults from `actionOptions`. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
+            {attribute: 'actionsOptions', type: 'Object', defaultValue: '', description: 'Configure the defaults for how actions will be handled.'},
+          ]
         }
       ]
     });
