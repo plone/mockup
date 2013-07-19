@@ -12,16 +12,73 @@ define([
     },
     initialize: function() {
       this.set('content', this.getContent());
+      if (this.get('attributes')) {
+        var collection = new Attributes();
+        collection.add(this.get('attributes'));
+        this.set('attributes', collection);
+      }
     },
     getContent: function() {
       return $('#page_'+this.get('id')).html();
     }
   });
 
+  var Attribute = Backbone.Model.extend({
+    defaults: {
+      attribute: '',
+      type: '',
+      description: '',
+      defaultValue: ''
+    },
+    initialize: function() {
+      if (this.get('attributes')) {
+        var collection = new Attributes();
+        collection.add(this.get('attributes'));
+        this.set('attributes', collection);
+      }
+    }
+  });
+
+  var Attributes = Backbone.Collection.extend({
+    model: Attribute
+  });
+
   var Pages = Backbone.Collection.extend({
     model: Page,
     comparater: function(model) {
       return model.get('title');
+    }
+  });
+
+  var AttributeView = Backbone.View.extend({
+    tagName: 'tr',
+    tpl: $('#tpl_attribute').html(),
+    render: function() {
+      var self = this,
+          attrs = '',
+          tpl_options = {};
+      if (self.model.get('attributes')) {
+        attrs = $('<div />').append(new AttributesView({model: self.model.get('attributes')}).render().$el).html();
+      }
+
+      tpl_options.attrs = attrs;
+
+      self.$el.html(_.template(self.tpl, _.extend(tpl_options,self.model.toJSON())));
+      return self;
+    }
+  });
+
+  var AttributesView = Backbone.View.extend({
+    tagName: 'table',
+    className: 'table',
+    tpl: $('#tpl_attributes').html(),
+    render: function() {
+      this.$el.html(_.template(this.tpl, {}));
+      _.each(this.model.models, function(model) {
+        var view = new AttributeView({model: model});
+        this.$el.find('> tbody').append(view.render().$el);
+      }, this);
+      return this;
     }
   });
 
@@ -33,7 +90,7 @@ define([
     renderExamples: function() {
       var tpl = $('#tpl_example').html();
       var html = '';
-      examples = this.buildExamples();
+      var examples = this.buildExamples();
       _.each(examples, function(example) {
         html += _.template(tpl, example);
       }, this);
@@ -48,7 +105,9 @@ define([
         };
         obj.html = $(this).html();
         obj.pre = _.escape(obj.html);
-        if ($(this).data().title !== undefined) obj.title = $(this).data().title;
+        if ($(this).data().title !== undefined) {
+          obj.title = $(this).data().title;
+        }
         built.push(obj);
       });
       return built;
@@ -60,6 +119,10 @@ define([
         self.$el.html(_.template(tpl, _.extend({
           examples: self.renderExamples()
         }, self.model.toJSON())));
+
+        if (self.model.get('attributes')) {
+          $('.docs-attributes', self.$el).append(new AttributesView({model: self.model.get('attributes')}).render().$el);
+        }
         registry.scan(self.$el);
       });
       return this;

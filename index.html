@@ -98,28 +98,37 @@ require([
     <% if (attributes.length > 0) { %>
       <div class="docs-attributes" id="data-options">
         <h2>Data Options</h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Attribute</th>
-              <th>Type</th>
-              <th>Default</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% _.each(attributes, function(attr) { %>
-              <tr>
-                <td><%= attr.attribute %></td>
-                <td><%= attr.type %></td>
-                <td><%= attr.default %></td>
-                <td><%= attr.description %></td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
       </div>
     <% } %>
+  </script>
+
+  <script type="text/template" id="tpl_attribute">
+    <% if (type === 'Object' && attrs !== '') { %>
+      <td colspan="4" class="docs-attrs">
+        <%= attribute %> {
+          <% if (description !== '') { %> <p><%= description %></p> <% } %>
+          <%= attrs %>
+        }
+      </td>
+    <% } else { %>
+      <td><%= attribute %></td>
+      <td><%= type %></td>
+      <td><%= defaultValue %></td>
+      <td><%= description %></td>
+    <% } %>
+  </script>
+
+  <script type="text/template" id="tpl_attributes">
+    <thead>
+      <tr>
+        <th>Option</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
   </script>
 
   <script type="text/template" id="tpl_example">
@@ -147,6 +156,18 @@ require([
   </script>
 
   <!--  ** DOCS CONTENT ** -->
+
+  <!-- * Reused * -->
+  <script>
+  var backdropAttributes = [
+    {attribute: 'zIndex', type: 'String', defaultValue: '"1040"', description: 'Value for z-index to be applied to backdrop.'},
+    {attribute: 'opacity', type: 'String', defaultValue: '"0.8"', description: 'This property allows you to control the transparency or opacity of the backdrop.'},
+    {attribute: 'klass', type: 'String', defaultValue: '"backdrop"', description: 'Set the CSS class applied to the backdrop. Useful if you want to apply your own styling to the backdrop.'},
+    {attribute: 'klassActive', type: 'String', defaultValue: '"backdrop-active"', description: 'Set the CSS class which is applied when the backdrop is made active.'},
+    {attribute: 'closeOnEsc', type: 'Boolean', defaultValue: 'true', description: 'Whether or not to close the backdrop (and modal) when the "Escape" key is pressed.'},
+    {attribute: 'closeOnClick', type: 'Boolean', defaultValue: 'true', description: 'Whether or not to close the backdrop (and modal) when the backdrop is clicked.'},
+  ];
+  </script>
 
   <script>
     addPage({
@@ -531,9 +552,9 @@ $ make bootstrap</pre>
       title: 'Adjust Text Size',
       description: 'Easily change <strong>text size</strong> on a page.',
       attributes: [
-        {attribute: 'smallbtn', type: 'Selector', 'default': '', description: 'Selector used to activate small text on click.'},
-        {attribute: 'normalbtn', type: 'Selector', 'default': '', description: 'Selector used to activate normal text on click.'},
-        {attribute: 'largebtn', type: 'Selector', 'default': '', description: 'Selector used to activate large text on click.'}
+        {attribute: 'smallbtn', type: 'Selector', defaultValue: '', description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'Selector', defaultValue: '', description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'Selector', defaultValue: '', description: 'Selector used to activate large text on click.'}
       ]
     });
   </script>
@@ -564,14 +585,14 @@ $ make bootstrap</pre>
       title: 'Cookie Directive',
       description: 'A pattern that <strong>checks cookies</strong> enabled and asks permission for the user to allow cookies or not.',
       attributes: [
-        {attribute: 'allowMsg', type: 'String', 'default': 'Allow', description: 'Text on button used to allow cookies.'},
-        {attribute: 'askPermissionMsg', type: 'String', 'default': 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
-        {attribute: 'cookieName', type: 'String', 'default': 'Allow_Cookies_For_Site', description: 'Name of cookie used to store the value of this setting.'},
-        {attribute: 'denyMsg', type: 'String', 'default': 'Deny', description: 'Text on button used to deny cookies.'},
-        {attribute: 'shouldAsk', type: 'Boolean', 'default': 'true', description: 'Should user be prompted about cookies?'},
-        {attribute: 'shouldEnable', type: 'Boolean', 'default': 'true', description: 'Display a message about enabling cookies if they are disabled.'},
-        {attribute: 'shouldEnableMsg', type: 'String', 'default': 'You should enable cookies to be able to login.', description: 'A message about enabling cookies if they are disabled, which will be displayed if shouldEnable is true.'},
-        {attribute: 'shouldEnableSelector', type: 'String', 'default': '.login', description: 'shouldEnable message selector.'}
+        {attribute: 'allowMsg', type: 'String', defaultValue: 'Allow', description: 'Text on button used to allow cookies.'},
+        {attribute: 'askPermissionMsg', type: 'String', defaultValue: 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
+        {attribute: 'cookieName', type: 'String', defaultValue: 'Allow_Cookies_For_Site', description: 'Name of cookie used to store the value of this setting.'},
+        {attribute: 'denyMsg', type: 'String', defaultValue: 'Deny', description: 'Text on button used to deny cookies.'},
+        {attribute: 'shouldAsk', type: 'Boolean', defaultValue: 'true', description: 'Should user be prompted about cookies?'},
+        {attribute: 'shouldEnable', type: 'Boolean', defaultValue: 'true', description: 'Display a message about enabling cookies if they are disabled.'},
+        {attribute: 'shouldEnableMsg', type: 'String', defaultValue: 'You should enable cookies to be able to login.', description: 'A message about enabling cookies if they are disabled, which will be displayed if shouldEnable is true.'},
+        {attribute: 'shouldEnableSelector', type: 'String', defaultValue: '.login', description: 'shouldEnable message selector.'}
       ]
     });
   </script>
@@ -592,15 +613,15 @@ $ make bootstrap</pre>
       title: 'Expose',
       description: 'Exposes the focused element by <strong>darkening everything else on the page</strong>. Useful to focus the user attention on a particular area.',
       attributes: [
-        {attribute: 'backdrop', type: 'String', 'default': 'body', description: 'Selector of parent element to use as backdrop.'},
-        {attribute: 'backdropCloseOnClick', type: 'Boolean', 'default': 'true', description: 'Cancel expose on click if true.'},
-        {attribute: 'backdropCloseOnEsc', type: 'Boolean', 'default': 'true', description: 'Cancel expose on escape if true.'},
-        {attribute: 'backdropKlass', type: 'String', 'default': 'backdrop', description: 'TODO'},
-        {attribute: 'backdropKlassActive', type: 'String', 'default': 'backdrop-active', description: 'TODO'},
-        {attribute: 'backdropOpacity', type: 'Float', 'default': '0.8', description: 'Backdrop opacity value between 0 and 1.'},
-        {attribute: 'backdropZIndex', type: 'Integer', 'default': '1000', description: 'Z-index of backdrop overlay.'},
-        {attribute: 'klassActive', type: 'String', 'default': 'active', description: 'TODO'},
-        {attribute: 'triggers', type: 'String', 'default': 'focusin', description: 'Events that cause the expose feature to be triggered.'}
+        {attribute: 'backdrop', type: 'String', defaultValue: 'body', description: 'Selector of parent element to use as backdrop.'},
+        {attribute: 'backdropCloseOnClick', type: 'Boolean', defaultValue: 'true', description: 'Cancel expose on click if true.'},
+        {attribute: 'backdropCloseOnEsc', type: 'Boolean', defaultValue: 'true', description: 'Cancel expose on escape if true.'},
+        {attribute: 'backdropKlass', type: 'String', defaultValue: 'backdrop', description: 'TODO'},
+        {attribute: 'backdropKlassActive', type: 'String', defaultValue: 'backdrop-active', description: 'TODO'},
+        {attribute: 'backdropOpacity', type: 'Float', defaultValue: '0.8', description: 'Backdrop opacity value between 0 and 1.'},
+        {attribute: 'backdropZIndex', type: 'Integer', defaultValue: '1000', description: 'Z-index of backdrop overlay.'},
+        {attribute: 'klassActive', type: 'String', defaultValue: 'active', description: 'TODO'},
+        {attribute: 'triggers', type: 'String', defaultValue: 'focusin', description: 'Events that cause the expose feature to be triggered.'}
       ]
     });
   </script>
@@ -644,9 +665,9 @@ $ make bootstrap</pre>
       title: 'Form Unload Alert',
       description: 'A pattern to <strong>warn user when changes are unsaved</strong> and they try to navigate away from page.',
       attributes: [
-        {attribute: 'changingEvents', type: 'String', 'default': 'change keyup paste', description: 'Events on which to check for changes.'},
-        {attribute: 'changingFields', type: 'String', 'default': 'input,select,textarea,fileupload', description: 'Fields on which to check for changes.'},
-        {attribute: 'message', type: 'String', 'default': 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
+        {attribute: 'changingEvents', type: 'String', defaultValue: 'change keyup paste', description: 'Events on which to check for changes.'},
+        {attribute: 'changingFields', type: 'String', defaultValue: 'input,select,textarea,fileupload', description: 'Fields on which to check for changes.'},
+        {attribute: 'message', type: 'String', defaultValue: 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
       ]
     });
   </script>
@@ -688,29 +709,29 @@ $ make bootstrap</pre>
       title: 'Live Search',
       description: 'Dynamically query the server and display results.',
       attributes: [
-        {attribute: 'url', type: 'String', 'default': '', description: 'The url that will be of the server side page that will be queried.'},
+        {attribute: 'url', type: 'String', defaultValue: '', description: 'The url that will be of the server side page that will be queried.'},
         {attribute: 'delay', type: 'Integer', '200': '', description: 'Delay in ms after user types before searching.'},
-        {attribute: 'highlight', type: 'String', 'default': '"pat-livesearch-highlight"', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
-        {attribute: 'minimumInputLength', type: 'Integer', 'default': '3', description: 'Number of characters user must type before search begins.'},
-        {attribute: 'input', type: 'Selector', 'default': '".pat-livesearch-input"', description: 'Selector for element that will be used for the livesearch input.'},
-        {attribute: 'toggleTarget', type: 'Selector', 'default': '".pat-livesearch-container"', description: 'Selector for element that will be shown when results are found.'},
-        {attribute: 'toggleClass', type: 'String', 'default': '"show"', description: 'CSS class that will be added to target toggle element when results are found.'},
-        {attribute: 'positionToggleWithInput', type: 'Boolean', 'default': 'true', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
-        {attribute: 'setPosition', type: 'Function', 'default': '', description: 'Function which will be used to set the position of the toggle element.'},
-        {attribute: 'resultsTarget', type: 'Selector', 'default': '".pat-livesearch-results"', description: 'Selector for element where results from the server will be inserted.'},
-        {attribute: 'resultContainerTemplate', type: 'String', 'default': '"&lt;ul&gt;&lt;/ul&gt;"', description: 'Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used.'},
-        {attribute: 'resultContainerTemplateSelector', type: 'Selector', 'default': '', description: 'Selector for an element in the DOM to use in place of resultContainerTemplate.'},
-        {attribute: 'resultSelector', type: 'Selector', 'default': '".pat-livesearch-result"', description: 'Will be used to select result items from within the result container.'},
-        {attribute: 'resultTemplate', type: 'String', 'default': $('#ls_attr_resultTemplate').html(), description: 'Will be used to select result items from within the result container.'},
-        {attribute: 'resultTemplateSelector', type: 'Selector', 'default': '', description: 'Selector for element to be used in place of resultTemplate.'},
-        {attribute: 'helpTemplate', type: 'String', 'default': '"&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;"', description: "Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.'"},
-        {attribute: 'helpTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of helpTemplate."},
-        {attribute: 'typeMoreTemplate', type: 'String', 'default': '"Type <%= more %> more characters to search."', description: "Template for message which is displayed if the current input length is less than minimumInputLength."},
-        {attribute: 'typeMoreTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of typeMoreTemplate."},
-        {attribute: 'noResultsTemplate', type: 'String', 'default': '"No results found."', description: "Template for message that is displayed after a search when no results were found."},
-        {attribute: 'noResultsTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of noResultsTemplate."},
-        {attribute: 'searchingTemplate', type: 'String', 'default': '"Searching..."', description: "Template for message which will be displayed after a search has started and before it has ended."},
-        {attribute: 'searchingTemplateSelector', type: 'Selector', 'default': '', description: "Element in the DOM to be used instead of searchingTemplate."}
+        {attribute: 'highlight', type: 'String', defaultValue: '"pat-livesearch-highlight"', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
+        {attribute: 'minimumInputLength', type: 'Integer', defaultValue: '3', description: 'Number of characters user must type before search begins.'},
+        {attribute: 'input', type: 'Selector', defaultValue: '".pat-livesearch-input"', description: 'Selector for element that will be used for the livesearch input.'},
+        {attribute: 'toggleTarget', type: 'Selector', defaultValue: '".pat-livesearch-container"', description: 'Selector for element that will be shown when results are found.'},
+        {attribute: 'toggleClass', type: 'String', defaultValue: '"show"', description: 'CSS class that will be added to target toggle element when results are found.'},
+        {attribute: 'positionToggleWithInput', type: 'Boolean', defaultValue: 'true', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
+        {attribute: 'setPosition', type: 'Function', defaultValue: '', description: 'Function which will be used to set the position of the toggle element.'},
+        {attribute: 'resultsTarget', type: 'Selector', defaultValue: '".pat-livesearch-results"', description: 'Selector for element where results from the server will be inserted.'},
+        {attribute: 'resultContainerTemplate', type: 'String', defaultValue: '"&lt;ul&gt;&lt;/ul&gt;"', description: 'Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used.'},
+        {attribute: 'resultContainerTemplateSelector', type: 'Selector', defaultValue: '', description: 'Selector for an element in the DOM to use in place of resultContainerTemplate.'},
+        {attribute: 'resultSelector', type: 'Selector', defaultValue: '".pat-livesearch-result"', description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultTemplate', type: 'String', defaultValue: $('#ls_attr_resultTemplate').html(), description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultTemplateSelector', type: 'Selector', defaultValue: '', description: 'Selector for element to be used in place of resultTemplate.'},
+        {attribute: 'helpTemplate', type: 'String', defaultValue: '"&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;"', description: "Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.'"},
+        {attribute: 'helpTemplateSelector', type: 'Selector', defaultValue: '', description: "Element in the DOM to be used instead of helpTemplate."},
+        {attribute: 'typeMoreTemplate', type: 'String', defaultValue: '"Type <%= more %> more characters to search."', description: "Template for message which is displayed if the current input length is less than minimumInputLength."},
+        {attribute: 'typeMoreTemplateSelector', type: 'Selector', defaultValue: '', description: "Element in the DOM to be used instead of typeMoreTemplate."},
+        {attribute: 'noResultsTemplate', type: 'String', defaultValue: '"No results found."', description: "Template for message that is displayed after a search when no results were found."},
+        {attribute: 'noResultsTemplateSelector', type: 'Selector', defaultValue: '', description: "Element in the DOM to be used instead of noResultsTemplate."},
+        {attribute: 'searchingTemplate', type: 'String', defaultValue: '"Searching..."', description: "Template for message which will be displayed after a search has started and before it has ended."},
+        {attribute: 'searchingTemplateSelector', type: 'Selector', defaultValue: '', description: "Element in the DOM to be used instead of searchingTemplate."}
       ]
     });
   </script>
@@ -736,21 +757,28 @@ $ make bootstrap</pre>
       title: 'Modal',
       description: 'Creates a modal dialog (also called <strong>overlay</strong>).',
       attributes: [
-        {attribute: 'backdrop', type: 'String', 'default': 'body', description: 'TODO'},
-        {attribute: 'backdropOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
-        {attribute: 'height', type: 'String', 'default': '', description: 'Example: 300px'},
-        {attribute: 'klass', type: 'String', 'default': 'modal', description: 'TODO'},
-        {attribute: 'klassLoading', type: 'String', 'default': 'modal-loading', description: 'TODO'},
-        {attribute: 'klassWrapper', type: 'String', 'default': 'modal-wrapper', description: 'TODO'},
-        {attribute: 'klassWrapperInner', type: 'String', 'default': 'modal-wrapper-inner', description: 'TODO'},
-        {attribute: 'margin', type: 'Function', 'default': '', description: 'TODO'},
-        {attribute: 'position', type: 'String', 'default': 'center middle', description: 'TODO'},
-        {attribute: 'template', type: 'Function', 'default': '', description: 'TODO'},
-        {attribute: 'templateOptions', type: 'Object', 'default': '{...}', description: 'TODO'},
-        {attribute: 'templateOptions.title', type: 'String', 'default': 'null', description: 'If not equal to null this will be inserted into the modal header.'},
-        {attribute: 'templateOptions.titleSelector', type: 'Selector', 'default': 'h1:first', description: 'Selector for an element within the modal content that will be extracted and inserted into the modal header.'},
-        {attribute: 'triggers', type: 'String', 'default': 'focusin', description: 'TODO'},
-        {attribute: 'width', type: 'String', 'default': '', description: 'TODO'}
+        {attribute: 'height', type: 'String', defaultValue: '', description: 'Set the height of the modal, for example: "250px".'},
+        {attribute: 'width', type: 'String', defaultValue: '', description: 'Set the width of the modal, for example: "80%" or "500px".'},
+        {attribute: 'margin', type: 'Function, Integer', defaultValue: '20', description: 'A function or Integer which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.'},
+        {attribute: 'position', type: 'String', defaultValue: 'center middle', description: 'Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle.'},
+
+        {attribute: 'triggers', type: 'Array', defaultValue: '[]', description: 'Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format ["<event> <selector>"] or ["<event>"]. For example, ["click .someButton"]. If you pass in only an event such as, ["change"], the event listener will be added to the element on which the modal was initiated, usually a link or button.'},
+
+        {attribute: 'backdrop', type: 'Selector', defaultValue: 'body', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user. To hide all of the content use "body".'},
+        {
+          attribute: 'backdropOptions',
+          type: 'Object',
+          default: null,
+          description: null,
+          attributes: backdropAttributes
+        },
+
+        {attribute: 'template', type: 'Function', defaultValue: '', description: 'TODO'},
+        {
+          attribute: 'templateOptions',
+          type: 'Object',
+          attributes: []
+        }
       ]
     });
   </script>
@@ -1074,16 +1102,16 @@ $ make bootstrap</pre>
       title: 'Pick A Date',
       description: 'Allows the user to <strong>select a date</strong> (with or without time) through a calendar.',
       attributes: [
-        {attribute: 'date', type: 'Object', 'default': '{formatSubmit: "dd-mm-yyyy"}', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
-        {attribute: 'time', type: 'Object', 'default': '{formatSubmit: "HH:i"}', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
-        {attribute: 'separator', type: 'String', 'default': '" " (space)', description: 'Separator between date and time if both are enabled.'},
-        {attribute: 'klassClear', type: 'String', 'default': 'pat-pickadate-clear', description: 'Class name of element that is generated by pattern.'},
-        {attribute: 'klassDate', type: 'String', 'default': 'pat-pickadate-date', description: 'Class applied to date input.'},
-        {attribute: 'klassDateWrapper', type: 'String', 'default': 'pat-pickadate-date-wrapper', description: 'Class applied to extra wrapper div around date input.'},
-        {attribute: 'klassSeparator', type: 'String', 'default': 'pat-pickadate-separator', description: 'Class applied to separator.'},
-        {attribute: 'klassTime', type: 'String', 'default': 'pat-pickadate-time', description: 'Class applied to time input.'},
-        {attribute: 'klassTimeWrapper', type: 'String', 'default': 'pat-pickadate-time-wrapper', description: 'Class applied to wrapper div around time input.'},
-        {attribute: 'klassWrapper', type: 'String', 'default': 'pat-pickadate-wrapper', description: 'Class name of element that is generated by pattern.'}
+        {attribute: 'date', type: 'Object', defaultValue: '{formatSubmit: "dd-mm-yyyy"}', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
+        {attribute: 'time', type: 'Object', defaultValue: '{formatSubmit: "HH:i"}', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
+        {attribute: 'separator', type: 'String', defaultValue: '" " (space)', description: 'Separator between date and time if both are enabled.'},
+        {attribute: 'klassClear', type: 'String', defaultValue: 'pat-pickadate-clear', description: 'Class name of element that is generated by pattern.'},
+        {attribute: 'klassDate', type: 'String', defaultValue: 'pat-pickadate-date', description: 'Class applied to date input.'},
+        {attribute: 'klassDateWrapper', type: 'String', defaultValue: 'pat-pickadate-date-wrapper', description: 'Class applied to extra wrapper div around date input.'},
+        {attribute: 'klassSeparator', type: 'String', defaultValue: 'pat-pickadate-separator', description: 'Class applied to separator.'},
+        {attribute: 'klassTime', type: 'String', defaultValue: 'pat-pickadate-time', description: 'Class applied to time input.'},
+        {attribute: 'klassTimeWrapper', type: 'String', defaultValue: 'pat-pickadate-time-wrapper', description: 'Class applied to wrapper div around time input.'},
+        {attribute: 'klassWrapper', type: 'String', defaultValue: 'pat-pickadate-wrapper', description: 'Class name of element that is generated by pattern.'}
       ]
     });
   </script>
@@ -1107,9 +1135,9 @@ $ make bootstrap</pre>
       title: 'Picture',
       description: 'A responsive image widget.',
       attributes: [
-        {attribute: 'alt', type: 'String', 'default': '', description: 'Alternate text.'},
-        {attribute: 'attribute', type: 'Object', 'default': '{src: "data-src", media: "data-media"}', description: 'TODO'},
-        {attribute: 'klass', type: 'Object', 'default': '{loading: "picture-loading", error: "picture-error"}', description: 'TODO'}
+        {attribute: 'alt', type: 'String', defaultValue: '', description: 'Alternate text.'},
+        {attribute: 'attribute', type: 'Object', defaultValue: '{src: "data-src", media: "data-media"}', description: 'TODO'},
+        {attribute: 'klass', type: 'Object', defaultValue: '{loading: "picture-loading", error: "picture-error"}', description: 'TODO'}
       ]
     });
   </script>
@@ -1160,9 +1188,9 @@ $ make bootstrap</pre>
       title: 'Prevent Double Submit',
       description: 'A pattern to <strong>prevent submitting a form twice</strong>.',
       attributes: [
-        {attribute: 'guardKlass', type: 'String', 'default': 'submitting', description: 'Class applied to submit button after it is clicked once.'},
-        {attribute: 'optOutKlass', type: 'String', 'default': 'allowMultiSubmit', description: 'Class used to opt-out a submit button from double-submit prevention.'},
-        {attribute: 'message', type: 'String', 'default': 'You already clicked the submit button. Do you really want to submit this form again?', description: 'Message to be displayed when "opt-out" submit button is clicked a second time.'}
+        {attribute: 'guardKlass', type: 'String', defaultValue: 'submitting', description: 'Class applied to submit button after it is clicked once.'},
+        {attribute: 'optOutKlass', type: 'String', defaultValue: 'allowMultiSubmit', description: 'Class used to opt-out a submit button from double-submit prevention.'},
+        {attribute: 'message', type: 'String', defaultValue: 'You already clicked the submit button. Do you really want to submit this form again?', description: 'Message to be displayed when "opt-out" submit button is clicked a second time.'}
       ]
     });
   </script>
@@ -1195,24 +1223,24 @@ $ make bootstrap</pre>
       title: 'Query String for Collections',
       description: "A widget for creating <strong>query's for collections</strong>",
       attributes: [
-        {attribute: 'criteria', type: 'Object', 'default': '{}', description: 'options to pass into criteria'},
-        {attribute: 'previewURL', type: 'String', 'default': 'portal_factory/@@querybuilder_html_results', description: 'URL used to pass in a plone.app.querystring formatted http querystring and get an HTML list of results'},
-        {attribute: 'previewCountURL', type: 'String', 'default': 'portal_factory/@@querybuildernumberofresults', description: 'URL used to pass in a plone.app.querystring formatted http querystring and get an HTML string of the total number of records found with the query'},
-        {attribute: 'sorttxt', type: 'String', 'default': 'Sort On', description: 'Text to use to label the sort dropdown'},
-        {attribute: 'reversetxt', type: 'String', 'default': 'Reversed Order', description: 'Text to use to label the sort order checkbox'},
-        {attribute: 'previewTitle', type: 'String', 'default': 'Preview', description: 'Title for the preview area'},
-        {attribute: 'previewDescription', type: 'String', 'default': 'Preview of at most 10 items', description: 'Description for the preview area'},
-        {attribute: 'klassWrapper', type: 'String', 'default': 'querystring-wrapper', description: 'css class to apply to the wrapper element'},
-        {attribute: 'klassSortLabel', type: 'String', 'default': 'querystring-sort-label', description: 'css class to apply to the sort on label'},
-        {attribute: 'klassSortReverse', type: 'String', 'default': 'querystring-sortreverse', description: 'css class to apply to the sort order label and checkbox container'},
-        {attribute: 'klassSortReverseLabel', type: 'String', 'default': 'querystring-previewcount-wrapper', description: 'css class to apply to the sort order label'},
-        {attribute: 'klassPreviewCountWrapper', type: 'String', 'default': 'querystring-previewcount-wrapper', description: ''},
-        {attribute: 'klassPreviewResultsWrapper', type: 'String', 'default': 'querystring-previewresults-wrapper', description: 'css class to apply to the results wrapper'},
-        {attribute: 'klassPreviewWrapper', type: 'String', 'default': 'querystring-preview-wrapper', description: 'css class to apply to the preview wrapper'},
-        {attribute: 'klassPreview', type: 'String', 'default': 'querystring-preview-preview', description: 'css class to apply to the preview pane'},
-        {attribute: 'klassPreviewTitle', type: 'String', 'default': 'querystring-preview-title', description: 'css class to apply to the preview title'},
-        {attribute: 'klassPreviewDescription', type: 'String', 'default': 'querystring-preview-description', description: 'css class to apply to the  preview description'},
-        {attribute: 'klassSortWrapper', type: 'String', 'default': 'querystring-sort-wrapper', description: 'css class to apply to the sort order and sort on wrapper'},
+        {attribute: 'criteria', type: 'Object', defaultValue: '{}', description: 'options to pass into criteria'},
+        {attribute: 'previewURL', type: 'String', defaultValue: 'portal_factory/@@querybuilder_html_results', description: 'URL used to pass in a plone.app.querystring formatted http querystring and get an HTML list of results'},
+        {attribute: 'previewCountURL', type: 'String', defaultValue: 'portal_factory/@@querybuildernumberofresults', description: 'URL used to pass in a plone.app.querystring formatted http querystring and get an HTML string of the total number of records found with the query'},
+        {attribute: 'sorttxt', type: 'String', defaultValue: 'Sort On', description: 'Text to use to label the sort dropdown'},
+        {attribute: 'reversetxt', type: 'String', defaultValue: 'Reversed Order', description: 'Text to use to label the sort order checkbox'},
+        {attribute: 'previewTitle', type: 'String', defaultValue: 'Preview', description: 'Title for the preview area'},
+        {attribute: 'previewDescription', type: 'String', defaultValue: 'Preview of at most 10 items', description: 'Description for the preview area'},
+        {attribute: 'klassWrapper', type: 'String', defaultValue: 'querystring-wrapper', description: 'css class to apply to the wrapper element'},
+        {attribute: 'klassSortLabel', type: 'String', defaultValue: 'querystring-sort-label', description: 'css class to apply to the sort on label'},
+        {attribute: 'klassSortReverse', type: 'String', defaultValue: 'querystring-sortreverse', description: 'css class to apply to the sort order label and checkbox container'},
+        {attribute: 'klassSortReverseLabel', type: 'String', defaultValue: 'querystring-previewcount-wrapper', description: 'css class to apply to the sort order label'},
+        {attribute: 'klassPreviewCountWrapper', type: 'String', defaultValue: 'querystring-previewcount-wrapper', description: ''},
+        {attribute: 'klassPreviewResultsWrapper', type: 'String', defaultValue: 'querystring-previewresults-wrapper', description: 'css class to apply to the results wrapper'},
+        {attribute: 'klassPreviewWrapper', type: 'String', defaultValue: 'querystring-preview-wrapper', description: 'css class to apply to the preview wrapper'},
+        {attribute: 'klassPreview', type: 'String', defaultValue: 'querystring-preview-preview', description: 'css class to apply to the preview pane'},
+        {attribute: 'klassPreviewTitle', type: 'String', defaultValue: 'querystring-preview-title', description: 'css class to apply to the preview title'},
+        {attribute: 'klassPreviewDescription', type: 'String', defaultValue: 'querystring-preview-description', description: 'css class to apply to the  preview description'},
+        {attribute: 'klassSortWrapper', type: 'String', defaultValue: 'querystring-sort-wrapper', description: 'css class to apply to the sort order and sort on wrapper'},
       ]
     });
   </script>
@@ -1352,32 +1380,32 @@ $ make bootstrap</pre>
       title: 'Related Items',
       description: 'An advanced widget for <strong>selecting related items</strong>.',
       attributes: [
-        {attribute: 'ajaxvocabulary', type: 'String', 'default': 'NO DEFAULT', description: 'TODO'},
-        {attribute: 'attributes', type: 'List', 'default': '["UID","Title", "Type", "path"]', description: 'TODO'},
-        {attribute: 'basePath', type: 'String', 'default': '/', description: 'TODO'},
-        {attribute: 'breadCrumbTemplate', type: 'String', 'default': '/&lt;a href="&lt;%= path %&gt;"&gt;&lt;%= text %&gt;&lt;/a&gt;', description: 'TODO'},
-        {attribute: 'breadCrumbTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
-        {attribute: 'breadCrumbsTemplate', type: 'String', 'default': '&lt;span&gt;&lt;a href="/"&gt;&lt;i class="icon-home"&gt;&lt;/i&gt;&lt;/a&gt;&lt;%= items %&gt;&lt;/span&gt;', description: 'TODO'},
-        {attribute: 'breadCrumbsTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
-        {attribute: 'browseText', type: 'String', 'default': 'Browse', description: 'TODO'},
-        {attribute: 'cache', type: 'Boolean', 'default': 'true', description: 'TODO'},
-        {attribute: 'closeOnSelect', type: 'Boolean', 'default': 'false', description: 'TODO'},
-        {attribute: 'dropdownCssClass', type: 'String', 'default': 'pat-relateditems-dropdown', description: 'TODO'},
-        {attribute: 'escapeMarkup', type: 'Function', 'default': 'function(text) { return text; }', description: 'TODO'},
-        {attribute: 'folderTypes', type: 'List', 'default': '["Folder"]', description: 'TODO'},
-        {attribute: 'homeText', type: 'String', 'default': 'home', description: 'TODO'},
-        {attribute: 'maximumSelectionSize', type: 'Integer', 'default': '-1', description: 'TODO'},
-        {attribute: 'multiple', type: 'Boolean', 'default': 'true', description: 'TODO'},
-        {attribute: 'orderable', type: 'Boolean', 'default': 'true', description: 'TODO'},
-        {attribute: 'resultTemplate', type: 'String', 'default': '', description: 'TODO'},
-        {attribute: 'resultTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
-        {attribute: 'searchText', type: 'String', 'default': 'Search', description: 'TODO'},
-        {attribute: 'selectionTemplate', type: 'String', 'default': '', description: 'TODO'},
-        {attribute: 'selectionTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
-        {attribute: 'separator', type: 'String', 'default': ',', description: 'TODO'},
-        {attribute: 'tabsTemplate', type: 'String', 'default': '', description: 'TODO'},
-        {attribute: 'tabsTemplateSelector', type: 'String', 'default': 'null', description: 'TODO'},
-        {attribute: 'tokenSeparators', type: 'List', 'default': '[",", " "]', description: 'TODO'}
+        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: 'NO DEFAULT', description: 'TODO'},
+        {attribute: 'attributes', type: 'List', defaultValue: '["UID","Title", "Type", "path"]', description: 'TODO'},
+        {attribute: 'basePath', type: 'String', defaultValue: '/', description: 'TODO'},
+        {attribute: 'breadCrumbTemplate', type: 'String', defaultValue: '/&lt;a href="&lt;%= path %&gt;"&gt;&lt;%= text %&gt;&lt;/a&gt;', description: 'TODO'},
+        {attribute: 'breadCrumbTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
+        {attribute: 'breadCrumbsTemplate', type: 'String', defaultValue: '&lt;span&gt;&lt;a href="/"&gt;&lt;i class="icon-home"&gt;&lt;/i&gt;&lt;/a&gt;&lt;%= items %&gt;&lt;/span&gt;', description: 'TODO'},
+        {attribute: 'breadCrumbsTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
+        {attribute: 'browseText', type: 'String', defaultValue: 'Browse', description: 'TODO'},
+        {attribute: 'cache', type: 'Boolean', defaultValue: 'true', description: 'TODO'},
+        {attribute: 'closeOnSelect', type: 'Boolean', defaultValue: 'false', description: 'TODO'},
+        {attribute: 'dropdownCssClass', type: 'String', defaultValue: 'pat-relateditems-dropdown', description: 'TODO'},
+        {attribute: 'escapeMarkup', type: 'Function', defaultValue: 'function(text) { return text; }', description: 'TODO'},
+        {attribute: 'folderTypes', type: 'List', defaultValue: '["Folder"]', description: 'TODO'},
+        {attribute: 'homeText', type: 'String', defaultValue: 'home', description: 'TODO'},
+        {attribute: 'maximumSelectionSize', type: 'Integer', defaultValue: '-1', description: 'TODO'},
+        {attribute: 'multiple', type: 'Boolean', defaultValue: 'true', description: 'TODO'},
+        {attribute: 'orderable', type: 'Boolean', defaultValue: 'true', description: 'TODO'},
+        {attribute: 'resultTemplate', type: 'String', defaultValue: '', description: 'TODO'},
+        {attribute: 'resultTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
+        {attribute: 'searchText', type: 'String', defaultValue: 'Search', description: 'TODO'},
+        {attribute: 'selectionTemplate', type: 'String', defaultValue: '', description: 'TODO'},
+        {attribute: 'selectionTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
+        {attribute: 'separator', type: 'String', defaultValue: ',', description: 'TODO'},
+        {attribute: 'tabsTemplate', type: 'String', defaultValue: '', description: 'TODO'},
+        {attribute: 'tabsTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
+        {attribute: 'tokenSeparators', type: 'List', defaultValue: '[",", " "]', description: 'TODO'}
       ]
     });
   </script>
@@ -1403,19 +1431,19 @@ $ make bootstrap</pre>
       title: 'Select2',
       description: '<strong>Autocompletes, multiple or single selections</strong> from any kind of data source (with search!).',
       attributes: [
-        {attribute: 'separator', type: 'String', 'default': ', (comma)', description: ''
+        {attribute: 'separator', type: 'String', defaultValue: ', (comma)', description: ''
           + 'Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.'
           + '<br/><br/>'
           + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will'
           + 'allow the <em>tags</em> and <em>initvalmap</em> to have'
           + 'values separated by ";" instead of the default ",".'},
-        {attribute: 'data-path-select2-initvalmap', type: 'String', 'default': '', description: ''
+        {attribute: 'data-path-select2-initvalmap', type: 'String', defaultValue: '', description: ''
           + 'This can be a json encoded string, or a list of <em>id:text</em>'
           + 'values. Ex: "Red:The Color Red,Orange:The Color Orange"'
           + '<br /><br />'
           + 'This is used inside the initSelection method, if ajax options'
           + 'are NOT set.'},
-        {attribute: 'ajaxvocabulary', type: 'String', 'default': '', description: 'This is a URL to a JSON formatted file used to populate the list'}
+        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: '', description: 'This is a URL to a JSON formatted file used to populate the list'}
       ]
     });
   </script>
@@ -1701,7 +1729,7 @@ $ make bootstrap</pre>
       title: 'TinyMCE',
       description: 'Rich text editor.',
       attributes: [
-        {attribute: 'relatedItems', type: 'Object', 'default': '<pre>{\n'
+        {attribute: 'relatedItems', type: 'Object', defaultValue: '<pre>{\n'
           + '  attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"],\n'
           + '  batchSize: 20,\n'
           + '  basePath: "/",\n'
@@ -1710,13 +1738,13 @@ $ make bootstrap</pre>
           + '  maximumSelectionSize: 1,\n'
           + '  placeholder: "Search for item on site..."\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'targetList', type: 'List', 'default': '<pre>[\n'
+        {attribute: 'targetList', type: 'List', defaultValue: '<pre>[\n'
           + '  {text: "Open in this window / frame", value: ""},\n'
           + '  {text: "Open in new window", value: "_blank"},\n'
           + '  {text: "Open in parent window / frame", value: "_parent"},\n'
           + '  {text: "Open in top frame (replaces all frames)", value: "_top"}\n'
           + ']</pre>', description: 'TODO.'},
-        {attribute: 'text', type: 'List', 'default': '<pre>{\n'
+        {attribute: 'text', type: 'List', defaultValue: '<pre>{\n'
           + '  insertBtn: "Insert", // so this can be configurable for different languages\n'
           + '  cancelBtn: "Cancel",\n'
           + '  insertHeading: "Insert link",\n'
@@ -1727,7 +1755,7 @@ $ make bootstrap</pre>
           + '  anchor: "Anchor",\n'
           + '  subject: "Subject"\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'tiny', type: 'Object', 'default': '<pre>{\n'
+        {attribute: 'tiny', type: 'Object', defaultValue: '<pre>{\n'
           + '  plugins: [\n'
           + '    "advlist autolink lists link image charmap print preview anchor",\n'
           + '    "searchreplace visualblocks code fullscreen",\n'
@@ -1735,9 +1763,9 @@ $ make bootstrap</pre>
           + '  ],\n'
           + '  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'rel_upload_url', type: 'String', 'default': 'null',
+        {attribute: 'rel_upload_url', type: 'String', defaultValue: 'null',
          description: 'To provide upload support.'},
-        {attribute: 'folder_url', type: 'String', 'default': 'null',
+        {attribute: 'folder_url', type: 'String', defaultValue: 'null',
          description: 'Base url to provide upload url off of.'}
       ]
     });
@@ -1772,15 +1800,15 @@ $ make bootstrap</pre>
       title: 'Table of Contents',
       description: 'Automatically <strong>generate a table of contents</strong>.',
       attributes: [
-        {attribute: 'IDPrefix', type: 'String', 'default': 'autotoc-item-', description: 'Prefix used to generate ID.'},
-        {attribute: 'klassActive', type: 'String', 'default': 'active', description: 'Class used for active level.'},
-        {attribute: 'klassLevelPrefix', type: 'String', 'default': 'autotoc-level-', description: 'Class prefix used for the TOC levels.'},
-        {attribute: 'klassSection', type: 'String', 'default': 'autotoc-section', description: 'Class used for section in TOC.'},
-        {attribute: 'klassTOC', type: 'String', 'default': 'autotoc-nav', description: 'Class used for the TOC.'},
-        {attribute: 'levels', type: 'String', 'default': 'h1,h2,h3', description: 'Selectors used to find levels.'},
-        {attribute: 'scrollDuration', type: 'String', 'default': 'slow', description: 'Speed of scrolling.'},
-        {attribute: 'scrollEasing', type: 'String', 'default': 'swing', description: 'Easing to use while scrolling.'},
-        {attribute: 'section', type: 'String', 'default': 'section', description: 'Tag type to use for TOC.'}
+        {attribute: 'IDPrefix', type: 'String', defaultValue: 'autotoc-item-', description: 'Prefix used to generate ID.'},
+        {attribute: 'klassActive', type: 'String', defaultValue: 'active', description: 'Class used for active level.'},
+        {attribute: 'klassLevelPrefix', type: 'String', defaultValue: 'autotoc-level-', description: 'Class prefix used for the TOC levels.'},
+        {attribute: 'klassSection', type: 'String', defaultValue: 'autotoc-section', description: 'Class used for section in TOC.'},
+        {attribute: 'klassTOC', type: 'String', defaultValue: 'autotoc-nav', description: 'Class used for the TOC.'},
+        {attribute: 'levels', type: 'String', defaultValue: 'h1,h2,h3', description: 'Selectors used to find levels.'},
+        {attribute: 'scrollDuration', type: 'String', defaultValue: 'slow', description: 'Speed of scrolling.'},
+        {attribute: 'scrollEasing', type: 'String', defaultValue: 'swing', description: 'Easing to use while scrolling.'},
+        {attribute: 'section', type: 'String', defaultValue: 'section', description: 'Tag type to use for TOC.'}
       ]
     });
   </script>
@@ -1814,8 +1842,8 @@ $ make bootstrap</pre>
       title: 'Tooltip',
       description: 'A pattern to show a tooltip on hover.',
       attributes: [
-        {attribute: 'event_enter', type: 'String', 'default': 'mouseenter', description: 'Event used to trigger tooltip.'},
-        {attribute: 'event_exit', type: 'String', 'default': 'mouseleave', description: 'Event used to dismiss tooltip.'}
+        {attribute: 'event_enter', type: 'String', defaultValue: 'mouseenter', description: 'Event used to trigger tooltip.'},
+        {attribute: 'event_exit', type: 'String', defaultValue: 'mouseleave', description: 'Event used to dismiss tooltip.'}
       ]
     });
   </script>
@@ -1864,8 +1892,8 @@ $ make bootstrap</pre>
       title: 'DropZone',
       description: "Drag 'n drop file upload",
       attributes: [
-        {attribute: 'url', type: 'String', 'default': 'null', description: 'Required option dropzone if not used with a form'},
-        {attribute: 'clickable', type: 'String', 'default': 'false', description: 'If you can click on container to also upload'}
+        {attribute: 'url', type: 'String', defaultValue: 'null', description: 'Required option dropzone if not used with a form'},
+        {attribute: 'clickable', type: 'String', defaultValue: 'false', description: 'If you can click on container to also upload'}
       ]
     });
   </script>
