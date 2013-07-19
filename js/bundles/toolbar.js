@@ -149,16 +149,16 @@ define([
                   response = response.replace('action="folder_rename_form',
                                               'action="' + current + '/folder_rename_form');
                 }
-                modal.redraw(response);
+                //modal.redraw(response);
               }
             }
           }
         }
-      }).on('before-render.modal.patterns', function(e, modal){
+      }).on('before-events-setup.modal.patterns', function(e, modal){
         // TODO: not sure exectly how to handle this for now we hide it
-        $('#plone-document-byline', modal.$raw).hide();
-        $('.modal-footer input.context', modal.$raw).removeClass('context').addClass('standalone');
-        $('.listingBar', modal.$raw).each(function() {  // TODO: we shouldn't hack like this
+        $('#plone-document-byline', modal.$modal).hide();
+        $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
+        $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
           var $el = $(this),
               $pagination = $('<ul/>'),
               $previous, $next;
@@ -188,9 +188,8 @@ define([
           if ($next) {
             $pagination.append($next);
           }
-          $el.hide().before($('<div class="pagination pagination-centered"/>').append($pagination));
+          $el.replaceWith($('<div class="pagination pagination-centered"/>').append($pagination));
         });
-
       }).on('after-render.modal.patterns', function(e, modal){
         // normalize buttons
         modal.$modal.find('input[type="submit"]').addClass('standalone').removeClass('context');
@@ -280,6 +279,9 @@ define([
       $('#plone-contentmenu-factories ul li#plone-contentmenu-settings').removeClass('is-content');
       var editOptions = {
         width: '80%',
+        backdropOptions: {
+          closeOnClick: false
+        },
         templateOptions: {
           content: '#content',
           automaticallyAddButtonActions: false,

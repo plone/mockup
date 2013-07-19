@@ -121,7 +121,7 @@ define([
             actions.a = {};
           }
           $.each(actions, function(action, options) {
-            options = $.extend({}, defaultOptions, options);
+            options = $.extend(true, {}, defaultOptions, options);
             $(action, $('.modal-body', $modal)).each(function(action) {
               var $action = $(this);
               $action.on(options.eventType, function(e) {
@@ -279,11 +279,12 @@ define([
       render: function(options) {
         var self = this;
 
-        self.trigger('before-render');
-
         if (!self.$raw) {
           return;
         }
+
+        self.trigger('before-render');
+
         var $raw = self.$raw.clone();
 
         // Object that will be passed to the template
@@ -319,6 +320,8 @@ define([
 
         // Render html
         self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
+
+        self.trigger('before-events-setup');
 
         // Setup buttons
         $(options.buttons, self.$modal).each(function() {
