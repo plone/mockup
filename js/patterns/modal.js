@@ -83,7 +83,7 @@ define([
           '    <div class="<%= options.klassPrepend %>"><%= prepend %></div> ' +
           '    <div class="<%= options.klassContent %>"><%= content %></div>' +
           '  </div>' +
-          '  <div class="options.klassFooter"> ' +
+          '  <div class="<%= options.klassFooter %>"> ' +
           '    <%= buttons %> ' +
           '  </div>' +
           '</div>',
