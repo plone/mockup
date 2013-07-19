@@ -34,10 +34,9 @@ define([
   'chai',
   'jquery',
   'sinon',
-  'mockup-fakeserver',
   'mockup-registry',
   'mockup-patterns-livesearch'
-], function(chai, $, sinon, server, registry, Livesearch) {
+], function(chai, $, sinon, registry, Livesearch) {
   "use strict";
 
   var expect = chai.expect,
@@ -52,6 +51,86 @@ define([
   ========================== */
 
   describe('Livesearch', function() {
+    beforeEach(function(){
+      this.clock = sinon.useFakeTimers();
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      function getQueryVariable(url, variable) {
+        var query = url.split('?')[1];
+        if(query === undefined){
+          return null;
+        }
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i += 1) {
+            var pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) === variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return null;
+      }
+      this.server.respondWith("GET", /search.json/, function (xhr, id) {
+        var items = [
+          {
+            "UID": "123sdfasdf",
+            "getURL": "http://localhost:8081/news/aggregator",
+            "Type": "Collection", "Description": "Site News",
+            "Title": "News"
+          },
+          {
+            "UID": "fooasdfasdf1123asZ",
+            "getURL": "http://localhost:8081/news/aggregator",
+            "Type": "Collection", "Description": "Site News",
+            "Title": "Another Item"
+          },
+          {
+            "UID": "fooasdfasdf1231as",
+            "getURL": "http://localhost:8081/news/aggregator",
+            "Type": "Collection", "Description": "Site News",
+            "Title": "News"
+          },
+          {
+            "UID": "fooasdfasdf12231451",
+            "getURL": "http://localhost:8081/news/aggregator",
+            "Type": "Collection", "Description": "Site News",
+            "Title": "Another Item"
+          },
+          {
+            "UID": "sdfsdkfo12231451",
+            "getURL": "http://localhost:8081/news/aggregator",
+            "Type": "Collection", "Description": "Site News",
+            "Title": "Another Item"
+          }
+        ];
+
+        var results = [];
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
+        if (query.criteria[0].v === 'none*') {
+          results = [];
+        } else {
+          if (batch) {
+            var start, end;
+            start = (batch.page-1) * batch.size;
+            end = start + batch.size;
+            results = items.slice(start, end);
+          } else {
+            results = items;
+          }
+        }
+        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+          total: results.length,
+          results: results
+        }));
+      });
+
+    });
+    afterEach(function() {
+      $('body').empty();
+      this.clock.restore();
+      this.server.restore();
+    });
 
     it('test default elements', function() {
       var $el = $(''+
@@ -86,16 +165,16 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = sinon.useFakeTimers();
-
       var $input = pattern.$input;
+
+      $input.trigger('focus');
 
       var d = $.Event('keyup');
       d.which = 68;
 
       $input.val('ddd').trigger(d);
 
-      clock.tick(1000);
+      this.clock.tick(1000);
 
       pattern._keyDown();
       pattern._keyDown();
@@ -131,7 +210,6 @@ define([
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
-      var clock = sinon.useFakeTimers();
       var $input = pattern.$input;
 
       var d = $.Event('keyup');
@@ -164,15 +242,13 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = sinon.useFakeTimers();
-
       var $input = pattern.$input;
 
       var d = $.Event('keyup');
       d.which = 68;
 
       $input.val('none').trigger(d);
-      clock.tick(1000);
+      this.clock.tick(1000);
 
       expect(pattern.$results.text()).to.contain('No results');
 
@@ -191,14 +267,13 @@ define([
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
-      var clock = sinon.useFakeTimers();
       var $input = pattern.$input;
 
       var d = $.Event('keyup');
       d.which = 68;
 
       $input.val('123').trigger(d);
-      clock.tick(pattern.options.delay+5);
+      this.clock.tick(pattern.options.delay+5);
 
       expect(pattern.$results.text()).to.contain('Searching...');
 
@@ -209,7 +284,7 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json;' +
-          '                          resultTemplateSelector: #tpl_livesearch">'+
+          '                          #tpl_livesearch">'+
           ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
           ' <div class="pat-livesearch-container">'+
               '<div class="pat-livesearch-results">'+
@@ -226,17 +301,15 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var clock = sinon.useFakeTimers();
-
       var $input= pattern.$input;
-      $input.val('abcd').trigger('keyup').focus();
+      $input.val('abcd').trigger('keyup');
 
-      clock.tick(1500);
+      this.clock.tick(1000);
 
       var $results = pattern.items();
 
       expect($results.length).to.be.gt(1);
-      expect($results.first().text().indexOf('Money Honey')).to.be.gt(-1);
+      expect($results.first().text().indexOf('Site News')).to.be.gt(-1);
 
       $el.remove();
       tpl.remove();
