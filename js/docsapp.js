@@ -115,7 +115,14 @@ define([
     render: function() {
       var self = this;
       var tpl = $('#tpl_pattern').html();
-      require(["mockup-patterns-"+self.model.get('id')], function (MainRouter) {
+      var patterns = ["mockup-patterns-" + self.model.get('id')];
+      var extras = self.model.get('extras');
+      if(extras){
+        for(var i=0; i<extras.length; i=i+1){
+          patterns.push("mockup-patterns-" + extras[i]);
+        }
+      }
+      require(patterns, function (MainRouter) {
         self.$el.html(_.template(tpl, _.extend({
           examples: self.renderExamples()
         }, self.model.toJSON())));

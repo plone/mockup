@@ -770,6 +770,7 @@ $ make bootstrap</pre>
   <script>
     addPattern({
       id: 'modal',
+      extras: ['tinymce'],
       title: 'Modal',
       description: 'Creates a modal dialog (also called <strong>overlay</strong>).',
       attributes: [
@@ -841,6 +842,22 @@ $ make bootstrap</pre>
                    width:80%">
               Modal with custom position</a>
   </script>
+
+
+  <script type="text/example" class="example-modal" title="Modal with tinymce">
+  <a href="#modaltinymce"
+               class="btn btn-large btn-primary pat-modal"
+               data-pat-modal="height: 600px;
+                               width: 80%">
+              Modal with TinyMCE</a>
+  </script>
+  <script type="text/template" id="modaltinymce">
+    <div>
+      <textarea class="pat-tinymce"></textarea>
+    </div>
+  </script>
+
+
   <script type="text/example" class="example-modal" title="">
 <a href="#modal4"
                class="btn btn-large btn-primary pat-modal">
