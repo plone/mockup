@@ -47,6 +47,10 @@ define([
   var Toolbar = {
     name: "plone-toolbar",
     transform: function($root) {
+      if ($root.hasClass('modal')) {
+        /* do not run in modal */
+        return;
+      }
 
       // Dropdown {{{
 

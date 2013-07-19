@@ -52,6 +52,10 @@ define([
   var Widgets = {
     name: "plone-widgets",
     transform: function($root) {
+      if ($root.hasClass('modal')) {
+        /* do not run in modal */
+        return;
+      }
 
       // apply autotoc pattern where enableFormTabbing exists
       var $match = $root.filter('.enableFormTabbing');
