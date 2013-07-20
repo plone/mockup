@@ -16875,3 +16875,24 @@ ul#textAdjust {
 .table tr:nth-of-type(even) {
   background-color: #f4f4f4;
 }
+.docs-attributes .table {
+  margin: 10px 0;
+}
+.docs-attributes .table .table th {
+  background-color: #c8c8c8;
+  padding: 4px 8px;
+  color: #444;
+}
+.docs-attributes .table .attr-default {
+  width: 30%;
+}
+.docs-attributes .table .attr-description {
+  width: 40%;
+}
+.docs-attributes .table .docs-attrs table {
+  margin-left: 40px;
+}
+.docs-attributes .table .docs-attrs p {
+  margin-top: 8px;
+  margin-left: 40px;
+}
