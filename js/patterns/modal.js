@@ -209,10 +209,12 @@ define([
                 return;
               }
 
-              if (typeof options.redirectToUrl === 'function') {
-                window.parent.location.href = options.redirectToUrl.apply(self, [$action, response, options]);
-              } else {
-                window.parent.location.href = options.redirectToUrl;
+              if (options.redirectOnResponse === true) {
+                if (typeof options.redirectToUrl === 'function') {
+                  window.parent.location.href = options.redirectToUrl.apply(self, [$action, response, options]);
+                } else {
+                  window.parent.location.href = options.redirectToUrl;
+                }
               }
 
               if (options.onSuccess) {
