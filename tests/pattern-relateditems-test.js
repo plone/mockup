@@ -43,7 +43,7 @@ define([
   var expect = chai.expect,
       mocha = window.mocha;
 
-  mocha.setup('bdd');
+  mocha.setup('bdd').globals(['jQuery*']);
   $.fx.off = true;
 
   /* ==========================

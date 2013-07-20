@@ -29,7 +29,15 @@ module.exports = function(grunt) {
         autoWatch: true
       },
       ci: {
-        singleRun: true
+        singleRun: true,
+        reporters: ['dots', 'junit', 'coverage'],
+        junitReporter: {
+          outputFile: 'test-results.xml'
+        },
+        coverageReporter: {
+          type : 'cobertura',
+          dir : 'coverage/'
+        }
         // SauceLabs stuff comes here
       }
     },

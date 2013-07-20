@@ -47,7 +47,7 @@ define([
 
   var server = sinon.fakeServer.create();
   server.autoRespond = true;
-  server.autoRespondAfter = 0;
+  server.autoRespondAfter = 1;
   server.respondWith("patterns-modal-load-via-ajax", function (xhr, id) {
     xhr.respond(200, { "Content-Type": "text/html" }, '' +
       '<html><body>' +
@@ -60,6 +60,21 @@ define([
   ========================== */
 
   describe("Modal", function() {
+    beforeEach(function(){
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+      this.server.respondWith(/patterns-modal-load-via-ajax/, function (xhr, id) {
+        xhr.respond(200, { "Content-Type": "text/html" }, '' +
+          '<html><body>' +
+          '<div id="content">Exampel</div>' +
+          '</body></html>');
+      });
+    });
+    afterEach(function() {
+      $('body').empty();
+      this.server.restore();
+    });
+
     it("default behaivour", function() {
       var $el = $('' +
         '<div id="body">' +
@@ -121,8 +136,6 @@ define([
       $('a', $el)
         .patternModal()
         .on('show.modal.patterns', function() {
-          console.log('works');
-
           $el.remove();
           done();
         })
