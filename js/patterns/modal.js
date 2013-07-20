@@ -716,10 +716,13 @@ define([
     },
     hide: function() {
       var self = this;
+      self.trigger('hide');
+      if (self._suppressHide && !window.confirm(self._suppressHide)) {
+        return;
+      }
       if (self.ajaxXHR) {
         self.ajaxXHR.abort();
       }
-      self.trigger('hide');
       if ($('.modal', self.$wrapper).size() < 2) {
         self.backdrop.hide();
         self.$wrapper.hide();

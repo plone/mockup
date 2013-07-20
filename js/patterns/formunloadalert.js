@@ -57,16 +57,24 @@ define([
         }
       );
 
-      $(window).on('beforeunload', function(e){
-        return self._handle_unload(self, e);
-      });
+      var $modal = self.$el.parents('.modal')
+      if ($modal.size() !== 0) {
+        $modal.data('pattern-modal').on('hide', function(e, modal) {
+          modal._suppressHide = self._handle_unload.apply(self, e);
+        });
+      } else {
+        $(window).on('beforeunload', function(e){
+          return self._handle_unload.apply(self, e);
+        });
+      }
 
       self.$el.on('submit', function(e){
         self._suppressed = true;
       });
 
     },
-    _handle_unload : function (self, e) {
+    _handle_unload : function (e) {
+      var self = this;
       if (self._suppressed) {
         self._suppressed = false;
         return undefined;

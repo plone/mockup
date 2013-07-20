@@ -71,9 +71,10 @@ define([
       $match = $root.filter('.enableUnloadProtection');
       $match = $match.add($root.find('.enableUnloadProtection'));
       $match.addClass('pat-formunloadalert');
-      $match.attr({
-        'data-pat-formunloadalert':'message: '+window.form_modified_message
-      });
+      // TODO: need to get form_modified_message into body data attributes
+      //$match.attr({
+      //  'data-pat-formunloadalert':'message: '+window.form_modified_message
+      //});
 
       // Fix drop downs
       var actions = $('dl.actionMenu#plone-contentmenu-actions dt.actionMenuHeader a', $root);
