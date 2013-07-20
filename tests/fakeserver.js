@@ -272,6 +272,38 @@ define([
 '    </body> '+
 '    </html>']);
 
+  server.respondWith("GET", /modal-form.html/,
+                                [200, { "Content-Type": "text/html" },
+                                 ''+
+'    <html> '+
+'    <head></head>'+
+'    <body> '+
+'    <div id="content">'+
+'    <h1>Modal with Form</h1>'+
+'    <p>This modal contains a form.</p>'+
+'    <form method="POST" action="/modal-submit.html">' +
+'      <label for="name">Name:</label><input type="text" name="name" />' +
+'      <div class="formControls"> ' +
+'        <input type="submit" value="Submit" name="submit" />' +
+'      </div> '+
+'    </form>' +
+'    </body> '+
+'    </html>']);
+
+  server.respondWith('POST', /modal-submit.html/, function(xhr, id) {
+    var name = getQueryVariable('?'+xhr.requestBody, 'name');
+    xhr.respond(200, {"content-Type": "text/html"},
+      '<html> '+
+      '  <head></head>'+
+      '  <body> '+
+      '    <div id="content">'+
+      '      <h1>Hello, '+_.escape(name)+'</h1>'+
+      '      <p>Thanks!</p>'+
+      '  </body> '+
+      '</html>'
+    );
+  });
+
   server.respondWith('POST', /upload/, function(xhr, id) {
     xhr.respond(200, {"content-Type": "application/json"},
       JSON.stringify({

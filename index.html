@@ -784,7 +784,7 @@ function($action, response, options) { ... }
 
         {attribute: 'triggers', type: 'Array', defaultValue: '[]', description: 'Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format ["<event> <selector>"] or ["<event>"]. For example, ["click .someButton"]. If you pass in only an event such as, ["change"], the event listener will be added to the element on which the modal was initiated, usually a link or button.'},
 
-        {attribute: 'backdrop', type: 'Selector', defaultValue: 'body', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user. To hide all of the content use "body".'},
+        {attribute: 'backdrop', type: 'Selector', defaultValue: 'body', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.'},
         {
           attribute: 'backdropOptions',
           type: 'Object',
@@ -864,6 +864,13 @@ function($action, response, options) { ... }
                class="btn btn-large btn-primary pat-modal">
               Modal with links (AJAX)</a>
   </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="/modal-form.html"
+   class="btn btn-large btn-primary pat-modal">
+    Modal with form (AJAX)</a>
+  </script>
+
   <script type="text/example" class="example-modal" title="">
 <a href="#modal3"
    class="btn btn-large btn-primary pat-modal"
@@ -888,15 +895,23 @@ function($action, response, options) { ... }
   </script>
 
   <script type="text/example" class="example-modal" title="">
-<a href="#modal1"
+<a href="#modalBackdrop"
    class="btn btn-large btn-primary pat-modal"
-   data-pat-modal="{backdrop: '#content',
-                    backdropOptions: {
-                      opacity: '0.2',
-                      closeOnClick: false
+   data-pat-modal='{"backdrop": "#content",
+                    "backdropOptions": {
+                      "opacity": "0.2",
+                      "closeOnClick": false
                     }
-                  }">
+                  }'>
     Custom Backdrop</a>
+<div id="modalBackdrop" style="display: none">
+  <h1>Custom Backdrop</h1>
+  <ul>
+    <li>Less opaque</li>
+    <li>Modal doesn't close when Backdrop is clicked</li>
+  </ul>
+</div>
+</div>
   </script>
 
   <script type="text/example" class="example-modal" title="">
@@ -1001,60 +1016,6 @@ function($action, response, options) { ... }
       <p>I don't care if it takes from now till the end of
         Shrimpfest. You might wanna lean away from that fire since
         you're soaked in alcohol.</p>
-
-      <p>Did you know that more frozen bananas are sold right here on
-        this boardwalk than anywhere on the OC? You stay on top of
-        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
-        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
-        you telling me you have a multi-stage trick with hidden
-        identities? That coat costs more than your house! Well,
-        obviously, I'm not a big guy. I'm not a Carl Weathers, par
-        example. You burn down the storage unit? Oh, most definitely.
-        Oh…yeah…the guy in the…the $4,000 suit is holding the
-        elevator for a guy who doesn't make that in three months.
-        Come on!</p>
-
-
-      <p>No! These are just strippers! Look how hot they are! Michael
-        was having brunch with Sally Sitwell at a restaurant called
-        Skip Church's Bistro. In addition to brunch, the restaurant
-        was known for an item on the menu called the "Skip's
-        Scramble", an omelet that contained everything on the menu.
-        Do not order the Skip's Scramble. Look, you are playing
-        adults…with fully formed libidos, not 2 young men playing
-        grab-ass in the shower. I just don't want him to point out my
-        cracker ass in front of Ann. How about a turtle? I've always
-        loved those leathery little snappy faces. I believe you will
-        find the dessert to be both engrossing and high-grossing! So
-        we don't get dessert?</p>
-
-
-      <p>I'm in Vegas this week and would like to point out the Blue
-        Man Group is *actually* hiring. The support group? Te quiero.
-        English, please. I love you! Great, now I'm late. We need
-        a name. Maybe "Operation Hot Mother." No, let's try to top
-        that. (They never did.) Hey, Dad. Look at you. You're a year
-        older…and a year closer to death. Buster: Oh yeah, I guess
-        that's kind of funny. I am going to my spin class. I thought
-        you had vertigo. Turns out he ended up getting too friendly
-        with the teddy bear.</p>
-
-
-      <p>And although the intervention didn't work, it turned into
-        one of the Bluth family's better parties. Te quiero. English,
-        please. I love you! Great, now I'm late. I call it Tricks –-
-        wait for it – Around The Office. The only thing I found in
-        the fridge was a dead dove in a bag. Gob: You didn't eat
-        that, did you?</p>
-
-
-      <p>I believe you will find the dessert to be both engrossing
-        and high-grossing! So we don't get dessert? Well excuse me
-        for liking the way they frame my junk! Did you know that more
-        frozen bananas are sold right here on this boardwalk than
-        anywhere in the OC? Buster, what are you doing with mother's
-        rape-horn?</p>
-
 
       <p>I believe you will find the dessert to be both engrossing
         and high-grossing! So we don't get dessert? Look at us,
@@ -1184,6 +1145,19 @@ function($action, response, options) { ... }
 
     </div>
   </div>
+  </script>
+  <script type="text/example" class="example-modal" title="">
+<a href="#modalButtons"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal='{"templateOptions":{"buttons":".btn"}}'>
+    Modal with Buttons</a>
+<div id="modalButtons" style="display: none">
+  <h1>Modal with buttons</h1>
+  <div id="content">
+    <p>Here is some content, in the content we have some buttons that will be placed in the footer.</p>
+    <button class="btn">Save</button><button class="btn">Cancel</button>
+  </div>
+</div>
   </script>
 
   <!--  **** Pick A Date **** -->
