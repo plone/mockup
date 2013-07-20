@@ -106,7 +106,12 @@ define([
           onSuccess: null,
           onError: null,
           onFormError: null,
-          onTimeout: null
+          onTimeout: null,
+          redirectToUrl: function($action, response, options) {
+            var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
+                          .replace('<base', '<div').replace('</base>', '</div>'))[0]);
+            return $base.attr('href');
+          }
         },
         form: function(actions, defaultOptions) {
           var self = this;
@@ -204,11 +209,10 @@ define([
                 return;
               }
 
-              if (options.redirectToResponseUrl) {
-                var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
-                              .replace('<base', '<div').replace('</base>', '</div>'))[0]);
-                window.parent.location.href = $base.attr('href');
-                return;
+              if (typeof options.redirectToUrl === 'function') {
+                window.parent.location.href = options.redirectToUrl.apply(self, [$action, response, options]);
+              } else {
+                window.parent.location.href = options.redirectToUrl;
               }
 
               if (options.onSuccess) {

@@ -767,7 +767,10 @@ $ make bootstrap</pre>
   </div>
 </div>
   </script>
-  <script>
+  <div style="display: none" id="example_redirectToUrl">
+function($action, response, options) { ... }
+  </div>
+<script>
     addPattern({
       id: 'modal',
       extras: ['tinymce'],
@@ -810,7 +813,23 @@ $ make bootstrap</pre>
             {attribute: 'klassContent', type: 'String', defaultValue: '""', description: 'This CSS class will be applied to the element where content matched using the `content` selector will be merged into the template.'},
             {attribute: 'template', type: 'String', defaultValue: '<pre>'+_.escape($('#example_template').html())+'</pre>', description: 'An <a href="http://underscorejs.org">underscore</a> template which will be used during render. Options passed to the template are: title (either the string set using `title`, or html matched from the content using `titleSelector`), prepend (html extracted from the content matching `prependContent` selector), content (extracted from the content using the `content` option), options (all of the `templateOptions` set on the modal).'},
             {attribute: 'actions', type: 'Object', defaultValue: '{}', description: 'A hash of selector to options. Where options can include any of the defaults from `actionOptions`. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
-            {attribute: 'actionsOptions', type: 'Object', defaultValue: '', description: 'Configure the defaults for how actions will be handled.'},
+            {
+              attribute: 'actionsOptions',
+              type: 'Object',
+              defaultValue: '',
+              description: 'Configure the defaults for how actions will be handled.',
+              attributes: [
+                {attribute: 'eventType', type: 'String', defaultValue: '"click"', description: 'The event to bind to the element matched for the action.'},
+                {attribute: 'target', type: 'Selector', defaultValue: 'null', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
+                {attribute: 'ajaxUrl', type: 'String, Function', defaultValue: 'null', description: 'A URL string or a function($actionElement, actionOptions) that returns a string.'},
+                {attribute: 'modalFunction', type: 'String', defaultValue: 'null', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, "hide".'},
+                {attribute: 'redirectOnResponse', type: 'Boolean', defaultValue: 'false', description: 'Whether or not to redirect the window to `redirectToUrl` after a succesful AJAX response.'},
+                {attribute: 'redirectToUrl', type: 'String, Function', defaultValue: $('#example_redirectToUrl').text(), description: 'After a successful ajax request, if `redirectOnResponse` is true, redirect to a specified URL. The default function extracts the URL from a &lt;base&gt; in the response content.'},
+                {attribute: 'isForm', type: 'Boolean', defaultValue: 'false', description: 'Manually indicate an action should use an ajaxSubmit call. Otherwise, whether or not it is a form action will be determined by the element type.'},
+                {attribute: 'timeout', type: 'Integer', defaultValue: '5000', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
+
+              ]
+            },
           ]
         }
       ]

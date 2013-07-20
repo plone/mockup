@@ -301,7 +301,7 @@ define([
         }
       };
       var addOptions = editOptions;
-      addOptions.templateOptions.actionsOptions.redirectToResponseUrl = true;
+      addOptions.templateOptions.actionsOptions.redirectOnResponse = true;
       $('#plone-action-edit > a, #plone-contentmenu-factories ul li.is-content a')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(editOptions));
