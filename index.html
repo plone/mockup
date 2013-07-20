@@ -810,6 +810,9 @@ function($action, response, options) { ... }
             {attribute: 'klassPrepend', type: 'String', defaultValue: '""', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
             {attribute: 'klassContent', type: 'String', defaultValue: '""', description: 'This CSS class will be applied to the element where content matched using the `content` selector will be merged into the template.'},
             {attribute: 'template', type: 'String', defaultValue: '<pre>'+_.escape($('#example_template').html())+'</pre>', description: 'An <a href="http://underscorejs.org">underscore</a> template which will be used during render. Options passed to the template are: title (either the string set using `title`, or html matched from the content using `titleSelector`), prepend (html extracted from the content matching `prependContent` selector), content (extracted from the content using the `content` option), options (all of the `templateOptions` set on the modal).'},
+            {attribute: 'buttons', type: 'Selector', defaultValue: '.formControls &gt; input[type="submit"]', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
+            {attribute: 'automaticallyAddButtonActions', type: 'Boolean', defaultValue: 'true', description: 'Automatically create actions for elements matched with the `buttons` selector. They will use the options provided in `actionsOptions`.'},
+            {attribute: 'loadLinksWithinModal', type: 'Boolean', defaultValue: 'true', description: 'Automatically load links (&lt;a&gt;) inside of the modal using AJAX.'},
             {attribute: 'actions', type: 'Object', defaultValue: '{}', description: 'A hash of selector to options. Where options can include any of the defaults from `actionOptions`. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
             {
               attribute: 'actionsOptions',
@@ -884,6 +887,17 @@ function($action, response, options) { ... }
     </div>
   </script>
 
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal1"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="{backdrop: '#content',
+                    backdropOptions: {
+                      opacity: '0.2',
+                      closeOnClick: false
+                    }
+                  }">
+    Custom Backdrop</a>
+  </script>
 
   <script type="text/example" class="example-modal" title="">
 <a href="#modal4"
