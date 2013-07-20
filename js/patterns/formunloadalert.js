@@ -57,7 +57,7 @@ define([
         }
       );
 
-      var $modal = self.$el.parents('.modal')
+      var $modal = self.$el.parents('.modal');
       if ($modal.size() !== 0) {
         $modal.data('pattern-modal').on('hide', function(e, modal) {
           modal._suppressHide = self._handle_unload.apply(self, e);
