@@ -135,7 +135,8 @@ define([
             rel_upload_path: '@@fileUpload',
             folder_url: config.document_base_url,
             tiny: {
-              content_css: config.portal_url + '/base.css'
+              content_css: config.portal_url + '/base.css',
+              document_base_url: config.document_base_url
             }
           })
         });
