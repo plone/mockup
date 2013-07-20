@@ -424,7 +424,7 @@ define([
       }
 
       self.backdrop.on('hidden', function(e) {
-        if (self.$modal !== undefined && self.$modal.hasClass(self.options.klassActive)) {
+        if (self.$modal !== undefined && self.$modal.hasClass(self.options.templateOptions.klassActive)) {
           self.hide();
         }
       });

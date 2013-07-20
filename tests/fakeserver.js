@@ -284,7 +284,7 @@ define([
 '    <form method="POST" action="/modal-submit.html">' +
 '      <label for="name">Name:</label><input type="text" name="name" />' +
 '      <div class="formControls"> ' +
-'        <input type="submit" value="Submit" name="submit" />' +
+'        <input type="submit" class="btn btn-primary" value="Submit" name="submit" />' +
 '      </div> '+
 '    </form>' +
 '    </body> '+
