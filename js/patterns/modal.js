@@ -83,7 +83,7 @@ define([
           '    <div class="<%= options.klassPrepend %>"><%= prepend %></div> ' +
           '    <div class="<%= options.klassContent %>"><%= content %></div>' +
           '  </div>' +
-          '  <div class="<%= options.klassFooter %>"> ' +
+          '  <div class="options.klassFooter"> ' +
           '    <%= buttons %> ' +
           '  </div>' +
           '</div>',
@@ -93,7 +93,6 @@ define([
           target: null,
           ajaxUrl: null, // string, or function($el, options) that returns a string
           modalFunction: null, // String, function name on self to call
-          redirectToResponseUrl: false, // Boolean, whether or not to redirect to the response URL on ajaxSubmit
           isForm: false,
           timeout: 5000,
           displayInModal: true,
@@ -107,6 +106,7 @@ define([
           onError: null,
           onFormError: null,
           onTimeout: null,
+          redirectOnResponse: false,
           redirectToUrl: function($action, response, options) {
             var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
                           .replace('<base', '<div').replace('</base>', '</div>'))[0]);
@@ -126,7 +126,7 @@ define([
             actions.a = {};
           }
           $.each(actions, function(action, options) {
-            options = $.extend(true, {}, defaultOptions, options);
+            options = $.extend({}, defaultOptions, options);
             $(action, $('.modal-body', $modal)).each(function(action) {
               var $action = $(this);
               $action.on(options.eventType, function(e) {
@@ -283,12 +283,11 @@ define([
       render: function(options) {
         var self = this;
 
+        self.trigger('before-render');
+
         if (!self.$raw) {
           return;
         }
-
-        self.trigger('before-render');
-
         var $raw = self.$raw.clone();
 
         // Object that will be passed to the template
@@ -324,8 +323,6 @@ define([
 
         // Render html
         self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
-
-        self.trigger('before-events-setup');
 
         // Setup buttons
         $(options.buttons, self.$modal).each(function() {
@@ -720,13 +717,10 @@ define([
     },
     hide: function() {
       var self = this;
-      self.trigger('hide');
-      if (self._suppressHide && !window.confirm(self._suppressHide)) {
-        return;
-      }
       if (self.ajaxXHR) {
         self.ajaxXHR.abort();
       }
+      self.trigger('hide');
       if ($('.modal', self.$wrapper).size() < 2) {
         self.backdrop.hide();
         self.$wrapper.hide();

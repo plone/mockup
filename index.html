@@ -112,10 +112,10 @@ require([
         }
       </td>
     <% } else { %>
-      <td><%= attribute %></td>
-      <td><%= type %></td>
-      <td><%= defaultValue %></td>
-      <td><%= description %></td>
+      <td class="attr-name"><%= attribute %></td>
+      <td class="attr-type"><%= type %></td>
+      <td class="attr-default"><%= defaultValue %></td>
+      <td  class="attr-description"><%= description %></td>
     <% } %>
   </script>
 
@@ -792,8 +792,6 @@ function($action, response, options) { ... }
           description: null,
           attributes: backdropAttributes
         },
-
-        {attribute: 'template', type: 'Function', defaultValue: '', description: 'TODO'},
         {
           attribute: 'templateOptions',
           type: 'Object',
@@ -827,7 +825,17 @@ function($action, response, options) { ... }
                 {attribute: 'redirectToUrl', type: 'String, Function', defaultValue: $('#example_redirectToUrl').text(), description: 'After a successful ajax request, if `redirectOnResponse` is true, redirect to a specified URL. The default function extracts the URL from a &lt;base&gt; in the response content.'},
                 {attribute: 'isForm', type: 'Boolean', defaultValue: 'false', description: 'Manually indicate an action should use an ajaxSubmit call. Otherwise, whether or not it is a form action will be determined by the element type.'},
                 {attribute: 'timeout', type: 'Integer', defaultValue: '5000', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
-
+                {attribute: 'displayInModal', type: 'Boolean', defaultValue: 'true', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
+                {attribute: 'reloadWindowOnClose', type: 'Boolean', defaultValue: 'true', description: 'Whether or not to reload the window when the modal is closed due to this action.'},
+                {attribute: 'error', type: 'Selector', defaultValue: '.portalMessage.error', description: 'Match content from an ajaxSubmit that indicates an error. If content is found, `onFormError` is called.'},
+                {attribute: 'onSuccess', type: 'Function', defaultValue: 'null', description: 'Function is called after a successful AJAX request. Arguments: response, state, xhr, form.'},
+                {attribute: 'onError', type: 'Function', defaultValue: 'null', description: 'Function is called if an AJAX request results in an error. Arguments: response, state, xhr, form.'},
+                {attribute: 'onFormError', type: 'Function', defaultValue: 'null', description: 'Function is called if an AJAX request is successful, but content in the response matches the `error` selector. Arguments: response, state, xhr, form.'},
+                {attribute: 'onTimeout', type: 'Function', defaultValue: 'null', description: 'Function is called if an AJAX request takes longer in than `timeout` to complete. Arguments: response, state, xhr, form.'},
+                {attribute: 'form', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Function called during render, setup actions and bind events to elements. Arguments: actions, defaultOptions (from actionsOptions)'},
+                {attribute: 'handleFormAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If the action.isForm is true or if form() determines the action is a form action this method will be called when the event is triggered.'},
+                {attribute: 'handleLinkAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If the action.isForm is false or if form() determines the action is a link action this method will be called when the event is triggered.'},
+                {attribute: 'render', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Called when modal is shown, and after a successful response when `displayInModal` is true.'}
               ]
             },
           ]
