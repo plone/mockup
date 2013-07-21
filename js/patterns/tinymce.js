@@ -165,7 +165,7 @@ define([
     modalShown: function(){
       var self = this;
       /* initialize elements so submit does the right thing.. */
-      self.$uploadBtn = $('input[type="submit"]', self.modal.$modal);
+      self.$uploadBtn = $('.modal-footer input[type="submit"]', self.modal.$modal);
       self.$form = $('form', self.modal.$modal);
       self.$iframe = $('iframe', self.modal.$modal);
       self.$form.on('submit', function(e){
@@ -331,7 +331,7 @@ define([
       var self = this;
       self.$internal = $('input[name="internal"]', self.modal.$modal);
       self.$target = $('select[name="target"]', self.modal.$modal);
-      self.$button = $('input[name="insert"]', self.modal.$modal);
+      self.$button = $('.modal-footer input[name="insert"]', self.modal.$modal);
       self.$title = $('input[name="title"]', self.modal.$modal);
       self.$external = $('input[name="external"]', self.modal.$modal);
       self.$email = $('input[name="email"]', self.modal.$modal);
@@ -370,7 +370,9 @@ define([
           if(typeof(val) === 'object'){
             val = val[0];
           }
-          return 'resolveuid/' + val.UID;
+          if(val){
+            return 'resolveuid/' + val.UID;
+          }
         }
       } else if(self.linkType === 'external'){
         return self.$external.val();
@@ -401,12 +403,14 @@ define([
           if(typeof(val) === 'object'){
             val = val[0];
           }
-          var url = 'resolveuid/' + val.UID;
-          var scale = self.$scale.val();
-          if(scale){
-            url += '/@@images/image/' + scale;
+          if(val){
+            var url = 'resolveuid/' + val.UID;
+            var scale = self.$scale.val();
+            if(scale){
+              url += '/@@images/image/' + scale;
+            }
+            return url;
           }
-          return url;
         }
       } else if(self.linkType === 'externalImage'){
         val = self.$externalImage.val();
@@ -497,6 +501,8 @@ define([
       var self = this;
       self.initElements();
       self.$button.off('click').on('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
         var href = self.getLinkUrl();
         if(!href){
           return; // just cut out if no url
@@ -509,7 +515,7 @@ define([
         }
         self.hide();
       });
-      $('input[name="cancel"]', self.modal.$modal).click(function(e){
+      $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function(e){
         e.preventDefault();
         self.hide();
       });
