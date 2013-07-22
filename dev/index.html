@@ -192,10 +192,10 @@ $ git clone git://github.com/plone/mockup.git
 $ cd mockup
 $ make bootstrap</pre>
       <p>
-        And you're environment is ready to start working on testable, modular, Javascript!
+        And your environment is ready to start working on testable, modular, JavaScript!
       </p>
       <p>
-        If you're interested in developing in mockup, but then seeing it's use
+        If you're interested in developing in mockup, then seeing its use
         directly in Plone, check out the <a href='https://github.com/plone/buildout.deco'>buildout.deco</a>
         project on GitHub.
       </p>
@@ -244,30 +244,30 @@ $ make bootstrap</pre>
         things to move around a bit.
       </p>
       <ul>
-        <li><strong>build/</strong> All combined, optimized, and minimized javascript code, as well as compiled less and media are copied and placed here</li>
-        <li><strong>js/</strong> This directory contains all of the modularized javascript code</li>
+        <li><strong>build/</strong> All combined, optimized, and minimized JavaScript code, as well as compiled less and media are copied and placed here</li>
+        <li><strong>js/</strong> This directory contains all of the modularized JavaScript code</li>
         <li><strong>js/config.js</strong> This file contains the RequireJS configuration</li>
         <li><strong>js/fakeserver.js</strong> This file is useful for development -- it contains the code for setting up fake responses to XHR</li>
         <li><strong>js/bundles</strong> This is where a bundle is defined -- it is a set of requirements and code that provide the features being packaged into a Plone product</li>
-        <li><strong>js/patterns</strong> This is a directory that contains all individual, encapsulated patterns (ie widgets/javascript)</li>
+        <li><strong>js/patterns</strong> This is a directory that contains all individual, encapsulated patterns (i.e. widgets/JavaScript)</li>
         <li><strong>less/</strong> This directory contains all the <a href='http://lesscss.org/'>less</a> code for all the patterns and bundles</li>
         <li><strong>lib/</strong> This directory contains external libraries not necessarily found in the bower repositories</li>
         <li><strong>tests/</strong> This directory contains all tests for patterns and bundles, including gernal setup and configuration code</li>
-        <li><strong>Gruntfile.js</strong> This file contains the directives for compiling less, and combining/optimizing/minimizing javascript for the defined bundles</li>
+        <li><strong>Gruntfile.js</strong> This file contains the directives for compiling less, and combining/optimizing/minimizing JavaScript for the defined bundles</li>
         <li><strong>index.html</strong> This is the main source of documentation for the mockup project.</li>
         <li><strong>Makefile</strong> This is the Makefile used to define what tasks should run when you want to build a bundle, or bootstrap the environment</li>
       </ul>
       <h4>What's a Pattern? What Are Bundles? How do they relate?</h4>
       <p>
-        <em>Pattern's</em> are unit's of javascript, defined by a RequireJS/AMD style module.
+        <em>Patterns</em> are units of JavaScript, defined by a RequireJS/AMD style module.
         Patterns may require other patterns to operate, and may require third
         party libraries. Think of patterns as a module -- encapsulated and
         separate, and providing a widget or tool to use by other patterns or
         in html.
       </p>
       <p>
-        <em>Bundle's</em> are defined similar to <em>Pattern's</em> -- they are
-        encapsulated bits of javascript that define requirements for a bundle,
+        <em>Bundles</em> are defined similar to <em>Patterns</em> -- they are
+        encapsulated bits of JavaScript that define requirements for a bundle,
         and have some extra code in them that's useful for integrating the
         required patterns into Plone products.
       </p>
@@ -278,8 +278,8 @@ $ make bootstrap</pre>
       </p>
       <p>
         <em>plone.app.widgets</em> is a good example of a bundle. The
-        <strong>js/bundles/widges.js</strong> file contains a RequireJS module
-        that defines the all the requirements for the plone.app.widgets, and
+        <strong>js/bundles/widgets.js</strong> file contains a RequireJS module
+        that defines all the requirements for plone.app.widgets, and
         adds some specific code to make the requirements work nicely in the
         <em>plone.app.widgets</em> Plone module.
       </p>
@@ -315,7 +315,7 @@ $ make bootstrap</pre>
       </p>
 
       <h3>Step 5: Bundling</h3>
-      <p>To build bundles</p>
+      <p>To build bundles:</p>
       <pre>make</pre>
 
       <h3>Step 6: Testing</h3>
@@ -332,7 +332,7 @@ $ make bootstrap</pre>
         This is the part that developers in the Plone community are currently
         familiar with, and the step that purely front-end developers will have to
         pass off their products. This step is all about taking the bundled
-        javascript and adding it to Plone products in the ways javascript has
+        JavaScript and adding it to Plone products in the ways JavaScript has
         always been added.
       </p>
     </div>
@@ -359,7 +359,7 @@ $ make bootstrap</pre>
         **WORKING DRAFT** Please Contribute!
       </h3>
       <p>
-        Things are almost garaunteed to
+        Things are almost guaranteed to
         be misspelled, grammatically incorrect, missing, wrong and misleading.
         Please help to improve it!
       </p>
@@ -369,25 +369,25 @@ $ make bootstrap</pre>
         <h2>What's the purpose of this project?</h2>
         <p>
           The <em>mockup</em> project intends to improve the testing and modularization
-          story of the javascript used inside Plone. Further, it aims to make developing
+          story of the JavaScript used inside Plone. Further, it aims to make developing
           client-side widgets and tools more approachable for developers who are
-          familiar with javascript and related tooling.
+          familiar with JavaScript and related tooling.
         </p>
 
-        <h2>How does this project achieve better modularization of javascript, and what kind of benefits come from it?</h2>
+        <h2>How does this project achieve better modularization of JavaScript, and what kind of benefits come from it?</h2>
         <p>
           Specifically, this project uses
           <a href='http://requirejs.org/' target='_blank'>RequireJS</a>, a library
           that adheres to the
           <a href='http://en.wikipedia.org/wiki/Asynchronous_module_definition' target='_blank'>AMD</a>
-          concept of javascript modularization.
+          concept of JavaScript modularization.
         </p>
         <p>
           Here's a great page outlining the motivations for AMD:
           <a href="http://requirejs.org/docs/whyamd.html" target="_blank">Why AMD?</a>.
         </p>
         <p>
-          Basically, it gives us a standard way to encapsulate javascript, and a
+          Basically, it gives us a standard way to encapsulate JavaScript, and a
           mechanism for combining, optimizing, and minimizing code when it's bundled.
           On top of that, the overall process involved is known to developers outside
           the plone community.
@@ -403,42 +403,42 @@ $ make bootstrap</pre>
           <em>Almond</em> is a small shim loader for the <em>AMD</em> specification.
           It completely replaces <em>RequireJS</em> for production use, providing
           the interface, but not all the dynamic loading capabilities -- which
-          aren't needed since all the javascript is bundled up into single files.
+          aren't needed since all the JavaScript is bundled up into single files.
           <em>Almond</em> comes in at right around <strong>1kb</strong>
           when all is said and done, which makes for very light overhead.
         </p>
 
-        <h2>How does this project achieve better testing of javascript, and why should anyone care?</h2>
+        <h2>How does this project achieve better testing of JavaScript, and why should anyone care?</h2>
         <p>
-          Currently javascript in Plone is <em>not tested all</em>. So, to begin,
+          Currently JavaScript in Plone is <em>not tested at all</em>. So, to begin,
           *any* testing is an improvement. Beyond that, it's a nightmare to upgrade
-          a javascript library -- there is no way of understanding all the
+          a JavaScript library -- there is no way of understanding all the
           ramifications of such a change. With tests, you can know immediately
           what parts of your code fail, and what parts you need to update.
         </p>
         <p>
-          Complex Javascript becomes more reliable!
+          Complex JavaScript becomes more reliable!
         </p>
 
         <h2>How does this project make developing widgets and front-end tooling more approachable?</h2>
         <p>
           There are two big things that make this project really approachable
-          for front-end developers: using tools commonly used for javascript
-          development, and no need to install understand Plone.
+          for front-end developers: using tools commonly used for JavaScript
+          development, and no need to install and understand Plone.
         </p>
         <p>
           If front-end developers already have a suite of awesome tools to use,
           why bother creating custom ones that are only used in the Plone
           community? Certainly there is a time and place for specialized tools,
-          but people who specialize in javascript and front-end development
+          but people who specialize in JavaScript and front-end development
           can be more effective with tools they're familiar with if they don't
           have to mix Plone into their process.
         </p>
         <p>
-          This also allows contribution back to the Javascript community -- if
-          Plone takes advantage of the products that come out of the Javascript
+          This also allows contribution back to the JavaScript community -- if
+          Plone takes advantage of the products that come out of the JavaScript
           community, we can contribute back, and maybe even garner interest
-          in members of the Javascript community contributing to Plone.
+          in members of the JavaScript community contributing to Plone.
         </p>
         <p>
           Second, this project only needs <em>git</em> and <em>npm/node</em>.
@@ -455,14 +455,14 @@ $ make bootstrap</pre>
 
         <h2>Why is this better than the status quo?</h2>
         <p>
-          Plone has zero tests for javascript, people are scared to poke it, and
+          Plone has zero tests for JavaScript, people are scared to poke it, and
           knowledge of Plone development is required. This means that only people
-          who are both knowledgable with Plone and Javascript add to Plone's
-          javascript story, and even then tend to tread lightly.
+          who are both knowledgable with Plone and JavaScript add to Plone's
+          JavaScript story, and even then tend to tread lightly.
         </p>
         <p>
           This project aims to make developers be capable of being bold and
-          inovative when it comes to javascript.
+          innovative when it comes to JavaScript.
         </p>
 
         <h2>Isn't this a lot of work and code just to hack some javasript?</h2>
@@ -500,8 +500,8 @@ $ make bootstrap</pre>
 
         <h2>What's the relation to plone.app.toolbar? plone.app.widgets?</h2>
         <p>
-          They provide Plone integration with the javascript developed
-          and tested in the <em>mockup</em> project. Javascript is bundled,
+          They provide Plone integration with the JavaScript developed
+          and tested in the <em>mockup</em> project. JavaScript is bundled,
           optimized, compressed, then packaged within the products. In the package
           itself, views and other integrations are made to override existing
           aspects with their newer equivalents.
@@ -517,20 +517,20 @@ $ make bootstrap</pre>
 
         <h2>I just want add a custom widget, but I don't want to contribute it to this project, what do I do?</h2>
         <p>
-          Check out the <a href='/#getting-started'>getting started</a> page to
+          Check out the <a href='#getting-started'>getting started</a> page to
           learn how to get started with developing your own custom patterns!
         </p>
 
         <h2>What is a bundle?</h2>
         <p>
-          A bundle is a combination of javascript, css, and other media that
+          A bundle is a combination of JavaScript, CSS, and other media that
           are meant to be delivered into a specific Plone product.
         </p>
         <p>
           For instance,
           the <em>plone.app.widgets</em> product is a bundle consisting of the
-          combined, optimized, and minimized javascript, the compiled css (from
-          less), and other resource (such as images)
+          combined, optimized, and minimized JavaScript, the compiled CSS (from
+          less), and other resourcese (such as images).
         </p>
         <p>
           In practice, developers will only add to the widgets and toolbar
