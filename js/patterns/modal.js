@@ -344,6 +344,8 @@ define([
           $button.hide();
         });
 
+        self.trigger('before-events-setup');
+
         // Wire up events
         $('.modal-header > a.close', self.$modal)
           .off('click')
