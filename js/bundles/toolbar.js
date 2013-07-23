@@ -232,6 +232,7 @@ define([
 
       // Manage portlets
       var portletOptions = {
+        width: '50%',
         templateOptions: {
           buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
           automaticallyAddButtonActions: false
