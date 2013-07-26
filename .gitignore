@@ -7,3 +7,5 @@
 /plone/mockup.egg-info/
 /bower_components/
 /test-results.xml
+
+.DS_Store
