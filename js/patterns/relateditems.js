@@ -182,7 +182,7 @@ define([
       self.trigger('deselecting');
       var data = self.$el.select2("data");
       _.each(data, function(obj, i) {
-        if (obj.id === item.id) {
+        if (obj.UID === item.UID) {
           data.splice(i, 1);
         }
       });
