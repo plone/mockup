@@ -7,3 +7,4 @@
 /plone/mockup.egg-info/
 /bower_components/
 /test-results.xml
+/sauce_connect.log*

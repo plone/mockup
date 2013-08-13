@@ -20,15 +20,11 @@ module.exports = function(grunt) {
       all: ['Gruntfile.js', 'js/**/*.js', 'tests/*.js']
     },
     karma: {
-      options: {
-        configFile: 'tests/karma.conf.js',
-        runnerPort: 9999,
-        browsers: ['Chrome']
-      },
       dev: {
-        autoWatch: true
+        configFile: 'tests/karma.conf.js'
       },
       ci: {
+        configFile: 'tests/karma.conf.js',
         singleRun: true,
         reporters: ['dots', 'junit', 'coverage'],
         junitReporter: {
@@ -37,8 +33,30 @@ module.exports = function(grunt) {
         coverageReporter: {
           type : 'cobertura',
           dir : 'coverage/'
+        },
+        browsers: ['sauce_chrome', 'sauce_firefox'],
+        sauceLabs: {
+          testName: 'PloneMockup',
+          startConnect: true
+        },
+        customLaunchers: {
+          'sauce_chrome': {
+             base: 'SauceLabs',
+             platform: 'Linux',
+             browserName: 'chrome'
+           },
+          'sauce_firefox': {
+             base: 'SauceLabs',
+             platform: 'Linux',
+             browserName: 'firefox'
+           },
+           'sauce_ie': {
+             base: 'SauceLabs',
+             platform: 'Windows 8',
+             browserName: 'internet explorer',
+             version: '10'
+           }
         }
-        // SauceLabs stuff comes here
       }
     },
     requirejs: {

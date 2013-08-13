@@ -1,81 +1,90 @@
-/* global basePath, files, MOCHA, MOCHA_ADAPTER, REQUIRE, REQUIRE_ADAPTER,
- *   preprocessors, exclude, reporters, coverageReporter, port, runnerPort,
- *   colors, logLevel, LOG_INFO, autoWatch, browsers, captureTimeout,
- *   singleRun
- */
-
 // Karma configuration
 
-// base path, that will be used to resolve files and exclude
-basePath = '../';
+var requirejsOptions = require('../js/config'),
+    files = [];
 
-// list of files / patterns to load in the browser
-files = [
-  MOCHA,
-  MOCHA_ADAPTER,
-  REQUIRE,
-  REQUIRE_ADAPTER,
+for (var key in requirejsOptions.paths) {
+  files.push({
+    pattern: requirejsOptions.paths[key] + '.js',
+    included: false
+  });
+}
+files.push({pattern: 'tests/example-resource*', included: false});
+files.push({pattern: 'tests/fakeserver*', included: false});
+files.push({pattern: 'tests/**/*-test.js', included: false});
+files.push('js/config.js');
+files.push('tests/config.js');
 
-  'js/config.js',
-  {pattern: 'lib/**/*.js', included: false},
-  {pattern: 'bower_components/**/*.js', included: false},
-  {pattern: 'js/**/*.js', included: false},
-  {pattern: 'tests/example-resource*', included: false},
-  {pattern: 'tests/fakeserver*', included: false},
-  {pattern: 'tests/**/*-test.js', included: false},
+module.exports = function(config) {
+  config.set({
 
-  'tests/config.js'
-];
+    // base path, that will be used to resolve files and exclude
+    basePath: '../',
 
-preprocessors = {
-  'js/**/*.js': 'coverage'
-};
+    // frameworks to use
+    frameworks: ['mocha', 'requirejs'],
 
-// list of files to exclude
-exclude = [
-  // TODO: we need to fix this tests
-  'tests/iframe-test.js',
-  'tests/pattern-formunloadalert-test.js',
-  'tests/pattern-preventdoublesubmit-test.js'
-];
+    // list of files / patterns to load in the browser
+    files: files,
 
-// test results reporter to use
-// possible values: dots || progress || growl
-reporters = ['progress', 'coverage'];
-coverageReporter = {
-  type : 'html',
-  dir : 'coverage/'
-};
+    // list of files to exclude
+    exclude: [
+      // TODO: we need to fix this tests
+      'tests/iframe-test.js',
+      'tests/pattern-formunloadalert-test.js',
+      'tests/pattern-preventdoublesubmit-test.js'
+    ],
 
-// web server port
-port = 8080;
+    preprocessors: {
+      'js/**/*.js': 'coverage'
+    },
 
-// cli runner port
-runnerPort = 9100;
+    // test results reporter to use
+    // possible values: dots || progress || growl
+    reporters: ['dots', 'progress', 'coverage'],
 
-// enable / disable colors in the output (reporters and logs)
-colors = true;
+    coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    },
 
-// level of logging
-// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_INFO;
+    // web server port
+    port: 9876,
 
-// enable / disable watching file and executing tests whenever any file changes
-autoWatch = false;
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
-// Start these browsers, currently available:
-// - Chrome
-// - ChromeCanary
-// - Firefox
-// - Opera
-// - Safari (only Mac)
-// - PhantomJS
-// - IE (only Windows)
-browsers = ['Chrome'];
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_DEBUG,
 
-// If browser does not capture in given timeout [ms], kill it
-captureTimeout = 5000;
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
 
-// Continuous Integration mode
-// if true, it capture browsers, run tests and exit
-singleRun = false;
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera
+    // - Safari (only Mac)
+    // - PhantomJS
+    // - IE (only Windows)
+    browsers: ['Chrome'],
+
+    // If browser does not capture in given timeout [ms], kill it
+    captureTimeout: 60000,
+
+    // Continuous Integration mode
+    // if true, it capture browsers, run tests and exit
+    singleRun: false,
+
+    plugins: [
+      'karma-mocha',
+      'karma-coverage',
+      'karma-requirejs',
+      'karma-sauce-launcher',
+      'karma-chrome-launcher',
+      'karma-junit-reporter'
+    ]
+  });
+}
