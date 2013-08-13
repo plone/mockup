@@ -98,6 +98,7 @@ bootstrap:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	$(NPM) link --prefix=./node_modules
 	$(BOWER) install
+	sed -i -e "s@throw new Error('Unknown Prefix @//throw// new Error('Unknown Prefix @g" ./node_modules/lcov-result-merger/index.js
 
 jshint:
 	$(GRUNT) jshint

@@ -31,7 +31,7 @@ module.exports = function(grunt) {
           outputFile: 'test-results.xml'
         },
         coverageReporter: {
-          type : 'cobertura',
+          type : 'lcovonly',
           dir : 'coverage/'
         },
         browsers: ['sauce_chrome', 'sauce_firefox'],

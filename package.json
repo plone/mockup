@@ -19,7 +19,9 @@
     "karma-sauce-launcher": "~0.1.0",
     "karma-chrome-launcher": "~0.1.0",
     "karma-junit-reporter": "~0.1.0",
-    "almond": "~0.2.5"
+    "almond": "~0.2.5",
+    "lcov-result-merger": "~0.0.1",
+    "coveralls": "~2.1.0"
   },
   "maintainers": [
     {

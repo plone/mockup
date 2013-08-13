@@ -10,3 +10,4 @@ before_install:
   - make bootstrap
 script:
   - make test-ci
+  - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
