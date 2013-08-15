@@ -58,8 +58,8 @@ define([
       dropdownCssClass: 'pat-relateditems-dropdown',
       maximumSelectionSize: -1,
       resultTemplate: '' +
-        '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %>">' +
-        '  <a href="#" class="pat-relateditems-result-select <% if (selected) { %>pat-active<% } %>">' +
+        '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">' +
+        '  <a href="#" class="pat-relateditems-result-select">' +
         '    <span class="pat-relateditems-result-title"><%= Title %></span>' +
         '    <span class="pat-relateditems-result-path"><%= path %></span>' +
         '  </a>' +
