@@ -202,7 +202,6 @@ define([
 
       Select2.prototype.initializeValueMap.call(self);
       Select2.prototype.initializeTags.call(self);
-      Select2.prototype.initializeOrdering.call(self);
 
       if(self.query.valid){
         self.options.ajax = self.query.selectAjax();
@@ -210,9 +209,11 @@ define([
         self.options.tags = [];
       }
 
-      self.options.formatSelection = function(item) {
+      self.options.formatSelection = function(item, $container) {
         return self.applyTemplate('selection', item);
       };
+
+      Select2.prototype.initializeOrdering.call(self);
 
       self.options.formatResult = function(item) {
         if(!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1){
