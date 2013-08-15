@@ -236,12 +236,13 @@ define([
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
           event.preventDefault();
-          if ($(this).is('.pat-active')) {
-            $(this).removeClass('pat-active');
+          var $parent = $(this).parents('.pat-relateditems-result');
+          if ($parent.is('.pat-active')) {
+            $parent.removeClass('pat-active');
             self.deselectItem(item);
           } else {
             self.selectItem(item);
-            $(this).addClass('pat-active');
+            $parent.addClass('pat-active');
             if(self.options.maximumSelectionSize > 0){
               var items = self.$select2.select2('data');
               if(items.length >= self.options.maximumSelectionSize){
