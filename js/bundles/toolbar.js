@@ -131,30 +131,28 @@ define([
       // Contents
       $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
         width: '60%',
-        templateOptions: {
-          buttons: '#folderlisting-main-table > input.context,' +
-                   '#folderlisting-main-table > input.standalone,' +
-                   '.formControls > input',
-          actionsOptions: {
-            onSuccess: function(modal, response, state, xhr, form){
-              // handle content_status_history differently than other buttons
-              var hasForm = form && form.attr;
-              var action = hasForm ? form.attr('action'): null;
-              if(action && action.indexOf('content_status_history') !== -1){
-                // load back the folder contents
-                var $action = $('<a href="' +
-                  action.replace('content_status_history', 'folder_contents') +
-                  '"/>');
-                modal.options.handleLinkAction.apply(modal, [$action, {}]);
-              } else {
-                // XXX hack the rename form action url
-                if(hasForm){
-                  var current = form.attr('action');
-                  response = response.replace('action="folder_rename_form',
-                                              'action="' + current + '/folder_rename_form');
-                }
-                //modal.redraw(response);
+        buttons: '#folderlisting-main-table > input.context,' +
+                 '#folderlisting-main-table > input.standalone,' +
+                 '.formControls > input',
+        actionOptions: {
+          onSuccess: function(modal, response, state, xhr, form){
+            // handle content_status_history differently than other buttons
+            var hasForm = form && form.attr;
+            var action = hasForm ? form.attr('action'): null;
+            if(action && action.indexOf('content_status_history') !== -1){
+              // load back the folder contents
+              var $action = $('<a href="' +
+                action.replace('content_status_history', 'folder_contents') +
+                '"/>');
+              modal.options.handleLinkAction.apply(modal, [$action, {}]);
+            } else {
+              // XXX hack the rename form action url
+              if(hasForm){
+                var current = form.attr('action');
+                response = response.replace('action="folder_rename_form',
+                                            'action="' + current + '/folder_rename_form');
               }
+              //modal.redraw(response);
             }
           }
         }
@@ -210,11 +208,9 @@ define([
       // site setup
       $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
         width: '80%',
-        templateOptions: {
-          loadLinksWithinModal: false,
-          actionsOptions: {
-            displayInModal: false
-          }
+        loadLinksWithinModal: false,
+        actionOptions: {
+          displayInModal: false
         }
       }).on('show.modal.patterns', function(evt, modal) {
         $('a[href]', modal.$modal).each(function(){
@@ -233,10 +229,8 @@ define([
       // Manage portlets
       var portletOptions = {
         width: '50%',
-        templateOptions: {
-          buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
-          automaticallyAddButtonActions: false
-        }
+        buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
+        automaticallyAddButtonActions: false
       };
       $('#toolbar-manage-portlets a,#manage-dashboard a')
       .addClass('pat-modal')
@@ -244,7 +238,7 @@ define([
       .on('render.modal.patterns', function(e, modal) {
         // Kill the onchange method so we can wire up our own
         $('.section select', modal.$raw).removeAttr('onchange');
-        modal.options.templateOptions.actions = {
+        modal.options.actions = {
             // Handle adding portlets via the select
             '.section select': {
               eventType: 'change',
@@ -287,22 +281,20 @@ define([
         backdropOptions: {
           closeOnClick: false
         },
-        templateOptions: {
-          content: '#content',
-          automaticallyAddButtonActions: false,
-          actionsOptions: {
-            displayInModal: false
-          },
-          actions: {
-            'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
-            'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
-              modalFunction: 'hide'
-            }
+        content: '#content',
+        automaticallyAddButtonActions: false,
+        actionOptions: {
+          displayInModal: false
+        },
+        actions: {
+          'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
+          'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
+            modalFunction: 'hide'
           }
         }
       };
       var addOptions = editOptions;
-      addOptions.templateOptions.actionsOptions.redirectOnResponse = true;
+      addOptions.actionOptions.redirectOnResponse = true;
       $('#plone-action-edit > a, #plone-contentmenu-factories ul li.is-content a')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(editOptions));
@@ -315,16 +307,14 @@ define([
       // Content Rules
       var rulesOptions = {
         width: '80%',
-        templateOptions: {
-          content: '#content-core',
-          loadLinksWithinModal: false
-        }
+        content: '#content-core',
+        loadLinksWithinModal: false
       };
       $('#plone-action-contentrules > a')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(rulesOptions)).
         on('render.modal.patterns', function(e, modal) {
-          modal.options.templateOptions.actions = {
+          modal.options.actions = {
             'table.listing a': {
               ajaxUrl: function($action, options) {
                 return $action.attr('href').replace(/@@/g, "++nodiazo++/@@");
@@ -341,24 +331,22 @@ define([
       /***  Sharing  ***/
       $('#plone-action-local_roles > a').addClass('modal-trigger').patternModal({
         width: '80%',
-        templateOptions: {
-          buttons: '#sharing-save-button, input[name="form.button.Cancel"]',
-          automaticallyAddButtonActions: false,
-          actions: {
-            '#sharing-search-button': {},
-            'a': {},
-            'input[name="form.button.Cancel"]': {
-              modalFunction: 'hide'
-            },
-            '#sharing-save-button': {
-              onSuccess: function(modal, responseBody, state, xhr, form) {
-                modal.redraw(responseBody);
-                modal.$el.on('hidden.modal.patterns', function(e) {
-                  // We want to send the user to the original object *after* the status messages
-                  // have been displayed, and the user has closed the modal
-                  window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -1).join('/');
-                });
-              }
+        buttons: '#sharing-save-button, input[name="form.button.Cancel"]',
+        automaticallyAddButtonActions: false,
+        actions: {
+          '#sharing-search-button': {},
+          'a': {},
+          'input[name="form.button.Cancel"]': {
+            modalFunction: 'hide'
+          },
+          '#sharing-save-button': {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              modal.redraw(responseBody);
+              modal.$el.on('hidden.modal.patterns', function(e) {
+                // We want to send the user to the original object *after* the status messages
+                // have been displayed, and the user has closed the modal
+                window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -1).join('/');
+              });
             }
           }
         }

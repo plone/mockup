@@ -188,14 +188,12 @@ define([
 
       /*** Login ***/
       var loginOptions = {
-        templateOptions: {
-          title: 'Login',
-          content: '#content',
-          prependContent: '.portalMessage',
-          actions: {
-            '#login_form input[type="submit"]': {
-              displayInModal: false
-            }
+        title: 'Login',
+        content: '#content',
+        prependContent: '.portalMessage',
+        actions: {
+          '#login_form input[type="submit"]': {
+            displayInModal: false
           }
         }
       };
@@ -208,9 +206,7 @@ define([
 
       /*** Register form ***/
       var registerOptions = {
-        templateOptions: {
-          buttons: '.actionButtons > input[type="submit"]'
-        }
+        buttons: '.actionButtons > input[type="submit"]'
       };
       $('#personaltools-join', $root)
         .addClass('pat-modal')
@@ -218,10 +214,8 @@ define([
 
       /*** Content History ***/
       var contentHistoryOptions = {
-        templateOptions: {
-          titleSelector: 'h2:first',
-          content: '#content-core'
-        }
+        titleSelector: 'h2:first',
+        content: '#content-core'
       };
       $('#content-history > a, #plone-action-content-history > a', $root)
         .addClass('pat-modal')
@@ -229,10 +223,8 @@ define([
 
       /*** Default Page ***/
       var defaultPage = {
-        templateOptions: {
-          actionsOptions: {
-            displayInModal: false
-          }
+        actionOptions: {
+          displayInModal: false
         }
       };
       $('#folderChangeDefaultPage, #folderChangeDefaultPage a, #contextSetDefaultPage a', $root)
@@ -245,11 +237,9 @@ define([
         var addUserOptions = {
           ajaxUrl: users_add[0].action,
           triggers: ['click input[name="form.button.AddUser"]'],
-          templateOptions: {
-            buttons: 'input[name="form.actions.register"]',
-            content: '#content',
-            prependContent: '.portalMessage'
-          }
+          buttons: 'input[name="form.actions.register"]',
+          content: '#content',
+          prependContent: '.portalMessage'
         };
         $('input[name="form.button.AddUser"]')
           .addClass('pat-modal')
@@ -262,11 +252,9 @@ define([
         var addGroupOptions = {
           ajaxUrl: groups_add[0].action,
           triggers: ['click input[name="form.button.AddGroup"]'],
-          templateOptions: {
-            buttons: 'input[name="form.button.Save"]',
-            content: '#content',
-            prependContent: '.portalMessage'
-          }
+          buttons: 'input[name="form.button.Save"]',
+          content: '#content',
+          prependContent: '.portalMessage'
         };
         $('input[name="form.button.AddGroup"]')
           .addClass('pat-modal')
@@ -277,11 +265,9 @@ define([
       /*** Content Type Restrctions form ***/
       $('#plone-contentmenu-settings > a,a#plone-contentmenu-settings', $root).addClass('modal-trigger').patternModal({
         width: '80%',
-        templateOptions: {
-          contentClass: 'modal-constrain-types',
-          actionsOptions: {
-            displayInModal: false
-          }
+        contentClass: 'modal-constrain-types',
+        actionOptions: {
+          displayInModal: false
         }
       }).on('shown.modal.patterns', function(modal){
         var $modal = modal.$modal;
@@ -327,21 +313,17 @@ define([
       // The AJAX form doesn't load it from the javascript_head_slot. */
       $('#workflow-transition-advanced > a,a#workflow-transition-advanced', $root).addClass('modal-trigger').patternModal({
         width: '80%',
-        templateOptions: {
-          actionsOptions: {
-            displayInModal: false
-          }
+        actionOptions: {
+          displayInModal: false
         }
       });
 
       /*** Personal preferences ***/
       var prefs = $('#plone-personal-actions-preferences > a, #personaltools-preferences > a', $root);
       var prefsOptions = {
-        templateOptions: {
-          buttons: 'input[type="submit"]',
-          actionsOptions: {
-            displayInModal: false
-          }
+        buttons: 'input[type="submit"]',
+        actionOptions: {
+          displayInModal: false
         }
       };
       prefs.addClass('pat-modal');
@@ -349,10 +331,8 @@ define([
 
       /*** Rename Action ***/
       var renameOptions = {
-        templateOptions: {
-          actionsOptions: {
-            displayInModal: false
-          }
+        actionOptions: {
+          displayInModal: false
         }
       };
       $('#plone-contentmenu-actions-rename a', $root)
@@ -371,7 +351,7 @@ define([
       var delete_action = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete', $root);
       delete_action.addClass('pat-modal');
       delete_action.on('render.modal.patterns', function(e, modal) {
-        modal.options.templateOptions.actionsOptions.onSuccess = processDelete;
+        modal.options.actionOptions.onSuccess = processDelete;
       });
 
       }
