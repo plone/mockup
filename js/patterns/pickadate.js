@@ -40,11 +40,13 @@ define([
     defaults: {
       separator: ' ',
       date: {
-        formatSubmit: 'dd-mm-yyyy',
+        value: '',
+        formatSubmit: 'yyyy-mm-dd',
         selectYears: true,
         selectMonths: true
       },
       time: {
+        value: '',
         formatSubmit: 'HH:i'
       },
       klassWrapper: 'pat-pickadate-wrapper',
@@ -68,9 +70,7 @@ define([
       return value;
     },
     init: function() {
-      var self = this,
-          onSetDate = self.options.date.onSet,
-          onSetTime = self.options.time.onSet;
+      var self = this;
 
       self.$el.hide();
 
@@ -81,24 +81,22 @@ define([
       self.options.date = self.ensureBool(self.options.date);
       self.options.time = self.ensureBool(self.options.time);
 
+      var date_name = self.$el.attr('name') + '_date';
+      var time_name = self.$el.attr('name') + '_time';
+
       if (self.options.date !== false) {
         self.$date = $('<input type="text"/>')
+              .attr('data-value', self.options.date.value)
               .addClass(self.options.klassDate)
               .appendTo($('<div/>')
                   .addClass(self.options.klassDateWrapper)
                   .appendTo(self.$wrapper))
               .pickadate($.extend(true, self.options.date, {
-                onSet: function() {
-                  self.setDateTime();
-                  if (onSetDate) {
-                    onSetDate.apply(this, arguments);
-                  }
-                },
+                hiddenSuffix: date_name,
                 onStart: function(){
                   this.$node.attr('placeholder', self.options.placeholderDate);
                 }
               }));
-
       }
 
       if (self.options.date !== false && self.options.time !== false) {
@@ -111,43 +109,28 @@ define([
 
       if (self.options.time !== false) {
         self.$time = $('<input type="text"/>')
+              .attr('data-value', self.options.time.value)
               .addClass(self.options.klassTime)
               .appendTo($('<div/>')
                   .addClass(self.options.klassTimeWrapper)
                   .appendTo(self.$wrapper))
               .pickatime($.extend(true, self.options.time, {
-                onSet: function() {
-                  self.setDateTime();
-                  if (onSetTime) {
-                    onSetTime.apply(this, arguments);
-                  }
-                },
+                hiddenSuffix: time_name,
                 onStart: function(){
                   this.$node.attr('placeholder', self.options.placeholderTime);
                 }
               }));
+        // work around pickadate bug loading 00:xx as value
+        if (self.options.time.value.substring(0,2) == '00') {
+          var timeval = '12' + self.options.time.value.substring(2) + ' a.m.';
+          self.$time.pickatime('picker').set('select', timeval, {format: 'hh:i a'});
+        }
       }
 
       self.$clear = $('<div/>')
             .addClass(self.options.klassClear)
             .appendTo(self.$wrapper);
 
-    },
-    setDateTime: function() {
-      var self = this,
-          value = '';
-
-      if (self.$date) {
-        value += self.$date.val();
-      }
-      if (self.$date && self.$time) {
-        value += self.options.separator;
-      }
-      if (self.$time) {
-        value += self.$time.val();
-      }
-
-      self.$el.attr('value', value);
     }
   });
 
