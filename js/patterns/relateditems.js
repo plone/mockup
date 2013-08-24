@@ -57,6 +57,7 @@ define([
       attributes: ['UID','Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
       maximumSelectionSize: -1,
+      showTabs: true,
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">' +
         '  <a href="#" class="pat-relateditems-result-select">' +
@@ -293,6 +294,9 @@ define([
       self.$searchBtn = $('.pat-relateditems-tabs-search', self.$browse);
       self.$browsePath = $('<span class="pat-relateditems-path" />');
       self.$browse.after(self.$browsePath);
+      if (self.options.showTabs === false || self.options.showTabs === 'false') {
+        self.$browse.hide();
+      }
       self.deactivateBrowsing();
 
       self.$browseBtn.click(function(e){
