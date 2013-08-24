@@ -91,6 +91,18 @@ define([
       breadCrumbTemplateSelector: null,
       escapeMarkup: function(text) {
         return text;
+      },
+      setupAjax: function() {
+        // Setup the ajax object to use during requests
+        var self = this;
+
+        self.query = new QueryHelper(self.$el,
+        $.extend(true, {}, self.options, {basePattern: self}));
+        
+        if(self.query.valid){
+          return self.query.selectAjax();
+        }
+        return {};
       }
     },
     applyTemplate: function(tpl, item) {
@@ -194,8 +206,7 @@ define([
     init: function() {
       var self = this;
 
-      self.query = new QueryHelper(self.$el,
-          $.extend(true, {}, self.options, {basePattern: self}));
+      self.options.ajax = self.options.setupAjax.apply(self);
 
       self.$el.wrap('<div class="pat-relateditems-container" />');
       self.$container = self.$el.parents('.pat-relateditems-container');
@@ -203,12 +214,6 @@ define([
 
       Select2.prototype.initializeValueMap.call(self);
       Select2.prototype.initializeTags.call(self);
-
-      if(self.query.valid){
-        self.options.ajax = self.query.selectAjax();
-      } else {
-        self.options.tags = [];
-      }
 
       self.options.formatSelection = function(item, $container) {
         return self.applyTemplate('selection', item);
