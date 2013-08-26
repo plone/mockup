@@ -55,13 +55,14 @@ define([
         closeOnEsc: true,
         closeOnClick: true
       },
+      title: null,
+      titleSelector: 'h1:first',
+      buttons: '.formControls > input[type="submit"]',
+      content: '#content',
+      automaticallyAddButtonActions: true,
+      loadLinksWithinModal: true,
+      prependContent: '.portalMessage',
       templateOptions: {
-        title: null,
-        titleSelector: 'h1:first',
-        buttons: '.formControls > input[type="submit"]',
-        automaticallyAddButtonActions: true,
-        loadLinksWithinModal: true,
-        content: '#content',
         klass: "modal",
         klassHeader: "modal-header",
         klassBody: "modal-body",
@@ -72,7 +73,6 @@ define([
         klassActive: "active",
         klassPrepend: "", // String, css class to be applied to the wrapper of the prepended content
         klassContent: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
-        prependContent: '.portalMessage',
         template: '' +
           '<div class="<%= options.klass %>">' +
           '  <div class="<%= options.klassHeader %>">' +
@@ -86,73 +86,77 @@ define([
           '  <div class="<%= options.klassFooter %>"> ' +
           '    <%= buttons %> ' +
           '  </div>' +
+          '</div>'
+      },
+      actions: {},
+      actionOptions: {
+        eventType: 'click',
+        target: null,
+        ajaxUrl: null, // string, or function($el, options) that returns a string
+        modalFunction: null, // String, function name on self to call
+        isForm: false,
+        timeout: 5000,
+        displayInModal: true,
+        reloadWindowOnClose: true,
+        error: '.portalMessage.error',
+        loading: '' +
+          '<div class="progress progress-striped active">' +
+          '  <div class="bar" style="width: 100%;"></div>' +
           '</div>',
-        actions: {},
-        actionsOptions: {
-          eventType: 'click',
-          target: null,
-          ajaxUrl: null, // string, or function($el, options) that returns a string
-          modalFunction: null, // String, function name on self to call
-          isForm: false,
-          timeout: 5000,
-          displayInModal: true,
-          reloadWindowOnClose: true,
-          error: '.portalMessage.error',
-          loading: '' +
-            '<div class="progress progress-striped active">' +
-            '  <div class="bar" style="width: 100%;"></div>' +
-            '</div>',
-          onSuccess: null,
-          onError: null,
-          onFormError: null,
-          onTimeout: null,
-          redirectOnResponse: false,
-          redirectToUrl: function($action, response, options) {
-            var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
-                          .replace('<base', '<div').replace('</base>', '</div>'))[0]);
-            return $base.attr('href');
-          }
-        },
-        form: function(actions, defaultOptions) {
-          var self = this;
-          var $modal = self.$modal;
-          var templateOptions = self.options.templateOptions;
-
-          if (templateOptions.automaticallyAddButtonActions) {
-            actions[templateOptions.buttons] = {};
-          }
-
-          if (templateOptions.loadLinksWithinModal) {
-            actions.a = {};
-          }
-          $.each(actions, function(action, options) {
-            options = $.extend({}, defaultOptions, options);
-            $(action, $('.modal-body', $modal)).each(function(action) {
-              var $action = $(this);
-              $action.on(options.eventType, function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-
-                self.showLoading(false);
-
-                // handle event on $action using a function on self
-                if (options.modalFunction !== null) {
-                  self[options.modalFunction]();
-                // handle event on input/button using jquery.form library
-                } else if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
-                  self.options.handleFormAction.apply(self, [$action, options]);
-                // handle event on link with jQuery.ajax
-                } else if (options.ajaxUrl !== null || $.nodeName($action[0], 'a')) {
-                  self.options.handleLinkAction.apply(self, [$action, options]);
-                }
-
-              });
-            });
-          });
-
+        onSuccess: null,
+        onError: null,
+        onFormError: null,
+        onTimeout: null,
+        redirectOnResponse: false,
+        redirectToUrl: function($action, response, options) {
+          var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
+                        .replace('<base', '<div').replace('</base>', '</div>'))[0]);
+          return $base.attr('href');
         }
       },
-      handleFormAction: function($action, options) {
+      form: function(actions) {
+        var self = this;
+        var $modal = self.$modal;
+
+        if (self.options.automaticallyAddButtonActions) {
+          actions[self.options.buttons] = {};
+        }
+
+        if (self.options.loadLinksWithinModal) {
+          actions.a = {};
+        }
+        $.each(actions, function(action, options) {
+          var actionKeys = _.union(_.keys(self.options.actionOptions), ['templateOptions']);
+          var actionOptions = $.extend(true, _.pick(options, actionKeys), self.options.actionOptions);
+          options.templateOptions = $.extend(true, options.templateOptions, self.options.templateOptions);
+
+          var patternKeys = _.union(_.keys(self.options.actionOptions), ['actions', 'actionOptions']);
+          var patternOptions = $.extend(true, _.omit(options, patternKeys), self.options);
+
+          $(action, $('.'+options.templateOptions.klassBody, $modal)).each(function(action) {
+            var $action = $(this);
+            $action.on(actionOptions.eventType, function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+
+              self.showLoading(false);
+
+              // handle event on $action using a function on self
+              if (actionOptions.modalFunction !== null) {
+                self[actionOptions.modalFunction]();
+              // handle event on input/button using jquery.form library
+              } else if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
+                self.options.handleFormAction.apply(self, [$action, actionOptions, patternOptions]);
+              // handle event on link with jQuery.ajax
+              } else if (options.ajaxUrl !== null || $.nodeName($action[0], 'a')) {
+                self.options.handleLinkAction.apply(self, [$action, actionOptions, patternOptions]);
+              }
+
+            });
+          });
+        });
+      },
+      handleFormAction: function($action, options, patternOptions) {
         var self = this;
         // pass action that was clicked when submiting form
         var extraData = {};
@@ -204,7 +208,7 @@ define([
                 if (options.onFormError) {
                   options.onFormError(self, response, state, xhr, form);
                 } else {
-                  self.redraw(response);
+                  self.redraw(response, patternOptions);
                 }
                 return;
               }
@@ -222,7 +226,7 @@ define([
               }
 
               if (options.displayInModal === true) {
-                self.redraw(response);
+                self.redraw(response, patternOptions);
               } else {
                 $action.trigger('destroy.modal.patterns');
                 if (options.reloadWindowOnClose) {
@@ -235,7 +239,7 @@ define([
             }
         });
       },
-      handleLinkAction: function($action, options) {
+      handleLinkAction: function($action, options, patternOptions) {
         var self = this;
         var url;
 
@@ -273,7 +277,7 @@ define([
             self.trigger('linkActionError', [xhr, textStatus, errorStatus]);
           },
           success: function(response, state, xhr) {
-            self.redraw(response);
+            self.redraw(response, patternOptions);
             if (options.onSuccess) {
               options.onSuccess(self, response, state, xhr);
             }
@@ -298,7 +302,7 @@ define([
           prepend: '<div />',
           content: '',
           buttons: '<div class="pat-modal-buttons"></div>',
-          options: options
+          options: options.templateOptions
         };
 
         // setup the Title
@@ -360,7 +364,7 @@ define([
 
         // form
         if (options.form) {
-          options.form.apply(self, [options.actions, options.actionsOptions]);
+          options.form.apply(self, [options.actions]);
         }
 
         self.$modal
@@ -482,7 +486,7 @@ define([
         if (self.$el.attr('href')) {
           if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
             self.options.target = self.$el.attr('href');
-            self.options.templateOptions.content = '';
+            self.options.content = '';
           }
           if (!self.options.ajaxUrl && self.$el.attr('href').substr(0, 1) !== '#') {
             self.options.ajaxUrl = self.$el.attr('href');
@@ -701,7 +705,7 @@ define([
     _show: function() {
       var self = this;
       self.render.apply(self,
-          [self.options.templateOptions]);
+          [self.options]);
       self.trigger('show');
       self.backdrop.show();
       self.$wrapper.show();
@@ -739,13 +743,13 @@ define([
       $(window.parent).off('resize.modal.patterns');
       self.trigger('hidden');
     },
-    redraw: function(response) {
+    redraw: function(response, options) {
       var self = this;
       self.trigger('beforeDraw');
       self.$modal.remove();
       self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
             .replace('<body', '<div').replace('</body>', '</div>'))[0]));
-      self.render.apply(self, [self.options.templateOptions]);
+      self.render.apply(self, [options]);
       self.positionModal();
       registry.scan(self.$modal);
       self.trigger('afterDraw');
