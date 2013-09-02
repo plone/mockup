@@ -104,7 +104,7 @@ test: jshint
 	CHROME_BIN=$(BOWER_CHROME) $(GRUNT) karma:dev --force
 
 test-ci: jshint
-	$(GRUNT) karma:ci --force
+	CHROME_BIN=$(BOWER_CHROME) $(GRUNT) karma:ci --force
 
 docs:
 	mkdir -p docs/dev
