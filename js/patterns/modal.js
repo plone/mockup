@@ -109,8 +109,7 @@ define([
         onTimeout: null,
         redirectOnResponse: false,
         redirectToUrl: function($action, response, options) {
-          var $base = $($((/<base[^>]*>((.|[\n\r])*)<\/base>/im).exec(response)[0]
-                        .replace('<base', '<div').replace('</base>', '</div>'))[0]);
+            var $base = $(/<base.*?(\/>|<\/base>)/im.exec(response)[0]);
           return $base.attr('href');
         }
       },
