@@ -5,10 +5,7 @@ GRUNT = ./node_modules/.bin/grunt
 BOWER = ./node_modules/.bin/bower
 
 UNAME := $(shell uname)
-BOWER_CHROME=`which chrome`
-ifeq ($(UNAME), Linux)
-	BOWER_CHROME=`which chromium`
-endif
+BOWER_CHROME=`which chrome chromium chromium-browser | egrep '^/' | head -1`
 
 all: compile jshint test-ci docs
 
