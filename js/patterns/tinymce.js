@@ -147,10 +147,8 @@ define([
             '</form>' +
           '</div>' +
         '</div>',
-        templateOptions: {
-          content: null,
-          buttons: '.btn'
-        }
+        content: null,
+        buttons: '.btn'
       });
       self.modal.on('shown', function(e){
         self.modalShown.apply(self, [e]);
@@ -233,10 +231,8 @@ define([
 
       self.modal = new Modal(self.$el, {
         html: self.generateModalHtml(),
-        templateOptions: {
-          content: null,
-          buttons: '.btn'
-        }
+        content: null,
+        buttons: '.btn'
       });
       self.modal.on('shown', function(e){
         self.modalShown.apply(self, [e]);
