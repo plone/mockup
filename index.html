@@ -1445,37 +1445,39 @@ function($action, response, options) { ... }
       title: 'Related Items',
       description: 'An advanced widget for <strong>selecting related items</strong>.',
       attributes: [
-        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: 'NO DEFAULT', description: 'TODO'},
-        {attribute: 'attributes', type: 'List', defaultValue: '["UID","Title", "Type", "path"]', description: 'TODO'},
-        {attribute: 'basePath', type: 'String', defaultValue: '/', description: 'TODO'},
-        {attribute: 'breadCrumbTemplate', type: 'String', defaultValue: '/&lt;a href="&lt;%= path %&gt;"&gt;&lt;%= text %&gt;&lt;/a&gt;', description: 'TODO'},
-        {attribute: 'breadCrumbTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
-        {attribute: 'breadCrumbsTemplate', type: 'String', defaultValue: '&lt;span&gt;&lt;a href="/"&gt;&lt;i class="icon-home"&gt;&lt;/i&gt;&lt;/a&gt;&lt;%= items %&gt;&lt;/span&gt;', description: 'TODO'},
-        {attribute: 'breadCrumbsTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
-        {attribute: 'browseText', type: 'String', defaultValue: 'Browse', description: 'TODO'},
-        {attribute: 'cache', type: 'Boolean', defaultValue: 'true', description: 'TODO'},
-        {attribute: 'closeOnSelect', type: 'Boolean', defaultValue: 'false', description: 'TODO'},
-        {attribute: 'dropdownCssClass', type: 'String', defaultValue: 'pat-relateditems-dropdown', description: 'TODO'},
-        {attribute: 'escapeMarkup', type: 'Function', defaultValue: 'function(text) { return text; }', description: 'TODO'},
-        {attribute: 'folderTypes', type: 'List', defaultValue: '["Folder"]', description: 'TODO'},
-        {attribute: 'homeText', type: 'String', defaultValue: 'home', description: 'TODO'},
-        {attribute: 'maximumSelectionSize', type: 'Integer', defaultValue: '-1', description: 'TODO'},
-        {attribute: 'multiple', type: 'Boolean', defaultValue: 'true', description: 'TODO'},
-        {attribute: 'orderable', type: 'Boolean', defaultValue: 'true', description: 'TODO'},
-        {attribute: 'resultTemplate', type: 'String', defaultValue: '', description: 'TODO'},
-        {attribute: 'resultTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
-        {attribute: 'searchText', type: 'String', defaultValue: 'Search', description: 'TODO'},
-        {attribute: 'selectionTemplate', type: 'String', defaultValue: '', description: 'TODO'},
-        {attribute: 'selectionTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
-        {attribute: 'separator', type: 'String', defaultValue: ',', description: 'TODO'},
-        {attribute: 'tabsTemplate', type: 'String', defaultValue: '', description: 'TODO'},
-        {attribute: 'tabsTemplateSelector', type: 'String', defaultValue: 'null', description: 'TODO'},
-        {attribute: 'tokenSeparators', type: 'List', defaultValue: '[",", " "]', description: 'TODO'}
+        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: '', description: 'This is a URL to a JSON formatted file used to populate the list'},
+        {attribute: 'attributes', type: 'List', defaultValue: '["UID","Title", "Type", "path"]', description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
+        {attribute: 'basePath', type: 'String', defaultValue: '/', description: 'If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results.'},
+        {attribute: 'breadCrumbTemplate', type: 'String', defaultValue: '/&lt;a href="&lt;%= path %&gt;"&gt;&lt;%= text %&gt;&lt;/a&gt;', description: 'Template to use for a single item in the breadcrumbs.'},
+        {attribute: 'breadCrumbTemplateSelector', type: 'String', defaultValue: 'null', description: 'Select an element from the DOM from which to grab the breadCrumbTemplate.'},
+        {attribute: 'breadCrumbsTemplate', type: 'String', defaultValue: '&lt;span&gt;&lt;a href="/"&gt;&lt;i class="icon-home"&gt;&lt;/i&gt;&lt;/a&gt;&lt;%= items %&gt;&lt;/span&gt;', description: 'Template for element to which breadCrumbs will be appended.'},
+        {attribute: 'breadCrumbsTemplateSelector', type: 'String', defaultValue: 'null', description: 'Select an element from the DOM from which to grab the breadCrumbsTemplate.'},
+        {attribute: 'browseText', type: 'String', defaultValue: 'Browse', description: 'Text which will be inserted into the "Browse" tab.'},
+        {attribute: 'cache', type: 'Boolean', defaultValue: 'true', description: 'Whether or not results from the server should be cached.'},
+        {attribute: 'closeOnSelect', type: 'Boolean', defaultValue: 'false', description: 'Select2 option. Whether or not the drop down should be closed when an item is selected.'},
+        {attribute: 'dropdownCssClass', type: 'String', defaultValue: 'pat-relateditems-dropdown', description: 'Select2 option. CSS class to add to the drop down element.'},
+        {attribute: 'folderTypes', type: 'List', defaultValue: '["Folder"]', description: 'Types which should be considered browsable.'},
+        {attribute: 'homeText', type: 'String', defaultValue: 'home', description: 'Text to display in the initial breadcrumb item.'},
+        {attribute: 'maximumSelectionSize', type: 'Integer', defaultValue: '-1', description: 'Do not change this option.'},
+        {attribute: 'multiple', type: 'Boolean', defaultValue: 'true', description: 'Do not change this option.'},
+        {attribute: 'orderable', type: 'Boolean', defaultValue: 'true', description: 'Whether or not items should be drag-and-drop sortable.'},
+        {attribute: 'showTabs', type: 'Boolean', defaultValue: 'true', description: 'Whether or not to display the "Browse" and "Search" tabs.'},
+        {attribute: 'resultTemplate', type: 'String', defaultValue: '', description: 'Template for an item in the in the list of results. Refer to source for default.'},
+        {attribute: 'resultTemplateSelector', type: 'String', defaultValue: 'null', description: 'Select an element from the DOM from which to grab the resultTemplate.'},
+        {attribute: 'searchText', type: 'String', defaultValue: 'Search', description: 'Text which will be inserted into the "Search" tab.'},
+        {attribute: 'selectableTypes', type: 'List', defaultValue: 'null', description: 'If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.'},
+        {attribute: 'selectionTemplate', type: 'String', defaultValue: '', description: 'Template for element that will be used to construct a selected item.'},
+        {attribute: 'selectionTemplateSelector', type: 'String', defaultValue: 'null', description: 'Select an element from the DOM from which to grab the selectionTemplate.'},
+        {attribute: 'separator', type: 'String', defaultValue: ',', description: 'Select2 option. String which separates multiple items.'},
+        {attribute: 'tabsTemplate', type: 'String', defaultValue: '', description: 'Template used to construct the tabs for toggling between "Browse" and "Search".'},
+        {attribute: 'tabsTemplateSelector', type: 'String', defaultValue: 'null', description: 'Select an element from the DOM from which to grab the tabsTemplate.'},
+        {attribute: 'tokenSeparators', type: 'List', defaultValue: '[",", " "]', description: 'Select2 option, refer to select2 documentation.'},
+        {attribute: 'width', type: 'String', defaultValue: '300px', description: 'Specify a width for the widget.'}
       ]
     });
   </script>
   <script type="text/template" id="page_relateditems">
-
+    <p>The Related Items pattern is based on <a href="#patterns/select2">Select2</a> so many of the same options will work here as well.</p>
   </script>
   <script type="text/example" class="example-relateditems">
     <input type="text" class="pat-relateditems"
