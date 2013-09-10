@@ -921,26 +921,35 @@ define([
       var filename = data.filename;
       var ext = filename.split('.');
       ext = ext[ext.length-1].toLowerCase();
-      if(['png', 'jpg', 'gif', 'jpeg'].indexOf(ext) === -1){
-        /* bail out of here for regular files */
-        return;
-      }
-      var attr = {
-        src: 'resolveuid/' + data.uid + '/@@images/image/preview',
-        class: 'image-inline'
-      };
+      var attr;
       function waitLoad(imgElm) {
-        imgElm.onload = imgElm.onerror = function() {
-          imgElm.onload = imgElm.onerror = null;
-          self.tiny.selection.select(imgElm);
-          self.tiny.nodeChanged();
-        };
-      }
+          imgElm.onload = imgElm.onerror = function() {
+            imgElm.onload = imgElm.onerror = null;
+            self.tiny.selection.select(imgElm);
+            self.tiny.nodeChanged();
+          };
+        }
 
-      attr.id = '__mcenew';
-      self.tiny.insertContent(self.tiny.dom.createHTML('img', attr));
-      var imgElm = self.tiny.dom.get('__mcenew');
-      self.tiny.dom.setAttrib(imgElm, 'id', null);
+      if(['png', 'jpg', 'gif', 'jpeg'].indexOf(ext) !== -1){
+        /* handle images different than others */
+        attr = {
+          src: 'resolveuid/' + data.uid + '/@@images/image/preview',
+          class: 'image-inline'
+        };
+        attr.id = '__mcenew';
+        self.tiny.insertContent(self.tiny.dom.createHTML('img', attr));
+        var imgElm = self.tiny.dom.get('__mcenew');
+        self.tiny.dom.setAttrib(imgElm, 'id', null);
+      }else{
+        attr = {
+          id: '__mcenew'
+        };
+        self.tiny.insertContent(self.tiny.dom.createHTML('a', attr));
+        var aElm = self.tiny.dom.get('__mcenew');
+        self.tiny.dom.setAttrib(aElm, 'id', null);
+        self.tiny.dom.setAttrib(aElm, 'href', 'resolveuid/' + data.uid);
+        self.tiny.dom.setHTML(aElm, filename);
+      }
     },
     fileUploadError: function(){
       /* XXX need to be able to handle errors better? */
