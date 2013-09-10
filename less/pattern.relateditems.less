@@ -90,7 +90,7 @@
     display: block;
     padding-left: 20px;
 
-    &:after {
+    &.selectable:after {
       .icon(@circle-blank);
       position: absolute;
       left: 0;
@@ -106,7 +106,7 @@
 
   &.pat-active {
     .pat-relateditems-result-select {
-      &:after {
+      &.selectable:after {
         .icon(@circle);
       }
     }

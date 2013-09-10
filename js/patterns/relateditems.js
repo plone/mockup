@@ -43,6 +43,7 @@ define([
     currentPath: null,
     defaults: {
       ajaxvocabulary: null, // must be set to work
+      width: '300px',
       multiple: true,
       tokenSeparators: [",", " "],
       separator: ",",
@@ -54,13 +55,14 @@ define([
       searchText: 'Search',
       homeText: 'home',
       folderTypes: ['Folder'],
+      selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       attributes: ['UID','Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
       maximumSelectionSize: -1,
       showTabs: true,
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">' +
-        '  <a href="#" class="pat-relateditems-result-select">' +
+        '  <a href="#" class="pat-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
         '    <span class="pat-relateditems-result-title"><%= Title %></span>' +
         '    <span class="pat-relateditems-result-path"><%= path %></span>' +
         '  </a>' +
@@ -203,6 +205,14 @@ define([
       item.selected = false;
       self.trigger('deselected');
     },
+    isSelectable: function(item) {
+      var self = this;
+      if (self.options.selectableTypes === null) {
+        return true;
+      } else {
+        return _.indexOf(self.options.selectableTypes, item.Type) > -1;
+      }
+    },
     init: function() {
       var self = this;
 
@@ -222,11 +232,13 @@ define([
       Select2.prototype.initializeOrdering.call(self);
 
       self.options.formatResult = function(item) {
-        if(!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1){
+        if (!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1){
           item.folderish = false;
         }else{
           item.folderish = true;
         }
+
+        item.selectable = self.isSelectable(item);
 
         if (item.selected === undefined) {
           var data = self.$el.select2("data");
@@ -242,17 +254,19 @@ define([
 
         $('.pat-relateditems-result-select', result).on('click', function(event) {
           event.preventDefault();
-          var $parent = $(this).parents('.pat-relateditems-result');
-          if ($parent.is('.pat-active')) {
-            $parent.removeClass('pat-active');
-            self.deselectItem(item);
-          } else {
-            self.selectItem(item);
-            $parent.addClass('pat-active');
-            if(self.options.maximumSelectionSize > 0){
-              var items = self.$select2.select2('data');
-              if(items.length >= self.options.maximumSelectionSize){
-                self.$select2.select2('close');
+          if ($(this).is('.selectable')) {
+            var $parent = $(this).parents('.pat-relateditems-result');
+            if ($parent.is('.pat-active')) {
+              $parent.removeClass('pat-active');
+              self.deselectItem(item);
+            } else {
+              self.selectItem(item);
+              $parent.addClass('pat-active');
+              if(self.options.maximumSelectionSize > 0){
+                var items = self.$select2.select2('data');
+                if(items.length >= self.options.maximumSelectionSize){
+                  self.$select2.select2('close');
+                }
               }
             }
           }
