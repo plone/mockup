@@ -221,6 +221,9 @@ define([
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
+      if(self.tinypattern.options.anchor_selector){
+        self.options.anchor_selector = self.tinypattern.options.anchor_selector;
+      }
       self.tiny = self.tinypattern.tiny;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = self.options.linkTypes;

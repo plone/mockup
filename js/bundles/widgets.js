@@ -127,6 +127,10 @@ define([
       $root.find('.mce_editable').addClass('pat-tinymce').each(function(){
         var $tiny = $(this);
         var config = $.parseJSON($tiny.attr('data-mce-config'));
+        config.content_css = config.portal_url + '/base.css';
+        delete config.customplugins;
+        delete config.plugins;
+        delete config.theme;
         $tiny.attr({
           'data-pat-tinymce': JSON.stringify({
             relatedItems: {
@@ -134,10 +138,7 @@ define([
             },
             rel_upload_path: '@@fileUpload',
             folder_url: config.document_base_url,
-            tiny: {
-              content_css: config.portal_url + '/base.css',
-              document_base_url: config.document_base_url
-            }
+            tiny: config
           })
         });
       });
