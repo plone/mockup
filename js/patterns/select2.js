@@ -114,9 +114,17 @@ define([
                   return this.contains(target, [event.pageX, event.pageY]);
                 }
               });
+              return $( this ).clone().
+                addClass('dragging').
+                css({opacity: 0.75, position: 'absolute'}).
+                appendTo(document.body);
             })
             .drag(function(e, dd) {
               /*jshint eqeqeq:false */
+              $( dd.proxy ).css({
+                top: dd.offsetY,
+                left: dd.offsetX
+              });
               var drop = dd.drop[0],
               method = $.data(drop || {}, "drop+reorder");
               /* XXX Cannot use triple equals here */
@@ -130,6 +138,7 @@ define([
             .drag("end", function(e, dd) {
               $(this).removeClass('select2-choice-dragging');
               self.$el.select2("onSortEnd");
+              $( dd.proxy ).remove();
             })
             .drop("init", function(e, dd ) {
               /*jshint eqeqeq:false */
