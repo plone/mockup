@@ -9,6 +9,8 @@ var requirejsOptions = {
     'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
     'underscore': 'bower_components/underscore/underscore',
     'backbone': 'bower_components/backbone/backbone',
+    'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
+    'button-groups': 'bower_components/bootstrap/js/bootstrap-dropdown',
     'select2': 'bower_components/select2/select2',
     'tinymce': 'lib/tinymce/tinymce.min',
     'chai': 'bower_components/chai/chai',
@@ -46,9 +48,12 @@ var requirejsOptions = {
     'mockup-patterns-toggle': 'js/patterns/toggle',
     'mockup-patterns-tooltip': 'js/patterns/tooltip',
     'mockup-patterns-dropzone': 'js/patterns/dropzone',
+    'mockup-patterns-structure': 'js/patterns/structure',
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
-    'mockup-bundles-tiles': 'js/bundles/widgets'
+    'mockup-bundles-tiles': 'js/bundles/widgets',
+    'text': "bower_components/requirejs-text/text",
+    'templates': 'js/patterns/templates'
   },
   shim: {
     'underscore': { exports: 'window._' },
@@ -72,6 +77,9 @@ var requirejsOptions = {
         return this.tinyMCE;
       }
     }
+  },
+  text: {
+    env: 'xhr'
   }
 };
 

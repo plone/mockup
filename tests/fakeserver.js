@@ -146,15 +146,31 @@ define([
     ];
     var searchables = about.concat(root).concat(staff);
 
-    var addUrls = function(list){
-      /* add getURL value */
+    var addSomeData = function(list){
+      /* add getURL value, review_state, modification, creation */
+      var dates = [
+        'January 1, 2011',
+        'February 10, 2012',
+        'March 12, 2013',
+        'April 1, 2012',
+        'May 20, 2013'
+      ];
       for(var i=0; i<list.length; i=i+1){
         var data = list[i];
         data.getURL = window.location.origin + data.path;
+        data.review_state = ['published', 'private', 'review'][Math.floor(Math.random()*3)];
+        data.CreationDate = dates[Math.floor(Math.random()*dates.length)];
+        data.ModificationDate = dates[Math.floor(Math.random()*dates.length)];
+        data.EffectiveDate = dates[Math.floor(Math.random()*dates.length)];
+        if(data.Type === 'Folder'){
+          data.is_folderish = true;
+        }else{
+          data.is_folderish = false;
+        }
       }
     };
-    addUrls(searchables);
-    addUrls(root);
+    addSomeData(searchables);
+    addSomeData(root);
     root[0].getURL = window.location.origin + '/exampledata/test.png';
 
     var results = [];
