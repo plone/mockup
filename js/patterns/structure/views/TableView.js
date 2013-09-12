@@ -8,6 +8,7 @@ define([
 
   var TableView = Backbone.View.extend({
     tagName: 'table',
+    className: 'table table-striped table-bordered',
     template: _.template(
       '<thead>' +
         '<tr>' +
@@ -27,8 +28,6 @@ define([
     },
     render: function() {
       this.$el.html(this.template({}));
-      this.$el.addClass('table').addClass('table-striped').
-        addClass('table-bordered');
       if(this.collection.length){
         var container = this.$('tbody');
         this.collection.each(function(result){

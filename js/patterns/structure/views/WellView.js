@@ -7,10 +7,7 @@ define([
 
   var WellView = Backbone.View.extend({
     tagName: 'div',
-    render: function(){
-      this.$el.addClass('well');
-      return this;
-    }
+    className: 'well'
   });
 
   return WellView;

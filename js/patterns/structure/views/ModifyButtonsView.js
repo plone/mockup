@@ -9,6 +9,7 @@ define([
 
   var ModifyButtonsView = Backbone.View.extend({
     tagName: 'div',
+    className: 'btn-group',
     template: _.template(
       '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
         'Modify' +
@@ -23,7 +24,6 @@ define([
         var view = (new ButtonView({model: btn})).render();
         btnContainer.append(view.el);
       });
-      this.$el.addClass('btn-group');
       this.$('.dropdown-toggle').dropdown();
       return this;
     },
