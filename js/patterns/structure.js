@@ -34,10 +34,10 @@ define([
   'text!templates/paginator.html',
   'button-groups',
   'backbone.paginator'
-], function($, Base, _, backbone, QueryHelper, PaginatorTemplate) {
+], function($, Base, _, Backbone, QueryHelper, PaginatorTemplate) {
   "use strict";
 
-  var Button = backbone.Model.extend({
+  var Button = Backbone.Model.extend({
 
     defaults: function(){
       return {
@@ -49,7 +49,7 @@ define([
     }
   });
 
-  var Result = backbone.Model.extend({
+  var Result = Backbone.Model.extend({
 
     defaults: function(){
       return {
@@ -59,14 +59,17 @@ define([
   });
 
 
-  var ResultCollection = backbone.Paginator.extend({
+  var ResultCollection = Backbone.Paginator.requestPager.extend({
     model: Result,
     queryHelper: null, // need to set
     paginator_core: {
       // the type of the request (GET by default)
       type: 'GET',
       // the type of reply (jsonp by default)
-      dataType: 'json'
+      dataType: 'json',
+      url: function(){
+        return this.url;
+      }
     },
     paginator_ui: {
       // the lowest page index your API allows to be accessed
@@ -75,43 +78,27 @@ define([
       // (also, the actual page the paginator is on)
       currentPage: 1,
       // how many items per page should be shown
-      perPage: 20,
+      perPage: 25
     },
     server_api: {
-      // number of items to return per request/page
-      'per_page': function() {
-        return this.perPage;
+      query: null,
+      batch: function(){
+        return JSON.stringify({
+          page: this.currentPage,
+          size: this.perPage
+        });
       },
-      // how many results the request should skip ahead to
-      'page': function() {
-        return this.currentPage;
-      },
-      // field to sort by
-      'sort': function() {
-        if(this.sortField === undefined){
-          return 'created';
-        }
-        return this.sortField;
-      },
+      attributes: function(){
+        return JSON.stringify(this.queryHelper.options.attributes);
+      }
     },
     parse: function (response) {
       this.totalRecords = response.total;
       return response.results;
-    },
-    fetch: function(options) {
-      debugger;
-      if(!options){
-        options = {};
-      }
-      var data = (options.data || {});
-      options.data = {
-       attributes: JSON.stringify(this.queryHelper.options.attributes),
-      };
-      return backbone.Paginator.prototype.fetch.call(this, options);
     }
   });
 
-  var ButtonView = backbone.View.extend({
+  var ButtonView = Backbone.View.extend({
     tagName: 'li',
     template: _.template('<a href="#"><%- title %></a>'),
     events: {
@@ -127,7 +114,7 @@ define([
   });
 
 
-  var ModifyButtonsView = backbone.View.extend({
+  var ModifyButtonsView = Backbone.View.extend({
     tagName: 'div',
     template: _.template(
       '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
@@ -150,7 +137,7 @@ define([
   });
 
 
-  var TableRowView = backbone.View.extend({
+  var TableRowView = Backbone.View.extend({
     tagName: 'tr',
     template: _.template(
       '<td><input type="checkbox" /></td>' +
@@ -171,7 +158,7 @@ define([
   });
 
 
-  var TableView = backbone.View.extend({
+  var TableView = Backbone.View.extend({
     tagName: 'table',
     template: _.template(
       '<thead>' +
@@ -188,7 +175,7 @@ define([
       this.collection = this.options.collection;
       this.listenTo(this.collection, 'reset', this.addAll);
       this.listenTo(this.collection, 'all', this.render);
-      this.collection.fetch();
+      this.collection.pager();
     },
     render: function() {
       this.$el.html(this.template({}));
@@ -206,11 +193,10 @@ define([
   });
 
 
-  var PagingView = backbone.View.extend({
+  var PagingView = Backbone.View.extend({
     events: {
       'click a.servernext': 'nextResultPage',
       'click a.serverprevious': 'previousResultPage',
-      'click a.orderUpdate': 'updateSortBy',
       'click a.serverlast': 'gotoLast',
       'click a.page': 'gotoPage',
       'click a.serverfirst': 'gotoFirst',
@@ -234,12 +220,7 @@ define([
     render: function () {
       var html = this.template(this.collection.info());
       this.$el.html(html);
-    },
-
-    updateSortBy: function (e) {
-      e.preventDefault();
-      var currentSort = $('#sortByField').val();
-      this.collection.updateOrder(currentSort);
+      return this;
     },
 
     nextResultPage: function (e) {
@@ -276,7 +257,7 @@ define([
   });
 
 
-  var WellView = backbone.View.extend({
+  var WellView = Backbone.View.extend({
     tagName: 'div',
     render: function(){
       this.$el.addClass('well');
@@ -285,7 +266,7 @@ define([
   });
 
 
-  var StructureView = backbone.View.extend({
+  var StructureView = Backbone.View.extend({
     tagName: 'div',
     initialize: function(){
       this.buttons_view = new ModifyButtonsView({
