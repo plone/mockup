@@ -31,10 +31,10 @@ define([
   'underscore',
   'backbone',
   'mockup-patterns-queryhelper',
-  'text!js/patterns/templates/paginator.html',
+  'text!templates/paginator.html',
   'button-groups',
   'backbone.paginator'
-], function($, Base, _, backbone, QueryHelper, tpl_paginator) {
+], function($, Base, _, backbone, QueryHelper, PaginatorTemplate) {
   "use strict";
 
   var Button = backbone.Model.extend({
