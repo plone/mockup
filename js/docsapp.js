@@ -115,7 +115,7 @@ define([
     render: function() {
       var self = this;
       var tpl = $('#tpl_pattern').html();
-      var patterns = ["mockup-patterns-" + self.model.get('id')];
+      var patterns = ["mockup-patterns-" + self.model.get('id'), "mockup-fakeserver"];
       var extras = self.model.get('extras');
       if(extras){
         for(var i=0; i<extras.length; i=i+1){
