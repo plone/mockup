@@ -48,10 +48,11 @@ var requirejsOptions = {
     'mockup-patterns-toggle': 'js/patterns/toggle',
     'mockup-patterns-tooltip': 'js/patterns/tooltip',
     'mockup-patterns-dropzone': 'js/patterns/dropzone',
-    'mockup-patterns-structure': 'js/patterns/structure',
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
     'mockup-bundles-tiles': 'js/bundles/widgets',
+    'mockup-patterns-structure': 'js/patterns/structure/pattern',
+    'structure': 'js/patterns/structure',
     'text': "bower_components/requirejs-text/text",
     'templates': 'js/patterns/templates'
   },
