@@ -68,10 +68,10 @@ define([
       });
     },
     render: function(){
+      this.$el.append(this.well_view.render().el);
       this.$el.append(this.buttons_view.render().el);
       this.$el.append(this.table_view.render().el);
       this.$el.append(this.paging_view.render().el);
-      this.$el.append(this.well_view.render().el);
       return this;
     }
   });

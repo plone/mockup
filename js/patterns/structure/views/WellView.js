@@ -33,12 +33,14 @@ define([
 
   var WellView = Backbone.View.extend({
     tagName: 'div',
-    className: 'well selected-items',
+    className: 'selected-items',
     template: _.template(WellTemplate),
     events: {
-      'click a.remove': 'itemRemoved'
+      'click a.remove': 'itemRemoved',
+      'click a.status': 'showItemsClicked'
     },
     initialize: function(){
+      this.opened = false;
       this.app = this.options.app;
       this.collection = this.app.selected_collection;
       this.listenTo(this.collection, 'reset', this.render);
@@ -51,12 +53,33 @@ define([
         collection: this.collection
       });
       this.$el.html(html);
+      if(this.opened){
+        this.showItems();
+      }
       return this;
     },
     itemRemoved: function(e){
       e.preventDefault();
       var uid = $(e.target).closest('li').data('uid');
       this.app.selected_collection.removeByUID(uid);
+    },
+    showItems: function(){
+      var pos = this.$el.position();
+      this.$('ul').css({
+        display: 'block',
+        top: pos.top + this.$el.height(),
+        left: pos.left
+      });
+    },
+    showItemsClicked: function(e){
+      e.preventDefault();
+      if(this.opened){
+        this.$('ul').css({display: 'none'});
+        this.opened = false;
+      } else {
+        this.showItems();
+        this.opened = true;
+      }
     }
   });
 

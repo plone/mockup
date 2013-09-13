@@ -1,3 +1,6 @@
+<a href="#" class="status">
+  <span class="badge badge-success"><%= collection.length %> selected</span>
+</a>
 <ul class="items">
 <% collection.each(function(item){ %>
 <li class="item" data-uid="<%= item.attributes.UID %>">
@@ -5,11 +8,3 @@
 </li>
 <% }); %>
 </ul>
-<div class="clear"> </div>
-<div class="info">
-  <% if(collection.length) { %>
-    <span><b>Number Selected</b>: <%= collection.length %></span>
-  <% } else { %>
-    <span>Selected items will be place here</span>
-  <% } %>
-</div>
