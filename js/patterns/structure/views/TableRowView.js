@@ -24,29 +24,79 @@
 
 
 define([
+  'jquery',
   'underscore',
   'backbone',
-], function(_, Backbone) {
+  'text!structure/templates/tablerow.html'
+], function($, _, Backbone, TableRowTemplate) {
   "use strict";
 
   var TableRowView = Backbone.View.extend({
     tagName: 'tr',
-    template: _.template(
-      '<td><input type="checkbox" /></td>' +
-      '<td><a href="<%- getURL %>"><%- Title %></td></a>' +
-      '<td><%- ModificationDate %></td>' +
-      '<td><%- EffectiveDate %></td>' +
-      '<td><%- review_state %></td>'),
+    template: _.template(TableRowTemplate),
+    events: {
+      'change input': 'itemSelected'
+    },
+    initialize: function(){
+      this.app = this.options.app;
+      this.selected_collection = this.app.selected_collection;
+    },
     render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
+      var data = this.model.toJSON();
+      data.selected = false;
+      if(this.selected_collection.findWhere({UID: data.UID})){
+        data.selected = true;
+      }
+      this.$el.html(this.template(data));
       var attrs = this.model.attributes;
       this.$el.addClass('state-' + attrs.review_state).
         addClass('type-' + attrs.Type);
       if(attrs.is_folderish){
         this.$el.addClass('folder');
       }
+      this.el.model = this.model;
       return this;
     },
+    itemSelected: function(){
+      var remove = false;
+      var checkbox = this.$('input')[0];
+      if(checkbox.checked){
+        this.app.selected_collection.add(this.model);
+      }else{
+        this.app.selected_collection.removeResult(this.model);
+        remove = true;
+      }
+
+      var app = this.app;
+      var selected_collection = this.selected_collection;
+
+      /* check for shift click now */
+      if(this.app.shift_clicked && this.app.last_selected &&
+            this.app.last_selected.parentNode !== null){
+        var $el = $(this.app.last_selected);
+        var last_checked_index = $el.index();
+        var this_index = this.$el.index();
+        this.app.table_view.$('input[type="checkbox"]').each(function(){
+          var $el = $(this);
+          var index = $el.parents('tr').index();
+          if((index > last_checked_index && index < this_index) ||
+              (index < last_checked_index && index > this_index)){
+            this.checked = checkbox.checked;
+            var model = $(this).closest('tr')[0].model;
+            var existing = selected_collection.getByUID(model.attributes.UID);
+            if(this.checked){
+              if(!existing){
+                selected_collection.add(model);
+              }
+            } else if(existing){
+              selected_collection.remove(existing);
+            }
+          }
+        });
+
+      }
+      this.app.last_selected = this.el;
+    }
   });
 
   return TableRowView;

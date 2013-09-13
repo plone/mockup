@@ -24,14 +24,40 @@
 
 
 define([
+  'jquery',
   'underscore',
   'backbone',
-], function(_, Backbone) {
+  'text!structure/templates/well.html',
+], function($, _, Backbone, WellTemplate) {
   "use strict";
 
   var WellView = Backbone.View.extend({
     tagName: 'div',
-    className: 'well'
+    className: 'well',
+    template: _.template(WellTemplate),
+    events: {
+      'click a.remove': 'itemRemoved'
+    },
+    initialize: function(){
+      this.app = this.options.app;
+      this.collection = this.app.selected_collection;
+      this.listenTo(this.collection, 'reset', this.render);
+      this.listenTo(this.collection, 'all', this.render);
+      this.listenTo(this.collection, 'add', this.render);
+      this.listenTo(this.collection, 'remove', this.render);
+    },
+    render: function () {
+      var html = this.template({
+        collection: this.collection
+      });
+      this.$el.html(html);
+      return this;
+    },
+    itemRemoved: function(e){
+      e.preventDefault();
+      var uid = $(e.target).closest('li').data('uid');
+      this.app.selected_collection.removeByUID(uid);
+    }
   });
 
   return WellView;

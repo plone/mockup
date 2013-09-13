@@ -1,0 +1,6 @@
+<ul class="items">
+<% collection.each(function(item){ %>
+<li class="item" data-uid="<%= item.attributes.UID %>">
+<%= item.attributes.Title %> <a href="#" class="remove">x</a>
+</li>
+<% }); %>

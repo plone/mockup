@@ -47,7 +47,8 @@ define([
     template: _.template(PagingTemplate),
 
     initialize: function () {
-
+      this.app = this.options.app;
+      this.collection = this.app.collection;
       this.collection.on('reset', this.render, this);
       this.collection.on('sync', this.render, this);
 

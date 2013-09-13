@@ -23,19 +23,29 @@
 //
 
 
-define(['backbone'], function(Backbone) {
-  "use strict";
+define([
+  'backbone',
+  'structure/models/Result'
+], function(Backbone, Result) {
+"use strict";
 
-  var Result = Backbone.Model.extend({
-    defaults: function(){
-      return {
-        is_folderish: false
-      };
+  var SelectedCollection = Backbone.Collection.extend({
+    model: Result,
+    removeResult: function(model){
+      return this.removeByUID(model.uid());
     },
-    uid: function(){
-      return this.attributes.UID;
+    removeByUID: function(uid){
+      var found = this.getByUID(uid);
+      if(found){
+        this.remove(found);
+      }
+      return found;
+    },
+    getByUID: function(uid){
+      return this.findWhere({UID: uid});
     }
   });
 
-  return Result;
+  return SelectedCollection;
 });
+

@@ -29,7 +29,10 @@ define([
   'mockup-patterns-queryhelper',
   'structure/views/AppView',
 
-  'text!structure/templates/paging.html' // for some reason we need to load this early
+  // for some reason we need to load this early
+  'text!structure/templates/paging.html',
+  'text!structure/templates/well.html',
+  'text!structure/templates/tablerow.html'
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 

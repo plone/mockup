@@ -24,10 +24,11 @@
 
 
 define([
+  'jquery',
   'underscore',
   'backbone',
   'structure/views/TableRowView'
-], function(_, Backbone, TableRowView) {
+], function($, _, Backbone, TableRowView) {
   "use strict";
 
   var TableView = Backbone.View.extend({
@@ -45,17 +46,24 @@ define([
       '<tbody>' +
       '</tbody>'),
     initialize: function(){
-      this.collection = this.options.collection;
-      this.listenTo(this.collection, 'reset', this.addAll);
+      this.app = this.options.app;
+      this.collection = this.app.collection;
+      this.selected_collection = this.app.selected_collection;
+      this.listenTo(this.collection, 'reset', this.render);
       this.listenTo(this.collection, 'all', this.render);
+      this.listenTo(this.selected_collection, 'remove', this.render);
       this.collection.pager();
     },
     render: function() {
-      this.$el.html(this.template({}));
-      if(this.collection.length){
-        var container = this.$('tbody');
-        this.collection.each(function(result){
-          var view = (new TableRowView({model: result})).render();
+      var self = this;
+      self.$el.html(self.template({}));
+      if(self.collection.length){
+        var container = self.$('tbody');
+        self.collection.each(function(result){
+          var view = (new TableRowView({
+            model: result,
+            app: self.app
+          })).render();
           container.append(view.el);
         });
       }

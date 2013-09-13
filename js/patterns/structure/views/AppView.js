@@ -24,6 +24,7 @@
 
 
 define([
+  'jquery',
   'underscore',
   'backbone',
   'structure/views/ModifyButtonsView',
@@ -31,9 +32,10 @@ define([
   'structure/views/TableView',
   'structure/views/WellView',
   'structure/views/PagingView',
-  'structure/collections/ResultCollection'
-], function(_, Backbone, ModifyButtonsView, Button, TableView, WellView,
-            PagingView, ResultCollection) {
+  'structure/collections/ResultCollection',
+  'structure/collections/SelectedCollection'
+], function($, _, Backbone, ModifyButtonsView, Button, TableView, WellView,
+            PagingView, ResultCollection, SelectedCollection) {
   "use strict";
 
   var AppView = Backbone.View.extend({
@@ -52,10 +54,18 @@ define([
       this.collection = new ResultCollection([], {
         url: this.options.collection_url
       });
+      this.selected_collection = new SelectedCollection();
       this.collection.queryHelper = this.options.queryHelper;
-      this.table_view = new TableView({collection: this.collection});
-      this.well_view = new WellView({table_view: this.table_view});
-      this.paging_view = new PagingView({collection: this.collection});
+      this.table_view = new TableView({app: this});
+      this.well_view = new WellView({app: this});
+      this.paging_view = new PagingView({app: this});
+
+      /* detect shift clicks */
+      this.shift_clicked = false;
+      var self = this;
+      $(document).bind('keyup keydown', function(e){
+        self.shift_clicked = e.shiftKey;
+      });
     },
     render: function(){
       this.$el.append(this.buttons_view.render().el);
