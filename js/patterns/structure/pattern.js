@@ -1,5 +1,3 @@
-// tabs pattern.
-//
 // Author: Nathan Van Gheem
 // Contact: nathan@vangheem.us
 // Version: 1.0
@@ -42,10 +40,12 @@ define([
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish'],
-      startPath: '/'
+      basePath: '/'
     },
     init: function() {
       var self = this;
+      self.browsing = true; // so all queries will be correct with QueryHelper
+
       self.view = new AppView({
         collection_url: self.options.ajaxvocabulary,
         queryHelper: new QueryHelper(self.$el,

@@ -1,3 +1,28 @@
+// Author: Nathan Van Gheem
+// Contact: nathan@vangheem.us
+// Version: 1.0
+//
+// Description:
+//
+// License:
+//
+// Copyright (C) 2010 Plone Foundation
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 2 of the License.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+// more details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program; if not, write to the Free Software Foundation, Inc., 51
+// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+//
+
+
 define([
   'backbone',
   'structure/models/Result',
@@ -24,15 +49,17 @@ define([
       // (also, the actual page the paginator is on)
       currentPage: 1,
       // how many items per page should be shown
-      perPage: 25
+      perPage: 15
     },
     server_api: {
-      query: null,
-      batch: function(){
+      query: function(){
         return JSON.stringify({
-          page: this.currentPage,
-          size: this.perPage
+          criteria: this.queryHelper.getCriterias()
         });
+      },
+      batch: function(){
+        this.queryHelper.options.batchSize = this.perPage;
+        return JSON.stringify(this.queryHelper.getBatch(this.currentPage));
       },
       attributes: function(){
         return JSON.stringify(this.queryHelper.options.attributes);

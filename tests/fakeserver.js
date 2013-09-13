@@ -122,8 +122,38 @@ define([
     }));
   });
 
+  // define here so it's the same for the entire page load.
+  // these are all random items on the root of the site
+  var randomItems = [];
+  var basePaths = ['/', '/news/', '/projects/', '/about/'];
+  var possibleNames = ['Page', 'News Item', 'Info', 'Blog Item'];
+
+  function generateUID(size){
+    if(!size){
+      size = 30;
+    }
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for(var i=0; i<size; i=i+1){
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+  for(var pathi=0; pathi<basePaths.length; pathi=pathi+1){
+    var basePath = basePaths[pathi];
+    for(var i=0; i<100; i=i+1){
+      randomItems.push({
+        UID: generateUID(),
+        Title: possibleNames[Math.floor(Math.random()*possibleNames.length)] + ' ' + i,
+        path: basePath + generateUID(8),
+        Type: "Document"
+      });
+    }
+  }
+
   server.respondWith(/relateditems-test.json/, function(xhr, id) {
-    var root = [
+    var searchables = [
       {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
       {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
       {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
@@ -132,19 +162,16 @@ define([
       {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "Document"},
       {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "Folder"},
       {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "Document"},
-    ];
-    var about = [
+      // about
       {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "Document"},
       {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "Document"},
       {"UID": "dfgsdfgj675", "Title": "Staff", "path": "/about/staff", "Type": "Folder"},
-      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "Document"}
-    ];
-
-    var staff = [
+      {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "Document"},
+      // staff
       {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "Document"},
       {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "Document"}
     ];
-    var searchables = about.concat(root).concat(staff);
+    searchables = searchables.concat(randomItems);
 
     var addSomeData = function(list){
       /* add getURL value, review_state, modification, creation */
@@ -170,8 +197,7 @@ define([
       }
     };
     addSomeData(searchables);
-    addSomeData(root);
-    root[0].getURL = window.location.origin + '/exampledata/test.png';
+    searchables[0].getURL = window.location.origin + '/exampledata/test.png';
 
     var results = [];
 
@@ -191,9 +217,13 @@ define([
     var term = '';
     if(query){
       query = $.parseJSON(query);
-      term = query.criteria[0].v;
-      if(query.criteria.length > 1){
-        path = query.criteria[1].v;
+      for(var i=0; i<query.criteria.length; i=i+1){
+        var criteria = query.criteria[i];
+        if(criteria.i === 'path'){
+          path = criteria.v;
+        }else{
+          term = criteria.v;
+        }
       }
     }
 
