@@ -33,7 +33,7 @@ define([
 
   var WellView = Backbone.View.extend({
     tagName: 'div',
-    className: 'well',
+    className: 'well selected-items',
     template: _.template(WellTemplate),
     events: {
       'click a.remove': 'itemRemoved'
