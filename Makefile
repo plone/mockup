@@ -146,11 +146,11 @@ docs:
 	sed -i -e 's@images/spritemap@spritemap@g' docs/dev/docs.min.css
 
 clean:
+	if test -f $(BOWER); then $(BOWER) cache-clean; fi
 	mkdir -p build
 	rm -rf build
 	rm -rf node_modules
 	rm -rf bower_components
 
-	if test -f $(BOWER); then $(BOWER) cache-clean; fi
 
 .PHONY: compile bootstrap jshint test test-ci docs clean

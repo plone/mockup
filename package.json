@@ -4,24 +4,31 @@
   "description": "Plone CMS Mockup Project",
   "homepage": "http://plone.github.io/mockup",
   "devDependencies": {
-    "bower": "~1.1.2",
+    "bower": "~1.2.6",
     "grunt-cli": "~0.1.9",
-    "grunt-contrib-jshint": "~0.6.2",
+    "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-contrib-less": "~0.7.0",
     "grunt-contrib-cssmin": "~0.6.1",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-karma": "~0.6.1",
-    "karma": "~0.10.1",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-karma": "~0.6.2",
+    "karma": "~0.10.2",
     "karma-mocha": "~0.1.0",
     "karma-coverage": "~0.1.0",
     "karma-requirejs": "~0.1.0",
     "karma-sauce-launcher": "~0.1.0",
     "karma-chrome-launcher": "~0.1.0",
     "karma-junit-reporter": "~0.1.0",
-    "almond": "~0.2.5",
+    "almond": "~0.2.6",
     "lcov-result-merger": "~0.0.1",
-    "coveralls": "~2.1.0"
+    "coveralls": "~2.2.0",
+    "mocha": "~1.12.1",
+    "karma-script-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.3",
+    "karma-coffee-preprocessor": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0"
   },
   "maintainers": [
     {
@@ -31,11 +38,11 @@
     }
   ],
   "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/plone/mockup.git"
+    "type": "git",
+    "url": "https://github.com/plone/mockup.git"
   },
   "bugs": {
-    "url" : "https://github.com/plone/mockup/issues",
+    "url": "https://github.com/plone/mockup/issues",
     "email": "rok@garbas.si"
   },
   "licenses": [
