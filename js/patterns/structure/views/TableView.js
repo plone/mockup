@@ -27,24 +27,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'structure/views/TableRowView'
-], function($, _, Backbone, TableRowView) {
+  'structure/views/TableRowView',
+  'text!structure/templates/table.html'
+], function($, _, Backbone, TableRowView, TableTemplate) {
   "use strict";
 
   var TableView = Backbone.View.extend({
-    tagName: 'table',
-    className: 'table table-striped table-bordered',
-    template: _.template(
-      '<thead>' +
-        '<tr>' +
-          '<th colspan="2">Title</th>' +
-          '<th>Last Modified</th>' +
-          '<th>Published on</th>' +
-          '<th>State</th>' +
-        '</tr>' +
-      '</thead>' +
-      '<tbody>' +
-      '</tbody>'),
+    tagName: 'div',
+    template: _.template(TableTemplate),
     initialize: function(){
       this.app = this.options.app;
       this.collection = this.app.collection;

@@ -32,7 +32,8 @@ define([
   // for some reason we need to load this early
   'text!structure/templates/paging.html',
   'text!structure/templates/well.html',
-  'text!structure/templates/tablerow.html'
+  'text!structure/templates/tablerow.html',
+  'text!structure/templates/table.html'
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 
@@ -43,7 +44,8 @@ define([
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish'],
-      basePath: '/'
+      basePath: '/',
+      upload_url: null
     },
     init: function() {
       var self = this;
@@ -52,7 +54,8 @@ define([
       self.view = new AppView({
         collection_url: self.options.ajaxvocabulary,
         queryHelper: new QueryHelper(self.$el,
-          $.extend(true, {}, self.options, {basePattern: self}))
+          $.extend(true, {}, self.options, {basePattern: self})),
+        upload_url: self.options.upload_url
       });
       self.$el.append(self.view.render().$el);
     }

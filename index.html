@@ -2013,13 +2013,16 @@ function($action, response, options) { ... }
       title: 'Structure',
       description: "Managing a folder of items",
       attributes: [
+        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
+        {attribute: 'upload_url', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'}
       ]
     });
   </script>
   <script type="text/template" id="page_structure">
   </script>
   <script type="text/example" class="example-structure" data-title="Default">
-    <div class="pat-structure" data-pat-structure="ajaxvocabulary:/relateditems-test.json">
+    <div class="pat-structure" data-pat-structure="ajaxvocabulary:/relateditems-test.json;
+                                                   upload_url:/upload">
     </div>
   </script>
 

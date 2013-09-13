@@ -44,7 +44,7 @@ define([
       uploadMultiple: false,
       clickable: false,
       wrap: false,
-      wrapperTemplate: '<div class="tinymce-dropzone-container"/>',
+      wrapperTemplate: '<div class="dropzone-container"/>',
       resultTemplate: '<div class="dz-notice">' +
           '<p>Drop files here...</p></div><div class="dropzone-previews"/>',
       autoCleanResults: false,

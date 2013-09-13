@@ -33,9 +33,10 @@ define([
   'structure/views/WellView',
   'structure/views/PagingView',
   'structure/collections/ResultCollection',
-  'structure/collections/SelectedCollection'
+  'structure/collections/SelectedCollection',
+  'mockup-patterns-dropzone'
 ], function($, _, Backbone, ModifyButtonsView, Button, TableView, WellView,
-            PagingView, ResultCollection, SelectedCollection) {
+            PagingView, ResultCollection, SelectedCollection, DropZone) {
   "use strict";
 
   var AppView = Backbone.View.extend({
@@ -72,6 +73,27 @@ define([
       this.$el.append(this.buttons_view.render().el);
       this.$el.append(this.table_view.render().el);
       this.$el.append(this.paging_view.render().el);
+
+      /* dropzone support */
+      var self = this;
+      var upload_url = self.options.upload_url;
+      if(upload_url){
+        self.dropzone = new DropZone(self.$el, {
+          klass: 'structure-dropzone',
+          clickable: false,
+          url: upload_url,
+          autoCleanResults: true,
+          success: function(e, data){
+            self.table_view.render();
+          }
+        }).dropzone;
+        self.dropzone.on('sending', function(){
+          self.$el.addClass('dropping');
+        });
+        self.dropzone.on('complete', function(){
+          self.$el.removeClass('dropping');
+        });
+      }
       return this;
     }
   });
