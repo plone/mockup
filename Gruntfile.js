@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
 
+  require('karma-mocha');
   var requirejsOptions = require('./js/config'),
       docs = {};
 
