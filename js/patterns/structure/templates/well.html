@@ -4,5 +4,12 @@
 <%= item.attributes.Title %> <a href="#" class="remove">x</a>
 </li>
 <% }); %>
-<span class="clear" />
-
+</ul>
+<div class="clear"> </div>
+<div class="info">
+  <% if(collection.length) { %>
+    <span><b>Number Selected</b>: <%= collection.length %></span>
+  <% } else { %>
+    <span>Selected items will be place here</span>
+  <% } %>
+</div>
