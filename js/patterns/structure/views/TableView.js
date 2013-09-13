@@ -49,8 +49,7 @@ define([
       this.app = this.options.app;
       this.collection = this.app.collection;
       this.selected_collection = this.app.selected_collection;
-      this.listenTo(this.collection, 'reset', this.render);
-      this.listenTo(this.collection, 'all', this.render);
+      this.listenTo(this.collection, 'sync', this.render);
       this.listenTo(this.selected_collection, 'remove', this.render);
       this.collection.pager();
     },
