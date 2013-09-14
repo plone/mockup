@@ -127,19 +127,21 @@ define([
       $el.remove();
     });
     it("load modal content via ajax", function(done) {
-      var $el = $('' +
-        '<div id="body">' +
-        ' <a class="pat-modal" href="patterns-modal-load-via-ajax"' +
-        '    data-pat-modal="backdrop: #body">Open</a>' +
-        '</div>').appendTo('body');
-
-      $('a', $el)
+      $('<a class="pat-modal" />')
         .patternModal()
-        .on('show.modal.patterns', function() {
-          $el.remove();
+        .on('show.modal.patterns', function(e, modal){
+          expect(true).to.be.true;
           done();
-        })
-        .click();
+      }).click();
+    });
+    it("redirects to base urls", function(done){
+      $('<a class="pat-modal" />')
+        .patternModal()
+        .on('show.modal.patterns', function(e, modal){
+          expect(modal.defaults.actionOptions.redirectToUrl('ignore',
+              '<html><head><base href="testurl" /></head></html>')).to.equal('testurl');
+          done();
+      }).click();
     });
 
     describe("modal positioning (findPosition) ", function() {

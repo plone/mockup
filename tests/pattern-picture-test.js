@@ -34,8 +34,8 @@ define([
   'chai',
   'jquery',
   'mockup-registry',
-  'mockup-patterns-pickadate'
-], function(chai, $, registry, PickADate) {
+  'mockup-patterns-picture'
+], function(chai, $, registry, Toggle) {
   "use strict";
 
   var expect = chai.expect,
@@ -45,41 +45,49 @@ define([
   $.fx.off = true;
 
   /* ==========================
-   TEST: PickADate
+   TEST: Picture
   ========================== */
 
-  describe("PickADate", function() {
+  describe("Picture", function() {
     beforeEach(function() {
-      this.$el = $('<div><input class="pat-pickadate" /></div>');
+      this.$el = $('' +
+        '<div class="pat-picture" ' +
+        '     data-pat-picture="alt:Alternative text;">' +
+        '   <div data-src="http://placehold.it/480x320"></div> ' +
+        '   <div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"></div>' +
+        '</div>').appendTo('body');
     });
-    it('date and time element', function() {
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+    afterEach(function() {
+      this.$el.remove();
+    });
+    it("create responsive image widget", function() {
+      expect($('img', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-date', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-time', this.$el).size()).to.equal(1);
+      expect($('img', this.$el).size()).to.equal(1);
     });
-    it('only date element', function() {
-      $('input', this.$el).attr('data-pat-pickadate', 'time:false');
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+    it("test alternative text is recorded", function() {
       registry.scan(this.$el);
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-date', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-time', this.$el).size()).to.equal(0);
+      expect($('img', this.$el).size()).to.equal(1);
+      expect($('img', this.$el).attr('alt')).to.equal('Alternative text');
     });
-    it('only time element', function() {
-      $('input', this.$el).attr('data-pat-pickadate', 'time:true;date:false');
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+    /*
+    it("test state change classes", function() {
       registry.scan(this.$el);
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-date', this.$el).size()).to.equal(0);
-      expect($('.pat-pickadate-time', this.$el).size()).to.equal(1);
+      var img = $('img', this.$el);
+      expect($('img', this.$el).size()).to.equal(1);
+      expect(img.attr('class')).to.equal('test-loading');
+      expect(img.attr('class')).to.equal('test-error');
     });
-    it('getting around bug in pickatime', function() {
-      $('input', this.$el).attr('data-pat-pickadate', '{"time": {"value": "00:00"}}');
+    // Chrome and friends don't allow resizing except in popups
+    it("resize window to see media query in action", function() {
       registry.scan(this.$el);
-      expect($('.picker__list-item--selected', $('.pat-pickadate-time', this.$el).parent()).text()).to.equal('12:00 AM');
+      expect($('img', this.$el).size()).to.equal(1);
+      window.resizeTo(640, 480);
+      expect($('img', this.$el).attr('src')).to.equal('http://placehold.it/640x427');
+      window.resizeTo(479, 320);
+      expect($('img', this.$el).attr('src')).to.equal('http://placehold.it/480x320');
     });
+    */
   });
 
 });
