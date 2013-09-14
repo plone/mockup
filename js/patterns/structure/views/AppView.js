@@ -75,6 +75,9 @@ define([
         var foo = 'one';
       });
 
+      this.toolbar.items[0].disable();
+      this.toolbar.items[1].disable();
+
       /* detect shift clicks */
       this.shift_clicked = false;
       var self = this;

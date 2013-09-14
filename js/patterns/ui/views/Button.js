@@ -47,6 +47,14 @@ define([
         this.options.id = title !== '' ? title.toLowerCase().replace(' ', '-') : this.cid;
       }
       BaseView.prototype.initialize.call(this);
+
+      this.on('disable', function() {
+        this.disable();
+      }, this);
+
+      this.on('enable', function() {
+        this.enable();
+      }, this);
     },
     handleClick: function(e){
       e.preventDefault();

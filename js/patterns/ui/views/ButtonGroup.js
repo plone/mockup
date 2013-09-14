@@ -35,11 +35,12 @@ define([
     className: 'btn-group',
     disable: function() {
       _.each(this.items, function(button) {
-        try {
-          button.disable();
-        } catch(e) {
-          return;
-        }
+        button.trigger('disable');
+      });
+    },
+    enable: function() {
+      _.each(this.items, function(button) {
+        button.trigger('enable');
       });
     }
   });
