@@ -120,6 +120,7 @@ define([
                   this.$node.attr('placeholder', self.options.placeholderTime);
                 }
               }));
+        // XXX: bug in pickatime
         // work around pickadate bug loading 00:xx as value
         if (self.options.time.value.substring(0,2) == '00') {
           var timeval = '12' + self.options.time.value.substring(2) + ' a.m.';
