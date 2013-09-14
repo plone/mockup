@@ -38,7 +38,7 @@ define([
   var Picture = Base.extend({
     name: "picture",
     defaults: {
-      alt : '',
+      alt: null,
       klass: {
         loading: 'picture-loading',
         error: 'picture-error'
