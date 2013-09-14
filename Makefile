@@ -146,7 +146,7 @@ docs:
 	sed -i -e 's@images/spritemap@spritemap@g' docs/dev/docs.min.css
 
 clean:
-	if test -f $(BOWER); then $(BOWER) cache-clean; fi
+	if test -f $(BOWER); then $(BOWER) cache clean; fi
 	mkdir -p build
 	rm -rf build
 	rm -rf node_modules
