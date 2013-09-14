@@ -1223,9 +1223,9 @@ function($action, response, options) { ... }
       title: 'Picture',
       description: 'A responsive image widget.',
       attributes: [
-        {attribute: 'alt', type: 'String', defaultValue: 'null', description: 'Alternate text to be used on the resulting responsive image tag.'},
-        {attribute: 'attribute', type: 'Object', defaultValue: '{src: "data-src", media: "data-media"}', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping is looks for <i>data-src</i> attributes to use as the resulting <i>src</i> attribute for the resulting, and the same for <i>data-media</i> mapping to <i>media</i> for mediaquery information.'},
-        {attribute: 'klass', type: 'Object', defaultValue: '{loading: "picture-loading", error: "picture-error"}', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><i>loading</i> is the CSS class added to the element whilst an image is loading, and <i>error</i> is the CSS class added to the element if an error occurred whilst loading the image.'}
+        {attribute: 'alt', type: 'String', defaultValue: '<code>null</code>', description: 'Alternate text to be used on the resulting responsive image tag.'},
+        {attribute: 'attribute', type: 'Object', defaultValue: '<code>{src: "data-src", media: "data-media"}</code>', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping looks for <code>data-src</code> attributes to use as the resulting <code>src</code> attribute for the resulting element. Ditto for <code>data-media</code>, which maps to <code>media</code> for mediaquery information.'},
+        {attribute: 'klass', type: 'Object', defaultValue: '<code>{loading: "picture-loading", error: "picture-error"}</code>', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><code>loading</code> is the CSS class added to the element whilst an image is loading, and <code>error</code> is the CSS class added to the element if an error occurred whilst loading the image.'}
       ]
     });
   </script>
