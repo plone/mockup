@@ -1815,12 +1815,6 @@ function($action, response, options) { ... }
           + '  maximumSelectionSize: 1,\n'
           + '  placeholder: "Search for item on site..."\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'targetList', type: 'List', defaultValue: '<pre>[\n'
-          + '  {text: "Open in this window / frame", value: ""},\n'
-          + '  {text: "Open in new window", value: "_blank"},\n'
-          + '  {text: "Open in parent window / frame", value: "_parent"},\n'
-          + '  {text: "Open in top frame (replaces all frames)", value: "_top"}\n'
-          + ']</pre>', description: 'TODO.'},
         {attribute: 'text', type: 'List', defaultValue: '<pre>{\n'
           + '  insertBtn: "Insert", // so this can be configurable for different languages\n'
           + '  cancelBtn: "Cancel",\n'
@@ -1831,16 +1825,42 @@ function($action, response, options) { ... }
           + '  email: "Email",\n'
           + '  anchor: "Anchor",\n'
           + '  subject: "Subject"\n'
+          + '  image: "Image",\n'
+          + '  imageAlign: "Align",\n'
+          + '  scale: "Size",\n'
+          + '  alt: "Alternative Text",\n'
+          + '  externalImage: "External Image URI"\n'
           + '}</pre>', description: 'TODO.'},
+        {attribute: 'scales', type: 'String', defaultValue: '<pre>\n'
+          + '"Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile," +\n'
+          + '"Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview," +\n'
+          + '"Large (768x768):large"</pre>', description: 'TODO.'},
+        {attribute: 'targetList', type: 'List', defaultValue: '<pre>[\n'
+          + '  {text: "Open in this window / frame", value: ""},\n'
+          + '  {text: "Open in new window", value: "_blank"},\n'
+          + '  {text: "Open in parent window / frame", value: "_parent"},\n'
+          + '  {text: "Open in top frame (replaces all frames)", value: "_top"}\n'
+          + ']</pre>', description: 'TODO.'},
+        {attribute: 'imageTypes', type: 'String', defaultValue: 'Image',
+         description: 'TODO.'},
+        {attribute: 'folderTypes', type: 'String', defaultValue: 'Folder,Plone Site',
+         description: 'TODO.'},
+        {attribute: 'linkableTypes', type: 'String', defaultValue: 'Document,Event,File,Folder,Image,News Item,Topic',
+         description: 'TODO.'},
         {attribute: 'tiny', type: 'Object', defaultValue: '<pre>{\n'
           + '  plugins: [\n'
-          + '    "advlist autolink lists link image charmap print preview anchor",\n'
-          + '    "searchreplace visualblocks code fullscreen",\n'
-          + '    "insertdatetime media table contextmenu paste plonelink"\n'
+          + '    "advlist autolink lists charmap print preview anchor ploneupload",\n'
+          + '    "searchreplace visualblocks code fullscreen autoresize",\n'
+          + '    "insertdatetime media table contextmenu paste plonelink ploneimage"\n'
           + '  ],\n'
-          + '  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink image"\n'
+          + '  menubar: "edit table format tools view insert"\n'
+          + '  toolbar: "undo redo | styleselect | bold italic | " +\n'
+          + '           "alignleft aligncenter alignright alignjustify | " +\n'
+          + '           "bullist numlist outdent indent | " +\n'
+          + '           "unlink plonelink ploneimage | ploneupload"\n'
+          + '  autoresize_max_height: 1500\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'rel_upload_url', type: 'String', defaultValue: 'null',
+        {attribute: 'rel_upload_path', type: 'String', defaultValue: 'null',
          description: 'To provide upload support.'},
         {attribute: 'folder_url', type: 'String', defaultValue: 'null',
          description: 'Base url to provide upload url off of.'}
