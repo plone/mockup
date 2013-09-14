@@ -27,29 +27,38 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'structure/views/ModifyButtonsView',
-  'structure/models/Button',
+  'ui/views/Toolbar',
+  'ui/views/ButtonGroup',
+  'ui/views/Button',
   'structure/views/TableView',
   'structure/views/WellView',
   'structure/views/PagingView',
   'structure/collections/ResultCollection',
   'structure/collections/SelectedCollection',
   'mockup-patterns-dropzone'
-], function($, _, Backbone, ModifyButtonsView, Button, TableView, WellView,
+], function($, _, Backbone, Toolbar, ButtonGroup, Button, TableView, WellView,
             PagingView, ResultCollection, SelectedCollection, DropZone) {
   "use strict";
 
   var AppView = Backbone.View.extend({
     tagName: 'div',
     initialize: function(){
-      this.buttons_view = new ModifyButtonsView({
-        buttons: [
-          new Button({title: 'Cut'}),
-          new Button({title: 'Copy'}),
-          new Button({title: 'Delete'}),
-          new Button({title: 'Workflow'}),
-          new Button({title: 'Tags'}),
-          new Button({title: 'Dates'})
+      this.toolbar = new Toolbar({
+        items: [
+          new ButtonGroup({
+            items: [
+              new Button({title: 'Cut', icon: 'cut', disabled: true}),
+              new Button({title: 'Copy'}),
+              new Button({title: 'Delete', context: 'danger'}),
+            ]
+          }),
+          new ButtonGroup({
+            items: [
+              new Button({title: 'Workflow'}),
+              new Button({title: 'Tags'}),
+              new Button({title: 'Dates'})
+            ]
+          })
         ]
       });
       this.collection = new ResultCollection([], {
@@ -61,6 +70,11 @@ define([
       this.well_view = new WellView({app: this});
       this.paging_view = new PagingView({app: this});
 
+      this.$el.on('ui.button.click:cut', function(event, button) {
+        // example of binding event to button
+        var foo = 'one';
+      });
+
       /* detect shift clicks */
       this.shift_clicked = false;
       var self = this;
@@ -69,8 +83,9 @@ define([
       });
     },
     render: function(){
+
       this.$el.append(this.well_view.render().el);
-      this.$el.append(this.buttons_view.render().el);
+      this.$el.append(this.toolbar.render().el);
       this.$el.append(this.table_view.render().el);
       this.$el.append(this.paging_view.render().el);
 

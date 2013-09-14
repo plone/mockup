@@ -1,5 +1,5 @@
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
+// Author: Ryan Foster
+// Contact: ryan@rynamic.com
 // Version: 1.0
 //
 // Description:
@@ -23,20 +23,17 @@
 //
 
 
-define(['backbone'], function(Backbone) {
+define([
+  'underscore',
+  'backbone',
+  'ui/views/container'
+], function(_, Backbone, ContainerView) {
   "use strict";
 
-  var Button = Backbone.Model.extend({
-
-    defaults: function(){
-      return {
-        title: 'Button',
-        click: function(e){
-          e.preventDefault();
-        }
-      };
-    }
+  var Toolbar = ContainerView.extend({
+    tagName: 'div',
+    className: 'navbar'
   });
 
-  return Button;
+  return Toolbar;
 });

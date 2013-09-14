@@ -53,6 +53,7 @@ var requirejsOptions = {
     'mockup-bundles-tiles': 'js/bundles/widgets',
     'mockup-patterns-structure': 'js/patterns/structure/pattern',
     'structure': 'js/patterns/structure',
+    'ui': 'js/patterns/ui',
     'text': "bower_components/requirejs-text/text",
     'templates': 'js/patterns/templates'
   },

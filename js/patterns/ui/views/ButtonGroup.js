@@ -1,5 +1,5 @@
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
+// Author: Ryan Foster
+// Contact: ryan@rynamic.com
 // Version: 1.0
 //
 // Description:
@@ -23,23 +23,26 @@
 //
 
 
-define(['backbone', 'underscore'], function(Backbone, _) {
+define([
+  'underscore',
+  'backbone',
+  'ui/views/container'
+  ], function(_, Backbone, ContainerView) {
   "use strict";
 
-  var ButtonView = Backbone.View.extend({
-    tagName: 'li',
-    template: _.template('<a href="#"><%- title %></a>'),
-    events: {
-      'click a': 'handleClick'
-    },
-    handleClick: function(e){
-      return this.model.click(e);
-    },
-    render: function(){
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
+  var ButtonGroup = ContainerView.extend({
+    tagName: 'div',
+    className: 'btn-group',
+    disable: function() {
+      _.each(this.items, function(button) {
+        try {
+          button.disable();
+        } catch(e) {
+          return;
+        }
+      });
     }
   });
 
-  return ButtonView;
+  return ButtonGroup;
 });

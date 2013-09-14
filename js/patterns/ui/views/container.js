@@ -1,5 +1,5 @@
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
+// Author: Ryan Foster
+// Contact: ryan@rynamic.com
 // Version: 1.0
 //
 // Description:
@@ -26,32 +26,26 @@
 define([
   'underscore',
   'backbone',
-  'structure/views/ButtonView',
-  'button-groups',
-], function(_, Backbone, ButtonView) {
+  'ui/views/base'
+], function(_, Backbone, BaseView) {
   "use strict";
 
-  var ModifyButtonsView = Backbone.View.extend({
-    tagName: 'div',
-    className: 'btn-group',
-    template: _.template(
-      '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
-        'Modify' +
-        '<span class="caret"></span>' +
-      '</a>' +
-      '<ul class="dropdown-menu">' +
-      '</ul>'),
+  var Container = BaseView.extend({
+    items: [],
     render: function() {
-      this.$el.html(this.template({}));
-      var btnContainer = this.$('ul');
-      _.each(this.options.buttons, function(btn){
-        var view = (new ButtonView({model: btn})).render();
-        btnContainer.append(view.el);
-      });
-      this.$('.dropdown-toggle').dropdown();
+      var self = this;
+      _.each(this.items, function(view){
+        this.$el.append(view.render().$el);
+      }, this);
+
+      this.afterRender();
+      
       return this;
     },
+    afterRender: function() {
+
+    }
   });
 
-  return ModifyButtonsView;
+  return Container;
 });
