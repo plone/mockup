@@ -245,6 +245,7 @@ $ make bootstrap</pre>
       </p>
       <ul>
         <li><strong>build/</strong> All combined, optimized, and minimized JavaScript code, as well as compiled less and media are copied and placed here</li>
+        <li><strong>docs/</strong> Documentation files built with <code>make docs</code></li>
         <li><strong>js/</strong> This directory contains all of the modularized JavaScript code</li>
         <li><strong>js/config.js</strong> This file contains the RequireJS configuration</li>
         <li><strong>js/fakeserver.js</strong> This file is useful for development -- it contains the code for setting up fake responses to XHR</li>
@@ -285,9 +286,20 @@ $ make bootstrap</pre>
       </p>
       <h4>What's up with this documentation?</h4>
       <p>
-        Most of the documentation found outside of code comments is found in this
-        single HTML file. Take a look at it, and if you want to contribute, hack
-        away!
+        Most of the documentation found outside of code comments is in the
+        single <em>index.html</em> file. Take a look at it, and if you want to
+        contribute, hack away!
+      </p>
+      <p>
+        To update the pages
+        at <a href="http://plone.github.io/mockup/dev/">http://plone.github.io/mockup/dev/</a>,
+        run <code>$ make docs</code>, then switch into the <em>docs/</em>
+        directory. If you then do <code>$ git branch</code> you'll notice that
+        the <em>docs/</em> directory is another clone of the mockup repo,
+        checked out on the <em>gh-pages</em> branch. Yes, this site
+        is <a href="http://pages.github.com/">Github magic</a>. Commit the
+        changes, then <code>$ git push origin gh-pages</code> to update the
+        site.
       </p>
       <p>
         Why is it done this way? It's convenient for the time being.
