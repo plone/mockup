@@ -215,7 +215,7 @@ module.exports = function(grunt) {
       },
       'docs-docscss': {
         path: 'docs/dev/index.html',
-        pattern: '<style type="text/less">@import "less/docs.less";@isBrowser\: true;</style>',
+        pattern: '<style type="text/less">@import "less/docs.less";@isBrowser: true;</style>',
         replacement: '<link rel="stylesheet" type="text/css" href="docs.min.css" />'
       },
       'docs-halflings': {
