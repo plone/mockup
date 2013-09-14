@@ -24,40 +24,30 @@
 
 
 define([
-  'underscore',
+  'jquery',
   'backbone',
+  'underscore',
   'ui/views/base'
-], function(_, Backbone, BaseView) {
+  ],
+  function($, Backbone, _, BaseView) {
   "use strict";
 
-  var Container = BaseView.extend({
-    id: '',
-    items: [],
-    render: function() {
-      var self = this;
-      _.each(this.items, function(view){
-        this.$el.append(view.render().$el);
-      }, this);
-
-      this.bindEvents();
-      this.afterRender();
-      
+  var TextFilterView = BaseView.extend({
+    tagName: 'form',
+    className: 'navbar-search pull-right',
+    template: '<input type="text" class="search-query" placeholder="Search">',
+    events: {
+      'keyup .search-query': 'filter'
+    },
+    render: function(){
+      this.$el.html(_.template(this.template, {}));
       return this;
     },
-    bindEvents: function() {
-      var self = this;
-      _.each(this.items, function(view) {
-        view.on('all', function() {
-          var eventName = arguments[0];
-          var newName = self.id !== '' ? self.id + '.' + eventName : eventName;
-          self.trigger(newName, arguments[1]);
-        });
-      });
-    },
-    afterRender: function() {
-
+    filter: function(event) {
+      var val = $(event.currentTarget).val();
+      this.trigger('filter.change', [val, this]);
     }
   });
 
-  return Container;
+  return TextFilterView;
 });

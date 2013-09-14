@@ -33,11 +33,12 @@ define([
   'structure/views/TableView',
   'structure/views/WellView',
   'structure/views/PagingView',
+  'structure/views/TextFilterView',
   'structure/collections/ResultCollection',
   'structure/collections/SelectedCollection',
   'mockup-patterns-dropzone'
 ], function($, _, Backbone, Toolbar, ButtonGroup, Button, TableView, WellView,
-            PagingView, ResultCollection, SelectedCollection, DropZone) {
+            PagingView, TextFilterView, ResultCollection, SelectedCollection, DropZone) {
   "use strict";
 
   var AppView = Backbone.View.extend({
@@ -58,6 +59,9 @@ define([
               new Button({title: 'Tags'}),
               new Button({title: 'Dates'})
             ]
+          }),
+          new TextFilterView({
+            id: 'filter'
           })
         ]
       });
@@ -73,6 +77,11 @@ define([
       this.$el.on('ui.button.click:cut', function(event, button) {
         // example of binding event to button
         var foo = 'one';
+      });
+
+      this.toolbar.on('filter.change', function(value, view) {
+        // do something when the filter happens
+        var foo = 'two';
       });
 
       this.toolbar.items[0].disable();
