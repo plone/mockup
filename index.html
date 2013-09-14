@@ -1767,44 +1767,79 @@ function($action, response, options) { ... }
         <th>Last Name</th>
         <th>Occupation</th>
         <th>Age</th>
+        <th>Day of birth</th>
+        <th>Some date</th>
+        <th>No date</th>
       </thead>
       <tr>
         <td>Buster</td>
         <td>Bluth</td>
         <td>Army</td>
         <td>35</td>
+        <td class="sortabledata-1">Monday</td>
+        <td>1999-01-01</td>
+        <td>01-01-1999</td>
       </tr>
       <tr>
         <td>Michael</td>
         <td>Bluth</td>
         <td>Company President</td>
         <td>39</td>
+        <td class="sortabledata-3">Wednesday</td>
+        <td>1999-10-01</td>
+        <td>02-01-1998</td>
       </tr>
       <tr>
         <td>GOB</td>
         <td>Bluth</td>
         <td>Magician</td>
         <td>37</td>
+        <td class="sortabledata-7">Sunday</td>
+        <td>1998-11-01</td>
+        <td>13-01-1997</td>
       </tr>
       <tr>
         <td>Lindsay</td>
         <td>Fünke</td>
         <td>Protester</td>
         <td>36</td>
+        <td class="sortabledata-2">Tuesday</td>
+        <td>1998-10-11</td>
+        <td>14-11-1996</td>
       </tr>
       <tr>
         <td>Tony</td>
         <td>Wonder</td>
         <td>Magician</td>
         <td>35</td>
+        <td class="sortabledata-4">Thursday</td>
+        <td>1998-10-21</td>
+        <td>07-21-1995</td>
       </tr>
       <tr>
         <td>Tobias</td>
         <td>Fünke</td>
         <td>Therapist</td>
         <td>40</td>
+        <td class="sortabledata-4">Thursday</td>
+        <td>1998-21-59</td>
+        <td>01-10-1994</td>
       </tr>
     </table>
+    <p>
+    <ul>
+        <li>If the displayed data doesn't match the sequence (as in days of the week), provide a <code>sortabledata-XXX</code> class. The column will be sorted on <code>XXX</code>.
+        </li>
+        <li>Note that a secondary sort is always done on the first two columns (by the second, and then by the first column). This provides a crude way to sort by surname and name. (Look at sequence of "<em>Bluth</em>" rows changing when sorting on Last Name.)
+        </li>
+        <li>Rows get <code>odd</code> and <code>even</code> classes for CSS styling.
+        </li>
+        <li>If something looks more like a date than like a number (specifically <em>1999-01-01</em>, not e.g. <em>01-01-1999</em>) it will be sorted textually, not numerically. Dates aren't validated.
+        </li>
+        <li>If something looks like a number, javascript will make some wild guesses about it. It can turn out weird (try sorting on the "<em>No Date</em>" column).
+        </li>
+    </ul>
+    </p>
   </script>
 
   <!--  **** TinyMCE **** -->
