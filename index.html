@@ -2021,15 +2021,53 @@ function($action, response, options) { ... }
   </script>
 
 
-   <!--  **** DropZone **** -->
+  <!--  **** DropZone **** -->
   <script>
     addPattern({
-      id: 'dropzone',
-      title: 'DropZone',
-      description: "Drag 'n drop file upload",
+      id: "dropzone",
+      title: "DropZone",
+      description: "file upload with drag and drop support",
       attributes: [
-        {attribute: 'url', type: 'String', defaultValue: '<code>null</code>', description: 'Required option dropzone if not used with a form'},
-        {attribute: 'clickable', type: 'String', defaultValue: '<code>false</code>', description: 'If you can click on container to also upload'}
+        {attribute: "url", 
+         type: "String", 
+         defaultValue: "<code>null</code>", 
+         description: "Required option dropzone if not used with a form"},
+        {attribute: "clickable", 
+         type: "Boolean",
+         defaultValue: "<code>false</code>", 
+         description: "If you can click on container to also upload"},
+        {attribute: "klass", 
+         type: "String", 
+         defaultValue: "<code>dropzone</code>", 
+         description: "value for class attribute in the form element"},
+        {attribute: "paramName", 
+         type: "String", 
+         defaultValue: "<code>file</code>", 
+         description: "value for name attribute in the file input element"},
+        {attribute: "uploadMultiple", 
+         type: "Boolean", 
+         defaultValue: "<code>false</code>", 
+         description: "condition value for multiple attribute in the file input element. If the value is 'true' and paramName is file, 'multiple=multiple' and 'name=file[]' will be added in the file input."},
+        {attribute: "wrap", 
+         type: "Boolean", 
+         defaultValue: "<code>false</code>", 
+         description: "condition value for wrapping this element with 'wrapperTemplate' value."},
+        {attribute: "wrapperTemplate", 
+         type: "String", 
+         defaultValue: '<code>&lt;div class="tinymce-dropzone-container"/&gt;</code>',
+         description: "HTML template for wrapping around with this element."},
+        {attribute: "resultTemplate", 
+         type: "String", 
+         defaultValue: '<code>&lt;div class="dz-notice"&gt;&lt;p&gt;Drop files here...&lt;/p&gt;&lt;/div&gt;&lt;div class="dropzone-previews"/&gt;</code>',
+         description: "HTML template for the element that will contain file information."},
+        {attribute: "autoCleanResults", 
+         type: "Boolean", 
+         defaultValue: "<code>false</code>", 
+         description: "condition value for the file preview in div element to fadeout after file upload is completed."},
+        {attribute: "previewsContainer", 
+         type: "Selector",
+         defaultValue: "<code>.dropzone-previews</code>", 
+         description: "JavaScript selector for file preview in div element."},
       ]
     });
   </script>

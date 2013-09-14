@@ -1,6 +1,5 @@
-// Pattern which adds support for checking if the user has his cookies enabled
-// when logging in, and also to ask if he accepts that the site can use
-// cookies.
+// Pattern which adds support for file upload with 
+// drag and drop support.
 //
 // Author: Nathan Van Gheem
 // Contact: nathan@vangheem.su
