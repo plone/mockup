@@ -28,7 +28,9 @@ define([
   'underscore',
   'backbone',
   'structure/views/TableRowView',
-  'text!structure/templates/table.html'
+  'text!structure/templates/table.html',
+  'jquery.event.drag',
+  'jquery.event.drop'
 ], function($, _, Backbone, TableRowView, TableTemplate) {
   "use strict";
 
@@ -56,8 +58,79 @@ define([
           container.append(view.el);
         });
       }
+      if(self.app.options.move_url){
+        self.addReordering();
+      }
       return this;
     },
+    addReordering: function(){
+      var self = this;
+      self.$el.addClass('order-support');
+      var start = null;
+      /* drag and drop reording support */
+      self.$('tr').drag("start", function(e, dd) {
+        $(this).addClass('structure-dragging');
+        $.drop({
+          tolerance: function(event, proxy, target) {
+            var test = event.pageY > (target.top + target.height / 2);
+            $.data(target.elem, "drop+reorder",
+                   test ? "insertAfter" : "insertBefore" );
+            return this.contains(target, [event.pageX, event.pageY]);
+          }
+        });
+        start = $(this).index();
+        return $( this ).clone().
+          addClass('dragging').
+          css({opacity: 0.75, position: 'absolute'}).
+          appendTo(document.body);
+      })
+      .drag(function(e, dd) {
+        /*jshint eqeqeq:false */
+        $( dd.proxy ).css({
+          top: dd.offsetY,
+          left: dd.offsetX
+        });
+        var drop = dd.drop[0],
+        method = $.data(drop || {}, "drop+reorder");
+        /* XXX Cannot use triple equals here */
+        if (drop && (drop != dd.current || method != dd.method)){
+          $(this)[method](drop);
+          dd.current = drop;
+          dd.method = method;
+          dd.update();
+        }
+      })
+      .drag("end", function(e, dd) {
+        var $el = $(this);
+        $el.removeClass('structure-dragging');
+        $(dd.proxy).remove();
+        self.moveItem($el, $el.index() - start);
+      })
+      .drop("init", function(e, dd ) {
+        /*jshint eqeqeq:false */
+        /* XXX Cannot use triple equals here */
+        return (this == dd.drag) ? false: true;
+      });
+    },
+    moveItem: function($el, delta){
+      $.ajax({
+        url: this.app.options.move_url,
+        type: 'POST',
+        data: {
+          delta: delta
+        },
+        dataType: 'json',
+        success: function(data){
+          if(data.status !== "success"){
+            // XXX handle error here with something?
+            alert('error moving item');
+          }
+        },
+        error: function(data){
+          alert('error moving item');
+        }
+      });
+    }
   });
 
   return TableView;

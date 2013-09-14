@@ -45,7 +45,8 @@ define([
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish'],
       basePath: '/',
-      upload_url: null
+      upload_url: null,
+      move_url: null
     },
     init: function() {
       var self = this;
@@ -55,7 +56,8 @@ define([
         collection_url: self.options.ajaxvocabulary,
         queryHelper: new QueryHelper(self.$el,
           $.extend(true, {}, self.options, {basePattern: self})),
-        upload_url: self.options.upload_url
+        upload_url: self.options.upload_url,
+        move_url: self.options.move_url
       });
       self.$el.append(self.view.render().$el);
     }

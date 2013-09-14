@@ -372,6 +372,13 @@ define([
     xhr.respond(200, {"content-Type": "text/html"}, content);
   });
 
+  server.respondWith('POST', /moveitem/, function(xhr, id) {
+    xhr.respond(200, { "Content-Type": "application/json" },
+      JSON.stringify({
+        "status": "success"
+    }));
+  });
+
   return server;
 
 });
