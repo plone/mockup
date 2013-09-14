@@ -62,21 +62,21 @@ define([
         this.$el.remove();
       });
       it('default attributes', function() {
-        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.false;
+        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.equal(false);
         expect($('.dz-notice', this.$el).size()).to.equal(0);
         expect($('.dropzone-previews', this.$el).size()).to.equal(0);
         expect($('.dz-default', this.$el).size()).to.equal(0);
         expect($('.dz-message', this.$el).size()).to.equal(0);
         registry.scan(this.$el);
-        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.true;
+        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.equal(true);
         expect($('.dz-notice', this.$el).size()).to.equal(1);
         expect($('.dz-notice p', this.$el).size()).to.equal(1);
         expect($('.dz-notice p', this.$el).html()).to.equal('Drop files here...');
         expect($('.dropzone-previews', this.$el).size()).to.equal(1);
-        expect($('.dropzone-previews', this.$el).html()).to.be.empty;
+        expect($('.dropzone-previews', this.$el).html()).to.be.equal('');
         expect($('.dz-default', this.$el).size()).to.equal(1);
         expect($('.dz-message', this.$el).size()).to.equal(1);
-        expect($('.dz-message', this.$el).hasClass('dz-default')).to.be.true;
+        expect($('.dz-message', this.$el).hasClass('dz-default')).to.be.equal(true);
         expect($('.dz-default span', this.$el).size()).to.equal(1);
         expect($('.dz-default span', this.$el).html()).to.equal('Drop files here to upload');
       });
@@ -86,7 +86,7 @@ define([
       beforeEach(function() {
         this.$el = $('' +
           '<div>' +
-          '  <form method="post"' + 
+          '  <form method="post"' +
           '    action="/upload"' +
           '    enctype="multipart/form-data"' +
           '    class="pat-dropzone">' +
@@ -97,21 +97,21 @@ define([
         this.$el.remove();
       });
       it('default attributes', function() {
-        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.false;
+        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.equal(false);
         expect($('.dz-notice', this.$el).size()).to.equal(0);
         expect($('.dropzone-previews', this.$el).size()).to.equal(0);
         expect($('.dz-default', this.$el).size()).to.equal(0);
         expect($('.dz-message', this.$el).size()).to.equal(0);
         registry.scan(this.$el);
-        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.true;
+        expect($('.pat-dropzone', this.$el).hasClass('dropzone')).to.be.equal(true);
         expect($('.dz-notice', this.$el).size()).to.equal(1);
         expect($('.dz-notice p', this.$el).size()).to.equal(1);
         expect($('.dz-notice p', this.$el).html()).to.equal('Drop files here...');
         expect($('.dropzone-previews', this.$el).size()).to.equal(1);
-        expect($('.dropzone-previews', this.$el).html()).to.be.empty;
+        expect($('.dropzone-previews', this.$el).html()).to.be.equal('');
         expect($('.dz-default', this.$el).size()).to.equal(1);
         expect($('.dz-message', this.$el).size()).to.equal(1);
-        expect($('.dz-message', this.$el).hasClass('dz-default')).to.be.true;
+        expect($('.dz-message', this.$el).hasClass('dz-default')).to.be.equal(true);
         expect($('.dz-default span', this.$el).size()).to.equal(1);
         expect($('.dz-default span', this.$el).html()).to.equal('Drop files here to upload');
       });
