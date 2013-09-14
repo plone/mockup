@@ -611,7 +611,7 @@ $ make bootstrap</pre>
       attributes: [
         {attribute: 'allowMsg', type: 'String', defaultValue: 'Allow', description: 'Text on button used to allow cookies.'},
         {attribute: 'askPermissionMsg', type: 'String', defaultValue: 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
-        {attribute: 'cookieName', type: 'String', defaultValue: 'Allow_Cookies_For_Site', description: 'Name of cookie used to store the value of this setting.'},
+        {attribute: 'cookieName', type: 'String', defaultValue: '<code>Allow_Cookies_For_Site</code>', description: 'Name of cookie used to store the value of this setting.'},
         {attribute: 'denyMsg', type: 'String', defaultValue: 'Deny', description: 'Text on button used to deny cookies.'},
         {attribute: 'shouldAsk', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Should user be prompted about cookies?'},
         {attribute: 'shouldEnable', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Display a message about enabling cookies if they are disabled.'},
@@ -689,8 +689,8 @@ $ make bootstrap</pre>
       title: 'Form Unload Alert',
       description: 'A pattern to <strong>warn user when changes are unsaved</strong> and they try to navigate away from page.',
       attributes: [
-        {attribute: 'changingEvents', type: 'String', defaultValue: '<code>change keyup paste</code>', description: 'Events on which to check for changes (space-seperated.'},
-        {attribute: 'changingFields', type: 'String', defaultValue: '<code>input,select,textarea,fileupload</code>', description: 'Fields on which to check for changes (comma-seperated.'},
+        {attribute: 'changingEvents', type: 'String', defaultValue: '<code>change keyup paste</code>', description: 'Events on which to check for changes (space-separated).'},
+        {attribute: 'changingFields', type: 'String', defaultValue: '<code>input,select,textarea,fileupload</code>', description: 'Fields on which to check for changes (comma-separated).'},
         {attribute: 'message', type: 'String', defaultValue: 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
       ]
     });
@@ -800,8 +800,8 @@ function($action, response, options) { ... }
       title: 'Modal',
       description: 'Creates a modal dialog (also called <strong>overlay</strong>).',
       attributes: [
-        {attribute: 'height', type: 'String', defaultValue: '<code>""</code>', description: 'Set the height of the modal, for example: "<code>250px</code>".'},
-        {attribute: 'width', type: 'String', defaultValue: '<code>""</code>', description: 'Set the width of the modal, for example: "<code>80%</code>" or "<code>500px</code>".'},
+        {attribute: 'height', type: 'String', defaultValue: '<code>""</code>', description: 'Set the height of the modal, for example: <code>250px</code>.'},
+        {attribute: 'width', type: 'String', defaultValue: '<code>""</code>', description: 'Set the width of the modal, for example: <code>80%</code> or <code>500px</code>.'},
         {attribute: 'margin', type: 'Function, Integer', defaultValue: '<code>20</code>', description: 'A function or Integer which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.'},
         {attribute: 'position', type: 'String', defaultValue: '<code>center middle</code>', description: 'Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle.'},
 
@@ -820,7 +820,7 @@ function($action, response, options) { ... }
         },
         {attribute: 'buttons', type: 'Selector', defaultValue: '<code>.formControls &gt; input[type="submit"]</code>', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
         {attribute: 'automaticallyAddButtonActions', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Automatically create actions for elements matched with the <code>buttons</code> selector. They will use the options provided in <code>actionOptions</code>.'},
-        {attribute: 'loadLinksWithinModal', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Automatically load links (&lt;a&gt;) inside of the modal using AJAX.'},
+        {attribute: 'loadLinksWithinModal', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Automatically load links (<code>&lt;a&gt;</code>) inside of the modal using AJAX.'},
         {attribute: 'actions', type: 'Object', defaultValue: '<code>{}</code>', description: 'A hash of selector to options. Where options can include any of the defaults from <code>actionOptions</code>. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
         {
           attribute: 'templateOptions',
@@ -847,9 +847,9 @@ function($action, response, options) { ... }
             {attribute: 'eventType', type: 'String', defaultValue: '<code>click</code>', description: 'The event to bind to the element matched for the action.'},
             {attribute: 'target', type: 'Selector', defaultValue: '<code>null</code>', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
             {attribute: 'ajaxUrl', type: 'String, Function', defaultValue: '<code>null</code>', description: 'A URL string or a <code>function($actionElement, actionOptions)</code> that returns a string.'},
-            {attribute: 'modalFunction', type: 'String', defaultValue: '<code>null</code>', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, "<code>hide</code>".'},
+            {attribute: 'modalFunction', type: 'String', defaultValue: '<code>null</code>', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, <code>hide</code>.'},
             {attribute: 'redirectOnResponse', type: 'Boolean', defaultValue: '<code>false</code>', description: 'Whether or not to redirect the window to <code>redirectToUrl</code> after a succesful AJAX response.'},
-            {attribute: 'redirectToUrl', type: 'String, Function', defaultValue: $('#example_redirectToUrl').text(), description: 'After a successful ajax request, if <code>redirectOnResponse</code> is true, redirect to a specified URL. The default function extracts the URL from a <code>&lt;base&gt;</code> in the response content.'},
+            {attribute: 'redirectToUrl', type: 'String, Function', defaultValue: '<pre>'+$('#example_redirectToUrl').text()+'</pre>', description: 'After a successful ajax request, if <code>redirectOnResponse</code> is true, redirect to a specified URL. The default function extracts the URL from a <code>&lt;base&gt;</code> in the response content.'},
             {attribute: 'isForm', type: 'Boolean', defaultValue: '<code>false</code>', description: 'Manually indicate whether an action should use an <code>ajaxSubmit</code> call. Otherwise, whether or not it is a form action will be determined by the element type.'},
             {attribute: 'timeout', type: 'Integer', defaultValue: '<code>5000</code>', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
             {attribute: 'displayInModal', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
@@ -1519,14 +1519,14 @@ function($action, response, options) { ... }
         {attribute: 'separator', type: 'String', defaultValue: '<code>,</code>', description: ''
           + 'Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.'
           + '<br/><br/>'
-          + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will'
-          + 'allow <code>tags</code> and <code>initvalmap</code> to have'
+          + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will '
+          + 'allow <code>tags</code> and <code>initvalmap</code> to have '
           + 'values separated by ";" instead of the default ",".'},
         {attribute: 'data-path-select2-initvalmap', type: 'String', defaultValue: '<code>""</code>', description: ''
-          + 'This can be a json encoded string, or a list of <code>id:text</code>'
-          + 'values. Ex: "<code>Red:The Color Red,Orange:The Color Orange</code>"'
+          + 'This can be a json encoded string, or a list of <code>id:text</code> '
+          + 'values. Ex: <code>Red:The Color Red,Orange:The Color Orange</code>'
           + '<br /><br />'
-          + 'This is used inside the <code>initSelection</code> method, if AJAX options'
+          + 'This is used inside the <code>initSelection</code> method, if AJAX options '
           + 'are NOT set.'},
         {attribute: 'ajaxvocabulary', type: 'String', defaultValue: '<code>""</code>', description: 'This is a URL to a JSON-formatted file used to populate the list'}
       ]
@@ -1758,6 +1758,23 @@ function($action, response, options) { ... }
     });
   </script>
   <script type="text/template" id="page_tablesorter">
+    <h2>Directions</h2>
+    <p>
+    <ul>
+        <li>If the displayed data doesn't match the sequence (as in days of the week), provide a <code>sortabledata-XXX</code> class. The column will be sorted on <code>XXX</code>.
+        </li>
+        <li>Note that a secondary sort is always done on the first two columns (by the second, and then by the first column). This provides a crude way to sort by surname and name. (Look at sequence of "<em>Bluth</em>" rows changing when sorting on Last Name.)
+        </li>
+        <li>Rows get <code>odd</code> and <code>even</code> classes for CSS styling.
+        </li>
+        <li>If something looks more like a date than like a number (specifically <em>1999-01-01</em>, not e.g. <em>01-01-1999</em>) it will be sorted textually, not numerically. Dates aren't validated.
+        </li>
+        <li>If something looks like a number, javascript will make some wild guesses about it. It can turn out weird (try sorting on the "<em>No Date</em>" column).
+        </li>
+    </ul>
+    </p>
+  </script>
+  <script type="text/template" id="page_tablesorter">
 
   </script>
   <script type="text/example" class="example-tablesorter" data-title="Default">
@@ -1826,20 +1843,6 @@ function($action, response, options) { ... }
         <td>01-10-1994</td>
       </tr>
     </table>
-    <p>
-    <ul>
-        <li>If the displayed data doesn't match the sequence (as in days of the week), provide a <code>sortabledata-XXX</code> class. The column will be sorted on <code>XXX</code>.
-        </li>
-        <li>Note that a secondary sort is always done on the first two columns (by the second, and then by the first column). This provides a crude way to sort by surname and name. (Look at sequence of "<em>Bluth</em>" rows changing when sorting on Last Name.)
-        </li>
-        <li>Rows get <code>odd</code> and <code>even</code> classes for CSS styling.
-        </li>
-        <li>If something looks more like a date than like a number (specifically <em>1999-01-01</em>, not e.g. <em>01-01-1999</em>) it will be sorted textually, not numerically. Dates aren't validated.
-        </li>
-        <li>If something looks like a number, javascript will make some wild guesses about it. It can turn out weird (try sorting on the "<em>No Date</em>" column).
-        </li>
-    </ul>
-    </p>
   </script>
 
   <!--  **** TinyMCE **** -->
