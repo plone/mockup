@@ -169,6 +169,7 @@ define([
           }
           search(fromPath, q);
         }
+
         if (path) {
           browse(searchables, term, path);
         } else {
@@ -187,7 +188,7 @@ define([
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
-        '        pat-relateditems="width: 300px;' +
+        '        data-pat-relateditems="width: 300px;' +
         '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
@@ -205,7 +206,7 @@ define([
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
-        '        pat-relateditems="width: 300px;' +
+        '        data-pat-relateditems="width: 300px;' +
         '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
@@ -231,7 +232,7 @@ define([
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
-        '        pat-relateditems="width: 300px;' +
+        '        data-pat-relateditems="width: 300px;' +
         '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
@@ -241,13 +242,18 @@ define([
       $('.pat-relateditems-tabs-search', $el).click();
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
-      $('.pat-relateditems-result-select', $el).first().on('click', function() {
+      expect($('.pat-relateditems-result-select')).to.have.length(13);
+      $('.pat-relateditems-result-select').first().on('click', function() {
         expect(pattern.$el.select2('data')).to.have.length(1);
       }).click();
+      clock.tick(1000);
 
       $el.remove();
       $('.select2-sizer, .select2-drop').remove();
     });
+
+
+
 
     it('allow only a single type to be selectable', function () {
       var $el = $('' +
@@ -280,7 +286,7 @@ define([
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
-        '        pat-relateditems="width: 300px;' +
+        '        data-pat-relateditems="width: 300px;' +
         '                          ajaxvocabulary: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
@@ -290,9 +296,10 @@ define([
       clock.tick(1000);
       var $items = $('.select2-results > li');
       expect(pattern.browsing).to.be.false;
+      expect($('.pat-relateditems-result-browse', $items)).to.have.length(5);
       $('.pat-relateditems-result-browse', $items).first().on('click', function() {
         expect(pattern.browsing).to.be.true;
-        expect(pattern.currentPath).to.equal($(this).attr('href'));
+        expect(pattern.currentPath).to.equal($(this).attr('data-path'));
       }).click();
 
       $el.remove();

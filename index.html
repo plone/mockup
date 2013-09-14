@@ -1876,13 +1876,16 @@ function($action, response, options) { ... }
     });
   </script>
   <script type="text/template" id="page_tinymce">
-
+  <p>
+    <a href="http://www.tinymce.com/">TinyMCE</a> version 4.0.x
+  </p>
   </script>
   <script type="text/example" class="example-tinymce" data-title="Default">
     <form>
       <textarea class="pat-tinymce"
-        data-pat-tinymce='{"relatedItems":
-                            { "ajaxvocabulary": "/relateditems-test.json"} }'
+        data-pat-tinymce='{"relatedItems": {
+                             "ajaxvocabulary": "/relateditems-test.json"
+                           } }'
         ></textarea>
     </form>
   </script>
