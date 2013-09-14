@@ -553,9 +553,9 @@ $ make bootstrap</pre>
       title: 'Adjust Text Size',
       description: 'Easily change <strong>text size</strong> on a page.',
       attributes: [
-        {attribute: 'smallbtn', type: 'Selector', defaultValue: '', description: 'Selector used to activate small text on click.'},
-        {attribute: 'normalbtn', type: 'Selector', defaultValue: '', description: 'Selector used to activate normal text on click.'},
-        {attribute: 'largebtn', type: 'Selector', defaultValue: '', description: 'Selector used to activate large text on click.'}
+        {attribute: 'smallbtn', type: 'Selector', defaultValue: null, description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'Selector', defaultValue: null, description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'Selector', defaultValue: 'null', description: 'Selector used to activate large text on click.'}
       ]
     });
   </script>
@@ -1200,9 +1200,9 @@ function($action, response, options) { ... }
       title: 'Picture',
       description: 'A responsive image widget.',
       attributes: [
-        {attribute: 'alt', type: 'String', defaultValue: '', description: 'Alternate text.'},
-        {attribute: 'attribute', type: 'Object', defaultValue: '{src: "data-src", media: "data-media"}', description: 'TODO'},
-        {attribute: 'klass', type: 'Object', defaultValue: '{loading: "picture-loading", error: "picture-error"}', description: 'TODO'}
+        {attribute: 'alt', type: 'String', defaultValue: '', description: 'Alternate text to be used on the resulting responsive image.'},
+        {attribute: 'attribute', type: 'Object', defaultValue: '{src: "data-src", media: "data-media"}', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping is looks for <i>data-src</i> to use as the <i>src</i> attribute for the resulting, and the same for <i>data-media</i> mapping to <i>media</i>.'},
+        {attribute: 'klass', type: 'Object', defaultValue: '{loading: "picture-loading", error: "picture-error"}', description: 'The relevant classes to be applied to the given image element at different stages of handling.'}
       ]
     });
   </script>
@@ -1229,7 +1229,7 @@ function($action, response, options) { ... }
       </dl>
     </div>
   </script>
-  <script type="text/example" class="example-picture">
+  <script type="text/example" class="example-picture" data-title="Alternative text">
 <div class="pat-picture" data-pat-picture-alt="Alternative text">
   <div data-src="http://placehold.it/480x320"></div>
   <div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"></div>
