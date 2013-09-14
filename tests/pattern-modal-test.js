@@ -143,6 +143,14 @@ define([
           done();
       }).click();
     });
+    it("redirects to base urls", function(){
+        var bla = $('<a class="pat-modal" />').patternModal().on('show.modal.patterns', function(e, modal){
+            expect(modal.defaults.actionOptions.redirectToUrl('ignore',
+                '<html><head><base href="testurl" /></head></html>')).to.equal('testurl');
+            expect(modal.defaults.actionOptions.redirectToUrl('ignore',
+                '<html><head><base href="testurl"></base></head></html>')).to.equal('testurl');
+        }).click();
+    });
 
     describe("modal positioning (findPosition) ", function() {
       //
