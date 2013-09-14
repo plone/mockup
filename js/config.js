@@ -55,6 +55,9 @@ var requirejsOptions = {
     'backbone': { exports: 'window.Backbone' },
     'picker.date': { deps: [ 'picker' ] },
     'picker.time': { deps: [ 'picker' ] },
+    'jquery.event.drag': { deps: ['jquery'] },
+    'jquery.event.drop': { deps: ['jquery'] },
+    'jquery.cookie': { deps: ['jquery'] },
     'sinon': { exports: 'window.sinon' },
     'sinon-fakexmlhttprequest': { exports: 'window.sinon',  deps: [ 'sinon' ] },
     'sinon-fakeserver': {

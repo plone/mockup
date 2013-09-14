@@ -336,8 +336,9 @@ $ make bootstrap</pre>
       <pre>make test</pre>
       <p>
         Right now tests are
-        <img src="https://api.travis-ci.org/plone/mockup.png?branch=master"
-             alt="Build Status" />.
+        <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
+        and coverage is
+        <a href='https://coveralls.io/r/plone/mockup?branch=master'><img src='https://coveralls.io/repos/plone/mockup/badge.png?branch=master' alt='Coverage Status' /></a> .
       </p>
       <h4>Adding new tests</h4>
       <p>To add new tests, you can add them into the <tt>tests</tt> directory.
@@ -1222,9 +1223,9 @@ function($action, response, options) { ... }
       title: 'Picture',
       description: 'A responsive image widget.',
       attributes: [
-        {attribute: 'alt', type: 'String', defaultValue: '', description: 'Alternate text to be used on the resulting responsive image.'},
-        {attribute: 'attribute', type: 'Object', defaultValue: '{src: "data-src", media: "data-media"}', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping is looks for <i>data-src</i> to use as the <i>src</i> attribute for the resulting, and the same for <i>data-media</i> mapping to <i>media</i>.'},
-        {attribute: 'klass', type: 'Object', defaultValue: '{loading: "picture-loading", error: "picture-error"}', description: 'The relevant classes to be applied to the given image element at different stages of handling.'}
+        {attribute: 'alt', type: 'String', defaultValue: 'null', description: 'Alternate text to be used on the resulting responsive image tag.'},
+        {attribute: 'attribute', type: 'Object', defaultValue: '{src: "data-src", media: "data-media"}', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping is looks for <i>data-src</i> attributes to use as the resulting <i>src</i> attribute for the resulting, and the same for <i>data-media</i> mapping to <i>media</i> for mediaquery information.'},
+        {attribute: 'klass', type: 'Object', defaultValue: '{loading: "picture-loading", error: "picture-error"}', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><i>loading</i> is the CSS class added to the element whilst an image is loading, and <i>error</i> is the CSS class added to the element if an error occurred whilst loading the image.'}
       ]
     });
   </script>
@@ -1233,26 +1234,11 @@ function($action, response, options) { ... }
       <u><strong>Responsive images pattern</strong></u>
       <p>This pattern load the last image that fulfill the media-query criteria.
         When multiple pictures are displayed it loads the images within the
-        visible viewport first. Will update images on <abbr>resize</abbr> event.</p>
-      <p></p>
-      <u><strong>Data Attributes</strong></u>
-      <p>Below are some notes about some of the available data attributes.</p>
-      <dl>
-        <dt>data-pat-picture-alt</dt>
-        <dd>Alternative text used on img tag</dd>
-        <dt>data-pat-picture-klass-loading</dt>
-        <dd>CSS class added to element while loading the image</dd>
-        <dt>data-pat-picture-klass-error</dt>
-        <dd>CSS class added to element if error occured while loading the image</dd>
-        <dt>data-pat-picture-attribute-src</dt>
-        <dd>Which attribute to fetch image source information from, defaults to <strong>data-src</strong></dd>
-        <dt>data-pat-picture-attribute-media</dt>
-        <dd>Which attribute to fetch image mediaquery information from, defaults to <strong>data-media</strong></dd>
-      </dl>
+        visible viewport first. Will update images on <abbr>resize</abbr> event.      </p>
     </div>
   </script>
   <script type="text/example" class="example-picture" data-title="Alternative text">
-<div class="pat-picture" data-pat-picture-alt="Alternative text">
+<div class="pat-picture" data-pat-picture="alt:Alternative text;">
   <div data-src="http://placehold.it/480x320"></div>
   <div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"></div>
   <div data-src="http://placehold.it/800x533" data-media="(min-width: 640px)"></div>
