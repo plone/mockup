@@ -46,7 +46,7 @@ define([
   $.fx.off = true;
 
    /* ==========================
-   TEST: Select2
+   TEST: TinyMCE
   ========================== */
 
   describe("TinyMCE", function() {
@@ -54,21 +54,37 @@ define([
       $('body').empty();
     });
 
-    it('create tinymce', function(){
-      var $el = $('<div><textarea class="pat-tinymce"></textarea></div>');
-      $('body').append($el);
+    it('creates tinymce', function(){
+      var $el = $('' +
+       '<div>' +
+       '  <textarea class="pat-tinymce">' +
+       '  </textarea>' +
+       '</div>').appendTo('body');
       registry.scan($el);
       expect($el.children().length).to.be.gt(1);
       tinymce.get(0).remove();
     });
 
-    it('initial tinymce value', function(){
-      var $el = $('<div><textarea class="pat-tinymce">foobar</textarea></div>');
-      $('body').append($el);
+    it('maintains an initial textarea value', function(){
+      var $el = $('' +
+       '<div>' +
+       '  <textarea class="pat-tinymce">' +
+       '    foobar' +
+       '  </textarea>' +
+       '</div>').appendTo('body');
       registry.scan($el);
       expect(tinymce.get(0).getContent()).to.be.equal('<p>foobar</p>');
     });
 
+    it('loads buttons for plugins', function() {
+      var $el = $('' +
+       '<div>' +
+       '  <textarea class="pat-tinymce">' +
+       '  </textarea>' +
+       '</div>').appendTo('body');
+      registry.scan($el);
+      expect(tinymce.get(0).buttons).to.contain.keys('plonelink', 'ploneimage');
+    });
   });
 
 });
