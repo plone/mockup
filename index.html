@@ -319,12 +319,22 @@ $ make bootstrap</pre>
       <pre>make</pre>
 
       <h3>Step 6: Testing</h3>
+      <h4>Running tests</h4>
       <p>And you can run tests with:</p>
-  <pre>make test</pre>
+      <pre>make test</pre>
       <p>
         Right now tests are
         <img src="https://api.travis-ci.org/plone/mockup.png?branch=master"
              alt="Build Status" />.
+      </p>
+      <h4>Adding new tests</h4>
+      <p>To add new tests, you can add them into the <tt>tests</tt> directory.
+      They will automatically be picked up by the test runner if they are named
+      with a suffix of:</p>
+      <pre>-test.js</pre>
+      <p>For example, to add a new test for the <tt>foobar</tt> pattern, 
+      you should name your test file like so:</p>
+      <pre>pattern-foobar-test.js</pre>
       </p>
 
       <h3>Step 7: Releasing/Passing bundles on to Plone developers</h3>
