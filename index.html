@@ -334,6 +334,8 @@ $ make bootstrap</pre>
       <h4>Running tests</h4>
       <p>And you can run tests with:</p>
       <pre>make test</pre>
+      <p>This will start a continuous process that will rerun the tests when you change any of
+      the js files.</p>
       <p>
         Right now tests are
         <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
@@ -349,6 +351,16 @@ $ make bootstrap</pre>
       you should name your test file like so:</p>
       <pre>pattern-foobar-test.js</pre>
       </p>
+      <h4>Debugging tests</h4>
+      <p>While the tests are running you can connect debug console on</p>
+      <pre>http://localhost:9876/</pre>
+      <p>if you add the "debugger;" statement into your code or test while your browsers JS window is
+      open (for example right-click &gt; inspect element &gt; sources) then the debugger will be activated
+      and you can step through the code.</p>
+      <h4>Test coverage</h4>
+      <pre>./coverage</pre>
+      <p>Find the index.html file under the folder for the browser you are using. This will tell you
+      the current coverage from the last test run</p>
 
       <h3>Step 7: Releasing/Passing bundles on to Plone developers</h3>
       <p>
