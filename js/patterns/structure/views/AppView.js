@@ -47,7 +47,7 @@ define([
         items: [
           new ButtonGroup({
             items: [
-              new Button({title: 'Cut', icon: 'cut', disabled: true}),
+              new Button({title: 'Cut'}),
               new Button({title: 'Copy'}),
               new Button({title: 'Delete', context: 'danger'}),
             ]
