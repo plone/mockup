@@ -73,8 +73,7 @@ define([
       self.$el.addClass('order-support');
       var start = null;
       /* drag and drop reording support */
-      self.$('tbody').on('dragstart', 'tr', function(e, dd) {
-        console.log('dragstart');
+      self.$('tr').drag('start', function(e, dd) {
         var dragged = this;
         $(dragged).addClass('structure-dragging');
         $.drop({
@@ -91,9 +90,7 @@ define([
           css({opacity: 0.75, position: 'absolute'}).
           appendTo(document.body);
       })
-      .on('drag', 'tr', function(e, dd) {
-        console.log('drag');
-
+      .drag(function(e, dd) {
         /*jshint eqeqeq:false */
         $( dd.proxy ).css({
           top: dd.offsetY,
@@ -111,7 +108,7 @@ define([
           /* detect here if we should start loading more */
           var $rows = self.$('tr');
           var $el = $(this);
-          if(($el.index() + 3) > $rows.length){
+          if(($el.index() + 5) > $rows.length){
             if(!self.continuous){
               self.continuous = true;
               self.collection.nextPage();
@@ -119,17 +116,13 @@ define([
           }
         }
       })
-      .on('dragend', 'tr', function(e, dd) {
-        console.log('dragend');
-
+      .drag('end', function(e, dd) {
         var $el = $(this);
         $el.removeClass('structure-dragging');
         $(dd.proxy).remove();
         self.moveItem($el, $el.index() - start);
       })
-      .on('dropinit', 'tr', function(e, dd ) {
-        console.log('draginit');
-
+      .drop('init', function(e, dd ) {
         /*jshint eqeqeq:false */
         /* XXX Cannot use triple equals here */
         return (this == dd.drag) ? false: true;
