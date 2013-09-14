@@ -34,7 +34,7 @@ module.exports = function(grunt) {
           type : 'lcovonly',
           dir : 'coverage/'
         },
-        browsers: ['sauce_chrome', 'sauce_firefox'],
+        browsers: ['sauce_chrome'],
         sauceLabs: {
           testName: 'PloneMockup',
           startConnect: true
@@ -42,19 +42,18 @@ module.exports = function(grunt) {
         customLaunchers: {
           'sauce_chrome': {
              base: 'SauceLabs',
-             platform: 'Linux',
+             platform: 'Windows 8',
              browserName: 'chrome'
            },
           'sauce_firefox': {
              base: 'SauceLabs',
-             platform: 'Linux',
+             platform: 'Windows 8',
              browserName: 'firefox'
            },
            'sauce_ie': {
              base: 'SauceLabs',
              platform: 'Windows 8',
-             browserName: 'internet explorer',
-             version: '10'
+             browserName: 'internet explorer'
            }
         }
       }
