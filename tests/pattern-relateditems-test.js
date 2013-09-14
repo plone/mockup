@@ -252,6 +252,40 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
+    it('deselect an item using click then backspace', function () {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          ajaxvocabulary: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+
+      var clock = sinon.useFakeTimers();
+
+      $('.pat-relateditems-tabs-search', $el).click();
+      clock.tick(1000);
+      expect(pattern.$el.select2('data')).to.have.length(0);
+      expect($('.pat-relateditems-result-select')).to.have.length(13);
+      $('.pat-relateditems-result-select').first().on('click', function() {
+        expect(pattern.$el.select2('data')).to.have.length(1);
+      }).click();
+      clock.tick(1000);
+      // select our first choice
+      var $choice = $('.select2-search-choice').first();
+      $choice.click();
+      expect($('.select2-search-choice-focus').first().text()).to.equal($choice.text());
+
+      // Need to simulate a backspace to remove the selected item: below doesn't work
+      var backspaceEvent = $.Event("keydown");
+      backspaceEvent.ctrlKey = false;
+      backspaceEvent.which = 8;
+      $('.select2-search-field input').trigger( backspaceEvent );
+      expect(pattern.$el.select2('data')).to.have.length(0);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop').remove();
+    });
 
 
 
@@ -301,6 +335,38 @@ define([
         expect(pattern.browsing).to.be.true;
         expect(pattern.currentPath).to.equal($(this).attr('data-path'));
       }).click();
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
+    });
+
+
+
+    it('clicking on breadcrumbs goes back up', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          ajaxvocabulary: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+
+      var clock = sinon.useFakeTimers();
+      $('.pat-relateditems-tabs-search', $el).click();
+      clock.tick(1000);
+      var $items = $('.select2-results > li');
+      expect(pattern.browsing).to.be.false;
+      expect($('.pat-relateditems-result-browse', $items)).to.have.length(5);
+      $('.pat-relateditems-result-browse', $items).first().click();
+      clock.tick(1000);
+      var $crumbs = $('.pat-relateditems-path a');
+      // /about/staff
+      expect($crumbs).to.have.length(3);
+      // /about
+      $crumbs.eq(1).on('click', function() {
+      }).click();
+      clock.tick(1000);
+      expect(pattern.currentPath).to.equal('/about');
 
       $el.remove();
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
