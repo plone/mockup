@@ -78,6 +78,16 @@ define([
       this.toolbar.items[0].disable();
       this.toolbar.items[1].disable();
 
+      this.selected_collection.on('add remove', function(modal, collection) {
+        if (collection.length) {
+          this.toolbar.items[0].enable();
+          this.toolbar.items[1].enable();
+        } else {
+          this.toolbar.items[0].disable();
+          this.toolbar.items[1].disable();
+        }
+      }, this);
+
       /* detect shift clicks */
       this.shift_clicked = false;
       var self = this;
