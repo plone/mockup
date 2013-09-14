@@ -141,6 +141,108 @@ module.exports = function(grunt) {
         ext: '.min.css',
         report: 'min'
       }
+    },
+    sed: {
+      'bootstrap': {
+        path: 'node_modules/lcov-result-merger/index.js',
+        pattern: 'throw new Error(\'Unknown Prefix ',
+        replacement: '//throw// new Error(\'Unknown Prefix '
+      },
+      'widgets-fontawesome': {
+        path: 'build/widgets.min.css',
+        pattern: '../bower_components/font-awesome/font/fontawesome-webfont',
+        replacement: '++resource++plone.app.widgets-fontawesome-webfont'
+      },
+      'widgets-select2png': {
+        path: 'build/widgets.min.css',
+        pattern: 'select2.png',
+        replacement: '++resource++plone.app.widgets-select2.png'
+      },
+      'widgets-select2spinnergif': {
+        path: 'build/widgets.min.css',
+        pattern: 'select2-spinner.gif',
+        replacement: '++resource++plone.app.widgets-select2-spinner.gif'
+      },
+      'widgets-icomoon': {
+        path: 'build/widgets.min.css',
+        pattern: 'fonts/icomoon',
+        replacement: '++resource++plone.app.widgets-icomoon'
+      },
+      'widgets-spritemap': {
+        path: 'build/widgets.min.css',
+        pattern: 'images/spritemap',
+        replacement: 'spritemap'
+      },
+      'toolbar-halflings': {
+        path: 'build/toolbar.min.css',
+        pattern: '../img/glyphicons-halflings.png',
+        replacement: '++resource++plone.app.toolbar-glyphicons-halflings.png'
+      },
+      'toolbar-glyphiconswhite': {
+        path: 'build/toolbar.min.css',
+        pattern: '../img/glyphicons-halflings-white.png',
+        replacement: '++resource++plone.app.toolbar-glyphicons-halflings-white.png'
+      },
+      'toolbar-fontawesome': {
+        path: 'build/toolbar.min.css',
+        pattern: '../bower_components/font-awesome/font/fontawesome-webfont',
+        replacement: '++resource++plone.app.toolbar-fontawesome-webfont'
+      },
+      'toolbar-select2png': {
+        path: 'build/toolbar.min.css',
+        pattern: 'select2.png',
+        replacement: '++resource++plone.app.toolbar-select2.png'
+      },
+      'toolbar-select2spinnergif': {
+        path: 'build/toolbar.min.css',
+        pattern: 'select2-spinner.gif',
+        replacement: '++resource++plone.app.toolbar-select2-spinner.gif'
+      },
+      'toolbar-icomoon': {
+        path: 'build/toolbar.min.css',
+        pattern: 'fonts/icomoon',
+        replacement: '++resource++plone.app.toolbar-icomoon'
+      },
+      'toolbar-spritemap': {
+        path: 'build/toolbar.min.css',
+        pattern: 'images/spritemap',
+        replacement: 'spritemap'
+      },
+      'docs-lessjs': {
+        path: 'docs/dev/index.html',
+        pattern: '<script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.4.1.js"></script>',
+        replacement: ''
+      },
+      'docs-docscss': {
+        path: 'docs/dev/index.html',
+        pattern: '<style type="text/less">@import "less/docs.less";@isBrowser\: true;</style>',
+        replacement: '<link rel="stylesheet" type="text/css" href="docs.min.css" />'
+      },
+      'docs-halflings': {
+        path: 'docs/dev/docs.min.css',
+        pattern: '../img/glyphicons-halflings.png@glyphicons-halflings.png',
+        replacement: ''
+      },
+      'docs-halflings-white': {
+        path: 'docs/dev/docs.min.css',
+        pattern: '../img/glyphicons-halflings-white.png',
+        replacement: 'glyphicons-halflings-white.png'
+      },
+      'docs-fontawesome': {
+        path: 'docs/dev/docs.min.css',
+        pattern: '../bower_components/font-awesome/font/fontawesome-webfont',
+        replacement: 'fontawesome-webfont'
+      },
+      'docs-icomoon': {
+        path: 'docs/dev/docs.min.css',
+        pattern: 'fonts/icomoon',
+        replacement: 'icomoon'
+      },
+      'docs-spritemap': {
+        path: 'docs/dev/docs.min.css',
+        pattern: 'images/spritemap',
+        replacement: 'spritemap'
+      }
     }
   });
 
@@ -150,22 +252,42 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-sed');
 
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
       'less:widgets',
-      'cssmin:widgets'
+      'cssmin:widgets',
+      'sed:widgets-fontawesome',
+      'sed:widgets-select2png',
+      'sed:widgets-select2spinnergif',
+      'sed:widgets-icomoon',
+      'sed:widgets-spritemap'
       ]);
   grunt.registerTask('compile-toolbar', [
       'requirejs:toolbar',
       'uglify:toolbar',
       'less:toolbar',
-      'cssmin:toolbar'
+      'cssmin:toolbar',
+      'sed:toolbar-halflings',
+      'sed:toolbar-glyphiconswhite',
+      'sed:toolbar-fontawesome',
+      'sed:toolbar-select2png',
+      'sed:toolbar-select2spinnergif',
+      'sed:toolbar-icomoon',
+      'sed:toolbar-spritemap'
       ]);
   grunt.registerTask('docs', [
       'uglify:docs',
       'less:docs',
-      'cssmin:docs'
+      'cssmin:docs',
+      'sed:docs-lessjs',
+      'sed:docs-docscss',
+      'sed:docs-halflings',
+      'sed:docs-halflings-white',
+      'sed:docs-fontawesome',
+      'sed:docs-icomoon',
+      'sed:docs-spritemap'
       ]);
   grunt.registerTask('default', ['test-ci', 'compile', 'docs']);
 
