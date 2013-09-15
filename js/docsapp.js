@@ -99,11 +99,15 @@ define([
 
               }
             }
-            if (defaultValue) {
-              if (model.get('type') === 'String') {
+            if (defaultValue !== undefined) {
+              if ((model.get('type') === 'String') && (defaultValue !== null)) {
                 defaultValue = "'"+defaultValue+"'";
               }
-              model.set('defaultValue', '<code>'+_.escape(defaultValue)+'</code>');
+              if (defaultValue) {
+                model.set('defaultValue', '<code>'+_.escape(defaultValue)+'</code>');
+              } else {
+                model.set('defaultValue', '<code>'+defaultValue+'</code>');
+              }
             }
           }
         }
