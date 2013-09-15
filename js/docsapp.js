@@ -100,7 +100,7 @@ define([
               }
             }
             if (defaultValue) {
-              model.set('defaultValue', '<code>'+defaultValue+'</code>');
+              model.set('defaultValue', '<code>'+_.escape(defaultValue)+'</code>');
             }
           }
         }

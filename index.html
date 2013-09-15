@@ -1454,7 +1454,7 @@ function($action, response, options) { ... }
       description: 'An advanced widget for <strong>selecting related items</strong>.',
       attributes: [
         {attribute: 'ajaxvocabulary', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
-        {attribute: 'attributes', type: 'List', description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
+        {attribute: 'attributes', type: 'Array', description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
         {attribute: 'basePath', type: 'String', description: 'If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results.'},
         {attribute: 'breadCrumbTemplate', type: 'String', description: 'Template to use for a single item in the breadcrumbs.'},
         {attribute: 'breadCrumbTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>breadCrumbTemplate</code>.'},
@@ -1464,7 +1464,7 @@ function($action, response, options) { ... }
         {attribute: 'cache', type: 'Boolean', description: 'Whether or not results from the server should be cached.'},
         {attribute: 'closeOnSelect', type: 'Boolean', description: 'Select2 option. Whether or not the drop down should be closed when an item is selected.'},
         {attribute: 'dropdownCssClass', type: 'String', description: 'Select2 option. CSS class to add to the drop down element.'},
-        {attribute: 'folderTypes', type: 'List', description: 'Types which should be considered browsable.'},
+        {attribute: 'folderTypes', type: 'Array', defaultValue: '<code>["Folder"]</code>', description: 'Types which should be considered browsable.'},
         {attribute: 'homeText', type: 'String', defaultValue: 'home', description: 'Text to display in the initial breadcrumb item.'},
         {attribute: 'maximumSelectionSize', type: 'Integer', description: 'Do not change this option.'},
         {attribute: 'multiple', type: 'Boolean', description: 'Do not change this option.'},
@@ -1473,13 +1473,13 @@ function($action, response, options) { ... }
         {attribute: 'resultTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template for an item in the in the list of results. Refer to source for default.'},
         {attribute: 'resultTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>resultTemplate</code>.'},
         {attribute: 'searchText', type: 'String', defaultValue: 'Search', description: 'Text which will be inserted into the "Search" tab.'},
-        {attribute: 'selectableTypes', type: 'List', description: 'If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.'},
+        {attribute: 'selectableTypes', type: 'Array', description: 'If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.'},
         {attribute: 'selectionTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template for element that will be used to construct a selected item.'},
         {attribute: 'selectionTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>selectionTemplate</code>.'},
         {attribute: 'separator', type: 'String', description: 'Select2 option. String which separates multiple items.'},
         {attribute: 'tabsTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template used to construct the tabs for toggling between "Browse" and "Search".'},
         {attribute: 'tabsTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>tabsTemplate</code>.'},
-        {attribute: 'tokenSeparators', type: 'List', description: 'Select2 option, refer to select2 documentation.'},
+        {attribute: 'tokenSeparators', type: 'Array', defaultValue: '<code>[",", " "]</code>', description: 'Select2 option, refer to select2 documentation.'},
         {attribute: 'width', type: 'String', description: 'Specify a width for the widget.'}
       ]
     });
@@ -1861,7 +1861,7 @@ function($action, response, options) { ... }
           + '  maximumSelectionSize: 1,\n'
           + '  placeholder: "Search for item on site..."\n'
           + '}</pre>', description: 'TODO.'},
-        {attribute: 'text', type: 'List', defaultValue: '<pre>{\n'
+        {attribute: 'text', type: 'Array', defaultValue: '<pre>{\n'
           + '  insertBtn: "Insert", // so this can be configurable for different languages\n'
           + '  cancelBtn: "Cancel",\n'
           + '  insertHeading: "Insert link",\n'
@@ -1881,7 +1881,7 @@ function($action, response, options) { ... }
           + '"Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile," +\n'
           + '"Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview," +\n'
           + '"Large (768x768):large"</pre>', description: 'TODO.'},
-        {attribute: 'targetList', type: 'List', defaultValue: '<pre>[\n'
+        {attribute: 'targetList', type: 'Array', defaultValue: '<pre>[\n'
           + '  {text: "Open in this window / frame", value: ""},\n'
           + '  {text: "Open in new window", value: "_blank"},\n'
           + '  {text: "Open in parent window / frame", value: "_parent"},\n'
