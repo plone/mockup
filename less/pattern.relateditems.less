@@ -23,47 +23,9 @@
 .pat-relateditems-container {
   display: inline-block;
   position: relative;
-  padding-top: 20px;
-
-  .pat-relateditems-tabs {
-
-    z-index: 10001;
-    position: relative;
-
-    .pat-relateditems-tab {
-      padding-top: 6px;
-      padding-right: 12px;
-      padding-bottom: 6px;
-      padding-left: 12px;
-      line-height: 18px;
-      border: 1px solid transparent;
-      border-bottom-style: none;
-      .border-top-radius(4px);
-      display: inline-block;
-      background-color: transparent;
-      margin-bottom: -1px;
-
-      &:hover {
-        border-color: #aaa;
-      }
-
-      &.pat-active {
-        color: #555555;
-        border-color: #aaa;
-        background-color: #f1f1f1;
-
-        &:hover {
-          text-decoration: none;
-        }
-      }
-
-    }
-
-  }
 }
 .pat-relateditems-path {
   display: block;
-  height: 20px;
   line-height: 20px;
   background-color: #f1f1f1;
   font-size: 12px;
@@ -71,9 +33,15 @@
   border-bottom-style: none;
   z-index: 9999;
   position: relative;
+  padding: 0 6px;
+  color: #333;
 
   a {
     padding: 0 6px;
+  }
+
+  em {
+    color: #666;
   }
 }
 .pat-relateditems-result {
