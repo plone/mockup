@@ -576,9 +576,9 @@ $ make bootstrap</pre>
       title: 'Adjust Text Size',
       description: 'Easily change <strong>text size</strong> on a page.',
       attributes: [
-        {attribute: 'smallbtn', type: 'Selector', description: 'Selector used to activate small text on click.'},
-        {attribute: 'normalbtn', type: 'Selector', description: 'Selector used to activate normal text on click.'},
-        {attribute: 'largebtn', type: 'Selector', description: 'Selector used to activate large text on click.'}
+        {attribute: 'smallbtn', type: 'String', description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'String', description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'String', description: 'Selector used to activate large text on click.'}
       ]
     });
   </script>
@@ -737,25 +737,25 @@ $ make bootstrap</pre>
         {attribute: 'delay', type: 'Integer', description: 'Delay in ms after user types before searching.'},
         {attribute: 'highlight', type: 'String', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
         {attribute: 'minimumInputLength', type: 'Integer', description: 'Number of characters user must type before search begins.'},
-        {attribute: 'input', type: 'Selector', description: 'Selector for element that will be used for the livesearch input.'},
-        {attribute: 'toggleTarget', type: 'Selector', description: 'Selector for element that will be shown when results are found.'},
+        {attribute: 'input', type: 'String', description: 'Selector for element that will be used for the livesearch input.'},
+        {attribute: 'toggleTarget', type: 'String', description: 'Selector for element that will be shown when results are found.'},
         {attribute: 'toggleClass', type: 'String', description: 'CSS class that will be added to target toggle element when results are found.'},
         {attribute: 'positionToggleWithInput', type: 'Boolean', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
         {attribute: 'setPosition', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Function which will be used to set the position of the toggle element.'},
-        {attribute: 'resultsTarget', type: 'Selector', description: 'Selector for element where results from the server will be inserted.'},
+        {attribute: 'resultsTarget', type: 'String', description: 'Selector for element where results from the server will be inserted.'},
         {attribute: 'resultContainerTemplate', type: 'String', description: 'Template for the element that will contain results. If <code>resultContainerTemplateSelector</code> is set, this will not be used.'},
-        {attribute: 'resultContainerTemplateSelector', type: 'Selector', description: 'Selector for an element in the DOM to use in place of <code>resultContainerTemplate</code>.'},
-        {attribute: 'resultSelector', type: 'Selector', description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultContainerTemplateSelector', type: 'String', description: 'Selector for an element in the DOM to use in place of <code>resultContainerTemplate</code>.'},
+        {attribute: 'resultSelector', type: 'String', description: 'Will be used to select result items from within the result container.'},
         {attribute: 'resultTemplate', type: 'String', defaultValue: $('#ls_attr_resultTemplate').html(), description: 'Will be used to select result items from within the result container.'},
-        {attribute: 'resultTemplateSelector', type: 'Selector', description: 'Selector for element to be used in place of <code>resultTemplate</code>.'},
+        {attribute: 'resultTemplateSelector', type: 'String', description: 'Selector for element to be used in place of <code>resultTemplate</code>.'},
         {attribute: 'helpTemplate', type: 'String', description: "Template for the element that will contain help messages, such as '<i>No results found.</i>' or '<i>Type 3 more characters to search.</i>'"},
-        {attribute: 'helpTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>helpTemplate</code>."},
+        {attribute: 'helpTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>helpTemplate</code>."},
         {attribute: 'typeMoreTemplate', type: 'String', description: "Template for message which is displayed if the current input length is less than <code>minimumInputLength</code>."},
-        {attribute: 'typeMoreTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>typeMoreTemplate</code>."},
+        {attribute: 'typeMoreTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>typeMoreTemplate</code>."},
         {attribute: 'noResultsTemplate', type: 'String', defaultValue: 'No results found.', description: "Template for message that is displayed after a search when no results were found."},
-        {attribute: 'noResultsTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>noResultsTemplate</code>."},
+        {attribute: 'noResultsTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>noResultsTemplate</code>."},
         {attribute: 'searchingTemplate', type: 'String', defaultValue: 'Searching...', description: "Template for message which will be displayed after a search has started and before it has ended."},
-        {attribute: 'searchingTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>searchingTemplate</code>."}
+        {attribute: 'searchingTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>searchingTemplate</code>."}
       ]
     });
   </script>
@@ -807,10 +807,10 @@ function($action, response, options) { ... }
 
         {attribute: 'triggers', type: 'Array', description: 'Add event listeners to elements on the page which will open the modal when triggered. Pass an <code>Array</code> of strings with the format <code>["<event> <selector>"]</code> or <code>["<event>"]</code>. For example, <code>["click .someButton"]</code>. If you pass in only an event such as, <code>["change"]</code>, the event listener will be added to the element on which the modal was initiated, usually a link or button.'},
         {attribute: 'title', type: 'String', description: 'A string to place in the modal header. If title is provided titleSelector is not used.'},
-        {attribute: 'titleSelector', type: 'Selector', description: 'Selector for an element to extract from the content provided to the modal and place in the modal header.'},
-        {attribute: 'content', type: 'Selector', description: 'Selector for an element within the content provided to the modal to use as the modal body.'},
-        {attribute: 'prependContent', type: 'Selector', description: 'Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.'},
-        {attribute: 'backdrop', type: 'Selector', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.'},
+        {attribute: 'titleSelector', type: 'String', description: 'Selector for an element to extract from the content provided to the modal and place in the modal header.'},
+        {attribute: 'content', type: 'String', description: 'Selector for an element within the content provided to the modal to use as the modal body.'},
+        {attribute: 'prependContent', type: 'String', description: 'Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.'},
+        {attribute: 'backdrop', type: 'String', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.'},
         {
           attribute: 'backdropOptions',
           type: 'Object',
@@ -818,7 +818,7 @@ function($action, response, options) { ... }
           description: null,
           attributes: backdropAttributes
         },
-        {attribute: 'buttons', type: 'Selector', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
+        {attribute: 'buttons', type: 'String', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
         {attribute: 'automaticallyAddButtonActions', type: 'Boolean', description: 'Automatically create actions for elements matched with the <code>buttons</code> selector. They will use the options provided in <code>actionOptions</code>.'},
         {attribute: 'loadLinksWithinModal', type: 'Boolean', description: 'Automatically load links (<code>&lt;a&gt;</code>) inside of the modal using AJAX.'},
         {attribute: 'actions', type: 'Object', description: 'A hash of selector to options. Where options can include any of the defaults from <code>actionOptions</code>. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
@@ -845,7 +845,7 @@ function($action, response, options) { ... }
           description: 'Configure the defaults for how actions will be handled. Any variables from the pattern defaults can also be set here which will allow the actions to override any options such as width, height, etc.',
           attributes: [
             {attribute: 'eventType', type: 'String', defaultValue: '"click"', description: 'The event to bind to the element matched for the action.'},
-            {attribute: 'target', type: 'Selector', defaultValue: 'null', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
+            {attribute: 'target', type: 'String', defaultValue: 'null', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
             {attribute: 'ajaxUrl', type: 'String, Function', defaultValue: 'null', description: 'A URL string or a function($actionElement, actionOptions) that returns a string.'},
             {attribute: 'modalFunction', type: 'String', defaultValue: 'null', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, "hide".'},
             {attribute: 'redirectOnResponse', type: 'Boolean', defaultValue: 'false', description: 'Whether or not to redirect the window to `redirectToUrl` after a succesful AJAX response.'},
@@ -854,7 +854,7 @@ function($action, response, options) { ... }
             {attribute: 'timeout', type: 'Integer', defaultValue: '5000', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
             {attribute: 'displayInModal', type: 'Boolean', defaultValue: 'true', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
             {attribute: 'reloadWindowOnClose', type: 'Boolean', defaultValue: 'true', description: 'Whether or not to reload the window when the modal is closed due to this action.'},
-            {attribute: 'error', type: 'Selector', defaultValue: '.portalMessage.error', description: 'Match content from an ajaxSubmit that indicates an error. If content is found, `onFormError` is called.'},
+            {attribute: 'error', type: 'String', defaultValue: '.portalMessage.error', description: 'Match content from an ajaxSubmit that indicates an error. If content is found, `onFormError` is called.'},
             {attribute: 'onSuccess', type: 'Function', defaultValue: 'null', description: 'Function is called after a successful AJAX request. Arguments: response, state, xhr, form.'},
             {attribute: 'onError', type: 'Function', defaultValue: 'null', description: 'Function is called if an AJAX request results in an error. Arguments: response, state, xhr, form.'},
             {attribute: 'onFormError', type: 'Function', defaultValue: 'null', description: 'Function is called if an AJAX request is successful, but content in the response matches the `error` selector. Arguments: response, state, xhr, form.'},

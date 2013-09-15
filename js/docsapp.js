@@ -100,6 +100,9 @@ define([
               }
             }
             if (defaultValue) {
+              if (model.get('type') === 'String') {
+                defaultValue = "'"+defaultValue+"'";
+              }
               model.set('defaultValue', '<code>'+_.escape(defaultValue)+'</code>');
             }
           }
