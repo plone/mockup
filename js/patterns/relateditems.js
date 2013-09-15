@@ -52,6 +52,7 @@ define([
       closeOnSelect: false,
       basePath: '/',
       searchText: 'Search:',
+      searchAllText: 'entire site',
       homeText: 'home',
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -140,7 +141,7 @@ define([
       var path = self.currentPath ? self.currentPath : self.options.basePath;
       var html;
       if (path === '/') {
-        html = self.applyTemplate('breadCrumbs', {items:'<em>entire site</em>', searchText: self.options.searchText});
+        html = self.applyTemplate('breadCrumbs', {items:'<em>'+self.options.searchAllText+'</em>', searchText: self.options.searchText});
       } else {
         var paths = path.split('/');
         var itemPath = '';
