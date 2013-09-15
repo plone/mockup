@@ -161,12 +161,12 @@ require([
   <!-- * Reused * -->
   <script>
   var backdropAttributes = [
-    {attribute: 'zIndex', type: 'String', defaultValue: '<code>"1040"</code>', description: 'Value for <code>z-index</code> to be applied to backdrop.'},
-    {attribute: 'opacity', type: 'String', defaultValue: '<code>"0.8"</code>', description: 'This property allows you to control the transparency or opacity of the backdrop.'},
-    {attribute: 'klass', type: 'String', defaultValue: '<code>"backdrop"</code>', description: 'Set the CSS class applied to the backdrop. Useful if you want to apply your own styling to the backdrop.'},
-    {attribute: 'klassActive', type: 'String', defaultValue: '<code>"backdrop-active"</code>', description: 'Set the CSS class which is applied when the backdrop is made active.'},
-    {attribute: 'closeOnEsc', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not to close the backdrop (and modal) when the "Escape" key is pressed.'},
-    {attribute: 'closeOnClick', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not to close the backdrop (and modal) when the backdrop is clicked.'},
+    {attribute: 'zIndex', type: 'String', description: 'Value for <code>z-index</code> to be applied to backdrop.'},
+    {attribute: 'opacity', type: 'String', description: 'This property allows you to control the transparency or opacity of the backdrop.'},
+    {attribute: 'klass', type: 'String', description: 'Set the CSS class applied to the backdrop. Useful if you want to apply your own styling to the backdrop.'},
+    {attribute: 'klassActive', type: 'String', description: 'Set the CSS class which is applied when the backdrop is made active.'},
+    {attribute: 'closeOnEsc', type: 'Boolean', description: 'Whether or not to close the backdrop (and modal) when the "Escape" key is pressed.'},
+    {attribute: 'closeOnClick', type: 'Boolean', description: 'Whether or not to close the backdrop (and modal) when the backdrop is clicked.'},
   ];
   </script>
 
@@ -576,9 +576,9 @@ $ make bootstrap</pre>
       title: 'Adjust Text Size',
       description: 'Easily change <strong>text size</strong> on a page.',
       attributes: [
-        {attribute: 'smallbtn', type: 'Selector', defaultValue: '<code>null</code>', description: 'Selector used to activate small text on click.'},
-        {attribute: 'normalbtn', type: 'Selector', defaultValue: '<code>null</code>', description: 'Selector used to activate normal text on click.'},
-        {attribute: 'largebtn', type: 'Selector', defaultValue: '<code>null</code>', description: 'Selector used to activate large text on click.'}
+        {attribute: 'smallbtn', type: 'Selector', description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'Selector', description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'Selector', description: 'Selector used to activate large text on click.'}
       ]
     });
   </script>
@@ -611,12 +611,12 @@ $ make bootstrap</pre>
       attributes: [
         {attribute: 'allowMsg', type: 'String', defaultValue: 'Allow', description: 'Text on button used to allow cookies.'},
         {attribute: 'askPermissionMsg', type: 'String', defaultValue: 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
-        {attribute: 'cookieName', type: 'String', defaultValue: '<code>Allow_Cookies_For_Site</code>', description: 'Name of cookie used to store the value of this setting.'},
+        {attribute: 'cookieName', type: 'String', description: 'Name of cookie used to store the value of this setting.'},
         {attribute: 'denyMsg', type: 'String', defaultValue: 'Deny', description: 'Text on button used to deny cookies.'},
-        {attribute: 'shouldAsk', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Should user be prompted about cookies?'},
-        {attribute: 'shouldEnable', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Display a message about enabling cookies if they are disabled.'},
+        {attribute: 'shouldAsk', type: 'Boolean', description: 'Should user be prompted about cookies?'},
+        {attribute: 'shouldEnable', type: 'Boolean', description: 'Display a message about enabling cookies if they are disabled.'},
         {attribute: 'shouldEnableMsg', type: 'String', defaultValue: 'You should enable cookies to be able to login.', description: 'A message about enabling cookies if they are disabled, which will be displayed if shouldEnable is true.'},
-        {attribute: 'shouldEnableSelector', type: 'String', defaultValue: '<code>.login</code>', description: '<code>shouldEnable</code> message selector.'}
+        {attribute: 'shouldEnableSelector', type: 'String', description: '<code>shouldEnable</code> message selector.'}
       ]
     });
   </script>
@@ -637,15 +637,15 @@ $ make bootstrap</pre>
       title: 'Expose',
       description: 'Exposes the focused element by <strong>darkening everything else on the page</strong>. Useful to focus the user attention on a particular area.',
       attributes: [
-        {attribute: 'backdrop', type: 'String', defaultValue: '<code>body</code>', description: 'Selector of parent element to use as backdrop.'},
-        {attribute: 'backdropCloseOnClick', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Cancel expose on click if true.'},
-        {attribute: 'backdropCloseOnEsc', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Cancel expose on escape if true.'},
-        {attribute: 'backdropKlass', type: 'String', defaultValue: '<code>backdrop</code>', description: 'TODO'},
-        {attribute: 'backdropKlassActive', type: 'String', defaultValue: '<code>backdrop-active</code>', description: 'TODO'},
-        {attribute: 'backdropOpacity', type: 'Float', defaultValue: '<code>0.8</code>', description: 'Backdrop opacity value between 0 and 1.'},
-        {attribute: 'backdropZIndex', type: 'Integer', defaultValue: '<code>1000</code>', description: 'Z-index of backdrop overlay.'},
-        {attribute: 'klassActive', type: 'String', defaultValue: '<code>active</code>', description: 'TODO'},
-        {attribute: 'triggers', type: 'String', defaultValue: '<code>focusin</code>', description: 'Events that cause the expose feature to be triggered.'}
+        {attribute: 'backdrop', type: 'String', description: 'Selector of parent element to use as backdrop.'},
+        {attribute: 'backdropCloseOnClick', type: 'Boolean', description: 'Cancel expose on click if true.'},
+        {attribute: 'backdropCloseOnEsc', type: 'Boolean', description: 'Cancel expose on escape if true.'},
+        {attribute: 'backdropKlass', type: 'String', description: 'TODO'},
+        {attribute: 'backdropKlassActive', type: 'String', description: 'TODO'},
+        {attribute: 'backdropOpacity', type: 'Float', description: 'Backdrop opacity value between 0 and 1.'},
+        {attribute: 'backdropZIndex', type: 'Integer', description: 'Z-index of backdrop overlay.'},
+        {attribute: 'klassActive', type: 'String', description: 'TODO'},
+        {attribute: 'triggers', type: 'String', description: 'Events that cause the expose feature to be triggered.'}
       ]
     });
   </script>
@@ -689,8 +689,8 @@ $ make bootstrap</pre>
       title: 'Form Unload Alert',
       description: 'A pattern to <strong>warn user when changes are unsaved</strong> and they try to navigate away from page.',
       attributes: [
-        {attribute: 'changingEvents', type: 'String', defaultValue: '<code>change keyup paste</code>', description: 'Events on which to check for changes (space-separated).'},
-        {attribute: 'changingFields', type: 'String', defaultValue: '<code>input,select,textarea,fileupload</code>', description: 'Fields on which to check for changes (comma-separated).'},
+        {attribute: 'changingEvents', type: 'String', description: 'Events on which to check for changes (space-separated).'},
+        {attribute: 'changingFields', type: 'String', description: 'Fields on which to check for changes (comma-separated).'},
         {attribute: 'message', type: 'String', defaultValue: 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
       ]
     });
@@ -733,29 +733,29 @@ $ make bootstrap</pre>
       title: 'Live Search',
       description: 'Dynamically query the server and display results.',
       attributes: [
-        {attribute: 'url', type: 'String', defaultValue: '<code>""</code>', description: 'The server-side url that will be queried.'},
-        {attribute: 'delay', type: 'Integer', defaultValue: '<code>200</code>', description: 'Delay in ms after user types before searching.'},
-        {attribute: 'highlight', type: 'String', defaultValue: '<code>pat-livesearch-highlight</code>', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
-        {attribute: 'minimumInputLength', type: 'Integer', defaultValue: '<code>3</code>', description: 'Number of characters user must type before search begins.'},
-        {attribute: 'input', type: 'Selector', defaultValue: '<code>.pat-livesearch-input</code>', description: 'Selector for element that will be used for the livesearch input.'},
-        {attribute: 'toggleTarget', type: 'Selector', defaultValue: '<code>.pat-livesearch-container</code>', description: 'Selector for element that will be shown when results are found.'},
-        {attribute: 'toggleClass', type: 'String', defaultValue: '<code>show</code>', description: 'CSS class that will be added to target toggle element when results are found.'},
-        {attribute: 'positionToggleWithInput', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
+        {attribute: 'url', type: 'String', description: 'The server-side url that will be queried.'},
+        {attribute: 'delay', type: 'Integer', description: 'Delay in ms after user types before searching.'},
+        {attribute: 'highlight', type: 'String', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
+        {attribute: 'minimumInputLength', type: 'Integer', description: 'Number of characters user must type before search begins.'},
+        {attribute: 'input', type: 'Selector', description: 'Selector for element that will be used for the livesearch input.'},
+        {attribute: 'toggleTarget', type: 'Selector', description: 'Selector for element that will be shown when results are found.'},
+        {attribute: 'toggleClass', type: 'String', description: 'CSS class that will be added to target toggle element when results are found.'},
+        {attribute: 'positionToggleWithInput', type: 'Boolean', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
         {attribute: 'setPosition', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Function which will be used to set the position of the toggle element.'},
-        {attribute: 'resultsTarget', type: 'Selector', defaultValue: '<code>.pat-livesearch-results</code>', description: 'Selector for element where results from the server will be inserted.'},
-        {attribute: 'resultContainerTemplate', type: 'String', defaultValue: '<code>&lt;ul&gt;&lt;/ul&gt;</code>', description: 'Template for the element that will contain results. If <code>resultContainerTemplateSelector</code> is set, this will not be used.'},
-        {attribute: 'resultContainerTemplateSelector', type: 'Selector', defaultValue: '<code>null</code>', description: 'Selector for an element in the DOM to use in place of <code>resultContainerTemplate</code>.'},
-        {attribute: 'resultSelector', type: 'Selector', defaultValue: '<code>.pat-livesearch-result</code>', description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultsTarget', type: 'Selector', description: 'Selector for element where results from the server will be inserted.'},
+        {attribute: 'resultContainerTemplate', type: 'String', description: 'Template for the element that will contain results. If <code>resultContainerTemplateSelector</code> is set, this will not be used.'},
+        {attribute: 'resultContainerTemplateSelector', type: 'Selector', description: 'Selector for an element in the DOM to use in place of <code>resultContainerTemplate</code>.'},
+        {attribute: 'resultSelector', type: 'Selector', description: 'Will be used to select result items from within the result container.'},
         {attribute: 'resultTemplate', type: 'String', defaultValue: $('#ls_attr_resultTemplate').html(), description: 'Will be used to select result items from within the result container.'},
-        {attribute: 'resultTemplateSelector', type: 'Selector', defaultValue: '<code>null</code>', description: 'Selector for element to be used in place of <code>resultTemplate</code>.'},
-        {attribute: 'helpTemplate', type: 'String', defaultValue: '<code>&lt;div class="pat-livesearch-help"&gt;&lt;%= help %&gt;&lt;/div&gt;</code>', description: "Template for the element that will contain help messages, such as '<i>No results found.</i>' or '<i>Type 3 more characters to search.</i>'"},
-        {attribute: 'helpTemplateSelector', type: 'Selector', defaultValue: '<code>null</code>', description: "Element in the DOM to be used instead of <code>helpTemplate</code>."},
-        {attribute: 'typeMoreTemplate', type: 'String', defaultValue: 'Type <%= more %> more characters to search.', description: "Template for message which is displayed if the current input length is less than <code>minimumInputLength</code>."},
-        {attribute: 'typeMoreTemplateSelector', type: 'Selector', defaultValue: '<code>null</code>', description: "Element in the DOM to be used instead of <code>typeMoreTemplate</code>."},
+        {attribute: 'resultTemplateSelector', type: 'Selector', description: 'Selector for element to be used in place of <code>resultTemplate</code>.'},
+        {attribute: 'helpTemplate', type: 'String', description: "Template for the element that will contain help messages, such as '<i>No results found.</i>' or '<i>Type 3 more characters to search.</i>'"},
+        {attribute: 'helpTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>helpTemplate</code>."},
+        {attribute: 'typeMoreTemplate', type: 'String', description: "Template for message which is displayed if the current input length is less than <code>minimumInputLength</code>."},
+        {attribute: 'typeMoreTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>typeMoreTemplate</code>."},
         {attribute: 'noResultsTemplate', type: 'String', defaultValue: 'No results found.', description: "Template for message that is displayed after a search when no results were found."},
-        {attribute: 'noResultsTemplateSelector', type: 'Selector', defaultValue: '<code>null</code>', description: "Element in the DOM to be used instead of <code>noResultsTemplate</code>."},
+        {attribute: 'noResultsTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>noResultsTemplate</code>."},
         {attribute: 'searchingTemplate', type: 'String', defaultValue: 'Searching...', description: "Template for message which will be displayed after a search has started and before it has ended."},
-        {attribute: 'searchingTemplateSelector', type: 'Selector', defaultValue: '<code>null</code>', description: "Element in the DOM to be used instead of <code>searchingTemplate</code>."}
+        {attribute: 'searchingTemplateSelector', type: 'Selector', description: "Element in the DOM to be used instead of <code>searchingTemplate</code>."}
       ]
     });
   </script>
@@ -800,17 +800,17 @@ function($action, response, options) { ... }
       title: 'Modal',
       description: 'Creates a modal dialog (also called <strong>overlay</strong>).',
       attributes: [
-        {attribute: 'height', type: 'String', defaultValue: '<code>""</code>', description: 'Set the height of the modal, for example: <code>250px</code>.'},
-        {attribute: 'width', type: 'String', defaultValue: '<code>""</code>', description: 'Set the width of the modal, for example: <code>80%</code> or <code>500px</code>.'},
-        {attribute: 'margin', type: 'Function, Integer', defaultValue: '<code>20</code>', description: 'A function or Integer which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.'},
-        {attribute: 'position', type: 'String', defaultValue: '<code>center middle</code>', description: 'Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle.'},
+        {attribute: 'height', type: 'String', description: 'Set the height of the modal, for example: <code>250px</code>.'},
+        {attribute: 'width', type: 'String', description: 'Set the width of the modal, for example: <code>80%</code> or <code>500px</code>.'},
+        {attribute: 'margin', type: 'Function, Integer', description: 'A function or Integer which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.'},
+        {attribute: 'position', type: 'String', description: 'Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle.'},
 
-        {attribute: 'triggers', type: 'Array', defaultValue: '<code>[]</code>', description: 'Add event listeners to elements on the page which will open the modal when triggered. Pass an <code>Array</code> of strings with the format <code>["<event> <selector>"]</code> or <code>["<event>"]</code>. For example, <code>["click .someButton"]</code>. If you pass in only an event such as, <code>["change"]</code>, the event listener will be added to the element on which the modal was initiated, usually a link or button.'},
-        {attribute: 'title', type: 'String', defaultValue: '<code>""</code>', description: 'A string to place in the modal header. If title is provided titleSelector is not used.'},
-        {attribute: 'titleSelector', type: 'Selector', defaultValue: '<code>h1:first</code>', description: 'Selector for an element to extract from the content provided to the modal and place in the modal header.'},
-        {attribute: 'content', type: 'Selector', defaultValue: '<code>#content</code>', description: 'Selector for an element within the content provided to the modal to use as the modal body.'},
-        {attribute: 'prependContent', type: 'Selector', defaultValue: '<code>.portalMessage</code>', description: 'Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.'},
-        {attribute: 'backdrop', type: 'Selector', defaultValue: '<code>body</code>', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.'},
+        {attribute: 'triggers', type: 'Array', description: 'Add event listeners to elements on the page which will open the modal when triggered. Pass an <code>Array</code> of strings with the format <code>["<event> <selector>"]</code> or <code>["<event>"]</code>. For example, <code>["click .someButton"]</code>. If you pass in only an event such as, <code>["change"]</code>, the event listener will be added to the element on which the modal was initiated, usually a link or button.'},
+        {attribute: 'title', type: 'String', description: 'A string to place in the modal header. If title is provided titleSelector is not used.'},
+        {attribute: 'titleSelector', type: 'Selector', description: 'Selector for an element to extract from the content provided to the modal and place in the modal header.'},
+        {attribute: 'content', type: 'Selector', description: 'Selector for an element within the content provided to the modal to use as the modal body.'},
+        {attribute: 'prependContent', type: 'Selector', description: 'Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.'},
+        {attribute: 'backdrop', type: 'Selector', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.'},
         {
           attribute: 'backdropOptions',
           type: 'Object',
@@ -818,23 +818,23 @@ function($action, response, options) { ... }
           description: null,
           attributes: backdropAttributes
         },
-        {attribute: 'buttons', type: 'Selector', defaultValue: '<code>.formControls &gt; input[type="submit"]</code>', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
-        {attribute: 'automaticallyAddButtonActions', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Automatically create actions for elements matched with the <code>buttons</code> selector. They will use the options provided in <code>actionOptions</code>.'},
-        {attribute: 'loadLinksWithinModal', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Automatically load links (<code>&lt;a&gt;</code>) inside of the modal using AJAX.'},
-        {attribute: 'actions', type: 'Object', defaultValue: '<code>{}</code>', description: 'A hash of selector to options. Where options can include any of the defaults from <code>actionOptions</code>. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
+        {attribute: 'buttons', type: 'Selector', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
+        {attribute: 'automaticallyAddButtonActions', type: 'Boolean', description: 'Automatically create actions for elements matched with the <code>buttons</code> selector. They will use the options provided in <code>actionOptions</code>.'},
+        {attribute: 'loadLinksWithinModal', type: 'Boolean', description: 'Automatically load links (<code>&lt;a&gt;</code>) inside of the modal using AJAX.'},
+        {attribute: 'actions', type: 'Object', description: 'A hash of selector to options. Where options can include any of the defaults from <code>actionOptions</code>. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
         {
           attribute: 'templateOptions',
           type: 'Object',
           description: 'Options for the classes and templates used when rendering the modal.',
           attributes: [
-            {attribute: 'klass', type: 'String', defaultValue: '<code>modal</code>', description: 'CSS class applied to the modal element.'},
-            {attribute: 'klassHeader', type: 'String', defaultValue: '<code>modal-header</code>', description: 'CSS class applied to the modal header element.'},
-            {attribute: 'klassBody', type: 'String', defaultValue: '<code>modal-body</code>', description: 'CSS class applied to the modal body element.'},
-            {attribute: 'klassFooter', type: 'String', defaultValue: '<code>modal-footer</code>', description: 'CSS class applied to the modal footer element.'},
-            {attribute: 'klassWrapper', type: 'String', defaultValue: '<code>modal-wrapper</code>', description: 'CSS class applied to the invisible by default element that contains the modal. This element is used for precise styling of the modal and to capture links. During modal initialization, if an existing element is found with this class it will be used as the wrapper and the modal will be appended to it. This allows for multiple modals to share the same wrapper. If no element is found a new element will be created with this class applied.'},
-            {attribute: 'klassWrapperInner', type: 'String', defaultValue: '<code>modal-wrapper-inner</code>', description: 'CSS class applied to an element that is created within the wrapper. Like the wrapper element the wrapperInner element will be matched with an existing item in the DOM or created during initial modal setup.'},
-            {attribute: 'klassPrepend', type: 'String', defaultValue: '<code>""</code>', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
-            {attribute: 'klassContent', type: 'String', defaultValue: '<code>""</code>', description: 'This CSS class will be applied to the element where content matched using the <code>content</code> selector will be merged into the template.'},
+            {attribute: 'klass', type: 'String', description: 'CSS class applied to the modal element.'},
+            {attribute: 'klassHeader', type: 'String', description: 'CSS class applied to the modal header element.'},
+            {attribute: 'klassBody', type: 'String', description: 'CSS class applied to the modal body element.'},
+            {attribute: 'klassFooter', type: 'String', description: 'CSS class applied to the modal footer element.'},
+            {attribute: 'klassWrapper', type: 'String', description: 'CSS class applied to the invisible by default element that contains the modal. This element is used for precise styling of the modal and to capture links. During modal initialization, if an existing element is found with this class it will be used as the wrapper and the modal will be appended to it. This allows for multiple modals to share the same wrapper. If no element is found a new element will be created with this class applied.'},
+            {attribute: 'klassWrapperInner', type: 'String', description: 'CSS class applied to an element that is created within the wrapper. Like the wrapper element the wrapperInner element will be matched with an existing item in the DOM or created during initial modal setup.'},
+            {attribute: 'klassPrepend', type: 'String', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
+            {attribute: 'klassContent', type: 'String', description: 'This CSS class will be applied to the element where content matched using the <code>content</code> selector will be merged into the template.'},
             {attribute: 'template', type: 'String', defaultValue: '<pre>'+_.escape($('#example_template').html())+'</pre>', description: 'An <a href="http://underscorejs.org">underscore</a> template which will be used during render. Options passed to the template are: title (either the string set using <code>title</code>, or html matched from the content using <code>titleSelector</code>), prepend (html extracted from the content matching <code>prependContent</code> selector), content (extracted from the content using the <code>content</code> option), options (all of the <code>templateOptions</code> set on the modal).'}
             ]
         },
@@ -844,21 +844,21 @@ function($action, response, options) { ... }
           defaultValue: '',
           description: 'Configure the defaults for how actions will be handled. Any variables from the pattern defaults can also be set here which will allow the actions to override any options such as width, height, etc.',
           attributes: [
-            {attribute: 'eventType', type: 'String', defaultValue: '<code>click</code>', description: 'The event to bind to the element matched for the action.'},
-            {attribute: 'target', type: 'Selector', defaultValue: '<code>null</code>', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
-            {attribute: 'ajaxUrl', type: 'String, Function', defaultValue: '<code>null</code>', description: 'A URL string or a <code>function($actionElement, actionOptions)</code> that returns a string.'},
-            {attribute: 'modalFunction', type: 'String', defaultValue: '<code>null</code>', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, <code>hide</code>.'},
-            {attribute: 'redirectOnResponse', type: 'Boolean', defaultValue: '<code>false</code>', description: 'Whether or not to redirect the window to <code>redirectToUrl</code> after a succesful AJAX response.'},
+            {attribute: 'eventType', type: 'String', description: 'The event to bind to the element matched for the action.'},
+            {attribute: 'target', type: 'Selector', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
+            {attribute: 'ajaxUrl', type: 'String, Function', description: 'A URL string or a <code>function($actionElement, actionOptions)</code> that returns a string.'},
+            {attribute: 'modalFunction', type: 'String', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, <code>hide</code>.'},
+            {attribute: 'redirectOnResponse', type: 'Boolean', description: 'Whether or not to redirect the window to <code>redirectToUrl</code> after a succesful AJAX response.'},
             {attribute: 'redirectToUrl', type: 'String, Function', defaultValue: '<pre>'+$('#example_redirectToUrl').text()+'</pre>', description: 'After a successful ajax request, if <code>redirectOnResponse</code> is true, redirect to a specified URL. The default function extracts the URL from a <code>&lt;base&gt;</code> in the response content.'},
-            {attribute: 'isForm', type: 'Boolean', defaultValue: '<code>false</code>', description: 'Manually indicate whether an action should use an <code>ajaxSubmit</code> call. Otherwise, whether or not it is a form action will be determined by the element type.'},
-            {attribute: 'timeout', type: 'Integer', defaultValue: '<code>5000</code>', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
-            {attribute: 'displayInModal', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
-            {attribute: 'reloadWindowOnClose', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not to reload the window when the modal is closed due to this action.'},
-            {attribute: 'error', type: 'Selector', defaultValue: '<code>.portalMessage.error</code>', description: 'Match content from an <code>ajaxSubmit</code> that indicates an error. If content is found, <code>onFormError</code> is called.'},
-            {attribute: 'onSuccess', type: 'Function', defaultValue: '<code>null</code>', description: 'Function is called after a successful AJAX request. Arguments: <code>response, state, xhr, form</code>.'},
-            {attribute: 'onError', type: 'Function', defaultValue: '<code>null</code>', description: 'Function is called if an AJAX request results in an error. Arguments: <code>response, state, xhr, form</code>.'},
-            {attribute: 'onFormError', type: 'Function', defaultValue: '<code>null</code>', description: 'Function is called if an AJAX request is successful, but content in the response matches the <code>error</code> selector. Arguments: <code>response, state, xhr, form</code>.'},
-            {attribute: 'onTimeout', type: 'Function', defaultValue: '<code>null</code>', description: 'Function is called if an AJAX request takes longer in than <code>timeout</code> to complete. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'isForm', type: 'Boolean', description: 'Manually indicate whether an action should use an <code>ajaxSubmit</code> call. Otherwise, whether or not it is a form action will be determined by the element type.'},
+            {attribute: 'timeout', type: 'Integer', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
+            {attribute: 'displayInModal', type: 'Boolean', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
+            {attribute: 'reloadWindowOnClose', type: 'Boolean', description: 'Whether or not to reload the window when the modal is closed due to this action.'},
+            {attribute: 'error', type: 'Selector', description: 'Match content from an <code>ajaxSubmit</code> that indicates an error. If content is found, <code>onFormError</code> is called.'},
+            {attribute: 'onSuccess', type: 'Function', description: 'Function is called after a successful AJAX request. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'onError', type: 'Function', description: 'Function is called if an AJAX request results in an error. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'onFormError', type: 'Function', description: 'Function is called if an AJAX request is successful, but content in the response matches the <code>error</code> selector. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'onTimeout', type: 'Function', description: 'Function is called if an AJAX request takes longer in than <code>timeout</code> to complete. Arguments: <code>response, state, xhr, form</code>.'},
             {attribute: 'form', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Function called during render, setup actions and bind events to elements. Arguments: <code>actions, defaultOptions</code> (from <code>actionOptions</code>)'},
             {attribute: 'handleFormAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If <code>action.isForm</code> is true, or if <code>form()</code> determines that the action is a <em>form</em> action, this method will be called when the event is triggered.'},
             {attribute: 'handleLinkAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If <code>action.isForm</code> is false, or if <code>form()</code> determines that the action is a <em>link</em> action, this method will be called when the event is triggered.'},
@@ -1194,16 +1194,16 @@ function($action, response, options) { ... }
       title: 'Pick A Date',
       description: 'Allows the user to <strong>select a date</strong> (with or without time) through a calendar.',
       attributes: [
-        {attribute: 'date', type: 'Object', defaultValue: '<code>{formatSubmit: "dd-mm-yyyy"}</code>', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
-        {attribute: 'time', type: 'Object', defaultValue: '<code>{formatSubmit: "HH:i"}</code>', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
+        {attribute: 'date', type: 'Object', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
+        {attribute: 'time', type: 'Object', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
         {attribute: 'separator', type: 'String', defaultValue: '" " (space)', description: 'Separator between date and time if both are enabled.'},
-        {attribute: 'klassClear', type: 'String', defaultValue: '<code>pat-pickadate-clear</code>', description: 'Class name of element that is generated by pattern.'},
-        {attribute: 'klassDate', type: 'String', defaultValue: '<code>pat-pickadate-date</code>', description: 'Class applied to date input.'},
-        {attribute: 'klassDateWrapper', type: 'String', defaultValue: '<code>pat-pickadate-date-wrapper</code>', description: 'Class applied to extra wrapper div around date input.'},
-        {attribute: 'klassSeparator', type: 'String', defaultValue: '<code>pat-pickadate-separator</code>', description: 'Class applied to separator.'},
-        {attribute: 'klassTime', type: 'String', defaultValue: '<code>pat-pickadate-time</code>', description: 'Class applied to time input.'},
-        {attribute: 'klassTimeWrapper', type: 'String', defaultValue: '<code>pat-pickadate-time-wrapper</code>', description: 'Class applied to wrapper div around time input.'},
-        {attribute: 'klassWrapper', type: 'String', defaultValue: '<code>pat-pickadate-wrapper</code>', description: 'Class name of element that is generated by pattern.'}
+        {attribute: 'klassClear', type: 'String', description: 'Class name of element that is generated by pattern.'},
+        {attribute: 'klassDate', type: 'String', description: 'Class applied to date input.'},
+        {attribute: 'klassDateWrapper', type: 'String', description: 'Class applied to extra wrapper div around date input.'},
+        {attribute: 'klassSeparator', type: 'String', description: 'Class applied to separator.'},
+        {attribute: 'klassTime', type: 'String', description: 'Class applied to time input.'},
+        {attribute: 'klassTimeWrapper', type: 'String', description: 'Class applied to wrapper div around time input.'},
+        {attribute: 'klassWrapper', type: 'String', description: 'Class name of element that is generated by pattern.'}
       ]
     });
   </script>
@@ -1227,9 +1227,9 @@ function($action, response, options) { ... }
       title: 'Picture',
       description: 'A responsive image widget.',
       attributes: [
-        {attribute: 'alt', type: 'String', defaultValue: '<code>null</code>', description: 'Alternate text to be used on the resulting responsive image tag.'},
-        {attribute: 'attribute', type: 'Object', defaultValue: '<code>{src: "data-src", media: "data-media"}</code>', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping looks for <code>data-src</code> attributes to use as the resulting <code>src</code> attribute for the resulting element. Ditto for <code>data-media</code>, which maps to <code>media</code> for mediaquery information.'},
-        {attribute: 'klass', type: 'Object', defaultValue: '<code>{loading: "picture-loading", error: "picture-error"}</code>', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><code>loading</code> is the CSS class added to the element whilst an image is loading, and <code>error</code> is the CSS class added to the element if an error occurred whilst loading the image.'}
+        {attribute: 'alt', type: 'String', description: 'Alternate text to be used on the resulting responsive image tag.'},
+        {attribute: 'attribute', type: 'Object', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping looks for <code>data-src</code> attributes to use as the resulting <code>src</code> attribute for the resulting element. Ditto for <code>data-media</code>, which maps to <code>media</code> for mediaquery information.'},
+        {attribute: 'klass', type: 'Object', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><code>loading</code> is the CSS class added to the element whilst an image is loading, and <code>error</code> is the CSS class added to the element if an error occurred whilst loading the image.'}
       ]
     });
   </script>
@@ -1265,8 +1265,8 @@ function($action, response, options) { ... }
       title: 'Prevent Double Submit',
       description: 'A pattern to <strong>prevent submitting a form twice</strong>.',
       attributes: [
-        {attribute: 'guardKlass', type: 'String', defaultValue: '<code>submitting</code>', description: 'Class applied to submit button after it is clicked once.'},
-        {attribute: 'optOutKlass', type: 'String', defaultValue: '<code>allowMultiSubmit</code>', description: 'Class used to opt-out a submit button from double-submit prevention.'},
+        {attribute: 'guardKlass', type: 'String', description: 'Class applied to submit button after it is clicked once.'},
+        {attribute: 'optOutKlass', type: 'String', description: 'Class used to opt-out a submit button from double-submit prevention.'},
         {attribute: 'message', type: 'String', defaultValue: 'You already clicked the submit button. Do you really want to submit this form again?', description: 'Message to be displayed when "opt-out" submit button is clicked a second time.'}
       ]
     });
@@ -1300,24 +1300,24 @@ function($action, response, options) { ... }
       title: 'Query String for Collections',
       description: "A widget for creating <strong>query's for collections</strong>",
       attributes: [
-        {attribute: 'criteria', type: 'Object', defaultValue: '<code>{}</code>', description: 'options to pass into criteria'},
-        {attribute: 'previewURL', type: 'String', defaultValue: '<code>portal_factory/@@querybuilder_html_results</code>', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML list of results'},
-        {attribute: 'previewCountURL', type: 'String', defaultValue: '<code>portal_factory/@@querybuildernumberofresults</code>', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML string of the total number of records found with the query'},
+        {attribute: 'criteria', type: 'Object', description: 'options to pass into criteria'},
+        {attribute: 'previewURL', type: 'String', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML list of results'},
+        {attribute: 'previewCountURL', type: 'String', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML string of the total number of records found with the query'},
         {attribute: 'sorttxt', type: 'String', defaultValue: 'Sort On', description: 'Text to use to label the sort dropdown'},
         {attribute: 'reversetxt', type: 'String', defaultValue: 'Reversed Order', description: 'Text to use to label the sort order checkbox'},
         {attribute: 'previewTitle', type: 'String', defaultValue: 'Preview', description: 'Title for the preview area'},
         {attribute: 'previewDescription', type: 'String', defaultValue: 'Preview of at most 10 items', description: 'Description for the preview area'},
-        {attribute: 'klassWrapper', type: 'String', defaultValue: '<code>querystring-wrapper</code>', description: 'CSS class to apply to the wrapper element'},
-        {attribute: 'klassSortLabel', type: 'String', defaultValue: '<code>querystring-sort-label</code>', description: 'CSS class to apply to the sort on label'},
-        {attribute: 'klassSortReverse', type: 'String', defaultValue: '<code>querystring-sortreverse</code>', description: 'CSS class to apply to the sort order label and checkbox container'},
-        {attribute: 'klassSortReverseLabel', type: 'String', defaultValue: '<code>querystring-previewcount-wrapper</code>', description: 'CSS class to apply to the sort order label'},
-        {attribute: 'klassPreviewCountWrapper', type: 'String', defaultValue: '<code>querystring-previewcount-wrapper</code>', description: ''},
-        {attribute: 'klassPreviewResultsWrapper', type: 'String', defaultValue: '<code>querystring-previewresults-wrapper</code>', description: 'CSS class to apply to the results wrapper'},
-        {attribute: 'klassPreviewWrapper', type: 'String', defaultValue: '<code>querystring-preview-wrapper</code>', description: 'CSS class to apply to the preview wrapper'},
-        {attribute: 'klassPreview', type: 'String', defaultValue: '<code>querystring-preview-preview</code>', description: 'CSS class to apply to the preview pane'},
-        {attribute: 'klassPreviewTitle', type: 'String', defaultValue: '<code>querystring-preview-title</code>', description: 'CSS class to apply to the preview title'},
-        {attribute: 'klassPreviewDescription', type: 'String', defaultValue: '<code>querystring-preview-description</code>', description: 'CSS class to apply to the  preview description'},
-        {attribute: 'klassSortWrapper', type: 'String', defaultValue: '<code>querystring-sort-wrapper</code>', description: 'CSS class to apply to the sort order and sort on wrapper'},
+        {attribute: 'klassWrapper', type: 'String', description: 'CSS class to apply to the wrapper element'},
+        {attribute: 'klassSortLabel', type: 'String', description: 'CSS class to apply to the sort on label'},
+        {attribute: 'klassSortReverse', type: 'String', description: 'CSS class to apply to the sort order label and checkbox container'},
+        {attribute: 'klassSortReverseLabel', type: 'String', description: 'CSS class to apply to the sort order label'},
+        {attribute: 'klassPreviewCountWrapper', type: 'String', description: ''},
+        {attribute: 'klassPreviewResultsWrapper', type: 'String', description: 'CSS class to apply to the results wrapper'},
+        {attribute: 'klassPreviewWrapper', type: 'String', description: 'CSS class to apply to the preview wrapper'},
+        {attribute: 'klassPreview', type: 'String', description: 'CSS class to apply to the preview pane'},
+        {attribute: 'klassPreviewTitle', type: 'String', description: 'CSS class to apply to the preview title'},
+        {attribute: 'klassPreviewDescription', type: 'String', description: 'CSS class to apply to the  preview description'},
+        {attribute: 'klassSortWrapper', type: 'String', description: 'CSS class to apply to the sort order and sort on wrapper'},
       ]
     });
   </script>
@@ -1457,34 +1457,34 @@ function($action, response, options) { ... }
       title: 'Related Items',
       description: 'An advanced widget for <strong>selecting related items</strong>.',
       attributes: [
-        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: '<code>""</code>', description: 'This is a URL to a JSON-formatted file used to populate the list'},
-        {attribute: 'attributes', type: 'List', defaultValue: '<code>["UID","Title", "Type", "path"]</code>', description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
-        {attribute: 'basePath', type: 'String', defaultValue: '<code>/</code>', description: 'If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results.'},
-        {attribute: 'breadCrumbTemplate', type: 'String', defaultValue: '<code>/&lt;a href="&lt;%= path %&gt;"&gt;&lt;%= text %&gt;&lt;/a&gt;</code>', description: 'Template to use for a single item in the breadcrumbs.'},
-        {attribute: 'breadCrumbTemplateSelector', type: 'String', defaultValue: '<code>null</code>', description: 'Select an element from the DOM from which to grab the <code>breadCrumbTemplate</code>.'},
-        {attribute: 'breadCrumbsTemplate', type: 'String', defaultValue: '<code>&lt;span&gt;&lt;a href="/"&gt;&lt;i class="icon-home"&gt;&lt;/i&gt;&lt;/a&gt;&lt;%= items %&gt;&lt;/span&gt;</code>', description: 'Template for element to which breadCrumbs will be appended.'},
-        {attribute: 'breadCrumbsTemplateSelector', type: 'String', defaultValue: '<code>null</code>', description: 'Select an element from the DOM from which to grab the <em>breadCrumbsTemplate</em>.'},
+        {attribute: 'ajaxvocabulary', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
+        {attribute: 'attributes', type: 'List', description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
+        {attribute: 'basePath', type: 'String', description: 'If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results.'},
+        {attribute: 'breadCrumbTemplate', type: 'String', description: 'Template to use for a single item in the breadcrumbs.'},
+        {attribute: 'breadCrumbTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>breadCrumbTemplate</code>.'},
+        {attribute: 'breadCrumbsTemplate', type: 'String', description: 'Template for element to which breadCrumbs will be appended.'},
+        {attribute: 'breadCrumbsTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <em>breadCrumbsTemplate</em>.'},
         {attribute: 'browseText', type: 'String', defaultValue: 'Browse', description: 'Text which will be inserted into the "Browse" tab.'},
-        {attribute: 'cache', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not results from the server should be cached.'},
-        {attribute: 'closeOnSelect', type: 'Boolean', defaultValue: '<code>false</code>', description: 'Select2 option. Whether or not the drop down should be closed when an item is selected.'},
-        {attribute: 'dropdownCssClass', type: 'String', defaultValue: '<code>pat-relateditems-dropdown</code>', description: 'Select2 option. CSS class to add to the drop down element.'},
-        {attribute: 'folderTypes', type: 'List', defaultValue: '<code>["Folder"]</code>', description: 'Types which should be considered browsable.'},
+        {attribute: 'cache', type: 'Boolean', description: 'Whether or not results from the server should be cached.'},
+        {attribute: 'closeOnSelect', type: 'Boolean', description: 'Select2 option. Whether or not the drop down should be closed when an item is selected.'},
+        {attribute: 'dropdownCssClass', type: 'String', description: 'Select2 option. CSS class to add to the drop down element.'},
+        {attribute: 'folderTypes', type: 'List', description: 'Types which should be considered browsable.'},
         {attribute: 'homeText', type: 'String', defaultValue: 'home', description: 'Text to display in the initial breadcrumb item.'},
-        {attribute: 'maximumSelectionSize', type: 'Integer', defaultValue: '<code>-1</code>', description: 'Do not change this option.'},
-        {attribute: 'multiple', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Do not change this option.'},
-        {attribute: 'orderable', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not items should be drag-and-drop sortable.'},
-        {attribute: 'showTabs', type: 'Boolean', defaultValue: '<code>true</code>', description: 'Whether or not to display the "Browse" and "Search" tabs.'},
+        {attribute: 'maximumSelectionSize', type: 'Integer', description: 'Do not change this option.'},
+        {attribute: 'multiple', type: 'Boolean', description: 'Do not change this option.'},
+        {attribute: 'orderable', type: 'Boolean', description: 'Whether or not items should be drag-and-drop sortable.'},
+        {attribute: 'showTabs', type: 'Boolean', description: 'Whether or not to display the "Browse" and "Search" tabs.'},
         {attribute: 'resultTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template for an item in the in the list of results. Refer to source for default.'},
-        {attribute: 'resultTemplateSelector', type: 'String', defaultValue: '<code>null</code>', description: 'Select an element from the DOM from which to grab the <code>resultTemplate</code>.'},
+        {attribute: 'resultTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>resultTemplate</code>.'},
         {attribute: 'searchText', type: 'String', defaultValue: 'Search', description: 'Text which will be inserted into the "Search" tab.'},
-        {attribute: 'selectableTypes', type: 'List', defaultValue: '<code>null</code>', description: 'If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.'},
+        {attribute: 'selectableTypes', type: 'List', description: 'If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.'},
         {attribute: 'selectionTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template for element that will be used to construct a selected item.'},
-        {attribute: 'selectionTemplateSelector', type: 'String', defaultValue: '<code>null</code>', description: 'Select an element from the DOM from which to grab the <code>selectionTemplate</code>.'},
-        {attribute: 'separator', type: 'String', defaultValue: '<code>,</code>', description: 'Select2 option. String which separates multiple items.'},
+        {attribute: 'selectionTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>selectionTemplate</code>.'},
+        {attribute: 'separator', type: 'String', description: 'Select2 option. String which separates multiple items.'},
         {attribute: 'tabsTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template used to construct the tabs for toggling between "Browse" and "Search".'},
-        {attribute: 'tabsTemplateSelector', type: 'String', defaultValue: '<code>null</code>', description: 'Select an element from the DOM from which to grab the <code>tabsTemplate</code>.'},
-        {attribute: 'tokenSeparators', type: 'List', defaultValue: '<code>[",", " "]</code>', description: 'Select2 option, refer to select2 documentation.'},
-        {attribute: 'width', type: 'String', defaultValue: '<code>300px</code>', description: 'Specify a width for the widget.'}
+        {attribute: 'tabsTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>tabsTemplate</code>.'},
+        {attribute: 'tokenSeparators', type: 'List', description: 'Select2 option, refer to select2 documentation.'},
+        {attribute: 'width', type: 'String', description: 'Specify a width for the widget.'}
       ]
     });
   </script>
@@ -1520,19 +1520,19 @@ function($action, response, options) { ... }
       title: 'Select2',
       description: '<strong>Autocompletes, multiple or single selections</strong> from any kind of data source (with search!).',
       attributes: [
-        {attribute: 'separator', type: 'String', defaultValue: '<code>,</code>', description: ''
+        {attribute: 'separator', type: 'String', description: ''
           + 'Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.'
           + '<br/><br/>'
           + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will '
           + 'allow <code>tags</code> and <code>initvalmap</code> to have '
           + 'values separated by ";" instead of the default ",".'},
-        {attribute: 'data-path-select2-initvalmap', type: 'String', defaultValue: '<code>""</code>', description: ''
+        {attribute: 'data-path-select2-initvalmap', type: 'String', description: ''
           + 'This can be a json encoded string, or a list of <code>id:text</code> '
           + 'values. Ex: <code>Red:The Color Red,Orange:The Color Orange</code>'
           + '<br /><br />'
           + 'This is used inside the <code>initSelection</code> method, if AJAX options '
           + 'are NOT set.'},
-        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: '<code>""</code>', description: 'This is a URL to a JSON-formatted file used to populate the list'}
+        {attribute: 'ajaxvocabulary', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'}
       ]
     });
   </script>
@@ -1950,15 +1950,15 @@ function($action, response, options) { ... }
       title: 'Table of Contents',
       description: 'Automatically <strong>generate a table of contents</strong>.',
       attributes: [
-        {attribute: 'IDPrefix', type: 'String', defaultValue: '<code>autotoc-item-</code>', description: 'Prefix used to generate ID.'},
-        {attribute: 'klassActive', type: 'String', defaultValue: '<code>active</code>', description: 'Class used for active level.'},
-        {attribute: 'klassLevelPrefix', type: 'String', defaultValue: '<code>autotoc-level-</code>', description: 'Class prefix used for the TOC levels.'},
-        {attribute: 'klassSection', type: 'String', defaultValue: '<code>autotoc-section</code>', description: 'Class used for section in TOC.'},
-        {attribute: 'klassTOC', type: 'String', defaultValue: '<code>autotoc-nav</code>', description: 'Class used for the TOC.'},
-        {attribute: 'levels', type: 'String', defaultValue: '<code>h1,h2,h3</code>', description: 'Selectors used to find levels.'},
-        {attribute: 'scrollDuration', type: 'String', defaultValue: '<code>slow</code>', description: 'Speed of scrolling.'},
-        {attribute: 'scrollEasing', type: 'String', defaultValue: '<code>swing</code>', description: 'Easing to use while scrolling.'},
-        {attribute: 'section', type: 'String', defaultValue: '<code>section</code>', description: 'Tag type to use for TOC.'}
+        {attribute: 'IDPrefix', type: 'String', description: 'Prefix used to generate ID.'},
+        {attribute: 'klassActive', type: 'String', description: 'Class used for active level.'},
+        {attribute: 'klassLevelPrefix', type: 'String', description: 'Class prefix used for the TOC levels.'},
+        {attribute: 'klassSection', type: 'String', description: 'Class used for section in TOC.'},
+        {attribute: 'klassTOC', type: 'String', description: 'Class used for the TOC.'},
+        {attribute: 'levels', type: 'String', description: 'Selectors used to find levels.'},
+        {attribute: 'scrollDuration', type: 'String', description: 'Speed of scrolling.'},
+        {attribute: 'scrollEasing', type: 'String', description: 'Easing to use while scrolling.'},
+        {attribute: 'section', type: 'String', description: 'Tag type to use for TOC.'}
       ]
     });
   </script>
@@ -1992,8 +1992,8 @@ function($action, response, options) { ... }
       title: 'Tooltip',
       description: 'A pattern to show a tooltip on hover.',
       attributes: [
-        {attribute: 'event_enter', type: 'String', defaultValue: '<code>mouseenter</code>', description: 'Event used to trigger tooltip.'},
-        {attribute: 'event_exit', type: 'String', defaultValue: '<code>mouseleave</code>', description: 'Event used to dismiss tooltip.'}
+        {attribute: 'event_enter', type: 'String', description: 'Event used to trigger tooltip.'},
+        {attribute: 'event_exit', type: 'String', description: 'Event used to dismiss tooltip.'}
       ]
     });
   </script>
@@ -2042,8 +2042,8 @@ function($action, response, options) { ... }
       title: 'DropZone',
       description: "Drag 'n drop file upload",
       attributes: [
-        {attribute: 'url', type: 'String', defaultValue: '<code>null</code>', description: 'Required option dropzone if not used with a form'},
-        {attribute: 'clickable', type: 'String', defaultValue: '<code>false</code>', description: 'If you can click on container to also upload'}
+        {attribute: 'url', type: 'String', description: 'Required option dropzone if not used with a form'},
+        {attribute: 'clickable', type: 'String', description: 'If you can click on container to also upload'}
       ]
     });
   </script>
