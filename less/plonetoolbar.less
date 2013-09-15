@@ -79,6 +79,15 @@
           text-decoration: none;
         }
       }
+      &.active {
+        .gradient(@linkBgColor, darken(@linkBgColor,8%), @linkBgColor);
+        background-color: @linkBgColor;
+        color: @bgColor;
+        & > a {
+          color: @bgColor;
+          text-decoration: none;
+        }
+      }
     }
   }
   &.toolbar-dropdown-open {

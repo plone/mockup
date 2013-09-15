@@ -34,7 +34,7 @@ module.exports = function(grunt) {
           type : 'lcovonly',
           dir : 'coverage/'
         },
-        browsers: ['sauce_chrome', 'sauce_firefox'],
+        browsers: ['sauce_chrome'],
         sauceLabs: {
           testName: 'PloneMockup',
           startConnect: true
@@ -42,19 +42,18 @@ module.exports = function(grunt) {
         customLaunchers: {
           'sauce_chrome': {
              base: 'SauceLabs',
-             platform: 'Linux',
+             platform: 'Windows 8',
              browserName: 'chrome'
            },
           'sauce_firefox': {
              base: 'SauceLabs',
-             platform: 'Linux',
+             platform: 'Windows 8',
              browserName: 'firefox'
            },
            'sauce_ie': {
              base: 'SauceLabs',
              platform: 'Windows 8',
-             browserName: 'internet explorer',
-             version: '10'
+             browserName: 'internet explorer'
            }
         }
       }
@@ -316,27 +315,27 @@ module.exports = function(grunt) {
 
     grunt.file.copy('index.html', 'docs/dev/index.html');
 
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'docs/dev/');
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'docs/dev/');
+    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'docs/dev/glyphicons-halflings.png');
+    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'docs/dev/glyphicons-halflings-white.png');
 
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.eot', 'docs/dev');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.woff', 'docs/dev');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.ttf', 'docs/dev');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.svg', 'docs/dev');
+    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.eot', 'docs/dev/fontawesome-webfont.eot');
+    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.woff', 'docs/dev/fontawesome-webfont.woff');
+    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.ttf', 'docs/dev/fontawesome-webfont.ttf');
+    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.svg', 'docs/dev/fontawesome-webfont.svg');
 
-    grunt.file.copy('bower_components/select2/select2.png', 'docs/dev');
-    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'docs/dev');
+    grunt.file.copy('bower_components/select2/select2.png', 'docs/dev/select2.png');
+    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'docs/dev/select2-spinner.gif');
 
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'docs/dev');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'docs/dev');
-    grunt.file.copy('cp lib/dropzone/downloads/images/spritemap.png', 'docs/dev');
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'docs/dev');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'docs/dev/icomoon.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'docs/dev/icomoon.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'docs/dev/icomoon.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'docs/dev/icomoon.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'docs/dev/icomoon-small.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'docs/dev/icomoon-small.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'docs/dev/icomoon-small.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'docs/dev/icomoon-small.ttf');
+    grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'docs/dev/spritemap.png');
+    grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/spritemap@2x.png');
   });
 
 

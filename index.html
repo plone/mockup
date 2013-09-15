@@ -334,6 +334,8 @@ $ make bootstrap</pre>
       <h4>Running tests</h4>
       <p>And you can run tests with:</p>
       <pre>make test</pre>
+      <p>This will start a continuous process that will rerun the tests when you change any of
+      the js files.</p>
       <p>
         Right now tests are
         <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
@@ -349,6 +351,15 @@ $ make bootstrap</pre>
       you should name your test file like so:</p>
       <pre>pattern-foobar-test.js</pre>
       </p>
+      <h4>Debugging tests</h4>
+      <p>While the tests are running you can connect debug console on
+      <a href="http://localhost:9876/">http://localhost:9876</a></p>
+      <p>if you add the <strong>"debugger;"</strong> statement into your code or test while your browsers JS window is
+      open (for example right-click &gt; inspect element &gt; sources) then the debugger will be activated
+      and you can step through the code.</p>
+      <h4>Test coverage</h4>
+      <p>In the <strong>./coverage</strong> directory find the index.html file under the folder for the browser you are using. This will tell you
+      the current coverage from the last test run</p>
 
       <h3>Step 7: Releasing/Passing bundles on to Plone developers</h3>
       <p>
@@ -1783,63 +1794,42 @@ function($action, response, options) { ... }
         <th>Last Name</th>
         <th>Occupation</th>
         <th>Age</th>
-        <th>Day of birth</th>
-        <th>Some date</th>
-        <th>No date</th>
       </thead>
       <tr>
         <td>Buster</td>
         <td>Bluth</td>
         <td>Army</td>
         <td>35</td>
-        <td class="sortabledata-1">Monday</td>
-        <td>1999-01-01</td>
-        <td>01-01-1999</td>
       </tr>
       <tr>
         <td>Michael</td>
         <td>Bluth</td>
         <td>Company President</td>
         <td>39</td>
-        <td class="sortabledata-3">Wednesday</td>
-        <td>1999-10-01</td>
-        <td>02-01-1998</td>
       </tr>
       <tr>
         <td>GOB</td>
         <td>Bluth</td>
         <td>Magician</td>
         <td>37</td>
-        <td class="sortabledata-7">Sunday</td>
-        <td>1998-11-01</td>
-        <td>13-01-1997</td>
       </tr>
       <tr>
         <td>Lindsay</td>
         <td>Fünke</td>
         <td>Protester</td>
         <td>36</td>
-        <td class="sortabledata-2">Tuesday</td>
-        <td>1998-10-11</td>
-        <td>14-11-1996</td>
       </tr>
       <tr>
         <td>Tony</td>
         <td>Wonder</td>
         <td>Magician</td>
         <td>35</td>
-        <td class="sortabledata-4">Thursday</td>
-        <td>1998-10-21</td>
-        <td>07-21-1995</td>
       </tr>
       <tr>
         <td>Tobias</td>
         <td>Fünke</td>
         <td>Therapist</td>
         <td>40</td>
-        <td class="sortabledata-4">Thursday</td>
-        <td>1998-21-59</td>
-        <td>01-10-1994</td>
       </tr>
     </table>
   </script>
@@ -2030,15 +2020,44 @@ function($action, response, options) { ... }
   </script>
 
 
-   <!--  **** DropZone **** -->
+  <!--  **** DropZone **** -->
   <script>
     addPattern({
-      id: 'dropzone',
-      title: 'DropZone',
-      description: "Drag 'n drop file upload",
+      id: "dropzone",
+      title: "DropZone",
+      description: "file upload with drag and drop support",
       attributes: [
-        {attribute: 'url', type: 'String', description: 'Required option dropzone if not used with a form'},
-        {attribute: 'clickable', type: 'String', description: 'If you can click on container to also upload'}
+        {attribute: "url", 
+         type: "String", 
+         description: "Required option dropzone if not used with a form"},
+        {attribute: "clickable", 
+         type: "Boolean",
+         description: "If you can click on container to also upload"},
+        {attribute: "klass", 
+         type: "String", 
+         description: "value for class attribute in the form element"},
+        {attribute: "paramName", 
+         type: "String", 
+         description: "value for name attribute in the file input element"},
+        {attribute: "uploadMultiple", 
+         type: "Boolean", 
+         description: "condition value for multiple attribute in the file input element. If the value is 'true' and paramName is file, 'multiple=multiple' and 'name=file[]' will be added in the file input."},
+        {attribute: "wrap", 
+         type: "String", 
+         description: "'true' or 'false' for wrapping this element with 'wrapperTemplate' value. If the value is 'inner', this element will wrap the 'wrapperTemplate' value."},
+        {attribute: "wrapperTemplate", 
+         type: "String", 
+         description: "HTML template for wrapping around with this element."},
+        {attribute: "resultTemplate", 
+         type: "String", 
+         description: "HTML template for the element that will contain file information."},
+        {attribute: "autoCleanResults", 
+         type: "Boolean", 
+         defaultValue: "<code>false</code>", 
+         description: "condition value for the file preview in div element to fadeout after file upload is completed."},
+        {attribute: "previewsContainer", 
+         type: "Selector",
+         description: "JavaScript selector for file preview in div element."},
       ]
     });
   </script>
