@@ -102,7 +102,7 @@ define([
           getOptions($el, this.name),
           options || {});
     }
-    if (options && (options.__returnDefaults === undefined || options.__returnDefaults === false)) {
+    if (this.options.__returnDefaults !== true) {
       this.init();
       this.trigger('init');
     }

@@ -83,21 +83,25 @@ define([
         if (self.patternOptions) {
           var defaultValue;
           var attr = model.get('attribute');
-          if (self.parentAttr) {
-            try {
-              defaultValue = self.patternOptions[self.parentAttr][attr];
-            } catch (e) {
 
-            }
-          } else {
-            try {
-              defaultValue = self.patternOptions[attr];
-            } catch (e) {
+          // If the doc item has a defaultValue use it, otherwise, try to grab it off of the pattern
+          if (!model.get('defaultValue')) {
+            if (self.parentAttr) {
+              try {
+                defaultValue = self.patternOptions[self.parentAttr][attr];
+              } catch (e) {
 
+              }
+            } else {
+              try {
+                defaultValue = self.patternOptions[attr];
+              } catch (e) {
+
+              }
             }
-          }
-          if (defaultValue) {
-            model.set('defaultValue', defaultValue);
+            if (defaultValue) {
+              model.set('defaultValue', '<code>'+defaultValue+'</code>');
+            }
           }
         }
         var view = new AttributeView({model: model});
