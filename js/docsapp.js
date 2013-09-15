@@ -56,9 +56,13 @@ define([
     render: function() {
       var self = this,
           attrs = '',
-          tpl_options = {};
-      if (self.model.get('attributes')) {
-        attrs = $('<div />').append(new AttributesView({model: self.model.get('attributes')}).render().$el).html();
+          tpl_options = {},
+          attrsModel = self.model.get('attributes');
+      if (attrsModel) {
+        var attrsView = new AttributesView({model: attrsModel});
+        attrsView.parentAttr = self.model.get('attribute');
+        attrsView.patternOptions = self.patternOptions;
+        attrs = $('<div />').append(attrsView.render().$el).html();
       }
 
       tpl_options.attrs = attrs;
@@ -73,9 +77,42 @@ define([
     className: 'table',
     tpl: $('#tpl_attributes').html(),
     render: function() {
+      var self = this;
       this.$el.html(_.template(this.tpl, {}));
       _.each(this.model.models, function(model) {
+        if (self.patternOptions) {
+          var defaultValue;
+          var attr = model.get('attribute');
+
+          // If the doc item has a defaultValue use it, otherwise, try to grab it off of the pattern
+          if (!model.get('defaultValue')) {
+            if (self.parentAttr) {
+              try {
+                defaultValue = self.patternOptions[self.parentAttr][attr];
+              } catch (e) {
+
+              }
+            } else {
+              try {
+                defaultValue = self.patternOptions[attr];
+              } catch (e) {
+
+              }
+            }
+            if (defaultValue !== undefined) {
+              if ((model.get('type') === 'String') && (defaultValue !== null)) {
+                defaultValue = "'"+defaultValue+"'";
+              }
+              if (defaultValue) {
+                model.set('defaultValue', '<code>'+_.escape(defaultValue)+'</code>');
+              } else {
+                model.set('defaultValue', '<code>'+defaultValue+'</code>');
+              }
+            }
+          }
+        }
         var view = new AttributeView({model: model});
+        view.patternOptions = self.patternOptions;
         this.$el.find('> tbody').append(view.render().$el);
       }, this);
       return this;
@@ -122,13 +159,15 @@ define([
           patterns.push("mockup-patterns-" + extras[i]);
         }
       }
-      require(patterns, function (MainRouter) {
+      require(patterns, function (Pattern) {
         self.$el.html(_.template(tpl, _.extend({
           examples: self.renderExamples()
         }, self.model.toJSON())));
 
         if (self.model.get('attributes')) {
-          $('.docs-attributes', self.$el).append(new AttributesView({model: self.model.get('attributes')}).render().$el);
+          var attrsView = new AttributesView({model: self.model.get('attributes')});
+          attrsView.patternOptions = new Pattern($('<div />'), {__returnDefaults: true}).options;
+          $('.docs-attributes', self.$el).append(attrsView.render().$el);
         }
         registry.scan(self.$el);
       });

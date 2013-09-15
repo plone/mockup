@@ -56,7 +56,7 @@ define([
       homeText: 'home',
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID','Title', 'Type', 'path'],
+      attributes: ['UID', 'Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
       maximumSelectionSize: -1,
       showTabs: true,
