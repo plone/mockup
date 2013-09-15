@@ -102,8 +102,10 @@ define([
           getOptions($el, this.name),
           options || {});
     }
-    this.init();
-    this.trigger('init');
+    if (this.options.__returnDefaults !== true) {
+      this.init();
+      this.trigger('init');
+    }
   };
   Base.prototype = {
     constructor: Base,

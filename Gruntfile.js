@@ -26,7 +26,7 @@ module.exports = function(grunt) {
       ci: {
         configFile: 'tests/karma.conf.js',
         singleRun: true,
-        reporters: ['dots', 'junit', 'coverage'],
+        reporters: ['junit', 'coverage'],
         junitReporter: {
           outputFile: 'test-results.xml'
         },
@@ -337,7 +337,6 @@ module.exports = function(grunt) {
     grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'docs/dev/spritemap.png');
     grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/spritemap@2x.png');
   });
-
 
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
