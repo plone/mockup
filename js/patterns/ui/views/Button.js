@@ -60,39 +60,9 @@ define([
     handleClick: function(e){
       e.preventDefault();
       if (!this.$el.is('.disabled')) {
-        var eventName = 'button.' + this.options.id + '.click';
-        this.trigger(eventName, [this]);
-        this.trigger('button.click', [this]);
-      }
-      if(this.url){
-        // handle ajax now
-        var self = this;
-        var uids = [];
-        self.collection.each(function(item){
-          uids.push(item.uid());
-        });
-        var url = this.url.replace('{path}', self.app.options.queryHelper.getCurrentPath());
-        $.ajax({
-          url: url,
-          type: 'POST',
-          data: {
-            '_authenticator': $('input[name="_authenticator"]').val(),
-            'selection': JSON.stringify(uids)
-          },
-          success: function(data){
-            if(data.status === 'success'){
-              self.collection.reset();
-            }
-            if(data.msg){
-              alert(data.msg);
-            }
-          },
-          error: function(data){
-            if(data.status === 404){
-              alert('operation url "' + url + '" is not valid');
-            }
-          }
-        });
+        var eventName = 'button.' + this.options.id + ':click';
+        this.trigger(eventName, this);
+        this.trigger('button:click', this);
       }
     },
     render: function(){
