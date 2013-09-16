@@ -62,6 +62,12 @@ define([
       // Remove the recursive part because it was confusing if two children had the
       // same id
       return _.findWhere(this.items, {'id': id});
+    },
+    add: function(item) {
+      if (item.id !== undefined && this.get(item.id)) {
+        throw "Another item with the same `id` already exists.";
+      }
+      this.items.push(item);
     }
   });
 
