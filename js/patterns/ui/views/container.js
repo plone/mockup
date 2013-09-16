@@ -59,8 +59,7 @@ define([
 
     },
     get: function(id){
-      for(var i=0; i<this.items.length; i=i+1){
-        var item = this.items[i];
+      _.each(this.items, function(item, i) {
         if(item.id !== undefined && item.id === id){
           return item;
         }
@@ -70,7 +69,7 @@ define([
             return item;
           }
         }
-      }
+      }, this);
       return null;
     }
   });
