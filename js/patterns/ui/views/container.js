@@ -59,7 +59,9 @@ define([
 
     },
     get: function(id){
-      return _.where(this.items, {'id': id});
+      // Remove the recursive part because it was confusing if two children had the
+      // same id
+      return _.findWhere(this.items, {'id': id});
     }
   });
 
