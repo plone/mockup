@@ -59,18 +59,7 @@ define([
 
     },
     get: function(id){
-      _.each(this.items, function(item, i) {
-        if(item.id !== undefined && item.id === id){
-          return item;
-        }
-        if(item.get !== undefined){
-          item = item.get(id);
-          if(item !== null){
-            return item;
-          }
-        }
-      }, this);
-      return null;
+      return _.where(this.items, {'id': id});
     }
   });
 
