@@ -75,7 +75,7 @@ define([
         items: items
       });
 
-      this.$el.on('ui.button.click:cut', function(event, button) {
+      this.toolbar.on('cut.click', function(event, button) {
         // example of binding event to button
         var foo = 'one';
       });
