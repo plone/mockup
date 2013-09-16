@@ -2014,8 +2014,8 @@ function($action, response, options) { ... }
       description: "Managing a folder of items",
       attributes: [
         {attribute: 'ajaxvocabulary', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
-        {attribute: 'upload_url', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'},
-        {attribute: 'move_url', type: 'String', defaultValue: 'null', description: 'For supporting drag drop reordering'}
+        {attribute: 'uploadUrl', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'},
+        {attribute: 'moveUrl', type: 'String', defaultValue: 'null', description: 'For supporting drag drop reordering'}
       ]
     });
   </script>
@@ -2023,8 +2023,8 @@ function($action, response, options) { ... }
   </script>
   <script type="text/example" class="example-structure" data-title="Default">
     <div class="pat-structure" data-pat-structure="ajaxvocabulary:/relateditems-test.json;
-                                                   upload_url:/upload;
-                                                   move_url:/moveitem;">
+                                                   uploadUrl:/upload;
+                                                   moveUrl:/moveitem;">
     </div>
   </script>
 

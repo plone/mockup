@@ -44,26 +44,19 @@ define([
   var AppView = Backbone.View.extend({
     tagName: 'div',
     initialize: function(){
+      var items = [];
+      _.each(this.options.buttonGroups, function(group){
+        var buttons = [];
+        _.each(group, function(button){
+          buttons.push(new Button(button));
+        });
+        items.push(new ButtonGroup({
+          items: buttons
+        }));
+      });
+      items.push(new TextFilterView({id: 'filter'}));
       this.toolbar = new Toolbar({
-        items: [
-          new ButtonGroup({
-            items: [
-              new Button({title: 'Cut'}),
-              new Button({title: 'Copy'}),
-              new Button({title: 'Delete', context: 'danger'}),
-            ]
-          }),
-          new ButtonGroup({
-            items: [
-              new Button({title: 'Workflow'}),
-              new Button({title: 'Tags'}),
-              new Button({title: 'Dates'})
-            ]
-          }),
-          new TextFilterView({
-            id: 'filter'
-          })
-        ]
+        items: items
       });
       this.collection = new ResultCollection([], {
         url: this.options.collection_url

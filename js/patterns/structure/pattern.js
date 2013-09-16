@@ -45,8 +45,32 @@ define([
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish'],
       basePath: '/',
-      upload_url: null,
-      move_url: null
+      uploadUrl: null,
+      moveUrl: null,
+      buttonGroups: {
+        'primary': [{
+          title: 'Cut', // required
+          url: '/cut'
+        },{
+          title: 'Copy',
+          url: '/copy'
+        },{
+          title: 'Delete',
+          section: 'primary',
+          url: '/delete',
+          context: 'danger'
+        }],
+        'secondary': [{
+          title: 'Workflow',
+          url: '/workflow'
+        },{
+          title: 'Tags',
+          url: '/tags'
+        },{
+          title: 'Dates',
+          url: '/dates'
+        }]
+      }
     },
     init: function() {
       var self = this;
@@ -56,8 +80,9 @@ define([
         collection_url: self.options.ajaxvocabulary,
         queryHelper: new QueryHelper(self.$el,
           $.extend(true, {}, self.options, {basePattern: self})),
-        upload_url: self.options.upload_url,
-        move_url: self.options.move_url
+        uploadUrl: self.options.uploadUrl,
+        moveUrl: self.options.moveUrl,
+        buttonGroups: self.options.buttonGroups
       });
       self.$el.append(self.view.render().$el);
     }

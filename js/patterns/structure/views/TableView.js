@@ -113,7 +113,7 @@ define([
     },
     moveItem: function($el, delta){
       $.ajax({
-        url: this.app.options.move_url,
+        url: this.app.options.moveUrl,
         type: 'POST',
         data: {
           delta: delta
