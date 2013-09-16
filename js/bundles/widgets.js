@@ -117,7 +117,7 @@ define([
       $('dl.actionMenu').removeClass('deactivated');
 
       $('html').on('mousedown', function(e) {
-        if (!$(e.toElement).parents('dl.actionMenu').hasClass('activated')){
+        if (!$(e.toElement || e.relatedTarget || e.target).parents('dl.actionMenu').hasClass('activated')){
           // Means we clicked an opened menu, do not close
           $('dl.actionMenu').removeClass('activated');
         }
