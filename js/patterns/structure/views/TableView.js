@@ -44,13 +44,10 @@ define([
       this.listenTo(this.collection, 'sync', this.render);
       this.listenTo(this.selected_collection, 'remove', this.render);
       this.collection.pager();
-      this.continuous = false;
     },
     render: function() {
       var self = this;
-      if(!self.continuous){
-        self.$el.html(self.template({}));
-      }
+      self.$el.html(self.template({}));
       if(self.collection.length){
         var container = self.$('tbody');
         self.collection.each(function(result){
@@ -61,11 +58,7 @@ define([
           container.append(view.el);
         });
       }
-      if(self.continuous){
-        self.continuous = false;
-      }else{
-        self.addReordering();
-      }
+      self.addReordering();
       return this;
     },
     addReordering: function(){
@@ -104,16 +97,6 @@ define([
           dd.current = drop;
           dd.method = method;
           dd.update();
-          console.log(this);
-          /* detect here if we should start loading more */
-          var $rows = self.$('tr');
-          var $el = $(this);
-          if(($el.index() + 5) > $rows.length){
-            if(!self.continuous){
-              self.continuous = true;
-              self.collection.nextPage();
-            }
-          }
         }
       })
       .drag('end', function(e, dd) {
