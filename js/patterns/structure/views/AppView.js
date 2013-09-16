@@ -48,8 +48,9 @@ define([
       this.collection = new ResultCollection([], {
         url: this.options.collection_url
       });
+      self.queryHelper = self.options.queryHelper;
       this.selected_collection = new SelectedCollection();
-      this.collection.queryHelper = this.options.queryHelper;
+      this.collection.queryHelper = this.queryHelper;
       this.table_view = new TableView({app: this});
       this.well_view = new WellView({app: this});
       this.paging_view = new PagingView({app: this});

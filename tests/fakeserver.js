@@ -379,7 +379,9 @@ define([
     /delete/,
     /workflow/,
     /tags/,
-    /dates/
+    /dates/,
+    /paste/,
+    /order/
   ];
 
   _.each(basicActions, function(action){

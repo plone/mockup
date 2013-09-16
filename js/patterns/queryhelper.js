@@ -67,10 +67,19 @@ define([
         self.valid = false;
       }
     },
-    currentPath: function(){
+    getCurrentPath: function(){
       var self = this;
       var pattern = self.basePattern;
-      var currentPath = pattern.currentPath;
+      var currentPath;
+      /* If currentPath is set on the QueryHelper object, use that first.
+       * Then, check on the pattern.
+       * Finally, see if it is a function and call it if it is.
+       */
+      if(self.currentPath){
+        currentPath = self.currentPath;
+      }else{
+        currentPath = pattern.currentPath;
+      }
       if(typeof(currentPath) === 'function'){
         currentPath = currentPath();
       }
@@ -111,7 +120,7 @@ define([
         criterias.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
-          v: self.currentPath()
+          v: self.getCurrentPath()
         });
       }
       criterias = criterias.concat(options.additionalCriterias);

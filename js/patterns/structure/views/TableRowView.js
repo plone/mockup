@@ -35,7 +35,8 @@ define([
     tagName: 'tr',
     template: _.template(TableRowTemplate),
     events: {
-      'change input': 'itemSelected'
+      'change input': 'itemSelected',
+      'click a': 'itemClicked'
     },
     initialize: function(){
       this.app = this.options.app;
@@ -54,8 +55,17 @@ define([
       if(attrs.is_folderish){
         this.$el.addClass('folder');
       }
+      this.$el.attr('data-path', data.path);
       this.el.model = this.model;
       return this;
+    },
+    itemClicked: function(e){
+      if(this.model.attributes.is_folderish){
+        // go to this folder now
+        e.preventDefault();
+        this.app.queryHelper.currentPath = this.model.attributes.path;
+        this.app.collection.pager();
+      }
     },
     itemSelected: function(){
       var remove = false;

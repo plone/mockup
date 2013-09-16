@@ -1,5 +1,15 @@
 <table class="table table-striped table-bordered">
   <thead>
+    <tr class="breadcrumbs">
+      <td colspan="4">
+        <a href="#" data-path="/">/</a>
+        <% _.each(path.split('/'), function(part){
+          if(part){ %>
+            <a href="#" data-path="<%- part %>"><%- part %></a>
+          <% }
+        }); %>
+      </td>
+    </tr>
     <tr>
       <th colspan="2">Title</th>
       <th>Last Modified</th>

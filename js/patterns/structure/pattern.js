@@ -48,18 +48,21 @@ define([
       uploadUrl: null,
       moveUrl: null,
       buttonGroups: {
-        'primary': [{
+        primary: [{
           title: 'Cut', // required
           url: '/cut'
         },{
-          title: 'Copy',
+          title: 'Copy', // required
           url: '/copy'
+        },{
+          title: 'Paste', // required
+          url: '/paste'
         },{
           title: 'Delete',
           url: '/delete',
           context: 'danger'
         }],
-        'secondary': [{
+        secondary: [{
           title: 'Workflow',
           url: '/workflow'
         },{
@@ -68,6 +71,10 @@ define([
         },{
           title: 'Dates',
           url: '/dates'
+        }],
+        folder: [{
+          title: 'Order',
+          url: '/order'
         }]
       }
     },

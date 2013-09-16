@@ -70,7 +70,7 @@ define([
         self.collection.each(function(item){
           uids.push(item.uid());
         });
-        var url = this.url.replace('{path}', self.app.options.queryHelper.currentPath());
+        var url = this.url.replace('{path}', self.app.options.queryHelper.getCurrentPath());
         $.ajax({
           url: url,
           type: 'POST',

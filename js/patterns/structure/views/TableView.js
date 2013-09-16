@@ -46,9 +46,14 @@ define([
       this.listenTo(this.selected_collection, 'reset', this.render);
       this.collection.pager();
     },
+    events: {
+      'click .breadcrumbs a': 'breadcrumbClicked'
+    },
     render: function() {
       var self = this;
-      self.$el.html(self.template({}));
+      self.$el.html(self.template({
+        path: self.app.queryHelper.getCurrentPath()
+      }));
       if(self.collection.length){
         var container = self.$('tbody');
         self.collection.each(function(result){
@@ -62,12 +67,18 @@ define([
       self.addReordering();
       return this;
     },
+    breadcrumbClicked: function(e){
+      e.preventDefault();
+      var $el = $(e.target);
+      this.app.queryHelper.currentPath = $el.attr('data-path');
+      this.collection.pager();
+    },
     addReordering: function(){
       var self = this;
       self.$el.addClass('order-support');
       var start = null;
       /* drag and drop reording support */
-      self.$('tr').drag('start', function(e, dd) {
+      self.$('tbody tr').drag('start', function(e, dd) {
         var dragged = this;
         $(dragged).addClass('structure-dragging');
         $.drop({
