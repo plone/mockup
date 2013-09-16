@@ -43,6 +43,7 @@ define([
       this.selected_collection = this.app.selected_collection;
       this.listenTo(this.collection, 'sync', this.render);
       this.listenTo(this.selected_collection, 'remove', this.render);
+      this.listenTo(this.selected_collection, 'reset', this.render);
       this.collection.pager();
     },
     render: function() {

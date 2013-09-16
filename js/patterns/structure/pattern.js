@@ -56,7 +56,6 @@ define([
           url: '/copy'
         },{
           title: 'Delete',
-          section: 'primary',
           url: '/delete',
           context: 'danger'
         }],

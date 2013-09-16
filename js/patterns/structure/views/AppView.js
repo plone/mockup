@@ -44,20 +44,7 @@ define([
   var AppView = Backbone.View.extend({
     tagName: 'div',
     initialize: function(){
-      var items = [];
-      _.each(this.options.buttonGroups, function(group){
-        var buttons = [];
-        _.each(group, function(button){
-          buttons.push(new Button(button));
-        });
-        items.push(new ButtonGroup({
-          items: buttons
-        }));
-      });
-      items.push(new TextFilterView({id: 'filter'}));
-      this.toolbar = new Toolbar({
-        items: items
-      });
+      var self = this;
       this.collection = new ResultCollection([], {
         url: this.options.collection_url
       });
@@ -66,6 +53,26 @@ define([
       this.table_view = new TableView({app: this});
       this.well_view = new WellView({app: this});
       this.paging_view = new PagingView({app: this});
+
+      var items = [];
+      _.each(this.options.buttonGroups, function(group){
+        var buttons = [];
+        _.each(group, function(button){
+          $.extend(button, button, {
+            app: self,
+            collection: self.selected_collection
+          });
+          buttons.push(new Button(button));
+        });
+        items.push(new ButtonGroup({
+          items: buttons,
+          app: self
+        }));
+      });
+      items.push(new TextFilterView({id: 'filter'}));
+      this.toolbar = new Toolbar({
+        items: items
+      });
 
       this.$el.on('ui.button.click:cut', function(event, button) {
         // example of binding event to button
@@ -92,7 +99,6 @@ define([
 
       /* detect shift clicks */
       this.shift_clicked = false;
-      var self = this;
       $(document).bind('keyup keydown', function(e){
         self.shift_clicked = e.shiftKey;
       });

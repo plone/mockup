@@ -24,11 +24,12 @@
 
 
 define([
+  'jquery',
   'backbone',
   'underscore',
   'ui/views/base'
   ],
-  function(Backbone, _, BaseView) {
+  function($, Backbone, _, BaseView) {
   "use strict";
 
   var ButtonView = BaseView.extend({
@@ -61,6 +62,36 @@ define([
       if (!this.$el.is('.disabled')) {
         this.$el.trigger('ui.button.click', [this]);
         this.$el.trigger('ui.button.click:'+this.id, [this]);
+      }
+      if(this.url){
+        // handle ajax now
+        var self = this;
+        var uids = [];
+        self.collection.each(function(item){
+          uids.push(item.uid());
+        });
+        var url = this.url.replace('{path}', self.app.options.queryHelper.currentPath());
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: {
+            '_authenticator': $('input[name="_authenticator"]').val(),
+            'selection': JSON.stringify(uids)
+          },
+          success: function(data){
+            if(data.status === 'success'){
+              self.collection.reset();
+            }
+            if(data.msg){
+              alert(data.msg);
+            }
+          },
+          error: function(data){
+            if(data.status === 404){
+              alert('operation url "' + url + '" is not valid');
+            }
+          }
+        });
       }
     },
     render: function(){

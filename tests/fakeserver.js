@@ -372,11 +372,24 @@ define([
     xhr.respond(200, {"content-Type": "text/html"}, content);
   });
 
-  server.respondWith('POST', /moveitem/, function(xhr, id) {
-    xhr.respond(200, { "Content-Type": "application/json" },
-      JSON.stringify({
-        "status": "success"
-    }));
+  var basicActions = [
+    /moveitem/,
+    /copy/,
+    /cut/,
+    /delete/,
+    /workflow/,
+    /tags/,
+    /dates/
+  ];
+
+  _.each(basicActions, function(action){
+    server.respondWith('POST', action, function(xhr, id) {
+      server.autoRespondAfter = 200;
+      xhr.respond(200, { "Content-Type": "application/json" },
+        JSON.stringify({
+          "status": "success"
+      }));
+    });
   });
 
   return server;
