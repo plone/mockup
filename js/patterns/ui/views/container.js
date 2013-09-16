@@ -24,25 +24,48 @@
 
 
 define([
+  'jquery',
   'underscore',
   'backbone',
   'ui/views/base'
-], function(_, Backbone, BaseView) {
+], function($, _, Backbone, BaseView) {
   "use strict";
 
   var Container = BaseView.extend({
     id: '',
     items: [],
+    itemContainer: null,
+    template: null,
     render: function() {
       var self = this;
-      _.each(this.items, function(view){
-        this.$el.append(view.render().$el);
-      }, this);
 
+      if (self.template !== null) {
+        self.$el.html(_.template(this.template, this.serializedModel()));
+      }
+
+      this.renderItems();
       this.bindEvents();
       this.afterRender();
 
       return this;
+    },
+    serializedModel: function() {
+      return {};
+    },
+    renderItems: function() {
+      var $container;
+
+      if (this.itemContainer !== null) {
+        $container = $(this.itemContainer, this.$el);
+        if ($container.length === 0) {
+          throw "Item Container element not found.";
+        }
+      } else {
+        $container = this.$el;
+      }
+      _.each(this.items, function(view){
+        $container.append(view.render().$el);
+      }, this);
     },
     bindEvents: function() {
       var self = this;
