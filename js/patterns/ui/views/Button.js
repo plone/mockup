@@ -60,8 +60,8 @@ define([
     handleClick: function(e){
       e.preventDefault();
       if (!this.$el.is('.disabled')) {
-        this.$el.trigger('ui.button.click', [this]);
-        this.$el.trigger('ui.button.click:'+this.id, [this]);
+        var eventName = this.options.id + '.click';
+        this.trigger(eventName, [this]);
       }
       if(this.url){
         // handle ajax now
