@@ -45,7 +45,7 @@ define([
     },
     filter: function(event) {
       var val = $(event.currentTarget).val();
-      this.trigger('filter.change', [val, this]);
+      this.trigger('filter:change', val, this);
     }
   });
 

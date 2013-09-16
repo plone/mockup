@@ -50,7 +50,8 @@ define([
         view.on('all', function() {
           var eventName = arguments[0];
           var newName = self.id !== '' ? self.id + '.' + eventName : eventName;
-          self.trigger(newName, arguments[1]);
+          arguments[0] = newName;
+          self.trigger.apply(self, arguments);
         });
       });
     },
