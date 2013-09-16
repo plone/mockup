@@ -36,8 +36,8 @@ define([
     defaults: {
       message : 'You already clicked the submit button. ' +
                 'Do you really want to submit this form again?',
-      guardKlass: 'submitting',
-      optOutKlass: 'allowMultiSubmit'
+      guardClassName: 'submitting',
+      optOutClassName: 'allowMultiSubmit'
     },
     init: function() {
       var self = this;
@@ -48,13 +48,13 @@ define([
         // mark the button as clicked
         $(':submit').removeAttr('clicked');
         $(this).attr('clicked', 'clicked');
-        // if submitting and no opt-out klass is found
+        // if submitting and no opt-out guardClassName is found
         // pop up confirmation dialog
-        if ($(this).hasClass(self.options.guardKlass) &&
-              !$(this).hasClass(self.options.optOutKlass)){
+        if ($(this).hasClass(self.options.guardClassName) &&
+              !$(this).hasClass(self.options.optOutClassName)){
           return self._confirm();
         }
-        $(this).addClass(self.options.guardKlass);
+        $(this).addClass(self.options.guardClassName);
       });
 
     },

@@ -47,14 +47,14 @@ define([
       results: ' items matching your search.',
       days: 'days',
       betweendt: 'to',
-      klassBetweenDt: 'querystring-criteria-betweendt',
-      klassWrapper: 'querystring-criteria-wrapper',
-      klassIndex: 'querystring-criteria-index',
-      klassOperator: 'querystring-criteria-operator',
-      klassValue: 'querystring-criteria-value',
-      klassRemove: 'querystring-criteria-remove',
-      klassResults: 'querystring-criteria-results',
-      klassClear: 'querystring-criteria-clear'
+      classBetweenDtName: 'querystring-criteria-betweendt',
+      classWrapperName: 'querystring-criteria-wrapper',
+      classIndexName: 'querystring-criteria-index',
+      classOperatorName: 'querystring-criteria-operator',
+      classValueName: 'querystring-criteria-value',
+      classRemoveName: 'querystring-criteria-remove',
+      classResultsName: 'querystring-criteria-results',
+      classClearName: 'querystring-criteria-clear'
     },
     init: function($el, options, indexes, index, operator, value) {
       var self = this;
@@ -65,12 +65,12 @@ define([
 
       // create wrapper criteria and append it to DOM
       self.$wrapper = $('<div/>')
-              .addClass(self.options.klassWrapper)
+              .addClass(self.options.classWrapperName)
               .appendTo($el);
 
       // Remove button
       self.$remove = $('<div>'+self.options.remove+'</div>')
-              .addClass(self.options.klassRemove)
+              .addClass(self.options.classRemoveName)
               .appendTo(self.$wrapper)
               .on('click', function(e) {
                 self.remove();
@@ -98,7 +98,7 @@ define([
       // attach index select to DOM
       self.$wrapper.append(
           $('<div/>')
-              .addClass(self.options.klassIndex)
+              .addClass(self.options.classIndexName)
               .append(self.$index));
 
       // add blink (select2)
@@ -140,7 +140,7 @@ define([
       // attach operators select to DOM
       self.$wrapper.append(
           $('<div/>')
-              .addClass(self.options.klassOperator)
+              .addClass(self.options.classOperatorName)
               .append(self.$operator));
 
       // add blink (select2)
@@ -165,14 +165,14 @@ define([
       var self = this,
           widget = self.indexes[index].operators[self.$operator.val()].widget,
           $wrapper = $('<div/>')
-            .addClass(self.options.klassValue)
+            .addClass(self.options.classValueName)
             .appendTo(self.$wrapper);
 
       self.removeValue();
 
       if (widget === 'StringWidget') {
         self.$value = $('<input type="text"/>')
-                .addClass(self.options.klassValue + '-' + widget)
+                .addClass(self.options.classValueName + '-' + widget)
                 .val(value)
                 .appendTo($wrapper)
                 .change(function(){
@@ -181,7 +181,7 @@ define([
 
       } else if (widget === 'DateWidget') {
         self.$value = $('<input type="text"/>')
-                .addClass(self.options.klassValue + '-' + widget)
+                .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .patternPickadate({
                   time: false,
@@ -194,8 +194,8 @@ define([
       } else if (widget === 'DateRangeWidget') {
         var startwrap = $('<span/>').appendTo($wrapper);
         var startdt = $('<input type="text"/>')
-                        .addClass(self.options.klassValue + '-' + widget)
-                        .addClass(self.options.klassValue + '-' + widget + '-start')
+                        .addClass(self.options.classValueName + '-' + widget)
+                        .addClass(self.options.classValueName + '-' + widget + '-start')
                         .appendTo(startwrap)
                         .patternPickadate({
                           time: false,
@@ -204,12 +204,12 @@ define([
         $wrapper.append(
           $('<span/>')
             .html(self.options.betweendt)
-            .addClass(self.options.klassBetweenDt)
+            .addClass(self.options.classBetweenDtName)
         );
         var endwrap = $('<span/>').appendTo($wrapper);
         var enddt = $('<input type="text"/>')
-                        .addClass(self.options.klassValue + '-' + widget)
-                        .addClass(self.options.klassValue + '-' + widget + '-end')
+                        .addClass(self.options.classValueName + '-' + widget)
+                        .addClass(self.options.classValueName + '-' + widget + '-end')
                         .appendTo(endwrap)
                         .patternPickadate({
                           time: false,
@@ -223,7 +223,7 @@ define([
       } else if (widget === 'RelativeDateWidget') {
         self.$value = $('<input type="text"/>')
                 .after($('<span/>').html(self.options.days))
-                .addClass(self.options.klassValue + '-' + widget)
+                .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
                   self.trigger('value-changed');
@@ -231,7 +231,7 @@ define([
 
       } else if (widget === 'ReferenceWidget') {
         self.$value = $('<input type="text"/>')
-                .addClass(self.options.klassValue + '-' + widget)
+                .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
                   self.trigger('value-changed');
@@ -239,7 +239,7 @@ define([
 
       } else if (widget === 'RelativePathWidget') {
         self.$value = $('<input type="text"/>')
-                .addClass(self.options.klassValue + '-' + widget)
+                .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
                   self.trigger('value-changed');
@@ -247,7 +247,7 @@ define([
 
       } else if (widget === 'MultipleSelectionWidget') {
         self.$value = $('<select/>').attr('multiple', true)
-                .addClass(self.options.klassValue + '-' + widget)
+                .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function(){
                   self.trigger('value-changed');
@@ -274,7 +274,7 @@ define([
       var self = this;
       self.removeClear();
       self.$clear = $('<div/>')
-        .addClass(self.options.klassClear)
+        .addClass(self.options.classClearName)
         .appendTo(self.$wrapper);
     },
     remove: function() {
@@ -400,7 +400,7 @@ define([
     name: 'querystring',
     defaults: {
       indexes: [],
-      klassWrapper: 'querystring-wrapper',
+      classWrapperName: 'querystring-wrapper',
       criteria: {},
       previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
       previewCountURL: 'portal_factory/@@querybuildernumberofresults',
@@ -408,16 +408,16 @@ define([
       reversetxt: 'Reversed Order',
       previewTitle: 'Preview',
       previewDescription: 'Preview of at most 10 items',
-      klassSortLabel: 'querystring-sort-label',
-      klassSortReverse: 'querystring-sortreverse',
-      klassSortReverseLabel: 'querystring-sortreverse-label',
-      klassPreviewCountWrapper: 'querystring-previewcount-wrapper',
-      klassPreviewResultsWrapper: 'querystring-previewresults-wrapper',
-      klassPreviewWrapper: 'querystring-preview-wrapper',
-      klassPreview: 'querystring-preview',
-      klassPreviewTitle: 'querystring-preview-title',
-      klassPreviewDescription: 'querystring-preview-description',
-      klassSortWrapper: 'querystring-sort-wrapper'
+      classSortLabelName: 'querystring-sort-label',
+      classSortReverseName: 'querystring-sortreverse',
+      classSortReverseLabelName: 'querystring-sortreverse-label',
+      classPreviewCountWrapperName: 'querystring-previewcount-wrapper',
+      classPreviewResultsWrapperName: 'querystring-previewresults-wrapper',
+      classPreviewWrapperName: 'querystring-preview-wrapper',
+      classPreviewName: 'querystring-preview',
+      classPreviewTitleName: 'querystring-preview-title',
+      classPreviewDescriptionName: 'querystring-preview-description',
+      classSortWrapperName: 'querystring-sort-wrapper'
     },
     init: function() {
       var self = this;
@@ -430,24 +430,24 @@ define([
       self.$el.after(self.$wrapper);
 
       self.$criteriaWrapper = $('<div/>')
-        .addClass(self.options.klassWrapper)
+        .addClass(self.options.classWrapperName)
         .appendTo(self.$wrapper);
 
       self.$sortWrapper = $('<div/>')
-        .addClass(self.options.klassSortWrapper)
+        .addClass(self.options.classSortWrapperName)
         .appendTo(self.$wrapper);
 
       self.$previewWrapper = $('<div/>')
-        .addClass(self.options.klassPreviewWrapper)
+        .addClass(self.options.classPreviewWrapperName)
         .appendTo(self.$wrapper);
 
       // preview title and description
       $('<div/>')
-        .addClass(self.options.klassPreviewTitle)
+        .addClass(self.options.classPreviewTitleName)
         .html(self.options.previewTitle)
         .appendTo(self.$previewWrapper);
       $('<div/>')
-        .addClass(self.options.klassPreviewDescription)
+        .addClass(self.options.classPreviewDescriptionName)
         .html(self.options.previewDescription)
         .appendTo(self.$previewWrapper);
 
@@ -512,7 +512,7 @@ define([
       var existingSortOrder = $('#formfield-form-widgets-sort_reversed');
 
       $('<span/>')
-        .addClass(self.options.klassSortLabel)
+        .addClass(self.options.classSortLabelName)
         .html(self.options.sorttxt)
         .appendTo(self.$sortWrapper);
       self.$sortOn = $('<select/>')
@@ -547,13 +547,13 @@ define([
 
 
       $('<span/>')
-        .addClass(self.options.klassSortReverse)
+        .addClass(self.options.classSortReverseName)
         .appendTo(self.$sortWrapper)
         .append(self.$sortOrder)
         .append(
           $('<span/>')
             .html(self.options.reversetxt)
-            .addClass(self.options.klassSortReverseLabel)
+            .addClass(self.options.classSortReverseLabelName)
         );
 
       // if the form already contains the sort fields, hide them! Their values
@@ -598,12 +598,12 @@ define([
       });
 
       self.$previewPane = $('<div/>')
-        .addClass(self.options.klassPreview)
+        .addClass(self.options.classPreviewName)
         .appendTo(self.$previewWrapper);
 
       if(query.length <= 0) {
         $('<div/>')
-          .addClass(self.options.klassPreviewCountWrapper)
+          .addClass(self.options.classPreviewCountWrapperName)
           .html("No results to preview")
           .prependTo(self.$previewPane);
         return; // no query means nothing to send out requests for
@@ -625,7 +625,7 @@ define([
       self._count_xhr = $.get(self.options.previewCountURL + '?' + query.join('&'))
           .done(function(data, stat){
             $('<div/>')
-              .addClass(self.options.klassPreviewCountWrapper)
+              .addClass(self.options.classPreviewCountWrapperName)
               .html(data)
               .prependTo(self.$previewPane);
           });
@@ -633,7 +633,7 @@ define([
       self._preview_xhr = $.get(self.options.previewURL + '?' + query.join('&'))
           .done(function(data, stat){
             $('<div/>')
-              .addClass(self.options.klassPreviewResultsWrapper)
+              .addClass(self.options.classPreviewResultsWrapperName)
               .html(data)
               .appendTo(self.$previewPane);
           });

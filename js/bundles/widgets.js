@@ -58,7 +58,7 @@ define([
       $match = $match.add($root.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
       $match.attr({
-        'data-pat-autotoc':'levels: legend;section: fieldset;klass: autotabs'
+        'data-pat-autotoc':'levels: legend;section: fieldset;className: autotabs'
       });
 
       // activate accessibility pattern by default

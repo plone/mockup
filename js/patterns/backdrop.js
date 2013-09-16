@@ -36,23 +36,23 @@ define([
     defaults: {
       zIndex: "1000",
       opacity: "0.8",
-      klass: "backdrop",
-      klassActive: 'backdrop-active',
+      className: "backdrop",
+      classActiveName: 'backdrop-active',
       closeOnEsc: true,
       closeOnClick: true
     },
     init: function() {
       var self = this;
-      self.$backdrop = $('> .' + self.options.klass, self.$el);
+      self.$backdrop = $('> .' + self.options.className, self.$el);
       if (self.$backdrop.size() === 0) {
         self.$backdrop= $('<div/>')
             .hide()
             .appendTo(self.$el)
-            .addClass(self.options.klass);
+            .addClass(self.options.className);
       }
       if (self.options.closeOnEsc === true) {
         $(document).on('keydown', function(e, data) {
-          if (self.$el.is('.' + self.options.klassActive)) {
+          if (self.$el.is('.' + self.options.classActiveName)) {
             if (e.keyCode === 27) {  // ESC key pressed
               self.hide();
             }
@@ -61,7 +61,7 @@ define([
       }
       if (self.options.closeOnClick === true) {
         self.$backdrop.on('click', function() {
-          if (self.$el.is('.' + self.options.klassActive)) {
+          if (self.$el.is('.' + self.options.classActiveName)) {
             self.hide();
           }
         });
@@ -69,20 +69,20 @@ define([
     },
     show: function() {
       var self = this;
-      if (!self.$el.hasClass(self.options.klassActive)) {
+      if (!self.$el.hasClass(self.options.classActiveName)) {
         self.trigger('show');
         self.$backdrop.css('opacity', '0').show();
-        self.$el.addClass(self.options.klassActive);
+        self.$el.addClass(self.options.classActiveName);
         self.$backdrop.animate({ opacity: self.options.opacity }, 500);
         self.trigger('shown');
       }
     },
     hide: function() {
       var self = this;
-      if (self.$el.hasClass(self.options.klassActive)) {
+      if (self.$el.hasClass(self.options.classActiveName)) {
         self.trigger('hide');
         self.$backdrop.animate({ opacity: '0' }, 500).hide();
-        self.$el.removeClass(self.options.klassActive);
+        self.$el.removeClass(self.options.classActiveName);
         self.trigger('hidden');
       }
     }

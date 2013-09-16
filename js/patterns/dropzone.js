@@ -38,7 +38,7 @@ define([
     name: "dropzone",
     defaults: {
       url: null, // XXX MUST provide url to submit to OR be in a form
-      klass: 'dropzone',
+      className: 'dropzone',
       paramName: "file",
       uploadMultiple: false,
       clickable: false,
@@ -83,7 +83,7 @@ define([
       }
 
       var autoClean = self.options.autoCleanResults;
-      $el.addClass(self.options.klass);
+      $el.addClass(self.options.className);
 
       // clean up options
       var options = $.extend({}, self.options);

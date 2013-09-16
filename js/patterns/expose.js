@@ -36,12 +36,12 @@ define([
     name: "expose",
     defaults: {
       triggers: "focusin",
-      klassActive: "active",
+      classActiveName: "active",
       backdrop: "body",
       backdropZIndex: "1000",
       backdropOpacity: "0.8",
-      backdropKlass: "backdrop",
-      backdropKlassActive: 'backdrop-active',
+      backdropClassName: "backdrop",
+      backdropClassActiveName: 'backdrop-active',
       backdropCloseOnEsc: true,
       backdropCloseOnClick: true
     },
@@ -50,8 +50,8 @@ define([
 
       self.backdrop = new Backdrop(self.$el.parents(self.options.backdrop), {
         zindex: self.options.backdropZIndex,
-        klass: self.options.backdropKlass,
-        klassActive: self.options.backdropKlassActive,
+        className: self.options.backdropClassName,
+        classActiveName: self.options.backdropClassActiveName,
         styles: self.options.backdropStyles,
         opacity: self.options.backdropOpacity,
         closeOnEsc: self.options.backdropCloseOnEsc,
@@ -69,9 +69,9 @@ define([
     },
     show: function() {
       var self = this;
-      if (!self.$el.hasClass(self.options.klassActive)) {
+      if (!self.$el.hasClass(self.options.classActiveName)) {
         self.trigger('show');
-        self.$el.addClass(self.options.klassActive);
+        self.$el.addClass(self.options.classActiveName);
         self.backdrop.show();
         self._initialZIndex = self.$el.css('z-index');
         self.$el.css('z-index', self.options.backdropZIndex + 1);
@@ -82,11 +82,11 @@ define([
     },
     hide: function() {
       var self = this;
-      if (self.$el.hasClass(self.options.klassActive)) {
+      if (self.$el.hasClass(self.options.classActiveName)) {
         self.trigger('hide');
         self.backdrop.hide();
         self.$el.css('z-index', self._initialZIndex);
-        self.$el.removeClass(self.options.klassActive);
+        self.$el.removeClass(self.options.classActiveName);
         self.trigger('hidden');
       }
     }

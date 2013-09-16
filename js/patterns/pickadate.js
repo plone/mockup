@@ -49,13 +49,13 @@ define([
         value: '',
         formatSubmit: 'HH:i'
       },
-      klassWrapper: 'pat-pickadate-wrapper',
-      klassSeparator: 'pat-pickadate-separator',
-      klassDate: 'pat-pickadate-date',
-      klassDateWrapper: 'pat-pickadate-date-wrapper',
-      klassTime: 'pat-pickadate-time',
-      klassTimeWrapper: 'pat-pickadate-time-wrapper',
-      klassClear: 'pat-pickadate-clear',
+      classWrapperName: 'pat-pickadate-wrapper',
+      classSeparatorName: 'pat-pickadate-separator',
+      classDateName: 'pat-pickadate-date',
+      classDateWrapperName: 'pat-pickadate-date-wrapper',
+      classTimeName: 'pat-pickadate-time',
+      classTimeWrapperName: 'pat-pickadate-time-wrapper',
+      classClearName: 'pat-pickadate-clear',
       placeholderDate: 'enter date...',
       placeholderTime: 'enter time...'
     },
@@ -75,7 +75,7 @@ define([
       self.$el.hide();
 
       self.$wrapper = $('<div/>')
-            .addClass(self.options.klassWrapper)
+            .addClass(self.options.classWrapperName)
             .insertAfter(self.$el);
 
       self.options.date = self.ensureBool(self.options.date);
@@ -87,9 +87,9 @@ define([
       if (self.options.date !== false) {
         self.$date = $('<input type="text"/>')
               .attr('data-value', self.options.date.value)
-              .addClass(self.options.klassDate)
+              .addClass(self.options.classDateName)
               .appendTo($('<div/>')
-                  .addClass(self.options.klassDateWrapper)
+                  .addClass(self.options.classDateWrapperName)
                   .appendTo(self.$wrapper))
               .pickadate($.extend(true, self.options.date, {
                 hiddenSuffix: date_name,
@@ -101,7 +101,7 @@ define([
 
       if (self.options.date !== false && self.options.time !== false) {
         self.$separator = $('<span/>')
-              .addClass(self.options.klassSeparator)
+              .addClass(self.options.classSeparatorName)
               .html(self.options.separator === ' ' ? '&nbsp;'
                                                    : self.options.separator)
               .appendTo(self.$wrapper);
@@ -110,9 +110,9 @@ define([
       if (self.options.time !== false) {
         self.$time = $('<input type="text"/>')
               .attr('data-value', self.options.time.value)
-              .addClass(self.options.klassTime)
+              .addClass(self.options.classTimeName)
               .appendTo($('<div/>')
-                  .addClass(self.options.klassTimeWrapper)
+                  .addClass(self.options.classTimeWrapperName)
                   .appendTo(self.$wrapper))
               .pickatime($.extend(true, self.options.time, {
                 hiddenSuffix: time_name,
@@ -130,7 +130,7 @@ define([
       }
 
       self.$clear = $('<div/>')
-            .addClass(self.options.klassClear)
+            .addClass(self.options.classClearName)
             .appendTo(self.$wrapper);
 
     }

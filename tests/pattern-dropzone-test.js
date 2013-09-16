@@ -85,9 +85,9 @@ define([
         // TODO: checking throw error does not work
         //expect(registry.scan(this.$el)).to.throw(new Error('No URL provided'));
       });
-      it('change klass data option', function() {
+      it('change className data option', function() {
         var attr = $('.pat-dropzone', this.$el).attr('data-pat-dropzone');
-        $('.pat-dropzone', this.$el).attr('data-pat-dropzone', attr + '; klass: drop-zone');
+        $('.pat-dropzone', this.$el).attr('data-pat-dropzone', attr + '; className: drop-zone');
         registry.scan(this.$el);
         expect($('.pat-dropzone', this.$el).hasClass('drop-zone')).to.be.equal(true);
       });
@@ -189,8 +189,8 @@ define([
         registry.scan(this.$el);
         //TODO
       });
-      it('change klass data option', function() {
-        $('.pat-dropzone', this.$el).attr('data-pat-dropzone', 'klass: drop-zone');
+      it('change className data option', function() {
+        $('.pat-dropzone', this.$el).attr('data-pat-dropzone', 'className: drop-zone');
         registry.scan(this.$el);
         expect($('.pat-dropzone', this.$el).hasClass('drop-zone')).to.be.equal(true);
       });

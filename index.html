@@ -163,8 +163,8 @@ require([
   var backdropAttributes = [
     {attribute: 'zIndex', type: 'String', description: 'Value for <code>z-index</code> to be applied to backdrop.'},
     {attribute: 'opacity', type: 'String', description: 'This property allows you to control the transparency or opacity of the backdrop.'},
-    {attribute: 'klass', type: 'String', description: 'Set the CSS class applied to the backdrop. Useful if you want to apply your own styling to the backdrop.'},
-    {attribute: 'klassActive', type: 'String', description: 'Set the CSS class which is applied when the backdrop is made active.'},
+    {attribute: 'className', type: 'String', description: 'Set the CSS class applied to the backdrop. Useful if you want to apply your own styling to the backdrop.'},
+    {attribute: 'classActiveName', type: 'String', description: 'Set the CSS class which is applied when the backdrop is made active.'},
     {attribute: 'closeOnEsc', type: 'Boolean', description: 'Whether or not to close the backdrop (and modal) when the "Escape" key is pressed.'},
     {attribute: 'closeOnClick', type: 'Boolean', description: 'Whether or not to close the backdrop (and modal) when the backdrop is clicked.'},
   ];
@@ -651,11 +651,11 @@ $ make bootstrap</pre>
         {attribute: 'backdrop', type: 'String', description: 'Selector of parent element to use as backdrop.'},
         {attribute: 'backdropCloseOnClick', type: 'Boolean', description: 'Cancel expose on click if true.'},
         {attribute: 'backdropCloseOnEsc', type: 'Boolean', description: 'Cancel expose on escape if true.'},
-        {attribute: 'backdropKlass', type: 'String', description: 'TODO'},
-        {attribute: 'backdropKlassActive', type: 'String', description: 'TODO'},
+        {attribute: 'backdropClassName', type: 'String', description: 'TODO'},
+        {attribute: 'backdropClassActiveName', type: 'String', description: 'TODO'},
         {attribute: 'backdropOpacity', type: 'Float', description: 'Backdrop opacity value between 0 and 1.'},
         {attribute: 'backdropZIndex', type: 'Integer', description: 'Z-index of backdrop overlay.'},
-        {attribute: 'klassActive', type: 'String', description: 'TODO'},
+        {attribute: 'classActiveName', type: 'String', description: 'TODO'},
         {attribute: 'triggers', type: 'String', description: 'Events that cause the expose feature to be triggered.'}
       ]
     });
@@ -788,16 +788,16 @@ $ make bootstrap</pre>
 
   <!--  **** Modal **** -->
   <script type="text/example" id="example_template">
-<div class="<%= options.klass %>">
-  <div class="<%= options.klassHeader %>">
+<div class="<%= options.className %>">
+  <div class="<%= options.classHeaderName %>">
     <a class="close">&times;</a>
     <% if (title) { %><h3><%= title %></h3><% } %>
   </div>
-  <div class="<%= options.klassBody %>">
-    <div class="<%= options.klassPrepend %>"><%= prepend %></div> 
-    <div class="<%= options.klassContent %>"><%= content %></div>
+  <div class="<%= options.classBodyName %>">
+    <div class="<%= options.classPrependName %>"><%= prepend %></div> 
+    <div class="<%= options.classContentName %>"><%= content %></div>
   </div>
-  <div class="options.klassFooter"> 
+  <div class="options.classFooterName"> 
     <%= buttons %> 
   </div>
 </div>
@@ -838,14 +838,14 @@ function($action, response, options) { ... }
           type: 'Object',
           description: 'Options for the classes and templates used when rendering the modal.',
           attributes: [
-            {attribute: 'klass', type: 'String', description: 'CSS class applied to the modal element.'},
-            {attribute: 'klassHeader', type: 'String', description: 'CSS class applied to the modal header element.'},
-            {attribute: 'klassBody', type: 'String', description: 'CSS class applied to the modal body element.'},
-            {attribute: 'klassFooter', type: 'String', description: 'CSS class applied to the modal footer element.'},
-            {attribute: 'klassWrapper', type: 'String', description: 'CSS class applied to the invisible by default element that contains the modal. This element is used for precise styling of the modal and to capture links. During modal initialization, if an existing element is found with this class it will be used as the wrapper and the modal will be appended to it. This allows for multiple modals to share the same wrapper. If no element is found a new element will be created with this class applied.'},
-            {attribute: 'klassWrapperInner', type: 'String', description: 'CSS class applied to an element that is created within the wrapper. Like the wrapper element the wrapperInner element will be matched with an existing item in the DOM or created during initial modal setup.'},
-            {attribute: 'klassPrepend', type: 'String', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
-            {attribute: 'klassContent', type: 'String', description: 'This CSS class will be applied to the element where content matched using the <code>content</code> selector will be merged into the template.'},
+            {attribute: 'className', type: 'String', description: 'CSS class applied to the modal element.'},
+            {attribute: 'classHeaderName', type: 'String', description: 'CSS class applied to the modal header element.'},
+            {attribute: 'classBodyName', type: 'String', description: 'CSS class applied to the modal body element.'},
+            {attribute: 'classFooterName', type: 'String', description: 'CSS class applied to the modal footer element.'},
+            {attribute: 'classWrapperName', type: 'String', description: 'CSS class applied to the invisible by default element that contains the modal. This element is used for precise styling of the modal and to capture links. During modal initialization, if an existing element is found with this class it will be used as the wrapper and the modal will be appended to it. This allows for multiple modals to share the same wrapper. If no element is found a new element will be created with this class applied.'},
+            {attribute: 'classWrapperInnerName', type: 'String', description: 'CSS class applied to an element that is created within the wrapper. Like the wrapper element the wrapperInner element will be matched with an existing item in the DOM or created during initial modal setup.'},
+            {attribute: 'classPrependName', type: 'String', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
+            {attribute: 'classContentName', type: 'String', description: 'This CSS class will be applied to the element where content matched using the <code>content</code> selector will be merged into the template.'},
             {attribute: 'template', type: 'String', defaultValue: '<pre>'+_.escape($('#example_template').html())+'</pre>', description: 'An <a href="http://underscorejs.org">underscore</a> template which will be used during render. Options passed to the template are: title (either the string set using <code>title</code>, or html matched from the content using <code>titleSelector</code>), prepend (html extracted from the content matching <code>prependContent</code> selector), content (extracted from the content using the <code>content</code> option), options (all of the <code>templateOptions</code> set on the modal).'}
             ]
         },
@@ -1204,13 +1204,13 @@ function($action, response, options) { ... }
         {attribute: 'date', type: 'Object', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
         {attribute: 'time', type: 'Object', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
         {attribute: 'separator', type: 'String', defaultValue: '" " (space)', description: 'Separator between date and time if both are enabled.'},
-        {attribute: 'klassClear', type: 'String', description: 'Class name of element that is generated by pattern.'},
-        {attribute: 'klassDate', type: 'String', description: 'Class applied to date input.'},
-        {attribute: 'klassDateWrapper', type: 'String', description: 'Class applied to extra wrapper div around date input.'},
-        {attribute: 'klassSeparator', type: 'String', description: 'Class applied to separator.'},
-        {attribute: 'klassTime', type: 'String', description: 'Class applied to time input.'},
-        {attribute: 'klassTimeWrapper', type: 'String', description: 'Class applied to wrapper div around time input.'},
-        {attribute: 'klassWrapper', type: 'String', description: 'Class name of element that is generated by pattern.'}
+        {attribute: 'classClearName', type: 'String', description: 'Class name of element that is generated by pattern.'},
+        {attribute: 'classDateName', type: 'String', description: 'Class applied to date input.'},
+        {attribute: 'classDateWrapperName', type: 'String', description: 'Class applied to extra wrapper div around date input.'},
+        {attribute: 'classSeparatorName', type: 'String', description: 'Class applied to separator.'},
+        {attribute: 'classTimeName', type: 'String', description: 'Class applied to time input.'},
+        {attribute: 'classTimeWrapperName', type: 'String', description: 'Class applied to wrapper div around time input.'},
+        {attribute: 'classWrapperName', type: 'String', description: 'Class name of element that is generated by pattern.'}
       ]
     });
   </script>
@@ -1236,7 +1236,7 @@ function($action, response, options) { ... }
       attributes: [
         {attribute: 'alt', type: 'String', description: 'Alternate text to be used on the resulting responsive image tag.'},
         {attribute: 'attribute', type: 'Object', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping looks for <code>data-src</code> attributes to use as the resulting <code>src</code> attribute for the resulting element. Ditto for <code>data-media</code>, which maps to <code>media</code> for mediaquery information.'},
-        {attribute: 'klass', type: 'Object', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><code>loading</code> is the CSS class added to the element whilst an image is loading, and <code>error</code> is the CSS class added to the element if an error occurred whilst loading the image.'}
+        {attribute: 'className', type: 'Object', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><code>loading</code> is the CSS class added to the element whilst an image is loading, and <code>error</code> is the CSS class added to the element if an error occurred whilst loading the image.'}
       ]
     });
   </script>
@@ -1272,8 +1272,8 @@ function($action, response, options) { ... }
       title: 'Prevent Double Submit',
       description: 'A pattern to <strong>prevent submitting a form twice</strong>.',
       attributes: [
-        {attribute: 'guardKlass', type: 'String', description: 'Class applied to submit button after it is clicked once.'},
-        {attribute: 'optOutKlass', type: 'String', description: 'Class used to opt-out a submit button from double-submit prevention.'},
+        {attribute: 'guardClassName', type: 'String', description: 'Class applied to submit button after it is clicked once.'},
+        {attribute: 'optOutClassName', type: 'String', description: 'Class used to opt-out a submit button from double-submit prevention.'},
         {attribute: 'message', type: 'String', defaultValue: 'You already clicked the submit button. Do you really want to submit this form again?', description: 'Message to be displayed when "opt-out" submit button is clicked a second time.'}
       ]
     });
@@ -1314,17 +1314,17 @@ function($action, response, options) { ... }
         {attribute: 'reversetxt', type: 'String', defaultValue: 'Reversed Order', description: 'Text to use to label the sort order checkbox'},
         {attribute: 'previewTitle', type: 'String', defaultValue: 'Preview', description: 'Title for the preview area'},
         {attribute: 'previewDescription', type: 'String', defaultValue: 'Preview of at most 10 items', description: 'Description for the preview area'},
-        {attribute: 'klassWrapper', type: 'String', description: 'CSS class to apply to the wrapper element'},
-        {attribute: 'klassSortLabel', type: 'String', description: 'CSS class to apply to the sort on label'},
-        {attribute: 'klassSortReverse', type: 'String', description: 'CSS class to apply to the sort order label and checkbox container'},
-        {attribute: 'klassSortReverseLabel', type: 'String', description: 'CSS class to apply to the sort order label'},
-        {attribute: 'klassPreviewCountWrapper', type: 'String', description: ''},
-        {attribute: 'klassPreviewResultsWrapper', type: 'String', description: 'CSS class to apply to the results wrapper'},
-        {attribute: 'klassPreviewWrapper', type: 'String', description: 'CSS class to apply to the preview wrapper'},
-        {attribute: 'klassPreview', type: 'String', description: 'CSS class to apply to the preview pane'},
-        {attribute: 'klassPreviewTitle', type: 'String', description: 'CSS class to apply to the preview title'},
-        {attribute: 'klassPreviewDescription', type: 'String', description: 'CSS class to apply to the  preview description'},
-        {attribute: 'klassSortWrapper', type: 'String', description: 'CSS class to apply to the sort order and sort on wrapper'},
+        {attribute: 'classWrapperName', type: 'String', description: 'CSS class to apply to the wrapper element'},
+        {attribute: 'classSortLabelName', type: 'String', description: 'CSS class to apply to the sort on label'},
+        {attribute: 'classSortReverseName', type: 'String', description: 'CSS class to apply to the sort order label and checkbox container'},
+        {attribute: 'classSortReverseLabelName', type: 'String', description: 'CSS class to apply to the sort order label'},
+        {attribute: 'classPreviewCountWrapperName', type: 'String', description: ''},
+        {attribute: 'classPreviewResultsWrapperName', type: 'String', description: 'CSS class to apply to the results wrapper'},
+        {attribute: 'classPreviewWrapperName', type: 'String', description: 'CSS class to apply to the preview wrapper'},
+        {attribute: 'classPreviewName', type: 'String', description: 'CSS class to apply to the preview pane'},
+        {attribute: 'classPreviewTitleName', type: 'String', description: 'CSS class to apply to the preview title'},
+        {attribute: 'classPreviewDescriptionName', type: 'String', description: 'CSS class to apply to the  preview description'},
+        {attribute: 'classSortWrapperName', type: 'String', description: 'CSS class to apply to the sort order and sort on wrapper'},
       ]
     });
   </script>
@@ -1934,10 +1934,10 @@ function($action, response, options) { ... }
       description: 'Automatically <strong>generate a table of contents</strong>.',
       attributes: [
         {attribute: 'IDPrefix', type: 'String', description: 'Prefix used to generate ID.'},
-        {attribute: 'klassActive', type: 'String', description: 'Class used for active level.'},
-        {attribute: 'klassLevelPrefix', type: 'String', description: 'Class prefix used for the TOC levels.'},
-        {attribute: 'klassSection', type: 'String', description: 'Class used for section in TOC.'},
-        {attribute: 'klassTOC', type: 'String', description: 'Class used for the TOC.'},
+        {attribute: 'classActiveName', type: 'String', description: 'Class used for active level.'},
+        {attribute: 'classLevelPrefixName', type: 'String', description: 'Class prefix used for the TOC levels.'},
+        {attribute: 'classSectionName', type: 'String', description: 'Class used for section in TOC.'},
+        {attribute: 'classTOCName', type: 'String', description: 'Class used for the TOC.'},
         {attribute: 'levels', type: 'String', description: 'Selectors used to find levels.'},
         {attribute: 'scrollDuration', type: 'String', description: 'Speed of scrolling.'},
         {attribute: 'scrollEasing', type: 'String', description: 'Easing to use while scrolling.'},
@@ -2031,7 +2031,7 @@ function($action, response, options) { ... }
         {attribute: "clickable", 
          type: "Boolean",
          description: "If you can click on container to also upload"},
-        {attribute: "klass", 
+        {attribute: "className", 
          type: "String", 
          description: "value for class attribute in the form element"},
         {attribute: "paramName", 
@@ -2087,7 +2087,7 @@ function($action, response, options) { ... }
         background-color: red;
       }
     </style>
-    <div class="pat-dropzone" data-pat-dropzone="url: /upload; klass: mydropzone">
+    <div class="pat-dropzone" data-pat-dropzone="url: /upload; className: mydropzone">
       Drop here...
     </div>
   </script>
