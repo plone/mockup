@@ -45,7 +45,7 @@ define([
 
     tagName: 'aside',
     template: _.template(PagingTemplate),
-
+    maxPages: 7,
     initialize: function () {
       this.app = this.options.app;
       this.collection = this.app.collection;
@@ -55,39 +55,70 @@ define([
       this.$el.appendTo('#pagination');
 
     },
-
     render: function () {
-      var html = this.template(this.collection.info());
+      var data = this.collection.info();
+      data.pages = this.getPages(data);
+      var html = this.template(data);
       this.$el.html(html);
       return this;
     },
+    getPages: function(data){
+      var perPage = data.perPage;
+      var totalPages = data.totalPages;
+      if(!totalPages){
+        return [];
+      }
+      var currentPage = data.currentPage;
+      var left = 1;
+      var right = totalPages;
+      if(totalPages > this.maxPages){
+        left = Math.max(1, Math.floor(currentPage - (this.maxPages / 2)));
+        right = Math.min(left + this.maxPages, totalPages);
+        if((right - left) < this.maxPages){
+          left = left - Math.floor(this.maxPages / 2);
+        }
+      }
+      var pages = [];
+      for(var i=left; i<=right; i=i+1){
+        pages.push(i);
+      }
 
+      /* add before and after */
+      if(pages[0] > 1){
+        if(pages[0] > 2){
+          pages = ['...'].concat(pages);
+        }
+        pages = [1].concat(pages);
+      }
+      if(pages[pages.length - 1] < (totalPages - 1)){
+        if(pages[pages.length - 2] < totalPages - 2){
+          pages.push('...');
+        }
+        pages.push(totalPages);
+      }
+      return pages;
+    },
     nextResultPage: function (e) {
       e.preventDefault();
       this.collection.requestNextPage();
     },
-
     previousResultPage: function (e) {
       e.preventDefault();
       this.collection.requestPreviousPage();
     },
-
     gotoFirst: function (e) {
       e.preventDefault();
       this.collection.goTo(this.collection.information.firstPage);
     },
-
     gotoLast: function (e) {
       e.preventDefault();
       this.collection.goTo(this.collection.information.lastPage);
     },
-
     gotoPage: function (e) {
       e.preventDefault();
       var page = $(e.target).text();
       this.collection.goTo(page);
     },
-
     changeCount: function (e) {
       e.preventDefault();
       var per = $(e.target).text();

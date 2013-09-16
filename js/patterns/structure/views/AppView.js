@@ -55,6 +55,7 @@ define([
       this.well_view = new WellView({app: this});
       this.paging_view = new PagingView({app: this});
 
+      /* initialize buttons */
       var items = [];
       _.each(this.options.buttonGroups, function(group){
         var buttons = [];
@@ -73,11 +74,6 @@ define([
       items.push(new TextFilterView({id: 'filter'}));
       this.toolbar = new Toolbar({
         items: items
-      });
-
-      this.$el.on('ui.button.click:cut', function(event, button) {
-        // example of binding event to button
-        var foo = 'one';
       });
 
       this.toolbar.on('filter.change', function(value, view) {
@@ -113,12 +109,12 @@ define([
 
       /* dropzone support */
       var self = this;
-      var upload_url = self.options.upload_url;
-      if(upload_url){
+      var uploadUrl = self.options.uploadUrl;
+      if(uploadUrl){
         self.dropzone = new DropZone(self.$el, {
           klass: 'structure-dropzone',
           clickable: false,
-          url: upload_url,
+          url: uploadUrl,
           autoCleanResults: true,
           success: function(e, data){
             self.table_view.render();

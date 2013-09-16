@@ -1,15 +1,13 @@
 <div class="breadcrumb">
 
     <span class="cell">
-    <% for(p=1;p<=totalPages;p++){
-    %>
-      <% if (currentPage == p) { %>
-        <span class="page selected"><%= p %></span>
-      <% } else { %>
-        <a href="#" class="page"><%= p %></a>
-      <% } %>
-    <%
-    }%>
+      <% _.each(pages, function(p){ %>
+        <% if (currentPage == p) { %>
+          <span class="page selected"><%= p %></span>
+        <% } else { %>
+          <a href="#" class="page"><%= p %></a>
+        <% } %>
+      <% }); %>
 
     <span class="divider">/</span>
 

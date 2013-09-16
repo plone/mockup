@@ -41,7 +41,7 @@ define([
 
       this.bindEvents();
       this.afterRender();
-      
+
       return this;
     },
     bindEvents: function() {
@@ -56,6 +56,21 @@ define([
     },
     afterRender: function() {
 
+    },
+    get: function(id){
+      for(var i=0; i<this.items.length; i=i+1){
+        var item = this.items[i];
+        if(item.id !== undefined && item.id === id){
+          return item;
+        }
+        if(item.get !== undefined){
+          item = item.get(id);
+          if(item !== null){
+            return item;
+          }
+        }
+      }
+      return null;
     }
   });
 

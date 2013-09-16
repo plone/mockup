@@ -47,15 +47,16 @@ define([
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,
+      /*
+       * all these base buttons are required
+       */
       buttonGroups: {
         primary: [{
-          title: 'Cut', // required
-          url: '/cut'
+          title: 'Cut'
         },{
-          title: 'Copy', // required
-          url: '/copy'
+          title: 'Copy'
         },{
-          title: 'Paste', // required
+          title: 'Paste',
           url: '/paste'
         },{
           title: 'Delete',

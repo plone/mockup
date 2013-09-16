@@ -142,7 +142,7 @@ define([
   }
   for(var pathi=0; pathi<basePaths.length; pathi=pathi+1){
     var basePath = basePaths[pathi];
-    for(var i=0; i<100; i=i+1){
+    for(var i=0; i<1000; i=i+1){
       randomItems.push({
         UID: generateUID(),
         Title: possibleNames[Math.floor(Math.random()*possibleNames.length)] + ' ' + i,
