@@ -35,7 +35,6 @@ define([
     id: '',
     items: [],
     itemContainer: null,
-    template: null,
     render: function() {
       var self = this;
 
@@ -48,9 +47,6 @@ define([
       this.afterRender();
 
       return this;
-    },
-    serializedModel: function() {
-      return {};
     },
     renderItems: function() {
       var $container;
@@ -77,9 +73,6 @@ define([
           self.trigger.apply(self, arguments);
         });
       });
-    },
-    afterRender: function() {
-
     },
     get: function(id){
       // Remove the recursive part because it was confusing if two children had the

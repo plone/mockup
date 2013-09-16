@@ -30,10 +30,24 @@ define([
   "use strict";
 
   var BaseView = Backbone.View.extend({
+    template: null,
     initialize: function() {
       for (var key in this.options) {
         this[key] = this.options[key];
       }
+    },
+    render: function() {
+      if (this.template !== null) {
+        this.$el.html(_.template(this.template, this.serializedModel()));
+      }
+
+      this.afterRender();
+    },
+    afterRender: function() {
+
+    },
+    serializedModel: function() {
+      return this.options;
     }
   });
 
