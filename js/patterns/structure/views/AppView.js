@@ -45,110 +45,50 @@ define([
   var AppView = Backbone.View.extend({
     tagName: 'div',
     buttonEvents: {
-      'primary cut': 'cutClickEvent',
+      'primary cut,copy': 'cutCopyClickEvent',
       '*': 'buttonClickEvent', // make sure this is bound last so overrides can
                                // prevent bubbling events if necessary
     },
     initialize: function(){
       var self = this;
-      this.collection = new ResultCollection([], {
-        url: this.options.collection_url
+      self.collection = new ResultCollection([], {
+        url: self.options.collection_url
       });
       self.queryHelper = self.options.queryHelper;
-      this.selected_collection = new SelectedCollection();
-      this.collection.queryHelper = this.queryHelper;
+      self.selected_collection = new SelectedCollection();
+      self.collection.queryHelper = self.queryHelper;
+      self.table_view = new TableView({app: self});
+      self.well_view = new SelectionWellView({app: self});
+      self.paging_view = new PagingView({app: self});
+      self.paste_allowed = self.options.paste_allowed;
 
-      this.table_view = new TableView({app: this});
-      this.well_view = new SelectionWellView({app: this});
-      this.paging_view = new PagingView({app: this});
-
-      /* initialize buttons */
-<<<<<<< HEAD
       self.setupButtons();
-=======
-      var items = [];
 
-      items.push(new SelectionButtonView({
-        title: 'Selected',
-        collection: this.selected_collection
-      }));
-
-      for (var key in this.options.buttonGroups) {
-        var group = this.options.buttonGroups[key];
-        group.id = key;
-        var buttons = [];
-        _.each(group, function(button){
-          buttons.push(new ButtonView(button));
-        });
-        items.push(new ButtonGroup(_.extend(group, {
-          items: buttons,
-        })));
-      }
-      items.push(new TextFilterView({id: 'filter'}));
-      this.toolbar = new Toolbar({
-        items: items
-      });
-
-      this.toolbar.on('button:click', function(button) {
-        if(button.url !== undefined){
-          // handle ajax now
-          var uids = [];
-          self.selected_collection.each(function(item){
-            uids.push(item.uid());
-          });
-          var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
-          $.ajax({
-            url: url,
-            type: 'POST',
-            data: {
-              '_authenticator': $('input[name="_authenticator"]').val(),
-              'selection': JSON.stringify(uids)
-            },
-            success: function(data){
-              if(data.status === 'success'){
-                self.collection.reset();
-              }
-              if(data.msg){
-                alert(data.msg);
-              }
-            },
-            error: function(data){
-              if(data.status === 404){
-                alert('operation url "' + url + '" is not valid');
-              }
-            }
-          });
-        }
-      });
-
-      this.toolbar.on('filter:change', function(value, view) {
-        // do something when the filter happens
-        var foo = 'two';
-      });
-
-      this.toolbar.on('button.selected:click', function(view) {
+      self.toolbar.on('button.selected:click', function(view) {
         view.$el.toggleClass('active');
-        this.well_view.$el.toggleClass('active');
-      }, this);
+        self.well_view.$el.toggleClass('active');
+      }, self);
 
-      this.toolbar.get('selected').disable();
-      this.toolbar.get('primary').disable();
-      this.toolbar.get('secondary').disable();
+      self.buttons.primary.disable();
+      self.buttons.secondary.disable();
 
-      this.selected_collection.on('add remove', function(modal, collection) {
+      self.selected_collection.on('add remove', function(modal, collection) {
         if (collection.length) {
-          this.toolbar.get('selected').enable();
-          this.toolbar.get('primary').enable();
-          this.toolbar.get('secondary').enable();
+          self.toolbar.get('selected').enable();
+          self.buttons.primary.enable();
+          self.buttons.secondary.enable();
+          if(!self.paste_allowed){
+            self.buttons.primary.get('paste').disable();
+          }
         } else {
           this.toolbar.get('selected').disable();
-          this.toolbar.get('primary').disable();
-          this.toolbar.get('secondary').disable();
+          self.buttons.primary.disable();
+          self.buttons.secondary.disable();
         }
-      }, this);
+      }, self);
 
       /* detect shift clicks */
-      this.shift_clicked = false;
+      self.shift_clicked = false;
       $(document).bind('keyup keydown', function(e){
         self.shift_clicked = e.shiftKey;
       });
@@ -174,6 +114,7 @@ define([
               self.collection.reset();
             }
             if(data.msg){
+              // give status message somewhere...
               alert(data.msg);
             }
           },
@@ -185,35 +126,41 @@ define([
         });
       }
     },
-    cutClickEvent: function(button){
+    cutCopyClickEvent: function(button){
       var self = this;
+      self.paste_allowed = true;
+      self.buttons.primary.get('paste').enable();
     },
     setupButtons: function(){
       var self = this;
-      self.buttonGroups = {};
+      self.buttons = {};
       var items = [];
+      items.push(new SelectionButtonView({
+        title: 'Selected',
+        collection: this.selected_collection
+      }));
       _.each(_.pairs(this.options.buttonGroups), function(group){
         var buttons = [];
         _.each(group[1], function(button){
-          buttons.push(new Button(button));
+          buttons.push(new ButtonView(button));
         });
-        self.buttonGroups[group[0]] = new ButtonGroup({
+        self.buttons[group[0]] = new ButtonGroup({
           items: buttons,
           id: group[0],
           app: self
         });
-        items.push(self.buttonGroups[group[0]]);
+        items.push(self.buttons[group[0]]);
       });
       items.push(new TextFilterView({id: 'filter'}));
       this.toolbar = new Toolbar({
         items: items
       });
 
-      this.cut = this.buttonGroups.primary.get('cut');
+      this.cut = this.buttons.primary.get('cut');
 
       _.each(_.pairs(this.buttonEvents), function(binding){
         if(binding[0] === '*'){
-          _.each(self.buttonGroups, function(group){
+          _.each(self.buttons, function(group){
             _.each(group.items, function(button){
               button.on('button:click', function(button){
                 self[binding[1]].call(self, button);
@@ -223,10 +170,12 @@ define([
         }else{
           var parts = binding[0].split(' ');
           var group = parts[0];
-          var btnName = parts[1];
-          var button = self.buttonGroups[group].get(btnName);
-          button.on('button:click', function(button){
-            self[binding[1]].call(self, button);
+          var btnNames = parts[1].split(',');
+          _.each(btnNames, function(btnName){
+            var button = self.buttons[group].get(btnName);
+            button.on('button:click', function(button){
+              self[binding[1]].call(self, button);
+            });
           });
         }
       });

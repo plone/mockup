@@ -373,24 +373,52 @@ define([
   });
 
   var basicActions = [
-    /moveitem/,
-    /copy/,
-    /cut/,
-    /delete/,
-    /workflow/,
-    /tags/,
-    /dates/,
-    /paste/,
-    /order/
+    '/moveitem',
+    '/copy',
+    '/cut',
+    '/delete',
+    '/workflow',
+    '/tags',
+    '/dates',
+    '/paste',
+    '/order'
   ];
+
+  var actionData = {
+    '/copy': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: selection.length + ' items copied'
+      };
+    },
+    '/cut': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: selection.length + ' items cut'
+      };
+    },
+    '/paste': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'pasted ' + selection.length + ' items'
+      };
+    }
+
+  };
 
   _.each(basicActions, function(action){
     server.respondWith('POST', action, function(xhr, id) {
       server.autoRespondAfter = 200;
-      xhr.respond(200, { "Content-Type": "application/json" },
-        JSON.stringify({
+      var data = {
           "status": "success"
-      }));
+      };
+      if(actionData[action]){
+        data = actionData[action](xhr);
+      }
+      xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
     });
   });
 

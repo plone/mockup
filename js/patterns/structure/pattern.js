@@ -54,9 +54,11 @@ define([
        */
       buttonGroups: {
         primary: [{
-          title: 'Cut'
+          title: 'Cut',
+          url: '/cut'
         },{
-          title: 'Copy'
+          title: 'Copy',
+          url: '/copy'
         },{
           title: 'Paste',
           url: '/paste'
