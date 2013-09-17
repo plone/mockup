@@ -70,6 +70,7 @@ define([
         self.well_view.$el.toggleClass('active');
       }, self);
 
+      this.toolbar.get('selected').disable();
       self.buttons.primary.disable();
       self.buttons.secondary.disable();
 
