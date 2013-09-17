@@ -63,9 +63,8 @@ define([
       this.paging_view = new PagingView({app: this});
 
       /* initialize buttons */
-<<<<<<< HEAD
       self.setupButtons();
-=======
+
       var items = [];
 
       items.push(new SelectionButtonView({
