@@ -67,6 +67,7 @@ define([
       self.toolbar.on('button.cut:click button.copy:click', self.cutCopyClickEvent, self);
       self.toolbar.on('button:click', self.buttonClickEvent, self);
 
+      this.toolbar.get('selected').disable();
       self.buttons.primary.disable();
       self.buttons.secondary.disable();
 
