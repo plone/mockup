@@ -120,25 +120,12 @@ define([
           });
         }
       });
->>>>>>> new selected widget, well, styling, templates
 
       this.toolbar.on('filter:change', function(value, view) {
         // do something when the filter happens
         var foo = 'two';
       });
 
-<<<<<<< HEAD
-      this.buttonGroups.primary.disable();
-      this.buttonGroups.secondary.disable();
-
-      this.selected_collection.on('add remove', function(modal, collection) {
-        if (collection.length) {
-          this.buttonGroups.primary.enable();
-          this.buttonGroups.secondary.enable();
-        } else {
-          this.buttonGroups.primary.disable();
-          this.buttonGroups.secondary.disable();
-=======
       this.toolbar.on('button.selected:click', function(view) {
         view.$el.toggleClass('active');
         this.well_view.$el.toggleClass('active');
@@ -157,7 +144,6 @@ define([
           this.toolbar.get('selected').disable();
           this.toolbar.get('primary').disable();
           this.toolbar.get('secondary').disable();
->>>>>>> new selected widget, well, styling, templates
         }
       }, this);
 
