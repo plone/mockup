@@ -112,7 +112,7 @@ define([
     },
     gotoLast: function (e) {
       e.preventDefault();
-      this.collection.goTo(this.collection.information.lastPage);
+      this.collection.goTo(this.collection.information.totalPages);
     },
     gotoPage: function (e) {
       e.preventDefault();
