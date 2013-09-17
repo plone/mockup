@@ -44,11 +44,6 @@ define([
 
   var AppView = Backbone.View.extend({
     tagName: 'div',
-    buttonEvents: {
-      'primary cut,copy': 'cutCopyClickEvent',
-      '*': 'buttonClickEvent', // make sure this is bound last so overrides can
-                               // prevent bubbling events if necessary
-    },
     initialize: function(){
       var self = this;
       self.collection = new ResultCollection([], {
@@ -69,6 +64,8 @@ define([
         view.$el.toggleClass('active');
         self.well_view.$el.toggleClass('active');
       }, self);
+      self.toolbar.on('button.cut:click button.copy:click', self.cutCopyClickEvent, self);
+      self.toolbar.on('button:click', self.buttonClickEvent, self);
 
       self.buttons.primary.disable();
       self.buttons.secondary.disable();
@@ -155,30 +152,6 @@ define([
       items.push(new TextFilterView({id: 'filter'}));
       this.toolbar = new Toolbar({
         items: items
-      });
-
-      this.cut = this.buttons.primary.get('cut');
-
-      _.each(_.pairs(this.buttonEvents), function(binding){
-        if(binding[0] === '*'){
-          _.each(self.buttons, function(group){
-            _.each(group.items, function(button){
-              button.on('button:click', function(button){
-                self[binding[1]].call(self, button);
-              });
-            });
-          });
-        }else{
-          var parts = binding[0].split(' ');
-          var group = parts[0];
-          var btnNames = parts[1].split(',');
-          _.each(btnNames, function(btnName){
-            var button = self.buttons[group].get(btnName);
-            button.on('button:click', function(button){
-              self[binding[1]].call(self, button);
-            });
-          });
-        }
       });
     },
     render: function(){
