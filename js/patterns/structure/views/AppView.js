@@ -63,24 +63,21 @@ define([
       /* initialize buttons */
       self.setupButtons();
 
-      this.toolbar.on('button:click', function(button) {
-        });
-
       this.toolbar.on('filter:change', function(value, view) {
         // do something when the filter happens
         var foo = 'two';
       });
 
-      this.toolbar.items[0].disable();
-      this.toolbar.items[1].disable();
+      this.buttonGroups.primary.disable();
+      this.buttonGroups.secondary.disable();
 
       this.selected_collection.on('add remove', function(modal, collection) {
         if (collection.length) {
-          this.toolbar.items[0].enable();
-          this.toolbar.items[1].enable();
+          this.buttonGroups.primary.enable();
+          this.buttonGroups.secondary.enable();
         } else {
-          this.toolbar.items[0].disable();
-          this.toolbar.items[1].disable();
+          this.buttonGroups.primary.disable();
+          this.buttonGroups.secondary.disable();
         }
       }, this);
 
