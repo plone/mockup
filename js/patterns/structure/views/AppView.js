@@ -194,7 +194,7 @@ define([
       _.each(_.pairs(this.options.buttonGroups), function(group){
         var buttons = [];
         _.each(group[1], function(button){
-          buttons.push(new Button(button));
+          buttons.push(new ButtonView(button));
         });
         self.buttonGroups[group[0]] = new ButtonGroup({
           items: buttons,
