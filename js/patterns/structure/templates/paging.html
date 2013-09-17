@@ -1,58 +1,55 @@
-<div class="breadcrumb">
+<div class="pagination pagination-small pagination-centered">
 
-    <span class="cell">
-      <% _.each(pages, function(p){ %>
-        <% if (currentPage == p) { %>
-          <span class="page selected"><%= p %></span>
-        <% } else { %>
-          <a href="#" class="page"><%= p %></a>
-        <% } %>
-      <% }); %>
+  <ul>
+    <li class="<% if (currentPage === 1) { %>disabled<% } %>">
+      <a href="#" class="serverfirst">
+        &laquo;
+      </a>
+    </li>
+    <li class="<% if (currentPage === 1) { %>disabled<% } %>">
+      <a href="#" class="serverprevious">
+        &lt;
+      </a>
+    </li>
+    <% _.each(pages, function(p){ %>
+    <li class="<% if (currentPage == p) { %>active<% } %>">
+      <a href="#" class="page"><%= p %></a>
+    </li>
+    <% }); %>
+    <li class="<% if (currentPage === lastPage) { %>disabled<% } %>">
+      <a href="#" class="servernext">
+        &gt;
+      </a>
+    </li>
+    <li class="<% if (currentPage === lastPage) { %>disabled<% } %>">
+      <a href="#" class="serverlast">
+        &raquo;
+      </a>
+    </li>
+  </ul>
 
-    <span class="divider">/</span>
-
-    <% if (currentPage > firstPage) { %>
-      <a href="#" class="serverprevious">Previous</a>
-    <% }else{ %>
-      <span>Previous</span>
-    <% }%>
-
-    <% if (currentPage < totalPages) { %>
-      <a href="#" class="servernext">Next</a>
-    <% } %>
-
-    <% if (firstPage != currentPage) { %>
-      <a href="#" class="serverfirst">First</a>
-    <% } %>
-
-    <% if (lastPage != currentPage) { %>
-      <a href="#" class="serverlast">Last</a>
-    <% } %>
-
-
-    <span class="divider">/</span>
-
-    <span class="cell serverhowmany">
-      Show
-      <a href="#" class="selected">15</a>
-      |
+  <ul>
+    <li class="disabled"><a href="#">Show:</a></li>
+    <li class="serverhowmany <% if(perPage == 15){ %>disabled<% } %>">
+      <a href="#" class="">15</a>
+    </li>
+    <li class="serverhowmany <% if(perPage == 30){ %>disabled<% } %>">
       <a href="#" class="">30</a>
-      |
+    </li>
+    <li class="serverhowmany <% if(perPage == 50){ %>disabled<% } %>">
       <a href="#" class="">50</a>
-      per page
-    </span>
+    </li>
+  </ul>
 
+  <ul>
+    <li class="disabled">
+      <a href="#">
+        Page: <span class="current"><%= currentPage %></span>
+        of
+        <span class="total"><%= totalPages %></span>
+              shown
+      </a>
+    </li>
+  </ul>
 
-    <span class="divider">/</span>
-    <span class="cell first records">
-      Page: <span class="current"><%= currentPage %></span>
-      of
-      <span class="total"><%= totalPages %></span>
-            shown
-    </span>
-
-    </span>
-
-
-  </div>
-
+</div>
