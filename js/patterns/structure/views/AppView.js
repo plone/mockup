@@ -62,6 +62,7 @@ define([
       self.paging_view = new PagingView({app: self});
       self.paste_allowed = self.options.paste_allowed;
 
+      /* initialize buttons */
       self.setupButtons();
 
       self.toolbar.on('button.selected:click', function(view) {
