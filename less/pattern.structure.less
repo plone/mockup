@@ -7,40 +7,40 @@
     table{
         margin-bottom: 0;
     }
-    .navbar{
-        margin-bottom:0;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-        padding: 5px;
+    .navbar {
+        margin-bottom: 5px;
     }
 }
 
 .selected-items{
-    padding: 0;
+    position: relative;
 
-    ul{
-        position:absolute;
-        display: none;
-        list-style-type: none;
-        margin: 0;
-        padding: 5px;
-        z-index: 99999;
-        background-color: #DDD;
-        background-color: #f5f5f5;
-        border: 1px solid #e3e3e3;
-        width: 75%;
-        max-height: 25%;
-        overflow-y: scroll;
-        border-radius: 5px;
-        box-shadow: 0 0 15px #ABABAB;
+    .popover {
+        min-width: 111px;
+        max-width: 98%;
 
-        li{
-            list-style-type: none;
-            float: left;
-            background-color: #ddd;
-            border-color: #e3e3e3;
-            margin: 2px 5px;
-            padding: 2px 8px;
+        &.bottom {
+            .arrow {
+                left: 55px;
+            }
+        }
+    }
+
+    &.active {
+        .popover {
+            display: block;
+        }
+    }
+
+    .items {
+        span {
+            display: inline-block;
+            background-color: #999;
+            border-radius: 8px;
+            margin: 0 8px 3px 0;
+            padding: 2px 4px;
+            font-size: 12px;
+            color: #FFF;
         }
     }
     .clear{

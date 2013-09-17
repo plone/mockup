@@ -31,13 +31,14 @@ define([
   'ui/views/ButtonGroup',
   'ui/views/Button',
   'structure/views/TableView',
-  'structure/views/WellView',
+  'structure/views/SelectionWellView',
+  'structure/views/SelectionButtonView',
   'structure/views/PagingView',
   'structure/views/TextFilterView',
   'structure/collections/ResultCollection',
   'structure/collections/SelectedCollection',
   'mockup-patterns-dropzone'
-], function($, _, Backbone, Toolbar, ButtonGroup, Button, TableView, WellView,
+], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView, SelectionButtonView,
             PagingView, TextFilterView, ResultCollection, SelectedCollection, DropZone) {
   "use strict";
 
@@ -56,18 +57,77 @@ define([
       self.queryHelper = self.options.queryHelper;
       this.selected_collection = new SelectedCollection();
       this.collection.queryHelper = this.queryHelper;
+
       this.table_view = new TableView({app: this});
-      this.well_view = new WellView({app: this});
+      this.well_view = new SelectionWellView({app: this});
       this.paging_view = new PagingView({app: this});
 
       /* initialize buttons */
+<<<<<<< HEAD
       self.setupButtons();
+=======
+      var items = [];
+
+      items.push(new SelectionButtonView({
+        title: 'Selected',
+        collection: this.selected_collection
+      }));
+
+      for (var key in this.options.buttonGroups) {
+        var group = this.options.buttonGroups[key];
+        group.id = key;
+        var buttons = [];
+        _.each(group, function(button){
+          buttons.push(new ButtonView(button));
+        });
+        items.push(new ButtonGroup(_.extend(group, {
+          items: buttons,
+        })));
+      }
+      items.push(new TextFilterView({id: 'filter'}));
+      this.toolbar = new Toolbar({
+        items: items
+      });
+
+      this.toolbar.on('button:click', function(button) {
+        if(button.url !== undefined){
+          // handle ajax now
+          var uids = [];
+          self.selected_collection.each(function(item){
+            uids.push(item.uid());
+          });
+          var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
+          $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+              '_authenticator': $('input[name="_authenticator"]').val(),
+              'selection': JSON.stringify(uids)
+            },
+            success: function(data){
+              if(data.status === 'success'){
+                self.collection.reset();
+              }
+              if(data.msg){
+                alert(data.msg);
+              }
+            },
+            error: function(data){
+              if(data.status === 404){
+                alert('operation url "' + url + '" is not valid');
+              }
+            }
+          });
+        }
+      });
+>>>>>>> new selected widget, well, styling, templates
 
       this.toolbar.on('filter:change', function(value, view) {
         // do something when the filter happens
         var foo = 'two';
       });
 
+<<<<<<< HEAD
       this.buttonGroups.primary.disable();
       this.buttonGroups.secondary.disable();
 
@@ -78,6 +138,26 @@ define([
         } else {
           this.buttonGroups.primary.disable();
           this.buttonGroups.secondary.disable();
+=======
+      this.toolbar.on('button.selected:click', function(view) {
+        view.$el.toggleClass('active');
+        this.well_view.$el.toggleClass('active');
+      }, this);
+
+      this.toolbar.get('selected').disable();
+      this.toolbar.get('primary').disable();
+      this.toolbar.get('secondary').disable();
+
+      this.selected_collection.on('add remove', function(modal, collection) {
+        if (collection.length) {
+          this.toolbar.get('selected').enable();
+          this.toolbar.get('primary').enable();
+          this.toolbar.get('secondary').enable();
+        } else {
+          this.toolbar.get('selected').disable();
+          this.toolbar.get('primary').disable();
+          this.toolbar.get('secondary').disable();
+>>>>>>> new selected widget, well, styling, templates
         }
       }, this);
 
@@ -167,8 +247,8 @@ define([
     },
     render: function(){
 
-      this.$el.append(this.well_view.render().el);
       this.$el.append(this.toolbar.render().el);
+      this.$el.append(this.well_view.render().el);
       this.$el.append(this.table_view.render().el);
       this.$el.append(this.paging_view.render().el);
 

@@ -31,7 +31,9 @@ define([
 
   // for some reason we need to load this early
   'text!structure/templates/paging.html',
-  'text!structure/templates/well.html',
+  'text!structure/templates/selection_well.html',
+  'text!structure/templates/selection_button.html',
+  'text!structure/templates/selection_item.html',
   'text!structure/templates/tablerow.html',
   'text!structure/templates/table.html'
 ], function($, Base, QueryHelper, AppView) {

@@ -24,35 +24,35 @@
 
 
 define([
+  'jquery',
+  'backbone',
   'underscore',
-  'backbone'
-  ], function(_, Backbone) {
+  'ui/views/button',
+  'text!structure/templates/selection_button.html'
+  ],
+  function($, Backbone, _, ButtonView, tpl_button) {
   "use strict";
 
-  var BaseView = Backbone.View.extend({
-    template: null,
+  var SelectionButton = ButtonView.extend({
+    collection: null,
+    template: tpl_button,
     initialize: function() {
-      for (var key in this.options) {
-        this[key] = this.options[key];
+      ButtonView.prototype.initialize.call(this);
+
+      if (this.collection !== null) {
+        this.collection.on('add remove reset', function() {
+          this.render();
+        }, this);
       }
-    },
-    render: function() {
-      if (this.template !== null) {
-        this.$el.html(_.template(this.template, this.serializedModel()));
-      }
-
-      this.trigger('render', this);
-      this.afterRender();
-
-      return this;
-    },
-    afterRender: function() {
-
     },
     serializedModel: function() {
-      return this.options;
+      var obj = {icon: '', title: this.options.title, length: 0};
+      if (this.collection !== null) {
+        obj.length = this.collection.length;
+      }
+      return obj;
     }
   });
 
-  return BaseView;
+  return SelectionButton;
 });

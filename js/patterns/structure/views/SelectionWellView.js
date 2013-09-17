@@ -27,8 +27,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!structure/templates/well.html',
-], function($, _, Backbone, WellTemplate) {
+  'text!structure/templates/selection_well.html',
+  'text!structure/templates/selection_item.html'
+], function($, _, Backbone, WellTemplate, ItemTemplate) {
   "use strict";
 
   var WellView = Backbone.View.extend({
@@ -43,16 +44,13 @@ define([
       this.opened = false;
       this.app = this.options.app;
       this.collection = this.app.selected_collection;
-      this.listenTo(this.collection, 'reset', this.render);
-      this.listenTo(this.collection, 'all', this.render);
-      this.listenTo(this.collection, 'add', this.render);
-      this.listenTo(this.collection, 'remove', this.render);
+      this.listenTo(this.collection, 'reset all add remove', this.render);
     },
     render: function () {
-      var html = this.template({
-        collection: this.collection
-      });
-      this.$el.html(html);
+      this.$el.html(this.template({}));
+      _.each(this.collection.models, function(model) {
+        $('.items', this.$el).append(_.template(ItemTemplate, model.toJSON()));
+      }, this);
       if(this.opened){
         this.showItems();
       }
@@ -60,7 +58,7 @@ define([
     },
     itemRemoved: function(e){
       e.preventDefault();
-      var uid = $(e.target).closest('li').data('uid');
+      var uid = $(e.target).data('uid');
       this.app.selected_collection.removeByUID(uid);
     },
     showItems: function(){

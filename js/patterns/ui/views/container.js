@@ -44,6 +44,9 @@ define([
 
       this.renderItems();
       this.bindEvents();
+
+      this.trigger('render', this);
+
       this.afterRender();
 
       return this;

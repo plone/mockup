@@ -33,16 +33,16 @@ define([
   "use strict";
 
   var ButtonView = BaseView.extend({
-    tagName: 'button',
+    tagName: 'a',
     className: 'btn',
+    attributes: {
+      'href': '#'
+    },
+    template: '<% if (icon) { %><i class="icon-<%= icon %>"</i><% } %> <%= title %>',
     events: {
       'click': 'handleClick'
     },
     initialize: function() {
-      if (!this.options.classNames) {
-        this.options.classNames = [];
-      }
-      if (this.options.context) { this.options.classNames.push('btn-'+this.options.context); }
       if (!this.options.id) {
         var title = this.options.title || '';
         this.options.id = title !== '' ? title.toLowerCase().replace(' ', '-') : this.cid;
@@ -56,6 +56,10 @@ define([
       this.on('enable', function() {
         this.enable();
       }, this);
+
+      this.on('render', function() {
+        
+      }, this);
     },
     handleClick: function(e){
       e.preventDefault();
@@ -65,17 +69,8 @@ define([
         this.trigger('button:click', this);
       }
     },
-    render: function(){
-      this.$el.text(this.options.title);
-      if (this.options.icon) {
-        this.$el.prepend('<i class="icon-'+this.options.icon+'"</i>');
-      }
-      this.$el.addClass(this.options.classNames.join(' '));
-
-      if (this.options.disabled) {
-        this.disable();
-      }
-      return this;
+    serializedModel: function() {
+      return _.extend({'icon': '', 'title': ''}, this.options);
     },
     disable: function() {
       this.options.disabled = true;
