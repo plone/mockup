@@ -51,8 +51,8 @@ define([
       _.each(this.collection.models, function(model) {
         $('.items', this.$el).append(_.template(ItemTemplate, model.toJSON()));
       }, this);
-      if(this.opened){
-        this.showItems();
+      if (this.collection.length === 0) {
+        this.$el.removeClass('active');
       }
       return this;
     },
@@ -60,14 +60,6 @@ define([
       e.preventDefault();
       var uid = $(e.target).data('uid');
       this.app.selected_collection.removeByUID(uid);
-    },
-    showItems: function(){
-      var pos = this.$el.position();
-      this.$('ul').css({
-        display: 'block',
-        top: pos.top + this.$el.height(),
-        left: pos.left
-      });
     },
     showItemsClicked: function(e){
       e.preventDefault();

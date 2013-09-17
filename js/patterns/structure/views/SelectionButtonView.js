@@ -42,6 +42,9 @@ define([
       if (this.collection !== null) {
         this.collection.on('add remove reset', function() {
           this.render();
+          if (this.collection.length === 0) {
+            this.$el.removeClass('active');
+          }
         }, this);
       }
     },
