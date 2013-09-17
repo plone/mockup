@@ -43,6 +43,11 @@ define([
 
   var AppView = Backbone.View.extend({
     tagName: 'div',
+    buttonEvents: {
+      'primary cut': 'cutClickEvent',
+      '*': 'buttonClickEvent', // make sure this is bound last so overrides can
+                               // prevent bubbling events if necessary
+    },
     initialize: function(){
       var self = this;
       this.collection = new ResultCollection([], {
@@ -56,53 +61,10 @@ define([
       this.paging_view = new PagingView({app: this});
 
       /* initialize buttons */
-      var items = [];
-      _.each(this.options.buttonGroups, function(group){
-        var buttons = [];
-        _.each(group, function(button){
-          buttons.push(new Button(button));
-        });
-        items.push(new ButtonGroup({
-          items: buttons,
-          app: self
-        }));
-      });
-      items.push(new TextFilterView({id: 'filter'}));
-      this.toolbar = new Toolbar({
-        items: items
-      });
+      self.setupButtons();
 
       this.toolbar.on('button:click', function(button) {
-        if(button.url){
-          // handle ajax now
-          var uids = [];
-          self.selected_collection.each(function(item){
-            uids.push(item.uid());
-          });
-          var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
-          $.ajax({
-            url: url,
-            type: 'POST',
-            data: {
-              '_authenticator': $('input[name="_authenticator"]').val(),
-              'selection': JSON.stringify(uids)
-            },
-            success: function(data){
-              if(data.status === 'success'){
-                self.collection.reset();
-              }
-              if(data.msg){
-                alert(data.msg);
-              }
-            },
-            error: function(data){
-              if(data.status === 404){
-                alert('operation url "' + url + '" is not valid');
-              }
-            }
-          });
-        }
-      });
+        });
 
       this.toolbar.on('filter:change', function(value, view) {
         // do something when the filter happens
@@ -126,6 +88,84 @@ define([
       this.shift_clicked = false;
       $(document).bind('keyup keydown', function(e){
         self.shift_clicked = e.shiftKey;
+      });
+    },
+    buttonClickEvent: function(button){
+      var self = this;
+      if(button.url){
+        // handle ajax now
+        var uids = [];
+        self.selected_collection.each(function(item){
+          uids.push(item.uid());
+        });
+        var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: {
+            '_authenticator': $('input[name="_authenticator"]').val(),
+            'selection': JSON.stringify(uids)
+          },
+          success: function(data){
+            if(data.status === 'success'){
+              self.collection.reset();
+            }
+            if(data.msg){
+              alert(data.msg);
+            }
+          },
+          error: function(data){
+            if(data.status === 404){
+              alert('operation url "' + url + '" is not valid');
+            }
+          }
+        });
+      }
+    },
+    cutClickEvent: function(button){
+      var self = this;
+    },
+    setupButtons: function(){
+      var self = this;
+      self.buttonGroups = {};
+      var items = [];
+      _.each(_.pairs(this.options.buttonGroups), function(group){
+        var buttons = [];
+        _.each(group[1], function(button){
+          buttons.push(new Button(button));
+        });
+        self.buttonGroups[group[0]] = new ButtonGroup({
+          items: buttons,
+          id: group[0],
+          app: self
+        });
+        items.push(self.buttonGroups[group[0]]);
+      });
+      items.push(new TextFilterView({id: 'filter'}));
+      this.toolbar = new Toolbar({
+        items: items
+      });
+
+      this.cut = this.buttonGroups.primary.get('cut');
+
+      _.each(_.pairs(this.buttonEvents), function(binding){
+        if(binding[0] === '*'){
+          _.each(self.buttonGroups, function(group){
+            _.each(group.items, function(button){
+              button.on('button:click', function(button){
+                self[binding[1]].call(self, button);
+              });
+            });
+          });
+        }else{
+          var parts = binding[0].split(' ');
+          var group = parts[0];
+          var btnName = parts[1];
+          var button = self.buttonGroups[group].get(btnName);
+          button.on('button:click', function(button){
+            self[binding[1]].call(self, button);
+          });
+        }
       });
     },
     render: function(){
