@@ -35,6 +35,7 @@ define([
   var ButtonView = BaseView.extend({
     tagName: 'a',
     className: 'btn',
+    eventPrefix: 'button',
     attributes: {
       'href': '#'
     },
@@ -64,9 +65,7 @@ define([
     handleClick: function(e){
       e.preventDefault();
       if (!this.$el.is('.disabled')) {
-        var eventName = 'button.' + this.options.id + ':click';
-        this.trigger(eventName, this);
-        this.trigger('button:click', this);
+        this.uiEventTrigger('click', this);
       }
     },
     serializedModel: function() {

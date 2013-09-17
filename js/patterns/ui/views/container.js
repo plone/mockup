@@ -70,10 +70,23 @@ define([
       var self = this;
       _.each(this.items, function(view) {
         view.on('all', function() {
+          var slice = [].slice;
           var eventName = arguments[0];
+          var eventTarget;
           var newName = self.id !== '' ? self.id + '.' + eventName : eventName;
-          arguments[0] = newName;
-          self.trigger.apply(self, arguments);
+          if (arguments.length > 1) {
+            eventTarget = arguments[1];
+          }
+          if (newName !== eventName) {
+            var newArgs = slice.call(arguments, 0);
+            newArgs[0] = newName;
+            self.trigger.apply(self, newArgs);
+          }
+          if (eventTarget !== undefined && eventTarget.isUIView === true) {
+            if (eventTarget.propagateEvent(eventName) === true) {
+              self.trigger.apply(self, arguments);
+            }
+          }
         });
       });
     },

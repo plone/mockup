@@ -30,6 +30,8 @@ define([
   "use strict";
 
   var BaseView = Backbone.View.extend({
+    isUIView: true,
+    eventPrefix: 'ui',
     template: null,
     initialize: function() {
       for (var key in this.options) {
@@ -51,6 +53,29 @@ define([
     },
     serializedModel: function() {
       return this.options;
+    },
+    propagateEvent: function(eventName) {
+      if (eventName.indexOf(':') > 0) {
+        var eventId = eventName.split(':')[0];
+        if (this.eventPrefix !== '') {
+          if (eventId === this.eventPrefix ||
+              eventId === this.eventPrefix + '.' + this.id) { return true; }
+        }
+      }
+      return false;
+    },
+    uiEventTrigger: function(name) {
+      var args = [].slice.call(arguments, 0);
+      
+      if (this.eventPrefix !== '') {
+        args[0] = this.eventPrefix + ':' + name;
+        Backbone.View.prototype.trigger.apply(this, args);
+      
+        if (this.id) {
+          args[0] =  this.eventPrefix + '.' + this.id + ':' + name;
+          Backbone.View.prototype.trigger.apply(this, args);
+        }
+      }
     }
   });
 

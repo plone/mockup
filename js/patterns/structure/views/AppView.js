@@ -64,7 +64,7 @@ define([
         view.$el.toggleClass('active');
         self.well_view.$el.toggleClass('active');
       }, self);
-      self.toolbar.on('button.cut:click button.copy:click', self.cutCopyClickEvent, self);
+      self.toolbar.on('button.cut:click primary.button.copy:click', self.cutCopyClickEvent, self);
       self.toolbar.on('button:click', self.buttonClickEvent, self);
 
       this.toolbar.get('selected').disable();
