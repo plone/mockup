@@ -53,7 +53,7 @@ define([
       self.selected_collection = new SelectedCollection();
       self.collection.queryHelper = self.queryHelper;
       self.table_view = new TableView({app: self});
-      self.well_view = new SelectionWellView({app: self});
+      self.well_view = new SelectionWellView({collection: self.selected_collection});
       self.paging_view = new PagingView({app: self});
       self.paste_allowed = self.options.paste_allowed;
 

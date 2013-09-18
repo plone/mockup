@@ -47,7 +47,9 @@ define([
       this.collection.pager();
     },
     events: {
-      'click .breadcrumbs a': 'breadcrumbClicked'
+      'click .breadcrumbs a': 'breadcrumbClicked',
+      'change .select-all': 'selectAll',
+      // 'change tbody input[type="checkbox"]': 'toggleSelectAll'
     },
     render: function() {
       var self = this;
@@ -72,6 +74,19 @@ define([
       var $el = $(e.target);
       this.app.queryHelper.currentPath = $el.attr('data-path');
       this.collection.pager();
+    },
+    selectAll: function(e) {
+      if ($(e.target).is(':checked')) {
+        $('input[type="checkbox"]', $('tbody')).attr('checked', 'checked').change();
+      } else {
+        this.selected_collection.remove(this.collection.models);
+      }
+    },
+    toggleSelectAll: function(e) {
+      var $el = $(e.target);
+      if (!$el.is(':checked')) {
+        this.$('.select-all').removeAttr('checked');
+      }
     },
     addReordering: function(){
       var self = this;

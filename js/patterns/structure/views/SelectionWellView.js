@@ -42,8 +42,6 @@ define([
     },
     initialize: function(){
       this.opened = false;
-      this.app = this.options.app;
-      this.collection = this.app.selected_collection;
       this.listenTo(this.collection, 'reset all add remove', this.render);
     },
     render: function () {
@@ -59,7 +57,7 @@ define([
     itemRemoved: function(e){
       e.preventDefault();
       var uid = $(e.target).data('uid');
-      this.app.selected_collection.removeByUID(uid);
+      this.collection.removeByUID(uid);
     },
     showItemsClicked: function(e){
       e.preventDefault();
