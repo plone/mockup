@@ -32,14 +32,16 @@ define([
   'ui/views/Button',
   'structure/views/TableView',
   'structure/views/SelectionWellView',
+  'structure/views/OrderView',
   'structure/views/SelectionButtonView',
   'structure/views/PagingView',
   'structure/views/TextFilterView',
   'structure/collections/ResultCollection',
   'structure/collections/SelectedCollection',
-  'mockup-patterns-dropzone'
-], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView, SelectionButtonView,
-            PagingView, TextFilterView, ResultCollection, SelectedCollection, DropZone) {
+  'mockup-patterns-dropzone',
+], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
+            OrderView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
+            SelectedCollection, DropZone) {
   "use strict";
 
   var AppView = Backbone.View.extend({
@@ -53,21 +55,24 @@ define([
       self.selected_collection = new SelectedCollection();
       self.collection.queryHelper = self.queryHelper;
       self.table_view = new TableView({app: self});
-      self.well_view = new SelectionWellView({collection: self.selected_collection});
       self.paging_view = new PagingView({app: self});
       self.paste_allowed = self.options.paste_allowed;
 
       /* initialize buttons */
       self.setupButtons();
 
-      self.toolbar.on('button.selected:click', function(view) {
-        view.$el.toggleClass('active');
-        self.well_view.$el.toggleClass('active');
-      }, self);
+      self.well_view = new SelectionWellView({
+        collection: self.selected_collection,
+        button: self.toolbar.get('selected')
+      });
+      self.order_view = new OrderView({
+        button: self.buttons.folder.get('order')
+      });
+
       self.toolbar.on('button.cut:click primary.button.copy:click', self.cutCopyClickEvent, self);
       self.toolbar.on('button:click', self.buttonClickEvent, self);
 
-      this.toolbar.get('selected').disable();
+      self.toolbar.get('selected').disable();
       self.buttons.primary.disable();
       self.buttons.secondary.disable();
 
@@ -159,6 +164,8 @@ define([
 
       this.$el.append(this.toolbar.render().el);
       this.$el.append(this.well_view.render().el);
+      this.$el.append(this.order_view.render().el);
+
       this.$el.append(this.table_view.render().el);
       this.$el.append(this.paging_view.render().el);
 
