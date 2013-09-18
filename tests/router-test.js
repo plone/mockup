@@ -45,7 +45,7 @@ define([
   $.fx.off = true;
   Router.isTest = true;
 
-  Backbone.history.start();
+  Router.start();
 
   describe("Router", function () {
     
@@ -76,7 +76,7 @@ define([
 
       expect(Router.testPath).to.equal(undefined);
       Router.addRoute('test', 'foo', callback, foo, '/');
-      Router.start();
+      Router.redirect();
 
       expect(Router.testPath).to.equal('#!/test:foo');
     });

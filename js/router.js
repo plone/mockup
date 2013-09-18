@@ -73,7 +73,7 @@ define([
       }, this);
     },
     start: function() {
-      this.redirect();
+      Backbone.history.start();
     },
     reset: function() {
       this.testPath = undefined;

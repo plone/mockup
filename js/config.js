@@ -53,7 +53,7 @@ var requirejsOptions = {
   },
   shim: {
     'underscore': { exports: 'window._' },
-    'backbone': { exports: 'window.Backbone' },
+    'backbone': { exports: 'window.Backbone', deps: ['underscore', 'jquery'] },
     'picker.date': { deps: [ 'picker' ] },
     'picker.time': { deps: [ 'picker' ] },
     'jquery.event.drag': { deps: ['jquery'] },
