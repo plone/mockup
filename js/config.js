@@ -22,6 +22,7 @@ var requirejsOptions = {
     'mockup-docsapp': 'js/docsapp',
     'mockup-fakeserver': 'tests/fakeserver',
     'mockup-registry': 'js/registry',
+    'mockup-router': 'js/router',
     'mockup-iframe': 'js/iframe',
     'mockup-iframe_init': 'js/iframe_init',
     'mockup-patterns-accessibility': 'js/patterns/accessibility',
