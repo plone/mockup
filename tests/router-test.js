@@ -59,13 +59,12 @@ define([
       };
 
       Router.addRoute('test', 'foo', callback, foo, '');
-      Router.start();
       Router.navigate("test:foo", {trigger: true});
 
       expect(foo.set).to.equal(true);
     });
 
-    it("redirects", function() {
+    it("redirects from added action", function() {
       var foo = {
         set: false
       };
@@ -79,6 +78,18 @@ define([
       Router.redirect();
 
       expect(Router.testPath).to.equal('#!/test:foo');
+
+      Router.reset();
+    });
+
+    it("basic redirect", function() {
+
+      Router.addRedirect('/', 'test:two');
+      Router.redirect();
+
+      expect(Router.testPath).to.equal('#!/test:two');
+
+      Router.reset();
     });
 
   });

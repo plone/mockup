@@ -40,12 +40,16 @@ define([
   var Router = Backbone.Router.extend({
     isTest: false,
     actions: [],
+    redirects: {},
     addRoute: function(patternName, id, callback, context, pathExp) {
       if (_.findWhere(this.patterns, {patternName: patternName, id: id}) === undefined) {
         this.actions.push({patternName: patternName, id: id, callback: callback, context: context, pathExp: pathExp});
       }
       var regex = new RegExp('(' + regexEscape(patternName) + ':' + regexEscape(id) + ')');
       this.route(regex, 'handleRoute');
+    },
+    addRedirect: function(pathExp, destination) {
+      this.redirects[pathExp] = destination;
     },
     handleRoute: function(pattern) {
       var parts = pattern.split(':');
@@ -57,20 +61,41 @@ define([
       }
     },
     redirect: function() {
-      var path = window.parent.location.pathname;
-      _.each(this.actions, function(action) {
+      var path = window.parent.location.pathname,
+          newPath,
+          regex,
+          hash;
+
+      _.some(this.actions, function(action) {
         if (action.pathExp) {
-          var regex = new RegExp(action.pathExp);
+          regex = new RegExp(action.pathExp);
           if (path.match(regex)) {
-            if (this.isTest === false) {
-              window.parent.location.hash = '!/' + action.patternName + ':' + action.id;
-              window.parent.location.pathname = path.replace(regex, '');
-            } else {
-              this.testPath = path.replace(regex, '') + '#!/' + action.patternName + ':' + action.id;
-            }
+            hash = '!/' + action.patternName + ':' + action.id;
+            newPath = path.replace(regex, '');
+            return true;
           }
         }
       }, this);
+
+      if (hash === undefined) {
+        for (var pathExp in this.redirects) {
+          regex = new RegExp(pathExp);
+          if (path.match(regex)) {
+            hash = '!/' + this.redirects[pathExp];
+            newPath = path.replace(regex, '');
+            break;
+          }
+        }
+      }
+
+      if (hash !== undefined) {
+        if (this.isTest === false) {
+          window.parent.location.hash = hash;
+          window.parent.location.pathname = newPath;
+        } else {
+          this.testPath = newPath + '#' + hash;
+        }
+      }
     },
     start: function() {
       Backbone.history.start();
