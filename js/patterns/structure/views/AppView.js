@@ -71,7 +71,7 @@ define([
       self.buttons.primary.disable();
       self.buttons.secondary.disable();
 
-      self.selected_collection.on('add remove', function(modal, collection) {
+      self.selected_collection.on('add remove reset', function(modal, collection) {
         if (collection.length) {
           self.toolbar.get('selected').enable();
           self.buttons.primary.enable();
