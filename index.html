@@ -877,6 +877,17 @@ function($action, response, options) { ... }
         {attribute: 'handleFormAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If <code>action.isForm</code> is <code>true</code>, or if <code>form()</code> determines that the action is a form action, this method will be called when the event is triggered.'},
         {attribute: 'handleLinkAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If <code>action.isForm</code> is <code>false</code>, or if <code>form()</code> determines that the action is a link action this method will be called when the event is triggered.'},
         {attribute: 'render', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Called when modal is shown, and after a successful response if <code>displayInModal</code> is <code>true</code>.'}
+        ,
+        {
+          attribute: 'routerOptions',
+          type: 'Object',
+          defaultValue: '',
+          description: 'Configure URL redirect and showing of modal on hash change.',
+          attributes: [
+            {attribute: 'id', type: 'String', description: 'For launching the modal on hash change this will be used by the Router to match this modal. For example, if the `id` is <code>"login"</code>, hashes containing "modal:login" will be matched.'},
+            {attribute: 'pathExp', type: 'String', description: 'A Regular Expression compatible string which will be used to match path segments in order to redirect to a hash. For example, with `id` <code>"edit"</code> and `pathExp` as <code>"/edit$"</code> a URL with a path of <code>/animals/edit</code> will redirect to <code>/animals#!/modal:edit</code>.'}
+          ]
+        }
       ]
     });
   </script>
@@ -1196,11 +1207,13 @@ function($action, response, options) { ... }
   </script>
   <script type="text/example" class="example-modal" title="">
 <a href="#modalButtons"
-   class="btn btn-large btn-primary pat-modal"
-   data-pat-modal='{"routerOptions": { "id": "foo", "pathExp": "foo" } }'>
+   class="pat-modal"
+   style="display: none"
+   data-pat-modal='{"routerOptions": { "id": "hash", "pathExp": "/" } }'>
     Foo</a>
+<a href="#!/modal:hash" class="btn btn-large">Change hash</a>
 <div id="modalButtons" style="display: none">
-  <h1>Modal with buttons</h1>
+  <h1>Modal launched by hashchange</h1>
   <div id="content">
     <p>Here is some content, in the content we have some buttons that will be placed in the footer.</p>
     <button class="btn">Save</button><button class="btn">Cancel</button>
