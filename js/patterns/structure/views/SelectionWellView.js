@@ -38,7 +38,9 @@ define([
     template: _.template(WellTemplate),
     events: {
       'click a.remove': 'itemRemoved',
-      'click a.status': 'showItemsClicked'
+      'click a.status': 'showItemsClicked',
+      'keyup input.filter': 'filterSelected',
+      'click .remove-all': 'removeAll'
     },
     initialize: function(){
       this.opened = false;
@@ -68,6 +70,21 @@ define([
         this.showItems();
         this.opened = true;
       }
+    },
+    filterSelected: function(e) {
+      var val = $(e.target).val().toLowerCase();
+      $('.selected-item', this.$el).each(function() {
+        var $el = $(this);
+        if ($el.text().toLowerCase().indexOf(val) === -1) {
+          $el.hide();
+        } else {
+          $el.show();
+        }
+      });
+    },
+    removeAll: function(e) {
+      e.preventDefault();
+      this.collection.reset();
     }
   });
 
