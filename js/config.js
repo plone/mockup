@@ -24,6 +24,7 @@ var requirejsOptions = {
     'mockup-docsapp': 'js/docsapp',
     'mockup-fakeserver': 'tests/fakeserver',
     'mockup-registry': 'js/registry',
+    'mockup-router': 'js/router',
     'mockup-iframe': 'js/iframe',
     'mockup-iframe_init': 'js/iframe_init',
     'mockup-patterns-accessibility': 'js/patterns/accessibility',
@@ -59,7 +60,7 @@ var requirejsOptions = {
   },
   shim: {
     'underscore': { exports: 'window._' },
-    'backbone': { exports: 'window.Backbone' },
+    'backbone': { exports: 'window.Backbone', deps: ['underscore', 'jquery'] },
     'picker.date': { deps: [ 'picker' ] },
     'picker.time': { deps: [ 'picker' ] },
     'jquery.event.drag': { deps: ['jquery'] },

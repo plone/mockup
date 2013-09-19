@@ -34,13 +34,14 @@ if (window.jQuery) {
 
 define([
   'jquery',
+  'mockup-router',
   'mockup-iframe',
   'mockup-registry',
   'mockup-patterns-toggle',
   'mockup-patterns-modal',
   'mockup-patterns-tinymce',
   'mockup-bundles-widgets'
-], function($, iframe, registry, Toggle, Modal, TinyMCE) {
+], function($, Router, iframe, registry, Toggle, Modal, TinyMCE) {
   "use strict";
 
   // BBB: we need to hook pattern to classes which plone was using until now
@@ -291,14 +292,20 @@ define([
           'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
             modalFunction: 'hide'
           }
+        },
+        routerOptions: {
+          id: 'edit',
+          pathExp: '/edit$'
         }
       };
       var addOptions = editOptions;
+
       addOptions.actionOptions.redirectOnResponse = true;
       $('#plone-action-edit > a, #plone-contentmenu-factories ul li.is-content a')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(editOptions));
 
+      delete addOptions.routerOptions;
       $('#plone-contentmenu-factories ul li.is-content a')
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(addOptions));
@@ -360,6 +367,8 @@ define([
   // initialize only if we are not in top frame (we are in toolbar's iframe)
   if (window.parent !== window) {
     registry.scan($('body'));
+    Router.redirect();
+    Router.start();
   }
 
   return Toolbar;
