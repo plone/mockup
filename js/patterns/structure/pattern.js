@@ -45,7 +45,7 @@ define([
       ajaxvocabulary: null,
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
-                   'is_folderish'],
+                   'is_folderish', 'Subject'],
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,
