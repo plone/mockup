@@ -31,9 +31,8 @@ addPage = function(page) {
 
 //
 require([
-  'mockup-fakeserver',
   'mockup-docsapp'
-], function(server, DocsApp) {
+], function(DocsApp) {
 
   DocsApp.patterns.add(patterns);
   DocsApp.pages.add(pages);
@@ -2085,6 +2084,30 @@ function($action, response, options) { ... }
       Drop here...
     </div>
   </script>
+
+
+  <!--  **** Structure **** -->
+  <script>
+    addPattern({
+      id: 'structure',
+      title: 'Structure',
+      description: "Managing a folder of items",
+      attributes: [
+        {attribute: 'ajaxvocabulary', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
+        {attribute: 'uploadUrl', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'},
+        {attribute: 'moveUrl', type: 'String', defaultValue: 'null', description: 'For supporting drag drop reordering'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_structure">
+  </script>
+  <script type="text/example" class="example-structure" data-title="Default">
+    <div class="pat-structure" data-pat-structure="ajaxvocabulary:/relateditems-test.json;
+                                                   uploadUrl:/upload;
+                                                   moveUrl:/moveitem;">
+    </div>
+  </script>
+
 
 </head>
 

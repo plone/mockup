@@ -1,0 +1,124 @@
+@import "../bower_components/bootstrap/less/variables.less";
+@import "../bower_components/bootstrap/less/mixins.less";
+@import "../bower_components/bootstrap/less/button-groups.less";
+@import "../bower_components/font-awesome/less/mixins.less";
+
+.pat-structure{
+    table{
+        margin-bottom: 0;
+    }
+    .navbar {
+        margin-bottom: 5px;
+    }
+    .table th, .table td {
+        padding: 4px;
+    }
+}
+
+.popoverview {
+
+    .popover {
+        min-width: 111px;
+
+        .popover-title {
+
+            padding-bottom: 0;
+            input {
+                margin-bottom: 0;
+            }
+            .remove-all {
+                display: inline-block;
+                clear: left;
+                margin-top: 5px;
+                margin-left: 6px;
+
+                &:before {
+                    padding-right: 5px;
+                }
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        &.bottom {
+            .arrow {
+                left: 55px;
+            }
+        }
+    }
+
+    &.active {
+        .popover {
+            display: block;
+        }
+    }
+
+    .items {
+        max-height: 300px;
+        overflow-y: auto;
+
+        .selected-item {
+            display: block;
+            margin: 0 8px 3px 0;
+            border-radius: 6px;
+            padding: 4px 6px;
+
+            &:hover {
+                background-color: #f2f2f2;
+            }
+
+            a:hover {
+                text-decoration: none;
+            }
+
+            a:before {
+                .icon(@remove-sign);
+                color: #999;
+
+                &:hover {
+                    color: #000;
+                }
+            }
+        }
+    }
+    .clear{
+        clear:both;
+    }
+}
+
+.structure-dropzone{
+    position: relative;
+
+    .dropzone-previews{
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #DDD;
+        opacity: 0.8;
+        height: 100%;
+    }
+    .dz-notice{
+        display: none;
+    }
+}
+
+.structure-dropzone.dz-drag-hover{
+    opacity: 0.6;
+}
+.structure-dropzone.dropping {
+    .dropzone-previews{
+        display: block;
+    }
+}
+
+.order-support tbody tr{
+    cursor: move;
+}
+
+.structure-dragging{
+    outline: 1px dashed black;
+}

@@ -52,7 +52,8 @@ define([
       self.basePattern = self.options.basePattern;
       if(self.basePattern === undefined){
         self.basePattern = {
-          browsing: false
+          browsing: false,
+          basePath: '/'
         };
       }
 
@@ -66,7 +67,75 @@ define([
         self.valid = false;
       }
     },
+    getCurrentPath: function(){
+      var self = this;
+      var pattern = self.basePattern;
+      var currentPath;
+      /* If currentPath is set on the QueryHelper object, use that first.
+       * Then, check on the pattern.
+       * Finally, see if it is a function and call it if it is.
+       */
+      if(self.currentPath){
+        currentPath = self.currentPath;
+      }else{
+        currentPath = pattern.currentPath;
+      }
+      if(typeof(currentPath) === 'function'){
+        currentPath = currentPath();
+      }
+      var path = currentPath;
+      if(!path){
+        if(pattern.options.basePath){
+          path = pattern.options.basePath;
+        }else{
+          path = '/';
+        }
+      }
+      return path;
+    },
+    getCriterias: function(term, options){
+      if(options === undefined){
+        options = {};
+      }
+      options = $.extend({}, {
+        useBaseCriteria: true,
+        additionalCriterias: []
+      }, options);
 
+      var self = this;
+      var criterias = [];
+      if(options.useBaseCriteria){
+        criterias = self.options.baseCriteria.slice(0);
+      }
+      if(term){
+        term += '*';
+        criterias.push({
+          i: self.options.searchParam,
+          o: 'plone.app.querystring.operation.string.contains',
+          v: term
+        });
+      }
+      var pattern = self.basePattern;
+      if(pattern.browsing){
+        criterias.push({
+          i: 'path',
+          o: 'plone.app.querystring.operation.string.path',
+          v: self.getCurrentPath()
+        });
+      }
+      criterias = criterias.concat(options.additionalCriterias);
+      return criterias;
+    },
+    getBatch: function(page){
+      if(!page){
+        page = 1;
+      }
+      var self = this;
+      return {
+        page: page,
+        size: self.options.batchSize
+      };
+    },
     selectAjax: function(){
       var self = this;
       return {
@@ -74,32 +143,11 @@ define([
         dataType: 'JSON',
         quietMillis: 100,
         data: function(term, page) {
-          if(term){
-            term += '*';
-          }
-          var criteria = self.options.baseCriteria.slice(0);
-          criteria.push({
-            i: self.options.searchParam,
-            o: 'plone.app.querystring.operation.string.contains',
-            v: term
-          });
-          var pattern = self.basePattern;
-          if(pattern.browsing){
-            criteria.push({
-              i: 'path',
-              o: 'plone.app.querystring.operation.string.path',
-              v: pattern.currentPath ? pattern.currentPath : pattern.options.basePath
-            });
-          }
-
           var opts = {
             query: JSON.stringify({
-              criteria: criteria
+              criteria: self.getCriterias()
             }),
-            batch: JSON.stringify({
-              page: page, // select2 is 1 based for pages
-              size: self.options.batchSize
-            }),
+            batch: JSON.stringify(self.getBatch(page)),
             attributes: JSON.stringify(self.options.attributes)
           };
           return opts;

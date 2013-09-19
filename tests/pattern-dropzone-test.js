@@ -108,7 +108,7 @@ define([
         $('.pat-dropzone', this.$el).attr('data-pat-dropzone', attr + '; wrap: true');
         registry.scan(this.$el);
         expect($('.pat-dropzone', this.$el).parent().hasClass('dropzone')).to.be.equal(true);
-        expect($('.pat-dropzone', this.$el).parent().hasClass('tinymce-dropzone-container')).to.be.equal(true);
+        expect($('.pat-dropzone', this.$el).parent().hasClass('dropzone-container')).to.be.equal(true);
         var dzNotice = $('.pat-dropzone', this.$el).next();
         expect($(dzNotice).size()).to.equal(1);
         expect($(dzNotice).hasClass('dz-notice')).to.be.equal(true);
@@ -131,7 +131,7 @@ define([
         registry.scan(this.$el);
         var dzChildren = $('.pat-dropzone', this.$el).children();
         expect($(dzChildren).hasClass('dropzone')).to.be.equal(true);
-        expect($(dzChildren).hasClass('tinymce-dropzone-container')).to.be.equal(true);
+        expect($(dzChildren).hasClass('dropzone-container')).to.be.equal(true);
         expect($('.dz-notice', dzChildren).size()).to.equal(1);
         expect($('.dz-notice p', dzChildren).size()).to.equal(1);
         expect($('.dz-notice p', dzChildren).html()).to.equal('Drop files here...');
@@ -208,7 +208,7 @@ define([
         $('.pat-dropzone', this.$el).attr('data-pat-dropzone', 'wrap: true');
         registry.scan(this.$el);
         expect($('.pat-dropzone', this.$el).parent().hasClass('dropzone')).to.be.equal(true);
-        expect($('.pat-dropzone', this.$el).parent().hasClass('tinymce-dropzone-container')).to.be.equal(true);
+        expect($('.pat-dropzone', this.$el).parent().hasClass('dropzone-container')).to.be.equal(true);
         var dzNotice = $('.pat-dropzone', this.$el).next();
         expect($(dzNotice).size()).to.equal(1);
         expect($(dzNotice).hasClass('dz-notice')).to.be.equal(true);
@@ -230,7 +230,7 @@ define([
         registry.scan(this.$el);
         var dzChildren = $('.pat-dropzone', this.$el).children();
         expect($(dzChildren).hasClass('dropzone')).to.be.equal(true);
-        expect($(dzChildren).hasClass('tinymce-dropzone-container')).to.be.equal(true);
+        expect($(dzChildren).hasClass('dropzone-container')).to.be.equal(true);
         expect($('.dz-notice', dzChildren).size()).to.equal(1);
         expect($('.dz-notice p', dzChildren).size()).to.equal(1);
         expect($('.dz-notice p', dzChildren).html()).to.equal('Drop files here...');
