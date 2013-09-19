@@ -303,12 +303,12 @@ define([
 
     hide: function() {
       var self = this;
-      var klass = self.options.highlight;
+      var className = self.options.highlight;
       self.trigger('hiding');
       if (self.$toggle) {
         self.$toggle.removeClass(self.options.toggleClass);
       }
-      $('.'+klass, self.$results).removeClass(klass);
+      $('.'+className, self.$results).removeClass(className);
       self.trigger('hidden');
     },
 
@@ -318,28 +318,28 @@ define([
 
     _keyUp: function() {
       var self = this;
-      var klass = self.options.highlight;
-      var selected = $('.'+klass, self.$results);
+      var className = self.options.highlight;
+      var selected = $('.'+className, self.$results);
 
       if (selected.length > 0) {
         if (selected.prev().length > 0) {
-          selected.removeClass(klass);
-          selected = selected.prev().addClass(klass);
+          selected.removeClass(className);
+          selected = selected.prev().addClass(className);
         }
       }
     },
 
     _keyDown: function() {
       var self = this;
-      var klass = self.options.highlight;
-      var selected = $('.'+klass, self.$results);
+      var className = self.options.highlight;
+      var selected = $('.'+className, self.$results);
 
       if (selected.length === 0) {
-        selected = self.items().first().addClass(klass);
+        selected = self.items().first().addClass(className);
       } else {
         if (selected.next().length > 0) {
-          selected.removeClass(klass);
-          selected = selected.next().addClass(klass);
+          selected.removeClass(className);
+          selected = selected.next().addClass(className);
         }
       }
     },

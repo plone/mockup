@@ -35,17 +35,17 @@ define([
       section: 'section',
       levels: 'h1,h2,h3',
       IDPrefix: 'autotoc-item-',
-      klassTOC: 'autotoc-nav',
-      klassSection: 'autotoc-section',
-      klassLevelPrefix: 'autotoc-level-',
-      klassActive: 'active',
+      classTOCName: 'autotoc-nav',
+      classSectionName: 'autotoc-section',
+      classLevelPrefixName: 'autotoc-level-',
+      classActiveName: 'active',
       scrollDuration: 'slow',
       scrollEasing: 'swing'
     },
     init: function() {
       var self = this;
 
-      self.$toc = $('<nav/>').addClass(self.options.klassTOC);
+      self.$toc = $('<nav/>').addClass(self.options.classTOCName);
 
       if (self.options.prependTo) {
         self.$toc.prependTo(self.options.prependTo);
@@ -57,11 +57,11 @@ define([
         self.$toc.prependTo(self.$el);
       }
 
-      if (self.options.klass) {
-        self.$el.addClass(self.options.klass);
+      if (self.options.className) {
+        self.$el.addClass(self.options.className);
       }
 
-      $(self.options.section, self.$el).addClass(self.options.klassSection);
+      $(self.options.section, self.$el).addClass(self.options.classSectionName);
 
       $(self.options.levels, self.$el).each(function(i) {
         var $level = $(this),
@@ -75,17 +75,17 @@ define([
           .appendTo(self.$toc)
           .text($level.text())
           .prop('href', id)
-          .addClass(self.options.klassLevelPrefix + self.getLevel($level))
+          .addClass(self.options.classLevelPrefixName + self.getLevel($level))
           .on('click', function(e, doScroll) {
             e.stopPropagation();
             e.preventDefault();
-            self.$toc.children('.' + self.options.klassActive).removeClass(
-              self.options.klassActive);
-            self.$el.children('.' + self.options.klassActive).removeClass(
-              self.options.klassActive);
-            $(e.target).addClass(self.options.klassActive);
+            self.$toc.children('.' + self.options.classActiveName).removeClass(
+              self.options.classActiveName);
+            self.$el.children('.' + self.options.classActiveName).removeClass(
+              self.options.classActiveName);
+            $(e.target).addClass(self.options.classActiveName);
             $level.parents(self.options.section)
-                .addClass(self.options.klassActive);
+                .addClass(self.options.classActiveName);
             if (doScroll !== false && self.options.scrollDuration && $level) {
               $('body,html').animate({
                 scrollTop: $level.offset().top

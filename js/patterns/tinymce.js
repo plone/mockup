@@ -528,7 +528,7 @@ define([
       var self = this;
       if(self.options.upload_url){
         self.dropzone = new DropZone(self.modal.$modal, {
-          klass: 'tinymce-dropzone',
+          className: 'tinymce-dropzone',
           clickable: false,
           url: self.options.upload_url,
           wrap: 'inner',
@@ -628,7 +628,7 @@ define([
       self.rel = self.anchorElm ? self.dom.getAttrib(self.anchorElm, 'rel') : '';
       self.title = self.anchorElm ? self.dom.getAttrib(self.anchorElm, 'title') : '';
       self.src = self.imgElm ? self.dom.getAttrib(self.imgElm, 'src') : '';
-      self.klass = self.imgElm ? self.dom.getAttrib(self.imgElm, 'class') : '';
+      self.className = self.imgElm ? self.dom.getAttrib(self.imgElm, 'class') : '';
       self.alt = self.imgElm ? self.dom.getAttrib(self.imgElm, 'alt') : '';
 
       if (self.imgElm && self.imgElm.nodeName === "IMG") {
@@ -671,7 +671,7 @@ define([
           self.linkType = 'externalImage';
           self.externalImage = self.src;
         }
-        var klasses = self.klass.split(' ');
+        var klasses = self.className.split(' ');
         for(var i=0; i<klasses.length; i=i+1){
           var klass = klasses[i];
           if(klass.indexOf('image-') !== -1){
@@ -998,7 +998,7 @@ define([
          * can still upload via link and file overlays
          
         self.dropzone = new DropZone(self.$el, {
-          klass: 'tinymce-dropzone',
+          className: 'tinymce-dropzone',
           clickable: false,
           url: self.options.upload_url,
           wrap: true,

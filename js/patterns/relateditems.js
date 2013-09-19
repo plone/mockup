@@ -51,15 +51,14 @@ define([
       cache: true,
       closeOnSelect: false,
       basePath: '/',
-      browseText: 'Browse',
-      searchText: 'Search',
+      searchText: 'Search:',
+      searchAllText: 'entire site',
       homeText: 'home',
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID','Title', 'Type', 'path'],
+      attributes: ['UID', 'Title', 'Type', 'path'],
       dropdownCssClass: 'pat-relateditems-dropdown',
       maximumSelectionSize: -1,
-      showTabs: true,
       resultTemplate: '' +
         '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">' +
         '  <a href="#" class="pat-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
@@ -79,14 +78,8 @@ define([
         ' <span class="pat-relateditems-item-path"><%= path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
-      tabsTemplate: '' +
-        '<div class="pat-relateditems-tabs">' +
-        ' <a href="#" class="pat-relateditems-tabs-search pat-relateditems-tab pat-active"><%= searchText %></a>' +
-        ' <a href="#" class="pat-relateditems-tabs-browse pat-relateditems-tab"><%= browseText %></a>' +
-        '</div>',
-      tabsTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<span><a class="icon-home" href="/"></a><%= items %></span>',
+        '<span><span class="pat-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
         '/<a href="<%= path %>"><%= text %></a>',
@@ -124,64 +117,52 @@ define([
       var self = this;
       self.browsing = true;
       self.setBreadCrumbs();
-      self.setTabs();
     },
     deactivateBrowsing: function(){
       var self = this;
       self.browsing = false;
       self.setBreadCrumbs();
-      self.setTabs();
     },
     browseTo: function(path) {
       var self = this;
       self.trigger('before-browse');
       self.currentPath = path;
-      self.activateBrowsing();
+      if (path === '/') {
+        self.deactivateBrowsing();
+      } else {
+        self.activateBrowsing();
+      }
       self.$el.select2('close');
       self.$el.select2('open');
       self.trigger('after-browse');
     },
-    setTabs: function() {
-      var self = this;
-      if (self.browsing) {
-        self.$browseBtn.addClass('pat-active');
-        self.$searchBtn.removeClass('pat-active');
-      } else {
-        self.$browseBtn.removeClass('pat-active');
-        self.$searchBtn.addClass('pat-active');
-      }
-    },
     setBreadCrumbs: function() {
       var self = this;
       var path = self.currentPath ? self.currentPath : self.options.basePath;
-      if (self.browsing) {
-        var html;
-        if (path === '/') {
-          html = self.applyTemplate('breadCrumbs', {items:''});
-        } else {
-          var paths = path.split('/');
-          var itemPath = '';
-          var itemsHtml = '';
-          _.each(paths, function(node) {
-            if (node !== '') {
-              var item = {};
-              itemPath = itemPath + '/' + node;
-              item.text = node;
-              item.path = itemPath;
-              itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
-            }
-          });
-          html = self.applyTemplate('breadCrumbs', {items:itemsHtml});
-        }
-        var $crumbs = $(html);
-        $('a', $crumbs).on('click', function(event) {
-          self.browseTo($(this).attr('href'));
-          return false;
-        });
-        self.$browsePath.html($crumbs);
+      var html;
+      if (path === '/') {
+        html = self.applyTemplate('breadCrumbs', {items:'<em>'+self.options.searchAllText+'</em>', searchText: self.options.searchText});
       } else {
-        self.$browsePath.html('');
+        var paths = path.split('/');
+        var itemPath = '';
+        var itemsHtml = '';
+        _.each(paths, function(node) {
+          if (node !== '') {
+            var item = {};
+            itemPath = itemPath + '/' + node;
+            item.text = node;
+            item.path = itemPath;
+            itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
+          }
+        });
+        html = self.applyTemplate('breadCrumbs', {items:itemsHtml, searchText: self.options.searchText});
       }
+      var $crumbs = $(html);
+      $('a', $crumbs).on('click', function(event) {
+        self.browseTo($(this).attr('href'));
+        return false;
+      });
+      self.$browsePath.html($crumbs);
     },
     selectItem: function(item) {
       var self = this;
@@ -305,30 +286,11 @@ define([
         browseText: self.options.browseText,
         searchText: self.options.searchText
       };
-      self.$browse = $(self.applyTemplate('tabs', browseOpts));
-      self.$container.prepend(self.$browse);
-      self.$browseBtn = $('.pat-relateditems-tabs-browse', self.$browse);
-      self.$searchBtn = $('.pat-relateditems-tabs-search', self.$browse);
+      
       self.$browsePath = $('<span class="pat-relateditems-path" />');
-      self.$browse.after(self.$browsePath);
-      if (self.options.showTabs === false || self.options.showTabs === 'false') {
-        self.$browse.hide();
-      }
+      self.$container.prepend(self.$browsePath);
+
       self.deactivateBrowsing();
-
-      self.$browseBtn.click(function(e){
-        self.activateBrowsing();
-        self.$el.select2('close');
-        self.$el.select2('open');
-        return false;
-      });
-
-      self.$searchBtn.click(function(e){
-        self.deactivateBrowsing();
-        self.$el.select2('close');
-        self.$el.select2('open');
-        return false;
-      });
 
       self.$el.on("select2-selecting", function(event) {
         event.preventDefault();

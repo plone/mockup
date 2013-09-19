@@ -58,7 +58,7 @@ define([
       $match = $match.add($root.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
       $match.attr({
-        'data-pat-autotoc':'levels: legend;section: fieldset;klass: autotabs'
+        'data-pat-autotoc':'levels: legend;section: fieldset;className: autotabs'
       });
 
       // activate accessibility pattern by default
@@ -117,7 +117,7 @@ define([
       $('dl.actionMenu').removeClass('deactivated');
 
       $('html').on('mousedown', function(e) {
-        if (!$(e.toElement).parents('dl.actionMenu').hasClass('activated')){
+        if (!$(e.toElement || e.relatedTarget || e.target).parents('dl.actionMenu').hasClass('activated')){
           // Means we clicked an opened menu, do not close
           $('dl.actionMenu').removeClass('activated');
         }

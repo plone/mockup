@@ -38,8 +38,8 @@ define([
   var Picture = Base.extend({
     name: "picture",
     defaults: {
-      alt : '',
-      klass: {
+      alt: null,
+      className: {
         loading: 'picture-loading',
         error: 'picture-error'
       },
@@ -109,15 +109,15 @@ define([
 
       $img
         .load(function() {
-          self.$el.removeClass(self.options.klass.loading);
+          self.$el.removeClass(self.options.className.loading);
           self.trigger('complete');
         })
         .error(function() {
-          self.$el.addClass(self.options.klass.error);
+          self.$el.addClass(self.options.className.error);
           self.trigger('error');
         });
 
-      self.$el.addClass(self.options.klass.loading);
+      self.$el.addClass(self.options.className.loading);
       $img.attr('src', matches.pop().attr(self.options.attribute.src));
       self.trigger('loading');
     },

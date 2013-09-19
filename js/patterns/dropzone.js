@@ -1,6 +1,5 @@
-// Pattern which adds support for checking if the user has his cookies enabled
-// when logging in, and also to ask if he accepts that the site can use
-// cookies.
+// Pattern which adds support for file upload with 
+// drag and drop support.
 //
 // Author: Nathan Van Gheem
 // Contact: nathan@vangheem.su
@@ -39,7 +38,7 @@ define([
     name: "dropzone",
     defaults: {
       url: null, // XXX MUST provide url to submit to OR be in a form
-      klass: 'dropzone',
+      className: 'dropzone',
       paramName: "file",
       uploadMultiple: false,
       clickable: false,
@@ -84,7 +83,7 @@ define([
       }
 
       var autoClean = self.options.autoCleanResults;
-      $el.addClass(self.options.klass);
+      $el.addClass(self.options.className);
 
       // clean up options
       var options = $.extend({}, self.options);

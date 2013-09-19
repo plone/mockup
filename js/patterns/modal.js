@@ -50,8 +50,8 @@ define([
       backdropOptions: {
         zIndex: "1040",
         opacity: "0.8",
-        klass: "backdrop",
-        klassActive: "backdrop-active",
+        className: "backdrop",
+        classActiveName: "backdrop-active",
         closeOnEsc: true,
         closeOnClick: true
       },
@@ -63,27 +63,27 @@ define([
       loadLinksWithinModal: true,
       prependContent: '.portalMessage',
       templateOptions: {
-        klass: "modal",
-        klassHeader: "modal-header",
-        klassBody: "modal-body",
-        klassFooter: "modal-footer",
-        klassWrapper: "modal-wrapper",
-        klassWrapperInner: "modal-wrapper-inner",
-        klassLoading: "modal-loading",
-        klassActive: "active",
-        klassPrepend: "", // String, css class to be applied to the wrapper of the prepended content
-        klassContent: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
+        className: "modal",
+        classHeaderName: "modal-header",
+        classBodyName: "modal-body",
+        classFooterName: "modal-footer",
+        classWrapperName: "modal-wrapper",
+        classWrapperInnerName: "modal-wrapper-inner",
+        classLoadingName: "modal-loading",
+        classActiveName: "active",
+        classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
+        classContentName: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         template: '' +
-          '<div class="<%= options.klass %>">' +
-          '  <div class="<%= options.klassHeader %>">' +
+          '<div class="<%= options.className %>">' +
+          '  <div class="<%= options.classHeaderName %>">' +
           '    <a class="close">&times;</a>' +
           '    <% if (title) { %><h3><%= title %></h3><% } %>' +
           '  </div>' +
-          '  <div class="<%= options.klassBody %>">' +
-          '    <div class="<%= options.klassPrepend %>"><%= prepend %></div> ' +
-          '    <div class="<%= options.klassContent %>"><%= content %></div>' +
+          '  <div class="<%= options.classBodyName %>">' +
+          '    <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
+          '    <div class="<%= options.classContentName %>"><%= content %></div>' +
           '  </div>' +
-          '  <div class="<%= options.klassFooter %>"> ' +
+          '  <div class="<%= options.classFooterName %>"> ' +
           '    <%= buttons %> ' +
           '  </div>' +
           '</div>'
@@ -132,7 +132,7 @@ define([
           var patternKeys = _.union(_.keys(self.options.actionOptions), ['actions', 'actionOptions']);
           var patternOptions = $.extend(true, _.omit(options, patternKeys), self.options);
 
-          $(action, $('.'+options.templateOptions.klassBody, $modal)).each(function(action) {
+          $(action, $('.'+options.templateOptions.classBodyName, $modal)).each(function(action) {
             var $action = $(this);
             $action.on(actionOptions.eventType, function(e) {
               e.stopPropagation();
@@ -367,7 +367,7 @@ define([
         }
 
         self.$modal
-          .addClass(self.options.templateOptions.klass)
+          .addClass(self.options.templateOptions.className)
           .on('click', function(e) {
             e.stopPropagation();
             if ($.nodeName(e.target, 'a')) {
@@ -402,7 +402,7 @@ define([
           self.$el.parents(self.options.backdrop),
           self.options.backdropOptions);
 
-      self.$wrapper = $('> .' + self.options.templateOptions.klassWrapper, self.backdrop.$el);
+      self.$wrapper = $('> .' + self.options.templateOptions.classWrapperName, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
         self.$wrapper = $('<div/>')
           .hide()
@@ -417,7 +417,7 @@ define([
             'right': '0',
             'top': '0'
           })
-          .addClass(self.options.templateOptions.klassWrapper)
+          .addClass(self.options.templateOptions.classWrapperName)
           .insertBefore(self.backdrop.$backdrop)
           .on('click', function(e) {
             e.stopPropagation();
@@ -429,14 +429,14 @@ define([
       }
 
       self.backdrop.on('hidden', function(e) {
-        if (self.$modal !== undefined && self.$modal.hasClass(self.options.templateOptions.klassActive)) {
+        if (self.$modal !== undefined && self.$modal.hasClass(self.options.templateOptions.classActiveName)) {
           self.hide();
         }
       });
 
       if (self.options.backdropOptions.closeOnEsc === true) {
         $(document).on('keydown', function(e, data) {
-          if (self.$el.is('.' + self.options.templateOptions.klassActive)) {
+          if (self.$el.is('.' + self.options.templateOptions.classActiveName)) {
             if (e.keyCode === 27) {  // ESC key pressed
               self.hide();
             }
@@ -444,10 +444,10 @@ define([
         });
       }
 
-      self.$wrapperInner = $('> .' + self.options.templateOptions.klassWrapperInner, self.$wrapper);
+      self.$wrapperInner = $('> .' + self.options.templateOptions.classWrapperInnerName, self.$wrapper);
       if (self.$wrapperInner.size() === 0) {
         self.$wrapperInner = $('<div/>')
-          .addClass(self.options.klassWrapperInner)
+          .addClass(self.options.classWrapperInnerName)
           .css({
             'position': 'absolute',
             'bottom': '0',
@@ -458,10 +458,10 @@ define([
           .appendTo(self.$wrapper);
       }
 
-      self.$loading = $('> .' + self.options.templateOptions.klassLoading, self.$wrapperInner);
+      self.$loading = $('> .' + self.options.templateOptions.classLoadingName, self.$wrapperInner);
       if (self.$loading.size() === 0) {
         self.$loading = $('<div/>').hide()
-          .addClass(self.options.templateOptions.klassLoading)
+          .addClass(self.options.templateOptions.classLoadingName)
           .appendTo(self.$wrapperInner);
       }
 
@@ -710,8 +710,8 @@ define([
       self.$wrapper.show();
       self.$loading.hide();
       self.$wrapper.parent().css('overflow', 'hidden');
-      self.$el.addClass(self.options.templateOptions.klassActive);
-      self.$modal.addClass(self.options.templateOptions.klassActive);
+      self.$el.addClass(self.options.templateOptions.classActiveName);
+      self.$modal.addClass(self.options.templateOptions.classActiveName);
       registry.scan(self.$modal);
       self.positionModal();
       $('img', self.$modal).load(function() {
@@ -734,7 +734,7 @@ define([
         self.$loading.hide();
         self.$wrapper.parent().css('overflow', 'visible');
       }
-      self.$el.removeClass(self.options.templateOptions.klassActive);
+      self.$el.removeClass(self.options.templateOptions.classActiveName);
       if (self.$modal !== undefined) {
         self.$modal.remove();
         self.initModal();

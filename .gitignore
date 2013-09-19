@@ -2,9 +2,11 @@
 /build/
 /jam/
 /coverage/
-/node_modules/
+/node_modules
+/nixenv
 /docs/
 /plone/mockup.egg-info/
 /bower_components/
 /test-results.xml
 /sauce_connect.log*
+.idea

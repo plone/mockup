@@ -46,8 +46,13 @@ define([
       var self = this;
       // Init Selection ---------------------------------------------
       if (self.options.initvaluemap) {
+        self.options.id = function(term) {
+          return term.id;
+        };
         self.options.initSelection = function ($el, callback) {
-          var data = [], value = $el.val(), seldefaults = {};
+          var data = [],
+              value = $el.val(),
+              seldefaults = self.options.initvaluemap;
 
           // Create the initSelection value that contains the default selection,
           // but in a javascript object
@@ -161,9 +166,6 @@ define([
     init: function() {
       var self = this;
 
-      self.initializeValueMap();
-      self.initializeTags();
-
       if (self.options.ajax || self.options.ajaxvocabulary) {
         if(self.options.ajaxvocabulary) {
           self.options.multiple = true;
@@ -201,11 +203,7 @@ define([
                 results.push({id:query_term, text:query_term});
               }
               $.each(data.results, function(i, item) {
-                if (self.options.ajaxvocabulary) {
-                  results.push({ id: item.text, text: item.text });
-                } else {
-                  results.push(item);
-                }
+                results.push(item);
               });
             }
             return { results: results };
@@ -213,6 +211,8 @@ define([
         }, self.options.ajax);
       }
 
+      self.initializeValueMap();
+      self.initializeTags();
       self.initializeOrdering();
       self.initializeSelect2();
     }
