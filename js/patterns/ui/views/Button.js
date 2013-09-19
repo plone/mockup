@@ -59,13 +59,13 @@ define([
       }, this);
 
       this.on('render', function() {
-        
+
       }, this);
     },
     handleClick: function(e){
       e.preventDefault();
       if (!this.$el.is('.disabled')) {
-        this.uiEventTrigger('click', this);
+        this.uiEventTrigger('click', this, e);
       }
     },
     serializedModel: function() {

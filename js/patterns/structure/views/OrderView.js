@@ -31,11 +31,11 @@ define([
 ], function($, _, Backbone, PopoverView) {
   "use strict";
 
-  var WellView = PopoverView.extend({
+  var OrderView = PopoverView.extend({
     title: _.template('Set folder ordering'),
     content: _.template(
       '<select>' +
-        '<option>Folder ordering</option>' +
+        '<option>Manual</option>' +
         '<option>Effective Date</option>' +
         '<option>Creation Date</option>' +
       '</select>'),
@@ -50,6 +50,6 @@ define([
     }
   });
 
-  return WellView;
+  return OrderView;
 });
 

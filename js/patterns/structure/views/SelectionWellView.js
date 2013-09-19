@@ -60,6 +60,10 @@ define([
       e.preventDefault();
       var uid = $(e.target).data('uid');
       this.collection.removeByUID(uid);
+      if(this.collection.length !== 0){
+        // re-rendering causes it to close, reopen
+        this.show();
+      }
     },
     filterSelected: function(e) {
       var val = $(e.target).val().toLowerCase();
@@ -75,6 +79,7 @@ define([
     removeAll: function(e) {
       e.preventDefault();
       this.collection.reset();
+      this.hide();
     }
   });
 

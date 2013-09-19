@@ -80,6 +80,7 @@ define([
         left: (pos.left + pos.width / 2) - 44
       };
       this.applyPlacement(tp);
+      this.opened = true;
     },
     applyPlacement: function(offset){
       var $tip = this.$('.popover');
@@ -89,6 +90,7 @@ define([
       $tip.show();
     },
     hide: function(){
+      this.opened = false;
       this.$('.popover').hide();
     },
     showItemsClicked: function(e){
@@ -97,10 +99,8 @@ define([
       }
       if(this.opened){
         this.hide();
-        this.opened = false;
       } else {
         this.show();
-        this.opened = true;
       }
     }
   });

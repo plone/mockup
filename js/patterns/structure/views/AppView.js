@@ -33,6 +33,7 @@ define([
   'structure/views/TableView',
   'structure/views/SelectionWellView',
   'structure/views/OrderView',
+  'structure/views/TagsView',
   'structure/views/SelectionButtonView',
   'structure/views/PagingView',
   'structure/views/TextFilterView',
@@ -40,7 +41,7 @@ define([
   'structure/collections/SelectedCollection',
   'mockup-patterns-dropzone',
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
-            OrderView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
+            OrderView, TagsView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
 
@@ -67,6 +68,9 @@ define([
       });
       self.order_view = new OrderView({
         button: self.buttons.folder.get('order')
+      });
+      self.tags_view = new TagsView({
+        button: self.buttons.secondary.get('tags')
       });
 
       self.toolbar.on('button.cut:click primary.button.copy:click', self.cutCopyClickEvent, self);
@@ -165,6 +169,7 @@ define([
       this.$el.append(this.toolbar.render().el);
       this.$el.append(this.well_view.render().el);
       this.$el.append(this.order_view.render().el);
+      this.$el.append(this.tags_view.render().el);
 
       this.$el.append(this.table_view.render().el);
       this.$el.append(this.paging_view.render().el);
