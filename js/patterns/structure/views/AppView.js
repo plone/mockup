@@ -104,8 +104,10 @@ define([
         self.shift_clicked = e.shiftKey;
       });
     },
-    buttonClickEvent: function(button, data, callback){
+    buttonClickEvent: function(button){
       var self = this;
+      var data = null, callback = null;
+
       if(button.url){
         // handle ajax now
         var uids = [];
@@ -113,7 +115,19 @@ define([
           uids.push(item.uid());
         });
 
-        if(data === undefined){
+        if(arguments.length > 1){
+          var arg1 = arguments[1];
+          if(!arg1.preventDefault){
+            data = arg1;
+          }
+        }
+        if(arguments.length > 2){
+          var arg2 = arguments[2];
+          if(arg2 === 'function'){
+            callback = arg2;
+          }
+        }
+        if(data === null){
           data = {
             'selection': JSON.stringify(uids)
           };
@@ -133,7 +147,7 @@ define([
               // give status message somewhere...
               alert(data.msg);
             }
-            if(callback !== undefined){
+            if(callback !== null){
               callback(data);
             }
           },
