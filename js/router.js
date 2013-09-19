@@ -38,7 +38,6 @@ define([
   };
 
   var Router = Backbone.Router.extend({
-    isTest: false,
     actions: [],
     redirects: {},
     addRoute: function(patternName, id, callback, context, pathExp) {
@@ -89,19 +88,17 @@ define([
       }
 
       if (hash !== undefined) {
-        if (this.isTest === false) {
-          window.parent.location.hash = hash;
-          window.parent.location.pathname = newPath;
-        } else {
-          this.testPath = newPath + '#' + hash;
-        }
+        this._change_location.apply(this, [newPath, hash]);
       }
+    },
+    _change_location: function(path, hash) {
+      window.parent.location.hash = hash;
+      window.parent.location.pathname = path;
     },
     start: function() {
       Backbone.history.start();
     },
     reset: function() {
-      this.testPath = undefined;
       this.actions = [];
     }
 

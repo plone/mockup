@@ -43,11 +43,21 @@ define([
 
   mocha.setup('bdd');
   $.fx.off = true;
-  Router.isTest = true;
 
   Router.start();
 
   describe("Router", function () {
+
+    beforeEach(function() {
+      var self = this;
+      Router._change_location = function(path, hash) {
+        self.routerPath = path + '#' + hash;
+      };
+    });
+
+    afterEach(function() {
+      this.routerPath = undefined;
+    });
 
     it("routes and calls back", function() {
       var foo = {
@@ -73,11 +83,11 @@ define([
         this.set = true;
       };
 
-      expect(Router.testPath).to.equal(undefined);
+      expect(this.routerPath).to.equal(undefined);
       Router.addRoute('test', 'foo', callback, foo, '/');
       Router.redirect();
 
-      expect(Router.testPath).to.equal('#!/test:foo');
+      expect(this.routerPath).to.equal('#!/test:foo');
 
       Router.reset();
     });
@@ -87,7 +97,7 @@ define([
       Router.addRedirect('/', 'test:two');
       Router.redirect();
 
-      expect(Router.testPath).to.equal('#!/test:two');
+      expect(this.routerPath).to.equal('#!/test:two');
 
       Router.reset();
     });
