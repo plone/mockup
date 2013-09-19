@@ -145,7 +145,7 @@ define([
         data: function(term, page) {
           var opts = {
             query: JSON.stringify({
-              criteria: self.getCriterias()
+              criteria: self.getCriterias(term)
             }),
             batch: JSON.stringify(self.getBatch(page)),
             attributes: JSON.stringify(self.options.attributes)
