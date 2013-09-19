@@ -65,15 +65,15 @@ define([
       return false;
     },
     uiEventTrigger: function(name) {
-      var args = [].slice.call(arguments, 0);
-      
+      var origName = name;
+      var args = [].slice.call(arguments, 1);
+
       if (this.eventPrefix !== '') {
-        args[0] = this.eventPrefix + ':' + name;
-        Backbone.View.prototype.trigger.apply(this, args);
-      
+        name = this.eventPrefix + ':' + origName;
+        Backbone.View.prototype.trigger.apply(this, [name, args]);
         if (this.id) {
-          args[0] =  this.eventPrefix + '.' + this.id + ':' + name;
-          Backbone.View.prototype.trigger.apply(this, args);
+          name =  this.eventPrefix + '.' + this.id + ':' + origName;
+          Backbone.View.prototype.trigger.apply(this, [name, args]);
         }
       }
     }

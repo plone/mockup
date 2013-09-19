@@ -81,6 +81,9 @@ define([
       };
       this.applyPlacement(tp);
       this.opened = true;
+      if(this.button){
+        this.button.$el.addClass('active');
+      }
     },
     applyPlacement: function(offset){
       var $tip = this.$('.popover');
@@ -92,11 +95,11 @@ define([
     hide: function(){
       this.opened = false;
       this.$('.popover').hide();
-    },
-    showItemsClicked: function(e){
       if(this.button){
-        this.button.$el.toggleClass('active');
+        this.button.$el.removeClass('active');
       }
+    },
+    showItemsClicked: function(button, e){
       if(this.opened){
         this.hide();
       } else {

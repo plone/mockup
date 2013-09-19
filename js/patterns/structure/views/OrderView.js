@@ -61,7 +61,7 @@ define([
         orderMode: self.$('select').val()
       }, function(data){
         self.hide();
-        self.app.collection.sync();
+        self.app.collection.reset();
       });
     }
   });
