@@ -32,8 +32,9 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-backdrop',
   'mockup-registry',
+  'mockup-router',
   'jquery.form'
-], function($, _, Base, Backdrop, registry) {
+], function($, _, Base, Backdrop, registry, Router) {
   "use strict";
 
   var Modal = Base.extend({
@@ -112,6 +113,10 @@ define([
             var $base = $(/<base.*?(\/>|<\/base>)/im.exec(response)[0]);
           return $base.attr('href');
         }
+      },
+      routerOptions: {
+        id: null,
+        pathExp: null
       },
       form: function(actions) {
         var self = this;
@@ -426,6 +431,13 @@ define([
               self.backdrop.hide();
             }
           });
+      }
+
+      // Router
+      if (self.options.routerOptions.id !== null) {
+        Router.addRoute('modal', self.options.routerOptions.id, function() {
+          this.show();
+        }, self, self.options.routerOptions.pathExp);
       }
 
       self.backdrop.on('hidden', function(e) {
