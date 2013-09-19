@@ -48,12 +48,12 @@ define([
   Router.start();
 
   describe("Router", function () {
-    
+
     it("routes and calls back", function() {
       var foo = {
         set: false
       };
-      
+
       var callback = function() {
         this.set = true;
       };
@@ -68,7 +68,7 @@ define([
       var foo = {
         set: false
       };
-      
+
       var callback = function() {
         this.set = true;
       };

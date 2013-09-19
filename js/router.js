@@ -104,7 +104,7 @@ define([
       this.testPath = undefined;
       this.actions = [];
     }
-    
+
   });
 
   return new Router();
