@@ -1,11 +1,18 @@
-GIT = git
-NPM = npm
 
-GRUNT = ./nixenv/bin/grunt
-BOWER = ./nixenv/bin/bower
 NIX_PATH = $(HOME)/.nix-defexpr/channels/
 NIX := $(shell which nix-build | egrep '^/' | head -1)
 UNAME := $(shell uname)
+
+GIT = git
+NPM = npm
+
+ifdef NIX
+GRUNT = ./nixenv/bin/grunt
+BOWER = ./nixenv/bin/bower
+else
+GRUNT = ./node_modules/.bin/grunt
+BOWER = ./node_modules/.bin/bower
+endif
 
 all: compile jshint test-ci docs
 
@@ -58,8 +65,4 @@ clean:
 	rm -rf node_modules
 	rm -rf bower_components
 
-<<<<<<< HEAD
-
-=======
->>>>>>> initial working environment tested on linux
 .PHONY: compile bootstrap jshint test test-ci docs clean
