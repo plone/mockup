@@ -33,7 +33,7 @@ define([
 
   var PopoverView = Backbone.View.extend({
     tagName: 'div',
-    className: 'popover',
+    className: 'popoverview',
     template: _.template(PopoverTemplate),
     content: _.template(''),
     title: _.template(''),

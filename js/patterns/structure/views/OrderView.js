@@ -32,7 +32,6 @@ define([
   "use strict";
 
   var WellView = PopoverView.extend({
-    className: 'selected-items',
     title: _.template('Set folder ordering'),
     content: _.template(
       '<select>' +
