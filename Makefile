@@ -51,6 +51,9 @@ jshint:
 test: jshint
 	NODE_PATH=./node_modules $(GRUNT) karma:dev --force
 
+test-chrome: jshint
+	NODE_PATH=./node_modules $(GRUNT) karma:dev_chrome --force
+
 test-ci: jshint
 	NODE_PATH=./node_modules $(GRUNT) karma:ci --force
 

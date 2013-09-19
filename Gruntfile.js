@@ -24,6 +24,10 @@ module.exports = function(grunt) {
       dev: {
         configFile: 'tests/karma.conf.js'
       },
+      dev_chrome: {
+        configFile: 'tests/karma.conf.js',
+        browsers: ['Chrome']
+      },
       ci: {
         configFile: 'tests/karma.conf.js',
         singleRun: true,
