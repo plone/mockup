@@ -81,20 +81,30 @@ define([
           title: 'Order',
           url: '/order'
         }]
-      }
+      },
+      folderOrderModes: [{
+        id: '',
+        title: 'Manual'
+      },{
+        id: 'effectiveDate',
+        title: 'Publication Date'
+      },{
+        id: 'creationDate',
+        title: 'Creation Date'
+      }],
+      folderOrder: ''
     },
     init: function() {
       var self = this;
       self.browsing = true; // so all queries will be correct with QueryHelper
 
-      self.view = new AppView({
-        collection_url: self.options.ajaxvocabulary,
-        queryHelper: new QueryHelper(self.$el,
-          $.extend(true, {}, self.options, {basePattern: self})),
-        uploadUrl: self.options.uploadUrl,
-        moveUrl: self.options.moveUrl,
-        buttonGroups: self.options.buttonGroups
-      });
+      self.options.collection_url = self.options.ajaxvocabulary;
+      self.options.queryHelper = new QueryHelper(self.$el,
+        $.extend(true, {}, self.options, {basePattern: self}));
+
+      delete self.options.attributes; // not compatible with backbone
+
+      self.view = new AppView(self.options);
       self.$el.append(self.view.render().$el);
     }
   });

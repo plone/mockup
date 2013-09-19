@@ -64,13 +64,16 @@ define([
 
       self.well_view = new SelectionWellView({
         collection: self.selected_collection,
-        button: self.toolbar.get('selected')
+        button: self.toolbar.get('selected'),
+        app: self
       });
       self.order_view = new OrderView({
-        button: self.buttons.folder.get('order')
+        button: self.buttons.folder.get('order'),
+        app: self
       });
       self.tags_view = new TagsView({
-        button: self.buttons.secondary.get('tags')
+        button: self.buttons.secondary.get('tags'),
+        app: self
       });
 
       self.toolbar.on('button.cut:click primary.button.copy:click', self.cutCopyClickEvent, self);
@@ -101,7 +104,7 @@ define([
         self.shift_clicked = e.shiftKey;
       });
     },
-    buttonClickEvent: function(button){
+    buttonClickEvent: function(button, data, callback){
       var self = this;
       if(button.url){
         // handle ajax now
@@ -109,14 +112,19 @@ define([
         self.selected_collection.each(function(item){
           uids.push(item.uid());
         });
+
+        if(data === undefined){
+          data = {
+            'selection': JSON.stringify(uids)
+          };
+        }
+        data._authenticator = $('input[name="_authenticator"]').val();
+
         var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
         $.ajax({
           url: url,
           type: 'POST',
-          data: {
-            '_authenticator': $('input[name="_authenticator"]').val(),
-            'selection': JSON.stringify(uids)
-          },
+          data: data,
           success: function(data){
             if(data.status === 'success'){
               self.collection.reset();
@@ -124,6 +132,9 @@ define([
             if(data.msg){
               // give status message somewhere...
               alert(data.msg);
+            }
+            if(callback !== undefined){
+              callback(data);
             }
           },
           error: function(data){

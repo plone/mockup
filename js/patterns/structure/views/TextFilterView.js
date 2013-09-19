@@ -34,13 +34,17 @@ define([
 
   var TextFilterView = BaseView.extend({
     tagName: 'form',
-    className: 'navbar-search pull-right',
-    template: '<input type="text" class="search-query" placeholder="Search">',
+    className: 'navbar-search pull-right form-search',
+    template: _.template(
+      '<div class="input-append">' +
+        '<input type="text" class="search-query" placeholder="Filter">' +
+        '<button type="submit" class="btn">Query</button>' +
+      '</div>'),
     events: {
       'keyup .search-query': 'filter'
     },
     render: function(){
-      this.$el.html(_.template(this.template, {}));
+      this.$el.html(this.template({}));
       return this;
     },
     filter: function(event) {

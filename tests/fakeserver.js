@@ -405,8 +405,13 @@ define([
         status: "success",
         msg: 'pasted ' + selection.length + ' items'
       };
+    },
+    '/order': function(xhr){
+      return {
+        status: "success",
+        msg: 'Folder ordering set'
+      };
     }
-
   };
 
   _.each(basicActions, function(action){

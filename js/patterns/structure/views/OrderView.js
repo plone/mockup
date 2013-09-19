@@ -35,18 +35,34 @@ define([
     title: _.template('Set folder ordering'),
     content: _.template(
       '<select>' +
-        '<option>Manual</option>' +
-        '<option>Effective Date</option>' +
-        '<option>Creation Date</option>' +
+        '<% _.each(folderOrderModes, function(mode){ %>' +
+          '<option value="<%= mode.id %>"' +
+              '<% if(mode.id == folderOrder) { %>selected="selected"<% } %> >' +
+              '<%= mode.title %></option>' +
+        '<% }) %>' +
       '</select>'),
     events: {
+      'change select': 'orderModeChanged'
     },
     initialize: function(){
+      this.app = this.options.app;
+      this.options.folderOrderModes = this.app.options.folderOrderModes;
+      this.options.folderOrder = this.app.options.folderOrder;
       PopoverView.prototype.initialize.call(this);
     },
     render: function () {
       PopoverView.prototype.render.call(this);
       return this;
+    },
+    orderModeChanged: function(){
+      var self = this;
+
+      self.app.buttonClickEvent(self.options.button, {
+        orderMode: self.$('select').val()
+      }, function(data){
+        self.hide();
+        self.app.collection.sync();
+      });
     }
   });
 
