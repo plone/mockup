@@ -38,7 +38,6 @@ define([
     content: _.template(''),
     title: _.template(''),
     button: null,
-    placement: 'bottom',
     events: {
     },
     opened: false,
@@ -67,92 +66,26 @@ define([
       if(this.button){
         $el = this.button.$el;
       }
-      var el = $el[0];
-      return $.extend({}, (typeof el.getBoundingClientRect === 'function') ? el.getBoundingClientRect() : {
-        width: el.offsetWidth,
-        height: el.offsetHeight
+      return $.extend({}, {
+        width: $el.width(),
+        height: $el.height()
       }, $el.offset());
     },
 
     show: function(){
       var pos = this.getPosition();
       var $tip = this.$('.popover');
-      var tp;
-
-      var actualWidth = $tip[0].offsetWidth;
-      var actualHeight = $tip[0].offsetHeight;
-
-      switch (this.placement) {
-        case 'bottom':
-          tp = {
-            top: pos.top + pos.height,
-            left: pos.left + pos.width / 2 - actualWidth / 2
-          };
-          break;
-        case 'top':
-          tp = {
-            top: pos.top - actualHeight,
-            left: pos.left + pos.width / 2 - actualWidth / 2
-          };
-          break;
-        case 'left':
-          tp = {
-            top: pos.top + pos.height / 2 - actualHeight / 2,
-            left: pos.left - actualWidth
-          };
-          break;
-        case 'right':
-          tp = {
-            top: pos.top + pos.height / 2 - actualHeight / 2,
-            left: pos.left + pos.width
-          };
-          break;
-      }
+      var tp = {
+        top: (pos.top + pos.height) + 11,
+        left: (pos.left + pos.width / 2) - 44
+      };
       this.applyPlacement(tp);
     },
-    replaceArrow: function(delta, dimension, position){
-      this.$('.arrow').css(position, delta ? (50 * (1 - delta / dimension) + "%") : '');
-    },
     applyPlacement: function(offset){
-      var $tip = this.$('.popover'),
-          width = $tip[0].offsetWidth,
-          height = $tip[0].offsetHeight,
-          actualWidth,
-          actualHeight,
-          delta,
-          replace;
+      var $tip = this.$('.popover');
 
-      $tip.css({left: 0, top: 0}); // reset
-      $tip.offset(offset).addClass(this.placement).addClass('in');
-
-      actualWidth = $tip[0].offsetWidth;
-      actualHeight = $tip[0].offsetHeight;
-
-      if (this.placement === 'top' && actualHeight !== height) {
-        offset.top = offset.top + height - actualHeight;
-        replace = true;
-      }
-
-      if (this.placement === 'bottom' || this.placement === 'top') {
-        delta = 0;
-
-        if (offset.left < 0){
-          delta = offset.left * -2;
-          offset.left = 0;
-          $tip.offset(offset);
-          actualWidth = $tip[0].offsetWidth;
-          actualHeight = $tip[0].offsetHeight;
-        }
-
-        this.replaceArrow(delta - width + actualWidth, actualWidth, 'left');
-      } else {
-        this.replaceArrow(actualHeight - height, actualHeight, 'top');
-      }
-
-      if(replace){
-        $tip.offset(offset);
-      }
-      $tip.css({position: 'fixed'});
+      $tip.css({left: 0, top: 0, position: 'fixed'}).
+        offset(offset).addClass(this.placement).addClass('in');
       $tip.show();
     },
     hide: function(){
