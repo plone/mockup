@@ -19,6 +19,7 @@ buildEnv {
     nodePackages."grunt-contrib-cssmin"
     nodePackages."grunt-contrib-uglify"
     nodePackages."grunt-karma"
+    nodePackages."grunt-sed"
     nodePackages."karma"
     nodePackages."karma-mocha"
     nodePackages."karma-coverage"

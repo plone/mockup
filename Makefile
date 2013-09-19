@@ -3,10 +3,9 @@ NPM = npm
 
 GRUNT = ./nixenv/bin/grunt
 BOWER = ./nixenv/bin/bower
-NIX_PATH=~/.nix-defexpr/channels/
-
+NIX_PATH = $(HOME)/.nix-defexpr/channels/
+NIX := $(shell which nix-build | egrep '^/' | head -1)
 UNAME := $(shell uname)
-BOWER_CHROME=`which chromium | egrep '^/' | head -1`
 
 all: compile jshint test-ci docs
 
@@ -24,25 +23,26 @@ compile-toolbar:
 	mkdir -p build
 	$(GRUNT) compile-toolbar
 
-bootstrap-nix:
-	NIX_PATH=${NIX_PATH} nix-build --out-link nixenv dev.nix
-	ln -s ./nixenv/lib/node_modules ./
-
-bootstrap-npm:
-	$(NPM) link --prefix=./node_modules
-	sed -i -e "s@throw new Error('Unknown Prefix @//throw// new Error('Unknown Prefix @g" ./node_modules/lcov-result-merger/index.js
-
-bootstrap:
+bootstrap: clean
 	mkdir -p build
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
-	$(BOWER) install
+ifdef NIX
+	@echo true
+	NIX_PATH=${NIX_PATH} nix-build --out-link nixenv dev.nix
+	ln -s ./nixenv/lib/node_modules ./
+else
+	@echo false
+	$(NPM) link --prefix=./node_modules
+	sed -i -e "s@throw new Error('Unknown Prefix @//throw// new Error('Unknown Prefix @g" ./node_modules/lcov-result-merger/index.js
 	$(GRUNT) sed:bootstrap
+endif
+	$(BOWER) install
 
 jshint:
 	$(GRUNT) jshint
 
 test: jshint
-	CHROME_BIN=$(BOWER_CHROME) NODE_PATH=./node_modules $(GRUNT) karma:dev --force
+	NODE_PATH=./node_modules $(GRUNT) karma:dev --force
 
 test-ci: jshint
 	NODE_PATH=./node_modules $(GRUNT) karma:ci --force
