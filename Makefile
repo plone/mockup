@@ -59,10 +59,12 @@ docs:
 	$(GRUNT) docs
 
 clean:
-	if test -f $(BOWER); then $(BOWER) cache clean; fi
 	mkdir -p build
 	rm -rf build
 	rm -rf node_modules
 	rm -rf bower_components
+
+clean-all: clean
+	if test -f $(BOWER); then $(BOWER) cache clean; fi
 
 .PHONY: compile bootstrap jshint test test-ci docs clean
