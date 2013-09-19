@@ -121,9 +121,13 @@ define([
         var term = '';
         if(query){
           query = $.parseJSON(query);
-          term = query.criteria[0].v;
-          if(query.criteria.length > 1){
-            path = query.criteria[1].v;
+          for(var i=0; i<query.criteria.length; i=i+1){
+            var criteria = query.criteria[i];
+            if(criteria.i === 'path'){
+              path = criteria.v;
+            }else{
+              term = criteria.v;
+            }
           }
         }
 
