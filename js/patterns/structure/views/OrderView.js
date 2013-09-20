@@ -56,7 +56,6 @@ define([
     },
     orderModeChanged: function(){
       var self = this;
-
       self.app.buttonClickEvent(self.options.button, {
         orderMode: self.$('select').val()
       }, function(data){

@@ -105,6 +105,7 @@ define([
       } else {
         this.show();
       }
+      return false;
     }
   });
 

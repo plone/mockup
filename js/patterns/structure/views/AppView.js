@@ -45,8 +45,20 @@ define([
             SelectedCollection, DropZone) {
   "use strict";
 
+  var DISABLE_EVENT = 'DISABLE';
+
   var AppView = Backbone.View.extend({
     tagName: 'div',
+    /* we setup binding here and specifically for every button so there is a
+     * way to override default click event behavior.
+     * Otherwise, if we bound all buttons to the same event, there is no way
+     * to override the event or stop bubbling it. */
+    buttonClickEvents: {
+      'cut': 'cutCopyClickEvent',
+      'copy': 'cutCopyClickEvent',
+      'order': DISABLE_EVENT, //disable default
+      'tags': DISABLE_EVENT, //disable
+    },
     initialize: function(){
       var self = this;
       self.collection = new ResultCollection([], {
@@ -75,9 +87,6 @@ define([
         button: self.buttons.secondary.get('tags'),
         app: self
       });
-
-      self.toolbar.on('button.cut:click primary.button.copy:click', self.cutCopyClickEvent, self);
-      self.toolbar.on('button:click', self.buttonClickEvent, self);
 
       self.toolbar.get('selected').disable();
       self.buttons.primary.disable();
@@ -175,7 +184,16 @@ define([
       _.each(_.pairs(this.options.buttonGroups), function(group){
         var buttons = [];
         _.each(group[1], function(button){
-          buttons.push(new ButtonView(button));
+          button = new ButtonView(button);
+          buttons.push(button);
+          // bind click events now...
+          var ev = self.buttonClickEvents[button.id];
+          if(ev !== DISABLE_EVENT){
+            if(ev === undefined){
+              ev = 'buttonClickEvent'; // default click event
+            }
+            button.on('button:click', self[ev], self);
+          }
         });
         self.buttons[group[0]] = new ButtonGroup({
           items: buttons,
