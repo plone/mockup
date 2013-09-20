@@ -39,7 +39,10 @@ define([
         defaults: {},
 
         init: function() {
-           alert('recurrence init!');
+            var self = this;
+            self.$el.recurrenceinput({
+                readOnly: false
+            });
         }
     });
 
