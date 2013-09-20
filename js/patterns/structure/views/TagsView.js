@@ -58,7 +58,7 @@ define([
       this.$remove.select2();
       this.addSelect2 = new Select2(this.$add, {
         multiple: true,
-        ajaxvocabulary: this.app.options.tagsAjaxvocabulary
+        ajaxvocabulary: this.app.options.tagsAjaxVocabulary
       });
       return this;
     },
