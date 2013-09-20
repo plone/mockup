@@ -25,9 +25,12 @@
 
 define([
     'jquery',
-    'mockup-patterns-base',
-    'jquery.cookie'
-], function($, Base) {
+    'jquery.tmpl',
+    'jquery.recurrenceinput',
+    'jquery.tools.dateinput',
+    'jquery.tools.overlay',
+    'mockup-patterns-base'
+], function($, template, recinput, dateinput, overlay, Base) {
     "use strict";
 
     var Recurrence = Base.extend({
