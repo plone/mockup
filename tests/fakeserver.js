@@ -437,6 +437,13 @@ define([
         status: "success",
         msg: 'Tags updated for ' + selection.length + ' items'
       };
+    },
+    '/dates': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'Dates updated for ' + selection.length + ' items'
+      };
     }
   };
 

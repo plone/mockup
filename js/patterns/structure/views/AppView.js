@@ -34,6 +34,7 @@ define([
   'structure/views/SelectionWellView',
   'structure/views/OrderView',
   'structure/views/TagsView',
+  'structure/views/DatesView',
   'structure/views/SelectionButtonView',
   'structure/views/PagingView',
   'structure/views/TextFilterView',
@@ -41,7 +42,7 @@ define([
   'structure/collections/SelectedCollection',
   'mockup-patterns-dropzone',
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
-            OrderView, TagsView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
+            OrderView, TagsView, DatesView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
 
@@ -58,6 +59,8 @@ define([
       'copy': 'cutCopyClickEvent',
       'order': DISABLE_EVENT, //disable default
       'tags': DISABLE_EVENT, //disable
+      'dates': DISABLE_EVENT,
+      'workflow': DISABLE_EVENT
     },
     initialize: function(){
       var self = this;
@@ -85,6 +88,10 @@ define([
       });
       self.tagsView = new TagsView({
         button: self.buttons.secondary.get('tags'),
+        app: self
+      });
+      self.datesView = new DatesView({
+        button: self.buttons.secondary.get('dates'),
         app: self
       });
 
@@ -137,10 +144,9 @@ define([
           }
         }
         if(data === null){
-          data = {
-            'selection': JSON.stringify(uids)
-          };
+          data = {};
         }
+        data.selection = JSON.stringify(uids);
         data._authenticator = $('input[name="_authenticator"]').val();
 
         var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
@@ -213,6 +219,7 @@ define([
       this.$el.append(this.wellView.render().el);
       this.$el.append(this.orderView.render().el);
       this.$el.append(this.tagsView.render().el);
+      this.$el.append(this.datesView.render().el);
 
       this.$el.append(this.tableView.render().el);
       this.$el.append(this.pagingView.render().el);
