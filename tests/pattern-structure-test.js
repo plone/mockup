@@ -35,7 +35,7 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-structure',
-  'mockup-fakeserver'
+//  'mockup-fakeserver'
 ], function(chai, $, registry, Structure, server) {
   "use strict";
 
