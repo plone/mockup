@@ -35,11 +35,10 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-structure',
-//  'mockup-fakeserver'
-], function(chai, $, registry, Structure, server) {
+  'sinon',
+], function(chai, $, registry, Structure, sinon) {
   "use strict";
 
-//  server.autoRespondAfter = 0;
   var expect = chai.expect,
       mocha = window.mocha;
 
@@ -51,6 +50,42 @@ define([
   ========================== */
 
   describe("Structure", function() {
+    beforeEach(function(){
+      var results = [
+        {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
+        {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
+        {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
+        {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
+      ];
+      var addSomeData = function(list){
+        for(var i=0; i<list.length; i=i+1){
+          var data = list[i];
+          data.getURL = window.location.origin + data.path;
+          data.review_state = 'published';
+          data.CreationDate = 'January 1, 2012';
+          data.ModificationDate = 'January 2, 2012';
+          data.EffectiveDate = 'January 3, 2012';
+          data.Subject = ['one', 'two'];
+          if(data.Type === 'Folder'){
+            data.is_folderish = true;
+          }else{
+            data.is_folderish = false;
+          }
+        }
+      };
+      addSomeData(results);
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+      this.server.respondWith(/relateditems-test.json/, function (xhr, id) {
+        xhr.respond(200, { "Content-Type": "application/json" },
+          JSON.stringify({
+            "total": results.length,
+            "results": results
+          })
+        );
+      });
+    });
+
     it('initialize', function() {
       var $el = $('' +
         '<div class="pat-structure" ' +
@@ -59,8 +94,8 @@ define([
                                  'moveUrl:/moveitem;' +
                                  'tagsAjaxVocabulary:/select2-test.json;">' +
         '</div>');
-//      registry.scan($el);
-//      expect($el.find('table').size()).to.equal(1);
+      registry.scan($el);
+      expect($el.find('.order-support > table').size()).to.equal(1);
     });
   });
 
