@@ -204,7 +204,7 @@ define([
       var uploadUrl = self.options.uploadUrl;
       if(uploadUrl){
         self.dropzone = new DropZone(self.$el, {
-          klass: 'structure-dropzone',
+          className: 'structure-dropzone',
           clickable: false,
           url: uploadUrl,
           autoCleanResults: true,
