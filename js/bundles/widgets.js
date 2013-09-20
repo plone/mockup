@@ -36,6 +36,7 @@ define([
   'mockup-patterns-pickadate',
   'mockup-patterns-autotoc',
   'mockup-patterns-accessibility',
+  'mockup-patterns-recurrence',
   'mockup-patterns-relateditems',
   'mockup-patterns-formunloadalert',
   'mockup-patterns-toggle',

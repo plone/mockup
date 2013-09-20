@@ -28,6 +28,7 @@ var requirejsOptions = {
     'mockup-iframe': 'js/iframe',
     'mockup-iframe_init': 'js/iframe_init',
     'mockup-patterns-accessibility': 'js/patterns/accessibility',
+    'mockup-patterns-recurrence': 'js/patterns/recurrence',
     'mockup-patterns-autotoc': 'js/patterns/autotoc',
     'mockup-patterns-backdrop': 'js/patterns/backdrop',
     'mockup-patterns-base': 'js/patterns/base',
