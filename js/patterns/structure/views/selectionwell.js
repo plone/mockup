@@ -27,7 +27,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'ui/views/PopoverView',
+  'ui/views/popover',
   'text!structure/templates/selection_item.html'
 ], function($, _, Backbone, PopoverView, ItemTemplate) {
   "use strict";

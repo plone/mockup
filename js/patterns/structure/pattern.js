@@ -27,7 +27,7 @@ define([
   'jquery',
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
-  'structure/views/AppView',
+  'structure/views/app',
 
   // for some reason we need to load this early
   'text!structure/templates/paging.html',
