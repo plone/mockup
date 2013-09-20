@@ -43,6 +43,7 @@ define([
     name: 'structure',
     defaults: {
       ajaxvocabulary: null,
+      tagsAjaxVocabulary: null,
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish', 'Subject'],

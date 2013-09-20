@@ -113,7 +113,7 @@ define([
         self.shift_clicked = e.shiftKey;
       });
     },
-    buttonClickEvent: function(button){
+    defaultButtonClickEvent: function(button){
       var self = this;
       var data = null, callback = null;
 
@@ -190,7 +190,7 @@ define([
           var ev = self.buttonClickEvents[button.id];
           if(ev !== DISABLE_EVENT){
             if(ev === undefined){
-              ev = 'buttonClickEvent'; // default click event
+              ev = 'defaultButtonClickEvent'; // default click event
             }
             button.on('button:click', self[ev], self);
           }

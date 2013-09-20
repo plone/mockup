@@ -24,6 +24,20 @@ define([
   server.autoRespond = true;
   server.autoRespondAfter = 200;
 
+  server.respondWith("GET", /select2-test.json/, function (xhr, id) {
+    var items = [
+      {id: 'red', text: 'Red'},
+      {id: 'green', text: 'Green'},
+      {id: 'blue', text: 'Blue'},
+      {id: 'orange', text: 'Orange'},
+      {id: 'yellow', text: 'Yellow'}
+    ];
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+      total: items.length,
+      results: items
+    }));
+  });
+
   server.respondWith("GET", /search.json/, function (xhr, id) {
     var items = [
       {
@@ -127,6 +141,7 @@ define([
   var randomItems = [];
   var basePaths = ['/', '/news/', '/projects/', '/about/'];
   var possibleNames = ['Page', 'News Item', 'Info', 'Blog Item'];
+  var possibleTags = ['one', 'two', 'three', 'four'];
 
   function generateUID(size){
     if(!size){
@@ -189,6 +204,10 @@ define([
         data.CreationDate = dates[Math.floor(Math.random()*dates.length)];
         data.ModificationDate = dates[Math.floor(Math.random()*dates.length)];
         data.EffectiveDate = dates[Math.floor(Math.random()*dates.length)];
+        data.Subject = [
+          possibleTags[Math.floor(Math.random()*possibleTags.length)],
+          possibleTags[Math.floor(Math.random()*possibleTags.length)]
+        ];
         if(data.Type === 'Folder'){
           data.is_folderish = true;
         }else{
@@ -410,6 +429,13 @@ define([
       return {
         status: "success",
         msg: 'Folder ordering set'
+      };
+    },
+    '/tags': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'Tags updated for ' + selection.length + ' items'
       };
     }
   };
