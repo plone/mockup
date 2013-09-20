@@ -40,12 +40,12 @@ define([
     },
     initialize: function(){
       this.app = this.options.app;
-      this.selected_collection = this.app.selected_collection;
+      this.selectedCollection = this.app.selectedCollection;
     },
     render: function() {
       var data = this.model.toJSON();
       data.selected = false;
-      if(this.selected_collection.findWhere({UID: data.UID})){
+      if(this.selectedCollection.findWhere({UID: data.UID})){
         data.selected = true;
       }
       this.$el.html(this.template(data));
@@ -71,14 +71,14 @@ define([
       var remove = false;
       var checkbox = this.$('input')[0];
       if(checkbox.checked){
-        this.app.selected_collection.add(this.model);
+        this.app.selectedCollection.add(this.model);
       }else{
-        this.app.selected_collection.removeResult(this.model);
+        this.app.selectedCollection.removeResult(this.model);
         remove = true;
       }
 
       var app = this.app;
-      var selected_collection = this.selected_collection;
+      var selectedCollection = this.selectedCollection;
 
       /* check for shift click now */
       if(this.app.shift_clicked && this.app.last_selected &&
@@ -93,13 +93,13 @@ define([
               (index < last_checked_index && index > this_index)){
             this.checked = checkbox.checked;
             var model = $(this).closest('tr')[0].model;
-            var existing = selected_collection.getByUID(model.attributes.UID);
+            var existing = selectedCollection.getByUID(model.attributes.UID);
             if(this.checked){
               if(!existing){
-                selected_collection.add(model);
+                selectedCollection.add(model);
               }
             } else if(existing){
-              selected_collection.remove(existing);
+              selectedCollection.remove(existing);
             }
           }
         });

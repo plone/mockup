@@ -40,10 +40,10 @@ define([
     initialize: function(){
       this.app = this.options.app;
       this.collection = this.app.collection;
-      this.selected_collection = this.app.selected_collection;
+      this.selectedCollection = this.app.selectedCollection;
       this.listenTo(this.collection, 'sync', this.render);
-      this.listenTo(this.selected_collection, 'remove', this.render);
-      this.listenTo(this.selected_collection, 'reset', this.render);
+      this.listenTo(this.selectedCollection, 'remove', this.render);
+      this.listenTo(this.selectedCollection, 'reset', this.render);
       this.collection.pager();
     },
     events: {
@@ -79,7 +79,7 @@ define([
       if ($(e.target).is(':checked')) {
         $('input[type="checkbox"]', $('tbody')).attr('checked', 'checked').change();
       } else {
-        this.selected_collection.remove(this.collection.models);
+        this.selectedCollection.remove(this.collection.models);
       }
     },
     toggleSelectAll: function(e) {

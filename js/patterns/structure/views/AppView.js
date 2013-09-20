@@ -50,28 +50,28 @@ define([
     initialize: function(){
       var self = this;
       self.collection = new ResultCollection([], {
-        url: self.options.collection_url
+        url: self.options.collectionUrl
       });
       self.queryHelper = self.options.queryHelper;
-      self.selected_collection = new SelectedCollection();
+      self.selectedCollection = new SelectedCollection();
       self.collection.queryHelper = self.queryHelper;
-      self.table_view = new TableView({app: self});
-      self.paging_view = new PagingView({app: self});
-      self.paste_allowed = self.options.paste_allowed;
+      self.tableView = new TableView({app: self});
+      self.pagingView = new PagingView({app: self});
+      self.pasteAllowed = self.options.pasteAllowed;
 
       /* initialize buttons */
       self.setupButtons();
 
-      self.well_view = new SelectionWellView({
-        collection: self.selected_collection,
+      self.wellView = new SelectionWellView({
+        collection: self.selectedCollection,
         button: self.toolbar.get('selected'),
         app: self
       });
-      self.order_view = new OrderView({
+      self.orderView = new OrderView({
         button: self.buttons.folder.get('order'),
         app: self
       });
-      self.tags_view = new TagsView({
+      self.tagsView = new TagsView({
         button: self.buttons.secondary.get('tags'),
         app: self
       });
@@ -83,12 +83,12 @@ define([
       self.buttons.primary.disable();
       self.buttons.secondary.disable();
 
-      self.selected_collection.on('add remove reset', function(modal, collection) {
+      self.selectedCollection.on('add remove reset', function(modal, collection) {
         if (collection.length) {
           self.toolbar.get('selected').enable();
           self.buttons.primary.enable();
           self.buttons.secondary.enable();
-          if(!self.paste_allowed){
+          if(!self.pasteAllowed){
             self.buttons.primary.get('paste').disable();
           }
         } else {
@@ -111,7 +111,7 @@ define([
       if(button.url){
         // handle ajax now
         var uids = [];
-        self.selected_collection.each(function(item){
+        self.selectedCollection.each(function(item){
           uids.push(item.uid());
         });
 
@@ -161,7 +161,7 @@ define([
     },
     cutCopyClickEvent: function(button){
       var self = this;
-      self.paste_allowed = true;
+      self.pasteAllowed = true;
       self.buttons.primary.get('paste').enable();
     },
     setupButtons: function(){
@@ -170,7 +170,7 @@ define([
       var items = [];
       items.push(new SelectionButtonView({
         title: 'Selected',
-        collection: this.selected_collection
+        collection: this.selectedCollection
       }));
       _.each(_.pairs(this.options.buttonGroups), function(group){
         var buttons = [];
@@ -192,12 +192,12 @@ define([
     render: function(){
 
       this.$el.append(this.toolbar.render().el);
-      this.$el.append(this.well_view.render().el);
-      this.$el.append(this.order_view.render().el);
-      this.$el.append(this.tags_view.render().el);
+      this.$el.append(this.wellView.render().el);
+      this.$el.append(this.orderView.render().el);
+      this.$el.append(this.tagsView.render().el);
 
-      this.$el.append(this.table_view.render().el);
-      this.$el.append(this.paging_view.render().el);
+      this.$el.append(this.tableView.render().el);
+      this.$el.append(this.pagingView.render().el);
 
       /* dropzone support */
       var self = this;
