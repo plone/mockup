@@ -36,7 +36,7 @@ define([
         defaults: {},
 
         init: function() {
-           alert('recurrence init!')
+           alert('recurrence init!');
         }
     });
 
