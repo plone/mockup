@@ -62,10 +62,17 @@ define([
       });
       return this;
     },
+    getSelect2Values: function($el){
+      var values = [];
+      _.each($el.select2('data'), function(item){
+        values.push(item.id);
+      });
+      return values;
+    },
     applyButtonClicked: function(e){
       this.app.defaultButtonClickEvent(this.button, {
-        remove: this.$remove.select2('data'),
-        add: this.$add.select2('data')
+        remove: JSON.stringify(this.getSelect2Values(this.$remove)),
+        add: JSON.stringify(this.getSelect2Values(this.$add))
       });
       this.hide();
     },
