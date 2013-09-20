@@ -444,7 +444,15 @@ define([
         status: "success",
         msg: 'Dates updated for ' + selection.length + ' items'
       };
+    },
+    '/workflow': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'Workflow updated for ' + selection.length + ' items'
+      };
     }
+
   };
 
   _.each(basicActions, function(action){
