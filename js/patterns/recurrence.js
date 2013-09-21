@@ -29,7 +29,7 @@ define([
     'jquery.recurrenceinput',
     'jquery.tools.dateinput',
     'jquery.tools.overlay'
-], function($, Base) {
+], function ($, Base) {
     "use strict";
 
     var Recurrence = Base.extend({
@@ -45,10 +45,10 @@ define([
             startFieldDay: null,
             ajaxURL: null,
             ajaxContentType: 'application/json; charset=utf8',
-            ributtonExtraClass: '',
+            ributtonExtraClass: ''
         },
 
-        init: function() {
+        init: function () {
             var self = this;
             self.$el.recurrenceinput(this.options);
         }
