@@ -75,13 +75,22 @@ local server, provided in the test_server.py script.
 This server requires the dateutil module, so you must install it first.
 Here are some examples of how to do this, depending on your platform:
 
-Debian/Ubuntu:
+Debian/Ubuntu::
 
     $ sudo apt-get install python-dateutil
 
-A non-system Python 2 with setuptools or distribute installed:
+A non-system Python 2 with setuptools or distribute installed::
 
     $ <pathtopython>/easy_install python-dateutil
+
+Then start the tests server like so::
+
+    $ python ./test_server.py
+
+Open the demo pages http://localhost:8000/demo/input.html and
+http://localhost:8000/demo/localized.html
+
+And Open the tests: http://localhost:8000/tests/tests.html
 
 
 The demo/input.html document contains basic usecases and can be used when
