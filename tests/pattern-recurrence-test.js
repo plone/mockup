@@ -32,10 +32,11 @@
 
 define([
     'chai',
+    'sinon',
     'jquery',
     'mockup-registry',
     'mockup-patterns-recurrence'
-], function (chai, $, registry, Recurrence) {
+], function (chai, sinon, $, registry, Recurrence) {
     "use strict";
 
     var expect = chai.expect,
@@ -49,6 +50,10 @@ define([
     ========================== */
 
     describe("Recurrence", function () {
+
+        var recMethodSpy,
+            origRecinput;
+
         beforeEach(function () {
             this.$el = $([
                 '<div>',
@@ -56,14 +61,20 @@ define([
                 '      data-pat-recurrence=""></textarea>',
                 '</div>'
             ].join(''));
+
+            recMethodSpy = sinon.spy();
+            origRecinput = $.fn.recurrenceinput;
+            $.fn.recurrenceinput = recMethodSpy;
         });
 
-        // test that the textarea element gets hidden
-        it('textarea hidden', function () {
-            var $txt = $('.pat-recurrence', this.$el);
-            expect($txt.css('display')).to.not.equal('none');
+        afterEach(function () {
+            $.fn.recurrenceinput = origRecinput;
+        });
+
+        it('init with default options', function () {
             registry.scan(this.$el);
-            expect($txt.css('display')).to.equal('none');
+            expect(recMethodSpy.calledOnce).to.equal(true);
+            expect(recMethodSpy.calledWith({readOnly: false})).to.equal(true);
         });
 
     });
