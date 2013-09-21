@@ -51,8 +51,7 @@ define([
 
     describe("Recurrence", function () {
 
-        var recMethodSpy,
-            origRecinput;
+        var recMethod;  // a spy on the jQuery's recurrenceinput method
 
         beforeEach(function () {
             this.$el = $([
@@ -62,19 +61,19 @@ define([
                 '</div>'
             ].join(''));
 
-            recMethodSpy = sinon.spy();
-            origRecinput = $.fn.recurrenceinput;
-            $.fn.recurrenceinput = recMethodSpy;
+            sinon.spy($.fn, "recurrenceinput");
+            recMethod = $.fn.recurrenceinput;
         });
 
         afterEach(function () {
-            $.fn.recurrenceinput = origRecinput;
+            $.fn.recurrenceinput.restore();  // stop spying on the method
         });
 
         it('init with default options', function () {
+            expect(recMethod.called).to.equal(false);
             registry.scan(this.$el);
-            expect(recMethodSpy.calledOnce).to.equal(true);
-            expect(recMethodSpy.calledWith({readOnly: false})).to.equal(true);
+            expect(recMethod.calledOnce).to.equal(true);
+            expect(recMethod.calledWith({readOnly: false})).to.equal(true);
         });
 
     });
