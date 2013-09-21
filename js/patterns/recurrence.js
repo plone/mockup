@@ -1,9 +1,8 @@
-// Pattern which provides accessibility support
+// Pattern which provides a recurrence widget.
 //
-// Author: Peter Lamut<peter.lamut@niteoweb.com>
-// Version: 0.1
-//
-// Taken from the original accessibility.js from Plone
+// Authors: Peter Lamut<peter.lamut@niteoweb.com>
+//          Johannes Raggam<raggam-nl@adm.at>
+// Version: 1.0
 //
 // License:
 //
@@ -36,13 +35,22 @@ define([
     var Recurrence = Base.extend({
         name: "recurrence",
 
-        defaults: {},
+        defaults: {
+            lang: 'en',
+            readOnly: false,
+            firstDay: 0,
+            startField: null,
+            startFieldYear: null,
+            startFieldMonth: null,
+            startFieldDay: null,
+            ajaxURL: null,
+            ajaxContentType: 'application/json; charset=utf8',
+            ributtonExtraClass: '',
+        },
 
         init: function() {
             var self = this;
-            self.$el.recurrenceinput({
-                readOnly: false
-            });
+            self.$el.recurrenceinput(this.options);
         }
     });
 
