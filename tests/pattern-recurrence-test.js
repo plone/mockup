@@ -37,7 +37,7 @@ define([
     'mockup-registry',
     'mockup-patterns-recurrence'
 ], function (chai, sinon, $, registry, Recurrence) {
-    "use strict";
+    'use strict';
 
     var expect = chai.expect,
         mocha = window.mocha;
@@ -49,9 +49,10 @@ define([
     TEST: Recurrence
     ========================== */
 
-    describe("Recurrence", function () {
+    describe('Recurrence', function () {
 
-        var recMethod;  // a spy on the jQuery's recurrenceinput method
+        var defaultOpts,  // pattern's default options
+            recMethod;    // a spy on the jQuery's recurrenceinput method
 
         beforeEach(function () {
             this.$el = $([
@@ -61,7 +62,20 @@ define([
                 '</div>'
             ].join(''));
 
-            sinon.spy($.fn, "recurrenceinput");
+            defaultOpts = {
+                lang: 'en',
+                readOnly: false,
+                firstDay: 0,
+                startField: null,
+                startFieldYear: null,
+                startFieldMonth: null,
+                startFieldDay: null,
+                ajaxURL: null,
+                ajaxContentType: 'application/json; charset=utf8',
+                ributtonExtraClass: ''
+            };
+
+            sinon.spy($.fn, 'recurrenceinput');
             recMethod = $.fn.recurrenceinput;
         });
 
@@ -73,7 +87,23 @@ define([
             expect(recMethod.called).to.equal(false);
             registry.scan(this.$el);
             expect(recMethod.calledOnce).to.equal(true);
-            expect(recMethod.calledWith({readOnly: false})).to.equal(true);
+            expect(recMethod.calledWith(defaultOpts)).to.equal(true);
+        });
+
+        it('init with some user-provided options', function () {
+            var $txt = $('.pat-recurrence', this.$el);
+            $txt.attr('data-pat-recurrence',
+                'firstDay: 4; startField: #fieldId; ributtonExtraClass: red');
+
+            // NOTE: integers in data-pat-* are passed as strings
+            defaultOpts.firstDay = '4';
+            defaultOpts.startField = '#fieldId';
+            defaultOpts.ributtonExtraClass = 'red';
+
+            expect(recMethod.called).to.equal(false);
+            registry.scan(this.$el);
+            expect(recMethod.calledOnce).to.equal(true);
+            expect(recMethod.calledWith(defaultOpts)).to.equal(true);
         });
 
     });
