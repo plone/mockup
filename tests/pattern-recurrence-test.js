@@ -66,7 +66,7 @@ define([
         });
 
         afterEach(function () {
-            $.fn.recurrenceinput.restore();  // stop spying on the method
+            recMethod.restore();  // stop spying on the method
         });
 
         it('init with default options', function () {
