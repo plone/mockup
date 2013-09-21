@@ -93,11 +93,11 @@ define([
         it('init with some user-provided options', function () {
             var $txt = $('.pat-recurrence', this.$el);
             $txt.attr('data-pat-recurrence',
-                'firstDay: 4; startField: #fieldId; ributtonExtraClass: red');
+                'firstDay: 4; startField: fieldId; ributtonExtraClass: red');
 
             // NOTE: integers in data-pat-* are passed as strings
             defaultOpts.firstDay = '4';
-            defaultOpts.startField = '#fieldId';
+            defaultOpts.startField = 'fieldId';
             defaultOpts.ributtonExtraClass = 'red';
 
             expect(recMethod.called).to.equal(false);
