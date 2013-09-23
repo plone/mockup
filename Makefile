@@ -34,11 +34,9 @@ bootstrap: clean
 	mkdir -p build
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 ifdef NIX
-	@echo true
 	NIX_PATH=${NIX_PATH} nix-build --out-link nixenv dev.nix
 	ln -s ./nixenv/lib/node_modules ./
 else
-	@echo false
 	$(NPM) link --prefix=./node_modules
 	sed -i -e "s@throw new Error('Unknown Prefix @//throw// new Error('Unknown Prefix @g" ./node_modules/lcov-result-merger/index.js
 	$(GRUNT) sed:bootstrap
