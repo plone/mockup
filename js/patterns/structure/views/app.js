@@ -154,7 +154,7 @@ define([
         }
         if(arguments.length > 2){
           var arg2 = arguments[2];
-          if(arg2 === 'function'){
+          if(typeof(arg2) === 'function'){
             callback = arg2;
           }
         }
@@ -180,6 +180,7 @@ define([
             if(callback !== null){
               callback(data);
             }
+            self.collection.pager();
           },
           error: function(data){
             if(data.status === 404){

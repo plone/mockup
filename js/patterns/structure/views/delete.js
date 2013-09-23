@@ -50,7 +50,10 @@ define([
       return this;
     },
     applyButtonClicked: function(e){
-      this.app.defaultButtonClickEvent(this.button);
+      var self = this;
+      this.app.defaultButtonClickEvent(this.button, {}, function(data){
+        self.app.selectedCollection.reset();
+      });
       this.hide();
     }
   });
