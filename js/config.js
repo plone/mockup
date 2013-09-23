@@ -9,7 +9,7 @@ var requirejsOptions = {
     'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
     'underscore': 'bower_components/underscore/underscore',
     'backbone': 'bower_components/backbone/backbone',
-    'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
+    'backbone-paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
     'button-groups': 'bower_components/bootstrap/js/bootstrap-dropdown',
     'select2': 'bower_components/select2/select2',
     'tinymce': 'lib/tinymce/tinymce.min',

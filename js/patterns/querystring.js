@@ -402,6 +402,7 @@ define([
       indexes: [],
       classWrapperName: 'querystring-wrapper',
       criteria: {},
+      indexOptionsUrl: null,
       previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
       previewCountURL: 'portal_factory/@@querybuildernumberofresults',
       sorttxt: 'Sort On',
@@ -429,6 +430,24 @@ define([
       self.$wrapper = $('<div/>');
       self.$el.after(self.$wrapper);
 
+      if(self.options.indexOptionsUrl){
+        $.ajax({
+          url: self.options.indexOptionsUrl,
+          success: function(data){
+            self.options.indexes = data.indexes;
+            self.options.sortable_indexes = data.sortable_indexes;
+            self._init();
+          },
+          error: function(xhr){
+            // XXX handle this...
+          }
+        });
+      }else{
+        self._init();
+      }
+    },
+    _init: function(){
+      var self = this;
       self.$criteriaWrapper = $('<div/>')
         .addClass(self.options.classWrapperName)
         .appendTo(self.$wrapper);
@@ -468,6 +487,7 @@ define([
 
       // add criteria preview pane to see results from criteria query
       self.refreshPreviewEvent();
+
     },
     createCriteria: function(index, operator, value) {
       var self = this,

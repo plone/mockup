@@ -21,6 +21,14 @@ define([
   }
 
   var server = sinon.fakeServer.create();
+  server.xhr.useFilters = true;
+  var okayUrls = [
+    "/tests/queryStringCriteria.json"
+  ];
+  server.xhr.addFilter(function(method, url) {
+    //whenever the this returns true the request will not faked
+    return okayUrls.indexOf(url) !== -1 || url.indexOf('.html') !== -1;
+  });
   server.autoRespond = true;
   server.autoRespondAfter = 200;
 

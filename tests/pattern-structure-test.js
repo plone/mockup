@@ -34,8 +34,8 @@ define([
   'chai',
   'jquery',
   'mockup-registry',
-  'mockup-patterns-structure',
-  'sinon',
+//  'mockup-patterns-structure',
+//  'sinon',
 ], function(chai, $, registry, Structure, sinon) {
   "use strict";
 
@@ -48,7 +48,7 @@ define([
    /* ==========================
    TEST: Select2
   ========================== */
-
+/*
   describe("Structure", function() {
     beforeEach(function(){
       var results = [
@@ -98,6 +98,6 @@ define([
       expect($el.find('.order-support > table').size()).to.equal(1);
     });
   });
-
+*/
 });
 

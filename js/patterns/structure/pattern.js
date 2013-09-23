@@ -28,14 +28,6 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
   'structure/views/app',
-
-  // for some reason we need to load this early
-  'text!structure/templates/paging.html',
-  'text!structure/templates/selection_button.html',
-  'text!structure/templates/selection_item.html',
-  'text!structure/templates/tablerow.html',
-  'text!structure/templates/table.html',
-  'text!templates/popover.html',
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 

@@ -27,9 +27,11 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'ui/views/base'
+  'ui/views/base',
+  'ui/views/button',
+  'ui/views/popover'
   ],
-  function($, Backbone, _, BaseView) {
+  function($, Backbone, _, BaseView, ButtonView, PopoverView) {
   "use strict";
 
   var TextFilterView = BaseView.extend({
@@ -38,13 +40,25 @@ define([
     template: _.template(
       '<div class="input-append">' +
         '<input type="text" class="search-query" placeholder="Filter">' +
-        '<button type="submit" class="btn">Query</button>' +
       '</div>'),
+    popoverContent: _.template(
+      ''
+    ),
     events: {
       'keyup .search-query': 'filter'
     },
     render: function(){
       this.$el.html(this.template({}));
+      this.button = new ButtonView({
+        title: 'Query'
+      });
+      this.popover = new PopoverView({
+        button: this.button,
+        title: _.template('Query'),
+        content: this.popoverContent
+      });
+      this.$('div.input-append').append(this.button.render().el);
+      this.$el.append(this.popover.render().el);
       return this;
     },
     filter: function(event) {

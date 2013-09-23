@@ -26,7 +26,7 @@
 define([
   'backbone',
   'structure/models/result',
-  'backbone.paginator'
+  'backbone-paginator'
 ], function(Backbone, Result) {
 "use strict";
 

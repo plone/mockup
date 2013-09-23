@@ -13,6 +13,8 @@ files.push({pattern: 'tests/example-resource*', included: false});
 files.push({pattern: 'tests/fakeserver*', included: false});
 files.push({pattern: 'tests/**/*-test.js', included: false});
 files.push({pattern: 'js/patterns/ui/**/*.js', included: false});
+files.push({pattern: 'js/patterns/ui/views/button.js', included: false});
+
 files.push({pattern: 'js/patterns/templates/*.html', included: false});
 files.push({pattern: 'js/patterns/structure/**/*.js', included: false});
 files.push({pattern: 'js/patterns/structure/templates/*.html', included: false});
