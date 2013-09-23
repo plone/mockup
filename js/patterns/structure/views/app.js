@@ -34,7 +34,7 @@ define([
   'structure/views/selectionwell',
   'structure/views/order',
   'structure/views/tags',
-  'structure/views/dates',
+  'structure/views/properties',
   'structure/views/workflow',
   'structure/views/delete',
   'structure/views/selectionbutton',
@@ -44,7 +44,7 @@ define([
   'structure/collections/selected',
   'mockup-patterns-dropzone',
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
-            OrderView, TagsView, DatesView, WorkflowView, DeleteView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
+            OrderView, TagsView, PropertiesView, WorkflowView, DeleteView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
 
@@ -61,7 +61,7 @@ define([
       'copy': 'cutCopyClickEvent',
       'order': DISABLE_EVENT, //disable default
       'tags': DISABLE_EVENT, //disable
-      'dates': DISABLE_EVENT,
+      'properties': DISABLE_EVENT,
       'workflow': DISABLE_EVENT,
       'delete': DISABLE_EVENT
     },
@@ -106,8 +106,8 @@ define([
         button: self.buttons.secondary.get('tags'),
         app: self
       });
-      self.datesView = new DatesView({
-        button: self.buttons.secondary.get('dates'),
+      self.propertiesView = new PropertiesView({
+        button: self.buttons.secondary.get('properties'),
         app: self
       });
       self.workflowView = new WorkflowView({
@@ -252,7 +252,7 @@ define([
       this.$el.append(this.wellView.render().el);
       this.$el.append(this.orderView.render().el);
       this.$el.append(this.tagsView.render().el);
-      this.$el.append(this.datesView.render().el);
+      this.$el.append(this.propertiesView.render().el);
       this.$el.append(this.workflowView.render().el);
       this.$el.append(this.deleteView.render().el);
 

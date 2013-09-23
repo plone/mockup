@@ -36,6 +36,7 @@ define([
     defaults: {
       ajaxVocabulary: null,
       tagsAjaxVocabulary: null,
+      usersAjaxVocabulary: null,
       indexOptionsUrl: null, // for querystring widget
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
@@ -68,8 +69,8 @@ define([
           title: 'Tags',
           url: '/tags'
         },{
-          title: 'Dates',
-          url: '/dates'
+          title: 'Properties',
+          url: '/properties'
         }],
         folder: [{
           title: 'Order',

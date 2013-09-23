@@ -28,18 +28,34 @@ define([
   'underscore',
   'backbone',
   'ui/views/popover',
-  'mockup-patterns-pickadate'
-], function($, _, Backbone, PopoverView, PickADate) {
+  'mockup-patterns-pickadate',
+  'mockup-patterns-select2'
+], function($, _, Backbone, PopoverView, PickADate, Select2) {
   "use strict";
 
-  var DatesView = PopoverView.extend({
-    className: 'popoverview dates',
+  var PropertiesView = PopoverView.extend({
+    className: 'popoverview properties',
     title: _.template('Modify dates on items'),
     content: _.template(
       '<label>Publication Date</label>' +
       '<input name="effective" />' +
       '<label>Expiration Date</label>' +
       '<input name="expiration" />' +
+      '<label>Copyright</label>' +
+      '<textarea name="copyright"></textarea>' +
+      '<label>Creators<label>' +
+      '<input name="creators" style="width: 300px" />' +
+      '<label>Contributors<label>' +
+      '<input name="contributors" style="width: 300px" />' +
+      '<label>Exclude from nav</label>' +
+      '<label class="checkbox">' +
+        '<input type="radio" name="exclude-from-nav" value="Yes" />' +
+        'Yes' +
+      '</label>' +
+      '<label class="checkbox">' +
+        '<input type="radio" name="exclude-from-nav" value="No" />' +
+        'No' +
+      '</label>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
     ),
     events: {
@@ -53,17 +69,37 @@ define([
       PopoverView.prototype.render.call(this);
       this.$effective = this.$('[name="effective"]');
       this.$expiration = this.$('[name="expiration"]');
+      this.$copyright = this.$('[name="copyright"]');
+      this.$creators = this.$('[name="creators"]');
+      this.$contributors = this.$('[name="contributors"]');
+      this.$exclude = this.$('[name="exclude-from-nav"]');
+
+      this.creatorsSelect2 = new Select2(this.$creators, {
+        multiple: true,
+        ajaxVocabulary: this.app.options.usersAjaxVocabulary
+      });
+      this.contributorsSelect2 = new Select2(this.$contributors, {
+        multiple: true,
+        ajaxVocabulary: this.app.options.usersAjaxVocabulary
+      });
       this.effectivePickADate = new PickADate(this.$effective);
       this.expirationPickADate = new PickADate(this.$expiration);
       return this;
     },
     applyButtonClicked: function(e){
-      this.app.defaultButtonClickEvent(this.button, {
+      var data = {
         effectiveDate: this.effectivePickADate.$date.attr('value'),
         effectiveTime: this.effectivePickADate.$time.attr('value'),
         expirationDate: this.expirationPickADate.$date.attr('value'),
-        expirationTime: this.expirationPickADate.$time.attr('value')
-      });
+        expirationTime: this.expirationPickADate.$time.attr('value'),
+        copyright: this.$copyright.val(),
+        contributors: JSON.stringify(this.$contributors.select2('data')),
+        creators: JSON.stringify(this.$creators.select2('data'))
+      };
+      if(this.$('[name="exclude-from-nav"]:checked').length > 0){
+        data.exclude_from_nav = this.$('[name="exclude-from-nav"]:checked').val();
+      }
+      this.app.defaultButtonClickEvent(this.button, data);
       this.hide();
     },
     showItemsClicked: function(button, e){
@@ -74,11 +110,18 @@ define([
       }
       this.$effective.attr('value', '');
       this.$expiration.attr('value', '');
+      this.$copyright.html('');
+      this.$creators.select2('data', []);
+      this.$contributors.select2('data', []);
+      this.$exclude.each(function(){
+        this.checked = false;
+      });
     }
   });
 
-  return DatesView;
+  return PropertiesView;
 });
+
 
 
 

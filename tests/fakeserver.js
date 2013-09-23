@@ -23,11 +23,10 @@ define([
   var server = sinon.fakeServer.create();
   server.xhr.useFilters = true;
   var okayUrls = [
-    "/tests/queryStringCriteria.json"
   ];
   server.xhr.addFilter(function(method, url) {
     //whenever the this returns true the request will not faked
-    return okayUrls.indexOf(url) !== -1 || url.indexOf('.html') !== -1;
+    return url.indexOf('tests/json/') !== -1 || url.indexOf('.html') !== -1;
   });
   server.autoRespond = true;
   server.autoRespondAfter = 200;
@@ -405,7 +404,7 @@ define([
     '/delete',
     '/workflow',
     '/tags',
-    '/dates',
+    '/properties',
     '/paste',
     '/order'
   ];
@@ -445,11 +444,11 @@ define([
         msg: 'Tags updated for ' + selection.length + ' items'
       };
     },
-    '/dates': function(xhr){
+    '/properties': function(xhr){
       var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
       return {
         status: "success",
-        msg: 'Dates updated for ' + selection.length + ' items'
+        msg: 'Properties updated for ' + selection.length + ' items'
       };
     },
     '/workflow': function(xhr){
