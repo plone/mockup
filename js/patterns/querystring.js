@@ -519,7 +519,12 @@ define([
         self.updateValue();
       };
 
-      criteria.on('remove', doupdates);
+      criteria.on('remove', function(e, criteria){
+        if(self.criterias.indexOf(criteria) !== -1){
+          self.criterias.splice(self.criterias.indexOf(criteria), 1);
+        }
+        doupdates(e, criteria);
+      });
       criteria.on('remove-clear', doupdates);
       criteria.on('remove-operator', doupdates);
       criteria.on('remove-value', doupdates);
@@ -685,8 +690,10 @@ define([
           criteriastrs.push(jsonstr);
         }
       });
-
-      self.$el.val('['+criteriastrs.join(',')+']');
+      var existing = self.$el.val();
+      var val = '['+criteriastrs.join(',')+']';
+      self.$el.val(val);
+      self.$el.trigger('change');
     }
   });
 

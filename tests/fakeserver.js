@@ -227,7 +227,6 @@ define([
     searchables[0].getURL = window.location.origin + '/exampledata/test.png';
 
     var results = [];
-
     // grab the page number and number of items per page -- note, page is 1-based from Select2
     var batch = getQueryVariable(xhr.url, 'batch');
     var page = 1;
@@ -272,7 +271,7 @@ define([
             }
           }
         }else{
-          q = term.toLowerCase();
+          q = term.toLowerCase().replace('*', '');
           if (keys.indexOf(q) > -1){
             results.push(item);
           }

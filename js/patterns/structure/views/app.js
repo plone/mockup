@@ -67,9 +67,22 @@ define([
     },
     initialize: function(){
       var self = this;
+      self.options.additionalCriterias = [];
       self.collection = new ResultCollection([], {
         url: self.options.collectionUrl
       });
+      self.collection.queryParser = function(){
+        var term = null;
+        if(self.toolbar){
+          term = self.toolbar.get('filter').term;
+        }
+        return JSON.stringify({
+          criteria: self.queryHelper.getCriterias(term, {
+            additionalCriterias: self.options.additionalCriterias
+          })
+        });
+      };
+
       self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
       self.collection.queryHelper = self.queryHelper;
@@ -124,6 +137,7 @@ define([
           self.buttons.secondary.disable();
         }
       }, self);
+
 
       /* detect shift clicks */
       self.shift_clicked = false;

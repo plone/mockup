@@ -42,6 +42,7 @@ define([
         return this.url;
       }
     },
+    queryParser: null, // needs to be passed in
     paginator_ui: {
       // the lowest page index your API allows to be accessed
       firstPage: 1,
@@ -53,9 +54,7 @@ define([
     },
     server_api: {
       query: function(){
-        return JSON.stringify({
-          criteria: this.queryHelper.getCriterias()
-        });
+        return this.queryParser();
       },
       batch: function(){
         this.queryHelper.options.batchSize = this.perPage;

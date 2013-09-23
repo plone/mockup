@@ -48,6 +48,9 @@ define([
     events: {
       'keyup .search-query': 'filter'
     },
+    term: null,
+    timeoutId: null,
+    keyupDelay: 300,
     initialize: function(){
       this.app = this.options.app;
     },
@@ -65,16 +68,34 @@ define([
       this.$('div.input-append').append(this.button.render().el);
       this.$el.append(this.popover.render().el);
       this.popover.$el.addClass('query');
+      this.$queryString = this.popover.$('input.pat-querystring');
       this.queryString = new QueryString(
-        this.popover.$('input.pat-querystring'), {
+        this.$queryString, {
         indexOptionsUrl: this.app.options.indexOptionsUrl,
         showPreviews: false
+      });
+      var self = this;
+      this.queryString.$el.on('change', function(){
+        if(self.timeoutId){
+          clearTimeout(self.timeoutId);
+        }
+        self.timeoutId = setTimeout(function(){
+          var criterias = $.parseJSON(self.$queryString.val());
+          self.app.options.additionalCriterias = criterias;
+          self.app.collection.pager();
+        }, this.keyupDelay);
       });
       return this;
     },
     filter: function(event) {
-      var val = $(event.currentTarget).val();
-      this.uiEventTrigger('change', val, this);
+      var self = this;
+      if(self.timeoutId){
+        clearTimeout(self.timeoutId);
+      }
+      self.timeoutId = setTimeout(function(){
+        self.term = $(event.currentTarget).val();
+        self.app.collection.pager();
+      }, this.keyupDelay);
     }
   });
 
