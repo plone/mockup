@@ -38,7 +38,6 @@ ifdef NIX
 	ln -s ./nixenv/lib/node_modules ./
 else
 	$(NPM) link --prefix=./node_modules
-	sed -i -e "s@throw new Error('Unknown Prefix @//throw// new Error('Unknown Prefix @g" ./node_modules/lcov-result-merger/index.js
 	$(GRUNT) sed:bootstrap
 endif
 	$(BOWER) install
