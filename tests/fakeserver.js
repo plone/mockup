@@ -215,6 +215,7 @@ define([
           possibleTags[Math.floor(Math.random()*possibleTags.length)],
           possibleTags[Math.floor(Math.random()*possibleTags.length)]
         ];
+        data.id = data.Title.replace(' ', '-').toLowerCase();
         if(data.Type === 'Folder'){
           data.is_folderish = true;
         }else{
@@ -406,7 +407,8 @@ define([
     '/tags',
     '/properties',
     '/paste',
-    '/order'
+    '/order',
+    '/rename'
   ];
 
   var actionData = {
@@ -449,6 +451,13 @@ define([
       return {
         status: "success",
         msg: 'Properties updated for ' + selection.length + ' items'
+      };
+    },
+    '/rename': function(xhr){
+      var torename = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'torename'));
+      return {
+        status: "success",
+        msg: 'Renamed ' + torename.length + ' items'
       };
     },
     '/workflow': function(xhr){

@@ -37,6 +37,7 @@ define([
   'structure/views/properties',
   'structure/views/workflow',
   'structure/views/delete',
+  'structure/views/rename',
   'structure/views/selectionbutton',
   'structure/views/paging',
   'structure/views/textfilter',
@@ -44,7 +45,8 @@ define([
   'structure/collections/selected',
   'mockup-patterns-dropzone',
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
-            OrderView, TagsView, PropertiesView, WorkflowView, DeleteView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
+            OrderView, TagsView, PropertiesView, WorkflowView, DeleteView, RenameView,
+            SelectionButtonView, PagingView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
 
@@ -63,7 +65,8 @@ define([
       'tags': DISABLE_EVENT, //disable
       'properties': DISABLE_EVENT,
       'workflow': DISABLE_EVENT,
-      'delete': DISABLE_EVENT
+      'delete': DISABLE_EVENT,
+      'rename': DISABLE_EVENT
     },
     initialize: function(){
       var self = this;
@@ -116,6 +119,10 @@ define([
       });
       self.deleteView = new DeleteView({
         button: self.buttons.primary.get('delete'),
+        app: self
+      });
+      self.renameView = new RenameView({
+        button: self.buttons.secondary.get('rename'),
         app: self
       });
 
@@ -255,6 +262,7 @@ define([
       this.$el.append(this.propertiesView.render().el);
       this.$el.append(this.workflowView.render().el);
       this.$el.append(this.deleteView.render().el);
+      this.$el.append(this.renameView.render().el);
 
       this.$el.append(this.tableView.render().el);
       this.$el.append(this.pagingView.render().el);

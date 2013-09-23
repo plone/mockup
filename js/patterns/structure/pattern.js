@@ -71,6 +71,9 @@ define([
         },{
           title: 'Properties',
           url: '/properties'
+        },{
+          title: 'Rename',
+          url: '/rename'
         }],
         folder: [{
           title: 'Order',

@@ -35,7 +35,7 @@ define([
 
   var PropertiesView = PopoverView.extend({
     className: 'popoverview properties',
-    title: _.template('Modify dates on items'),
+    title: _.template('Modify properties on items'),
     content: _.template(
       '<label>Publication Date</label>' +
       '<input name="effective" />' +
