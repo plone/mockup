@@ -1334,6 +1334,7 @@ function($action, response, options) { ... }
       description: "A widget for creating <strong>query's for collections</strong>",
       attributes: [
         {attribute: 'criteria', type: 'Object', description: 'options to pass into criteria'},
+        {attribute: 'indexOptionsUrl', type: 'String', description: 'URL to grab index option data from. Must contain "sortable_indexes" and "indexes" data in JSON object.'},
         {attribute: 'previewURL', type: 'String', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML list of results'},
         {attribute: 'previewCountURL', type: 'String', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML string of the total number of records found with the query'},
         {attribute: 'sorttxt', type: 'String', defaultValue: 'Sort On', description: 'Text to use to label the sort dropdown'},
