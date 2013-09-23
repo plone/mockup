@@ -224,7 +224,10 @@ define([
         });
         items.push(self.buttons[group[0]]);
       });
-      items.push(new TextFilterView({id: 'filter'}));
+      items.push(new TextFilterView({
+        id: 'filter',
+        app: this
+      }));
       this.toolbar = new Toolbar({
         items: items
       });

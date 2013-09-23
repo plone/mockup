@@ -36,6 +36,7 @@ define([
     defaults: {
       ajaxvocabulary: null,
       tagsAjaxVocabulary: null,
+      indexOptionsUrl: null, // for querystring widget
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish', 'Subject'],

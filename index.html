@@ -1352,6 +1352,7 @@ function($action, response, options) { ... }
         {attribute: 'classPreviewTitleName', type: 'String', description: 'CSS class to apply to the preview title'},
         {attribute: 'classPreviewDescriptionName', type: 'String', description: 'CSS class to apply to the  preview description'},
         {attribute: 'classSortWrapperName', type: 'String', description: 'CSS class to apply to the sort order and sort on wrapper'},
+        {attribute: 'showPreviews', type: 'Boolean', description: 'Should previews be shown?'}
       ]
     });
   </script>
@@ -1481,6 +1482,12 @@ function($action, response, options) { ... }
     //-->
     <input class="pat-querystring"
            data-pat-querystring="indexOptionsUrl: /tests/queryStringCriteria.json" />
+
+  </script>
+  <script type="text/example" class="example-querystring" data-title="Without Previews">
+    <input class="pat-querystring"
+           data-pat-querystring="indexOptionsUrl: /tests/queryStringCriteria.json;
+                                 showPreviews: false;" />
 
   </script>
 
@@ -2123,6 +2130,7 @@ function($action, response, options) { ... }
       attributes: [
         {attribute: 'ajaxvocabulary', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
         {attribute: 'tagsAjaxVocabulary', type: 'String', defaultValue: 'null', description: 'Url to return tags query results'},
+        {attribute: 'indexOptionsUrl', type: 'String', defaultValue: 'null', description: 'Url to configure querystring widget with'},
         {attribute: 'uploadUrl', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'},
         {attribute: 'moveUrl', type: 'String', defaultValue: 'null', description: 'For supporting drag drop reordering'}
       ]
@@ -2134,7 +2142,8 @@ function($action, response, options) { ... }
     <div class="pat-structure" data-pat-structure="ajaxvocabulary:/relateditems-test.json;
                                                    uploadUrl:/upload;
                                                    moveUrl:/moveitem;
-                                                   tagsAjaxVocabulary:/select2-test.json;">
+                                                   tagsAjaxVocabulary:/select2-test.json;
+                                                   indexOptionsUrl:/tests/queryStringCriteria.json;">
     </div>
   </script>
 

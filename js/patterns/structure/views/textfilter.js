@@ -29,9 +29,10 @@ define([
   'underscore',
   'ui/views/base',
   'ui/views/button',
-  'ui/views/popover'
+  'ui/views/popover',
+  'mockup-patterns-querystring'
   ],
-  function($, Backbone, _, BaseView, ButtonView, PopoverView) {
+  function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString) {
   "use strict";
 
   var TextFilterView = BaseView.extend({
@@ -42,10 +43,13 @@ define([
         '<input type="text" class="search-query" placeholder="Filter">' +
       '</div>'),
     popoverContent: _.template(
-      ''
+      '<input class="pat-querystring" />'
     ),
     events: {
       'keyup .search-query': 'filter'
+    },
+    initialize: function(){
+      this.app = this.options.app;
     },
     render: function(){
       this.$el.html(this.template({}));
@@ -55,10 +59,17 @@ define([
       this.popover = new PopoverView({
         button: this.button,
         title: _.template('Query'),
-        content: this.popoverContent
+        content: this.popoverContent,
+        alignment: "right"
       });
       this.$('div.input-append').append(this.button.render().el);
       this.$el.append(this.popover.render().el);
+      this.popover.$el.addClass('query');
+      this.queryString = new QueryString(
+        this.popover.$('input.pat-querystring'), {
+        indexOptionsUrl: this.app.options.indexOptionsUrl,
+        showPreviews: false
+      });
       return this;
     },
     filter: function(event) {

@@ -418,7 +418,8 @@ define([
       classPreviewName: 'querystring-preview',
       classPreviewTitleName: 'querystring-preview-title',
       classPreviewDescriptionName: 'querystring-preview-description',
-      classSortWrapperName: 'querystring-sort-wrapper'
+      classSortWrapperName: 'querystring-sort-wrapper',
+      showPreviews: true
     },
     init: function() {
       var self = this;
@@ -456,19 +457,24 @@ define([
         .addClass(self.options.classSortWrapperName)
         .appendTo(self.$wrapper);
 
-      self.$previewWrapper = $('<div/>')
-        .addClass(self.options.classPreviewWrapperName)
-        .appendTo(self.$wrapper);
+      if(self.options.showPreviews === 'false'){
+        self.options.showPreviews = false;
+      }
+      if(self.options.showPreviews){
+        self.$previewWrapper = $('<div/>')
+          .addClass(self.options.classPreviewWrapperName)
+          .appendTo(self.$wrapper);
 
-      // preview title and description
-      $('<div/>')
-        .addClass(self.options.classPreviewTitleName)
-        .html(self.options.previewTitle)
-        .appendTo(self.$previewWrapper);
-      $('<div/>')
-        .addClass(self.options.classPreviewDescriptionName)
-        .html(self.options.previewDescription)
-        .appendTo(self.$previewWrapper);
+        // preview title and description
+        $('<div/>')
+          .addClass(self.options.classPreviewTitleName)
+          .html(self.options.previewTitle)
+          .appendTo(self.$previewWrapper);
+        $('<div/>')
+          .addClass(self.options.classPreviewDescriptionName)
+          .html(self.options.previewDescription)
+          .appendTo(self.$previewWrapper);
+      }
 
       self.criterias = [];
 
@@ -486,7 +492,9 @@ define([
       self.createSort();
 
       // add criteria preview pane to see results from criteria query
-      self.refreshPreviewEvent();
+      if(self.options.showPreviews){
+        self.refreshPreviewEvent();
+      }
 
     },
     createCriteria: function(index, operator, value) {
@@ -591,6 +599,10 @@ define([
     },
     refreshPreviewEvent: function() {
       var self = this;
+
+      if(!self.options.showPreviews){
+        return; // cut out of this if there are no previews available
+      }
 
       /* TEMPORARY */
       //if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }

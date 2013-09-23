@@ -38,6 +38,7 @@ define([
     content: _.template(''),
     title: _.template(''),
     button: null,
+    alignment: "left",
     events: {
     },
     opened: false,
@@ -50,6 +51,9 @@ define([
       }
       if(this.options.title){
         this.title = this.options.title;
+      }
+      if(this.options.alignment){
+        this.alignment = this.options.alignment;
       }
     },
     render: function () {
@@ -71,14 +75,17 @@ define([
         height: $el.height()
       }, $el.offset());
     },
-
     show: function(){
       var pos = this.getPosition();
       var $tip = this.$('.popover');
       var tp = {
-        top: (pos.top + pos.height) + 11,
-        left: (pos.left + pos.width / 2) - 44
+        top: (pos.top + pos.height) + 11
       };
+      if(this.alignment === "left"){
+        tp.left = (pos.left + pos.width / 2) - 44;
+      }else{
+        tp.left = pos.left - $tip.width() + pos.width + 11;
+      }
       this.applyPlacement(tp);
       this.opened = true;
       if(this.button){
@@ -87,9 +94,14 @@ define([
     },
     applyPlacement: function(offset){
       var $tip = this.$('.popover');
-
       $tip.css({left: 0, top: 0, position: 'fixed'}).
-        offset(offset).addClass(this.placement).addClass('in');
+        offset(offset).addClass(this.placement).addClass('in').
+        addClass('align-' + this.alignment);
+      if(this.alignment === 'left'){
+        this.$('.arrow').css('left', '55px');
+      }else{
+        this.$('.arrow').css('left', (this.$('.popover').width() - 25) + 'px');
+      }
       $tip.show();
     },
     hide: function(){
