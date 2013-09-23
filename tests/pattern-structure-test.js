@@ -89,7 +89,7 @@ define([
     it('initialize', function() {
       var $el = $('' +
         '<div class="pat-structure" ' +
-             'data-pat-structure="ajaxvocabulary:/relateditems-test.json;' +
+             'data-pat-structure="ajaxVocabulary:/relateditems-test.json;' +
                                  'uploadUrl:/upload;' +
                                  'moveUrl:/moveitem;' +
                                  'tagsAjaxVocabulary:/select2-test.json;">' +

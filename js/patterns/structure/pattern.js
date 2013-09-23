@@ -34,7 +34,7 @@ define([
   var Structure = Base.extend({
     name: 'structure',
     defaults: {
-      ajaxvocabulary: null,
+      ajaxVocabulary: null,
       tagsAjaxVocabulary: null,
       indexOptionsUrl: null, // for querystring widget
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
@@ -92,7 +92,7 @@ define([
       var self = this;
       self.browsing = true; // so all queries will be correct with QueryHelper
 
-      self.options.collectionUrl = self.options.ajaxvocabulary;
+      self.options.collectionUrl = self.options.ajaxVocabulary;
       self.options.queryHelper = new QueryHelper(self.$el,
         $.extend(true, {}, self.options, {basePattern: self}));
 

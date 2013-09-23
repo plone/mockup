@@ -82,7 +82,7 @@ define([
     it('ajax vocabulary', function() {
         var $el = $(
         ' <input class="pat-select2"' +
-        '        data-pat-select2="ajaxvocabulary: select2-users-vocabulary"' +
+        '        data-pat-select2="ajaxVocabulary: select2-users-vocabulary"' +
         '        />'
         );
 
