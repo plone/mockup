@@ -44,6 +44,8 @@ define([
           '<label>Change State</label>' +
           '<span class="help-block">Select the transition to be used for ' +
             'modifying the items state.</span>' +
+          '<select name="transition">' +
+          '</select>' +
         '</fieldset>' +
       '</form>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
@@ -58,21 +60,43 @@ define([
     render: function(){
       PopoverView.prototype.render.call(this);
       this.$comments = this.$('textarea');
+      this.$transition = this.$('select');
       return this;
     },
     applyButtonClicked: function(e){
       this.app.defaultButtonClickEvent(this.button, {
-        comments: this.$comments.val()
+        comments: this.$comments.val(),
+        transition: this.$transition.val()
       });
       this.hide();
     },
     showItemsClicked: function(button, e){
       PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
       var self = this;
-      if(!this.opened){
+      if(!self.opened){
         return;
       }
-      this.$comments.val('');
+      self.$comments.val('');
+      self.$transition.empty();
+      $.ajax({
+        url: self.button.url,
+        type: 'POST',
+        data: {
+          selection: JSON.stringify(self.app.getSelectedUids()),
+          transitions: true
+        },
+        success: function(data){
+          _.each(data.transitions, function(transition){
+            self.$transition.append(
+              '<option value="' + transition.id + '">' + transition.title +
+                '</option>');
+          });
+        },
+        error: function(data){
+          // XXX error handling...
+          alert('error getting transition data');
+        }
+      });
     }
   });
 

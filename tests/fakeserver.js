@@ -447,10 +447,25 @@ define([
     },
     '/workflow': function(xhr){
       var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
-      return {
-        status: "success",
-        msg: 'Workflow updated for ' + selection.length + ' items'
-      };
+      if(xhr.requestBody.indexOf('transitions') !== -1){
+        var transitions = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'transitions'));
+        // get possible transitions...
+        return {
+          "status": "success",
+          "transitions": [{
+            id: "publish",
+            title: "Publish"
+          },{
+            id: "retract",
+            title: "Retract"
+          }]
+        };
+      }else{
+        return {
+          status: "success",
+          msg: 'Workflow updated for ' + selection.length + ' items'
+        };
+      }
     }
 
   };

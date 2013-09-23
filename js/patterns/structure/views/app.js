@@ -125,16 +125,20 @@ define([
         self.shift_clicked = e.shiftKey;
       });
     },
+    getSelectedUids: function(){
+      var self = this;
+      var uids = [];
+      self.selectedCollection.each(function(item){
+        uids.push(item.uid());
+      });
+      return uids;
+    },
     defaultButtonClickEvent: function(button){
       var self = this;
       var data = null, callback = null;
 
       if(button.url){
         // handle ajax now
-        var uids = [];
-        self.selectedCollection.each(function(item){
-          uids.push(item.uid());
-        });
 
         if(arguments.length > 1){
           var arg1 = arguments[1];
@@ -151,7 +155,7 @@ define([
         if(data === null){
           data = {};
         }
-        data.selection = JSON.stringify(uids);
+        data.selection = JSON.stringify(self.getSelectedUids());
         data._authenticator = $('input[name="_authenticator"]').val();
 
         var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
