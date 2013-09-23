@@ -36,6 +36,7 @@ define([
   'structure/views/tags',
   'structure/views/dates',
   'structure/views/workflow',
+  'structure/views/delete',
   'structure/views/selectionbutton',
   'structure/views/paging',
   'structure/views/textfilter',
@@ -43,7 +44,7 @@ define([
   'structure/collections/selected',
   'mockup-patterns-dropzone',
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
-            OrderView, TagsView, DatesView, WorkflowView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
+            OrderView, TagsView, DatesView, WorkflowView, DeleteView, SelectionButtonView, PagingView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
 
@@ -61,7 +62,8 @@ define([
       'order': DISABLE_EVENT, //disable default
       'tags': DISABLE_EVENT, //disable
       'dates': DISABLE_EVENT,
-      'workflow': DISABLE_EVENT
+      'workflow': DISABLE_EVENT,
+      'delete': DISABLE_EVENT
     },
     initialize: function(){
       var self = this;
@@ -97,6 +99,10 @@ define([
       });
       self.workflowView = new WorkflowView({
         button: self.buttons.secondary.get('workflow'),
+        app: self
+      });
+      self.deleteView = new DeleteView({
+        button: self.buttons.primary.get('delete'),
         app: self
       });
 
@@ -230,6 +236,7 @@ define([
       this.$el.append(this.tagsView.render().el);
       this.$el.append(this.datesView.render().el);
       this.$el.append(this.workflowView.render().el);
+      this.$el.append(this.deleteView.render().el);
 
       this.$el.append(this.tableView.render().el);
       this.$el.append(this.pagingView.render().el);

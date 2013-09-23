@@ -466,7 +466,14 @@ define([
           msg: 'Workflow updated for ' + selection.length + ' items'
         };
       }
-    }
+    },
+    '/delete': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'Deleted ' + selection.length + ' items'
+      };
+    },
 
   };
 
