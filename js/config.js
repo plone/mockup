@@ -4,6 +4,7 @@ var requirejsOptions = {
   baseUrl: './',
   wrap: true,
   paths: {
+    'text': "bower_components/requirejs-text/text",
     'jquery': 'bower_components/jquery/jquery',
     'jquery.form': 'bower_components/jquery-form/jquery.form',
     'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
@@ -52,15 +53,14 @@ var requirejsOptions = {
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
     'mockup-bundles-tiles': 'js/bundles/widgets',
-    'mockup-patterns-structure': 'js/patterns/structure/pattern',
-    'structure': 'js/patterns/structure',
-    'ui': 'js/patterns/ui',
-    'text': "bower_components/requirejs-text/text",
-    'templates': 'js/patterns/templates'
+    'mockup-patterns-structure': 'js/patterns/structure/pattern'
   },
   shim: {
     'underscore': { exports: 'window._' },
-    'backbone': { exports: 'window.Backbone', deps: ['underscore', 'jquery'] },
+    'backbone': {
+      exports: 'window.Backbone',
+      deps: ['underscore', 'jquery']
+    },
     'picker.date': { deps: [ 'picker' ] },
     'picker.time': { deps: [ 'picker' ] },
     'jquery.event.drag': { deps: ['jquery'] },

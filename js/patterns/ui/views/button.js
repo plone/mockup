@@ -27,7 +27,7 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'ui/views/base'
+  'js/patterns/ui/views/base'
   ],
   function($, Backbone, _, BaseView) {
   "use strict";

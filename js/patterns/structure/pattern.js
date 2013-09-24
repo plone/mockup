@@ -27,15 +27,15 @@ define([
   'jquery',
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
-  'structure/views/app',
+  'js/patterns/structure/views/app',
 
   // for some reason we need to load this early
-  'text!structure/templates/paging.html',
-  'text!structure/templates/selection_button.html',
-  'text!structure/templates/selection_item.html',
-  'text!structure/templates/tablerow.html',
-  'text!structure/templates/table.html',
-  'text!templates/popover.html',
+  'text!js/patterns/structure/templates/paging.html',
+  'text!js/patterns/structure/templates/selection_button.html',
+  'text!js/patterns/structure/templates/selection_item.html',
+  'text!js/patterns/structure/templates/tablerow.html',
+  'text!js/patterns/structure/templates/table.html',
+  'text!js/patterns/ui/templates/popover.html',
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 

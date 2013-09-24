@@ -25,7 +25,7 @@
 
 define([
   'backbone',
-  'structure/models/result'
+  'js/patterns/structure/models/result'
 ], function(Backbone, Result) {
 "use strict";
 
