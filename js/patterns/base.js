@@ -145,36 +145,10 @@ define([
 
     Constructor.__super__ = Base.prototype;
 
-    if (Constructor.prototype.jqueryPlugin === undefined) {
-      Constructor.prototype.jqueryPlugin = "pattern" +
-          Constructor.prototype.name.charAt(0).toUpperCase() +
-          Constructor.prototype.name.slice(1);
-    }
-    if (Constructor.prototype.jqueryPlugin) {
-      $.fn[Constructor.prototype.jqueryPlugin] = function(method, options) {
-        $(this).each(function() {
-          var $el = $(this),
-              pattern = $el.data('pattern-' + Constructor.prototype.name);
-          if (typeof method === "object") {
-            options = method;
-            method = undefined;
-          }
-          if (!pattern || typeof(pattern) === 'string') {
-            pattern = new Constructor($el, options);
-            $el.data('pattern-' + Constructor.prototype.name, pattern);
-          } else if (method && pattern && pattern[method]) {
-            // TODO: now allow method starts with "_"
-            pattern[method].apply(pattern, [options]);
-          }
+    registry.register(Constructor);
 
-        });
-        return this;
-      };
-    }
-
-    registry.register({
+    {
       name: Constructor.prototype.name,
-      trigger: '.pat-' + Constructor.prototype.name,
       init: function($all) {
         return $all.each(function(i) {
           var $el = $(this),
