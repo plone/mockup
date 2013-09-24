@@ -681,18 +681,6 @@ define([
             // register pattern to be used for scanning new content
             registry.patterns[pattern.name] = pattern;
 
-            // register pattern as jquery plugin
-            if (pattern.jquery_plugin) {
-                var pluginName = ("pat-" + pattern.name)
-                        .replace(/-([a-zA-Z])/g, function(match, p1) {
-                            return p1.toUpperCase();
-                        });
-                $.fn[pluginName] = jquery_plugin(pattern);
-                // BBB 2012-12-10
-                $.fn[pluginName.replace(/^pat/, "pattern")] = jquery_plugin(pattern);
-            }
-
-
             if (registry.initialized) {
                 registry.scan(document.body, false, [pattern.name]);
             }
@@ -707,4 +695,3 @@ define([
 
     return registry;
 });
-// vim: sw=4 expandtab

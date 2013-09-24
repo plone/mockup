@@ -175,7 +175,6 @@ define([
     registry.register({
       name: Constructor.prototype.name,
       trigger: '.pat-' + Constructor.prototype.name,
-      jquery_plugin: false,
       init: function($all) {
         return $all.each(function(i) {
           var $el = $(this),
