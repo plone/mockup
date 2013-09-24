@@ -54,7 +54,9 @@ define([
     render: function() {
       var self = this;
       self.$el.html(self.template({
-        path: self.app.queryHelper.getCurrentPath()
+        path: self.app.queryHelper.getCurrentPath(),
+        status: self.app.status,
+        statusType: self.app.statusType
       }));
       if(self.collection.length){
         var container = self.$('tbody');
@@ -139,6 +141,7 @@ define([
       });
     },
     moveItem: function($el, delta){
+      var self = this;
       $.ajax({
         url: this.app.options.moveUrl,
         type: 'POST',
@@ -149,11 +152,11 @@ define([
         success: function(data){
           if(data.status !== "success"){
             // XXX handle error here with something?
-            alert('error moving item');
+            self.app.setStatus('error moving item');
           }
         },
         error: function(data){
-          alert('error moving item');
+          self.app.setStatus('error moving item');
         }
       });
     }

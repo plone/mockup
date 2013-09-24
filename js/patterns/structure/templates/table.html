@@ -1,13 +1,16 @@
 <table class="table table-striped table-bordered">
   <thead>
     <tr class="breadcrumbs">
-      <td colspan="4">
+      <td colspan="3">
         <a href="#" data-path="/">/</a>
         <% _.each(path.split('/'), function(part){
           if(part){ %>
             <a href="#" data-path="<%- part %>"><%- part %></a>
           <% }
         }); %>
+      </td>
+      <td colspan="2" class="status <%= statusType %>">
+        <%= status %>
       </td>
     </tr>
     <tr>

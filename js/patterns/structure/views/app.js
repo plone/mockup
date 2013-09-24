@@ -68,6 +68,8 @@ define([
       'delete': DISABLE_EVENT,
       'rename': DISABLE_EVENT
     },
+    status: '',
+    statusType: 'info',
     initialize: function(){
       var self = this;
       self.options.additionalCriterias = [];
@@ -196,7 +198,7 @@ define([
             }
             if(data.msg){
               // give status message somewhere...
-              alert(data.msg);
+              self.setStatus(data.msg);
             }
             if(callback !== null){
               callback(data);
@@ -205,7 +207,7 @@ define([
           },
           error: function(data){
             if(data.status === 404){
-              alert('operation url "' + url + '" is not valid');
+              window.alert('operation url "' + url + '" is not valid');
             }
           }
         });
@@ -213,6 +215,14 @@ define([
     },
     cutCopyClickEvent: function(button){
       var self = this;
+      var txt;
+      if(button.id === 'cut'){
+        txt = 'cut ';
+      }else{
+        txt = 'copied ';
+      }
+      txt += 'selection';
+      self.setStatus(txt);
       self.pasteAllowed = true;
       self.buttons.primary.get('paste').enable();
     },
@@ -252,6 +262,14 @@ define([
       this.toolbar = new Toolbar({
         items: items
       });
+    },
+    setStatus: function(txt, type){
+      this.status = txt;
+      if(type === undefined){
+        type = 'info';
+      }
+      this.statusType = type;
+      this.$('td.status').addClass(type).html(txt);
     },
     render: function(){
 

@@ -94,7 +94,7 @@ define([
         },
         error: function(data){
           // XXX error handling...
-          alert('error getting transition data');
+          window.alert('error getting transition data');
         }
       });
     }
