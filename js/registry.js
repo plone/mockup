@@ -278,9 +278,6 @@ define([
             // register pattern to be used for scanning new content
             registry.patterns[pattern.name] = pattern;
 
-            if (registry.initialized) {
-                registry.scan(document.body, false, [pattern.name]);
-            }
             return true;
         }
     };
