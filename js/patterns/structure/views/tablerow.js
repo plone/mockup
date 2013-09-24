@@ -27,7 +27,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!structure/templates/tablerow.html'
+  'text!js/patterns/structure/templates/tablerow.html'
 ], function($, _, Backbone, TableRowTemplate) {
   "use strict";
 

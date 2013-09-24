@@ -40,8 +40,9 @@ define([
   'mockup-patterns-toggle',
   'mockup-patterns-modal',
   'mockup-patterns-tinymce',
+  'mockup-patterns-structure',
   'mockup-bundles-widgets'
-], function($, Router, iframe, registry, Toggle, Modal, TinyMCE) {
+], function($, Router, iframe, registry, Toggle, Modal, TinyMCE, Structure) {
   "use strict";
 
   // BBB: we need to hook pattern to classes which plone was using until now

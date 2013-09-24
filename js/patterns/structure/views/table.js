@@ -27,8 +27,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'structure/views/tablerow',
-  'text!structure/templates/table.html',
+  'js/patterns/structure/views/tablerow',
+  'text!js/patterns/structure/templates/table.html',
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, _, Backbone, TableRowView, TableTemplate) {

@@ -27,7 +27,14 @@ define([
   'jquery',
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
-  'structure/views/app',
+  'js/patterns/structure/views/app',
+  'text!js/patterns/structure/templates/paging.html',
+  'text!js/patterns/structure/templates/selection_button.html',
+  'text!js/patterns/structure/templates/selection_item.html',
+  'text!js/patterns/structure/templates/tablerow.html',
+  'text!js/patterns/structure/templates/table.html',
+  'text!js/patterns/ui/templates/popover.html',
+>>>>>>> renaming imports, including structure in toolbar bundle
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 
