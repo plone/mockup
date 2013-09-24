@@ -285,10 +285,5 @@ define([
         }
     };
 
-    $(document) .on("patterns-injected.patterns", function(ev) {
-        registry.scan(ev.target);
-        $(ev.target).trigger("patterns-injected-scanned");
-    });
-
     return registry;
 });
