@@ -36,6 +36,8 @@ define([
   'js/patterns/structure/views/tags',
   'js/patterns/structure/views/properties',
   'js/patterns/structure/views/workflow',
+  'js/patterns/structure/views/delete',
+  'js/patterns/structure/views/rename',
   'js/patterns/structure/views/selectionbutton',
   'js/patterns/structure/views/paging',
   'js/patterns/structure/views/textfilter',
