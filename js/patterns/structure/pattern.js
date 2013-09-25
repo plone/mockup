@@ -33,7 +33,7 @@ define([
   'text!js/patterns/structure/templates/selection_item.html',
   'text!js/patterns/structure/templates/tablerow.html',
   'text!js/patterns/structure/templates/table.html',
-  'text!js/patterns/ui/templates/popover.html'
+  'text!js/ui/templates/popover.html'
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 

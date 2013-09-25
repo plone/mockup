@@ -27,7 +27,7 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/patterns/ui/views/button',
+  'js/ui/views/button',
   'text!js/patterns/structure/templates/selection_button.html'
   ],
   function($, Backbone, _, ButtonView, tpl_button) {

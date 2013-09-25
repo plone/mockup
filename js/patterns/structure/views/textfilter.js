@@ -27,9 +27,9 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/patterns/ui/views/base',
-  'js/patterns/ui/views/button',
-  'js/patterns/ui/views/popover',
+  'js/ui/views/base',
+  'js/ui/views/button',
+  'js/ui/views/popover',
   'mockup-patterns-querystring'
 ], function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString) {
   "use strict";

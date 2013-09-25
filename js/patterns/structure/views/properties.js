@@ -27,7 +27,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/patterns/ui/views/popover',
+  'js/ui/views/popover',
   'mockup-patterns-pickadate',
   'mockup-patterns-select2'
 ], function($, _, Backbone, PopoverView, PickADate, Select2) {
