@@ -29,7 +29,8 @@ define(['backbone'], function(Backbone) {
   var Result = Backbone.Model.extend({
     defaults: function(){
       return {
-        is_folderish: false
+        is_folderish: false,
+        review_state: ''
       };
     },
     uid: function(){

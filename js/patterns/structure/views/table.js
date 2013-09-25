@@ -28,7 +28,7 @@ define([
   'underscore',
   'backbone',
   'js/patterns/structure/views/tablerow',
-  'text!js/patterns/structure/templates/table.html',
+  'text!js/patterns/structure/templates/table.tmpl',
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, _, Backbone, TableRowView, TableTemplate) {

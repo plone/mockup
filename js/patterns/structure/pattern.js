@@ -28,12 +28,12 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
   'js/patterns/structure/views/app',
-  'text!js/patterns/structure/templates/paging.html',
-  'text!js/patterns/structure/templates/selection_button.html',
-  'text!js/patterns/structure/templates/selection_item.html',
-  'text!js/patterns/structure/templates/tablerow.html',
-  'text!js/patterns/structure/templates/table.html',
-  'text!js/ui/templates/popover.html'
+  'text!js/patterns/structure/templates/paging.tmpl',
+  'text!js/patterns/structure/templates/selection_button.tmpl',
+  'text!js/patterns/structure/templates/selection_item.tmpl',
+  'text!js/patterns/structure/templates/tablerow.tmpl',
+  'text!js/patterns/structure/templates/table.tmpl',
+  'text!js/ui/templates/popover.tmpl'
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 
@@ -46,7 +46,7 @@ define([
       indexOptionsUrl: null, // for querystring widget
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
-                   'is_folderish', 'Subject'],
+                   'is_folderish', 'Subject', 'getURL'],
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,

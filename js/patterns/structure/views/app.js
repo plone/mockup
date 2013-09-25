@@ -68,6 +68,14 @@ define([
       'delete': DISABLE_EVENT,
       'rename': DISABLE_EVENT
     },
+    buttonViewMapping: {
+      'folder.order': OrderView,
+      'secondary.tags': TagsView,
+      'secondary.properties': PropertiesView,
+      'secondary.workflow': WorkflowView,
+      'primary.delete': DeleteView,
+      'secondary.rename': RenameView
+    },
     status: '',
     statusType: 'info',
     initialize: function(){
@@ -103,29 +111,16 @@ define([
         button: self.toolbar.get('selected'),
         app: self
       });
-      self.orderView = new OrderView({
-        button: self.buttons.folder.get('order'),
-        app: self
-      });
-      self.tagsView = new TagsView({
-        button: self.buttons.secondary.get('tags'),
-        app: self
-      });
-      self.propertiesView = new PropertiesView({
-        button: self.buttons.secondary.get('properties'),
-        app: self
-      });
-      self.workflowView = new WorkflowView({
-        button: self.buttons.secondary.get('workflow'),
-        app: self
-      });
-      self.deleteView = new DeleteView({
-        button: self.buttons.primary.get('delete'),
-        app: self
-      });
-      self.renameView = new RenameView({
-        button: self.buttons.secondary.get('rename'),
-        app: self
+
+      self.buttonViews = {};
+      _.map(self.buttonViewMapping, function(ViewClass, key, list){
+        var name = key.split('.');
+        var group = name[0];
+        var buttonName = name[1];
+        self.buttonViews[key] = new ViewClass({
+          button: self.buttons[group].get(buttonName),
+          app: self
+        });
       });
 
       self.toolbar.get('selected').disable();
@@ -272,21 +267,18 @@ define([
       this.$('td.status').addClass(type).html(txt);
     },
     render: function(){
+      var self = this;
 
-      this.$el.append(this.toolbar.render().el);
-      this.$el.append(this.wellView.render().el);
-      this.$el.append(this.orderView.render().el);
-      this.$el.append(this.tagsView.render().el);
-      this.$el.append(this.propertiesView.render().el);
-      this.$el.append(this.workflowView.render().el);
-      this.$el.append(this.deleteView.render().el);
-      this.$el.append(this.renameView.render().el);
+      self.$el.append(self.toolbar.render().el);
+      self.$el.append(self.wellView.render().el);
+      _.each(self.buttonViews, function(view){
+        self.$el.append(view.render().el);
+      });
 
-      this.$el.append(this.tableView.render().el);
-      this.$el.append(this.pagingView.render().el);
+      self.$el.append(self.tableView.render().el);
+      self.$el.append(self.pagingView.render().el);
 
       /* dropzone support */
-      var self = this;
       var uploadUrl = self.options.uploadUrl;
       if(uploadUrl){
         self.dropzone = new DropZone(self.$el, {
@@ -305,7 +297,7 @@ define([
           self.$el.removeClass('dropping');
         });
       }
-      return this;
+      return self;
     }
   });
 
