@@ -34,7 +34,7 @@ define([
   'js/patterns/structure/views/selectionwell',
   'js/patterns/structure/views/order',
   'js/patterns/structure/views/tags',
-  'js/patterns/structure/views/dates',
+  'js/patterns/structure/views/properties',
   'js/patterns/structure/views/workflow',
   'js/patterns/structure/views/selectionbutton',
   'js/patterns/structure/views/paging',
