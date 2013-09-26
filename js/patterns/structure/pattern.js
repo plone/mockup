@@ -46,7 +46,7 @@ define([
       indexOptionsUrl: null, // for querystring widget
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
-                   'is_folderish', 'Subject', 'getURL'],
+                   'is_folderish', 'Subject', 'getURL', 'id'],
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,

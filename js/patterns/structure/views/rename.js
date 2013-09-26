@@ -40,6 +40,7 @@ define([
     ),
     itemTemplate: _.template(
       '<div class="item">' +
+        '<input name="UID" type="hidden" value="<%- UID %>" />' +
         '<label>Title</label>' +
         '<input name="newtitle" value="<%= Title %>" />' +
         '<label>Short name</label>' +
