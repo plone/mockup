@@ -39,7 +39,8 @@ define([
       searchParam: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       batchSize: 10, // number of results to retrive
-      baseCriteria: []
+      baseCriteria: [],
+      pathDepth: 1
     },
 
     init: function() {
@@ -120,7 +121,7 @@ define([
         criterias.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
-          v: self.getCurrentPath()
+          v: self.getCurrentPath() + '::' + self.options.pathDepth
         });
       }
       criterias = criterias.concat(options.additionalCriterias);
