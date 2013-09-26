@@ -78,6 +78,7 @@ define([
     },
     status: '',
     statusType: 'info',
+    pasteOperation: null,
     initialize: function(){
       var self = this;
       self.options.additionalCriterias = [];
@@ -181,6 +182,8 @@ define([
         }
         data.selection = JSON.stringify(self.getSelectedUids());
         data._authenticator = $('input[name="_authenticator"]').val();
+        data.folder = self.options.queryHelper.getCurrentPath();
+        data.pasteOperation = self.pasteOperation;
 
         var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
         $.ajax({
@@ -213,8 +216,10 @@ define([
       var txt;
       if(button.id === 'cut'){
         txt = 'cut ';
+        self.pasteOperation = 'cut';
       }else{
         txt = 'copied ';
+        self.pasteOperation = 'copy';
       }
       txt += 'selection';
       self.setStatus(txt);
@@ -287,7 +292,7 @@ define([
           url: uploadUrl,
           autoCleanResults: true,
           success: function(e, data){
-            self.table_view.render();
+            self.tableView.render();
           }
         }).dropzone;
         self.dropzone.on('sending', function(){

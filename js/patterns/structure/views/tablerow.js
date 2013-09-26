@@ -86,7 +86,7 @@ define([
         var $el = $(this.app.last_selected);
         var last_checked_index = $el.index();
         var this_index = this.$el.index();
-        this.app.table_view.$('input[type="checkbox"]').each(function(){
+        this.app.tableView.$('input[type="checkbox"]').each(function(){
           var $el = $(this);
           var index = $el.parents('tr').index();
           if((index > last_checked_index && index < this_index) ||
