@@ -143,6 +143,24 @@ define([
         }
       }, self);
 
+      self.collection.on('sync', function(){
+        // need to reload models inside selectedCollection so they get any
+        // updated metadata
+        var uids = [];
+        self.selectedCollection.each(function(item){
+          uids.push(item.attributes.UID);
+        });
+        self.queryHelper.search(
+          'UID', 'plone.app.querystring.operation.list.contains',
+          uids,
+          function(data){
+            _.each(data.results, function(attributes){
+              var item = self.selectedCollection.getByUID(attributes.UID);
+              item.attributes = attributes;
+            });
+          },
+          false);
+      });
 
       /* detect shift clicks */
       self.shift_clicked = false;
