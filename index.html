@@ -31,12 +31,15 @@ addPage = function(page) {
 
 //
 require([
-  'mockup-docsapp'
+  'mockup-docsapp',
+  'mockup-patterns-raptorize'
 ], function(DocsApp) {
 
   DocsApp.patterns.add(patterns);
   DocsApp.pages.add(pages);
   DocsApp.initialize();
+  $('a.brand').patternRaptorize();
+  
 });
 
 
@@ -2176,7 +2179,7 @@ function($action, response, options) { ... }
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#">
+          <a class="brand pat-raptorize" href="#">
             <span class="plone-logo">
               <span class="plone-logo-circle">
                 <span class="plone-circle-inner">
