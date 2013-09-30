@@ -91,6 +91,13 @@ define([
       expect($('.toggled', this.$el).size()).to.equal(0);
       expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
     });
+
+    it("passing boolean options as strings", function() {
+      $('.pat-toggle', this.$el).patternToggle({preventDefault: "true"});
+      var pattern = $('.pat-toggle', this.$el).data('pattern-toggle');
+      expect(pattern.options.preventDefault).to.equal(true);
+    });
+
     it("toggle multiple targets", function() {
        var $el = $('' +
         '<div>' +
