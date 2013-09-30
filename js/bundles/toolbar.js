@@ -132,80 +132,12 @@ define([
 
       // Contents
       $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
-        width: '60%',
-        buttons: '#folderlisting-main-table > input.context,' +
-                 '#folderlisting-main-table > input.standalone,' +
-                 '.formControls > input',
+        width: '90%',
         actionOptions: {
           onSuccess: function(modal, response, state, xhr, form){
-            // handle content_status_history differently than other buttons
-            var hasForm = form && form.attr;
-            var action = hasForm ? form.attr('action'): null;
-            if(action && action.indexOf('content_status_history') !== -1){
-              // load back the folder contents
-              var $action = $('<a href="' +
-                action.replace('content_status_history', 'folder_contents') +
-                '"/>');
-              modal.options.handleLinkAction.apply(modal, [$action, {}]);
-            } else {
-              // XXX hack the rename form action url
-              if(hasForm){
-                var current = form.attr('action');
-                response = response.replace('action="folder_rename_form',
-                                            'action="' + current + '/folder_rename_form');
-              }
-              //modal.redraw(response);
-            }
           }
         }
-      }).on('before-events-setup.modal.patterns', function(e, modal){
-        // TODO: not sure exectly how to handle this for now we hide it
-        $('#plone-document-byline', modal.$modal).hide();
-        $('.modal-footer input.context', modal.$modal).removeClass('context').addClass('standalone');
-        $('.listingBar', modal.$modal).each(function() {  // TODO: we shouldn't hack like this
-          var $el = $(this),
-              $pagination = $('<ul/>'),
-              $previous, $next;
-
-          // create boostrap style pagination
-          $('> *', $el).each(function() {
-            if ($(this).hasClass('previous')) {
-              $previous = $('<li/>').append($('a', this).clone());
-            } else if ($(this).hasClass('next')) {
-              $next = $('<li/>').append($('a', this).clone());
-            } else if ($.nodeName(this, 'span')) {
-              if ($('a', this).size() !== 0) {
-                $pagination.append($('<li/>').append($('a', this).clone()));
-                if ($(this).html().indexOf("...") !== -1) {
-                  $pagination.append($('<li class="deactive"><span>...</span></li>'));
-                }
-              } else {
-                $pagination.append($('<li class="active"/>').append($(this).clone()));
-              }
-            } else {
-              $pagination.append($('<li/>').append($(this).clone()));
-            }
-          });
-          if ($previous) {
-            $pagination.prepend($previous);
-          }
-          if ($next) {
-            $pagination.append($next);
-          }
-          $el.replaceWith($('<div class="pagination pagination-centered"/>').append($pagination));
-        });
-      }).on('after-render.modal.patterns', function(e, modal){
-        // normalize buttons
-        modal.$modal.find('input[type="submit"]').addClass('standalone').removeClass('context');
-        $('.modal-body #folderlisting-main-table td:not(.draggable) > a:not([href$="folder_contents"])', modal.$modal).css({
-          color: '#333333'
-        }).off('click').on('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          window.parent.location.href = $(this).attr('href');
-        });
       });
-
 
       // site setup
       $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
