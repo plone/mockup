@@ -44,10 +44,11 @@ define([
   'js/patterns/structure/collections/result',
   'js/patterns/structure/collections/selected',
   'mockup-patterns-dropzone'
-], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView, SelectionWellView,
-            OrderView, TagsView, PropertiesView, WorkflowView, DeleteView, RenameView,
-            SelectionButtonView, PagingView, TextFilterView, ResultCollection,
-            SelectedCollection, DropZone) {
+], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView,
+            SelectionWellView, OrderView, TagsView, PropertiesView,
+            WorkflowView, DeleteView, RenameView, SelectionButtonView,
+            PagingView, TextFilterView, ResultCollection, SelectedCollection,
+            DropZone) {
   "use strict";
 
   var DISABLE_EVENT = 'DISABLE';
@@ -93,7 +94,8 @@ define([
         return JSON.stringify({
           criteria: self.queryHelper.getCriterias(term, {
             additionalCriterias: self.options.additionalCriterias
-          })
+          }),
+          sort_on: 'getObjPositionInParent'
         });
       };
 
