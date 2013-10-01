@@ -154,11 +154,11 @@ define([
     moveItem: function($el, delta){
       var self = this;
       $.ajax({
-        url: this.app.options.moveUrl,
+        url: this.app.getAjaxUrl(this.app.options.moveUrl),
         type: 'POST',
         data: {
           delta: delta,
-          UID: $el.attr('data-UID'),
+          id: $el.attr('data-id'),
           _authenticator: $('[name="_authenticator"]').val(),
           subset_ids: JSON.stringify(self.subset_ids)
         },

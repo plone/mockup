@@ -178,6 +178,9 @@ define([
       });
       return uids;
     },
+    getAjaxUrl: function(url){
+      return url.replace('{path}', this.options.queryHelper.getCurrentPath());
+    },
     defaultButtonClickEvent: function(button){
       var self = this;
       var data = null, callback = null;
@@ -205,7 +208,7 @@ define([
         data.folder = self.options.queryHelper.getCurrentPath();
         data.pasteOperation = self.pasteOperation;
 
-        var url = button.url.replace('{path}', self.options.queryHelper.getCurrentPath());
+        var url = self.getAjaxUrl(button.url);
         $.ajax({
           url: url,
           type: 'POST',
