@@ -323,15 +323,14 @@ define([
       self.$el.append(self.pagingView.render().el);
 
       /* dropzone support */
-      var uploadUrl = self.options.uploadUrl;
-      if(uploadUrl){
+      if(self.options.uploadUrl){
         self.dropzone = new DropZone(self.$el, {
           className: 'structure-dropzone',
           clickable: false,
-          url: uploadUrl,
+          url: self.getAjaxUrl(self.options.uploadUrl),
           autoCleanResults: true,
           success: function(e, data){
-            self.tableView.render();
+            self.collection.pager();
           }
         }).dropzone;
         self.dropzone.on('sending', function(){
@@ -339,6 +338,10 @@ define([
         });
         self.dropzone.on('complete', function(){
           self.$el.removeClass('dropping');
+        });
+        self.dropzone.on('drop', function(){
+          // because this can change depending on the folder we're in
+          self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
         });
       }
       return self;
