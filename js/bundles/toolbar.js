@@ -132,7 +132,8 @@ define([
 
       // Contents
       $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
-        width: '90%',
+        width: '96%',
+        position: 'middle top',
         actionOptions: {
           onSuccess: function(modal, response, state, xhr, form){
           }
