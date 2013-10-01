@@ -2047,6 +2047,23 @@ function($action, response, options) { ... }
   </script>
 
 
+  <!--  **** Toggle **** -->
+  <script>
+    addPattern({
+      id: 'toggle',
+      title: 'Toggle',
+      description: '<strong>Toggles any attribute value</strong> after some event is fired.',
+      attributes: [
+        {attribute: 'attribute', type: 'String', default: 'class', description: 'Element attribute whose value will be changed'},
+        {attribute: 'event', type: 'String', default: 'click', description: 'event that triggers the toggle'},
+        {attribute: 'externalClose', type: 'Boolean', default: 'true', description: ''},
+        {attribute: 'preventDefault', type: 'Boolean', default: 'true', description: ''},
+        {attribute: 'menu', type: 'String', default: 'global', description: ''}
+      ]
+    });
+  </script>
+
+
   <!--  **** DropZone **** -->
   <script>
     addPattern({
