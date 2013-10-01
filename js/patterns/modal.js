@@ -131,7 +131,7 @@ define([
         }
         $.each(actions, function(action, options) {
           var actionKeys = _.union(_.keys(self.options.actionOptions), ['templateOptions']);
-          var actionOptions = $.extend(true, _.pick(options, actionKeys), self.options.actionOptions);
+          var actionOptions = $.extend(true, {}, self.options.actionOptions, _.pick(options, actionKeys));
           options.templateOptions = $.extend(true, options.templateOptions, self.options.templateOptions);
 
           var patternKeys = _.union(_.keys(self.options.actionOptions), ['actions', 'actionOptions']);
