@@ -24,10 +24,11 @@
 
 
 define([
+  'underscore',
   'backbone',
   'js/patterns/structure/models/result',
   'backbone-paginator'
-], function(Backbone, Result) {
+], function(_, Backbone, Result) {
 "use strict";
 
   var ResultCollection = Backbone.Paginator.requestPager.extend({
@@ -66,8 +67,15 @@ define([
     },
     parse: function (response) {
       this.totalRecords = response.total;
-      return response.results;
-    }
+      var results = response.results;
+      // XXX manually set sort order here since backbone will otherwise
+      // do arbitrary sorting?
+      _.each(results, function(item, idx){
+        item._sort = idx;
+      });
+      return results;
+    },
+    comparator: '_sort'
   });
 
   return ResultCollection;

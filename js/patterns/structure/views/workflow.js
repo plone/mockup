@@ -32,7 +32,7 @@ define([
   "use strict";
 
   var WorkflowView = PopoverView.extend({
-    className: 'popoverview dates',
+    className: 'popoverview workflow',
     title: _.template('Modify dates on items'),
     content: _.template(
       '<form>' +
@@ -46,6 +46,13 @@ define([
             'modifying the items state.</span>' +
           '<select name="transition">' +
           '</select>' +
+          '<label>' +
+            '<input type="checkbox" name="recurse" />' +
+            'Include contained items?</label>' +
+          '<span class="help-block">' +
+            'If checked, this will attempt to modify the status of all ' +
+            'content in any selected folders and their subfolders.' +
+          '</span>' +
         '</fieldset>' +
       '</form>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
@@ -64,10 +71,14 @@ define([
       return this;
     },
     applyButtonClicked: function(e){
-      this.app.defaultButtonClickEvent(this.button, {
+      var data = {
         comments: this.$comments.val(),
         transition: this.$transition.val()
-      });
+      };
+      if(this.$('[name="recurse"]')[0].checked){
+        data.recurse = 'yes';
+      }
+      this.app.defaultButtonClickEvent(this.button, data);
       this.hide();
     },
     showItemsClicked: function(button, e){
@@ -80,7 +91,7 @@ define([
       self.$transition.empty();
       $.ajax({
         url: self.button.url,
-        type: 'POST',
+        type: 'GET',
         data: {
           selection: JSON.stringify(self.app.getSelectedUids()),
           transitions: true

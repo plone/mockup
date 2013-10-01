@@ -33,6 +33,7 @@ define([
 
   var TableRowView = Backbone.View.extend({
     tagName: 'tr',
+    className: 'itemRow',
     template: _.template(TableRowTemplate),
     events: {
       'change input': 'itemSelected',
@@ -56,6 +57,8 @@ define([
         this.$el.addClass('folder');
       }
       this.$el.attr('data-path', data.path);
+      this.$el.attr('data-UID', data.UID);
+      this.$el.attr('data-id', data.id);
       this.el.model = this.model;
       return this;
     },

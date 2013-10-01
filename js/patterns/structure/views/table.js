@@ -45,6 +45,7 @@ define([
       this.listenTo(this.selectedCollection, 'remove', this.render);
       this.listenTo(this.selectedCollection, 'reset', this.render);
       this.collection.pager();
+      this.subset_ids = [];
     },
     events: {
       'click .breadcrumbs a': 'breadcrumbClicked',
@@ -69,6 +70,7 @@ define([
         });
       }
       self.addReordering();
+      self.storeOrder();
       return this;
     },
     breadcrumbClicked: function(e){
@@ -133,6 +135,7 @@ define([
         $el.removeClass('structure-dragging');
         $(dd.proxy).remove();
         self.moveItem($el, $el.index() - start);
+        self.storeOrder();
       })
       .drop('init', function(e, dd ) {
         /*jshint eqeqeq:false */
@@ -140,20 +143,34 @@ define([
         return (this == dd.drag) ? false: true;
       });
     },
+    storeOrder: function(){
+      var self = this;
+      var subset_ids = [];
+      self.$('tbody tr.itemRow').each(function(idx){
+        subset_ids.push($(this).attr('data-id'));
+      });
+      self.subset_ids = subset_ids;
+    },
     moveItem: function($el, delta){
       var self = this;
       $.ajax({
         url: this.app.options.moveUrl,
         type: 'POST',
         data: {
-          delta: delta
+          delta: delta,
+          UID: $el.attr('data-UID'),
+          _authenticator: $('[name="_authenticator"]').val(),
+          subset_ids: JSON.stringify(self.subset_ids)
         },
         dataType: 'json',
         success: function(data){
-          if(data.status !== "success"){
+          if(data.msg){
+            self.app.setStatus(data.msg);
+          }else if(data.status !== "success"){
             // XXX handle error here with something?
             self.app.setStatus('error moving item');
           }
+          self.app.collection.pager(); // reload it all
         },
         error: function(data){
           self.app.setStatus('error moving item');
