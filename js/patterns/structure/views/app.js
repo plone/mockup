@@ -61,6 +61,7 @@ define([
     buttonClickEvents: {
       'cut': 'cutCopyClickEvent',
       'copy': 'cutCopyClickEvent',
+      'paste': 'pasteEvent',
       'tags': DISABLE_EVENT, //disable
       'properties': DISABLE_EVENT,
       'workflow': DISABLE_EVENT,
@@ -80,6 +81,7 @@ define([
     sort_on: 'getObjPositionInParent',
     sort_order: 'ascending',
     additionalCriterias: [],
+    pasteSelection: null,
     initialize: function(){
       var self = this;
       self.collection = new ResultCollection([], {
@@ -173,6 +175,7 @@ define([
       $(document).bind('keyup keydown', function(e){
         self.shift_clicked = e.shiftKey;
       });
+
     },
     inQueryMode: function(){
       if(this.additionalCriterias.length > 0){
@@ -186,10 +189,13 @@ define([
       }
       return false;
     },
-    getSelectedUids: function(){
+    getSelectedUids: function(collection){
       var self = this;
+      if(collection === undefined){
+        collection = self.selectedCollection;
+      }
       var uids = [];
-      self.selectedCollection.each(function(item){
+      collection.each(function(item){
         uids.push(item.uid());
       });
       return uids;
@@ -219,10 +225,12 @@ define([
         if(data === null){
           data = {};
         }
-        data.selection = JSON.stringify(self.getSelectedUids());
+        if(data.selection === undefined){
+          // if selection is overridden by another mechanism
+          data.selection = JSON.stringify(self.getSelectedUids());
+        }
         data._authenticator = $('input[name="_authenticator"]').val();
         data.folder = self.options.queryHelper.getCurrentPath();
-        data.pasteOperation = self.pasteOperation;
 
         var url = self.getAjaxUrl(button.url);
         $.ajax({
@@ -250,6 +258,13 @@ define([
         });
       }
     },
+    pasteEvent: function(button){
+      var self = this;
+      self.defaultButtonClickEvent(button, {
+        selection: JSON.stringify(self.getSelectedUids(self.pasteSelection)),
+        pasteOperation: self.pasteOperation
+      });
+    },
     cutCopyClickEvent: function(button){
       var self = this;
       var txt;
@@ -260,6 +275,12 @@ define([
         txt = 'copied ';
         self.pasteOperation = 'copy';
       }
+
+      // clone selected items
+      self.pasteSelection = new Backbone.Collection();
+      self.selectedCollection.each(function(item){
+        self.pasteSelection.add(item);
+      });
       txt += 'selection';
       self.setStatus(txt);
       self.pasteAllowed = true;
