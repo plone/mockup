@@ -49,11 +49,11 @@ define([
       '<input name="contributors" style="width: 300px" />' +
       '<label>Exclude from nav</label>' +
       '<label class="checkbox">' +
-        '<input type="radio" name="exclude-from-nav" value="Yes" />' +
+        '<input type="radio" name="exclude-from-nav" value="yes" />' +
         'Yes' +
       '</label>' +
       '<label class="checkbox">' +
-        '<input type="radio" name="exclude-from-nav" value="No" />' +
+        '<input type="radio" name="exclude-from-nav" value="no" />' +
         'No' +
       '</label>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
