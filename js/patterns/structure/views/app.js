@@ -32,7 +32,6 @@ define([
   'js/ui/views/button',
   'js/patterns/structure/views/table',
   'js/patterns/structure/views/selectionwell',
-  'js/patterns/structure/views/order',
   'js/patterns/structure/views/tags',
   'js/patterns/structure/views/properties',
   'js/patterns/structure/views/workflow',
@@ -45,7 +44,7 @@ define([
   'js/patterns/structure/collections/selected',
   'mockup-patterns-dropzone'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView,
-            SelectionWellView, OrderView, TagsView, PropertiesView,
+            SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, SelectionButtonView,
             PagingView, TextFilterView, ResultCollection, SelectedCollection,
             DropZone) {
@@ -62,7 +61,6 @@ define([
     buttonClickEvents: {
       'cut': 'cutCopyClickEvent',
       'copy': 'cutCopyClickEvent',
-      'order': DISABLE_EVENT, //disable default
       'tags': DISABLE_EVENT, //disable
       'properties': DISABLE_EVENT,
       'workflow': DISABLE_EVENT,
@@ -70,7 +68,6 @@ define([
       'rename': DISABLE_EVENT
     },
     buttonViewMapping: {
-      'folder.order': OrderView,
       'secondary.tags': TagsView,
       'secondary.properties': PropertiesView,
       'secondary.workflow': WorkflowView,
@@ -80,9 +77,11 @@ define([
     status: '',
     statusType: 'info',
     pasteOperation: null,
+    sort_on: 'getObjPositionInParent',
+    sort_order: 'ascending',
+    additionalCriterias: [],
     initialize: function(){
       var self = this;
-      self.options.additionalCriterias = [];
       self.collection = new ResultCollection([], {
         url: self.options.collectionUrl
       });
@@ -91,11 +90,16 @@ define([
         if(self.toolbar){
           term = self.toolbar.get('filter').term;
         }
+        var sort_on = self.sort_on;
+        if(!sort_on){
+          sort_on = 'getObjPositionInParent';
+        }
         return JSON.stringify({
           criteria: self.queryHelper.getCriterias(term, {
-            additionalCriterias: self.options.additionalCriterias
+            additionalCriterias: self.additionalCriterias
           }),
-          sort_on: 'getObjPositionInParent'
+          sort_on: sort_on,
+          sort_order: self.sort_order
         });
       };
 
@@ -169,6 +173,18 @@ define([
       $(document).bind('keyup keydown', function(e){
         self.shift_clicked = e.shiftKey;
       });
+    },
+    inQueryMode: function(){
+      if(this.additionalCriterias.length > 0){
+        return true;
+      }
+      if(this.sort_on && this.sort_on !== 'getObjPositionInParent'){
+        return true;
+      }
+      if(this.sort_order !== 'ascending'){
+        return true;
+      }
+      return false;
     },
     getSelectedUids: function(){
       var self = this;

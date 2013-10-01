@@ -431,6 +431,9 @@ define([
       self.$wrapper = $('<div/>');
       self.$el.after(self.$wrapper);
 
+      // initialization can be detailed if by ajax
+      self.initialized = false;
+
       if(self.options.indexOptionsUrl){
         $.ajax({
           url: self.options.indexOptionsUrl,
@@ -495,7 +498,8 @@ define([
       if(self.options.showPreviews){
         self.refreshPreviewEvent();
       }
-
+      self.$el.trigger('initialized');
+      self.initialized = true;
     },
     createCriteria: function(index, operator, value) {
       var self = this,
@@ -556,13 +560,14 @@ define([
           $("#form-widgets-sort_on", existingSortOn).val($(this).val());
         });
 
+      self.$sortOn.append($('<option value="">No sorting</option>')); // default no sorting
       for(var key in self.options.sortable_indexes) {
         self.$sortOn.append(
           $('<option/>')
             .attr('value', key)
             .html(self.options.indexes[key].title));
       }
-      self.$sortOn.patternSelect2();
+      self.$sortOn.patternSelect2({width: 150});
 
       self.$sortOrder = $("<input type='checkbox' />")
                           .attr('name', 'sort_reversed:boolean')

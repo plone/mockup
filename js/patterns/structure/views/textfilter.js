@@ -74,15 +74,29 @@ define([
         showPreviews: false
       });
       var self = this;
-      this.queryString.$el.on('change', function(){
+      self.queryString.$el.on('change', function(){
         if(self.timeoutId){
           clearTimeout(self.timeoutId);
         }
         self.timeoutId = setTimeout(function(){
           var criterias = $.parseJSON(self.$queryString.val());
-          self.app.options.additionalCriterias = criterias;
+          self.app.additionalCriterias = criterias;
           self.app.collection.pager();
         }, this.keyupDelay);
+      });
+      self.queryString.$el.on('initialized', function(){
+        self.queryString.$sortOn.on('change', function(){
+          self.app.sort_on = self.queryString.$sortOn.val();
+          self.app.collection.pager();
+        });
+        self.queryString.$sortOrder.change(function(){
+          if(self.queryString.$sortOrder[0].checked){
+            self.app.sort_order = 'reverse';
+          }else{
+            self.app.sort_order = 'ascending';
+          }
+          self.app.collection.pager();
+        });
       });
       return this;
     },

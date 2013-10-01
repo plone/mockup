@@ -80,23 +80,8 @@ define([
         },{
           title: 'Rename',
           url: '/rename'
-        }],
-        folder: [{
-          title: 'Order',
-          url: '/order'
         }]
-      },
-      folderOrderModes: [{
-        id: '',
-        title: 'Manual'
-      },{
-        id: 'effectiveDate',
-        title: 'Publication Date'
-      },{
-        id: 'creationDate',
-        title: 'Creation Date'
-      }],
-      folderOrder: ''
+      }
     },
     init: function() {
       var self = this;

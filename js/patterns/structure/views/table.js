@@ -94,6 +94,12 @@ define([
     },
     addReordering: function(){
       var self = this;
+      // if we have a custom query going on, we do not allow sorting.
+      if(self.app.inQueryMode()){
+        self.app.setStatus('Can not order items while querying');
+        self.$el.removeClass('order-support');
+        return;
+      }
       self.$el.addClass('order-support');
       var start = null;
       /* drag and drop reording support */
