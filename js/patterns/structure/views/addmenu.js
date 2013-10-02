@@ -37,6 +37,7 @@ define([
 
   var AddMenu = ButtonGroup.extend({
     title: 'Add',
+    className: 'btn-group addnew',
     events: {
     },
     modalTemplate: _.template(
