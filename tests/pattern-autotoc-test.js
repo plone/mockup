@@ -115,6 +115,11 @@ define([
       expect($('div.placeholder', this.$el).children().eq(0).attr('class')).to.equal("autotoc-nav");
       expect($('div.placeholder', this.$el).children().eq(1).attr('id')).to.equal("first-elem");
     });
+    it("custom className", function() {
+      this.$el.attr('data-pat-autotoc', 'className:SOMETHING');
+      registry.scan(this.$el);
+      expect(this.$el.hasClass('SOMETHING')).to.equal(true);
+    });
   });
 
 });
