@@ -49,6 +49,8 @@ define([
       if(this.selectedCollection.findWhere({UID: data.UID})){
         data.selected = true;
       }
+      data.attributes = this.model.attributes;
+      data.activeColumns = this.app.activeColumns;
       this.$el.html(this.template(data));
       var attrs = this.model.attributes;
       this.$el.addClass('state-' + attrs.review_state).

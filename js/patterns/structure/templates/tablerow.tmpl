@@ -4,6 +4,7 @@
     <%- Title %>
   </a>
 </td>
-<td><%- ModificationDate %></td>
-<td><%- EffectiveDate %></td>
-<td><%- review_state %></td>
+<% _.each(activeColumns, function(column){ %>
+  <td><%- attributes[column] %></td>
+<% }); %>
+

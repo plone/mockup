@@ -68,7 +68,9 @@ define([
       self.$el.html(self.template({
         path: self.app.queryHelper.getCurrentPath(),
         status: self.app.status,
-        statusType: self.app.statusType
+        statusType: self.app.statusType,
+        activeColumns: self.app.activeColumns,
+        availableColumns: self.app.availableColumns
       }));
 
       self.contextMenu = (new ContextMenu({

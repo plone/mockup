@@ -36,7 +36,7 @@ define([
     className: 'popoverview columns',
     title: _.template('Columns'),
     content: _.template(
-      '<label>Select columns to show</label>' +
+      '<label>Select columns to show, drag and drop to reorder</label>' +
       '<ul>' +
       '</ul>' +
       '<button class="btn btn-block btn-success">Save</button>'
@@ -44,7 +44,7 @@ define([
     itemTemplate: _.template(
       '<li>' +
         '<label>' +
-          '<input type="checkbox"/>' +
+          '<input type="checkbox" value="<%- id %>"/>' +
           '<%- title %>' +
         '</label>' +
       '</li>'),
@@ -62,24 +62,22 @@ define([
       self.$container = self.$('ul');
       _.each(self.app.activeColumns, function(id){
         var $el = $(self.itemTemplate({
-          title: self.app.availableColumns[id]
+          title: self.app.availableColumns[id],
+          id: id
         }));
         $el.find('input')[0].checked = true;
         self.$container.append($el);
       });
       _.each(_.omit(self.app.availableColumns, self.app.activeColumns), function(name, id){
         var $el = $(self.itemTemplate({
-          title: name
+          title: name,
+          id: id
         }));
         self.$container.append($el);
       });
 
       var dd = new DragDrop(self.$container, {
-        selector: 'li',
-        drop: function(){
-          // store column data, upate table
-
-        }
+        selector: 'li'
       });
 
       return this;
@@ -87,6 +85,11 @@ define([
     applyButtonClicked: function(e){
       var self = this;
       this.hide();
+      self.app.activeColumns = [];
+      self.$('input:checked').each(function(){
+        self.app.activeColumns.push($(this).val());
+      });
+      self.app.tableView.render();
     }
   });
 
