@@ -246,7 +246,7 @@ define([
       for(var i=0; i<query.criteria.length; i=i+1){
         var criteria = query.criteria[i];
         if(criteria.i === 'path'){
-          path = criteria.v;
+          path = criteria.v.split('::')[0];
         }else{
           term = criteria.v;
         }

@@ -33,8 +33,9 @@ define([
   'mockup-patterns-backdrop',
   'mockup-registry',
   'mockup-router',
+  'js/utils',
   'jquery.form'
-], function($, _, Base, Backdrop, registry, Router) {
+], function($, _, Base, Backdrop, registry, Router, utils) {
   "use strict";
 
   var Modal = Base.extend({
@@ -129,9 +130,10 @@ define([
         if (self.options.loadLinksWithinModal) {
           actions.a = {};
         }
+
         $.each(actions, function(action, options) {
           var actionKeys = _.union(_.keys(self.options.actionOptions), ['templateOptions']);
-          var actionOptions = $.extend(true, _.pick(options, actionKeys), self.options.actionOptions);
+          var actionOptions = $.extend(true, {}, self.options.actionOptions, _.pick(options, actionKeys));
           options.templateOptions = $.extend(true, options.templateOptions, self.options.templateOptions);
 
           var patternKeys = _.union(_.keys(self.options.actionOptions), ['actions', 'actionOptions']);
@@ -233,10 +235,9 @@ define([
                 self.redraw(response, patternOptions);
               } else {
                 $action.trigger('destroy.modal.patterns');
+                // also calls hide
                 if (options.reloadWindowOnClose) {
                   self.reloadWindow();
-                } else {
-                  self.hide();
                 }
               }
               self.trigger('formActionSuccess', [response, state, xhr, form]);
@@ -539,8 +540,7 @@ define([
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
         self.$loading.hide();
-        self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+        self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
         self.trigger('after-ajax', self, textStatus, xhr);
         self._show();
       });
@@ -743,9 +743,9 @@ define([
       if ($('.modal', self.$wrapper).size() < 2) {
         self.backdrop.hide();
         self.$wrapper.hide();
-        self.$loading.hide();
         self.$wrapper.parent().css('overflow', 'visible');
       }
+      self.$loading.hide();
       self.$el.removeClass(self.options.templateOptions.classActiveName);
       if (self.$modal !== undefined) {
         self.$modal.remove();
@@ -758,8 +758,7 @@ define([
       var self = this;
       self.trigger('beforeDraw');
       self.$modal.remove();
-      self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+      self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
       self.render.apply(self, [options]);
       self.positionModal();
       registry.scan(self.$modal);

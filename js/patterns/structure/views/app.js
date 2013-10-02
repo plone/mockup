@@ -30,6 +30,7 @@ define([
   'js/ui/views/toolbar',
   'js/ui/views/buttongroup',
   'js/ui/views/button',
+  'js/ui/views/base',
   'js/patterns/structure/views/table',
   'js/patterns/structure/views/selectionwell',
   'js/patterns/structure/views/tags',
@@ -39,20 +40,21 @@ define([
   'js/patterns/structure/views/rename',
   'js/patterns/structure/views/selectionbutton',
   'js/patterns/structure/views/paging',
+  'js/patterns/structure/views/addmenu',
   'js/patterns/structure/views/textfilter',
   'js/patterns/structure/collections/result',
   'js/patterns/structure/collections/selected',
   'mockup-patterns-dropzone'
-], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, TableView,
-            SelectionWellView, TagsView, PropertiesView,
+], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
+            TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, SelectionButtonView,
-            PagingView, TextFilterView, ResultCollection, SelectedCollection,
-            DropZone) {
+            PagingView, AddMenu, TextFilterView, ResultCollection,
+            SelectedCollection, DropZone) {
   "use strict";
 
   var DISABLE_EVENT = 'DISABLE';
 
-  var AppView = Backbone.View.extend({
+  var AppView = BaseView.extend({
     tagName: 'div',
     /* we setup binding here and specifically for every button so there is a
      * way to override default click event behavior.
@@ -84,6 +86,8 @@ define([
     pasteSelection: null,
     initialize: function(){
       var self = this;
+      BaseView.prototype.initialize.call(self);
+
       self.collection = new ResultCollection([], {
         url: self.options.collectionUrl
       });
@@ -154,20 +158,35 @@ define([
       self.collection.on('sync', function(){
         // need to reload models inside selectedCollection so they get any
         // updated metadata
-        var uids = [];
-        self.selectedCollection.each(function(item){
-          uids.push(item.attributes.UID);
-        });
-        self.queryHelper.search(
-          'UID', 'plone.app.querystring.operation.list.contains',
-          uids,
-          function(data){
-            _.each(data.results, function(attributes){
-              var item = self.selectedCollection.getByUID(attributes.UID);
-              item.attributes = attributes;
-            });
-          },
-          false);
+        if(self.selectedCollection.models.length > 0){
+          var uids = [];
+          self.selectedCollection.each(function(item){
+            uids.push(item.attributes.UID);
+          });
+          self.queryHelper.search(
+            'UID', 'plone.app.querystring.operation.list.contains',
+            uids,
+            function(data){
+              _.each(data.results, function(attributes){
+                var item = self.selectedCollection.getByUID(attributes.UID);
+                item.attributes = attributes;
+              });
+            },
+            false);
+        }
+
+        if(self.contextInfoUrl){
+          $.ajax({
+            url: self.getAjaxUrl(self.contextInfoUrl),
+            dataType: 'json',
+            success: function(data){
+              self.trigger('context-info-loaded', data);
+            },
+            error: function(){
+              // XXX handle error?
+            }
+          });
+        }
       });
 
       /* detect shift clicks */
@@ -294,6 +313,15 @@ define([
         title: 'Selected',
         collection: this.selectedCollection
       }));
+
+      if(self.options.contextInfoUrl){
+        // only add menu if set
+        items.push(new AddMenu({
+          contextInfoUrl: self.options.contextInfoUrl,
+          app: self
+        }));
+      }
+
       _.each(_.pairs(this.options.buttonGroups), function(group){
         var buttons = [];
         _.each(group[1], function(button){
@@ -336,6 +364,7 @@ define([
 
       self.$el.append(self.toolbar.render().el);
       self.$el.append(self.wellView.render().el);
+
       _.each(self.buttonViews, function(view){
         self.$el.append(view.render().el);
       });
