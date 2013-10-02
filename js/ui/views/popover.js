@@ -82,7 +82,7 @@ define([
         top: (pos.top + pos.height) + 11
       };
       if(this.alignment === "left"){
-        tp.left = (pos.left + pos.width / 2) - 44;
+        tp.left = (pos.left + pos.width / 2) - 11;
       }else{
         tp.left = pos.left - $tip.width() + pos.width + 11;
       }
@@ -98,7 +98,7 @@ define([
         offset(offset).addClass(this.placement).addClass('in').
         addClass('align-' + this.alignment);
       if(this.alignment === 'left'){
-        this.$('.arrow').css('left', '55px');
+        this.$('.arrow').css('left', '22px');
       }else{
         this.$('.arrow').css('left', (this.$('.popover').width() - 25) + 'px');
       }

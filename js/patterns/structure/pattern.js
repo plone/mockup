@@ -48,7 +48,26 @@ define([
       setDefaultPageUrl: null,
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
-                   'is_folderish', 'Subject', 'getURL', 'id'],
+                   'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
+                   'getObjSize', 'last_comment_date', 'total_comments'],
+      activeColumns: [
+        'ModificationDate',
+        'EffectiveDate',
+        'review_state'
+      ],
+      availableColumns: {
+        'ModificationDate': 'Modification date',
+        'EffectiveDate': 'Publication date',
+        'CreationDate': 'Creation date',
+        'review_state': 'Review state',
+        'Subject': 'Tags',
+        'Type': 'Type',
+        'is_folder': 'Folder',
+        'exclude_from_nav': 'Excluded from nav',
+        'getObjSize': 'Object Size',
+        'last_comment_date': 'Last comment date',
+        'total_comments': 'Total comments'
+      },
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,

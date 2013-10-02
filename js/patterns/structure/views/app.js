@@ -41,6 +41,7 @@ define([
   'js/patterns/structure/views/selectionbutton',
   'js/patterns/structure/views/paging',
   'js/patterns/structure/views/addmenu',
+  'js/patterns/structure/views/columns',
   'js/patterns/structure/views/textfilter',
   'js/patterns/structure/collections/result',
   'js/patterns/structure/collections/selected',
@@ -48,7 +49,7 @@ define([
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, SelectionButtonView,
-            PagingView, AddMenu, TextFilterView, ResultCollection,
+            PagingView, AddMenu, ColumnsView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
 
@@ -130,9 +131,14 @@ define([
         var name = key.split('.');
         var group = name[0];
         var buttonName = name[1];
+        var alignment = 'left';
+        if(group === 'secondary'){
+          alignment = 'right';
+        }
         self.buttonViews[key] = new ViewClass({
           button: self.buttons[group].get(buttonName),
-          app: self
+          app: self,
+          alignment: alignment
         });
       });
 
@@ -323,8 +329,21 @@ define([
       var self = this;
       self.buttons = {};
       var items = [];
+
+      var columnsBtn = new ButtonView({
+        id: 'columns',
+        icon: 'cog'
+      });
+
+      self.columnsView = new ColumnsView({
+        app: self,
+        button: columnsBtn
+      });
+      items.push(columnsBtn);
+
       items.push(new SelectionButtonView({
         title: 'Selected',
+        id: 'selected',
         collection: this.selectedCollection
       }));
 
@@ -404,6 +423,7 @@ define([
 
       self.$el.append(self.toolbar.render().el);
       self.$el.append(self.wellView.render().el);
+      self.$el.append(self.columnsView.render().el);
 
       _.each(self.buttonViews, function(view){
         self.$el.append(view.render().el);

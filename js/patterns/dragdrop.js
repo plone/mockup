@@ -48,6 +48,10 @@ define([
         $(dragged).addClass(self.options.dragClass);
         $.drop({
           tolerance: function(event, proxy, target) {
+            if($(target.elem).closest(self.$el).length === 0){
+              /* prevent dragging conflict over another drag area */
+              return;
+            }
             var test = event.pageY > (target.top + target.height / 2);
             $.data(target.elem, "drop+reorder",
                    test ? "insertAfter" : "insertBefore" );
@@ -69,7 +73,7 @@ define([
         var drop = dd.drop[0],
             method = $.data(drop || {}, "drop+reorder");
         /* XXX Cannot use triple equals here */
-        if (drop && (drop != dd.current || method != dd.method)){
+        if (method && drop && (drop != dd.current || method != dd.method)){
           $(this)[method](drop);
           dd.current = drop;
           dd.method = method;
