@@ -30,8 +30,8 @@ define([
   'js/ui/views/buttongroup',
   'js/ui/views/button',
   'mockup-patterns-modal',
-  'js/utils',
-  'boostrap-dropdown'
+  'mockup-utils',
+  'bootstrap-dropdown'
 ], function($, _, Backbone, ButtonGroup, ButtonView, Modal, utils) {
   "use strict";
 
@@ -40,15 +40,6 @@ define([
     className: 'btn-group addnew',
     events: {
     },
-    modalTemplate: _.template(
-      '<div>' +
-        '<form>' +
-          '<legend>Create <%- title %>' +
-          '<label>Title</label>' +
-          '<input name="title" />' +
-          '<a class="btn btn-success">Add</a>' +
-        '</form>' +
-      '</div>'),
     initialize: function(){
       var self = this;
       ButtonGroup.prototype.initialize.call(self);

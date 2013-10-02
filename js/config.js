@@ -11,7 +11,7 @@ var requirejsOptions = {
     'underscore': 'bower_components/underscore/underscore',
     'backbone': 'bower_components/backbone/backbone',
     'backbone-paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
-    'boostrap-dropdown': 'bower_components/bootstrap/js/bootstrap-dropdown',
+    'bootstrap-dropdown': 'bower_components/bootstrap/js/bootstrap-dropdown',
     'select2': 'bower_components/select2/select2',
     'tinymce': 'lib/tinymce/tinymce.min',
     'chai': 'bower_components/chai/chai',
@@ -26,6 +26,7 @@ var requirejsOptions = {
     'mockup-fakeserver': 'tests/fakeserver',
     'mockup-registry': 'js/registry',
     'mockup-router': 'js/router',
+    'mockup-utils': 'js/utils',
     'mockup-iframe': 'js/iframe',
     'mockup-iframe_init': 'js/iframe_init',
     'mockup-patterns-accessibility': 'js/patterns/accessibility',
@@ -53,7 +54,7 @@ var requirejsOptions = {
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
     'mockup-bundles-tiles': 'js/bundles/widgets',
-    'mockup-patterns-structure': 'js/patterns/structure/pattern'
+    'mockup-patterns-structure': 'js/patterns/structure/pattern',
   },
   shim: {
     'underscore': { exports: 'window._' },

@@ -33,7 +33,7 @@ define([
   'mockup-patterns-backdrop',
   'mockup-registry',
   'mockup-router',
-  'js/utils',
+  'mockup-utils',
   'jquery.form'
 ], function($, _, Base, Backdrop, registry, Router, utils) {
   "use strict";
@@ -382,6 +382,7 @@ define([
               // TODO: open links inside modal
               // and slide modal body
             }
+            self.$modal.trigger('modal-click');
           })
           .on('destroy.modal.patterns', function(e) {
             e.stopPropagation();

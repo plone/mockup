@@ -29,9 +29,10 @@ define([
   'backbone',
   'js/patterns/structure/views/tablerow',
   'text!js/patterns/structure/templates/table.tmpl',
+  'js/patterns/structure/views/contextmenu',
   'jquery.event.drag',
   'jquery.event.drop'
-], function($, _, Backbone, TableRowView, TableTemplate) {
+], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu) {
   "use strict";
 
   var TableView = Backbone.View.extend({
@@ -59,6 +60,13 @@ define([
         status: self.app.status,
         statusType: self.app.statusType
       }));
+
+      self.contextMenu = (new ContextMenu({
+        container: self,
+        app: self.app
+      })).render();
+      self.$el.append(self.contextMenu.$el);
+
       if(self.collection.length){
         var container = self.$('tbody');
         self.collection.each(function(result){
@@ -66,6 +74,7 @@ define([
             model: result,
             app: self.app
           })).render();
+          self.contextMenu.bind(view.$el);
           container.append(view.el);
         });
       }

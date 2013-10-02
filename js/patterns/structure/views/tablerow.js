@@ -59,6 +59,7 @@ define([
       this.$el.attr('data-path', data.path);
       this.$el.attr('data-UID', data.UID);
       this.$el.attr('data-id', data.id);
+      this.$el.attr('data-type', data.Type);
       this.el.model = this.model;
       return this;
     },
