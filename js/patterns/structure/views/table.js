@@ -30,23 +30,34 @@ define([
   'js/patterns/structure/views/tablerow',
   'text!js/patterns/structure/templates/table.tmpl',
   'js/patterns/structure/views/contextmenu',
+  'js/ui/views/base',
   'jquery.event.drag',
   'jquery.event.drop'
-], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu) {
+], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu, BaseView) {
   "use strict";
 
-  var TableView = Backbone.View.extend({
+  var TableView = BaseView.extend({
     tagName: 'div',
     template: _.template(TableTemplate),
     initialize: function(){
-      this.app = this.options.app;
-      this.collection = this.app.collection;
-      this.selectedCollection = this.app.selectedCollection;
-      this.listenTo(this.collection, 'sync', this.render);
-      this.listenTo(this.selectedCollection, 'remove', this.render);
-      this.listenTo(this.selectedCollection, 'reset', this.render);
-      this.collection.pager();
-      this.subset_ids = [];
+      var self = this;
+      BaseView.prototype.initialize.call(self);
+      self.collection = self.app.collection;
+      self.selectedCollection = self.app.selectedCollection;
+      self.listenTo(self.collection, 'sync', self.render);
+      self.listenTo(self.selectedCollection, 'remove', self.render);
+      self.listenTo(self.selectedCollection, 'reset', self.render);
+      self.collection.pager();
+      self.subset_ids = [];
+
+      self.app.on('context-info-loaded', function(data){
+        /* set default page info */
+        var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
+        if($defaultPage.length > 0){
+          $defaultPage.find('td.title').prepend('<span>*</span> ');
+          $defaultPage.addClass('default-page');
+        }
+      });
     },
     events: {
       'click .breadcrumbs a': 'breadcrumbClicked',

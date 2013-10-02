@@ -90,7 +90,18 @@ define([
         self.$setDefaultPage.hide();
       }else{
         self.$paste.hide();
-        self.$setDefaultPage.show();
+        if(self.app.setDefaultPageUrl){
+          self.$setDefaultPage.show();
+        }else{
+          self.$setDefaultPage.hide();
+        }
+      }
+      if(self.app.inQueryMode()){
+        self.$moveTop.hide();
+        self.$moveBottom.hide();
+      }else{
+        self.$moveTop.show();
+        self.$moveBottom.show();
       }
     },
     bind: function($el){
@@ -107,13 +118,6 @@ define([
         $el.addClass('contextmenuactive');
         return false;
       });
-      if(self.app.inQueryMode()){
-        self.$moveTop.hide();
-        self.$moveBottom.hide();
-      }else{
-        self.$moveTop.show();
-        self.$moveBottom.show();
-      }
     },
     cutClicked: function(){
       this.cutCopyClicked('cut');
@@ -137,8 +141,8 @@ define([
         self.app.setStatus('could not ' + operation + ' item');
       }
     },
-    pasteClicked: function(){
-      this.app.pasteEvent(this.app.buttons.primary.get('paste'), {
+    pasteClicked: function(e){
+      this.app.pasteEvent(this.app.buttons.primary.get('paste'), e, {
         folder: this.$active.attr('data-path')
       });
     },
@@ -149,7 +153,21 @@ define([
       this.app.moveItem(this.$active.attr('data-id'), 'bottom');
     },
     setDefaultPageClicked: function(){
-
+      var self = this;
+      $.ajax({
+        url: self.app.getAjaxUrl(self.app.setDefaultPageUrl),
+        type: 'POST',
+        data: {
+          '_authenticator': $('[name="_authenticator"]').val(),
+          'id': this.$active.attr('data-id')
+        },
+        success: function(data){
+          self.app.ajaxSuccessResponse.apply(self.app, [data]);
+        },
+        error: function(data){
+          self.app.ajaxErrorResponse.apply(self.app, [data]);
+        }
+      });
     }
   });
 

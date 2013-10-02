@@ -45,6 +45,7 @@ define([
       usersAjaxVocabulary: null,
       indexOptionsUrl: null, // for querystring widget
       contextInfoUrl: null, // for add new dropdown and other info
+      setDefaultPageUrl: null,
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish', 'Subject', 'getURL', 'id'],

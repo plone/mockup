@@ -259,27 +259,35 @@ define([
           type: 'POST',
           data: data,
           success: function(data){
-            if(data.status === 'success'){
-              self.collection.reset();
-            }
-            if(data.msg){
-              // give status message somewhere...
-              self.setStatus(data.msg);
-            }
-            if(callback !== null){
-              callback(data);
-            }
-            self.collection.pager();
+            self.ajaxSuccessResponse.apply(self, [data, callback]);
           },
-          error: function(data){
-            if(data.status === 404){
-              window.alert('operation url "' + url + '" is not valid');
-            }
+          error: function(response){
+            self.ajaxErrorResponse.apply(self, [response]);
           }
-        });
+        }, self);
       }
     },
-    pasteEvent: function(button, data){
+    ajaxSuccessResponse: function(data, callback){
+      var self = this;
+      if(data.status === 'success'){
+        self.collection.reset();
+      }
+      if(data.msg){
+        // give status message somewhere...
+        self.setStatus(data.msg);
+      }
+      if(callback !== null && callback !== undefined){
+        callback(data);
+      }
+      self.collection.pager();
+    },
+    ajaxErrorResponse: function(response){
+      var self = this;
+      if(response.status === 404){
+        window.alert('operation url "' + url + '" is not valid');
+      }
+    },
+    pasteEvent: function(button, e, data){
       var self = this;
       if(data === undefined){
         data = {};
