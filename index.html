@@ -2171,6 +2171,49 @@ function($action, response, options) { ... }
   </script>
 
 
+  <!--  **** Drag n' Drop**** -->
+  <script>
+    addPattern({
+      id: 'dragdrop',
+      title: "Drae n' Drop",
+      description: "Setup drag and drop sorting",
+      attributes: [
+        {attribute: 'selector', type: 'String', defaultValue: 'li', description: 'Selector to use to draggable items in pattern'},
+        {attribute: 'dragClass', type: 'String', defaultValue: 'item-dragging', description: 'Class to apply to original item that is being dragged.'},
+        {attribute: 'cloneClass', type: 'String', defaultValue: 'dragging', description: 'Class to apply to cloned item that is dragged.'},
+        {attribute: 'drop', type: 'function', defaultValue: 'null', description: 'callback function for when item is dropped'},
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_structure">
+  </script>
+  <script type="text/example" class="example-dragdrop" data-title="Default">
+    <ul class="pat-dragdrop">
+      <li>One</li>
+      <li>Two</li>
+      <li>Three</li>
+    </ul>
+  </script>
+  <script type="text/example" class="example-dragdrop" data-title="Table">
+    <table class="table table-stripped pat-dragdrop" data-pat-dragdrop="selector:tr;">
+      <tbody>
+        <tr>
+          <td>One One</td>
+          <td>One Two</td>
+        </tr>
+        <tr>
+          <td>Two One</td>
+          <td>Two Two</td>
+        </tr>
+        <tr>
+          <td>Three One</td>
+          <td>Three Two</td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
+
+
 </head>
 
 <body>
