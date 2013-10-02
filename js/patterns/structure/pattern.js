@@ -82,10 +82,7 @@ define([
           title: 'Rename',
           url: '/rename'
         }]
-      },
-      folderTypes: [
-        'Folder'
-      ]
+      }
     },
     init: function() {
       var self = this;

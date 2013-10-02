@@ -249,7 +249,9 @@ define([
           data.selection = JSON.stringify(self.getSelectedUids());
         }
         data._authenticator = $('input[name="_authenticator"]').val();
-        data.folder = self.options.queryHelper.getCurrentPath();
+        if(data.folder === undefined){
+          data.folder = self.options.queryHelper.getCurrentPath();
+        }
 
         var url = self.getAjaxUrl(button.url);
         $.ajax({
@@ -277,12 +279,16 @@ define([
         });
       }
     },
-    pasteEvent: function(button){
+    pasteEvent: function(button, data){
       var self = this;
-      self.defaultButtonClickEvent(button, {
+      if(data === undefined){
+        data = {};
+      }
+      data = $.extend(true, {}, {
         selection: JSON.stringify(self.getSelectedUids(self.pasteSelection)),
         pasteOperation: self.pasteOperation
-      });
+      }, data);
+      self.defaultButtonClickEvent(button, data);
     },
     cutCopyClickEvent: function(button){
       var self = this;

@@ -35,7 +35,7 @@ define([
     className: 'dropdown clearfix contextmenu',
     events: {
       'click .cut a': 'cutClicked',
-      'click .copy a': 'copyClick',
+      'click .copy a': 'copyClicked',
       'click .paste a': 'pasteClicked',
       'click .move-top a': 'moveTopClicked',
       'click .move-bottom a': 'moveBottomClicked',
@@ -52,6 +52,7 @@ define([
           '<li class="divider"></li>' +
           '<li class="set-default-page"><a href="#">Set as default page</a></li>' +
       '</ul>'),
+    active: null,
     initialize: function(){
       var self = this;
       BaseView.prototype.initialize.call(self);
@@ -80,8 +81,8 @@ define([
     },
     showHideButtons: function($el){
       var self = this;
-      var type = $el.attr('data-type');
-      if(self.app.folderTypes.indexOf(type) !== -1){
+      var folderish = $el.attr('data-folderish');
+      if(folderish === 'true'){
         // its a valid folder type
         if(self.app.pasteAllowed){
           self.$paste.show();
@@ -104,18 +105,37 @@ define([
           top: e.pageY
         });
         self.showHideButtons($el);
+        self.$active = $el;
         $el.addClass('contextmenuactive');
         return false;
       });
     },
     cutClicked: function(){
-
+      this.cutCopyClicked('cut');
     },
     copyClicked: function(){
+      this.cutCopyClicked('copy');
+    },
+    cutCopyClicked: function(operation){
+      var self = this;
+      self.app.pasteOperation = operation;
 
+      var uid = self.$active.attr('data-UID');
+      var model = self.app.collection.findWhere({UID: uid});
+      if(model){
+        self.app.pasteSelection = new Backbone.Collection();
+        self.app.pasteSelection.add(model);
+        self.app.setStatus(operation + ' 1 item');
+        self.app.pasteAllowed = true;
+        self.app.buttons.primary.get('paste').enable();
+      }else{
+        self.app.setStatus('could not ' + operation + ' item');
+      }
     },
     pasteClicked: function(){
-
+      this.app.pasteEvent(this.app.buttons.primary.get('paste'), {
+        folder: this.$active.attr('data-path')
+      });
     },
     moveTopClicked: function(){
 
