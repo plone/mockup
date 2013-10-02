@@ -465,7 +465,7 @@ module.exports = function(grunt) {
       'sed:docs-spritemap'
       ]);
   grunt.registerTask('default', [
-      'test-ci',
+      'karma:ci',
       'compile',
       'docs'
       ]);
