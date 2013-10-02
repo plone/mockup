@@ -59,7 +59,7 @@ define([
       registry.scan($el);
       expect($('.backdrop', $el).size()).to.equal(1);
       expect($el.hasClass('backdrop-active')).to.equal(false);
-      $('input', $el).focus();
+      $('input', $el).focusin();
       expect($('form', $el).css('z-index')).to.equal('10001');
       expect($el.hasClass('backdrop-active')).to.equal(true);
       var keydown = $.Event("keydown");
