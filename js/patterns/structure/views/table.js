@@ -149,7 +149,7 @@ define([
         var $el = $(this);
         $el.removeClass('structure-dragging');
         $(dd.proxy).remove();
-        self.moveItem($el, $el.index() - start);
+        self.app.moveItem($el.attr('data-id'), $el.index() - start, self.subset_ids);
         self.storeOrder();
       })
       .drop('init', function(e, dd ) {
@@ -165,32 +165,6 @@ define([
         subset_ids.push($(this).attr('data-id'));
       });
       self.subset_ids = subset_ids;
-    },
-    moveItem: function($el, delta){
-      var self = this;
-      $.ajax({
-        url: this.app.getAjaxUrl(this.app.options.moveUrl),
-        type: 'POST',
-        data: {
-          delta: delta,
-          id: $el.attr('data-id'),
-          _authenticator: $('[name="_authenticator"]').val(),
-          subset_ids: JSON.stringify(self.subset_ids)
-        },
-        dataType: 'json',
-        success: function(data){
-          if(data.msg){
-            self.app.setStatus(data.msg);
-          }else if(data.status !== "success"){
-            // XXX handle error here with something?
-            self.app.setStatus('error moving item');
-          }
-          self.app.collection.pager(); // reload it all
-        },
-        error: function(data){
-          self.app.setStatus('error moving item');
-        }
-      });
     }
   });
 

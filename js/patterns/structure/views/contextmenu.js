@@ -46,10 +46,8 @@ define([
           '<li class="cut"><a href="#">Cut</a></li>' +
           '<li class="copy"><a href="#">Copy</a></li>' +
           '<li class="paste"><a href="#">Paste</a></li>' +
-          '<li class="divider"></li>' +
           '<li class="move-top"><a href="#">Move to top of folder</a></li>' +
           '<li class="move-bottom"><a href="#">Move to bottom of folder</a></li>' +
-          '<li class="divider"></li>' +
           '<li class="set-default-page"><a href="#">Set as default page</a></li>' +
       '</ul>'),
     active: null,
@@ -109,6 +107,13 @@ define([
         $el.addClass('contextmenuactive');
         return false;
       });
+      if(self.app.inQueryMode()){
+        self.$moveTop.hide();
+        self.$moveBottom.hide();
+      }else{
+        self.$moveTop.show();
+        self.$moveBottom.show();
+      }
     },
     cutClicked: function(){
       this.cutCopyClicked('cut');
@@ -138,10 +143,10 @@ define([
       });
     },
     moveTopClicked: function(){
-
+      this.app.moveItem(this.$active.attr('data-id'), 'top');
     },
     moveBottomClicked: function(){
-
+      this.app.moveItem(this.$active.attr('data-id'), 'bottom');
     },
     setDefaultPageClicked: function(){
 

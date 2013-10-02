@@ -357,6 +357,32 @@ define([
         items: items
       });
     },
+    moveItem: function(id, delta, subset_ids){
+      var self = this;
+      $.ajax({
+        url: this.getAjaxUrl(this.options.moveUrl),
+        type: 'POST',
+        data: {
+          delta: delta,
+          id: id,
+          _authenticator: $('[name="_authenticator"]').val(),
+          subset_ids: JSON.stringify(subset_ids)
+        },
+        dataType: 'json',
+        success: function(data){
+          if(data.msg){
+            self.setStatus(data.msg);
+          }else if(data.status !== "success"){
+            // XXX handle error here with something?
+            self.setStatus('error moving item');
+          }
+          self.collection.pager(); // reload it all
+        },
+        error: function(data){
+          self.setStatus('error moving item');
+        }
+      });
+    },
     setStatus: function(txt, type){
       this.status = txt;
       if(type === undefined){
