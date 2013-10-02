@@ -19,6 +19,7 @@ var requirejsOptions = {
     'picker': 'bower_components/pickadate/lib/picker',
     'picker.date': 'bower_components/pickadate/lib/picker.date',
     'picker.time': 'bower_components/pickadate/lib/picker.time',
+    'raptorize': 'bower_components/jquery-raptorize-coffee/build/jquery-raptorize',
     'jquery.event.drag': 'lib/jquery.event.drag',
     'jquery.event.drop': 'lib/jquery.event.drop',
     'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
@@ -41,6 +42,7 @@ var requirejsOptions = {
     'mockup-patterns-pickadate': 'js/patterns/pickadate',
     'mockup-patterns-picture': 'js/patterns/picture',
     'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
+    'mockup-patterns-raptorize': 'js/patterns/raptorize',
     'mockup-patterns-relateditems': 'js/patterns/relateditems',
     'mockup-patterns-queryhelper': 'js/patterns/queryhelper',
     'mockup-patterns-querystring': 'js/patterns/querystring',
@@ -53,7 +55,8 @@ var requirejsOptions = {
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
     'mockup-bundles-tiles': 'js/bundles/widgets',
-    'mockup-patterns-structure': 'js/patterns/structure/pattern'
+    'mockup-patterns-structure': 'js/patterns/structure/pattern',
+    'modernizr': 'bower_components/modernizr/modernizr'
   },
   shim: {
     'underscore': { exports: 'window._' },
@@ -63,6 +66,7 @@ var requirejsOptions = {
     },
     'picker.date': { deps: [ 'picker' ] },
     'picker.time': { deps: [ 'picker' ] },
+    'jquery-raptorize-coffee': {deps: ['modernizr']},
     'jquery.event.drag': { deps: ['jquery'] },
     'jquery.event.drop': { deps: ['jquery'] },
     'jquery.cookie': { deps: ['jquery'] },
