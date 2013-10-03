@@ -27,91 +27,170 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'js/ui/views/container',
+  'mockup-patterns-backdrop',
   'text!js/ui/templates/popover.tmpl'
-], function($, _, Backbone, PopoverTemplate, ItemTemplate) {
+], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
   "use strict";
 
-  var PopoverView = Backbone.View.extend({
+  var PopoverView = ContainerView.extend({
     tagName: 'div',
     className: 'popoverview',
-    template: _.template(PopoverTemplate),
-    content: _.template(''),
-    title: _.template(''),
-    button: null,
-    alignment: "left",
+    eventPrefix: 'popover',
+    template: PopoverTemplate,
+    content: null,
+    title: null,
+    triggerView: null,
+    triggerEvents: {
+      'button:click': 'toggle'
+    },
+    placement: "bottom",
     events: {
     },
     opened: false,
-    initialize: function(){
-      if(this.options.button){
-        this.button = this.options.button;
-      }
-      if(this.options.content){
-        this.content = this.options.content;
-      }
-      if(this.options.title){
-        this.title = this.options.title;
-      }
-      if(this.options.alignment){
-        this.alignment = this.options.alignment;
-      }
+    closeOnOutClick: true,
+    appendInContainer: true,
+    backdrop: undefined,
+    useBackdrop: true,
+    backdropOptions: {
+      zIndex: "1009",
+      opacity: "0.4",
+      className: "backdrop backdrop-popover",
+      classActiveName: "backdrop-active",
+      closeOnEsc: false,
+      closeOnClick: true
     },
-    render: function () {
-      this.$el.html(this.template(this.options));
-      if(this.button){
-        this.button.on('button:click', this.showItemsClicked, this);
-      }
+    afterRender: function () {
+      var self = this;
+      this.bindTriggerEvents();
+
       this.$('.popover-title').append(this.title(this.options));
       this.$('.popover-content').append(this.content(this.options));
-      return this;
+
+      if (this.useBackdrop === true && this.backdrop === undefined) {
+        this.backdrop = new Backdrop($('body'), this.backdropOptions);
+        this.backdrop.on('hidden', function(e) {
+          if (self.opened === true) {
+            self.hide();
+          }
+        });
+        this.on('popover:hide', function() {
+          this.backdrop.hide();
+        }, this);
+      }
+    },
+    bindTriggerEvents: function() {
+      if (this.triggerView) {
+        _.each(this.triggerEvents, function(func, event) {
+          var method = this[func];
+          if (!method) {
+            $.error('Function not found.');
+          }
+          this.stopListening(this.triggerView, event);
+          this.listenTo(this.triggerView, event, method);
+        }, this);
+      }
     },
     getPosition: function(){
-      var $el = this.$el;
-      if(this.button){
-        $el = this.button.$el;
-      }
+      var $el = this.triggerView.$el;
       return $.extend({}, {
-        width: $el.width(),
-        height: $el.height()
+        width: $el[0].offsetWidth,
+        height: $el[0].offsetHeight
       }, $el.offset());
     },
     show: function(){
       var pos = this.getPosition();
       var $tip = this.$('.popover');
-      var tp = {
-        top: (pos.top + pos.height) + 11
-      };
-      if(this.alignment === "left"){
-        tp.left = (pos.left + pos.width / 2) - 11;
-      }else{
-        tp.left = pos.left - $tip.width() + pos.width + 11;
+      var $el = this.$el, tp, placement, actualWidth, actualHeight;
+
+      placement = this.placement;
+
+      $tip.css({ top: 0, left: 0, display: 'block' });
+
+      actualWidth = $tip[0].offsetWidth;
+      actualHeight = $tip[0].offsetHeight;
+
+      switch (placement) {
+        case 'bottom':
+          tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
+          break;
+        case 'top':
+          tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
+          break;
+        case 'left':
+          tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth};
+          break;
+        case 'right':
+          tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width};
+          break;
       }
-      this.applyPlacement(tp);
+      
+      this.applyPlacement(tp, placement);
+      this.backdrop.show();
       this.opened = true;
-      if(this.button){
-        this.button.$el.addClass('active');
+
+      if(this.triggerView){
+        this.triggerView.$el.addClass('active');
+      }
+
+      this.uiEventTrigger('show', this);
+    },
+    applyPlacement: function(offset, placement){
+      var $el = this.$el,
+        $tip = this.$('.popover'),
+        width = $tip[0].offsetWidth,
+        height = $tip[0].offsetHeight,
+        actualWidth,
+        actualHeight,
+        delta,
+        replace;
+
+      $el.offset(offset)
+        .addClass(placement)
+        .addClass('in').show();
+
+      actualWidth = $tip[0].offsetWidth;
+      actualHeight = $tip[0].offsetHeight;
+
+      if (placement === 'top' && actualHeight !== height) {
+        offset.top = offset.top + height - actualHeight;
+        replace = true;
+      }
+
+      if (placement === 'bottom' || placement === 'top') {
+        delta = 0;
+
+        if (offset.left < 0){
+          delta = offset.left * -2;
+          offset.left = 0;
+          $el.offset(offset);
+          actualWidth = $tip[0].offsetWidth;
+          actualHeight = $tip[0].offsetHeight;
+        }
+
+        this.positionArrow(delta - width + actualWidth, actualWidth, 'left');
+
+      } else {
+        this.positionArrow(actualHeight - height, actualHeight, 'top');
+      }
+
+      if (replace) {
+        $el.offset(offset);
       }
     },
-    applyPlacement: function(offset){
-      var $tip = this.$('.popover');
-      $tip.css({left: 0, top: 0, position: 'fixed'}).
-        offset(offset).addClass(this.placement).addClass('in').
-        addClass('align-' + this.alignment);
-      if(this.alignment === 'left'){
-        this.$('.arrow').css('left', '22px');
-      }else{
-        this.$('.arrow').css('left', (this.$('.popover').width() - 25) + 'px');
-      }
-      $tip.show();
+    positionArrow: function(delta, dimension, position) {
+      var $arrow = this.$('.arrow');
+      $arrow.css(position, delta ? (50 * (1 - delta / dimension) + "%") : '');
     },
     hide: function(){
       this.opened = false;
       this.$('.popover').hide();
-      if(this.button){
-        this.button.$el.removeClass('active');
+      if(this.triggerView){
+        this.triggerView.$el.removeClass('active');
       }
+      this.uiEventTrigger('hide', this);
     },
-    showItemsClicked: function(button, e){
+    toggle: function(button, e){
       if(this.opened){
         this.hide();
       } else {

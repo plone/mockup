@@ -59,10 +59,9 @@ define([
         title: 'Query'
       });
       this.popover = new PopoverView({
-        button: this.button,
+        triggerView: this.button,
         title: _.template('Query'),
-        content: this.popoverContent,
-        alignment: "right"
+        content: this.popoverContent
       });
       this.$('div.input-append').append(this.button.render().el);
       this.$el.append(this.popover.render().el);

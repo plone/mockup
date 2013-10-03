@@ -122,7 +122,7 @@ define([
 
       self.wellView = new SelectionWellView({
         collection: self.selectedCollection,
-        button: self.toolbar.get('selected'),
+        triggerView: self.toolbar.get('selected'),
         app: self
       });
 
@@ -131,14 +131,9 @@ define([
         var name = key.split('.');
         var group = name[0];
         var buttonName = name[1];
-        var alignment = 'left';
-        if(group === 'secondary'){
-          alignment = 'right';
-        }
         self.buttonViews[key] = new ViewClass({
-          button: self.buttons[group].get(buttonName),
-          app: self,
-          alignment: alignment
+          triggerView: self.buttons[group].get(buttonName),
+          app: self
         });
       });
 
@@ -337,7 +332,7 @@ define([
 
       self.columnsView = new ColumnsView({
         app: self,
-        button: columnsBtn
+        triggerView: columnsBtn
       });
       items.push(columnsBtn);
 
