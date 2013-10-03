@@ -28,13 +28,15 @@ define([
   'underscore',
   'backbone',
   'js/ui/views/container',
+  'mockup-patterns-backdrop',
   'text!js/ui/templates/popover.tmpl'
-], function($, _, Backbone, ContainerView, PopoverTemplate) {
+], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
   "use strict";
 
   var PopoverView = ContainerView.extend({
     tagName: 'div',
     className: 'popoverview',
+    eventPrefix: 'popover',
     template: PopoverTemplate,
     content: null,
     title: null,
@@ -46,13 +48,35 @@ define([
     events: {
     },
     opened: false,
+    closeOnOutClick: true,
     appendInContainer: true,
+    useBackdrop: true,
+    backdropOptions: {
+      zIndex: "1009",
+      opacity: "0.4",
+      className: "backdrop backdrop-popover",
+      classActiveName: "backdrop-active",
+      closeOnEsc: false,
+      closeOnClick: true
+    },
     afterRender: function () {
       var self = this;
       this.bindTriggerEvents();
 
       this.$('.popover-title').append(this.title(this.options));
       this.$('.popover-content').append(this.content(this.options));
+
+      if (this.useBackdrop === true) {
+        this.backdrop = new Backdrop($('body'), this.backdropOptions);
+        this.backdrop.on('hidden', function(e) {
+          if (self.opened === true) {
+            self.hide();
+          }
+        });
+        this.on('popover:hide', function() {
+          this.backdrop.hide();
+        }, this);
+      }
     },
     bindTriggerEvents: function() {
       if (this.triggerView) {
@@ -100,7 +124,14 @@ define([
       }
       
       this.applyPlacement(tp, placement);
+      this.backdrop.show();
       this.opened = true;
+
+      if(this.triggerView){
+        this.triggerView.$el.addClass('active');
+      }
+
+      this.uiEventTrigger('show', this);
     },
     applyPlacement: function(offset, placement){
       var $el = this.$el,
@@ -152,9 +183,10 @@ define([
     hide: function(){
       this.opened = false;
       this.$('.popover').hide();
-      if(this.button){
-        this.button.$el.removeClass('active');
+      if(this.triggerView){
+        this.triggerView.$el.removeClass('active');
       }
+      this.uiEventTrigger('hide', this);
     },
     toggle: function(button, e){
       if(this.opened){

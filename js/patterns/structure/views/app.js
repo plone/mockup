@@ -332,7 +332,7 @@ define([
 
       self.columnsView = new ColumnsView({
         app: self,
-        button: columnsBtn
+        triggerView: columnsBtn
       });
       items.push(columnsBtn);
 
