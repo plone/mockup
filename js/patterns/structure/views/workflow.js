@@ -32,7 +32,7 @@ define([
   "use strict";
 
   var WorkflowView = PopoverView.extend({
-    className: 'popoverview workflow',
+    className: 'popover workflow',
     title: _.template('Modify dates on items'),
     content: _.template(
       '<form>' +
@@ -78,11 +78,11 @@ define([
       if(this.$('[name="recurse"]')[0].checked){
         data.recurse = 'yes';
       }
-      this.app.defaultButtonClickEvent(this.button, data);
+      this.app.defaultButtonClickEvent(this.triggerView, data);
       this.hide();
     },
-    showItemsClicked: function(button, e){
-      PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
+    toggle: function(button, e){
+      PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
       if(!self.opened){
         return;

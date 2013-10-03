@@ -32,7 +32,7 @@ define([
   "use strict";
 
   var DeleteView = PopoverView.extend({
-    className: 'popoverview delete',
+    className: 'popover delete',
     title: _.template('Delete selected items'),
     content: _.template(
       '<label>Are you certain you want to delete the selected items</label>' +
@@ -51,7 +51,7 @@ define([
     },
     applyButtonClicked: function(e){
       var self = this;
-      this.app.defaultButtonClickEvent(this.button, {}, function(data){
+      this.app.defaultButtonClickEvent(this.triggerView, {}, function(data){
         self.app.selectedCollection.reset();
       });
       this.hide();

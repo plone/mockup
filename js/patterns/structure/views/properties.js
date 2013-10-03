@@ -34,7 +34,7 @@ define([
   "use strict";
 
   var PropertiesView = PopoverView.extend({
-    className: 'popoverview properties',
+    className: 'popover properties',
     title: _.template('Modify properties on items'),
     content: _.template(
       '<label>Publication Date</label>' +
@@ -99,11 +99,11 @@ define([
       if(this.$('[name="exclude-from-nav"]:checked').length > 0){
         data.exclude_from_nav = this.$('[name="exclude-from-nav"]:checked').val();
       }
-      this.app.defaultButtonClickEvent(this.button, data);
+      this.app.defaultButtonClickEvent(this.triggerView, data);
       this.hide();
     },
-    showItemsClicked: function(button, e){
-      PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
+    toggle: function(button, e){
+      PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
       if(!this.opened){
         return;

@@ -35,7 +35,7 @@ define([
 
   var PopoverView = ContainerView.extend({
     tagName: 'div',
-    className: 'popoverview',
+    className: 'popover',
     eventPrefix: 'popover',
     template: PopoverTemplate,
     content: null,
@@ -100,8 +100,7 @@ define([
     },
     show: function(){
       var pos = this.getPosition();
-      var $tip = this.$('.popover');
-      var $el = this.$el, tp, placement, actualWidth, actualHeight;
+      var $tip = this.$el, tp, placement, actualWidth, actualHeight;
 
       placement = this.placement;
 
@@ -137,7 +136,7 @@ define([
     },
     applyPlacement: function(offset, placement){
       var $el = this.$el,
-        $tip = this.$('.popover'),
+        $tip = this.$el,
         width = $tip[0].offsetWidth,
         height = $tip[0].offsetHeight,
         actualWidth,
@@ -184,7 +183,7 @@ define([
     },
     hide: function(){
       this.opened = false;
-      this.$('.popover').hide();
+      this.$el.hide();
       if(this.triggerView){
         this.triggerView.$el.removeClass('active');
       }

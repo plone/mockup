@@ -32,7 +32,7 @@ define([
   "use strict";
 
   var PropertiesView = PopoverView.extend({
-    className: 'popoverview rename',
+    className: 'popover rename',
     title: _.template('Rename items'),
     content: _.template(
       '<div class="itemstoremove"></div>' +
@@ -69,13 +69,13 @@ define([
         });
       });
       var self = this;
-      this.app.defaultButtonClickEvent(this.button, {
+      this.app.defaultButtonClickEvent(this.triggerView, {
         torename: JSON.stringify(torename)
       });
       this.hide();
     },
-    showItemsClicked: function(button, e){
-      PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
+    toggle: function(button, e){
+      PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
       if(!self.opened){
         return;

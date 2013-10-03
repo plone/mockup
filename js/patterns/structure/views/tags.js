@@ -70,14 +70,14 @@ define([
       return values;
     },
     applyButtonClicked: function(e){
-      this.app.defaultButtonClickEvent(this.button, {
+      this.app.defaultButtonClickEvent(this.triggerView, {
         remove: JSON.stringify(this.getSelect2Values(this.$remove)),
         add: JSON.stringify(this.getSelect2Values(this.$add))
       });
       this.hide();
     },
-    showItemsClicked: function(button, e){
-      PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
+    toggle: function(button, e){
+      PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
       if(!this.opened){
         return;

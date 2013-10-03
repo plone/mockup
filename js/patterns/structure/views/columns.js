@@ -33,7 +33,7 @@ define([
   "use strict";
 
   var ColumnsView = PopoverView.extend({
-    className: 'popoverview columns',
+    className: 'popover columns',
     title: _.template('Columns'),
     content: _.template(
       '<label>Select columns to show, drag and drop to reorder</label>' +

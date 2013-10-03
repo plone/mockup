@@ -33,7 +33,7 @@ define([
   "use strict";
 
   var WellView = PopoverView.extend({
-    className: 'popoverview selected',
+    className: 'popover selected',
     title: _.template('<input type="text" class="filter" placeholder="Filter" />' +
                       '<a href="#" class="icon-remove-sign remove-all">remove all</a>'),
     content: _.template(
