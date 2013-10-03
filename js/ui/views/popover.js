@@ -51,7 +51,7 @@ define([
     closeOnOutClick: true,
     appendInContainer: true,
     backdrop: undefined,
-    useBackdrop: true,
+    useBackdrop: false,
     backdropOptions: {
       zIndex: "1009",
       opacity: "0.4",
