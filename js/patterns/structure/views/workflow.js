@@ -90,7 +90,7 @@ define([
       self.$comments.val('');
       self.$transition.empty();
       $.ajax({
-        url: self.button.url,
+        url: button.url,
         type: 'GET',
         data: {
           selection: JSON.stringify(self.app.getSelectedUids()),
