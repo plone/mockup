@@ -48,6 +48,7 @@ define([
         self.$backdrop= $('<div/>')
             .hide()
             .appendTo(self.$el)
+            .css('z-index', self.options.zIndex)
             .addClass(self.options.className);
       }
       if (self.options.closeOnEsc === true) {
