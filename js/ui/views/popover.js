@@ -50,6 +50,7 @@ define([
     opened: false,
     closeOnOutClick: true,
     appendInContainer: true,
+    backdrop: undefined,
     useBackdrop: true,
     backdropOptions: {
       zIndex: "1009",
@@ -66,7 +67,7 @@ define([
       this.$('.popover-title').append(this.title(this.options));
       this.$('.popover-content').append(this.content(this.options));
 
-      if (this.useBackdrop === true) {
+      if (this.useBackdrop === true && this.backdrop === undefined) {
         this.backdrop = new Backdrop($('body'), this.backdropOptions);
         this.backdrop.on('hidden', function(e) {
           if (self.opened === true) {
@@ -85,6 +86,7 @@ define([
           if (!method) {
             $.error('Function not found.');
           }
+          this.stopListening(this.triggerView, event);
           this.listenTo(this.triggerView, event, method);
         }, this);
       }
