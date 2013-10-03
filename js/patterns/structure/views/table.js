@@ -31,8 +31,10 @@ define([
   'text!js/patterns/structure/templates/table.tmpl',
   'js/patterns/structure/views/contextmenu',
   'js/ui/views/base',
-  'mockup-patterns-dragdrop'
-], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu, BaseView, DragDrop) {
+  'mockup-patterns-dragdrop',
+  'mockup-patterns-moment'
+], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu, BaseView,
+            DragDrop, Moment) {
   "use strict";
 
   var TableView = BaseView.extend({
@@ -90,6 +92,11 @@ define([
           container.append(view.el);
         });
       }
+
+      self.moment = new Moment(self.$el, {
+        selector: '.ModificationDate,.EffectiveDate,.CreationDate',
+        format: 'relative'
+      });
       self.addReordering();
       self.storeOrder();
       return this;

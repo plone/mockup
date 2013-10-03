@@ -56,9 +56,9 @@ define([
         'review_state'
       ],
       availableColumns: {
-        'ModificationDate': 'Modification date',
-        'EffectiveDate': 'Publication date',
-        'CreationDate': 'Creation date',
+        'ModificationDate': 'Last modified',
+        'EffectiveDate': 'Published',
+        'CreationDate': 'Created',
         'review_state': 'Review state',
         'Subject': 'Tags',
         'Type': 'Type',

@@ -5,6 +5,6 @@
   </a>
 </td>
 <% _.each(activeColumns, function(column){ %>
-  <td><%- attributes[column] %></td>
+  <td class="<%- column %>"><%- attributes[column] %></td>
 <% }); %>
 
