@@ -131,14 +131,9 @@ define([
         var name = key.split('.');
         var group = name[0];
         var buttonName = name[1];
-        var alignment = 'left';
-        if(group === 'secondary'){
-          alignment = 'right';
-        }
         self.buttonViews[key] = new ViewClass({
-          button: self.buttons[group].get(buttonName),
-          app: self,
-          alignment: alignment
+          triggerView: self.buttons[group].get(buttonName),
+          app: self
         });
       });
 
