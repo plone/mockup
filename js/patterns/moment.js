@@ -37,37 +37,40 @@ define([
     name: 'moment',
     defaults: {
       // selector of elements to format dates for
-      selector: '.date',
+      selector: null,
       // also available options are relative, calendar
       format: 'MMMM Do YYYY, h:mm:ss a'
     },
+    convert: function($el){
+      var self = this;
+      var date = $el.attr('data-date');
+      if(!date){
+        date = $.trim($el.html());
+      }
+      date = moment(date);
+      if(!date.isValid()){
+        return;
+      }
+      if(self.options.format === 'relative'){
+        date = date.fromNow();
+      }else if(self.options.format === 'calendar'){
+        date = date.calendar();
+      }else{
+        date = date.format(self.options.format);
+      }
+      if(date){
+        $el.html(date);
+      }
+    },
     init: function() {
       var self = this;
-      self.$el.find(self.options.selector).each(function(){
-        var $el = $(this);
-        var date = $el.attr('data-date');
-        if(!date){
-          date = $.trim($el.html());
-        }
-        try{
-          date = moment(date);
-          if(!date.isValid()){
-            return;
-          }
-          if(self.options.format === 'relative'){
-            date = date.fromNow();
-          }else if(self.options.format === 'calendar'){
-            date = date.calendar();
-          }else{
-            date = date.format(self.options.format);
-          }
-          if(date){
-            $el.html(date);
-          }
-        }catch(e){
-          // no successful parsing, ignore
-        }
-      });
+      if(self.options.selector){
+        self.$el.find(self.options.selector).each(function(){
+          self.convert($(this));
+        });
+      }else{
+        self.convert(self.$el);
+      }
     }
   });
 
