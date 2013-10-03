@@ -122,7 +122,7 @@ define([
 
       self.wellView = new SelectionWellView({
         collection: self.selectedCollection,
-        button: self.toolbar.get('selected'),
+        triggerView: self.toolbar.get('selected'),
         app: self
       });
 
