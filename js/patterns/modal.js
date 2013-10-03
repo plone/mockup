@@ -411,10 +411,11 @@ define([
 
       self.$wrapper = $('> .' + self.options.templateOptions.classWrapperName, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
+        var zIndex = self.options.backdropOptions.zIndex !== null ? parseInt(self.options.backdropOptions.zIndex, 10) + 1 : 1041;
         self.$wrapper = $('<div/>')
           .hide()
           .css({
-            'z-index': parseInt(self.options.backdropOptions.zIndex, 10) + 1,
+            'z-index': zIndex,
             'overflow-y': 'auto',
             'position': 'fixed',
             'height': '100%',

@@ -34,7 +34,7 @@ define([
   var Backdrop = Base.extend({
     name: "backdrop",
     defaults: {
-      zIndex: "1000",
+      zIndex: null,
       opacity: "0.8",
       className: "backdrop",
       classActiveName: 'backdrop-active',
@@ -45,11 +45,13 @@ define([
       var self = this;
       self.$backdrop = $('> .' + self.options.className, self.$el);
       if (self.$backdrop.size() === 0) {
-        self.$backdrop= $('<div/>')
+        self.$backdrop = $('<div/>')
             .hide()
             .appendTo(self.$el)
-            .css('z-index', self.options.zIndex)
             .addClass(self.options.className);
+        if (self.options.zIndex !== null) {
+          self.$backdrop.css('z-index', self.options.zIndex);
+        }
       }
       if (self.options.closeOnEsc === true) {
         $(document).on('keydown', function(e, data) {
