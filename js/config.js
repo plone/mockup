@@ -20,6 +20,7 @@ var requirejsOptions = {
     'picker.date': 'bower_components/pickadate/lib/picker.date',
     'picker.time': 'bower_components/pickadate/lib/picker.time',
     'moment': 'bower_components/moment/moment',
+    'ace': "bower_components/ace/lib/ace",
     'jquery.event.drag': 'lib/jquery.event.drag',
     'jquery.event.drop': 'lib/jquery.event.drop',
     'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
@@ -58,6 +59,7 @@ var requirejsOptions = {
     'mockup-patterns-structure': 'js/patterns/structure/pattern',
     'mockup-patterns-dragdrop': 'js/patterns/dragdrop',
     'mockup-patterns-moment': 'js/patterns/moment',
+    'mockup-patterns-ace': 'js/patterns/ace',
   },
   shim: {
     'underscore': { exports: 'window._' },
@@ -86,11 +88,13 @@ var requirejsOptions = {
         this.tinyMCE.DOM.events.domLoaded = true;
         return this.tinyMCE;
       }
+    },
+    'ace': {
+      init: function(){
+        debugger;
+      }
     }
   },
-  text: {
-    env: 'xhr'
-  }
 };
 
 if (typeof exports !== "undefined" && typeof module !== "undefined") {

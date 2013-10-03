@@ -42,9 +42,11 @@ define([
   'text!js/patterns/tinymce/templates/upload.tmpl',
   'text!js/patterns/tinymce/templates/link.tmpl',
   'text!js/patterns/tinymce/templates/result.tmpl',
-  'text!js/patterns/tinymce/templates/selection.tmpl'
+  'text!js/patterns/tinymce/templates/selection.tmpl',
+  'mockup-utils'
 ], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, dropzone,
-            UploadTemplate, LinkTemplate, ResultTemplate, SelectionTemplate) {
+            UploadTemplate, LinkTemplate, ResultTemplate, SelectionTemplate,
+            utils) {
   "use strict";
 
   /* register the tinymce plugin */
@@ -824,16 +826,7 @@ define([
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
-      var id = self.$el.attr('id');
-      if(id === undefined){
-        id = 'tiny' + (Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16).substring(1));
-      } else {
-        /* hopefully we don't screw anything up here... changing the id 
-         * in some cases so we get a decent selector */
-        id = id.replace(/\./g, '-');
-      }
-      self.$el.attr('id', id);
+      var id = utils.setId(self.$id);
       var tinyOptions = self.options.tiny;
       tinyOptions.selector = '#' + id;
       tinyOptions.addLinkClicked = function(){

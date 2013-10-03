@@ -24,6 +24,7 @@ module.exports = function(grunt) {
   karma_files.push({pattern: 'js/patterns/structure/**/*.js', included: false});
   karma_files.push({pattern: 'js/patterns/structure/**/*.tmpl', included: false});
   karma_files.push({pattern: 'js/patterns/tinymce/templates/*.tmpl', included: false});
+
   karma_files.push('js/config.js');
   karma_files.push('tests/config.js');
 

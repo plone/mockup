@@ -36,6 +36,28 @@ define([
     parseBodyTag: function(txt){
       return $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(txt)[0]
           .replace('<body', '<div').replace('</body>', '</div>')).eq(0).html();
+    },
+    setId: function($el, prefix){
+      if(prefix === undefined){
+        prefix = 'id';
+      }
+      var id = $el.attr('id');
+      if(id === undefined){
+        id = prefix + (Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16).substring(1));
+      } else {
+        /* hopefully we don't screw anything up here... changing the id 
+         * in some cases so we get a decent selector */
+        id = id.replace(/\./g, '-');
+      }
+      $el.attr('id', id);
+      return id;
+    },
+    bool: function(val){
+      if(typeof(val) === 'string'){
+        val = $.trim(val).toLowerCase();
+      }
+      return ['true', true, 1].indexOf(val) !== -1;
     }
   };
 

@@ -2274,6 +2274,58 @@ function($action, response, options) { ... }
   </script>
 
 
+  <!--  **** Ace Editor **** -->
+  <script>
+    addPattern({
+      id: 'ace',
+      title: "Ace File Editor",
+      description: "Edit files in the browser",
+      attributes: [
+        {attribute: 'theme', type: 'String', defaultValue: 'null', description: 'Theme to use with editor. defaults to whatever it ships with'},
+        {attribute: 'mode', type: 'String', defaultValue: 'text', description: 'What type of syntax is it?'},
+        {attribute: 'width', type: 'Integer', defaultValue: '500', description: 'Width of the editor'},
+        {attribute: 'height', type: 'Integer', defaultValue: '200', description: 'Height of the editor'},
+        {attribute: 'tabSize', type: 'Integer', defaultValue: '4', description: ''},
+        {attribute: 'softTabs', type: 'Boolean', defaultValue: 'true', description: 'use spaces for tabs'},
+        {attribute: 'wrapMode', type: 'Boolean', defaultValue: 'false', description: 'wrap text'},
+        {attribute: 'showGutter', type: 'Boolean', defaultValue: 'true', description: ''},
+        {attribute: 'showPrintMargin', type: 'Boolean', defaultValue: 'false', description: 'show print margin'},
+        {attribute: 'readOnly', type: 'Boolean', defaultValue: 'false', description: 'read only editor'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-ace" data-title="Default">
+    <pre class="pat-ace" data-pat-ace="theme:clouds">
+      foobar
+    </pre>
+  </script>
+
+  <script type="text/example" class="example-ace" data-title="Mode">
+    <pre class="pat-ace" data-pat-ace="mode:javascript;
+                                       theme:dawn;">
+var foo = 'bar';
+function foobar(){
+  return foo;
+}
+    </pre>
+  </script>
+
+  <script type="text/example" class="example-ace" data-title="Options">
+<pre class="pat-ace" data-pat-ace="mode:javascript;
+                                   theme:ambiance;
+                                   tabSize:2;
+                                   showGutter:false;
+                                   showPrintMargin:true;">
+var foo = 'bar';
+function foobar(){
+  return foo;
+}
+</pre>
+</script>
+
+
+
+
 </head>
 
 <body>

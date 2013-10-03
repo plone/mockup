@@ -26,7 +26,8 @@ define([
   ];
   server.xhr.addFilter(function(method, url) {
     //whenever the this returns true the request will not faked
-    return url.indexOf('tests/json/') !== -1 || url.indexOf('.html') !== -1;
+    return url.indexOf('tests/json/') !== -1 || url.indexOf('.html') !== -1 ||
+           url.indexOf('ace/lib') !== -1;
   });
   server.autoRespond = true;
   server.autoRespondAfter = 200;
