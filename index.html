@@ -2185,8 +2185,6 @@ function($action, response, options) { ... }
       ]
     });
   </script>
-  <script type="text/template" id="page_structure">
-  </script>
   <script type="text/example" class="example-dragdrop" data-title="Default">
     <ul class="pat-dragdrop">
       <li>One</li>
@@ -2211,6 +2209,58 @@ function($action, response, options) { ... }
         </tr>
       </tbody>
     </table>
+  </script>
+
+  
+  <!--  **** Moment **** -->
+  <script>
+    addPattern({
+      id: 'moment',
+      title: "Moment",
+      description: "Date parsing",
+      attributes: [
+        {attribute: 'selector', type: 'String', defaultValue: 'null', description: 'selector to use to look for dates to format'},
+        {attribute: 'format', type: 'String', defaultValue: 'MMMM Do YYYY, h:mm:ss a', description: 'Format to use to render date. Also available is "relative" and "calendar" formats.'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-moment" data-title="Default">
+    <ul class="pat-moment" data-pat-moment="selector:li">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-01-01T22:10:00-05:00</li>
+      <li>2013-01-05T04:34:00-05:00</li>
+      <li>2013-02-14T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Relative format">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:relative;">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-01-01T22:10:00-05:00</li>
+      <li>2013-01-05T04:34:00-05:00</li>
+      <li>2013-02-14T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Calendar format">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:calendar;">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-10-02T22:10:00-05:00</li>
+      <li>2013-10-05T04:34:00-05:00</li>
+      <li>2013-10-03T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Custom format">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:MMM Do, YYYY h:m a;">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-01-01T22:10:00-05:00</li>
+      <li>2013-01-05T04:34:00-05:00</li>
+      <li>2013-02-14T16:55:00-05:00</li>
+    </ul>
   </script>
 
 

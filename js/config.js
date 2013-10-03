@@ -19,6 +19,7 @@ var requirejsOptions = {
     'picker': 'bower_components/pickadate/lib/picker',
     'picker.date': 'bower_components/pickadate/lib/picker.date',
     'picker.time': 'bower_components/pickadate/lib/picker.time',
+    'moment': 'bower_components/moment/moment',
     'jquery.event.drag': 'lib/jquery.event.drag',
     'jquery.event.drop': 'lib/jquery.event.drop',
     'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
@@ -56,6 +57,7 @@ var requirejsOptions = {
     'mockup-bundles-tiles': 'js/bundles/widgets',
     'mockup-patterns-structure': 'js/patterns/structure/pattern',
     'mockup-patterns-dragdrop': 'js/patterns/dragdrop',
+    'mockup-patterns-moment': 'js/patterns/moment',
   },
   shim: {
     'underscore': { exports: 'window._' },
