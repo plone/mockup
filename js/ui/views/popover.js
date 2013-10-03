@@ -123,9 +123,11 @@ define([
           tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width};
           break;
       }
-      
+
       this.applyPlacement(tp, placement);
-      this.backdrop.show();
+      if(this.useBackdrop === true){
+        this.backdrop.show();
+      }
       this.opened = true;
 
       if(this.triggerView){
