@@ -1,4 +1,4 @@
-// expose pattern.
+// backdrop pattern.
 //
 // Author: Rok Garbas
 // Contact: rok@garbas.si

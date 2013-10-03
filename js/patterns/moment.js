@@ -3,7 +3,6 @@
 // Author: Nathan Van Gheem
 // Contact: nathan@vangheem.us
 // Version: 1.0
-// Depends:
 //
 // Description:
 //

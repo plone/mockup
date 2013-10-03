@@ -43,7 +43,7 @@ define([
     },
     init: function() {
       var self = this;
-      
+
       self.on(self.options.event_enter, function(e) {
         e.stopPropagation();
         self.show(e);
@@ -52,21 +52,21 @@ define([
         e.stopPropagation();
         self.hide(e);
       });
-      
+
     },
-    
+
     show : function(e) {
         var s = $(e.target).attr('href');
         $(s).addClass('active');
     },
-    
+
     hide : function(e) {
         var s = $(e.target).attr('href');
         $(s).removeClass('active');
     }
-    
+
   });
-  
+
 
   return ToolTip;
 

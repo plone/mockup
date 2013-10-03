@@ -1,4 +1,4 @@
-// tabs pattern.
+// toggle pattern.
 //
 // Author: Rok Garbas
 // Contact: rok@garbas.si

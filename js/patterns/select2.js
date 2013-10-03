@@ -1,11 +1,8 @@
-// plone integration for textext.
+// plone integration for select2
 //
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
+// Author: Rok Garbas
+// Contact: rok@garbas.si
 // Version: 1.0
-// Depends:
-//    ++resource++plone.app.jquery.js
-//    ++resource++plone.app.widgets/textext.js
 //
 // Description:
 //
