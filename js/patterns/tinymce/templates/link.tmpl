@@ -1,0 +1,114 @@
+<div>
+  <div class="linkModal">
+    <h1><%- insertHeading %></h1>
+    <div class="linkTypes">
+      <% _.each(linkTypes, function(type){ %>
+        <label>
+          <input name="linktype" type="radio"
+                 value="<%- type %>" />
+            <%- text[type] %>
+        </label>
+      <% }); %>
+    <div>
+    <hr style="clear:both" />
+    <div class="internal linkType">
+      <input type="text" name="internal" value="<%- uid %>" />
+    </div>
+    <div class="image linkType">
+      <input type="text" name="image" value="<%- uid %>" />
+    </div>
+    <div class="control-group external linkType">
+      <label><%- externalText %></label>
+      <div class="controls">
+        <input type="text" name="external" value="<%- external %>" />
+      </div>
+    </div>
+    <div class="control-group email linkType">
+      <label><%- emailText %></label>
+      <div class="controls">
+        <input type="text" name="email" value="<%- email %>" />
+      </div>
+    </div>
+    <div class="control-group email linkType">
+      <label><%- subjectText %></label>
+      <div class="controls">
+        <input type="text" name="subject" value="<%- subject %>" />
+      </div>
+    </div>
+    <div class="control-group anchor linkType">
+      <label>Select an anchor</label>
+      <div class="controls">
+        <select name="anchor" class="pat-select2" data-pat-select2="width:500px"
+                value="<%- anchor %>" />
+      </div>
+    </div>
+    <div class="control-group linkType anchor email external internal">
+      <div class="controls">
+        <select name="target">
+          <% _.each(targetList, function(target){ %>
+            <option value="<%- target.value %>"
+              <% if(target.value === selectedTarget){ %>
+                selected="selected"
+              <% } %>
+              ><%- target.text %></option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
+    <div class="control-group linkType anchor email external internal">
+      <label><%- titleText %></label>
+      <div class="controls">
+        <input type="text" name="title" value="<%- title %>" />
+      </div>
+    </div>
+    <div class="control-group linkType externalImage">
+      <label><%- externalImageText %></label>
+      <div class="controls">
+        <input type="text" name="externalImage" '
+        '       value="<%- externalImage %>" />
+      </div>
+    </div>
+    <div class="control-group linkType image externalImage">
+      <label><%- altText %></label>
+      <div class="controls">
+        <input type="text" name="alt" value="<%- alt %>" />
+      </div>
+    </div>
+    <div class="control-group linkType image externalImage">
+      <label><%- imageAlignText %></label>
+      <div class="controls">
+        <select name="align">
+          <% _.each(['inline', 'right', 'left'], function(align){ %>
+              <option value="<%- align %>"
+                <% if(align === selectedAlign){ %>
+                   selected="selected"
+                <% } %>
+              >
+              <%- align.charAt(0).toUpperCase() + align.slice(1) %>
+              </option>
+          <% }); %>
+        <select>
+      </div>
+    </div>
+    <div class="control-group linkType image">
+      <label><%- scaleText %></label>
+      <div class="controls">
+        <select name="scale">
+          <option value="">Original</option>
+            <% _.each(scales.split(','), function(scale){ %>
+              <% var scale = scale.split(':'); %>
+              <option value="<%- scale[1] %>"
+              <% if(scale[1] === selectedScale){ %>
+                selected="selected"
+              <% } %>
+              >
+            <%- scale[0] %>
+            </option>
+            <% }); %>
+        </select>
+      </div>
+    </div>
+    <input type="submit" class="btn" name="cancel" value="<%- cancelBtn %>" />
+    <input type="submit" class="btn btn-primary" name="insert" value="<%- insertBtn %>" />
+  </div>
+</div>

@@ -90,7 +90,6 @@ define([
       setupAjax: function() {
         // Setup the ajax object to use during requests
         var self = this;
-
         self.query = new QueryHelper(self.$el,
         $.extend(true, {}, self.options, {basePattern: self}));
 
