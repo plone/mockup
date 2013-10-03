@@ -88,13 +88,8 @@ var requirejsOptions = {
         this.tinyMCE.DOM.events.domLoaded = true;
         return this.tinyMCE;
       }
-    },
-    'ace': {
-      init: function(){
-        debugger;
-      }
     }
-  },
+  }
 };
 
 if (typeof exports !== "undefined" && typeof module !== "undefined") {

@@ -826,7 +826,7 @@ define([
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
-      var id = utils.setId(self.$id);
+      var id = utils.setId(self.$el);
       var tinyOptions = self.options.tiny;
       tinyOptions.selector = '#' + id;
       tinyOptions.addLinkClicked = function(){
