@@ -55,7 +55,7 @@ define([
     });
 
     it('creates tinymce', function(){
-      var $el = $('' +
+      var $el = $(
        '<div>' +
        '  <textarea class="pat-tinymce">' +
        '  </textarea>' +
@@ -66,7 +66,7 @@ define([
     });
 
     it('maintains an initial textarea value', function(){
-      var $el = $('' +
+      var $el = $(
        '<div>' +
        '  <textarea class="pat-tinymce">' +
        '    foobar' +
@@ -77,7 +77,7 @@ define([
     });
 
     it('loads buttons for plugins', function() {
-      var $el = $('' +
+      var $el = $(
        '<div>' +
        '  <textarea class="pat-tinymce">' +
        '  </textarea>' +
@@ -85,6 +85,54 @@ define([
       registry.scan($el);
       expect(tinymce.get(0).buttons).to.contain.keys('plonelink', 'ploneimage');
     });
+
+    it('on form submit, save data to form', function(){
+      var $container = $(
+       '<form>' +
+       '  <textarea class="pat-tinymce">' +
+       '  </textarea>' +
+       '</form>').appendTo('body');
+
+      var $el = $container.find('textarea');
+      var tinymce = new TinyMCE($el);
+      tinymce.tiny.setContent('<p>foobar</p>');
+      $container.submit(function(e){
+        e.preventDefault();
+      });
+      $container.trigger('submit');
+
+      expect($el.val()).to.equal('<p>foobar</p>');
+    });
+
+    it('auto adds image on upload', function(){
+      var $el = $(
+       '<textarea class="pat-tinymce">' +
+       '</textarea>').appendTo('body');
+
+      var tinymce = new TinyMCE($el);
+
+      tinymce.fileUploaded({
+        filename: 'foobar.png',
+        uid: 'foobar'
+      });
+      expect(tinymce.tiny.getContent()).to.contain('resolveuid/foobar');
+
+    });
+    it('auto adds link on file upload', function(){
+      var $el = $(
+       '<textarea class="pat-tinymce">' +
+       '</textarea>').appendTo('body');
+
+      var tinymce = new TinyMCE($el);
+
+      tinymce.fileUploaded({
+        filename: 'foobar.txt',
+        uid: 'foobar'
+      });
+      expect(tinymce.tiny.getContent()).to.contain('foobar.txt</a>');
+
+    });
+
   });
 
 });
