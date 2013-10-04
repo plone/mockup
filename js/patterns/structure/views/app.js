@@ -327,7 +327,7 @@ define([
 
       var columnsBtn = new ButtonView({
         id: 'columns',
-        icon: 'cog'
+        icon: 'columns'
       });
 
       self.columnsView = new ColumnsView({
@@ -456,7 +456,7 @@ define([
       } else {
         self.$el.addClass('ui-backdrop-element');
       }
-      
+
       return self;
     }
   });
