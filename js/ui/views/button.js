@@ -60,15 +60,8 @@ define([
       }, this);
 
       this.on('render', function() {
-
-      }, this);
-    },
-    render: function(){
-      this.$el.html(_.template(this.template, this.serializedModel()));
-      if(this.context){
         this.$el.addClass('btn-' + this.context);
-      }
-      return this;
+      }, this);
     },
     handleClick: function(e){
       e.preventDefault();
