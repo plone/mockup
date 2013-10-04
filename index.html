@@ -2323,7 +2323,57 @@ function foobar(){
 </pre>
 </script>
 
+  <!--  **** File Manager **** -->
 
+  <!--
+  <script>
+    addPattern({
+      id: 'tree',
+      title: "Tree",
+      description: "Manage tree of items",
+      attributes: [
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-tree" data-title="Default">
+    <div class="pat-tree" data-pat-tree="">
+      <ul>
+        <li>
+          <a href="#">Root node 1</a>
+          <ul>
+            <li>
+              <a href="#">Child node 1</a>
+            </li>
+            <li>
+              <a href="#">Child node 2</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Root node 2</a>
+        </li>
+      </ul>
+    </div>
+  </script>
+  -->
+
+  <!--  **** File Manager **** -->
+  <!--
+  <script>
+    addPattern({
+      id: 'filemanager',
+      title: "File Manager",
+      description: "Manage group of files in browser",
+      attributes: [
+        {attribute: 'aceConfig', type: 'JSON', defaultValue: '{}', description: 'Config to initialize ace with'},
+        {attribute: 'fileTreeUrl', type: 'JSON', defaultValue: 'null', description: 'url to return json data structure'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-filemanager" data-title="Default">
+    <div class="pat-filemanager" data-pat-filemanager="fileTreeUrl: /tests/json/fileTree.json" />
+  </script>
+  -->
 
 
 </head>
