@@ -2325,37 +2325,51 @@ function foobar(){
 
   <!--  **** File Manager **** -->
 
-  <!--
   <script>
     addPattern({
       id: 'tree',
       title: "Tree",
       description: "Manage tree of items",
       attributes: [
+        {attribute: 'data', type: 'JSON', defaultValue: 'undefined', description: 'load data structure directly into tree'},
+        {attribute: 'dataUrl', type: 'JSON', defaultValue: 'undefined', description: 'Load data from remote url'},
+        {attribute: 'autoOpen', type: 'Boolean', defaultValue: 'false', description: 'auto open tree contents'},
+        {attribute: 'dragAndDrop', type: 'Boolean', defaultValue: 'false', description: 'node drag and drop support'},
+        {attribute: 'selectable', type: 'Boolean', defaultValue: 'true', description: 'if nodes can be selectable'},
+        {attribute: 'keyboardSupport', type: 'Boolean', defaultValue: 'true', description: 'if keyboard naviation is allowed'}
       ]
     });
   </script>
-  <script type="text/example" class="example-tree" data-title="Default">
-    <div class="pat-tree" data-pat-tree="">
-      <ul>
-        <li>
-          <a href="#">Root node 1</a>
-          <ul>
-            <li>
-              <a href="#">Child node 1</a>
-            </li>
-            <li>
-              <a href="#">Child node 2</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">Root node 2</a>
-        </li>
-      </ul>
+  <script type="text/example" class="example-tree" data-title="JSON node data">
+    <div class="pat-tree" data-pat-tree='data:[
+      {"label": "node1",
+       "children": [{
+         "label": "child1"
+        },{
+         "label": "child2"
+        }]
+      },{
+       "label": "node2",
+       "children": [{
+         "label": "child3"
+        }]
+      }];'>
     </div>
   </script>
-  -->
+
+  <script type="text/example" class="example-tree" data-title="Remote data URL">
+    <div class="pat-tree" data-pat-tree="dataUrl:/tests/json/fileTree.json;
+                                         autoOpen:true">
+    </div>
+  </script>
+  <script type="text/example" class="example-tree" data-title="Drag and drop">
+    <div class="pat-tree" data-pat-tree="dataUrl:/tests/json/fileTree.json;
+                                         dragAndDrop: true;
+                                         autoOpen: true">
+    </div>
+  </script>
+
+
 
   <!--  **** File Manager **** -->
   <!--

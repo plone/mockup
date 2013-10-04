@@ -16,7 +16,8 @@
     "backbone.paginator": "0.8.1",
     "requirejs-text": "2.0.10",
     "moment": "2.2.1",
-    "ace": "1.1.1"
+    "ace": "1.1.1",
+    "jqtree": "0.18.0"
   },
   "devDependencies": {
     "chai": "1.7.2"

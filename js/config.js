@@ -21,6 +21,7 @@ var requirejsOptions = {
     'picker.time': 'bower_components/pickadate/lib/picker.time',
     'moment': 'bower_components/moment/moment',
     'ace': "bower_components/ace/lib/ace",
+    'jqtree': "bower_components/jqtree/tree.jquery",
     'jquery.event.drag': 'lib/jquery.event.drag',
     'jquery.event.drop': 'lib/jquery.event.drop',
     'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
