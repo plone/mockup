@@ -112,7 +112,17 @@ module.exports = function(grunt) {
         browsers: ['PhantomJS']
       },
       dev_chrome: {
-        browsers: ['Chrome']
+        browsers: ['Chrome'],
+        preprocessors: {},
+        reporters: ['dots', 'progress'],
+        plugins: [
+          'karma-mocha',
+          'karma-requirejs',
+          'karma-sauce-launcher',
+          'karma-chrome-launcher',
+          'karma-phantomjs-launcher',
+          'karma-junit-reporter'
+        ]
       },
       ci: {
         singleRun: true,
