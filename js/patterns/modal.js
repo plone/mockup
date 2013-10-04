@@ -209,6 +209,7 @@ define([
             },
             success: function(response, state, xhr, form) {
               // if error is found
+              // NOTE to self: fix dexterity problem here
               if ($(options.error, response).size() !== 0) {
                 if (options.onFormError) {
                   options.onFormError(self, response, state, xhr, form);
