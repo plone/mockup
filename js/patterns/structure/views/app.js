@@ -449,6 +449,14 @@ define([
           self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
         });
       }
+
+      // Backdrop class
+      if (self.options.backdropSelector !== null) {
+        $(self.options.backdropSelector).addClass('ui-backdrop-element');
+      } else {
+        self.$el.addClass('ui-backdrop-element');
+      }
+      
       return self;
     }
   });

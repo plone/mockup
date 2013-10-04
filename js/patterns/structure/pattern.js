@@ -46,6 +46,7 @@ define([
       indexOptionsUrl: null, // for querystring widget
       contextInfoUrl: null, // for add new dropdown and other info
       setDefaultPageUrl: null,
+      backdropSelector: '.modal', // Element upon which to apply backdrops used for popovers
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
                    'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',

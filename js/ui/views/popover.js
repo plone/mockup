@@ -51,7 +51,8 @@ define([
     closeOnOutClick: true,
     appendInContainer: true,
     backdrop: undefined,
-    useBackdrop: false,
+    $backdrop: null,
+    useBackdrop: true,
     backdropOptions: {
       zIndex: "1009",
       opacity: "0.4",
@@ -66,18 +67,6 @@ define([
 
       this.$('.popover-title').append(this.title(this.options));
       this.$('.popover-content').append(this.content(this.options));
-
-      if (this.useBackdrop === true && this.backdrop === undefined) {
-        this.backdrop = new Backdrop($('body'), this.backdropOptions);
-        this.backdrop.on('hidden', function(e) {
-          if (self.opened === true) {
-            self.hide();
-          }
-        });
-        this.on('popover:hide', function() {
-          this.backdrop.hide();
-        }, this);
-      }
     },
     bindTriggerEvents: function() {
       if (this.triggerView) {
@@ -117,9 +106,6 @@ define([
           tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
           break;
         case 'left':
-          console.log(pos);
-          console.log(actualWidth);
-          console.log(actualHeight);
           tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth};
           break;
         case 'right':
@@ -128,9 +114,12 @@ define([
       }
 
       this.applyPlacement(tp, placement);
+
+      this.setBackdrop();
       if(this.useBackdrop === true){
         this.backdrop.show();
       }
+
       this.opened = true;
 
       if(this.triggerView){
@@ -199,6 +188,26 @@ define([
         this.hide();
       } else {
         this.show();
+      }
+    },
+    setBackdrop: function() {
+      if (this.useBackdrop === true && this.backdrop === undefined) {
+        var self = this;
+        this.$backdrop = this.$el.closest('.ui-backdrop-element');
+        if (this.$backdrop.length === 0) {
+          this.$backdrop = $('body');
+        }
+      
+        this.backdrop = new Backdrop(this.$backdrop, this.backdropOptions);
+        this.backdrop.on('hidden', function(e) {
+          e.stopPropagation();
+          if (self.opened === true) {
+            self.hide();
+          }
+        });
+        this.on('popover:hide', function() {
+          this.backdrop.hide();
+        }, this);
       }
     }
   });
