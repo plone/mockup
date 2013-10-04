@@ -12,6 +12,7 @@ var requirejsOptions = {
     'backbone': 'bower_components/backbone/backbone',
     'backbone-paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
     'bootstrap-dropdown': 'bower_components/bootstrap/js/bootstrap-dropdown',
+    'bootstrap-tooltip': 'bower_components/bootstrap/js/bootstrap-tooltip',
     'select2': 'bower_components/select2/select2',
     'tinymce': 'lib/tinymce/tinymce.min',
     'chai': 'bower_components/chai/chai',
@@ -75,6 +76,8 @@ var requirejsOptions = {
     'jquery.event.drag': { deps: ['jquery'] },
     'jquery.event.drop': { deps: ['jquery'] },
     'jquery.cookie': { deps: ['jquery'] },
+    'bootstrap-dropdown': { deps: ['jquery'] },
+    'bootstrap-tooltip': { deps: ['jquery'] },
     'sinon': { exports: 'window.sinon' },
     'sinon-fakexmlhttprequest': { exports: 'window.sinon',  deps: [ 'sinon' ] },
     'sinon-fakeserver': {

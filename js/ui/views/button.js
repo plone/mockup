@@ -40,6 +40,7 @@ define([
     attributes: {
       'href': '#'
     },
+    tooltip: null,
     template: '<% if (icon) { %><i class="icon-<%= icon %>"</i><% } %> <%= title %>',
     events: {
       'click': 'handleClick'
@@ -61,6 +62,12 @@ define([
 
       this.on('render', function() {
         this.$el.addClass('btn-' + this.context);
+
+        if (this.tooltip !== null) {
+          this.$el.tooltip({
+            title: this.tooltip
+          });
+        }
       }, this);
     },
     handleClick: function(e){

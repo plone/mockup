@@ -29,7 +29,8 @@ define([
   'backbone',
   'js/ui/views/container',
   'mockup-patterns-backdrop',
-  'text!js/ui/templates/popover.tmpl'
+  'text!js/ui/templates/popover.tmpl',
+  'bootstrap-tooltip'
 ], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
   "use strict";
 
@@ -93,7 +94,8 @@ define([
 
       placement = this.placement;
 
-      $tip.css({ top: 0, left: 0, display: 'block' });
+      $tip.css({ top: 0, left: 0 }).addClass('active');
+
 
       actualWidth = $tip[0].offsetWidth;
       actualHeight = $tip[0].offsetHeight;
@@ -140,7 +142,7 @@ define([
 
       $el.offset(offset)
         .addClass(placement)
-        .addClass('in').show();
+        .addClass('active');
 
       actualWidth = $tip[0].offsetWidth;
       actualHeight = $tip[0].offsetHeight;
@@ -177,7 +179,7 @@ define([
     },
     hide: function(){
       this.opened = false;
-      this.$el.hide();
+      this.$el.removeClass('active');
       if(this.triggerView){
         this.triggerView.$el.removeClass('active');
       }
@@ -199,10 +201,12 @@ define([
         }
       
         this.backdrop = new Backdrop(this.$backdrop, this.backdropOptions);
-        this.backdrop.on('hidden', function(e) {
-          e.stopPropagation();
-          if (self.opened === true) {
-            self.hide();
+        this.backdrop.$el.on('hidden.backdrop.patterns', function(e) {
+          if (e.namespace === 'backdrop.patterns') {
+            e.stopPropagation();
+            if (self.opened === true) {
+              self.hide();
+            }
           }
         });
         this.on('popover:hide', function() {
