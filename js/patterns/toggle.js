@@ -68,7 +68,7 @@ define([
         self.$target = self.$el[self.options.menu](self.options.target);
       }
 
-      if (!self.$target) {
+      if (!self.$target || self.$target.size() === 0) {
         $.error('No target found for "' + self.options.target + '".');
       }
 
