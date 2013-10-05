@@ -46,23 +46,32 @@ define([
 
       self.on(self.options.event_enter, function(e) {
         e.stopPropagation();
-        self.show(e);
+        self.show.apply(self, [e]);
       });
       self.on(self.options.event_exit, function(e) {
         e.stopPropagation();
-        self.hide(e);
+        self.hide.apply(self, [e]);
       });
 
     },
-
+    closest: function($el, selector) {
+        var $closest;
+        $.each($el.parents(), function(i, el) {
+            $closest = $(selector, el);
+            if ($closest.size() !== 0) {
+                return false;
+            }
+        });
+        return $closest;
+    },
     show : function(e) {
         var s = $(e.target).attr('href');
-        $(s).addClass('active');
+        this.closest(this.$el, s).addClass('active');
     },
 
     hide : function(e) {
         var s = $(e.target).attr('href');
-        $(s).removeClass('active');
+        this.closest(this.$el, s).removeClass('active');
     }
 
   });
