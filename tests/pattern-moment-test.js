@@ -78,6 +78,13 @@ define([
       registry.scan($el);
       expect($el.find('div').html()).to.equal('2012');
     });
+    it("test parse no date", function() {
+      var $el = $('<div class="pat-moment" data-pat-moment="format:calendar">' +
+        '<div></div>' +
+      '</div>');
+      registry.scan($el);
+      expect($el.find('div').html()).to.equal('');
+    });
 
   });
 });
