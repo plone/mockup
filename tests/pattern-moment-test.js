@@ -45,7 +45,7 @@ define([
   $.fx.off = true;
 
 /* ==========================
-   TEST: TableSorter
+   TEST: Moment
   ========================== */
 
   describe("Moment", function () {
