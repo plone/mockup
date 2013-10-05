@@ -40,7 +40,8 @@ define([
   "use strict";
 
   var expect = chai.expect,
-      mocha = window.mocha;
+      mocha = window.mocha,
+      errormsg;
 
   mocha.setup({globals: ['setTimeout', 'setInterval', 'clearTimeout', 'clearInterval']});
   mocha.setup('bdd');
@@ -52,6 +53,12 @@ define([
 
   describe('Livesearch', function() {
     beforeEach(function(){
+
+      this._error = $.error;
+      $.error = function(msg) {
+        errormsg = msg;
+      };
+
       this.clock = sinon.useFakeTimers();
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
@@ -130,6 +137,11 @@ define([
       $('body').empty();
       this.clock.restore();
       this.server.restore();
+
+      this.$el.remove();
+      $.error= this._error;
+      errormsg = undefined;
+
     });
 
     it('test default elements', function() {
@@ -313,6 +325,22 @@ define([
 
       $el.remove();
       tpl.remove();
+    });
+
+    it('log error msg if there is no input field', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="url:/search.json">'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      expect(errormsg).to.equal('Input element not found ' + $el);
+
+      $el.remove();
     });
 
   });
