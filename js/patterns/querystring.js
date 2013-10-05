@@ -402,6 +402,7 @@ define([
       indexes: [],
       classWrapperName: 'querystring-wrapper',
       criteria: {},
+      indexOptionsUrl: null,
       previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
       previewCountURL: 'portal_factory/@@querybuildernumberofresults',
       sorttxt: 'Sort On',
@@ -417,7 +418,8 @@ define([
       classPreviewName: 'querystring-preview',
       classPreviewTitleName: 'querystring-preview-title',
       classPreviewDescriptionName: 'querystring-preview-description',
-      classSortWrapperName: 'querystring-sort-wrapper'
+      classSortWrapperName: 'querystring-sort-wrapper',
+      showPreviews: true
     },
     init: function() {
       var self = this;
@@ -429,6 +431,27 @@ define([
       self.$wrapper = $('<div/>');
       self.$el.after(self.$wrapper);
 
+      // initialization can be detailed if by ajax
+      self.initialized = false;
+
+      if(self.options.indexOptionsUrl){
+        $.ajax({
+          url: self.options.indexOptionsUrl,
+          success: function(data){
+            self.options.indexes = data.indexes;
+            self.options.sortable_indexes = data.sortable_indexes;
+            self._init();
+          },
+          error: function(xhr){
+            // XXX handle this...
+          }
+        });
+      }else{
+        self._init();
+      }
+    },
+    _init: function(){
+      var self = this;
       self.$criteriaWrapper = $('<div/>')
         .addClass(self.options.classWrapperName)
         .appendTo(self.$wrapper);
@@ -437,19 +460,24 @@ define([
         .addClass(self.options.classSortWrapperName)
         .appendTo(self.$wrapper);
 
-      self.$previewWrapper = $('<div/>')
-        .addClass(self.options.classPreviewWrapperName)
-        .appendTo(self.$wrapper);
+      if(self.options.showPreviews === 'false'){
+        self.options.showPreviews = false;
+      }
+      if(self.options.showPreviews){
+        self.$previewWrapper = $('<div/>')
+          .addClass(self.options.classPreviewWrapperName)
+          .appendTo(self.$wrapper);
 
-      // preview title and description
-      $('<div/>')
-        .addClass(self.options.classPreviewTitleName)
-        .html(self.options.previewTitle)
-        .appendTo(self.$previewWrapper);
-      $('<div/>')
-        .addClass(self.options.classPreviewDescriptionName)
-        .html(self.options.previewDescription)
-        .appendTo(self.$previewWrapper);
+        // preview title and description
+        $('<div/>')
+          .addClass(self.options.classPreviewTitleName)
+          .html(self.options.previewTitle)
+          .appendTo(self.$previewWrapper);
+        $('<div/>')
+          .addClass(self.options.classPreviewDescriptionName)
+          .html(self.options.previewDescription)
+          .appendTo(self.$previewWrapper);
+      }
 
       self.criterias = [];
 
@@ -467,7 +495,11 @@ define([
       self.createSort();
 
       // add criteria preview pane to see results from criteria query
-      self.refreshPreviewEvent();
+      if(self.options.showPreviews){
+        self.refreshPreviewEvent();
+      }
+      self.$el.trigger('initialized');
+      self.initialized = true;
     },
     createCriteria: function(index, operator, value) {
       var self = this,
@@ -491,7 +523,12 @@ define([
         self.updateValue();
       };
 
-      criteria.on('remove', doupdates);
+      criteria.on('remove', function(e, criteria){
+        if(self.criterias.indexOf(criteria) !== -1){
+          self.criterias.splice(self.criterias.indexOf(criteria), 1);
+        }
+        doupdates(e, criteria);
+      });
       criteria.on('remove-clear', doupdates);
       criteria.on('remove-operator', doupdates);
       criteria.on('remove-value', doupdates);
@@ -523,13 +560,14 @@ define([
           $("#form-widgets-sort_on", existingSortOn).val($(this).val());
         });
 
+      self.$sortOn.append($('<option value="">No sorting</option>')); // default no sorting
       for(var key in self.options.sortable_indexes) {
         self.$sortOn.append(
           $('<option/>')
             .attr('value', key)
             .html(self.options.indexes[key].title));
       }
-      self.$sortOn.patternSelect2();
+      self.$sortOn.patternSelect2({width: 150});
 
       self.$sortOrder = $("<input type='checkbox' />")
                           .attr('name', 'sort_reversed:boolean')
@@ -571,6 +609,10 @@ define([
     },
     refreshPreviewEvent: function() {
       var self = this;
+
+      if(!self.options.showPreviews){
+        return; // cut out of this if there are no previews available
+      }
 
       /* TEMPORARY */
       //if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
@@ -653,8 +695,10 @@ define([
           criteriastrs.push(jsonstr);
         }
       });
-
-      self.$el.val('['+criteriastrs.join(',')+']');
+      var existing = self.$el.val();
+      var val = '['+criteriastrs.join(',')+']';
+      self.$el.val(val);
+      self.$el.trigger('change');
     }
   });
 

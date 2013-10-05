@@ -27,8 +27,8 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/patterns/ui/views/base'
-  ],
+  'js/ui/views/base'
+],
   function($, Backbone, _, BaseView) {
   "use strict";
 
@@ -36,9 +36,11 @@ define([
     tagName: 'a',
     className: 'btn',
     eventPrefix: 'button',
+    context: null,
     attributes: {
       'href': '#'
     },
+    tooltip: null,
     template: '<% if (icon) { %><i class="icon-<%= icon %>"</i><% } %> <%= title %>',
     events: {
       'click': 'handleClick'
@@ -59,7 +61,13 @@ define([
       }, this);
 
       this.on('render', function() {
+        this.$el.addClass('btn-' + this.context);
 
+        if (this.tooltip !== null) {
+          this.$el.tooltip({
+            title: this.tooltip
+          });
+        }
       }, this);
     },
     handleClick: function(e){

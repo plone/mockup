@@ -1,8 +1,8 @@
-// Author: Ryan Foster
-// Contact: ryan@rynamic.com
+//
+// Author: Nathan Van Gheem<nathan@vangheem.us>
 // Version: 1.0
 //
-// Description:
+// Taken from the original accessibility.js from Plone
 //
 // License:
 //
@@ -24,26 +24,30 @@
 
 
 define([
-  'underscore',
-  'backbone',
-  'js/patterns/ui/views/container'
-  ], function(_, Backbone, ContainerView) {
+  'jquery',
+  'mockup-patterns-base',
+  'js/patterns/filemanager/views/app'
+], function($, Base, AppView) {
   "use strict";
 
-  var ButtonGroup = ContainerView.extend({
-    tagName: 'div',
-    className: 'btn-group',
-    disable: function() {
-      _.each(this.items, function(button) {
-        button.trigger('disable');
-      });
+  var FileManager = Base.extend({
+    name: "filemanager",
+    defaults: {
+      aceConfig: {},
+      fileTreeUrl: null
     },
-    enable: function() {
-      _.each(this.items, function(button) {
-        button.trigger('enable');
-      });
+    init: function() {
+      var self = this;
+      self.appView = new AppView(self.options);
+      if(self.options.fileTreeUrl){
+        self.$el.append(self.appView.render().el);
+      }else{
+        self.$el.html('Must specify fileTreeUrl setting for pattern');
+      }
     }
   });
 
-  return ButtonGroup;
+  return FileManager;
+
 });
+

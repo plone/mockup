@@ -27,9 +27,11 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/patterns/ui/views/base'
-  ],
-  function($, Backbone, _, BaseView) {
+  'js/ui/views/base',
+  'js/ui/views/button',
+  'js/ui/views/popover',
+  'mockup-patterns-querystring'
+], function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString) {
   "use strict";
 
   var TextFilterView = BaseView.extend({
@@ -38,18 +40,74 @@ define([
     template: _.template(
       '<div class="input-append">' +
         '<input type="text" class="search-query" placeholder="Filter">' +
-        '<button type="submit" class="btn">Query</button>' +
       '</div>'),
+    popoverContent: _.template(
+      '<input class="pat-querystring" />'
+    ),
     events: {
       'keyup .search-query': 'filter'
     },
+    term: null,
+    timeoutId: null,
+    keyupDelay: 300,
+    initialize: function(){
+      this.app = this.options.app;
+    },
     render: function(){
       this.$el.html(this.template({}));
+      this.button = new ButtonView({
+        title: 'Query'
+      });
+      this.popover = new PopoverView({
+        triggerView: this.button,
+        title: _.template('Query'),
+        content: this.popoverContent
+      });
+      this.$('div.input-append').append(this.button.render().el);
+      this.$el.append(this.popover.render().el);
+      this.popover.$el.addClass('query');
+      this.$queryString = this.popover.$('input.pat-querystring');
+      this.queryString = new QueryString(
+        this.$queryString, {
+        indexOptionsUrl: this.app.options.indexOptionsUrl,
+        showPreviews: false
+      });
+      var self = this;
+      self.queryString.$el.on('change', function(){
+        if(self.timeoutId){
+          clearTimeout(self.timeoutId);
+        }
+        self.timeoutId = setTimeout(function(){
+          var criterias = $.parseJSON(self.$queryString.val());
+          self.app.additionalCriterias = criterias;
+          self.app.collection.pager();
+        }, this.keyupDelay);
+      });
+      self.queryString.$el.on('initialized', function(){
+        self.queryString.$sortOn.on('change', function(){
+          self.app.sort_on = self.queryString.$sortOn.val();
+          self.app.collection.pager();
+        });
+        self.queryString.$sortOrder.change(function(){
+          if(self.queryString.$sortOrder[0].checked){
+            self.app.sort_order = 'reverse';
+          }else{
+            self.app.sort_order = 'ascending';
+          }
+          self.app.collection.pager();
+        });
+      });
       return this;
     },
     filter: function(event) {
-      var val = $(event.currentTarget).val();
-      this.uiEventTrigger('change', val, this);
+      var self = this;
+      if(self.timeoutId){
+        clearTimeout(self.timeoutId);
+      }
+      self.timeoutId = setTimeout(function(){
+        self.term = $(event.currentTarget).val();
+        self.app.collection.pager();
+      }, this.keyupDelay);
     }
   });
 

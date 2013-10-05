@@ -38,7 +38,7 @@ define([
       triggers: "focusin",
       classActiveName: "active",
       backdrop: "body",
-      backdropZIndex: "1000",
+      backdropZIndex: null,
       backdropOpacity: "0.8",
       backdropClassName: "backdrop",
       backdropClassActiveName: 'backdrop-active',
@@ -74,7 +74,7 @@ define([
         self.$el.addClass(self.options.classActiveName);
         self.backdrop.show();
         self._initialZIndex = self.$el.css('z-index');
-        self.$el.css('z-index', self.options.backdropZIndex + 1);
+        self.$el.css('z-index', self.options.backdropZIndex !== null ? self.options.backdropZIndex + 1 : 1041);
         self.$el.css('opacity', '0');
         self.$el.animate({ opacity: '1' }, 500);
         self.trigger('shown');

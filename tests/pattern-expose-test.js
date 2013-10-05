@@ -59,8 +59,8 @@ define([
       registry.scan($el);
       expect($('.backdrop', $el).size()).to.equal(1);
       expect($el.hasClass('backdrop-active')).to.equal(false);
-      $('input', $el).focus();
-      expect($('form', $el).css('z-index')).to.equal('10001');
+      $('input', $el).focusin();
+      expect($('form', $el).css('z-index')).to.equal('1041');
       expect($el.hasClass('backdrop-active')).to.equal(true);
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;

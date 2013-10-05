@@ -1,11 +1,8 @@
-// plone integration for textext.
+// plone integration for select2
 //
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
+// Author: Rok Garbas
+// Contact: rok@garbas.si
 // Version: 1.0
-// Depends:
-//    ++resource++plone.app.jquery.js
-//    ++resource++plone.app.widgets/textext.js
 //
 // Description:
 //
@@ -166,11 +163,11 @@ define([
     init: function() {
       var self = this;
 
-      if (self.options.ajax || self.options.ajaxvocabulary) {
-        if(self.options.ajaxvocabulary) {
+      if (self.options.ajax || self.options.ajaxVocabulary) {
+        if(self.options.ajaxVocabulary) {
           self.options.multiple = true;
           self.options.ajax = self.options.ajax || {};
-          self.options.ajax.url = self.options.ajaxvocabulary;
+          self.options.ajax.url = self.options.ajaxVocabulary;
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
             $(value.split(self.options.separator)).each(function () {
@@ -193,7 +190,7 @@ define([
           },
           results: function (data, page) {
             var results = data.results;
-            if (self.options.ajaxvocabulary) {
+            if (self.options.ajaxVocabulary) {
               var data_ids = [];
               $.each(data.results, function(i, item) {
                 data_ids.push(item.id);

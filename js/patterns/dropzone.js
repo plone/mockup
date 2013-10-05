@@ -2,7 +2,7 @@
 // drag and drop support.
 //
 // Author: Nathan Van Gheem
-// Contact: nathan@vangheem.su
+// Contact: nathan@vangheem.us
 // Version: 1.0
 //
 // License:

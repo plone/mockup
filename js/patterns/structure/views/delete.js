@@ -27,44 +27,41 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/patterns/ui/views/popover'
+  'js/ui/views/popover'
 ], function($, _, Backbone, PopoverView) {
   "use strict";
 
-  var OrderView = PopoverView.extend({
-    title: _.template('Set folder ordering'),
+  var DeleteView = PopoverView.extend({
+    className: 'popover delete',
+    title: _.template('Delete selected items'),
     content: _.template(
-      '<select>' +
-        '<% _.each(folderOrderModes, function(mode){ %>' +
-          '<option value="<%= mode.id %>"' +
-              '<% if(mode.id == folderOrder) { %>selected="selected"<% } %> >' +
-              '<%= mode.title %></option>' +
-        '<% }) %>' +
-      '</select>'),
+      '<label>Are you certain you want to delete the selected items</label>' +
+      '<button class="btn btn-block btn-danger">Yes</button>'
+    ),
     events: {
-      'change select': 'orderModeChanged'
+      'click button': 'applyButtonClicked'
     },
     initialize: function(){
       this.app = this.options.app;
-      this.options.folderOrderModes = this.app.options.folderOrderModes;
-      this.options.folderOrder = this.app.options.folderOrder;
       PopoverView.prototype.initialize.call(this);
     },
-    render: function () {
+    render: function(){
       PopoverView.prototype.render.call(this);
       return this;
     },
-    orderModeChanged: function(){
+    applyButtonClicked: function(e){
       var self = this;
-      self.app.defaultButtonClickEvent(self.options.button, {
-        orderMode: self.$('select').val()
-      }, function(data){
-        self.hide();
-        self.app.collection.reset();
+      this.app.defaultButtonClickEvent(this.triggerView, {}, function(data){
+        self.app.selectedCollection.reset();
       });
+      this.hide();
     }
   });
 
-  return OrderView;
+  return DeleteView;
 });
+
+
+
+
 

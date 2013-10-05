@@ -32,13 +32,21 @@
 
 define([
   'jquery',
+  'underscore',
   'mockup-patterns-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
   'tinymce',
   'mockup-patterns-dropzone',
-  'dropzone'
-], function($, Base, RelatedItems, Modal, tinymce, DropZone, dropzone) {
+  'dropzone',
+  'text!js/patterns/tinymce/templates/upload.tmpl',
+  'text!js/patterns/tinymce/templates/link.tmpl',
+  'text!js/patterns/tinymce/templates/result.tmpl',
+  'text!js/patterns/tinymce/templates/selection.tmpl',
+  'mockup-utils'
+], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, dropzone,
+            UploadTemplate, LinkTemplate, ResultTemplate, SelectionTemplate,
+            utils) {
   "use strict";
 
   /* register the tinymce plugin */
@@ -118,35 +126,18 @@ define([
                                "the file will be uploaded to the current folder."
       }
     },
+    template: _.template(UploadTemplate),
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
       self.modal = new Modal(self.$el, {
-        html: '<div>' +
-          '<div class="linkModal">' +
-            '<form method="POST" class="disableAutoSubmit" ' +
-                   'action="' + self.options.upload_url + '" ' +
-                   'enctype="multipart/form-data">' +
-              '<h1>' + self.options.text.uploadHeading + '</h1>' +
-              '<div class="">' +
-                "<input type='text' name='location' class='pat-relateditems' data-pat-relateditems='" +
-                JSON.stringify(self.options.relatedItems) + "' />" +
-              '</div>' +
-              '<p>' + self.options.text.uploadLocationWarning + '</p>' +
-              '<div class="control-group">' +
-                '<label>' + self.options.text.file + '</label>' +
-                '<div class="controls">' +
-                  "<input type='file' name='file' />" +
-                '</div>' +
-              '</div>' +
-              '<input type="submit" class="btn btn-primary" name="upload" value="' +
-                self.options.text.uploadBtn +
-              '" />' +
-              '<iframe id="upload_target" name="upload_target" src="" ' +
-                       'style="width:0;height:0;border:0px solid #fff;"></iframe>' +
-            '</form>' +
-          '</div>' +
-        '</div>',
+        html: self.template({
+          uploadUrl: self.options.uploadUrl,
+          uploadHeading: self.options.text.uploadHeading,
+          uploadLocationWarning: self.options.text.uploadLocationWarning,
+          file: self.options.text.file,
+          uploadBtn: self.options.text.uploadBtn
+        }),
         content: null,
         buttons: '.btn'
       });
@@ -166,9 +157,12 @@ define([
       self.$uploadBtn = $('.modal-footer input[type="submit"]', self.modal.$modal);
       self.$form = $('form', self.modal.$modal);
       self.$iframe = $('iframe', self.modal.$modal);
+      self.$location = $('[name="location"]', self.modal.$modal);
+      self.$location.addClass('pat-relateditems').patternRelateditems(self.options.relatedItems);
+
       self.$form.on('submit', function(e){
         /* handle file upload */
-        var locationData = self.modal.$modal.find('[name="location"]').select2('data');
+        var locationData = self.$location.select2('data');
         if(locationData.length > 0){
           self.$form.attr('action',
             locationData[0].getURL + '/' + self.options.rel_upload_path);
@@ -218,6 +212,7 @@ define([
         insertHeading: 'Insert Link'
       }
     },
+    template: _.template(LinkTemplate),
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
@@ -244,84 +239,35 @@ define([
     },
     generateModalHtml: function(){
       var self = this;
-      return '<div>' +
-        '<div class="linkModal">' +
-          '<h1>' + self.options.text.insertHeading + '</h1>' +
-          self.buildLinkTypeElement() +
-          '<hr style="clear:both" />' +
-          '<div class="internal linkType">' +
-            "<input type='text' name='internal' class='pat-relateditems' data-pat-relateditems='" +
-            JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
-          '</div>' +
-          '<div class="image linkType">' +
-            "<input type='text' name='image' class='pat-relateditems' data-pat-relateditems='" +
-            JSON.stringify(self.options.relatedItems) + "' value='" + self.uid + "' />" +
-          '</div>' +
-          '<div class="control-group external linkType">' +
-            '<label>' + self.options.text.external + '</label>' +
-            '<div class="controls">' +
-              '<input type="text" name="external" value="' + self.external + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group email linkType">' +
-            '<label>' + self.options.text.email + '</label>' +
-            '<div class="controls">' +
-              '<input type="text" name="email" value="' + self.email + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group email linkType">' +
-            '<label>' + self.options.text.subject + '</label>' +
-            '<div class="controls">' +
-              '<input type="text" name="subject" value="' + self.subject + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group anchor linkType">' +
-            '<label>Select an anchor</label>' +
-            '<div class="controls">' +
-              '<select name="anchor" class="pat-select2" data-pat-select2="width:500px" ' +
-              '        value="' + self.anchor + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group linkType anchor email external internal">' +
-            '<div class="controls">' +
-              self.buildTargetElement() +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group linkType anchor email external internal">' +
-            '<label>' + self.options.text.title + '</label>' +
-            '<div class="controls">' +
-              '<input type="text" name="title" value="' + self.title + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group linkType externalImage">' +
-            '<label>' + self.options.text.externalImage + '</label>' +
-            '<div class="controls">' +
-              '<input type="text" name="externalImage" ' +
-              '       value="' + self.externalImage + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group linkType image externalImage">' +
-            '<label>' + self.options.text.alt + '</label>' +
-            '<div class="controls">' +
-              '<input type="text" name="alt" value="' + self.alt + '" />' +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group linkType image externalImage">' +
-            '<label>' + self.options.text.imageAlign + '</label>' +
-            '<div class="controls">' +
-              self.buildAlignElement() +
-            '</div>' +
-          '</div>' +
-          '<div class="control-group linkType image">' +
-            '<label>' + self.options.text.scale + '</label>' +
-            '<div class="controls">' +
-              self.buildScalesElement() +
-            '</div>' +
-          '</div>' +
-          '<input type="submit" class="btn" name="cancel" value="' + self.options.text.cancelBtn + '" />' +
-          '<input type="submit" class="btn btn-primary" name="insert" value="' + self.options.text.insertBtn + '" />' +
-        '</div>' +
-      '</div>';
+      return self.template({
+        text: self.options.text,
+        insertHeading: self.options.text.insertHeading,
+        linkTypes: self.linkTypes,
+        relatedItems: JSON.stringify(self.options.relatedItems),
+        externalText: self.options.text.external,
+        external: self.external,
+        emailText: self.options.text.email,
+        email: self.email,
+        subjectText: self.options.text.subject,
+        subject: self.subject,
+        anchor: self.anchor,
+        targetList: self.options.targetList,
+        selectedTarget: self.target,
+        titleText: self.options.text.title,
+        title: self.title,
+        externalImageText: self.options.text.externalImage,
+        externalImage: self.externalImage,
+        altText: self.options.text.alt,
+        alt: self.alt,
+        imageAlignText: self.options.text.imageAlign,
+        selectedAlign: self.align,
+        scaleText: self.options.text.scale,
+        scales: self.options.scales,
+        selectedScale: self.scale,
+        cancelBtn: self.options.text.cancelBtn,
+        insertBtn: self.options.text.insertBtn,
+        uid: self.uid
+      });
     },
     isImageMode: function(){
       return ['image', 'externalImage'].indexOf(this.linkType) !== -1;
@@ -329,6 +275,7 @@ define([
     initElements: function(){
       var self = this;
       self.$internal = $('input[name="internal"]', self.modal.$modal);
+      self.$internal.addClass('pat-relateditems').patternRelateditems(self.options.relatedItems);
       self.$target = $('select[name="target"]', self.modal.$modal);
       self.$button = $('.modal-footer input[name="insert"]', self.modal.$modal);
       self.$title = $('input[name="title"]', self.modal.$modal);
@@ -339,6 +286,8 @@ define([
 
       /* image elements */
       self.$image = $('input[name="image"]', self.modal.$modal);
+      self.$image.addClass('pat-relateditems').patternRelateditems(self.options.relatedItems);
+
       self.$alt = $('input[name="alt"]', self.modal.$modal);
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
@@ -498,6 +447,7 @@ define([
     },
     modalShown: function(e){
       var self = this;
+      
       self.initElements();
       self.$button.off('click').on('click', function(e){
         e.preventDefault();
@@ -526,11 +476,11 @@ define([
     },
     setupDropzone: function(){
       var self = this;
-      if(self.options.upload_url){
+      if(self.options.uploadUrl){
         self.dropzone = new DropZone(self.modal.$modal, {
           className: 'tinymce-dropzone',
           clickable: false,
-          url: self.options.upload_url,
+          url: self.options.uploadUrl,
           wrap: 'inner',
           autoCleanResults: true,
           success: function(e, data){
@@ -680,62 +630,6 @@ define([
         }
       }
     },
-    buildAlignElement: function(){
-      var self = this;
-      var aligns = ['inline', 'right', 'left'];
-      var html = '<select name="align">';
-      for(var i=0; i<aligns.length; i=i+1){
-        var align = aligns[i];
-        html += '<option value="' + align + '" ';
-        if(align === self.align){
-          html += 'selected="selected"';
-        }
-        html += '>' + align.charAt(0).toUpperCase() + align.slice(1) +
-                '</option>';
-      }
-      html += '</select>';
-      return html;
-    },
-    buildScalesElement: function(){
-      var self = this;
-      var html = '<select name="scale"><option value="">Original</option>';
-      var scales = self.options.scales.split(',');
-      for(var i=0; i<scales.length; i=i+1){
-        var scale = scales[i].split(':');
-        html += '<option value="' + scale[1] + '" ';
-        if(scale[1] === self.scale){
-          html += 'selected="selected" ';
-        }
-        html += '>' + scale[0] + '</option>';
-      }
-      html += '</select>';
-      return html;
-    },
-    buildLinkTypeElement: function(){
-      var self = this;
-      var html = '<div class="linkTypes">';
-      for(var i=0; i<self.linkTypes.length; i=i+1){
-        var type = self.linkTypes[i];
-        html += '<label><input name="linktype" type="radio" ' +
-          ' value="' + type + '" />' + self.options.text[type] + '</label>';
-      }
-      html += '</div>';
-      return html;
-    },
-    buildTargetElement: function(){
-      var self = this;
-      var html = '<select name="target">';
-      for(var i=0; i<self.options.targetList.length; i=i+1){
-        var target = self.options.targetList[i];
-        html += '<option value="' + target.value + '" ';
-        if(target.value === self.target){
-          html += 'selected="selected"';
-        }
-        html += '>' + target.text + '</option>';
-      }
-      html += '</select>';
-      return html;
-    },
     setSelectElement: function($el, val){
       $el.find('option:selected').attr('selected', '');
       if(val){
@@ -763,7 +657,7 @@ define([
         attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
         batchSize: 20,
         basePath: '/',
-        ajaxvocabulary: null,
+        ajaxVocabulary: null,
         width: 500,
         maximumSelectionSize: 1,
         placeholder: 'Search for item on site...'
@@ -872,37 +766,8 @@ define([
               o: 'plone.app.querystring.operation.list.contains',
               v: self.options.imageTypes.split(',').concat(self.options.folderTypes.split(','))
             }],
-            resultTemplate: '' +
-  '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %>">' +
-  ' <span class="pat-relateditems-buttons">' +
-  '  <% if (folderish) { %>' +
-  '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>">' +
-  '       <i class="icon-folder-open"></i>' +
-  '    </a>' +
-  '   <% } %>' +
-  '  <% if (!selected && !folderish) { %>' +
-  '     <a class="pat-relateditems-result-select" href="#">' +
-  '         <i class="icon-plus-sign"></i>' +
-  '     </a>' +
-  '  <% } %>' +
-  ' </span>' +
-  ' <% if (!folderish) { %>' +
-  '   <span class="pat-relateditems-result-image">' +
-  '     <img src="<%= getURL %>/@@images/image/tile" />' +
-  '   </span>' +
-  ' <% } %>' +
-  ' <span class="pat-relateditems-result-title"><%= Title %></span>' +
-  ' <span class="pat-relateditems-result-path"><%= path %></span>' +
-  '</div>',
-            selectionTemplate: '' +
-  '<span class="pat-relateditems-item pat-relateditems-type-<%= Type %>">' +
-  ' <span class="pat-relateditems-result-image">' +
-  '   <img src="<%= getURL %>/@@images/image/tile" />' +
-  ' </span>' +
-  ' <span class="pat-relateditems-item-title"><%= Title %></span>' +
-  ' <span class="pat-relateditems-item-path"><%= path %></span>' +
-  '</span>',
-
+            resultTemplate: ResultTemplate,
+            selectionTemplate: SelectionTemplate
           }
         });
         var $el = $('<div/>').insertAfter(self.$el);
@@ -961,16 +826,7 @@ define([
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
-      var id = self.$el.attr('id');
-      if(id === undefined){
-        id = 'tiny' + (Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16).substring(1));
-      } else {
-        /* hopefully we don't screw anything up here... changing the id 
-         * in some cases so we get a decent selector */
-        id = id.replace(/\./g, '-');
-      }
-      self.$el.attr('id', id);
+      var id = utils.setId(self.$el);
       var tinyOptions = self.options.tiny;
       tinyOptions.selector = '#' + id;
       tinyOptions.addLinkClicked = function(){
@@ -987,12 +843,12 @@ define([
         self.options.base_url = window.location.href;
       }
       if(self.options.rel_upload_path){
-        self.options.upload_url = self.options.folder_url + '/' + self.options.rel_upload_path;
+        self.options.uploadUrl = self.options.folder_url + '/' + self.options.rel_upload_path;
       } else {
-        self.options.upload_url = null;
+        self.options.uploadUrl = null;
       }
 
-      if(self.options.upload_url){
+      if(self.options.uploadUrl){
         /*
          * disable until it works better
          * can still upload via link and file overlays
@@ -1000,7 +856,7 @@ define([
         self.dropzone = new DropZone(self.$el, {
           className: 'tinymce-dropzone',
           clickable: false,
-          url: self.options.upload_url,
+          url: self.options.uploadUrl,
           wrap: true,
           autoCleanResults: true,
           success: function(e, data){
@@ -1025,7 +881,7 @@ define([
 
       /* fixes chrome at least,
        * still not working quite right in firefox
-      if(self.options.upload_url){
+      if(self.options.uploadUrl){
         var events = ["drop", "dragstart", "dragend", "dragenter", "dragover",
                       "dragleave"];
         var iframe = self.$el.prev().find('.mce-edit-area iframe');

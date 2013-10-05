@@ -21,6 +21,14 @@ define([
   }
 
   var server = sinon.fakeServer.create();
+  server.xhr.useFilters = true;
+  var okayUrls = [
+  ];
+  server.xhr.addFilter(function(method, url) {
+    //whenever the this returns true the request will not faked
+    return url.indexOf('tests/json/') !== -1 || url.indexOf('.html') !== -1 ||
+           url.indexOf('ace/lib') !== -1 || url.indexOf('.tmpl') !== -1;
+  });
   server.autoRespond = true;
   server.autoRespondAfter = 200;
 
@@ -208,6 +216,7 @@ define([
           possibleTags[Math.floor(Math.random()*possibleTags.length)],
           possibleTags[Math.floor(Math.random()*possibleTags.length)]
         ];
+        data.id = data.Title.replace(' ', '-').toLowerCase();
         if(data.Type === 'Folder'){
           data.is_folderish = true;
         }else{
@@ -219,7 +228,6 @@ define([
     searchables[0].getURL = window.location.origin + '/exampledata/test.png';
 
     var results = [];
-
     // grab the page number and number of items per page -- note, page is 1-based from Select2
     var batch = getQueryVariable(xhr.url, 'batch');
     var page = 1;
@@ -239,7 +247,7 @@ define([
       for(var i=0; i<query.criteria.length; i=i+1){
         var criteria = query.criteria[i];
         if(criteria.i === 'path'){
-          path = criteria.v;
+          path = criteria.v.split('::')[0];
         }else{
           term = criteria.v;
         }
@@ -264,7 +272,7 @@ define([
             }
           }
         }else{
-          q = term.toLowerCase();
+          q = term.toLowerCase().replace('*', '');
           if (keys.indexOf(q) > -1){
             results.push(item);
           }
@@ -398,9 +406,10 @@ define([
     '/delete',
     '/workflow',
     '/tags',
-    '/dates',
+    '/properties',
     '/paste',
-    '/order'
+    '/order',
+    '/rename'
   ];
 
   var actionData = {
@@ -438,11 +447,18 @@ define([
         msg: 'Tags updated for ' + selection.length + ' items'
       };
     },
-    '/dates': function(xhr){
+    '/properties': function(xhr){
       var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
       return {
         status: "success",
-        msg: 'Dates updated for ' + selection.length + ' items'
+        msg: 'Properties updated for ' + selection.length + ' items'
+      };
+    },
+    '/rename': function(xhr){
+      var torename = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'torename'));
+      return {
+        status: "success",
+        msg: 'Renamed ' + torename.length + ' items'
       };
     },
     '/workflow': function(xhr){
@@ -466,7 +482,14 @@ define([
           msg: 'Workflow updated for ' + selection.length + ' items'
         };
       }
-    }
+    },
+    '/delete': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'Deleted ' + selection.length + ' items'
+      };
+    },
 
   };
 

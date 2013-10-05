@@ -27,21 +27,25 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/patterns/ui/views/popover',
-  'mockup-patterns-pickadate'
-], function($, _, Backbone, PopoverView, PickADate) {
+  'js/ui/views/popover'
+], function($, _, Backbone, PopoverView) {
   "use strict";
 
-  var DatesView = PopoverView.extend({
-    className: 'popoverview dates',
-    title: _.template('Modify dates on items'),
+  var PropertiesView = PopoverView.extend({
+    className: 'popover rename',
+    title: _.template('Rename items'),
     content: _.template(
-      '<label>Publication Date</label>' +
-      '<input name="effective" />' +
-      '<label>Expiration Date</label>' +
-      '<input name="expiration" />' +
+      '<div class="itemstoremove"></div>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
     ),
+    itemTemplate: _.template(
+      '<div class="item">' +
+        '<input name="UID" type="hidden" value="<%- UID %>" />' +
+        '<label>Title</label>' +
+        '<input name="newtitle" value="<%= Title %>" />' +
+        '<label>Short name</label>' +
+        '<input name="newid" value="<%= id %>" />' +
+      '</div>'),
     events: {
       'click button': 'applyButtonClicked'
     },
@@ -51,34 +55,42 @@ define([
     },
     render: function(){
       PopoverView.prototype.render.call(this);
-      this.$effective = this.$('[name="effective"]');
-      this.$expiration = this.$('[name="expiration"]');
-      this.effectivePickADate = new PickADate(this.$effective);
-      this.expirationPickADate = new PickADate(this.$expiration);
+      this.$items = this.$('.itemstoremove');
       return this;
     },
     applyButtonClicked: function(e){
-      this.app.defaultButtonClickEvent(this.button, {
-        effectiveDate: this.effectivePickADate.$date.attr('value'),
-        effectiveTime: this.effectivePickADate.$time.attr('value'),
-        expirationDate: this.expirationPickADate.$date.attr('value'),
-        expirationTime: this.expirationPickADate.$time.attr('value')
+      var torename = [];
+      this.$items.find('.item').each(function(){
+        var $item = $(this);
+        torename.push({
+          UID: $item.find('[name="UID"]').val(),
+          newid: $item.find('[name="newid"]').val(),
+          newtitle: $item.find('[name="newtitle"]').val()
+        });
+      });
+      var self = this;
+      this.app.defaultButtonClickEvent(this.triggerView, {
+        torename: JSON.stringify(torename)
       });
       this.hide();
     },
-    showItemsClicked: function(button, e){
-      PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
+    toggle: function(button, e){
+      PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
-      if(!this.opened){
+      if(!self.opened){
         return;
       }
-      this.$effective.attr('value', '');
-      this.$expiration.attr('value', '');
+      self.$items.empty();
+      self.app.selectedCollection.each(function(item){
+        self.$items.append(self.itemTemplate(item.toJSON()));
+      });
     }
   });
 
-  return DatesView;
+  return PropertiesView;
 });
+
+
 
 
 

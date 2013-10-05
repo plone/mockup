@@ -33,15 +33,14 @@ define([
     isUIView: true,
     eventPrefix: 'ui',
     template: null,
+    appendInContainer: true,
     initialize: function() {
       for (var key in this.options) {
         this[key] = this.options[key];
       }
     },
     render: function() {
-      if (this.template !== null) {
-        this.$el.html(_.template(this.template, this.serializedModel()));
-      }
+      this.applyTemplate();
 
       this.trigger('render', this);
       this.afterRender();
@@ -53,6 +52,11 @@ define([
     },
     serializedModel: function() {
       return this.options;
+    },
+    applyTemplate: function() {
+      if (this.template !== null) {
+        this.$el.html(_.template(this.template, this.serializedModel()));
+      }
     },
     propagateEvent: function(eventName) {
       if (eventName.indexOf(':') > 0) {

@@ -3,7 +3,6 @@
 // Author: Rok Garbas
 // Contact: rok@garbas.si
 // Version: 1.0
-// Depends: jquery.js patterns.js jquery.form.js
 //
 // Description:
 //
@@ -33,8 +32,9 @@ define([
   'mockup-patterns-backdrop',
   'mockup-registry',
   'mockup-router',
+  'mockup-utils',
   'jquery.form'
-], function($, _, Base, Backdrop, registry, Router) {
+], function($, _, Base, Backdrop, registry, Router, utils) {
   "use strict";
 
   var Modal = Base.extend({
@@ -100,6 +100,7 @@ define([
         displayInModal: true,
         reloadWindowOnClose: true,
         error: '.portalMessage.error',
+        formFieldError: '.field.error',
         loading: '' +
           '<div class="progress progress-striped active">' +
           '  <div class="bar" style="width: 100%;"></div>' +
@@ -129,9 +130,10 @@ define([
         if (self.options.loadLinksWithinModal) {
           actions.a = {};
         }
+
         $.each(actions, function(action, options) {
           var actionKeys = _.union(_.keys(self.options.actionOptions), ['templateOptions']);
-          var actionOptions = $.extend(true, _.pick(options, actionKeys), self.options.actionOptions);
+          var actionOptions = $.extend(true, {}, self.options.actionOptions, _.pick(options, actionKeys));
           options.templateOptions = $.extend(true, options.templateOptions, self.options.templateOptions);
 
           var patternKeys = _.union(_.keys(self.options.actionOptions), ['actions', 'actionOptions']);
@@ -207,8 +209,10 @@ define([
               self.trigger('formActionError', [xhr, textStatus, errorStatus]);
             },
             success: function(response, state, xhr, form) {
-              // if error is found
-              if ($(options.error, response).size() !== 0) {
+              // if error is found (NOTE: check for both the portal errors
+              // and the form field-level errors)
+              if ($(options.error, response).size() !== 0 ||
+                  $(options.formFieldError, response).size() !== 0) {
                 if (options.onFormError) {
                   options.onFormError(self, response, state, xhr, form);
                 } else {
@@ -233,10 +237,9 @@ define([
                 self.redraw(response, patternOptions);
               } else {
                 $action.trigger('destroy.modal.patterns');
+                // also calls hide
                 if (options.reloadWindowOnClose) {
                   self.reloadWindow();
-                } else {
-                  self.hide();
                 }
               }
               self.trigger('formActionSuccess', [response, state, xhr, form]);
@@ -381,6 +384,7 @@ define([
               // TODO: open links inside modal
               // and slide modal body
             }
+            self.$modal.trigger('modal-click');
           })
           .on('destroy.modal.patterns', function(e) {
             e.stopPropagation();
@@ -409,10 +413,11 @@ define([
 
       self.$wrapper = $('> .' + self.options.templateOptions.classWrapperName, self.backdrop.$el);
       if (self.$wrapper.size() === 0) {
+        var zIndex = self.options.backdropOptions.zIndex !== null ? parseInt(self.options.backdropOptions.zIndex, 10) + 1 : 1041;
         self.$wrapper = $('<div/>')
           .hide()
           .css({
-            'z-index': parseInt(self.options.backdropOptions.zIndex, 10) + 1,
+            'z-index': zIndex,
             'overflow-y': 'auto',
             'position': 'fixed',
             'height': '100%',
@@ -539,8 +544,7 @@ define([
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
         self.$loading.hide();
-        self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+        self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
         self.trigger('after-ajax', self, textStatus, xhr);
         self._show();
       });
@@ -743,9 +747,9 @@ define([
       if ($('.modal', self.$wrapper).size() < 2) {
         self.backdrop.hide();
         self.$wrapper.hide();
-        self.$loading.hide();
         self.$wrapper.parent().css('overflow', 'visible');
       }
+      self.$loading.hide();
       self.$el.removeClass(self.options.templateOptions.classActiveName);
       if (self.$modal !== undefined) {
         self.$modal.remove();
@@ -758,8 +762,7 @@ define([
       var self = this;
       self.trigger('beforeDraw');
       self.$modal.remove();
-      self.$raw = $('<div />').append($($((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(response)[0]
-            .replace('<body', '<div').replace('</body>', '</div>'))[0]));
+      self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
       self.render.apply(self, [options]);
       self.positionModal();
       registry.scan(self.$modal);

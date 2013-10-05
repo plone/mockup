@@ -43,7 +43,7 @@ define([
 
   mocha.setup('bdd');
   $.fx.off = true;
-
+  
   /* ==========================
    TEST: AutoTOC
   ========================== */
@@ -62,9 +62,9 @@ define([
         '   <h2>Title 3.1</h2>' +
         '   <h3>Title 3.1.1</h3>' +
         '   <h4>Title 3.1.1.1</h4>' +
-        '   <h1>Title 4</h1>' +
+        '   <h1 style="margin-top: 500px;">Title 4</h1>' +
         ' </div>' +
-        ' <div class="placeholder">' +
+        ' <div class="placeholder" style="height: 1000px;">' +
         '   <div id="first-elem"></div>' +
         ' </div>' +
         '</div>').appendTo('body');
@@ -114,6 +114,28 @@ define([
       expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
       expect($('div.placeholder', this.$el).children().eq(0).attr('class')).to.equal("autotoc-nav");
       expect($('div.placeholder', this.$el).children().eq(1).attr('id')).to.equal("first-elem");
+    });
+    it("custom className", function() {
+      this.$el.attr('data-pat-autotoc', 'className:SOMETHING');
+      registry.scan(this.$el);
+      expect(this.$el.hasClass('SOMETHING')).to.equal(true);
+    });
+    it("scrolls to content", function(done) {
+      registry.scan(this.$el);
+      expect($(document).scrollTop()).to.equal(0);
+      if (navigator.userAgent.search("PhantomJS") >= 0) {
+          // TODO Make this test work in PhantomJS as well as Chrome
+          //      See https://github.com/ariya/phantomjs/issues/10162
+          done();
+      }
+      $("> nav > a.autotoc-level-1", this.$el).last()
+        .on('clicked.autodoc.patterns', function() {
+          var documentOffset = Math.round($(document).scrollTop());
+          var headingOffset = Math.round($("#autotoc-item-autotoc-8", this.$el).offset().top);
+          expect(documentOffset).to.equal(headingOffset);
+          done();
+        })
+        .click();
     });
   });
 

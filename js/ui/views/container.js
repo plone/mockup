@@ -27,7 +27,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/patterns/ui/views/base'
+  'js/ui/views/base'
 ], function($, _, Backbone, BaseView) {
   "use strict";
 
@@ -35,15 +35,16 @@ define([
     id: '',
     items: [],
     itemContainer: null,
+    isOffsetParent: true,
     render: function() {
-      var self = this;
-
-      if (self.template !== null) {
-        self.$el.html(_.template(this.template, this.serializedModel()));
-      }
+      this.applyTemplate();
 
       this.renderItems();
       this.bindEvents();
+
+      if (this.isOffsetParent) {
+        this.$el.addClass('ui-offset-parent');
+      }
 
       this.trigger('render', this);
 
@@ -63,7 +64,11 @@ define([
         $container = this.$el;
       }
       _.each(this.items, function(view){
-        $container.append(view.render().$el);
+        if (view.appendInContainer === true) {
+          $container.append(view.render().$el);
+        } else {
+          view.render();
+        }
       }, this);
     },
     bindEvents: function() {

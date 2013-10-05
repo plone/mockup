@@ -35,11 +35,12 @@ define([
     name: "queryhelper",
     defaults: {
       basePattern: null, // must be passed in
-      ajaxvocabulary: null,
+      ajaxVocabulary: null,
       searchParam: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       batchSize: 10, // number of results to retrive
-      baseCriteria: []
+      baseCriteria: [],
+      pathDepth: 1
     },
 
     init: function() {
@@ -57,11 +58,11 @@ define([
         };
       }
 
-      if (self.options.url && !self.options.ajaxvocabulary) {
-        self.options.ajaxvocabulary = self.options.url;
+      if (self.options.url && !self.options.ajaxVocabulary) {
+        self.options.ajaxVocabulary = self.options.url;
       }
-      if(self.options.ajaxvocabulary !== undefined &&
-          self.options.ajaxvocabulary !== null){
+      if(self.options.ajaxVocabulary !== undefined &&
+          self.options.ajaxVocabulary !== null){
         self.valid = true;
       }else{
         self.valid = false;
@@ -120,7 +121,7 @@ define([
         criterias.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
-          v: self.getCurrentPath()
+          v: self.getCurrentPath() + '::' + self.options.pathDepth
         });
       }
       criterias = criterias.concat(options.additionalCriterias);
@@ -139,7 +140,7 @@ define([
     selectAjax: function(){
       var self = this;
       return {
-        url: self.options.ajaxvocabulary,
+        url: self.options.ajaxVocabulary,
         dataType: 'JSON',
         quietMillis: 100,
         data: function(term, page) {
@@ -179,7 +180,7 @@ define([
         attributes: JSON.stringify(self.options.attributes)
       };
       $.ajax({
-        url: self.options.ajaxvocabulary,
+        url: self.options.ajaxVocabulary,
         dataType: 'JSON',
         data: data,
         success: callback

@@ -3,7 +3,6 @@
 // Author: Rok Garbas
 // Contact: rok@garbas.si
 // Version: 1.0
-// Depends: jquery.js patterns.js pickadate.js
 //
 // Description:
 //

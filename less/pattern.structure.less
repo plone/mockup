@@ -6,16 +6,52 @@
 .pat-structure{
     table{
         margin-bottom: 0;
+
+        td.status{
+            &.info{
+                color: #3a87ad;
+                background-color: #d9edf7;
+                border-color: #bce8f1;
+            }
+            &.error{
+                color: #b94a48;
+                background-color: #f2dede;
+                border-color: #eed3d7;
+            }
+        }
     }
     .navbar {
         margin-bottom: 5px;
+
+        .btn-group.addnew, #selected{
+            margin-left: 5px;
+        }
     }
     .table th, .table td {
         padding: 4px;
     }
+
+    label.checkbox{
+        float: left;
+    }
+
+    .contextmenu {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+
+        ul{
+            display:block;
+            position:static;
+            margin-bottom:5px;
+        }
+    }
+    .contextmenuactive{
+        outline: 1px dashed orange;
+    }
 }
 
-.popoverview {
+.pat-structure {
 
     .popover {
         min-width: 111px;
@@ -42,20 +78,10 @@
                 }
             }
         }
-
-        &.bottom {
-            .arrow {
-                left: 55px;
-            }
-        }
-    }
-
-    &.active {
-        .popover {
+        &.active {
             display: block;
         }
     }
-
 
     .clear{
         clear:both;
@@ -70,7 +96,7 @@
     }
 }
 
-.popoverview.selected {
+.popover.selected {
     .items {
         max-height: 300px;
         overflow-y: auto;
@@ -100,6 +126,57 @@
         }
     }
 }
+
+.popover.query {
+    .popover {
+        width: 700px;
+        max-width: 700px;
+    }
+}
+
+.popover.rename {
+    .popover{
+        width: 400px;
+
+        .popover-content{
+            max-height: 500px;
+            overflow-y: scroll;
+        }
+        input{
+            width: 100%;
+            height: 24px;
+            line-height: 110%;
+            font-size: 110%;
+        }
+        div.item{
+            border-bottom: 1px solid #0E6EB0;
+            margin-bottom: 5px;
+            padding-bottom: 10px;
+        }
+    }
+}
+
+.popover.columns{
+    ul{
+        list-style: none;
+        margin: 0 0 10px 0;
+
+        li{
+            list-style: none;
+            cursor: move;
+            border: 1px solid #DDD;
+            border-bottom: none;
+            padding: 3px 7px;
+
+            label{
+                margin-bottom: 0;
+            }
+        }
+
+    }
+
+}
+
 
 .structure-dropzone{
     position: relative;
@@ -134,4 +211,10 @@
 
 .structure-dragging{
     outline: 1px dashed black;
+}
+
+
+.backdrop-popover {
+    background-color: #fff;
+    z-index: 1009;
 }

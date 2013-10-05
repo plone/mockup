@@ -1,9 +1,10 @@
 <td><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
-<td>
+<td class="title">
   <a href="<%- getURL %>">
     <%- Title %>
   </a>
 </td>
-<td><%- ModificationDate %></td>
-<td><%- EffectiveDate %></td>
-<td><%- review_state %></td>
+<% _.each(activeColumns, function(column){ %>
+  <td class="<%- column %>"><%- attributes[column] %></td>
+<% }); %>
+

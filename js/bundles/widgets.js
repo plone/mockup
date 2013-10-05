@@ -134,7 +134,7 @@ define([
         $tiny.attr({
           'data-pat-tinymce': JSON.stringify({
             relatedItems: {
-              ajaxvocabulary: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+              ajaxVocabulary: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
             },
             rel_upload_path: '@@fileUpload',
             folder_url: config.document_base_url,
@@ -176,8 +176,14 @@ define([
       });
       
       // Apply the preventdoublesubmit pattern to forms
-      $('form', $root).addClass('pat-preventdoublesubmit');
-      $('form', $root).attr({
+      $('form', $root)
+        .not('[action$="@@new-user"]')
+        .not('[action$="@@usergroup-groupdetails"]')
+        .addClass('pat-preventdoublesubmit');
+      $('form', $root)
+        .not('[action$="@@new-user"]')
+        .not('[action$="@@usergroup-groupdetails"]')
+        .attr({
         'data-pat-preventdoublesubmit': 'message:'+window.form_resubmit_message
       });
       

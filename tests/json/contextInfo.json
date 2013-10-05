@@ -1,0 +1,9 @@
+{
+  "addButtons": [{
+    "id": "page",
+    "title": "Page"
+  },{
+    "id": "folder",
+    "title": "Folder"
+  }]
+}

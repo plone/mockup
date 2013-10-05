@@ -28,23 +28,37 @@ define([
   'underscore',
   'backbone',
   'js/patterns/structure/views/tablerow',
-  'text!js/patterns/structure/templates/table.html',
-  'jquery.event.drag',
-  'jquery.event.drop'
-], function($, _, Backbone, TableRowView, TableTemplate) {
+  'text!js/patterns/structure/templates/table.tmpl',
+  'js/patterns/structure/views/contextmenu',
+  'js/ui/views/base',
+  'mockup-patterns-dragdrop',
+  'mockup-patterns-moment'
+], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu, BaseView,
+            DragDrop, Moment) {
   "use strict";
 
-  var TableView = Backbone.View.extend({
+  var TableView = BaseView.extend({
     tagName: 'div',
     template: _.template(TableTemplate),
     initialize: function(){
-      this.app = this.options.app;
-      this.collection = this.app.collection;
-      this.selectedCollection = this.app.selectedCollection;
-      this.listenTo(this.collection, 'sync', this.render);
-      this.listenTo(this.selectedCollection, 'remove', this.render);
-      this.listenTo(this.selectedCollection, 'reset', this.render);
-      this.collection.pager();
+      var self = this;
+      BaseView.prototype.initialize.call(self);
+      self.collection = self.app.collection;
+      self.selectedCollection = self.app.selectedCollection;
+      self.listenTo(self.collection, 'sync', self.render);
+      self.listenTo(self.selectedCollection, 'remove', self.render);
+      self.listenTo(self.selectedCollection, 'reset', self.render);
+      self.collection.pager();
+      self.subset_ids = [];
+
+      self.app.on('context-info-loaded', function(data){
+        /* set default page info */
+        var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
+        if($defaultPage.length > 0){
+          $defaultPage.find('td.title').prepend('<span>*</span> ');
+          $defaultPage.addClass('default-page');
+        }
+      });
     },
     events: {
       'click .breadcrumbs a': 'breadcrumbClicked',
@@ -54,8 +68,19 @@ define([
     render: function() {
       var self = this;
       self.$el.html(self.template({
-        path: self.app.queryHelper.getCurrentPath()
+        path: self.app.queryHelper.getCurrentPath(),
+        status: self.app.status,
+        statusType: self.app.statusType,
+        activeColumns: self.app.activeColumns,
+        availableColumns: self.app.availableColumns
       }));
+
+      self.contextMenu = (new ContextMenu({
+        container: self,
+        app: self.app
+      })).render();
+      self.$el.append(self.contextMenu.$el);
+
       if(self.collection.length){
         var container = self.$('tbody');
         self.collection.each(function(result){
@@ -63,10 +88,17 @@ define([
             model: result,
             app: self.app
           })).render();
+          self.contextMenu.bind(view.$el);
           container.append(view.el);
         });
       }
+
+      self.moment = new Moment(self.$el, {
+        selector: '.ModificationDate,.EffectiveDate,.CreationDate',
+        format: 'relative'
+      });
       self.addReordering();
+      self.storeOrder();
       return this;
     },
     breadcrumbClicked: function(e){
@@ -90,72 +122,29 @@ define([
     },
     addReordering: function(){
       var self = this;
+      // if we have a custom query going on, we do not allow sorting.
+      if(self.app.inQueryMode()){
+        self.app.setStatus('Can not order items while querying');
+        self.$el.removeClass('order-support');
+        return;
+      }
       self.$el.addClass('order-support');
-      var start = null;
-      /* drag and drop reording support */
-      self.$('tbody tr').drag('start', function(e, dd) {
-        var dragged = this;
-        $(dragged).addClass('structure-dragging');
-        $.drop({
-          tolerance: function(event, proxy, target) {
-            var test = event.pageY > (target.top + target.height / 2);
-            $.data(target.elem, "drop+reorder",
-                   test ? "insertAfter" : "insertBefore" );
-            return this.contains(target, [event.pageX, event.pageY]);
-          }
-        });
-        start = $(this).index();
-        return $( this ).clone().
-          addClass('dragging').
-          css({opacity: 0.75, position: 'absolute'}).
-          appendTo(document.body);
-      })
-      .drag(function(e, dd) {
-        /*jshint eqeqeq:false */
-        $( dd.proxy ).css({
-          top: dd.offsetY,
-          left: dd.offsetX
-        });
-        var drop = dd.drop[0],
-            method = $.data(drop || {}, "drop+reorder");
-        /* XXX Cannot use triple equals here */
-        if (drop && (drop != dd.current || method != dd.method)){
-          $(this)[method](drop);
-          dd.current = drop;
-          dd.method = method;
-          dd.update();
+      var dd = new DragDrop(self.$('tbody'), {
+        selector: 'tr',
+        dragClass: 'structure-dragging',
+        drop: function($el, delta){
+          self.app.moveItem($el.attr('data-id'), delta, self.subset_ids);
+          self.storeOrder();
         }
-      })
-      .drag('end', function(e, dd) {
-        var $el = $(this);
-        $el.removeClass('structure-dragging');
-        $(dd.proxy).remove();
-        self.moveItem($el, $el.index() - start);
-      })
-      .drop('init', function(e, dd ) {
-        /*jshint eqeqeq:false */
-        /* XXX Cannot use triple equals here */
-        return (this == dd.drag) ? false: true;
       });
     },
-    moveItem: function($el, delta){
-      $.ajax({
-        url: this.app.options.moveUrl,
-        type: 'POST',
-        data: {
-          delta: delta
-        },
-        dataType: 'json',
-        success: function(data){
-          if(data.status !== "success"){
-            // XXX handle error here with something?
-            alert('error moving item');
-          }
-        },
-        error: function(data){
-          alert('error moving item');
-        }
+    storeOrder: function(){
+      var self = this;
+      var subset_ids = [];
+      self.$('tbody tr.itemRow').each(function(idx){
+        subset_ids.push($(this).attr('data-id'));
       });
+      self.subset_ids = subset_ids;
     }
   });
 

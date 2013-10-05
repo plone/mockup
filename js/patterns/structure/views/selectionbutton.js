@@ -27,8 +27,8 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/patterns/ui/views/button',
-  'text!js/patterns/structure/templates/selection_button.html'
+  'js/ui/views/button',
+  'text!js/patterns/structure/templates/selection_button.tmpl'
   ],
   function($, Backbone, _, ButtonView, tpl_button) {
   "use strict";

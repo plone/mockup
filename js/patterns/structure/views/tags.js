@@ -27,7 +27,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/patterns/ui/views/popover',
+  'js/ui/views/popover',
   'mockup-patterns-select2'
 ], function($, _, Backbone, PopoverView, Select2) {
   "use strict";
@@ -58,7 +58,7 @@ define([
       this.$remove.select2();
       this.addSelect2 = new Select2(this.$add, {
         multiple: true,
-        ajaxvocabulary: this.app.options.tagsAjaxVocabulary
+        ajaxVocabulary: this.app.options.tagsAjaxVocabulary
       });
       return this;
     },
@@ -70,14 +70,14 @@ define([
       return values;
     },
     applyButtonClicked: function(e){
-      this.app.defaultButtonClickEvent(this.button, {
+      this.app.defaultButtonClickEvent(this.triggerView, {
         remove: JSON.stringify(this.getSelect2Values(this.$remove)),
         add: JSON.stringify(this.getSelect2Values(this.$add))
       });
       this.hide();
     },
-    showItemsClicked: function(button, e){
-      PopoverView.prototype.showItemsClicked.apply(this, [button, e]);
+    toggle: function(button, e){
+      PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
       if(!this.opened){
         return;

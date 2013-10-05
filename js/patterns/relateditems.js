@@ -1,11 +1,8 @@
-// plone integration for textext.
+// plone integration for related items
 //
-// Author: Rok Garbas
-// Contact: rok@garbas.si
+// Author: Ryan Foster
+// Contact: ryan@rynamic.com
 // Version: 1.0
-// Depends:
-//    ++resource++plone.app.jquery.js
-//    ++resource++plone.app.widgets/textext.js
 //
 // Description:
 //
@@ -42,7 +39,7 @@ define([
     browsing: false,
     currentPath: null,
     defaults: {
-      ajaxvocabulary: null, // must be set to work
+      ajaxVocabulary: null, // must be set to work
       width: '300px',
       multiple: true,
       tokenSeparators: [",", " "],
@@ -90,7 +87,6 @@ define([
       setupAjax: function() {
         // Setup the ajax object to use during requests
         var self = this;
-
         self.query = new QueryHelper(self.$el,
         $.extend(true, {}, self.options, {basePattern: self}));
 

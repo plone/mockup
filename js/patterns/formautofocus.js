@@ -47,7 +47,7 @@ define([
       else{
         $(self.options.always, self.$el).focus();
       }
-        
+
     }
   });
 

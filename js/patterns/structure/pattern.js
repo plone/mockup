@@ -28,25 +28,47 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
   'js/patterns/structure/views/app',
-
-  // for some reason we need to load this early
-  'text!js/patterns/structure/templates/paging.html',
-  'text!js/patterns/structure/templates/selection_button.html',
-  'text!js/patterns/structure/templates/selection_item.html',
-  'text!js/patterns/structure/templates/tablerow.html',
-  'text!js/patterns/structure/templates/table.html',
-  'text!js/patterns/ui/templates/popover.html',
+  'text!js/patterns/structure/templates/paging.tmpl',
+  'text!js/patterns/structure/templates/selection_button.tmpl',
+  'text!js/patterns/structure/templates/selection_item.tmpl',
+  'text!js/patterns/structure/templates/tablerow.tmpl',
+  'text!js/patterns/structure/templates/table.tmpl',
+  'text!js/ui/templates/popover.tmpl'
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 
   var Structure = Base.extend({
     name: 'structure',
     defaults: {
-      ajaxvocabulary: null,
+      ajaxVocabulary: null,
       tagsAjaxVocabulary: null,
+      usersAjaxVocabulary: null,
+      indexOptionsUrl: null, // for querystring widget
+      contextInfoUrl: null, // for add new dropdown and other info
+      setDefaultPageUrl: null,
+      backdropSelector: '.modal', // Element upon which to apply backdrops used for popovers
       attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
                    'ModificationDate', 'EffectiveDate', 'CreationDate',
-                   'is_folderish', 'Subject'],
+                   'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
+                   'getObjSize', 'last_comment_date', 'total_comments'],
+      activeColumns: [
+        'ModificationDate',
+        'EffectiveDate',
+        'review_state'
+      ],
+      availableColumns: {
+        'ModificationDate': 'Last modified',
+        'EffectiveDate': 'Published',
+        'CreationDate': 'Created',
+        'review_state': 'Review state',
+        'Subject': 'Tags',
+        'Type': 'Type',
+        'is_folder': 'Folder',
+        'exclude_from_nav': 'Excluded from nav',
+        'getObjSize': 'Object Size',
+        'last_comment_date': 'Last comment date',
+        'total_comments': 'Total comments'
+      },
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,
@@ -75,31 +97,19 @@ define([
           title: 'Tags',
           url: '/tags'
         },{
-          title: 'Dates',
-          url: '/dates'
-        }],
-        folder: [{
-          title: 'Order',
-          url: '/order'
+          title: 'Properties',
+          url: '/properties'
+        },{
+          title: 'Rename',
+          url: '/rename'
         }]
-      },
-      folderOrderModes: [{
-        id: '',
-        title: 'Manual'
-      },{
-        id: 'effectiveDate',
-        title: 'Publication Date'
-      },{
-        id: 'creationDate',
-        title: 'Creation Date'
-      }],
-      folderOrder: ''
+      }
     },
     init: function() {
       var self = this;
       self.browsing = true; // so all queries will be correct with QueryHelper
 
-      self.options.collectionUrl = self.options.ajaxvocabulary;
+      self.options.collectionUrl = self.options.ajaxVocabulary;
       self.options.queryHelper = new QueryHelper(self.$el,
         $.extend(true, {}, self.options, {basePattern: self}));
 

@@ -78,17 +78,9 @@ define([
         }
         return false;
       }
+    }
 
-            if (registry.patterns[pattern.name]) {
-                return false;
-            }
+  };
 
-            // register pattern to be used for scanning new content
-            registry.patterns[pattern.name] = pattern;
-
-            return true;
-        }
-    };
-
-    return registry;
+  return registry;
 });

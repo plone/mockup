@@ -75,7 +75,7 @@ define([
       this.server.restore();
     });
 
-    it("default behaivour", function() {
+    it("default behaviour", function() {
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
@@ -138,6 +138,8 @@ define([
       $('<a class="pat-modal" />')
         .patternModal()
         .on('show.modal.patterns', function(e, modal){
+          expect(modal.defaults.actionOptions.redirectToUrl('ignore',
+              '<html><head><base href="testurl"></base></head></html>')).to.equal('testurl');
           expect(modal.defaults.actionOptions.redirectToUrl('ignore',
               '<html><head><base href="testurl" /></head></html>')).to.equal('testurl');
           done();

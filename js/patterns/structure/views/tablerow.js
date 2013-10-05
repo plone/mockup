@@ -27,12 +27,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!js/patterns/structure/templates/tablerow.html'
+  'text!js/patterns/structure/templates/tablerow.tmpl'
 ], function($, _, Backbone, TableRowTemplate) {
   "use strict";
 
   var TableRowView = Backbone.View.extend({
     tagName: 'tr',
+    className: 'itemRow',
     template: _.template(TableRowTemplate),
     events: {
       'change input': 'itemSelected',
@@ -48,6 +49,8 @@ define([
       if(this.selectedCollection.findWhere({UID: data.UID})){
         data.selected = true;
       }
+      data.attributes = this.model.attributes;
+      data.activeColumns = this.app.activeColumns;
       this.$el.html(this.template(data));
       var attrs = this.model.attributes;
       this.$el.addClass('state-' + attrs.review_state).
@@ -56,6 +59,10 @@ define([
         this.$el.addClass('folder');
       }
       this.$el.attr('data-path', data.path);
+      this.$el.attr('data-UID', data.UID);
+      this.$el.attr('data-id', data.id);
+      this.$el.attr('data-type', data.Type);
+      this.$el.attr('data-folderish', data.is_folderish);
       this.el.model = this.model;
       return this;
     },
@@ -86,7 +93,7 @@ define([
         var $el = $(this.app.last_selected);
         var last_checked_index = $el.index();
         var this_index = this.$el.index();
-        this.app.table_view.$('input[type="checkbox"]').each(function(){
+        this.app.tableView.$('input[type="checkbox"]').each(function(){
           var $el = $(this);
           var index = $el.parents('tr').index();
           if((index > last_checked_index && index < this_index) ||

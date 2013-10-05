@@ -2,15 +2,36 @@ module.exports = function(grunt) {
 
   require('karma-mocha');
   var requirejsOptions = require('./js/config'),
-      docs = {};
+      karmaConfig = require('./node_modules/karma/lib/config'),
+      karma_files = [],
+      docs_files = {};
 
   for (var key in requirejsOptions.paths) {
     if (key !== 'tinymce') {
-      docs['docs/dev/' + requirejsOptions.paths[key] + '.js'] = [requirejsOptions.paths[key] + '.js'];
+      docs_files['docs/dev/' + requirejsOptions.paths[key] + '.js'] = [requirejsOptions.paths[key] + '.js'];
     }
+    karma_files.push({
+      pattern: requirejsOptions.paths[key] + '.js',
+      included: false
+    });
   }
-  docs['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
-  docs['docs/dev/js/config.js'] = 'js/config.js';
+
+  karma_files.push({pattern: 'tests/example-resource*', included: false});
+  karma_files.push({pattern: 'tests/fakeserver*', included: false});
+  karma_files.push({pattern: 'tests/**/*-test.js', included: false});
+  karma_files.push({pattern: 'js/patterns/ui/**/*.js', included: false});
+  karma_files.push({pattern: 'js/patterns/ui/**/*.html', included: false});
+  karma_files.push({pattern: 'js/patterns/structure/**/*.js', included: false});
+  karma_files.push({pattern: 'js/patterns/structure/**/*.tmpl', included: false});
+  karma_files.push({pattern: 'js/patterns/filemanager/**/*.tmpl', included: false});
+  karma_files.push({pattern: 'js/patterns/filemanager/**/*.js', included: false});
+  karma_files.push({pattern: 'js/patterns/tinymce/templates/*.tmpl', included: false});
+
+  karma_files.push('js/config.js');
+  karma_files.push('tests/config.js');
+
+  docs_files['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
+  docs_files['docs/dev/js/config.js'] = 'js/config.js';
 
   requirejsOptions.optimize = 'none';
 
@@ -21,16 +42,92 @@ module.exports = function(grunt) {
       all: ['Gruntfile.js', 'js/**/*.js', 'tests/*.js']
     },
     karma: {
+      options: {
+
+        // base path, that will be used to resolve files and exclude
+        basePath: './',
+
+        // frameworks to use
+        frameworks: ['mocha', 'requirejs'],
+
+        // list of files / patterns to load in the browser
+        files: karma_files,
+
+        // list of files to exclude
+        exclude: [
+          // TODO: we need to fix this tests
+          'tests/iframe-test.js',
+          'tests/pattern-formunloadalert-test.js',
+          'tests/pattern-preventdoublesubmit-test.js'
+        ],
+
+        preprocessors: {
+          'js/**/*.js': 'coverage'
+        },
+
+        // test results reporter to use
+        // possible values: dots || progress || growl
+        reporters: ['dots', 'progress', 'coverage'],
+
+        coverageReporter: {
+          type : 'html',
+          dir : 'coverage/'
+        },
+
+        // web server port
+        port: 9876,
+
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
+
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: karmaConfig.LOG_INFO,
+
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
+
+        // If browser does not capture in given timeout [ms], kill it
+        captureTimeout: 60000,
+
+        plugins: [
+          'karma-mocha',
+          'karma-coverage',
+          'karma-requirejs',
+          'karma-sauce-launcher',
+          'karma-chrome-launcher',
+          'karma-phantomjs-launcher',
+          'karma-junit-reporter'
+        ]
+      },
       dev: {
-        configFile: 'tests/karma.conf.js'
+        // Start these browsers, currently available:
+        // - Chrome
+        // - ChromeCanary
+        // - Firefox
+        // - Opera
+        // - Safari (only Mac)
+        // - PhantomJS
+        // - IE (only Windows)
+        browsers: ['PhantomJS']
       },
       dev_chrome: {
-        configFile: 'tests/karma.conf.js',
-        browsers: ['Chrome']
+        browsers: ['Chrome'],
+        preprocessors: {},
+        reporters: ['dots', 'progress'],
+        plugins: [
+          'karma-mocha',
+          'karma-requirejs',
+          'karma-sauce-launcher',
+          'karma-chrome-launcher',
+          'karma-phantomjs-launcher',
+          'karma-junit-reporter'
+        ]
       },
       ci: {
-        configFile: 'tests/karma.conf.js',
         singleRun: true,
+        browsers: ['sauce_chrome'],
+
         reporters: ['junit', 'coverage'],
         junitReporter: {
           outputFile: 'test-results.xml'
@@ -39,7 +136,7 @@ module.exports = function(grunt) {
           type : 'lcovonly',
           dir : 'coverage/'
         },
-        browsers: ['sauce_chrome'],
+
         sauceLabs: {
           testName: 'PloneMockup',
           startConnect: true
@@ -90,7 +187,7 @@ module.exports = function(grunt) {
         }
       },
       docs: {
-        files: docs
+        files: docs_files
       }
     },
     less: {
@@ -382,7 +479,7 @@ module.exports = function(grunt) {
       'sed:docs-spritemap'
       ]);
   grunt.registerTask('default', [
-      'test-ci',
+      'karma:ci',
       'compile',
       'docs'
       ]);
