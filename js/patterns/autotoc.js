@@ -94,6 +94,7 @@ define([
             if (self.$el.parents('.modal').size() !== 0) {
               self.$el.trigger('resize.modal.patterns');
             }
+            $(this).trigger('clicked');
           });
       });
 
