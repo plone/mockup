@@ -867,6 +867,7 @@ function($action, response, options) { ... }
             {attribute: 'displayInModal', type: 'Boolean', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
             {attribute: 'reloadWindowOnClose', type: 'Boolean', description: 'Whether or not to reload the window when the modal is closed due to this action.'},
             {attribute: 'error', type: 'String', description: 'Match content from an <code>ajaxSubmit</code> that indicates an error. If content is found, <code>onFormError</code> is called.'},
+            {attribute: 'formFieldError', type: 'String', description: 'Match content from an <code>ajaxSubmit</code> that indicates a specific form field error (e.g. validation error). If content is found, <code>onFormError</code> is called.'},
             {attribute: 'onSuccess', type: 'Function', description: 'Function is called after a successful AJAX request. Arguments: <code>response, state, xhr, form</code>.'},
             {attribute: 'onError', type: 'Function', description: 'Function is called if an AJAX request results in an error. Arguments: <code>response, state, xhr, form</code>.'},
             {attribute: 'onFormError', type: 'Function', description: 'Function is called if an AJAX request is successful, but content in the response matches the <code>error</code> selector. Arguments: <code>response, state, xhr, form</code>.'},
