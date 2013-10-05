@@ -40,5 +40,5 @@ Run tests with PhantomJS::
 
 Run tests with Chrome::
 
-    $ make test --chrome
+    $ make test-chrome
 
