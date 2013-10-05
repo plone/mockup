@@ -100,6 +100,7 @@ define([
         displayInModal: true,
         reloadWindowOnClose: true,
         error: '.portalMessage.error',
+        formFieldError: '.field.error',
         loading: '' +
           '<div class="progress progress-striped active">' +
           '  <div class="bar" style="width: 100%;"></div>' +
@@ -208,8 +209,10 @@ define([
               self.trigger('formActionError', [xhr, textStatus, errorStatus]);
             },
             success: function(response, state, xhr, form) {
-              // if error is found
-              if ($(options.error, response).size() !== 0) {
+              // if error is found (NOTE: check for both the portal errors
+              // and the form field-level errors)
+              if ($(options.error, response).size() !== 0 ||
+                  $(options.formFieldError, response).size() !== 0) {
                 if (options.onFormError) {
                   options.onFormError(self, response, state, xhr, form);
                 } else {
