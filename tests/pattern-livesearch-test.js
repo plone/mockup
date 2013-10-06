@@ -40,7 +40,8 @@ define([
   "use strict";
 
   var expect = chai.expect,
-      mocha = window.mocha;
+      mocha = window.mocha,
+      errormsg;
 
   mocha.setup({globals: ['setTimeout', 'setInterval', 'clearTimeout', 'clearInterval']});
   mocha.setup('bdd');
@@ -52,6 +53,12 @@ define([
 
   describe('Livesearch', function() {
     beforeEach(function(){
+
+      this._error = $.error;
+      $.error = function(msg) {
+        errormsg = msg;
+      };
+
       this.clock = sinon.useFakeTimers();
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
@@ -130,6 +137,11 @@ define([
       $('body').empty();
       this.clock.restore();
       this.server.restore();
+
+      this.$el.remove();
+      $.error= this._error;
+      errormsg = undefined;
+
     });
 
     it('test default elements', function() {
@@ -169,10 +181,10 @@ define([
 
       $input.trigger('focus');
 
-      var d = $.Event('keyup');
-      d.which = 68;
+      var keyup = $.Event('keyup');
+      keyup.which = 68;
 
-      $input.val('ddd').trigger(d);
+      $input.val('ddd').trigger(keyup);
 
       this.clock.tick(1000);
 
@@ -188,11 +200,64 @@ define([
 
       expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
-      expect(pattern.testTarget).to.be.null;
+      // keyleft
+      keyup = $.Event('keyup');
+      keyup.which = 37;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
-      pattern._keyEnter();
+      // keyright
+      keyup = $.Event('keyup');
+      keyup.which = 39;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      // up arrow
+      keyup = $.Event('keyup');
+      keyup.which = 38;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      // down arrow
+      keyup = $.Event('keyup');
+      keyup.which = 40;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      // enter
+      expect(pattern.testTarget).to.be.null;
+      keyup = $.Event('keyup');
+      keyup.which = 13; // like pattern._keyEnter();
+      $input.trigger(keyup);
 
       expect(pattern.testTarget).to.not.be.null;
+
+      //up arrow
+      pattern._keyDown();
+      var keydown = $.Event('keydown');
+      keydown.which = 38;
+      $input.trigger(keydown);
+
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      //down arrow
+      keydown = $.Event('keydown');
+      keydown.which = 40;
+      $input.trigger(keydown);
+
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(2);
+
+      // escape
+      keyup = $.Event('keyup');
+      keyup.which = 27; // like pattern._keyEscape()
+      $input.trigger(keyup);
+
+      this.clock.tick(1000);
+      expect(pattern.$toggle.hasClass('show')).to.be.false;
 
       $el.remove();
 
@@ -313,6 +378,87 @@ define([
 
       $el.remove();
       tpl.remove();
+    });
+
+    it('log error msg if there is no input field', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="url:/search.json">'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      expect(errormsg).to.equal('Input element not found ' + $el);
+
+      $el.remove();
+    });
+
+    it('log error msg if there is no url', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="">'+
+            ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      expect(errormsg).to.equal('No url provided for livesearch results ' + $el);
+
+      $el.remove();
+    });
+
+    it('hide search result if clicking somewhere', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="url:/search.json;">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+
+      pattern.$toggle.addClass('show');
+      $('html').click();
+
+      expect(pattern.$toggle.hasClass('show')).to.be.false;
+
+    });
+
+    it('show cached result', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="url:/search.json; isTest: true">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+
+      var $input = pattern.$input;
+      var keyup = $.Event('keyup');
+      keyup.which = 68;
+      $input.val('cacheme').trigger(keyup);
+      this.clock.tick(1000);
+
+      var result = pattern.$results.find('.pat-livesearch-result').length;
+
+      $input.val('cacheme').trigger(keyup);
+      this.clock.tick(1000);
+
+      expect(pattern.getCache().length).to.equal(result);
+
     });
 
   });
