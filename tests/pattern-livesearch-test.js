@@ -181,10 +181,10 @@ define([
 
       $input.trigger('focus');
 
-      var d = $.Event('keyup');
-      d.which = 68;
+      var keyup = $.Event('keyup');
+      keyup.which = 68;
 
-      $input.val('ddd').trigger(d);
+      $input.val('ddd').trigger(keyup);
 
       this.clock.tick(1000);
 
@@ -200,11 +200,64 @@ define([
 
       expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
-      expect(pattern.testTarget).to.be.null;
+      // keyleft
+      keyup = $.Event('keyup');
+      keyup.which = 37;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
-      pattern._keyEnter();
+      // keyright
+      keyup = $.Event('keyup');
+      keyup.which = 39;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      // up arrow
+      keyup = $.Event('keyup');
+      keyup.which = 38;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      // down arrow
+      keyup = $.Event('keyup');
+      keyup.which = 40;
+      $input.trigger(keyup);
+      // nothing should happen
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      // enter
+      expect(pattern.testTarget).to.be.null;
+      keyup = $.Event('keyup');
+      keyup.which = 13; // like pattern._keyEnter();
+      $input.trigger(keyup);
 
       expect(pattern.testTarget).to.not.be.null;
+
+      //up arrow
+      pattern._keyDown();
+      var keydown = $.Event('keydown');
+      keydown.which = 38;
+      $input.trigger(keydown);
+
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+
+      //down arrow
+      keydown = $.Event('keydown');
+      keydown.which = 40;
+      $input.trigger(keydown);
+
+      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(2);
+
+      // escape
+      keyup = $.Event('keyup');
+      keyup.which = 27; // like pattern._keyEscape()
+      $input.trigger(keyup);
+
+      this.clock.tick(1000);
+      expect(pattern.$toggle.hasClass('show')).to.be.false;
 
       $el.remove();
 
