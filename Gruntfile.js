@@ -25,7 +25,9 @@ module.exports = function(grunt) {
   karma_files.push({pattern: 'js/patterns/structure/**/*.tmpl', included: false});
   karma_files.push({pattern: 'js/patterns/filemanager/**/*.tmpl', included: false});
   karma_files.push({pattern: 'js/patterns/filemanager/**/*.js', included: false});
-  karma_files.push({pattern: 'js/patterns/tinymce/templates/*.tmpl', included: false});
+  karma_files.push({pattern: 'js/patterns/tinymce/**/*.tmpl', included: false});
+  karma_files.push({pattern: 'js/patterns/tinymce/**/*.js', included: false});
+
 
   karma_files.push('js/config.js');
   karma_files.push('tests/config.js');
@@ -57,7 +59,6 @@ module.exports = function(grunt) {
         exclude: [
           // TODO: we need to fix this tests
           'tests/iframe-test.js',
-          'tests/pattern-formunloadalert-test.js',
           'tests/pattern-preventdoublesubmit-test.js'
         ],
 

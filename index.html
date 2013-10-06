@@ -330,19 +330,24 @@ $ make bootstrap</pre>
       <pre>make</pre>
 
       <h3>Step 6: Testing</h3>
+      <h4>
+        Right now tests are
+        <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
+        and coverage is
+        <a href='https://coveralls.io/r/plone/mockup?branch=master'><img src='https://coveralls.io/repos/plone/mockup/badge.png?branch=master' alt='Coverage Status' /></a> .
+      </h4>
       <h4>Running tests</h4>
       <p>And you can run tests with:</p>
       <pre>make test</pre>
       <p>This will start a continuous process that will rerun the tests when you change any of
       the js files.</p>
-      <p>
-        Right now tests are
-        <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
-        and coverage is
-        <a href='https://coveralls.io/r/plone/mockup?branch=master'><img src='https://coveralls.io/repos/plone/mockup/badge.png?branch=master' alt='Coverage Status' /></a> .
-      </p>
-      <p>if you have Chrome installed you can alternatively run your tests with:</p>
+      <p>If you have Chrome installed you can alternatively run your tests with:</p>
       <pre>make test-chrome</pre>
+      <p>If you want to just run the tests for the pattern you are working on you can run tests with:</p>
+      <pre>make test pattern=foobar</pre>
+      <p>Or:</p>
+      <pre>make test-chrome pattern=foobar</pre>
+      <p>These will run only the tests in patterns-foobar-test.js</p>
       <h4>Adding new tests</h4>
       <p>To add new tests, you can add them into the <tt>tests</tt> directory.
       They will automatically be picked up by the test runner if they are named
