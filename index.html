@@ -2375,7 +2375,6 @@ function foobar(){
 
 
   <!--  **** File Manager **** -->
-  <!--
   <script>
     addPattern({
       id: 'filemanager',
@@ -2383,14 +2382,13 @@ function foobar(){
       description: "Manage group of files in browser",
       attributes: [
         {attribute: 'aceConfig', type: 'JSON', defaultValue: '{}', description: 'Config to initialize ace with'},
-        {attribute: 'fileTreeUrl', type: 'JSON', defaultValue: 'null', description: 'url to return json data structure'},
+        {attribute: 'dataTreeUrl', type: 'JSON', defaultValue: 'null', description: 'url to return json data structure'},
       ]
     });
   </script>
   <script type="text/example" class="example-filemanager" data-title="Default">
-    <div class="pat-filemanager" data-pat-filemanager="fileTreeUrl: /tests/json/fileTree.json" />
+    <div class="pat-filemanager" data-pat-filemanager="dataTreeUrl: /tests/json/fileTree.json" />
   </script>
-  -->
 
 
 </head>

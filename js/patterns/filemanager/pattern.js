@@ -34,15 +34,22 @@ define([
     name: "filemanager",
     defaults: {
       aceConfig: {},
-      fileTreeUrl: null
+      dataTreeUrl: null,
+      uploadUrl: null
+    },
+    treeConfig: {
+      autoOpen: true
     },
     init: function() {
       var self = this;
-      self.appView = new AppView(self.options);
-      if(self.options.fileTreeUrl){
+      if(self.options.dataTreeUrl !== null){
+        self.options.treeConfig = $.extend(true, {}, self.treeConfig, {
+          dataUrl: self.options.dataTreeUrl
+        });
+        self.appView = new AppView(self.options);
         self.$el.append(self.appView.render().el);
       }else{
-        self.$el.html('Must specify fileTreeUrl setting for pattern');
+        self.$el.html('Must specify dataTreeUrl setting for pattern');
       }
     }
   });
