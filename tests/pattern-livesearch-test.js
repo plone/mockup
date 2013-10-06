@@ -343,6 +343,26 @@ define([
       $el.remove();
     });
 
+    it('log error msg if there is no url', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="">'+
+            ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+      expect(errormsg).to.equal('No url provided for livesearch results ' + $el);
+
+      $el.remove();
+    });
+
+
+
+
   });
 
 });
