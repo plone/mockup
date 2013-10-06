@@ -84,7 +84,7 @@ define([
     it("test setting small font size with button works", function(){
       // add pattern to anchor
       this.$el.attr("data-pat-accessibility", "smallbtn: #btn1");
-      var accessibility = new Accessibility(this.$el);
+      registry.scan(this.$el);
       $('#btn1', this.$el).trigger('click');
       expect(this.$el.hasClass('smallText')).to.be.true;
     });
@@ -92,7 +92,7 @@ define([
       // add pattern to anchor
       this.$el.attr("data-pat-accessibility",
         "largebtn: #btn3; smallbtn: #btn1");
-      var accessibility = new Accessibility(this.$el);
+      registry.scan(this.$el);
       $('#btn3', this.$el).trigger('click');
       expect(this.$el.hasClass('largeText')).to.be.true;
     });

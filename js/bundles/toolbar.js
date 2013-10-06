@@ -178,7 +178,7 @@ define([
             '.section select': {
               eventType: 'change',
               onSuccess: function(modal, response, state, xhr, form) {
-                  if (modal.$modal.find('.pat-modal-buttons input').length === 0) {
+                  if (modal.$modal.find('.pattern-modal-buttons input').length === 0) {
                       // The portlet didn't have an edit form (e.g. calendar)
                       modal.reloadWindow();
                   }

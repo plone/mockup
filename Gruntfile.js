@@ -18,6 +18,7 @@ module.exports = function(grunt) {
 
   karma_files.push({pattern: 'tests/example-resource*', included: false});
   karma_files.push({pattern: 'tests/fakeserver*', included: false});
+  karma_files.push({pattern: 'tests/*-test.js', included: false});
   karma_files.push({pattern: 'tests/**/*-test.js', included: false});
   karma_files.push({pattern: 'js/patterns/ui/**/*.js', included: false});
   karma_files.push({pattern: 'js/patterns/ui/**/*.html', included: false});
@@ -59,6 +60,7 @@ module.exports = function(grunt) {
         exclude: [
           // TODO: we need to fix this tests
           'tests/iframe-test.js',
+          'tests/pattern-formunloadalert-test.js',
           'tests/pattern-preventdoublesubmit-test.js'
         ],
 

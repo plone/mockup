@@ -52,26 +52,26 @@ define([
       url: null, // must be set in order to work
       delay: 200,
       blurDelay: 200,
-      highlight: 'pat-livesearch-highlight', // class to add to items when selected
+      highlight: 'pattern-livesearch-highlight', // class to add to items when selected
       minimumInputLength: 3, // number of chars user should type before searching
-      toggleTarget: '.pat-livesearch-container', // the element to show/hide when performing search
+      toggleTarget: '.pattern-livesearch-container', // the element to show/hide when performing search
       toggleClass: 'show',
       positionToggleWithInput: true,
-      resultsTarget: '.pat-livesearch-results', // the element to fill with results
-      input: '.pat-livesearch-input', // input selector
+      resultsTarget: '.pattern-livesearch-results', // the element to fill with results
+      input: '.pattern-livesearch-input', // input selector
       resultsContainerTemplate: '<ul></ul>',
       resultsContainerTemplateSelector: null,
       resultsAppendTo: 'ul', // selector for element within results to append to.
-      resultSelector: '.pat-livesearch-result',
+      resultSelector: '.pattern-livesearch-result',
       resultTemplate: '' +
-        '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
-          '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
+        '<li class="pattern-livesearch-result pattern-livesearch-type-<%= Type %>">' +
+          '<a class="pattern-livesearch-result-title" href="<%= getURL %>">' +
             '<%= Title %>' +
           '</a>' +
-          '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
+          '<p class="pattern-livesearch-result-desc"><%= Description %></p>' +
         '</li>',
       resultTemplateSelector: null,
-      helpTemplate: '<div class="pat-livesearch-help"><%= help %></div>',
+      helpTemplate: '<div class="pattern-livesearch-help"><%= help %></div>',
       helpTemplateSelector: null,
       typeMoreTemplate: 'Type <%= more %> more character<%= more === 1 ? "" : "s" %> to search.',
       typeMoreTemplateSelector: null,

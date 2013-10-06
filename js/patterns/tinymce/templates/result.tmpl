@@ -1,16 +1,16 @@
-<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">
-  <a href="#" class="pat-relateditems-result-select <% if (selectable) { %>selectable<% } %>">
+<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-active<% } %>">
+  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">
     <% if (!folderish) { %>
-    <span class="pat-relateditems-result-image">
+    <span class="pattern-relateditems-result-image">
       <img src="<%= getURL %>/@@images/image/tile" />
     </span>
     <% } %>
-    <span class="pat-relateditems-result-title"><%= Title %></span>
-    <span class="pat-relateditems-result-path"><%= path %></span>
+    <span class="pattern-relateditems-result-title"><%= Title %></span>
+    <span class="pattern-relateditems-result-path"><%= path %></span>
   </a>
-  <span class="pat-relateditems-buttons">
+  <span class="pattern-relateditems-buttons">
     <% if (folderish) { %>' +
-      <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>"></a>
+      <a class="pattern-relateditems-result-browse" href="#" data-path="<%= path %>"></a>
     <% } %>
   </span>
 </div>

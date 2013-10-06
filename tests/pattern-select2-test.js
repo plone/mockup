@@ -86,7 +86,8 @@ define([
         '        />'
         );
 
-        var select2 = new Select2($el);
+        registry.scan($el);
+        var select2 = $el.data('pattern-select2');
         expect(select2.options.ajax.url).to.equal("select2-users-vocabulary");
     });
 

@@ -29,79 +29,13 @@
 define([
   'jquery',
   'mockup-registry'
-], function($, registry) {
+], function($, Registry) {
   "use strict";
-
-  function getName(name) {
-    return name.replace(/\.(\w)/g, function(match, letter) { return letter.toUpperCase(); });
-  }
-
-  function _keysToObject(object, keys, value) {
-    if (keys.length === 1) {
-      object[keys[0]] = value;
-      return value;
-    } else {
-      var key = keys.shift();
-      if (!object[key]) {
-        object[key] = {};
-      }
-      return _keysToObject(object[key], keys, value);
-    }
-  }
-
-  function getOptions($el, name, options) {
-    options = options || {};
-
-    // get options from parent element first, stop if element tag name is 'body'
-    if ($el.length !== 0 && !$.nodeName($el[0], 'body')) {
-      options = getOptions($el.parent(), name, options);
-    }
-
-    // collect all options from element
-    var elOptions = {};
-    if ($el.length !== 0) {
-      elOptions = $el.data('pat-' + name);
-      if (elOptions) {
-        // parse options if string
-        if (typeof(elOptions) === 'string') {
-          var tmpOptions = {};
-          // TODO: Redo this with a proper Regex
-          $.each(elOptions.split(';'), function(i, item) {
-            item = item.split(':');
-            if (item.length >= 1) {
-              item.reverse();
-              var key = item.pop();
-              key = key.replace(/^\s+|\s+$/g, '');  // trim
-              item.reverse();
-              var value = item.join(':');
-              value = value.replace(/^\s+|\s+$/g, '');  // trim
-              tmpOptions[key] = value;
-            }
-          });
-          elOptions = {};
-          $.each(tmpOptions, function(key, value) {
-            _keysToObject(elOptions, key.split('-'), value);
-          });
-        }
-      }
-    }
-
-    return $.extend(true, {}, options, elOptions);
-  }
 
   // Base Pattern
   var Base = function($el, options) {
     this.$el = $el;
-    if (this.parser) {
-      this.options = $.extend(true, {},
-          this.parser.parse($el, this.defaults || {}, this.multipleOptions || false),
-          options || {});
-    } else {
-      this.options = $.extend(true, {},
-          this.defaults || {},
-          getOptions($el, this.name),
-          options || {});
-    }
+    this.options = $.extend(true, {}, this.defaults || {}, options || {});
     if (this.options.__returnDefaults !== true) {
       this.init();
       this.trigger('init');
@@ -145,20 +79,7 @@ define([
 
     Constructor.__super__ = Base.prototype;
 
-    registry.register(Constructor);
-
-    {
-      name: Constructor.prototype.name,
-      init: function($all) {
-        return $all.each(function(i) {
-          var $el = $(this),
-              data = $el.data('pattern-' + Constructor.prototype.name + '-' + i);
-          if (!data) {
-            $el.data('pattern-' + Constructor.prototype.name + '-' + i, new Constructor($el));
-          }
-        });
-      }
-    });
+    Registry.register(Constructor);
 
     return Constructor;
   };

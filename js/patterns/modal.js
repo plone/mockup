@@ -308,7 +308,7 @@ define([
           title: '',
           prepend: '<div />',
           content: '',
-          buttons: '<div class="pat-modal-buttons"></div>',
+          buttons: '<div class="pattern-modal-buttons"></div>',
           options: options.templateOptions
         };
 
@@ -346,7 +346,7 @@ define([
               e.preventDefault();
             })
             .clone()
-            .appendTo($('.pat-modal-buttons', self.$modal))
+            .appendTo($('.pattern-modal-buttons', self.$modal))
             .off('click').on('click', function(e) {
               e.stopPropagation();
               e.preventDefault();
