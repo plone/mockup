@@ -413,8 +413,53 @@ define([
       $el.remove();
     });
 
+    it('hide search result if clicking somewhere', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="url:/search.json;">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
 
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
+      pattern.$toggle.addClass('show');
+      $('html').click();
+
+      expect(pattern.$toggle.hasClass('show')).to.be.false;
+
+    });
+
+    it('show cached result', function(){
+      var $el = $(''+
+          '<div class="pat-livesearch"'+
+              'data-pat-livesearch="url:/search.json; isTest: true">'+
+            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
+            '<div class="pat-livesearch-container">'+
+              '<div class="pat-livesearch-results">'+
+              '</div>'+
+            '</div>'+
+          '</div>').appendTo('body');
+
+      var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
+
+      var $input = pattern.$input;
+      var keyup = $.Event('keyup');
+      keyup.which = 68;
+      $input.val('cacheme').trigger(keyup);
+      this.clock.tick(1000);
+
+      var result = pattern.$results.find('.pat-livesearch-result').length;
+
+      $input.val('cacheme').trigger(keyup);
+      this.clock.tick(1000);
+
+      expect(pattern.getCache().length).to.equal(result);
+
+    });
 
   });
 
