@@ -75,7 +75,7 @@ define([
       this.server.restore();
     });
 
-    it("default behaivour", function() {
+    it("default behaviour", function() {
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +

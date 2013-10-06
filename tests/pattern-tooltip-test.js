@@ -1,6 +1,6 @@
-// tests for moment
+// tests for tooltip
 //
-// @author Nathan Van Gheem
+// @author lpmayos
 // @version 1.0
 // @licstart  The following is the entire license notice for the JavaScript
 //            code in this page.
@@ -34,8 +34,8 @@ define([
   'chai',
   'jquery',
   'mockup-registry',
-  'mockup-patterns-moment'
-], function(chai, $, registry, Moment) {
+  'mockup-patterns-tooltip'
+], function(chai, $, registry, ToolTip) {
   "use strict";
 
   var expect = chai.expect,
@@ -45,45 +45,38 @@ define([
   $.fx.off = true;
 
 /* ==========================
-   TEST: Moment
+   TEST: Tooltip
   ========================== */
 
-  describe("Moment", function () {
+  describe("Tooltip", function () {
+
     beforeEach(function() {
+      this.$el = $('' +
+        '<div><p href=".example-class" class="pat-tooltip">'+
+        '  Hover over this line to see a tooltip'+
+        '</p>'+
+        '<p class="tooltips example-class">'+
+        '  Setting the .example-class in the href makes this show up'+
+        '</p></div>');
     });
-    it("test parse relative", function() {
-      var date = new Date();
-      date.setMinutes(date.getMinutes() + 2);
-      var $el = $('<div class="pat-moment"' +
-        'data-pat-moment="format:relative">' + date + '</div>');
-      registry.scan($el);
-      expect($el.html()).to.equal('in 2 minutes');
+
+    afterEach(function() {
+        this.$el.remove();
     });
-    it("test parse calendar", function() {
-      var $el = $('<div class="pat-moment"' +
-        'data-pat-moment="format:calendar">2012-10-02 14:30</div>');
-      registry.scan($el);
-      expect($el.html()).to.equal('10/02/2012');
-    });
-    it("test parse custom", function() {
-      var $el = $('<div class="pat-moment"' +
-        'data-pat-moment="format:YYYY">2012-10-02 14:30</div>');
-      registry.scan($el);
-      expect($el.html()).to.equal('2012');
-    });
-    it("test parse custom", function() {
-      var $el = $('<div class="pat-moment" data-pat-moment="format:YYYY;selector:*">' +
-        '<div>2012-10-02 14:30</div>' +
-      '</div>');
-      registry.scan($el);
-      expect($el.find('div').html()).to.equal('2012');
-    });
-    it("test parse no date", function() {
-      var $el = $('<div class="pat-moment" data-pat-moment="format:calendar">' +
-        '<div></div>' +
-      '</div>');
-      registry.scan($el);
-      expect($el.find('div').html()).to.equal('');
+
+    it("tooltip appears and disappears", function() {
+        registry.scan(this.$el);
+
+        var trs;
+
+        $('.pat-tooltip', this.$el).trigger('mouseenter.tooltip.patterns');
+        trs = this.$el.find('.example-class');
+        expect(trs.eq(0).hasClass('active')).to.be.true;
+
+        $('.pat-tooltip', this.$el).trigger('mouseleave.tooltip.patterns');
+        trs = this.$el.find('.example-class');
+        expect(trs.eq(0).hasClass('active')).to.be.false;
+
     });
 
   });
