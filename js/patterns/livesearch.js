@@ -364,15 +364,15 @@ define([
       var self = this;
       window.clearTimeout(self.timeout);
       if (event.type === 'keyup') {
-        switch (event.keyCode) {
+        switch (event.which) {
           case 13:
             self._keyEnter();
             return false;
           case 27:
             self._keyEscape();
             break;
-          case 38: break;
-          case 40: break;
+          case 38: break; // up arrow
+          case 40: break; // down arrow
           case 37: break; // keyLeft
           case 39: break; // keyRight
           default:
@@ -392,7 +392,7 @@ define([
 
         }
       } else if (event.type === 'keydown') {
-        switch (event.keyCode) {
+        switch (event.which) {
           case 38:
             self._keyUp();
             return false;
