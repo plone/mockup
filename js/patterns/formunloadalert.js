@@ -64,7 +64,7 @@ define([
         });
       } else {
         $(window).on('beforeunload', function(e){
-          return self._handle_unload.apply(self, e);
+          return self._handle_unload(e);
         });
       }
 
@@ -81,10 +81,14 @@ define([
       }
       if (self._changed) {
         var msg = self.options.message;
-        (e || window.event).returnValue = msg;
+        self._handle_msg(e,msg);
+        $(window).trigger('messageset');
         return msg;
       }
-    }
+    },
+    _handle_msg:  function(e,msg) {
+      (e || window.event).returnValue = msg;
+    } 
   });
   return FormUnloadAlert;
 
