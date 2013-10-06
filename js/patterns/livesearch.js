@@ -345,7 +345,7 @@ define([
     },
 
     _keyEscape: function() {
-      this.$input.trigger('blur');
+      this.$input.trigger('blur.livesearch.patterns');
     },
 
     _keyEnter: function() {
