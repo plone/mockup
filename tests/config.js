@@ -1,5 +1,8 @@
 var tests = Object.keys(window.__karma__.files).filter(function (file) {
-  return (/\-test\.js$/).test(file);
+    if (window.__karma__.config.args.pattern) {
+      return (new RegExp(window.__karma__.config.args.pattern + "-test.js$")).test(file);
+    }
+    return (/\-test\.js$/).test(file);
 });
 
 requirejs.config({
