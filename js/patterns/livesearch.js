@@ -50,7 +50,6 @@ define([
     testTarget: null,
     defaults: {
       url: null, // must be set in order to work
-      dataType: 'json', // 'json' or 'html'
       delay: 200,
       blurDelay: 200,
       highlight: 'pat-livesearch-highlight', // class to add to items when selected
@@ -181,23 +180,12 @@ define([
         self.options.ajax.url,
         $.param(params),
         function(data) {
-          var dataType = self.options.dataType;
-
-          if (dataType === 'json') {
-
-            if(data.results !== undefined){
-              self.cache[term] = data.results;
-            }else{
-              console.log('error from server returning result');
-            }
-
-          } else if (dataType === 'html') {
-            if(data.results !== undefined){
-              self.cache[term] = data.results;
-            }else{
-              console.log('error from server returning result');
-            }
+          if(data.results !== undefined){
+            self.cache[term] = data.results;
+          }else{
+            console.log('error from server returning result');
           }
+
           self.trigger('searched');
         }
       );
@@ -247,10 +235,6 @@ define([
       return html;
     },
 
-    renderhtmlResults: function(data) {
-      return data;
-    },
-
     render: function(event) {
       var self = this;
 
@@ -276,11 +260,7 @@ define([
             appendTo = container;
           }
           if (data) {
-            if (self.options.dataType === 'json') {
-              appendTo.append(self.renderJsonResults(data));
-            } else if (self.options.dataType === 'html') {
-              appendTo.append(self.renderHtmlResults(data));
-            }
+            appendTo.append(self.renderJsonResults(data));
           } else {
             container.html(self.renderHelp('noResults', {}));
           }
