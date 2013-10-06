@@ -125,7 +125,7 @@ define([
     });
     it('shows the right message on beforeunload event', function(done){
       registry.scan(this.$el);
-      var returnValue = undefined;
+      var returnValue = "";
       // current instance of the pattern
       var pattern = this.$el.data('pattern-formunloadalert-0');
       var $select = $('select', this.$el);
@@ -137,7 +137,7 @@ define([
       pattern._handle_msg = function(e, msg) {
         // Set the msg into a variable that we can actually read
         returnValue = msg;
-      }
+      };
       
       expect(pattern._changed).to.be.false;
       $select.trigger('change');
@@ -145,7 +145,7 @@ define([
       
       $(window)
         .on('messageset.formunloadalert.patterns', function(){
-        expect(returnValue).to.equal(pattern.options.message);  
+        expect(returnValue).to.equal(pattern.options.message);
         done();
       });
       // Trigger the beforeunload event
