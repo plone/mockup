@@ -13,10 +13,10 @@ Install & Run Tests
 -------------------
 Install Node version 0.10 or greater
 
-    `Install using package manager, e.g. apt or yum    
+    `Install using package manager, e.g. apt or yum
     <https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager>`_
 
-    `Install without using package manager  
+    `Install without using package manager
     <https://github.com/joyent/node/wiki/Installation>`_
 
 Install PhantomJS
@@ -27,7 +27,7 @@ Install PhantomJS
 Maybe use your package manager::
 
     $ apt-get install phantomjs
-   
+
 Now git clone & build Mockup::
 
     $ git clone https://github.com/plone/mockup.git
@@ -42,3 +42,17 @@ Run tests with Chrome::
 
     $ make test-chrome
 
+Status of builds
+----------------
+
+.. image:: https://travis-ci.org/plone/mockup.png
+   :target: https://travis-ci.org/plone/mockup
+   :alt: Travis CI
+
+.. image:: https://coveralls.io/repos/plone/mockup/badge.png?branch=master
+   :target: https://coveralls.io/r/plone/mockup?branch=master
+   :alt: Coveralls
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/plone/mockup/trend.png
+   :target: https://bitdeli.com/free
+   :alt: Bitdeli
