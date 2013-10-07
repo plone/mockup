@@ -46,7 +46,7 @@ define([
         id = prefix + (Math.floor((1 + Math.random()) * 0x10000)
           .toString(16).substring(1));
       } else {
-        /* hopefully we don't screw anything up here... changing the id 
+        /* hopefully we don't screw anything up here... changing the id
          * in some cases so we get a decent selector */
         id = id.replace(/\./g, '-');
       }
@@ -64,4 +64,3 @@ define([
   return utils;
 
 });
-

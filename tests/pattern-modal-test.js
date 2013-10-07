@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, console, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -85,16 +79,16 @@ define([
 
       registry.scan($el);
 
-      expect($('.backdrop', $el).is(':hidden')).to.be.true;
-      expect($el.hasClass('backdrop-active')).to.be.false;
-      expect($('.modal-wrapper', $el).is(':hidden')).to.be.true;
+      expect($('.backdrop', $el).is(':hidden')).to.be.equal(true);
+      expect($el.hasClass('backdrop-active')).to.be.equal(false);
+      expect($('.modal-wrapper', $el).is(':hidden')).to.be.equal(true);
       expect($('.modal', $el).size()).to.equal(0);
 
       $('a.pat-modal', $el).click();
 
-      expect($('.backdrop', $el).is(':visible')).to.be.true;
-      expect($el.hasClass('backdrop-active')).to.be.true;
-      expect($('.modal-wrapper', $el).is(':visible')).to.be.true;
+      expect($('.backdrop', $el).is(':visible')).to.be.equal(true);
+      expect($el.hasClass('backdrop-active')).to.be.equal(true);
+      expect($('.modal-wrapper', $el).is(':visible')).to.be.equal(true);
       expect($('.modal', $el).size()).to.equal(1);
       expect($('.modal .modal-header', $el).size()).to.equal(1);
       expect($('.modal .modal-body', $el).size()).to.equal(1);
@@ -103,7 +97,7 @@ define([
       var keydown = $.Event("keydown");
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).to.be.false;
+      expect($el.hasClass('backdrop-active')).to.be.equal(false);
       expect($('.modal', $el).size()).to.equal(0);
 
       $el.remove();
@@ -130,7 +124,7 @@ define([
       $('<a class="pat-modal" />')
         .patternModal()
         .on('show.modal.patterns', function(e, modal){
-          expect(true).to.be.true;
+          expect(true).to.be.equal(true);
           done();
       }).click();
     });

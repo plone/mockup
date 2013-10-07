@@ -4,7 +4,7 @@
 //
 // Description:
 //    TinyMCE pattern (for now its depening on Plone's integration)
-// 
+//
 // License:
 //
 // Copyright (C) 2010 Plone Foundation
@@ -22,13 +22,6 @@
 // this program; if not, write to the Free Software Foundation, Inc., 51
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
-
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  undef:true, strict:true, trailing:true, browser:true, evil:true */
-/*global define:false */
-/*global alert,console:true */
-
 
 define([
   'jquery',
@@ -249,7 +242,7 @@ define([
         /*
          * disable until it works better
          * can still upload via link and file overlays
-         
+
         self.dropzone = new DropZone(self.$el, {
           className: 'tinymce-dropzone',
           clickable: false,

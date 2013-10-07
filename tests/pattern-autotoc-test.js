@@ -24,18 +24,12 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
   'mockup-registry',
   'mockup-patterns-autotoc'
-], function(chai, $, registry, AutoTOC) {
+], function(chai, $, Registry, AutoTOC) {
   "use strict";
 
   var expect = chai.expect,
@@ -43,7 +37,7 @@ define([
 
   mocha.setup('bdd');
   $.fx.off = true;
-  
+
   /* ==========================
    TEST: AutoTOC
   ========================== */
@@ -74,7 +68,7 @@ define([
     });
     it("by default creates TOC from h1/h2/h3", function() {
       expect($('> nav', this.$el).size()).to.equal(0);
-      registry.scan(this.$el);
+      Registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(1);
       expect($('> nav > a', this.$el).size()).to.equal(9);
       expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
@@ -90,7 +84,7 @@ define([
     it("can have custom levels", function() {
       this.$el.attr("data-pat-autotoc", "levels: h1");
       expect($('> nav', this.$el).size()).to.equal(0);
-      registry.scan(this.$el);
+      Registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(1);
       expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
       expect($('> nav > a.autotoc-level-2', this.$el).size()).to.equal(0);
@@ -99,7 +93,7 @@ define([
       this.$el.attr("data-pat-autotoc", "levels: h1;appendTo:.placeholder");
       expect($('> nav', this.$el).size()).to.equal(0);
       expect($('div.placeholder > nav', this.$el).size()).to.equal(0);
-      registry.scan(this.$el);
+      Registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(0);
       expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
       expect($('div.placeholder', this.$el).children().eq(0).attr('id')).to.equal("first-elem");
@@ -109,7 +103,7 @@ define([
       this.$el.attr("data-pat-autotoc", "levels: h1;prependTo:.placeholder");
       expect($('> nav', this.$el).size()).to.equal(0);
       expect($('div.placeholder > nav', this.$el).size()).to.equal(0);
-      registry.scan(this.$el);
+      Registry.scan(this.$el);
       expect($('> nav', this.$el).size()).to.equal(0);
       expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
       expect($('div.placeholder', this.$el).children().eq(0).attr('class')).to.equal("autotoc-nav");
@@ -117,11 +111,11 @@ define([
     });
     it("custom className", function() {
       this.$el.attr('data-pat-autotoc', 'className:SOMETHING');
-      registry.scan(this.$el);
+      Registry.scan(this.$el);
       expect(this.$el.hasClass('SOMETHING')).to.equal(true);
     });
     it("scrolls to content", function(done) {
-      registry.scan(this.$el);
+      Registry.scan(this.$el);
       expect($(document).scrollTop()).to.equal(0);
       if (navigator.userAgent.search("PhantomJS") >= 0) {
           // TODO Make this test work in PhantomJS as well as Chrome

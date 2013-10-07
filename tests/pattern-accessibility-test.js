@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -60,41 +54,41 @@ define([
     });
     it("test cookie remains set", function() {
       var accessibility = new Accessibility(this.$el);
-      expect($.cookie('fontsize'), this.$el).to.be.null;
+      expect($.cookie('fontsize'), this.$el).to.be.equal(null);
       accessibility.setBaseFontSize("smallText", 1);
-      expect($.cookie('fontsize'), this.$el).to.not.be.null;
+      expect($.cookie('fontsize'), this.$el).to.not.equal(null);
     });
     it("test class is set", function() {
       var accessibility = new Accessibility(this.$el);
-      expect(this.$el.hasClass("smallText")).to.be.false;
-      expect(this.$el.hasClass("largeText")).to.be.false;
+      expect(this.$el.hasClass("smallText")).to.be.equal(false);
+      expect(this.$el.hasClass("largeText")).to.be.equal(false);
       accessibility.setBaseFontSize("smallText", 1);
-      expect(this.$el.hasClass("smallText")).to.be.true;
-      expect(this.$el.hasClass("largeText")).to.be.false;
+      expect(this.$el.hasClass("smallText")).to.be.equal(true);
+      expect(this.$el.hasClass("largeText")).to.be.equal(false);
       accessibility.setBaseFontSize("largeText", 1);
-      expect(this.$el.hasClass("smallText")).to.be.false;
-      expect(this.$el.hasClass("largeText")).to.be.true;
+      expect(this.$el.hasClass("smallText")).to.be.equal(false);
+      expect(this.$el.hasClass("largeText")).to.be.equal(true);
     });
     it("test class is set if a cookie is found", function() {
       $.cookie('fontsize', "smallText");
-      expect(this.$el.hasClass("smallText")).to.be.false;
+      expect(this.$el.hasClass("smallText")).to.be.equal(false);
       registry.scan(this.$el);
-      expect(this.$el.hasClass("smallText")).to.be.true;
+      expect(this.$el.hasClass("smallText")).to.be.equal(true);
     });
     it("test setting small font size with button works", function(){
       // add pattern to anchor
       this.$el.attr("data-pat-accessibility", "smallbtn: #btn1");
-      var accessibility = new Accessibility(this.$el);
+      registry.scan(this.$el);
       $('#btn1', this.$el).trigger('click');
-      expect(this.$el.hasClass('smallText')).to.be.true;
+      expect(this.$el.hasClass('smallText')).to.be.equal(true);
     });
     it("test setting large font size with button works", function(){
       // add pattern to anchor
       this.$el.attr("data-pat-accessibility",
         "largebtn: #btn3; smallbtn: #btn1");
-      var accessibility = new Accessibility(this.$el);
+      registry.scan(this.$el);
       $('#btn3', this.$el).trigger('click');
-      expect(this.$el.hasClass('largeText')).to.be.true;
+      expect(this.$el.hasClass('largeText')).to.be.equal(true);
     });
   });
 

@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',

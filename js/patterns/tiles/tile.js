@@ -107,7 +107,7 @@ define([
         $('li > a', self.actions).off('hover').on('hover', function(e) {
           if(self.actions.is(":visible")) {
             self.actions.show();
-          } 
+          }
           else {
             self.actions.hide();
           }

@@ -24,60 +24,29 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
   'mockup-registry',
   'mockup-patterns-base'
-], function(chai, $, registry, Base) {
+], function(chai, $, Registry, Base) {
   "use strict";
 
   var expect = chai.expect,
       mocha = window.mocha;
 
   mocha.setup('bdd');
-  $.fx.off = true;
 
   describe("Base", function () {
     beforeEach(function() {
-      this._patterns = $.extend({}, registry.patterns);
+      this._patterns = $.extend({}, Registry.patterns);
     });
     afterEach(function() {
-      registry.patterns = this._patterns;
+      Registry.patterns = this._patterns;
     });
     it("read options from dom tree", function() {
-      var $el = $('' +
-        '<div data-pat-example="{&quot;name1&quot;: &quot;value1&quot;,' +
-        '    &quot;name2&quot;: &quot;value2&quot;}">' +
-        ' <div class="pat-example"' +
-        '      data-pat-example="name2: something;' +
-        '                        some-thing-name4: value4;' +
-        '                        some-stuff: value5"/>' +
-        '</div>');
-
-      Base.extend({
-        name: "example",
-        defaults: {
-          name3: 'value3'
-        },
-        init: function() {
-          expect(this.options.name1).to.equal('value1');
-          expect(this.options.name2).to.equal('something');
-          expect(this.options.name3).to.equal('value3');
-          expect(this.options.some.thing.name4).to.equal('value4');
-          expect(this.options.some.stuff).to.equal('value5');
-        }
-      });
-
-      registry.scan($el, true);
+      // TODO: check extending Base pattern and multiple extending
     });
-    // TODO: make sure that pattern is not initialized twice if scanned twice
   });
 
 });

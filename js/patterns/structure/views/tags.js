@@ -82,7 +82,7 @@ define([
       if(!this.opened){
         return;
       }
-      // clear out 
+      // clear out
       self.$remove.select2('destroy');
       self.$remove.empty();
       self.$add.select2('data', []);
@@ -103,5 +103,3 @@ define([
 
   return TagsView;
 });
-
-

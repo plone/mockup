@@ -65,8 +65,8 @@ define([
               seldefaults = {};
               $(self.options.initvaluemap.split(self.options.separator)).each(function() {
                 var selection = this.split(':');
-                var id = selection[0];
-                var text = selection[1];
+                var id = $.trim(selection[0]);
+                var text = $.trim(selection[1]);
                 seldefaults[id] = text;
               });
             }
@@ -168,6 +168,7 @@ define([
           self.options.multiple = true;
           self.options.ajax = self.options.ajax || {};
           self.options.ajax.url = self.options.ajaxVocabulary;
+          // XXX removing the following function does'nt break tests. dead code?
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
             $(value.split(self.options.separator)).each(function () {

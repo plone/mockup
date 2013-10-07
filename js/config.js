@@ -76,6 +76,7 @@ var requirejsOptions = {
     'jquery.event.drag': { deps: ['jquery'] },
     'jquery.event.drop': { deps: ['jquery'] },
     'jquery.cookie': { deps: ['jquery'] },
+    'jqtree': { deps: ['jquery'] },
     'bootstrap-dropdown': { deps: ['jquery'] },
     'bootstrap-tooltip': { deps: ['jquery'] },
     'sinon': { exports: 'window.sinon' },

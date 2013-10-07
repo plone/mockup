@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -70,11 +64,11 @@ define([
       // current instance of the pattern
       var pattern = this.$el.data('pattern-formunloadalert-0');
       var $select = $('select', this.$el);
-      
-      expect(pattern._changed).to.be.false;
+
+      expect(pattern._changed).to.be.equal(false);
 
       $select.trigger('change');
-      expect(pattern._changed).to.be.true;
+      expect(pattern._changed).to.be.equal(true);
 
       $('a', this.$el)
         .on('click', function(e){
@@ -101,10 +95,10 @@ define([
       var pattern = this.$el.data('pattern-formunloadalert-0');
       var $select = $('select', this.$el);
 
-      expect(pattern._changed).to.be.false;
+      expect(pattern._changed).to.be.equal(false);
 
       $select.trigger('change');
-      expect(pattern._changed).to.be.true;
+      expect(pattern._changed).to.be.equal(true);
 
       $(this.$el).on('submit', function(e){
         var returnedString = pattern._handle_unload(pattern, e);
@@ -129,20 +123,20 @@ define([
       // current instance of the pattern
       var pattern = this.$el.data('pattern-formunloadalert-0');
       var $select = $('select', this.$el);
-      
-      // Override the _handle_msg of the pattern as we need to 
-      // get the msg string out somehow, and there's no way to 
+
+      // Override the _handle_msg of the pattern as we need to
+      // get the msg string out somehow, and there's no way to
       // do this that I can find after triggering beforeunload
-      
+
       pattern._handle_msg = function(e, msg) {
         // Set the msg into a variable that we can actually read
         returnValue = msg;
       };
-      
-      expect(pattern._changed).to.be.false;
+
+      expect(pattern._changed).to.be.equal(false);
       $select.trigger('change');
-      expect(pattern._changed).to.be.true;
-      
+      expect(pattern._changed).to.be.equal(true);
+
       $(window)
         .on('messageset.formunloadalert.patterns', function(){
         expect(returnValue).to.equal(pattern.options.message);
@@ -162,15 +156,15 @@ define([
         '<a href="patterns.html">Click here to go somewhere else</a>' +
         '</div>');
       registry.scan(this.$el);
-      
+
       var pattern = this.$el.data('pattern-formunloadalert-0');
       var $select = $('select', this.$el);
-      
-      expect(pattern._changed).to.be.false;
+
+      expect(pattern._changed).to.be.equal(false);
       $select.trigger('change');
-      // This should make no differnce, as there was no form so 
+      // This should make no differnce, as there was no form so
       // the pattern should have exited.
-      expect(pattern._changed).to.be.false;
+      expect(pattern._changed).to.be.equal(false);
     });
   });
 

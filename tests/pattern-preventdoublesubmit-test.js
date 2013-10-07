@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -84,19 +78,19 @@ define([
       var $b1 = $('#b1', $el);
       var $b2 = $('#b2', $el);
 
-      expect(get_confirmed($el)).to.be.undefined;
+      expect(get_confirmed($el)).to.be.equal(undefined);
       $b1.trigger('click');
-      expect(get_confirmed($el)).to.be.undefined;
-      expect($b1.hasClass(guardKlass)).to.be.true;
+      expect(get_confirmed($el)).to.be.equal(undefined);
+      expect($b1.hasClass(guardKlass)).to.be.equal(true);
       $b1.trigger('click');
-      expect(get_confirmed($el)).to.be.true;
+      expect(get_confirmed($el)).to.be.equal(true);
 
       // reset confirmed flag
       reset_confirmed($el);
 
       $b2.trigger('click');
-      expect($b2.hasClass(guardKlass)).to.be.true;
-      expect(get_confirmed($el)).to.be.undefined;
+      expect($b2.hasClass(guardKlass)).to.be.equal(true);
+      expect(get_confirmed($el)).to.be.equal(undefined);
 
     });
   });

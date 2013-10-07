@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -53,32 +47,32 @@ define([
       this.$el = $('<div><input class="pat-pickadate" /></div>');
     });
     it('date and time element', function() {
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-date', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-time', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-date', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-time', this.$el).size()).to.equal(1);
     });
     it('only date element', function() {
       $('input', this.$el).attr('data-pat-pickadate', 'time:false');
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-date', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-time', this.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-date', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-time', this.$el).size()).to.equal(0);
     });
     it('only time element', function() {
       $('input', this.$el).attr('data-pat-pickadate', 'time:true;date:false');
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(0);
       registry.scan(this.$el);
-      expect($('.pat-pickadate-wrapper', this.$el).size()).to.equal(1);
-      expect($('.pat-pickadate-date', this.$el).size()).to.equal(0);
-      expect($('.pat-pickadate-time', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-date', this.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-time', this.$el).size()).to.equal(1);
     });
     it('getting around bug in pickatime', function() {
       $('input', this.$el).attr('data-pat-pickadate', '{"time": {"value": "00:00"}}');
       registry.scan(this.$el);
-      expect($('.picker__list-item--selected', $('.pat-pickadate-time', this.$el).parent()).text()).to.equal('12:00 AM');
+      expect($('.picker__list-item--selected', $('.pattern-pickadate-time', this.$el).parent()).text()).to.equal('12:00 AM');
     });
   });
 

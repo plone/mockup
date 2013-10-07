@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false, getQueryVariable, _ */
-
 define([
   'chai',
   'jquery',
@@ -197,8 +191,8 @@ define([
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
       
       expect($('.select2-container-multi', $el)).to.have.length(1);
-      expect($('.pat-relateditems-container', $el)).to.have.length(1);
-      expect($('.pat-relateditems-path', $el)).to.have.length(1);
+      expect($('.pattern-relateditems-container', $el)).to.have.length(1);
+      expect($('.pattern-relateditems-path', $el)).to.have.length(1);
 
       $el.remove();
       $('.select2-sizer, .select2-drop').remove();
@@ -217,8 +211,8 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
-      expect($('.pat-relateditems-result-select')).to.have.length(13);
-      $('.pat-relateditems-result-select').first().on('click', function() {
+      expect($('.pattern-relateditems-result-select')).to.have.length(13);
+      $('.pattern-relateditems-result-select').first().on('click', function() {
         expect(pattern.$el.select2('data')).to.have.length(1);
       }).click();
       clock.tick(1000);
@@ -241,7 +235,7 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
 
-      $('.pat-relateditems-result-select').first().on('click', function() {
+      $('.pattern-relateditems-result-select').first().on('click', function() {
         expect(pattern.$el.select2('data')).to.have.length(1);
       }).click();
       clock.tick(1000);
@@ -275,17 +269,17 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
 
-      var $result = $('.pat-relateditems-result').first();
+      var $result = $('.pattern-relateditems-result').first();
 
-      expect($result.is('.pat-active')).to.equal(false);
+      expect($result.is('.pattern-relateditems-active')).to.equal(false);
 
-      $('.pat-relateditems-result-select', $result).click();
+      $('.pattern-relateditems-result-select', $result).click();
       expect(pattern.$el.select2('data')).to.have.length(1);
 
-      expect($result.is('.pat-active')).to.equal(true);
-      $('.pat-relateditems-result-select', $result).click();
+      expect($result.is('.pattern-relateditems-active')).to.equal(true);
+      $('.pattern-relateditems-result-select', $result).click();
 
-      expect($result.is('.pat-active')).to.equal(false);
+      expect($result.is('.pattern-relateditems-active')).to.equal(false);
       expect(pattern.$el.select2('data')).to.have.length(0);
 
       $el.remove();
@@ -309,10 +303,10 @@ define([
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
 
-      $('.pat-relateditems-result-select').first().click();
+      $('.pattern-relateditems-result-select').first().click();
       expect(pattern.$el.select2('data')).to.have.length(0);
 
-      $('.pat-relateditems-type-Image .pat-relateditems-result-select').first().click();
+      $('.pattern-relateditems-type-Image .pattern-relateditems-result-select').first().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
 
       $el.remove();
@@ -333,10 +327,10 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       var $items = $('.select2-results > li');
-      expect(pattern.browsing).to.be.false;
-      expect($('.pat-relateditems-result-browse', $items)).to.have.length(5);
-      $('.pat-relateditems-result-browse', $items).first().on('click', function() {
-        expect(pattern.browsing).to.be.true;
+      expect(pattern.browsing).to.be.equal(false);
+      expect($('.pattern-relateditems-result-browse', $items)).to.have.length(5);
+      $('.pattern-relateditems-result-browse', $items).first().on('click', function() {
+        expect(pattern.browsing).to.be.equal(true);
         expect(pattern.currentPath).to.equal($(this).attr('data-path'));
       }).click();
 
@@ -358,11 +352,11 @@ define([
 
       clock.tick(1000);
       var $items = $('.select2-results > li');
-      expect(pattern.browsing).to.be.false;
-      expect($('.pat-relateditems-result-browse', $items)).to.have.length(5);
-      $('.pat-relateditems-result-browse', $items).first().click();
+      expect(pattern.browsing).to.be.equal(false);
+      expect($('.pattern-relateditems-result-browse', $items)).to.have.length(5);
+      $('.pattern-relateditems-result-browse', $items).first().click();
       clock.tick(1000);
-      var $crumbs = $('.pat-relateditems-path a');
+      var $crumbs = $('.pattern-relateditems-path a');
       // /about/staff
       expect($crumbs).to.have.length(3);
       // /about
@@ -389,9 +383,9 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
 
-      $('.pat-relateditems-result-select').first().click();
+      $('.pattern-relateditems-result-select').first().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
-      $('.pat-relateditems-result-select').last().click();
+      $('.pattern-relateditems-result-select').last().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
 
       $el.remove();

@@ -27,7 +27,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!js/patterns/structure/templates/paging.tmpl',
+  'text!js/patterns/structure/templates/paging.tmpl'
 ], function($, _, Backbone, PagingTemplate) {
   "use strict";
 

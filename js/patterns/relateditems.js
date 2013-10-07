@@ -54,29 +54,29 @@ define([
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       attributes: ['UID', 'Title', 'Type', 'path'],
-      dropdownCssClass: 'pat-relateditems-dropdown',
+      dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       resultTemplate: '' +
-        '<div class="pat-relateditems-result pat-relateditems-type-<%= Type %> <% if (selected) { %>pat-active<% } %>">' +
-        '  <a href="#" class="pat-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
-        '    <span class="pat-relateditems-result-title"><%= Title %></span>' +
-        '    <span class="pat-relateditems-result-path"><%= path %></span>' +
+        '<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
+        '    <span class="pattern-relateditems-result-title"><%= Title %></span>' +
+        '    <span class="pattern-relateditems-result-path"><%= path %></span>' +
         '  </a>' +
-        '  <span class="pat-relateditems-buttons">' +
+        '  <span class="pattern-relateditems-buttons">' +
         '  <% if (folderish) { %>' +
-        '     <a class="pat-relateditems-result-browse" href="#" data-path="<%= path %>"></a>' +
+        '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%= path %>"></a>' +
         '   <% } %>' +
         ' </span>' +
         '</div>',
       resultTemplateSelector: null,
       selectionTemplate: '' +
-        '<span class="pat-relateditems-item pat-relateditems-type-<%= Type %>">' +
-        ' <span class="pat-relateditems-item-title"><%= Title %></span>' +
-        ' <span class="pat-relateditems-item-path"><%= path %></span>' +
+        '<span class="pattern-relateditems-item pattern-relateditems-type-<%= Type %>">' +
+        ' <span class="pattern-relateditems-item-title"><%= Title %></span>' +
+        ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<span><span class="pat-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>',
+        '<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
         '/<a href="<%= path %>"><%= text %></a>',
@@ -195,8 +195,8 @@ define([
 
       self.options.ajax = self.options.setupAjax.apply(self);
 
-      self.$el.wrap('<div class="pat-relateditems-container" />');
-      self.$container = self.$el.parents('.pat-relateditems-container');
+      self.$el.wrap('<div class="pattern-relateditems-container" />');
+      self.$container = self.$el.parents('.pattern-relateditems-container');
       self.$container.width(self.options.width);
 
       Select2.prototype.initializeValueMap.call(self);
@@ -229,16 +229,16 @@ define([
 
         var result = $(self.applyTemplate('result', item));
 
-        $('.pat-relateditems-result-select', result).on('click', function(event) {
+        $('.pattern-relateditems-result-select', result).on('click', function(event) {
           event.preventDefault();
           if ($(this).is('.selectable')) {
-            var $parent = $(this).parents('.pat-relateditems-result');
-            if ($parent.is('.pat-active')) {
-              $parent.removeClass('pat-active');
+            var $parent = $(this).parents('.pattern-relateditems-result');
+            if ($parent.is('.pattern-relateditems-active')) {
+              $parent.removeClass('pattern-relateditems-active');
               self.deselectItem(item);
             } else {
               self.selectItem(item);
-              $parent.addClass('pat-active');
+              $parent.addClass('pattern-relateditems-active');
               if(self.options.maximumSelectionSize > 0){
                 var items = self.$select2.select2('data');
                 if(items.length >= self.options.maximumSelectionSize){
@@ -249,7 +249,7 @@ define([
           }
         });
 
-        $('.pat-relateditems-result-browse', result).on('click', function(event) {
+        $('.pattern-relateditems-result-browse', result).on('click', function(event) {
           event.preventDefault();
           event.stopPropagation();
           var path = $(this).data('path');
@@ -282,8 +282,8 @@ define([
         browseText: self.options.browseText,
         searchText: self.options.searchText
       };
-      
-      self.$browsePath = $('<span class="pat-relateditems-path" />');
+
+      self.$browsePath = $('<span class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);
 
       self.deactivateBrowsing();

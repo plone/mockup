@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false, getQueryVariable  */
-
 define([
   'chai',
   'jquery',
@@ -148,9 +142,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -168,9 +162,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json; isTest: true">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -193,48 +187,48 @@ define([
       pattern._keyDown();
       pattern._keyDown();
 
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(3);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(3);
 
       pattern._keyUp();
       pattern._keyUp();
 
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       // keyleft
       keyup = $.Event('keyup');
       keyup.which = 37;
       $input.trigger(keyup);
       // nothing should happen
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       // keyright
       keyup = $.Event('keyup');
       keyup.which = 39;
       $input.trigger(keyup);
       // nothing should happen
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       // up arrow
       keyup = $.Event('keyup');
       keyup.which = 38;
       $input.trigger(keyup);
       // nothing should happen
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       // down arrow
       keyup = $.Event('keyup');
       keyup.which = 40;
       $input.trigger(keyup);
       // nothing should happen
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       // enter
-      expect(pattern.testTarget).to.be.null;
+      expect(pattern.testTarget).to.be.equal(null);
       keyup = $.Event('keyup');
       keyup.which = 13; // like pattern._keyEnter();
       $input.trigger(keyup);
 
-      expect(pattern.testTarget).to.not.be.null;
+      expect(pattern.testTarget).to.not.equal(null);
 
       //up arrow
       pattern._keyDown();
@@ -242,14 +236,14 @@ define([
       keydown.which = 38;
       $input.trigger(keydown);
 
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(1);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       //down arrow
       keydown = $.Event('keydown');
       keydown.which = 40;
       $input.trigger(keydown);
 
-      expect($('.pat-livesearch-highlight', pattern.$results).index()).to.equal(2);
+      expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(2);
 
       // escape
       keyup = $.Event('keyup');
@@ -257,7 +251,7 @@ define([
       $input.trigger(keyup);
 
       this.clock.tick(1000);
-      expect(pattern.$toggle.hasClass('show')).to.be.false;
+      expect(pattern.$toggle.hasClass('show')).to.be.equal(false);
 
       $el.remove();
 
@@ -267,9 +261,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -298,9 +292,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -324,9 +318,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -350,18 +344,18 @@ define([
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json;' +
           '                          #tpl_livesearch">'+
-          ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-          ' <div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+          ' <input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+          ' <div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
       var tpl = $('<script type="text/template" id="tpl_livesearch">' +
-        '<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>">' +
-          '<a class="pat-livesearch-result-title" href="<%= getURL %>">' +
+        '<li class="pattern-livesearch-result pattern-livesearch-type-<%= Type %>">' +
+          '<a class="pattern-livesearch-result-title" href="<%= getURL %>">' +
             '<%= Title %>' +
           '</a> Money Honey' +
-          '<p class="pat-livesearch-result-desc"><%= Description %></p>' +
+          '<p class="pattern-livesearch-result-desc"><%= Description %></p>' +
         '</li></script>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -384,8 +378,8 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json">'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -400,9 +394,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="">'+
-            ' <input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            ' <input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -417,9 +411,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -429,7 +423,7 @@ define([
       pattern.$toggle.addClass('show');
       $('html').click();
 
-      expect(pattern.$toggle.hasClass('show')).to.be.false;
+      expect(pattern.$toggle.hasClass('show')).to.be.equal(false);
 
     });
 
@@ -437,9 +431,9 @@ define([
       var $el = $(''+
           '<div class="pat-livesearch"'+
               'data-pat-livesearch="url:/search.json; isTest: true">'+
-            '<input type="text" class="pat-livesearch-input" placeholder="Search" />'+
-            '<div class="pat-livesearch-container">'+
-              '<div class="pat-livesearch-results">'+
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
+            '<div class="pattern-livesearch-container">'+
+              '<div class="pattern-livesearch-results">'+
               '</div>'+
             '</div>'+
           '</div>').appendTo('body');
@@ -452,7 +446,7 @@ define([
       $input.val('cacheme').trigger(keyup);
       this.clock.tick(1000);
 
-      var result = pattern.$results.find('.pat-livesearch-result').length;
+      var result = pattern.$results.find('.pattern-livesearch-result').length;
 
       $input.val('cacheme').trigger(keyup);
       this.clock.tick(1000);

@@ -1,4 +1,4 @@
-// tests for jquery.iframe.js script.
+// tests for iframe.js script.
 //
 // @author Rok Garbas
 // @version 1.0
@@ -24,55 +24,50 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, */
-
-
-var testCase = buster.testCase,
-    assert = buster.assert;
-
 define([
+  'chai',
   'jquery',
-  'js/jquery.iframe'
-], function($, IFrame, undefined) {
+  'mockup-iframe'
+], function(chai, $, IFrame, undefined) {
   "use strict";
 
-  testCase("jquery.iframe.js", {
+  var expect = chai.expect,
+      mocha = window.mocha;
 
-    setUp: function() {
+  mocha.setup('bdd');
+
+  describe("Registry", function () {
+    beforeEach(function() {
       this.iframe = new $.IFrame({
         el: $('<div><p>some</p><a href="#">some link</a></div>').appendTo('body'),
         position: 'top'
       });
       this.iframe._window_location = function() {};
       this.iframe._window_open = function() {};
-    },
-
-    tearDown: function() {
+    });
+    afterEach(function() {
       this.iframe.$el.remove();
-    },
-
-    //  --- tests --- //
-
-    "simple stretch and shrink": function() {
+    });
+    it("simple stretch and shrink", function() {
       var initial_height = this.iframe.$el.height();
 
-      assert(initial_height !== 0);
+      expect(initial_height).to.not.equal(0);
 
       this.iframe.stretch();
-      assert(initial_height < this.iframe.$el.height());
+      expect(initial_height).to.be.below(this.iframe.$el.height());
 
       this.iframe.shrink();
-      assert(initial_height === this.iframe.$el.height());
+      expect(initial_height).to.be.equal(this.iframe.$el.height());
 
       this.iframe.toggle();
-      assert(initial_height < this.iframe.$el.height());
+      expect(initial_height).to.be.above(this.iframe.$el.height());
 
       this.iframe.toggle();
-      assert(initial_height === this.iframe.$el.height());
-    }
+      expect(initial_height).to.be.equal(this.iframe.$el.height());
+    });
+
+  });
+});
 
 //    "defult handling of clicks inside iframe": function() {
 //      var stub_location = this.stub($.iframe, '_window_location'),
@@ -99,7 +94,3 @@ define([
 //        function(e, iframe) { assert(true); });
 //      $.iframe.$el.parents('html').trigger({ type: 'click' });
 //    }
-
-  });
-
-});

@@ -36,7 +36,7 @@ define([
     defaults: {},
     sortabledataclass: function (cell){
       var re, matches;
-    
+
       re = new RegExp("sortabledata-([^ ]*)","g");
       matches = re.exec(cell.attr('class'));
       if (matches) { return matches[1]; }
@@ -124,13 +124,12 @@ define([
           .on("click", function(e) {
             self.sort.apply(self, [this]);
           });
-          
+
       self.$el.children('tbody').each(self.setoddeven);
-      
+
     }
   });
 
   return TableSorter;
 
 });
-
