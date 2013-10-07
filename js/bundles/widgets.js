@@ -88,25 +88,25 @@ define([
       personal_tools.attr({
         'data-pat-toggle': 'target: dl.actionMenu#portal-personaltools;value: activated'
       });
-      
+
       var add_new = $('dl.actionMenu#plone-contentmenu-factories dt.actionMenuHeader a', $root);
       add_new.addClass('pat-toggle');
       add_new.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-factories;value: activated'
       });
-      
+
       var display = $('dl.actionMenu#plone-contentmenu-display dt.actionMenuHeader a', $root);
       display.addClass('pat-toggle');
       display.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-display;value: activated'
       });
-      
+
       var workflow = $('dl.actionMenu#plone-contentmenu-workflow dt.actionMenuHeader a', $root);
       workflow.addClass('pat-toggle');
       workflow.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-workflow;value: activated'
       });
-      
+
       // plone/app/search/search.pt
       var filter_results = $('form[name=searchform] dl.actionMenu dt.actionMenuHeader a', $root);
       filter_results.addClass('pat-toggle');
@@ -146,35 +146,35 @@ define([
       // Use toggle to replace the toggleSelect from the select_all.js
       // First, remove the previous onclick
       $("[onclick^='toggleSelect']", $root).attr('onclick', null);
-      
+
       // Assign the class and data attributes for the "select all of the content_status_history template
       var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', $root);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
-      
+
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
       select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', $root);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
-      
+
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
       select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', $root);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target:form[action*=usergroup-usermembership] table.listing:last input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
-      
+
       // plone/app/search/search.pt
       select_all = $("[onchange*='toggleSelect']", $root).attr('onchange', null);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target:form[name=searchform] dd.actionMenuContent input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
-      
+
       // Apply the preventdoublesubmit pattern to forms
       $('form', $root)
         .not('[action$="@@new-user"]')
@@ -186,7 +186,7 @@ define([
         .attr({
         'data-pat-preventdoublesubmit': 'message:'+window.form_resubmit_message
       });
-      
+
       // Add the form auto focus for the add or edit forms
       var add_form = $('form[action*="++add++"]', $root);
       add_form.addClass('pat-formautofocus');

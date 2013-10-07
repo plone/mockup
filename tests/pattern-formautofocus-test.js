@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -80,11 +74,11 @@ define([
         ' </form>' +
         '</div>')
         .appendTo('body');
-      expect($('input#first-input').is(':focus')).to.be.false;
+      expect($('input#first-input').is(':focus')).to.be.equal(false);
       $('input').on('focus', function() {
         expect($(this).attr('id')).to.equal('input1-inside-error');
-        expect($('input#first-input-should-not-focus').is(':focus')).to.be.false;
-        expect($('input#input-inside-error-should-not-focus').is(':focus')).to.be.false;
+        expect($('input#first-input-should-not-focus').is(':focus')).to.be.equal(false);
+        expect($('input#input-inside-error-should-not-focus').is(':focus')).to.be.equal(false);
         done();
       });
       registry.scan($el);
@@ -99,11 +93,11 @@ define([
         ' </form>' +
         '</div>')
         .appendTo('body');
-      expect($('input#first-input').is(':focus')).to.be.false;
+      expect($('input#first-input').is(':focus')).to.be.equal(false);
       $('input').on('focus', function() {
         expect($(this).attr('id')).to.equal('first-input');
-        expect($('input#first-input-should-not-focus').is(':focus')).to.be.false;
-        expect($('input#input-inside-error-should-not-focus').is(':focus')).to.be.false;
+        expect($('input#first-input-should-not-focus').is(':focus')).to.be.equal(false);
+        expect($('input#input-inside-error-should-not-focus').is(':focus')).to.be.equal(false);
         done();
       });
       registry.scan($el);

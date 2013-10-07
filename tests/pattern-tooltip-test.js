@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -71,11 +65,11 @@ define([
 
         $('.pat-tooltip', this.$el).trigger('mouseenter.tooltip.patterns');
         trs = this.$el.find('.example-class');
-        expect(trs.eq(0).hasClass('active')).to.be.true;
+        expect(trs.eq(0).hasClass('active')).to.be.equal(true);
 
         $('.pat-tooltip', this.$el).trigger('mouseleave.tooltip.patterns');
         trs = this.$el.find('.example-class');
-        expect(trs.eq(0).hasClass('active')).to.be.false;
+        expect(trs.eq(0).hasClass('active')).to.be.equal(false);
 
     });
 

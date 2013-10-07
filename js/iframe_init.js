@@ -24,7 +24,7 @@
 //          this page.
 //
 
-/*jshint laxcomma:true, boss:true, scripturl:true, expr:true */
+/*jshint scripturl:true */
 
 (function(window, document, undefined) {
 "use strict";
@@ -37,6 +37,7 @@
  * Modified just a bit by Rok Garbas 2013
  */
 var domready = function (ready) {
+  /*jshint laxcomma:true, boss:true, scripturl:true, expr:true */
 
   var fns = [], fn, f = false
     , doc = document

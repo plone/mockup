@@ -1,11 +1,11 @@
-// Patterns 
+// Patterns
 //
 // Author: Rok Garbas
 // Contact: rok@garbas.si
 // Version: 1.0
 // Depends: jquery.js
 //
-// Description: 
+// Description:
 //
 // License:
 //

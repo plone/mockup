@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false, getQueryVariable, _ */
-
 define([
   'chai',
   'jquery',
@@ -333,10 +327,10 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       var $items = $('.select2-results > li');
-      expect(pattern.browsing).to.be.false;
+      expect(pattern.browsing).to.be.equal(false);
       expect($('.pattern-relateditems-result-browse', $items)).to.have.length(5);
       $('.pattern-relateditems-result-browse', $items).first().on('click', function() {
-        expect(pattern.browsing).to.be.true;
+        expect(pattern.browsing).to.be.equal(true);
         expect(pattern.currentPath).to.equal($(this).attr('data-path'));
       }).click();
 
@@ -358,7 +352,7 @@ define([
 
       clock.tick(1000);
       var $items = $('.select2-results > li');
-      expect(pattern.browsing).to.be.false;
+      expect(pattern.browsing).to.be.equal(false);
       expect($('.pattern-relateditems-result-browse', $items)).to.have.length(5);
       $('.pattern-relateditems-result-browse', $items).first().click();
       clock.tick(1000);

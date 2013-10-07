@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -87,22 +81,22 @@ define([
       if(cookie === null){
         cookie = undefined;
       }
-      expect(cookie).to.be.undefined;
+      expect(cookie).to.be.equal(undefined);
       registry.scan(this.$el);
       this.$el.find('.cookieallowbutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("1");
-      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.equal(true);
     });
     it("test ask permission deny button", function() {
       var cookie = $.cookie('Allow_Cookies_For_Site');
       if(cookie === null){
         cookie = undefined;
       }
-      expect(cookie).to.be.undefined;
+      expect(cookie).to.be.equal(undefined);
       registry.scan(this.$el);
       this.$el.find('.cookiedenybutton').trigger('click');
       expect($.cookie('Allow_Cookies_For_Site'), this.$el).to.equal("0");
-      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.true;
+      expect(this.$el.find('.cookiedirective').is(':hidden')).to.be.equal(true);
     });
     it("test ask permission customizable", function() {
       this.$el.attr("data-pat-cookiedirective",

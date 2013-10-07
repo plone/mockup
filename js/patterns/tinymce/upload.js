@@ -4,7 +4,7 @@
 //
 // Description:
 //    TinyMCE pattern (for now its depening on Plone's integration)
-// 
+//
 // License:
 //
 // Copyright (C) 2010 Plone Foundation
@@ -41,7 +41,7 @@ define([
 ], function($, _, Base, RelatedItems, Modal, tinymce, UploadTemplate) {
   "use strict";
 
-  
+
   tinymce.PluginManager.add('ploneimage', function(editor) {
     editor.addButton('ploneimage', {
       icon: 'image',

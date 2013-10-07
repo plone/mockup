@@ -1,7 +1,7 @@
 // Pattern which provide some basic form helpers:
-// - prevent forms with changed values to be unloaded 
+// - prevent forms with changed values to be unloaded
 // This is going to replace 'Products/CMFPlone/skins/plone_ecmascript/formUnload.js'
-// Bits of this come from 
+// Bits of this come from
 // https://raw.github.com/mmonteleone/jquery.safetynet/master/jquery.safetynet.js
 //
 // Author: Simone Orsi
@@ -88,7 +88,7 @@ define([
     },
     _handle_msg:  function(e,msg) {
       (e || window.event).returnValue = msg;
-    } 
+    }
   });
   return FormUnloadAlert;
 

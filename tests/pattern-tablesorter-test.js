@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false */
-
 define([
   'chai',
   'jquery',
@@ -96,12 +90,12 @@ define([
       }
 
       var trs = this.$el.find('tbody tr');
-      expect(trs.eq(0).hasClass('odd')).to.be.true;
-      expect(trs.eq(1).hasClass('odd')).to.be.false;
-      expect(trs.eq(2).hasClass('odd')).to.be.true;
-      expect(trs.eq(0).hasClass('even')).to.be.false;
-      expect(trs.eq(1).hasClass('even')).to.be.true;
-      expect(trs.eq(2).hasClass('even')).to.be.false;
+      expect(trs.eq(0).hasClass('odd')).to.be.equal(true);
+      expect(trs.eq(1).hasClass('odd')).to.be.equal(false);
+      expect(trs.eq(2).hasClass('odd')).to.be.equal(true);
+      expect(trs.eq(0).hasClass('even')).to.be.equal(false);
+      expect(trs.eq(1).hasClass('even')).to.be.equal(true);
+      expect(trs.eq(2).hasClass('even')).to.be.equal(false);
 
     });
     it("test sort by third column", function() {
@@ -118,12 +112,12 @@ define([
       }
 
       var trs = this.$el.find('tbody tr');
-      expect(trs.eq(0).hasClass('odd')).to.be.true;
-      expect(trs.eq(1).hasClass('odd')).to.be.false;
-      expect(trs.eq(2).hasClass('odd')).to.be.true;
-      expect(trs.eq(0).hasClass('even')).to.be.false;
-      expect(trs.eq(1).hasClass('even')).to.be.true;
-      expect(trs.eq(2).hasClass('even')).to.be.false;
+      expect(trs.eq(0).hasClass('odd')).to.be.equal(true);
+      expect(trs.eq(1).hasClass('odd')).to.be.equal(false);
+      expect(trs.eq(2).hasClass('odd')).to.be.equal(true);
+      expect(trs.eq(0).hasClass('even')).to.be.equal(false);
+      expect(trs.eq(1).hasClass('even')).to.be.equal(true);
+      expect(trs.eq(2).hasClass('even')).to.be.equal(false);
 
     });
     it("test several sorts and finally back to first column", function() {
@@ -145,12 +139,12 @@ define([
       }
 
       var trs = this.$el.find('tbody tr');
-      expect(trs.eq(0).hasClass('odd')).to.be.true;
-      expect(trs.eq(1).hasClass('odd')).to.be.false;
-      expect(trs.eq(2).hasClass('odd')).to.be.true;
-      expect(trs.eq(0).hasClass('even')).to.be.false;
-      expect(trs.eq(1).hasClass('even')).to.be.true;
-      expect(trs.eq(2).hasClass('even')).to.be.false;
+      expect(trs.eq(0).hasClass('odd')).to.be.equal(true);
+      expect(trs.eq(1).hasClass('odd')).to.be.equal(false);
+      expect(trs.eq(2).hasClass('odd')).to.be.equal(true);
+      expect(trs.eq(0).hasClass('even')).to.be.equal(false);
+      expect(trs.eq(1).hasClass('even')).to.be.equal(true);
+      expect(trs.eq(2).hasClass('even')).to.be.equal(false);
 
     });
   });

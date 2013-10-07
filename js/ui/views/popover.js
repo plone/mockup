@@ -199,7 +199,7 @@ define([
         if (this.$backdrop.length === 0) {
           this.$backdrop = $('body');
         }
-      
+
         this.backdrop = new Backdrop(this.$backdrop, this.backdropOptions);
         this.backdrop.$el.on('hidden.backdrop.patterns', function(e) {
           if (e.namespace === 'backdrop.patterns') {

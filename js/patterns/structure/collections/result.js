@@ -47,7 +47,7 @@ define([
     paginator_ui: {
       // the lowest page index your API allows to be accessed
       firstPage: 1,
-      // which page should the paginator start from 
+      // which page should the paginator start from
       // (also, the actual page the paginator is on)
       currentPage: 1,
       // how many items per page should be shown

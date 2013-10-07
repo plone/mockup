@@ -1,4 +1,4 @@
-// Pattern which adds support for file upload with 
+// Pattern which adds support for file upload with
 // drag and drop support.
 //
 // Author: Nathan Van Gheem

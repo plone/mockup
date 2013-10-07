@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-/*global buster:false, define:false, describe:false, it:false, expect:false,
-  beforeEach:false, afterEach:false, getQueryVariable  */
-
 define([
   'chai',
   'jquery',
@@ -229,12 +223,12 @@ define([
       expect($('.pattern-livesearch-highlight', pattern.$results).index()).to.equal(1);
 
       // enter
-      expect(pattern.testTarget).to.be.null;
+      expect(pattern.testTarget).to.be.equal(null);
       keyup = $.Event('keyup');
       keyup.which = 13; // like pattern._keyEnter();
       $input.trigger(keyup);
 
-      expect(pattern.testTarget).to.not.be.null;
+      expect(pattern.testTarget).to.not.equal(null);
 
       //up arrow
       pattern._keyDown();
@@ -257,7 +251,7 @@ define([
       $input.trigger(keyup);
 
       this.clock.tick(1000);
-      expect(pattern.$toggle.hasClass('show')).to.be.false;
+      expect(pattern.$toggle.hasClass('show')).to.be.equal(false);
 
       $el.remove();
 
@@ -429,7 +423,7 @@ define([
       pattern.$toggle.addClass('show');
       $('html').click();
 
-      expect(pattern.$toggle.hasClass('show')).to.be.false;
+      expect(pattern.$toggle.hasClass('show')).to.be.equal(false);
 
     });
 

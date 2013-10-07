@@ -24,12 +24,6 @@
 //          this page.
 //
 
-/*jshint bitwise:true, curly:true, eqeqeq:true, expr:true, immed:true, latedef:true,
-  newcap:true, noarg:true, noempty:true, nonew:true, plusplus:true,
-  regexp:true, undef:true, strict:true, trailing:true, browser:true */
-
-/*global define:false, describe:false, it:false, expect:false */
-
 define([
   'chai',
   'jquery',
@@ -44,9 +38,9 @@ define([
   $.fx.off = true;
 
   describe("utils", function () {
-    
+
     describe('setId', function() {
-      
+
       it("by default uses 'id' as prefix", function() {
         var $el = $('<div>'),
             id = utils.setId($el);
@@ -90,13 +84,13 @@ define([
             html = utils.parseBodyTag(response);
         expect(html).to.equal('<p>foo</p>');
       });
-      
+
       it("returns an empty string for responses with an empty body", function() {
         var response = '<body></body>',
             html = utils.parseBodyTag(response);
         expect(html).to.equal('');
       });
-      
+
       it("fails for empty responses", function() {
         var response = '',
             fn = function () {utils.parseBodyTag(response);};
@@ -110,35 +104,35 @@ define([
       });
 
     });
-    
+
     describe('bool', function() {
-      
+
       it("returns true for 'true'", function() {
-        expect(utils.bool('true')).to.be.true;
-        expect(utils.bool(' true ')).to.be.true;
-        expect(utils.bool('TRUE')).to.be.true;
-        expect(utils.bool('True')).to.be.true;
+        expect(utils.bool('true')).to.be.equal(true);
+        expect(utils.bool(' true ')).to.be.equal(true);
+        expect(utils.bool('TRUE')).to.be.equal(true);
+        expect(utils.bool('True')).to.be.equal(true);
       });
-      
+
       it("returns true for true", function() {
         var val = utils.bool(true);
-        expect(val).to.be.true;
+        expect(val).to.be.equal(true);
       });
 
       it("returns true for true", function() {
         var val = utils.bool(1);
-        expect(val).to.be.true;
+        expect(val).to.be.equal(true);
       });
-      
+
       it("returns false for strings != 'true'", function() {
-        expect(utils.bool('1')).to.be.false;
-        expect(utils.bool('')).to.be.false;
-        expect(utils.bool('false')).to.be.false;
+        expect(utils.bool('1')).to.be.equal(false);
+        expect(utils.bool('')).to.be.equal(false);
+        expect(utils.bool('false')).to.be.equal(false);
       });
-      
+
       it("returns false for undefined/null", function() {
-        expect(utils.bool(undefined)).to.be.false;
-        expect(utils.bool(null)).to.be.false;
+        expect(utils.bool(undefined)).to.be.equal(false);
+        expect(utils.bool(null)).to.be.equal(false);
       });
     });
 
