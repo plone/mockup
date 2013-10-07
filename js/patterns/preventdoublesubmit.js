@@ -52,7 +52,7 @@ define([
         // pop up confirmation dialog
         if ($(this).hasClass(self.options.guardClassName) &&
               !$(this).hasClass(self.options.optOutClassName)){
-          return self._confirm();
+          return self._confirm.call(self);
         }
         $(this).addClass(self.options.guardClassName);
       });

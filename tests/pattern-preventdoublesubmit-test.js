@@ -86,6 +86,9 @@ define([
 
       expect(get_confirmed($el)).to.be.undefined;
       $b1.trigger('click');
+      expect($b1.hasClass('submitting')).to.be.true;
+      expect(get_confirmed($el)).to.be.undefined;
+
       expect(get_confirmed($el)).to.be.undefined;
       expect($b1.hasClass(guardKlass)).to.be.true;
       $b1.trigger('click');
