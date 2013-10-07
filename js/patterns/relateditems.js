@@ -107,7 +107,10 @@ define([
       } else {
         template = self.options[tpl+'Template'];
       }
-      return _.template(template, item);
+      // let's give all the options possible to the template generation
+      var options = $.extend(true, {}, self.options, item);
+      options._item = item;
+      return _.template(template, options);
     },
     activateBrowsing: function(){
       var self = this;

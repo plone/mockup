@@ -37,7 +37,8 @@ define([
   'mockup-utils',
   'js/patterns/tinymce/links',
   'js/patterns/tinymce/upload'
-], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, dropzone, ResultTemplate, SelectionTemplate, utils, LinkModal, UploadModal) {
+], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, dropzone,
+            ResultTemplate, SelectionTemplate, utils, LinkModal, UploadModal) {
   "use strict";
 
   var TinyMCE = Base.extend({
@@ -68,6 +69,12 @@ define([
         alt: 'Alternative Text',
         externalImage: 'External Image URI'
       },
+      // URL generation options
+      prependToUrl: '',
+      appendToUrl: '',
+      linkAttribute: 'path', // attribute to get link value from data
+      prependToScalePart: '/imagescale/', // some value here is required to be able to parse scales back
+      appendToScalePart: '',
       scales: 'Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
               'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
               'Large (768x768):large',
@@ -168,6 +175,49 @@ define([
         self.imageModal.show();
       }
     },
+    generateUrl: function(data){
+      var self = this;
+      var part = data[self.options.linkAttribute];
+      return self.options.prependToUrl + part + self.options.appendToUrl;
+    },
+    generateImageUrl: function(data, scale){
+      var self = this;
+      var url = self.generateUrl(data);
+      return url + self.options.prependToScalePart + scale + self.options.appendToScalePart;
+    },
+    stripGeneratedUrl: function(url){
+      // to get original attribute back
+      var self = this;
+      url = url.split(self.options.prependToScalePart, 2)[0];
+      if(self.options.prependToUrl){
+        var parts = url.split(self.options.prependToUrl, 2);
+        if(parts.length === 2){
+          url = parts[1];
+        }
+      }
+      if(self.options.appendToUrl){
+        url = url.split(self.options.appendToUrl)[0];
+      }
+      return url;
+    },
+    getScaleFromUrl: function(url){
+      var self = this;
+      var split = url.split(self.options.prependToScalePart);
+      var baseUrl = split[0];
+      if(split.length !== 2){
+        // not valid scale, screw it
+        return null;
+      }
+      if(self.options.appendToScaleUrl){
+        url = split[1].split(self.options.appendToScalePart)[0];
+      }else{
+        url = split[1];
+      }
+      if(url.indexOf('/image_') !== -1){
+        url = url.split('/image_')[1];
+      }
+      return url;
+    },
     fileUploaded: function(data){
       var self = this;
       if(data === null){
@@ -188,7 +238,7 @@ define([
       if(['png', 'jpg', 'gif', 'jpeg'].indexOf(ext) !== -1){
         /* handle images different than others */
         attr = {
-          src: 'resolveuid/' + data.uid + '/@@images/image/preview',
+          src: self.generateImageUrl(data, 'thumb'),
           class: 'image-inline'
         };
         attr.id = '__mcenew';
@@ -202,7 +252,7 @@ define([
         self.tiny.insertContent(self.tiny.dom.createHTML('a', attr));
         var aElm = self.tiny.dom.get('__mcenew');
         self.tiny.dom.setAttrib(aElm, 'id', null);
-        self.tiny.dom.setAttrib(aElm, 'href', 'resolveuid/' + data.uid);
+        self.tiny.dom.setAttrib(aElm, 'href', self.generateUrl(data));
         self.tiny.dom.setHTML(aElm, filename);
       }
     },
@@ -228,6 +278,12 @@ define([
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
       tinyOptions.skin = false;
+
+      self.options.relatedItems.generateImageUrl = function(data, scale){
+        // this is so, in our result and selection template, we can 
+        // access getting actual urls from related items
+        return self.generateImageUrl.apply(self, [data, scale]);
+      };
 
       if(!self.options.base_url){
         self.options.base_url = window.location.href;

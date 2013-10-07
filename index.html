@@ -1933,7 +1933,17 @@ function($action, response, options) { ... }
         {attribute: 'rel_upload_path', type: 'String', defaultValue: '<code>null</code>',
          description: 'To provide upload support.'},
         {attribute: 'folder_url', type: 'String', defaultValue: '<code>null</code>',
-         description: 'Base url to provide upload url off of.'}
+         description: 'Base url to provide upload url off of.'},
+        {attribute: 'prependToUrl', type: 'String', defaultValue: "<code>''</code>",
+         description: 'Text to prepend to generated internal urls'},
+        {attribute: 'appendToUrl', type: 'String', defaultValue: "<code>''</code>",
+         description: 'Text to append to generated internal urls'},
+        {attribute: 'prependToScalePart', type: 'String', defaultValue: "<code>'/imagescale/'</code>",
+         description: 'Text to prepend to generated image scale url part'},
+        {attribute: 'appendToScalePart', type: 'String', defaultValue: "<code>''</code>",
+         description: 'Text to append to generated image scale url part'},
+        {attribute: 'linkAttribute', type: 'String', defaultValue: "<code>'path'</code>",
+         description: 'ajax response data attribute to use for url'},
       ]
     });
   </script>
@@ -2380,6 +2390,7 @@ function foobar(){
 
 
   <!--  **** File Manager **** -->
+  <!--
   <script>
     addPattern({
       id: 'filemanager',
@@ -2394,7 +2405,7 @@ function foobar(){
   <script type="text/example" class="example-filemanager" data-title="Default">
     <div class="pat-filemanager" data-pat-filemanager="dataTreeUrl: /tests/json/fileTree.json" />
   </script>
-
+  -->
 
 </head>
 

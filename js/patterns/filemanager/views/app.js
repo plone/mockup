@@ -42,8 +42,7 @@ define([
     afterRender: function(){
       var self = this;
       self.$tree = self.$('.tree');
-      debugger;
-      self.tree = new Tree(self.$tree, self.fileConfig);
+      self.tree = new Tree(self.$tree, self.treeConfig);
 
       if(self.uploadUrl){
         self.dropzone = new DropZone(self.$el, {

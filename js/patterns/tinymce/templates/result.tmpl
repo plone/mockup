@@ -2,7 +2,7 @@
   <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">
     <% if (!folderish) { %>
     <span class="pattern-relateditems-result-image">
-      <img src="<%= getURL %>/@@images/image/tile" />
+      <img src="<%= generateImageUrl(_item, 'thumb') %>" />
     </span>
     <% } %>
     <span class="pattern-relateditems-result-title"><%= Title %></span>

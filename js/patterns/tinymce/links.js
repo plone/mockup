@@ -69,10 +69,6 @@ define([
 
 
   var LinkModal = Base.extend({
-    /*
-    * XXX ONLY working with linking by resolveuid. IMO, this should be the
-    * only supported way.
-    */
     name: 'linkmodal',
     defaults: {
       anchor_selector: 'h1,h2,h3',
@@ -197,7 +193,7 @@ define([
             val = val[0];
           }
           if(val){
-            return 'resolveuid/' + val.UID;
+            return self.tinypattern.generateUrl(val);
           }
         }
       } else if(self.linkType === 'external'){
@@ -230,12 +226,7 @@ define([
             val = val[0];
           }
           if(val){
-            var url = 'resolveuid/' + val.UID;
-            var scale = self.$scale.val();
-            if(scale){
-              url += '/@@images/image/' + scale;
-            }
-            return url;
+            return self.tinypattern.generateImageUrl(val, self.$scale.val());
           }
         }
       } else if(self.linkType === 'externalImage'){
@@ -465,8 +456,11 @@ define([
 
       self.uid = '';
       if(self.href && !self.isImageMode()){
-        if(self.href.indexOf('resolveuid/') !== -1){
-          self.uid = self.href.replace('resolveuid/', '');
+        if(self.options.prependToUrl &&
+            self.href.indexOf(self.options.prependToUrl) !== -1){
+          // XXX if using default configuration, it gets more difficult
+          // here to detect internal urls so this might need to change...
+          self.uid = self.tinypattern.stripGeneratedUrl(self.href);
           self.linkType = 'internal';
         } else if(self.href.indexOf('mailto:') !== -1){
           self.linkType = 'email';
@@ -485,16 +479,10 @@ define([
         }
       } else if(self.src){
         /* image parsing here */
-        if(self.src.indexOf('resolveuid/') !== -1){
+        if(self.src.indexOf(self.options.prependToScalePart) !== -1){
           self.linkType = 'image';
-          self.uid = self.src.replace('resolveuid/', '');
-          // strip scale off
-          if(self.uid.indexOf('@@images/image/') !== -1){
-            self.scale = self.uid.split('@@images/image/')[1];
-          } else if(self.uid.indexOf('/image_') !== -1){
-            self.scale = self.uid.split('/image_')[1];
-          }
-          self.uid = self.uid.split('/@@images')[0].split('/image_')[0];
+          self.scale = self.tinypattern.getScaleFromUrl(self.src);
+          self.uid = self.tinypattern.stripGeneratedUrl(self.src);
         } else {
           self.linkType = 'externalImage';
           self.externalImage = self.src;

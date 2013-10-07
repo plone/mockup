@@ -225,7 +225,8 @@ define([
       }
     };
     addSomeData(searchables);
-    searchables[0].getURL = window.location.origin + '/exampledata/test.png';
+    searchables[0].getURL = window.location.origin + '/tests/images/plone.png';
+    searchables[0].path = '/tests/images/plone.png';
 
     var results = [];
     // grab the page number and number of items per page -- note, page is 1-based from Select2
