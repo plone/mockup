@@ -61,7 +61,6 @@ module.exports = function(grunt) {
           // TODO: we need to fix this tests
           'tests/iframe-test.js',
           'tests/pattern-formunloadalert-test.js',
-          'tests/pattern-preventdoublesubmit-test.js'
         ],
 
         preprocessors: {
