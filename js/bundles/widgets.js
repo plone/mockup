@@ -138,7 +138,10 @@ define([
             },
             rel_upload_path: '@@fileUpload',
             folder_url: config.document_base_url,
-            tiny: config
+            tiny: config,
+            prependToUrl: 'resolveuid/',
+            linkAttribute: 'UID',
+            prependToScalePart: '/@@images/image/'
           })
         });
       });
