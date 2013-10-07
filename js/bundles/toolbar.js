@@ -37,19 +37,23 @@ define([
   'mockup-router',
   'mockup-iframe',
   'mockup-registry',
+  'mockup-patterns-base',
   'mockup-patterns-toggle',
   'mockup-patterns-modal',
   'mockup-patterns-tinymce',
   'mockup-patterns-structure',
   'mockup-bundles-widgets'
-], function($, Router, iframe, registry, Toggle, Modal, TinyMCE, Structure) {
+], function($, Router, iframe, Registry, Base, Toggle, Modal, TinyMCE,
+            Structure) {
   "use strict";
 
   // BBB: we need to hook pattern to classes which plone was using until now
-  var Toolbar = {
+  var Toolbar = Base.extend({
     name: "plone-toolbar",
-    transform: function($root) {
-      if ($root.hasClass('modal')) {
+    init: function() {
+      var self = this;
+
+      if (self.$el.hasClass('modal')) {
         /* do not run in modal */
         return;
       }
@@ -294,12 +298,12 @@ define([
       });
 
     }
-  };
 
-  registry.register(Toolbar);
+  });
 
   // initialize only if we are not in top frame (we are in toolbar's iframe)
   if (window.parent !== window) {
+    $('body').addClass('pat-plone-toolbar');
     registry.scan($('body'));
     Router.redirect();
     Router.start();

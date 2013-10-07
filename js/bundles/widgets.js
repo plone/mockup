@@ -32,6 +32,7 @@ if (window.jQuery) {
 define([
   'jquery',
   'mockup-registry',
+  'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'mockup-patterns-autotoc',
@@ -45,31 +46,32 @@ define([
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
   'mockup-patterns-livesearch'
-], function($, registry) {
+], function($, Registry, Base) {
   "use strict";
 
   // BBB: we need to hook pattern to classes which plone was using until now
-  var Widgets = {
+  var PloneWidgets = Base.extend({
     name: "plone-widgets",
-    transform: function($root) {
+    init: function() {
+      var self = this;
 
       // apply autotoc pattern where enableFormTabbing exists
-      var $match = $root.filter('.enableFormTabbing');
-      $match = $match.add($root.find('.enableFormTabbing'));
+      var $match = self.$el.filter('.enableFormTabbing');
+      $match = $match.add(self.$el.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
       $match.attr({
         'data-pat-autotoc':'levels: legend;section: fieldset;className: autotabs'
       });
 
       // activate accessibility pattern by default
-      $root.addClass('pat-accessibility');
-      $root.attr({
+      self.$el.addClass('pat-accessibility');
+      self.$el.attr({
         'data-pat-accessibility': 'smallbtn: #accessibility-smallText;normalbtn: #accessibility-normalText;largebtn: #accessibility-largeText'
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
-      $match = $root.filter('.enableUnloadProtection');
-      $match = $match.add($root.find('.enableUnloadProtection'));
+      $match = self.$el.filter('.enableUnloadProtection');
+      $match = $match.add(self.$el.find('.enableUnloadProtection'));
       $match.addClass('pat-formunloadalert');
       // TODO: need to get form_modified_message into body data attributes
       //$match.attr({
@@ -77,38 +79,38 @@ define([
       //});
 
       // Fix drop downs
-      var actions = $('dl.actionMenu#plone-contentmenu-actions dt.actionMenuHeader a', $root);
+      var actions = $('dl.actionMenu#plone-contentmenu-actions dt.actionMenuHeader a', self.$el);
       actions.addClass('pat-toggle');
       actions.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-actions;value: activated'
       });
 
-      var personal_tools = $('dl.actionMenu#portal-personaltools dt.actionMenuHeader a', $root);
+      var personal_tools = $('dl.actionMenu#portal-personaltools dt.actionMenuHeader a', self.$el);
       personal_tools.addClass('pat-toggle');
       personal_tools.attr({
         'data-pat-toggle': 'target: dl.actionMenu#portal-personaltools;value: activated'
       });
 
-      var add_new = $('dl.actionMenu#plone-contentmenu-factories dt.actionMenuHeader a', $root);
+      var add_new = $('dl.actionMenu#plone-contentmenu-factories dt.actionMenuHeader a', self.$el);
       add_new.addClass('pat-toggle');
       add_new.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-factories;value: activated'
       });
 
-      var display = $('dl.actionMenu#plone-contentmenu-display dt.actionMenuHeader a', $root);
+      var display = $('dl.actionMenu#plone-contentmenu-display dt.actionMenuHeader a', self.$el);
       display.addClass('pat-toggle');
       display.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-display;value: activated'
       });
 
-      var workflow = $('dl.actionMenu#plone-contentmenu-workflow dt.actionMenuHeader a', $root);
+      var workflow = $('dl.actionMenu#plone-contentmenu-workflow dt.actionMenuHeader a', self.$el);
       workflow.addClass('pat-toggle');
       workflow.attr({
         'data-pat-toggle': 'target: dl.actionMenu#plone-contentmenu-workflow;value: activated'
       });
 
       // plone/app/search/search.pt
-      var filter_results = $('form[name=searchform] dl.actionMenu dt.actionMenuHeader a', $root);
+      var filter_results = $('form[name=searchform] dl.actionMenu dt.actionMenuHeader a', self.$el);
       filter_results.addClass('pat-toggle');
       filter_results.attr({
         'data-pat-toggle': 'target: form[name=searchform] dl.actionMenu;value: activated'
@@ -124,7 +126,7 @@ define([
       });
 
       // add tinymce pattern
-      $root.find('.mce_editable').addClass('pat-tinymce').each(function(){
+      self.$el.find('.mce_editable').addClass('pat-tinymce').each(function(){
         var $tiny = $(this);
         var config = $.parseJSON($tiny.attr('data-mce-config'));
         config.content_css = config.portal_url + '/base.css';
@@ -148,42 +150,42 @@ define([
 
       // Use toggle to replace the toggleSelect from the select_all.js
       // First, remove the previous onclick
-      $("[onclick^='toggleSelect']", $root).attr('onclick', null);
+      $("[onclick^='toggleSelect']", self.$el).attr('onclick', null);
 
       // Assign the class and data attributes for the "select all of the content_status_history template
-      var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', $root);
+      var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', self.$el);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
 
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
-      select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', $root);
+      select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', self.$el);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
 
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
-      select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', $root);
+      select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', self.$el);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target:form[action*=usergroup-usermembership] table.listing:last input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
 
       // plone/app/search/search.pt
-      select_all = $("[onchange*='toggleSelect']", $root).attr('onchange', null);
+      select_all = $("[onchange*='toggleSelect']", self.$el).attr('onchange', null);
       select_all.addClass('pat-toggle');
       select_all.attr({
         'data-pat-toggle': 'target:form[name=searchform] dd.actionMenuContent input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
       });
 
       // Apply the preventdoublesubmit pattern to forms
-      $('form', $root)
+      $('form', self.$el)
         .not('[action$="@@new-user"]')
         .not('[action$="@@usergroup-groupdetails"]')
         .addClass('pat-preventdoublesubmit');
-      $('form', $root)
+      $('form', self.$el)
         .not('[action$="@@new-user"]')
         .not('[action$="@@usergroup-groupdetails"]')
         .attr({
@@ -191,9 +193,9 @@ define([
       });
 
       // Add the form auto focus for the add or edit forms
-      var add_form = $('form[action*="++add++"]', $root);
+      var add_form = $('form[action*="++add++"]', self.$el);
       add_form.addClass('pat-formautofocus');
-      var edit_form = $('form[action*="@@edit"]', $root);
+      var edit_form = $('form[action*="@@edit"]', self.$el);
       edit_form.addClass('pat-formautofocus');
 
       /*** Login ***/
@@ -207,18 +209,18 @@ define([
           }
         }
       };
-      $('#personaltools-login', $root)
+      $('#personaltools-login', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(loginOptions));
 
       /*** Contact form ***/
-      $('#siteaction-contact > a', $root).addClass('pat-modal');
+      $('#siteaction-contact > a', self.$el).addClass('pat-modal');
 
       /*** Register form ***/
       var registerOptions = {
         buttons: '.actionButtons > input[type="submit"]'
       };
-      $('#personaltools-join', $root)
+      $('#personaltools-join', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(registerOptions));
 
@@ -227,7 +229,7 @@ define([
         titleSelector: 'h2:first',
         content: '#content-core'
       };
-      $('#content-history > a, #plone-action-content-history > a', $root)
+      $('#content-history > a, #plone-action-content-history > a', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
 
@@ -237,12 +239,12 @@ define([
           displayInModal: false
         }
       };
-      $('#folderChangeDefaultPage, #folderChangeDefaultPage a, #contextSetDefaultPage a', $root)
+      $('#folderChangeDefaultPage, #folderChangeDefaultPage a, #contextSetDefaultPage a', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(defaultPage));
 
       /*** Add user form ***/
-      var users_add = $('form[name="users_add"]', $root);
+      var users_add = $('form[name="users_add"]', self.$el);
       if ( users_add.length > 0) {
         var addUserOptions = {
           ajaxUrl: users_add[0].action,
@@ -257,7 +259,7 @@ define([
       }
 
       /*** Add group form ***/
-      var groups_add = $('form[name="groups_add"]', $root);
+      var groups_add = $('form[name="groups_add"]', self.$el);
       if ( groups_add.length > 0) {
         var addGroupOptions = {
           ajaxUrl: groups_add[0].action,
@@ -273,7 +275,7 @@ define([
 
 
       /*** Content Type Restrctions form ***/
-      $('#plone-contentmenu-settings > a,a#plone-contentmenu-settings', $root).addClass('modal-trigger').patternModal({
+      $('#plone-contentmenu-settings > a,a#plone-contentmenu-settings', self.$el).addClass('modal-trigger').patternModal({
         width: '80%',
         contentClass: 'modal-constrain-types',
         actionOptions: {
@@ -321,7 +323,7 @@ define([
       /*** Advanced workflow
       // This form needs additional JS and CSS for the calendar widget.
       // The AJAX form doesn't load it from the javascript_head_slot. */
-      $('#workflow-transition-advanced > a,a#workflow-transition-advanced', $root).addClass('modal-trigger').patternModal({
+      $('#workflow-transition-advanced > a,a#workflow-transition-advanced', self.$el).addClass('modal-trigger').patternModal({
         width: '80%',
         actionOptions: {
           displayInModal: false
@@ -329,7 +331,7 @@ define([
       });
 
       /*** Personal preferences ***/
-      var prefs = $('#plone-personal-actions-preferences > a, #personaltools-preferences > a', $root);
+      var prefs = $('#plone-personal-actions-preferences > a, #personaltools-preferences > a', self.$el);
       var prefsOptions = {
         buttons: 'input[type="submit"]',
         actionOptions: {
@@ -345,7 +347,7 @@ define([
           displayInModal: false
         }
       };
-      $('#plone-contentmenu-actions-rename a', $root)
+      $('#plone-contentmenu-actions-rename a', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(renameOptions));
 
@@ -358,23 +360,22 @@ define([
             window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
         });
       }
-      var delete_action = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete', $root);
+      var delete_action = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete', self.$el);
       delete_action.addClass('pat-modal');
       delete_action.on('render.modal.patterns', function(e, modal) {
         modal.options.actionOptions.onSuccess = processDelete;
       });
 
       }
-  };
-
-  registry.register(Widgets);
+  });
 
   // initialize only if we are in top frame
   if (window.parent === window) {
     $(document).ready(function() {
+      $('body').addClass('pat-plone-widgets');
       registry.scan($('body'));
     });
   }
 
-  return Widgets;
+  return PloneWidgets;
 });
