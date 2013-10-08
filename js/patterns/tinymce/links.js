@@ -190,7 +190,7 @@ define([
         }
       }
 
-      nodes = self.tiny.dom.select(self.options.anchor_selector);
+      nodes = self.tiny.dom.select(self.linkModal.options.anchorSelector);
       if (nodes.length > 0) {
         for (i = 0; i < nodes.length; i=i+1) {
           node = nodes[i];
@@ -203,7 +203,7 @@ define([
           /* okay, ugly, but we need to first check that this anchor isn't already available */
           var found = false;
           for(i=0; i<self.anchorNodes.length; i=i+1){
-            var anode = self.anchor_data[i];
+            var anode = self.anchorData[i];
             if(anode.name === name){
               found = true;
               // so it's also found, let's update the title to be more presentable
@@ -290,7 +290,7 @@ define([
   var LinkModal = Base.extend({
     name: 'linkmodal',
     defaults: {
-      anchor_selector: 'h1,h2,h3',
+      anchorSelector: 'h1,h2,h3',
       linkTypes: [
         /* available, none activate by default because these options
          * only get merged, not set.
@@ -318,8 +318,8 @@ define([
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
-      if(self.tinypattern.options.anchor_selector){
-        self.options.anchor_selector = self.tinypattern.options.anchor_selector;
+      if(self.tinypattern.options.anchorSelector){
+        self.options.anchorSelector = self.tinypattern.options.anchorSelector;
       }
       self.tiny = self.tinypattern.tiny;
       self.dom = self.tiny.dom;

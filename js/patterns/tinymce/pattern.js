@@ -209,7 +209,7 @@ define([
         // not valid scale, screw it
         return null;
       }
-      if(self.options.appendToScaleUrl){
+      if(self.options.appendToScalePart){
         url = split[1].split(self.options.appendToScalePart)[0];
       }else{
         url = split[1];
@@ -228,13 +228,6 @@ define([
       var ext = filename.split('.');
       ext = ext[ext.length-1].toLowerCase();
       var attr;
-      function waitLoad(imgElm) {
-          imgElm.onload = imgElm.onerror = function() {
-            imgElm.onload = imgElm.onerror = null;
-            self.tiny.selection.select(imgElm);
-            self.tiny.nodeChanged();
-          };
-        }
 
       if(['png', 'jpg', 'gif', 'jpeg'].indexOf(ext) !== -1){
         /* handle images different than others */

@@ -196,6 +196,52 @@ define([
       expect(tiny.stripGeneratedUrl('resolveuid/foobar')).to.equal('foobar');
     });
 
+    it('test parses correct attribute from url with appended value', function(){
+      var tiny = createTinymce({
+        prependToUrl: 'resolveuid/',
+        linkAttribute: 'UID',
+        appendToUrl: '/@@view'
+      });
+      expect(tiny.stripGeneratedUrl('resolveuid/foobar/@@view')).to.equal('foobar');
+    });
+
+    it('test get scale from url', function(){
+      var pattern = createTinymce({
+        prependToScalePart: '/somescale/'
+      });
+      expect(pattern.getScaleFromUrl('foobar/somescale/foobar')).to.equal('foobar');
+    });
+
+    it('test get scale return null if invalid', function(){
+      var pattern = createTinymce({
+        prependToScalePart: '/somescale/'
+      });
+      expect(pattern.getScaleFromUrl('foobar')).to.equal(null);
+    });
+
+    it('get scale handles edge case of image_ for plone', function(){
+      var pattern = createTinymce({
+        prependToScalePart: '/somescale'
+      });
+      expect(pattern.getScaleFromUrl('foobar/somescale/image_large')).to.equal('large');
+    });
+
+    it('get scale with appended option', function(){
+      var pattern = createTinymce({
+        prependToScalePart: '/somescale/',
+        appendToScalePart: '/@@view'
+      });
+      expect(pattern.getScaleFromUrl('foobar/somescale/large/@@view')).to.equal('large');
+    });
+
+    it('get scale handles edge case of image_ for plone', function(){
+      var pattern = createTinymce({
+        prependToScalePart: '/somescale'
+      });
+      expect(pattern.getScaleFromUrl('foobar/somescale/image_large')).to.equal('large');
+    });
+
+
     it('test add link', function(){
       var pattern = createTinymce({
         prependToUrl: 'resolveuid/',
@@ -281,6 +327,108 @@ define([
       expect(val.UID).to.equal('123sdfasdf');
       */
     });
+
+    it('test create upload file modal', function(){
+      var pattern = createTinymce();
+      pattern.uploadFileClicked();
+      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(true);
+    });
+
+    it('test reopen upload file modal', function(){
+      var pattern = createTinymce();
+      pattern.uploadFileClicked();
+      pattern.uploadModal.hide();
+      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(false);
+      pattern.uploadFileClicked();
+      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(true);
+    });
+
+    it('test reopen add link modal', function(){
+      var pattern = createTinymce();
+      pattern.addLinkClicked();
+      pattern.linkModal.hide();
+      expect(pattern.linkModal.modal.$modal.is(':visible')).to.equal(false);
+      pattern.addLinkClicked();
+      expect(pattern.linkModal.modal.$modal.is(':visible')).to.equal(true);
+    });
+
+    it('test reopen add image modal', function(){
+      var pattern = createTinymce();
+      pattern.addImageClicked();
+      pattern.imageModal.hide();
+      expect(pattern.imageModal.modal.$modal.is(':visible')).to.equal(false);
+      pattern.addImageClicked();
+      expect(pattern.imageModal.modal.$modal.is(':visible')).to.equal(true);
+    });
+
+    it('test loads existing link external values', function(){
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent(
+        '<a href="foobar" data-linktype="external" data-val="foobar">foobar</a>');
+
+      pattern.tiny.selection.select(
+        pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.external.$input.val()).to.equal('foobar');
+    });
+
+    it('test loads existing link email values', function(){
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent(
+        '<a href="mailto:foo@bar.com" data-linktype="email" data-val="foo@bar.com">foobar</a>');
+
+      pattern.tiny.selection.select(
+        pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.email.$input.val()).to.equal('foo@bar.com');
+    });
+
+    it('test anchor link adds existing anchors to list', function(){
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent(
+        '<a class="mceItemAnchor" name="foobar"></a>');
+
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+    });
+
+    it('test anchor link adds anchors from option', function(){
+      var pattern = createTinymce({
+        anchorSelector: 'h1'
+      });
+
+      pattern.tiny.setContent('<h1>blah</h1>');
+      pattern.addLinkClicked();
+      expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+    });
+
+    it('test anchor get index', function(){
+      var pattern = createTinymce({
+        anchorSelector: 'h1'
+      });
+
+      pattern.tiny.setContent('<h1>blah</h1><h1>foobar</h1>');
+      pattern.addLinkClicked();
+      expect(pattern.linkModal.linkTypes.anchor.getIndex('foobar')).to.equal(1);
+    });
+
+    it('test anchor get url', function(){
+      var pattern = createTinymce({
+        anchorSelector: 'h1'
+      });
+
+      pattern.tiny.setContent('<h1>blah</h1>');
+      pattern.addLinkClicked();
+      pattern.linkModal.linkTypes.anchor.$select.select2('data', '0');
+      expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#blah');
+    });
+
 
 
   });
