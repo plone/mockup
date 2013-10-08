@@ -1,9 +1,14 @@
-@import "../bower_components/pickadate/_raw/lib/themes/base.less";
-@import "../bower_components/pickadate/_raw/lib/themes/base.date.less";
-@import "../bower_components/pickadate/_raw/lib/themes/base.time.less";
-@import "../bower_components/pickadate/_raw/lib/themes/classic.less";
-@import "../bower_components/pickadate/_raw/lib/themes/classic.date.less";
-@import "../bower_components/pickadate/_raw/lib/themes/classic.time.less";
+.importCSS() when not (@isBrowser) {
+  @import (less) "../bower_components/pickadate/lib/themes/classic.css";
+  @import (less) "../bower_components/pickadate/lib/themes/classic.date.css";
+  @import (less) "../bower_components/pickadate/lib/themes/classic.time.css";
+}
+.importCSS() when (@isBrowser) {
+  @import (css) "@{pathPrefix}../bower_components/pickadate/lib/themes/classic.css";
+  @import (css) "@{pathPrefix}../bower_components/pickadate/lib/themes/classic.date.css";
+  @import (css) "@{pathPrefix}../bower_components/pickadate/lib/themes/classic.time.css";
+}
+.importCSS();
 
 .pattern-pickadate-wrapper {
   position: relative;
