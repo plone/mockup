@@ -298,7 +298,9 @@ define([
       expect($('.pattern-pickadate-date', self.$el).attr('data-value')).to.be.equal('2001-10-10');
 
       // ... and make sure 2001-10-10 is picked in the date picker calendar
-      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__day--selected').attr('data-pick')).to.be.equal('1002664800000');
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--year > :selected').val()).to.be.equal('2001');
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--month > :selected').val()).to.be.equal('9');
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__day--selected').text()).to.be.equal('10');
 
       // time picker value is parsed correctly from main element
       expect($('.pattern-pickadate-time', self.$el).attr('data-value')).to.be.equal('10:10');
@@ -341,8 +343,10 @@ define([
       // date picker value is parsed correctly from main element ...
       expect($('.pattern-pickadate-date', self.$el).attr('data-value')).to.be.equal('1801-12-30');
 
-      // ... and make sure 2001-10-10 is picked in the date picker calendar
-      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__day--selected').attr('data-pick')).to.be.equal('-5301766800000');
+      // ... and make sure 1801-12-30 is picked in the date picker calendar
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--year > :selected').val()).to.be.equal('1801');
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--month > :selected').val()).to.be.equal('11');
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__day--selected').text()).to.be.equal('30');
 
     });
 
