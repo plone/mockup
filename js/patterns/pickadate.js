@@ -84,17 +84,14 @@ define([
       var time_name = self.$el.attr('name') + '_time';
 
       if (self.options.date !== false) {
-        self.$date = $('<input type="text"/>')
+        self.$date = $('<input type="text" placeholder="' + self.options.placeholderDate + '"/>')
               .attr('data-value', self.options.date.value)
               .addClass(self.options.classDateName)
               .appendTo($('<div/>')
                   .addClass(self.options.classDateWrapperName)
                   .appendTo(self.$wrapper))
               .pickadate($.extend(true, self.options.date, {
-                hiddenSuffix: date_name,
-                onStart: function(){
-                  this.$node.attr('placeholder', self.options.placeholderDate);
-                }
+                hiddenSuffix: date_name
               }));
       }
 
@@ -107,17 +104,14 @@ define([
       }
 
       if (self.options.time !== false) {
-        self.$time = $('<input type="text"/>')
+        self.$time = $('<input type="text" placeholder="' + self.options.placeholderTime + '"/>')
               .attr('data-value', self.options.time.value)
               .addClass(self.options.classTimeName)
               .appendTo($('<div/>')
                   .addClass(self.options.classTimeWrapperName)
                   .appendTo(self.$wrapper))
               .pickatime($.extend(true, self.options.time, {
-                hiddenSuffix: time_name,
-                onStart: function(){
-                  this.$node.attr('placeholder', self.options.placeholderTime);
-                }
+                hiddenSuffix: time_name
               }));
         // XXX: bug in pickatime
         // work around pickadate bug loading 00:xx as value
