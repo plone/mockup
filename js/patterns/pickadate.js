@@ -39,14 +39,10 @@ define([
     defaults: {
       separator: ' ',
       date: {
-        value: '',
-        formatSubmit: 'yyyy-mm-dd',
         selectYears: true,
         selectMonths: true
       },
       time: {
-        value: '',
-        formatSubmit: 'HH:i'
       },
       classWrapperName: 'pattern-pickadate-wrapper',
       classSeparatorName: 'pattern-pickadate-separator',
@@ -55,21 +51,27 @@ define([
       classTimeName: 'pattern-pickadate-time',
       classTimeWrapperName: 'pattern-pickadate-time-wrapper',
       classClearName: 'pattern-pickadate-clear',
-      placeholderDate: 'enter date...',
-      placeholderTime: 'enter time...'
+      placeholderDate: 'Enter date...',
+      placeholderTime: 'Enter time...'
     },
-    ensureBool: function(value) {
-      if (typeof(value) === 'string') {
-        if (value === 'true') {
-          return true;
-        } else if (value === 'false') {
-          return false;
-        }
+    isFalse: function(value) {
+      if (typeof(value) === 'string' && value === 'false') {
+        return false;
       }
       return value;
     },
     init: function() {
-      var self = this;
+      var self = this,
+          value = self.$el.val().split(' '),
+          dateValue = value[0] || '',
+          timeValue = value[1] || '';
+
+      self.options.date = self.isFalse(self.options.date);
+      self.options.time = self.isFalse(self.options.time);
+
+      if (self.options.date === false) {
+        timeValue = value[0];
+      }
 
       self.$el.hide();
 
@@ -77,21 +79,29 @@ define([
             .addClass(self.options.classWrapperName)
             .insertAfter(self.$el);
 
-      self.options.date = self.ensureBool(self.options.date);
-      self.options.time = self.ensureBool(self.options.time);
-
-      var date_name = self.$el.attr('name') + '_date';
-      var time_name = self.$el.attr('name') + '_time';
-
       if (self.options.date !== false) {
-        self.$date = $('<input type="text" placeholder="' + self.options.placeholderDate + '"/>')
-              .attr('data-value', self.options.date.value)
+        self.options.date.formatSubmit = 'yyyy-mm-dd';
+        self.$date = $('<input type="text"/>')
+              .attr('placeholder', self.options.placeholderDate)
+              .attr('data-value', dateValue)
               .addClass(self.options.classDateName)
               .appendTo($('<div/>')
                   .addClass(self.options.classDateWrapperName)
                   .appendTo(self.$wrapper))
-              .pickadate($.extend(true, self.options.date, {
-                hiddenSuffix: date_name
+              .pickadate($.extend(true, {}, self.options.date, {
+                onSet: function(e) {
+                  if (e.select !== undefined) {
+                    self.$date.attr('data-value', e.select);
+                    if (self.options.time === false ||
+                        self.$time.attr('data-value') !== '') {
+                      self.updateValue.call(self);
+                    }
+                  }
+                  if (e.hasOwnProperty('clear')) {
+                    self.$el.removeAttr('value');
+                    self.$date.attr('data-value', '');
+                  }
+                }
               }));
       }
 
@@ -104,21 +114,35 @@ define([
       }
 
       if (self.options.time !== false) {
-        self.$time = $('<input type="text" placeholder="' + self.options.placeholderTime + '"/>')
-              .attr('data-value', self.options.time.value)
+        self.options.time.formatSubmit = 'HH:i';
+        self.$time = $('<input type="text"/>')
+              .attr('placeholder', self.options.placeholderTime)
+              .attr('data-value', timeValue)
               .addClass(self.options.classTimeName)
               .appendTo($('<div/>')
                   .addClass(self.options.classTimeWrapperName)
                   .appendTo(self.$wrapper))
-              .pickatime($.extend(true, self.options.time, {
-                hiddenSuffix: time_name
+              .pickatime($.extend(true, {}, self.options.time, {
+                onSet: function(e) {
+                  if (e.select !== undefined) {
+                    self.$time.attr('data-value', e.select);
+                    if (self.options.date === false ||
+                        self.$date.attr('data-value') !== '') {
+                      self.updateValue.call(self);
+                    }
+                  }
+                  if (e.hasOwnProperty('clear')) {
+                    self.$el.removeAttr('value');
+                    self.$time.attr('data-value', '');
+                  }
+                }
               }));
+
         // XXX: bug in pickatime
         // work around pickadate bug loading 00:xx as value
-        if (typeof(self.options.time.value) === 'string' &&
-           self.options.time.value.substring(0,2) === '00') {
-          var timeval = '12' + self.options.time.value.substring(2) + ' a.m.';
-          self.$time.pickatime('picker').set('select', timeval, {format: 'hh:i a'});
+        if (typeof(timeValue) === 'string' && timeValue.substring(0,2) === '00') {
+          self.$time.pickatime('picker').set('select', timeValue.split(':'));
+          self.$time.attr('data-value', timeValue);
         }
       }
 
@@ -126,6 +150,32 @@ define([
             .addClass(self.options.classClearName)
             .appendTo(self.$wrapper);
 
+    },
+    updateValue: function() {
+      var self = this,
+          value = '';
+
+      if (self.options.date !== false) {
+        var date = self.$date.data('pickadate').component,
+            dateValue = self.$date.data('pickadate').get('select'),
+            formatDate = date.formats.toString;
+        value += formatDate.apply(date, ['yyyy-mm-dd', dateValue]);
+      }
+
+      if (self.options.date !== false && self.options.time !== false) {
+        value += ' ';
+      }
+
+      if (self.options.time !== false) {
+        var time = self.$time.data('pickatime').component,
+            timeValue = self.$time.data('pickatime').get('select'),
+            formatTime = time.formats.toString;
+        value += formatTime.apply(time, ['HH:i', timeValue]);
+      }
+
+      self.$el.attr('value', value);
+
+      self.trigger('updated');
     }
   });
 
