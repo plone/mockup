@@ -13,46 +13,41 @@
       <% }); %>
     <div>
     <hr style="clear:both" />
-    <div class="internal linkType">
-      <input type="text" name="internal" value="<%- uid %>" />
+    <div class="internal linkType main">
+      <input type="text" name="internal" />
     </div>
-    <div class="image linkType">
-      <input type="text" name="image" value="<%- uid %>" />
+    <div class="image linkType main">
+      <input type="text" name="image" />
     </div>
-    <div class="control-group external linkType">
+    <div class="control-group external linkType main">
       <label><%- externalText %></label>
       <div class="controls">
-        <input type="text" name="external" value="<%- external %>" />
+        <input type="text" name="external" />
       </div>
     </div>
-    <div class="control-group email linkType">
+    <div class="control-group email linkType main">
       <label><%- emailText %></label>
       <div class="controls">
-        <input type="text" name="email" value="<%- email %>" />
+        <input type="text" name="email" />
       </div>
     </div>
     <div class="control-group email linkType">
       <label><%- subjectText %></label>
       <div class="controls">
-        <input type="text" name="subject" value="<%- subject %>" />
+        <input type="text" name="subject" />
       </div>
     </div>
-    <div class="control-group anchor linkType">
+    <div class="control-group anchor linkType main">
       <label>Select an anchor</label>
       <div class="controls">
-        <select name="anchor" class="pat-select2" data-pat-select2="width:500px"
-                value="<%- anchor %>" />
+        <select name="anchor" class="pat-select2" data-pat-select2="width:500px" />
       </div>
     </div>
     <div class="control-group linkType anchor email external internal">
       <div class="controls">
         <select name="target">
           <% _.each(targetList, function(target){ %>
-            <option value="<%- target.value %>"
-              <% if(target.value === selectedTarget){ %>
-                selected="selected"
-              <% } %>
-              ><%- target.text %></option>
+            <option value="<%- target.value %>"><%- target.text %></option>
           <% }); %>
         </select>
       </div>
@@ -60,20 +55,19 @@
     <div class="control-group linkType anchor email external internal">
       <label><%- titleText %></label>
       <div class="controls">
-        <input type="text" name="title" value="<%- title %>" />
+        <input type="text" name="title" />
       </div>
     </div>
-    <div class="control-group linkType externalImage">
+    <div class="control-group linkType externalImage main">
       <label><%- externalImageText %></label>
       <div class="controls">
-        <input type="text" name="externalImage" '
-        '       value="<%- externalImage %>" />
+        <input type="text" name="externalImage" />
       </div>
     </div>
     <div class="control-group linkType image externalImage">
       <label><%- altText %></label>
       <div class="controls">
-        <input type="text" name="alt" value="<%- alt %>" />
+        <input type="text" name="alt" />
       </div>
     </div>
     <div class="control-group linkType image externalImage">
@@ -81,11 +75,7 @@
       <div class="controls">
         <select name="align">
           <% _.each(['inline', 'right', 'left'], function(align){ %>
-              <option value="<%- align %>"
-                <% if(align === selectedAlign){ %>
-                   selected="selected"
-                <% } %>
-              >
+              <option value="<%- align %>">
               <%- align.charAt(0).toUpperCase() + align.slice(1) %>
               </option>
           <% }); %>
@@ -99,13 +89,9 @@
           <option value="">Original</option>
             <% _.each(scales.split(','), function(scale){ %>
               <% var scale = scale.split(':'); %>
-              <option value="<%- scale[1] %>"
-              <% if(scale[1] === selectedScale){ %>
-                selected="selected"
-              <% } %>
-              >
-            <%- scale[0] %>
-            </option>
+              <option value="<%- scale[1] %>">
+                <%- scale[0] %>
+              </option>
             <% }); %>
         </select>
       </div>

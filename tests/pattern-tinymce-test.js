@@ -78,6 +78,10 @@ define([
           },
         ];
 
+        if(xhr.url.indexOf('123sdfasdf') !== -1){
+          // ajax request for this one val
+          items.pop();
+        }
         xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
           total: items.length,
           results: items
@@ -202,7 +206,7 @@ define([
       });
 
       pattern.addLinkClicked();
-      pattern.linkModal.$internal.select2('data', {
+      pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
         Type: 'Page',
         Title: 'Foobar',
@@ -213,15 +217,16 @@ define([
     it('test add external link', function(){
       var pattern = createTinymce();
       pattern.addLinkClicked();
-      pattern.linkModal.linkType = 'external';
-      pattern.linkModal.$external.attr('value', 'http://foobar');
+      var modal = pattern.linkModal;
+      modal.linkType = 'external';
+      modal.linkTypes.external.$input.attr('value', 'http://foobar');
       expect(pattern.linkModal.getLinkUrl()).to.equal('http://foobar');
     });
     it('test add email link', function(){
       var pattern = createTinymce();
       pattern.addLinkClicked();
       pattern.linkModal.linkType = 'email';
-      pattern.linkModal.$email.attr('value', 'foo@bar.com');
+      pattern.linkModal.linkTypes.email.$input.attr('value', 'foo@bar.com');
       expect(pattern.linkModal.getLinkUrl()).to.equal('mailto:foo@bar.com');
     });
     it('test add image link', function(){
@@ -230,20 +235,53 @@ define([
         linkAttribute: 'UID',
         prependToScalePart: '/@@images/image/'
       });
-      pattern.addLinkClicked();
-      pattern.linkModal.$image.select2('data', {
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.$input.select2('data', {
         UID: 'foobar',
         Type: 'Page',
         Title: 'Foobar',
         path: '/foobar'
       });
 
-      pattern.linkModal.linkType = 'image';
-      pattern.linkModal.$email.attr('value', 'foo@bar.com');
-      pattern.linkModal.$scale.find('[value="thumb"]')[0].selected = true;
-      expect(pattern.linkModal.getLinkUrl()).to.equal(
+      pattern.imageModal.linkType = 'image';
+      pattern.imageModal.$scale.find('[value="thumb"]')[0].selected = true;
+      expect(pattern.imageModal.getLinkUrl()).to.equal(
         'resolveuid/foobar/@@images/image/thumb');
     });
+
+    it('test adds data attributes', function(){
+      var pattern = createTinymce();
+
+      pattern.addLinkClicked();
+      pattern.linkModal.linkTypes.internal.$input.select2('data', {
+        UID: 'foobar',
+        Type: 'Page',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.tiny.setContent('<p>blah</p>');
+      pattern.linkModal.focusElement(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
+      pattern.linkModal.$button.trigger('click');
+      expect(pattern.tiny.getContent()).to.contain('data-val="foobar"');
+      expect(pattern.tiny.getContent()).to.contain('data-linktype="internal"');
+    });
+
+    it('test loading link also sets up related items correctly', function(){
+      var pattern = createTinymce({
+        relatedItems: {
+          ajaxVocabulary: '/data.json'
+        }
+      });
+
+      pattern.addLinkClicked();
+
+      pattern.linkModal.linkTypes.internal.set('123sdfasdf');
+      var val = pattern.linkModal.linkTypes.internal.$input.select2('data');
+      /* XXX ajax not loading quickly enough here... 
+      expect(val.UID).to.equal('123sdfasdf');
+      */
+    });
+
 
   });
 

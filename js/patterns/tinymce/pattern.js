@@ -45,6 +45,7 @@ define([
     name: 'tinymce',
     defaults: {
       relatedItems: {
+        // UID attribute is required here since we're working with related items
         attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
         batchSize: 20,
         basePath: '/',
