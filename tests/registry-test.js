@@ -66,10 +66,21 @@ define([
       });
     });
 
+    it("skip initializing pattern if not in registry", function() {
+      var $el = $('<div/>');
+      Registry.init($el, 'example', {});
+      expect($el.data('example')).to.be.equal(undefined);
+    });
+
     it("failing pattern initialization", function() {
+      window.DEBUG = false;
+      Registry.patterns.example = function($el, options) {
+        throw new Error("some random error");
+      };
       Registry.init($('<div/>'), 'example', {});
       expect(this.warnMsg).to.be.equal(
         'Failed while initializing "example" pattern.');
+      window.DEBUG = true;
     });
 
     it("pattern initialization", function() {
