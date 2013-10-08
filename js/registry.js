@@ -50,7 +50,7 @@ define([
 
     init: function($el, patternName, options) {
       var pattern = $el.data('pattern-' + patternName);
-      if (pattern === undefined) {
+      if (pattern === undefined && Registry.patterns[patternName]) {
         if (window.DEBUG) {
           pattern = new Registry.patterns[patternName]($el,
               Registry.getOptions($el, patternName, options));
