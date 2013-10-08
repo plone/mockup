@@ -373,7 +373,7 @@ define([
   if (window.parent === window) {
     $(document).ready(function() {
       $('body').addClass('pat-plone-widgets');
-      registry.scan($('body'));
+      Registry.scan($('body'));
     });
   }
 
