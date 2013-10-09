@@ -128,7 +128,8 @@ define([
                 left: dd.offsetX
               });
               var drop = dd.drop[0],
-              method = $.data(drop || {}, "drop+reorder");
+                  method = $.data(drop || {}, "drop+reorder");
+
               /* XXX Cannot use triple equals here */
               if (drop && (drop != dd.current || method != dd.method)){
                 $(this)[method](drop);
