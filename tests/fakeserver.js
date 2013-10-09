@@ -26,13 +26,14 @@ define([
   ];
   server.xhr.addFilter(function(method, url) {
     //whenever the this returns true the request will not faked
-    return url.indexOf('tests/json/') !== -1 || url.indexOf('.html') !== -1 ||
-           url.indexOf('ace/lib') !== -1 || url.indexOf('.tmpl') !== -1;
+    return url.indexOf('tests/json/') !== -1 ||
+           url.indexOf('ace/lib') !== -1 ||
+           url.indexOf('.tmpl') !== -1;
   });
   server.autoRespond = true;
   server.autoRespondAfter = 200;
 
-  server.respondWith("GET", /select2-test.json/, function (xhr, id) {
+  server.respondWith("GET", /select2-test\.json/, function (xhr, id) {
     var items = [
       {id: 'red', text: 'Red'},
       {id: 'green', text: 'Green'},
@@ -46,7 +47,7 @@ define([
     }));
   });
 
-  server.respondWith("GET", /search.json/, function (xhr, id) {
+  server.respondWith("GET", /search\.json/, function (xhr, id) {
     var items = [
       {
         "UID": "123sdfasdf",
@@ -175,7 +176,7 @@ define([
     }
   }
 
-  server.respondWith(/relateditems-test.json/, function(xhr, id) {
+  server.respondWith(/relateditems-test\.json/, function(xhr, id) {
     var searchables = [
       {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
       {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
@@ -310,7 +311,7 @@ define([
     }));
   });
 
-  server.respondWith("GET", /something.html/,
+  server.respondWith("GET", /something\.html/,
                                 [200, { "Content-Type": "text/html" },
                                  ''+
 '    <html> '+
@@ -322,7 +323,7 @@ define([
 '    </body> '+
 '    </html>']);
 
-  server.respondWith("GET", /something-link.html/,
+  server.respondWith("GET", /something-link\.html/,
                                 [200, { "Content-Type": "text/html" },
                                  ''+
 '    <html> '+
@@ -334,7 +335,7 @@ define([
 '    </body> '+
 '    </html>']);
 
-  server.respondWith("GET", /something-else.html/,
+  server.respondWith("GET", /something-else\.html/,
                                 [200, { "Content-Type": "text/html" },
                                  ''+
 '    <html> '+
@@ -346,7 +347,7 @@ define([
 '    </body> '+
 '    </html>']);
 
-  server.respondWith("GET", /modal-form.html/,
+  server.respondWith("GET", /modal-form\.html/,
                                 [200, { "Content-Type": "text/html" },
                                  ''+
 '    <html> '+
@@ -364,7 +365,7 @@ define([
 '    </body> '+
 '    </html>']);
 
-  server.respondWith('POST', /modal-submit.html/, function(xhr, id) {
+  server.respondWith('POST', /modal-submit\.html/, function(xhr, id) {
     var name = getQueryVariable('?'+xhr.requestBody, 'name');
     xhr.respond(200, {"content-Type": "text/html"},
       '<html> '+
@@ -490,7 +491,7 @@ define([
         status: "success",
         msg: 'Deleted ' + selection.length + ' items'
       };
-    },
+    }
 
   };
 
