@@ -899,6 +899,7 @@ function($action, response, options) { ... }
       ]
     });
   </script>
+
   <script type="text/example" class="example-modal" title="">
 <a href="#modal1"
    class="btn btn-large btn-primary pat-modal">Modal basic</a>
@@ -907,21 +908,23 @@ function($action, response, options) { ... }
   <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
 </div>
   </script>
+
   <script type="text/example" class="example-modal" title="">
 <a href="something.html#content" id="modal2"
-               class="btn btn-large btn-primary pat-modal">
-              Modal with remote content (AJAX)</a>
+   class="btn btn-large btn-primary pat-modal">
+   Modal with remote content (AJAX)</a>
   </script>
+
   <script type="text/example" class="example-modal" title="">
 <a href="something-link.html#content" id="modal2"
-               class="btn btn-large btn-primary pat-modal">
-              Modal with links (AJAX)</a>
+   class="btn btn-large btn-primary pat-modal">
+   Modal with links (AJAX)</a>
   </script>
 
   <script type="text/example" class="example-modal" title="">
 <a href="/modal-form.html"
    class="btn btn-large btn-primary pat-modal">
-    Modal with form (AJAX)</a>
+   Modal with form (AJAX)</a>
   </script>
 
   <script type="text/example" class="example-modal" title="">
@@ -930,21 +933,21 @@ function($action, response, options) { ... }
    data-pat-modal="position:center bottom;
                    height:30%;
                    width:80%">
-              Modal with custom position</a>
+   Modal with custom position</a>
   </script>
-
 
   <script type="text/example" class="example-modal" title="Modal with tinymce">
-  <a href="#modaltinymce"
-               class="btn btn-large btn-primary pat-modal"
-               data-pat-modal="height: 600px;
-                               width: 80%">
-              Modal with TinyMCE</a>
+<a href="#modaltinymce"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="height: 600px;
+                   width: 80%">
+   Modal with TinyMCE</a>
   </script>
+
   <script type="text/template" id="modaltinymce">
-    <div>
-      <textarea class="pat-tinymce"></textarea>
-    </div>
+<div>
+  <textarea class="pat-tinymce"></textarea>
+</div>
   </script>
 
   <script type="text/example" class="example-modal" title="">
@@ -956,7 +959,7 @@ function($action, response, options) { ... }
                       "closeOnClick": false
                     }
                   }'>
-    Custom Backdrop</a>
+  Custom Backdrop</a>
 <div id="modalBackdrop" style="display: none">
   <h1>Custom Backdrop</h1>
   <ul>
@@ -964,14 +967,14 @@ function($action, response, options) { ... }
     <li>Modal doesn't close when Backdrop is clicked</li>
   </ul>
 </div>
-</div>
   </script>
 
   <script type="text/example" class="example-modal" title="">
 <a href="#modal4"
-               class="btn btn-large btn-primary pat-modal">
-              Modal with long text</a>
+   class="btn btn-large btn-primary pat-modal">
+   Modal with long text</a>
   </script>
+
   <script type="text/template" id="page_modal">
   <div style="display:none">
     <div id="modal3">
@@ -1199,11 +1202,12 @@ function($action, response, options) { ... }
     </div>
   </div>
   </script>
+
   <script type="text/example" class="example-modal" title="">
 <a href="#modalButtons"
    class="btn btn-large btn-primary pat-modal"
    data-pat-modal="buttons: .btn">
-    Modal with Buttons</a>
+   Modal with Buttons</a>
 <div id="modalButtons" style="display: none">
   <h1>Modal with buttons</h1>
   <div id="content">
@@ -1212,12 +1216,13 @@ function($action, response, options) { ... }
   </div>
 </div>
   </script>
+
   <script type="text/example" class="example-modal" title="">
 <a href="#modalButtons"
    class="pat-modal"
    style="display: none"
    data-pat-modal='{"routerOptions": { "id": "hash", "pathExp": "/" } }'>
-    Foo</a>
+   Foo</a>
 <a href="#!/modal:hash" class="btn btn-large">Change hash</a>
 <div id="modalButtons" style="display: none">
   <h1>Modal launched by hashchange</h1>
