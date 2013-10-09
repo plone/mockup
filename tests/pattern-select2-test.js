@@ -148,6 +148,8 @@ define([
 
         $results = $('li.select2-result-selectable');
         expect($results.size()).to.equal(3);
+        expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
+        expect($results.first().text()).to.be.equal('Red');
     });
 
     it('prepends the query term to the selection', function() {
@@ -167,9 +169,11 @@ define([
 
         var $results = $('li.select2-result-selectable');
         expect($results.size()).to.equal(4);
+        expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
+        expect($results.first().text()).to.be.equal('AAA');
     });
 
-    it('orderable tags', function() {
+    it('sets up orderable tags', function() {
         var $el = $(
         '<div>' +
         ' <input class="pat-select2"' +
@@ -181,6 +185,49 @@ define([
 
         registry.scan($el);
         expect($('.select2-container', $el).hasClass('select2-orderable')).to.be.equal(true);
+    });
+
+    it('handles orderable tag drag events', function() {
+        var $el = $(
+        '<div>' +
+        ' <input class="pat-select2"' +
+        '        data-pat-select2="orderable: true; tags: Red,Yellow,Blue"' +
+        '        value="Yellow,Red"' +
+        '        />' +
+        '</div>'
+        ).appendTo('body');
+        var pattern = $('.pat-select2').patternSelect2();
+
+        var $results = $('li.select2-search-choice');
+        expect($results.size()).to.equal(2);
+        expect($.trim($results.eq(0).text())).to.equal('Yellow');
+        expect($.trim($results.eq(1).text())).to.equal('Red');
+
+        var first_elem = $results.eq(0);
+        var second_elem = $results.eq(1);
+        // css class is set and proxy is created when starting to drag
+        expect($('li.dragging').size()).to.equal(0);
+        expect(first_elem.hasClass('select2-choice-dragging')).to.equal(false);
+
+        first_elem.trigger($.Event('dragstart'));
+
+        expect(first_elem.hasClass('select2-choice-dragging')).to.equal(true);
+        var $proxy = $('li.dragging');
+        expect($proxy.size()).to.equal(1);
+
+        // css position is updated while dragging
+        first_elem.trigger($.Event('drag'), {proxy: $proxy,
+                                             drop: [],
+                                             offsetX: 10,
+                                             offsetY: 0
+                                            });
+        expect($proxy.css('top')).to.equal('0px');
+        expect($proxy.css('left')).to.equal('10px');
+
+        // css class is removed and proxy is deleted when dragging stops
+        first_elem.trigger($.Event('dragend'), {proxy: $proxy});
+        expect(first_elem.hasClass('select2-choice-dragging')).to.equal(false);
+        expect($('li.dragging').size()).to.equal(0);
     });
 
   });
