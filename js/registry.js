@@ -72,8 +72,8 @@ define([
       var $content = $(content),
           patterns = [];
 
-      patterns = $.merge(patterns, $content.filter('[class^="pat-"]'));
-      patterns = $.merge(patterns, $('[class^="pat-"]', $content));
+      patterns = $.merge(patterns, $content.filter('[class*="pat-"]'));
+      patterns = $.merge(patterns, $('[class*="pat-"]', $content));
 
       $.each(patterns, function(i, $el) {
         $el = $($el);

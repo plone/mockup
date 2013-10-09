@@ -118,6 +118,14 @@ define([
       expect($dom.find('div').data('pattern-example').example).to.be.equal('works');
     });
 
+    it("scan for pattern among other class names on element", function() {
+      var $el = $('<div class="some-other-stuff pat-example" />');
+      Registry.patterns.example = function($el, options) {
+        this.example = 'works';
+      };
+      Registry.scan($el);
+      expect($el.data('pattern-example').example).to.be.equal('works');
+    });
     it("try register a pattern without name", function() {
       Registry.register(function($el, options) {});
       expect(this.warnMsg).to.be.equal('Pattern didn\'t specified a name.');
