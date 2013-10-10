@@ -39,16 +39,6 @@ define([
   mocha.setup('bdd');
   $.fx.off = true;
 
-  var server = sinon.fakeServer.create();
-  server.autoRespond = true;
-  server.autoRespondAfter = 1;
-  server.respondWith("patterns-modal-load-via-ajax", function (xhr, id) {
-    xhr.respond(200, { "Content-Type": "text/html" }, '' +
-      '<html><body>' +
-      '<div id="content">Exampel</div>' +
-      '</body></html>');
-  });
-
   /* ==========================
    TEST: Modal
   ========================== */
