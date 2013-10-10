@@ -92,6 +92,7 @@ define([
 
       $el.remove();
     });
+
     it("customize modal on show event", function() {
       var $el = $('' +
         '<div id="body">' +
@@ -110,6 +111,7 @@ define([
 
       $el.remove();
     });
+
     it("load modal content via ajax", function(done) {
       $('<a class="pat-modal" />')
         .patternModal()
@@ -118,6 +120,7 @@ define([
           done();
       }).click();
     });
+
     it("redirects to base urls", function(done){
       $('<a class="pat-modal" />')
         .patternModal()
