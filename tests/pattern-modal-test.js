@@ -39,16 +39,6 @@ define([
   mocha.setup('bdd');
   $.fx.off = true;
 
-  var server = sinon.fakeServer.create();
-  server.autoRespond = true;
-  server.autoRespondAfter = 1;
-  server.respondWith("patterns-modal-load-via-ajax", function (xhr, id) {
-    xhr.respond(200, { "Content-Type": "text/html" }, '' +
-      '<html><body>' +
-      '<div id="content">Exampel</div>' +
-      '</body></html>');
-  });
-
   /* ==========================
    TEST: Modal
   ========================== */
@@ -63,7 +53,38 @@ define([
           '<div id="content">Exampel</div>' +
           '</body></html>');
       });
+
+      this.server.respondWith("GET", /modal-form\.html/, function (xhr, id) {
+        xhr.respond(200, { "Content-Type": "text/html" },
+          '<html>'+
+          '<head></head>'+
+          '<body>'+
+          '<div id="content">'+
+          '<h1>Modal with Form</h1>'+
+          '<p>This modal contains a form.</p>'+
+          '<form method="POST" action="/modal-submit.html">' +
+          '  <label for="name">Name:</label><input type="text" name="name" />' +
+          '  <div class="formControls"> ' +
+          '    <input type="submit" class="btn btn-primary" value="Submit" name="save" />' +
+          '  </div>'+
+          '</form>' +
+          '</body>'+
+          '</html>');
+        });
+
+        this.server.respondWith('POST', /modal-submit\.html/, function(xhr, id) {
+          xhr.respond(200, {"content-Type": "text/html"},
+            '<html> '+
+            '  <head></head>'+
+            '  <body> '+
+            '    <div id="content">'+
+            '      <h1>Form submitted</h1>'+
+            '      <p>Thanks!</p>'+
+            '  </body> '+
+            '</html>');
+        });
     });
+
     afterEach(function() {
       $('body').empty();
       this.server.restore();
@@ -102,6 +123,7 @@ define([
 
       $el.remove();
     });
+
     it("customize modal on show event", function() {
       var $el = $('' +
         '<div id="body">' +
@@ -120,6 +142,7 @@ define([
 
       $el.remove();
     });
+
     it("load modal content via ajax", function(done) {
       $('<a class="pat-modal" />')
         .patternModal()
@@ -128,6 +151,7 @@ define([
           done();
       }).click();
     });
+
     it("redirects to base urls", function(done){
       $('<a class="pat-modal" />')
         .patternModal()
@@ -138,6 +162,26 @@ define([
               '<html><head><base href="testurl" /></head></html>')).to.equal('testurl');
           done();
       }).click();
+    });
+
+    it("handles forms and form submits", function(done) {
+      var server = this.server;
+      $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
+        .appendTo('body')
+        .patternModal()
+        .on('show.modal.patterns', function(e, modal){
+          var $input = $('.pattern-modal-buttons').find('input');
+          expect($input.size()).to.equal(1);
+          $input.click();
+          server.respond(); // XXX could not get autorespond to work
+        })
+        .on('formActionSuccess.modal.patterns', function() {
+          var title = $('.modal-header').find('h3').text();
+          expect(title).to.equal('Form submitted');
+          done();
+        })
+      .click();
+      server.respond(); // XXX could not get autorespond to work
     });
 
     describe("modal positioning (findPosition) ", function() {
