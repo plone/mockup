@@ -76,11 +76,11 @@ define([
 
       this.creatorsSelect2 = new Select2(this.$creators, {
         multiple: true,
-        ajaxVocabulary: this.app.options.usersAjaxVocabulary
+        vocabularyUrl: this.app.options.usersAjaxVocabulary
       });
       this.contributorsSelect2 = new Select2(this.$contributors, {
         multiple: true,
-        ajaxVocabulary: this.app.options.usersAjaxVocabulary
+        vocabularyUrl: this.app.options.usersAjaxVocabulary
       });
       this.effectivePickADate = new PickADate(this.$effective);
       this.expirationPickADate = new PickADate(this.$expiration);
@@ -121,7 +121,3 @@ define([
 
   return PropertiesView;
 });
-
-
-
-

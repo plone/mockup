@@ -1520,7 +1520,7 @@ function($action, response, options) { ... }
       title: 'Related Items',
       description: 'An advanced widget for <strong>selecting related items</strong>.',
       attributes: [
-        {attribute: 'ajaxVocabulary', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
+        {attribute: 'vocabularyUrl', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
         {attribute: 'attributes', type: 'Array', defaultValue: "<code>['UID', 'Title', 'Type', 'path']</code>", description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
         {attribute: 'basePath', type: 'String', description: 'If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results.'},
         {attribute: 'breadCrumbTemplate', type: 'String', description: 'Template to use for a single item in the breadcrumbs.'},
@@ -1554,17 +1554,17 @@ function($action, response, options) { ... }
   <script type="text/example" class="example-relateditems">
     <input type="text" class="pat-relateditems"
         data-pat-relateditems="width:30em;
-                               ajaxVocabulary:/relateditems-test.json" />
+                               vocabularyUrl:/relateditems-test.json" />
   </script>
   <script type="text/example" class="example-relateditems" data-title="Existing values, some bad">
     <input type="text" class="pat-relateditems"
         value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
         data-pat-relateditems="width:30em;
-                               ajaxVocabulary:/relateditems-test.json" />
+                               vocabularyUrl:/relateditems-test.json" />
   </script>
   <script type="text/example" class="example-relateditems" data-title="Selectable Types">
     <input type="text" class="pat-relateditems"
-        data-pat-relateditems='{"selectableTypes": ["Document"], "ajaxVocabulary": "/relateditems-test.json"}' />
+        data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
   </script>
 
   <!--  **** Select2 **** -->
@@ -1578,15 +1578,15 @@ function($action, response, options) { ... }
           + 'Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.'
           + '<br/><br/>'
           + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will '
-          + 'allow <code>tags</code> and <code>initvaluemap</code> to have '
+          + 'allow <code>tags</code> and <code>initialValues</code> to have '
           + 'values separated by ";" instead of the default ",".'},
-        {attribute: 'initvaluemap', type: 'String', description: ''
+        {attribute: 'initialValues', type: 'String', description: ''
           + 'This can be a json encoded string, or a list of <code>id:text</code> '
           + 'values. Ex: <code>Red:The Color Red,Orange:The Color Orange</code>'
           + '<br /><br />'
           + 'This is used inside the <code>initSelection</code> method, if AJAX options '
           + 'are NOT set.'},
-        {attribute: 'ajaxVocabulary', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
+        {attribute: 'vocabularyUrl', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
         {attribute: 'OTHER OPTIONS', type: '', description: 'For more options on select2 go to http://ivaynberg.github.io/select2/#documentation'}
       ]
     });
@@ -1791,7 +1791,7 @@ function($action, response, options) { ... }
     data-pat-select2="separator:,;
                       tags:Red,Yellow,Green,Orange,Purple;
                       width:20em;
-                      initvaluemap:Red:The Color Red,Orange:The Color Orange"
+                      initialValues:Red:The Color Red,Orange:The Color Orange"
     value="Red,Orange"/>
   </script>
   <script type="text/example" class="example-select2" data-title="Orderable tags">
@@ -1803,7 +1803,7 @@ function($action, response, options) { ... }
   <script type="text/example" class="example-select2" data-title="AJAX tags">
 <input type="hidden" class="pat-select2"
     data-pat-select2="placeholder:Search for a Value;
-                      ajaxVocabulary:select2-test.json;
+                      vocabularyUrl:select2-test.json;
                       width:20em" />
   </script>
 
@@ -1894,7 +1894,7 @@ function($action, response, options) { ... }
           + '  attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"],\n'
           + '  batchSize: 20,\n'
           + '  basePath: "/",\n'
-          + '  ajaxVocabulary: null,\n'
+          + '  vocabularyUrl: null,\n'
           + '  width: 500,\n'
           + '  maximumSelectionSize: 1,\n'
           + '  placeholder: "Search for item on site..."\n'
@@ -1970,7 +1970,7 @@ function($action, response, options) { ... }
     <form>
       <textarea class="pat-tinymce"
         data-pat-tinymce='{"relatedItems": {
-                             "ajaxVocabulary": "/relateditems-test.json"
+                             "vocabularyUrl": "/relateditems-test.json"
                            } }'
         ></textarea>
     </form>
@@ -1979,7 +1979,7 @@ function($action, response, options) { ... }
     <form>
       <textarea class="pat-tinymce"
         data-pat-tinymce='{"relatedItems": {
-                             "ajaxVocabulary": "/relateditems-test.json"
+                             "vocabularyUrl": "/relateditems-test.json"
                            },
                            "rel_upload_path": "upload",
                            "folder_url": "http://localhost:8000/"}'
@@ -2178,7 +2178,7 @@ function($action, response, options) { ... }
       title: 'Structure',
       description: "Managing a folder of items",
       attributes: [
-        {attribute: 'ajaxVocabulary', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
+        {attribute: 'vocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
         {attribute: 'tagsAjaxVocabulary', type: 'String', defaultValue: 'null', description: 'Url to return tags query results'},
         {attribute: 'usersAjaxVocabulary', type: 'String', defaultValue: 'null', description: 'Url to query users'},
         {attribute: 'indexOptionsUrl', type: 'String', defaultValue: 'null', description: 'Url to configure querystring widget with'},
@@ -2191,7 +2191,7 @@ function($action, response, options) { ... }
   <script type="text/template" id="page_structure">
   </script>
   <script type="text/example" class="example-structure" data-title="Default">
-    <div class="pat-structure" data-pat-structure="ajaxVocabulary:/relateditems-test.json;
+    <div class="pat-structure" data-pat-structure="vocabularyUrl:/relateditems-test.json;
                                                    uploadUrl:/upload;
                                                    moveUrl:/moveitem;
                                                    tagsAjaxVocabulary:/select2-test.json;

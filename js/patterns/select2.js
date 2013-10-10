@@ -39,31 +39,31 @@ define([
     defaults: {
       separator: ","
     },
-    initializeValueMap: function(){
+    initializeValues: function(){
       var self = this;
       // Init Selection ---------------------------------------------
-      if (self.options.initvaluemap) {
+      if (self.options.initialValues) {
         self.options.id = function(term) {
           return term.id;
         };
         self.options.initSelection = function ($el, callback) {
           var data = [],
               value = $el.val(),
-              seldefaults = self.options.initvaluemap;
+              seldefaults = self.options.initialValues;
 
           // Create the initSelection value that contains the default selection,
           // but in a javascript object
-          if (typeof(self.options.initvaluemap) === 'string' && self.options.initvaluemap !== '') {
+          if (typeof(self.options.initialValues) === 'string' && self.options.initialValues !== '') {
             // if default selection value starts with a '{', then treat the value as
             // a JSON object that needs to be parsed
-            if(self.options.initvaluemap[0] === '{') {
-              seldefaults = JSON.parse(self.options.initvaluemap);
+            if(self.options.initialValues[0] === '{') {
+              seldefaults = JSON.parse(self.options.initialValues);
             }
             // otherwise, treat the value as a list, separated by the defaults.separator value of
             // strings in the format "id:text", and convert it to an object
             else {
               seldefaults = {};
-              $(self.options.initvaluemap.split(self.options.separator)).each(function() {
+              $(self.options.initialValues.split(self.options.separator)).each(function() {
                 var selection = this.split(':');
                 var id = $.trim(selection[0]);
                 var text = $.trim(selection[1]);
@@ -164,11 +164,11 @@ define([
     init: function() {
       var self = this;
 
-      if (self.options.ajax || self.options.ajaxVocabulary) {
-        if(self.options.ajaxVocabulary) {
+      if (self.options.ajax || self.options.vocabularyUrl) {
+        if(self.options.vocabularyUrl) {
           self.options.multiple = true;
           self.options.ajax = self.options.ajax || {};
-          self.options.ajax.url = self.options.ajaxVocabulary;
+          self.options.ajax.url = self.options.vocabularyUrl;
           // XXX removing the following function does'nt break tests. dead code?
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
@@ -192,7 +192,7 @@ define([
           },
           results: function (data, page) {
             var results = data.results;
-            if (self.options.ajaxVocabulary) {
+            if (self.options.vocabularyUrl) {
               var data_ids = [];
               $.each(data.results, function(i, item) {
                 data_ids.push(item.id);
@@ -210,7 +210,7 @@ define([
         }, self.options.ajax);
       }
 
-      self.initializeValueMap();
+      self.initializeValues();
       self.initializeTags();
       self.initializeOrdering();
       self.initializeSelect2();

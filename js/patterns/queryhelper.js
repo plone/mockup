@@ -35,7 +35,7 @@ define([
     name: "queryhelper",
     defaults: {
       basePattern: null, // must be passed in
-      ajaxVocabulary: null,
+      vocabularyUrl: null,
       searchParam: 'SearchableText', // query string param to pass to search url
       attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
       batchSize: 10, // number of results to retrive
@@ -58,11 +58,11 @@ define([
         };
       }
 
-      if (self.options.url && !self.options.ajaxVocabulary) {
-        self.options.ajaxVocabulary = self.options.url;
+      if (self.options.url && !self.options.vocabularyUrl) {
+        self.options.vocabularyUrl = self.options.url;
       }
-      if(self.options.ajaxVocabulary !== undefined &&
-          self.options.ajaxVocabulary !== null){
+      if(self.options.vocabularyUrl !== undefined &&
+          self.options.vocabularyUrl !== null){
         self.valid = true;
       }else{
         self.valid = false;
@@ -140,7 +140,7 @@ define([
     selectAjax: function(){
       var self = this;
       return {
-        url: self.options.ajaxVocabulary,
+        url: self.options.vocabularyUrl,
         dataType: 'JSON',
         quietMillis: 100,
         data: function(term, page) {
@@ -180,7 +180,7 @@ define([
         attributes: JSON.stringify(self.options.attributes)
       };
       $.ajax({
-        url: self.options.ajaxVocabulary,
+        url: self.options.vocabularyUrl,
         dataType: 'JSON',
         data: data,
         success: callback

@@ -39,7 +39,7 @@ define([
     browsing: false,
     currentPath: null,
     defaults: {
-      ajaxVocabulary: null, // must be set to work
+      vocabularyUrl: null, // must be set to work
       width: '300px',
       multiple: true,
       tokenSeparators: [",", " "],
@@ -202,7 +202,7 @@ define([
       self.$container = self.$el.parents('.pattern-relateditems-container');
       self.$container.width(self.options.width);
 
-      Select2.prototype.initializeValueMap.call(self);
+      Select2.prototype.initializeValues.call(self);
       Select2.prototype.initializeTags.call(self);
 
       self.options.formatSelection = function(item, $container) {
@@ -301,4 +301,3 @@ define([
   return RelatedItems;
 
 });
-

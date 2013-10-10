@@ -186,7 +186,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
       
@@ -203,7 +203,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -226,7 +226,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -260,7 +260,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -292,7 +292,7 @@ define([
         ' <input class="pat-relateditems" />' +
         '</div>').appendTo('body');
       var opts = {
-        ajaxVocabulary: '/relateditems-test.json',
+        vocabularyUrl: '/relateditems-test.json',
         selectableTypes: ['Image']
       };
       var pattern = $('.pat-relateditems').attr('data-pat-relateditems', JSON.stringify(opts)).patternRelateditems().data('patternRelateditems');
@@ -318,7 +318,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -343,7 +343,7 @@ define([
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -375,7 +375,7 @@ define([
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 
@@ -399,7 +399,7 @@ define([
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          ajaxVocabulary: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
 

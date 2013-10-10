@@ -315,7 +315,7 @@ define([
     it('test loading link also sets up related items correctly', function(){
       var pattern = createTinymce({
         relatedItems: {
-          ajaxVocabulary: '/data.json'
+          vocabularyUrl: '/data.json'
         }
       });
 
@@ -434,4 +434,3 @@ define([
   });
 
 });
-

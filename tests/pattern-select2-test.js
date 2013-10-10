@@ -84,7 +84,7 @@ define([
     it('init value map/tags from JSON string', function() {
         var $el = $('<input class="pat-select2" value="Red" />').appendTo('body');
         $el.patternSelect2({tags: '["Red", "Yellow"]',
-                            initvaluemap: '{"Red": "RedTEXT", "Yellow": "YellowTEXT"}'
+                            initialValues: '{"Red": "RedTEXT", "Yellow": "YellowTEXT"}'
         });
         var $choices = $('.select2-choices li');
         expect($choices.size()).to.equal(2);
@@ -93,7 +93,7 @@ define([
     it('init value map from string', function() {
         var $el = $('<input class="pat-select2" value="Red" />').appendTo('body');
         $el.patternSelect2({tags: '["Red", "Yellow"]',
-                            initvaluemap: 'Yellow: YellowTEXT, Red: RedTEXT'
+                            initialValues: 'Yellow: YellowTEXT, Red: RedTEXT'
         });
         var $choices = $('.select2-choices li');
         expect($choices.size()).to.equal(2);
@@ -107,7 +107,7 @@ define([
         ' <input class="pat-select2"' +
         '        data-pat-select2="{' +
         '          &quot;tags&quot;: &quot;Red,Yellow,Blue&quot;,' +
-        '          &quot;initvaluemap&quot;: {' +
+        '          &quot;initialValues&quot;: {' +
         '            &quot;Yellow&quot;: &quot;YellowTEXT&quot;,' +
         '            &quot;Red&quot;: &quot;RedTEXT&quot;' +
         '          }' +
@@ -122,7 +122,7 @@ define([
     it('ajax vocabulary url configuration', function() {
         var $el = $(
         ' <input class="pat-select2"' +
-        '        data-pat-select2="ajaxVocabulary: select2-users-vocabulary"' +
+        '        data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
         '        />'
         );
 
@@ -134,7 +134,7 @@ define([
     it('displays the vocabulary when clicking an empty checkbox', function() {
         $('<input type="hidden" class="pat-select2"' +
           '    data-pat-select2="placeholder:Search for a Value;' +
-          '                     ajaxVocabulary: /select2-ajax.json;' +
+          '                     vocabularyUrl: /select2-ajax.json;' +
           '                     width:20em" />'
         ).appendTo('body');
         var pattern = $('.pat-select2').patternSelect2();
@@ -155,7 +155,7 @@ define([
     it('prepends the query term to the selection', function() {
         $('<input type="hidden" class="pat-select2"' +
           '    data-pat-select2="placeholder:Search for a Value;' +
-          '                     ajaxVocabulary: /select2-ajax.json;' +
+          '                     vocabularyUrl: /select2-ajax.json;' +
           '                     width:20em" />'
         ).appendTo('body');
         var pattern = $('.pat-select2').patternSelect2();

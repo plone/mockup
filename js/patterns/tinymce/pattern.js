@@ -49,7 +49,7 @@ define([
         attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
         batchSize: 20,
         basePath: '/',
-        ajaxVocabulary: null,
+        vocabularyUrl: null,
         width: 500,
         maximumSelectionSize: 1,
         placeholder: 'Search for item on site...'

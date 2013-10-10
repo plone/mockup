@@ -60,7 +60,7 @@ define([
       //  $tiny.attr({
       //    'data-pat-tinymce': JSON.stringify({
       //      relatedItems: {
-      //        ajaxVocabulary: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+      //        vocabularyUrl: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
       //      },
       //      rel_upload_path: '@@fileUpload',
       //      folder_url: config.document_base_url,
