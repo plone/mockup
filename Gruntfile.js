@@ -170,7 +170,8 @@ module.exports = function(grunt) {
           name: 'node_modules/almond/almond.js',
           include: 'mockup-bundles-widgets',
           insertRequire: ['mockup-bundles-widgets'],
-          out: 'build/widgets.min.js'
+          out: 'build/widgets.min.js',
+          excludeShallow: ['jquery']
         }
       },
       toolbar: {
