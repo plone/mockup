@@ -27,7 +27,8 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/ui/views/base'
+  'js/ui/views/base',
+  'bootstrap-tooltip'
 ],
   function($, Backbone, _, BaseView) {
   "use strict";
@@ -68,6 +69,13 @@ define([
         if (this.tooltip !== null) {
           this.$el.tooltip({
             title: this.tooltip
+          });
+          // XXX since tooltip triggers hidden
+          // suppress so it plays nice with modals, backdrops, etc
+          this.$el.on('hidden', function(e){
+            if(e.type == 'hidden'){
+              e.stopPropagation();
+            }
           });
         }
       }, this);
