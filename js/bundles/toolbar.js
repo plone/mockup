@@ -69,14 +69,18 @@ define([
       var $match = self.$el.filter('.enableFormTabbing');
       $match = $match.add(self.$el.find('.enableFormTabbing'));
       $match.addClass('pat-autotoc');
-      $match.attr({
-        'data-pat-autotoc':'levels: legend;section: fieldset;className: autotabs'
+      $match.patternAutotoc({
+        levels: 'legend',
+        section: 'fieldset',
+        className: 'autotabs'
       });
 
       // activate accessibility pattern by default
       self.$el.addClass('pat-accessibility');
-      self.$el.attr({
-        'data-pat-accessibility': 'smallbtn: #accessibility-smallText;normalbtn: #accessibility-normalText;largebtn: #accessibility-largeText'
+      self.$el.patternAccessibility({
+        smallbtn: '#accessibility-smallText',
+        normalbtn: '#accessibility-normalText',
+        largebtn: '#accessibility-largeText'
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
@@ -95,43 +99,56 @@ define([
       // Assign the class and data attributes for the "select all of the content_status_history template
       var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', self.$el);
       select_all.addClass('pat-toggle');
-      select_all.attr({
-        'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      select_all.patternToggle({
+        target: 'table.listing input[type=checkbox]',
+        attribute: 'checked',
+        value: 'checked',
+        externalClose: false,
+        preventDefault: false
       });
 
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
       select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', self.$el);
       select_all.addClass('pat-toggle');
-      select_all.attr({
-        'data-pat-toggle': 'target: table.listing input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      select_all.patternToggle({
+        target: 'table.listing input[type=checkbox]',
+        attribute: 'checked',
+        value: 'checked',
+        externalClose: false,
+        preventDefault: false
       });
 
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
       select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', self.$el);
       select_all.addClass('pat-toggle');
-      select_all.attr({
-        'data-pat-toggle': 'target:form[action*=usergroup-usermembership] table.listing:last input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      select_all.patternToggle({
+        target: 'form[action*=usergroup-usermembership] table.listing:last input[type=checkbox]',
+        attribute: 'checked',
+        value: 'checked',
+        externalClose: false,
+        preventDefault: false
       });
 
       // plone/app/search/search.pt
       select_all = $("[onchange*='toggleSelect']", self.$el).attr('onchange', null);
       select_all.addClass('pat-toggle');
-      select_all.attr({
-        'data-pat-toggle': 'target:form[name=searchform] dd.actionMenuContent input[type=checkbox];attribute: checked;value: checked;externalClose: false;preventDefault: false'
+      select_all.patternToggle({
+        target: 'form[name=searchform] dd.actionMenuContent input[type=checkbox]',
+        attribute: 'checked',
+        value: 'checked',
+        externalClose: false,
+        preventDefault: false
       });
       // }}}
 
       // Apply the preventdoublesubmit pattern to forms
+      // XXX requires form_resubmit_message to be set!
       $('form', self.$el)
         .not('[action$="@@new-user"]')
         .not('[action$="@@usergroup-groupdetails"]')
-        .addClass('pat-preventdoublesubmit');
-      $('form', self.$el)
-        .not('[action$="@@new-user"]')
-        .not('[action$="@@usergroup-groupdetails"]')
-        .attr({
-        'data-pat-preventdoublesubmit': 'message:'+window.form_resubmit_message
-      });
+        .patternPreventdoublesubmit({
+          message: window.form_resubmit_message
+        });
 
       // Add the form auto focus for the add or edit forms
       var add_form = $('form[action*="++add++"]', self.$el);
@@ -152,7 +169,7 @@ define([
       };
       $('#personaltools-login', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(loginOptions));
+        .patternModal(loginOptions);
 
       /*** Contact form ***/
       $('#siteaction-contact > a', self.$el).addClass('pat-modal');
@@ -163,7 +180,7 @@ define([
       };
       $('#personaltools-join', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(registerOptions));
+        .patternModal(registerOptions);
 
       /*** Content History ***/
       var contentHistoryOptions = {
@@ -172,7 +189,7 @@ define([
       };
       $('#content-history > a, #plone-action-content-history > a', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(contentHistoryOptions));
+        .patternModal(contentHistoryOptions);
 
       /*** Default Page ***/
       var defaultPage = {
@@ -182,7 +199,7 @@ define([
       };
       $('#folderChangeDefaultPage, #folderChangeDefaultPage a, #contextSetDefaultPage a', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(defaultPage));
+        .patternModal(defaultPage);
 
       /*** Add user form ***/
       var users_add = $('form[name="users_add"]', self.$el);
@@ -196,7 +213,7 @@ define([
         };
         $('input[name="form.button.AddUser"]')
           .addClass('pat-modal')
-          .attr('data-pat-modal', JSON.stringify(addUserOptions));
+          .patternModal(addUserOptions);
       }
 
       /*** Add group form ***/
@@ -211,7 +228,7 @@ define([
         };
         $('input[name="form.button.AddGroup"]')
           .addClass('pat-modal')
-          .attr('data-pat-modal', JSON.stringify(addGroupOptions));
+          .patternModal(addGroupOptions);
       }
 
 
@@ -280,7 +297,7 @@ define([
         }
       };
       prefs.addClass('pat-modal');
-      prefs.attr('data-pat-modal', JSON.stringify(prefsOptions));
+      prefs.patternModal(prefsOptions);
 
       /*** Rename Action ***/
       var renameOptions = {
@@ -290,7 +307,7 @@ define([
       };
       $('#plone-contentmenu-actions-rename a', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(renameOptions));
+        .patternModal(renameOptions);
 
       /*** Delete action ***/
       function processDelete(modal, responseBody, state, xhr, form) {
@@ -422,7 +439,7 @@ define([
       };
       $('#toolbar-manage-portlets a,#manage-dashboard a', self.$el)
       .addClass('pat-modal')
-      .attr('data-pat-modal', JSON.stringify(portletOptions))
+      .patternModal(portletOptions)
       .on('render.modal.patterns', function(e, modal) {
         // Kill the onchange method so we can wire up our own
         $('.section select', modal.$raw).removeAttr('onchange');
@@ -490,12 +507,12 @@ define([
       addOptions.actionOptions.redirectOnResponse = true;
       $('#plone-action-edit > a, #plone-contentmenu-factories ul li.is-content a', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(editOptions));
+        .patternModal(editOptions);
 
       delete addOptions.routerOptions;
       $('#plone-contentmenu-factories ul li.is-content a', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(addOptions));
+        .patternModal(addOptions);
 
 
       // Content Rules
@@ -506,7 +523,7 @@ define([
       };
       $('#plone-action-contentrules > a', self.$el)
         .addClass('pat-modal')
-        .attr('data-pat-modal', JSON.stringify(rulesOptions)).
+        .patternModal(rulesOptions).
         on('render.modal.patterns', function(e, modal) {
           modal.options.actions = {
             'table.listing a': {
@@ -545,9 +562,6 @@ define([
           }
         }
       });
-
-      // finally, let's do a scan of the contents here.
-      registry.scan(self.$el);
     }
 
   });
