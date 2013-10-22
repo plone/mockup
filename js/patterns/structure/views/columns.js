@@ -53,7 +53,6 @@ define([
     },
     initialize: function(){
       this.app = this.options.app;
-      this.foo = 'bar';
       PopoverView.prototype.initialize.call(this);
     },
     render: function(){

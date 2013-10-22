@@ -61,7 +61,9 @@ define([
       }, this);
 
       this.on('render', function() {
-        this.$el.addClass('btn-' + this.context);
+        if(this.context !== null){
+          this.$el.addClass('btn-' + this.context);
+        }
 
         if (this.tooltip !== null) {
           this.$el.tooltip({
