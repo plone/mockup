@@ -49,7 +49,7 @@ define([
   'mockup-patterns-formautofocus',
   'mockup-patterns-livesearch',
   'mockup-bundles-widgets'
-], function($, Router, iframe, Registry, Base, Toggle, Modal, TinyMCE,
+], function($, Router, iframe, registry, Base, Toggle, Modal, TinyMCE,
             Structure, AutoTOC, Accessibility, FormUnloadAlert, LiveSearch,
             PloneWidgets) {
   "use strict";

@@ -41,8 +41,8 @@ define([
     name: 'structure',
     defaults: {
       vocabularyUrl: null,
-      tagsAjaxVocabulary: null,
-      usersAjaxVocabulary: null,
+      tagsVocabularyUrl: null,
+      usersVocabularyUrl: null,
       indexOptionsUrl: null, // for querystring widget
       contextInfoUrl: null, // for add new dropdown and other info
       setDefaultPageUrl: null,

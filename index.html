@@ -2179,8 +2179,8 @@ function($action, response, options) { ... }
       description: "Managing a folder of items",
       attributes: [
         {attribute: 'vocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
-        {attribute: 'tagsAjaxVocabulary', type: 'String', defaultValue: 'null', description: 'Url to return tags query results'},
-        {attribute: 'usersAjaxVocabulary', type: 'String', defaultValue: 'null', description: 'Url to query users'},
+        {attribute: 'tagsVocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to return tags query results'},
+        {attribute: 'usersVocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to query users'},
         {attribute: 'indexOptionsUrl', type: 'String', defaultValue: 'null', description: 'Url to configure querystring widget with'},
         {attribute: 'uploadUrl', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'},
         {attribute: 'moveUrl', type: 'String', defaultValue: 'null', description: 'For supporting drag drop reordering'},
@@ -2194,8 +2194,8 @@ function($action, response, options) { ... }
     <div class="pat-structure" data-pat-structure="vocabularyUrl:/relateditems-test.json;
                                                    uploadUrl:/upload;
                                                    moveUrl:/moveitem;
-                                                   tagsAjaxVocabulary:/select2-test.json;
-                                                   usersAjaxVocabulary:/tests/json/users.json;
+                                                   tagsVocabularyUrl:/select2-test.json;
+                                                   usersVocabularyUrl:/tests/json/users.json;
                                                    indexOptionsUrl:/tests/json/queryStringCriteria.json;
                                                    contextInfoUrl:/tests/json/contextInfo.json;
                                                    ">

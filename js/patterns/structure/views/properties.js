@@ -76,11 +76,11 @@ define([
 
       this.creatorsSelect2 = new Select2(this.$creators, {
         multiple: true,
-        vocabularyUrl: this.app.options.usersAjaxVocabulary
+        vocabularyUrl: this.app.options.usersVocabularyUrl
       });
       this.contributorsSelect2 = new Select2(this.$contributors, {
         multiple: true,
-        vocabularyUrl: this.app.options.usersAjaxVocabulary
+        vocabularyUrl: this.app.options.usersVocabularyUrl
       });
       this.effectivePickADate = new PickADate(this.$effective);
       this.expirationPickADate = new PickADate(this.$expiration);
