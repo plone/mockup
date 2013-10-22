@@ -61,7 +61,8 @@ define([
       this.popover = new PopoverView({
         triggerView: this.button,
         title: _.template('Query'),
-        content: this.popoverContent
+        content: this.popoverContent,
+        placement: 'left'
       });
       this.$('div.input-append').append(this.button.render().el);
       this.$el.append(this.popover.render().el);
