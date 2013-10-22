@@ -68,7 +68,7 @@ define([
       return pattern;
     },
 
-    scan: function(content, do_not_catch_init_exception) {
+    scan: function(content) {
       var $content = $(content),
           patterns = [];
 

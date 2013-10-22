@@ -76,8 +76,7 @@ define([
       });
 
       // activate accessibility pattern by default
-      self.$el.addClass('pat-accessibility');
-      self.$el.patternAccessibility({
+      self.$el.addClass('pat-accessibility').patternAccessibility({
         smallbtn: '#accessibility-smallText',
         normalbtn: '#accessibility-normalText',
         largebtn: '#accessibility-largeText'
@@ -98,8 +97,7 @@ define([
 
       // Assign the class and data attributes for the "select all of the content_status_history template
       var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', self.$el);
-      select_all.addClass('pat-toggle');
-      select_all.patternToggle({
+      select_all.addClass('pat-toggle').patternToggle({
         target: 'table.listing input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -109,8 +107,7 @@ define([
 
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
       select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', self.$el);
-      select_all.addClass('pat-toggle');
-      select_all.patternToggle({
+      select_all.addClass('pat-toggle').patternToggle({
         target: 'table.listing input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -120,8 +117,7 @@ define([
 
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
       select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', self.$el);
-      select_all.addClass('pat-toggle');
-      select_all.patternToggle({
+      select_all.addClass('pat-toggle').patternToggle({
         target: 'form[action*=usergroup-usermembership] table.listing:last input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -131,8 +127,7 @@ define([
 
       // plone/app/search/search.pt
       select_all = $("[onchange*='toggleSelect']", self.$el).attr('onchange', null);
-      select_all.addClass('pat-toggle');
-      select_all.patternToggle({
+      select_all.addClass('pat-toggle').patternToggle({
         target: 'form[name=searchform] dd.actionMenuContent input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -400,16 +395,6 @@ define([
 
       // Modals {{{
 
-      // Contents
-      $('#plone-action-folderContents > a', self.$el).addClass('modal-trigger').patternModal({
-        width: '96%',
-        position: 'middle top',
-        actionOptions: {
-          onSuccess: function(modal, response, state, xhr, form){
-          }
-        }
-      });
-
       // site setup
       $('#plone-sitesetup a', self.$el).addClass('modal-trigger').patternModal({
         width: '80%',
@@ -486,6 +471,7 @@ define([
         backdropOptions: {
           closeOnClick: false
         },
+        position: "center top",
         content: '#content',
         automaticallyAddButtonActions: false,
         actionOptions: {
@@ -562,6 +548,35 @@ define([
           }
         }
       });
+
+      self.$el.find('.mce_editable').addClass('pat-tinymce').each(function(){
+        var $tiny = $(this);
+        var config = $.parseJSON($tiny.attr('data-mce-config'));
+        config.content_css = config.portal_url + '/base.css';
+        delete config.customplugins;
+        delete config.plugins;
+        delete config.theme;
+        $tiny.attr({
+          'data-pat-tinymce': JSON.stringify({
+            relatedItems: {
+              vocabularyUrl: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+            },
+            rel_upload_path: '@@fileUpload',
+            folder_url: config.document_base_url,
+            tiny: config,
+            prependToUrl: 'resolveuid/',
+            linkAttribute: 'UID',
+            prependToScalePart: '/@@images/image/'
+          })
+        });
+      });
+
+
+      // XXX important, run pattern mods against overlays
+      $('body').on('show.modal.patterns', function(){
+        (new Toolbar($(this))); // just run init again...
+      });
+
     }
 
   });

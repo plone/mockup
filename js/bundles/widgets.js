@@ -50,27 +50,27 @@ define([
       var self = this;
 
       // add tinymce pattern
-      //self.$el.find('.mce_editable').addClass('pat-tinymce').each(function(){
-      //  var $tiny = $(this);
-      //  var config = $.parseJSON($tiny.attr('data-mce-config'));
-      //  config.content_css = config.portal_url + '/base.css';
-      //  delete config.customplugins;
-      //  delete config.plugins;
-      //  delete config.theme;
-      //  $tiny.attr({
-      //    'data-pat-tinymce': JSON.stringify({
-      //      relatedItems: {
-      //        vocabularyUrl: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
-      //      },
-      //      rel_upload_path: '@@fileUpload',
-      //      folder_url: config.document_base_url,
-      //      tiny: config,
-      //      prependToUrl: 'resolveuid/',
-      //      linkAttribute: 'UID',
-      //      prependToScalePart: '/@@images/image/'
-      //    })
-      //  });
-      //});
+      self.$el.find('.mce_editable').addClass('pat-tinymce').each(function(){
+        var $tiny = $(this);
+        var config = $.parseJSON($tiny.attr('data-mce-config'));
+        config.content_css = config.portal_url + '/base.css';
+        delete config.customplugins;
+        delete config.plugins;
+        delete config.theme;
+        $tiny.attr({
+          'data-pat-tinymce': JSON.stringify({
+            relatedItems: {
+              vocabularyUrl: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+            },
+            rel_upload_path: '@@fileUpload',
+            folder_url: config.document_base_url,
+            tiny: config,
+            prependToUrl: 'resolveuid/',
+            linkAttribute: 'UID',
+            prependToScalePart: '/@@images/image/'
+          })
+        });
+      });
 
     }
 

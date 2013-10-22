@@ -30,7 +30,6 @@ define([
   'js/ui/views/container',
   'mockup-patterns-backdrop',
   'text!js/ui/templates/popover.tmpl',
-  'bootstrap-tooltip'
 ], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
   "use strict";
 
