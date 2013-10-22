@@ -310,7 +310,7 @@ define([
       // Dropdown {{{
 
       // toggle class on click (shows dropdown)
-      $('.toolbar-dropdown > a').each(function() {
+      $('.toolbar-dropdown > a', self.$el).each(function() {
         $(this).patternToggle({
           target: '.toolbar-dropdown',
           value: 'toolbar-dropdown-open',
@@ -319,7 +319,7 @@ define([
       });
 
       // make sure clicking on anything in the menu closes the toggled element
-      $('.toolbar-dropdown .toolbar-dropdown-menu a').click(function(e) {
+      $('.toolbar-dropdown .toolbar-dropdown-menu a', self.$el).click(function(e) {
           $(this).parents('.toolbar-dropdown').children('a').trigger('click');
       });
 
@@ -384,7 +384,7 @@ define([
       // Modals {{{
 
       // Contents
-      $('#plone-action-folderContents > a').addClass('modal-trigger').patternModal({
+      $('#plone-action-folderContents > a', self.$el).addClass('modal-trigger').patternModal({
         width: '96%',
         position: 'middle top',
         actionOptions: {
@@ -394,7 +394,7 @@ define([
       });
 
       // site setup
-      $('#plone-sitesetup a').addClass('modal-trigger').patternModal({
+      $('#plone-sitesetup a', self.$el).addClass('modal-trigger').patternModal({
         width: '80%',
         loadLinksWithinModal: false,
         actionOptions: {
@@ -420,7 +420,7 @@ define([
         buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
         automaticallyAddButtonActions: false
       };
-      $('#toolbar-manage-portlets a,#manage-dashboard a')
+      $('#toolbar-manage-portlets a,#manage-dashboard a', self.$el)
       .addClass('pat-modal')
       .attr('data-pat-modal', JSON.stringify(portletOptions))
       .on('render.modal.patterns', function(e, modal) {
@@ -461,9 +461,9 @@ define([
       );
 
       // Edit/Add
-      $('#plone-contentmenu-factories ul li').addClass('is-content');
-      $('#plone-contentmenu-factories ul li#plone-contentmenu-more').removeClass('is-content');
-      $('#plone-contentmenu-factories ul li#plone-contentmenu-settings').removeClass('is-content');
+      $('#plone-contentmenu-factories ul li', self.$el).addClass('is-content');
+      $('#plone-contentmenu-factories ul li#plone-contentmenu-more', self.$el).removeClass('is-content');
+      $('#plone-contentmenu-factories ul li#plone-contentmenu-settings', self.$el).removeClass('is-content');
       var editOptions = {
         width: '80%',
         backdropOptions: {
@@ -488,12 +488,12 @@ define([
       var addOptions = editOptions;
 
       addOptions.actionOptions.redirectOnResponse = true;
-      $('#plone-action-edit > a, #plone-contentmenu-factories ul li.is-content a')
+      $('#plone-action-edit > a, #plone-contentmenu-factories ul li.is-content a', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(editOptions));
 
       delete addOptions.routerOptions;
-      $('#plone-contentmenu-factories ul li.is-content a')
+      $('#plone-contentmenu-factories ul li.is-content a', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(addOptions));
 
@@ -504,7 +504,7 @@ define([
         content: '#content-core',
         loadLinksWithinModal: false
       };
-      $('#plone-action-contentrules > a')
+      $('#plone-action-contentrules > a', self.$el)
         .addClass('pat-modal')
         .attr('data-pat-modal', JSON.stringify(rulesOptions)).
         on('render.modal.patterns', function(e, modal) {
@@ -523,7 +523,7 @@ define([
         });
 
       /***  Sharing  ***/
-      $('#plone-action-local_roles > a').addClass('modal-trigger').patternModal({
+      $('#plone-action-local_roles > a', self.$el).addClass('modal-trigger').patternModal({
         width: '80%',
         buttons: '#sharing-save-button, input[name="form.button.Cancel"]',
         automaticallyAddButtonActions: false,
@@ -546,6 +546,8 @@ define([
         }
       });
 
+      // finally, let's do a scan of the contents here.
+      registry.scan(self.$el);
     }
 
   });
