@@ -37,7 +37,7 @@ define([
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
   'tinymce',
-  'text!js/patterns/tinymce/templates/upload.tmpl'
+  'text!js/patterns/tinymce/templates/upload.xml'
 ], function($, _, Base, RelatedItems, Modal, tinymce, UploadTemplate) {
   "use strict";
 

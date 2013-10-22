@@ -23,10 +23,10 @@ module.exports = function(grunt) {
   karma_files.push({pattern: 'js/patterns/ui/**/*.js', included: false});
   karma_files.push({pattern: 'js/patterns/ui/**/*.html', included: false});
   karma_files.push({pattern: 'js/patterns/structure/**/*.js', included: false});
-  karma_files.push({pattern: 'js/patterns/structure/**/*.tmpl', included: false});
-  karma_files.push({pattern: 'js/patterns/filemanager/**/*.tmpl', included: false});
+  karma_files.push({pattern: 'js/patterns/structure/**/*.xml', included: false});
+  karma_files.push({pattern: 'js/patterns/filemanager/**/*.xml', included: false});
   karma_files.push({pattern: 'js/patterns/filemanager/**/*.js', included: false});
-  karma_files.push({pattern: 'js/patterns/tinymce/**/*.tmpl', included: false});
+  karma_files.push({pattern: 'js/patterns/tinymce/**/*.xml', included: false});
   karma_files.push({pattern: 'js/patterns/tinymce/**/*.js', included: false});
 
 

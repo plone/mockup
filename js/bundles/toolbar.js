@@ -395,6 +395,16 @@ define([
 
       // Modals {{{
 
+      // Contents
+      $('#plone-action-folderContents > a', self.$el).addClass('modal-trigger').patternModal({
+        width: '96%',
+        position: 'middle top',
+        actionOptions: {
+          onSuccess: function(modal, response, state, xhr, form){
+          }
+        }
+      });
+
       // site setup
       $('#plone-sitesetup a', self.$el).addClass('modal-trigger').patternModal({
         width: '80%',

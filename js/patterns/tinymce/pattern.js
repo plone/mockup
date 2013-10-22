@@ -32,8 +32,8 @@ define([
   'tinymce',
   'mockup-patterns-dropzone',
   'dropzone',
-  'text!js/patterns/tinymce/templates/result.tmpl',
-  'text!js/patterns/tinymce/templates/selection.tmpl',
+  'text!js/patterns/tinymce/templates/result.xml',
+  'text!js/patterns/tinymce/templates/selection.xml',
   'mockup-utils',
   'js/patterns/tinymce/links',
   'js/patterns/tinymce/upload'

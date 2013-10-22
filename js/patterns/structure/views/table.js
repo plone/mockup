@@ -28,7 +28,7 @@ define([
   'underscore',
   'backbone',
   'js/patterns/structure/views/tablerow',
-  'text!js/patterns/structure/templates/table.tmpl',
+  'text!js/patterns/structure/templates/table.xml',
   'js/patterns/structure/views/contextmenu',
   'js/ui/views/base',
   'mockup-patterns-dragdrop',

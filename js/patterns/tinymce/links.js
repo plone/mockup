@@ -32,7 +32,7 @@ define([
   'mockup-patterns-modal',
   'tinymce',
   'mockup-patterns-dropzone',
-  'text!js/patterns/tinymce/templates/link.tmpl'
+  'text!js/patterns/tinymce/templates/link.xml'
 ], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, LinkTemplate) {
   "use strict";
 
@@ -325,7 +325,6 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-
       self.modal = new Modal(self.$el, {
         html: self.generateModalHtml(),
         content: null,

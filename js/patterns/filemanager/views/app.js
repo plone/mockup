@@ -31,7 +31,7 @@ define([
   'mockup-patterns-dropzone',
   'mockup-patterns-tree',
   'mockup-patterns-ace',
-  'text!js/patterns/filemanager/templates/app.tmpl'
+  'text!js/patterns/filemanager/templates/app.xml'
 ], function($, _, Backbone, BaseView, DropZone, Tree, Ace, AppTemplate) {
   "use strict";
 

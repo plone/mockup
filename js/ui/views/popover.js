@@ -29,7 +29,7 @@ define([
   'backbone',
   'js/ui/views/container',
   'mockup-patterns-backdrop',
-  'text!js/ui/templates/popover.tmpl',
+  'text!js/ui/templates/popover.xml',
 ], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
   "use strict";
 

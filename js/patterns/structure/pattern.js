@@ -28,12 +28,12 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-queryhelper',
   'js/patterns/structure/views/app',
-  'text!js/patterns/structure/templates/paging.tmpl',
-  'text!js/patterns/structure/templates/selection_button.tmpl',
-  'text!js/patterns/structure/templates/selection_item.tmpl',
-  'text!js/patterns/structure/templates/tablerow.tmpl',
-  'text!js/patterns/structure/templates/table.tmpl',
-  'text!js/ui/templates/popover.tmpl'
+  'text!js/patterns/structure/templates/paging.xml',
+  'text!js/patterns/structure/templates/selection_button.xml',
+  'text!js/patterns/structure/templates/selection_item.xml',
+  'text!js/patterns/structure/templates/tablerow.xml',
+  'text!js/patterns/structure/templates/table.xml',
+  'text!js/ui/templates/popover.xml'
 ], function($, Base, QueryHelper, AppView) {
   "use strict";
 
