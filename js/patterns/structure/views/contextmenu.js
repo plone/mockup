@@ -39,7 +39,8 @@ define([
       'click .paste a': 'pasteClicked',
       'click .move-top a': 'moveTopClicked',
       'click .move-bottom a': 'moveBottomClicked',
-      'click .set-default-page a': 'setDefaultPageClicked'
+      'click .set-default-page a': 'setDefaultPageClicked',
+      'click .open': 'openClicked'
     },
     template: _.template(
       '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">' +
@@ -49,6 +50,7 @@ define([
           '<li class="move-top"><a href="#">Move to top of folder</a></li>' +
           '<li class="move-bottom"><a href="#">Move to bottom of folder</a></li>' +
           '<li class="set-default-page"><a href="#">Set as default page</a></li>' +
+          '<li class="open"><a href="#">Open</a></li>' +
       '</ul>'),
     active: null,
     initialize: function(){
@@ -168,6 +170,17 @@ define([
           self.app.ajaxErrorResponse.apply(self.app, [data]);
         }
       });
+    },
+    openClicked: function(){
+      var self = this;
+      var win = window;
+      if (win.parent !== window) {
+        win = win.parent;
+      }
+      var uid = self.$active.attr('data-UID');
+      var model = self.app.collection.findWhere({UID: uid});
+
+      win.location = model.attributes.getURL;
     }
   });
 
