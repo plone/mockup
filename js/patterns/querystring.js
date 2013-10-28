@@ -235,6 +235,7 @@ define([
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
+                .val(value)
                 .change(function(){
                   self.trigger('value-changed');
                 });
