@@ -115,7 +115,7 @@ define([
           path += '/';
         }
       });
-      path += $el.attr('data-path')
+      path += $el.attr('data-path');
       this.app.queryHelper.currentPath = path;
       this.collection.pager();
     },
