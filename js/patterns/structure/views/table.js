@@ -68,7 +68,7 @@ define([
     render: function() {
       var self = this;
       self.$el.html(self.template({
-        path: self.app.queryHelper.getCurrentPath(),
+        pathParts: self.app.queryHelper.getCurrentPath().split('/').slice(1),
         status: self.app.status,
         statusType: self.app.statusType,
         activeColumns: self.app.activeColumns,
@@ -104,7 +104,19 @@ define([
     breadcrumbClicked: function(e){
       e.preventDefault();
       var $el = $(e.target);
-      this.app.queryHelper.currentPath = $el.attr('data-path');
+      if($el[0].tagName !== 'A'){
+        $el = $el.parent('a');
+      }
+      var path = '';
+      $($el.prevAll('a').get().reverse()).each(function(){
+        var part = $(this).attr('data-path');
+        path += part;
+        if(part !== '/'){
+          path += '/';
+        }
+      });
+      path += $el.attr('data-path')
+      this.app.queryHelper.currentPath = path;
       this.collection.pager();
     },
     selectAll: function(e) {

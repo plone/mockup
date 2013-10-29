@@ -79,7 +79,7 @@ define([
       'secondary.rename': RenameView
     },
     status: '',
-    statusType: 'info',
+    statusType: 'warning',
     pasteOperation: null,
     sort_on: 'getObjPositionInParent',
     sort_order: 'ascending',
@@ -409,7 +409,7 @@ define([
     setStatus: function(txt, type){
       this.status = txt;
       if(type === undefined){
-        type = 'info';
+        type = 'warning';
       }
       this.statusType = type;
       this.$('td.status').addClass(type).html(txt);
