@@ -540,8 +540,10 @@ define([
       var self = this;
 
       // elements that may exist already on the page
-      var existingSortOn = $('#formfield-form-widgets-sort_on');
-      var existingSortOrder = $('#formfield-form-widgets-sort_reversed');
+      // XXX do this in a way so it'll work with other forms will work
+      // as long as they provide sort_on and sort_reversed fields in z3c form
+      var existingSortOn = $('[id$="-sort_on"]').filter('[id^="formfield-"]');
+      var existingSortOrder = $('[id$="-sort_reversed"]').filter('[id^="formfield-"]');
 
       $('<span/>')
         .addClass(self.options.classSortLabelName)
@@ -552,7 +554,7 @@ define([
         .appendTo(self.$sortWrapper)
         .change(function(){
           self.refreshPreviewEvent.call(self);
-          $("#form-widgets-sort_on", existingSortOn).val($(this).val());
+          $('[id$="sort_on"]', existingSortOn).val($(this).val());
         });
 
       self.$sortOn.append($('<option value="">No sorting</option>')); // default no sorting
@@ -593,7 +595,7 @@ define([
       // will be synced back and forth between the querystring's form elements
       if(existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
         var reversed = $('.option input[type="checkbox"]', existingSortOrder).attr('checked') === "checked";
-        var sort_on = $('#form-widgets-sort_on', existingSortOn).val();
+        var sort_on = $('[id$="-sort_on"]', existingSortOn).val();
         if(reversed) {
           self.$sortOrder.attr('checked', 'checked');
         }
