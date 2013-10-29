@@ -4,7 +4,7 @@
 <table class="table table-striped table-bordered">
   <thead>
     <tr class="breadcrumbs">
-      <td>
+        <td colspan="<%= activeColumns.length + 2 %>">
           <a href="#" data-path="/">
               <span class="icon icon-home"></span> /
           </a>

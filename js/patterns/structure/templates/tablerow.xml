@@ -1,4 +1,4 @@
-<td><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+<td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 <td class="title">
   <a href="<%- getURL %>">
     <%- Title %>
