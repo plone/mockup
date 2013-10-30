@@ -43,16 +43,19 @@ endif
 	$(BOWER) install
 
 jshint:
-	$(GRUNT) jshint
+	NODE_PATH=./node_modules $(GRUNT) jshint
 
-test: jshint
-	NODE_PATH=./node_modules $(GRUNT) karma:dev --force --pattern=$(pattern)
+test:
+	NODE_PATH=./node_modules $(GRUNT) dev --force --pattern=$(pattern)
 
-test-chrome:
-	NODE_PATH=./node_modules $(GRUNT) karma:dev_chrome --force --pattern=$(pattern)
+test-once:
+	NODE_PATH=./node_modules $(GRUNT) dev_once --force --pattern=$(pattern)
 
-test-ci: jshint
-	NODE_PATH=./node_modules $(GRUNT) karma:ci --force
+test-dev:
+	NODE_PATH=./node_modules $(GRUNT) dev_chrome --force --pattern=$(pattern)
+
+test-ci:
+	NODE_PATH=./node_modules $(GRUNT) ci
 
 docs:
 	mkdir -p docs/dev/lib/tinymce
