@@ -227,6 +227,7 @@ define([
                 } else {
                   window.parent.location.href = options.redirectToUrl;
                 }
+                return; // cut out right here since we're changing url
               }
 
               if (options.onSuccess) {

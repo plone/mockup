@@ -485,7 +485,8 @@ define([
         content: '#content',
         automaticallyAddButtonActions: false,
         actionOptions: {
-          displayInModal: false
+          displayInModal: false,
+          redirectOnResponse: true
         },
         actions: {
           'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
