@@ -114,6 +114,10 @@ module.exports = function(grunt) {
         // - IE (only Windows)
         browsers: ['PhantomJS']
       },
+      dev_once: {
+        singleRun: true,
+        browsers: ['PhantomJS']
+      },
       dev_chrome: {
         browsers: ['Chrome'],
         preprocessors: {},
@@ -481,9 +485,23 @@ module.exports = function(grunt) {
       'sed:docs-icomoon',
       'sed:docs-spritemap'
       ]);
-  grunt.registerTask('default', [
+  grunt.registerTask('dev', [
+      'jshint',
+      'karma:dev'
+      ]);
+  grunt.registerTask('dev_once', [
+      'jshint',
+      'karma:dev_once'
+      ]);
+  grunt.registerTask('dev_chrome', [
+      'karma:dev_chrome'
+      ]);
+  grunt.registerTask('ci', [
+      'jshint',
+      'karma:dev_once',
       'karma:ci',
-      'compile',
+      'compile-widgets',
+      'compile-toolbar',
       'docs'
       ]);
 
