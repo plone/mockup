@@ -1,2 +1,7 @@
-@import "../bower_components/jqtree/jqtree.css";
-
+.importCSS() when not (@isBrowser) {
+  @import (less) "../bower_components/jqtree/jqtree.css";
+}
+.importCSS() when (@isBrowser) {
+  @import (css) "@{pathPrefix}../bower_components/jqtree/jqtree.css";
+}
+.importCSS();
