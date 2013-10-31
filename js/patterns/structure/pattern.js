@@ -63,7 +63,7 @@ define([
         'review_state': 'Review state',
         'Subject': 'Tags',
         'Type': 'Type',
-        'is_folder': 'Folder',
+        'is_folderish': 'Folder',
         'exclude_from_nav': 'Excluded from nav',
         'getObjSize': 'Object Size',
         'last_comment_date': 'Last comment date',
