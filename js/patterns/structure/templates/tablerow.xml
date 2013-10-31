@@ -1,8 +1,15 @@
 <td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 <td class="title">
-  <a href="<%- getURL %>">
+  <% if(attributes.is_folderish){ %>
+    <a href="<%- getURL %>">
+        <span class="icon icon-folder-open"></span> <%- Title %>
+    </a>
+  <% } else { %>
+    <% if(['File', 'Image'].indexOf(attributes.Type) !== -1){ %>
+      <span class="icon icon-file"></span>
+    <% } %>
     <%- Title %>
-  </a>
+  <% } %>
 </td>
 <% _.each(activeColumns, function(column){ %>
   <td class="<%- column %>"><%- attributes[column] %></td>
