@@ -164,6 +164,7 @@ define([
               o: 'plone.app.querystring.operation.list.contains',
               v: self.options.imageTypes.split(',').concat(self.options.folderTypes.split(','))
             }],
+            selectableTypes: self.options.imageTypes.split(','),
             resultTemplate: ResultTemplate,
             selectionTemplate: SelectionTemplate
           }
