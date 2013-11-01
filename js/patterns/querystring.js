@@ -375,7 +375,7 @@ define([
         vval = '["'+varr.join('","')+'"]';
       }
       else if(varr.length === 1) {
-        vval = '"'+varr[0]+'"';
+        vval = JSON.stringify(varr[0]);
       }
       else {
         vval = '""';
