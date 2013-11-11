@@ -40,7 +40,7 @@ else
 	$(NPM) link --prefix=./node_modules
 	$(GRUNT) sed:bootstrap
 endif
-	$(BOWER) install
+	$(GRUNT) bower:install
 
 jshint:
 	NODE_PATH=./node_modules $(GRUNT) jshint
