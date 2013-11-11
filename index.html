@@ -379,6 +379,28 @@ $ make bootstrap</pre>
       </p>
     </div>
   </script>
+
+  <script>
+    addPage({
+      id: 'hello-world',
+      title: 'Writing a Hello World Pattern',
+      requiredPatterns: ['autotoc']
+    });
+  </script>
+  <script type="text/template" id="page_hello-world">
+    <style type='text/css'>
+      .hello-world .autotoc-nav {
+        background-color: white;
+      }
+    </style>
+    <div class='hello-world pat-autotoc' data-pat-autotoc="levels:h2,h3,h4">
+      <h2>Introduction</h2>
+
+      <p>Assuming you sucessfully set up your development environment as described
+      under the <a href="#getting-started">Getting Started</a> section, ... TODO ...
+      </p>
+  </script>
+
   <script>
     addPage({
       id: 'about',
@@ -2440,6 +2462,7 @@ function foobar(){
           <ul class="nav">
             <li><a href="#about">About</a></li>
             <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#hello-world">Hello World</a></li>
             <li><a href="#patterns">Patterns</a></li>
           </ul>
           <p class="pull-right">
