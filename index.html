@@ -399,6 +399,8 @@ $ make bootstrap</pre>
       <p>Assuming you successfully set up your development environment as described
       under the <a href="#getting-started">Getting Started</a> section, you are now
       ready to write your first pattern!
+      <br>TODO: state assumptions: we are in the working directory "mockup" (where we have
+        cloned GIT repo) and all file names and paths are relative to this dir)
       </p>
 
       <p>The Mockup project folder on your filesystem filesystem should look like the
@@ -407,9 +409,10 @@ $ make bootstrap</pre>
 mockup/
   js/
     bundles/
+      widgets.js
     patterns/
     ui/
-      config.js
+    config.js
   less/
   lib/
   plone/
@@ -420,9 +423,82 @@ mockup/
   package.json
   &hellip;
 </pre>
-<strong>(XXX: test on a fresh instance if correct!)
-<br>TODO: skip the listing of folder and files, which are not relevant for
-this tutorial</strong>
+<strong>(XXX: test on a fresh instance if correct!)<br>
+XXX: needed at all? just takes a lot of space ...</strong>
+
+<p>In the <em>mockup</em> directory create a file js/patterns/hello.js with the following contents:</p>
+
+<pre>
+define([
+    'jquery',
+    'mockup-patterns-base'
+], function ($, Base) {
+    "use strict";
+
+    var HelloWorld = Base.extend({
+        name: 'helloworld',
+        init: function () {
+            var $label = this.$el;
+            $label.text("Hello, world!");
+        }
+    });
+
+    return HelloWorld;
+});
+</pre>
+<strong>XXX: syntax highlighting?</strong>
+
+TODO: file contents description
+
+<p>In <em>js/config.js</em> under the <em>paths</em>
+definitions add the following line:</p>
+<pre>
+'mockup-patterns-helloworld': 'js/patterns/hello',
+</pre>
+
+TODO: describe what this does
+
+<p>In <em>js/bundles/widgets.js</em> add the following line to the list
+which is passed to the <em>define()</em> function:</p>
+<pre>
+'mockup-patterns-helloworld',
+</pre>
+
+TODO: describe what this does
+
+In the console run the following command ()
+<pre>
+$ make compile-widgets
+</pre>
+
+TODO: describe what this does
+
+<p>Now that we have defined configured and compiled our Hello World pattern, it's time
+to use it. Inside the root "mockup" directory create a simple HTML file called
+<em>hello.html</em> containing the following:</p>
+
+<pre>
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Hello World Pattern&lt;/title&gt;
+    &lt;script type="text/javascript" src="bower_components/jquery/jquery.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="build/widgets.min.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+    &lt;label class="pat-helloworld"&gt;(no greeting yet)&lt;/label&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+<strong>XXX: markup highlighting?</strong>
+
+<br>TODO: describe what we have ... jsut a label and a reference to the compiled
+javascript. and expexted result.
+and class="pat-reference" explained (maybe in the next subsection)
 
 
       <h2>Additional Resources</h2>

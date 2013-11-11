@@ -33,6 +33,7 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-base',
+  'mockup-patterns-helloworld',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
