@@ -58,6 +58,7 @@ var requirejsOptions = {
     'mockup-patterns-dropzone': 'js/patterns/dropzone',
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
+    'mockup-bundles-barceloneta': 'js/bundles/barceloneta',
     'mockup-bundles-tiles': 'js/bundles/widgets',
     'mockup-patterns-structure': 'js/patterns/structure/pattern',
     'mockup-patterns-dragdrop': 'js/patterns/dragdrop',
