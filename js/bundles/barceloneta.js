@@ -34,11 +34,11 @@ define([
   'mockup-registry',
   'mockup-patterns-base',
   'mockup-patterns-livesearch',
-  'mockup-patterns-accessbility',
+  'mockup-patterns-accessibility',
   // 'mockup-patterns-structure',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
-  'mockup-bunddle-widgets'
+  'mockup-bundles-widgets'
 
 ], function($, Registry, Base) {
   "use strict";
