@@ -1,0 +1,1 @@
+define(["jquery","mockup-patterns-base"],function(a,b){"use strict";var c=b.extend({name:"helloworld",init:function(){var a=this.$el;a.text("Hello, world!")}});return c});
