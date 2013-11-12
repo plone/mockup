@@ -40,7 +40,7 @@ define([
   'mockup-patterns-tinymce',
   'mockup-patterns-querystring'
 
-], function($, Registry, Base, Select2, PickADate, RelatedItems, TinyMCE,
+], function($, Registry, Base, HelloWorld, Select2, PickADate, RelatedItems, TinyMCE,
             QueryString) {
   "use strict";
 

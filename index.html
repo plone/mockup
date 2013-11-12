@@ -428,7 +428,9 @@ mockup/
 <strong>(XXX: test on a fresh instance if correct!)<br>
 XXX: needed at all? just takes a lot of space ...</strong>
 
-<h3>Defining a Pattern</h3>
+
+<h3>Defining a New Pattern</h3>
+
 <p>Our Hello World pattern will be very simple - all it will do is change the text
 of some HTML label to "Hello, World!". The first step is to go to the
 <em>js/patterns</em> subdirectory and create a file called <em>hello.js</em> in it
@@ -478,30 +480,57 @@ text to "Hello, world!".</p>
 
 <h3>Pattern Registration</h3>
 
-TODO: a sentence or two about what is to be done (configuring paths etc.)
-
-<p>In <em>js/config.js</em> under the <em>paths</em>
-definitions add the following line:</p>
+<p>In order to use the pattern we need to tell the bundling machinery where to find
+it and to start including it in the Javascript bundles we create. So first open the
+file <em>js/config.js</em> and add the following line under <em>paths</em>
+definitions (omit the trailing comma if adding to the end of the paths list):</p>
 <pre>
 'mockup-patterns-helloworld': 'js/patterns/hello',
 </pre>
 
-TODO: describe what this does
+<p>This tells the bundling/packaging machinery that a module called
+<em>mockup-patterns-helloworld</em> is defined in the file <em>hello.js</em> under the
+<em>js/patterns</em> subdirectory (relative to where config.js is located). Note that
+we omit the file's .js suffix in the path definition.</p>
 
-<p>In <em>js/bundles/widgets.js</em> add the following line to the list
-which is passed to the <em>define()</em> function:</p>
+<p>To tell the machinery to include our pattern in the bundles, open the
+<em>js/bundles/widgets.js</em> file and add the following line to the list of
+dependencies passed to the <em>define()</em> function.
+<br>
+<strong>XXX: this is probably widgets-specific and will change after refactoring.
+Update this section at that point.</strong>
+</p>
+
 <pre>
 'mockup-patterns-helloworld',
 </pre>
 
-TODO: describe what this does
+<p>For the dependency we use the same name as already used in the pattern path
+definition.<br>
+As we learned in the Defining a Pattern section above, we also have to add a
+corresponding HelloWorld parameter to the function passed to the <em>define()</em>
+as the second argument. Make sure that parameter's relative position matches the
+relative position of the <em>mockup-patterns-helloworld</em> in the dependency list.
+</p>
 
-In the console run the following command ()
+<pre>
+function($, Registry, &hellip;, <strong>HelloWorld</strong>, &hellip;) {
+    &hellip;
+}
+</pre>
+
+<p>We now have everything ready to create a Javascript bundle containing our
+Hello World pattern. From the &lt;mockup&gt; directory run the following console
+command:</p>
+
 <pre>
 $ make compile-widgets
 </pre>
 
-TODO: describe what this does
+TODO: describe what this does (what gets created and)
+
+
+<h3>Using the Pattern on a Page</h3>
 
 <p>Now that we have defined configured and compiled our Hello World pattern, it's time
 to use it. Inside the root "mockup" directory create a simple HTML file called
@@ -522,7 +551,6 @@ to use it. Inside the root "mockup" directory create a simple HTML file called
     &lt;label class="pat-helloworld"&gt;(no greeting yet)&lt;/label&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-
 </pre>
 <strong>XXX: markup highlighting?</strong>
 
@@ -2001,9 +2029,7 @@ function($action, response, options) { ... }
     </ul>
     </p>
   </script>
-  <script type="text/template" id="page_tablesorter">
 
-  </script>
   <script type="text/example" class="example-tablesorter" data-title="Default">
     <table class="pat-tablesorter">
       <thead>
