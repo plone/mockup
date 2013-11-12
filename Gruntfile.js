@@ -41,14 +41,6 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    bower: {
-        install: {
-            options: {
-                install: true,
-                copy: false
-              }
-        }
-    },
     jshint: {
       all: ['Gruntfile.js', 'js/**/*.js', 'tests/*.js']
     },
@@ -362,7 +354,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
