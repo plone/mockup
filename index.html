@@ -428,13 +428,14 @@ mockup/
 <strong>(XXX: test on a fresh instance if correct!)<br>
 XXX: needed at all? just takes a lot of space ...</strong>
 
-
-<h3>Defining a New Pattern</h3>
-
+<h2>Creating a New Pattern</h2>
 <p>Our Hello World pattern will be very simple - all it will do is change the text
-of some HTML label to "Hello, World!". The first step is to go to the
-<em>js/patterns</em> subdirectory and create a file called <em>hello.js</em> in it
-with the following contents:</p>
+of some HTML label to "Hello, World!". So let's get started!</p>
+
+<h3>Defining the Pattern</h3>
+
+<p> The first step is to go to the <em>js/patterns</em> subdirectory and create
+a file called <em>hello.js</em> in it with the following contents:</p>
 
 <pre>
 define([
@@ -494,15 +495,20 @@ definitions (omit the trailing comma if adding to the end of the paths list):</p
 we omit the file's .js suffix in the path definition.</p>
 
 <p>To tell the machinery to include our pattern in the bundles, open the
-<em>js/bundles/widgets.js</em> file and add the following line to the list of
-dependencies passed to the <em>define()</em> function.
+<em>js/bundles/widgets.js</em> file and add the <em>mockup-patterns-helloworld</em>
+to the list of dependencies passed to the <em>define()</em> function.
 <br>
 <strong>XXX: this is probably widgets-specific and will change after refactoring.
 Update this section at that point.</strong>
 </p>
 
 <pre>
-'mockup-patterns-helloworld',
+define([
+  'jquery',
+  &hellip;
+  <strong>'mockup-patterns-helloworld',</strong>
+  &hellip;
+], &hellip;)
 </pre>
 
 <p>For the dependency we use the same name as already used in the pattern path
@@ -527,53 +533,63 @@ command:</p>
 $ make compile-widgets
 </pre>
 
-TODO: describe what this does (what gets created and)
+<p>This determines all the dependecies and bundles them up into a single
+file called <em>build/widgets.min.js</em>. It also copies some additional
+resources (e.g. images and CSS files) to the same <em>build</em> directory.</p>
 
 
 <h3>Using the Pattern on a Page</h3>
 
-<p>Now that we have defined configured and compiled our Hello World pattern, it's time
-to use it. Inside the root "mockup" directory create a simple HTML file called
-<em>hello.html</em> containing the following:</p>
+<p>Now that we have defined, configured and compiled our Hello World pattern, it's time
+to use it and see, how it work. Inside the root "mockup" directory create a simple HTML
+file called <em>hello.html</em> with the following contents:</p>
 
 <pre>
 &lt;!DOCTYPE html&gt;
-
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="utf-8"&gt;
     &lt;title&gt;Hello World Pattern&lt;/title&gt;
     &lt;script type="text/javascript" src="bower_components/jquery/jquery.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="build/widgets.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="<strong>build/widgets.min.js</strong>"&gt;&lt;/script&gt;
   &lt;/head&gt;
 
   &lt;body&gt;
-    &lt;label class="pat-helloworld"&gt;(no greeting yet)&lt;/label&gt;
+    &lt;label class="<strong>pat-helloworld</strong>"&gt;(no greeting yet)&lt;/label&gt;
   &lt;/body&gt;
-&lt;/html&gt;
-</pre>
+&lt;/html&gt;</pre>
 <strong>XXX: markup highlighting?</strong>
 
-<br>TODO: describe what we have ... jsut a label and a reference to the compiled
-javascript. and expexted result.
-and class="pat-reference" explained (maybe in the next subsection)
+<p>In the head we first include jQuery and <em>widgets.min.js</em> generated in the
+previous step. The body of the document contains a label with some placeholder text.
+The important thing here is its <strong>pat-helloworld</strong> CSS class. It tells
+the <em>helloworld</em> pattern that it should perform its work on this particular
+DOM element. This, by the way, is the general way of triggering the patterns - you
+add a CSS class pat-&lt;pattern-name&gt; to the desired elements and the pattern
+&lt;pattern-name&gt; will be executed on them.</p>
+
+<p>Now open the <em>hello.html</em> file with your browser directly from the
+filesystem and you should see "Hello, world!" displayed. This is different from
+the original label text - our Hello World pattern automatically changed
+it.</p>
 
 
-      <h2>Additional Resources</h2>
-      <li>
-        <ul>
-         <p>
-         <a href="http://www.youtube.com/watch?v=RqUn3n4HuMM"
-         target ="_blank">An introductory overview</a>
-         of Plone Mockup - about the project and its goals, setting up a development
-         environment, Patterns explained, testing Javascript with Mocha library,
-         compiling and deploying widgets, etc. (recorded Hangout session from the
-         Pacific Rim Sprint, Sep 13, 2013)</p>
+<h2>Additional Resources</h2>
+  <li>
+    <ul>
+     <p>
+     <a href="http://www.youtube.com/watch?v=RqUn3n4HuMM"
+     target ="_blank">An introductory overview</a>
+     of Plone Mockup - about the project and its goals, setting up a development
+     environment, Patterns explained, testing Javascript with Mocha library,
+     compiling and deploying widgets, etc. (recorded Hangout session from the
+     Pacific Rim Sprint, Sep 13, 2013)</p>
 
-         <p>Video length: 58:05</p>
-        </ul>
-      </li>
-  </script>
+     <p>Video length: 58:05</p>
+    </ul>
+  </li>
+</script>
+
 
   <script>
     addPage({
