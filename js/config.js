@@ -11,7 +11,7 @@ var requirejsOptions = {
     'underscore': 'bower_components/underscore/underscore',
     'backbone': 'bower_components/backbone/backbone',
     'backbone-paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
-    'bootstrap-dropdown': 'bower_components/bootstrap/js/bootstrap-dropdown',
+    'bootstrap-dropdown': 'bower_components/bootstrap/js/dropdown',
     'bootstrap-tooltip': 'bower_components/bootstrap/js/bootstrap-tooltip',
     'select2': 'bower_components/select2/select2',
     'tinymce': 'lib/tinymce/tinymce.min',

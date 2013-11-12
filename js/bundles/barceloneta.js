@@ -21,14 +21,6 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-
-if (window.jQuery) {
-  define( "jquery", [], function () {
-    "use strict";
-    return window.jQuery;
-  } );
-}
-
 define([
   'jquery',
   'mockup-registry',
@@ -38,7 +30,8 @@ define([
   // 'mockup-patterns-structure',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
-  'mockup-bundles-widgets'
+  'mockup-bundles-widgets',
+  'bootstrap-dropdown'
 
 ], function($, Registry, Base) {
   "use strict";
@@ -48,7 +41,7 @@ define([
     name: "plone-barceloneta",
     init: function() {
       var self = this;
-      console.alert("hola!");
+      console.log("hola!");
     }
 
   });
