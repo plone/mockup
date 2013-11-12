@@ -177,7 +177,6 @@ module.exports = function(grunt) {
           include: 'mockup-bundles-widgets',
           insertRequire: ['mockup-bundles-widgets'],
           out: 'build/widgets.min.js',
-          excludeShallow: ['jquery']
         }
       },
       toolbar: {

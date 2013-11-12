@@ -25,13 +25,6 @@
 //
 
 
-if (window.jQuery) {
-  define( "jquery", [], function () {
-    "use strict";
-    return window.jQuery;
-  } );
-}
-
 define([
   'jquery',
   'mockup-router',
