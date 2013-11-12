@@ -338,6 +338,19 @@ define([
         // Render html
         self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
 
+        // In most browsers, when you hit the enter key while a form element is focused
+        // the browser will trigger the form 'submit' event.  Google Chrome also does this,
+        // but not when when the default submit button is hidden with 'display: none'.
+        // The following code will work around this issue:
+        $('form', self.$modal).on ('keydown', function (event) {
+            // ignore keys which are not enter, and ignore enter inside a textarea.
+            if (event.keyCode !== 13 || event.target.nodeName == 'TEXTAREA')
+                return;
+
+            event.preventDefault ();
+            $('input[type=submit], button[type=submit], button:not(type)', this).eq(0).trigger ('click');
+        });
+
         // Setup buttons
         $(options.buttons, self.$modal).each(function() {
           var $button = $(this);
