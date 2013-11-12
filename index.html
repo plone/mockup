@@ -462,7 +462,8 @@ define([
 <p>
 The file contains a call to the RequireJS's
 <a href="http://requirejs.org/docs/api.html#define">define()</a> function, which
-(unsurprisingly) defines a new module. We pass two parameters to it:</p>
+(unsurprisingly) defines a new Javascript code module. We pass two parameters
+to it:</p>
 <ol>
   <li>An array containing the names of module's dependencies. We state that we
   depend on jQuery and the base Mockup pattern module.</li>
@@ -474,10 +475,11 @@ The file contains a call to the RequireJS's
 dependencies (in the same order as defined in the dependency list). This allows us
 to use these dependencies in our module's code.</p>
 
-<p>The way to create a new module is to call the <strong>Base.extend()</strong> method
-and pass the actual object definition to it. As you can see our HelloWorld object is
-very simple - it contains a <var>name</var> property definining its name and an
-<var>init()</var> method. The latter does the actual work of changing the label's
+<p>The way to actually create a new module is to call the <strong>Base.extend()</strong>
+method and pass the module definition to it. The latter is just an object with
+some properties, and as you can see the object describing our HelloWorld pattern is
+in fact very simple. It only contains a <var>name</var> property definining its name
+and an <var>init()</var> method. The latter does the actual work of changing the label's
 text to "Hello, world!".</p>
 
 
