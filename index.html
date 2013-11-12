@@ -585,7 +585,74 @@ it.</p>
 
 <h2>Adding Configuration Options to a Pattern</h2>
 
-<p>TODO: descripe data-pat-* attributes and how the options work</p>
+<p>Patterns can provide various configuration options for customizing their
+appearance and/or behavior. Let's modify our Hello World pattern so that it will
+allow us to change the label's font color and its background color.</p>
+
+<p>We first need to update the pattern definition in <em>js/patterns/hello.js</em>:</p>
+
+<pre>
+var HelloWorld = Base.extend({
+    name: 'helloworld',
+    <strong>defaults: {
+        'color': 'black',
+        'bgcolor': 'yellow'
+    },</strong>
+    init: function () {
+        var $label = this.$el;
+        $label.text("Hello, world!");
+        <strong>$label.css({
+            'color': this.options.color,
+            'background': this.options.bgcolor
+        });</strong>
+    }
+});
+</pre>
+
+<p>We added a new attribute called <strong>defaults</strong> to the object
+describing the Hello World pattern. The value of this attribute is another object
+containing the <em>&lt;option-name&gt;: &lt;default-value&gt;</em> pairs, which
+should be pretty self-explanatory.</p>
+
+<p>In the <em>init()</em> method we added a code which sets the label's font and
+background color as defined by the pattern configuration options. Option values can be
+read through the <em>this.options</em> object (with <em>this</em> pointing to the
+object describing the pattern).</p>
+
+<p>NOTE: Since we have changed the pattern's code we need to run the
+<em>make compile-widgets</em> command from the console again, so that the Javascript
+bundle will contain the enhanced version of the Hello World pattern we just created.</p>
+<hr>
+<p>To see the changes in action, we slightly modify the <em>hello.html</em> file. The
+&lt;body&gt; should now contain the following:</p>
+
+<pre>
+&lt;label class="pat-helloworld"
+    <strong>data-pat-helloworld="color:white; bgcolor:black"</strong>&gt;(no greeting yet)&lt;/label&gt;
+&lt;br&gt;
+&lt;label class="pat-helloworld"
+    <strong>data-pat-helloworld="color:green"</strong>&gt;(no greeting yet)&lt;/label&gt;
+</pre>
+
+<p>And the result of the change:</p>
+<span style="color:white; background:black">Hello, world!</span><br>
+<span style="color:green; background:yellow">Hello, world!</span><br><br>
+
+
+<p>We added another label and defined the <strong>data-pat-helloworld</strong>
+attribute on both. The <em>data-pat-&lt;pattern-name&gt;</em> attribute is used
+to pass configuration options to the pattern (<em>color</em> and <em>bgcolor</em>
+in our case). If some of the options are not provided, their corresponding default
+values are used (as defined in the pattern).</p>
+
+
+<h3>Options Format</h3>
+<p>TODO: describe</p>
+
+
+<h3>Applying the Options to Multiple Elements at Once</h3>
+<p>TODO: describe</p>
+
 
 
 <h2>Additional Resources</h2>
