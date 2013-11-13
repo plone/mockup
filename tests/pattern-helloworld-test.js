@@ -21,7 +21,7 @@ define([
         });
 
         it('should change label text to "Hello, world!"', function () {
-            expect(this.$el.text()).to.be.equal("(no greeting yet)");
+            expect(this.$el.text()).to.not.be.equal("Hello, world!");
             registry.scan(this.$el);
             expect(this.$el.text()).to.be.equal("Hello, world!");
         });

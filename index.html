@@ -472,7 +472,7 @@ to it:</p>
 <ol>
   <li>An array containing the names of module's dependencies. We state that we
   depend on jQuery and the base Mockup pattern module.</li>
-  <li>A function which returns an object that defines our <em>HelloWorld</em>
+  <li>A function which returns an object that defines our <em>Hello World</em>
   module.</li>
 </ol>
 
@@ -482,7 +482,7 @@ to use these dependencies in our module's code.</p>
 
 <p>The way to actually create a new module is to call the <strong>Base.extend()</strong>
 method and pass the module definition to it. The latter is just an object with
-some properties, and as you can see the object describing our HelloWorld pattern is
+some properties, and as you can see the object describing our Hello World pattern is
 in fact very simple. It only contains a <var>name</var> property definining its name
 and an <var>init()</var> method. The latter does the actual work of changing the label's
 text to "Hello, world!".</p>
@@ -752,7 +752,7 @@ define([
         });
 
         <strong>it</strong>('should change label text to "Hello, world!"', function () {
-            expect(this.$el.text()).to.be.equal("(no greeting yet)");
+            expect(this.$el.text()).to.not.be.equal("Hello, world!");
             <strong>registry.scan(this.$el);</strong>
             expect(this.$el.text()).to.be.equal("Hello, world!");
         });
@@ -778,8 +778,9 @@ test code. Let's first explain some of the dependencies:</p>
   <li><strong>mockup-registry</strong> - the <em>registry</em> is a collection of tools
   used for managing the patterns. It also keeps track of which patterns have
   been registered, hence its name.<br>
-  In our example we use its <em>scan()</em> method, which scans the given DOM (sub)tree
-  and applies patterns to all DOM elements in the tree where applicable.</li>
+  In our example we use its <strong>scan()</strong> method, which scans the given
+  DOM (sub)tree and applies patterns to all DOM elements in the tree where
+  applicable.</li>
 
   <li><strong>mockup-patterns-helloworld</strong> - the pattern under test must
   always be listed among the test dependencies, even if we don't use it directly in
@@ -817,12 +818,21 @@ the <em>describe()</em> function can be nested).</p>
 <strong>it()</strong> function. We first provide a descriptive name for the test
 case, which makes it very easy to see, what this test case expects from the
 pattern under test (<em>'It should change label text to "Hello, world!"'</em>).
-The second parameter is a function containing the actual test case code. TODO:
-kaj naredi ... preveri to, poženi scan (to apply the pattern), potem preveri,
-ali se je ustrezno text spremenil</p>
+The second parameter is a function containing the actual test case code. It first
+verifies that the label does not yet have the expected text. Then it invokes
+the <em>registry.scan()</em> method (to apply the pattern) and after that it checks
+again to see, whether the pattern has indeed changed the text to
+<em>"Hello, world!"</em>.</p>
 
-<p>beforeEach - run before every test, used for setup work</p>
+<p>The last thing to mention is the <strong>beforeEach()</strong> function. The test
+framework calls this function before each test case is run, giving us the
+opportunity to perform some initialization and setup work in it. This way we don't
+have to repeat the same common initializiation tasks separately in each test case,
+resulting in a more readable and maintainable code.</p>
 
+<p>In our example above, all we do in <em>beforeEach()</em> is create a jQuery object
+representing an HTML label, which later serves as a convenient test polygon for the
+Hello World pattern.</p>
 
 
 <h3>Running the Tests</h3>
