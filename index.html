@@ -713,8 +713,115 @@ levels have precedence over those defined higher up the DOM tree.</p>
 
 
 <h2>Writing Tests</h2>
-<p>TODO</p>
+<p>It's true that our Hello World pattern is very simple and doesn't contain
+any obscure bugs, but with more complex patterns you can never be sure. And even
+if they work flawlessly at the moment, there's always a chance of introducing bugs
+when adding new features or refactoring the existing ones. This is where the tests
+come in. They can automatically run the patterns in different usecase scenarios and
+make sure they behave as expected.</p>
 
+<h3>Defining a Test Case</h3>
+
+<p>All tests are placed in the <em>tests</em> subdirectory and the names of the files
+containing them must match the <em>*-test.js</em> pattern. It is a good practice to
+name the files after the pattern they test. Since we want to test the Hello World
+pattern, we create a file called <em>tests/pattern-helloworld-test.js</em> and put
+the following code into it:</p>
+
+<pre>
+define([
+    <strong>'chai',</strong>
+    'jquery',
+    <strong>'mockup-registry',</strong>
+    <strong>'mockup-patterns-helloworld'</strong>
+], function (chai, $, registry, HelloWorld) {
+    "use strict";
+
+    var expect = chai.expect,
+        <strong>mocha = window.mocha;</strong>
+
+    <strong>mocha.setup('bdd');</strong>
+    $.fx.off = true;
+
+    <strong>describe</strong>("HelloWorld", function () {
+        <strong>beforeEach</strong>(function () {
+            this.$el = $(
+                '&lt;label class="pat-helloworld"&gt;(no greeting yet)&lt;/label&gt;'
+            );
+        });
+
+        <strong>it</strong>('should change label text to "Hello, world!"', function () {
+            expect(this.$el.text()).to.be.equal("(no greeting yet)");
+            <strong>registry.scan(this.$el);</strong>
+            expect(this.$el.text()).to.be.equal("Hello, world!");
+        });
+    });
+
+});</pre>
+<strong>XXX: we really need syntax highlighting and line numbers &hellip;</strong>
+
+<p>Test modules are defined in a similar way to patterns. We call the <em>define()</em>
+function, list the module dependencies and provide a function which contains the actual
+test code. Let's first explain some of the dependencies:</p>
+
+<ul>
+  <li>
+  <strong>chai</strong> - <a href="http://chaijs.com/">Chai</a> is an assertion
+  library complementing the <a href="http://visionmedia.github.io/mocha/">Mocha</a>
+  testing framework, which is what Plone Mockup project uses for tests. The Chai
+  library is quite flexible as it allows you to choose your preferred style for
+  making assertions in tests. In our example we use the so-called <em>BDD</em> style,
+  allowing for assertions such as <code>expect(result).to.be.above(0).and.not.equal(7)</code>.
+ </li>
+
+  <li><strong>mockup-registry</strong> - the <em>registry</em> is a collection of tools
+  used for managing the patterns. It also keeps track of which patterns have
+  been registered, hence its name.<br>
+  In our example we use its <em>scan()</em> method, which scans the given DOM (sub)tree
+  and applies patterns to all DOM elements in the tree where applicable.</li>
+
+  <li><strong>mockup-patterns-helloworld</strong> - the pattern under test must
+  always be listed among the test dependencies, even if we don't use it directly in
+  the test code (as is the case here with our example). The reason is that the
+  <em>registry.scan($element)</em> method will apply our pattern to the
+  <var>$element</var> only if the pattern is present in the test module's dependency
+  list.</li>
+</ul>
+
+
+
+<p>
+mockup-patterns-helloworld - the same name under which we registered the pattern
+earlier in the tutorial (under the <em>Pattern Registration</em> section)
+
+TODO: explain the code</p>
+
+
+<h3>Running the Tests</h3>
+
+<p>
+Run $ make test
+
+it will also check for styling/syntax errors (JSHint, the JS code quality tool)
+and THEN it will go on to the tests
+
+mention jshint is run beforehand as well
+http://localhost:9876/ - karma runner... describe briefly .. uses PhantomJS
+
+TODO: and try to break the test ... and describe auto re-run
+</p>
+
+
+TODO: menton and briefly describe:
+* Karma (the test runner)
+* Mocha (test framework lib)
+* Chai (an assertion library)
+
+
+
+<h2>Deployment</h2>
+
+<p>TODO: how to pass your work to Plone developers for instance ...</p>
 
 
 <h2>Additional Resources</h2>
