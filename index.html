@@ -1798,12 +1798,29 @@ function($action, response, options) { ... }
 <input type="text" class="pat-select2"
     data-pat-select2="orderable:true;
                       tags:Red,Yellow,Green;
+                      allowNewItems:false;
+                      width:20em" />
+  </script>
+  <script type="text/example" class="example-select2" data-title="Orderable tags (allow new items)">
+<input type="text" class="pat-select2"
+    data-pat-select2="orderable:true;
+                      tags:Red,Yellow,Green;
+                      allowNewItems:true;
                       width:20em" />
   </script>
   <script type="text/example" class="example-select2" data-title="AJAX tags">
 <input type="hidden" class="pat-select2"
     data-pat-select2="placeholder:Search for a Value;
                       vocabularyUrl:select2-test.json;
+                      allowNewItems:false;
+                      width:20em" />
+  </script>
+
+  <script type="text/example" class="example-select2" data-title="AJAX tags (allow new items)">
+<input type="hidden" class="pat-select2"
+    data-pat-select2="placeholder:Search for a Value;
+                      vocabularyUrl:select2-test.json;
+                      allowNewItems:true;
                       width:20em" />
   </script>
 

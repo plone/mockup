@@ -34,6 +34,14 @@ define([
 ], function($, Base) {
   "use strict";
 
+  function parseBool(value) {
+    if (typeof value === "boolean") return value;
+    if (typeof value === "number") return value === 0 ? false : true;
+    if (typeof value !== "string") return undefined;
+
+    return value.toLowerCase() === 'true' ? true : false;
+  }
+
   var Select2 = Base.extend({
     name: "select2",
     defaults: {
@@ -91,6 +99,14 @@ define([
         } else {
           self.options.tags = self.options.tags.split(self.options.separator);
         }
+      }
+
+      if (self.options.tags && !self.options.allowNewItems) {
+         self.options.data = $.map (self.options.tags, function (value, i) {
+             return { id: value, text: value };
+         });
+         self.options.multiple = true;
+         delete self.options.tags;
       }
     },
     initializeOrdering: function(){
@@ -164,6 +180,11 @@ define([
     init: function() {
       var self = this;
 
+      if (self.options.hasOwnProperty ('allowNewItems'))
+      {
+          self.options.allowNewItems = parseBool(self.options.allowNewItems);
+      }
+
       if (self.options.ajax || self.options.vocabularyUrl) {
         if(self.options.vocabularyUrl) {
           self.options.multiple = true;
@@ -198,12 +219,17 @@ define([
                 data_ids.push(item.id);
               });
               results = [];
-              if (query_term !== ''  && $.inArray(query_term, data_ids) === -1) {
-                results.push({id:query_term, text:query_term});
+
+              var have_result = query_term === '' || $.inArray(query_term, data_ids) >= 0;
+              if (self.options.allowNewItems && !have_result) {
+                  results.push({id:query_term, text:query_term});
               }
-              $.each(data.results, function(i, item) {
-                results.push(item);
-              });
+
+              if (have_result) {
+                $.each(data.results, function(i, item) {
+                    results.push(item);
+                });
+              }
             }
             return { results: results };
           }
