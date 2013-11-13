@@ -27,6 +27,7 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-livesearch',
   'mockup-patterns-accessibility',
+  'mockup-patterns-autotoc',
   // 'mockup-patterns-structure',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
