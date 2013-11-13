@@ -398,14 +398,20 @@ $ make bootstrap</pre>
     <div class='hello-world pat-autotoc' data-pat-autotoc="levels:h2,h3,h4">
       <h2>Introduction</h2>
 
+      <p style="color: red; font-weight: bold">
+      CAUTION: this is a work in progress. Things might change without advance
+      notice and errors in the docs are possible. You have been warned. ;-)
+      </p>
       <p>Assuming you successfully set up your development environment as described
       under the <a href="#getting-started">Getting Started</a> section, you are now
-      ready to write your first pattern!
-      <br>TODO: state assumptions: we are in the working directory "mockup" (where we have
-        cloned GIT repo) and all file names and paths are relative to this dir)
+      ready to write your first pattern!</p>
+
+      <p>Unless stated otherwise the <em>mockup</em> directory (the one that you
+      cloned the repository into) will be our root working directory throughout this
+      tutorial and all the paths and filenames are specified <em>relative</em> to it.
       </p>
 
-      <p>The Mockup project folder on your filesystem filesystem should look like the
+      <p>The mockup directory on your filesystem filesystem should look like the
       following (NOTE: most of the files and folders have been omitted for brevity):</p>
 <pre>
 mockup/
@@ -427,6 +433,7 @@ mockup/
 </pre>
 <strong>(XXX: test on a fresh instance if correct!)<br>
 XXX: needed at all? just takes a lot of space ...</strong>
+
 
 <h2>Creating a New Pattern</h2>
 <p>Our Hello World pattern will be very simple - all it will do is change the text
@@ -460,7 +467,8 @@ define([
 <p>
 The file contains a call to the RequireJS's
 <a href="http://requirejs.org/docs/api.html#define">define()</a> function, which
-(unsurprisingly) defines a new module. We pass two parameters to it:</p>
+(unsurprisingly) defines a new Javascript code module. We pass two parameters
+to it:</p>
 <ol>
   <li>An array containing the names of module's dependencies. We state that we
   depend on jQuery and the base Mockup pattern module.</li>
@@ -472,10 +480,11 @@ The file contains a call to the RequireJS's
 dependencies (in the same order as defined in the dependency list). This allows us
 to use these dependencies in our module's code.</p>
 
-<p>The way to create a new module is to call the <strong>Base.extend()</strong> method
-and pass the actual object definition to it. As you can see our HelloWorld object is
-very simple - it contains a <var>name</var> property definining its name and an
-<var>init()</var> method. The latter does the actual work of changing the label's
+<p>The way to actually create a new module is to call the <strong>Base.extend()</strong>
+method and pass the module definition to it. The latter is just an object with
+some properties, and as you can see the object describing our HelloWorld pattern is
+in fact very simple. It only contains a <var>name</var> property definining its name
+and an <var>init()</var> method. The latter does the actual work of changing the label's
 text to "Hello, world!".</p>
 
 
@@ -541,7 +550,7 @@ resources (e.g. images and CSS files) to the same <em>build</em> directory.</p>
 <h3>Using the Pattern on a Page</h3>
 
 <p>Now that we have defined, configured and compiled our Hello World pattern, it's time
-to use it and see, how it work. Inside the root "mockup" directory create a simple HTML
+to use it and see how it works. Inside the root "mockup" directory create a simple HTML
 file called <em>hello.html</em> with the following contents:</p>
 
 <pre>
@@ -568,10 +577,144 @@ DOM element. This, by the way, is the general way of triggering the patterns - y
 add a CSS class pat-&lt;pattern-name&gt; to the desired elements and the pattern
 &lt;pattern-name&gt; will be executed on them.</p>
 
-<p>Now open the <em>hello.html</em> file with your browser directly from the
-filesystem and you should see "Hello, world!" displayed. This is different from
-the original label text - our Hello World pattern automatically changed
-it.</p>
+<p>In case we want to apply more than one pattern to a single DOM element, we can
+simply assign multiple <em>pat-*</em> CSS classes to it.</p>
+
+<p>To test the Hello World pattern open the <em>hello.html</em> file with your
+browser directly from the filesystem and you should see "Hello, world!" displayed.
+This text is different from the original label text - our Hello World pattern
+automatically changed it.</p>
+
+
+<h2>Adding Configuration Options to a Pattern</h2>
+
+<p>Patterns can provide various configuration options for customizing their
+appearance and/or behavior. Let's modify our Hello World pattern so that it will
+allow us to change the label's font color and its background color.</p>
+
+<p>We first need to update the pattern definition in <em>js/patterns/hello.js</em>:</p>
+
+<pre>
+var HelloWorld = Base.extend({
+    name: 'helloworld',
+    <strong>defaults: {
+        'color': 'black',
+        'bgcolor': 'yellow'
+    },</strong>
+    init: function () {
+        var $label = this.$el;
+        $label.text("Hello, world!");
+        <strong>$label.css({
+            'color': this.options.color,
+            'background': this.options.bgcolor
+        });</strong>
+    }
+});
+</pre>
+
+<p>We added a new attribute called <strong>defaults</strong> to the object
+describing the Hello World pattern. The value of this attribute is another object
+containing the <em>&lt;option-name&gt;: &lt;default-value&gt;</em> pairs, which
+should be pretty self-explanatory.</p>
+
+<p>In the <em>init()</em> method we added a code which sets the label's font and
+background color as defined by the pattern configuration options. Option values can be
+read through the <em>this.options</em> object (with <em>this</em> pointing to the
+object describing the pattern).</p>
+
+<p>NOTE: Since we have changed the pattern's code we need to run the
+<em>make compile-widgets</em> command from the console again, so that the Javascript
+bundle will contain the enhanced version of the Hello World pattern we just created.</p>
+
+<h3>The <em>data-pat-&lt;pattern-name&gt;</em> Attribute</h3>
+
+<p>To see the changes in action, we slightly modify the <em>hello.html</em> file. The
+&lt;body&gt; should now contain the following:</p>
+
+<pre>
+&lt;label class="pat-helloworld"
+    <strong>data-pat-helloworld="color:white; bgcolor:black"</strong>&gt;(no greeting yet)&lt;/label&gt;
+&lt;br&gt;
+&lt;label class="pat-helloworld"
+    <strong>data-pat-helloworld="color:green"</strong>&gt;(no greeting yet)&lt;/label&gt;
+</pre>
+
+<p>And the result of the change:</p>
+<span style="color:white; background:black">Hello, world!</span><br>
+<span style="color:green; background:yellow">Hello, world!</span><br><br>
+
+
+<p>We added another label and defined the <strong>data-pat-helloworld</strong>
+attribute on both. The <em>data-pat-&lt;pattern-name&gt;</em> attribute is used
+to pass configuration options to the pattern (<em>color</em> and <em>bgcolor</em>
+in our case). If some of the options are not provided, their corresponding default
+values are used (as defined by the pattern). This is why the second label gets
+a yellow background even though we haven't explicitly specified it.</p>
+
+<p>If you wonder whether it is possible for a DOM element to have more than
+one <em>data-pat-*</em> attribute defined, the answer is of course YES, because
+multiple patterns can be applied to a single DOM element at the same time.</p>
+
+<h3>Options Format</h3>
+
+<p>There are two different ways to specify the option values in <em>data-pat-*</em>
+attributes, the key:value format and the JSON dictionary format.</p>
+
+<h4>Key : Value</h4>
+<p>This is the format we used in the example above. Each key represents the option
+with the same name, while the corresponding value is, well, the option's value. The
+key and the value are separated with a colon (:) and a semicolon (;) is used to
+separate multiple <em>key:value</em> pairs.</p>
+
+<h4>JSON Dictionary</h4>
+<p>This format, too, uses the <em>key:value</em> pairs, but they are passed in
+a JSON dictionary, like this: <code>data-pat-helloworld="{color:white, bgcolor:black}"</code></p>
+
+<p>Generally it doesn't really matter which of the two formats you use. In most
+cases it is simply a matter of personal preference. There is, however, one notable
+advantage of the JSON format - the option values are not limited to just strings and
+numbers, they can also be arbitrary JSON-compatible structures (even nested).
+Sometimes when a pattern expects a complex configuration, JSON format is your
+only choice.</p>
+
+<h3>Nesting the Options</h3>
+<p>Setting the same options for many different elements over and over again can be a
+tedious task. It also makes it more difficult to globally change such options later.
+Luckily the patterns provide a mechanism to avoid problems like these and that is
+<em>option nesting</em>. It works as follows - you can define a <em>data-pat-*</em>
+attribute on an element somewhere in the DOM hierarchy and all its descendants
+(at all levels) will <em>inherit the option values</em> listed there! This is
+quite a useful feature indeed.</p>
+
+<p>Suppose we modify the <em>&lt;body&gt;</em> tag in our <em>hello.html</em>
+page and add <em>data-pat-helloworld</em> attribute to it:</p>
+
+<pre>
+&lt;body <strong>data-pat-helloworld="bgcolor:orange"</strong>&gt;
+</pre>
+
+<p>Suddenly all the elements using the Hello World pattern will get an orange
+background by default, even though the true default background color as defined by
+the pattern is yellow. Elements can override this behavior by explicitly providing
+ther own value for the <em>bgcolor</em> option.</p>
+
+<p>If you now reload the <em>hello.html</em> file in your browser, you should see
+the following:</p>
+<span style="color:white; background:black">Hello, world!</span><br>
+<span style="color:green; background:orange">Hello, world!</span><br><br>
+
+<p>The bottom of the two labels now indeed has an orange background, because that's
+the option value that an element further up the hierarchy provides. On the other
+hand the background color of the upper label remains black, because that label
+provides its own value for the <em>bgcolor</em> option, overriding the value set
+by the <em>&lt;body&gt;</em> tag. We can see that the option values defined at lower
+levels have precedence over those defined higher up the DOM tree.</p>
+
+
+
+<h2>Writing Tests</h2>
+<p>TODO</p>
+
 
 
 <h2>Additional Resources</h2>
@@ -590,6 +733,7 @@ it.</p>
   </li>
 </script>
 
+<!-- END Hello World SECTION -->
 
   <script>
     addPage({

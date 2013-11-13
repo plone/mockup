@@ -1,1 +1,1 @@
-define(["jquery","mockup-patterns-base"],function(a,b){"use strict";var c=b.extend({name:"helloworld",init:function(){var a=this.$el;a.text("Hello, world!")}});return c});
+define(["jquery","mockup-patterns-base"],function(a,b){"use strict";var c=b.extend({name:"helloworld",defaults:{color:"black",bgcolor:"yellow"},init:function(){var a=this.$el;a.text("Hello, world!"),a.css({color:this.options.color,background:this.options.bgcolor})}});return c});
