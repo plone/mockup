@@ -625,7 +625,9 @@ object describing the pattern).</p>
 <p>NOTE: Since we have changed the pattern's code we need to run the
 <em>make compile-widgets</em> command from the console again, so that the Javascript
 bundle will contain the enhanced version of the Hello World pattern we just created.</p>
-<hr>
+
+<h3>The <em>data-pat-&lt;pattern-name&gt;</em> Attribute</h3>
+
 <p>To see the changes in action, we slightly modify the <em>hello.html</em> file. The
 &lt;body&gt; should now contain the following:</p>
 
@@ -646,12 +648,34 @@ bundle will contain the enhanced version of the Hello World pattern we just crea
 attribute on both. The <em>data-pat-&lt;pattern-name&gt;</em> attribute is used
 to pass configuration options to the pattern (<em>color</em> and <em>bgcolor</em>
 in our case). If some of the options are not provided, their corresponding default
-values are used (as defined in the pattern).</p>
+values are used (as defined by the pattern). This is why the second label gets
+a yellow background even though we haven't explicitly specified it.</p>
 
+<p>If you wonder whether it is possible for a DOM element to have more than
+one <em>data-pat-*</em> attribute defined, the answer is of course YES, because
+multiple patterns can be applied to a single DOM element at the same time.</p>
 
 <h3>Options Format</h3>
-<p>TODO: describe</p>
 
+<p>There are two different ways to specify the option values in <em>data-pat-*</em>
+attributes, the key:value format and the JSON dictionary format.</p>
+
+<h4>Key : Value</h4>
+<p>This is the format we used in the example above. Each key represents the option
+with the same name, while the corresponding value is, well, the option's value. The
+key and the value are separated with a colon (:) and a semicolon (;) is used to
+separate multiple <em>key:value</em> pairs.</p>
+
+<h4>JSON Dictionary</h4>
+<p>This format, too, uses the <em>key:value</em> pairs, but they are passed in
+a JSON dictionary, like this: <code>data-pat-helloworld="{color:white, bgcolor:black}"</code></p>
+
+<p>Generally it doesn't really matter which of the two formats you use. In most
+cases it is simply a matter of personal preference. There is, however, one notable
+advantage of the JSON format - the option values are not limited to just strings and
+numbers, they can also be arbitrary JSON-compatible structures (even nested).
+Sometimes when a pattern expects a complex configuration, JSON format is your
+only choice.</p>
 
 <h3>Applying the Options to Multiple Elements at Once</h3>
 <p>TODO: describe</p>
