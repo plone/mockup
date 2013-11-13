@@ -467,7 +467,7 @@ define([
 <p>
 The file contains a call to the RequireJS's
 <a href="http://requirejs.org/docs/api.html#define">define()</a> function, which
-(unsurprisingly) defines a new Javascript code module. We pass two parameters
+(unsurprisingly) defines a new JavaScript code module. We pass two parameters
 to it:</p>
 <ol>
   <li>An array containing the names of module's dependencies. We state that we
@@ -491,7 +491,7 @@ text to "Hello, world!".</p>
 <h3>Pattern Registration</h3>
 
 <p>In order to use the pattern we need to tell the bundling machinery where to find
-it and to start including it in the Javascript bundles we create. So first open the
+it and to start including it in the JavaScript bundles we create. So first open the
 file <em>js/config.js</em> and add the following line under <em>paths</em>
 definitions (omit the trailing comma if adding to the end of the paths list):</p>
 <pre>
@@ -534,7 +534,7 @@ function($, Registry, &hellip;, <strong>HelloWorld</strong>, &hellip;) {
 }
 </pre>
 
-<p>We now have everything ready to create a Javascript bundle containing our
+<p>We now have everything ready to create a JavaScript bundle containing our
 Hello World pattern. From the &lt;mockup&gt; directory run the following console
 command:</p>
 
@@ -623,7 +623,7 @@ read through the <em>this.options</em> object (with <em>this</em> pointing to th
 object describing the pattern).</p>
 
 <p>NOTE: Since we have changed the pattern's code we need to run the
-<em>make compile-widgets</em> command from the console again, so that the Javascript
+<em>make compile-widgets</em> command from the console again, so that the JavaScript
 bundle will contain the enhanced version of the Hello World pattern we just created.</p>
 
 <h3>The <em>data-pat-&lt;pattern-name&gt;</em> Attribute</h3>
@@ -837,23 +837,65 @@ Hello World pattern.</p>
 
 <h3>Running the Tests</h3>
 
-<p>
-Run $ make test
+<p>To run our test run the following console command from the <em>&lt;mockup&gt;</em>
+directory:</p>
 
-it will also check for styling/syntax errors (JSHint, the JS code quality tool)
-and THEN it will go on to the tests
+<pre>
+$ make test pattern=helloworld
+</pre>
 
-mention jshint is run beforehand as well
-http://localhost:9876/ - karma runner... describe briefly .. uses PhantomJS
+<p>Ignore DEBUG messages and examine the last line of output. It should be
+similar to the following:</p>
 
-TODO: and try to break the test ... and describe auto re-run
-</p>
+<pre>PhantomJS 1.9.2 (Linux): Executed 1 of 1 SUCCESS (0.4 secs / 0.008 secs)</pre>
 
+<p>The test runner informed us that our test passed. Yay!</p>
 
-TODO: menton and briefly describe:
-* Karma (the test runner)
-* Mocha (test framework lib)
-* Chai (an assertion library)
+<p>If you want to run the test for all patterns, run the <em>make test</em>
+command with no parameters:</p>
+
+<pre>
+$ make test
+</pre>
+
+<p>You might have noticed that when tests complete, the <em>make test</em> command
+does not terminate. That's because it ran
+<a href="http://karma-runner.github.io/">Karma</a>, a powerful JavaScript test runner,
+behind the scenes. Karma launched a process which now monitors our pattern and
+pattern test files for changes.</p>
+
+<p>With Karma still running, try changing the <em>js/patterns/hello.js</em> file so
+that the Hello World pattern changes the label text to something else than
+<em>"Hello, world!"</em>. Karma will detect the change and automatically re-run the
+test(s) which will now, of course, fail. If you now change the
+<em>tests/pattern-helloworld-test.js</em> so that it will accept the new behavior of
+the Hello World pattern, Karma will once more re-run the tests, which will now again
+pass.</p>
+
+<p>Another nice thing about Karma is that you can connect to the test runner with
+a browser, too. Visit <a href="http://localhost:9876">http://localhost:9876</a> and
+watch what happens in the console window. Search for a line resembling the one
+below:</p>
+
+<pre>
+&hellip;
+INFO [Firefox 25.0.0 (Ubuntu)]: Connected on socket IH_Zu1A3ZL27f5IBYKnr
+&hellip;
+</pre>
+
+<p>When Karma detects that a browser has connected to it, it runs all the tests
+<em>in that particular browser</em>! Isn't that great? It allows you to quickly
+test the behavior of a pattern in many different browsers. When you make a change,
+Karma will automatically run the tests for all the browsers currently connected to
+it.</p>
+
+<p>Oh, just more more thing - at this point some of you might be wondering, what
+browser Karma used the first time we ran the <em>make test</em> command, when we
+had not yet connected to <em>localhost:9876</em> with any of the browsers?</p>
+
+<p>The answer is <a href="http://phantomjs.org/">PhantomJS</a>. It's a WebKit-based
+"browser" without user interface, but with a JavaScript API for communicating
+with it.</p>
 
 
 
@@ -869,7 +911,7 @@ TODO: menton and briefly describe:
      <a href="http://www.youtube.com/watch?v=RqUn3n4HuMM"
      target ="_blank">An introductory overview</a>
      of Plone Mockup - about the project and its goals, setting up a development
-     environment, Patterns explained, testing Javascript with Mocha library,
+     environment, Patterns explained, testing JavaScript with Mocha library,
      compiling and deploying widgets, etc. (recorded Hangout session from the
      Pacific Rim Sprint, Sep 13, 2013)</p>
 
