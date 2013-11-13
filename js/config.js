@@ -71,6 +71,8 @@ var requirejsOptions = {
   },
   shim: {
     'underscore': { exports: 'window._' },
+    'bootstrap-alert': { deps: ['jquery'] },
+    'bootstrap-collapse': { deps: ['jquery'] },
     'backbone': {
       exports: 'window.Backbone',
       deps: ['underscore', 'jquery']
