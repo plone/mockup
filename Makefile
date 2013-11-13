@@ -32,7 +32,6 @@ compile-toolbar:
 
 bootstrap: clean
 	mkdir -p build
-	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 ifdef NIX
 	NIX_PATH=${NIX_PATH} nix-build --out-link nixenv dev.nix
 	ln -s ./nixenv/lib/node_modules ./
@@ -58,6 +57,8 @@ test-ci:
 	NODE_PATH=./node_modules $(GRUNT) ci
 
 docs:
+	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
+	rm -rf docs/dev
 	mkdir -p docs/dev/lib/tinymce
 	$(GRUNT) docs
 
