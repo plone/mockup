@@ -33,7 +33,8 @@ define([
   'mockup-patterns-formautofocus',
   'mockup-bundles-widgets',
   'bootstrap-dropdown',
-  'bootstrap-collapse'
+  'bootstrap-collapse',
+  'bootstrap-alert'
 
 ], function($, Registry, Base) {
   "use strict";
