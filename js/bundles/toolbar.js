@@ -432,6 +432,11 @@ define([
         buttons: '.formControls > input[type="submit"],.actionButtons input[type="submit"]',
         automaticallyAddButtonActions: false
       };
+
+      // Hide manage portlets link
+      $('.managePortletsFallback', window.parent.document).remove();
+      $('.managePortletsLink', window.parent.document).remove();
+
       $('#toolbar-manage-portlets a,#manage-dashboard a', self.$el)
       .addClass('pat-modal')
       .patternModal(portletOptions)
