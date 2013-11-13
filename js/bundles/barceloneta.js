@@ -32,7 +32,8 @@ define([
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
   'mockup-bundles-widgets',
-  'bootstrap-dropdown'
+  'bootstrap-dropdown',
+  'bootstrap-collapse'
 
 ], function($, Registry, Base) {
   "use strict";
