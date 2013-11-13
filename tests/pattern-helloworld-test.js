@@ -10,7 +10,8 @@ define([
         mocha = window.mocha;
 
     mocha.setup('bdd');
-    $.fx.off = true;
+
+    $.fx.off = true;  //disable jQuery animations for various reasons
 
     describe("HelloWorld", function () {
         beforeEach(function () {

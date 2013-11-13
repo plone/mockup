@@ -720,7 +720,7 @@ when adding new features or refactoring the existing ones. This is where the tes
 come in. They can automatically run the patterns in different usecase scenarios and
 make sure they behave as expected.</p>
 
-<h3>Defining a Test Case</h3>
+<h3>Defining a Test Module</h3>
 
 <p>All tests are placed in the <em>tests</em> subdirectory and the names of the files
 containing them must match the <em>*-test.js</em> pattern. It is a good practice to
@@ -741,7 +741,8 @@ define([
         <strong>mocha = window.mocha;</strong>
 
     <strong>mocha.setup('bdd');</strong>
-    $.fx.off = true;
+
+    <strong>$.fx.off = true;</strong>  //disable jQuery animations for various reasons
 
     <strong>describe</strong>("HelloWorld", function () {
         <strong>beforeEach</strong>(function () {
@@ -790,11 +791,38 @@ test code. Let's first explain some of the dependencies:</p>
 
 
 
-<p>
-mockup-patterns-helloworld - the same name under which we registered the pattern
-earlier in the tutorial (under the <em>Pattern Registration</em> section)
+<p>In the body of our test module we choose the aforementioned BDD style for our
+assertion statements: <code>mocha.setup('bdd')</code>. We also disable jQuery
+animations (<code>$.fx.off = true</code>) for a couple of good reasons:</p>
 
-TODO: explain the code</p>
+<ul>
+  <li>Asynchronous animations on DOM elements might finish only after the test case
+  has already come to an end. If the latter expects that a pattern changes
+  some property of an element, but the change is delayed due to animation, an
+  assertion in the test might erroneously fail.</li>
+  <li>Speed - in most cases animations are just an eye candy for the users, and
+  as such, are not needed during the test runs. Disabling them can sometimes
+  considerably cut down the time needed to complete the tests.</li>
+</ul>
+
+<h4>The <em>describe()</em> Function</h4>
+
+<p>We define a group of test cases using the <strong>describe()</strong> function.
+The first parameter to it is the name of the group, which could be anything really (not
+necessarily <em>"HelloWorld"</em>). The second parameter is a function containing
+the actual test case definitions and/or the definitions of the test case subgroups (yes,
+the <em>describe()</em> function can be nested).</p>
+
+<p>In our example we only have a single test case and it's defined by a call to the
+<strong>it()</strong> function. We first provide a descriptive name for the test
+case, which makes it very easy to see, what this test case expects from the
+pattern under test (<em>'It should change label text to "Hello, world!"'</em>).
+The second parameter is a function containing the actual test case code. TODO:
+kaj naredi ... preveri to, poženi scan (to apply the pattern), potem preveri,
+ali se je ustrezno text spremenil</p>
+
+<p>beforeEach - run before every test, used for setup work</p>
+
 
 
 <h3>Running the Tests</h3>
