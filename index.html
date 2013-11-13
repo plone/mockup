@@ -677,8 +677,38 @@ numbers, they can also be arbitrary JSON-compatible structures (even nested).
 Sometimes when a pattern expects a complex configuration, JSON format is your
 only choice.</p>
 
-<h3>Applying the Options to Multiple Elements at Once</h3>
-<p>TODO: describe</p>
+<h3>Nesting the Options</h3>
+<p>Setting the same options for many different elements over and over again can be a
+tedious task. It also makes it more difficult to globally change such options later.
+Luckily the patterns provide a mechanism to avoid problems like these and that is
+<em>option nesting</em>. It works as follows - you can define a <em>data-pat-*</em>
+attribute on an element somewhere in the DOM hierarchy and all its descendants
+(at all levels) will <em>inherit the option values</em> listed there! This is
+quite a useful feature indeed.</p>
+
+<p>Suppose we modify the <em>&lt;body&gt;</em> tag in our <em>hello.html</em>
+page and add <em>data-pat-helloworld</em> attribute to it:</p>
+
+<pre>
+&lt;body <strong>data-pat-helloworld="bgcolor:orange"</strong>&gt;
+</pre>
+
+<p>Suddenly all the elements using the Hello World pattern will get an orange
+background by default, even though the true default background color as defined by
+the pattern is yellow. Elements can override this behavior by explicitly providing
+ther own value for the <em>bgcolor</em> option.</p>
+
+<p>If you now reload the <em>hello.html</em> file in your browser, you should see
+the following:</p>
+<span style="color:white; background:black">Hello, world!</span><br>
+<span style="color:green; background:orange">Hello, world!</span><br><br>
+
+<p>The bottom of the two labels now indeed has an orange background, because that's
+the option value that an element further up the hierarchy provides. On the other
+hand the background color of the upper label remains black, because that label
+provides its own value for the <em>bgcolor</em> option, overriding the value set
+by the <em>&lt;body&gt;</em> tag. We can see that the option values defined at lower
+levels have precedence over those defined higher up the DOM tree.</p>
 
 
 
