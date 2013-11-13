@@ -36,44 +36,16 @@ define([
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
-  'mockup-patterns-tinymce',
   'mockup-patterns-querystring'
 
-], function($, Registry, Base, Select2, PickADate, RelatedItems, TinyMCE,
-            QueryString) {
+], function($, Registry, Base, Select2, PickADate, RelatedItems, QueryString) {
   "use strict";
 
-  // BBB: we need to hook pattern to classes which plone was using until now
   var PloneWidgets = Base.extend({
     name: "plone-widgets",
     init: function() {
       var self = this;
-
-      // add tinymce pattern
-      self.$el.find('.mce_editable').addClass('pat-tinymce').each(function(){
-        var $tiny = $(this);
-        var config = $.parseJSON($tiny.attr('data-mce-config'));
-        config.content_css = config.portal_url + '/base.css';
-        delete config.customplugins;
-        delete config.plugins;
-        delete config.theme;
-        $tiny.attr({
-          'data-pat-tinymce': JSON.stringify({
-            relatedItems: {
-              vocabularyUrl: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
-            },
-            rel_upload_path: '@@fileUpload',
-            folder_url: config.document_base_url,
-            tiny: config,
-            prependToUrl: 'resolveuid/',
-            linkAttribute: 'UID',
-            prependToScalePart: '/@@images/image/'
-          })
-        });
-      });
-
     }
-
   });
 
   // initialize only if we are in top frame

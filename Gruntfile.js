@@ -36,7 +36,7 @@ module.exports = function(grunt) {
   docs_files['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
   docs_files['docs/dev/js/config.js'] = 'js/config.js';
 
-  requirejsOptions.optimize = 'none';
+  requirejsOptions.optimize = 'uglify';
 
   // Project configuration.
   grunt.initConfig({
