@@ -500,7 +500,11 @@ define([
         automaticallyAddButtonActions: false,
         actionOptions: {
           displayInModal: false,
-          redirectOnResponse: true
+          redirectOnResponse: true,
+          redirectToUrl: function($action, response, options) {
+            var $base = $(/<base.*?(\/>|<\/base>)/im.exec(response)[0]);
+            return $base.attr('href') + '/view';
+          }
         },
         actions: {
           'input#form-buttons-save, .formControls input[name="form.button.save"]': {},
