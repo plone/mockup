@@ -432,7 +432,7 @@ mockup/
   &hellip;
 </pre>
 <strong>(XXX: test on a fresh instance if correct!)<br>
-XXX: needed at all? just takes a lot of space ...</strong>
+XXX: needed at all? it just occupies a lot of space ...</strong>
 
 
 <h2>Creating a New Pattern</h2>
@@ -623,7 +623,7 @@ read through the <em>this.options</em> object (with <em>this</em> pointing to th
 object describing the pattern).</p>
 
 <p>NOTE: Since we have changed the pattern's code we need to run the
-<em>make compile-widgets</em> command from the console again, so that the JavaScript
+<code>make compile-widgets</code> command from the console again, so that the JavaScript
 bundle will contain the enhanced version of the Hello World pattern we just created.</p>
 
 <h3>The <em>data-pat-&lt;pattern-name&gt;</em> Attribute</h3>
@@ -857,14 +857,14 @@ similar to the following:</p>
 
 <p>The test runner informed us that our test passed. Yay!</p>
 
-<p>If you want to run the test for all patterns, run the <em>make test</em>
+<p>If you want to run the test for all patterns, run the <code>make test</code>
 command with no parameters:</p>
 
 <pre>
 $ make test
 </pre>
 
-<p>You might have noticed that when tests complete, the <em>make test</em> command
+<p>You might have noticed that when tests complete, the <code>make test</code> command
 does not terminate. That's because it ran
 <a href="http://karma-runner.github.io/">Karma</a>, a powerful JavaScript test runner,
 behind the scenes. Karma launched a process which now monitors our pattern and
@@ -896,7 +896,7 @@ Karma will automatically run the tests for all the browsers currently connected 
 it.</p>
 
 <p>Oh, just more more thing - at this point some of you might be wondering, what
-browser Karma used the first time we ran the <em>make test</em> command, when we
+browser Karma used the first time we ran the <code>make test</code> command, when we
 had not yet connected to <em>localhost:9876</em> with any of the browsers?</p>
 
 <p>The answer is <a href="http://phantomjs.org/">PhantomJS</a>. It's a WebKit-based
@@ -907,7 +907,48 @@ with it.</p>
 
 <h2>Deployment</h2>
 
-<p>TODO: how to pass your work to Plone developers for instance ...</p>
+<p>To wrap up everything, we just need to add a couple of words on deployment. When
+you're done with development, you somehow need to share your code with other people
+who might want to use it in their projects or in production environments.</p>
+
+<p>We have already mentioned the <code>make compile-widgets</code> command. It
+bundles all the patterns and their dependencies into a single JavaScript file
+<em>widgets.min.js</em> located in the <em>build</em> subdirectory. After a
+successful build all you have to do is copy this file to wherever you need it
+and link to it in your HTML pages  - just like we did in <em>hello.html</em>
+earlier.</p>
+
+<p>If you want to develop patterns in the context of a larger project, you
+have na option to include them in development mode. This way you will not have to
+re-compile them every time you make a change. To achieve that, add Plone Mockup
+project as a dependency to your <a href="http://www.buildout.org">buildout</a>
+config file, something like below:
+
+<pre>
+[buildout]
+extensions = mr.developer
+&hellip;
+parts +=
+    mockup
+&hellip;
+auto-checkout +=
+    mockup
+&hellip;
+eggs +=
+    mockup
+&hellip;
+[mockup]
+recipe = collective.recipe.cmd
+on_install = true
+on_update = true
+nix_path=~/.nix-defexpr/channels/
+cmds =
+    cd ${buildout:sources-dir}/mockup
+    make bootstrap NIX_PATH=${:nix_path}
+&hellip;
+[sources]
+mockup = git https://github.com/plone/mockup
+</pre>
 
 
 <h2>Additional Resources</h2>
