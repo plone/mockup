@@ -64,29 +64,35 @@ define([
       loadLinksWithinModal: true,
       prependContent: '.portalMessage',
       templateOptions: {
-        className: "modal",
+        className: "modal fade",
+        classDialog: "modal-dialog",
+        classModal: "modal-content",
         classHeaderName: "modal-header",
         classBodyName: "modal-body",
         classFooterName: "modal-footer",
         classWrapperName: "modal-wrapper",
         classWrapperInnerName: "modal-wrapper-inner",
         classLoadingName: "modal-loading",
-        classActiveName: "active",
+        classActiveName: "in",
         classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
         classContentName: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         template: '' +
           '<div class="<%= options.className %>">' +
-          '  <div class="<%= options.classHeaderName %>">' +
-          '    <a class="close">&times;</a>' +
-          '    <% if (title) { %><h3><%= title %></h3><% } %>' +
-          '  </div>' +
-          '  <div class="<%= options.classBodyName %>">' +
-          '    <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
-          '    <div class="<%= options.classContentName %>"><%= content %></div>' +
-          '  </div>' +
-          '  <div class="<%= options.classFooterName %>"> ' +
-          '    <%= buttons %> ' +
-          '    <a class="close hiddenStructure">&times;</a>' +
+          '  <div class="<%= options.classDialog %>">' +
+          '    <div class="<%= options.classModal %>">' +
+          '      <div class="<%= options.classHeaderName %>">' +
+          '        <a class="close">&times;</a>' +
+          '        <% if (title) { %><h3><%= title %></h3><% } %>' +
+          '      </div>' +
+          '      <div class="<%= options.classBodyName %>">' +
+          '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
+          '        <div class="<%= options.classContentName %>"><%= content %></div>' +
+          '      </div>' +
+          '      <div class="<%= options.classFooterName %>"> ' +
+          '        <%= buttons %> ' +
+          '        <a class="close hiddenStructure">&times;</a>' +
+          '      </div>' +
+          '    </div>' +
           '  </div>' +
           '</div>'
       },

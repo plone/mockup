@@ -31,10 +31,10 @@ define([
   // 'mockup-patterns-structure',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
+  'mockup-patterns-modal',
   'mockup-bundles-widgets',
   'bootstrap-dropdown',
-  'bootstrap-collapse',
-  'bootstrap-alert'
+  'bootstrap-collapse'
 
 ], function($, Registry, Base) {
   "use strict";
@@ -44,7 +44,7 @@ define([
     name: "plone-barceloneta",
     init: function() {
       var self = this;
-      console.log("hola!");
+
     }
 
   });
