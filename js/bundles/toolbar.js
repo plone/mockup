@@ -584,7 +584,7 @@ define([
 
 
       // XXX important, run pattern mods against overlays
-      $('body').on('show.modal.patterns', function(){
+      $('body').on('rendered.modal.patterns', function(){
         (new Toolbar($(this))); // just run init again...
       });
 
