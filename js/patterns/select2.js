@@ -184,6 +184,10 @@ define([
       {
           self.options.allowNewItems = parseBool(self.options.allowNewItems);
       }
+      else
+      {
+          self.options.allowNewItems = true;
+      }
 
       if (self.options.ajax || self.options.vocabularyUrl) {
         if(self.options.vocabularyUrl) {
@@ -225,7 +229,7 @@ define([
                   results.push({id:query_term, text:query_term});
               }
 
-              if (have_result) {
+              if (have_result || self.options.allowNewItems) {
                 $.each(data.results, function(i, item) {
                     results.push(item);
                 });
