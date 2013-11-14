@@ -769,7 +769,7 @@ test code. Let's first explain some of the dependencies:</p>
   <li>
   <strong>chai</strong> - <a href="http://chaijs.com/">Chai</a> is an assertion
   library complementing the <a href="http://visionmedia.github.io/mocha/">Mocha</a>
-  testing framework, which is what Plone Mockup project uses for tests. The Chai
+  test framework, which is what Plone Mockup project uses for tests. The Chai
   library is quite flexible as it allows you to choose your preferred style for
   making assertions in tests. In our example we use the so-called <em>BDD</em> style,
   allowing for assertions such as <code>expect(result).to.be.above(0).and.not.equal(7)</code>.
@@ -792,9 +792,10 @@ test code. Let's first explain some of the dependencies:</p>
 
 
 
-<p>In the body of our test module we choose the aforementioned BDD style for our
-assertion statements: <code>mocha.setup('bdd')</code>. We also disable jQuery
-animations (<code>$.fx.off = true</code>) for a couple of good reasons:</p>
+<p>In the body of the test module we choose the aforementioned
+<a href="http://chaijs.com/api/bdd/">BDD style</a> for our assertion statements:
+<code>mocha.setup('bdd')</code>. We also disable jQuery animations
+(<code>$.fx.off = true</code>) for a couple of good reasons:</p>
 
 <ul>
   <li>Asynchronous animations on DOM elements might finish only after the test case
@@ -808,13 +809,15 @@ animations (<code>$.fx.off = true</code>) for a couple of good reasons:</p>
 
 <h4>The <em>describe()</em> Function</h4>
 
-<p>We define a group of test cases using the <strong>describe()</strong> function.
-The first parameter to it is the name of the group, which could be anything really (not
-necessarily <em>"HelloWorld"</em>). The second parameter is a function containing
-the actual test case definitions and/or the definitions of the test case subgroups (yes,
-the <em>describe()</em> function can be nested).</p>
+<p>We define a group of test cases by using the
+<a href="http://visionmedia.github.io/mocha/#interfaces">describe()</a> function
+found in the aforementioned Mocha test framework. The first parameter is the
+name for the test case group, which could be anything, really (and not necessarily
+<em>"HelloWorld"</em>). The second parameter is a function containing the actual test
+case definitions and/or the definitions of the test case subgroups (yes, we can nest
+the <em>describe()</em> function).</p>
 
-<p>In our example we only have a single test case and it's defined by a call to the
+<p>In our example we only have a single test case and it is defined by a call to the
 <strong>it()</strong> function. We first provide a descriptive name for the test
 case, which makes it very easy to see, what this test case expects from the
 pattern under test (<em>'It should change label text to "Hello, world!"'</em>).
@@ -828,11 +831,14 @@ again to see, whether the pattern has indeed changed the text to
 framework calls this function before each test case is run, giving us the
 opportunity to perform some initialization and setup work in it. This way we don't
 have to repeat the same common initializiation tasks separately in each test case,
-resulting in a more readable and maintainable code.</p>
+resulting in a more readable and maintainable code. In our concrete example, all
+that we do in <em>beforeEach()</em> is create a jQuery object representing an HTML
+label, which later serves as a convenient test polygon for the Hello World pattern.</p>
 
-<p>In our example above, all we do in <em>beforeEach()</em> is create a jQuery object
-representing an HTML label, which later serves as a convenient test polygon for the
-Hello World pattern.</p>
+<p>Note that regarding the tests, we have only scratched the surface here. Describing
+all the options the test framework provides is beyond the scope of this tutorial.
+To learn more about how to write tests, please consult Mocha's
+<a href="http://visionmedia.github.io/mocha/">documentation</a>.</p>
 
 
 <h3>Running the Tests</h3>
