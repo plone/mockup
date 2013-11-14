@@ -34,14 +34,6 @@ define([
 ], function($, Base) {
   "use strict";
 
-  function parseBool(value) {
-    if (typeof value === "boolean") return value;
-    if (typeof value === "number") return value === 0 ? false : true;
-    if (typeof value !== "string") return undefined;
-
-    return value.toLowerCase() === 'true' ? true : false;
-  }
-
   var Select2 = Base.extend({
     name: "select2",
     defaults: {
@@ -180,14 +172,8 @@ define([
     init: function() {
       var self = this;
 
-      if (self.options.hasOwnProperty ('allowNewItems'))
-      {
-          self.options.allowNewItems = parseBool(self.options.allowNewItems);
-      }
-      else
-      {
-          self.options.allowNewItems = true;
-      }
+      self.options.allowNewItems = self.options.hasOwnProperty ('allowNewItems') ?
+            JSON.parse(self.options.allowNewItems) : true;
 
       if (self.options.ajax || self.options.vocabularyUrl) {
         if(self.options.vocabularyUrl) {
