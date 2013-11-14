@@ -777,7 +777,7 @@ define([
       self.trigger('beforeDraw');
       self.$modal.remove();
       self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
-      self.render.apply(self, [options]);
+      self.render.apply(self, [options || self.options]);
       self.positionModal();
       registry.scan(self.$modal);
       self.trigger('afterDraw');

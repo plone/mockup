@@ -83,6 +83,7 @@ define([
       });
 
       // apply formUnloadAlert pattern where enableUnloadProtection exists
+      // XXX not working
       $match = self.$el.filter('.enableUnloadProtection');
       $match = $match.add(self.$el.find('.enableUnloadProtection'));
       $match.addClass('pat-formunloadalert');
@@ -167,7 +168,9 @@ define([
         .patternModal(loginOptions);
 
       /*** Contact form ***/
-      $('#siteaction-contact > a', self.$el).addClass('pat-modal');
+      $('#siteaction-contact > a', self.$el)
+        .addClass('pat-modal')
+        .patternModal();
 
       /*** Register form ***/
       var registerOptions = {
@@ -305,19 +308,30 @@ define([
         .patternModal(renameOptions);
 
       /*** Delete action ***/
-      function processDelete(modal, responseBody, state, xhr, form) {
-        modal.redraw(responseBody);
-        modal.$el.on('hidden.modal.patterns', function(e) {
-            // We want to send the user to the containing folder *after* the status messages
-            // have been displayed, and the user has closed the modal
-            window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
-        });
-      }
       var delete_action = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete', self.$el);
-      delete_action.addClass('pat-modal');
-      delete_action.on('render.modal.patterns', function(e, modal) {
-        modal.options.actionOptions.onSuccess = processDelete;
-      });
+      delete_action
+        .addClass('pat-modal')
+        .patternModal({
+          actionOptions: {
+            onSuccess: function(modal, responseBody, state, xhr, form) {
+              modal.$el.on('afterDraw.modal.patterns', function(e){
+                // cleanup modal here, we only want to show the status
+                var $info = $('.portalMessage.info', modal.$modal);
+                if($info.length > 0){
+                  var $modalBody = $('.modal-body', modal.$modal);
+                  $modalBody.empty();
+                  $modalBody.append($info);
+                }
+              });
+              modal.redraw(responseBody);
+              modal.$el.on('hidden.modal.patterns', function(e) {
+                // We want to send the user to the containing folder *after* the status messages
+                // have been displayed, and the user has closed the modal
+                window.parent.location = modal.options.ajaxUrl.split('/').slice(0, -2).join('/');
+              });
+            }
+          }
+        });
 
       // Dropdown {{{
 
