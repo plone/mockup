@@ -193,11 +193,13 @@ define([
         });
         $form.trigger('submit');
 
+        self.showLoading(false);
         $form.ajaxSubmit({
           timeout: options.timeout,
           data: extraData,
           url: url,
             error: function(xhr, textStatus, errorStatus) {
+              self.$loading.hide();
               if (textStatus === 'timeout' && options.onTimeout) {
                 options.onTimeout.apply(self, xhr, errorStatus);
               // on "error", "abort", and "parsererror"
@@ -209,6 +211,7 @@ define([
               self.trigger('formActionError', [xhr, textStatus, errorStatus]);
             },
             success: function(response, state, xhr, form) {
+              self.$loading.hide();
               // if error is found (NOTE: check for both the portal errors
               // and the form field-level errors)
               if ($(options.error, response).size() !== 0 ||
@@ -589,6 +592,12 @@ define([
         'right': '0',
         'top': '0'
       });
+      if(self.modalInitialized()){
+        var zIndex = self.$modal.css('zIndex');
+        if(zIndex){
+          self.$loading.css('zIndex', parseInt(zIndex, 10) + 1);
+        }
+      }
     },
     findPosition: function(horpos, vertpos, margin, modalWidth, modalHeight,
                            wrapperInnerWidth, wrapperInnerHeight) {
@@ -660,6 +669,10 @@ define([
 
       return returnpos;
     },
+    modalInitialized: function(){
+      var self = this;
+      return self.$modal !== null && self.$modal !== undefined;
+    },
     // re-position modal at any point.
     //
     // Uses:
@@ -671,7 +684,7 @@ define([
       var self = this;
 
       // modal isn't initialized
-      if(self.$modal === null || self.$modal === undefined) { return; }
+      if(!self.modalInitialized()) { return; }
 
       // clear out any previously set styling
       self.$modal.removeAttr('style');
