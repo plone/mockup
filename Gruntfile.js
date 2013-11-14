@@ -36,7 +36,7 @@ module.exports = function(grunt) {
   docs_files['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
   docs_files['docs/dev/js/config.js'] = 'js/config.js';
 
-  requirejsOptions.optimize = 'uglify';
+  requirejsOptions.optimize = 'uglify2';
 
   // Project configuration.
   grunt.initConfig({
@@ -188,9 +188,15 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
+      widgets: {
+        files: {
+          'build/widgets.js': ['js/bundles/widgets_develop.js']
+        }
+      },
       toolbar: {
         files: {
-          'build/toolbar_init.min.js': ['js/iframe_init.js']
+          'build/toolbar_init.min.js': ['js/iframe_init.js'],
+          'build/toolbar.js': ['js/bundles/toolbar_develop.js']
         }
       },
       docs: {
@@ -363,7 +369,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sed');
 
   grunt.registerTask('widgets-files', '', function() {
-    grunt.file.copy('js/bundles/widgets_develop.js', 'build/widgets.js');
     grunt.file.delete('build/widgets.css');
     grunt.file.write('build/widgets.css', '');
 
@@ -388,7 +393,6 @@ module.exports = function(grunt) {
     grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-spritemap@2x.png');
   });
   grunt.registerTask('toolbar-files', '', function() {
-    grunt.file.copy('js/bundles/toolbar_develop.js', 'build/toolbar.js');
 
     grunt.file.delete('build/toolbar.css');
     grunt.file.delete('build/toolbar_init.css');
@@ -449,6 +453,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
+      'uglify:widgets',
       'less:widgets',
       'cssmin:widgets',
       'widgets-files',
