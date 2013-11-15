@@ -14,6 +14,6 @@ script:
   - make test-ci
 after_success:
   - cd docs
-  - if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID -       ↪1))"; fi
+  - if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))"; fi
   - cd ..
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
