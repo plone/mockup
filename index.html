@@ -445,21 +445,21 @@ of some HTML label to "Hello, World!". So let's get started!</p>
 a file called <em>hello.js</em> in it with the following contents:</p>
 
 <pre>
-define([
+<strong>define</strong>([
     'jquery',
-    'mockup-patterns-base'
+    <strong>'mockup-patterns-base'</strong>
 ], function ($, Base) {
     "use strict";
 
-    var HelloWorld = Base.extend({
+    var HelloWorld = <strong>Base.extend</strong>({
         name: 'helloworld',
-        init: function () {
-            var $label = this.$el;
+        <strong>init</strong>: function () {
+            var $label = <strong>this.$el</strong>;
             $label.text("Hello, world!");
         }
     });
 
-    return HelloWorld;
+    <strong>return HelloWorld;</strong>
 });
 </pre>
 <strong>XXX: syntax highlighting?</strong>
@@ -484,8 +484,14 @@ to use these dependencies in our module's code.</p>
 method and pass the module definition to it. The latter is just an object with
 some properties, and as you can see the object describing our Hello World pattern is
 in fact very simple. It only contains a <var>name</var> property definining its name
-and an <var>init()</var> method. The latter does the actual work of changing the label's
-text to "Hello, world!".</p>
+and an <strong>init()</strong> method. The latter does the actual work of changing
+the label's text to <em>"Hello, world!"</em>.</p>
+
+<p>You might be wondering what the <code>this.$el</code> construct stands for. It is
+just a reference to the DOM element on which the pattern has been invoked. In this
+context <code>this</code> points to the pattern object itself, while its attribute
+<code>$el</code> is a jQuery object wrapping that DOM element (or sometimes a subtree
+of DOM elements).</p>
 
 
 <h3>Pattern Registration</h3>
