@@ -9,6 +9,11 @@ env:
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
 install:
   - make bootstrap
+  - echo "Host github.com" >> ~/.ssh/config
+  - echo "   Hostname github.com" >> ~/.ssh/config
+  - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
+  - echo "   CheckHostIP no" >> ~/.ssh/config
+  - echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
 script:
   - rm -rf docs/dev
   - make docs
