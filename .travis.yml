@@ -21,6 +21,6 @@ after_success:
   - git status
   - git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))"
   - git status
-  - git push https://github.com:plone/mockup.git gh-pages
+  - git push https://github.com/plone/mockup.git gh-pages
   - cd ..
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
