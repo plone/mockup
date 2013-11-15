@@ -91,7 +91,7 @@ define([
       tiny: {
         plugins: [
           "advlist autolink lists charmap print preview anchor ploneupload",
-          "searchreplace visualblocks code fullscreen",
+          "searchreplace visualblocks code fullscreen autoresize",
           "insertdatetime media table contextmenu paste plonelink ploneimage"
         ],
         menubar: "edit table format tools view insert",
@@ -99,7 +99,7 @@ define([
                  "alignleft aligncenter alignright alignjustify | " +
                  "bullist numlist outdent indent | " +
                  "unlink plonelink ploneimage | ploneupload",
-        height: 550
+        autoresize_max_height: 1500
       },
       rel_upload_path: null,
       folder_url: null
@@ -275,7 +275,7 @@ define([
       tinyOptions.skin = false;
 
       self.options.relatedItems.generateImageUrl = function(data, scale){
-        // this is so, in our result and selection template, we can
+        // this is so, in our result and selection template, we can 
         // access getting actual urls from related items
         return self.generateImageUrl.apply(self, [data, scale]);
       };
@@ -317,6 +317,7 @@ define([
         tinyOptions.plugins[0] = tinyOptions.plugins[0].replace('ploneupload', '');
         tinyOptions.toolbar = tinyOptions.toolbar.replace('ploneupload', '');
       }
+
       tinymce.init(tinyOptions);
 
       /* fixes chrome at least,
