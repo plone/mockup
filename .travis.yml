@@ -3,11 +3,17 @@ node_js:
   - 0.10
 env:
   global:
+    - secure: "fPRKgxcbSXyiLqkUjAjPkn5eGBqMqf6c5haTZ9x76sDl1792nDyiL2FXSpiv2s8PeOqMbWgcXly0r+CLXypYkWba9nIxb4bhvtXyDoYAaoBV0lG1NbBakuOwqW/u60WpPJS1qTqmEUSEbSxdntqk7HF1yG6MdMi3PdubxMyw9h0="
     - secure: "kC1ondeLedcnmrpI5McHHjd3AAl0piErC3iCy8hwdJXSkanG36XF0nM3VoiudhJX1c0iTD0uod3cglChRq7stmYsHLlCvWJAf/19+ce6wG7MBw2M31qRRcktIYEPKlm3iMRWy+WwWOivTrjVwWG3/mcCdyeDTvSFFSjtMSqmLOg="
     - secure: "CyxPivnm/mpBX5Def/VlFHthxjMTjlThgd07tiGvd0vtDG1PPNzD0Y0q+4AmBilWZeIu1O1bP1vYMgMQ0rvcXr5K7+wZqoyss+ynRzMzdGLYQSU73zN5THKNeClioR90stsTr9GxX43VvgEIX9W3Zx1eSnmzT+ddnLYL94bAP9Q="
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
 before_install:
   - make bootstrap
 script:
+  - rm -rf docs/dev
   - make test-ci
+after_success:
+  - cd docs
+  - if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID -       ↪1))"; fi
+  - cd ..
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
