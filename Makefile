@@ -62,6 +62,18 @@ docs:
 	mkdir -p docs/dev/lib/tinymce
 	$(GRUNT) docs
 
+docs-publish:
+	if [ "$TRAVIS_PULL_REQUEST" == "false" ];
+	then
+		echo -e "Starting to update gh-pages\n"
+		cd docs
+		ls -la
+		git add -fA .
+		git commit -m "Travis build $TRAVIS_BUILD_NUMBER pushed to gh-pages"
+		git push -fq https://${GH_TOKEN}@github.com/plone/mockup.git gh-pages > /dev/null
+		cd ..
+	fi
+
 clean:
 	mkdir -p build
 	rm -rf build

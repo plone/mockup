@@ -9,18 +9,10 @@ env:
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
 install:
   - make bootstrap
-  - git config credential.helper "store --file=.git/credentials"
-  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  - echo "Host github.com" >> ~/.ssh/config
+  - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
 script:
-  - rm -rf docs/dev
   - make docs
 after_success:
-  - cd docs
-  - git status
-  - git add dev -A
-  - git status
-  - git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))"
-  - git status
-  - git push https://github.com/plone/mockup.git gh-pages
-  - cd ..
+  - make docs-publish
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
