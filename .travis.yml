@@ -11,9 +11,15 @@ install:
   - make bootstrap
 script:
   - rm -rf docs/dev
-  - make docs
+  - make travis-ci
 after_success:
   - cd docs
-  - if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev -A && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))" && git push git@github.com:plone/mockup.git gh-pages; fi
+  - git status
+  - git add dev -A
+  - git status
+  - git commit -a -m "Committed by Travis-CI build number:               ↪$((TRAVIS_JOB_ID - 1))"
+  - git status
+  - git push git@github.com:plone/mockup.git gh-pages
+#- if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev -A && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))" && git push git@github.com:plone/mockup.git gh-pages; fi
   - cd ..
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
