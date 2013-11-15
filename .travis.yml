@@ -11,6 +11,8 @@ install:
   - make bootstrap
   - echo "Host github.com" >> ~/.ssh/config
   - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
+  - git config --global user.email "mockup@garbas.si"
+  - git config --global user.name "Travis CI"
 script:
   - make docs
 after_success:
