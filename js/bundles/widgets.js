@@ -33,14 +33,13 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-base',
-  'mockup-patterns-helloworld',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
   'mockup-patterns-tinymce',
   'mockup-patterns-querystring'
 
-], function($, Registry, Base, HelloWorld, Select2, PickADate, RelatedItems, TinyMCE,
+], function($, Registry, Base, Select2, PickADate, RelatedItems, TinyMCE,
             QueryString) {
   "use strict";
 
