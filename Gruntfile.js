@@ -133,7 +133,7 @@ module.exports = function(grunt) {
       },
       ci: {
         singleRun: true,
-        browsers: ['sauce_chrome'],
+        browsers: ['sauce_chrome', 'sauce_firefox'],
 
         reporters: ['junit', 'coverage'],
         junitReporter: {
@@ -151,13 +151,15 @@ module.exports = function(grunt) {
         customLaunchers: {
           'sauce_chrome': {
              base: 'SauceLabs',
-             platform: 'Windows 8',
-             browserName: 'chrome'
+             platform: 'Windows 7',
+             browserName: 'chrome',
+             version: '31'
            },
           'sauce_firefox': {
              base: 'SauceLabs',
-             platform: 'Windows 8',
-             browserName: 'firefox'
+             platform: 'Windows 7',
+             browserName: 'firefox',
+             version: '25'
            },
            'sauce_ie': {
              base: 'SauceLabs',
