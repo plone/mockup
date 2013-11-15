@@ -41,6 +41,7 @@ var requirejsOptions = {
     'mockup-patterns-expose': 'js/patterns/expose',
     'mockup-patterns-formautofocus': 'js/patterns/formautofocus',
     'mockup-patterns-formunloadalert': 'js/patterns/formunloadalert',
+    'mockup-patterns-helloworld': 'js/patterns/hello',
     'mockup-patterns-livesearch': 'js/patterns/livesearch',
     'mockup-patterns-modal': 'js/patterns/modal',
     'mockup-patterns-pickadate': 'js/patterns/pickadate',
