@@ -14,7 +14,7 @@ install:
   - git config --global user.email "mockup@garbas.si"
   - git config --global user.name "Travis CI"
 script:
-  - make docs
+  - make test-ci
 after_success:
   - make docs-publish
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
