@@ -7,13 +7,13 @@ env:
     - secure: "kC1ondeLedcnmrpI5McHHjd3AAl0piErC3iCy8hwdJXSkanG36XF0nM3VoiudhJX1c0iTD0uod3cglChRq7stmYsHLlCvWJAf/19+ce6wG7MBw2M31qRRcktIYEPKlm3iMRWy+WwWOivTrjVwWG3/mcCdyeDTvSFFSjtMSqmLOg="
     - secure: "CyxPivnm/mpBX5Def/VlFHthxjMTjlThgd07tiGvd0vtDG1PPNzD0Y0q+4AmBilWZeIu1O1bP1vYMgMQ0rvcXr5K7+wZqoyss+ynRzMzdGLYQSU73zN5THKNeClioR90stsTr9GxX43VvgEIX9W3Zx1eSnmzT+ddnLYL94bAP9Q="
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
-before_install:
+install:
   - make bootstrap
 script:
   - rm -rf docs/dev
-  - make test-ci
+  - make docs
 after_success:
   - cd docs
-  - if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))"; fi
+  - if ! git diff-files --check --exit-code --ignore-submodules -- >&2; then git add dev -A && git commit -a -m "Committed by Travis-CI build number: $((TRAVIS_JOB_ID - 1))" && git push git@github.com:plone/mockup.git gh-pages; fi
   - cd ..
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
