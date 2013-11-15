@@ -11,7 +11,7 @@ install:
   - make bootstrap
 script:
   - rm -rf docs/dev
-  - make travis-ci
+  - make docs
 after_success:
   - cd docs
   - git status
