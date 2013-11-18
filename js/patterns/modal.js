@@ -86,6 +86,7 @@ define([
           '  </div>' +
           '  <div class="<%= options.classFooterName %>"> ' +
           '    <%= buttons %> ' +
+          '    <a class="close hiddenStructure">&times;</a>' +
           '  </div>' +
           '</div>'
       },
@@ -362,7 +363,7 @@ define([
         self.trigger('before-events-setup');
 
         // Wire up events
-        $('.modal-header > a.close', self.$modal)
+        $('.modal-header > a.close, .modal-footer > a.close', self.$modal)
           .off('click')
           .on('click', function(e) {
             e.stopPropagation();
