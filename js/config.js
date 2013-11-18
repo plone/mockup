@@ -27,7 +27,7 @@ var requirejsOptions = {
     'jqtree': "bower_components/jqtree/tree.jquery",
     'jquery.event.drag': 'lib/jquery.event.drag',
     'jquery.event.drop': 'lib/jquery.event.drop',
-    'dropzone': "lib/dropzone/downloads/dropzone-amd-module",
+    'dropzone': "bower_components/dropzone/downloads/dropzone-amd-module",
     'mockup-docsapp': 'js/docsapp',
     'mockup-fakeserver': 'tests/fakeserver',
     'mockup-registry': 'js/registry',

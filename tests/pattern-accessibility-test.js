@@ -54,9 +54,9 @@ define([
     });
     it("test cookie remains set", function() {
       var accessibility = new Accessibility(this.$el);
-      expect($.cookie('fontsize'), this.$el).to.be.equal(null);
+      expect($.cookie('fontsize')).to.be.undefined;
       accessibility.setBaseFontSize("smallText", 1);
-      expect($.cookie('fontsize'), this.$el).to.not.equal(null);
+      expect($.cookie('fontsize')).to.be.equal('smallText');
     });
     it("test class is set", function() {
       var accessibility = new Accessibility(this.$el);
