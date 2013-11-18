@@ -92,6 +92,14 @@ define([
           self.options.tags = self.options.tags.split(self.options.separator);
         }
       }
+
+      if (self.options.tags && !self.options.allowNewItems) {
+         self.options.data = $.map (self.options.tags, function (value, i) {
+             return { id: value, text: value };
+         });
+         self.options.multiple = true;
+         delete self.options.tags;
+      }
     },
     initializeOrdering: function(){
       var self = this;
@@ -164,6 +172,9 @@ define([
     init: function() {
       var self = this;
 
+      self.options.allowNewItems = self.options.hasOwnProperty ('allowNewItems') ?
+            JSON.parse(self.options.allowNewItems) : true;
+
       if (self.options.ajax || self.options.vocabularyUrl) {
         if(self.options.vocabularyUrl) {
           self.options.multiple = true;
@@ -198,12 +209,17 @@ define([
                 data_ids.push(item.id);
               });
               results = [];
-              if (query_term !== ''  && $.inArray(query_term, data_ids) === -1) {
-                results.push({id:query_term, text:query_term});
+
+              var have_result = query_term === '' || $.inArray(query_term, data_ids) >= 0;
+              if (self.options.allowNewItems && !have_result) {
+                  results.push({id:query_term, text:query_term});
               }
-              $.each(data.results, function(i, item) {
-                results.push(item);
-              });
+
+              if (have_result || self.options.allowNewItems) {
+                $.each(data.results, function(i, item) {
+                    results.push(item);
+                });
+              }
             }
             return { results: results };
           }
