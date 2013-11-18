@@ -1,15 +1,3 @@
-/* TEMPORARY */
-.border-radius(@radius) {
-  -webkit-border-radius: @radius;
-     -moz-border-radius: @radius;
-          border-radius: @radius;
-}
-.box-shadow(@shadow) {
-  -webkit-box-shadow: @shadow;
-     -moz-box-shadow: @shadow;
-          box-shadow: @shadow;
-}
-
 .pat-livesearch {
   position: relative;
 }
@@ -27,11 +15,11 @@
   border: 1px solid #DDD;
   *border-right-width: 2px;
   *border-bottom-width: 2px;
-  .border-radius(6px);
-  .box-shadow(0 5px 10px rgba(0,0,0,.2));
+  border-radius: 6px;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
   -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
-  background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
 
   // Aligns the dropdown menu to right
   &.pull-right {
@@ -54,7 +42,7 @@
     li {
       padding: 5px;
       display: block;
-      .border-radius(3px);
+      border-radius: 3px;
 
       p {
         margin: 0;
