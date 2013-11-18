@@ -1,7 +1,6 @@
 @import "../bower_components/bootstrap/less/variables.less";
 @import "../bower_components/bootstrap/less/mixins.less";
 @import "../bower_components/font-awesome/less/font-awesome.less";
-@FontAwesomePath: "@{pathPrefix}../bower_components/font-awesome/font";
 @import "pattern.select2.less";
 
 .pattern-relateditems-dropdown {
@@ -60,7 +59,8 @@
     padding-left: 20px;
 
     &.selectable:after {
-      .icon(@circle-blank);
+      //.fa();
+      //.fa-circle-o();
       position: absolute;
       left: 0;
       font-size: 14px;
@@ -76,7 +76,8 @@
   &.pattern-relateditems-active {
     .pattern-relateditems-result-select {
       &.selectable:after {
-        .icon(@circle);
+        //.fa();
+        //.fa-circle();
       }
     }
   }
@@ -94,7 +95,8 @@
       height: 36px;
       line-height: 36px;
       &:after {
-        .icon(@chevron-right);
+        //.fa();
+        //.fa-chevron-circle-right();
       }
     }
   }

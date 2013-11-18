@@ -265,7 +265,7 @@ module.exports = function(grunt) {
       },
       'widgets-fontawesome': {
         path: 'build/widgets.min.css',
-        pattern: '../bower_components/font-awesome/font/fontawesome-webfont',
+        pattern: '../bower_components/font-awesome/fonts/fontawesome-webfont',
         replacement: '++resource++plone.app.widgets-fontawesome-webfont'
       },
       'widgets-select2png': {
@@ -300,7 +300,7 @@ module.exports = function(grunt) {
       },
       'toolbar-fontawesome': {
         path: 'build/toolbar.min.css',
-        pattern: '../bower_components/font-awesome/font/fontawesome-webfont',
+        pattern: '../bower_components/font-awesome/fonts/fontawesome-webfont',
         replacement: '++resource++plone.app.toolbar-fontawesome-webfont'
       },
       'toolbar-select2png': {
@@ -345,7 +345,7 @@ module.exports = function(grunt) {
       },
       'docs-fontawesome': {
         path: 'docs/dev/docs.min.css',
-        pattern: '../bower_components/font-awesome/font/fontawesome-webfont',
+        pattern: '../bower_components/font-awesome/fonts/fontawesome-webfont',
         replacement: 'fontawesome-webfont'
       },
       'docs-icomoon': {
@@ -373,10 +373,10 @@ module.exports = function(grunt) {
     grunt.file.delete('build/widgets.css');
     grunt.file.write('build/widgets.css', '');
 
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.eot', 'build/widgets-fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.woff', 'build/widgets-fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.ttf', 'build/widgets-fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.svg', 'build/widgets-fontawesome-webfont.svg');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.eot', 'build/widgets-fontawesome-webfont.eot');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.woff', 'build/widgets-fontawesome-webfont.woff');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', 'build/widgets-fontawesome-webfont.ttf');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.svg', 'build/widgets-fontawesome-webfont.svg');
 
     grunt.file.copy('bower_components/select2/select2.png', 'build/widgets-select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/widgets-select2-spinner.gif');
@@ -390,8 +390,8 @@ module.exports = function(grunt) {
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/widgets-icomoon-small.woff');
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/widgets-icomoon-small.ttf');
 
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'build/widgets-spritemap.png');
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-spritemap@2x.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/widgets-spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-spritemap@2x.png');
   });
   grunt.registerTask('toolbar-files', '', function() {
 
@@ -404,10 +404,10 @@ module.exports = function(grunt) {
     grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'build/toolbar-glyphicons-halflings.png');
     grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'build/toolbar-glyphicons-halflings-white.png');
 
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.eot', 'build/toolbar-fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.woff', 'build/toolbar-fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.ttf', 'build/toolbar-fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.svg', 'build/toolbar-fontawesome-webfont.svg');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.eot', 'build/toolbar-fontawesome-webfont.eot');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.woff', 'build/toolbar-fontawesome-webfont.woff');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', 'build/toolbar-fontawesome-webfont.ttf');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.svg', 'build/toolbar-fontawesome-webfont.svg');
 
     grunt.file.copy('bower_components/select2/select2.png', 'build/toolbar-select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/toolbar-select2-spinner.gif');
@@ -421,8 +421,8 @@ module.exports = function(grunt) {
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/toolbar-icomoon-small.woff');
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/toolbar-icomoon-small.ttf');
 
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'build/toolbar-spritemap.png');
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-spritemap@2x.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/toolbar-spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-spritemap@2x.png');
   });
   grunt.registerTask('docs-files', '', function() {
     grunt.file.copy('lib/tinymce/tinymce.min.js', 'docs/dev/lib/tinymce/tinymce.min.js');
@@ -432,10 +432,10 @@ module.exports = function(grunt) {
     grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'docs/dev/glyphicons-halflings.png');
     grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'docs/dev/glyphicons-halflings-white.png');
 
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.eot', 'docs/dev/fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.woff', 'docs/dev/fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.ttf', 'docs/dev/fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.svg', 'docs/dev/fontawesome-webfont.svg');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.eot', 'docs/dev/fontawesome-webfont.eot');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.woff', 'docs/dev/fontawesome-webfont.woff');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', 'docs/dev/fontawesome-webfont.ttf');
+    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.svg', 'docs/dev/fontawesome-webfont.svg');
 
     grunt.file.copy('bower_components/select2/select2.png', 'docs/dev/select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'docs/dev/select2-spinner.gif');
@@ -448,8 +448,8 @@ module.exports = function(grunt) {
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'docs/dev/icomoon-small.svg');
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'docs/dev/icomoon-small.woff');
     grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'docs/dev/icomoon-small.ttf');
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'docs/dev/spritemap.png');
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/spritemap@2x.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'docs/dev/spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/spritemap@2x.png');
   });
 
   grunt.registerTask('compile-widgets', [
