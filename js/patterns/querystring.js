@@ -37,7 +37,7 @@ define([
     defaults: {
       indexWidth: '20em',
       placeholder: 'Select criteria',
-      remove: 'remove line',
+      remove: '',
       results: ' items matching your search.',
       days: 'days',
       betweendt: 'to',
