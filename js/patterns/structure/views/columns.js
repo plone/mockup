@@ -81,13 +81,14 @@ define([
 
       return this;
     },
-    applyButtonClicked: function(e){
+    applyButtonClicked: function(){
       var self = this;
       this.hide();
       self.app.activeColumns = [];
       self.$('input:checked').each(function(){
         self.app.activeColumns.push($(this).val());
       });
+      self.app.setCookieSetting('activeColumns', this.app.activeColumns);
       self.app.tableView.render();
     }
   });
