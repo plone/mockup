@@ -190,7 +190,7 @@ define([
             .appendTo('body')
             .patternModal()
             .on('show.modal.patterns', function(e, modal){
-                var event = $.Event ('keydown')
+                var event = $.Event ('keydown');
                 event.which = event.keyCode = 13;
                 $('.modal form').trigger (event);
                 server.respond();
