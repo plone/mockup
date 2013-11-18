@@ -6,11 +6,11 @@
   "devDependencies": {
     "almond": "~0.2.6",
     "bower": "~1.2.6",
-    "coveralls": "~2.2.0",
+    "coveralls": "~2.3.0",
     "grunt-cli": "~0.1.9",
-    "grunt-contrib-cssmin": "~0.6.1",
-    "grunt-contrib-jshint": "~0.6.4",
-    "grunt-contrib-less": "~0.7.0",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-less": "~0.8.2",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-karma": "~0.6.2",
@@ -28,7 +28,7 @@
     "karma-sauce-launcher": "~0.1.0",
     "karma-script-launcher": "~0.1.0",
     "lcov-result-merger": "~0.0.1",
-    "mocha": "~1.12.1"
+    "mocha": "~1.14.0"
   },
   "maintainers": [
     {
