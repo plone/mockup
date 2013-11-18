@@ -184,6 +184,26 @@ define([
       server.respond(); // XXX could not get autorespond to work
     });
 
+    it("handles form submits with enter key", function(done) {
+        var server = this.server;
+        $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
+            .appendTo('body')
+            .patternModal()
+            .on('show.modal.patterns', function(e, modal){
+                var event = $.Event ('keydown')
+                event.which = event.keyCode = 13;
+                $('.modal form').trigger (event);
+                server.respond();
+            })
+            .on('formActionSuccess.modal.patterns', function() {
+                var title = $('.modal-header').find('h3').text();
+                expect(title).to.equal('Form submitted');
+                done();
+            })
+            .click();
+        server.respond();
+    });
+
     describe("modal positioning (findPosition) ", function() {
       //
       // -- CHANGE POSITION ONLY ----------------------------------------------
