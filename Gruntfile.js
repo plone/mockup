@@ -263,31 +263,31 @@ module.exports = function(grunt) {
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       },
-      'widgets-fontawesome': {
-        path: 'build/widgets.min.css',
-        pattern: '../bower_components/font-awesome/fonts/fontawesome-webfont',
-        replacement: '++resource++plone.app.widgets-fontawesome-webfont'
-      },
       'widgets-select2png': {
-        path: 'build/widgets.min.css',
+        path: 'build/widgets.css',
         pattern: 'select2.png',
         replacement: '++resource++plone.app.widgets-select2.png'
       },
       'widgets-select2spinnergif': {
-        path: 'build/widgets.min.css',
+        path: 'build/widgets.css',
         pattern: 'select2-spinner.gif',
         replacement: '++resource++plone.app.widgets-select2-spinner.gif'
       },
-      'widgets-icomoon': {
-        path: 'build/widgets.min.css',
-        pattern: 'fonts/icomoon',
-        replacement: '++resource++plone.app.widgets-icomoon'
+      'widgets-glyphicons': {
+        path: 'build/widgets.css',
+        pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
+        replacement: '++resource++plone.app.widgets-glyphicons-halflings-regular'
       },
-      'widgets-spritemap': {
-        path: 'build/widgets.min.css',
-        pattern: 'images/spritemap',
-        replacement: 'spritemap'
-      },
+      //'widgets-tinymce-icomoon': {
+      //  path: 'build/widgets.min.css',
+      //  pattern: 'fonts/icomoon',
+      //  replacement: '++resource++plone.app.widgets-tinymce-icomoon'
+      //},
+      //'widgets-dropzone-spritemap': {
+      //  path: 'build/widgets.min.css',
+      //  pattern: 'images/spritemap',
+      //  replacement: '++resource++plone.app.widgets-dropzone-spritemap'
+      //},
       'toolbar-halflings': {
         path: 'build/toolbar.min.css',
         pattern: '../img/glyphicons-halflings.png',
@@ -373,25 +373,25 @@ module.exports = function(grunt) {
     grunt.file.delete('build/widgets.css');
     grunt.file.write('build/widgets.css', '');
 
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.eot', 'build/widgets-fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.woff', 'build/widgets-fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', 'build/widgets-fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.svg', 'build/widgets-fontawesome-webfont.svg');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/widgets-glyphicons-halflings-regular.eot');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/widgets-glyphicons-halflings-regular.svg');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/widgets-glyphicons-halflings-regular.ttf');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', 'build/widgets-glyphicons-halflings-regular.woff');
 
     grunt.file.copy('bower_components/select2/select2.png', 'build/widgets-select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/widgets-select2-spinner.gif');
 
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/widgets-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/widgets-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/widgets-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/widgets-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/widgets-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/widgets-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/widgets-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/widgets-icomoon-small.ttf');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/widgets-tinymce-icomoon.eot');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/widgets-tinymce-icomoon.svg');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/widgets-tinymce-icomoon.woff');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/widgets-tinymce-icomoon.ttf');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/widgets-tinymce-icomoon-small.eot');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/widgets-tinymce-icomoon-small.svg');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/widgets-tinymce-icomoon-small.woff');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/widgets-tinymce-icomoon-small.ttf');
 
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/widgets-spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-spritemap@2x.png');
+    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/widgets-dropzone-spritemap.png');
+    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-dropzone-spritemap@2x.png');
   });
   grunt.registerTask('toolbar-files', '', function() {
 
@@ -456,13 +456,13 @@ module.exports = function(grunt) {
       'requirejs:widgets',
       'uglify:widgets',
       'less:widgets',
-      'cssmin:widgets',
-      'widgets-files',
-      'sed:widgets-fontawesome',
+      'sed:widgets-glyphicons',
       'sed:widgets-select2png',
       'sed:widgets-select2spinnergif',
-      'sed:widgets-icomoon',
-      'sed:widgets-spritemap'
+      'cssmin:widgets',
+      'widgets-files',
+      //'sed:widgets-tinymce-icomoon',
+      //'sed:widgets-dropzone-spritemap'
       ]);
   grunt.registerTask('compile-toolbar', [
       'requirejs:toolbar',
