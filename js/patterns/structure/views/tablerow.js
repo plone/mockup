@@ -51,6 +51,7 @@ define([
       }
       data.attributes = this.model.attributes;
       data.activeColumns = this.app.activeColumns;
+      data.availableColumns = this.app.availableColumns;
       this.$el.html(this.template(data));
       var attrs = this.model.attributes;
       this.$el.addClass('state-' + attrs.review_state).

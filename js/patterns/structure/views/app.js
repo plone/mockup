@@ -45,7 +45,8 @@ define([
   'js/patterns/structure/views/textfilter',
   'js/patterns/structure/collections/result',
   'js/patterns/structure/collections/selected',
-  'mockup-patterns-dropzone'
+  'mockup-patterns-dropzone',
+  'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, SelectionButtonView,
@@ -85,9 +86,11 @@ define([
     sort_order: 'ascending',
     additionalCriterias: [],
     pasteSelection: null,
+    cookieSettingPrefix: '_fc_',
     initialize: function(){
       var self = this;
       BaseView.prototype.initialize.call(self);
+      self.setAllCookieSettings();
 
       self.collection = new ResultCollection([], {
         url: self.options.collectionUrl
@@ -458,6 +461,31 @@ define([
       }
 
       return self;
+    },
+    getCookieSetting: function(name, _default){
+      if(_default === undefined){
+        _default = null;
+      }
+      var val;
+      try{
+        val = $.cookie(this.cookieSettingPrefix + name);
+        val = $.parseJSON(val).value;
+      }catch(e){
+        /* error parsing json, load default here now */
+        return _default;
+      }
+      if(val === undefined || val === null){
+        return _default;
+      }
+      return val;
+    },
+    setCookieSetting: function(name, val){
+      $.cookie(this.cookieSettingPrefix + name,
+               JSON.stringify({'value': val})
+      );
+    },
+    setAllCookieSettings: function(){
+      this.activeColumns = this.getCookieSetting('activeColumns', this.activeColumns);
     }
   });
 
