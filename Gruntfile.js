@@ -505,7 +505,7 @@ module.exports = function(grunt) {
   grunt.registerTask('ci', [
       'jshint',
       'karma:dev_once',
-      'karma:ci',
+//      'karma:ci',
       'compile-widgets',
       'compile-toolbar',
       'docs'
