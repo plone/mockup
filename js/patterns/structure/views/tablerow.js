@@ -67,34 +67,42 @@ define([
       return this;
     },
     itemClicked: function(e){
-      if(this.model.attributes.is_folderish){
-        // go to this folder now
+      /* check if this should just be opened in new window */
+      var keyEvent = this.app.keyEvent;
+      if(keyEvent && keyEvent.ctrlKey){
+        /* control held down, let's open in new window */
+        var win = window;
+        if (win.parent !== window) {
+          win = win.parent;
+        }
+        var url = this.model.attributes.getURL + '/view';
+        win.open(url);
+      }else if(this.model.attributes.is_folderish){
+        // it's a folder, folder down path and show in contents window.
         e.preventDefault();
         this.app.queryHelper.currentPath = this.model.attributes.path;
         this.app.collection.pager();
       }
     },
     itemSelected: function(){
-      var remove = false;
       var checkbox = this.$('input')[0];
       if(checkbox.checked){
         this.app.selectedCollection.add(this.model);
       }else{
         this.app.selectedCollection.removeResult(this.model);
-        remove = true;
       }
 
-      var app = this.app;
       var selectedCollection = this.selectedCollection;
 
       /* check for shift click now */
-      if(this.app.shift_clicked && this.app.last_selected &&
+      var keyEvent = this.app.keyEvent;
+      if(keyEvent && keyEvent.shiftKey && this.app.last_selected &&
             this.app.last_selected.parentNode !== null){
         var $el = $(this.app.last_selected);
         var last_checked_index = $el.index();
         var this_index = this.$el.index();
         this.app.tableView.$('input[type="checkbox"]').each(function(){
-          var $el = $(this);
+          $el = $(this);
           var index = $el.parents('tr').index();
           if((index > last_checked_index && index < this_index) ||
               (index < last_checked_index && index > this_index)){

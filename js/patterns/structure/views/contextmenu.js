@@ -180,7 +180,13 @@ define([
       var uid = self.$active.attr('data-UID');
       var model = self.app.collection.findWhere({UID: uid});
 
-      win.location = model.attributes.getURL + '/view';
+      var url = model.attributes.getURL + '/view';
+      var keyEvent = this.app.keyEvent;
+      if(keyEvent && keyEvent.ctrlKey){
+        win.open(url);
+      }else{
+        win.location = url;
+      }
     }
   });
 

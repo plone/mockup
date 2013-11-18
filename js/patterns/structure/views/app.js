@@ -190,10 +190,9 @@ define([
         }
       });
 
-      /* detect shift clicks */
-      self.shift_clicked = false;
+      /* detect key events */
       $(document).bind('keyup keydown', function(e){
-        self.shift_clicked = e.shiftKey;
+        self.keyEvent = e;
       });
 
     },
