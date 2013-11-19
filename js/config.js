@@ -14,7 +14,7 @@ var requirejsOptions = {
     'bootstrap-dropdown': 'bower_components/bootstrap/js/dropdown',
     'bootstrap-collapse': 'bower_components/bootstrap/js/collapse',
     'bootstrap-alert': 'bower_components/bootstrap/js/alert',
-    'bootstrap-tooltip': 'bower_components/bootstrap/js/bootstrap-tooltip',
+    'bootstrap-tooltip': 'bower_components/bootstrap/js/tooltip',
     'select2': 'bower_components/select2/select2',
     'tinymce': 'lib/tinymce/tinymce.min',
     'chai': 'bower_components/chai/chai',

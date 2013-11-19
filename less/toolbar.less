@@ -1,12 +1,5 @@
 @import "mixins.less";
-@import "../bower_components/bootstrap/less/bootstrap.less";
-@import "../bower_components/bootstrap/less/responsive.less";
-@iconSpritePath: "@{pathPrefix}../bower_components/bootstrap/img/glyphicons-halflings.png";
-
-@import "../bower_components/font-awesome/less/font-awesome.less";
-@import "../bower_components/font-awesome/less/mixins.less";
-@FontAwesomePath: "@{pathPrefix}../bower_components/font-awesome/font";
-
+@import "plonetoolbar.less";
 @import "pattern.autotoc.less";
 @import "pattern.pickadate.less";
 @import "pattern.expose.less";
@@ -19,7 +12,8 @@
 @import "pattern.querystring.less";
 @import "pattern.structure.less";
 
-@import "plonetoolbar.less";
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/fonts/";
 
 
 body {
@@ -76,9 +70,9 @@ body {
   }
 
   .backdrop {
-    background-color: @white;
+    background-color: #FFFFFF;
     position: absolute;
-    .border-radius(6px);
+    border-radius: 6px;
   }
   form { margin: 1em 0 2em 0; }
 
@@ -130,7 +124,8 @@ body {
       margin: 0 0.4em;
       cursor: pointer;
       
-      .icon(@calendar);
+      .glyphicon();
+      .glyphicon-calendar();
 
       display: inline;
       width: auto;
@@ -180,14 +175,13 @@ body {
   }
   dl.portalMessage {
     .alert();
-    .alert-block();
     &.info { .alert-info(); }
     &.error {
-      .alert-error();
+      .alert-warning();
       dd { background: transparent; }
     }
     dt {
-      .border-radius(0);
+      border-radius: 0;
       float: none;
       font-size: 1.2em;
       line-height: 1.25em;
@@ -203,12 +197,12 @@ body {
   }
   div.field {
     &.error {
-      .control-group.error();
+      .has-warning();
       .fieldRequired { color: transparent; }
-      label { color: @grayDarker; }
+      label { color: @gray-darker; }
       div {
         color: #B94A48;
-        &.formHelp { color: @grayDarker; }
+        &.formHelp { color: @gray-darker; }
       }
       color: #B94A48;
       background: transparent;
@@ -216,7 +210,7 @@ body {
       margin: 0;
       padding: 0;
     }
-    .control-group();
+    .form-group();
     input[type="radio"],
     input[type="checkbox"] {
       float: left;

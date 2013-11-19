@@ -38,6 +38,9 @@ module.exports = function(grunt) {
 
   requirejsOptions.optimize = 'uglify';
 
+  function sed_glyphicons(bundle) {
+  }
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -288,40 +291,30 @@ module.exports = function(grunt) {
       //  pattern: 'images/spritemap',
       //  replacement: '++resource++plone.app.widgets-dropzone-spritemap'
       //},
-      'toolbar-halflings': {
-        path: 'build/toolbar.min.css',
-        pattern: '../img/glyphicons-halflings.png',
-        replacement: '++resource++plone.app.toolbar-glyphicons-halflings.png'
-      },
-      'toolbar-glyphiconswhite': {
-        path: 'build/toolbar.min.css',
-        pattern: '../img/glyphicons-halflings-white.png',
-        replacement: '++resource++plone.app.toolbar-glyphicons-halflings-white.png'
-      },
-      'toolbar-fontawesome': {
-        path: 'build/toolbar.min.css',
-        pattern: '../bower_components/font-awesome/fonts/fontawesome-webfont',
-        replacement: '++resource++plone.app.toolbar-fontawesome-webfont'
-      },
       'toolbar-select2png': {
-        path: 'build/toolbar.min.css',
+        path: 'build/toolbar.css',
         pattern: 'select2.png',
         replacement: '++resource++plone.app.toolbar-select2.png'
       },
       'toolbar-select2spinnergif': {
-        path: 'build/toolbar.min.css',
+        path: 'build/toolbar.css',
         pattern: 'select2-spinner.gif',
         replacement: '++resource++plone.app.toolbar-select2-spinner.gif'
       },
-      'toolbar-icomoon': {
+      'toolbar-glyphicons': {
+        path: 'build/toolbar.css',
+        pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
+        replacement: '++resource++plone.app.toolbar-glyphicons-halflings-regular'
+      },
+      'toolbar-tinymce-icomoon': {
         path: 'build/toolbar.min.css',
         pattern: 'fonts/icomoon',
-        replacement: '++resource++plone.app.toolbar-icomoon'
+        replacement: '++resource++plone.app.toolbar-tinymce-icomoon'
       },
-      'toolbar-spritemap': {
+      'toolbar-dropzone-spritemap': {
         path: 'build/toolbar.min.css',
         pattern: 'images/spritemap',
-        replacement: 'spritemap'
+        replacement: '++resource++plone.app.toolbar-dropzone-spritemap'
       },
       'docs-lessjs': {
         path: 'docs/dev/index.html',
@@ -398,31 +391,26 @@ module.exports = function(grunt) {
     grunt.file.delete('build/toolbar.css');
     grunt.file.delete('build/toolbar_init.css');
     grunt.file.write('build/toolbar.css', '');
-    grunt.file.write('build/toolbar_init.css', '');
-    grunt.file.write('build/toolbar_init.js', '');
 
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'build/toolbar-glyphicons-halflings.png');
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'build/toolbar-glyphicons-halflings-white.png');
-
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.eot', 'build/toolbar-fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.woff', 'build/toolbar-fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', 'build/toolbar-fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.svg', 'build/toolbar-fontawesome-webfont.svg');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/toolbar-glyphicons-halflings-regular.eot');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/toolbar-glyphicons-halflings-regular.svg');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/toolbar-glyphicons-halflings-regular.ttf');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', 'build/toolbar-glyphicons-halflings-regular.woff');
 
     grunt.file.copy('bower_components/select2/select2.png', 'build/toolbar-select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/toolbar-select2-spinner.gif');
 
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/toolbar-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/toolbar-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/toolbar-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/toolbar-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/toolbar-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/toolbar-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/toolbar-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/toolbar-icomoon-small.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/toolbar-tinymce-icomoon.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/toolbar-tinymce-icomoon.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/toolbar-tinymce-icomoon.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/toolbar-tinymce-icomoon.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/toolbar-tinymce-icomoon-small.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/toolbar-tinymce-icomoon-small.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/toolbar-tinymce-icomoon-small.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/toolbar-tinymce-icomoon-small.ttf');
 
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/toolbar-spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-spritemap@2x.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/toolbar-dropzone-spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-dropzone-spritemap@2x.png');
   });
   grunt.registerTask('docs-files', '', function() {
     grunt.file.copy('lib/tinymce/tinymce.min.js', 'docs/dev/lib/tinymce/tinymce.min.js');
@@ -459,24 +447,22 @@ module.exports = function(grunt) {
       'sed:widgets-glyphicons',
       'sed:widgets-select2png',
       'sed:widgets-select2spinnergif',
-      'cssmin:widgets',
-      'widgets-files',
       //'sed:widgets-tinymce-icomoon',
-      //'sed:widgets-dropzone-spritemap'
+      //'sed:widgets-dropzone-spritemap',
+      'cssmin:widgets',
+      'widgets-files'
       ]);
   grunt.registerTask('compile-toolbar', [
       'requirejs:toolbar',
       'uglify:toolbar',
       'less:toolbar',
-      'cssmin:toolbar',
-      'toolbar-files',
-      'sed:toolbar-halflings',
-      'sed:toolbar-glyphiconswhite',
-      'sed:toolbar-fontawesome',
+      'sed:toolbar-glyphicons',
       'sed:toolbar-select2png',
       'sed:toolbar-select2spinnergif',
-      'sed:toolbar-icomoon',
-      'sed:toolbar-spritemap'
+      //'sed:toolbar-tinymce-icomoon',
+      //'sed:toolbar-dropzone-spritemap',
+      'cssmin:toolbar',
+      'toolbar-files'
       ]);
   grunt.registerTask('docs', [
       'uglify:docs',
