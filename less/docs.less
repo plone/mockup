@@ -1,29 +1,21 @@
 @import "mixins.less";
-@import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
-
-@import "../bower_components/bootstrap/less/bootstrap.less";
-@import "../bower_components/bootstrap/less/responsive.less";
-
-@import "../bower_components/font-awesome/less/font-awesome.less";
-@FontAwesomePath: "@{pathPrefix}../bower_components/font-awesome/font";
-
 @import "plonelogo.less";
-@import "pattern.tooltip.less";
+@import "../bower_components/bootstrap/less/bootstrap.less";
 
-/* widgets : will be eventually loaded by DocsApp once we find time */
-@import "pattern.autotoc.less";
-@import "pattern.pickadate.less";
-@import "pattern.expose.less";
-@import "pattern.modal.less";
-@import "pattern.select2.less";
-@import "pattern.relateditems.less";
-@import "pattern.picture.less";
-@import "pattern.livesearch.less";
-@import "pattern.tinymce.less";
-@import "pattern.querystring.less";
-@import "pattern.dropzone.less";
-@import "pattern.structure.less";
-@import "pattern.tree.less";
+
+@font-face {
+  font-family: 'Inconsolata';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Inconsolata'), url(fonts/Inconsolata.woff) format('woff');
+}
+@font-face {
+  font-family: 'Inconsolata';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Inconsolata Bold'), local('Inconsolata-Bold'), url(fonts/InconsolataBold.woff) format('woff');
+}
+
 
 header {
   padding-top: 50px;
@@ -112,7 +104,7 @@ footer {
   padding: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-  border-radius: 10px;  
+  border-radius: 10px;
 }
 
 .shouldenablecookies {
@@ -121,12 +113,12 @@ footer {
   margin: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-  border-radius: 10px;  
+  border-radius: 10px;
 }
 
 
 /*====================================
-        NAVIGATION 
+        NAVIGATION
 ====================================*/
 #nav {
 	width:100%;
@@ -137,20 +129,20 @@ border-radius: 5px;
 -webkit-box-shadow: inset 1px 1px 5px 2px rgba(2, 2, 2, .1);
 box-shadow: inset 1px 1px 5px 2px rgba(2, 2, 2, .1);
 	}
-	
+
 #nav li {
 	display:inline-block;
 	width:20%;
 	text-align:center;
 	padding:10px;
 	}
-	
+
 #nav li a {
 	color:white;
 	}
 
 /*====================================
-        AUDIENCE NAV 
+        AUDIENCE NAV
 ====================================*/
 
 #audienceNav {
@@ -175,12 +167,12 @@ strong {
 {
 	font-size:5em;
 	}
-	
+
 #audienceNav li {
 	list-style-type:none;
 	text-align:center;
 	}
-	
+
 #audienceNav li h3{
 	padding:0px;
 	margin:0px;
@@ -193,17 +185,17 @@ strong {
 #audienceNav li ul li {
 	list-style-type:bullet;
 	text-align:left;
-	
+
 	}
 #audienceNav li ul li i {
 	padding-right:5px;
 
-	}	
-	
-#audienceNav li:nth-of-type(3){
-	
 	}
-	
+
+#audienceNav li:nth-of-type(3){
+
+	}
+
 /*====================================
         DECORATIVE STUFF
 ====================================*/
@@ -247,7 +239,7 @@ padding:5px;
 #textAdjust i.icon-3 {
 
 }
-	
+
 .clear {
 	clear:both;
 	}
@@ -262,8 +254,8 @@ padding:5px;
 }
 
 .table td {
-     
-     
+
+
 }
 
 .table td {

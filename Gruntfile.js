@@ -38,9 +38,6 @@ module.exports = function(grunt) {
 
   requirejsOptions.optimize = 'uglify';
 
-  function sed_glyphicons(bundle) {
-  }
-
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -417,27 +414,20 @@ module.exports = function(grunt) {
 
     grunt.file.copy('index.html', 'docs/dev/index.html');
 
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'docs/dev/glyphicons-halflings.png');
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'docs/dev/glyphicons-halflings-white.png');
-
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.eot', 'docs/dev/fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.woff', 'docs/dev/fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.ttf', 'docs/dev/fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/fonts/fontawesome-webfont.svg', 'docs/dev/fontawesome-webfont.svg');
-
     grunt.file.copy('bower_components/select2/select2.png', 'docs/dev/select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'docs/dev/select2-spinner.gif');
 
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'docs/dev/icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'docs/dev/icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'docs/dev/icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'docs/dev/icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'docs/dev/icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'docs/dev/icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'docs/dev/icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'docs/dev/icomoon-small.ttf');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'docs/dev/spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/spritemap@2x.png');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'docs/dev/tinymce-icomoon.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'docs/dev/tinymce-icomoon.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'docs/dev/tinymce-icomoon.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'docs/dev/tinymce-icomoon.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'docs/dev/tinymce-icomoon-small.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'docs/dev/tinymce-icomoon-small.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'docs/dev/tinymce-icomoon-small.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'docs/dev/tinymce-icomoon-small.ttf');
+
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'docs/dev/dropzone-spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/dropzone-spritemap@2x.png');
   });
 
   grunt.registerTask('compile-widgets', [
