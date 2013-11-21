@@ -313,6 +313,10 @@ define([
           return;
         }
         var $raw = self.$raw.clone();
+        // fix for IE9 bug (see http://bugs.jquery.com/ticket/10550)
+        $('input:checked', $raw).each(function() {
+          if (this.setAttribute) this.setAttribute('checked', 'checked');
+        });
 
         // Object that will be passed to the template
         var tpl_object = {
