@@ -121,10 +121,9 @@ define([
 
     it('ajax vocabulary url configuration', function() {
         var $el = $(
-        ' <input class="pat-select2"' +
-        '        data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
-        '        />'
-        );
+        '<input class="pat-select2"' +
+        '       data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
+        '       />');
 
         registry.scan($el);
         var select2 = $el.data('pattern-select2');
