@@ -191,13 +191,24 @@ module.exports = function(grunt) {
     uglify: {
       widgets: {
         files: {
-          'build/widgets.js': ['js/bundles/widgets_develop.js']
+          'build/widgets.js': [
+            'bower_components/jquery/jquery.js',
+            'bower_components/domready/ready.js',
+            'js/bundles/widgets_develop.js'
+           ]
         }
       },
       toolbar: {
         files: {
-          'build/toolbar_init.min.js': ['js/iframe_init.js'],
-          'build/toolbar.js': ['js/bundles/toolbar_develop.js']
+          'build/toolbar_init.min.js': [
+            'bower_components/domready/ready.js',
+            'js/iframe_init.js'
+          ],
+          'build/toolbar.js': [
+            'bower_components/jquery/jquery.js',
+            'bower_components/domready/ready.js',
+            'js/bundles/toolbar_develop.js'
+            ]
         }
       },
       docs: {

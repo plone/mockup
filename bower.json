@@ -1,6 +1,6 @@
 {
   "name": "plone-mockup",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Plone core patterns",
   "dependencies": {
     "ace": "1.1.1",
@@ -8,6 +8,7 @@
     "backbone.paginator": "0.8.1",
     "bootstrap": "3.0.2",
     "dropzone": "3.7.1",
+    "domready": "7f34949ce7453010c4984fb950eaeb5cfc583f94",
     "font-awesome": "4.0.3",
     "jqtree": "0.18.0",
     "jquery": "1.10.2",
