@@ -34,6 +34,7 @@ var requirejsOptions = {
     'mockup-router': 'js/router',
     'mockup-utils': 'js/utils',
     'mockup-iframe': 'js/iframe',
+    'domready': 'bower_components/domready/ready',
     'mockup-iframe_init': 'js/iframe_init',
     'mockup-patterns-accessibility': 'js/patterns/accessibility',
     'mockup-patterns-autotoc': 'js/patterns/autotoc',
@@ -73,6 +74,7 @@ var requirejsOptions = {
     'underscore': { exports: 'window._' },
     'bootstrap-alert': { deps: ['jquery'] },
     'bootstrap-collapse': { deps: ['jquery'] },
+    'mockup-iframe_init': { deps: ['domready'] },
     'backbone': {
       exports: 'window.Backbone',
       deps: ['underscore', 'jquery']
