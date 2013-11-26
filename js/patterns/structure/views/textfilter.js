@@ -35,11 +35,13 @@ define([
   "use strict";
 
   var TextFilterView = BaseView.extend({
-    tagName: 'form',
+    tagName: 'div',
     className: 'navbar-search pull-right form-search',
     template: _.template(
-      '<div class="input-append">' +
-        '<input type="text" class="search-query" placeholder="Filter">' +
+      '<div class="input-group">' +
+        '<input type="text" class="form-control search-query" placeholder="Filter">' +
+        '<span class="input-group-btn">' +
+        '</span>' +
       '</div>'),
     popoverContent: _.template(
       '<input class="pat-querystring" />'
@@ -64,7 +66,7 @@ define([
         content: this.popoverContent,
         placement: 'left'
       });
-      this.$('div.input-append').append(this.button.render().el);
+      this.$('.input-group-btn').append(this.button.render().el);
       this.$el.append(this.popover.render().el);
       this.popover.$el.addClass('query');
       this.$queryString = this.popover.$('input.pat-querystring');

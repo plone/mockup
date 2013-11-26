@@ -14,8 +14,21 @@
 
 .modal {
     z-index: 1040;
-    .modal-header {
-        min-height: 25px;
+
+    .modal-dialog {
+        width: 100%;
+        .modal-header {
+            min-height: 25px;
+            padding: 7px 10px;
+
+            h3{
+                margin: 0;
+            }
+
+            a.close{
+                margin-top: 2px;
+            }
+        }
     }
 
     &.in {
@@ -31,18 +44,3 @@
     display: none !important;
 }
 
-.modal-dialog {
-    width: 100%;
-}
-
-.modal-header {
-    padding: 7px 10px;
-
-    h3{
-        margin: 0;
-    }
-
-    a.close{
-        margin-top: 2px;
-    }
-}

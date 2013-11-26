@@ -6,7 +6,7 @@
     <tr class="breadcrumbs">
         <td colspan="<%= activeColumns.length + 2 %>">
           <a href="#" data-path="/">
-              <span class="icon icon-home"></span> /
+              <span class="glyphicon glyphicon-home"></span> /
           </a>
         <% _.each(pathParts, function(part, idx, list){
           if(part){
