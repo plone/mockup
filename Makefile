@@ -30,6 +30,9 @@ compile-toolbar:
 	mkdir -p build
 	$(GRUNT) compile-toolbar
 
+compile-structure:
+	$(GRUNT) compile-structure
+
 bootstrap: clean
 	mkdir -p build
 ifdef NIX
@@ -74,4 +77,4 @@ clean:
 clean-all: clean
 	if test -f $(BOWER); then $(BOWER) cache clean; fi
 
-.PHONY: compile bootstrap jshint test test-ci docs clean
+.PHONY: compile bootstrap jshint test test-ci docs clean compile-structure

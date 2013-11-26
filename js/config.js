@@ -59,6 +59,7 @@ var requirejsOptions = {
     'mockup-bundles-widgets': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',
     'mockup-bundles-tiles': 'js/bundles/widgets',
+    'mockup-bundles-structure': 'js/bundles/structure',
     'mockup-patterns-structure': 'js/patterns/structure/pattern',
     'mockup-patterns-dragdrop': 'js/patterns/dragdrop',
     'mockup-patterns-moment': 'js/patterns/moment',
