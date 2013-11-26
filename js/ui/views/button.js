@@ -37,12 +37,12 @@ define([
     tagName: 'a',
     className: 'btn',
     eventPrefix: 'button',
-    context: null,
+    context: 'default',
     attributes: {
       'href': '#'
     },
     tooltip: null,
-    template: '<% if (icon) { %><i class="icon-<%= icon %>"</i><% } %> <%= title %>',
+    template: '<% if (icon) { %><span class="glyphicon glyphicon-<%= icon %>"></span><% } %> <%= title %>',
     events: {
       'click': 'handleClick'
     },
