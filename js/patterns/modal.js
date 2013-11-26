@@ -64,28 +64,35 @@ define([
       loadLinksWithinModal: true,
       prependContent: '.portalMessage',
       templateOptions: {
-        className: "modal",
+        className: "modal fade",
+        classDialog: "modal-dialog",
+        classModal: "modal-content",
         classHeaderName: "modal-header",
         classBodyName: "modal-body",
         classFooterName: "modal-footer",
         classWrapperName: "modal-wrapper",
         classWrapperInnerName: "modal-wrapper-inner",
         classLoadingName: "modal-loading",
-        classActiveName: "active",
+        classActiveName: "in",
         classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
         classContentName: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         template: '' +
           '<div class="<%= options.className %>">' +
-          '  <div class="<%= options.classHeaderName %>">' +
-          '    <a class="close">&times;</a>' +
-          '    <% if (title) { %><h3><%= title %></h3><% } %>' +
-          '  </div>' +
-          '  <div class="<%= options.classBodyName %>">' +
-          '    <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
-          '    <div class="<%= options.classContentName %>"><%= content %></div>' +
-          '  </div>' +
-          '  <div class="<%= options.classFooterName %>"> ' +
-          '    <%= buttons %> ' +
+          '  <div class="<%= options.classDialog %>">' +
+          '    <div class="<%= options.classModal %>">' +
+          '      <div class="<%= options.classHeaderName %>">' +
+          '        <a class="close">&times;</a>' +
+          '        <% if (title) { %><h3><%= title %></h3><% } %>' +
+          '      </div>' +
+          '      <div class="<%= options.classBodyName %>">' +
+          '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
+          '        <div class="<%= options.classContentName %>"><%= content %></div>' +
+          '      </div>' +
+          '      <div class="<%= options.classFooterName %>"> ' +
+          '        <%= buttons %> ' +
+          '        <a class="close hiddenStructure">&times;</a>' +
+          '      </div>' +
+          '    </div>' +
           '  </div>' +
           '</div>'
       },
@@ -306,6 +313,10 @@ define([
           return;
         }
         var $raw = self.$raw.clone();
+        // fix for IE9 bug (see http://bugs.jquery.com/ticket/10550)
+        $('input:checked', $raw).each(function() {
+          if (this.setAttribute) this.setAttribute('checked', 'checked');
+        });
 
         // Object that will be passed to the template
         var tpl_object = {
@@ -341,6 +352,19 @@ define([
         // Render html
         self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
 
+        // In most browsers, when you hit the enter key while a form element is focused
+        // the browser will trigger the form 'submit' event.  Google Chrome also does this,
+        // but not when when the default submit button is hidden with 'display: none'.
+        // The following code will work around this issue:
+        $('form', self.$modal).on ('keydown', function (event) {
+            // ignore keys which are not enter, and ignore enter inside a textarea.
+            if (event.keyCode !== 13 || event.target.nodeName == 'TEXTAREA')
+                return;
+
+            event.preventDefault ();
+            $('input[type=submit], button[type=submit], button:not(type)', this).eq(0).trigger ('click');
+        });
+
         // Setup buttons
         $(options.buttons, self.$modal).each(function() {
           var $button = $(this);
@@ -362,7 +386,7 @@ define([
         self.trigger('before-events-setup');
 
         // Wire up events
-        $('.modal-header > a.close', self.$modal)
+        $('.modal-header > a.close, .modal-footer > a.close', self.$modal)
           .off('click')
           .on('click', function(e) {
             e.stopPropagation();

@@ -121,10 +121,9 @@ define([
 
     it('ajax vocabulary url configuration', function() {
         var $el = $(
-        ' <input class="pat-select2"' +
-        '        data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
-        '        />'
-        );
+        '<input class="pat-select2"' +
+        '       data-pat-select2="vocabularyUrl: select2-users-vocabulary"' +
+        '       />');
 
         registry.scan($el);
         var select2 = $el.data('pattern-select2');
@@ -228,6 +227,48 @@ define([
         first_elem.trigger($.Event('dragend'), {proxy: $proxy});
         expect(first_elem.hasClass('select2-choice-dragging')).to.equal(false);
         expect($('li.dragging').size()).to.equal(0);
+    });
+
+    it('does not allow new items to be added', function() {
+        $('<input type="hidden" class="pat-select2"' +
+          '    data-pat-select2="tags: Red,Yellow,Blue;' +
+          '                     allowNewItems: false;' +
+          '                     width:20em" />'
+        ).appendTo('body');
+        var pattern = $('.pat-select2').patternSelect2();
+        var clock = sinon.useFakeTimers();
+        var $input = $('.select2-input');
+        $input.click().val('AAA');
+        var keyup = $.Event('keyup-change');
+        $input.trigger(keyup);
+        clock.tick(1000);
+
+        var $results = $('li.select2-result-selectable');
+        expect($results.size()).to.equal(0);
+
+        var $no_results = $('li.select2-no-results');
+        expect($no_results.size()).to.equal(1);
+    });
+
+    it('does not allow new items to be added when using ajax', function() {
+        $('<input type="hidden" class="pat-select2"' +
+          '    data-pat-select2="vocabularyUrl: /select2-ajax.json;' +
+          '                     allowNewItems: false;' +
+          '                     width:20em" />'
+        ).appendTo('body');
+        var pattern = $('.pat-select2').patternSelect2();
+        var clock = sinon.useFakeTimers();
+        var $input = $('.select2-input');
+        $input.click().val('AAA');
+        var keyup = $.Event('keyup-change');
+        $input.trigger(keyup);
+        clock.tick(1000);
+
+        var $results = $('li.select2-result-selectable');
+        expect($results.size()).to.equal(0);
+
+        var $no_results = $('li.select2-no-results');
+        expect($no_results.size()).to.equal(1);
     });
 
   });

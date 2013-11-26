@@ -71,7 +71,7 @@ define([
       expect($('.pattern-pickadate-time', self.$el).size()).to.equal(1);
 
       // no value on main element
-      expect(self.$el.attr('value')).to.be.equal(undefined);
+      expect(self.$el.val()).to.be.equal('');
 
       // no picker is open
       expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
@@ -92,7 +92,7 @@ define([
 
       // since time is not selected we still dont expect main element to have
       // value
-      expect($('.pat-pickadate', self.$el).attr('value')).to.be.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
 
       // we open time picker
       $('.pattern-pickadate-time', self.$el).click();
@@ -108,19 +108,19 @@ define([
       expect($('.pattern-pickadate-time', self.$el).attr('data-value')).to.be.equal($selectedTime.attr('data-pick'));
 
       // main element should now have value
-      expect($('.pat-pickadate', self.$el).attr('value')).to.not.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
       // clearing time ...
       $('.picker__button--clear', timeWrapper).click();
 
       // ... should remove value from main element
-      expect($('.pat-pickadate', self.$el).attr('value')).to.be.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
 
       // select time again
       $selectedTime = timeWrapper.find('li').first().next().click();
 
       // main element should now have again value
-      expect($('.pat-pickadate', self.$el).attr('value')).to.not.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
       // clearing date ...
       $('.pattern-pickadate-date', self.$el).click();
@@ -128,14 +128,14 @@ define([
       $('.picker__button--clear', dateWrapper).click();
 
       // ... should also remove value from main element
-      expect($('.pat-pickadate', self.$el).attr('value')).to.be.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
 
       // selecting time again ...
       $selectedTime = timeWrapper.find('li').first().next().click();
 
       // ... should still keep main element value empty since date picker is
       // cleared
-      expect($('.pat-pickadate', self.$el).attr('value')).to.be.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
 
     });
 
@@ -204,7 +204,7 @@ define([
       expect($('.pattern-pickadate-time', self.$el).size()).to.equal(0);
 
       // no value on main element
-      expect(self.$el.attr('value')).to.be.equal(undefined);
+      expect(self.$el.val()).to.be.equal('');
 
       // date picker is not open
       expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
@@ -222,7 +222,7 @@ define([
       expect($('.pattern-pickadate-date', self.$el).attr('data-value')).to.be.equal($selectedDate.attr('data-pick'));
 
       // and also on main element since time element is disabled
-      expect($('.pat-pickadate', self.$el).attr('value')).to.not.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
       // clearing date ...
       $('.pattern-pickadate-date', self.$el).click();
@@ -230,7 +230,7 @@ define([
       $('.picker__button--clear', dateWrapper).click();
 
       // ... should also remove value from main element
-      expect($('.pat-pickadate', self.$el).attr('value')).to.be.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
     });
 
     it('only time element', function() {
@@ -258,7 +258,7 @@ define([
       expect($('.pattern-pickadate-time', self.$el).size()).to.equal(1);
 
       // no value on main element
-      expect(self.$el.attr('value')).to.be.equal(undefined);
+      expect(self.$el.val()).to.be.equal('');
 
       // time picker is not open
       expect(timeWrapper.find('.picker--opened').size()).to.be.equal(0);
@@ -276,13 +276,13 @@ define([
       expect($('.pattern-pickadate-time', self.$el).attr('data-value')).to.be.equal($selectedTime.attr('data-pick'));
 
       // and also on main element since time element is disabled
-      expect($('.pat-pickadate', self.$el).attr('value')).to.not.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
       // clearing date ...
       $('.picker__button--clear', timeWrapper).click();
 
       // ... should also remove value from main element
-      expect($('.pat-pickadate', self.$el).attr('value')).to.be.equal('');
+      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
     });
 
     it('populating date and time picker', function() {

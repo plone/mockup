@@ -41,25 +41,31 @@ define([
     },
     init: function() {
       var self = this;
-      // if this is not a form just return
-      if(!self.$el.is('form')){ return; }
 
-      $(':submit', self.$el).click(function(){
+      // if this is not a form just return
+      if(!self.$el.is('form')){
+        return;
+      }
+
+      $(':submit', self.$el).click(function(e){
+
         // mark the button as clicked
         $(':submit').removeAttr('clicked');
         $(this).attr('clicked', 'clicked');
+
         // if submitting and no opt-out guardClassName is found
         // pop up confirmation dialog
         if ($(this).hasClass(self.options.guardClassName) &&
               !$(this).hasClass(self.options.optOutClassName)){
-          return self._confirm();
+          return self._confirm.call(self);
         }
+
         $(this).addClass(self.options.guardClassName);
       });
 
     },
 
-    _confirm: function(){
+    _confirm: function(e) {
       return window.confirm(this.options.message);
     }
 

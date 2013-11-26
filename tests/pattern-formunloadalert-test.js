@@ -55,14 +55,14 @@ define([
         '</form>');
     });
     afterEach(function() {
-      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var pattern = this.$el.data('pattern-formunloadalert');
       pattern._changed = false;
     });
     it('prevent unload of form with changes', function(done) {
       registry.scan(this.$el);
 
       // current instance of the pattern
-      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var pattern = this.$el.data('pattern-formunloadalert');
       var $select = $('select', this.$el);
 
       expect(pattern._changed).to.be.equal(false);
@@ -92,7 +92,7 @@ define([
       registry.scan(this.$el);
 
       // current instance of the pattern
-      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var pattern = this.$el.data('pattern-formunloadalert');
       var $select = $('select', this.$el);
 
       expect(pattern._changed).to.be.equal(false);
@@ -121,7 +121,7 @@ define([
       registry.scan(this.$el);
       var returnValue = "";
       // current instance of the pattern
-      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var pattern = this.$el.data('pattern-formunloadalert');
       var $select = $('select', this.$el);
 
       // Override the _handle_msg of the pattern as we need to
@@ -157,7 +157,7 @@ define([
         '</div>');
       registry.scan(this.$el);
 
-      var pattern = this.$el.data('pattern-formunloadalert-0');
+      var pattern = this.$el.data('pattern-formunloadalert');
       var $select = $('select', this.$el);
 
       expect(pattern._changed).to.be.equal(false);

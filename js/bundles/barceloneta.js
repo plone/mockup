@@ -21,33 +21,41 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
-
 define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-base',
-  'mockup-patterns-select2',
-  'mockup-patterns-pickadate',
-  'mockup-patterns-relateditems',
-  'mockup-patterns-querystring'
+  'mockup-patterns-livesearch',
+  'mockup-patterns-accessibility',
+  'mockup-patterns-autotoc',
+  // 'mockup-patterns-structure',
+  'mockup-patterns-preventdoublesubmit',
+  'mockup-patterns-formautofocus',
+  'mockup-patterns-modal',
+  'mockup-bundles-widgets',
+  'bootstrap-dropdown',
+  'bootstrap-collapse'
 
-], function($, Registry, Base, Select2, PickADate, RelatedItems, QueryString) {
+], function($, Registry, Base) {
   "use strict";
 
-  var PloneWidgets = Base.extend({
-    name: "plone-widgets",
+  // BBB: we need to hook pattern to classes which plone was using until now
+  var PloneBarceloneta = Base.extend({
+    name: "plone-barceloneta",
     init: function() {
       var self = this;
+
     }
+
   });
 
   // initialize only if we are in top frame
   if (window.parent === window) {
     $(document).ready(function() {
-      $('body').addClass('pat-plone-widgets');
+      $('body').addClass('pat-plone-barceloneta');
       Registry.scan($('body'));
     });
   }
 
-  return PloneWidgets;
+  return PloneBarceloneta;
 });

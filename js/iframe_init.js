@@ -26,66 +26,15 @@
 
 /*jshint scripturl:true */
 
-(function(window, document, undefined) {
+(function (definition) {
 "use strict";
-
-
-/*!
- * domready (c) Dustin Diaz 2012 - License MIT
- * https://github.com/ded/domready
- *
- * Modified just a bit by Rok Garbas 2013
- */
-var domready = function (ready) {
-  /*jshint laxcomma:true, boss:true, scripturl:true, expr:true */
-
-  var fns = [], fn, f = false
-    , doc = document
-    , testEl = doc.documentElement
-    , hack = testEl.doScroll
-    , domContentLoaded = 'DOMContentLoaded'
-    , addEventListener = 'addEventListener'
-    , onreadystatechange = 'onreadystatechange'
-    , readyState = 'readyState'
-    , loadedRgx = hack ? /^loaded|^c/ : /^loaded|c/
-    , loaded = loadedRgx.test(doc[readyState]);
-
-  function flush(f) {
-    loaded = 1;
-    while (f = fns.shift()) f();
+  if (typeof define === 'function' && typeof define.amd === 'object') {
+    define(['domready'], definition);
+  } else {
+    this.IFrame = definition(window.domready);
   }
-
-  doc[addEventListener] && doc[addEventListener](domContentLoaded, fn = function () {
-    doc.removeEventListener(domContentLoaded, fn, f);
-    flush();
-  }, f);
-
-
-  hack && doc.attachEvent(onreadystatechange, fn = function () {
-    if (/^c/.test(doc[readyState])) {
-      doc.detachEvent(onreadystatechange, fn);
-      flush();
-    }
-  });
-
-  return (ready = hack ?
-    function (fn) {
-      self != top ?
-        loaded ? fn() : fns.push(fn) :
-        function () {
-          try {
-            testEl.doScroll('left');
-          } catch (e) {
-            return setTimeout(function() { ready(fn); }, 50);
-          }
-          fn();
-        }();
-    } :
-    function (fn) {
-      loaded ? fn() : fns.push(fn);
-    });
-}();
-
+}(function(domready, undefined) {
+"use strict";
 
 // # IFrame Object
 window.IFrame = function(el) { this.init(el); };
@@ -137,17 +86,17 @@ window.IFrame.prototype = {
           }
 
           if (url.slice(-3) === '.js') {
-            resource = document.createElement('script');
+            resource = window.document.createElement('script');
             resource.src = url;
             resource.type = 'text/javascript';
             resource.async = false;
           } else if (url.slice(-4) === '.css') {
-            resource = document.createElement('link');
+            resource = window.document.createElement('link');
             resource.href = url;
             resource.type = 'text/css';
             resource.rel = 'stylesheet';
           } else if (url.slice(-5) === '.less') {
-            resource = document.createElement('link');
+            resource = window.document.createElement('link');
             resource.href = url;
             resource.type = 'text/css';
             resource.rel = 'stylesheet/less';
@@ -163,7 +112,7 @@ window.IFrame.prototype = {
       }
     } else if (name === 'styles') {
       if (value) {
-        var style_node = document.createElement('style');
+        var style_node = window.document.createElement('style');
         style_node.type = "text/css";
         style_node.textContent = value;
         self.resources += style_node.outerHTML;
@@ -186,7 +135,7 @@ window.IFrame.prototype = {
     self.add(el);
 
     // Create iframe
-    var iframe = document.createElement('iframe');
+    var iframe = window.document.createElement('iframe');
 
     iframe.setAttribute('frameBorder', '0');
     iframe.setAttribute('border', '0');
@@ -197,7 +146,7 @@ window.IFrame.prototype = {
     iframe.setAttribute('style', 'display:none;');
     iframe.setAttribute('src', 'javascript:false');
 
-    document.body.appendChild(iframe);
+    window.document.body.appendChild(iframe);
 
     self.el = iframe;
     self.window = iframe.contentWindow;
@@ -246,16 +195,16 @@ window.IFrame.prototype = {
     if (self.options.position === 'top') {
         self.el.setAttribute('style', self.el.getAttribute('style') +
             'top:0px;');
-        document.body.setAttribute('style',
-            (document.body.getAttribute('style') || '') +
+        window.document.body.setAttribute('style',
+            (window.document.body.getAttribute('style') || '') +
             ';border-top:0' +
             ';margin-top:' + self.el.offsetHeight + 'px;');
 
     } else if(self.options.position === 'bottom') {
         self.el.setAttribute('style', self.el.getAttribute('style') +
             'bottom:0px;');
-        document.body.setAttribute('style',
-            (document.body.getAttribute('style') || '') +
+        window.document.body.setAttribute('style',
+            (window.document.body.getAttribute('style') || '') +
             ';border-bottom:0' +
             ';margin-bottom:' + self.el.offsetHeight + 'px;');
     }
@@ -269,10 +218,10 @@ window.iframe_initialize = function() {
 
   // find [data-iframe] elements in context
   matching = [];
-  if (document.querySelectorAll !== undefined) {
-    matching = document.querySelectorAll('[data-iframe]');
+  if (window.document.querySelectorAll !== undefined) {
+    matching = window.document.querySelectorAll('[data-iframe]');
   } else {
-    var all = document.getElementsByTagName('*');
+    var all = window.document.getElementsByTagName('*');
     for (i = 0; i < all.length; i += 1) {
       if (all[i].getAttribute('data-iframe')) {
         matching.push(all[i]);
@@ -302,4 +251,4 @@ if (window.iframe_initialized !== true) {
   domready(window.iframe_initialize);
 }
 
-}(window, window.document));
+}));

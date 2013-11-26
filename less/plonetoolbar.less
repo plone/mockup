@@ -47,8 +47,8 @@
   }
 
   & > ul.toolbar-dropdown-menu {
-    .border-radius(@radiusSize @radiusSize @radiusSize 0);
-    .box-shadow(0 @radiusSize/2 @radiusSize/2 0 @shadowColor);
+    border-radius: @radiusSize @radiusSize @radiusSize 0;
+    box-shadow: 0 @radiusSize/2 @radiusSize/2 0 @shadowColor;
     color: @fgColor;
     margin: 0;
     padding: 0.5em 0;
@@ -94,7 +94,7 @@
     & > a {
       color: @fgColor;
       background: @bgColor;
-      .border-radius(@radiusSize @radiusSize 0 0);
+      border-radius: @radiusSize @radiusSize 0 0;
       & > span { .ploneStatesToolbar(@bgColor, @shadowColor, @radiusSize); }
     } 
     & > .toolbar-dropdown-menu {
@@ -148,7 +148,7 @@
     ) {
 
   .gradient(@leftBgColor, darken(@leftBgColor,8%), @leftBgColor);
-  .box-shadow(0 @radiusSize/4 @radiusSize/2 @shadowColor);
+  box-shadow: 0 @radiusSize/4 @radiusSize/2 @shadowColor;
   min-height: @size;
   background-color: @leftBgColor;
   border: 0;
@@ -168,7 +168,7 @@
 
     // top blue line
     &.toolbar-top {
-      .box-shadow(0 @radiusSize/4 @radiusSize/4 @shadowColor);
+      box-shadow: 0 @radiusSize/4 @radiusSize/4 @shadowColor;
       height: 0.12*@size;
       background-color: @rightBgColor;
     }
@@ -192,8 +192,8 @@
         }
 
         & > a {
-          .border-radius(@radiusSize);
-          .box-shadow(0 @radiusSize/4 @shadow2Color inset);
+          border-radius: @radiusSize;
+          box-shadow: 0 @radiusSize/4 @shadow2Color inset;
           .gradient(lighten(@leftBgColor,1%), darken(@leftBgColor,11%), lighten(@leftBgColor,1%));
           .transition(0.1s, linear);
           padding-left: 0.272*@size;
@@ -212,7 +212,7 @@
         & > li.toolbar-dropdown > ul.toolbar-dropdown-menu {
           right: @radiusSize/4;
           left: auto;
-          .border-radius(@radiusSize 0 @radiusSize @radiusSize);
+          border-radius: @radiusSize 0 @radiusSize @radiusSize;
         }
       }
     }
@@ -221,9 +221,9 @@
     &.toolbar-right {
       float: right;
       height: 0.77*@size;
-      .border-radius(0 0 0 0.77*@size);
+      border-radius: 0 0 0 0.77*@size;
+      box-shadow: inset 0 -1*@radiusSize/4 @shadow2Color;
       .gradient(@rightBgColor, lighten(@rightBgColor,2%), @rightBgColor);
-      .box-shadow(inset 0 -1*@radiusSize/4 @shadow2Color);
 
       // create top part of swirl
       .toolbar-swirl {
@@ -239,7 +239,7 @@
         div {
           width: 0.72*@size;
           height: 0.72*@size;
-          .border-radius(0 0.77*@size 0 0);
+          border-radius: 0 0.77*@size 0 0;
           .gradient(@leftBgColor, darken(@leftBgColor,8%), @leftBgColor);
         }
       }
@@ -263,7 +263,7 @@
           &.toolbar-dropdown > ul.toolbar-dropdown-menu {
             right: 0;
             left: auto;
-            .border-radius(@radiusSize 0 @radiusSize @radiusSize);
+            border-radius: @radiusSize 0 @radiusSize @radiusSize;
           }
           & > a {
             color: @rightFgColor;
@@ -323,8 +323,8 @@
   &.state-pending,
   &.state-expired {
     padding: @radiusSize/4 @radiusSize;
-    .border-radius(@radiusSize);
-    .box-shadow(0 @radiusSize/4 @radiusSize/2 @shadowColor);
+    border-radius: @radiusSize;
+    box-shadow: 0 @radiusSize/4 @radiusSize/2 @shadowColor;
     color: @color;
   }
 }

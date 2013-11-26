@@ -76,7 +76,7 @@ define([
         '</span>',
       selectionTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>',
+        '<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="pattern-relateditems-iconhome" href="/"></a><%= items %></span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
         '/<a href="<%= path %>"><%= text %></a>',

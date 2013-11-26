@@ -4,10 +4,10 @@
 @import "../bower_components/bootstrap/less/progress-bars.less";
 
 .modal-loading {
-  .progress .bar();
-  .progress.active .bar();
-  .progress-striped .bar();
-  .border-radius(0.5em);
+  .progress-bar();
+  .progress.active .progress-bar();
+  .progress-striped .progress-bar();
+  border-radius: 0.5em;
   width: 40em;
   height: 40px;
 }
@@ -17,8 +17,16 @@
     .modal-header {
         min-height: 25px;
     }
+
+    &.in {
+        display: block !important;
+    }
 }
 
 .backdrop {
     z-index: 1030;
+}
+
+.hiddenStructure {
+    display: none !important;
 }
