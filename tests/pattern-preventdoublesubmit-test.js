@@ -44,9 +44,10 @@ define([
 
   describe("PreventDoubleSubmit", function() {
     beforeEach(function() {
+      var self = this;
       // mock up `_confirm` func
-      this._old_confirm = PreventDoubleSubmit.prototype._confirm;
-      PreventDoubleSubmit.prototype._confirm = function(){
+      self._old_confirm = PreventDoubleSubmit.prototype._confirm;
+      PreventDoubleSubmit.prototype._confirm = function() {
         this.confirmed = true;
       };
     });
@@ -63,16 +64,16 @@ define([
         '</select>' +
         ' <input id="b1" type="submit" value="Submit 1" />' +
         ' <input id="b2" type="submit" class="allowMultiSubmit" value="Submit 2" />' +
-        '</form>');
+        '</form>').on('submit', function(e) { e.preventDefault(); });
       registry.scan($el);
 
       var guardKlass = 'submitting';
       var optOutKlass = 'allowMultiSubmit';
-      var get_confirmed = function(el){
-        return el.data('pattern-preventdoublesubmit-0').confirmed;
+      var get_confirmed = function(el) {
+        return el.data('pattern-preventdoublesubmit').confirmed;
       };
-      var reset_confirmed = function(el){
-        el.data('pattern-preventdoublesubmit-0').confirmed = undefined;
+      var reset_confirmed = function(el) {
+        el.data('pattern-preventdoublesubmit').confirmed = undefined;
       };
 
       var $b1 = $('#b1', $el);
