@@ -28,7 +28,8 @@ define([
   'jquery',
   'mockup-patterns-base',
   'mockup-patterns-select2',
-  'mockup-patterns-pickadate'
+  'mockup-patterns-pickadate',
+  'select2'
 ], function($, Base, Select2, PickADate, undefined) {
   "use strict";
 
