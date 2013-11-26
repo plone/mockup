@@ -66,7 +66,6 @@ define([
     },
 
     _confirm: function(e) {
-      debugger;
       return window.confirm(this.options.message);
     }
 
