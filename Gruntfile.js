@@ -60,7 +60,6 @@ module.exports = function(grunt) {
         exclude: [
           // TODO: we need to fix this tests
           'tests/iframe-test.js',
-          'tests/pattern-formunloadalert-test.js',
         ],
 
         preprocessors: {
