@@ -1,4 +1,4 @@
-<div class="pagination pagination-small pagination-centered">
+<div class="pagination pagination-sm pagination-centered">
 
   <ul>
     <li class="<% if (currentPage === 1) { %>disabled<% } %>">

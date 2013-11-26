@@ -28,8 +28,9 @@ define([
   'chai',
   'jquery',
   'mockup-registry',
-//  'mockup-patterns-structure',
-//  'sinon',
+  'mockup-patterns-structure',
+  'sinon',
+  'mockup-fakeserver'
 ], function(chai, $, registry, Structure, sinon) {
   "use strict";
 
@@ -40,57 +41,26 @@ define([
   $.fx.off = true;
 
    /* ==========================
-   TEST: Select2
+   TEST: Structure
   ========================== */
-/*
   describe("Structure", function() {
     beforeEach(function(){
-      var results = [
-        {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
-        {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
-        {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
-        {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
-      ];
-      var addSomeData = function(list){
-        for(var i=0; i<list.length; i=i+1){
-          var data = list[i];
-          data.getURL = window.location.origin + data.path;
-          data.review_state = 'published';
-          data.CreationDate = 'January 1, 2012';
-          data.ModificationDate = 'January 2, 2012';
-          data.EffectiveDate = 'January 3, 2012';
-          data.Subject = ['one', 'two'];
-          if(data.Type === 'Folder'){
-            data.is_folderish = true;
-          }else{
-            data.is_folderish = false;
-          }
-        }
-      };
-      addSomeData(results);
-      this.server = sinon.fakeServer.create();
-      this.server.autoRespond = true;
-      this.server.respondWith(/relateditems-test.json/, function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "application/json" },
-          JSON.stringify({
-            "total": results.length,
-            "results": results
-          })
-        );
-      });
-    });
-
-    it('initialize', function() {
-      var $el = $('' +
+      this.$el = $('' +
         '<div class="pat-structure" ' +
              'data-pat-structure="vocabularyUrl:/relateditems-test.json;' +
                                  'uploadUrl:/upload;' +
                                  'moveUrl:/moveitem;' +
-                                 'tagsAjaxVocabulary:/select2-test.json;">' +
+                                 'tagsVocabularyUrl:/select2-test.json;' +
+                                 'usersVocabularyUrl:/tests/json/users.json;' +
+                                 'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
+                                 'contextInfoUrl:/tests/json/contextInfo.json;' +
+                                 ' ">' +
         '</div>');
-      registry.scan($el);
-      expect($el.find('.order-support > table').size()).to.equal(1);
+    });
+
+    it('initialize', function() {
+      registry.scan(this.$el);
+      expect(this.$el.find('.order-support > table').size()).to.equal(1);
     });
   });
-*/
 });

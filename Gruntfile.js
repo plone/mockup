@@ -20,8 +20,8 @@ module.exports = function(grunt) {
   karma_files.push({pattern: 'tests/fakeserver*', included: false});
   karma_files.push({pattern: 'tests/*-test.js', included: false});
   karma_files.push({pattern: 'tests/**/*-test.js', included: false});
-  karma_files.push({pattern: 'js/patterns/ui/**/*.js', included: false});
-  karma_files.push({pattern: 'js/patterns/ui/**/*.html', included: false});
+  karma_files.push({pattern: 'js/ui/**/*.js', included: false});
+  karma_files.push({pattern: 'js/ui/**/*.xml', included: false});
   karma_files.push({pattern: 'js/patterns/structure/**/*.js', included: false});
   karma_files.push({pattern: 'js/patterns/structure/**/*.xml', included: false});
   karma_files.push({pattern: 'js/patterns/filemanager/**/*.xml', included: false});

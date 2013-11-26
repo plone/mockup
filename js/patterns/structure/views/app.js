@@ -418,7 +418,6 @@ define([
     },
     render: function(){
       var self = this;
-
       self.$el.append(self.toolbar.render().el);
       self.$el.append(self.wellView.render().el);
       self.$el.append(self.columnsView.render().el);
