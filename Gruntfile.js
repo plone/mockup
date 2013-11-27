@@ -349,16 +349,16 @@ module.exports = function(grunt) {
         pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
         replacement: '++resource++plonetheme.barceloneta-glyphicons-halflings-regular'
       },
-      //'barceloneta-tinymce-icomoon': {
-      //  path: 'build/barceloneta.min.css',
-      //  pattern: 'fonts/icomoon',
-      //  replacement: '++resource++plonetheme.barceloneta-tinymce-icomoon'
-      //},
-      //'barceloneta-dropzone-spritemap': {
-      //  path: 'build/barceloneta.min.css',
-      //  pattern: 'images/spritemap',
-      //  replacement: '++resource++plonetheme.barceloneta-dropzone-spritemap'
-      //},
+      'barceloneta-tinymce-icomoon': {
+        path: 'build/barceloneta.css',
+        pattern: 'fonts/icomoon',
+        replacement: '++resource++plonetheme.barceloneta-tinymce-icomoon'
+      },
+      'barceloneta-dropzone-spritemap': {
+        path: 'build/barceloneta.css',
+        pattern: 'images/spritemap',
+        replacement: '++resource++plonetheme.barceloneta-dropzone-spritemap'
+      },
       'widgets-select2png': {
         path: 'build/widgets.css',
         pattern: 'select2.png',
@@ -374,16 +374,16 @@ module.exports = function(grunt) {
         pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
         replacement: '++resource++plone.app.widgets-glyphicons-halflings-regular'
       },
-      //'widgets-tinymce-icomoon': {
-      //  path: 'build/widgets.min.css',
-      //  pattern: 'fonts/icomoon',
-      //  replacement: '++resource++plone.app.widgets-tinymce-icomoon'
-      //},
-      //'widgets-dropzone-spritemap': {
-      //  path: 'build/widgets.min.css',
-      //  pattern: 'images/spritemap',
-      //  replacement: '++resource++plone.app.widgets-dropzone-spritemap'
-      //},
+      'widgets-tinymce-icomoon': {
+        path: 'build/widgets.css',
+        pattern: 'fonts/icomoon',
+        replacement: '++resource++plone.app.widgets-tinymce-icomoon'
+      },
+      'widgets-dropzone-spritemap': {
+        path: 'build/widgets.css',
+        pattern: 'images/spritemap',
+        replacement: '++resource++plone.app.widgets-dropzone-spritemap'
+      },
       'toolbar-select2png': {
         path: 'build/toolbar.css',
         pattern: 'select2.png',
@@ -467,17 +467,17 @@ module.exports = function(grunt) {
     grunt.file.copy('bower_components/select2/select2.png', 'build/barceloneta-select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/barceloneta-select2-spinner.gif');
 
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/barceloneta-tinymce-icomoon.eot');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/barceloneta-tinymce-icomoon.svg');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/barceloneta-tinymce-icomoon.woff');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/barceloneta-tinymce-icomoon.ttf');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/barceloneta-tinymce-icomoon-small.eot');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/barceloneta-tinymce-icomoon-small.svg');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/barceloneta-tinymce-icomoon-small.woff');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/barceloneta-tinymce-icomoon-small.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/barceloneta-tinymce-icomoon.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/barceloneta-tinymce-icomoon.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/barceloneta-tinymce-icomoon.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/barceloneta-tinymce-icomoon.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/barceloneta-tinymce-icomoon-small.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/barceloneta-tinymce-icomoon-small.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/barceloneta-tinymce-icomoon-small.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/barceloneta-tinymce-icomoon-small.ttf');
 
-    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/barceloneta-dropzone-spritemap.png');
-    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/barceloneta-dropzone-spritemap@2x.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/barceloneta-dropzone-spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/barceloneta-dropzone-spritemap@2x.png');
   });
   grunt.registerTask('widgets-files', '', function() {
     grunt.file.delete('build/widgets.css');
@@ -491,17 +491,17 @@ module.exports = function(grunt) {
     grunt.file.copy('bower_components/select2/select2.png', 'build/widgets-select2.png');
     grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/widgets-select2-spinner.gif');
 
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/widgets-tinymce-icomoon.eot');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/widgets-tinymce-icomoon.svg');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/widgets-tinymce-icomoon.woff');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/widgets-tinymce-icomoon.ttf');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/widgets-tinymce-icomoon-small.eot');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/widgets-tinymce-icomoon-small.svg');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/widgets-tinymce-icomoon-small.woff');
-    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/widgets-tinymce-icomoon-small.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/widgets-tinymce-icomoon.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/widgets-tinymce-icomoon.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/widgets-tinymce-icomoon.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/widgets-tinymce-icomoon.ttf');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/widgets-tinymce-icomoon-small.eot');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/widgets-tinymce-icomoon-small.svg');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/widgets-tinymce-icomoon-small.woff');
+    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/widgets-tinymce-icomoon-small.ttf');
 
-    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/widgets-dropzone-spritemap.png');
-    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-dropzone-spritemap@2x.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/widgets-dropzone-spritemap.png');
+    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-dropzone-spritemap@2x.png');
   });
   grunt.registerTask('toolbar-files', '', function() {
 
@@ -583,8 +583,8 @@ module.exports = function(grunt) {
       'sed:barceloneta-glyphicons',
       'sed:barceloneta-select2png',
       'sed:barceloneta-select2spinnergif',
-      //'sed:barceloneta-tinymce-icomoon',
-      //'sed:barceloneta-dropzone-spritemap',
+      'sed:barceloneta-tinymce-icomoon',
+      'sed:barceloneta-dropzone-spritemap',
       'cssmin:barceloneta',
       'barceloneta-files'
       ]);
@@ -595,8 +595,8 @@ module.exports = function(grunt) {
       'sed:widgets-glyphicons',
       'sed:widgets-select2png',
       'sed:widgets-select2spinnergif',
-      //'sed:widgets-tinymce-icomoon',
-      //'sed:widgets-dropzone-spritemap',
+      'sed:widgets-tinymce-icomoon',
+      'sed:widgets-dropzone-spritemap',
       'cssmin:widgets',
       'widgets-files'
       ]);
@@ -654,6 +654,7 @@ module.exports = function(grunt) {
       'jshint',
       'karma:dev_once',
 //      'karma:ci',
+      'compile-barceloneta',
       'compile-widgets',
       'compile-toolbar',
       'docs'
