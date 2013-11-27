@@ -569,6 +569,7 @@ define([
       }
     },
     guessImageLink: function(src){
+      var self = this;
       if(src.indexOf(self.options.prependToScalePart) !== -1){
         self.linkType = 'image';
         self.$scale.val(self.tinypattern.getScaleFromUrl(src));
