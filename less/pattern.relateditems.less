@@ -59,11 +59,10 @@
 
   .pattern-relateditems-result-select {
     display: block;
-    padding-left: 20px;
 
     &.selectable:after {
-      //.fa();
-      //.fa-circle-o();
+      .glyphicon();
+      .glyphicon-chevron-right();
       position: absolute;
       left: 0;
       font-size: 14px;
@@ -73,15 +72,9 @@
 
       color: @link-color;
     }
-
-  }
-
-  &.pattern-relateditems-active {
-    .pattern-relateditems-result-select {
-      &.selectable:after {
-        //.fa();
-        //.fa-circle();
-      }
+    &.selectable{
+      .glyphicon();
+      .glyphicon-record();
     }
   }
 
@@ -97,10 +90,8 @@
       display: block;
       height: 36px;
       line-height: 36px;
-      &:after {
-        //.fa();
-        //.fa-chevron-circle-right();
-      }
+      .glyphicon();
+      .glyphicon-chevron-right();
     }
   }
 
@@ -108,6 +99,7 @@
     display: block;
     color: #444;
     font-size: 11px;
+    padding-left: 25px;
   }
 }
 
