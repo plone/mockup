@@ -334,6 +334,21 @@ module.exports = function(grunt) {
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       },
+      'barceloneta-ticks.png': {
+        path: 'build/barceloneta.css',
+        pattern: 'images/barceloneta-ticks.png',
+        replacement: '++resource++plonetheme.barceloneta-ticks.png'
+      },
+      'barceloneta-bg-watermark.png': {
+        path: 'build/barceloneta.css',
+        pattern: 'images/barceloneta-bg-watermark.png',
+        replacement: '++resource++plonetheme.barceloneta-bg-watermark.png'
+      },
+      'barceloneta-bg-breadcrumb.png': {
+        path: 'build/barceloneta.css',
+        pattern: 'images/barceloneta-bg-breadcrumb.png',
+        replacement: '++resource++plonetheme.barceloneta-bg-breadcrumb.png'
+      },
       'barceloneta-select2png': {
         path: 'build/barceloneta.css',
         pattern: 'select2.png',
@@ -459,6 +474,21 @@ module.exports = function(grunt) {
     grunt.file.delete('build/barceloneta.css');
     grunt.file.write('build/barceloneta.css', '');
 
+    grunt.file.copy('less/images/barceloneta-apple-touch-icon-114x114-precomposed.png', 'build/barceloneta-apple-touch-icon-114x114-precomposed.png');
+    grunt.file.copy('less/images/barceloneta-apple-touch-icon-144x144-precomposed.png', 'build/barceloneta-apple-touch-icon-144x144-precomposed.png');
+    grunt.file.copy('less/images/barceloneta-apple-touch-icon-57x57-precomposed.png', 'build/barceloneta-apple-touch-icon-57x57-precomposed.png');
+    grunt.file.copy('less/images/barceloneta-apple-touch-icon-72x72-precomposed.png', 'build/barceloneta-apple-touch-icon-72x72-precomposed.png');
+    grunt.file.copy('less/images/barceloneta-apple-touch-icon.png', 'build/barceloneta-apple-touch-icon.png');
+    grunt.file.copy('less/images/barceloneta-apple-touch-icon-precomposed.png', 'build/barceloneta-apple-touch-icon-precomposed.png');
+    grunt.file.copy('less/images/barceloneta-bg-breadcrumb.png', 'build/barceloneta-bg-breadcrumb.png');
+    grunt.file.copy('less/images/barceloneta-bg-watermark.png', 'build/barceloneta-bg-watermark.png');
+    grunt.file.copy('less/images/barceloneta-favicon.ico', 'build/barceloneta-favicon.ico');
+    grunt.file.copy('less/images/barceloneta-ticks.png', 'build/barceloneta-ticks.png');
+
+    grunt.file.copy('less/images/barceloneta-ticks.png', 'less/images/barceloneta-ticks.png');
+    grunt.file.copy('less/images/barceloneta-bg-watermark.png', 'less/images/barceloneta-bg-watermark.png');
+    grunt.file.copy('less/images/barceloneta-bg-breadcrumb.png', 'less/images/barceloneta-bg-breadcrumb.png');
+
     grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/barceloneta-glyphicons-halflings-regular.eot');
     grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/barceloneta-glyphicons-halflings-regular.svg');
     grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/barceloneta-glyphicons-halflings-regular.ttf');
@@ -580,6 +610,9 @@ module.exports = function(grunt) {
       'requirejs:barceloneta',
       'uglify:barceloneta',
       'less:barceloneta',
+      'sed:barceloneta-ticks.png',
+      'sed:barceloneta-bg-watermark.png',
+      'sed:barceloneta-bg-breadcrumb.png',
       'sed:barceloneta-glyphicons',
       'sed:barceloneta-select2png',
       'sed:barceloneta-select2spinnergif',
