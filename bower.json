@@ -11,7 +11,7 @@
     "domready": "7f34949ce7453010c4984fb950eaeb5cfc583f94",
     "font-awesome": "4.0.3",
     "jqtree": "0.18.0",
-    "jquery": "1.10.2",
+    "jquery": "1.8.3",
     "jquery-form": "3.45.0",
     "jquery.cookie": "1.4.0",
     "moment": "2.4.0",
@@ -23,5 +23,8 @@
   },
   "devDependencies": {
     "chai": "1.7.2"
+  },
+  "resolutions": {
+    "jquery": "1.8.3"
   }
 }
