@@ -71,7 +71,7 @@ module.exports = function(grunt) {
         reporters: ['dots', 'progress', 'coverage'],
 
         coverageReporter: {
-          type : 'html',
+          type : 'lcov',
           dir : 'coverage/'
         },
 
@@ -136,10 +136,6 @@ module.exports = function(grunt) {
         reporters: ['junit', 'coverage'],
         junitReporter: {
           outputFile: 'test-results.xml'
-        },
-        coverageReporter: {
-          type : 'lcovonly',
-          dir : 'coverage/'
         },
 
         sauceLabs: {
