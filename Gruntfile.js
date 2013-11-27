@@ -165,6 +165,18 @@ module.exports = function(grunt) {
     },
     requirejs: {
       options: requirejsOptions,
+      // this bundle is used by:
+      //    https://pypi.python.org/pypi/plonetheme.barceloneta
+      barceloneta: {
+        options: {
+          name: 'node_modules/almond/almond.js',
+          include: 'mockup-bundles-barceloneta',
+          insertRequire: ['mockup-bundles-barceloneta'],
+          out: 'build/barceloneta.min.js',
+        }
+      },
+      // this bundle is used by:
+      //    https://pypi.python.org/pypi/plone.app.widgets
       widgets: {
         options: {
           name: 'node_modules/almond/almond.js',
@@ -173,6 +185,8 @@ module.exports = function(grunt) {
           out: 'build/widgets.min.js',
         }
       },
+      // this bundle is used by:
+      //    https://pypi.python.org/pypi/plone.app.toolbar
       toolbar: {
         options: {
           name: 'node_modules/almond/almond.js',
@@ -181,6 +195,8 @@ module.exports = function(grunt) {
           out: 'build/toolbar.min.js'
         }
       },
+      // this bundle is used by:
+      //    https://pypi.python.org/pypi/wildcard.foldercontents
       structure: {
         options: {
           optimize: 'none',
@@ -192,6 +208,15 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
+      barceloneta: {
+        files: {
+          'build/barceloneta.js': [
+            'bower_components/jquery/jquery.js',
+            'bower_components/domready/ready.js',
+            'js/bundles/barceloneta_develop.js'
+           ]
+        }
+      },
       widgets: {
         files: {
           'build/widgets.js': [
@@ -219,6 +244,14 @@ module.exports = function(grunt) {
       }
     },
     less: {
+      barceloneta: {
+        options: {
+          paths: ['less']
+        },
+        files: {
+          'build/barceloneta.css': 'less/barceloneta.less'
+        }
+      },
       widgets: {
         options: {
           paths: ['less']
@@ -254,6 +287,14 @@ module.exports = function(grunt) {
       }
     },
     cssmin: {
+      barceloneta: {
+        expand: true,
+        cwd: 'build/',
+        src: ['barceloneta.css'],
+        dest: 'build/',
+        ext: '.min.css',
+        report: 'min'
+      },
       widgets: {
         expand: true,
         cwd: 'build/',
@@ -293,6 +334,31 @@ module.exports = function(grunt) {
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       },
+      'barceloneta-select2png': {
+        path: 'build/barceloneta.css',
+        pattern: 'select2.png',
+        replacement: '++resource++plonetheme.barceloneta-select2.png'
+      },
+      'barceloneta-select2spinnergif': {
+        path: 'build/barceloneta.css',
+        pattern: 'select2-spinner.gif',
+        replacement: '++resource++plonetheme.barceloneta-select2-spinner.gif'
+      },
+      'barceloneta-glyphicons': {
+        path: 'build/barceloneta.css',
+        pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
+        replacement: '++resource++plonetheme.barceloneta-glyphicons-halflings-regular'
+      },
+      //'barceloneta-tinymce-icomoon': {
+      //  path: 'build/barceloneta.min.css',
+      //  pattern: 'fonts/icomoon',
+      //  replacement: '++resource++plonetheme.barceloneta-tinymce-icomoon'
+      //},
+      //'barceloneta-dropzone-spritemap': {
+      //  path: 'build/barceloneta.min.css',
+      //  pattern: 'images/spritemap',
+      //  replacement: '++resource++plonetheme.barceloneta-dropzone-spritemap'
+      //},
       'widgets-select2png': {
         path: 'build/widgets.css',
         pattern: 'select2.png',
@@ -389,6 +455,30 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-sed');
 
+  grunt.registerTask('barceloneta-files', '', function() {
+    grunt.file.delete('build/barceloneta.css');
+    grunt.file.write('build/barceloneta.css', '');
+
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/barceloneta-glyphicons-halflings-regular.eot');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/barceloneta-glyphicons-halflings-regular.svg');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/barceloneta-glyphicons-halflings-regular.ttf');
+    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', 'build/barceloneta-glyphicons-halflings-regular.woff');
+
+    grunt.file.copy('bower_components/select2/select2.png', 'build/barceloneta-select2.png');
+    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/barceloneta-select2-spinner.gif');
+
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/barceloneta-tinymce-icomoon.eot');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/barceloneta-tinymce-icomoon.svg');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/barceloneta-tinymce-icomoon.woff');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/barceloneta-tinymce-icomoon.ttf');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/barceloneta-tinymce-icomoon-small.eot');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/barceloneta-tinymce-icomoon-small.svg');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/barceloneta-tinymce-icomoon-small.woff');
+    //grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/barceloneta-tinymce-icomoon-small.ttf');
+
+    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/barceloneta-dropzone-spritemap.png');
+    //grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/barceloneta-dropzone-spritemap@2x.png');
+  });
   grunt.registerTask('widgets-files', '', function() {
     grunt.file.delete('build/widgets.css');
     grunt.file.write('build/widgets.css', '');
@@ -465,7 +555,6 @@ module.exports = function(grunt) {
     grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'build/toolbar-spritemap.png');
     grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-spritemap@2x.png');
   });
-
   grunt.registerTask('docs-files', '', function() {
     grunt.file.copy('lib/tinymce/tinymce.min.js', 'docs/dev/lib/tinymce/tinymce.min.js');
 
@@ -487,6 +576,18 @@ module.exports = function(grunt) {
     grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/dropzone-spritemap@2x.png');
   });
 
+  grunt.registerTask('compile-barceloneta', [
+      'requirejs:barceloneta',
+      'uglify:barceloneta',
+      'less:barceloneta',
+      'sed:barceloneta-glyphicons',
+      'sed:barceloneta-select2png',
+      'sed:barceloneta-select2spinnergif',
+      //'sed:barceloneta-tinymce-icomoon',
+      //'sed:barceloneta-dropzone-spritemap',
+      'cssmin:barceloneta',
+      'barceloneta-files'
+      ]);
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
       'uglify:widgets',
