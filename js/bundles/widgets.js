@@ -29,8 +29,8 @@ define([
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
-  'mockup-patterns-querystring'
-
+  'mockup-patterns-querystring',
+  'mockup-patterns-tinymce'
 ], function($, Registry, Base, Select2, PickADate, RelatedItems, QueryString) {
   "use strict";
 
