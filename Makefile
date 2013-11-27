@@ -20,7 +20,12 @@ compile: compile-widgets compile-toolbar
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
 	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
+	# cp build/barceloneta* path/to/plonetheme.barceloneta/plonetheme/barceloneta/static    #
 	# ----------------------------------------------------------------------- #
+
+compile-barceloneta:
+	mkdir -p build
+	$(GRUNT) compile-barceloneta
 
 compile-widgets:
 	mkdir -p build

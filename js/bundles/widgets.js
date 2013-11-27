@@ -31,7 +31,7 @@ define([
   'mockup-patterns-relateditems',
   'mockup-patterns-querystring',
   'mockup-patterns-tinymce'
-], function($, Registry, Base, Select2, PickADate, RelatedItems, QueryString) {
+], function($, Registry, Base) {
   "use strict";
 
   var PloneWidgets = Base.extend({

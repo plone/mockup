@@ -25,17 +25,15 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-base',
+  'mockup-bundles-widgets',
   'mockup-patterns-livesearch',
   'mockup-patterns-accessibility',
   'mockup-patterns-autotoc',
-  // 'mockup-patterns-structure',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
   'mockup-patterns-modal',
-  'mockup-bundles-widgets',
   'bootstrap-dropdown',
   'bootstrap-collapse'
-
 ], function($, Registry, Base) {
   "use strict";
 
