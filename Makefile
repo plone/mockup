@@ -16,7 +16,7 @@ endif
 
 all: compile jshint test-ci docs
 
-compile: compile-widgets compile-toolbar
+compile: compile-barceloneta compile-widgets compile-toolbar
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static    #
 	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static    #
