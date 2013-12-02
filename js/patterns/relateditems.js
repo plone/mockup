@@ -127,7 +127,7 @@ define([
       var self = this;
       self.trigger('before-browse');
       self.currentPath = path;
-      if (path === '/' && self.options.mode == 'search') {
+      if (path === '/' && self.options.mode === 'search') {
         self.deactivateBrowsing();
       } else {
         self.activateBrowsing();
@@ -294,6 +294,7 @@ define([
         self.deactivateBrowsing();
         self.browsing = false;
       }else{
+        self.activateBrowsing();
         self.browsing = true;
       }
 
