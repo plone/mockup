@@ -46,6 +46,7 @@ define([
       separator: ",",
       orderable: true,
       cache: true,
+      mode: 'search', // possible values are search and browse
       closeOnSelect: false,
       basePath: '/',
       searchText: 'Search:',
@@ -126,7 +127,7 @@ define([
       var self = this;
       self.trigger('before-browse');
       self.currentPath = path;
-      if (path === '/') {
+      if (path === '/' && self.options.mode == 'search') {
         self.deactivateBrowsing();
       } else {
         self.activateBrowsing();
@@ -289,7 +290,12 @@ define([
       self.$browsePath = $('<span class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);
 
-      self.deactivateBrowsing();
+      if(self.options.mode === 'search'){
+        self.deactivateBrowsing();
+        self.browsing = false;
+      }else{
+        self.browsing = true;
+      }
 
       self.$el.on("select2-selecting", function(event) {
         event.preventDefault();
