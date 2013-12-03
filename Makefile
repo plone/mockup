@@ -1,6 +1,6 @@
 
 NIX_PATH = $(HOME)/.nix-defexpr/channels/
-NIX := $(shell which nix-build | egrep '^/' | head -1)
+NIX := $(shell which nix-buixld | egrep '^/' | head -1)
 UNAME := $(shell uname)
 
 GIT = git

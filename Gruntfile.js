@@ -214,6 +214,11 @@ module.exports = function(grunt) {
             'bower_components/jquery/jquery.js',
             'bower_components/domready/ready.js',
             'js/bundles/barceloneta_develop.js'
+           ],
+          'build/barceloneta-legacy.js': [
+            'bower_components/html5shiv/dist/html5shiv.js',
+            'bower_components/respond/dest/respond.matchmedia.addListener.src.js',
+            'bower_components/respond/dest/respond.src.js'
            ]
         }
       },
