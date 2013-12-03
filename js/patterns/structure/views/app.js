@@ -431,9 +431,20 @@ define([
 
       /* dropzone support */
       if(self.options.uploadUrl){
+        /* add upload button to toolbar */
+        var uploadBtn = new ButtonView({
+          title: 'Upload',
+          context: 'success',
+          icon: 'upload'
+        });
+        self.toolbar.$el.append(uploadBtn.render().el);
+        uploadBtn.on('button:click', function(){
+          self.dropzone.hiddenFileInput.click();
+        });
         self.dropzone = new DropZone(self.$el, {
           className: 'structure-dropzone',
-          clickable: false,
+          //clickable: false,
+          clickable: $('<div/>')[0],
           url: self.getAjaxUrl(self.options.uploadUrl),
           autoCleanResults: true,
           success: function(e, data){
