@@ -461,6 +461,8 @@ define([
           // because this can change depending on the folder we're in
           self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
         });
+        /* allow multiple to upload at once */
+        $(self.dropzone.hiddenFileInput).attr('multiple', 'true');
       }
 
       // Backdrop class
