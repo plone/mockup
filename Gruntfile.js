@@ -225,10 +225,10 @@ module.exports = function(grunt) {
       widgets: {
         files: {
           'build/widgets.js': [
-            'bower_components/jquery/jquery.js',
+            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
             'bower_components/domready/ready.js',
             'bower_components/requirejs/require.js',
-            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
+            'bower_components/jquery/jquery.js',
             'js/bundles/widgets_develop.js'
            ]
         }
@@ -237,13 +237,13 @@ module.exports = function(grunt) {
         files: {
           'build/toolbar_init.min.js': [
             'bower_components/domready/ready.js',
-            'bower_components/requirejs/require.js',
-            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
             'js/iframe_init.js'
           ],
           'build/toolbar.js': [
-            'bower_components/jquery/jquery.js',
+            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
             'bower_components/domready/ready.js',
+            'bower_components/requirejs/require.js',
+            'bower_components/jquery/jquery.js',
             'js/bundles/toolbar_develop.js'
             ]
         }

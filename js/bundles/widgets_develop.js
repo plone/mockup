@@ -9,7 +9,7 @@
     script1.onload = function() {
       requirejs.config({ baseUrl: '++resource++mockup/' });
       if (document.querySelectorAll('[data-iframe="plone-toolbar"]').length !== 0){
-          require(['mockup-bundles-widgets']);
+        require(['mockup-bundles-widgets']);
       } else {
         require(['mockup-bundles-widgets', 'mockup-iframe_init']);
       }
@@ -27,6 +27,8 @@
       style2.innerHTML = '@import (less) "/++resource++mockup/less/iframe_init.less"; @isBrowser: true; @pathPrefix: \'/++resource++mockup/less/\';';
       document.getElementsByTagName("head")[0].appendChild(style2);
     }
+
+    less.refresh();
 
   });
 
