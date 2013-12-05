@@ -1,14 +1,17 @@
-/* Formautofocus pattern.
+/* Helloworld pattern.
  *
  * Options:
- *    condition(string): TODO ('div.error')
- *    target(string): TODO ("div.error :input:not(.formTabs):visible:first')
- *    always(string): TODO (:input:not(.formTabs):visible:first')
+ *      color(string): TODO ('black')
+ *      bgcolor(string): TODO ('yellow')
  *
  * Documentation:
- *    # TODO
+ *      # Example
+ *
+ *      {{ example-1 }}
  *
  * Example: example-1
+ *      <p class="pat-helloworld">Hello in default</p>
+ *      <p class="pat-helloworld" data-pat-helloworld="bgcolor:Red">Hello in Red</p>
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
@@ -26,33 +29,25 @@
  *    with this program; if not, write to the Free Software Foundation, Inc.,
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-
 define([
-  'jquery',
-  'mockup-patterns-base'
-], function($, Base, undefined) {
-  "use strict";
+    'jquery',
+    'mockup-patterns-base'
+], function ($, Base) {
+    "use strict";
 
-  var FormAutoFocus = Base.extend({
-    name: 'formautofocus',
-    defaults: {
-      condition: "div.error",
-      target: "div.error :input:not(.formTabs):visible:first",
-      always: ":input:not(.formTabs):visible:first"
-    },
-    init: function() {
-      var self = this;
-      if ($(self.options.condition, self.$el).size() !== 0) {
-        $(self.options.target, self.$el).focus();
-      }
-      else{
-        $(self.options.always, self.$el).focus();
-      }
+    var HelloWorld = Base.extend({
+        name: 'helloworld',
+        defaults: {
+            'color': 'black',
+            'bgcolor': 'yellow'
+        },
+        init: function () {
+            this.$el.css({
+                'color': this.options.color,
+                'background': this.options.bgcolor
+            });
+        }
+    });
 
-    }
-  });
-
-  return FormAutoFocus;
-
+    return HelloWorld;
 });

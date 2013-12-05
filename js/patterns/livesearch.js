@@ -1,28 +1,61 @@
-// Pattern which Plone livesearch functionality on an input
-//
-// Author: Ryan Foster
-// Contact: ryan@rynamic.com
-// Version: 1.0
-//
-// Adapted from livesearch.js in Plone.
-//
-// License:
-//
-// Copyright (C) 2013 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Livesearch pattern.
+ *
+ * Options:
+ *    url(string): The server-side url that will be queried. (null)
+ *    delay(integer): Delay in ms after user types before searching. (200)
+ *    highlight(string): CSS class that will be used to highlight items on keyboard navigation. ('pattern-livesearch-highlight')
+ *    minimumInputLength(integer): Number of characters user must type before search begins. (3)
+ *    input(string): Selector for element that will be used for the livesearch input. ('.pattern-livesearch-input')
+ *    toggleTarget(string): Selector for element that will be shown when results are found. ('.pattern-livesearch-container')
+ *    toggleClass(string): CSS class that will be added to target toggle element when results are found. ('show')
+ *    positionToggleWithInput(boolean): Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called. (true)
+ *    setPosition(function): Function which will be used to set the position of the toggle element. (look at source)
+ *    resultsTarget(string): Selector for element where results from the server will be inserted. ('.pattern-livesearch-results')
+ *    resultsContainerTemplate(string): Template for the element that will contain results. If resultContainerTemplateSelector is set, this will not be used. ('<ul></ul>')
+ *    resultsContainerTemplateSelector(string): Selector for an element in the DOM to use in place of resultContainerTemplate. (null)
+ *    resultsAppendTo(string): Selector for element within results to append to ('ul')
+ *    resultSelector(string): Will be used to select result items from within the result container. ('.pattern-livesearch-result')
+ *    resultTemplate(string): Will be used to select result items from within the result container. ('<li class="pat-livesearch-result pat-livesearch-type-<%= Type %>"><a class="pat-livesearch-result-title" href="<%= getURL %>"><%= Title %></a><p class="pat-livesearch-result-desc"><%= Description %></p></li>')
+ *    resultTemplateSelector(string): Selector for element to be used in place of resultTemplate. (null)
+ *    helpTemplate(string): Template for the element that will contain help messages, such as 'No results found.' or 'Type 3 more characters to search.' ('<div class="pattern-livesearch-help"><%= help %></div>')
+ *    helpTemplateSelector(string): Element in the DOM to be used instead of helpTemplate. (null)
+ *    typeMoreTemplate(string): Template for message which is displayed if the current input length is less than minimumInputLength. ('Type <%= more %> more character<%= more === 1 ? "" : "s" %> to search.')
+ *    typeMoreTemplateSelector(string): Element in the DOM to be used instead of typeMoreTemplate. (null)
+ *    noResultsTemplate(string): Template for message that is displayed after a search when no results were found. ('No results found.')
+ *    noResultsTemplateSelector(string): Element in the DOM to be used instead of noResultsTemplate. (null)
+ *    searchingTemplate(string): Template for message which will be displayed after a search has started and before it has ended. ('Searching...')
+ *    searchingTemplateSelector(string): Element in the DOM to be used instead of searchingTemplate. (null)
+ *
+ * Documentation:
+ *    # Example
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <div class="pat-livesearch"
+ *         data-pat-livesearch="url: /search.json;">
+ *      <input type="text" class="pat-livesearch-input" placeholder="Search" />
+ *      <div class="pat-livesearch-container">
+ *        <div class="pat-livesearch-results"></div>
+ *      </div>
+ *    </div>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([
@@ -30,7 +63,7 @@ define([
   'underscore',
   'mockup-patterns-base',
   'mockup-patterns-toggle',
-  'mockup-patterns-select2',
+  'mockup-patterns-select2', // TODO: is this still a dependency
   'mockup-patterns-queryhelper'
 ], function($, _, Base, Toggle, Select2, QueryHelper) {
   "use strict";

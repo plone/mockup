@@ -1,28 +1,42 @@
-// Pattern which adds support for checking if the user has his cookies enabled
-// when logging in, and also to ask if he accepts that the site can use
-// cookies.
-//
-// Author: Franco Pellegrini
-// Contact: frapell@gmail.com
-// Version: 1.0
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Cookie Directive pattern.
+ *
+ * Options:
+ *    allowMsg(string): Allow Text on button used to allow cookies.
+ *    askPermissionMsg(string): A message about allowing cookies. (This site uses cookies to provide additional functionality, do you accept?)
+ *    cookieName(string): Name of cookie used to store the value of this setting. ('Allow_Cookies_For_Site')
+ *    denyMsg(string): Text on button used to deny cookies. (Deny)
+ *    shouldAsk(boolean): Should user be prompted about cookies? (true)
+ *    shouldEnable(boolean): Display a message about enabling cookies if they are disabled. (true)
+ *    shouldEnableMsg(string): A message about enabling cookies if they are disabled, which will be displayed if shouldEnable is true. (You should enable cookies to be able to login.)
+ *    shouldEnableSelector(string): shouldEnable message selector. ('.login')
+ *
+ * Documentation:
+ *    # TODO: example is not working
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <div class="pat-cookiedirective">
+ *      <div class="login">
+ *      </div>
+ *    </div>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

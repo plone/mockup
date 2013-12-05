@@ -1,28 +1,69 @@
-// expose pattern.
-//
-// Author: Rok Garbas
-// Contact: rok@garbas.si
-// Version: 1.0
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Expose pattern.
+ *
+ * Options:
+ *    backdrop(string): Selector of parent element to use as backdrop. ('body')
+ *    backdropCloseOnClick(boolean): Cancel expose on click if true. (true)
+ *    backdropCloseOnEsc(boolean): Cancel expose on escape if true. (true)
+ *    backdropClassName(string): TODO ('backdrop')
+ *    backdropClassActiveName(string): TODO ('backdrop-active')
+ *    backdropOpacity(float): Backdrop opacity value between 0 and 1. (0.8)
+ *    backdropZIndex(integer): Z-index of backdrop overlay. (null)
+ *    classActiveName(string): TODO ('active')
+ *    triggers(string): Events that cause the expose feature to be triggered. ('focusin')
+ *
+ * Documentation:
+ *    # Expose on focus event (default)
+ *
+ *    {{ example-1 }}
+ *
+ *    # Expose on hover
+ *
+ *    {{ example-2 }}
+ *
+ * Example: example-1
+ *    <form id="mockup-expose" class="form-horizontal pat-expose">
+ *      <div class="control-group">
+ *        <label class="control-label" for="inputEmail">Email</label>
+ *        <div class="controls">
+ *          <input type="text" id="inputEmail" placeholder="Email">
+ *        </div>
+ *      </div>
+ *      <div class="control-group">
+ *        <label class="control-label" for="inputPassword">Password</label>
+ *        <div class="controls">
+ *          <input type="password" id="inputPassword" placeholder="Password">
+ *        </div>
+ *      </div>
+ *      <div class="control-group">
+ *        <div class="controls">
+ *          <label class="checkbox">
+ *            <input type="checkbox"> Remember me
+ *          </label>
+ *          <button type="submit" class="btn">Sign in</button>
+ *        </div>
+ *      </div>
+ *    </form>
+ *
+ * Example: example-2
+ *    <button type="submit" class="btn btn-large pat-expose"
+ *            data-pat-expose="triggers:hover">Hover over this button</button>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

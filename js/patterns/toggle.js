@@ -1,28 +1,38 @@
-// toggle pattern.
-//
-// Author: Rok Garbas
-// Contact: rok@garbas.si
-// Version: 1.0
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Toggle pattern.
+ *
+ * Options:
+ *    attribute(string): element attribute which will be toggeled ('class')
+ *    event(string): event which will trigger toggling ('click')
+ *    externalClose(bool): TODO (true)
+ *    preventDefault(bool): TODO (true)
+ *    menu('global', 'parent', 'parents', 'children', 'child', 'siblings'): a jquery selector function that specifies where in relation to $el the list to use is. 'global' is special and will be the default and select in the entire document  ('global')
+ *
+ * Documentation:
+ *    # Example 
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <button type="button"
+ *            class="btn btn-default pat-toggle"
+ *            data-pat-toggle="value:btn-lg;externalClose:false">This button goes bigger/smaller!</button>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([
@@ -38,10 +48,7 @@ define([
       event: 'click',
       externalClose: true,
       preventDefault: true,
-      menu: 'global' // global, parent, parents, children, child, siblings -- optional,
-                     // a jquery selector function that specifies where in
-                     // relation to $el the list to use is. 'global' is special
-                     // and will be the default and select in the entire document
+      menu: 'global'
     },
     ensureBool: function(value) {
       if (typeof(value) === 'string') {

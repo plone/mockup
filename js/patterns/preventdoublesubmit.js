@@ -1,28 +1,38 @@
-// Pattern which provide some basic form helpers:
-// - prevent forms to be submitted twice w/out warning
-// This is going to replace 'Products/CMFPlone/skins/plone_ecmascript/formsubmithelpers.js'
-//
-// Author: Simone Orsi
-// Contact: simahawk@gmail.com
-// Version: 1.0
-//
-// License:
-//
-// Copyright (C) 2013 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* PreventDoubleSubmit pattern.
+ *
+ * Options:
+ *    guardClassName(string): Class applied to submit button after it is clicked once. ('submitting')
+ *    optOutClassName(string): Class used to opt-out a submit button from double-submit prevention. ('allowMultiSubmit')
+ *    message(string): Message to be displayed when "opt-out" submit button is clicked a second time. ('You already clicked the submit button. Do you really want to submit this form again?')
+ *
+ * Documentation:
+ *    # Example
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
+ *      <input type="text" value="submit this value please!" />
+ *      <input class="btn btn-large btn-primary" type="submit" value="Single submit" />
+ *      <input class="btn btn-large btn-primary allowMultiSubmit" type="submit" value="Multi submit" />
+ *    </form>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

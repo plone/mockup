@@ -1,27 +1,76 @@
-// Pattern which adds support for file upload with
-// drag and drop support.
-//
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
-// Version: 1.0
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Dropzone pattern.
+ *
+ * Options:
+ *    url(string): If not used with a form, this option must provide the URL to submit to (null)
+ *    clickable(boolean): If you can click on container to also upload (false)
+ *    className(string): value for class attribute in the form element ('dropzone')
+ *    paramName(string): value for name attribute in the file input element ('file')
+ *    uploadMultiple(boolean): condition value for multiple attribute in the file input element. If the value is 'true' and paramName is file, 'multiple=multiple' and 'name=file[]' will be added in the file input. (false)
+ *    wrap(boolean): true or false for wrapping this element using the value of wrapperTemplate. If the value is 'inner', this element will wrap the wrapperTemplate value. (false)
+ *    wrapperTemplate(string): HTML template for wrapping around with this element. ('<div class="dropzone-container"/>')
+ *    resultTemplate(string): HTML template for the element that will contain file information. ('<div class="dz-notice"><p>Drop files here...</p></div><div class="dropzone-previews"/>')
+ *    autoCleanResults(boolean): condition value for the file preview in div element to fadeout after file upload is completed. (false)
+ *    previewsContainer(selector): JavaScript selector for file preview in div element. (.dropzone-previews)
+ *
+ * Documentation:
+ *    # On a form element
+ *
+ *    {{ example-1 }}
+ *
+ *    # On a div element
+ *
+ *    {{ example-2 }}
+ *
+ *    # With custom style
+ *
+ *    {{ example-3 }}
+ *
+ * Example: example-1
+ *    <form method="post" action="/upload" enctype="multipart/form-data"
+ *          class="pat-dropzone" data-pat-dropzone="clickable:true">
+ *    </form>
+ *
+ * Example: example-2
+ *    <div class="pat-dropzone" data-pat-dropzone="url: /upload">
+ *      <div>
+ *        <p>Something here that is useful</p>
+ *        <p>Something else here that is useful</p>
+ *        <p>Another thing here that is useful</p>
+ *      </div>
+ *    </div>
+ *
+ * Example: example-3
+ *    <style>
+ *      .mydropzone{
+ *        width: 400px;
+ *        height: 100px;
+ *        background-color: gray;
+ *      }
+ *      .mydropzone.dz-drag-hover{
+ *        background-color: red;
+ *      }
+ *    </style>
+ *    <div class="pat-dropzone"
+ *         data-pat-dropzone="url: /upload; className: mydropzone">
+ *      Drop here...
+ *    </div>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

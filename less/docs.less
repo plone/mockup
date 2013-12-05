@@ -1,300 +1,316 @@
 @import "mixins.less";
-@import "plonelogo.less";
 @import "../bower_components/bootstrap/less/bootstrap.less";
 
+@import "pattern.autotoc.less";
+@import "pattern.dropzone.less";
+@import "pattern.expose.less";
+@import "pattern.livesearch.less";
+@import "pattern.modal.less";
+@import "pattern.pickadate.less";
+@import "pattern.picture.less";
+@import "pattern.querystring.less";
+@import "pattern.relateditems.less";
+@import "pattern.select2.less";
+@import "pattern.structure.less";
+@import "pattern.tinymce.less";
+@import "pattern.tooltip.less";
+@import "pattern.tree.less";
 
-@font-face {
-  font-family: 'Inconsolata';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Inconsolata'), url(fonts/Inconsolata.woff) format('woff');
-}
-@font-face {
-  font-family: 'Inconsolata';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Inconsolata Bold'), local('Inconsolata-Bold'), url(fonts/InconsolataBold.woff) format('woff');
-}
 
+@mockupColor1: #0083BE;
+@mockupColor2: #026B99;
+@mockupColor3: #A1D2E7;
 
-header {
+body {
+  position: relative;
   padding-top: 50px;
 }
-.brand {
-  .plone-logo { .makePloneLogo(20px); }
-}
-footer {
-  background-color: #F5F5F5;
-  border-top: 1px solid #E5E5E5;
-  margin-top: 70px;
-  padding: 30px 0;
-  text-align: center;
-  p {
-    color: #777777;
+
+.mockup-header {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+  background-color: @mockupColor1;
+  border-color: @mockupColor2;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  .navbar-header {
+    .navbar-toggle {
+      border: 0;
+
+      &:hover, &:focus {
+        background-color: #FFF;
+
+        .icon-bar {
+          background-color: @mockupColor1;
+        }
+      }
+    }
+  }
+
+  .navbar-brand {
+    color: #FFF;
+
+    &:focus {
+      outline: none;
+    }
+  }
+  .navbar-left {
     margin-bottom: 0;
   }
-}
-
-
-#mockup-expose {
-  padding: 1em;
-}
-.pattern-pickadate-wrapper {
-  .pattern-pickadate-icon {
-    font-family: FontAwesome;
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: inherit;
-    display: inline;
-    width: auto;
-    height: auto;
-    line-height: normal;
-    vertical-align: super;
-    background: none;
-    background-image: none;
-    background-position: 0% 0%;
-    background-repeat: repeat;
-    margin: 0 0.4em;
+  .navbar-right {
+    margin-top: 0;
   }
-  .pattern-pickadate-icon:before {
-    content: "\f073";
+  .navbar-collapse {
+    border-color: @mockupColor2;
   }
-}
-.syntaxhighlighter {
-
-  font-size: 0.9em !important;
-  overflow: hidden !important;
-
-  a, div, code, table, table td, table tr,
-  table tbody, table thead, table caption, textarea {
-    font-family: "Inconsolata","Consolas","Bitstream Vera Sans Mono","Courier New",Courier,monospace !important;
+  .navbar-nav > li > a {
+    color: @mockupColor3;
+    text-align: left;
   }
-  table {
-    margin: 3px 0 !important;
-    background: #EEE !important;
-    td.code .line {
-      padding: 0 0.5em 0 0!important;
-    }
-  }
-  &:hover {
-    overflow: visible !important;
-    z-index: 500 !important;
-    table td.code .container {
-      border-top: 3px solid #EEE !important;
-      border-bottom: 3px solid #EEE !important;
-    }
-  }
-  .container {
-    &:before, &:after {
-      content: none;
-    }
+  .navbar-nav > li.active > a,
+  .navbar-nav > li.active > a:hover,
+  .navbar-nav > li.active > a:focus {
+    background-color: @mockupColor2;
+    outline: none;
   }
 }
 
-.largeText {
-    font-size: 120%;
-}
+.mockup-content {
 
-.smallText {
-    font-size: 80%;
-}
+  .page-header {
+    margin: 0;
+    color: @mockupColor3;
+    background-color: @mockupColor1;
+    text-align: center;
+    padding: 30px 0 40px 0;
 
-.cookiedirective {
-  background-color: yellow;
-  padding: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-}
-
-.shouldenablecookies {
-  background-color: yellow;
-  padding: 10px;
-  margin: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-}
-
-
-/*====================================
-        NAVIGATION
-====================================*/
-#nav {
-	width:100%;
-	background-color:#0083be;
-	-webkit-border-radius: 5px;
--moz-border-radius: 5px;
-border-radius: 5px;
--webkit-box-shadow: inset 1px 1px 5px 2px rgba(2, 2, 2, .1);
-box-shadow: inset 1px 1px 5px 2px rgba(2, 2, 2, .1);
-	}
-
-#nav li {
-	display:inline-block;
-	width:20%;
-	text-align:center;
-	padding:10px;
-	}
-
-#nav li a {
-	color:white;
-	}
-
-/*====================================
-        AUDIENCE NAV
-====================================*/
-
-#audienceNav {
-	width:100%;
-	display:inline-block;
-	margin-bottom:20px;
-	}
-
-#audienceNav li.well {
-	float:left;
-	width:25%;
-	margin:10px;
-	min-width:200px;
-	}
-strong {
-	color:#90B209;
-	}
-
-#audienceNav li i.icon-globe,
-#audienceNav li i.icon-eye-open,
-#audienceNav li i.icon-cogs
-{
-	font-size:5em;
-	}
-
-#audienceNav li {
-	list-style-type:none;
-	text-align:center;
-	}
-
-#audienceNav li h3{
-	padding:0px;
-	margin:0px;
-	}
-
-#audienceNav li ul {
-	margin:0px;
-	}
-
-#audienceNav li ul li {
-	list-style-type:bullet;
-	text-align:left;
-
-	}
-#audienceNav li ul li i {
-	padding-right:5px;
-
-	}
-
-#audienceNav li:nth-of-type(3){
-
-	}
-
-/*====================================
-        DECORATIVE STUFF
-====================================*/
-dd {
-	margin-bottom:10px;
-	padding-left:20px;
-	}
-.importantButton {
-	padding:10px;
-	background-color:#0083be;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	-webkit-box-shadow: inset 1px 1px 5px 2px rgba(2, 2, 2, .1);
-	box-shadow: inset 1px 1px 5px 2px rgba(2, 2, 2, .1);
-	display:inline;
-	}
-.importantButton:hover {
-	background-color:grey;
-	}
-.importantButton a {
-	color:white;
-	}
-.importantButton a:hover {
-	color:white;
-	}
-ul#textAdjust {
-display:inline-block;
-}
-
-#textAdjust li {
-list-style-type:none;
-float:left;
-padding:5px;
-}
-
-#textAdjust i.icon-1 {
-
-}
-
-#textAdjust i.icon-3 {
-
-}
-
-.clear {
-	clear:both;
-	}
-
-/*====================================
-        TABLE STYLING
-====================================*/
-
-.table th {
-  background-color:#0083be;
-  color:white;
-}
-
-.table td {
-
-
-}
-
-.table td {
-    border-right:solid 1px lightgrey;
-}
-
-.table td:last-of-type {
-    border-right: none;
-}
-
-.table tr:nth-of-type(odd){
-    background-color: transparent;
-}
-.table tr:nth-of-type(even){
-    background-color:#f4f4f4;
-}
-
-.docs-attributes {
-  .table {
-    margin: 10px 0;
-    .table th {
-      background-color: #c8c8c8;
-      padding: 4px 8px;
-      color: #444;
+    h1 {
+      color: #FFF;
     }
-    .attr-default {
-      width: 30%;
+    p {
+      .lead();
+      margin: 0;
+      font-size: @font-size-base * 1.2;
     }
-    .attr-description {
-      width: 40%;
+  }
+
+  .mockup-autotoc {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: 0 1px 0 #FFF;
+    background-color: #F5F5F5;
+    border: 1px solid #CCCCCC;
+    border-radius: 0.3em;
+    ul ul {
+      display: none;
     }
-    .docs-attrs {
-      table {
-        margin-left: 40px;
+    ul li.active > a {
+      font-weight: bold;
+    }
+    a {
+      color: #333333;
+      font-size: @font-size-base;
+      padding-top: 0.3em;
+      padding-bottom: 0.3em;
+    }
+  }
+
+  .mockup-patterns {
+    margin: 1em 0 0 0;
+
+    .mockup-pattern-tile {
+      color: #333;
+      text-align: center;
+      text-decoration: none;
+      margin: 0 0 1em 0;
+      padding: 0.5em;
+      border: 1px solid #CCC;
+      display: block;
+
+      &:focus {
+        outline: none;
+      }
+      &.active {
+        background-color: #F5F5F5;
+        border-bottom: none;
+        margin-bottom: 0;
+        z-index: 1000;
+      }
+    }
+
+    .mockup-pattern {
+      border: 1px solid #CCC;
+      background-color: #F5F5F5;
+      float: left;
+      width: 100%;
+      margin: -2px 0 1em 0;
+      padding: 1em;
+    }
+
+    .mockup-pattern-documentation {
+      padding: 1em;
+      background-color: #FFF;
+    }
+  }
+}
+
+.mockup-footer {
+  border-radius: 0;
+  margin: 0;
+  padding: 0 0 0.5em 0;
+  border-top: 0;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+  background-color: @mockupColor1;
+  border-color: @mockupColor2;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: @mockupColor3;
+
+  a {
+    color: #FFF;
+    border-style: dotted;
+    border-width: 0 0 1px 0;
+    border-color: #FFF;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .github-btn {
+    border: 0;
+    margin: 0;
+  }
+  .mockup-credits {
+    margin: 1em 0;
+
+    p {
+      margin: 0;
+    }
+  }
+  .mockup-links {
+    list-style: none;
+    margin: 1em 0;
+    padding: 0;
+    li {
+      display: inline;
+      a {
+        margin: 0 1em;
+      }
+    }
+  }
+}
+
+.page-index {
+
+  color: @mockupColor3;
+  background-color: @mockupColor1;
+  text-align: center;
+
+  .page-header {
+    border: 0;
+    padding: 30px;
+
+    h1 {
+      font-size: @font-size-base * 3.6;
+      line-height: 1;
+    }
+  }
+
+  .page-content {
+    padding: 30px;
+    a {
+      color:  #FFF;
+      display: inline-block;
+      border: 1px solid @mockupColor3;
+      padding: 0.5em 1em;
+      margin: 30px;
+      font-size: 18px;
+      border-radius: 0.2em;
+      text-decoration: none;
+
+      &:hover, &focus {
+        color: @mockupColor1;
+        border-color: #FFF;
+        background-color: #FFF;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+
+  .mockup-header {
+    .navbar-header {
+      margin-right: 15px;
+    }
+  }
+
+  .mockup-content .page-header {
+    text-align: left;
+
+    h1 {
+      font-size: @font-size-base * 4.4;
+    }
+    p {
+      font-size: @font-size-base * 1.6;
+    }
+  }
+
+  .mockup-footer {
+    .mockup-github {
+      text-align: center;
+    }
+    .mockup-links {
+      text-align: right;
+      margin-top: 2.5em;
+
+      li a {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .page-index {
+    text-align: left;
+
+    .page-header {
+      padding: 140px 0 0 0;
+
+      h1 {
+        font-size: @font-size-base * 7.1;
       }
       p {
-        margin-top: 8px;
-        margin-left: 40px;
+        font-size: @font-size-base * 2.5;
       }
     }
+
+    .page-content {
+      padding: 30px 0px 140px 0;
+
+      a {
+        font-size: @font-size-base * 1.8;
+        margin: 0;
+      }
+    }
+  }
+}
+
+
+@media (min-width: @screen-md-min) {
+
+  .mockup-content .mockup-autotoc {
+    ul ul {
+      display: block;
+      li > a {
+        padding-left: 2em;
+      }
+    }
+  }
+}
+
+
+@media (min-width: @screen-lg-min) {
+
+  .mockup-content .mockup-autotoc {
   }
 }

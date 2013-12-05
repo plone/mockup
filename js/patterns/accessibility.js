@@ -1,27 +1,57 @@
-// Pattern which provides accessibility support
-//
-// Author: Franco Pellegrini<frapell@gmail.com, Nathan Van Gheem<nathan@vangheem.us>
-// Version: 1.0
-//
-// Taken from the original accessibility.js from Plone
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Pattern which provides accessibility support
+ *
+ * Options:
+ *    smallbtn(string):	Selector used to activate small text on click. (null)
+ *    normalbtn(string): Selector used to activate normal text on click. (null)
+ *    largebtn(string):	Selector used to activate large text on click. (null)
+ *
+ * Documentation:
+ *    # Example
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <ul id="textAdjust"
+ *        class="pat-accessibility"
+ *        data-pat-accessibility="smallbtn:.decrease-text;
+ *                                normalbtn:.normal-text;
+ *                                largebtn:.increase-text;">
+ *      <li>
+ *        <a href="." class="decrease-text">
+ *          <i class="icon-minus-sign"></i>
+ *          Decrease Text Size
+ *        </a>
+ *      </li>
+ *      <li>
+ *        <a href="." class="normal-text">
+ *          <i class="icon-circle"></i>
+ *          Normal Text Size
+ *        </a>
+ *      </li>
+ *      <li>
+ *        <a href="." class="increase-text">
+ *          <i class="icon-plus-sign"></i>
+ *          Increase Text Size
+ *        </a>
+ *      </li>
+ *    </ul>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

@@ -1,28 +1,91 @@
-// Pattern which provides sorting ability for a table
-//
-// Author: Franco Pellegrini
-// Contact: frapell@gmail.com
-// Version: 1.0
-//
-// Taken from the original table_sorter.js from Plone
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Tablesorter pattern.
+ *
+ * Options:
+ *    someoptions(XXX): TODO: we need to expose options (XXX)
+ *
+ * Documentation:
+ *    # Directions
+ *
+ *    - If the displayed data doesn't match the sequence (as in days of the
+ *      week), provide a sortabledata-XXX class. The column will be sorted on
+ *      XXX.
+ *    - Note that a secondary sort is always done on the first two columns
+ *      (by the second, and then by the first column). This provides a crude
+ *      way to sort by surname and name. (Look at sequence of "Bluth" rows
+ *      changing when sorting on Last Name.)
+ *    - Rows get odd and even classes for CSS styling.
+ *    - If something looks more like a date than like a number (specifically
+ *      1999-01-01, not e.g. 01-01-1999) it will be sorted textually, not
+ *      numerically. Dates aren't validated.
+ *    - If something looks like a number, javascript will make some wild
+ *      guesses about it. It can turn out weird (try sorting on the "No Date"
+ *      column).
+ *
+ *    # Example 
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <table class="pat-tablesorter">
+ *      <thead>
+ *        <th>First Name</th>
+ *        <th>Last Name</th>
+ *        <th>Occupation</th>
+ *        <th>Age</th>
+ *      </thead>
+ *      <tr>
+ *        <td>Buster</td>
+ *        <td>Bluth</td>
+ *        <td>Army</td>
+ *        <td>35</td>
+ *      </tr>
+ *      <tr>
+ *        <td>Michael</td>
+ *        <td>Bluth</td>
+ *        <td>Company President</td>
+ *        <td>39</td>
+ *      </tr>
+ *      <tr>
+ *        <td>GOB</td>
+ *        <td>Bluth</td>
+ *        <td>Magician</td>
+ *        <td>37</td>
+ *      </tr>
+ *      <tr>
+ *        <td>Lindsay</td>
+ *        <td>Fünke</td>
+ *        <td>Protester</td>
+ *        <td>36</td>
+ *      </tr>
+ *      <tr>
+ *        <td>Tony</td>
+ *        <td>Wonder</td>
+ *        <td>Magician</td>
+ *        <td>35</td>
+ *      </tr>
+ *      <tr>
+ *        <td>Tobias</td>
+ *        <td>Fünke</td>
+ *        <td>Therapist</td>
+ *        <td>40</td>
+ *      </tr>
+ *    </table>
+ *
+ * License: Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *    General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

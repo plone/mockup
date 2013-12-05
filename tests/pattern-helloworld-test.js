@@ -1,16 +1,12 @@
 define([
-    'chai',
+    'expect',
     'jquery',
     'mockup-registry',
     'mockup-patterns-helloworld'
-], function (chai, $, registry, HelloWorld) {
+], function (expect, $, registry, HelloWorld) {
     "use strict";
 
-    var expect = chai.expect,
-        mocha = window.mocha;
-
-    mocha.setup('bdd');
-
+    window.mocha.setup('bdd');
     $.fx.off = true;  //disable jQuery animations for various reasons
 
     describe("HelloWorld", function () {
@@ -20,10 +16,17 @@ define([
             );
         });
 
-        it('should change label text to "Hello, world!"', function () {
-            expect(this.$el.text()).to.not.be.equal("Hello, world!");
+        it('default color is black', function () {
+            expect(this.$el[0].style.color).to.not.be.equal('black');
             registry.scan(this.$el);
-            expect(this.$el.text()).to.be.equal("Hello, world!");
+            expect(this.$el[0].style.color).to.be.equal('black');
+        });
+
+        it('should change color to red', function () {
+            this.$el.attr('data-pat-helloworld', 'color:red');
+            expect(this.$el[0].style.color).to.not.be.equal('red');
+            registry.scan(this.$el);
+            expect(this.$el[0].style.color).to.be.equal('red');
         });
     });
 

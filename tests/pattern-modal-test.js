@@ -1,42 +1,13 @@
-// tests for Base
-//
-// @author Rok Garbas
-// @version 1.0
-// @licstart  The following is the entire license notice for the JavaScript
-//            code in this page.
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
-// @licend  The above is the entire license notice for the JavaScript code in
-//          this page.
-//
-
 define([
-  'chai',
+  'expect',
   'jquery',
   'sinon',
   'mockup-registry',
   'mockup-patterns-modal'
-], function(chai, $, sinon, registry, Modal) {
+], function(expect, $, sinon, registry, Modal) {
   "use strict";
 
-  var expect = chai.expect,
-      mocha = window.mocha;
-
-  mocha.setup('bdd');
+  window.mocha.setup('bdd');
   $.fx.off = true;
 
   /* ==========================
@@ -134,8 +105,9 @@ define([
 
       $('a', $el)
         .patternModal()
-        .on('show.modal.patterns', function(e, target_modal) {
-            $('.modal-header', target_modal.$modal).prepend($('<h3>New Title</h3>'));
+        .on('show.modal.patterns', function(e) {
+            var modal = $(this).data('pattern-modal');
+            $('.modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
           })
         .click();
       expect($('.modal .modal-header h3', $el).text()).to.equal('New Title');
@@ -155,7 +127,8 @@ define([
     it("redirects to base urls", function(done){
       $('<a class="pat-modal" />')
         .patternModal()
-        .on('show.modal.patterns', function(e, modal){
+        .on('show.modal.patterns', function(e){
+          var modal = $(this).data('pattern-modal');
           expect(modal.defaults.actionOptions.redirectToUrl('ignore',
               '<html><head><base href="testurl"></base></head></html>')).to.equal('testurl');
           expect(modal.defaults.actionOptions.redirectToUrl('ignore',

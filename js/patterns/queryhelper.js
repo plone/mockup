@@ -1,28 +1,33 @@
-// Pattern which Plone livesearch functionality on an input
-//
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
-// Version: 1.0
-//
-// Adapted from queryhelper.js in Plone.
-//
-// License:
-//
-// Copyright (C) 2013 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Queryhelper pattern.
+ *
+ * Options:
+ *    basePattern(object): TODO (null)
+ *    vocabularyUrl(string): TODO (null)
+ *    searchParam(string): query string param to pass to search url. ('SearchableText')
+ *    attributes(array): TODO (['UID','Title', 'Description', 'getURL', 'Type'])
+ *    batchSize(integer): number of results to retrive (10)
+ *    baseCriteria(array): TODO ([])
+ *    pathDepth(integer): TODO (1)
+ *
+ * Documentation:
+ *    # TODO
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

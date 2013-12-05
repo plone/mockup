@@ -1,32 +1,73 @@
-// plone integration for tooltip.
-//
-// Author: David Hietpas
-// Contact: hietpasd@uwosh.edu
-// Version: 1.0
-// Depends:
-//    ++resource++plone.app.jquery.js
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
-
-// This is a simple pattern which doesn't do much.  More of a simple learning pattern.
+/* Tooltip pattern.
+ *
+ * Options:
+ *    event_enter(string): Event used to trigger tooltip. ('mouseenter')
+ *    event_exit(string): Event used to dismiss tooltip. ('mouseleave')
+ *
+ * Documentation:
+ *    # Directions
+ *
+ *    You can use this inside Plone or on any static page. Please check below
+ *    for additional directions for non-Plone sites as there are some lines
+ *    of code you need to add to the header of your webpage.
+ *
+ *    # Adding tooltip using Plone
+ *
+ *    - Make sure your viewing the page you want to add the tool tip too.
+ *    - Log in
+ *    - Create some text that you want to be the link that will reveal the
+ *      tooltip.
+ *    - Select the view html button
+ *    - Find your text. and wrap that text with an href tag, and add a class
+ *      and the href tag. 
+ *    - It should look like < a class="pat-tooltip" href="#my-demo-tip"> My
+ *      link text </a>
+ *    - Choose Save
+ *
+ *    Now that we have added our link we now need to add our tooltip.
+ *
+ *    - Choose "edit"
+ *    - Immediently following the link click to add some text and hit your 
+ *      "return" key
+ *    - Add the text that you want to be the tip.
+ *    - Choose the "edit html" button
+ *    - Find the tip text and wrap that text with a div tag, an ID tag and a
+ *      class.
+ *    - It should look like <div id="my-demo-tip" class="tooltips"> My Tip
+ *      Text here </div>
+ *    - Choose Save and test your tooltip.
+ *
+ *    Note: it's important that the href AND the ID be named exactly the same
+ *    thing. This is what links them together.
+ *
+ *    # Example 
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <p href=".example-class" class="pat-tooltip">
+ *      Hover over this line to see a tooltip
+ *    </p>
+ *    <p class="tooltips example-class">
+ *      Setting the .example-class in the href makes this show up
+ *    </p>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 define([
   'jquery',

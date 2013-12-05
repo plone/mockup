@@ -28,8 +28,8 @@ define([
   'underscore',
   'backbone',
   'js/ui/views/popover',
-  'mockup-patterns-dragdrop'
-], function($, _, Backbone, PopoverView, DragDrop) {
+  'mockup-patterns-sortable'
+], function($, _, Backbone, PopoverView, Sortable) {
   "use strict";
 
   var ColumnsView = PopoverView.extend({
@@ -75,7 +75,7 @@ define([
         self.$container.append($el);
       });
 
-      var dd = new DragDrop(self.$container, {
+      var dd = new Sortable(self.$container, {
         selector: 'li'
       });
 
