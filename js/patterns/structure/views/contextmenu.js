@@ -40,7 +40,8 @@ define([
       'click .move-top a': 'moveTopClicked',
       'click .move-bottom a': 'moveBottomClicked',
       'click .set-default-page a': 'setDefaultPageClicked',
-      'click .open': 'openClicked'
+      'click .open': 'openClicked',
+      'click .edit': 'editClicked'
     },
     template: _.template(
       '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">' +
@@ -51,6 +52,7 @@ define([
           '<li class="move-bottom"><a href="#">Move to bottom of folder</a></li>' +
           '<li class="set-default-page"><a href="#">Set as default page</a></li>' +
           '<li class="open"><a href="#">Open</a></li>' +
+          '<li class="edit"><a href="#">Edit</a></li>' +
       '</ul>'),
     active: null,
     initialize: function(){
@@ -171,22 +173,36 @@ define([
         }
       });
     },
-    openClicked: function(){
+    getSelectedBaseUrl: function(){
       var self = this;
+      var uid = self.$active.attr('data-UID');
+      var model = self.app.collection.findWhere({UID: uid});
+      return model.attributes.getURL;
+    },
+    getWindow: function(){
       var win = window;
       if (win.parent !== window) {
         win = win.parent;
       }
-      var uid = self.$active.attr('data-UID');
-      var model = self.app.collection.findWhere({UID: uid});
-
-      var url = model.attributes.getURL + '/view';
+      return win;
+    },
+    openUrl: function(url){
+      var self = this;
+      var win = self.getWindow();
       var keyEvent = this.app.keyEvent;
       if(keyEvent && keyEvent.ctrlKey){
         win.open(url);
       }else{
         win.location = url;
       }
+    },
+    openClicked: function(){
+      var self = this;
+      self.openUrl(self.getSelectedBaseUrl() + '/view');
+    },
+    editClicked: function(){
+      var self = this;
+      self.openUrl(self.getSelectedBaseUrl() + '/edit');
     }
   });
 
