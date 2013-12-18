@@ -271,6 +271,31 @@ define([
         expect($no_results.size()).to.equal(1);
     });
 
+    it('HTML multiple select widget converted to hidden inuput, before applying select2',
+       function() {
+        var $el = $(
+        '<div>' +
+        ' <select multiple class="pat-select2" id="test-select2" name="test-name"' +
+        '         data-pat-select2="{&quot;orderable&quot;: true, &quot;multiple&quot;: true, &quot;separator&quot;: &quot;;&quot;}">' +
+        '   <option value="1" selected>One</value>' +
+        '   <option value="2">Two</value>' +
+        '   <option value="3" selected>Three</value>' +
+        '   <option value="4">Four</value>' +
+        ' </select>' +
+        '</div>');
+
+        registry.scan($el);
+        expect($('#test-select2', $el).is('input')).to.equal(true);
+        expect($('#test-select2', $el).attr('type')).to.equal('hidden');
+        expect($('#test-select2', $el).attr('class')).to.equal('pat-select2 select2-offscreen');
+        expect($('#test-select2', $el).attr('name')).to.equal('test-name');
+        expect($('#test-select2', $el).val()).to.equal('1;3');
+        var $results = $('li.select2-search-choice', $el);
+        expect($results.size()).to.equal(2);
+        expect($.trim($results.eq(0).text())).to.equal('One');
+        expect($.trim($results.eq(1).text())).to.equal('Three');
+    });
+
   });
 
 });

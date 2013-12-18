@@ -224,6 +224,23 @@ define([
             return { results: results };
           }
         }, self.options.ajax);
+      } else if (self.options.multiple && self.$el.is('select')) {
+        // Multiselects need to be converted to input[type=hidden]
+        // for Select2
+        var vals = self.$el.val() || [];
+        var options = $.map(self.$el.find('option'),
+                            function (o) {
+                                return {text: $(o).html(), id: o.value};
+                            });
+        var $hidden = $('<input type="hidden" />');
+        $hidden.val(vals.join(self.options.separator));
+        $hidden.attr('class', self.$el.attr('class'));
+        $hidden.attr('name', self.$el.attr('name'));
+        $hidden.attr('id', self.$el.attr('id'));
+        self.$orig_el = self.$el;
+        self.$el.replaceWith($hidden);
+        self.$el = $hidden;
+        self.options.data = options;
       }
 
       self.initializeValues();
