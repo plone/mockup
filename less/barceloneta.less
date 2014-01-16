@@ -145,7 +145,7 @@
 @navbar-margin-bottom: 0;
 
 //List
-@disc-style: #a2c5e0;
+@bullet-color: #a2c5e0;
 
 // Input
 @input-border: #cccccc;
@@ -219,10 +219,6 @@ html {
 }
 
 /* Styles */
-
-ul, ol {
-    list-style-type: none;
-}
 
 #content-header {
     background-color: transparent;
@@ -332,6 +328,10 @@ body.userrole-authenticated {
   background-repeat: repeat-x;
   padding-top: 10px;
   padding-bottom: 10px;
+  font-weight: bold;
+  li {
+    display: inline-block;
+  }
 }
 
 
@@ -341,22 +341,38 @@ body.userrole-authenticated {
 
 /*Content*/
 
+ul, ol {
+  list-style: none;
+  padding-left: none;
+}
+
 #content {
-  ul {
-    counter-reset: my-disc;
+  .documentDescription {
+    font-style: italic;
+    font-size: 120%;
+    margin-bottom: 1.5em;
+  }
+
+  ul, ol {
+    counter-reset: ol;
     padding-left: 0;
+    li {
+      margin-bottom: .5em;
+      padding-left: 2em;
+      text-indent: -2em;
+    }
   }
-  li {
-    
+  ul li:before {
+    content: "●";
+    color: @bullet-color;
+    padding-right: 1em;
   }
-  li:before {
-    content: counter(my-disc, disc);
-    counter-increment: my-disc;
-    list-style-type: disc;
-    font-size: 30px;
-    color: @disc-style;
-    
+  ol li:before {
+    content: counter(ol) ".";
+    counter-increment: ol;
+    padding-right: 1em;
   }
+
 }
 /* Footer */
 
@@ -378,6 +394,9 @@ footer {
   li {
     display: inline-block;
     margin-left: 50px;
+    &:first-child {
+      margin-left: 0;
+    }
   }
 }
 
