@@ -28,13 +28,13 @@
 
   <ul class="pagination pagination-sm">
     <li class="disabled"><a href="#">Show:</a></li>
-    <li class="serverhowmany <% if(perPage == 15){ %>disabled<% } %>">
+    <li class="serverhowmany serverhowmany15 <% if(perPage == 15){ %>disabled<% } %>">
       <a href="#" class="">15</a>
     </li>
-    <li class="serverhowmany <% if(perPage == 30){ %>disabled<% } %>">
+    <li class="serverhowmany serverhowmany30 <% if(perPage == 30){ %>disabled<% } %>">
       <a href="#" class="">30</a>
     </li>
-    <li class="serverhowmany <% if(perPage == 50){ %>disabled<% } %>">
+    <li class="serverhowmany serverhowmany50 <% if(perPage == 50){ %>disabled<% } %>">
       <a href="#" class="">50</a>
     </li>
   </ul>

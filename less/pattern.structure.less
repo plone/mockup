@@ -1,6 +1,10 @@
 @import "../bower_components/bootstrap/less/variables.less";
-@import "../bower_components/bootstrap/less/glyphicons.less";
+@import "../bower_components/bootstrap/less/mixins.less";
 @import "../bower_components/bootstrap/less/button-groups.less";
+@import "mixins.less";
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
+@import "../bower_components/bootstrap/less/glyphicons.less";
+@import "../bower_components/bootstrap/less/badges.less";
 
 .pat-structure {
     table{
@@ -15,16 +19,12 @@
     .navbar {
         margin-bottom: 5px;
 
-        .btn-group.addnew, #selected{
+        .btn-group, #selected{
             margin-left: 5px;
         }
     }
     .table th, .table td {
         padding: 4px;
-    }
-
-    label.checkbox{
-        float: left;
     }
 
     .contextmenu {
@@ -44,7 +44,6 @@
 
     .navbar-search{
         margin-top: 5px;
-        width: 300px;
     }
     .alert.status{
         margin-bottom: 5px;
@@ -96,6 +95,13 @@
     .pattern-pickadate-wrapper .pattern-pickadate-time-wrapper .pattern-pickadate-time{
         width: 120px;
     }
+
+    .itemRow .title a{
+        color: #333333;
+    }
+    .itemRow.folder .title a{
+        color: #005580;
+    }
 }
 
 .popover.selected {
@@ -117,9 +123,8 @@
                 text-decoration: none;
             }
 
-            a {
-                .glyphicon();                
-                .glyphicon-remove();
+            a:before {
+                .glyphicon-remove-sign();
                 color: #999;
 
                 &:hover {
@@ -158,7 +163,8 @@
 .popover.columns{
     ul{
         list-style: none;
-        margin: 0 0 10px 0;
+        margin: 0;
+        padding: 0;
 
         li{
             list-style: none;
