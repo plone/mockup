@@ -38,6 +38,7 @@ define([
   'js/patterns/structure/views/workflow',
   'js/patterns/structure/views/delete',
   'js/patterns/structure/views/rename',
+  'js/patterns/structure/views/sort',
   'js/patterns/structure/views/selectionbutton',
   'js/patterns/structure/views/paging',
   'js/patterns/structure/views/addmenu',
@@ -49,7 +50,7 @@ define([
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
-            WorkflowView, DeleteView, RenameView, SelectionButtonView,
+            WorkflowView, DeleteView, RenameView, SortView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
@@ -70,7 +71,8 @@ define([
       'properties': DISABLE_EVENT,
       'workflow': DISABLE_EVENT,
       'delete': DISABLE_EVENT,
-      'rename': DISABLE_EVENT
+      'rename': DISABLE_EVENT,
+      'sort': DISABLE_EVENT
     },
     buttonViewMapping: {
       'secondary.tags': TagsView,
@@ -87,35 +89,34 @@ define([
     additionalCriterias: [],
     pasteSelection: null,
     cookieSettingPrefix: '_fc_',
-    initialize: function(){
+    initialize: function(options){
       var self = this;
-      BaseView.prototype.initialize.call(self);
+      BaseView.prototype.initialize.apply(self, [options]);
       self.setAllCookieSettings();
 
       self.collection = new ResultCollection([], {
-        url: self.options.collectionUrl
+        url: self.options.collectionUrl,
+        queryParser: function(){
+          var term = null;
+          if(self.toolbar){
+            term = self.toolbar.get('filter').term;
+          }
+          var sort_on = self.sort_on;
+          if(!sort_on){
+            sort_on = 'getObjPositionInParent';
+          }
+          return JSON.stringify({
+            criteria: self.queryHelper.getCriterias(term, {
+              additionalCriterias: self.additionalCriterias
+            }),
+            sort_on: sort_on,
+            sort_order: self.sort_order
+          });
+        },
+        queryHelper: self.options.queryHelper
       });
-      self.collection.queryParser = function(){
-        var term = null;
-        if(self.toolbar){
-          term = self.toolbar.get('filter').term;
-        }
-        var sort_on = self.sort_on;
-        if(!sort_on){
-          sort_on = 'getObjPositionInParent';
-        }
-        return JSON.stringify({
-          criteria: self.queryHelper.getCriterias(term, {
-            additionalCriterias: self.additionalCriterias
-          }),
-          sort_on: sort_on,
-          sort_order: self.sort_order
-        });
-      };
-
       self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
-      self.collection.queryHelper = self.queryHelper;
       self.tableView = new TableView({app: self});
       self.pagingView = new PagingView({app: self});
       self.pasteAllowed = self.options.pasteAllowed;
@@ -186,8 +187,11 @@ define([
             success: function(data){
               self.trigger('context-info-loaded', data);
             },
-            error: function(){
+            error: function(response){
               // XXX handle error?
+              if(response.status === 404){
+                console.log('context info url not found');
+              }
             }
           });
         }
@@ -265,7 +269,7 @@ define([
             self.ajaxSuccessResponse.apply(self, [data, callback]);
           },
           error: function(response){
-            self.ajaxErrorResponse.apply(self, [response]);
+            self.ajaxErrorResponse.apply(self, [response, url]);
           }
         }, self);
       }
@@ -284,7 +288,7 @@ define([
       }
       self.collection.pager();
     },
-    ajaxErrorResponse: function(response){
+    ajaxErrorResponse: function(response, url){
       var self = this;
       if(response.status === 404){
         window.alert('operation url "' + url + '" is not valid');
@@ -330,7 +334,7 @@ define([
       var columnsBtn = new ButtonView({
         id: 'columns',
         tooltip: 'Configure displayed columns',
-        icon: 'list'
+        icon: 'align-justify'
       });
 
       self.columnsView = new ColumnsView({
@@ -351,6 +355,19 @@ define([
           contextInfoUrl: self.options.contextInfoUrl,
           app: self
         }));
+      }
+      if(self.options.sort){
+        var sortButton = new ButtonView({
+          id: 'sort',
+          title: 'Sort',
+          tooltip: 'Sort folder contents',
+          url: self.options.sort.url
+        });
+        self.sortView = new SortView({
+          triggerView: sortButton,
+          app: self
+        });
+        items.push(sortButton);
       }
 
       _.each(_.pairs(this.options.buttonGroups), function(group){
@@ -418,9 +435,13 @@ define([
     },
     render: function(){
       var self = this;
+
       self.$el.append(self.toolbar.render().el);
       self.$el.append(self.wellView.render().el);
       self.$el.append(self.columnsView.render().el);
+      if(self.sortView){
+        self.$el.append(self.sortView.render().el);
+      }
 
       _.each(self.buttonViews, function(view){
         self.$el.append(view.render().el);
@@ -439,6 +460,8 @@ define([
         });
         self.toolbar.$el.append(uploadBtn.render().el);
         uploadBtn.on('button:click', function(){
+          // update because the url can change depending on the folder we're in.
+          self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
           self.dropzone.hiddenFileInput.click();
         });
         self.dropzone = new DropZone(self.$el, {
@@ -447,16 +470,11 @@ define([
           clickable: $('<div/>')[0],
           url: self.getAjaxUrl(self.options.uploadUrl),
           autoCleanResults: true,
+          useTus: self.options.useTus,
           success: function(e, data){
             self.collection.pager();
           }
         }).dropzone;
-        self.dropzone.on('sending', function(){
-          self.$el.addClass('dropping');
-        });
-        self.dropzone.on('complete', function(){
-          self.$el.removeClass('dropping');
-        });
         self.dropzone.on('drop', function(){
           // because this can change depending on the folder we're in
           self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);

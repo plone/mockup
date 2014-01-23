@@ -28,7 +28,8 @@ define([
     //whenever the this returns true the request will not faked
     return url.indexOf('tests/json/') !== -1 ||
            url.indexOf('ace/lib') !== -1 ||
-           url.indexOf('.xml') !== -1;
+           url.indexOf('.xml') !== -1 ||
+           /.*\.js$/i.test(url);
   });
   server.autoRespond = true;
   server.autoRespondAfter = 200;

@@ -22,7 +22,9 @@
  *    # Example
  *
  *    {{ example-basic }}
+ *
  *    {{ example-long }}
+ *
  *    {{ example-tinymce }}
  *
  *
@@ -33,7 +35,6 @@
  *      <h1>Basic modal!</h1>
  *      <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
  *    </div>
- *
  *
  * Example: example-long
  *    <a href="#modal2" class="btn btn-large btn-primary pat-modal"

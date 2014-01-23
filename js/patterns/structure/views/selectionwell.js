@@ -35,7 +35,8 @@ define([
   var WellView = PopoverView.extend({
     className: 'popover selected',
     title: _.template('<input type="text" class="filter" placeholder="Filter" />' +
-                      '<a href="#" class="icon-remove-sign remove-all">remove all</a>'),
+                      '<a href="#" class=" remove-all">' +
+                        '<span class="glyphicon glyphicon-remove-circle"></span> remove all</a>'),
     content: _.template(
       '<% collection.each(function(item){ %>' +
         '<%= item_template(item.toJSON()) %>' +
@@ -45,8 +46,8 @@ define([
       'keyup input.filter': 'filterSelected',
       'click .remove-all': 'removeAll'
     },
-    initialize: function(){
-      PopoverView.prototype.initialize.call(this);
+    initialize: function(options){
+      PopoverView.prototype.initialize.apply(this, [options]);
       this.listenTo(this.collection, 'reset all add remove', this.render);
       this.options.item_template = _.template(ItemTemplate);
     },
@@ -59,7 +60,7 @@ define([
     },
     itemRemoved: function(e){
       e.preventDefault();
-      var uid = $(e.target).data('uid');
+      var uid = $(e.currentTarget).data('uid');
       this.collection.removeByUID(uid);
       if(this.collection.length !== 0){
         // re-rendering causes it to close, reopen

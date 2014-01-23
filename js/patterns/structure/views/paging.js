@@ -46,7 +46,8 @@ define([
     tagName: 'aside',
     template: _.template(PagingTemplate),
     maxPages: 7,
-    initialize: function () {
+    initialize: function (options) {
+      this.options = options;
       this.app = this.options.app;
       this.collection = this.app.collection;
       this.collection.on('reset', this.render, this);

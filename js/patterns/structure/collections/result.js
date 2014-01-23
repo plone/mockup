@@ -34,6 +34,13 @@ define([
   var ResultCollection = Backbone.Paginator.requestPager.extend({
     model: Result,
     queryHelper: null, // need to set
+    initialize: function(models, options){
+      this.options = options;
+      this.url = options.url;
+      this.queryParser = options.queryParser;
+      this.queryHelper = options.queryHelper;
+      Backbone.Paginator.requestPager.prototype.initialize.apply(this, [models, options]);
+    },
     paginator_core: {
       // the type of the request (GET by default)
       type: 'GET',
@@ -43,7 +50,6 @@ define([
         return this.url;
       }
     },
-    queryParser: null, // needs to be passed in
     paginator_ui: {
       // the lowest page index your API allows to be accessed
       firstPage: 1,
