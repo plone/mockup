@@ -1,6 +1,7 @@
 @import "../bower_components/bootstrap/less/variables.less";
-@import "../bower_components/bootstrap/less/glyphicons.less";
+@import "../bower_components/bootstrap/less/mixins.less";
 @import "../bower_components/bootstrap/less/button-groups.less";
+@import "../bower_components/font-awesome/less/mixins.less";
 
 .pat-structure {
     table{
@@ -15,7 +16,7 @@
     .navbar {
         margin-bottom: 5px;
 
-        .btn-group.addnew, #selected{
+        .btn-group, #selected{
             margin-left: 5px;
         }
     }
@@ -44,7 +45,6 @@
 
     .navbar-search{
         margin-top: 5px;
-        width: 300px;
     }
     .alert.status{
         margin-bottom: 5px;
@@ -96,6 +96,13 @@
     .pattern-pickadate-wrapper .pattern-pickadate-time-wrapper .pattern-pickadate-time{
         width: 120px;
     }
+
+    .itemRow .title a{
+        color: #333333;
+    }
+    .itemRow.folder .title a{
+        color: #005580;
+    }
 }
 
 .popover.selected {
@@ -117,9 +124,8 @@
                 text-decoration: none;
             }
 
-            a {
-                .glyphicon();                
-                .glyphicon-remove();
+            a:before {
+                .icon(@remove-sign);
                 color: #999;
 
                 &:hover {

@@ -483,7 +483,7 @@ define([
       if (self.options.routerOptions.id !== null) {
         Router.addRoute('modal', self.options.routerOptions.id, function() {
           this.show();
-        }, self, self.options.routerOptions.pathExp);
+        }, self, self.options.routerOptions.pathExp, self.options.routerOptions.expReplace);
       }
 
       self.backdrop.on('hidden', function(e) {
