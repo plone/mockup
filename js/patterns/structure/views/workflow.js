@@ -37,22 +37,28 @@ define([
     content: _.template(
       '<form>' +
         '<fieldset>' +
-          '<label>Comments</label>' +
-          '<textarea rows="4"></textarea>' +
-          '<span class="help-block">Select the transition to be used for ' +
-            'modifying the items state.</span>' +
-          '<label>Change State</label>' +
-          '<span class="help-block">Select the transition to be used for ' +
-            'modifying the items state.</span>' +
-          '<select name="transition">' +
-          '</select>' +
-          '<label>' +
-            '<input type="checkbox" name="recurse" />' +
-            'Include contained items?</label>' +
-          '<span class="help-block">' +
-            'If checked, this will attempt to modify the status of all ' +
-            'content in any selected folders and their subfolders.' +
-          '</span>' +
+          '<div class="form-group">' +
+            '<label>Comments</label>' +
+            '<textarea class="form-control" rows="4"></textarea>' +
+            '<p class="help-block">Select the transition to be used for ' +
+              'modifying the items state.</p>' +
+          '</div>' +
+          '<div class="form-group">' +
+            '<label>Change State</label>' +
+            '<p class="help-block">Select the transition to be used for ' +
+              'modifying the items state.</p>' +
+            '<select class="form-control" name="transition">' +
+            '</select>' +
+          '</div>' +
+          '<div class="checkbox">' +
+            '<label>' +
+              '<input type="checkbox" name="recurse" />' +
+              'Include contained items?</label>' +
+            '<p class="help-block">' +
+              'If checked, this will attempt to modify the status of all ' +
+              'content in any selected folders and their subfolders.' +
+            '</p>' +
+          '</div>' +
         '</fieldset>' +
       '</form>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
@@ -60,9 +66,9 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(){
-      this.app = this.options.app;
-      PopoverView.prototype.initialize.call(this);
+    initialize: function(options){
+      this.app = options.app;
+      PopoverView.prototype.initialize.apply(this, [options]);
     },
     render: function(){
       PopoverView.prototype.render.call(this);

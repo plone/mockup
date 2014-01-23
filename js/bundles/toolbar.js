@@ -160,6 +160,10 @@ define([
         .addClass('pat-modal')
         .patternModal(loginOptions);
 
+      $('#plone-action-syndication > a', self.$el)
+        .addClass('pat-modal')
+        .patternModal(loginOptions);
+
       /*** Contact form ***/
       $('#siteaction-contact > a', self.$el)
         .addClass('pat-modal')
@@ -513,7 +517,8 @@ define([
         },
         routerOptions: {
           id: 'edit',
-          pathExp: '/edit$'
+          pathExp: '/edit$',
+          expReplace: '/view'
         }
       };
       var addOptions = editOptions;
@@ -608,6 +613,43 @@ define([
     }
 
   });
+
+
+  /* maybe hackish fix here, but.....  let's get these in and out widgets working in overlays
+   * TODO: Override all in and out widgets in python to use select2 */
+  var updateValues = function(id, $to){
+    var $container = $('#' + id + '-toDataContainer');
+    $container.empty();
+    var name = id.replace('-', '.').replace('-', '.') + ':list';
+    $to.find('option').each(function(){
+      $container.append('<input name="' + name + '" type="hidden" value="' + $(this).val() + '" />');
+    });
+  };
+
+  window.from2to = function(id){
+    var $el = $('#' + id);
+    var $selects = $el.find('select');
+    var $from = $selects.eq(0);
+    var $to = $selects.eq(1);
+    $from.find('option').each(function(){
+      if(this.selected){
+        $to.append($(this));
+      }
+    });
+    updateValues(id, $to);
+  };
+  window.to2from = function(id){
+    var $el = $('#' + id);
+    var $selects = $el.find('select');
+    var $from = $selects.eq(0);
+    var $to = $selects.eq(1);
+    $to.find('option').each(function(){
+      if(this.selected){
+        $from.append($(this));
+      }
+    });
+    updateValues(id, $to);
+  };
 
   // initialize only if we are not in top frame (we are in toolbar's iframe)
   if (window.parent !== window) {

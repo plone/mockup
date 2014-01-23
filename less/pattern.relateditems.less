@@ -1,6 +1,8 @@
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
 @import "../bower_components/bootstrap/less/variables.less";
 @import "../bower_components/bootstrap/less/glyphicons.less";
 @import "pattern.select2.less";
+@import "pattern.tree.less";
 
 .pattern-relateditems-dropdown {
   z-index: 10002;
@@ -17,6 +19,11 @@
 }
 .pat-relateditems {
 
+}
+
+.pattern-relateditems-active {
+    padding: 5px;
+    background-color: #DDD;
 }
 
 .pattern-relateditems-container {
@@ -43,10 +50,7 @@
     color: #666;
   }
 }
-.pattern-relateditems-iconhome {
-  .glyphicon();
-  .glyphicon-home();
-}
+
 .pattern-relateditems-result {
   padding-right: 30px;
   position: relative;
@@ -111,3 +115,69 @@
   }
 }
 
+/* tree parts */
+.pattern-relateditems-tree {
+    .tree-container {
+        position: absolute;
+        background-color: white;
+        min-width: 200px;
+        padding: 0px;
+        left: 4px;
+        border: 3px solid #DDD;
+        border-radius: 7px;
+        top: 4px;
+        display: none;
+        z-index: 10000;
+
+        .pat-tree {
+            max-height: 400px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-top: 1px solid #DDD;
+            border-bottom: 1px solid #DDD;
+            padding: 2px 0;
+        }
+
+        .select-folder-label {
+            display: block;
+            margin: 10px 5px 5px 5px;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .btn.close.pattern-relateditems-tree-itemselect{
+            display: block;
+            margin: 2px;
+            opacity: 1.0;
+        }
+        .btn.close.pattern-relateditems-tree-cancel{
+            display: block;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        .jqtree-tree {
+            .jqtree_common {
+                padding-left: 2px;
+            }
+
+            .jqtree_common.jqtree-selected {
+                .jqtree_common.jqtree-element {
+                    background: #97BDD6;
+                    text-shadow: none;
+                }
+            }
+
+            li.jqtree_common {
+                padding-right: 6px;
+
+                .jqtree_common.jqtree-element {
+                    &:hover {
+                        background: #DDD;
+                    }
+                }
+            }
+        }
+    }
+}

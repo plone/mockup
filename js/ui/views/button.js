@@ -46,12 +46,12 @@ define([
     events: {
       'click': 'handleClick'
     },
-    initialize: function() {
-      if (!this.options.id) {
-        var title = this.options.title || '';
-        this.options.id = title !== '' ? title.toLowerCase().replace(' ', '-') : this.cid;
+    initialize: function(options) {
+      if (!options.id) {
+        var title = options.title || '';
+        options.id = title !== '' ? title.toLowerCase().replace(' ', '-') : this.cid;
       }
-      BaseView.prototype.initialize.call(this);
+      BaseView.prototype.initialize.apply(this, [options]);
 
       this.on('disable', function() {
         this.disable();

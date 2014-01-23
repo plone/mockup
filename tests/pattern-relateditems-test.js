@@ -89,7 +89,7 @@ define([
           for(var i=0; i<query.criteria.length; i=i+1){
             var criteria = query.criteria[i];
             if(criteria.i === 'path'){
-              path = criteria.v;
+              path = criteria.v.split('::')[0];
             }else{
               term = criteria.v;
             }
@@ -159,7 +159,7 @@ define([
         '        data-pat-relateditems="width: 300px;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
       
       expect($('.select2-container-multi', $el)).to.have.length(1);
       expect($('.pattern-relateditems-container', $el)).to.have.length(1);
@@ -176,7 +176,7 @@ define([
         '        data-pat-relateditems="width: 300px;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
       pattern.$el.select2('open');
@@ -199,7 +199,7 @@ define([
         '        data-pat-relateditems="width: 300px;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
 
@@ -233,7 +233,7 @@ define([
         '        data-pat-relateditems="width: 300px;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
 
@@ -266,7 +266,7 @@ define([
         vocabularyUrl: '/relateditems-test.json',
         selectableTypes: ['Image']
       };
-      var pattern = $('.pat-relateditems').attr('data-pat-relateditems', JSON.stringify(opts)).patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).attr('data-pat-relateditems', JSON.stringify(opts)).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
 
@@ -291,7 +291,7 @@ define([
         '        data-pat-relateditems="width: 300px;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
 
@@ -316,7 +316,7 @@ define([
         '        data-pat-relateditems="width: 300px;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
       pattern.$el.select2('open');
@@ -327,7 +327,7 @@ define([
       expect($('.pattern-relateditems-result-browse', $items)).to.have.length(5);
       $('.pattern-relateditems-result-browse', $items).first().click();
       clock.tick(1000);
-      var $crumbs = $('.pattern-relateditems-path a');
+      var $crumbs = $('.pattern-relateditems-path a.crumb');
       // /about/staff
       expect($crumbs).to.have.length(3);
       // /about
@@ -348,7 +348,7 @@ define([
         '                          maximumSelectionSize: 1;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
       pattern.$el.select2('open');
@@ -372,7 +372,7 @@ define([
         '                          maximumSelectionSize: 1;' +
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
-      var pattern = $('.pat-relateditems').patternRelateditems().data('patternRelateditems');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
       pattern.$el.select2('open');
@@ -381,6 +381,130 @@ define([
       $el.remove();
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
+
+    it('test tree initialized', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          maximumSelectionSize: 1;' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+
+      var clock = sinon.useFakeTimers();
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+
+      clock.tick(1000);
+
+      $el.find('.pattern-relateditems-tree-select').trigger('click');
+
+      clock.tick(1000);
+
+      expect($el.find('.pat-tree ul li').length).to.equal(4);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
+    });
+
+    it('test tree select', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          maximumSelectionSize: 1;' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+
+      var clock = sinon.useFakeTimers();
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+
+      clock.tick(1000);
+
+      expect($el.find('.crumb').length).to.equal(1);
+
+      $el.find('.pattern-relateditems-tree-select').trigger('click');
+      clock.tick(1000);
+
+      $el.find('.pat-tree ul li div').eq(2).trigger('click');
+      clock.tick(1000);
+
+      $el.find('.pattern-relateditems-tree-itemselect').trigger('click');
+      clock.tick(1000);
+
+      expect($el.find('.crumb').length).to.equal(2);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
+    });
+
+    it('test tree sub select', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          maximumSelectionSize: 1;' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+
+      var clock = sinon.useFakeTimers();
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+
+      clock.tick(1000);
+
+      expect($el.find('.crumb').length).to.equal(1);
+
+      $el.find('.pattern-relateditems-tree-select').trigger('click');
+      clock.tick(1000);
+
+      $el.find('.pat-tree ul li div').eq(1).trigger('click');
+      clock.tick(1000);
+
+      $el.find('.pat-tree ul li div').eq(2).trigger('click');
+      clock.tick(1000);
+
+      $el.find('.pattern-relateditems-tree-itemselect').trigger('click');
+      clock.tick(1000);
+
+      expect($el.find('.crumb').length).to.equal(3);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
+    });
+
+    it('test tree cancel', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          maximumSelectionSize: 1;' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+
+      var clock = sinon.useFakeTimers();
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+
+      clock.tick(1000);
+
+      expect($el.find('.crumb').length).to.equal(1);
+
+      $el.find('.pattern-relateditems-tree-select').trigger('click');
+      clock.tick(1000);
+
+      $el.find('.pattern-relateditems-tree-cancel').trigger('click');
+      clock.tick(1000);
+
+      expect($el.find('.crumb').length).to.equal(1);
+      expect($el.find('.pattern-relateditems-tree').is(':visible')).to.equal(false);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
+    });
+
+
 
   });
 

@@ -40,9 +40,9 @@ define([
   var Router = Backbone.Router.extend({
     actions: [],
     redirects: {},
-    addRoute: function(patternName, id, callback, context, pathExp) {
+    addRoute: function(patternName, id, callback, context, pathExp, expReplace) {
       if (_.findWhere(this.patterns, {patternName: patternName, id: id}) === undefined) {
-        this.actions.push({patternName: patternName, id: id, callback: callback, context: context, pathExp: pathExp});
+        this.actions.push({patternName: patternName, id: id, callback: callback, context: context, pathExp: pathExp, expReplace: expReplace});
       }
       var regex = new RegExp('(' + regexEscape(patternName) + ':' + regexEscape(id) + ')');
       this.route(regex, 'handleRoute');
@@ -70,7 +70,11 @@ define([
           regex = new RegExp(action.pathExp);
           if (path.match(regex)) {
             hash = '!/' + action.patternName + ':' + action.id;
-            newPath = path.replace(regex, '');
+            var replaceWith = '';
+            if(action.expReplace){
+              replaceWith = action.expReplace;
+            }
+            newPath = path.replace(regex, replaceWith);
             return true;
           }
         }

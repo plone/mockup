@@ -3,7 +3,8 @@ require([
   'text!docs-getting-started',
   'text!docs-tutorial',
   'text!docs-about',
-  'bootstrap-collapse'
+  'bootstrap-collapse',
+  'mockup-fakeserver'
 ], function(Docs, GETTING_STARTED, TUTORIAL, ABOUT) {
   new Docs({
     pages: [
