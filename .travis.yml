@@ -8,7 +8,6 @@ env:
     - secure: "CyxPivnm/mpBX5Def/VlFHthxjMTjlThgd07tiGvd0vtDG1PPNzD0Y0q+4AmBilWZeIu1O1bP1vYMgMQ0rvcXr5K7+wZqoyss+ynRzMzdGLYQSU73zN5THKNeClioR90stsTr9GxX43VvgEIX9W3Zx1eSnmzT+ddnLYL94bAP9Q="
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
 install:
-  - npm cache clean
   - make bootstrap
   - echo "Host github.com" >> ~/.ssh/config
   - echo "   StrictHostKeyChecking no" >> ~/.ssh/config

@@ -1,30 +1,45 @@
-// Pattern which provide some basic form helpers:
-// - prevent forms with changed values to be unloaded
-// This is going to replace 'Products/CMFPlone/skins/plone_ecmascript/formUnload.js'
-// Bits of this come from
-// https://raw.github.com/mmonteleone/jquery.safetynet/master/jquery.safetynet.js
-//
-// Author: Simone Orsi
-// Contact: simahawk@gmail.com
-// Version: 1.0
-//
-// License:
-//
-// Copyright (C) 2013 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Formunloadalert pattern.
+ *
+ * Options:
+ *    changingEvents(string): Events on which to check for changes (space-separated). ('change keyup paste')
+ *    changingFields(string): Fields on which to check for changes (comma-separated). ('input,select,textarea,fileupload')
+ *    message(string): Confirmation message to display when dirty form is being unloaded. (Discard changes? If you click OK, any changes you have made will be lost.)
+ *
+ * Documentation:
+ *    # Example 
+ *
+ *    {{ example-1 }}
+ *
+ * Example: example-1
+ *    <form class="pat-formunloadalert" onsubmit="javascript:return false;">
+ *      <input type="text" value="" />
+ *      <select>
+ *        <option value="1">value 1</option>
+ *        <option value="2">value 2</option>
+ *      </select>
+ *      <input
+ *        class="btn btn-large btn-primary"
+ *        type="submit" value="Submit" />
+ *      <br />
+ *      <a href="/">Click here to go somewhere else</a>
+ *    </form>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

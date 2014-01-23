@@ -1,44 +1,44 @@
 module.exports = function(grunt) {
 
-  require('karma-mocha');
   var requirejsOptions = require('./js/config'),
       karmaConfig = require('./node_modules/karma/lib/config'),
-      karma_files = [],
-      docs_files = {};
+      karmaFiles = [],
+      patterns = [];
+
+  karmaFiles.push('bower_components/es5-shim/es5-shim.js');
+  karmaFiles.push('bower_components/es5-shim/es5-sham.js');
+  karmaFiles.push('bower_components/console-polyfill/index.js');
+  karmaFiles.push('node_modules/mocha/mocha.js');
+  karmaFiles.push('node_modules/karma-mocha/lib/adapter.js');
+  karmaFiles.push('node_modules/requirejs/require.js');
+  karmaFiles.push('node_modules/karma-requirejs/lib/adapter.js');
+
+  karmaFiles.push('js/config.js');
+  karmaFiles.push('tests/config.js');
 
   for (var key in requirejsOptions.paths) {
-    if (key !== 'tinymce') {
-      docs_files['docs/dev/' + requirejsOptions.paths[key] + '.js'] = [requirejsOptions.paths[key] + '.js'];
+    if (key.indexOf('mockup-patterns-') === 0) {
+      patterns.push(key);
     }
-    karma_files.push({
+    karmaFiles.push({
       pattern: requirejsOptions.paths[key] + '.js',
       included: false
     });
   }
 
-  karma_files.push({pattern: 'tests/example-resource*', included: false});
-  karma_files.push({pattern: 'tests/fakeserver*', included: false});
-  karma_files.push({pattern: 'tests/*-test.js', included: false});
-  karma_files.push({pattern: 'tests/**/*-test.js', included: false});
-  karma_files.push({pattern: 'js/ui/**/*.js', included: false});
-  karma_files.push({pattern: 'js/ui/**/*.xml', included: false});
-  karma_files.push({pattern: 'js/patterns/structure/**/*.js', included: false});
-  karma_files.push({pattern: 'js/patterns/structure/**/*.xml', included: false});
-  karma_files.push({pattern: 'js/patterns/filemanager/**/*.xml', included: false});
-  karma_files.push({pattern: 'js/patterns/filemanager/**/*.js', included: false});
-  karma_files.push({pattern: 'js/patterns/tinymce/**/*.xml', included: false});
-  karma_files.push({pattern: 'js/patterns/tinymce/**/*.js', included: false});
+  karmaFiles.push({pattern: 'tests/example-resource*', included: false});
+  karmaFiles.push({pattern: 'tests/fakeserver*', included: false});
+  karmaFiles.push({pattern: 'tests/*-test.js', included: false});
+  karmaFiles.push({pattern: 'tests/**/*-test.js', included: false});
+  karmaFiles.push({pattern: 'js/ui/**/*.js', included: false});
+  karmaFiles.push({pattern: 'js/ui/**/*.xml', included: false});
+  karmaFiles.push({pattern: 'js/patterns/structure/**/*.js', included: false});
+  karmaFiles.push({pattern: 'js/patterns/structure/**/*.xml', included: false});
+  karmaFiles.push({pattern: 'js/patterns/filemanager/**/*.xml', included: false});
+  karmaFiles.push({pattern: 'js/patterns/filemanager/**/*.js', included: false});
+  karmaFiles.push({pattern: 'js/patterns/tinymce/**/*.xml', included: false});
+  karmaFiles.push({pattern: 'js/patterns/tinymce/**/*.js', included: false});
 
-
-  karma_files.push('js/config.js');
-  karma_files.push('tests/config.js');
-
-  docs_files['docs/dev/bower_components/requirejs/require.js'] = 'bower_components/requirejs/require.js';
-  docs_files['docs/dev/js/config.js'] = 'js/config.js';
-
-  requirejsOptions.optimize = 'uglify';
-
-  // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
@@ -46,51 +46,19 @@ module.exports = function(grunt) {
     },
     karma: {
       options: {
-
-        // base path, that will be used to resolve files and exclude
         basePath: './',
-
-        // frameworks to use
-        frameworks: ['mocha', 'requirejs'],
-
-        // list of files / patterns to load in the browser
-        files: karma_files,
-
-        // list of files to exclude
-        exclude: [
-          // TODO: we need to fix this tests
-          'tests/iframe-test.js',
-        ],
-
-        preprocessors: {
-          'js/**/*.js': 'coverage'
-        },
-
-        // test results reporter to use
-        // possible values: dots || progress || growl
+        frameworks: [],
+        files: karmaFiles,
+        // TODO: we need to fix this tests
+        exclude: [ 'tests/iframe-test.js' ],
+        preprocessors: { 'js/**/*.js': 'coverage' },
         reporters: ['dots', 'progress', 'coverage'],
-
-        coverageReporter: {
-          type : 'lcov',
-          dir : 'coverage/'
-        },
-
-        // web server port
+        coverageReporter: { type : 'lcov', dir : 'coverage/' },
         port: 9876,
-
-        // enable / disable colors in the output (reporters and logs)
         colors: true,
-
-        // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: karmaConfig.LOG_INFO,
-
-        // enable / disable watching file and executing tests whenever any file changes
         autoWatch: true,
-
-        // If browser does not capture in given timeout [ms], kill it
         captureTimeout: 60000,
-
         plugins: [
           'karma-mocha',
           'karma-coverage',
@@ -101,85 +69,141 @@ module.exports = function(grunt) {
           'karma-junit-reporter'
         ]
       },
-      dev: {
-        // Start these browsers, currently available:
-        // - Chrome
-        // - ChromeCanary
-        // - Firefox
-        // - Opera
-        // - Safari (only Mac)
-        // - PhantomJS
-        // - IE (only Windows)
+      test: {
         browsers: ['PhantomJS']
       },
-      dev_once: {
+      test_once: {
         singleRun: true,
         browsers: ['PhantomJS']
       },
-      dev_chrome: {
+      test_dev: {
         browsers: ['Chrome'],
         preprocessors: {},
         reporters: ['dots', 'progress'],
         plugins: [
           'karma-mocha',
           'karma-requirejs',
-          'karma-sauce-launcher',
           'karma-chrome-launcher',
-          'karma-phantomjs-launcher',
-          'karma-junit-reporter'
         ]
       },
-      ci: {
+      test_ci: {
         singleRun: true,
-        browsers: ['sauce_chrome', 'sauce_firefox'],
-
-        reporters: ['junit', 'coverage'],
-        junitReporter: {
-          outputFile: 'test-results.xml'
-        },
-
-        sauceLabs: {
-          testName: 'PloneMockup',
-          startConnect: true
-        },
+        port: 8080,
+        reporters: ['junit', 'coverage', 'saucelabs'],
+        junitReporter: { outputFile: 'test-results.xml' },
+        sauceLabs: { testName: 'Mockup', startConnect: true },
+        browsers: [
+          'SL_Chrome',
+          'SL_Firefox',
+          //'SL_Opera',
+          //'SL_Safari',
+          //'SL_IE_8',
+          //'SL_IE_9',
+          //'SL_IE_10',
+          //'SL_IE_11'
+          //'SL_IPhone',
+          //'SL_IPad',
+          //'SL_Android'
+        ],
         customLaunchers: {
-          'sauce_chrome': {
-             base: 'SauceLabs',
-             platform: 'Windows 7',
-             browserName: 'chrome',
-             version: '31'
-           },
-          'sauce_firefox': {
-             base: 'SauceLabs',
-             platform: 'Windows 7',
-             browserName: 'firefox',
-             version: '25'
-           },
-           'sauce_ie': {
-             base: 'SauceLabs',
-             platform: 'Windows 8',
-             browserName: 'internet explorer'
-           }
+          'SL_Chrome': {
+            base: 'SauceLabs',
+            browserName: 'chrome'
+          },
+          'SL_Firefox': {
+            base: 'SauceLabs',
+            browserName: 'firefox'
+          },
+          'SL_Opera': {
+            base: 'SauceLabs',
+            browserName: 'opera'
+          },
+          'SL_Safari': {
+            base: 'SauceLabs',
+            browserName: 'safari',
+            platform: 'Mac 10.8',
+            version: '6'
+          },
+          'SL_IE_8': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '8'
+          },
+          'SL_IE_9': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 2008',
+            version: '9'
+          },
+          'SL_IE_10': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 2012',
+            version: '10'
+          },
+          'SL_IE_11': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 8.1',
+            version: '11'
+          },
+          'SL_IPhone': {
+            base: 'SauceLabs',
+            browserName: 'iphone',
+            platform: 'OS X 10.8',
+            version: '6.1'
+          },
+          'SL_IPad': {
+            base: 'SauceLabs',
+            browserName: 'ipad',
+            platform: 'OS X 10.8',
+            version: '6.1'
+          },
+          'SL_Android': {
+            base: 'SauceLabs',
+            browserName: 'android',
+            platform: 'Linux',
+            version: '4.0'
+          }
         }
       }
     },
     requirejs: {
       options: requirejsOptions,
+      docs: {
+        options: {
+          name: 'node_modules/requirejs/require.js',
+          include: ['mockup-bundles-docs'].concat(patterns),
+          insertRequire: ['mockup-bundles-docs'],
+          out: 'docs/dev/docs.js',
+        }
+      },
       // this bundle is used by:
-      //    https://pypi.python.org/pypi/plonetheme.barceloneta
+      //    https://pypi.python.org/pypi/plone.app.widgets
       barceloneta: {
         options: {
-          name: 'node_modules/almond/almond.js',
+          name: 'node_modules/requirejs/require.js',
           include: 'mockup-bundles-barceloneta',
           insertRequire: ['mockup-bundles-barceloneta'],
           out: 'build/barceloneta.min.js',
         }
       },
       // this bundle is used by:
+      //    https://pypi.python.org/pypi/wildcard.foldercontents
+      structure: {
+        options: {
+          name: 'node_modules/requirejs/require.js',
+          include: 'mockup-bundles-structure',
+          insertRequire: ['mockup-bundles-structure'],
+          out: 'build/structure.min.js'
+        }
+      },
+      // this bundle is used by:
       //    https://pypi.python.org/pypi/plone.app.widgets
       widgets: {
         options: {
-          name: 'node_modules/almond/almond.js',
+          name: 'node_modules/requirejs/require.js',
           include: 'mockup-bundles-widgets',
           insertRequire: ['mockup-bundles-widgets'],
           out: 'build/widgets.min.js',
@@ -189,30 +213,21 @@ module.exports = function(grunt) {
       //    https://pypi.python.org/pypi/plone.app.toolbar
       toolbar: {
         options: {
-          name: 'node_modules/almond/almond.js',
+          name: 'node_modules/requirejs/require.js',
           include: 'mockup-bundles-toolbar',
           insertRequire: ['mockup-bundles-toolbar'],
           out: 'build/toolbar.min.js'
         }
       },
-      // this bundle is used by:
-      //    https://pypi.python.org/pypi/wildcard.foldercontents
-      structure: {
-        options: {
-          optimize: 'none',
-          name: 'node_modules/almond/almond.js',
-          include: 'mockup-bundles-structure',
-          insertRequire: ['mockup-bundles-structure'],
-          out: 'build/structure.js'
-        }
-      }
     },
     uglify: {
       barceloneta: {
         files: {
           'build/barceloneta.js': [
-            'bower_components/jquery/jquery.js',
+            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js',
             'bower_components/domready/ready.js',
+            'bower_components/requirejs/require.js',
+            'bower_components/jquery/jquery.js',
             'js/bundles/barceloneta_develop.js'
            ],
           'build/barceloneta-legacy.js': [
@@ -222,10 +237,21 @@ module.exports = function(grunt) {
            ]
         }
       },
+      structure: {
+        files: {
+          'build/structure.js': [
+            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
+            'bower_components/domready/ready.js',
+            'bower_components/requirejs/require.js',
+            'bower_components/jquery/jquery.js',
+            'js/bundles/structure.js'
+           ]
+        }
+      },
       widgets: {
         files: {
           'build/widgets.js': [
-            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
+            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js',
             'bower_components/domready/ready.js',
             'bower_components/requirejs/require.js',
             'bower_components/jquery/jquery.js',
@@ -240,7 +266,7 @@ module.exports = function(grunt) {
             'js/iframe_init.js'
           ],
           'build/toolbar.js': [
-            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.5.1.js',
+            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js',
             'bower_components/domready/ready.js',
             'bower_components/requirejs/require.js',
             'bower_components/jquery/jquery.js',
@@ -248,93 +274,126 @@ module.exports = function(grunt) {
             ]
         }
       },
-      docs: {
-        files: docs_files
-      }
     },
     less: {
-      barceloneta: {
-        options: {
-          paths: ['less']
-        },
-        files: {
-          'build/barceloneta.css': 'less/barceloneta.less'
-        }
-      },
-      widgets: {
-        options: {
-          paths: ['less']
-        },
-        files: {
-          'build/widgets.css': 'less/widgets.less'
-        }
-      },
-      toolbar: {
-        options: {
-          paths: ['less']
-        },
-        files: {
-          'build/toolbar.css': 'less/toolbar.less',
-          'build/toolbar_init.css': 'less/iframe_init.less'
-        }
-      },
-      structure: {
-        options: {
-          paths: ['less']
-        },
-        files: {
-          'build/toolbar.css': 'less/structure.less'
-        }
+      options: {
+        compress: true,
+        cleancss: true,
+        ieCompat: true,
+        paths: ['less']
       },
       docs: {
-        options: {
-          paths: ['less']
-        },
         files: {
           'docs/dev/docs.css': 'less/docs.less'
         }
-      }
-    },
-    cssmin: {
+      },
       barceloneta: {
-        expand: true,
-        cwd: 'build/',
-        src: ['barceloneta.css'],
-        dest: 'build/',
-        ext: '.min.css',
-        report: 'min'
-      },
-      widgets: {
-        expand: true,
-        cwd: 'build/',
-        src: ['widgets.css'],
-        dest: 'build/',
-        ext: '.min.css',
-        report: 'min'
-      },
-      toolbar: {
-        expand: true,
-        cwd: 'build/',
-        src: ['toolbar.css', 'toolbar_init.css'],
-        dest: 'build/',
-        ext: '.min.css',
-        report: 'min'
+        files: {
+          'build/barceloneta.min.css': 'less/barceloneta.less'
+        }
       },
       structure: {
-        expand: true,
-        cwd: 'build/',
-        src: ['toolbar.css'],
-        dest: 'build/',
-        ext: '.min.css',
-        report: 'min'
+        files: {
+          'build/structure.min.css': 'less/structure.less'
+        }
       },
+      widgets: {
+        files: {
+          'build/widgets.min.css': 'less/widgets.less'
+        }
+      },
+      toolbar: {
+        files: {
+          'build/toolbar.min.css': 'less/toolbar.less',
+          'build/toolbar_init.min.css': 'less/iframe_init.less'
+        }
+      }
+    },
+    copy: {
       docs: {
-        expand: true,
-        cwd: 'docs/dev/',
-        src: ['docs.css'],
-        dest: 'docs/dev/',
-        ext: '.min.css',
-        report: 'min'
+        files: [
+          { expand: true, src: 'index.html', dest: 'docs/dev/' },
+          { expand: true, src: 'js/patterns/**', dest: 'docs/dev/' },
+          { expand: true, cwd: 'bower_components/bootstrap/fonts/', src: 'glyphicons-halflings-regular.*', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'bootstrap-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'icomoon.*', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'tinymce-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: 'loader.gif', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'tinymce-' + src; }},
+          { expand: true, cwd: 'bower_components/jqtree/', src: 'jqtree-circle.png', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'jqtree-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.png', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'select2-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.gif', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'select2-' + src; }},
+          { expand: true, cwd: 'bower_components/dropzone/downloads/images/', src: 'spritemap*', dest: 'docs/dev/',
+            rename: function(dest, src) { return dest + 'dropzone-' + src; }}
+        ]
+      },
+      barceloneta: {
+        files: [
+          { expand: true, cwd: 'less/images/', src: 'barceloneta-*', dest: 'build/' },
+          { expand: true, cwd: 'bower_components/bootstrap/fonts/', src: 'glyphicons-halflings-regular.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'barceloneta-bootstrap-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'icomoon.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'barceloneta-tinymce-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: 'loader.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'barceloneta-tinymce-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.png', dest: 'build/',
+            rename: function(dest, src) { return dest + 'barceloneta-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'barceloneta-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/dropzone/downloads/images/', src: 'spritemap*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'barceloneta-dropzone-' + src; }}
+        ]
+      },
+      structure: {
+        files: [
+          { expand: true, cwd: 'bower_components/bootstrap/fonts/', src: 'glyphicons-halflings-regular.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'structure-bootstrap-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'icomoon.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'structure-tinymce-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: 'loader.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'structure-tinymce-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.png', dest: 'build/',
+            rename: function(dest, src) { return dest + 'structure-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'structure-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/dropzone/downloads/images/', src: 'spritemap*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'structure-dropzone-' + src; }}
+        ]
+      },
+      widgets: {
+        files: [
+          { expand: true, cwd: 'bower_components/bootstrap/fonts/', src: 'glyphicons-halflings-regular.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'widgets-bootstrap-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'icomoon.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'widgets-tinymce-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: 'loader.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'widgets-tinymce-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.png', dest: 'build/',
+            rename: function(dest, src) { return dest + 'widgets-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'widgets-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/dropzone/downloads/images/', src: 'spritemap*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'widgets-dropzone-' + src; }}
+        ]
+      },
+      toolbar: {
+        files: [
+          { expand: true, cwd: 'bower_components/bootstrap/fonts/', src: 'glyphicons-halflings-regular.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'toolbar-bootstrap-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'icomoon.*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'toolbar-tinymce-' + src; }},
+          { expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: 'loader.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'toolbar-tinymce-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.png', dest: 'build/',
+            rename: function(dest, src) { return dest + 'toolbar-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/select2/', src: 'select2*.gif', dest: 'build/',
+            rename: function(dest, src) { return dest + 'toolbar-select2-' + src; }},
+          { expand: true, cwd: 'bower_components/dropzone/downloads/images/', src: 'spritemap*', dest: 'build/',
+            rename: function(dest, src) { return dest + 'toolbar-dropzone-' + src; }}
+        ]
       }
     },
     sed: {
@@ -343,359 +402,254 @@ module.exports = function(grunt) {
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       },
-      'barceloneta-ticks.png': {
-        path: 'build/barceloneta.css',
-        pattern: 'images/barceloneta-ticks.png',
-        replacement: '++resource++plonetheme.barceloneta-ticks.png'
+
+      'docs-css': {
+        path: 'docs/dev/index.html',
+        pattern: '<style type="text/less">@import "less/docs.less";@isBrowser: true;</style>',
+        replacement: '<link rel="stylesheet" type="text/css" href="docs.css" />'
       },
-      'barceloneta-bg-watermark.png': {
-        path: 'build/barceloneta.css',
-        pattern: 'images/barceloneta-bg-watermark.png',
-        replacement: '++resource++plonetheme.barceloneta-bg-watermark.png'
+      'docs-js': {
+        path: 'docs/dev/index.html',
+        pattern: '<script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js"></script>\n  <script src="node_modules/requirejs/require.js"></script>\n  <script src="js/config.js"></script>\n  <script>require\\(\\[\'mockup-bundles-docs\'\\]\\);</script>',
+        replacement: '<script src="docs.js"></script>'
       },
-      'barceloneta-bg-breadcrumb.png': {
-        path: 'build/barceloneta.css',
-        pattern: 'images/barceloneta-bg-breadcrumb.png',
-        replacement: '++resource++plonetheme.barceloneta-bg-breadcrumb.png'
+      'docs-legacy-js': {
+        path: 'docs/dev/index.html',
+        pattern: '<script src="bower_components/es5-shim/es5-shim.js"></script>\n    <script src="bower_components/es5-shim/es5-sham.js"></script>\n    <script src="bower_components/console-polyfill/index.js"></script>',
+        replacement: '<script src="docs-legacy.js"></script>'
       },
-      'barceloneta-select2png': {
-        path: 'build/barceloneta.css',
-        pattern: 'select2.png',
-        replacement: '++resource++plonetheme.barceloneta-select2.png'
+      'docs-bootstrap-glyphicons': {
+        path: 'docs/dev/docs.css',
+        pattern: '../fonts/glyphicons-halflings-regular',
+        replacement: 'bootstrap-glyphicons-halflings-regular'
       },
-      'barceloneta-select2spinnergif': {
-        path: 'build/barceloneta.css',
-        pattern: 'select2-spinner.gif',
-        replacement: '++resource++plonetheme.barceloneta-select2-spinner.gif'
+      'docs-dropzone-spritemap': {
+        path: 'docs/dev/docs.css',
+        pattern: '../images/spritemap',
+        replacement: 'dropzone-spritemap'
       },
-      'barceloneta-glyphicons': {
-        path: 'build/barceloneta.css',
-        pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
-        replacement: '++resource++plonetheme.barceloneta-glyphicons-halflings-regular'
+      'docs-select2-images': {
+        path: 'docs/dev/docs.css',
+        pattern: '\\(\'select2',
+        replacement: '(\'select2-select2'
       },
-      'barceloneta-tinymce-icomoon': {
-        path: 'build/barceloneta.css',
+      'docs-tinymce-icomoon': {
+        path: 'docs/dev/docs.css',
         pattern: 'fonts/icomoon',
-        replacement: '++resource++plonetheme.barceloneta-tinymce-icomoon'
+        replacement: 'tinymce-icomoon'
+      },
+      'docs-tinymce-loader': {
+        path: 'docs/dev/docs.css',
+        pattern: 'img/loader.gif',
+        replacement: 'tinymce-loader.gif'
+      },
+      'docs-jqtree-circle': {
+        path: 'docs/dev/docs.css',
+        pattern: 'jqtree-circle.png',
+        replacement: 'jqtree-jqtree-circle.png'
+      },
+
+      'barceloneta-images': {
+        path: 'build/barceloneta.min.css',
+        pattern: '\\(\'images/barceloneta-',
+        replacement: '\\(\'++resource++plonetheme.barceloneta-'
+      },
+      'barceloneta-bootstrap-glyphicons': {
+        path: 'build/barceloneta.min.css',
+        pattern: '../fonts/glyphicons-halflings-regular',
+        replacement: 'bootstrap-glyphicons-halflings-regular'
       },
       'barceloneta-dropzone-spritemap': {
-        path: 'build/barceloneta.css',
-        pattern: 'images/spritemap',
-        replacement: '++resource++plonetheme.barceloneta-dropzone-spritemap'
+        path: 'build/barceloneta.min.css',
+        pattern: '../images/spritemap',
+        replacement: 'dropzone-spritemap'
       },
-      'widgets-select2png': {
-        path: 'build/widgets.css',
-        pattern: 'select2.png',
-        replacement: '++resource++plone.app.widgets-select2.png'
+      'barceloneta-select2-images': {
+        path: 'build/barceloneta.min.css',
+        pattern: '\\(\'select2',
+        replacement: '(\'select2-select2'
       },
-      'widgets-select2spinnergif': {
-        path: 'build/widgets.css',
-        pattern: 'select2-spinner.gif',
-        replacement: '++resource++plone.app.widgets-select2-spinner.gif'
+      'barceloneta-tinymce-icomoon': {
+        path: 'build/barceloneta.min.css',
+        pattern: 'fonts/icomoon',
+        replacement: 'tinymce-icomoon'
       },
-      'widgets-glyphicons': {
-        path: 'build/widgets.css',
-        pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
-        replacement: '++resource++plone.app.widgets-glyphicons-halflings-regular'
+      'barceloneta-tinymce-loader': {
+        path: 'build/barceloneta.min.css',
+        pattern: 'img/loader.gif',
+        replacement: 'tinymce-loader.gif'
+      },
+
+      'structure-bootstrap-glyphicons': {
+        path: 'build/structure.min.css',
+        pattern: '../fonts/glyphicons-halflings-regular',
+        replacement: '++resource++wildcard.foldercontents-bootstrap-glyphicons-halflings-regular'
+      },
+      'structure-dropzone-spritemap': {
+        path: 'build/structure.min.css',
+        pattern: '../images/spritemap',
+        replacement: '++resource++wildcard.foldercontents-dropzone-spritemap'
+      },
+      'structure-select2-images': {
+        path: 'build/structure.min.css',
+        pattern: '\\(\'select2',
+        replacement: '(\'++resource++wildcard.foldercontents-select2-select2'
+      },
+      'structure-tinymce-icomoon': {
+        path: 'build/structure.min.css',
+        pattern: 'fonts/icomoon',
+        replacement: '++resource++wildcard.foldercontents-tinymce-icomoon'
+      },
+      'structure-tinymce-loader': {
+        path: 'build/structure.min.css',
+        pattern: 'img/loader.gif',
+        replacement: '++resource++wildcard.foldercontents-tinymce-loader.gif'
+      },
+
+      'widgets-bootstrap-glyphicons': {
+        path: 'build/widgets.min.css',
+        pattern: '../fonts/glyphicons-halflings-regular',
+        replacement: '++resource++plone.app.widgets-bootstrap-glyphicons-halflings-regular'
+      },
+      'widgets-dropzone-spritemap': {
+        path: 'build/widgets.min.css',
+        pattern: '../images/spritemap',
+        replacement: '++resource++plone.app.widgets-dropzone-spritemap'
+      },
+      'widgets-select2-images': {
+        path: 'build/widgets.min.css',
+        pattern: '\\(\'select2',
+        replacement: '(\'++resource++plone.app.widgets-select2-select2'
       },
       'widgets-tinymce-icomoon': {
-        path: 'build/widgets.css',
+        path: 'build/widgets.min.css',
         pattern: 'fonts/icomoon',
         replacement: '++resource++plone.app.widgets-tinymce-icomoon'
       },
-      'widgets-dropzone-spritemap': {
-        path: 'build/widgets.css',
-        pattern: 'images/spritemap',
-        replacement: '++resource++plone.app.widgets-dropzone-spritemap'
+      'widgets-tinymce-loader': {
+        path: 'build/widgets.min.css',
+        pattern: 'img/loader.gif',
+        replacement: '++resource++plone.app.widgets-tinymce-loader.gif'
       },
-      'toolbar-select2png': {
-        path: 'build/toolbar.css',
-        pattern: 'select2.png',
-        replacement: '++resource++plone.app.toolbar-select2.png'
+
+      'toolbar-bootstrap-glyphicons': {
+        path: 'build/toolbar.min.css',
+        pattern: '../fonts/glyphicons-halflings-regular',
+        replacement: '++resource++plone.app.toolbar-bootstrap-glyphicons-halflings-regular'
       },
-      'toolbar-select2spinnergif': {
-        path: 'build/toolbar.css',
-        pattern: 'select2-spinner.gif',
-        replacement: '++resource++plone.app.toolbar-select2-spinner.gif'
+      'toolbar-dropzone-spritemap': {
+        path: 'build/toolbar.min.css',
+        pattern: '../images/spritemap',
+        replacement: '++resource++plone.app.toolbar-dropzone-spritemap'
       },
-      'toolbar-glyphicons': {
-        path: 'build/toolbar.css',
-        pattern: '../bower_components/bootstrap/fonts/glyphicons-halflings-regular',
-        replacement: '++resource++plone.app.toolbar-glyphicons-halflings-regular'
+      'toolbar-select2-images': {
+        path: 'build/toolbar.min.css',
+        pattern: '\\(\'select2',
+        replacement: '(\'++resource++plone.app.toolbar-select2-select2'
       },
       'toolbar-tinymce-icomoon': {
         path: 'build/toolbar.min.css',
         pattern: 'fonts/icomoon',
         replacement: '++resource++plone.app.toolbar-tinymce-icomoon'
       },
-      'toolbar-dropzone-spritemap': {
+      'toolbar-tinymce-loader': {
         path: 'build/toolbar.min.css',
-        pattern: 'images/spritemap',
-        replacement: '++resource++plone.app.toolbar-dropzone-spritemap'
-      },
-      'docs-lessjs': {
-        path: 'docs/dev/index.html',
-        pattern: '<script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.4.1.js"></script>',
-        replacement: ''
-      },
-      'docs-docscss': {
-        path: 'docs/dev/index.html',
-        pattern: '<style type="text/less">@import "less/docs.less";@isBrowser: true;</style>',
-        replacement: '<link rel="stylesheet" type="text/css" href="docs.min.css" />'
-      },
-      'docs-halflings': {
-        path: 'docs/dev/docs.min.css',
-        pattern: '../img/glyphicons-halflings.png@glyphicons-halflings.png',
-        replacement: ''
-      },
-      'docs-halflings-white': {
-        path: 'docs/dev/docs.min.css',
-        pattern: '../img/glyphicons-halflings-white.png',
-        replacement: 'glyphicons-halflings-white.png'
-      },
-      'docs-fontawesome': {
-        path: 'docs/dev/docs.min.css',
-        pattern: '../bower_components/font-awesome/fonts/fontawesome-webfont',
-        replacement: 'fontawesome-webfont'
-      },
-      'docs-icomoon': {
-        path: 'docs/dev/docs.min.css',
-        pattern: 'fonts/icomoon',
-        replacement: 'icomoon'
-      },
-      'docs-spritemap': {
-        path: 'docs/dev/docs.min.css',
-        pattern: 'images/spritemap',
-        replacement: 'spritemap'
+        pattern: 'img/loader.gif',
+        replacement: '++resource++plone.app.toolbar-tinymce-loader.gif'
       }
     }
   });
 
+
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-sed');
 
-  grunt.registerTask('barceloneta-files', '', function() {
-    grunt.file.delete('build/barceloneta.css');
-    grunt.file.write('build/barceloneta.css', '');
 
-    grunt.file.copy('less/images/barceloneta-apple-touch-icon-114x114-precomposed.png', 'build/barceloneta-apple-touch-icon-114x114-precomposed.png');
-    grunt.file.copy('less/images/barceloneta-apple-touch-icon-144x144-precomposed.png', 'build/barceloneta-apple-touch-icon-144x144-precomposed.png');
-    grunt.file.copy('less/images/barceloneta-apple-touch-icon-57x57-precomposed.png', 'build/barceloneta-apple-touch-icon-57x57-precomposed.png');
-    grunt.file.copy('less/images/barceloneta-apple-touch-icon-72x72-precomposed.png', 'build/barceloneta-apple-touch-icon-72x72-precomposed.png');
-    grunt.file.copy('less/images/barceloneta-apple-touch-icon.png', 'build/barceloneta-apple-touch-icon.png');
-    grunt.file.copy('less/images/barceloneta-apple-touch-icon-precomposed.png', 'build/barceloneta-apple-touch-icon-precomposed.png');
-    grunt.file.copy('less/images/barceloneta-bg-breadcrumb.png', 'build/barceloneta-bg-breadcrumb.png');
-    grunt.file.copy('less/images/barceloneta-bg-watermark.png', 'build/barceloneta-bg-watermark.png');
-    grunt.file.copy('less/images/barceloneta-favicon.ico', 'build/barceloneta-favicon.ico');
-    grunt.file.copy('less/images/barceloneta-ticks.png', 'build/barceloneta-ticks.png');
-
-    grunt.file.copy('less/images/barceloneta-ticks.png', 'less/images/barceloneta-ticks.png');
-    grunt.file.copy('less/images/barceloneta-bg-watermark.png', 'less/images/barceloneta-bg-watermark.png');
-    grunt.file.copy('less/images/barceloneta-bg-breadcrumb.png', 'less/images/barceloneta-bg-breadcrumb.png');
-
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/barceloneta-glyphicons-halflings-regular.eot');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/barceloneta-glyphicons-halflings-regular.svg');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/barceloneta-glyphicons-halflings-regular.ttf');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', 'build/barceloneta-glyphicons-halflings-regular.woff');
-
-    grunt.file.copy('bower_components/select2/select2.png', 'build/barceloneta-select2.png');
-    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/barceloneta-select2-spinner.gif');
-
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/barceloneta-tinymce-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/barceloneta-tinymce-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/barceloneta-tinymce-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/barceloneta-tinymce-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/barceloneta-tinymce-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/barceloneta-tinymce-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/barceloneta-tinymce-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/barceloneta-tinymce-icomoon-small.ttf');
-
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/barceloneta-dropzone-spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/barceloneta-dropzone-spritemap@2x.png');
-  });
-  grunt.registerTask('widgets-files', '', function() {
-    grunt.file.delete('build/widgets.css');
-    grunt.file.write('build/widgets.css', '');
-
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/widgets-glyphicons-halflings-regular.eot');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/widgets-glyphicons-halflings-regular.svg');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/widgets-glyphicons-halflings-regular.ttf');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', 'build/widgets-glyphicons-halflings-regular.woff');
-
-    grunt.file.copy('bower_components/select2/select2.png', 'build/widgets-select2.png');
-    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/widgets-select2-spinner.gif');
-
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/widgets-tinymce-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/widgets-tinymce-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/widgets-tinymce-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/widgets-tinymce-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/widgets-tinymce-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/widgets-tinymce-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/widgets-tinymce-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/widgets-tinymce-icomoon-small.ttf');
-
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/widgets-dropzone-spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/widgets-dropzone-spritemap@2x.png');
-  });
-  grunt.registerTask('toolbar-files', '', function() {
-
-    grunt.file.delete('build/toolbar.css');
-    grunt.file.delete('build/toolbar_init.css');
-    grunt.file.write('build/toolbar.css', '');
-
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot', 'build/toolbar-glyphicons-halflings-regular.eot');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg', 'build/toolbar-glyphicons-halflings-regular.svg');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'build/toolbar-glyphicons-halflings-regular.ttf');
-    grunt.file.copy('bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff', 'build/toolbar-glyphicons-halflings-regular.woff');
-
-    grunt.file.copy('bower_components/select2/select2.png', 'build/toolbar-select2.png');
-    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/toolbar-select2-spinner.gif');
-
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/toolbar-tinymce-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/toolbar-tinymce-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/toolbar-tinymce-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/toolbar-tinymce-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/toolbar-tinymce-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/toolbar-tinymce-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/toolbar-tinymce-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/toolbar-tinymce-icomoon-small.ttf');
-
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'build/toolbar-dropzone-spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-dropzone-spritemap@2x.png');
-  });
-  grunt.registerTask('structure-files', '', function() {
-    grunt.file.delete('build/toolbar.css');
-
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings.png', 'build/toolbar-glyphicons-halflings.png');
-    grunt.file.copy('bower_components/bootstrap/img/glyphicons-halflings-white.png', 'build/toolbar-glyphicons-halflings-white.png');
-
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.eot', 'build/toolbar-fontawesome-webfont.eot');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.woff', 'build/toolbar-fontawesome-webfont.woff');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.ttf', 'build/toolbar-fontawesome-webfont.ttf');
-    grunt.file.copy('bower_components/font-awesome/font/fontawesome-webfont.svg', 'build/toolbar-fontawesome-webfont.svg');
-
-    grunt.file.copy('bower_components/select2/select2.png', 'build/toolbar-select2.png');
-    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'build/toolbar-select2-spinner.gif');
-
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'build/toolbar-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'build/toolbar-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'build/toolbar-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'build/toolbar-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'build/toolbar-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'build/toolbar-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'build/toolbar-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'build/toolbar-icomoon-small.ttf');
-
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap.png', 'build/toolbar-spritemap.png');
-    grunt.file.copy('lib/dropzone/downloads/images/spritemap@2x.png', 'build/toolbar-spritemap@2x.png');
-  });
-  grunt.registerTask('docs-files', '', function() {
-    grunt.file.copy('lib/tinymce/tinymce.min.js', 'docs/dev/lib/tinymce/tinymce.min.js');
-
-    grunt.file.copy('index.html', 'docs/dev/index.html');
-
-    grunt.file.copy('bower_components/select2/select2.png', 'docs/dev/select2.png');
-    grunt.file.copy('bower_components/select2/select2-spinner.gif', 'docs/dev/select2-spinner.gif');
-
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.eot', 'docs/dev/tinymce-icomoon.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.svg', 'docs/dev/tinymce-icomoon.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.woff', 'docs/dev/tinymce-icomoon.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon.ttf', 'docs/dev/tinymce-icomoon.ttf');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.eot', 'docs/dev/tinymce-icomoon-small.eot');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.svg', 'docs/dev/tinymce-icomoon-small.svg');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.woff', 'docs/dev/tinymce-icomoon-small.woff');
-    grunt.file.copy('lib/tinymce/skins/lightgray/fonts/icomoon-small.ttf', 'docs/dev/tinymce-icomoon-small.ttf');
-
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap.png', 'docs/dev/dropzone-spritemap.png');
-    grunt.file.copy('bower_components/dropzone/downloads/images/spritemap@2x.png', 'docs/dev/dropzone-spritemap@2x.png');
-  });
+  grunt.registerTask('docs', [
+      'requirejs:docs',
+      'less:docs',
+      'copy:docs',
+      'sed:docs-css',
+      'sed:docs-js',
+      'sed:docs-legacy-js',
+      'sed:docs-bootstrap-glyphicons',
+      'sed:docs-dropzone-spritemap',
+      'sed:docs-select2-images',
+      'sed:docs-tinymce-icomoon',
+      'sed:docs-tinymce-loader',
+      'sed:docs-jqtree-circle'
+      ]);
 
   grunt.registerTask('compile-barceloneta', [
       'requirejs:barceloneta',
       'uglify:barceloneta',
       'less:barceloneta',
-      'sed:barceloneta-ticks.png',
-      'sed:barceloneta-bg-watermark.png',
-      'sed:barceloneta-bg-breadcrumb.png',
-      'sed:barceloneta-glyphicons',
-      'sed:barceloneta-select2png',
-      'sed:barceloneta-select2spinnergif',
-      'sed:barceloneta-tinymce-icomoon',
+      'copy:barceloneta',
+      'sed:barceloneta-images',
+      'sed:barceloneta-bootstrap-glyphicons',
       'sed:barceloneta-dropzone-spritemap',
-      'cssmin:barceloneta',
-      'barceloneta-files'
+      'sed:barceloneta-select2-images',
+      'sed:barceloneta-tinymce-icomoon',
+      'sed:barceloneta-tinymce-loader'
       ]);
+
+  grunt.registerTask('compile-structure', [
+      'requirejs:structure',
+      'uglify:structure',
+      'less:structure',
+      'copy:structure',
+      'sed:structure-bootstrap-glyphicons',
+      'sed:structure-dropzone-spritemap',
+      'sed:structure-select2-images',
+      'sed:structure-tinymce-icomoon',
+      'sed:structure-tinymce-loader'
+      ]);
+
   grunt.registerTask('compile-widgets', [
       'requirejs:widgets',
       'uglify:widgets',
       'less:widgets',
-      'sed:widgets-glyphicons',
-      'sed:widgets-select2png',
-      'sed:widgets-select2spinnergif',
-      'sed:widgets-tinymce-icomoon',
+      'copy:widgets',
+      'sed:widgets-bootstrap-glyphicons',
       'sed:widgets-dropzone-spritemap',
-      'cssmin:widgets',
-      'widgets-files'
+      'sed:widgets-select2-images',
+      'sed:widgets-tinymce-icomoon',
+      'sed:widgets-tinymce-loader'
       ]);
+
   grunt.registerTask('compile-toolbar', [
       'requirejs:toolbar',
       'uglify:toolbar',
       'less:toolbar',
-      'sed:toolbar-glyphicons',
-      'sed:toolbar-select2png',
-      'sed:toolbar-select2spinnergif',
-      //'sed:toolbar-tinymce-icomoon',
-      //'sed:toolbar-dropzone-spritemap',
-      'cssmin:toolbar',
-      'toolbar-files'
-      ]);
-  grunt.registerTask('compile-structure', [
-      'requirejs:structure',
-      'less:structure',
-      'cssmin:structure',
-      'structure-files',
-      'sed:toolbar-halflings',
-      'sed:toolbar-glyphiconswhite',
-      'sed:toolbar-fontawesome',
-      'sed:toolbar-select2png',
-      'sed:toolbar-select2spinnergif',
-      'sed:toolbar-icomoon',
-      'sed:toolbar-spritemap'
+      'copy:toolbar',
+      'sed:toolbar-bootstrap-glyphicons',
+      'sed:toolbar-dropzone-spritemap',
+      'sed:toolbar-select2-images',
+      'sed:toolbar-tinymce-icomoon',
+      'sed:toolbar-tinymce-loader'
       ]);
 
-  grunt.registerTask('docs', [
-      'uglify:docs',
-      'less:docs',
-      'cssmin:docs',
-      'docs-files',
-      'sed:docs-lessjs',
-      'sed:docs-docscss',
-      'sed:docs-halflings',
-      'sed:docs-halflings-white',
-      'sed:docs-fontawesome',
-      'sed:docs-icomoon',
-      'sed:docs-spritemap'
-      ]);
-  grunt.registerTask('dev', [
+
+  grunt.registerTask('test', [
       'jshint',
-      'karma:dev'
+      'karma:test'
       ]);
-  grunt.registerTask('dev_once', [
+  grunt.registerTask('test_once', [
       'jshint',
-      'karma:dev_once'
+      'karma:test_once'
       ]);
-  grunt.registerTask('dev_chrome', [
-      'karma:dev_chrome'
+  grunt.registerTask('test_dev', [
+      'karma:test_dev'
       ]);
-  grunt.registerTask('ci', [
+  grunt.registerTask('test_ci', [
       'jshint',
-      'karma:dev_once',
-//      'karma:ci',
+      'karma:test_once',
+      'karma:test_ci',
       'compile-barceloneta',
       'compile-widgets',
       'compile-toolbar',

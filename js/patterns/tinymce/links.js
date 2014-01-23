@@ -422,7 +422,7 @@ define([
       var data = $.extend(true, {}, {
         src: src,
         alt: self.$alt.val(),
-        class: 'image-' + self.$align.val(),
+        'class': 'image-' + self.$align.val(),
         "data-linkType": self.linkType,
         "data-scale": self.$scale.val()
       }, self.linkTypes[self.linkType].attributes());

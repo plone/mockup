@@ -1,28 +1,78 @@
-// plone integration for select2
-//
-// Author: Rok Garbas
-// Contact: rok@garbas.si
-// Version: 1.0
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Select2 pattern.
+ *
+ * Options:
+ *    separator(string): Analagous to the separator constructor parameter from Select2. Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will allow tags and initialValues to have values separated by ";" instead of the default ",". (',')
+ *    initialValues(string): This can be a json encoded string, or a list of id:text values. Ex: Red:The Color Red,Orange:The Color Orange  This is used inside the initSelection method, if AJAX options are NOT set. (null)
+ *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
+ *    OTHER OPTIONS(): For more options on select2 go to http://ivaynberg.github.io/select2/#documentation ()
+ *
+ * Documentation:
+ *    # Autocomplete with search (single select)
+ *
+ *    {{ example-1 }}
+ *
+ *    # Tagging
+ *
+ *    {{ example-2 }}
+ *
+ *    # Orderable tags
+ *
+ *    {{ example-3 }}
+ *
+ *    # AJAX tags
+ *
+ *    {{ example-4 }}
+ *
+ * Example: example-1
+ *    <select class="pat-select2" data-pat-select2="width:20em">
+ *      <option value="Acholi">Acholi</option>
+ *      <option value="Afrikaans">Afrikaans</option>
+ *      <option value="Akan">Akan</option>
+ *      <option value="Albanian">Albanian</option>
+ *      <option value="Amharic">Amharic</option>
+ *      <option value="Arabic">Arabic</option>
+ *      <option value="Ashante">Ashante</option>
+ *      <option value="Asl">Asl</option>
+ *      <option value="Assyrian">Assyrian</option>
+ *      <option value="Azerbaijani">Azerbaijani</option>
+ *      <option value="Azeri">Azeri</option>
+ *    </select>
+ *
+ * Example: example-2
+ *    <input type="text" class="pat-select2"
+ *           data-pat-select2="separator:,;
+ *                             tags:Red,Yellow,Green,Orange,Purple;
+ *                             width:20em;
+ *                             initialValues:Red:The Color Red,Orange:The Color Orange"
+ *           value="Red,Orange"/>
+ *
+ * Example: example-3
+ *    <input type="text" class="pat-select2"
+ *           data-pat-select2="orderable:true;
+ *                             tags:Red,Yellow,Green;
+ *                             width:20em" />
+ * Example: example-4
+ *    <input type="hidden" class="pat-select2"
+ *           data-pat-select2="placeholder:Search for a Value;
+ *                             vocabularyUrl:select2-test.json;
+ *                             width:20em" />
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

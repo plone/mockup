@@ -27,7 +27,7 @@ define([
   'underscore',
   'backbone',
   'js/patterns/structure/models/result',
-  'backbone-paginator'
+  'backbone.paginator'
 ], function(_, Backbone, Result) {
 "use strict";
 

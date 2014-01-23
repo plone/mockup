@@ -1,28 +1,80 @@
-// plone integration for related items
-//
-// Author: Ryan Foster
-// Contact: ryan@rynamic.com
-// Version: 1.0
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* Related items pattern.
+ *
+ * Options:
+ *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
+ *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'Type', 'path'])
+ *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
+ *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%= path %>"><%= text %></a>')
+ *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
+ *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>')
+ *    breadCrumbsTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbsTemplate. (null)
+ *    cache(boolean): Whether or not results from the server should be
+ *    cached. (true)
+ *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
+ *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
+ *    folderTypes(array): Types which should be considered browsable. (["Folder"])
+ *    homeText(string): Text to display in the initial breadcrumb item. (home)
+ *    maximumSelectionSize(integer): Do not change this option. (-1)
+ *    multiple(boolean): Do not change this option. (true)
+ *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
+ *    resultTemplate(string): Template for an item in the in the list of results. Refer to source for default. (Refer to source)
+ *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
+ *    searchText(string): Text which will be inserted to the left of the
+ *    path. (Search)
+ *    searchAllText(string): Displays next to the path when the path is set to the root. (All)
+ *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
+ *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
+ *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
+ *    separator(string): Select2 option. String which separates multiple items. (',')
+ *    tokenSeparators(array): Select2 option, refer to select2 documentation.
+ *    ([",", " "])
+ *    width(string): Specify a width for the widget. ('300px')
+ *
+ * Documentation:
+ *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
+ *
+ *    # Default
+ *
+ *    {{ example-1 }}
+ *
+ *    # Existing values, some bad
+ *
+ *    {{ example-2 }}
+ *
+ *    # Selectable Types
+ *
+ *    {{ example-3 }}
+ *
+ * Example: example-1
+ *    <input type="text" class="pat-relateditems"
+ *           data-pat-relateditems="width:30em;
+ *                                  vocabularyUrl:/relateditems-test.json" />
+ *
+ * Example: example-2
+ *    <input type="text" class="pat-relateditems"
+ *           value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
+ *           data-pat-relateditems="width:30em; vocabularyUrl:/relateditems-test.json" />
+ *
+ * Example: example-3
+ *    <input type="text" class="pat-relateditems"
+             data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 
 define([

@@ -383,8 +383,8 @@ define([
           $('body', iframe.document).css('overflow', 'hidden');
           iframe.stretch();
         })
-        .on('show.modal.patterns', 'a.modal-trigger, a.pat-modal', function(e, modal) {
-          var $el = $(this);
+        .on('show.modal.patterns', 'a.modal-trigger, a.pat-modal', function(e) {
+          var $el = $(this), modal = $el.data('pattern-modal');
           $('.toolbar-dropdown-open > a').each(function() {
             if ($el[0] !== $(this)[0]) {
               $(this).trigger('click');
@@ -447,7 +447,8 @@ define([
       $('#toolbar-manage-portlets a,#manage-dashboard a', self.$el)
       .addClass('pat-modal')
       .patternModal(portletOptions)
-      .on('render.modal.patterns', function(e, modal) {
+      .on('render.modal.patterns', function(e) {
+        var modal = $(this).data('pattern-modal');
         // Kill the onchange method so we can wire up our own
         $('.section select', modal.$raw).removeAttr('onchange');
         modal.options.actions = {
@@ -479,8 +480,8 @@ define([
             }
           };
       })
-      .on('hidden.modal.patterns', function(e, modal) {
-          modal.reloadWindow();
+      .on('hidden.modal.patterns', function(e) {
+          $(this).data('pattern-modal').reloadWindow();
         }
       );
 
@@ -537,8 +538,8 @@ define([
       $('#plone-action-contentrules > a', self.$el)
         .addClass('pat-modal')
         .patternModal(rulesOptions).
-        on('render.modal.patterns', function(e, modal) {
-          modal.options.actions = {
+        on('render.modal.patterns', function(e) {
+          $(this).data('pattern-modal').options.actions = {
             'table.listing a': {
               ajaxUrl: function($action, options) {
                 return $action.attr('href').replace(/@@/g, "++nodiazo++/@@");

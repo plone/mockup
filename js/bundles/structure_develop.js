@@ -8,13 +8,13 @@
     script1.setAttribute('src', '/++resource++mockup/js/config.js');
     script1.onload = function() {
       requirejs.config({ baseUrl: '++resource++mockup/' });
-      require(['mockup-bundles-barceloneta']);
+      require(['mockup-bundles-structure']);
     };
     document.getElementsByTagName("head")[0].appendChild(script1);
 
     var style1 = document.createElement('style');
     style1.setAttribute('type', 'text/less');
-    style1.innerHTML = '@import (less) "/++resource++mockup/less/barceloneta.less"; @isBrowser: true; @pathPrefix: \'/++resource++mockup/less/\';';
+    style1.innerHTML = '@import (less) "/++resource++mockup/less/structure.less"; @isBrowser: true; @pathPrefix: \'/++resource++mockup/less/\';';
     document.getElementsByTagName("head")[0].appendChild(style1);
 
     less.refresh();

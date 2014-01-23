@@ -1,27 +1,64 @@
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
-// Version: 1.0
-//
-// Description:
-//    TinyMCE pattern (for now its depening on Plone's integration)
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
+/* TinyMCE pattern.
+ *
+ * Options:
+ *    relatedItems(object): Related items pattern options. ({ attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
+ *    text(object): Translation strings ({ insertBtn: "Insert", cancelBtn: "Cancel", insertHeading: "Insert link", title: "Title", internal: "Internal", external: "External", email: "Email", anchor: "Anchor", subject: "Subject" image: "Image", imageAlign: "Align", scale: "Size", alt: "Alternative Text", externalImage: "External Image URI"})
+ *    scales(string): TODO: is this even used ('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,Large (768x768):large')
+ *    targetList(array): TODO ([ {text: "Open in this window / frame", value: ""}, {text: "Open in new window", value: "_blank"}, {text: "Open in parent window / frame", value: "_parent"}, {text: "Open in top frame (replaces all frames)", value: "_top"}])
+ * imageTypes(string): TODO ('Image')
+ *    folderTypes(string): TODO ('Folder,Plone Site')
+ *    linkableTypes(string): TODO ('Document,Event,File,Folder,Image,News Item,Topic')
+ *    tiny(object): TODO ({ plugins: [ "advlist autolink lists charmap print preview anchor ploneupload", "usearchreplace visualblocks code fullscreen autoresize", "insertdatetime media table contextmenu paste plonelink ploneimage" ], menubar: "edit table format tools view insert",
+toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage | ploneupload", autoresize_max_height: 1500 })
+ *    rel_upload_path(string): To provide upload support. (null)
+ *    folder_url(string): Base url to provide upload url off of. (null)
+ *    prependToUrl(string): Text to prepend to generated internal urls. ('')
+ *    appendToUrl(string): Text to append to generated internal urls. ('')
+ *    prependToScalePart(string): Text to prepend to generated image scale url part. ('/imagescale/')
+ *    appendToScalePart(string): Text to append to generated image scale url part. ('')
+ *    linkAttribute(string): Ajax response data attribute to use for url. ('path')
+ *
+ * Documentation:
+ *    # Default
+ *
+ *    {{ example-1 }}
+ *
+ *    # With dropzone
+ *
+ *    {{ example-2 }}
+ *
+ * Example: example-1
+ *    <form>
+ *      <textarea class="pat-tinymce"
+ *          data-pat-tinymce='{"relatedItems": {
+ *                                "vocabularyUrl": "/relateditems-test.json"
+ *                                }}'></textarea>
+ *    </form>
+ *
+ * Example: example-2
+ *    <form>
+ *      <textarea class="pat-tinymce"
+ *          data-pat-tinymce='{"relatedItems": {"vocabularyUrl": "/relateditems-test.json" },
+ *                             "rel_upload_path": "upload",
+ *                             "folder_url": "http://localhost:8000/"}'></textarea>
+ *    </form>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 define([
   'jquery',
@@ -234,7 +271,7 @@ define([
         /* handle images different than others */
         attr = {
           src: self.generateImageUrl(data, 'thumb'),
-          class: 'image-inline'
+          'class': 'image-inline'
         };
         attr.id = '__mcenew';
         self.tiny.insertContent(self.tiny.dom.createHTML('img', attr));

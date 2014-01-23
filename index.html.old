@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plone Mockup(s)</title>
+
+  <style type="text/less">@import "less/docs.less";@isBrowser: true;</style>
+
+  <script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.4.1.js"></script>
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/underscore/underscore.js"></script>
+  <script src="bower_components/requirejs/require.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+
+window.DEBUG = true;
+
+// helper utilities
+var pages = [];
+var patterns = [];
+addPattern = function(page) {
+  patterns.push(page);
+};
+addPage = function(page) {
+  pages.push(page);
+};
+
+//
+require([
+  'mockup-docsapp'
+], function(DocsApp) {
+
+  DocsApp.patterns.add(patterns);
+  DocsApp.pages.add(pages);
+  DocsApp.initialize();
+});
+
+
+  </script>
+
+  <script type="text/x-ajax-respond" id="something-html">
+    <html>
+    <head></head>
+    <body>
+    <div id="content">
+    <div class="pull-right">
+      Button that triggers "hide" event ->
+      <a class="btn" onclick="$(this).trigger('destroy.modal.patterns')">Close</a>
+    </div>
+    <h1>Content from AJAX</h1>
+    <p>Ah, it is a rock, though. Should beat everything. Gob: There's not a lot
+    of logic to it. A flower in my garden, a mystery in my panties. [climbing
+    under trampoline] This shall keep me safe from the hot Mexican sun. This is
+    not me encouraging you to go here and write a review. No. So, what do you
+    say? We got a basket full of father-son fun here. What\'s Kama Sutra oil?
+    Maybe it's not for us.</p>
+    </body>
+    </html>
+  </script>
+  <script type="text/x-ajax-respond" id="select2-json">
+    {
+      "more": "false",
+      "results": [
+        {"id": "Red", "text": "Red"},
+        {"id": "Blue", "text": "Blue"},
+        {"id": "Green", "text": "Green"}
+      ]
+    }
+  </script>
+
+  <!-- TEMPLATES -->
+  <script type="text/template" id="tpl_page">
+    <div class="page-header">
+      <h1><%= title %> <small><%= description %></small></h1>
+    </div>
+    <div><%= content %></div>
+  </script>
+
+  <script type="text/template" id="tpl_pattern">
+    <ul class="breadcrumb">
+      <li><a href="#">Home</a> <span class="divider">/</span></li>
+      <li><a href="#patterns">Patterns</a> <span class="divider">/</span></li>
+      <li class="active"><%= title %></li>
+    </ul>
+    <div class="page-header">
+      <h1><%= title %> <small><%= description %></small></h1>
+    </div>
+    <div><%= content %></div>
+    <div class="docs-examples">
+      <h2>Examples</h2>
+      <%= examples %>
+    </div>
+
+    <% if (attributes.length > 0) { %>
+      <div class="docs-attributes" id="data-options">
+        <h2>Data Options</h2>
+      </div>
+    <% } %>
+  </script>
+
+  <script type="text/template" id="tpl_attribute">
+    <% if (type === 'Object' && attrs !== '') { %>
+      <td colspan="4" class="docs-attrs">
+        <%= attribute %> {
+          <% if (description !== '') { %> <p><%= description %></p> <% } %>
+          <%= attrs %>
+        }
+      </td>
+    <% } else { %>
+      <td class="attr-name"><%= attribute %></td>
+      <td class="attr-type"><%= type %></td>
+      <td class="attr-default"><%= defaultValue %></td>
+      <td  class="attr-description"><%= description %></td>
+    <% } %>
+  </script>
+
+  <script type="text/template" id="tpl_attributes">
+    <thead>
+      <tr>
+        <th>Option</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </script>
+
+  <script type="text/template" id="tpl_example">
+    <% if (title !== '') { %>
+      <h3><%= title %></h3>
+    <% } %>
+    <div>
+      <%= html %>
+    </div>
+    <div>
+      <pre class="brush: html;toolbar: false;"><%= pre %></pre>
+    </div>
+  </script>
+
+  <script type="text/template" id="tpl_patterns_list">
+    <div class="page-header">
+      <h1>Patterns <small>The complete list</small></h1>
+    </div>
+  </script>
+  <script type="text/template" id="tpl_patterns_list_item">
+    <div class="media-body">
+      <h4><a href="#patterns/<%= id %>" title="<%= title %>"><%= title %></a></h4>
+      <%= description %>
+    </div>
+  </script>
+
+  <!--  ** DOCS CONTENT ** -->
+
+  <!-- * Reused * -->
+  <script>
+  var backdropAttributes = [
+    {attribute: 'zIndex', type: 'String', description: 'Value for <code>z-index</code> to be applied to backdrop.'},
+    {attribute: 'opacity', type: 'String', description: 'This property allows you to control the transparency or opacity of the backdrop.'},
+    {attribute: 'className', type: 'String', description: 'Set the CSS class applied to the backdrop. Useful if you want to apply your own styling to the backdrop.'},
+    {attribute: 'classActiveName', type: 'String', description: 'Set the CSS class which is applied when the backdrop is made active.'},
+    {attribute: 'closeOnEsc', type: 'Boolean', description: 'Whether or not to close the backdrop (and modal) when the "Escape" key is pressed.'},
+    {attribute: 'closeOnClick', type: 'Boolean', description: 'Whether or not to close the backdrop (and modal) when the backdrop is clicked.'},
+  ];
+  </script>
+
+  <script>
+    addPage({
+      id: 'getting-started',
+      title: 'Getting Started',
+      requiredPatterns: ['autotoc']
+    });
+  </script>
+  <script type="text/template" id="page_getting-started">
+    <style type='text/css'>
+      .getting-started .autotoc-nav {
+        background-color: white;
+      }
+    </style>
+    <div class='getting-started pat-autotoc' data-pat-autotoc="levels:h2,h3,h4">
+      <h2>Quick-start </h2>
+<pre>
+Install Git
+Install Node (v0.10.20) / NPM
+$ git clone git://github.com/plone/mockup.git
+$ cd mockup
+$ make bootstrap</pre>
+      <p>
+        And your environment is ready to start working on testable, modular, JavaScript!
+      </p>
+      <p>
+        If you're interested in developing in mockup, then seeing its use
+        directly in Plone, check out the <a href='https://github.com/plone/buildout.deco'>buildout.deco</a>
+        project on GitHub.
+      </p>
+
+      <h2>Slower-start</h2>
+      <h3>Step 1: Get the tools</h3>
+      <p>
+        Download and install the latest versions of <a href='http://git-scm.org' title='git'>git</a> and
+        <a href='http://www.nodejs.org/' title='node and npm'>Node/<abbr title="Node Package Manager">NPM</abbr></a>.
+      </p>
+      <p>
+        Also make certain your system supports the <code>make</code> command.
+        Right now development of this project is being done primarily on Linux
+        and OS X, so setting up the tooling on MS Windows might be an
+        adventure for you to explore -- though, all of the tools used have equivalent
+        versions for that platform, so with a little effort, it should work!
+      </p>
+
+      <h3>Step 2: Checkout the Mockup project from GitHub</h3>
+      <p>
+        This will give you a starting point, and a lot of example code. It's used
+        to build <em>bundles</em> which are then added to various Plone products.
+        You do not need to develop code for the existing Plone products when you
+        use the Mockup project.
+      </p>
+  <pre>
+  git clone git://github.com/plone/mockup.git</pre>
+
+      <h3>Step 3: Bootstrap the environment</h3>
+      <p>
+        Run the following commands:
+      </p>
+  <pre>
+  cd mockup
+  make bootstrap</pre>
+      <p>
+        This will use Node/NPM to download and install all the requirements for
+        building and bundling, as well as all the external libraries needed to
+        build the patterns developed within the framework of the mockup project.
+      </p>
+
+      <h3>Step 4: Get hacking!</h3>
+      <h4>Mockup Project Structure</h4>
+      <p class='alert alert-info'>
+        <strong>NOTE</strong>: The project is under heavy development, so expect
+        things to move around a bit.
+      </p>
+      <ul>
+        <li><strong>build/</strong> All combined, optimized, and minimized JavaScript code, as well as compiled less and media are copied and placed here</li>
+        <li><strong>docs/</strong> Documentation files built with <code>make docs</code></li>
+        <li><strong>js/</strong> This directory contains all of the modularized JavaScript code</li>
+        <li><strong>js/config.js</strong> This file contains the RequireJS configuration</li>
+        <li><strong>js/fakeserver.js</strong> This file is useful for development -- it contains the code for setting up fake responses to XHR</li>
+        <li><strong>js/bundles</strong> This is where a bundle is defined -- it is a set of requirements and code that provide the features being packaged into a Plone product</li>
+        <li><strong>js/patterns</strong> This is a directory that contains all individual, encapsulated patterns (i.e. widgets/JavaScript)</li>
+        <li><strong>less/</strong> This directory contains all the <a href='http://lesscss.org/'>less</a> code for all the patterns and bundles</li>
+        <li><strong>lib/</strong> This directory contains external libraries not necessarily found in the bower repositories</li>
+        <li><strong>tests/</strong> This directory contains all tests for patterns and bundles, including general setup and configuration code</li>
+        <li><strong>Gruntfile.js</strong> This file contains the directives for compiling less, and combining/optimizing/minimizing JavaScript for the defined bundles</li>
+        <li><strong>index.html</strong> This is the main source of documentation for the mockup project.</li>
+        <li><strong>Makefile</strong> This is the Makefile used to define what tasks should run when you want to build a bundle, or bootstrap the environment</li>
+      </ul>
+      <h4>What's a Pattern? What Are Bundles? How do they relate?</h4>
+      <p>
+        <em>Patterns</em> are units of JavaScript, defined by a RequireJS/AMD style module.
+        Patterns may require other patterns to operate, and may require third
+        party libraries. Think of patterns as a module -- encapsulated and
+        separate, and providing a widget or tool to use by other patterns or
+        in html.
+      </p>
+      <p>
+        <em>Bundles</em> are defined similar to <em>Patterns</em> -- they are
+        encapsulated bits of JavaScript that define requirements for a bundle,
+        and have some extra code in them that's useful for integrating the
+        required patterns into Plone products.
+      </p>
+      <p>
+        So, the end result is that a front-end developer might spend their time
+        creating patterns, while a Plone developer might create a bundle and
+        integrate it into a Plone product.
+      </p>
+      <p>
+        <em>plone.app.widgets</em> is a good example of a bundle. The
+        <strong>js/bundles/widgets.js</strong> file contains a RequireJS module
+        that defines all the requirements for plone.app.widgets, and
+        adds some specific code to make the requirements work nicely in the
+        <em>plone.app.widgets</em> Plone module.
+      </p>
+      <h4>What's up with this documentation?</h4>
+      <p>
+        Most of the documentation found outside of code comments is in the
+        single <em>index.html</em> file. Take a look at it, and if you want to
+        contribute, hack away!
+      </p>
+      <p>
+        To update the pages
+        at <a href="http://plone.github.io/mockup/dev/">http://plone.github.io/mockup/dev/</a>,
+        run <code>$ make docs</code>, then switch into the <em>docs/</em>
+        directory. If you then do <code>$ git branch</code> you'll notice that
+        the <em>docs/</em> directory is another clone of the mockup repo,
+        checked out on the <em>gh-pages</em> branch. Yes, this site
+        is <a href="http://pages.github.com/">Github magic</a>. Commit the
+        changes, then <code>$ git push origin gh-pages</code> to update the
+        site.
+      </p>
+      <p>
+        Why is it done this way? It's convenient for the time being.
+      </p>
+      <h4>How are patterns created that DON'T belong to plone.app.*?</h4>
+      <p>
+        Check out some of the other patterns in <strong>js/patterns/</strong>,
+        then check out the bundle code in <strong>js/bundles</strong>. Once
+        you have a bundle, and maybe some patterns created for your own product,
+        you'll want to add some configuration directives to the <strong>Gruntfile.js</strong>
+        file. Then, you can run <code>$ make</code> to build your bundle into
+        the <strong>build/</strong> directory, and from there, copy over the
+        releasable code into your Plone product.
+      </p>
+      <h4>Tutorials?</h4>
+      <p>
+        Currently there are no tutorials for using this project, but they will
+        be forth coming -- <em>Especially</em> if you decide to contribute to the
+        project!
+      </p>
+      <p>
+        For now, the best way to learn is to dig into the patterns, bundles,
+        and less code, then join the <code>#plone</code> IRC channel on
+        freenode, and start asking questions!
+      </p>
+
+      <h3>Step 5: Bundling</h3>
+      <p>To build bundles:</p>
+      <pre>make</pre>
+
+      <h3>Step 6: Testing</h3>
+      <h4>
+        Right now tests are
+        <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
+        and coverage is
+        <a href='https://coveralls.io/r/plone/mockup?branch=master'><img src='https://coveralls.io/repos/plone/mockup/badge.png?branch=master' alt='Coverage Status' /></a> .
+      </h4>
+      <h4>Running tests</h4>
+      <p>And you can run tests with:</p>
+      <pre>make test</pre>
+      <p>This will start a continuous process that will rerun the tests when you change any of
+      the js files.</p>
+      <p>If you have Chrome installed you can alternatively run your tests with:</p>
+      <pre>make test-chrome</pre>
+      <p>If you want to just run the tests for the pattern you are working on you can run tests with:</p>
+      <pre>make test pattern=foobar</pre>
+      <p>Or:</p>
+      <pre>make test-chrome pattern=foobar</pre>
+      <p>These will run only the tests in patterns-foobar-test.js</p>
+      <h4>Adding new tests</h4>
+      <p>To add new tests, you can add them into the <tt>tests</tt> directory.
+      They will automatically be picked up by the test runner if they are named
+      with a suffix of:</p>
+      <pre>-test.js</pre>
+      <p>For example, to add a new test for the <tt>foobar</tt> pattern, 
+      you should name your test file like so:</p>
+      <pre>pattern-foobar-test.js</pre>
+      </p>
+      <h4>Debugging tests</h4>
+      <p>While the tests are running you can connect debug console on
+      <a href="http://localhost:9876/">http://localhost:9876</a></p>
+      <p>if you add the <strong>"debugger;"</strong> statement into your code or test while your browsers JS window is
+      open (for example right-click &gt; inspect element &gt; sources) then the debugger will be activated
+      and you can step through the code.</p>
+      <h4>Test coverage</h4>
+      <p>In the <strong>./coverage</strong> directory find the index.html file under the folder for the browser you are using. This will tell you
+      the current coverage from the last test run</p>
+
+      <h3>Step 7: Releasing/Passing bundles on to Plone developers</h3>
+      <p>
+        This is the part that developers in the Plone community are currently
+        familiar with, and the step that purely front-end developers will have to
+        pass off their products. This step is all about taking the bundled
+        JavaScript and adding it to Plone products in the ways JavaScript has
+        always been added.
+      </p>
+    </div>
+  </script>
+
+  <!--  ** WRITING A HELLO WORLD PATTERN ** -->
+
+  <script>
+    addPage({
+      id: 'hello-world',
+      title: 'Writing a Hello World Pattern',
+      requiredPatterns: ['autotoc']
+    });
+  </script>
+  <script type="text/template" id="page_hello-world">
+    <style type='text/css'>
+      .hello-world .autotoc-nav {
+        background-color: white;
+      }
+    </style>
+    <div class='hello-world pat-autotoc' data-pat-autotoc="levels:h2,h3,h4">
+      <h2>Introduction</h2>
+
+      <p style="color: red; font-weight: bold">
+      CAUTION: this is a work in progress. Things might change without advance
+      notice and errors in the docs are possible. You have been warned. ;-)
+      </p>
+      <p>Assuming you successfully set up your development environment as described
+      under the <a href="#getting-started">Getting Started</a> section, you are now
+      ready to write your first pattern!</p>
+
+      <p>Unless stated otherwise the <em>mockup</em> directory (the one that you
+      cloned the repository into) will be our root working directory throughout this
+      tutorial and all the paths and filenames are specified <em>relative</em> to it.
+      </p>
+
+      <p>The mockup directory on your filesystem filesystem should look like the
+      following (NOTE: most of the files and folders have been omitted for brevity):</p>
+<pre>
+mockup/
+  js/
+    bundles/
+      widgets.js
+    patterns/
+    ui/
+    config.js
+  less/
+  lib/
+  plone/
+    mockup/
+  tests/
+  bower.json
+  Gruntfile.js
+  package.json
+  &hellip;
+</pre>
+<strong>(XXX: test on a fresh instance if correct!)<br>
+XXX: needed at all? it just occupies a lot of space ...</strong>
+
+
+<h2>Creating a New Pattern</h2>
+<p>Our Hello World pattern will be very simple - all it will do is change the text
+of some HTML label to "Hello, World!". So let's get started!</p>
+
+<h3>Defining the Pattern</h3>
+
+<p> The first step is to go to the <em>js/patterns</em> subdirectory and create
+a file called <em>hello.js</em> in it with the following contents:</p>
+
+<pre>
+<strong>define</strong>([
+    'jquery',
+    <strong>'mockup-patterns-base'</strong>
+], function ($, Base) {
+    "use strict";
+
+    var HelloWorld = <strong>Base.extend</strong>({
+        name: 'helloworld',
+        <strong>init</strong>: function () {
+            var $label = <strong>this.$el</strong>;
+            $label.text("Hello, world!");
+        }
+    });
+
+    <strong>return HelloWorld;</strong>
+});
+</pre>
+<strong>XXX: syntax highlighting?</strong>
+
+<p>
+The file contains a call to the RequireJS's
+<a href="http://requirejs.org/docs/api.html#define">define()</a> function, which
+(unsurprisingly) defines a new JavaScript code module. We pass two parameters
+to it:</p>
+<ol>
+  <li>An array containing the names of module's dependencies. We state that we
+  depend on jQuery and the base Mockup pattern module.</li>
+  <li>A function which returns an object that defines our <em>Hello World</em>
+  module.</li>
+</ol>
+
+<p>When called this function is passed all the objects representing the module's
+dependencies (in the same order as defined in the dependency list). This allows us
+to use these dependencies in our module's code.</p>
+
+<p>The way to actually create a new module is to call the <strong>Base.extend()</strong>
+method and pass the module definition to it. The latter is just an object with
+some properties, and as you can see the object describing our Hello World pattern is
+in fact very simple. It only contains a <var>name</var> property definining its name
+and an <strong>init()</strong> method. The latter does the actual work of changing
+the label's text to <em>"Hello, world!"</em>.</p>
+
+<p>You might be wondering what the <code>this.$el</code> construct stands for. It is
+just a reference to the DOM element on which the pattern has been invoked. In this
+context <code>this</code> points to the pattern object itself, while its attribute
+<code>$el</code> is a jQuery object wrapping that DOM element (or sometimes a subtree
+of DOM elements).</p>
+
+
+<h3>Pattern Registration</h3>
+
+<p>In order to use the pattern we need to tell the bundling machinery where to find
+it and to start including it in the JavaScript bundles we create. So first open the
+file <em>js/config.js</em> and add the following line under <em>paths</em>
+definitions (omit the trailing comma if adding to the end of the paths list):</p>
+<pre>
+'mockup-patterns-helloworld': 'js/patterns/hello',
+</pre>
+
+<p>This tells the bundling/packaging machinery that a module called
+<em>mockup-patterns-helloworld</em> is defined in the file <em>hello.js</em> under the
+<em>js/patterns</em> subdirectory (relative to where config.js is located). Note that
+we omit the file's .js suffix in the path definition.</p>
+
+<p>To tell the machinery to include our pattern in the bundles, open the
+<em>js/bundles/widgets.js</em> file and add the <em>mockup-patterns-helloworld</em>
+to the list of dependencies passed to the <em>define()</em> function.
+<br>
+<strong>XXX: this is probably widgets-specific and will change after refactoring.
+Update this section at that point.</strong>
+</p>
+
+<pre>
+define([
+  'jquery',
+  &hellip;
+  <strong>'mockup-patterns-helloworld',</strong>
+  &hellip;
+], &hellip;)
+</pre>
+
+<p>For the dependency we use the same name as already used in the pattern path
+definition.<br>
+As we learned in the Defining a Pattern section above, we also have to add a
+corresponding HelloWorld parameter to the function passed to the <em>define()</em>
+as the second argument. Make sure that parameter's relative position matches the
+relative position of the <em>mockup-patterns-helloworld</em> in the dependency list.
+</p>
+
+<pre>
+function($, Registry, &hellip;, <strong>HelloWorld</strong>, &hellip;) {
+    &hellip;
+}
+</pre>
+
+<p>We now have everything ready to create a JavaScript bundle containing our
+Hello World pattern. From the &lt;mockup&gt; directory run the following console
+command:</p>
+
+<pre>
+$ make compile-widgets
+</pre>
+
+<p>This determines all the dependecies and bundles them up into a single
+file called <em>build/widgets.min.js</em>. It also copies some additional
+resources (e.g. images and CSS files) to the same <em>build</em> directory.</p>
+
+
+<h3>Using the Pattern on a Page</h3>
+
+<p>Now that we have defined, configured and compiled our Hello World pattern, it's time
+to use it and see how it works. Inside the root "mockup" directory create a simple HTML
+file called <em>hello.html</em> with the following contents:</p>
+
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Hello World Pattern&lt;/title&gt;
+    &lt;script type="text/javascript" src="bower_components/jquery/jquery.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="<strong>build/widgets.min.js</strong>"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+    &lt;label class="<strong>pat-helloworld</strong>"&gt;(no greeting yet)&lt;/label&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+<strong>XXX: markup highlighting?</strong>
+
+<p>In the head we first include jQuery and <em>widgets.min.js</em> generated in the
+previous step. The body of the document contains a label with some placeholder text.
+The important thing here is its <strong>pat-helloworld</strong> CSS class. It tells
+the <em>helloworld</em> pattern that it should perform its work on this particular
+DOM element. This, by the way, is the general way of triggering the patterns - you
+add a CSS class pat-&lt;pattern-name&gt; to the desired elements and the pattern
+&lt;pattern-name&gt; will be executed on them.</p>
+
+<p>In case we want to apply more than one pattern to a single DOM element, we can
+simply assign multiple <em>pat-*</em> CSS classes to it.</p>
+
+<p>To test the Hello World pattern open the <em>hello.html</em> file with your
+browser directly from the filesystem and you should see "Hello, world!" displayed.
+This text is different from the original label text - our Hello World pattern
+automatically changed it.</p>
+
+
+<h2>Adding Configuration Options to a Pattern</h2>
+
+<p>Patterns can provide various configuration options for customizing their
+appearance and/or behavior. Let's modify our Hello World pattern so that it will
+allow us to change the label's font color and its background color.</p>
+
+<p>We first need to update the pattern definition in <em>js/patterns/hello.js</em>:</p>
+
+<pre>
+var HelloWorld = Base.extend({
+    name: 'helloworld',
+    <strong>defaults: {
+        'color': 'black',
+        'bgcolor': 'yellow'
+    },</strong>
+    init: function () {
+        var $label = this.$el;
+        $label.text("Hello, world!");
+        <strong>$label.css({
+            'color': this.options.color,
+            'background': this.options.bgcolor
+        });</strong>
+    }
+});
+</pre>
+
+<p>We added a new attribute called <strong>defaults</strong> to the object
+describing the Hello World pattern. The value of this attribute is another object
+containing the <em>&lt;option-name&gt;: &lt;default-value&gt;</em> pairs, which
+should be pretty self-explanatory.</p>
+
+<p>In the <em>init()</em> method we added a code which sets the label's font and
+background color as defined by the pattern configuration options. Option values can be
+read through the <em>this.options</em> object (with <em>this</em> pointing to the
+object describing the pattern).</p>
+
+<p>NOTE: Since we have changed the pattern's code we need to run the
+<code>make compile-widgets</code> command from the console again, so that the JavaScript
+bundle will contain the enhanced version of the Hello World pattern we just created.</p>
+
+<h3>The <em>data-pat-&lt;pattern-name&gt;</em> Attribute</h3>
+
+<p>To see the changes in action, we slightly modify the <em>hello.html</em> file. The
+&lt;body&gt; should now contain the following:</p>
+
+<pre>
+&lt;label class="pat-helloworld"
+    <strong>data-pat-helloworld="color:white; bgcolor:black"</strong>&gt;(no greeting yet)&lt;/label&gt;
+&lt;br&gt;
+&lt;label class="pat-helloworld"
+    <strong>data-pat-helloworld="color:green"</strong>&gt;(no greeting yet)&lt;/label&gt;
+</pre>
+
+<p>And the result of the change:</p>
+<span style="color:white; background:black; cursor:default">Hello, world!</span><br>
+<span style="color:green; background:yellow; cursor:default">Hello, world!</span><br><br>
+
+
+<p>We added another label and defined the <strong>data-pat-helloworld</strong>
+attribute on both. The <em>data-pat-&lt;pattern-name&gt;</em> attribute is used
+to pass configuration options to the pattern (<em>color</em> and <em>bgcolor</em>
+in our case). If some of the options are not provided, their corresponding default
+values are used (as defined by the pattern). This is why the second label gets
+a yellow background even though we haven't explicitly specified it.</p>
+
+<p>If you wonder whether it is possible for a DOM element to have more than
+one <em>data-pat-*</em> attribute defined, the answer is of course YES, because
+multiple patterns can be applied to a single DOM element at the same time.</p>
+
+<h3>Options Format</h3>
+
+<p>There are two different ways to specify the option values in <em>data-pat-*</em>
+attributes, the key:value format and the JSON dictionary format.</p>
+
+<h4>Key : Value</h4>
+<p>This is the format we used in the example above. Each key represents the option
+with the same name, while the corresponding value is, well, the option's value. The
+key and the value are separated with a colon (:) and a semicolon (;) is used to
+separate multiple <em>key:value</em> pairs.</p>
+
+<h4>JSON Dictionary</h4>
+<p>This format, too, uses the <em>key:value</em> pairs, but they are passed in
+a JSON dictionary, like this: <code>data-pat-helloworld="{color:white, bgcolor:black}"</code></p>
+
+<p>Generally it doesn't really matter which of the two formats you use. In most
+cases it is simply a matter of personal preference. There is, however, one notable
+advantage of the JSON format - the option values are not limited to just strings and
+numbers, they can also be arbitrary JSON-compatible structures (even nested).
+Sometimes when a pattern expects a complex configuration, JSON format is your
+only choice.</p>
+
+<h3>Nesting the Options</h3>
+<p>Setting the same options for many different elements over and over again can be a
+tedious task. It also makes it more difficult to globally change such options later.
+Luckily the patterns provide a mechanism to avoid problems like these and that is
+<em>option nesting</em>. It works as follows - you can define a <em>data-pat-*</em>
+attribute on an element somewhere in the DOM hierarchy and all its descendants
+(at all levels) will <em>inherit the option values</em> listed there! This is
+quite a useful feature indeed.</p>
+
+<p>Suppose we modify the <em>&lt;body&gt;</em> tag in our <em>hello.html</em>
+page and add <em>data-pat-helloworld</em> attribute to it:</p>
+
+<pre>
+&lt;body <strong>data-pat-helloworld="bgcolor:orange"</strong>&gt;
+</pre>
+
+<p>Suddenly all the elements using the Hello World pattern will get an orange
+background by default, even though the true default background color as defined by
+the pattern is yellow. Elements can override this behavior by explicitly providing
+ther own value for the <em>bgcolor</em> option.</p>
+
+<p>If you now reload the <em>hello.html</em> file in your browser, you should see
+the following:</p>
+<span style="color:white; background:black; cursor:default">Hello, world!</span><br>
+<span style="color:green; background:orange; cursor:default">Hello, world!</span><br><br>
+
+<p>The bottom of the two labels now indeed has an orange background, because that's
+the option value that an element further up the hierarchy provides. On the other
+hand the background color of the upper label remains black, because that label
+provides its own value for the <em>bgcolor</em> option, overriding the value set
+by the <em>&lt;body&gt;</em> tag. We can see that the option values defined at lower
+levels have precedence over those defined higher up the DOM tree.</p>
+
+
+
+<h2>Writing Tests</h2>
+<p>It's true that our Hello World pattern is very simple and doesn't contain
+any obscure bugs, but with more complex patterns you can never be sure. And even
+if they work flawlessly at the moment, there's always a chance of introducing bugs
+when adding new features or refactoring the existing ones. This is where the tests
+come in. They can automatically run the patterns in different usecase scenarios and
+make sure they behave as expected.</p>
+
+<h3>Defining a Test Module</h3>
+
+<p>All tests are placed in the <em>tests</em> subdirectory and the names of the files
+containing them must match the <em>*-test.js</em> pattern. It is a good practice to
+name the files after the pattern they test. Since we want to test the Hello World
+pattern, we create a file called <em>tests/pattern-helloworld-test.js</em> and put
+the following code into it:</p>
+
+<pre>
+define([
+    <strong>'chai',</strong>
+    'jquery',
+    <strong>'mockup-registry',</strong>
+    <strong>'mockup-patterns-helloworld'</strong>
+], function (chai, $, registry, HelloWorld) {
+    "use strict";
+
+    var expect = chai.expect,
+        <strong>mocha = window.mocha;</strong>
+
+    <strong>mocha.setup('bdd');</strong>
+
+    <strong>$.fx.off = true;</strong>  //disable jQuery animations for various reasons
+
+    <strong>describe</strong>("HelloWorld", function () {
+        <strong>beforeEach</strong>(function () {
+            this.$el = $(
+                '&lt;label class="pat-helloworld"&gt;(no greeting yet)&lt;/label&gt;'
+            );
+        });
+
+        <strong>it</strong>('should change label text to "Hello, world!"', function () {
+            expect(this.$el.text()).to.not.be.equal("Hello, world!");
+            <strong>registry.scan(this.$el);</strong>
+            expect(this.$el.text()).to.be.equal("Hello, world!");
+        });
+    });
+
+});</pre>
+<strong>XXX: we really need syntax highlighting and line numbers &hellip;</strong>
+
+<p>Test modules are defined in a similar way to patterns. We call the <em>define()</em>
+function, list the module dependencies and provide a function which contains the actual
+test code. Let's first explain some of the dependencies:</p>
+
+<ul>
+  <li>
+  <strong>chai</strong> - <a href="http://chaijs.com/">Chai</a> is an assertion
+  library complementing the <a href="http://visionmedia.github.io/mocha/">Mocha</a>
+  test framework, which is what Plone Mockup project uses for tests. The Chai
+  library is quite flexible as it allows you to choose your preferred style for
+  making assertions in tests. In our example we use the so-called <em>BDD</em> style,
+  allowing for assertions such as <code>expect(result).to.be.above(0).and.not.equal(7)</code>.
+ </li>
+
+  <li><strong>mockup-registry</strong> - the <em>registry</em> is a collection of tools
+  used for managing the patterns. It also keeps track of which patterns have
+  been registered, hence its name.<br>
+  In our example we use its <strong>scan()</strong> method, which scans the given
+  DOM (sub)tree and applies patterns to all DOM elements in the tree where
+  applicable.</li>
+
+  <li><strong>mockup-patterns-helloworld</strong> - the pattern under test must
+  always be listed among the test dependencies, even if we don't use it directly in
+  the test code (as is the case here with our example). The reason is that the
+  <em>registry.scan($element)</em> method will apply our pattern to the
+  <var>$element</var> only if the pattern is present in the test module's dependency
+  list.</li>
+</ul>
+
+
+
+<p>In the body of the test module we choose the aforementioned
+<a href="http://chaijs.com/api/bdd/">BDD style</a> for our assertion statements:
+<code>mocha.setup('bdd')</code>. We also disable jQuery animations
+(<code>$.fx.off = true</code>) for a couple of good reasons:</p>
+
+<ul>
+  <li>Asynchronous animations on DOM elements might finish only after the test case
+  has already come to an end. If the latter expects that a pattern changes
+  some property of an element, but the change is delayed due to animation, an
+  assertion in the test might erroneously fail.</li>
+  <li>Speed - in most cases animations are just an eye candy for the users, and
+  as such, are not needed during the test runs. Disabling them can sometimes
+  considerably cut down the time needed to complete the tests.</li>
+</ul>
+
+<h4>The <em>describe()</em> Function</h4>
+
+<p>We define a group of test cases by using the
+<a href="http://visionmedia.github.io/mocha/#interfaces">describe()</a> function
+found in the aforementioned Mocha test framework. The first parameter is the
+name for the test case group, which could be anything, really (and not necessarily
+<em>"HelloWorld"</em>). The second parameter is a function containing the actual test
+case definitions and/or the definitions of the test case subgroups (yes, we can nest
+the <em>describe()</em> function).</p>
+
+<p>In our example we only have a single test case and it is defined by a call to the
+<strong>it()</strong> function. We first provide a descriptive name for the test
+case, which makes it very easy to see, what this test case expects from the
+pattern under test (<em>'It should change label text to "Hello, world!"'</em>).
+The second parameter is a function containing the actual test case code. It first
+verifies that the label does not yet have the expected text. Then it invokes
+the <em>registry.scan()</em> method (to apply the pattern) and after that it checks
+again to see, whether the pattern has indeed changed the text to
+<em>"Hello, world!"</em>.</p>
+
+<p>The last thing to mention is the <strong>beforeEach()</strong> function. The test
+framework calls this function before each test case is run, giving us the
+opportunity to perform some initialization and setup work in it. This way we don't
+have to repeat the same common initializiation tasks separately in each test case,
+resulting in a more readable and maintainable code. In our concrete example, all
+that we do in <em>beforeEach()</em> is create a jQuery object representing an HTML
+label, which later serves as a convenient test polygon for the Hello World pattern.</p>
+
+<p>Note that regarding the tests, we have only scratched the surface here. Describing
+all the options the test framework provides is beyond the scope of this tutorial.
+To learn more about how to write tests, please consult Mocha's
+<a href="http://visionmedia.github.io/mocha/">documentation</a>.</p>
+
+
+<h3>Running the Tests</h3>
+
+<p>To run our test run the following console command from the <em>&lt;mockup&gt;</em>
+directory:</p>
+
+<pre>
+$ make test pattern=helloworld
+</pre>
+
+<p>Ignore DEBUG messages and examine the last line of output. It should be
+similar to the following:</p>
+
+<pre>PhantomJS 1.9.2 (Linux): Executed 1 of 1 SUCCESS (0.4 secs / 0.008 secs)</pre>
+
+<p>The test runner informed us that our test passed. Yay!</p>
+
+<p>If you want to run the test for all patterns, run the <code>make test</code>
+command with no parameters:</p>
+
+<pre>
+$ make test
+</pre>
+
+<p>You might have noticed that when tests complete, the <code>make test</code> command
+does not terminate. That's because it ran
+<a href="http://karma-runner.github.io/">Karma</a>, a powerful JavaScript test runner,
+behind the scenes. Karma launched a process which now monitors our pattern and
+pattern test files for changes.</p>
+
+<p>With Karma still running, try changing the <em>js/patterns/hello.js</em> file so
+that the Hello World pattern changes the label text to something else than
+<em>"Hello, world!"</em>. Karma will detect the change and automatically re-run the
+test(s) which will now, of course, fail. If you now change the
+<em>tests/pattern-helloworld-test.js</em> so that it will accept the new behavior of
+the Hello World pattern, Karma will once more re-run the tests, which will now again
+pass.</p>
+
+<p>Another nice thing about Karma is that you can connect to the test runner with
+a browser, too. Visit <a href="http://localhost:9876">http://localhost:9876</a> and
+watch what happens in the console window. Search for a line resembling the one
+below:</p>
+
+<pre>
+&hellip;
+INFO [Firefox 25.0.0 (Ubuntu)]: Connected on socket IH_Zu1A3ZL27f5IBYKnr
+&hellip;
+</pre>
+
+<p>When Karma detects that a browser has connected to it, it runs all the tests
+<em>in that particular browser</em>! Isn't that great? It allows you to quickly
+test the behavior of a pattern in many different browsers. When you make a change,
+Karma will automatically run the tests for all the browsers currently connected to
+it.</p>
+
+<p>Oh, just more more thing - at this point some of you might be wondering, what
+browser Karma used the first time we ran the <code>make test</code> command, when we
+had not yet connected to <em>localhost:9876</em> with any of the browsers?</p>
+
+<p>The answer is <a href="http://phantomjs.org/">PhantomJS</a>. It's a WebKit-based
+"browser" without user interface, but with a JavaScript API for communicating
+with it.</p>
+
+
+
+<h2>Deployment</h2>
+
+<p>To wrap up everything, we just need to add a couple of words on deployment. When
+you're done with development, you somehow need to share your code with other people
+who might want to use it in their projects or in production environments.</p>
+
+<p>We have already mentioned the <code>make compile-widgets</code> command. It
+bundles all the patterns and their dependencies into a single JavaScript file
+<em>widgets.min.js</em> located in the <em>build</em> subdirectory. After a
+successful build all you have to do is copy this file to wherever you need it
+and link to it in your HTML pages  - just like we did in <em>hello.html</em>
+earlier.</p>
+
+<p>If you want to develop patterns in the context of a larger project, you
+have an option to include them in development mode. This way you will not have to
+re-compile them every time you make a change. To achieve that, add Plone Mockup
+project as a dependency to your <a href="http://www.buildout.org">buildout</a>
+config file, something like below:
+
+<pre>
+[buildout]
+extensions = mr.developer
+&hellip;
+parts +=
+    mockup
+&hellip;
+auto-checkout +=
+    mockup
+&hellip;
+eggs +=
+    mockup
+&hellip;
+[mockup]
+recipe = collective.recipe.cmd
+on_install = true
+on_update = true
+nix_path=~/.nix-defexpr/channels/
+cmds =
+    cd ${buildout:sources-dir}/mockup
+    make bootstrap NIX_PATH=${:nix_path}
+&hellip;
+[sources]
+mockup = git https://github.com/plone/mockup
+</pre>
+
+
+<h2>Additional Resources</h2>
+  <li>
+    <ul>
+     <p>
+     <a href="http://www.youtube.com/watch?v=RqUn3n4HuMM"
+     target ="_blank">An introductory overview</a>
+     of Plone Mockup - about the project and its goals, setting up a development
+     environment, Patterns explained, testing JavaScript with Mocha library,
+     compiling and deploying widgets, etc. (recorded Hangout session from the
+     Pacific Rim Sprint, Sep 13, 2013)</p>
+
+     <p>Video length: 58:05</p>
+    </ul>
+  </li>
+</script>
+
+<!-- END Hello World SECTION -->
+
+  <script>
+    addPage({
+      id: 'about',
+      title: 'About the Mockup Project',
+      requiredPatterns: ['autotoc']
+    });
+  </script>
+  <script type='text/template' id='page_about'>
+    <style type='text/css'>
+      .autotoc-nav {
+        width: 100%;
+        float: none;
+      }
+      .about h2 {
+        font-size: 1.5em;
+      }
+    </style>
+    <div class='alert alert-block'>
+      <h3>
+        **WORKING DRAFT** Please Contribute!
+      </h3>
+      <p>
+        Things are almost guaranteed to
+        be misspelled, grammatically incorrect, missing, wrong and misleading.
+        Please help to improve it!
+      </p>
+    </div>
+    <div class='about pat-autotoc' data-pat-autotoc="levels:h2">
+      <div>
+        <h2>What's the purpose of this project?</h2>
+        <p>
+          The <em>mockup</em> project intends to improve the testing and modularization
+          story of the JavaScript used inside Plone. Further, it aims to make developing
+          client-side widgets and tools more approachable for developers who are
+          familiar with JavaScript and related tooling.
+        </p>
+
+        <h2>How does this project achieve better modularization of JavaScript, and what kind of benefits come from it?</h2>
+        <p>
+          Specifically, this project uses
+          <a href='http://requirejs.org/' target='_blank'>RequireJS</a>, a library
+          that adheres to the
+          <a href='http://en.wikipedia.org/wiki/Asynchronous_module_definition' target='_blank'>AMD</a>
+          concept of JavaScript modularization.
+        </p>
+        <p>
+          Here's a great page outlining the motivations for AMD:
+          <a href="http://requirejs.org/docs/whyamd.html" target="_blank">Why AMD?</a>.
+        </p>
+        <p>
+          Basically, it gives us a standard way to encapsulate JavaScript, and a
+          mechanism for combining, optimizing, and minimizing code when it's bundled.
+          On top of that, the overall process involved is known to developers outside
+          the plone community.
+        </p>
+        <p>
+          In practice, however, <em>RequireJS</em> itself is really only used during
+          the development of this project. When the code here is packaged and released,
+          it's combined into bundles of code, and a library called
+          <a href='https://github.com/jrburke/almond' target='_blank'>Almond</a> is
+          used in place of <em>RequireJS</em>.
+        </p>
+        <p>
+          <em>Almond</em> is a small shim loader for the <em>AMD</em> specification.
+          It completely replaces <em>RequireJS</em> for production use, providing
+          the interface, but not all the dynamic loading capabilities -- which
+          aren't needed since all the JavaScript is bundled up into single files.
+          <em>Almond</em> comes in at right around <strong>1kb</strong>
+          when all is said and done, which makes for very light overhead.
+        </p>
+
+        <h2>How does this project achieve better testing of JavaScript, and why should anyone care?</h2>
+        <p>
+          Currently JavaScript in Plone is <em>not tested at all</em>. So, to begin,
+          *any* testing is an improvement. Beyond that, it's a nightmare to upgrade
+          a JavaScript library -- there is no way of understanding all the
+          ramifications of such a change. With tests, you can know immediately
+          what parts of your code fail, and what parts you need to update.
+        </p>
+        <p>
+          Complex JavaScript becomes more reliable!
+        </p>
+
+        <h2>How does this project make developing widgets and front-end tooling more approachable?</h2>
+        <p>
+          There are two big things that make this project really approachable
+          for front-end developers: using tools commonly used for JavaScript
+          development, and no need to install and understand Plone.
+        </p>
+        <p>
+          If front-end developers already have a suite of awesome tools to use,
+          why bother creating custom ones that are only used in the Plone
+          community? Certainly there is a time and place for specialized tools,
+          but people who specialize in JavaScript and front-end development
+          can be more effective with tools they're familiar with if they don't
+          have to mix Plone into their process.
+        </p>
+        <p>
+          This also allows contribution back to the JavaScript community -- if
+          Plone takes advantage of the products that come out of the JavaScript
+          community, we can contribute back, and maybe even garner interest
+          in members of the JavaScript community contributing to Plone.
+        </p>
+        <p>
+          Second, this project only needs <em>git</em> and <em>npm/node</em>.
+          There is no reason to download and install Plone to start developing
+          widgets and front-end tooling. This makes starting development on
+          the front-end really fast!
+        </p>
+        <p>
+          The point at which Plone needs to be installed is when a bundle needs
+          to be integrated into a Plone product. And then, a front-end developer
+          might be able to just pass along their code to someone with more
+          Plone knowledge.
+        </p>
+
+        <h2>Why is this better than the status quo?</h2>
+        <p>
+          Plone has zero tests for JavaScript, people are scared to poke it, and
+          knowledge of Plone development is required. This means that only people
+          who are both knowledgable with Plone and JavaScript add to Plone's
+          JavaScript story, and even then tend to tread lightly.
+        </p>
+        <p>
+          This project aims to make developers be capable of being bold and
+          innovative when it comes to JavaScript.
+        </p>
+
+        <h2>Isn't this a lot of work and code just to hack some JavaScript?</h2>
+        <p>
+          Yes, this process does break things up a bit -- but think of the
+          advantages. Testable code, more potential developers, and a better
+          front-end workflow.
+        </p>
+
+        <h2>What's this projects relation to the Patternslib project?</h2>
+        <p>
+          This project draws heavy inspiration from
+          <a href='http://patternslib.com/' target='_blank'>PatternsLib</a>,
+          but does not share any code.
+        </p>
+
+        <h2>Can I use this in Plone right now?</h2>
+        <p>
+          Sort of. It's in heavy development, so installing the related Plone
+          packages are on the edge of what this project aims to become.
+        </p>
+        <p>
+          The Plone products to take a look at are:
+          <a href='https://github.com/plone/plone.app.widgets' target='_blank'>plone.app.widgets</a>
+          and/or
+          <a href='https://github.com/plone/plone.app.toolbar' target='_blank'>plone.app.toolbar</a>.
+        </p>
+
+        <h2>How can I contribute?</h2>
+        <p>
+          Checkout the
+          <a href='https://github.com/plone/mockup' target='_blank'>mockup</a>
+          project on github.
+        </p>
+
+        <h2>What's the relation to plone.app.toolbar? plone.app.widgets?</h2>
+        <p>
+          They provide Plone integration with the JavaScript developed
+          and tested in the <em>mockup</em> project. JavaScript is bundled,
+          optimized, compressed, then packaged within the products. In the package
+          itself, views and other integrations are made to override existing
+          aspects with their newer equivalents.
+        </p>
+
+        <h2>What about plone.app.tiles, plone.app.deco, etc?</h2>
+        <p>
+          These are a much larger topic, and need a lot of work. The core of
+          this initiative is found within <em>plone.app.widgets</em> and
+          <em>plone.app.toolbar</em>. Once these are done, tiles, deco, and more
+          won't be far behind.
+        </p>
+
+        <h2>I just want add a custom widget, but I don't want to contribute it to this project, what do I do?</h2>
+        <p>
+          Check out the <a href='#getting-started'>getting started</a> page to
+          learn how to get started with developing your own custom patterns!
+        </p>
+
+        <h2>What is a bundle?</h2>
+        <p>
+          A bundle is a combination of JavaScript, CSS, and other media that
+          are meant to be delivered into a specific Plone product.
+        </p>
+        <p>
+          For instance,
+          the <em>plone.app.widgets</em> product is a bundle consisting of the
+          combined, optimized, and minimized JavaScript, the compiled CSS (from
+          less), and other resourcese (such as images).
+        </p>
+        <p>
+          In practice, developers will only add to the widgets and toolbar
+          bundles if they are contributing to the <em>plone.app.widgets</em>
+          or <em>plone.app.toolbar</em> projects. Normally developers creating
+          code for new products will create new bundles for their specific
+          product.
+        </p>
+      </div>
+    </div>
+  </script>
+
+
+  <!--  ** Patterns  ** -->
+
+  <!--  **** Adjust Text Size (accessibility) **** -->
+  <script>
+    addPattern({
+      id: 'accessibility',
+      title: 'Adjust Text Size',
+      description: 'Easily change <strong>text size</strong> on a page.',
+      attributes: [
+        {attribute: 'smallbtn', type: 'String', description: 'Selector used to activate small text on click.'},
+        {attribute: 'normalbtn', type: 'String', description: 'Selector used to activate normal text on click.'},
+        {attribute: 'largebtn', type: 'String', description: 'Selector used to activate large text on click.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_accessibility">
+
+  </script>
+  <script type="text/example" class="example-accessibility" data-title="Default">
+    <ul id="textAdjust" class="pat-accessibility"
+        data-pat-accessibility="smallbtn:.decrease-text;
+                                normalbtn:.normal-text;
+                                largebtn:.increase-text;">
+      <li>
+        <a href="." class="decrease-text"><i class="icon-minus-sign"></i>Decrease Text Size</a>
+      </li>
+      <li>
+        <a href="." class="normal-text"><i class="icon-circle"></i>Normal Text Size</a>
+      </li>
+      <li>
+        <a href="." class="increase-text"><i class="icon-plus-sign"></i>Increase Text Size</a>
+      </li>
+    </ul>
+  </script>
+
+  <!--  **** Cookie Directive **** -->
+  <script>
+    addPattern({
+      id: 'cookiedirective',
+      title: 'Cookie Directive',
+      description: 'A pattern that <strong>checks cookies</strong> enabled and asks permission for the user to allow cookies or not.',
+      attributes: [
+        {attribute: 'allowMsg', type: 'String', defaultValue: 'Allow', description: 'Text on button used to allow cookies.'},
+        {attribute: 'askPermissionMsg', type: 'String', defaultValue: 'This site uses cookies to provide additional functionality, do you accept?', description: 'A message about allowing cookies.'},
+        {attribute: 'cookieName', type: 'String', description: 'Name of cookie used to store the value of this setting.'},
+        {attribute: 'denyMsg', type: 'String', defaultValue: 'Deny', description: 'Text on button used to deny cookies.'},
+        {attribute: 'shouldAsk', type: 'Boolean', description: 'Should user be prompted about cookies?'},
+        {attribute: 'shouldEnable', type: 'Boolean', description: 'Display a message about enabling cookies if they are disabled.'},
+        {attribute: 'shouldEnableMsg', type: 'String', defaultValue: 'You should enable cookies to be able to login.', description: 'A message about enabling cookies if they are disabled, which will be displayed if shouldEnable is true.'},
+        {attribute: 'shouldEnableSelector', type: 'String', description: '<code>shouldEnable</code> message selector.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_cookiedirective">
+
+  </script>
+  <script type="text/example" class="example-cookiedirective" data-title="Default">
+    <div class="pat-cookiedirective">
+      <div class="login">
+      </div>
+    </div>
+  </script>
+
+  <!--  **** Expose **** -->
+  <script>
+    addPattern({
+      id: 'expose',
+      title: 'Expose',
+      description: 'Exposes the focused element by <strong>darkening everything else on the page</strong>. Useful to focus the user attention on a particular area.',
+      attributes: [
+        {attribute: 'backdrop', type: 'String', description: 'Selector of parent element to use as backdrop.'},
+        {attribute: 'backdropCloseOnClick', type: 'Boolean', description: 'Cancel expose on click if true.'},
+        {attribute: 'backdropCloseOnEsc', type: 'Boolean', description: 'Cancel expose on escape if true.'},
+        {attribute: 'backdropClassName', type: 'String', description: 'TODO'},
+        {attribute: 'backdropClassActiveName', type: 'String', description: 'TODO'},
+        {attribute: 'backdropOpacity', type: 'Float', description: 'Backdrop opacity value between 0 and 1.'},
+        {attribute: 'backdropZIndex', type: 'Integer', description: 'Z-index of backdrop overlay.'},
+        {attribute: 'classActiveName', type: 'String', description: 'TODO'},
+        {attribute: 'triggers', type: 'String', description: 'Events that cause the expose feature to be triggered.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_expose">
+
+  </script>
+  <script type="text/example" class="example-expose" data-title="Expose on focus event (default)">
+    <form id="mockup-expose" class="form-horizontal pat-expose">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Email</label>
+        <div class="controls">
+          <input type="text" id="inputEmail" placeholder="Email">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">Password</label>
+        <div class="controls">
+          <input type="password" id="inputPassword" placeholder="Password">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox"> Remember me
+          </label>
+          <button type="submit" class="btn">Sign in</button>
+        </div>
+      </div>
+    </form>
+  </script>
+  <script type="text/example" class="example-expose" data-title="Expose on hover">
+    <button type="submit"
+            class="btn btn-large pat-expose"
+            data-pat-expose="triggers:hover">Hover over this button</button>
+  </script>
+
+  <!--  **** Form Unload Alert **** -->
+  <script>
+    addPattern({
+      id: 'formunloadalert',
+      title: 'Form Unload Alert',
+      description: 'A pattern to <strong>warn user when changes are unsaved</strong> and they try to navigate away from page.',
+      attributes: [
+        {attribute: 'changingEvents', type: 'String', description: 'Events on which to check for changes (space-separated).'},
+        {attribute: 'changingFields', type: 'String', description: 'Fields on which to check for changes (comma-separated).'},
+        {attribute: 'message', type: 'String', defaultValue: 'Discard changes? If you click OK, any changes you have made will be lost.', description: 'Confirmation message to display when dirty form is being unloaded.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_formunloadalert">
+
+  </script>
+  <script type="text/example" class="example-formunloadalert">
+    <form class="pat-formunloadalert" onsubmit="javascript:return false;">
+      <input
+        type="text"
+        value=""
+        />
+      <select>
+        <option value="1">value 1</option>
+        <option value="2">value 2</option>
+      </select>
+      <input
+        class="btn btn-large btn-primary"
+        type="submit"
+        value="Submit"
+        />
+      <br />
+      <a href="/">Click here to go somewhere else</a>
+    </form>
+  </script>
+
+  <!--  **** Livesearch **** -->
+  <script type="text/example" id="ls_attr_resultTemplate">
+<pre>
+'&lt;li class="pat-livesearch-result pat-livesearch-type-&lt;%= Type %&gt;"&gt;' +
+  '&lt;a class="pat-livesearch-result-title" href="&lt;%= getURL %&gt;"&gt;' +
+    '&lt;%= Title %&gt;' +
+  '&lt;/a&gt;' +
+  '&lt;p class="pat-livesearch-result-desc"&gt;&lt;%= Description %&gt;&lt;/p&gt;' +
+'&lt;/li&gt;'</pre></script>
+  <script>
+    addPattern({
+      id: 'livesearch',
+      title: 'Live Search',
+      description: 'Dynamically query the server and display results.',
+      attributes: [
+        {attribute: 'url', type: 'String', description: 'The server-side url that will be queried.'},
+        {attribute: 'delay', type: 'Integer', description: 'Delay in ms after user types before searching.'},
+        {attribute: 'highlight', type: 'String', description: 'CSS class that will be used to highlight items on keyboard navigation.'},
+        {attribute: 'minimumInputLength', type: 'Integer', description: 'Number of characters user must type before search begins.'},
+        {attribute: 'input', type: 'String', description: 'Selector for element that will be used for the livesearch input.'},
+        {attribute: 'toggleTarget', type: 'String', description: 'Selector for element that will be shown when results are found.'},
+        {attribute: 'toggleClass', type: 'String', description: 'CSS class that will be added to target toggle element when results are found.'},
+        {attribute: 'positionToggleWithInput', type: 'Boolean', description: 'Whether or not the toggle element should be positioned relative to the input element. If set to false setPosition() will not be called.'},
+        {attribute: 'setPosition', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Function which will be used to set the position of the toggle element.'},
+        {attribute: 'resultsTarget', type: 'String', description: 'Selector for element where results from the server will be inserted.'},
+        {attribute: 'resultsContainerTemplate', type: 'String', description: 'Template for the element that will contain results. If <code>resultContainerTemplateSelector</code> is set, this will not be used.'},
+        {attribute: 'resultsContainerTemplateSelector', type: 'String', description: 'Selector for an element in the DOM to use in place of <code>resultContainerTemplate</code>.'},
+        {attribute: 'resultsAppendTo', type: 'String', description: 'Selector for element within results to append to'},
+        {attribute: 'resultSelector', type: 'String', description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultTemplate', type: 'String', defaultValue: $('#ls_attr_resultTemplate').html(), description: 'Will be used to select result items from within the result container.'},
+        {attribute: 'resultTemplateSelector', type: 'String', description: 'Selector for element to be used in place of <code>resultTemplate</code>.'},
+        {attribute: 'helpTemplate', type: 'String', description: "Template for the element that will contain help messages, such as '<i>No results found.</i>' or '<i>Type 3 more characters to search.</i>'"},
+        {attribute: 'helpTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>helpTemplate</code>."},
+        {attribute: 'typeMoreTemplate', type: 'String', description: "Template for message which is displayed if the current input length is less than <code>minimumInputLength</code>."},
+        {attribute: 'typeMoreTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>typeMoreTemplate</code>."},
+        {attribute: 'noResultsTemplate', type: 'String', defaultValue: 'No results found.', description: "Template for message that is displayed after a search when no results were found."},
+        {attribute: 'noResultsTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>noResultsTemplate</code>."},
+        {attribute: 'searchingTemplate', type: 'String', defaultValue: 'Searching...', description: "Template for message which will be displayed after a search has started and before it has ended."},
+        {attribute: 'searchingTemplateSelector', type: 'String', description: "Element in the DOM to be used instead of <code>searchingTemplate</code>."}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_livesearch">
+
+  </script>
+  <script type="text/example" class="example-livesearch" data-title="Default">
+<div class="pat-livesearch"
+    data-pat-livesearch="url: /search.json;">
+  <input type="text" class="pat-livesearch-input" placeholder="Search" />
+  <div class="pat-livesearch-container">
+    <div class="pat-livesearch-results">
+
+    </div>
+  </div>
+</div>
+  </script>
+
+  <!--  **** Modal **** -->
+  <script type="text/example" id="example_template">
+<div class="<%= options.className %>">
+  <div class="<%= options.classHeaderName %>">
+    <a class="close">&times;</a>
+    <% if (title) { %><h3><%= title %></h3><% } %>
+  </div>
+  <div class="<%= options.classBodyName %>">
+    <div class="<%= options.classPrependName %>"><%= prepend %></div> 
+    <div class="<%= options.classContentName %>"><%= content %></div>
+  </div>
+  <div class="options.classFooterName"> 
+    <%= buttons %> 
+  </div>
+</div>
+  </script>
+  <div style="display: none" id="example_redirectToUrl">
+function($action, response, options) { ... }
+  </div>
+<script>
+    addPattern({
+      id: 'modal',
+      extras: ['tinymce'],
+      title: 'Modal',
+      description: 'Creates a modal dialog (also called <strong>overlay</strong>).',
+      attributes: [
+        {attribute: 'height', type: 'String', description: 'Set the height of the modal, for example: <code>250px</code>.'},
+        {attribute: 'width', type: 'String', description: 'Set the width of the modal, for example: <code>80%</code> or <code>500px</code>.'},
+        {attribute: 'margin', type: 'Function, Integer', description: 'A function or Integer which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.'},
+        {attribute: 'position', type: 'String', description: 'Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle.'},
+        {attribute: 'triggers', type: 'Array', defaultValue: '<code>[]</code>', description: 'Add event listeners to elements on the page which will open the modal when triggered. Pass an <code>Array</code> of strings with the format <code>["&lt;event&gt; &lt;selector&gt;"]</code> or <code>["&lt;event&gt;"]</code>. For example, <code>["click .someButton"]</code>. If you pass in only an event such as, <code>["change"]</code>, the event listener will be added to the element on which the modal was initiated, usually a link or button.'},
+        {attribute: 'title', type: 'String', description: 'A string to place in the modal header. If title is provided, <code>titleSelector</code> is not used.'},
+        {attribute: 'titleSelector', type: 'Selector', description: 'Selector for an element to extract from the content provided to the modal and place in the modal header.'},
+        {attribute: 'content', type: 'Selector', description: 'Selector for an element within the content provided to the modal to use as the modal body.'},
+        {attribute: 'prependContent', type: 'Selector', description: 'Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response.'},
+        {attribute: 'backdrop', type: 'Selector', description: 'Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user.'},
+        {
+          attribute: 'backdropOptions',
+          type: 'Object',
+          defaultValue: null,
+          description: null,
+          attributes: backdropAttributes
+        },
+        {attribute: 'buttons', type: 'String', description: 'Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden.'},
+        {attribute: 'automaticallyAddButtonActions', type: 'Boolean', description: 'Automatically create actions for elements matched with the <code>buttons</code> selector. They will use the options provided in <code>actionOptions</code>.'},
+        {attribute: 'loadLinksWithinModal', type: 'Boolean', description: 'Automatically load links (<code>&lt;a&gt;</code>) inside of the modal using AJAX.'},
+        {attribute: 'actions', type: 'Object', description: 'A hash of selector to options. Where options can include any of the defaults from <code>actionOptions</code>. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal.'},
+        {
+          attribute: 'templateOptions',
+          type: 'Object',
+          description: 'Options for the classes and templates used when rendering the modal.',
+          attributes: [
+            {attribute: 'className', type: 'String', description: 'CSS class applied to the modal element.'},
+            {attribute: 'classHeaderName', type: 'String', description: 'CSS class applied to the modal header element.'},
+            {attribute: 'classBodyName', type: 'String', description: 'CSS class applied to the modal body element.'},
+            {attribute: 'classFooterName', type: 'String', description: 'CSS class applied to the modal footer element.'},
+            {attribute: 'classWrapperName', type: 'String', description: 'CSS class applied to the invisible by default element that contains the modal. This element is used for precise styling of the modal and to capture links. During modal initialization, if an existing element is found with this class it will be used as the wrapper and the modal will be appended to it. This allows for multiple modals to share the same wrapper. If no element is found a new element will be created with this class applied.'},
+            {attribute: 'classWrapperInnerName', type: 'String', description: 'CSS class applied to an element that is created within the wrapper. Like the wrapper element the wrapperInner element will be matched with an existing item in the DOM or created during initial modal setup.'},
+            {attribute: 'classPrependName', type: 'String', description: 'This CSS class will be applied to the wrapper around the content merged into the modal using the prependContent selector.'},
+            {attribute: 'classContentName', type: 'String', description: 'This CSS class will be applied to the element where content matched using the <code>content</code> selector will be merged into the template.'},
+            {attribute: 'template', type: 'String', defaultValue: '<pre>'+_.escape($('#example_template').html())+'</pre>', description: 'An <a href="http://underscorejs.org">underscore</a> template which will be used during render. Options passed to the template are: title (either the string set using <code>title</code>, or html matched from the content using <code>titleSelector</code>), prepend (html extracted from the content matching <code>prependContent</code> selector), content (extracted from the content using the <code>content</code> option), options (all of the <code>templateOptions</code> set on the modal).'}
+            ]
+        },
+        {
+          attribute: 'actionOptions',
+          type: 'Object',
+          defaultValue: '',
+          description: 'Configure the defaults for how actions will be handled. Any variables from the pattern defaults can also be set here which will allow the actions to override any options such as width, height, etc.',
+          attributes: [
+            {attribute: 'eventType', type: 'String', description: 'The event to bind to the element matched for the action.'},
+            {attribute: 'target', type: 'String', description: 'Select an element in the DOM from which to load content for the modal. For example, when you want to display content from another div inside of the modal.'},
+            {attribute: 'ajaxUrl', type: 'String, Function', description: 'A URL string or a <code>function($actionElement, actionOptions)</code> that returns a string.'},
+            {attribute: 'modalFunction', type: 'String', description: 'Instead of loading a URL you can instead have the action call a function of the modal pattern. For example, <code>hide</code>.'},
+            {attribute: 'redirectOnResponse', type: 'Boolean', description: 'Whether or not to redirect the window to <code>redirectToUrl</code> after a succesful AJAX response.'},
+            {attribute: 'redirectToUrl', type: 'String, Function', defaultValue: $('#example_redirectToUrl').text(), description: 'After a successful ajax request, if <code>redirectOnResponse</code> is true, redirect to a specified URL. The default function extracts the URL from a <code>&lt;base&gt;</code> in the response content.'},
+            {attribute: 'isForm', type: 'Boolean', description: 'Specify that an action should use an <code>ajaxSubmit</code> call. Otherwise, whether or not it is a form action will be determined by the element type.'},
+            {attribute: 'timeout', type: 'Integer', description: 'Number of milliseconds to wait for a response before it should be considered timed out.'},
+            {attribute: 'displayInModal', type: 'Boolean', description: 'Whether or not the response of an AJAX call should be displayed in the modal.'},
+            {attribute: 'reloadWindowOnClose', type: 'Boolean', description: 'Whether or not to reload the window when the modal is closed due to this action.'},
+            {attribute: 'error', type: 'String', description: 'Match content from an <code>ajaxSubmit</code> that indicates an error. If content is found, <code>onFormError</code> is called.'},
+            {attribute: 'formFieldError', type: 'String', description: 'Match content from an <code>ajaxSubmit</code> that indicates a specific form field error (e.g. validation error). If content is found, <code>onFormError</code> is called.'},
+            {attribute: 'onSuccess', type: 'Function', description: 'Function is called after a successful AJAX request. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'onError', type: 'Function', description: 'Function is called if an AJAX request results in an error. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'onFormError', type: 'Function', description: 'Function is called if an AJAX request is successful, but content in the response matches the <code>error</code> selector. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'onTimeout', type: 'Function', description: 'Function is called if an AJAX request takes longer in than <code>timeout</code> to complete. Arguments: <code>response, state, xhr, form</code>.'},
+            {attribute: 'templateOptions', type: 'Object', defaultValue: '<em>See <code>templateOptions</code> above</em>', description: 'Options for the template that will be used when this action is rendered. Shares the same defaults, and will be merged with, the <code>templateOptions</code> set above on the pattern.'}
+          ]
+        },
+        {attribute: 'form', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Function called during render, setup actions and bind events to elements. Arguments: <code>actions, defaultOptions</code> (from <code>actionOptions</code>)'},
+        {attribute: 'handleFormAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If <code>action.isForm</code> is <code>true</code>, or if <code>form()</code> determines that the action is a form action, this method will be called when the event is triggered.'},
+        {attribute: 'handleLinkAction', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'If <code>action.isForm</code> is <code>false</code>, or if <code>form()</code> determines that the action is a link action this method will be called when the event is triggered.'},
+        {attribute: 'render', type: 'Function', defaultValue: '<em>Refer to source</em>', description: 'Called when modal is shown, and after a successful response if <code>displayInModal</code> is <code>true</code>.'},
+        {
+          attribute: 'routerOptions',
+          type: 'Object',
+          defaultValue: '',
+          description: 'Configure URL redirect and showing of modal on hash change.',
+          attributes: [
+            {attribute: 'id', type: 'String', description: 'For launching the modal on hash change this will be used by the Router to match this modal. For example, if the `id` is <code>"login"</code>, hashes containing "modal:login" will be matched.'},
+            {attribute: 'pathExp', type: 'String', description: 'A Regular Expression compatible string which will be used to match path segments in order to redirect to a hash. For example, with `id` <code>"edit"</code> and `pathExp` as <code>"/edit$"</code> a URL with a path of <code>/animals/edit</code> will redirect to <code>/animals#!/modal:edit</code>.'}
+          ]
+        }
+      ]
+    });
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal1"
+   class="btn btn-large btn-primary pat-modal">Modal basic</a>
+<div id="modal1" style="display: none">
+  <h1>Basic modal!</h1>
+  <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+</div>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="something.html#content" id="modal2"
+   class="btn btn-large btn-primary pat-modal">
+   Modal with remote content (AJAX)</a>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="something-link.html#content" id="modal2"
+   class="btn btn-large btn-primary pat-modal">
+   Modal with links (AJAX)</a>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="/modal-form.html"
+   class="btn btn-large btn-primary pat-modal">
+   Modal with form (AJAX)</a>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal3"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="position:center bottom;
+                   height:30%;
+                   width:80%">
+   Modal with custom position</a>
+  </script>
+
+  <script type="text/example" class="example-modal" title="Modal with tinymce">
+<a href="#modaltinymce"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="height: 600px;
+                   width: 80%">
+   Modal with TinyMCE</a>
+  </script>
+
+  <script type="text/template" id="modaltinymce">
+<div>
+  <textarea class="pat-tinymce"></textarea>
+</div>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="#modalBackdrop"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal='{"backdrop": "#content",
+                    "backdropOptions": {
+                      "opacity": "0.2",
+                      "closeOnClick": false
+                    }
+                  }'>
+  Custom Backdrop</a>
+<div id="modalBackdrop" style="display: none">
+  <h1>Custom Backdrop</h1>
+  <ul>
+    <li>Less opaque</li>
+    <li>Modal doesn't close when Backdrop is clicked</li>
+  </ul>
+</div>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="#modal4"
+   class="btn btn-large btn-primary pat-modal">
+   Modal with long text</a>
+  </script>
+
+  <script type="text/template" id="page_modal">
+  <div style="display:none">
+    <div id="modal3">
+      <h1>This modal is positioned</h1>
+      <p>The end is near, do not jump the bunny.</p>
+    </div>
+    <div id="modal4">
+
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
+
+
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
+
+
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
+
+
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
+
+
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
+
+
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
+
+
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
+
+
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
+
+
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
+
+
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
+
+
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
+
+
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+      <p>Did you know that more frozen bananas are sold right here on
+        this boardwalk than anywhere on the OC? You stay on top of
+        her, Buddy. Don't be afraid to ride her. Hard. Are you aware
+        of this? Coming soon. Indeed. Whoa whoa whoa whoa. Wait. Are
+        you telling me you have a multi-stage trick with hidden
+        identities? That coat costs more than your house! Well,
+        obviously, I'm not a big guy. I'm not a Carl Weathers, par
+        example. You burn down the storage unit? Oh, most definitely.
+        Oh…yeah…the guy in the…the $4,000 suit is holding the
+        elevator for a guy who doesn't make that in three months.
+        Come on!</p>
+
+
+      <p>No! These are just strippers! Look how hot they are! Michael
+        was having brunch with Sally Sitwell at a restaurant called
+        Skip Church's Bistro. In addition to brunch, the restaurant
+        was known for an item on the menu called the "Skip's
+        Scramble", an omelet that contained everything on the menu.
+        Do not order the Skip's Scramble. Look, you are playing
+        adults…with fully formed libidos, not 2 young men playing
+        grab-ass in the shower. I just don't want him to point out my
+        cracker ass in front of Ann. How about a turtle? I've always
+        loved those leathery little snappy faces. I believe you will
+        find the dessert to be both engrossing and high-grossing! So
+        we don't get dessert?</p>
+
+
+      <p>I'm in Vegas this week and would like to point out the Blue
+        Man Group is *actually* hiring. The support group? Te quiero.
+        English, please. I love you! Great, now I'm late. We need
+        a name. Maybe "Operation Hot Mother." No, let's try to top
+        that. (They never did.) Hey, Dad. Look at you. You're a year
+        older…and a year closer to death. Buster: Oh yeah, I guess
+        that's kind of funny. I am going to my spin class. I thought
+        you had vertigo. Turns out he ended up getting too friendly
+        with the teddy bear.</p>
+
+
+      <p>And although the intervention didn't work, it turned into
+        one of the Bluth family's better parties. Te quiero. English,
+        please. I love you! Great, now I'm late. I call it Tricks –-
+        wait for it – Around The Office. The only thing I found in
+        the fridge was a dead dove in a bag. Gob: You didn't eat
+        that, did you?</p>
+
+
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Well excuse me
+        for liking the way they frame my junk! Did you know that more
+        frozen bananas are sold right here on this boardwalk than
+        anywhere in the OC? Buster, what are you doing with mother's
+        rape-horn?</p>
+
+
+      <p>I believe you will find the dessert to be both engrossing
+        and high-grossing! So we don't get dessert? Look at us,
+        crying like a couple of girls on the last day of camp.
+        Although George Michael had only got to second base, he'd
+        gone in head first, like Pete Rose. I know she's a brownish
+        area! With points! And I love her! Let me give that oatmeal
+        some brown sugar. YOU'RE the Chiclet! Not me. Caw ca caw, caw
+        ca caw, caw ca caw! It's as Ann as the nose on plain's
+        face.</p>
+
+
+      <p>Let me give that oatmeal some brown sugar. So, what do you
+        say? We got a basket full of father-son fun here. What's Kama
+        Sutra oil? Maybe it's not for us. Say goodbye to THESE!</p>
+
+
+      <p>So maybe you could start jete-ing, and stop je-terrorizing
+        me! Don't call my escorts whores.</p>
+
+
+      <p>Yes. Lindsay and I are planning a night of heterosexual
+        intercourse. Look, you are playing adults…with fully formed
+        libidos, not 2 young men playing grab-ass in the shower. Ah
+        coodle doodle doo, ah coodle doodle doo. One for the ladies.
+        Make love in your *own* hand, Mother! Fried cheese… with club
+        sauce. Popcorn shrimp… with club sauce. Chicken fingers… with
+        spicy club sauce. Fried cheese… with club sauce. Popcorn
+        shrimp… with club sauce. Chicken fingers… with spicy club
+        sauce. I'm going to buy you the single healthiest call girl
+        this town has ever seen.</p>
+
+
+      <p>I don't care if it takes from now till the end of
+        Shrimpfest. You might wanna lean away from that fire since
+        you're soaked in alcohol.</p>
+
+    </div>
+  </div>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="#modalButtons"
+   class="btn btn-large btn-primary pat-modal"
+   data-pat-modal="buttons: .btn">
+   Modal with Buttons</a>
+<div id="modalButtons" style="display: none">
+  <h1>Modal with buttons</h1>
+  <div id="content">
+    <p>Here is some content, in the content we have some buttons that will be placed in the footer.</p>
+    <button class="btn">Save</button><button class="btn">Cancel</button>
+  </div>
+</div>
+  </script>
+
+  <script type="text/example" class="example-modal" title="">
+<a href="#modalButtons"
+   class="pat-modal"
+   style="display: none"
+   data-pat-modal='{"routerOptions": { "id": "hash", "pathExp": "/" } }'>
+   Foo</a>
+<a href="#!/modal:hash" class="btn btn-large">Change hash</a>
+<div id="modalButtons" style="display: none">
+  <h1>Modal launched by hashchange</h1>
+  <div id="content">
+    <p>Here is some content, in the content we have some buttons that will be placed in the footer.</p>
+    <button class="btn">Save</button><button class="btn">Cancel</button>
+  </div>
+</div>
+  </script>
+
+  <!--  **** Pick A Date **** -->
+  <script>
+    addPattern({
+      id: 'pickadate',
+      title: 'Pick A Date',
+      description: 'Allows the user to <strong>select a date</strong> (with or without time) through a calendar.',
+      attributes: [
+        {attribute: 'date', type: 'Object', description: 'Date widget options described <a href="http://amsul.ca/pickadate.js/date.htm#formatting-rules">here</a>. If <b>false</b> is selected date picker wont be shown.'},
+        {attribute: 'time', type: 'Object', description: 'Time widget options described <a href="http://amsul.ca/pickadate.js/time.htm#formatting-rules">here</a>. If <b>false</b> is selected time picker wont be shown.'},
+        {attribute: 'separator', type: 'String', defaultValue: '" " (space)', description: 'Separator between date and time if both are enabled.'},
+        {attribute: 'classClearName', type: 'String', description: 'Class name of element that is generated by pattern.'},
+        {attribute: 'classDateName', type: 'String', description: 'Class applied to date input.'},
+        {attribute: 'classDateWrapperName', type: 'String', description: 'Class applied to extra wrapper div around date input.'},
+        {attribute: 'classSeparatorName', type: 'String', description: 'Class applied to separator.'},
+        {attribute: 'classTimeName', type: 'String', description: 'Class applied to time input.'},
+        {attribute: 'classTimeWrapperName', type: 'String', description: 'Class applied to wrapper div around time input.'},
+        {attribute: 'classWrapperName', type: 'String', description: 'Class name of element that is generated by pattern.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_pickadate">
+
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Date and Time">
+    <input class="pat-pickadate"/>
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Date and Time with initial data">
+    <input class="pat-pickadate" value="2010-12-31 00:45" />
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Date">
+    <input class="pat-pickadate" data-pat-pickadate="time:false"/>
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Date with initial date">
+    <input class="pat-pickadate" value="2010-12-31" data-pat-pickadate="time:false"/>
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Time">
+    <input class="pat-pickadate" data-pat-pickadate="date:false"/>
+  </script>
+  <script type="text/example" class="example-pickadate" data-title="Time with initial time">
+    <input class="pat-pickadate" value="00:00" data-pat-pickadate="date:false"/>
+  </script>
+
+  <!--  **** Picture **** -->
+  <script>
+    addPattern({
+      id: 'picture',
+      title: 'Picture',
+      description: 'A responsive image widget.',
+      attributes: [
+        {attribute: 'alt', type: 'String', description: 'Alternate text to be used on the resulting responsive image tag.'},
+        {attribute: 'attribute', type: 'Object', description: 'The mapping of attributes between pattern configuration and the resulting image element. For example, by default, the mapping looks for <code>data-src</code> attributes to use as the resulting <code>src</code> attribute for the resulting element. Ditto for <code>data-media</code>, which maps to <code>media</code> for mediaquery information.'},
+        {attribute: 'className', type: 'Object', description: 'The relevant classes to be applied to the given image element at different stages of handling.<br><br><code>loading</code> is the CSS class added to the element whilst an image is loading, and <code>error</code> is the CSS class added to the element if an error occurred whilst loading the image.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_picture">
+    <div>
+      <h1>Responsive images pattern</h1>
+      <p>This pattern loads the last image that fulfills the media-query criteria.
+        When multiple pictures are displayed, it loads the images within the
+        visible viewport first. Will update images on <abbr>resize</abbr> event.</p>
+    </div>
+  </script>
+  <script type="text/example" class="example-picture" data-title="Alternative text">
+<div class="pat-picture" data-pat-picture="alt:Alternative text;">
+  <div data-src="http://placehold.it/480x320"></div>
+  <div data-src="http://placehold.it/640x427" data-media="(min-width: 480px)"></div>
+  <div data-src="http://placehold.it/800x533" data-media="(min-width: 640px)"></div>
+  <div data-src="http://placehold.it/960x640" data-media="(min-width: 800px)"></div>
+  <div data-src="http://placehold.it/1200x800" data-media="(min-width: 960px)"></div>
+  <!--[if (lt IE 9) & (!IEMobile)]>
+    <div data-src="http://placehold.it/800x533"></div>
+  <![endif]-->
+  <noscript>
+      <img src="http://placehold.it/800x533" alt="Alternative text" />
+    </noscript>
+  </div>
+</div>
+  </script>
+
+  <!--  **** Prevent Double Submit **** -->
+  <script>
+    addPattern({
+      id: 'preventdoublesubmit',
+      title: 'Prevent Double Submit',
+      description: 'A pattern to <strong>prevent submitting a form twice</strong>.',
+      attributes: [
+        {attribute: 'guardClassName', type: 'String', description: 'Class applied to submit button after it is clicked once.'},
+        {attribute: 'optOutClassName', type: 'String', description: 'Class used to opt-out a submit button from double-submit prevention.'},
+        {attribute: 'message', type: 'String', defaultValue: 'You already clicked the submit button. Do you really want to submit this form again?', description: 'Message to be displayed when "opt-out" submit button is clicked a second time.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_preventdoublesubmit">
+
+  </script>
+  <script type="text/example" class="example-preventdoublesubmit">
+    <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
+      <input
+        type="text"
+        value="submit this value please!"
+        />
+      <input
+        class="btn btn-large btn-primary"
+        type="submit"
+        value="Single submit"
+        />
+      <input
+        class="btn btn-large btn-primary allowMultiSubmit"
+        type="submit"
+        value="Multi submit"
+        />
+    </form>
+  </script>
+
+  <!--  **** Query String (Creating a Query for Collections) **** -->
+  <script>
+    addPattern({
+      id: 'querystring',
+      title: 'Query String for Collections',
+      description: "A widget for creating <strong>query's for collections</strong>",
+      attributes: [
+        {attribute: 'criteria', type: 'Object', description: 'options to pass into criteria'},
+        {attribute: 'indexOptionsUrl', type: 'String', description: 'URL to grab index option data from. Must contain "sortable_indexes" and "indexes" data in JSON object.'},
+        {attribute: 'previewURL', type: 'String', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML list of results'},
+        {attribute: 'previewCountURL', type: 'String', description: 'URL used to pass in a <code>plone.app.querystring</code>-formatted HTTP querystring and get an HTML string of the total number of records found with the query'},
+        {attribute: 'sorttxt', type: 'String', defaultValue: 'Sort On', description: 'Text to use to label the sort dropdown'},
+        {attribute: 'reversetxt', type: 'String', defaultValue: 'Reversed Order', description: 'Text to use to label the sort order checkbox'},
+        {attribute: 'previewTitle', type: 'String', defaultValue: 'Preview', description: 'Title for the preview area'},
+        {attribute: 'previewDescription', type: 'String', defaultValue: 'Preview of at most 10 items', description: 'Description for the preview area'},
+        {attribute: 'classWrapperName', type: 'String', description: 'CSS class to apply to the wrapper element'},
+        {attribute: 'classSortLabelName', type: 'String', description: 'CSS class to apply to the sort on label'},
+        {attribute: 'classSortReverseName', type: 'String', description: 'CSS class to apply to the sort order label and checkbox container'},
+        {attribute: 'classSortReverseLabelName', type: 'String', description: 'CSS class to apply to the sort order label'},
+        {attribute: 'classPreviewCountWrapperName', type: 'String', description: ''},
+        {attribute: 'classPreviewResultsWrapperName', type: 'String', description: 'CSS class to apply to the results wrapper'},
+        {attribute: 'classPreviewWrapperName', type: 'String', description: 'CSS class to apply to the preview wrapper'},
+        {attribute: 'classPreviewName', type: 'String', description: 'CSS class to apply to the preview pane'},
+        {attribute: 'classPreviewTitleName', type: 'String', description: 'CSS class to apply to the preview title'},
+        {attribute: 'classPreviewDescriptionName', type: 'String', description: 'CSS class to apply to the  preview description'},
+        {attribute: 'classSortWrapperName', type: 'String', description: 'CSS class to apply to the sort order and sort on wrapper'},
+        {attribute: 'showPreviews', type: 'Boolean', description: 'Should previews be shown?'}
+      ]
+    });
+  </script>
+  <script type="text/x-ajax-respond" id="querystring-number-results-example-results">
+    6 items matching your search terms
+  </script>
+  <script type="text/x-ajax-respond" id="querystring-example-results">
+    <div id="search-results">
+      <dl class="searchResults">
+        <dt>
+           <a href="http://localhost:8080/Plone/events" class="published">Events</a>
+            <span class="documentByLine">
+                <span class="documentModified">
+                  —
+                    <span>
+                    last modified
+                    </span>
+                    Jul 14, 2013
+                </span>
+            </span>
+        </dt>
+        <dd>
+            Site Events
+            <span class="documentLocation">
+                <a href="http://localhost:8080/Plone/events" class="link-location">/Plone/events</a>
+            </span>
+        </dd>
+        <dt>
+           <a href="http://localhost:8080/Plone/events/aggregator" class="published">Events</a>
+            <span class="documentByLine">
+                <span class="documentModified">
+                  —
+                    <span>
+                    last modified
+                    </span>
+                    Jul 14, 2013
+                </span>
+            </span>
+        </dt>
+        <dd>
+            Site Events
+            <span class="documentLocation">
+                <a href="http://localhost:8080/Plone/events/aggregator" class="link-location">/Plone/events/aggregator</a>
+            </span>
+        </dd>
+        <dt>
+           <a href="http://localhost:8080/Plone/news" class="published">News</a>
+            <span class="documentByLine">
+                <span class="documentModified">
+                  —
+                    <span>
+                    last modified
+                    </span>
+                    Jul 14, 2013
+                </span>
+            </span>
+        </dt>
+        <dd>
+            Site News
+            <span class="documentLocation">
+                <a href="http://localhost:8080/Plone/news" class="link-location">/Plone/news</a>
+            </span>
+        </dd>
+        <dt>
+           <a href="http://localhost:8080/Plone/news/aggregator" class="published">News</a>
+            <span class="documentByLine">
+                <span class="documentModified">
+                  —
+                    <span>
+                    last modified
+                    </span>
+                    Jul 14, 2013
+                </span>
+            </span>
+        </dt>
+        <dd>
+            Site News
+            <span class="documentLocation">
+                <a href="http://localhost:8080/Plone/news/aggregator" class="link-location">/Plone/news/aggregator</a>
+            </span>
+        </dd>
+        <dt>
+           <a href="http://localhost:8080/Plone/Members" class="published">Users</a>
+            <span class="documentByLine">
+                <span class="documentModified">
+                  —
+                    <span>
+                    last modified
+                    </span>
+                    Jul 14, 2013
+                </span>
+            </span>
+        </dt>
+        <dd>
+            Site Users
+            <span class="documentLocation">
+                <a href="http://localhost:8080/Plone/Members" class="link-location">/Plone/Members</a>
+            </span>
+        </dd>
+        <dt>
+           <a href="http://localhost:8080/Plone/front-page" class="published">Welcome to Plone</a>
+            <span class="documentByLine">
+                <span class="documentModified">
+                  —
+                    <span>
+                    last modified
+                    </span>
+                    Jul 14, 2013
+                </span>
+            </span>
+        </dt>
+        <dd>
+            Congratulations! You have successfully installed Plone.
+            <span class="documentLocation">
+                <a href="http://localhost:8080/Plone/front-page" class="link-location">/Plone/front-page</a>
+            </span>
+        </dd>
+      </dl>
+    </div>
+  </script>
+  <script type="text/example" class="example-querystring" data-title="Default">
+    <!--
+      The JSON data in the data-pat-querystring attribute is copied from
+      setting up the buildout.deco project, getting all the dexterity stuff
+      installed on a site, and then adding a new (dexterity based) collection,
+      but then grabbing the data off of the input in the source on that page.
+    //-->
+    <input class="pat-querystring"
+           data-pat-querystring="indexOptionsUrl: /tests/json/queryStringCriteria.json" />
+
+  </script>
+  <script type="text/example" class="example-querystring" data-title="Without Previews">
+    <input class="pat-querystring"
+           data-pat-querystring="indexOptionsUrl: /tests/json/queryStringCriteria.json;
+                                 showPreviews: false;" />
+
+  </script>
+
+  <!--  **** Related Items **** -->
+  <script>
+    addPattern({
+      id: 'relateditems',
+      title: 'Related Items',
+      description: 'An advanced widget for <strong>selecting related items</strong>.',
+      attributes: [
+        {attribute: 'vocabularyUrl', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
+        {attribute: 'attributes', type: 'Array', defaultValue: "<code>['UID', 'Title', 'Type', 'path']</code>", description: 'This list is passed to the server during an AJAX request to specify the attributes which should be included on each item.'},
+        {attribute: 'basePath', type: 'String', description: 'If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results.'},
+        {attribute: 'breadCrumbTemplate', type: 'String', description: 'Template to use for a single item in the breadcrumbs.'},
+        {attribute: 'breadCrumbTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>breadCrumbTemplate</code>.'},
+        {attribute: 'breadCrumbsTemplate', type: 'String', description: 'Template for element to which breadCrumbs will be appended.'},
+        {attribute: 'breadCrumbsTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <em>breadCrumbsTemplate</em>.'},
+        {attribute: 'cache', type: 'Boolean', description: 'Whether or not results from the server should be cached.'},
+        {attribute: 'closeOnSelect', type: 'Boolean', description: 'Select2 option. Whether or not the drop down should be closed when an item is selected.'},
+        {attribute: 'dropdownCssClass', type: 'String', description: 'Select2 option. CSS class to add to the drop down element.'},
+        {attribute: 'folderTypes', type: 'Array', defaultValue: '<code>["Folder"]</code>', description: 'Types which should be considered browsable.'},
+        {attribute: 'homeText', type: 'String', defaultValue: 'home', description: 'Text to display in the initial breadcrumb item.'},
+        {attribute: 'maximumSelectionSize', type: 'Integer', description: 'Do not change this option.'},
+        {attribute: 'multiple', type: 'Boolean', description: 'Do not change this option.'},
+        {attribute: 'orderable', type: 'Boolean', description: 'Whether or not items should be drag-and-drop sortable.'},
+        {attribute: 'resultTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template for an item in the in the list of results. Refer to source for default.'},
+        {attribute: 'resultTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>resultTemplate</code>.'},
+        {attribute: 'searchText', type: 'String', defaultValue: 'Search', description: 'Text which will be inserted to the left of the path.'},
+        {attribute: 'searchAllText', type: 'String', defaultValue: 'All', description: 'Displays next to the path when the path is set to the root.'},
+        {attribute: 'selectableTypes', type: 'Array', description: 'If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable.'},
+        {attribute: 'selectionTemplate', type: 'String', defaultValue: '<em>Refer to source</em>', description: 'Template for element that will be used to construct a selected item.'},
+        {attribute: 'selectionTemplateSelector', type: 'String', description: 'Select an element from the DOM from which to grab the <code>selectionTemplate</code>.'},
+        {attribute: 'separator', type: 'String', description: 'Select2 option. String which separates multiple items.'},
+        {attribute: 'tokenSeparators', type: 'Array', defaultValue: '<code>[",", " "]</code>', description: 'Select2 option, refer to select2 documentation.'},
+        {attribute: 'width', type: 'String', description: 'Specify a width for the widget.'},
+        {attribute: 'mode', type: 'String', defaultValue: 'search', description: 'Mode widget should operate in. Options are search and browse.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_relateditems">
+    <p>The Related Items pattern is based on <a href="#patterns/select2">Select2</a> so many of the same options will work here as well.</p>
+  </script>
+  <script type="text/example" class="example-relateditems">
+    <input type="text" class="pat-relateditems"
+        data-pat-relateditems="width:30em;
+                               vocabularyUrl:/relateditems-test.json" />
+  </script>
+  <script type="text/example" class="example-relateditems" data-title="Existing values, some bad">
+    <input type="text" class="pat-relateditems"
+        value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
+        data-pat-relateditems="width:30em;
+                               vocabularyUrl:/relateditems-test.json" />
+  </script>
+  <script type="text/example" class="example-relateditems" data-title="Selectable Types">
+    <input type="text" class="pat-relateditems"
+        data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
+  </script>
+
+  <!--  **** Select2 **** -->
+  <script>
+    addPattern({
+      id: 'select2',
+      title: 'Select2',
+      description: '<strong>Autocompletes, multiple or single selections</strong> from any kind of data source (with search!).',
+      attributes: [
+        {attribute: 'separator', type: 'String', description: ''
+          + 'Analagous to the <em>separator</em> constructor parameter from <em>Select2</em>.'
+          + '<br/><br/>'
+          + 'Defines a custom separator used to distinguish the tag values. Ex: a value of ";" will '
+          + 'allow <code>tags</code> and <code>initialValues</code> to have '
+          + 'values separated by ";" instead of the default ",".'},
+        {attribute: 'initialValues', type: 'String', description: ''
+          + 'This can be a json encoded string, or a list of <code>id:text</code> '
+          + 'values. Ex: <code>Red:The Color Red,Orange:The Color Orange</code>'
+          + '<br /><br />'
+          + 'This is used inside the <code>initSelection</code> method, if AJAX options '
+          + 'are NOT set.'},
+        {attribute: 'vocabularyUrl', type: 'String', description: 'This is a URL to a JSON-formatted file used to populate the list'},
+        {attribute: 'OTHER OPTIONS', type: '', description: 'For more options on select2 go to http://ivaynberg.github.io/select2/#documentation'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_select2">
+  
+  </script>
+  <script type="text/example" class="example-select2" data-title="Autocomplete with search">
+    <select class="pat-select2" data-pat-select2="width:20em">
+      <option value="Acholi">Acholi</option>
+      <option value="Afrikaans">Afrikaans</option>
+      <option value="Akan">Akan</option>
+      <option value="Albanian">Albanian</option>
+      <option value="Amharic">Amharic</option>
+      <option value="Arabic">Arabic</option>
+      <option value="Ashante">Ashante</option>
+      <option value="Asl">Asl</option>
+      <option value="Assyrian">Assyrian</option>
+      <option value="Azerbaijani">Azerbaijani</option>
+      <option value="Azeri">Azeri</option>
+      <option value="Bajuni">Bajuni</option>
+      <option value="Basque">Basque</option>
+      <option value="Behdini">Behdini</option>
+      <option value="Belorussian">Belorussian</option>
+      <option value="Bengali">Bengali</option>
+      <option value="Berber">Berber</option>
+      <option value="Bosnian">Bosnian</option>
+      <option value="Bravanese">Bravanese</option>
+      <option value="Bulgarian">Bulgarian</option>
+      <option value="Burmese">Burmese</option>
+      <option value="Cakchiquel">Cakchiquel</option>
+      <option value="Cambodian">Cambodian</option>
+      <option value="Cantonese">Cantonese</option>
+      <option value="Catalan">Catalan</option>
+      <option value="Chaldean">Chaldean</option>
+      <option value="Chamorro">Chamorro</option>
+      <option value="Chao-chow">Chao-chow</option>
+      <option value="Chavacano">Chavacano</option>
+      <option value="Chin">Chin</option>
+      <option value="Chuukese">Chuukese</option>
+      <option value="Cree">Cree</option>
+      <option value="Croatian">Croatian</option>
+      <option value="Czech">Czech</option>
+      <option value="Dakota">Dakota</option>
+      <option value="Danish">Danish</option>
+      <option value="Dari">Dari</option>
+      <option value="Dinka">Dinka</option>
+      <option value="Diula">Diula</option>
+      <option value="Dutch">Dutch</option>
+      <option value="Edo">Edo</option>
+      <option value="Estonian">Estonian</option>
+      <option value="Ewe">Ewe</option>
+      <option value="Fante">Fante</option>
+      <option value="Farsi">Farsi</option>
+      <option value="Fijian Hindi">Fijian Hindi</option>
+      <option value="Finnish">Finnish</option>
+      <option value="Flemish">Flemish</option>
+      <option value="French">French</option>
+      <option value="French Canadian">French Canadian</option>
+      <option value="Fukienese">Fukienese</option>
+      <option value="Fula">Fula</option>
+      <option value="Fulani">Fulani</option>
+      <option value="Fuzhou">Fuzhou</option>
+      <option value="Ga">Ga</option>
+      <option value="Gaddang">Gaddang</option>
+      <option value="Gaelic">Gaelic</option>
+      <option value="Gaelic-irish">Gaelic-irish</option>
+      <option value="Gaelic-scottish">Gaelic-scottish</option>
+      <option value="Georgian">Georgian</option>
+      <option value="German">German</option>
+      <option value="Gorani">Gorani</option>
+      <option value="Greek">Greek</option>
+      <option value="Gujarati">Gujarati</option>
+      <option value="Haitian Creole">Haitian Creole</option>
+      <option value="Hakka">Hakka</option>
+      <option value="Hakka-chinese">Hakka-chinese</option>
+      <option value="Hausa">Hausa</option>
+      <option value="Hebrew">Hebrew</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Hmong">Hmong</option>
+      <option value="Hungarian">Hungarian</option>
+      <option value="Ibanag">Ibanag</option>
+      <option value="Ibo">Ibo</option>
+      <option value="Icelandic">Icelandic</option>
+      <option value="Igbo">Igbo</option>
+      <option value="Ilocano">Ilocano</option>
+      <option value="Indonesian">Indonesian</option>
+      <option value="Inuktitut">Inuktitut</option>
+      <option value="Italian">Italian</option>
+      <option value="Jakartanese">Jakartanese</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Javanese">Javanese</option>
+      <option value="Kanjobal">Kanjobal</option>
+      <option value="Karen">Karen</option>
+      <option value="Karenni">Karenni</option>
+      <option value="Kashmiri">Kashmiri</option>
+      <option value="Kazakh">Kazakh</option>
+      <option value="Kikuyu">Kikuyu</option>
+      <option value="Kinyarwanda">Kinyarwanda</option>
+      <option value="Kirundi">Kirundi</option>
+      <option value="Korean">Korean</option>
+      <option value="Kosovan">Kosovan</option>
+      <option value="Kotokoli">Kotokoli</option>
+      <option value="Krio">Krio</option>
+      <option value="Kurdish">Kurdish</option>
+      <option value="Kurmanji">Kurmanji</option>
+      <option value="Kyrgyz">Kyrgyz</option>
+      <option value="Lakota">Lakota</option>
+      <option value="Laotian">Laotian</option>
+      <option value="Latvian">Latvian</option>
+      <option value="Lingala">Lingala</option>
+      <option value="Lithuanian">Lithuanian</option>
+      <option value="Luganda">Luganda</option>
+      <option value="Luo">Luo</option>
+      <option value="Maay">Maay</option>
+      <option value="Macedonian">Macedonian</option>
+      <option value="Malay">Malay</option>
+      <option value="Malayalam">Malayalam</option>
+      <option value="Maltese">Maltese</option>
+      <option value="Mandarin">Mandarin</option>
+      <option value="Mandingo">Mandingo</option>
+      <option value="Mandinka">Mandinka</option>
+      <option value="Marathi">Marathi</option>
+      <option value="Marshallese">Marshallese</option>
+      <option value="Mien">Mien</option>
+      <option value="Mina">Mina</option>
+      <option value="Mirpuri">Mirpuri</option>
+      <option value="Mixteco">Mixteco</option>
+      <option value="Moldavan">Moldavan</option>
+      <option value="Mongolian">Mongolian</option>
+      <option value="Montenegrin">Montenegrin</option>
+      <option value="Navajo">Navajo</option>
+      <option value="Neapolitan">Neapolitan</option>
+      <option value="Nepali">Nepali</option>
+      <option value="Nigerian Pidgin">Nigerian Pidgin</option>
+      <option value="Norwegian">Norwegian</option>
+      <option value="Oromo">Oromo</option>
+      <option value="Pahari">Pahari</option>
+      <option value="Papago">Papago</option>
+      <option value="Papiamento">Papiamento</option>
+      <option value="Pashto">Pashto</option>
+      <option value="Patois">Patois</option>
+      <option value="Pidgin English">Pidgin English</option>
+      <option value="Polish">Polish</option>
+      <option value="Portug.creole">Portug.creole</option>
+      <option value="Portuguese">Portuguese</option>
+      <option value="Pothwari">Pothwari</option>
+      <option value="Pulaar">Pulaar</option>
+      <option value="Punjabi">Punjabi</option>
+      <option value="Putian">Putian</option>
+      <option value="Quichua">Quichua</option>
+      <option value="Romanian">Romanian</option>
+      <option value="Russian">Russian</option>
+      <option value="Samoan">Samoan</option>
+      <option value="Serbian">Serbian</option>
+      <option value="Shanghainese">Shanghainese</option>
+      <option value="Shona">Shona</option>
+      <option value="Sichuan">Sichuan</option>
+      <option value="Sicilian">Sicilian</option>
+      <option value="Sinhalese">Sinhalese</option>
+      <option value="Slovak">Slovak</option>
+      <option value="Somali">Somali</option>
+      <option value="Sorani">Sorani</option>
+      <option value="Spanish">Spanish</option>
+      <option value="Sudanese Arabic">Sudanese Arabic</option>
+      <option value="Sundanese">Sundanese</option>
+      <option value="Susu">Susu</option>
+      <option value="Swahili">Swahili</option>
+      <option value="Swedish">Swedish</option>
+      <option value="Sylhetti">Sylhetti</option>
+      <option value="Tagalog">Tagalog</option>
+      <option value="Taiwanese">Taiwanese</option>
+      <option value="Tajik">Tajik</option>
+      <option value="Tamil">Tamil</option>
+      <option value="Telugu">Telugu</option>
+      <option value="Thai">Thai</option>
+      <option value="Tibetan">Tibetan</option>
+      <option value="Tigre">Tigre</option>
+      <option value="Tigrinya">Tigrinya</option>
+      <option value="Toishanese">Toishanese</option>
+      <option value="Tongan">Tongan</option>
+      <option value="Toucouleur">Toucouleur</option>
+      <option value="Trique">Trique</option>
+      <option value="Tshiluba">Tshiluba</option>
+      <option value="Turkish">Turkish</option>
+      <option value="Twi">Twi</option>
+      <option value="Ukrainian">Ukrainian</option>
+      <option value="Urdu">Urdu</option>
+      <option value="Uyghur">Uyghur</option>
+      <option value="Uzbek">Uzbek</option>
+      <option value="Vietnamese">Vietnamese</option>
+      <option value="Visayan">Visayan</option>
+      <option value="Welsh">Welsh</option>
+      <option value="Wolof">Wolof</option>
+      <option value="Yiddish">Yiddish</option>
+      <option value="Yoruba">Yoruba</option>
+      <option value="Yupik">Yupik</option>
+    </select>
+  </script>
+  <script type="text/example" class="example-select2" data-title="Tagging">
+<input type="text" class="pat-select2"
+    data-pat-select2="separator:,;
+                      tags:Red,Yellow,Green,Orange,Purple;
+                      width:20em;
+                      initialValues:Red:The Color Red,Orange:The Color Orange"
+    value="Red,Orange"/>
+  </script>
+  <script type="text/example" class="example-select2" data-title="Orderable tags">
+<input type="text" class="pat-select2"
+    data-pat-select2="orderable:true;
+                      tags:Red,Yellow,Green;
+                      allowNewItems:false;
+                      width:20em" />
+  </script>
+  <script type="text/example" class="example-select2" data-title="Orderable tags (allow new items)">
+<input type="text" class="pat-select2"
+    data-pat-select2="orderable:true;
+                      tags:Red,Yellow,Green;
+                      allowNewItems:true;
+                      width:20em" />
+  </script>
+  <script type="text/example" class="example-select2" data-title="AJAX tags">
+<input type="hidden" class="pat-select2"
+    data-pat-select2="placeholder:Search for a Value;
+                      vocabularyUrl:select2-test.json;
+                      allowNewItems:false;
+                      width:20em" />
+  </script>
+
+  <script type="text/example" class="example-select2" data-title="AJAX tags (allow new items)">
+<input type="hidden" class="pat-select2"
+    data-pat-select2="placeholder:Search for a Value;
+                      vocabularyUrl:select2-test.json;
+                      allowNewItems:true;
+                      width:20em" />
+  </script>
+
+  <!--  **** Table Sorter **** -->
+  <script>
+    addPattern({
+      id: 'tablesorter',
+      title: 'Table Sorter',
+      description: 'A pattern you can apply to a <strong>table so it can have its items rearranged</strong> when clicking the header.',
+      attributes: []
+    });
+  </script>
+  <script type="text/template" id="page_tablesorter">
+    <h2>Directions</h2>
+    <p>
+    <ul>
+        <li>If the displayed data doesn't match the sequence (as in days of the week), provide a <code>sortabledata-XXX</code> class. The column will be sorted on <code>XXX</code>.
+        </li>
+        <li>Note that a secondary sort is always done on the first two columns (by the second, and then by the first column). This provides a crude way to sort by surname and name. (Look at sequence of "<em>Bluth</em>" rows changing when sorting on Last Name.)
+        </li>
+        <li>Rows get <code>odd</code> and <code>even</code> classes for CSS styling.
+        </li>
+        <li>If something looks more like a date than like a number (specifically <em>1999-01-01</em>, not e.g. <em>01-01-1999</em>) it will be sorted textually, not numerically. Dates aren't validated.
+        </li>
+        <li>If something looks like a number, javascript will make some wild guesses about it. It can turn out weird (try sorting on the "<em>No Date</em>" column).
+        </li>
+    </ul>
+    </p>
+  </script>
+
+  <script type="text/example" class="example-tablesorter" data-title="Default">
+    <table class="pat-tablesorter">
+      <thead>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Occupation</th>
+        <th>Age</th>
+      </thead>
+      <tr>
+        <td>Buster</td>
+        <td>Bluth</td>
+        <td>Army</td>
+        <td>35</td>
+      </tr>
+      <tr>
+        <td>Michael</td>
+        <td>Bluth</td>
+        <td>Company President</td>
+        <td>39</td>
+      </tr>
+      <tr>
+        <td>GOB</td>
+        <td>Bluth</td>
+        <td>Magician</td>
+        <td>37</td>
+      </tr>
+      <tr>
+        <td>Lindsay</td>
+        <td>Fünke</td>
+        <td>Protester</td>
+        <td>36</td>
+      </tr>
+      <tr>
+        <td>Tony</td>
+        <td>Wonder</td>
+        <td>Magician</td>
+        <td>35</td>
+      </tr>
+      <tr>
+        <td>Tobias</td>
+        <td>Fünke</td>
+        <td>Therapist</td>
+        <td>40</td>
+      </tr>
+    </table>
+  </script>
+
+  <!--  **** TinyMCE **** -->
+  <script>
+    addPattern({
+      id: 'tinymce',
+      title: 'TinyMCE',
+      description: 'Rich text editor.',
+      attributes: [
+        {attribute: 'relatedItems', type: 'Object', defaultValue: '<pre>{\n'
+          + '  attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"],\n'
+          + '  batchSize: 20,\n'
+          + '  basePath: "/",\n'
+          + '  vocabularyUrl: null,\n'
+          + '  width: 500,\n'
+          + '  maximumSelectionSize: 1,\n'
+          + '  placeholder: "Search for item on site..."\n'
+          + '}</pre>', description: 'TODO.'},
+        {attribute: 'text', type: 'Array', defaultValue: '<pre>{\n'
+          + '  insertBtn: "Insert", // so this can be configurable for different languages\n'
+          + '  cancelBtn: "Cancel",\n'
+          + '  insertHeading: "Insert link",\n'
+          + '  title: "Title",\n'
+          + '  internal: "Internal",\n'
+          + '  external: "External",\n'
+          + '  email: "Email",\n'
+          + '  anchor: "Anchor",\n'
+          + '  subject: "Subject"\n'
+          + '  image: "Image",\n'
+          + '  imageAlign: "Align",\n'
+          + '  scale: "Size",\n'
+          + '  alt: "Alternative Text",\n'
+          + '  externalImage: "External Image URI"\n'
+          + '}</pre>', description: 'TODO.'},
+        {attribute: 'scales', type: 'String', defaultValue: '<pre>\n'
+          + '"Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile," +\n'
+          + '"Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview," +\n'
+          + '"Large (768x768):large"</pre>', description: 'TODO.'},
+        {attribute: 'targetList', type: 'Array', defaultValue: '<pre>[\n'
+          + '  {text: "Open in this window / frame", value: ""},\n'
+          + '  {text: "Open in new window", value: "_blank"},\n'
+          + '  {text: "Open in parent window / frame", value: "_parent"},\n'
+          + '  {text: "Open in top frame (replaces all frames)", value: "_top"}\n'
+          + ']</pre>', description: 'TODO.'},
+        {attribute: 'imageTypes', type: 'String', defaultValue: '<code>Image</code>',
+         description: 'TODO.'},
+        {attribute: 'folderTypes', type: 'String', defaultValue: '<code>Folder,Plone Site</code>',
+         description: 'TODO.'},
+        {attribute: 'linkableTypes', type: 'String', defaultValue: '<code>Document,Event,File,Folder,Image,News Item,Topic</code>',
+         description: 'TODO.'},
+        {attribute: 'tiny', type: 'Object', defaultValue: '<pre>{\n'
+          + '  plugins: [\n'
+          + '    "advlist autolink lists charmap print preview anchor ploneupload",\n'
+          + '    "searchreplace visualblocks code fullscreen autoresize",\n'
+          + '    "insertdatetime media table contextmenu paste plonelink ploneimage"\n'
+          + '  ],\n'
+          + '  menubar: "edit table format tools view insert"\n'
+          + '  toolbar: "undo redo | styleselect | bold italic | " +\n'
+          + '           "alignleft aligncenter alignright alignjustify | " +\n'
+          + '           "bullist numlist outdent indent | " +\n'
+          + '           "unlink plonelink ploneimage | ploneupload"\n'
+          + '  autoresize_max_height: 1500\n'
+          + '}</pre>', description: 'TODO.'},
+        {attribute: 'rel_upload_path', type: 'String', defaultValue: '<code>null</code>',
+         description: 'To provide upload support.'},
+        {attribute: 'folder_url', type: 'String', defaultValue: '<code>null</code>',
+         description: 'Base url to provide upload url off of.'},
+        {attribute: 'prependToUrl', type: 'String', defaultValue: "<code>''</code>",
+         description: 'Text to prepend to generated internal urls'},
+        {attribute: 'appendToUrl', type: 'String', defaultValue: "<code>''</code>",
+         description: 'Text to append to generated internal urls'},
+        {attribute: 'prependToScalePart', type: 'String', defaultValue: "<code>'/imagescale/'</code>",
+         description: 'Text to prepend to generated image scale url part'},
+        {attribute: 'appendToScalePart', type: 'String', defaultValue: "<code>''</code>",
+         description: 'Text to append to generated image scale url part'},
+        {attribute: 'linkAttribute', type: 'String', defaultValue: "<code>'path'</code>",
+         description: 'ajax response data attribute to use for url'},
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_tinymce">
+  <p>
+    <a href="http://www.tinymce.com/">TinyMCE</a> version 4.0.x
+  </p>
+  </script>
+  <script type="text/example" class="example-tinymce" data-title="Default">
+    <form>
+      <textarea class="pat-tinymce"
+        data-pat-tinymce='{"relatedItems": {
+                             "vocabularyUrl": "/relateditems-test.json"
+                           } }'
+        ></textarea>
+    </form>
+  </script>
+  <script type="text/example" class="example-tinymce" data-title="With Dropzone">
+    <form>
+      <textarea class="pat-tinymce"
+        data-pat-tinymce='{"relatedItems": {
+                             "vocabularyUrl": "/relateditems-test.json"
+                           },
+                           "rel_upload_path": "upload",
+                           "folder_url": "http://localhost:8000/"}'
+        ></textarea>
+    </form>
+  </script>
+
+  <!--  **** Table of Contents **** -->
+  <script>
+    addPattern({
+      id: 'autotoc',
+      title: 'Table of Contents',
+      description: 'Automatically <strong>generate a table of contents</strong>.',
+      attributes: [
+        {attribute: 'IDPrefix', type: 'String', description: 'Prefix used to generate ID.'},
+        {attribute: 'classActiveName', type: 'String', description: 'Class used for active level.'},
+        {attribute: 'classLevelPrefixName', type: 'String', description: 'Class prefix used for the TOC levels.'},
+        {attribute: 'classSectionName', type: 'String', description: 'Class used for section in TOC.'},
+        {attribute: 'classTOCName', type: 'String', description: 'Class used for the TOC.'},
+        {attribute: 'levels', type: 'String', description: 'Selectors used to find levels.'},
+        {attribute: 'scrollDuration', type: 'String', description: 'Speed of scrolling.'},
+        {attribute: 'scrollEasing', type: 'String', description: 'Easing to use while scrolling.'},
+        {attribute: 'section', type: 'String', description: 'Tag type to use for TOC.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_autotoc">
+
+  </script>
+  <script type="text/example" class="example-autotoc" data-title="Default">
+    <div class="pat-autotoc"
+         data-pat-autotoc="scrollDuration:slow;
+                           levels:h4,h5,h6;">
+      <h4>Title 1</h4>
+      <p>Mr. Zuckerkorn, you've been warned about touching. You said
+        spanking. It walked on my pillow! How about a turtle? I've always
+        loved those leathery little snappy faces.</p>
+      <h5>Title 1.1</h5>
+      <p>Ah coodle doodle do Caw ca caw, caw ca caw. Butterscotch!</p>
+      <h6>Title 1.1.1</h6>
+      <p>Want a lick? Okay, Lindsay, are you forgetting that I was
+        a professional twice over - an analyst and a therapist.</p>
+      <h4>Title 2</h4>
+      <p>You boys know how to shovel coal? Don't worry, these young
+        beauties have been nowhere near the bananas. I thought the two of
+        us could talk man-on-man.</p>
+    </div>
+  </script>
+
+  <!--  **** Tooltip **** -->
+  <script>
+    addPattern({
+      id: 'tooltip',
+      title: 'Tooltip',
+      description: 'A pattern to show a tooltip on hover.',
+      attributes: [
+        {attribute: 'event_enter', type: 'String', description: 'Event used to trigger tooltip.'},
+        {attribute: 'event_exit', type: 'String', description: 'Event used to dismiss tooltip.'}
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_tooltip">
+    <h2>Directions</h2>
+    You can use this inside Plone or on any static page. Please check below for additional directions for non-Plone sites as there are some lines of code you need to add to the header of your webpage.
+    <h3>Adding tooltip using Plone</h3>
+    <ul>
+      <li> Make sure your viewing the page you want to add the tool tip too.</li>
+      <li> Log in </li>
+      <li> Create some text that you want to be the link that will reveal the tooltip. </li>
+      <li> Select the view html button</li>
+      <li>Find your text. and wrap that text with an href tag, and add a class and the href tag. <br>
+      It should look like &lt; a class=&quot;pat-tooltip&quot; href=&quot;#my-demo-tip&quot;&gt; My link text &lt;/a&gt;</li>
+      <li>Choose Save</li>
+      </ul>
+    <p>Now that we have added our link we now need to add our tooltip. </p>
+    <ul>
+      <li>Choose &quot;edit&quot;</li>
+      <li>Immediently following the link click to add some text and hit your &quot;return&quot; key</li>
+      <li>Add the text that you want to be the tip.</li>
+      <li>Choose the &quot;edit html&quot; button</li>
+      <li>Find the tip text and wrap that text with a div tag, an ID tag and a class.<br>
+      It should look like &lt;div id=&quot;my-demo-tip&quot; class=&quot;tooltips&quot;&gt; My Tip Text here &lt;/div&gt;</li>
+      <li>Choose Save and test your tooltip.</li>
+      </ul>
+    <p>Note: it's important that the href AND the ID be named exactly the same thing. This is what links them together.</p>
+    <h3>Adding tooltip not using Plone</h3>
+    <p>TODO</p>
+  </script>
+  <script type="text/example" class="example-tooltip">
+    <p href=".example-class" class="pat-tooltip">
+     Hover over this line to see a tooltip
+    </p>
+
+    <p class="tooltips example-class">
+      Setting the .example-class in the href makes this show up
+    </p>
+  </script>
+
+
+  <!--  **** Toggle **** -->
+  <script>
+    addPattern({
+      id: 'toggle',
+      title: 'Toggle',
+      description: '<strong>Toggles any attribute value</strong> after some event is fired.',
+      attributes: [
+        {attribute: 'attribute', type: 'String', default: 'class', description: 'Element attribute whose value will be changed'},
+        {attribute: 'event', type: 'String', default: 'click', description: 'event that triggers the toggle'},
+        {attribute: 'externalClose', type: 'Boolean', default: 'true', description: ''},
+        {attribute: 'preventDefault', type: 'Boolean', default: 'true', description: ''},
+        {attribute: 'menu', type: 'String', default: 'global', description: ''}
+      ]
+    });
+  </script>
+
+
+  <!--  **** DropZone **** -->
+  <script>
+    addPattern({
+      id: "dropzone",
+      title: "DropZone",
+      description: "file upload with drag and drop support",
+      attributes: [
+        {attribute: "url", 
+         type: "String", 
+         description: "If not used with a form, this option must provide the URL to submit to"},
+        {attribute: "clickable", 
+         type: "Boolean",
+         description: "If you can click on container to also upload"},
+        {attribute: "className", 
+         type: "String", 
+         description: "value for class attribute in the form element"},
+        {attribute: "paramName", 
+         type: "String", 
+         description: "value for name attribute in the file input element"},
+        {attribute: "uploadMultiple", 
+         type: "Boolean", 
+         description: "condition value for multiple attribute in the file input element. If the value is 'true' and paramName is file, 'multiple=multiple' and 'name=file[]' will be added in the file input."},
+        {attribute: "wrap", 
+         defaultValue: false,
+         type: "Boolean, String", 
+         description: "<code>true</code> or <code>false</code> for wrapping this element using the value of <code>wrapperTemplate</code>. If the value is 'inner', this element will wrap the <code>wrapperTemplate</code> value."},
+        {attribute: "wrapperTemplate", 
+         type: "String", 
+         description: "HTML template for wrapping around with this element."},
+        {attribute: "resultTemplate", 
+         type: "String", 
+         description: "HTML template for the element that will contain file information."},
+        {attribute: "autoCleanResults", 
+         type: "Boolean", 
+         defaultValue: "<code>false</code>", 
+         description: "condition value for the file preview in div element to fadeout after file upload is completed."},
+        {attribute: "previewsContainer", 
+         type: "Selector",
+         description: "JavaScript selector for file preview in div element."},
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_dropzone">
+  </script>
+  <script type="text/example" class="example-dropzone" data-title="With a form">
+    <form method="post" action="/upload" enctype="multipart/form-data" class="pat-dropzone"
+          data-pat-dropzone="clickable:true">
+    </form>
+  </script>
+  <script type="text/example" class="example-dropzone" data-title="With a div">
+    <div class="pat-dropzone" data-pat-dropzone="url: /upload">
+      <div>
+        <p>Something here that is useful</p>
+        <p>Something else here that is useful</p>
+        <p>Another thing here that is useful</p>
+      </div>
+    </div>
+  </script>
+  <script type="text/example" class="example-dropzone" data-title="With custom styles">
+    <style>
+      .mydropzone{
+        width: 400px;
+        height: 300px;
+        background-color: gray;
+      }
+      .mydropzone.dz-drag-hover{
+        background-color: red;
+      }
+    </style>
+    <div class="pat-dropzone" data-pat-dropzone="url: /upload; className: mydropzone">
+      Drop here...
+    </div>
+  </script>
+
+
+  <!--  **** Structure **** -->
+  <script>
+    addPattern({
+      id: 'structure',
+      title: 'Structure',
+      description: "Managing a folder of items",
+      attributes: [
+        {attribute: 'vocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to return query results'},
+        {attribute: 'tagsVocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to return tags query results'},
+        {attribute: 'usersVocabularyUrl', type: 'String', defaultValue: 'null', description: 'Url to query users'},
+        {attribute: 'indexOptionsUrl', type: 'String', defaultValue: 'null', description: 'Url to configure querystring widget with'},
+        {attribute: 'uploadUrl', type: 'String', defaultValue: 'null', description: 'For setting up dropzone'},
+        {attribute: 'moveUrl', type: 'String', defaultValue: 'null', description: 'For supporting drag drop reordering'},
+        {attribute: 'contextInfoUrl', type: 'String', defaultValue: 'null', description: 'For supporting add menu'},
+      ]
+    });
+  </script>
+  <script type="text/template" id="page_structure">
+  </script>
+  <script type="text/example" class="example-structure" data-title="Default">
+    <div class="pat-structure" data-pat-structure="vocabularyUrl:/relateditems-test.json;
+                                                   uploadUrl:/upload;
+                                                   moveUrl:/moveitem;
+                                                   tagsVocabularyUrl:/select2-test.json;
+                                                   usersVocabularyUrl:/tests/json/users.json;
+                                                   indexOptionsUrl:/tests/json/queryStringCriteria.json;
+                                                   contextInfoUrl:/tests/json/contextInfo.json;
+                                                   ">
+    </div>
+  </script>
+
+
+  <!--  **** Drag n' Drop**** -->
+  <script>
+    addPattern({
+      id: 'dragdrop',
+      title: "Drag n' Drop",
+      description: "Setup drag and drop sorting",
+      attributes: [
+        {attribute: 'selector', type: 'String', defaultValue: 'li', description: 'Selector to use to draggable items in pattern'},
+        {attribute: 'dragClass', type: 'String', defaultValue: 'item-dragging', description: 'Class to apply to original item that is being dragged.'},
+        {attribute: 'cloneClass', type: 'String', defaultValue: 'dragging', description: 'Class to apply to cloned item that is dragged.'},
+        {attribute: 'drop', type: 'function', defaultValue: 'null', description: 'callback function for when item is dropped'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-dragdrop" data-title="Default">
+    <ul class="pat-dragdrop">
+      <li>One</li>
+      <li>Two</li>
+      <li>Three</li>
+    </ul>
+  </script>
+  <script type="text/example" class="example-dragdrop" data-title="Table">
+    <table class="table table-stripped pat-dragdrop" data-pat-dragdrop="selector:tr;">
+      <tbody>
+        <tr>
+          <td>One One</td>
+          <td>One Two</td>
+        </tr>
+        <tr>
+          <td>Two One</td>
+          <td>Two Two</td>
+        </tr>
+        <tr>
+          <td>Three One</td>
+          <td>Three Two</td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
+
+  
+  <!--  **** Moment **** -->
+  <script>
+    addPattern({
+      id: 'moment',
+      title: "Moment",
+      description: "Date parsing",
+      attributes: [
+        {attribute: 'selector', type: 'String', defaultValue: 'null', description: 'selector to use to look for dates to format'},
+        {attribute: 'format', type: 'String', defaultValue: 'MMMM Do YYYY, h:mm:ss a', description: 'Format to use to render date. Also available is "relative" and "calendar" formats.'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-moment" data-title="Default">
+    <ul class="pat-moment" data-pat-moment="selector:li">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-01-01T22:10:00-05:00</li>
+      <li>2013-01-05T04:34:00-05:00</li>
+      <li>2013-02-14T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Relative format">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:relative;">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-01-01T22:10:00-05:00</li>
+      <li>2013-01-05T04:34:00-05:00</li>
+      <li>2013-02-14T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Calendar format">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:calendar;">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-10-02T22:10:00-05:00</li>
+      <li>2013-10-05T04:34:00-05:00</li>
+      <li>2013-10-03T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Custom format">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:MMM Do, YYYY h:m a;">
+      <li>2013-10-01T10:00:00-05:00</li>
+      <li>2013-01-01T22:10:00-05:00</li>
+      <li>2013-01-05T04:34:00-05:00</li>
+      <li>2013-02-14T16:55:00-05:00</li>
+    </ul>
+  </script>
+
+  <script type="text/example" class="example-moment" data-title="Setting date by attribute">
+    <ul class="pat-moment" data-pat-moment="selector:li;
+                                            format:MMM Do, YYYY h:m a;">
+      <li data-date="2013-10-01T10:00:00-05:00"></li>
+      <li data-date="2013-01-01T22:10:00-05:00"></li>
+      <li data-date="2013-01-05T04:34:00-05:00"></li>
+      <li data-date="2013-02-14T16:55:00-05:00"></li>
+    </ul>
+  </script>
+
+
+  <!--  **** Ace Editor **** -->
+  <script>
+    addPattern({
+      id: 'ace',
+      title: "Ace File Editor",
+      description: "Edit files in the browser",
+      attributes: [
+        {attribute: 'theme', type: 'String', defaultValue: 'null', description: 'Theme to use with editor. defaults to whatever it ships with'},
+        {attribute: 'mode', type: 'String', defaultValue: 'text', description: 'What type of syntax is it?'},
+        {attribute: 'width', type: 'Integer', defaultValue: '500', description: 'Width of the editor'},
+        {attribute: 'height', type: 'Integer', defaultValue: '200', description: 'Height of the editor'},
+        {attribute: 'tabSize', type: 'Integer', defaultValue: '4', description: ''},
+        {attribute: 'softTabs', type: 'Boolean', defaultValue: 'true', description: 'use spaces for tabs'},
+        {attribute: 'wrapMode', type: 'Boolean', defaultValue: 'false', description: 'wrap text'},
+        {attribute: 'showGutter', type: 'Boolean', defaultValue: 'true', description: ''},
+        {attribute: 'showPrintMargin', type: 'Boolean', defaultValue: 'false', description: 'show print margin'},
+        {attribute: 'readOnly', type: 'Boolean', defaultValue: 'false', description: 'read only editor'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-ace" data-title="Default">
+    <pre class="pat-ace" data-pat-ace="theme:clouds">
+      foobar
+    </pre>
+  </script>
+
+  <script type="text/example" class="example-ace" data-title="Mode">
+    <pre class="pat-ace" data-pat-ace="mode:javascript;
+                                       theme:dawn;">
+var foo = 'bar';
+function foobar(){
+  return foo;
+}
+    </pre>
+  </script>
+
+  <script type="text/example" class="example-ace" data-title="Options">
+<pre class="pat-ace" data-pat-ace="mode:javascript;
+                                   theme:ambiance;
+                                   tabSize:2;
+                                   showGutter:false;
+                                   showPrintMargin:true;">
+var foo = 'bar';
+function foobar(){
+  return foo;
+}
+</pre>
+</script>
+
+  <!--  **** File Manager **** -->
+
+  <script>
+    addPattern({
+      id: 'tree',
+      title: "Tree",
+      description: "Manage tree of items",
+      attributes: [
+        {attribute: 'data', type: 'JSON', defaultValue: 'undefined', description: 'load data structure directly into tree'},
+        {attribute: 'dataUrl', type: 'JSON', defaultValue: 'undefined', description: 'Load data from remote url'},
+        {attribute: 'autoOpen', type: 'Boolean', defaultValue: 'false', description: 'auto open tree contents'},
+        {attribute: 'dragAndDrop', type: 'Boolean', defaultValue: 'false', description: 'node drag and drop support'},
+        {attribute: 'selectable', type: 'Boolean', defaultValue: 'true', description: 'if nodes can be selectable'},
+        {attribute: 'keyboardSupport', type: 'Boolean', defaultValue: 'true', description: 'if keyboard naviation is allowed'}
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-tree" data-title="JSON node data">
+    <div class="pat-tree" data-pat-tree='data:[
+      {"label": "node1",
+       "children": [{
+         "label": "child1"
+        },{
+         "label": "child2"
+        }]
+      },{
+       "label": "node2",
+       "children": [{
+         "label": "child3"
+        }]
+      }];'>
+    </div>
+  </script>
+
+  <script type="text/example" class="example-tree" data-title="Remote data URL">
+    <div class="pat-tree" data-pat-tree="dataUrl:/tests/json/fileTree.json;
+                                         autoOpen:true">
+    </div>
+  </script>
+  <script type="text/example" class="example-tree" data-title="Drag and drop">
+    <div class="pat-tree" data-pat-tree="dataUrl:/tests/json/fileTree.json;
+                                         dragAndDrop: true;
+                                         autoOpen: true">
+    </div>
+  </script>
+
+
+
+  <!--  **** File Manager **** -->
+  <!--
+  <script>
+    addPattern({
+      id: 'filemanager',
+      title: "File Manager",
+      description: "Manage group of files in browser",
+      attributes: [
+        {attribute: 'aceConfig', type: 'JSON', defaultValue: '{}', description: 'Config to initialize ace with'},
+        {attribute: 'dataTreeUrl', type: 'JSON', defaultValue: 'null', description: 'url to return json data structure'},
+      ]
+    });
+  </script>
+  <script type="text/example" class="example-filemanager" data-title="Default">
+    <div class="pat-filemanager" data-pat-filemanager="dataTreeUrl: /tests/json/fileTree.json" />
+  </script>
+  -->
+
+  <header>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">
+            <span class="plone-logo">
+              <span class="plone-logo-circle">
+                <span class="plone-circle-inner">
+                  <span class="plone-dot-1"></span>
+                  <span class="plone-dot-2"></span>
+                  <span class="plone-dot-3"></span>
+                </span>
+              </span>
+            </span>
+            Mockup
+          </a>
+          <ul class="nav">
+            <li><a href="#about">About</a></li>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#hello-world">Hello World</a></li>
+            <li><a href="#patterns">Patterns</a></li>
+          </ul>
+          <p class="pull-right">
+            Right now tests are
+            <a href="https://travis-ci.org/plone/mockup"><img src="https://api.travis-ci.org/plone/mockup.png?branch=master" alt="Build Status" /></a>
+            and coverage is
+            <a href='https://coveralls.io/r/plone/mockup?branch=master'><img src='https://coveralls.io/repos/plone/mockup/badge.png?branch=master' alt='Coverage Status' /></a> .
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="content" data-panel="content">
+
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Plone<sup>&reg;</sup> and the Plone logo are registered trademarks of
+        the Plone Foundation. You’re looking good today.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
