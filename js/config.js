@@ -46,6 +46,7 @@ var requirejsOptions = {
     'mockup-patterns-backdrop': 'js/patterns/backdrop',
     'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
     'mockup-patterns-cookiedirective': 'js/patterns/cookiedirective',
+    'mockup-patterns-dragdrop': 'js/patterns/dragdrop',
     'mockup-patterns-sortable': 'js/patterns/sortable',
     'mockup-patterns-dropzone': 'js/patterns/dropzone',
     'mockup-patterns-expose': 'js/patterns/expose',
