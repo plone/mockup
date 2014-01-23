@@ -1,1 +1,172 @@
-define(["jquery","mockup-patterns-base","dropzone"],function(a,b,c){"use strict";c.autoDiscover=!1;var d=b.extend({name:"dropzone",defaults:{url:null,className:"dropzone",paramName:"file",uploadMultiple:!1,clickable:!1,wrap:!1,wrapperTemplate:'<div class="dropzone-container"/>',resultTemplate:'<div class="dz-notice"><p>Drop files here...</p></div><div class="dropzone-previews"/>',autoCleanResults:!1,previewsContainer:".dropzone-previews"},init:function(){var b=this;if("string"==typeof b.options.clickable&&(b.options.clickable="true"===b.options.clickable?!0:!1),!b.options.url&&"FORM"===b.$el[0].tagName){var d=b.$el.attr("action");d||(d=window.location.href),b.options.url=d}var e=b.$el;if(b.options.wrap){{e.wrap}"inner"===b.options.wrap?(e.wrapInner(b.options.wrapperTemplate),e=e.children().eq(0)):(e.wrap(b.options.wrapperTemplate),e=e.parent())}e.append('<div class="dz-notice"><p>Drop files here...</p></div>'),".dropzone-previews"===b.options.previewsContainer&&e.append('<div class="dropzone-previews"/>');var f=b.options.autoCleanResults;e.addClass(b.options.className);var g=a.extend({},b.options);if(delete g.wrap,delete g.wrapperTemplate,delete g.resultTemplate,delete g.autoCleanResults,b.options.previewsContainer){var h=e.find(b.options.previewsContainer);h.length>0&&(g.previewsContainer=h[0])}b.dropzone=new c(e[0],g),b.$dropzone=e,f&&b.dropzone.on("complete",function(b){setTimeout(function(){a(b.previewElement).fadeOut()},3e3)})}});return d});
+/* Dropzone pattern.
+ *
+ * Options:
+ *    url(string): If not used with a form, this option must provide the URL to submit to (null)
+ *    clickable(boolean): If you can click on container to also upload (false)
+ *    className(string): value for class attribute in the form element ('dropzone')
+ *    paramName(string): value for name attribute in the file input element ('file')
+ *    uploadMultiple(boolean): condition value for multiple attribute in the file input element. If the value is 'true' and paramName is file, 'multiple=multiple' and 'name=file[]' will be added in the file input. (false)
+ *    wrap(boolean): true or false for wrapping this element using the value of wrapperTemplate. If the value is 'inner', this element will wrap the wrapperTemplate value. (false)
+ *    wrapperTemplate(string): HTML template for wrapping around with this element. ('<div class="dropzone-container"/>')
+ *    resultTemplate(string): HTML template for the element that will contain file information. ('<div class="dz-notice"><p>Drop files here...</p></div><div class="dropzone-previews"/>')
+ *    autoCleanResults(boolean): condition value for the file preview in div element to fadeout after file upload is completed. (false)
+ *    previewsContainer(selector): JavaScript selector for file preview in div element. (.dropzone-previews)
+ *
+ * Documentation:
+ *    # On a form element
+ *
+ *    {{ example-1 }}
+ *
+ *    # On a div element
+ *
+ *    {{ example-2 }}
+ *
+ *    # With custom style
+ *
+ *    {{ example-3 }}
+ *
+ * Example: example-1
+ *    <form method="post" action="/upload" enctype="multipart/form-data"
+ *          class="pat-dropzone" data-pat-dropzone="clickable:true">
+ *    </form>
+ *
+ * Example: example-2
+ *    <div class="pat-dropzone" data-pat-dropzone="url: /upload">
+ *      <div>
+ *        <p>Something here that is useful</p>
+ *        <p>Something else here that is useful</p>
+ *        <p>Another thing here that is useful</p>
+ *      </div>
+ *    </div>
+ *
+ * Example: example-3
+ *    <style>
+ *      .mydropzone{
+ *        width: 400px;
+ *        height: 100px;
+ *        background-color: gray;
+ *      }
+ *      .mydropzone.dz-drag-hover{
+ *        background-color: red;
+ *      }
+ *    </style>
+ *    <div class="pat-dropzone"
+ *         data-pat-dropzone="url: /upload; className: mydropzone">
+ *      Drop here...
+ *    </div>
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+
+define([
+  'jquery',
+  'mockup-patterns-base',
+  'dropzone'
+], function($, Base, Dropzone) {
+  "use strict";
+
+  /* we do not want this plugin to auto discover */
+  Dropzone.autoDiscover = false;
+
+  var DropzonePattern = Base.extend({
+    name: "dropzone",
+    defaults: {
+      url: null, // XXX MUST provide url to submit to OR be in a form
+      className: 'dropzone',
+      paramName: "file",
+      uploadMultiple: false,
+      clickable: false,
+      wrap: false,
+      wrapperTemplate: '<div class="dropzone-container"/>',
+      resultTemplate: '<div class="dz-notice">' +
+          '<p>Drop files here...</p></div><div class="dropzone-previews"/>',
+      autoCleanResults: false,
+      previewsContainer: '.dropzone-previews'
+    },
+    init: function() {
+      var self = this;
+      if(typeof(self.options.clickable) === "string"){
+        if(self.options.clickable === 'true'){
+          self.options.clickable = true;
+        } else {
+          self.options.clickable = false;
+        }
+      }
+      if(!self.options.url && self.$el[0].tagName === 'FORM'){
+        var url = self.$el.attr('action');
+        if(!url){
+          // form without action, defaults to current url
+          url = window.location.href;
+        }
+        self.options.url = url;
+      }
+      var $el = self.$el;
+      if(self.options.wrap){
+        var wrapFunc = $el.wrap;
+        if(self.options.wrap === 'inner'){
+          $el.wrapInner(self.options.wrapperTemplate);
+          $el = $el.children().eq(0);
+        } else {
+          $el.wrap(self.options.wrapperTemplate);
+          $el = $el.parent();
+        }
+      }
+      $el.append('<div class="dz-notice"><p>Drop files here...</p></div>');
+      if(self.options.previewsContainer === '.dropzone-previews'){
+        $el.append('<div class="dropzone-previews"/>');
+      }
+
+      var autoClean = self.options.autoCleanResults;
+      $el.addClass(self.options.className);
+
+      // clean up options
+      var options = $.extend({}, self.options);
+      delete options.wrap;
+      delete options.wrapperTemplate;
+      delete options.resultTemplate;
+      delete options.autoCleanResults;
+
+      if(self.options.previewsContainer){
+        /*
+         * if they have a select but it's not an id, let's make an id selector
+         * so we can target the correct container. dropzone is weird here...
+         */
+        var $preview = $el.find(self.options.previewsContainer);
+        if($preview.length > 0){
+          options.previewsContainer = $preview[0];
+        }
+      }
+
+      self.dropzone = new Dropzone($el[0], options);
+      self.$dropzone = $el;
+
+      if(autoClean){
+        self.dropzone.on('complete', function(file){
+          setTimeout(function(){
+            $(file.previewElement).fadeOut();
+          }, 3000);
+        });
+      }
+    }
+  });
+
+  return DropzonePattern;
+
+});
+
+

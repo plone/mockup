@@ -1,1 +1,739 @@
-define(["jquery","mockup-patterns-base","mockup-patterns-select2","mockup-patterns-pickadate"],function(a,b,c,d,e){"use strict";var f=function(){this.init.apply(this,arguments)};f.prototype={defaults:{indexWidth:"20em",placeholder:"Select criteria",remove:"remove line",results:" items matching your search.",days:"days",betweendt:"to",classBetweenDtName:"querystring-criteria-betweendt",classWrapperName:"querystring-criteria-wrapper",classIndexName:"querystring-criteria-index",classOperatorName:"querystring-criteria-operator",classValueName:"querystring-criteria-value",classRemoveName:"querystring-criteria-remove",classResultsName:"querystring-criteria-results",classClearName:"querystring-criteria-clear"},init:function(b,c,d,f,g,h){var i=this;i.options=a.extend(!0,{},i.defaults,c),i.indexes=d,i.indexGroups={},i.$wrapper=a("<div/>").addClass(i.options.classWrapperName).appendTo(b),i.$remove=a("<div>"+i.options.remove+"</div>").addClass(i.options.classRemoveName).appendTo(i.$wrapper).on("click",function(){i.remove()}),i.$index=a("<select><option></option></select>").attr("placeholder",i.options.placeholder),a.each(i.indexes,function(b,c){c.enabled&&(i.indexGroups[c.group]||(i.indexGroups[c.group]=a("<optgroup/>").attr("label",c.group).appendTo(i.$index)),i.indexGroups[c.group].append(a("<option/>").attr("value",b).html(c.title)))}),i.$wrapper.append(a("<div/>").addClass(i.options.classIndexName).append(i.$index)),i.$index.patternSelect2({width:i.options.indexWidth,placeholder:i.options.placeholder}).on("change",function(a){i.removeValue(),i.createOperator(a.val),i.createClear(),i.trigger("index-changed")}),f!==e&&(i.$index.select2("val",f),i.createOperator(f,g,h),i.createClear()),i.trigger("create-criteria")},createOperator:function(b,c,d){var f=this;f.removeOperator(),f.$operator=a("<select/>"),f.indexes[b]&&a.each(f.indexes[b].operators,function(b,c){a("<option/>").attr("value",b).html(c.title).appendTo(f.$operator)}),f.$wrapper.append(a("<div/>").addClass(f.options.classOperatorName).append(f.$operator)),f.$operator.patternSelect2({width:"10em"}).on("change",function(){f.createValue(b),f.createClear(),f.trigger("operator-changed")}),c===e&&(c=f.$operator.select2("val")),f.$operator.select2("val",c),f.createValue(b,d),f.trigger("create-operator")},createValue:function(b,c){var d=this,f=d.indexes[b].operators[d.$operator.val()].widget,g=a("<div/>").addClass(d.options.classValueName).appendTo(d.$wrapper);if(d.removeValue(),"StringWidget"===f)d.$value=a('<input type="text"/>').addClass(d.options.classValueName+"-"+f).val(c).appendTo(g).change(function(){d.trigger("value-changed")});else if("DateWidget"===f)d.$value=a('<input type="text"/>').addClass(d.options.classValueName+"-"+f).appendTo(g).patternPickadate({time:!1,date:{format:"dd/mm/yyyy"}}).change(function(){d.trigger("value-changed")});else if("DateRangeWidget"===f){var h=a("<span/>").appendTo(g),i=a('<input type="text"/>').addClass(d.options.classValueName+"-"+f).addClass(d.options.classValueName+"-"+f+"-start").appendTo(h).patternPickadate({time:!1,date:{format:"dd/mm/yyyy"}});g.append(a("<span/>").html(d.options.betweendt).addClass(d.options.classBetweenDtName));var j=a("<span/>").appendTo(g),k=a('<input type="text"/>').addClass(d.options.classValueName+"-"+f).addClass(d.options.classValueName+"-"+f+"-end").appendTo(j).patternPickadate({time:!1,date:{format:"dd/mm/yyyy"}});g.find(".picker__input").change(function(){d.trigger("value-changed")}),d.$value=[i,k]}else"RelativeDateWidget"===f?d.$value=a('<input type="text"/>').after(a("<span/>").html(d.options.days)).addClass(d.options.classValueName+"-"+f).appendTo(g).change(function(){d.trigger("value-changed")}):"ReferenceWidget"===f?d.$value=a('<input type="text"/>').addClass(d.options.classValueName+"-"+f).appendTo(g).change(function(){d.trigger("value-changed")}):"RelativePathWidget"===f?d.$value=a('<input type="text"/>').addClass(d.options.classValueName+"-"+f).appendTo(g).val(c).change(function(){d.trigger("value-changed")}):"MultipleSelectionWidget"===f&&(d.$value=a("<select/>").attr("multiple",!0).addClass(d.options.classValueName+"-"+f).appendTo(g).change(function(){d.trigger("value-changed")}),d.indexes[b]&&a.each(d.indexes[b].values,function(b,c){a("<option/>").attr("value",b).html(c.title).appendTo(d.$value)}),d.$value.patternSelect2({width:"250px"}));c!==e&&"undefined"!=typeof d.$value&&d.$value.select2("val",c),d.trigger("create-value")},createClear:function(){var b=this;b.removeClear(),b.$clear=a("<div/>").addClass(b.options.classClearName).appendTo(b.$wrapper)},remove:function(){var a=this;a.trigger("remove"),a.$remove.remove(),a.$index.parent().remove(),a.removeOperator(),a.removeValue(),a.removeClear(),a.$wrapper.remove()},removeClear:function(){var a=this;a.trigger("remove-clear"),a.$clear&&a.$clear.remove()},removeOperator:function(){var a=this;a.trigger("remove-operator"),a.$operator&&a.$operator.parent().remove()},removeValue:function(){var b=this;b.trigger("remove-value"),b.$value&&(a.isArray(b.$value)?b.$value[0].parents(".querystring-criteria-value").remove():b.$value.parents(".querystring-criteria-value").remove())},buildQueryPart:function(){var b=this,c=b.$index.select2("val");if(""===c)return"";var d="query.i:records="+c;if("undefined"==typeof b.$operator)return"";var e=b.$operator.val(),f="query.o:records="+e,g="query.v:records=",h="query.v:records:list=",i=[];return"undefined"==typeof b.$value?i.push(g):a.isArray(b.$value)?a.each(b.$value,function(){i.push(h+a(this).parent().find(".picker__input").val())}):i.push(g+b.$value.val()),d+"&"+f+"&"+i.join("&")},getJSONListStr:function(){var b=this,c=b.$index.select2("val");if(""===c)return"";if("undefined"==typeof b.$operator)return"";var d=b.$operator.val(),e=[];a.isArray(b.$value)?a.each(b.$value,function(){e.push(a(this).parent().find(".picker__input").val())}):"undefined"!=typeof b.$value&&e.push(b.$value.val());var f;return f=e.length>1?'["'+e.join('","')+'"]':1===e.length?JSON.stringify(e[0]):'""','{"i":"'+c+'", "o":"'+d+'", "v":'+f+"}"},trigger:function(a){this.$wrapper.trigger(a+"-criteria.querystring.patterns",[this])},on:function(a,b){this.$wrapper.on(a+"-criteria.querystring.patterns",b)}};var g=b.extend({name:"querystring",defaults:{indexes:[],classWrapperName:"querystring-wrapper",criteria:{},indexOptionsUrl:null,previewURL:"portal_factory/@@querybuilder_html_results",previewCountURL:"portal_factory/@@querybuildernumberofresults",sorttxt:"Sort On",reversetxt:"Reversed Order",previewTitle:"Preview",previewDescription:"Preview of at most 10 items",classSortLabelName:"querystring-sort-label",classSortReverseName:"querystring-sortreverse",classSortReverseLabelName:"querystring-sortreverse-label",classPreviewCountWrapperName:"querystring-previewcount-wrapper",classPreviewResultsWrapperName:"querystring-previewresults-wrapper",classPreviewWrapperName:"querystring-preview-wrapper",classPreviewName:"querystring-preview",classPreviewTitleName:"querystring-preview-title",classPreviewDescriptionName:"querystring-preview-description",classSortWrapperName:"querystring-sort-wrapper",showPreviews:!0},init:function(){var b=this;b.$el.hide(),b.$wrapper=a("<div/>"),b.$el.after(b.$wrapper),b.initialized=!1,b.options.indexOptionsUrl?a.ajax({url:b.options.indexOptionsUrl,success:function(a){b.options.indexes=a.indexes,b.options.sortable_indexes=a.sortable_indexes,b._init()},error:function(){}}):b._init()},_init:function(){var b=this;b.$criteriaWrapper=a("<div/>").addClass(b.options.classWrapperName).appendTo(b.$wrapper),b.$sortWrapper=a("<div/>").addClass(b.options.classSortWrapperName).appendTo(b.$wrapper),"false"===b.options.showPreviews&&(b.options.showPreviews=!1),b.options.showPreviews&&(b.$previewWrapper=a("<div/>").addClass(b.options.classPreviewWrapperName).appendTo(b.$wrapper),a("<div/>").addClass(b.options.classPreviewTitleName).html(b.options.previewTitle).appendTo(b.$previewWrapper),a("<div/>").addClass(b.options.classPreviewDescriptionName).html(b.options.previewDescription).appendTo(b.$previewWrapper)),b.criterias=[],b.$el.val()&&a.each(JSON.parse(b.$el.val()),function(a,c){b.createCriteria(c.i,c.o,c.v)}),b.createCriteria(),b.createSort(),b.options.showPreviews&&b.refreshPreviewEvent(),b.$el.trigger("initialized"),b.initialized=!0},createCriteria:function(a,b,c){var d=this,e=new f(d.$criteriaWrapper,d.options.criteria,d.options.indexes,a,b,c);e.on("remove",function(){d.criterias[d.criterias.length-1]===e&&d.createCriteria()}),e.on("index-changed",function(){d.criterias[d.criterias.length-1]===e&&d.createCriteria()});var g=function(){d.refreshPreviewEvent(),d.updateValue()};e.on("remove",function(a,b){-1!==d.criterias.indexOf(b)&&d.criterias.splice(d.criterias.indexOf(b),1),g(a,b)}),e.on("remove-clear",g),e.on("remove-operator",g),e.on("remove-value",g),e.on("index-changed",g),e.on("operator-changed",g),e.on("create-criteria",g),e.on("create-operator",g),e.on("create-value",g),e.on("value-changed",g),d.criterias.push(e)},createSort:function(){var b=this,c=a('[id$="-sort_on"]').filter('[id^="formfield-"]'),d=a('[id$="-sort_reversed"]').filter('[id^="formfield-"]');a("<span/>").addClass(b.options.classSortLabelName).html(b.options.sorttxt).appendTo(b.$sortWrapper),b.$sortOn=a("<select/>").attr("name","sort_on").appendTo(b.$sortWrapper).change(function(){b.refreshPreviewEvent.call(b),a('[id$="sort_on"]',c).val(a(this).val())}),b.$sortOn.append(a('<option value="">No sorting</option>'));for(var e in b.options.sortable_indexes)b.$sortOn.append(a("<option/>").attr("value",e).html(b.options.indexes[e].title));if(b.$sortOn.patternSelect2({width:150}),b.$sortOrder=a("<input type='checkbox' />").attr("name","sort_reversed:boolean").change(function(){b.refreshPreviewEvent.call(b),"checked"===a(this).attr("checked")?a('.option input[type="checkbox"]',d).attr("checked","checked"):a('.option input[type="checkbox"]',d).removeAttr("checked")}),a("<span/>").addClass(b.options.classSortReverseName).appendTo(b.$sortWrapper).append(b.$sortOrder).append(a("<span/>").html(b.options.reversetxt).addClass(b.options.classSortReverseLabelName)),c.length>=1&&d.length>=1){var f="checked"===a('.option input[type="checkbox"]',d).attr("checked"),g=a('[id$="-sort_on"]',c).val();f&&b.$sortOrder.attr("checked","checked"),b.$sortOn.select2("val",g),a(c).hide(),a(d).hide()}},refreshPreviewEvent:function(){var b=this;if(b.options.showPreviews){"undefined"!=typeof b._preview_xhr&&b._preview_xhr.abort(),"undefined"!=typeof b.$previewPane&&b.$previewPane.remove();var c,d=[];if(a.each(b.criterias,function(a,b){c=b.buildQueryPart(),""!==c&&d.push(b.buildQueryPart())}),b.$previewPane=a("<div/>").addClass(b.options.classPreviewName).appendTo(b.$previewWrapper),d.length<=0)return a("<div/>").addClass(b.options.classPreviewCountWrapperName).html("No results to preview").prependTo(b.$previewPane),void 0;d.push("sort_on="+b.$sortOn.val());var e=b.$sortOrder.attr("checked");"checked"===e&&d.push("sort_order=reverse"),b._preview_xhr=a.get(b.options.previewURL+"?"+d.join("&")).done(function(c){a("<div/>").addClass(b.options.classPreviewResultsWrapperName).html(c).appendTo(b.$previewPane)})}},updateValue:function(){var b=this,c=[];a.each(b.criterias,function(a,b){var d=b.getJSONListStr();""!==d&&c.push(d)});var d=(b.$el.val(),"["+c.join(",")+"]");b.$el.val(d),b.$el.trigger("change")}});return g});
+/* Querystring pattern.
+ *
+ * Options:
+ *    criteria(object): options to pass into criteria ({})
+ *    indexOptionsUrl(string): URL to grab index option data from. Must contain "sortable_indexes" and "indexes" data in JSON object. (null)
+ *    previewURL(string): URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML list of results ('portal_factory/@@querybuilder_html_results')
+ *    previewCountURL(string): URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML string of the total number of records found with the query ('portal_factory/@@querybuildernumberofresults')
+ *    sorttxt(string): Text to use to label the sort dropdown ('Sort On')
+ *    reversetxt(string): Text to use to label the sort order checkbox ('Reversed Order')
+ *    previewTitle(string): Title for the preview area ('Preview')
+ *    previewDescription(string): Description for the preview area ('Preview of at most 10 items')
+ *    classWrapperName(string): CSS class to apply to the wrapper element ('querystring-wrapper')
+ *    classSortLabelName(string): CSS class to apply to the sort on label ('querystring-sort-label')
+ *    classSortReverseName(string): CSS class to apply to the sort order label and checkbox container ('querystring-sortreverse')
+ *    classSortReverseLabelName(string): CSS class to apply to the sort order label ('querystring-sortreverse-label')
+ *    classPreviewCountWrapperName(string): TODO ('querystring-previewcount-wrapper')
+ *    classPreviewResultsWrapperName(string): CSS class to apply to the results wrapper ('querystring-previewresults-wrapper')
+ *    classPreviewWrapperName(string): CSS class to apply to the preview wrapper ('querystring-preview-wrapper')
+ *    classPreviewName(string): CSS class to apply to the preview pane ('querystring-preview')
+ *    classPreviewTitleName(string): CSS class to apply to the preview title ('querystring-preview-title')
+ *    classPreviewDescriptionName(string): CSS class to apply to the preview description ('querystring-preview-description')
+ *    classSortWrapperName(string): CSS class to apply to the sort order and sort on wrapper ('querystring-sort-wrapper')
+ *    showPreviews(boolean): Should previews be shown? (true)
+ *
+ * Documentation:
+ *    # Default
+ *
+ *    {{ example-1 }}
+ *
+ *    # Without Previews
+ *    
+ *    {{ example-2 }}
+ *
+ * Example: example-1
+ *    <input class="pat-querystring"
+ *           data-pat-querystring="indexOptionsUrl: /tests/json/queryStringCriteria.json" />
+ *
+ * Example: example-2
+ *    <input class="pat-querystring"
+ *           data-pat-querystring="indexOptionsUrl: /tests/json/queryStringCriteria.json;
+ *                                 showPreviews: false;" />
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+
+define([
+  'jquery',
+  'mockup-patterns-base',
+  'mockup-patterns-select2',
+  'mockup-patterns-pickadate',
+  'select2'
+], function($, Base, Select2, PickADate, undefined) {
+  "use strict";
+
+  var Criteria = function() { this.init.apply(this, arguments); };
+  Criteria.prototype = {
+    defaults: {
+      indexWidth: '20em',
+      placeholder: 'Select criteria',
+      remove: '',
+      results: ' items matching your search.',
+      days: 'days',
+      betweendt: 'to',
+      classBetweenDtName: 'querystring-criteria-betweendt',
+      classWrapperName: 'querystring-criteria-wrapper',
+      classIndexName: 'querystring-criteria-index',
+      classOperatorName: 'querystring-criteria-operator',
+      classValueName: 'querystring-criteria-value',
+      classRemoveName: 'querystring-criteria-remove',
+      classResultsName: 'querystring-criteria-results',
+      classClearName: 'querystring-criteria-clear'
+    },
+    init: function($el, options, indexes, index, operator, value) {
+      var self = this;
+
+      self.options = $.extend(true, {}, self.defaults, options);
+      self.indexes = indexes;
+      self.indexGroups = {};
+
+      // create wrapper criteria and append it to DOM
+      self.$wrapper = $('<div/>')
+              .addClass(self.options.classWrapperName)
+              .appendTo($el);
+
+      // Remove button
+      self.$remove = $('<div>'+self.options.remove+'</div>')
+              .addClass(self.options.classRemoveName)
+              .appendTo(self.$wrapper)
+              .on('click', function(e) {
+                self.remove();
+              });
+
+      // Index selection
+      self.$index = $('<select><option></option></select>')
+          .attr('placeholder', self.options.placeholder);
+
+      // list of indexes
+      $.each(self.indexes, function(value, options) {
+        if (options.enabled) {
+          if (!self.indexGroups[options.group]) {
+            self.indexGroups[options.group] = $('<optgroup/>')
+                .attr('label', options.group)
+                .appendTo(self.$index);
+          }
+          self.indexGroups[options.group].append(
+            $('<option/>')
+                .attr('value', value)
+                .html(options.title));
+        }
+      });
+
+      // attach index select to DOM
+      self.$wrapper.append(
+          $('<div/>')
+              .addClass(self.options.classIndexName)
+              .append(self.$index));
+
+      // add blink (select2)
+      self.$index
+        .patternSelect2({
+            width: self.options.indexWidth,
+            placeholder: self.options.placeholder
+        })
+        .on("change", function(e) {
+          self.removeValue();
+          self.createOperator(e.val);
+          self.createClear();
+          self.trigger('index-changed');
+        });
+
+      if (index !== undefined) {
+        self.$index.select2('val', index);
+        self.createOperator(index, operator, value);
+        self.createClear();
+      }
+
+      self.trigger('create-criteria');
+    },
+    createOperator: function(index, operator, value) {
+      var self = this;
+
+      self.removeOperator();
+      self.$operator = $('<select/>');
+
+      if (self.indexes[index]) {
+        $.each(self.indexes[index].operators, function(value, options) {
+          $('<option/>')
+              .attr('value', value)
+              .html(options.title)
+              .appendTo(self.$operator);
+        });
+      }
+
+      // attach operators select to DOM
+      self.$wrapper.append(
+          $('<div/>')
+              .addClass(self.options.classOperatorName)
+              .append(self.$operator));
+
+      // add blink (select2)
+      self.$operator
+        .patternSelect2({ width: '10em' })
+        .on("change", function(e) {
+          self.createValue(index);
+          self.createClear();
+          self.trigger('operator-changed');
+        });
+
+      if (operator === undefined) {
+        operator = self.$operator.select2('val');
+      }
+
+      self.$operator.select2('val', operator);
+      self.createValue(index, value);
+
+      self.trigger('create-operator');
+    },
+    createValue: function(index, value) {
+      var self = this,
+          widget = self.indexes[index].operators[self.$operator.val()].widget,
+          $wrapper = $('<div/>')
+            .addClass(self.options.classValueName)
+            .appendTo(self.$wrapper);
+
+      self.removeValue();
+
+      if (widget === 'StringWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.classValueName + '-' + widget)
+                .val(value)
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
+
+      } else if (widget === 'DateWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.classValueName + '-' + widget)
+                .appendTo($wrapper)
+                .patternPickadate({
+                  time: false,
+                  date: { format: "dd/mm/yyyy" }
+                })
+                .change(function(){
+                  self.trigger('value-changed');
+                });
+
+      } else if (widget === 'DateRangeWidget') {
+        var startwrap = $('<span/>').appendTo($wrapper);
+        var startdt = $('<input type="text"/>')
+                        .addClass(self.options.classValueName + '-' + widget)
+                        .addClass(self.options.classValueName + '-' + widget + '-start')
+                        .appendTo(startwrap)
+                        .patternPickadate({
+                          time: false,
+                          date: { format: "dd/mm/yyyy" }
+                        });
+        $wrapper.append(
+          $('<span/>')
+            .html(self.options.betweendt)
+            .addClass(self.options.classBetweenDtName)
+        );
+        var endwrap = $('<span/>').appendTo($wrapper);
+        var enddt = $('<input type="text"/>')
+                        .addClass(self.options.classValueName + '-' + widget)
+                        .addClass(self.options.classValueName + '-' + widget + '-end')
+                        .appendTo(endwrap)
+                        .patternPickadate({
+                          time: false,
+                          date: { format: "dd/mm/yyyy" }
+                        });
+        $wrapper.find('.picker__input').change(function() {
+          self.trigger('value-changed');
+        });
+        self.$value = [startdt, enddt];
+
+      } else if (widget === 'RelativeDateWidget') {
+        self.$value = $('<input type="text"/>')
+                .after($('<span/>').html(self.options.days))
+                .addClass(self.options.classValueName + '-' + widget)
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
+
+      } else if (widget === 'ReferenceWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.classValueName + '-' + widget)
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
+
+      } else if (widget === 'RelativePathWidget') {
+        self.$value = $('<input type="text"/>')
+                .addClass(self.options.classValueName + '-' + widget)
+                .appendTo($wrapper)
+                .val(value)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
+
+      } else if (widget === 'MultipleSelectionWidget') {
+        self.$value = $('<select/>').attr('multiple', true)
+                .addClass(self.options.classValueName + '-' + widget)
+                .appendTo($wrapper)
+                .change(function(){
+                  self.trigger('value-changed');
+                });
+        if (self.indexes[index]) {
+          $.each(self.indexes[index].values, function(value, options) {
+            $('<option/>')
+                .attr('value', value)
+                .html(options.title)
+                .appendTo(self.$value);
+          });
+        }
+        self.$value.patternSelect2({ width: '250px' });
+      }
+
+      if(value !== undefined && typeof self.$value !== 'undefined') {
+        self.$value.select2('val', value);
+      }
+
+      self.trigger('create-value');
+
+    },
+    createClear: function() {
+      var self = this;
+      self.removeClear();
+      self.$clear = $('<div/>')
+        .addClass(self.options.classClearName)
+        .appendTo(self.$wrapper);
+    },
+    remove: function() {
+      var self = this;
+      self.trigger('remove');
+      self.$remove.remove();
+      self.$index.parent().remove();
+      self.removeOperator();
+      self.removeValue();
+      self.removeClear();
+      self.$wrapper.remove();
+    },
+    removeClear: function() {
+      var self = this;
+      self.trigger('remove-clear');
+      if (self.$clear) {
+        self.$clear.remove();
+      }
+    },
+    removeOperator: function() {
+      var self = this;
+      self.trigger('remove-operator');
+      if (self.$operator) {
+        self.$operator.parent().remove();
+      }
+    },
+    removeValue: function() {
+      var self = this;
+      self.trigger('remove-value');
+      if(self.$value) {
+        if($.isArray(self.$value)) { // date ranges have 2 values
+          self.$value[0].parents('.querystring-criteria-value').remove();
+        }
+        else {
+          self.$value.parents('.querystring-criteria-value').remove();
+        }
+      }
+    },
+    // builds the parameters to go into the http querystring for requesting
+    // results from the query builder
+    buildQueryPart: function() {
+      var self = this;
+
+      // index
+      var ival = self.$index.select2('val');
+      if(ival === "") { // no index selected, no query
+        return "";
+      }
+      var istr = 'query.i:records='+ival;
+
+      // operator
+      if(typeof self.$operator === "undefined") { // no operator, no query
+        return "";
+      }
+      var oval = self.$operator.val(),
+          ostr = 'query.o:records='+oval;
+
+      // value(s)
+      var vstrbase = 'query.v:records=',
+          vstrlistbase = 'query.v:records:list=',
+          vstr = [];
+      if(typeof self.$value === "undefined") {
+        vstr.push(vstrbase);
+      }
+      else if($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
+        $.each(self.$value, function(i, v) {
+          vstr.push(vstrlistbase + $(this).parent().find('.picker__input').val());
+        });
+      }
+      else {
+        vstr.push(vstrbase + self.$value.val());
+      }
+
+      return istr + '&' + ostr + '&' + vstr.join('&');
+    },
+    getJSONListStr: function() {
+      var self = this;
+
+      // index
+      var ival = self.$index.select2('val');
+      if(ival === "") { // no index selected, no query
+        return "";
+      }
+
+      // operator
+      if(typeof self.$operator === "undefined") { // no operator, no query
+        return "";
+      }
+      var oval = self.$operator.val();
+
+      // value(s)
+      var varr = [];
+      if($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
+        $.each(self.$value, function(i, v) {
+          varr.push($(this).parent().find('.picker__input').val());
+        });
+      }
+      else if(typeof self.$value !== "undefined") {
+        varr.push(self.$value.val());
+      }
+      var vval;
+      if(varr.length > 1) {
+        vval = '["'+varr.join('","')+'"]';
+      }
+      else if(varr.length === 1) {
+        vval = JSON.stringify(varr[0]);
+      }
+      else {
+        vval = '""';
+      }
+
+      return '{"i":"'+ival+'", "o":"'+oval+'", "v":'+vval+'}';
+    },
+    trigger: function(name) {
+      this.$wrapper.trigger(name + '-criteria.querystring.patterns', [ this ]);
+    },
+    on: function(name, callback) {
+      this.$wrapper.on(name + '-criteria.querystring.patterns', callback);
+    }
+  };
+
+  var QueryString = Base.extend({
+    name: 'querystring',
+    defaults: {
+      indexes: [],
+      classWrapperName: 'querystring-wrapper',
+      criteria: {},
+      indexOptionsUrl: null,
+      previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
+      previewCountURL: 'portal_factory/@@querybuildernumberofresults',
+      sorttxt: 'Sort On',
+      reversetxt: 'Reversed Order',
+      previewTitle: 'Preview',
+      previewDescription: 'Preview of at most 10 items',
+      classSortLabelName: 'querystring-sort-label',
+      classSortReverseName: 'querystring-sortreverse',
+      classSortReverseLabelName: 'querystring-sortreverse-label',
+      classPreviewCountWrapperName: 'querystring-previewcount-wrapper',
+      classPreviewResultsWrapperName: 'querystring-previewresults-wrapper',
+      classPreviewWrapperName: 'querystring-preview-wrapper',
+      classPreviewName: 'querystring-preview',
+      classPreviewTitleName: 'querystring-preview-title',
+      classPreviewDescriptionName: 'querystring-preview-description',
+      classSortWrapperName: 'querystring-sort-wrapper',
+      showPreviews: true
+    },
+    init: function() {
+      var self = this;
+
+      // hide input element
+      self.$el.hide();
+
+      // create wrapper for out criteria
+      self.$wrapper = $('<div/>');
+      self.$el.after(self.$wrapper);
+
+      // initialization can be detailed if by ajax
+      self.initialized = false;
+
+      if(self.options.indexOptionsUrl){
+        $.ajax({
+          url: self.options.indexOptionsUrl,
+          success: function(data){
+            self.options.indexes = data.indexes;
+            self.options.sortable_indexes = data.sortable_indexes;
+            self._init();
+          },
+          error: function(xhr){
+            // XXX handle this...
+          }
+        });
+      }else{
+        self._init();
+      }
+    },
+    _init: function(){
+      var self = this;
+      self.$criteriaWrapper = $('<div/>')
+        .addClass(self.options.classWrapperName)
+        .appendTo(self.$wrapper);
+
+      self.$sortWrapper = $('<div/>')
+        .addClass(self.options.classSortWrapperName)
+        .appendTo(self.$wrapper);
+
+      if(self.options.showPreviews === 'false'){
+        self.options.showPreviews = false;
+      }
+      if(self.options.showPreviews){
+        self.$previewWrapper = $('<div/>')
+          .addClass(self.options.classPreviewWrapperName)
+          .appendTo(self.$wrapper);
+
+        // preview title and description
+        $('<div/>')
+          .addClass(self.options.classPreviewTitleName)
+          .html(self.options.previewTitle)
+          .appendTo(self.$previewWrapper);
+        $('<div/>')
+          .addClass(self.options.classPreviewDescriptionName)
+          .html(self.options.previewDescription)
+          .appendTo(self.$previewWrapper);
+      }
+
+      self.criterias = [];
+
+      // create populated criterias
+      if (self.$el.val()) {
+        $.each(JSON.parse(self.$el.val()), function(i, item) {
+          self.createCriteria(item.i, item.o, item.v);
+        });
+      }
+
+      // add empty criteria which enables users to create new cr
+      self.createCriteria();
+
+      // add sort/order fields
+      self.createSort();
+
+      // add criteria preview pane to see results from criteria query
+      if(self.options.showPreviews){
+        self.refreshPreviewEvent();
+      }
+      self.$el.trigger('initialized');
+      self.initialized = true;
+    },
+    createCriteria: function(index, operator, value) {
+      var self = this,
+          criteria = new Criteria(self.$criteriaWrapper, self.options.criteria,
+            self.options.indexes, index, operator, value);
+
+      criteria.on('remove', function(e) {
+        if (self.criterias[self.criterias.length-1] === criteria) {
+          self.createCriteria();
+        }
+      });
+
+      criteria.on('index-changed', function(e) {
+        if (self.criterias[self.criterias.length-1] === criteria) {
+          self.createCriteria();
+        }
+      });
+
+      var doupdates = function() {
+        self.refreshPreviewEvent();
+        self.updateValue();
+      };
+
+      criteria.on('remove', function(e, criteria){
+        if(self.criterias.indexOf(criteria) !== -1){
+          self.criterias.splice(self.criterias.indexOf(criteria), 1);
+        }
+        doupdates(e, criteria);
+      });
+      criteria.on('remove-clear', doupdates);
+      criteria.on('remove-operator', doupdates);
+      criteria.on('remove-value', doupdates);
+      criteria.on('index-changed', doupdates);
+      criteria.on('operator-changed', doupdates);
+      criteria.on('create-criteria', doupdates);
+      criteria.on('create-operator', doupdates);
+      criteria.on('create-value', doupdates);
+      criteria.on('value-changed', doupdates);
+
+      self.criterias.push(criteria);
+    },
+    createSort: function() {
+      var self = this;
+
+      // elements that may exist already on the page
+      // XXX do this in a way so it'll work with other forms will work
+      // as long as they provide sort_on and sort_reversed fields in z3c form
+      var existingSortOn = $('[id$="-sort_on"]').filter('[id^="formfield-"]');
+      var existingSortOrder = $('[id$="-sort_reversed"]').filter('[id^="formfield-"]');
+
+      $('<span/>')
+        .addClass(self.options.classSortLabelName)
+        .html(self.options.sorttxt)
+        .appendTo(self.$sortWrapper);
+      self.$sortOn = $('<select/>')
+        .attr('name', 'sort_on')
+        .appendTo(self.$sortWrapper)
+        .change(function(){
+          self.refreshPreviewEvent.call(self);
+          $('[id$="sort_on"]', existingSortOn).val($(this).val());
+        });
+
+      self.$sortOn.append($('<option value="">No sorting</option>')); // default no sorting
+      for(var key in self.options.sortable_indexes) {
+        self.$sortOn.append(
+          $('<option/>')
+            .attr('value', key)
+            .html(self.options.indexes[key].title));
+      }
+      self.$sortOn.patternSelect2({width: 150});
+
+      self.$sortOrder = $("<input type='checkbox' />")
+                          .attr('name', 'sort_reversed:boolean')
+                          .change(function(){
+                            self.refreshPreviewEvent.call(self);
+                            if($(this).attr('checked') === "checked") {
+                              $('.option input[type="checkbox"]', existingSortOrder)
+                                .attr('checked', 'checked');
+                            }
+                            else {
+                              $('.option input[type="checkbox"]', existingSortOrder)
+                                .removeAttr('checked');
+                            }
+                          });
+
+
+      $('<span/>')
+        .addClass(self.options.classSortReverseName)
+        .appendTo(self.$sortWrapper)
+        .append(self.$sortOrder)
+        .append(
+          $('<span/>')
+            .html(self.options.reversetxt)
+            .addClass(self.options.classSortReverseLabelName)
+        );
+
+      // if the form already contains the sort fields, hide them! Their values
+      // will be synced back and forth between the querystring's form elements
+      if(existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
+        var reversed = $('.option input[type="checkbox"]', existingSortOrder).attr('checked') === "checked";
+        var sort_on = $('[id$="-sort_on"]', existingSortOn).val();
+        if(reversed) {
+          self.$sortOrder.attr('checked', 'checked');
+        }
+        self.$sortOn.select2('val', sort_on);
+        $(existingSortOn).hide();
+        $(existingSortOrder).hide();
+      }
+    },
+    refreshPreviewEvent: function() {
+      var self = this;
+
+      if(!self.options.showPreviews){
+        return; // cut out of this if there are no previews available
+      }
+
+      /* TEMPORARY */
+      //if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
+      //self._tmpcnt++;
+      /* /TEMPORARY */
+
+      if(typeof self._preview_xhr !== "undefined") {
+        self._preview_xhr.abort();
+      }
+      /*
+      if(typeof self._count_xhr !== "undefined") {
+        self._count_xhr.abort();
+      }
+      */
+      if(typeof self.$previewPane !== "undefined") {
+        self.$previewPane.remove();
+      }
+
+      var query = [], querypart;
+      $.each(self.criterias, function(i, criteria) {
+        querypart = criteria.buildQueryPart();
+        if(querypart !== "") {
+          query.push(criteria.buildQueryPart());
+        }
+      });
+
+      self.$previewPane = $('<div/>')
+        .addClass(self.options.classPreviewName)
+        .appendTo(self.$previewWrapper);
+
+      if(query.length <= 0) {
+        $('<div/>')
+          .addClass(self.options.classPreviewCountWrapperName)
+          .html("No results to preview")
+          .prependTo(self.$previewPane);
+        return; // no query means nothing to send out requests for
+      }
+
+      query.push('sort_on='+self.$sortOn.val());
+      var sortorder = self.$sortOrder.attr('checked');
+      if(sortorder === "checked") {
+        query.push('sort_order=reverse');
+      }
+
+      /* TEMPORARY */
+      //self.$previewPane.html(
+      //    'refreshed ' + self._tmpcnt + ' times<br />'
+      //    + (query.length > 1 ? query.join('<br />&') : query));
+      /* /TEMPORARY */
+
+      /*
+      self._count_xhr = $.get(self.options.previewCountURL + '?' + query.join('&'))
+          .done(function(data, stat){
+            $('<div/>')
+              .addClass(self.options.classPreviewCountWrapperName)
+              .html(data)
+              .prependTo(self.$previewPane);
+          });
+      */
+      self._preview_xhr = $.get(self.options.previewURL + '?' + query.join('&'))
+          .done(function(data, stat){
+            $('<div/>')
+              .addClass(self.options.classPreviewResultsWrapperName)
+              .html(data)
+              .appendTo(self.$previewPane);
+          });
+    },
+    updateValue: function() {
+      // updating the original input with json data in the form:
+      // [
+      //    {i:'index', o:'operator', v:'value'}
+      // ]
+
+      var self = this;
+
+      var criteriastrs = [];
+      $.each(self.criterias, function(i, criteria) {
+        var jsonstr = criteria.getJSONListStr();
+        if(jsonstr !== "") {
+          criteriastrs.push(jsonstr);
+        }
+      });
+      var existing = self.$el.val();
+      var val = '['+criteriastrs.join(',')+']';
+      self.$el.val(val);
+      self.$el.trigger('change');
+    }
+  });
+
+  return QueryString;
+
+});

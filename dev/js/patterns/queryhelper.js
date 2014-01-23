@@ -1,1 +1,199 @@
-define(["jquery","mockup-patterns-base"],function(a,b){"use strict";var c=b.extend({name:"queryhelper",defaults:{basePattern:null,vocabularyUrl:null,searchParam:"SearchableText",attributes:["UID","Title","Description","getURL","Type"],batchSize:10,baseCriteria:[],pathDepth:1},init:function(){var a=this;a.basePattern=a.options.basePattern,void 0===a.basePattern&&(a.basePattern={browsing:!1,basePath:"/"}),a.options.url&&!a.options.vocabularyUrl&&(a.options.vocabularyUrl=a.options.url),a.valid=void 0!==a.options.vocabularyUrl&&null!==a.options.vocabularyUrl?!0:!1},getCurrentPath:function(){var a,b=this,c=b.basePattern;a=b.currentPath?b.currentPath:c.currentPath,"function"==typeof a&&(a=a());var d=a;return d||(d=c.options.basePath?c.options.basePath:"/"),d},getCriterias:function(b,c){void 0===c&&(c={}),c=a.extend({},{useBaseCriteria:!0,additionalCriterias:[]},c);var d=this,e=[];c.useBaseCriteria&&(e=d.options.baseCriteria.slice(0)),b&&(b+="*",e.push({i:d.options.searchParam,o:"plone.app.querystring.operation.string.contains",v:b}));var f=d.basePattern;return f.browsing&&e.push({i:"path",o:"plone.app.querystring.operation.string.path",v:d.getCurrentPath()+"::"+d.options.pathDepth}),e=e.concat(c.additionalCriterias)},getBatch:function(a){a||(a=1);var b=this;return{page:a,size:b.options.batchSize}},selectAjax:function(){var a=this;return{url:a.options.vocabularyUrl,dataType:"JSON",quietMillis:100,data:function(b,c){var d={query:JSON.stringify({criteria:a.getCriterias(b)}),batch:JSON.stringify(a.getBatch(c)),attributes:JSON.stringify(a.options.attributes)};return d},results:function(a,b){var c=10*b<a.total;return{results:a.results,more:c}}}},search:function(b,c,d,e,f){void 0===f&&(f=!0);var g=this,h=[];f&&(h=g.options.baseCriteria.slice(0)),h.push({i:b,o:c,v:d});var i={query:JSON.stringify({criteria:h}),attributes:JSON.stringify(g.options.attributes)};a.ajax({url:g.options.vocabularyUrl,dataType:"JSON",data:i,success:e})}});return c});
+/* Queryhelper pattern.
+ *
+ * Options:
+ *    basePattern(object): TODO (null)
+ *    vocabularyUrl(string): TODO (null)
+ *    searchParam(string): query string param to pass to search url. ('SearchableText')
+ *    attributes(array): TODO (['UID','Title', 'Description', 'getURL', 'Type'])
+ *    batchSize(integer): number of results to retrive (10)
+ *    baseCriteria(array): TODO ([])
+ *    pathDepth(integer): TODO (1)
+ *
+ * Documentation:
+ *    # TODO
+ *
+ * License:
+ *    Copyright (C) 2010 Plone Foundation
+ *
+ *    This program is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU General Public License as published by the
+ *    Free Software Foundation; either version 2 of the License.
+ *
+ *    This program is distributed in the hope that it will be useful, but
+ *    WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *    Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+
+define([
+  'jquery',
+  'mockup-patterns-base'
+], function($, Base) {
+  "use strict";
+
+  var QueryHelper = Base.extend({
+    name: "queryhelper",
+    defaults: {
+      basePattern: null, // must be passed in
+      vocabularyUrl: null,
+      searchParam: 'SearchableText', // query string param to pass to search url
+      attributes: ['UID','Title', 'Description', 'getURL', 'Type'],
+      batchSize: 10, // number of results to retrive
+      baseCriteria: [],
+      pathDepth: 1
+    },
+
+    init: function() {
+      /* if basePattern argument provided, it can implement the interface of:
+       *    - browsing: boolean if currently browsing
+       *    - currentPath: string of current path to apply to search if browsing
+       *    - basePath: default path to provide if no subpath used
+       */
+      var self = this;
+      self.basePattern = self.options.basePattern;
+      if(self.basePattern === undefined){
+        self.basePattern = {
+          browsing: false,
+          basePath: '/'
+        };
+      }
+
+      if (self.options.url && !self.options.vocabularyUrl) {
+        self.options.vocabularyUrl = self.options.url;
+      }
+      if(self.options.vocabularyUrl !== undefined &&
+          self.options.vocabularyUrl !== null){
+        self.valid = true;
+      }else{
+        self.valid = false;
+      }
+    },
+    getCurrentPath: function(){
+      var self = this;
+      var pattern = self.basePattern;
+      var currentPath;
+      /* If currentPath is set on the QueryHelper object, use that first.
+       * Then, check on the pattern.
+       * Finally, see if it is a function and call it if it is.
+       */
+      if(self.currentPath){
+        currentPath = self.currentPath;
+      }else{
+        currentPath = pattern.currentPath;
+      }
+      if(typeof(currentPath) === 'function'){
+        currentPath = currentPath();
+      }
+      var path = currentPath;
+      if(!path){
+        if(pattern.options.basePath){
+          path = pattern.options.basePath;
+        }else{
+          path = '/';
+        }
+      }
+      return path;
+    },
+    getCriterias: function(term, options){
+      if(options === undefined){
+        options = {};
+      }
+      options = $.extend({}, {
+        useBaseCriteria: true,
+        additionalCriterias: []
+      }, options);
+
+      var self = this;
+      var criterias = [];
+      if(options.useBaseCriteria){
+        criterias = self.options.baseCriteria.slice(0);
+      }
+      if(term){
+        term += '*';
+        criterias.push({
+          i: self.options.searchParam,
+          o: 'plone.app.querystring.operation.string.contains',
+          v: term
+        });
+      }
+      var pattern = self.basePattern;
+      if(pattern.browsing){
+        criterias.push({
+          i: 'path',
+          o: 'plone.app.querystring.operation.string.path',
+          v: self.getCurrentPath() + '::' + self.options.pathDepth
+        });
+      }
+      criterias = criterias.concat(options.additionalCriterias);
+      return criterias;
+    },
+    getBatch: function(page){
+      if(!page){
+        page = 1;
+      }
+      var self = this;
+      return {
+        page: page,
+        size: self.options.batchSize
+      };
+    },
+    selectAjax: function(){
+      var self = this;
+      return {
+        url: self.options.vocabularyUrl,
+        dataType: 'JSON',
+        quietMillis: 100,
+        data: function(term, page) {
+          var opts = {
+            query: JSON.stringify({
+              criteria: self.getCriterias(term)
+            }),
+            batch: JSON.stringify(self.getBatch(page)),
+            attributes: JSON.stringify(self.options.attributes)
+          };
+          return opts;
+        },
+        results: function (data, page) {
+          var more = (page * 10) < data.total; // whether or not there are more results available
+          // notice we return the value of more so Select2 knows if more results can be loaded
+          return {results: data.results, more: more};
+        }
+      };
+    },
+
+    search: function(term, operation, value, callback, useBaseCriteria){
+      if(useBaseCriteria === undefined){
+        useBaseCriteria = true;
+      }
+      var self = this;
+      var criteria = [];
+      if(useBaseCriteria){
+        criteria = self.options.baseCriteria.slice(0);
+      }
+      criteria.push({
+        i: term,
+        o: operation,
+        v: value
+      });
+      var data = {
+        query: JSON.stringify({ criteria: criteria }),
+        attributes: JSON.stringify(self.options.attributes)
+      };
+      $.ajax({
+        url: self.options.vocabularyUrl,
+        dataType: 'JSON',
+        data: data,
+        success: callback
+      });
+    }
+  });
+
+  return QueryHelper;
+
+});
+
