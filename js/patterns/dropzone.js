@@ -76,8 +76,9 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'dropzone'
-], function($, Base, Dropzone) {
+  'dropzone',
+  'underscore'
+], function($, Base, Dropzone, _) {
   "use strict";
 
   /* we do not want this plugin to auto discover */
@@ -92,11 +93,14 @@ define([
       uploadMultiple: false,
       clickable: false,
       wrap: false,
+      addRemoveLinks: false,
       wrapperTemplate: '<div class="dropzone-container"/>',
-      resultTemplate: '<div class="dz-notice">' +
-          '<p>Drop files here...</p></div><div class="dropzone-previews"/>',
       autoCleanResults: false,
-      previewsContainer: '.dropzone-previews'
+      previewsContainer: '.dropzone-previews',
+      previewsTemplate: '<div class="dropzone-previews"></div>',
+      fileaddedClassName: 'dropping',
+      useTus: false,
+      maxFilesize: 99999999 // let's not have a max by default...
     },
     init: function() {
       var self = this;
@@ -117,7 +121,6 @@ define([
       }
       var $el = self.$el;
       if(self.options.wrap){
-        var wrapFunc = $el.wrap;
         if(self.options.wrap === 'inner'){
           $el.wrapInner(self.options.wrapperTemplate);
           $el = $el.children().eq(0);
@@ -128,11 +131,13 @@ define([
       }
       $el.append('<div class="dz-notice"><p>Drop files here...</p></div>');
       if(self.options.previewsContainer === '.dropzone-previews'){
-        $el.append('<div class="dropzone-previews"/>');
+        $el.append(self.options.previewsTemplate);
       }
 
       var autoClean = self.options.autoCleanResults;
       $el.addClass(self.options.className);
+      var fileaddedClassName = self.options.fileaddedClassName;
+      var useTus = self.options.useTus;
 
       // clean up options
       var options = $.extend({}, self.options);
@@ -140,6 +145,9 @@ define([
       delete options.wrapperTemplate;
       delete options.resultTemplate;
       delete options.autoCleanResults;
+      delete options.previewsTemplate;
+      delete options.fileaddedClassName;
+      delete options.useTus;
 
       if(self.options.previewsContainer){
         /*
@@ -152,8 +160,10 @@ define([
         }
       }
 
+      options.autoProcessQueue = false;
       self.dropzone = new Dropzone($el[0], options);
       self.$dropzone = $el;
+
 
       if(autoClean){
         self.dropzone.on('complete', function(file){
@@ -162,11 +172,68 @@ define([
           }, 3000);
         });
       }
+
+      /* customize file processing */
+      var processing = false;
+      function process(){
+        processing = true;
+        if(self.dropzone.files.length === 0){
+          processing = false;
+          self.$dropzone.removeClass(fileaddedClassName);
+          return;
+        }
+        var file = self.dropzone.files[0];
+        var $preview = $(file.previewElement);
+        if([Dropzone.SUCCESS, Dropzone.ERROR,
+                              Dropzone.CANCELED].indexOf(file.status) !== -1){
+          // remove it
+          self.dropzone.removeFile(file);
+          process();
+        }else if(file.status !== Dropzone.UPLOADING){
+          // start processing file
+          if(useTus && window.tus){
+            // use tus upload if installed
+            var $progress = $preview.find("[data-dz-uploadprogress]");
+            file.status = Dropzone.UPLOADING;
+            window.tus.upload(file, {
+              endpoint: self.options.url,
+              headers: {
+                'FILENAME': file.name
+              },
+              chunkSize: 1024 * 1024 * 5 // 5mb chunk size
+            }).fail(function(){
+              alert('Error uploading with TUS resumable uploads');
+              file.status = Dropzone.ERROR;
+            }).progress(function(e, bytesUploaded, bytesTotal){
+              var percentage = (bytesUploaded / bytesTotal * 100);
+              $progress.css('width', percentage + '%');
+              $progress.parent().css('display', 'block');
+            }).done(function(url, file){
+              file.status = Dropzone.SUCCESS;
+              self.dropzone.emit('success', file);
+              self.dropzone.emit('complete', file);
+            });
+          }else{
+            // otherwise, just use dropzone to process
+            self.dropzone.processFile(file);
+          }
+          setTimeout(process, 100);
+        }else{
+          // currently processing
+          setTimeout(process, 100);
+        }
+      }
+      self.dropzone.on('addedfile', function(){
+        self.$dropzone.addClass(fileaddedClassName);
+        setTimeout(function(){
+          if(!processing){
+            process();
+          }
+        }, 100);
+      });
     }
   });
 
   return DropzonePattern;
 
 });
-
-
