@@ -149,14 +149,7 @@ define([
         dataType: 'JSON',
         quietMillis: 100,
         data: function(term, page) {
-          var opts = {
-            query: JSON.stringify({
-              criteria: self.getCriterias(term)
-            }),
-            batch: JSON.stringify(self.getBatch(page)),
-            attributes: JSON.stringify(self.options.attributes)
-          };
-          return opts;
+          return self.getQueryData(term, page);
         },
         results: function (data, page) {
           var more = (page * 10) < data.total; // whether or not there are more results available
@@ -165,7 +158,29 @@ define([
         }
       };
     },
-
+    getUrl: function(){
+      var self = this;
+      var url = self.options.vocabularyUrl;
+      if(url.indexOf('?') === -1){
+        url += '?';
+      }else{
+        url += '&';
+      }
+      return url + $.param(self.getQueryData());
+    },
+    getQueryData: function(term, page){
+      var self = this;
+      var data = {
+        query: JSON.stringify({
+          criteria: self.getCriterias(term)
+        }),
+        attributes: JSON.stringify(self.options.attributes)
+      };
+      if(page){
+        data.batch = JSON.stringify(self.getBatch(page));
+      }
+      return data;
+    },
     search: function(term, operation, value, callback, useBaseCriteria){
       if(useBaseCriteria === undefined){
         useBaseCriteria = true;
