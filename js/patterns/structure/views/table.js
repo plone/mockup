@@ -29,12 +29,11 @@ define([
   'backbone',
   'js/patterns/structure/views/tablerow',
   'text!js/patterns/structure/templates/table.xml',
-  'js/patterns/structure/views/contextmenu',
   'js/ui/views/base',
-  'mockup-patterns-sortable',
+  'mockup-patterns-dragdrop',
   'mockup-patterns-moment'
-], function($, _, Backbone, TableRowView, TableTemplate, ContextMenu, BaseView,
-            Sortable, Moment) {
+], function($, _, Backbone, TableRowView, TableTemplate, BaseView, DragDrop,
+            Moment) {
   "use strict";
 
   var TableView = BaseView.extend({
@@ -58,6 +57,14 @@ define([
           $defaultPage.find('td.title').prepend('<span>*</span> ');
           $defaultPage.addClass('default-page');
         }
+        /* set breadcrumb title info */
+        var crumbs = data.breadcrumbs;
+        if(crumbs && crumbs.length){
+          var $crumbs = self.$('.breadcrumbs a.crumb');
+          _.each(crumbs, function(crumb, idx){
+            $crumbs.eq(idx).html(crumb.title);
+          });
+        }
       });
     },
     events: {
@@ -75,20 +82,14 @@ define([
         availableColumns: self.app.availableColumns
       }));
 
-      self.contextMenu = (new ContextMenu({
-        container: self,
-        app: self.app
-      })).render();
-      self.$el.append(self.contextMenu.$el);
-
       if(self.collection.length){
         var container = self.$('tbody');
         self.collection.each(function(result){
           var view = (new TableRowView({
             model: result,
-            app: self.app
+            app: self.app,
+            table: self
           })).render();
-          self.contextMenu.bind(view.$el);
           container.append(view.el);
         });
       }
@@ -141,7 +142,7 @@ define([
         return;
       }
       self.$el.addClass('order-support');
-      var dd = new Sortable(self.$('tbody'), {
+      var dd = new DragDrop(self.$('tbody'), {
         selector: 'tr',
         dragClass: 'structure-dragging',
         drop: function($el, delta){

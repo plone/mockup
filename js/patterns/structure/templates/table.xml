@@ -6,14 +6,14 @@
     <tr class="breadcrumbs">
         <td colspan="<%= activeColumns.length + 2 %>">
           <a href="#" data-path="/">
-              <span class="glyphicon glyphicon-home"></span> /
+              <span class="icon icon-home"></span> /
           </a>
         <% _.each(pathParts, function(part, idx, list){
           if(part){
             if(idx > 0){ %>
               /
             <% } %>
-            <a href="#" data-path="<%- part %>"><%- part %></a>
+            <a href="#" class="crumb" data-path="<%- part %>"><%- part %></a>
           <% }
         }); %>
       </td>
@@ -26,6 +26,7 @@
           <th><%- availableColumns[column] %></th>
         <% } %>
       <% }); %>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
