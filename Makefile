@@ -5,7 +5,7 @@ NPM = npm
 GRUNT = ./node_modules/.bin/grunt
 BOWER = ./node_modules/.bin/bower
 
-all: compile jshint test-ci docs
+all: test-once compile docs
 
 compile: compile-barceloneta compile-widgets compile-toolbar compile-structure
 	# ----------------------------------------------------------------------- #
@@ -17,23 +17,23 @@ compile: compile-barceloneta compile-widgets compile-toolbar compile-structure
 
 compile-barceloneta:
 	mkdir -p build
-	$(GRUNT) compile-barceloneta
+	NODE_PATH=./node_modules $(GRUNT) compile-barceloneta
 
 compile-widgets:
 	mkdir -p build
-	$(GRUNT) compile-widgets
+	NODE_PATH=./node_modules $(GRUNT) compile-widgets
 
 compile-toolbar:
 	mkdir -p build
-	$(GRUNT) compile-toolbar
+	NODE_PATH=./node_modules $(GRUNT) compile-toolbar
 
 compile-structure:
-	$(GRUNT) compile-structure
+	NODE_PATH=./node_modules $(GRUNT) compile-structure
 
 bootstrap: clean
 	mkdir -p build
 	$(NPM) link --prefix=./node_modules
-	$(GRUNT) sed:bootstrap
+	NODE_PATH=./node_modules $(GRUNT) sed:bootstrap
 	$(BOWER) install
 
 jshint:
@@ -54,10 +54,10 @@ test-ci:
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	rm -rf docs/dev
-	$(GRUNT) docs
+	NODE_PATH=./node_modules $(GRUNT) docs
 
-docs-publish: docs
-	if [ "$(TRAVIS_BRANCH)" = "master" ]; then echo -e "Starting to update gh-pages\n"; cd docs; ls -la; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to gh-pages"; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..; fi
+docs-publish:
+	echo -e "Starting to update gh-pages\n"; cd docs; ls -la; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to gh-pages"; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
 
 clean:
 	mkdir -p build
