@@ -46,9 +46,9 @@ define([
     events: {
       'click button': 'sortButtonClicked'
     },
-    initialize: function(){
-      this.app = this.options.app;
-      PopoverView.prototype.initialize.call(this);
+    initialize: function(options){
+      this.app = options.app;
+      PopoverView.prototype.initialize.apply(this, [options]);
       this.options.sortProperties = this.app.options.sort.properties;
     },
     render: function(){

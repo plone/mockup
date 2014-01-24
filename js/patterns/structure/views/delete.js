@@ -41,9 +41,9 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(){
-      this.app = this.options.app;
-      PopoverView.prototype.initialize.call(this);
+    initialize: function(options){
+      this.app = options.app;
+      PopoverView.prototype.initialize.apply(this, [options]);
     },
     render: function(){
       PopoverView.prototype.render.call(this);

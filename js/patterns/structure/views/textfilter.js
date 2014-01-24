@@ -52,7 +52,8 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
-    initialize: function(){
+    initialize: function(options){
+      BaseView.prototype.initialize.apply(this, [options]);
       this.app = this.options.app;
     },
     render: function(){
