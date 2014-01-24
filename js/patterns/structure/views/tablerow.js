@@ -48,8 +48,9 @@ define([
       'click .openItem a': 'openClicked',
       'click .editItem a': 'editClicked'
     },
-    initialize: function(){
-      this.app = this.options.app;
+    initialize: function(options){
+      this.options = options;
+      this.app = options.app;
       this.selectedCollection = this.app.selectedCollection;
       this.table = this.options.table;
     },

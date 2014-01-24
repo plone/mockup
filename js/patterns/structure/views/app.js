@@ -89,9 +89,9 @@ define([
     additionalCriterias: [],
     pasteSelection: null,
     cookieSettingPrefix: '_fc_',
-    initialize: function(){
+    initialize: function(options){
       var self = this;
-      BaseView.prototype.initialize.call(self);
+      BaseView.prototype.initialize.apply(self, [options]);
       self.setAllCookieSettings();
 
       self.collection = new ResultCollection([], {
@@ -114,7 +114,7 @@ define([
           sort_order: self.sort_order
         });
       };
-
+debugger;
       self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
       self.collection.queryHelper = self.queryHelper;

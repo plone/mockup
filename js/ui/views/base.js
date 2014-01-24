@@ -34,7 +34,8 @@ define([
     eventPrefix: 'ui',
     template: null,
     appendInContainer: true,
-    initialize: function() {
+    initialize: function(options) {
+      this.options = options;
       for (var key in this.options) {
         this[key] = this.options[key];
       }

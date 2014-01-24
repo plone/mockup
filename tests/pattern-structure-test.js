@@ -29,9 +29,9 @@ define([
         '</div>');
     });
 
-    //it('initialize', function() {
-    //  registry.scan(this.$el);
-    //  expect(this.$el.find('.order-support > table').size()).to.equal(1);
-    //});
+    it('initialize', function() {
+      registry.scan(this.$el);
+      expect(this.$el.find('.order-support > table').size()).to.equal(1);
+    });
   });
 });

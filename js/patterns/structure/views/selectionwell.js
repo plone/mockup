@@ -45,8 +45,8 @@ define([
       'keyup input.filter': 'filterSelected',
       'click .remove-all': 'removeAll'
     },
-    initialize: function(){
-      PopoverView.prototype.initialize.call(this);
+    initialize: function(options){
+      PopoverView.prototype.initialize.apply(this, [options]);
       this.listenTo(this.collection, 'reset all add remove', this.render);
       this.options.item_template = _.template(ItemTemplate);
     },

@@ -39,9 +39,9 @@ define([
   var TableView = BaseView.extend({
     tagName: 'div',
     template: _.template(TableTemplate),
-    initialize: function(){
+    initialize: function(options){
       var self = this;
-      BaseView.prototype.initialize.call(self);
+      BaseView.prototype.initialize.apply(self, [options]);
       self.collection = self.app.collection;
       self.selectedCollection = self.app.selectedCollection;
       self.listenTo(self.collection, 'sync', self.render);
