@@ -1,3 +1,4 @@
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
 @import "../bower_components/bootstrap/less/variables.less";
 @import "../bower_components/bootstrap/less/glyphicons.less";
 @import "pattern.select2.less";
@@ -18,6 +19,11 @@
 }
 .pat-relateditems {
 
+}
+
+.pattern-relateditems-active {
+    padding: 5px;
+    background-color: #DDD;
 }
 
 .pattern-relateditems-container {
@@ -44,10 +50,7 @@
     color: #666;
   }
 }
-.pattern-relateditems-iconhome {
-  .glyphicon();
-  .glyphicon-home();
-}
+
 .pattern-relateditems-result {
   padding-right: 30px;
   position: relative;

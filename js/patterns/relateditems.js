@@ -131,16 +131,16 @@ define([
       selectionTemplateSelector: null,
       breadCrumbsTemplate: '<span>' +
         '<span class="pattern-relateditems-tree">' +
-          '<a href="#" class="pattern-relateditems-tree-select"><span class="icon icon-indent-left"></span></a> ' +
+          '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
           '<div class="tree-container">' +
             '<span class="select-folder-label">Select folder</span>' +
             '<a href="#" class="btn close cancel">X</a>' +
             '<div class="pat-tree" />' +
-            '<a href="#" class="btn close select">Select</a>' +
+            '<a href="#" class="btn btn-default close select">Select</a>' +
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +
-          '<%= searchText %></span><a class="icon-home crumb" href="/"></a><%= items %>' +
+          '<%= searchText %></span><a class="crumb" href="/"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
         '</span>' +
       '</span>',
       breadCrumbsTemplateSelector: null,
