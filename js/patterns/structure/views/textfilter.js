@@ -36,7 +36,7 @@ define([
 
   var TextFilterView = BaseView.extend({
     tagName: 'div',
-    className: 'navbar-search pull-right form-search',
+    className: 'navbar-search form-search col-md-3 col-md-offset-9',
     template: _.template(
       '<div class="input-group">' +
         '<input type="text" class="form-control search-query" placeholder="Filter">' +
@@ -54,7 +54,6 @@ define([
     keyupDelay: 300,
     initialize: function(options){
       BaseView.prototype.initialize.apply(this, [options]);
-      this.app = this.options.app;
     },
     render: function(){
       this.$el.html(this.template({}));

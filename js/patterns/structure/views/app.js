@@ -95,28 +95,28 @@ define([
       self.setAllCookieSettings();
 
       self.collection = new ResultCollection([], {
-        url: self.options.collectionUrl
+        url: self.options.collectionUrl,
+        queryParser: function(){
+          var term = null;
+          if(self.toolbar){
+            term = self.toolbar.get('filter').term;
+          }
+          var sort_on = self.sort_on;
+          if(!sort_on){
+            sort_on = 'getObjPositionInParent';
+          }
+          return JSON.stringify({
+            criteria: self.queryHelper.getCriterias(term, {
+              additionalCriterias: self.additionalCriterias
+            }),
+            sort_on: sort_on,
+            sort_order: self.sort_order
+          });
+        },
+        queryHelper: self.options.queryHelper
       });
-      self.collection.queryParser = function(){
-        var term = null;
-        if(self.toolbar){
-          term = self.toolbar.get('filter').term;
-        }
-        var sort_on = self.sort_on;
-        if(!sort_on){
-          sort_on = 'getObjPositionInParent';
-        }
-        return JSON.stringify({
-          criteria: self.queryHelper.getCriterias(term, {
-            additionalCriterias: self.additionalCriterias
-          }),
-          sort_on: sort_on,
-          sort_order: self.sort_order
-        });
-      };
       self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
-      self.collection.queryHelper = self.queryHelper;
       self.tableView = new TableView({app: self});
       self.pagingView = new PagingView({app: self});
       self.pasteAllowed = self.options.pasteAllowed;
@@ -331,7 +331,7 @@ define([
       var columnsBtn = new ButtonView({
         id: 'columns',
         tooltip: 'Configure displayed columns',
-        icon: 'columns'
+        icon: 'align-justify'
       });
 
       self.columnsView = new ColumnsView({

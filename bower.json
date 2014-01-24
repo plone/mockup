@@ -22,8 +22,7 @@
     "pickadate": "3.3.2",
     "requirejs-text": "2.0.10",
     "respond": "1.4.2",
-    "select2": "3.4.5",
-    "font-awesome": "3.2.1"
+    "select2": "3.4.5"
   },
   "devDependencies": {
     "expect": "0.2.0",

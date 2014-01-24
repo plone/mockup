@@ -2,10 +2,10 @@
 <td class="title">
   <a href="<%- getURL %>">
     <% if(['File', 'Image'].indexOf(attributes.Type) !== -1){ %>
-      <span class="icon icon-file"></span>
+      <span class="glyphicon glyphicon-file"></span>
     <% } %>
     <% if(attributes.is_folderish) { %>
-      <span class="icon icon-folder-open"></span>
+      <span class="glyphicon glyphicon-folder-open"></span>
     <% } %>
     <%- Title %>
   </a>
@@ -17,8 +17,8 @@
 <% }); %>
 <td>
   <div class="btn-group">
-    <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-      <i class="icon-gears"></i>
+    <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+      <span class="glyphicon glyphicon-cog"></i>
       <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">

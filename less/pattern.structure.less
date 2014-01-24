@@ -1,7 +1,10 @@
 @import "../bower_components/bootstrap/less/variables.less";
 @import "../bower_components/bootstrap/less/mixins.less";
 @import "../bower_components/bootstrap/less/button-groups.less";
+@import "mixins.less";
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
 @import "../bower_components/bootstrap/less/glyphicons.less";
+@import "../bower_components/bootstrap/less/badges.less";
 
 .pat-structure {
     table{
@@ -125,7 +128,6 @@
             }
 
             a:before {
-                .glyphicon-remove-sign();
                 color: #999;
 
                 &:hover {

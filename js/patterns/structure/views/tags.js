@@ -46,7 +46,6 @@ define([
       'click button': 'applyButtonClicked'
     },
     initialize: function(options){
-      this.app = options.app;
       this.removeSelect2 = null;
       this.addSelect2 = null;
       PopoverView.prototype.initialize.apply(this, [options]);

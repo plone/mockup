@@ -118,7 +118,8 @@ define([
         },{
           title: 'Delete',
           url: '/delete',
-          context: 'danger'
+          context: 'danger',
+          icon: 'trash'
         }],
         secondary: [{
           title: 'Workflow',
