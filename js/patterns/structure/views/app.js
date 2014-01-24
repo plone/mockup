@@ -266,7 +266,7 @@ define([
             self.ajaxSuccessResponse.apply(self, [data, callback]);
           },
           error: function(response){
-            self.ajaxErrorResponse.apply(self, [response]);
+            self.ajaxErrorResponse.apply(self, [response, url]);
           }
         }, self);
       }
@@ -285,7 +285,7 @@ define([
       }
       self.collection.pager();
     },
-    ajaxErrorResponse: function(response){
+    ajaxErrorResponse: function(response, url){
       var self = this;
       if(response.status === 404){
         window.alert('operation url "' + url + '" is not valid');
