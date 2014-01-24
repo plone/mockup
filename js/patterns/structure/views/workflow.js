@@ -60,9 +60,6 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
-      PopoverView.prototype.initialize.apply(this, [options]);
-    },
     render: function(){
       PopoverView.prototype.render.call(this);
       this.$comments = this.$('textarea');

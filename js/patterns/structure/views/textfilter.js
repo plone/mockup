@@ -52,9 +52,6 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
-    initialize: function(options){
-      BaseView.prototype.initialize.apply(this, [options]);
-    },
     render: function(){
       this.$el.html(this.template({}));
       this.button = new ButtonView({

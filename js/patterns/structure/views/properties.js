@@ -62,6 +62,7 @@ define([
       'click button': 'applyButtonClicked'
     },
     initialize: function(options){
+      this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
     render: function(){
