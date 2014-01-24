@@ -114,7 +114,6 @@ define([
           sort_order: self.sort_order
         });
       };
-debugger;
       self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
       self.collection.queryHelper = self.queryHelper;
