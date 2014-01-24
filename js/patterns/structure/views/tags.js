@@ -36,10 +36,14 @@ define([
     title: _.template('Add/Remove tags'),
     content: _.template(
       '<label>Tags to remove</label>' +
-      '<select multiple class="toremove" style="width: 300px">' +
-      '</select>' +
+      '<div class="form-group">' +
+        '<select multiple class="toremove" style="width: 300px">' +
+        '</select>' +
+      '</div>' +
       '<label>Tags to add</label>' +
-      '<input class="toadd" style="width:300px" />' +
+      '<div class="form-group">' +
+        '<input class="toadd" style="width:300px" />' +
+      '</div>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
     ),
     events: {

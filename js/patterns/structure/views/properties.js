@@ -37,25 +37,39 @@ define([
     className: 'popover properties',
     title: _.template('Modify properties on items'),
     content: _.template(
-      '<label>Publication Date</label>' +
-      '<input name="effective" />' +
-      '<label>Expiration Date</label>' +
-      '<input name="expiration" />' +
-      '<label>Copyright</label>' +
-      '<textarea name="copyright"></textarea>' +
-      '<label>Creators<label>' +
-      '<input name="creators" style="width: 300px" />' +
-      '<label>Contributors<label>' +
-      '<input name="contributors" style="width: 300px" />' +
+      '<div class="form-group">' +
+        '<label>Publication Date</label>' +
+        '<input class="form-control" name="effective" />' +
+      '</div>' +
+      '<div class="form-group">' +
+        '<label>Expiration Date</label>' +
+        '<input class="form-control" name="expiration" />' +
+      '</div>' +
+      '<div class="form-group">' +
+        '<label>Copyright</label>' +
+        '<textarea class="form-control" name="copyright"></textarea>' +
+      '</div>' +
+      '<label>Creators</label>' +
+      '<div class="form-group">' +
+        '<input name="creators" style="width: 300px" />' +
+      '</div>' +
+      '<label>Contributors</label>' +
+      '<div class="form-group">' +
+        '<input name="contributors" style="width: 300px" />' +
+      '</div>' +
       '<label>Exclude from nav</label>' +
-      '<label class="checkbox">' +
-        '<input type="radio" name="exclude-from-nav" value="yes" />' +
-        'Yes' +
-      '</label>' +
-      '<label class="checkbox">' +
-        '<input type="radio" name="exclude-from-nav" value="no" />' +
-        'No' +
-      '</label>' +
+      '<div class="radio">' +
+        '<label>' +
+          '<input type="radio" name="exclude-from-nav" value="yes" />' +
+          'Yes' +
+        '</label>' +
+      '</div>' +
+      '<div class="radio">' +
+        '<label>' +
+          '<input type="radio" name="exclude-from-nav" value="no" />' +
+          'No' +
+        '</label>' +
+      '</div>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
     ),
     events: {

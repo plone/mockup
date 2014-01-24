@@ -34,13 +34,17 @@ define([
     className: 'popover sort',
     title: _.template('Sort items in this folder'),
     content: _.template(
-      '<label>What to sort on</label>' +
-      '<select name="sort_on">' +
-        '<% _.each(sortProperties, function(title, property){ %>' +
-          '<option value="<%- property %>"><%- title %></option>' +
-        '<% }); %>' +
-      '</select>' +
-      '<label>Reverse <input type="checkbox" name="reversed" /></label>' +
+      '<div class="form-group">' +
+        '<label>What to sort on</label>' +
+        '<select name="sort_on" class="form-control">' +
+          '<% _.each(sortProperties, function(title, property){ %>' +
+            '<option value="<%- property %>"><%- title %></option>' +
+          '<% }); %>' +
+        '</select>' +
+      '</div>' +
+      '<div class="checkbox">' +
+        '<label>Reverse <input type="checkbox" name="reversed" /></label>' +
+      '</div>' +
       '<button class="btn btn-block btn-primary">Sort</button>'
     ),
     events: {

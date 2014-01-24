@@ -40,11 +40,13 @@ define([
     ),
     itemTemplate: _.template(
       '<div class="item">' +
-        '<input name="UID" type="hidden" value="<%- UID %>" />' +
-        '<label>Title</label>' +
-        '<input name="newtitle" value="<%= Title %>" />' +
-        '<label>Short name</label>' +
-        '<input name="newid" value="<%= id %>" />' +
+        '<div class="form-group">' +
+          '<input name="UID" type="hidden" value="<%- UID %>" />' +
+          '<label>Title</label>' +
+          '<input class="form-control" name="newtitle" value="<%= Title %>" />' +
+          '<label>Short name</label>' +
+          '<input class="form-control" name="newid" value="<%= id %>" />' +
+        '</div>' +
       '</div>'),
     events: {
       'click button': 'applyButtonClicked'
