@@ -648,7 +648,6 @@ module.exports = function(grunt) {
       ]);
   grunt.registerTask('test_ci', [
       'jshint',
-      'karma:test_once',
       'karma:test_ci',
       'compile-barceloneta',
       'compile-widgets',
