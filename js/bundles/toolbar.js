@@ -615,7 +615,8 @@ define([
   });
 
 
-  /* maybe hackish fix here, but.....  let's get these in and out widgets working in overlays */
+  /* maybe hackish fix here, but.....  let's get these in and out widgets working in overlays
+   * TODO: Override all in and out widgets in python to use select2 */
   var updateValues = function(id, $to){
     var $container = $('#' + id + '-toDataContainer');
     $container.empty();
