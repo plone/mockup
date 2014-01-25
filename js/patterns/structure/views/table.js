@@ -30,9 +30,9 @@ define([
   'js/patterns/structure/views/tablerow',
   'text!js/patterns/structure/templates/table.xml',
   'js/ui/views/base',
-  'mockup-patterns-dragdrop',
+  'mockup-patterns-sortable',
   'mockup-patterns-moment'
-], function($, _, Backbone, TableRowView, TableTemplate, BaseView, DragDrop,
+], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
             Moment) {
   "use strict";
 
@@ -142,7 +142,7 @@ define([
         return;
       }
       self.$el.addClass('order-support');
-      var dd = new DragDrop(self.$('tbody'), {
+      var dd = new Sortable(self.$('tbody'), {
         selector: 'tr',
         dragClass: 'structure-dragging',
         drop: function($el, delta){
