@@ -134,9 +134,9 @@ define([
           '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
           '<div class="tree-container">' +
             '<span class="select-folder-label">Select folder</span>' +
-            '<a href="#" class="btn close cancel">X</a>' +
+            '<a href="#" class="btn close pattern-relateditems-tree-cancel">X</a>' +
             '<div class="pat-tree" />' +
-            '<a href="#" class="btn btn-default close select">Select</a>' +
+            '<a href="#" class="btn btn-default pattern-relateditems-tree-itemselect">Select</a>' +
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +
@@ -267,15 +267,19 @@ define([
           treePattern.$el.tree('selectNode', selectedNode);
         }
       });
-      $('a.close', $treeContainer).click(function(e){
+      $('a.pattern-relateditems-tree-cancel', $treeContainer).click(function(e){
         e.preventDefault();
-        // do not browse to path if the user wants to just close the popup
-        if($(e.target).text() !== "X") {
-            self.browseTo(self.currentPath); // just browse to current path since it's set elsewhere
-        }
         $treeContainer.fadeOut();
         return false;
       });
+
+      $('a.pattern-relateditems-tree-itemselect', $treeContainer).click(function(e){
+        e.preventDefault();
+        self.browseTo(self.currentPath); // just browse to current path since it's set elsewhere
+        $treeContainer.fadeOut();
+        return false;
+      });
+
       $treeSelect.on('click', function(e){
         e.preventDefault();
         self.browsing = true;
