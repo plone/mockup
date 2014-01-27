@@ -34,7 +34,8 @@ define([
     eventPrefix: 'ui',
     template: null,
     appendInContainer: true,
-    initialize: function() {
+    initialize: function(options) {
+      this.options = options;
       for (var key in this.options) {
         this[key] = this.options[key];
       }
@@ -45,6 +46,10 @@ define([
       this.trigger('render', this);
       this.afterRender();
 
+      if(!this.$el.attr('id') && this.options.id){
+        // apply id to element
+        this.$el.attr('id', 'gen-' + this.options.id);
+      }
       return this;
     },
     afterRender: function() {

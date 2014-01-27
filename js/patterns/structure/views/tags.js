@@ -36,20 +36,23 @@ define([
     title: _.template('Add/Remove tags'),
     content: _.template(
       '<label>Tags to remove</label>' +
-      '<select multiple class="toremove" style="width: 300px">' +
-      '</select>' +
+      '<div class="form-group">' +
+        '<select multiple class="toremove" style="width: 300px">' +
+        '</select>' +
+      '</div>' +
       '<label>Tags to add</label>' +
-      '<input class="toadd" style="width:300px" />' +
+      '<div class="form-group">' +
+        '<input class="toadd" style="width:300px" />' +
+      '</div>' +
       '<button class="btn btn-block btn-primary">Apply</button>'
     ),
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(){
-      this.app = this.options.app;
+    initialize: function(options){
       this.removeSelect2 = null;
       this.addSelect2 = null;
-      PopoverView.prototype.initialize.call(this);
+      PopoverView.prototype.initialize.apply(this, [options]);
     },
     render: function(){
       PopoverView.prototype.render.call(this);

@@ -40,9 +40,9 @@ define([
     className: 'btn-group addnew',
     events: {
     },
-    initialize: function(){
+    initialize: function(options){
       var self = this;
-      ButtonGroup.prototype.initialize.call(self);
+      ButtonGroup.prototype.initialize.apply(self, [options]);
       self.app.on('context-info-loaded', function(data){
         self.$items.empty();
         _.each(data.addButtons, function(item){

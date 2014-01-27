@@ -17,8 +17,31 @@
  *    loadLinksWithinModal(boolean): Automatically load links inside of the modal using AJAX. (true)
  *    actions(object): A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. ({})
  *
+ *
  * Documentation:
- *    # TODO: finish options (maybe we need to implement nested options here)
+ *    # Example
+ *
+ *    {{ example-basic }}
+ *
+ *    {{ example-tinymce }}
+ *
+ *
+ * Example: example-basic
+ *    <a href="#modal1" class="btn btn-large btn-primary pat-modal">Modal basic</a>
+ *    <div id="modal1" style="display: none">
+ *      <h1>Basic modal!</h1>
+ *      <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+ *    </div>
+ *
+ * Example: example-tinymce
+ *    <a href="#modaltinymce" class="btn btn-large btn-primary pat-modal"
+ *       data-pat-modal="height: 600px;
+ *                       width: 80%">
+ *       Modal with TinyMCE</a>
+ *    <div id="modaltinymce" style="display:none">
+ *      <textarea class="pat-tinymce"></textarea>
+ *    </div>
+ *
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
@@ -483,7 +506,7 @@ define([
       if (self.options.routerOptions.id !== null) {
         Router.addRoute('modal', self.options.routerOptions.id, function() {
           this.show();
-        }, self, self.options.routerOptions.pathExp);
+        }, self, self.options.routerOptions.pathExp, self.options.routerOptions.expReplace);
       }
 
       self.backdrop.on('hidden', function(e) {

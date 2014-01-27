@@ -1,1 +1,1 @@
-<%= title %> <span class="badge<% if (length > 0) { %> badge-success<% } %>">  <%= length %></span>
+<%= title %> <span class="label<% if (length > 0) { %> label-success<% } else { %> label-default<% } %>">  <%= length %></span>

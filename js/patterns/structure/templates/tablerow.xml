@@ -1,19 +1,44 @@
 <td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 <td class="title">
-  <% if(attributes.is_folderish){ %>
-    <a href="<%- getURL %>">
-        <span class="icon icon-folder-open"></span> <%- Title %>
-    </a>
-  <% } else { %>
+  <a href="<%- getURL %>">
     <% if(['File', 'Image'].indexOf(attributes.Type) !== -1){ %>
-      <span class="icon icon-file"></span>
+      <span class="glyphicon glyphicon-file"></span>
+    <% } %>
+    <% if(attributes.is_folderish) { %>
+      <span class="glyphicon glyphicon-folder-open"></span>
+    <% } %>
+    <% if(attributes.is_folderish) { %>
+      <span class="icon icon-folder-open"></span>
     <% } %>
     <%- Title %>
-  <% } %>
+  </a>
 </td>
 <% _.each(activeColumns, function(column){ %>
   <% if(_.has(availableColumns, column)) { %>
     <td class="<%- column %>"><%- attributes[column] %></td>
   <% } %>
 <% }); %>
-
+<td>
+  <div class="btn-group">
+    <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+      <span class="glyphicon glyphicon-cog"></span>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li class="cutItem"><a href="#">Cut</a></li>
+      <li class="copyItem"><a href="#">Copy</a></li>
+      <% if(pasteAllowed && attributes.is_folderish){ %>
+        <li class="pasteItem"><a href="#">Paste</a></li>
+      <% } %>
+      <% if(!inQueryMode){ %>
+        <li class="move-top"><a href="#">Move to top of folder</a></li>
+        <li class="move-bottom"><a href="#">Move to bottom of folder</a></li>
+      <% } %>
+      <% if(!attributes.is_folderish && canSetDefaultPage){ %>
+        <li class="set-default-page"><a href="#">Set as default page</a></li>
+      <% } %>
+      <li class="openItem"><a href="#">Open</a></li>
+      <li class="editItem"><a href="#">Edit</a></li>
+    </ul>
+  </div>
+</td>
