@@ -46,6 +46,10 @@ define([
       this.trigger('render', this);
       this.afterRender();
 
+      if(!this.$el.attr('id') && this.options.id){
+        // apply id to element
+        this.$el.attr('id', 'gen-' + this.options.id);
+      }
       return this;
     },
     afterRender: function() {

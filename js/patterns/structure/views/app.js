@@ -187,8 +187,11 @@ define([
             success: function(data){
               self.trigger('context-info-loaded', data);
             },
-            error: function(){
+            error: function(response){
               // XXX handle error?
+              if(response.status === 404){
+                console.log('context info url not found');
+              }
             }
           });
         }

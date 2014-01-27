@@ -39,7 +39,7 @@ define([
                                  'tagsVocabularyUrl:/select2-test.json;' +
                                  'usersVocabularyUrl:/tests/json/users.json;' +
                                  'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
-                                 'contextInfoUrl:/tests/json/contextInfo.json;' +
+                                 'contextInfoUrl:/contextInfo.json;' +
                                  ' ">' +
         '</div>');
 
@@ -80,6 +80,25 @@ define([
           msg: 'sorted'
         }));
       });
+      this.server.respondWith("POST", '/paste', function (xhr, id) {
+        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+          status: "success",
+          msg: 'pasted'
+        }));
+      });
+      this.server.respondWith("GET", '/contextInfo.json', function (xhr, id) {
+        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+          "addButtons": [{
+            "id": "page",
+            "title": "Page",
+            "url": "/addpage"
+          },{
+            "id": "folder",
+            "title": "Folder"
+          }]
+        }));
+      });
+
       this.clock = sinon.useFakeTimers();
     });
 
@@ -151,5 +170,31 @@ define([
       expect(this.$el.find('.order-support .status').html()).to.contain('sorted');
     });
 
+    it('test copy button', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      this.$el.find('#gen-copy').trigger('click');
+      expect(pattern.view.pasteOperation).to.equal('copy');
+    });
+
+    it('test cut button', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      this.$el.find('#gen-cut').trigger('click');
+      expect(pattern.view.pasteOperation).to.equal('cut');
+    });
+
+    it('test paste button', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      this.$el.find('#gen-copy').trigger('click');
+      this.$el.find('#gen-paste').trigger('click');
+    });
   });
 });
