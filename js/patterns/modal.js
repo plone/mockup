@@ -3,7 +3,7 @@
  * Options:
  *    height(string): Set the height of the modal, for example: 250px ('')
  *    width(string): Set the width of the modal, for example: 80% or 500px. ('')
- *    margin(function or integer): A function or Integer which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer. (20)
+ *    margin(function or integer): A function, Integer or String which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer. (20)
  *    position(string): Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle. ('center middle')
  *    triggers(array): Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format ["&lt;event&gt; &lt;selector&gt;"] or ["&lt;event&gt;"]. For example, ["click .someButton"]. If you pass in only an event such as, ["change"], the event listener will be added to the element on which the modal was initiated, usually a link or button. ([])
  *    title(string): A string to place in the modal header. If title is provided, titleSelector is not used. (null)
@@ -17,8 +17,52 @@
  *    loadLinksWithinModal(boolean): Automatically load links inside of the modal using AJAX. (true)
  *    actions(object): A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. ({})
  *
+ *
  * Documentation:
- *    # TODO: finish options (maybe we need to implement nested options here)
+ *    # Example
+ *
+ *    {{ example-basic }}
+ *    {{ example-long }}
+ *    {{ example-tinymce }}
+ *
+ *
+ * Example: example-basic
+ *    <a href="#modal1" class="btn btn-large btn-primary pat-modal"
+ *                      data-pat-modal="width: 400">Modal basic</a>
+ *    <div id="modal1" style="display: none">
+ *      <h1>Basic modal!</h1>
+ *      <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+ *    </div>
+ *
+ *
+ * Example: example-long
+ *    <a href="#modal2" class="btn btn-large btn-primary pat-modal"
+ *                      data-pat-modal="width: 500">Modal long scrolling</a>
+ *    <div id="modal2" style="display: none">
+ *      <h1>Basic with scrolling</h1>
+ *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+ *      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+ *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+ *      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+ *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+ *      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+ *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+ *      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+ *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+ *      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+ *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+ *    </div>
+ *
+ *
+ * Example: example-tinymce
+ *    <a href="#modaltinymce" class="btn btn-large btn-primary pat-modal"
+ *       data-pat-modal="height: 600px;
+ *                       width: 80%">
+ *       Modal with TinyMCE</a>
+ *    <div id="modaltinymce" style="display:none">
+ *      <textarea class="pat-tinymce"></textarea>
+ *    </div>
+ *
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
@@ -364,6 +408,7 @@ define([
 
         // Render html
         self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
+        self.$modalDialog = $('> .' + self.options.templateOptions.classDialog, self.$modal);
 
         // In most browsers, when you hit the enter key while a form element is focused
         // the browser will trigger the form 'submit' event.  Google Chrome also does this,
@@ -483,7 +528,7 @@ define([
       if (self.options.routerOptions.id !== null) {
         Router.addRoute('modal', self.options.routerOptions.id, function() {
           this.show();
-        }, self, self.options.routerOptions.pathExp);
+        }, self, self.options.routerOptions.pathExp, self.options.routerOptions.expReplace);
       }
 
       self.backdrop.on('hidden', function(e) {
@@ -737,25 +782,27 @@ define([
 
       var margin = typeof self.options.margin === 'function' ? self.options.margin() : self.options.margin;
       self.$modal.css({
-        'padding': '0',
-        'margin': margin,
-        'width': self.options.width, // defaults to "", which doesn't override other css
-        'height': self.options.height, // defaults to "", which doesn't override other css
         'position': 'absolute'
+      });
+      self.$modalDialog.css({
+        margin: margin,
+        padding: '0',
+        width: self.options.width, // defaults to "", which doesn't override other css
+        height: self.options.height // defaults to "", which doesn't override other css
       });
 
       var posopt = self.options.position.split(' '),
           horpos = posopt[0],
           vertpos = posopt[1];
-      var modalWidth = self.$modal.outerWidth(true);
-      var modalHeight = self.$modal.outerHeight(true);
+      var modalWidth = self.$modalDialog.outerWidth(true);
+      var modalHeight = self.$modalDialog.outerHeight(true);
       var wrapperInnerWidth = self.$wrapperInner.width();
       var wrapperInnerHeight = self.$wrapperInner.height();
 
       var pos = self.findPosition(horpos, vertpos, margin, modalWidth, modalHeight,
                                   wrapperInnerWidth, wrapperInnerHeight);
       for(var key in pos) {
-        self.$modal.css(key, pos[key]);
+        self.$modalDialog.css(key, pos[key]);
       }
     },
     render: function(options) {
