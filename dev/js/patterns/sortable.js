@@ -64,7 +64,7 @@ define([
   'mockup-patterns-base',
   'jquery.event.drag',
   'jquery.event.drop'
-], function($, Base) {
+], function($, Base, drag, drop) {
   "use strict";
 
   var SortablePattern = Base.extend({
@@ -82,7 +82,7 @@ define([
       self.$el.find(self.options.selector).drag('start', function(e, dd) {
         var dragged = this;
         $(dragged).addClass(self.options.dragClass);
-        $.drop({
+        drop({
           tolerance: function(event, proxy, target) {
             if($(target.elem).closest(self.$el).length === 0){
               /* prevent dragging conflict over another drag area */
