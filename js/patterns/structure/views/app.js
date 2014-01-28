@@ -391,6 +391,19 @@ define([
         });
         items.push(self.buttons[group[0]]);
       });
+      if(self.options.uploadUrl){
+        var uploadBtn = new ButtonView({
+          title: 'Upload',
+          context: 'success',
+          icon: 'upload'
+        });
+        items.push(uploadBtn);
+        uploadBtn.on('button:click', function(){
+          // update because the url can change depending on the folder we're in.
+          self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
+          self.dropzone.hiddenFileInput.click();
+        });
+      }
       items.push(new TextFilterView({
         id: 'filter',
         app: this
@@ -431,7 +444,7 @@ define([
         type = 'warning';
       }
       this.statusType = type;
-      this.$('td.status').addClass(type).html(txt);
+      this.$('.status').addClass(type).html(txt);
     },
     render: function(){
       var self = this;
@@ -452,18 +465,6 @@ define([
 
       /* dropzone support */
       if(self.options.uploadUrl){
-        /* add upload button to toolbar */
-        var uploadBtn = new ButtonView({
-          title: 'Upload',
-          context: 'success',
-          icon: 'upload'
-        });
-        self.toolbar.$el.append(uploadBtn.render().el);
-        uploadBtn.on('button:click', function(){
-          // update because the url can change depending on the folder we're in.
-          self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
-          self.dropzone.hiddenFileInput.click();
-        });
         self.dropzone = new DropZone(self.$el, {
           className: 'structure-dropzone',
           //clickable: false,
@@ -471,7 +472,7 @@ define([
           url: self.getAjaxUrl(self.options.uploadUrl),
           autoCleanResults: true,
           useTus: self.options.useTus,
-          success: function(e, data){
+          success: function(){
             self.collection.pager();
           }
         }).dropzone;

@@ -96,7 +96,10 @@ var requirejsOptions = {
     'jqtree': { deps: ['jquery'] },
     'jquery.cookie': { deps: ['jquery'] },
     'jquery.event.drag': { deps: ['jquery'] },
-    'jquery.event.drop': { deps: ['jquery'] },
+    'jquery.event.drop': {
+      deps: ['jquery'],
+      exports: '$.drop'
+    },
     'mockup-iframe_init': { deps: ['domready'] },
     'picker.date': { deps: [ 'picker' ] },
     'picker.time': { deps: [ 'picker' ] },
