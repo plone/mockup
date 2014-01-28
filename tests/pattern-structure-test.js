@@ -209,5 +209,42 @@ define([
       this.$el.find('#gen-copy').trigger('click');
       this.$el.find('#gen-paste').trigger('click');
     });
+
+    it('test button updates status', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      var $item = this.$el.find('.itemRow td.selection input').eq(0);
+      $item[0].checked = true;
+      $item.trigger('change');
+      this.$el.find('#gen-cut').trigger('click');
+      expect(this.$el.find('.order-support .status').html()).to.contain('cut');
+    });
+
+    it('test select all', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      var $item = this.$el.find('table th .select-all');
+      $item[0].checked = true;
+      $item.trigger('change');
+      expect(this.$el.find("#selected").html()).to.contain('15');
+
+    });
+
+    it('test unselect all', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      var $item = this.$el.find('table th .select-all');
+      $item[0].checked = true;
+      $item.trigger('change');
+      expect(this.$el.find("#selected").html()).to.contain('15');
+      $item[0].checked = false;
+      $item.trigger('change');
+      expect(this.$el.find("#selected").html()).to.contain('0');
+
+    });
+
   });
 });

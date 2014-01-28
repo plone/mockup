@@ -69,8 +69,7 @@ define([
     },
     events: {
       'click .breadcrumbs a': 'breadcrumbClicked',
-      'change .select-all': 'selectAll',
-      // 'change tbody input[type="checkbox"]': 'toggleSelectAll'
+      'change .select-all': 'selectAll'
     },
     render: function() {
       var self = this;
@@ -122,7 +121,7 @@ define([
     },
     selectAll: function(e) {
       if ($(e.target).is(':checked')) {
-        $('input[type="checkbox"]', $('tbody')).attr('checked', 'checked').change();
+        $('input[type="checkbox"]', this.$('tbody')).attr('checked', 'checked').change();
       } else {
         this.selectedCollection.remove(this.collection.models);
       }

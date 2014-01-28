@@ -36,7 +36,7 @@ define([
 
   var TextFilterView = BaseView.extend({
     tagName: 'div',
-    className: 'navbar-search form-search col-md-3 col-md-offset-9',
+    className: 'navbar-search form-search ui-offset-parent',
     template: _.template(
       '<div class="input-group">' +
         '<input type="text" class="form-control search-query" placeholder="Filter">' +

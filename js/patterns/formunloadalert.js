@@ -74,8 +74,11 @@ define([
 
       var $modal = self.$el.parents('.modal');
       if ($modal.size() !== 0) {
-        $modal.data('pattern-modal').on('hide', function(e, modal) {
-          modal._suppressHide = self._handle_unload.apply(self, e);
+        $modal.data('pattern-modal').on('hide', function(e) {
+          var modal = $modal.data('pattern-modal');
+          if(modal){
+            modal._suppressHide = self._handle_unload.apply(self, e);
+          }
         });
       } else {
         $(window).on('beforeunload', function(e){

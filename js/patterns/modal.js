@@ -843,6 +843,11 @@ define([
         self.ajaxXHR.abort();
       }
       self.trigger('hide');
+      if(self._suppressHide){
+        if(!confirm(self._suppressHide)){
+          return;
+        }
+      }
       if ($('.modal', self.$wrapper).size() < 2) {
         self.backdrop.hide();
         self.$wrapper.hide();

@@ -96,6 +96,9 @@ define([
                   }
                   modal.$loading.hide();
                 },
+                onError: function(){
+                  alert('error on form');
+                }
               },
               'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
                 modalFunction: 'hide'
