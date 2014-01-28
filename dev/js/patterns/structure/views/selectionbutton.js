@@ -36,8 +36,8 @@ define([
   var SelectionButton = ButtonView.extend({
     collection: null,
     template: tpl_button,
-    initialize: function() {
-      ButtonView.prototype.initialize.call(this);
+    initialize: function(options) {
+      ButtonView.prototype.initialize.apply(this, [options]);
 
       if (this.collection !== null) {
         this.collection.on('add remove reset', function() {
