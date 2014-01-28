@@ -116,14 +116,17 @@ define([
       registry.scan(this.$el);
       this.clock.tick(500);
       var cb = this.$el.find('.itemRow td.selection input').eq(0);
-      cb.trigger('click').trigger('change');
+      cb[0].checked = true;
+      cb.trigger('change');
       expect(this.$el.find("#selected").html()).to.contain('1');
     });
 
     it('remove item from selection well', function() {
       registry.scan(this.$el);
       this.clock.tick(1000);
-      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      var $item1 = this.$el.find('.itemRow td.selection input').eq(0);
+      $item1[0].checked = true;
+      $item1.trigger('change');
       this.$el.find('.items.popover-content a.remove').trigger('click').trigger('change');
       expect(this.$el.find("#selected").html()).to.contain('0');
     });
@@ -131,8 +134,12 @@ define([
     it('remove all from selection well', function() {
       registry.scan(this.$el);
       this.clock.tick(1000);
-      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
-      this.$el.find('.itemRow td.selection input').eq(1).trigger('click').trigger('change');
+      var $item1 = this.$el.find('.itemRow td.selection input').eq(0);
+      $item1[0].checked = true;
+      $item1.trigger('change');
+      var $item2 = this.$el.find('.itemRow td.selection input').eq(1);
+      $item2[0].checked = true;
+      $item2.trigger('change');
       expect(this.$el.find("#selected").html()).to.contain('2');
       this.$el.find('.popover.selected a.remove-all').trigger('click');
       expect(this.$el.find("#selected").html()).to.contain('0');
@@ -174,7 +181,9 @@ define([
       registry.scan(this.$el);
       var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
-      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      var $item = this.$el.find('.itemRow td.selection input').eq(0);
+      $item[0].checked = true;
+      $item.trigger('change');
       this.$el.find('#gen-copy').trigger('click');
       expect(pattern.view.pasteOperation).to.equal('copy');
     });
@@ -183,7 +192,9 @@ define([
       registry.scan(this.$el);
       var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
-      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      var $item = this.$el.find('.itemRow td.selection input').eq(0);
+      $item[0].checked = true;
+      $item.trigger('change');
       this.$el.find('#gen-cut').trigger('click');
       expect(pattern.view.pasteOperation).to.equal('cut');
     });
@@ -192,7 +203,9 @@ define([
       registry.scan(this.$el);
       var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
-      this.$el.find('.itemRow td.selection input').eq(0).trigger('click').trigger('change');
+      var $item = this.$el.find('.itemRow td.selection input').eq(0);
+      $item[0].checked = true;
+      $item.trigger('change');
       this.$el.find('#gen-copy').trigger('click');
       this.$el.find('#gen-paste').trigger('click');
     });

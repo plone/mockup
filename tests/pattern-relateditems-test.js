@@ -498,7 +498,7 @@ define([
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(1);
-      expect($el.find('.pattern-relateditems-tree').is(':visible')).to.equal(false);
+      expect($el.find('.tree-container').is(':visible')).to.equal(false);
 
       $el.remove();
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
