@@ -82,8 +82,9 @@ define([
   'underscore',
   'mockup-patterns-base',
   'mockup-patterns-select2',
-  'mockup-patterns-queryhelper'
-], function($, _, Base, Select2, QueryHelper) {
+  'mockup-patterns-queryhelper',
+  'mockup-patterns-tree'
+], function($, _, Base, Select2, QueryHelper, Tree) {
   "use strict";
 
   var RelatedItems = Base.extend({
@@ -128,11 +129,23 @@ define([
         ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
-      breadCrumbsTemplate: '' +
-        '<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="pattern-relateditems-iconhome" href="/"></a><%= items %></span>',
+      breadCrumbsTemplate: '<span>' +
+        '<span class="pattern-relateditems-tree">' +
+          '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
+          '<div class="tree-container">' +
+            '<span class="select-folder-label">Select folder</span>' +
+            '<a href="#" class="btn close pattern-relateditems-tree-cancel">X</a>' +
+            '<div class="pat-tree" />' +
+            '<a href="#" class="btn btn-default pattern-relateditems-tree-itemselect">Select</a>' +
+          '</div>' +
+        '</span>' +
+        '<span class="pattern-relateditems-path-label">' +
+          '<%= searchText %></span><a class="crumb" href="/"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
+        '</span>' +
+      '</span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
-        '/<a href="<%= path %>"><%= text %></a>',
+        '/<a href="<%= path %>" class="crumb"><%= text %></a>',
       breadCrumbTemplateSelector: null,
       escapeMarkup: function(text) {
         return text;
@@ -140,9 +153,6 @@ define([
       setupAjax: function() {
         // Setup the ajax object to use during requests
         var self = this;
-        self.query = new QueryHelper(self.$el,
-        $.extend(true, {}, self.options, {basePattern: self}));
-
         if(self.query.valid){
           return self.query.selectAjax();
         }
@@ -193,7 +203,14 @@ define([
       var path = self.currentPath ? self.currentPath : self.options.basePath;
       var html;
       if (path === '/') {
-        html = self.applyTemplate('breadCrumbs', {items:'<em>'+self.options.searchAllText+'</em>', searchText: self.options.searchText});
+        var searchText = '';
+        if(self.options.mode === 'search'){
+          searchText = '<em>'+self.options.searchAllText+'</em>';
+        }
+        html = self.applyTemplate('breadCrumbs', {
+          items: searchText,
+          searchText: self.options.searchText
+        });
       } else {
         var paths = path.split('/');
         var itemPath = '';
@@ -210,8 +227,65 @@ define([
         html = self.applyTemplate('breadCrumbs', {items:itemsHtml, searchText: self.options.searchText});
       }
       var $crumbs = $(html);
-      $('a', $crumbs).on('click', function(event) {
+      $('a.crumb', $crumbs).on('click', function(e) {
+        e.preventDefault();
         self.browseTo($(this).attr('href'));
+        return false;
+      });
+      var $treeSelect = $('.pattern-relateditems-tree-select', $crumbs);
+      var $container = $treeSelect.parent();
+      var $treeContainer = $('.tree-container', $container);
+      var $tree = $('.pat-tree', $container);
+      var selectedNode = null;
+      var treePattern = new Tree($tree, {
+        data: [],
+        dataFilter: function(data){
+          var nodes = [];
+          _.each(data.results, function(item){
+            nodes.push({
+              label: item.Title,
+              id: item.UID,
+              path: item.path
+            });
+          });
+          return nodes;
+        }
+      });
+      treePattern.$el.bind('tree.select', function(e){
+        var node = e.node;
+        if(node && !node._loaded){
+          self.currentPath = node.path;
+          selectedNode = node;
+          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node);
+          node._loaded = true;
+        }
+      });
+      treePattern.$el.bind('tree.refresh', function(){
+        /* the purpose of this is that when new data is loaded, the selected
+         * node is cleared. This re-selects it as a user browses structure of site */
+        if(selectedNode){
+          treePattern.$el.tree('selectNode', selectedNode);
+        }
+      });
+      $('a.pattern-relateditems-tree-cancel', $treeContainer).click(function(e){
+        e.preventDefault();
+        $treeContainer.fadeOut();
+        return false;
+      });
+
+      $('a.pattern-relateditems-tree-itemselect', $treeContainer).click(function(e){
+        e.preventDefault();
+        self.browseTo(self.currentPath); // just browse to current path since it's set elsewhere
+        $treeContainer.fadeOut();
+        return false;
+      });
+
+      $treeSelect.on('click', function(e){
+        e.preventDefault();
+        self.browsing = true;
+        self.currentPath = '/';
+        $treeContainer.fadeIn();
+        treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl());
         return false;
       });
       self.$browsePath.html($crumbs);
@@ -248,6 +322,22 @@ define([
     },
     init: function() {
       var self = this;
+
+      self.query = new QueryHelper(
+        self.$el,
+        $.extend(true, {}, self.options, {basePattern: self})
+      );
+      self.treeQuery = new QueryHelper(
+        self.$el,
+        $.extend(true, {}, self.options, {
+          basePattern: self,
+          baseCriteria: [{
+            i: 'Type',
+            o: 'plone.app.querystring.operation.list.contains',
+            v: self.options.folderTypes
+          }]
+        })
+      );
 
       self.options.ajax = self.options.setupAjax.apply(self);
 
@@ -328,7 +418,9 @@ define([
       };
 
       self.options.id = function(item) {
-        return item.UID;
+        /* Trick select2 into not removing an item from the list if it has been added.
+           Allows user to browse folders that have been selected. */
+        return item.UID + '/' + Math.random() + '' + Math.random();
       };
 
       Select2.prototype.initializeSelect2.call(self);

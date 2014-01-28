@@ -27,6 +27,7 @@ module.exports = function(grunt) {
   }
 
   karmaFiles.push({pattern: 'tests/example-resource*', included: false});
+  karmaFiles.push({pattern: 'tests/json/*.json', included: false});
   karmaFiles.push({pattern: 'tests/fakeserver*', included: false});
   karmaFiles.push({pattern: 'tests/*-test.js', included: false});
   karmaFiles.push({pattern: 'tests/**/*-test.js', included: false});
