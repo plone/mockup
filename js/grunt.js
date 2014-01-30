@@ -1,4 +1,5 @@
 var extend = require('extend'),
+    karmaConfig = require('../node_modules/karma/lib/config'),
     MockupGrunt = function (requirejsOptions) { this.init(requirejsOptions); };
 
 MockupGrunt.prototype = {
@@ -140,11 +141,17 @@ MockupGrunt.prototype = {
     * also at the same time create a list of all patterns to be loaded with
     * docs bundle
     */
+    var path;
     for (var key in this.requirejsOptions.paths) {
-      this.files.push({
-        pattern: this.requirejsOptions.paths[key] + '.js',
-        included: false
-      });
+      path = this.requirejsOptions.paths[key];
+      if (path.indexOf('js/') !== 0 &&
+          path.indexOf('tests/') !== 0 &&
+          path.indexOf('.md') !== path.length - 3) {
+        this.files.push({
+          pattern: this.requirejsOptions.paths[key] + '.js',
+          included: false
+        });
+      }
       if (key.indexOf('mockup-patterns-') === 0) {
         this.patterns.push(key);
       }
@@ -230,6 +237,8 @@ MockupGrunt.prototype = {
           coverageReporter: { type : 'lcov', dir : 'coverage/' },
           port: 9876,
           colors: true,
+          logLevel: karmaConfig.DEBUG_INFO,
+          browserNoActivityTimeout: 200000,
           autoWatch: true,
           captureTimeout: 60000,
           plugins: [
@@ -262,6 +271,7 @@ MockupGrunt.prototype = {
         test_ci: {
           singleRun: true,
           port: 8080,
+          recordVideo: true,
           reporters: ['junit', 'coverage', 'saucelabs'],
           junitReporter: { outputFile: 'test-results.xml' },
           sauceLabs: { testName: 'Mockup', startConnect: true },
