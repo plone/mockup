@@ -3,9 +3,9 @@ node_js:
   - 0.10
 env:
   global:
-    - secure: "Y684QEBBITFKiJbfCOAlGUeApNAaPXtEBjAlgDfqmrM8Ag5cvaeleMkp2H8WCkm/RTbqwcXfLNbxqq89JaWBgTFBN17xhPCIQkb4ZL2D7nDHg2hCpipV+F/RA8WAlQfbT4GETvowaAj4ktGNPmCsaBu2qNoAXhNYqSRt8JWwOFs="
-    - secure: "kWCtFBr+pvUixXnZbVY/BK6/wDEBv9noMDa9sZe26U9Q9tHIpZq6lNYM36SLR1wD1jC4AfN+31HzvzMYj+XhaY1KPbJLIiM6JELLucsifO4YzGCMRhylkdRKK6RrYZbjQTth10Z3AnFw+tSU/dSxKoVVAjEw5FtmWfDyN66SE0I="
-    - secure: "chE/bYqPJ8hye5ViNlKy63Uq3Sr4D8Wv/ZJT7JP13yE0g1lv6DJxyc3ws7/pp/sZJr5oyK2ZgJ/hupyhaofdqsE5VX6bhCFbpsP3WC+UOF8KvDE/K0nv5xs9up7H2KnLXznWBFMj/rwWT6EmWb5biUCQNT9kMtXtpcHGI6TXhpQ="
+    - secure: "fPRKgxcbSXyiLqkUjAjPkn5eGBqMqf6c5haTZ9x76sDl1792nDyiL2FXSpiv2s8PeOqMbWgcXly0r+CLXypYkWba9nIxb4bhvtXyDoYAaoBV0lG1NbBakuOwqW/u60WpPJS1qTqmEUSEbSxdntqk7HF1yG6MdMi3PdubxMyw9h0="
+    - secure: "kC1ondeLedcnmrpI5McHHjd3AAl0piErC3iCy8hwdJXSkanG36XF0nM3VoiudhJX1c0iTD0uod3cglChRq7stmYsHLlCvWJAf/19+ce6wG7MBw2M31qRRcktIYEPKlm3iMRWy+WwWOivTrjVwWG3/mcCdyeDTvSFFSjtMSqmLOg="
+    - secure: "CyxPivnm/mpBX5Def/VlFHthxjMTjlThgd07tiGvd0vtDG1PPNzD0Y0q+4AmBilWZeIu1O1bP1vYMgMQ0rvcXr5K7+wZqoyss+ynRzMzdGLYQSU73zN5THKNeClioR90stsTr9GxX43VvgEIX9W3Zx1eSnmzT+ddnLYL94bAP9Q="
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
 install:
   - make bootstrap
