@@ -287,9 +287,9 @@ MockupGrunt.prototype = {
             //'SL_Android'
           ],
           customLaunchers: {
-            'SL_Chrome': { base: 'SauceLabs', browserName: 'chrome' },
-            'SL_Firefox': { base: 'SauceLabs', browserName: 'firefox' },
-            'SL_Opera': { base: 'SauceLabs', browserName: 'opera' },
+            'SL_Chrome': { base: 'SauceLabs', browserName: 'chrome', platform: 'Windows 8', version: '31' },
+            'SL_Firefox': { base: 'SauceLabs', browserName: 'firefox', platform: 'Windows 8', version: '26' },
+            'SL_Opera': { base: 'SauceLabs', browserName: 'opera', platform: 'Windows 7', version: '12' },
             'SL_Safari': { base: 'SauceLabs', browserName: 'safari', platform: 'Mac 10.8', version: '6' },
             'SL_IE_8': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 7', version: '8' },
             'SL_IE_9': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 2008', version: '9' },
