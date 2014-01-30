@@ -59,7 +59,6 @@ var requirejsOptions = {
     'mockup-patterns-pickadate': 'js/patterns/pickadate',
     'mockup-patterns-picture': 'js/patterns/picture',
     'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
-    'mockup-patterns-queryhelper': 'js/patterns/queryhelper',
     'mockup-patterns-querystring': 'js/patterns/querystring',
     'mockup-patterns-relateditems': 'js/patterns/relateditems',
     'mockup-patterns-select2': 'js/patterns/select2',
