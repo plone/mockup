@@ -126,12 +126,6 @@ MockupGrunt.prototype = {
       * include karma requirejs configuration
       */
       'tests/config.js',
-      /*
-      * provide (but not include) all files in "tests/" and "js/" folder
-      * those files will be loaded by requirejs at later points
-      */
-      {pattern: 'tests/**/*', included: false},
-      {pattern: 'js/**/*', included: false}
     ];
 
     /*
@@ -145,15 +139,33 @@ MockupGrunt.prototype = {
     for (var key in this.requirejsOptions.paths) {
       path = this.requirejsOptions.paths[key];
       if (path.indexOf('.md') !== path.length - 3) {
-        this.files.push({
-          pattern: this.requirejsOptions.paths[key] + '.js',
-          included: false
-        });
+        this.files.push({ pattern: path + '.js', included: false });
       }
       if (key.indexOf('mockup-patterns-') === 0) {
         this.patterns.push(key);
       }
     }
+
+    /*
+    * provide (but not include) all files in "tests/" and "js/" folder
+    * those files will be loaded by requirejs at later points
+    */
+    this.files = this.files.concat([
+      {pattern: 'tests/example-resource*', included: false},
+      {pattern: 'tests/json/*.json', included: false},
+      {pattern: 'tests/fakeserver*', included: false},
+      {pattern: 'tests/*-test.js', included: false},
+      {pattern: 'tests/**/*-test.js', included: false},
+      {pattern: 'js/ui/**/*.js', included: false},
+      {pattern: 'js/ui/**/*.xml', included: false},
+      {pattern: 'js/patterns/structure/**/*.js', included: false},
+      {pattern: 'js/patterns/structure/**/*.xml', included: false},
+      {pattern: 'js/patterns/filemanager/**/*.xml', included: false},
+      {pattern: 'js/patterns/filemanager/**/*.js', included: false},
+      {pattern: 'js/patterns/tinymce/**/*.xml', included: false},
+      {pattern: 'js/patterns/tinymce/**/*.js', included: false},
+    ]);
+
 
   },
   registerBundle: function(name, customGruntConfig, bundleOptions, sections) {
