@@ -3,9 +3,6 @@ node_js:
   - 0.10
 env:
   global:
-    # This is the 2nd commit message:
-
-asdasdad
     - secure: "Y684QEBBITFKiJbfCOAlGUeApNAaPXtEBjAlgDfqmrM8Ag5cvaeleMkp2H8WCkm/RTbqwcXfLNbxqq89JaWBgTFBN17xhPCIQkb4ZL2D7nDHg2hCpipV+F/RA8WAlQfbT4GETvowaAj4ktGNPmCsaBu2qNoAXhNYqSRt8JWwOFs="
     - secure: "kWCtFBr+pvUixXnZbVY/BK6/wDEBv9noMDa9sZe26U9Q9tHIpZq6lNYM36SLR1wD1jC4AfN+31HzvzMYj+XhaY1KPbJLIiM6JELLucsifO4YzGCMRhylkdRKK6RrYZbjQTth10Z3AnFw+tSU/dSxKoVVAjEw5FtmWfDyN66SE0I="
     - secure: "chE/bYqPJ8hye5ViNlKy63Uq3Sr4D8Wv/ZJT7JP13yE0g1lv6DJxyc3ws7/pp/sZJr5oyK2ZgJ/hupyhaofdqsE5VX6bhCFbpsP3WC+UOF8KvDE/K0nv5xs9up7H2KnLXznWBFMj/rwWT6EmWb5biUCQNT9kMtXtpcHGI6TXhpQ="
