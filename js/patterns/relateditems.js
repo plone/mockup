@@ -82,9 +82,9 @@ define([
   'underscore',
   'mockup-patterns-base',
   'mockup-patterns-select2',
-  'mockup-patterns-queryhelper',
+  'mockup-utils',
   'mockup-patterns-tree'
-], function($, _, Base, Select2, QueryHelper, Tree) {
+], function($, _, Base, Select2, utils, Tree) {
   "use strict";
 
   var RelatedItems = Base.extend({
@@ -323,14 +323,12 @@ define([
     init: function() {
       var self = this;
 
-      self.query = new QueryHelper(
-        self.$el,
-        $.extend(true, {}, self.options, {basePattern: self})
+      self.query = new utils.QueryHelper(
+        $.extend(true, {}, self.options, {pattern: self})
       );
-      self.treeQuery = new QueryHelper(
-        self.$el,
+      self.treeQuery = new utils.QueryHelper(
         $.extend(true, {}, self.options, {
-          basePattern: self,
+          pattern: self,
           baseCriteria: [{
             i: 'Type',
             o: 'plone.app.querystring.operation.list.contains',

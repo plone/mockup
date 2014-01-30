@@ -64,8 +64,8 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-toggle',
   'mockup-patterns-select2', // TODO: is this still a dependency
-  'mockup-patterns-queryhelper'
-], function($, _, Base, Toggle, Select2, QueryHelper) {
+  'mockup-utils'
+], function($, _, Base, Toggle, Select2, utils) {
   "use strict";
 
   var Livesearch = Base.extend({
@@ -124,8 +124,8 @@ define([
 
     init: function() {
       var self = this;
-      self.query = new QueryHelper(self.$el,
-        $.extend(true, {}, self.options, {basePattern: self}));
+      self.query = new utils.QueryHelper(
+          $.extend(true, {}, self.options, {pattern: self}));
 
       this.$results = $(self.options.resultsTarget, self.$el);
 

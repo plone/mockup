@@ -103,6 +103,62 @@ define([
       });
     });
 
+
+    describe('QueryHelper', function() {
+
+      it("getQueryData correctly", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
+        var qd = qh.getQueryData('foobar');
+        expect(qd.query).to.equal('{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}]}');
+      });
+      it("getQueryData use attributes correctly", function() {
+        var qh = new utils.QueryHelper({
+          vocabularyUrl: 'http://foobar.com/',
+          attributes: ['one', 'two']});
+        var qd = qh.getQueryData('foobar');
+        expect(qd.attributes).to.equal('["one","two"]');
+      });
+      it("getQueryData set batch", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
+        var qd = qh.getQueryData('foobar', 1);
+        expect(qd.batch).to.equal('{"page":1,"size":' + qh.options.batchSize + '}');
+      });
+
+      it("selectAjax gets data correctly", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
+        var sa = qh.selectAjax();
+        expect(sa.data('foobar').query).to.equal('{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}]}');
+      });
+      it("selectAjax formats results correctly", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
+        var sa = qh.selectAjax();
+        var data = sa.results({total: 100, results: [1,2,3]}, 1);
+        expect(data.results.length).to.equal(3);
+        expect(data.more).to.equal(true);
+      });
+
+      it("getUrl correct", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
+        expect(qh.getUrl()).to.equal(
+          'http://foobar.com/?query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22Type%22%5D');
+      });
+      it("getUrl correct and url query params already present", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/?foo=bar'});
+        expect(qh.getUrl()).to.equal(
+          'http://foobar.com/?foo=bar&query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22Type%22%5D');
+      });
+
+
+      it("browsing adds path criteria", function() {
+        var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/?foo=bar'});
+        qh.pattern.browsing = true;
+        expect(qh.getQueryData('foobar').query).to.contain('plone.app.querystring.operation.string.path');
+      });
+
+
+    });
+
+
   });
 
 });
