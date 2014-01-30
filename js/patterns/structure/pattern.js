@@ -45,7 +45,7 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'mockup-patterns-queryhelper',
+  'mockup-utils',
   'js/patterns/structure/views/app',
   'text!js/patterns/structure/templates/paging.xml',
   'text!js/patterns/structure/templates/selection_button.xml',
@@ -53,7 +53,7 @@ define([
   'text!js/patterns/structure/templates/tablerow.xml',
   'text!js/patterns/structure/templates/table.xml',
   'text!js/ui/templates/popover.xml'
-], function($, Base, QueryHelper, AppView) {
+], function($, Base, utils, AppView) {
   "use strict";
 
   var Structure = Base.extend({
@@ -141,8 +141,8 @@ define([
       var self = this;
       self.browsing = true; // so all queries will be correct with QueryHelper
       self.options.collectionUrl = self.options.vocabularyUrl;
-      self.options.queryHelper = new QueryHelper(self.$el,
-        $.extend(true, {}, self.options, {basePattern: self}));
+      self.options.queryHelper = new utils.QueryHelper(
+        $.extend(true, {}, self.options, {pattern: self}));
 
       delete self.options.attributes; // not compatible with backbone
 
