@@ -144,9 +144,7 @@ MockupGrunt.prototype = {
     var path;
     for (var key in this.requirejsOptions.paths) {
       path = this.requirejsOptions.paths[key];
-      if (path.indexOf('js/') !== 0 &&
-          path.indexOf('tests/') !== 0 &&
-          path.indexOf('.md') !== path.length - 3) {
+      if (path.indexOf('.md') !== path.length - 3) {
         this.files.push({
           pattern: this.requirejsOptions.paths[key] + '.js',
           included: false
@@ -277,7 +275,7 @@ MockupGrunt.prototype = {
           sauceLabs: { testName: 'Mockup', startConnect: true },
           browsers: [
             'SL_Chrome',
-            'SL_Firefox',
+            //'SL_Firefox',
             //'SL_Opera',
             //'SL_Safari',
             //'SL_IE_8',
