@@ -116,11 +116,6 @@ require([
             description: 'A pattern to prevent submitting a form twice.',
             url: 'js/patterns/preventdoublesubmit.js'
           },
-          { id: 'queryhelper',
-            title: 'Queryhelper',
-            description: 'TODO',
-            url: 'js/patterns/queryhelper.js'
-          },
           { id: 'querystring',
             title: 'Querystring',
             description: 'A widget for creating queries for collections.',
