@@ -2,10 +2,10 @@ require([
   'mockup-docs',
   'text!docs-getting-started',
   'text!docs-tutorial',
-  'text!docs-about',
+  'text!docs-contribute',
   'bootstrap-collapse',
   'mockup-fakeserver'
-], function(Docs, GETTING_STARTED, TUTORIAL, ABOUT) {
+], function(Docs, GETTING_STARTED, TUTORIAL, CONTRIBUTE) {
   new Docs({
     pages: [
       { id: 'index',
@@ -168,11 +168,11 @@ require([
           }
         ]
       },
-      { id: 'about',
-        title: 'About',
-        description: 'XXX.',
+      { id: 'contribute',
+        title: 'Contribute',
+        description: 'How to start contributing.',
         position: 'right',
-        text: ABOUT
+        text: CONTRIBUTE
       }
     ]
   });

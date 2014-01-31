@@ -106,7 +106,7 @@ world](#hello-world) example.
 
 To build bundles::
 
-    make compile
+    make bundle
 
 ## Step 6: Testing
 

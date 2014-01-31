@@ -206,6 +206,77 @@ define([
     return self;
   };
 
+  var ProgressIndicator = function(options){
+    var self = this;
+    var defaults = {
+      className: 'progress-indicator',
+      container: null,
+      backdrop: null,
+      wrapper: null,
+      zIndex: 10005 // can be a function
+    };
+    if(!options){
+      options = {};
+    }
+    self.options = $.extend({}, defaults, options);
+    if(self.options.container === null){
+      self.options.container = $('body');
+    }
+    self.$loading = $('> .' + self.options.className, self.options.container);
+    if (self.$loading.size() === 0){
+      self.$loading = $('<div/>').hide()
+        .addClass(self.options.className)
+        .appendTo(self.options.container);
+    }
+    self.$wrapper = self.options.wrapper;
+    if(self.$wrapper === null){
+      self.$wrapper = self.options.container;
+    }
+
+    self.show = function(closable) {
+      if (closable === undefined) {
+        closable = true;
+      }
+
+      if(self.options.backdrop){
+        self.options.backdrop.closeOnClick = closable;
+        self.options.backdrop.closeOnEsc = closable;
+        self.options.backdrop.init();
+      }
+
+      self.$wrapper.parent().css('overflow', 'hidden');
+      self.$wrapper.show();
+      if(self.options.backdrop){
+        self.options.backdrop.show();
+      }
+      self.$loading.show();
+      self.position();
+    };
+
+    self.position = function() {
+      self.$loading.css({
+        'margin-left': self.$wrapper.width()/2 - self.$loading.width()/2,
+        'margin-top': self.$wrapper.height()/2 - self.$loading.height()/2,
+        'position': 'absolute',
+        'bottom': '0',
+        'left': '0',
+        'right': '0',
+        'top': '0'
+      });
+      var zIndex = self.options.zIndex;
+      if(typeof(zIndex) === 'function'){
+        zIndex = zIndex();
+      }
+      self.$loading.css('zIndex', zIndex);
+    };
+
+    self.hide = function(){
+      self.$loading.hide();
+    };
+
+    return self;
+  };
+
   return {
 
     parseBodyTag: function(txt){
@@ -234,6 +305,7 @@ define([
       }
       return ['true', true, 1].indexOf(val) !== -1;
     },
-    QueryHelper: QueryHelper
+    QueryHelper: QueryHelper,
+    ProgressIndicator: ProgressIndicator
   };
 });

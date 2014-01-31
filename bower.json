@@ -3,7 +3,7 @@
   "version": "1.5.0",
   "description": "Plone core patterns",
   "dependencies": {
-    "ace": "1.1.1",
+    "ace-builds": "1.1.1",
     "backbone": "1.1.0",
     "backbone.paginator": "0.8.1",
     "bootstrap": "3.0.3",
