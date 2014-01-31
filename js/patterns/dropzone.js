@@ -208,6 +208,8 @@ define([
               var percentage = (bytesUploaded / bytesTotal * 100);
               $progress.css('width', percentage + '%');
               $progress.parent().css('display', 'block');
+              var $size = $preview.find('.dz-size');
+              $size.html('uploading...<br />' + self.formatBytes(bytesUploaded) + ' / ' + self.formatBytes(bytesTotal));
             }).done(function(url, file){
               file.status = Dropzone.SUCCESS;
               self.dropzone.emit('success', file);
@@ -231,6 +233,17 @@ define([
           }
         }, 100);
       });
+    },
+    formatBytes: function(bytes){
+      var kb = Math.round(bytes / 1024);
+      if(kb < 1024){
+        return kb + ' KiB';
+      }
+      var mb = Math.round(kb / 1024);
+      if(mb < 1024){
+        return mb + ' MB';
+      }
+      return Math.round(mb / 1024) + ' GB';
     }
   });
 
