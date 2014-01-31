@@ -412,7 +412,8 @@ define([
     '/properties',
     '/paste',
     '/order',
-    '/rename'
+    '/rename',
+    '/rearrange'
   ];
 
   var actionData = {
@@ -492,8 +493,14 @@ define([
         status: "success",
         msg: 'Deleted ' + selection.length + ' items'
       };
+    },
+    '/rearrange': function(xhr){
+      var selection = JSON.parse(getQueryVariable('?' + xhr.requestBody, 'selection'));
+      return {
+        status: "success",
+        msg: 'Rearranged items'
+      };
     }
-
   };
 
   _.each(basicActions, function(action){
