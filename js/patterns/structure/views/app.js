@@ -47,12 +47,13 @@ define([
   'js/patterns/structure/collections/result',
   'js/patterns/structure/collections/selected',
   'mockup-patterns-dropzone',
+  'mockup-utils',
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, SortView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, ResultCollection,
-            SelectedCollection, DropZone) {
+            SelectedCollection, DropZone, utils) {
   "use strict";
 
   var DISABLE_EVENT = 'DISABLE';
@@ -93,6 +94,10 @@ define([
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.setAllCookieSettings();
+      self.loading = new utils.ProgressIndicator({
+        container: self.$el
+      });
+      self.loading.show();
 
       self.collection = new ResultCollection([], {
         url: self.options.collectionUrl,
@@ -195,6 +200,11 @@ define([
             }
           });
         }
+        self.loading.hide();
+      });
+
+      self.collection.on('pager', function(){
+        self.loading.show();
       });
 
       /* detect key events */
@@ -234,6 +244,7 @@ define([
       var data = null, callback = null;
 
       if(button.url){
+        self.loading.show();
         // handle ajax now
 
         if(arguments.length > 1){
@@ -267,9 +278,11 @@ define([
           data: data,
           success: function(data){
             self.ajaxSuccessResponse.apply(self, [data, callback]);
+            self.loading.hide();
           },
           error: function(response){
             self.ajaxErrorResponse.apply(self, [response, url]);
+            self.loading.hide();
           }
         }, self);
       }
@@ -292,6 +305,8 @@ define([
       var self = this;
       if(response.status === 404){
         window.alert('operation url "' + url + '" is not valid');
+      }else{
+        window.alert('there was an error performing action');
       }
     },
     pasteEvent: function(button, e, data){
