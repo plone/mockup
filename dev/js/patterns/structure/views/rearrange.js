@@ -30,40 +30,45 @@ define([
 ], function($, _, PopoverView) {
   "use strict";
 
-  var SortView = PopoverView.extend({
-    className: 'popover sort',
-    title: _.template('Sort items in this folder'),
+  var RearrangeView = PopoverView.extend({
+    className: 'popover rearrange',
+    title: _.template('Rearrange items in this folder'),
     content: _.template(
       '<div class="form-group">' +
-        '<label>What to sort on</label>' +
-        '<select name="sort_on" class="form-control">' +
-          '<% _.each(sortProperties, function(title, property){ %>' +
+        '<label>What to rearrange on</label>' +
+        '<select name="rearrange_on" class="form-control">' +
+          '<% _.each(rearrangeProperties, function(title, property){ %>' +
             '<option value="<%- property %>"><%- title %></option>' +
           '<% }); %>' +
         '</select>' +
+        '<p class="help-block">' +
+          'This permanently changes the order of items in this folder.' +
+          'This operation may take a long time depending on the size ' +
+          'of the folder.' +
+        '</p>' +
       '</div>' +
       '<div class="checkbox">' +
         '<label>Reverse <input type="checkbox" name="reversed" /></label>' +
       '</div>' +
-      '<button class="btn btn-block btn-primary">Sort</button>'
+      '<button class="btn btn-block btn-primary">Rearrange</button>'
     ),
     events: {
-      'click button': 'sortButtonClicked'
+      'click button': 'rearrangeButtonClicked'
     },
     initialize: function(options){
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
-      this.options.sortProperties = this.app.options.sort.properties;
+      this.options.rearrangeProperties = this.app.options.rearrange.properties;
     },
     render: function(){
       PopoverView.prototype.render.call(this);
-      this.$sortOn = this.$('[name="sort_on"]');
+      this.$rearrangeOn = this.$('[name="rearrange_on"]');
       this.$reversed = this.$('[name="reversed"]');
       return this;
     },
-    sortButtonClicked: function(){
+    rearrangeButtonClicked: function(){
       var data = {
-        sort_on: this.$sortOn.val(),
+        rearrange_on: this.$rearrangeOn.val(),
         reversed: false
       };
       if(this.$reversed[0].checked){
@@ -74,5 +79,5 @@ define([
     }
   });
 
-  return SortView;
+  return RearrangeView;
 });

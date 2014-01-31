@@ -88,7 +88,7 @@ define([
         'last_comment_date': 'Last comment date',
         'total_comments': 'Total comments'
       },
-      sort: {
+      rearrange: {
         properties: {
           'id': 'ID',
           'sortable_title': 'Title',
@@ -97,7 +97,7 @@ define([
           'effective': 'Publication Date',
           'Type': 'Type'
         },
-        url: '/sort'
+        url: '/rearrange'
       },
       basePath: '/',
       uploadUrl: null,

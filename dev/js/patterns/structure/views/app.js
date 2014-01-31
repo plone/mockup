@@ -38,7 +38,7 @@ define([
   'js/patterns/structure/views/workflow',
   'js/patterns/structure/views/delete',
   'js/patterns/structure/views/rename',
-  'js/patterns/structure/views/sort',
+  'js/patterns/structure/views/rearrange',
   'js/patterns/structure/views/selectionbutton',
   'js/patterns/structure/views/paging',
   'js/patterns/structure/views/addmenu',
@@ -50,7 +50,7 @@ define([
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
-            WorkflowView, DeleteView, RenameView, SortView, SelectionButtonView,
+            WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone) {
   "use strict";
@@ -72,7 +72,7 @@ define([
       'workflow': DISABLE_EVENT,
       'delete': DISABLE_EVENT,
       'rename': DISABLE_EVENT,
-      'sort': DISABLE_EVENT
+      'rearrange': DISABLE_EVENT
     },
     buttonViewMapping: {
       'secondary.tags': TagsView,
@@ -356,18 +356,18 @@ define([
           app: self
         }));
       }
-      if(self.options.sort){
-        var sortButton = new ButtonView({
-          id: 'sort',
-          title: 'Sort',
-          tooltip: 'Sort folder contents',
-          url: self.options.sort.url
+      if(self.options.rearrange){
+        var rearrangeButton = new ButtonView({
+          id: 'rearrange',
+          title: 'Rearrange',
+          tooltip: 'Rearrange folder contents',
+          url: self.options.rearrange.url
         });
-        self.sortView = new SortView({
-          triggerView: sortButton,
+        self.rearrangeView = new RearrangeView({
+          triggerView: rearrangeButton,
           app: self
         });
-        items.push(sortButton);
+        items.push(rearrangeButton);
       }
 
       _.each(_.pairs(this.options.buttonGroups), function(group){
@@ -452,8 +452,8 @@ define([
       self.$el.append(self.toolbar.render().el);
       self.$el.append(self.wellView.render().el);
       self.$el.append(self.columnsView.render().el);
-      if(self.sortView){
-        self.$el.append(self.sortView.render().el);
+      if(self.rearrangeView){
+        self.$el.append(self.rearrangeView.render().el);
       }
 
       _.each(self.buttonViews, function(view){
