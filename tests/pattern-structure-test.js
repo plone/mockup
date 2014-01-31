@@ -74,10 +74,10 @@ define([
           results: items
         }));
       });
-      this.server.respondWith("POST", '/sort', function (xhr, id) {
+      this.server.respondWith("POST", '/rearrange', function (xhr, id) {
         xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
           status: "success",
-          msg: 'sorted'
+          msg: 'rearranged'
         }));
       });
       this.server.respondWith("POST", '/paste', function (xhr, id) {
@@ -165,16 +165,16 @@ define([
       expect(this.$el.find('.itemRow').length).to.equal(30);
     });
 
-    it('test sort button', function() {
+    it('test rearrange button', function() {
       registry.scan(this.$el);
       this.clock.tick(1000);
-      var $popover = this.$el.find('.popover.sort');
-      this.$el.find('#sort').trigger('click');
+      var $popover = this.$el.find('.popover.rearrange');
+      this.$el.find('#rearrange').trigger('click');
       expect($popover.hasClass('active')).to.equal(true);
       $popover.find('button').trigger('click');
       this.clock.tick(1000);
       expect($popover.hasClass('active')).to.equal(false);
-      expect(this.$el.find('.order-support .status').html()).to.contain('sorted');
+      expect(this.$el.find('.order-support .status').html()).to.contain('rearrange');
     });
 
     it('test copy button', function() {
