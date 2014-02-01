@@ -5,9 +5,9 @@ NPM = npm
 GRUNT = ./node_modules/.bin/grunt
 BOWER = ./node_modules/.bin/bower
 
-all: test-once compile docs
+all: test-once bundle docs
 
-compile: compile-barceloneta compile-widgets compile-toolbar compile-structure
+bundle: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
 	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static
@@ -15,20 +15,20 @@ compile: compile-barceloneta compile-widgets compile-toolbar compile-structure
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
 	# ----------------------------------------------------------------------- #
 
-compile-barceloneta:
+bundle-barceloneta:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) compile-barceloneta
+	NODE_PATH=./node_modules $(GRUNT) bundle-barceloneta
 
-compile-widgets:
+bundle-widgets:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) compile-widgets
+	NODE_PATH=./node_modules $(GRUNT) bundle-widgets
 
-compile-toolbar:
+bundle-toolbar:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) compile-toolbar
+	NODE_PATH=./node_modules $(GRUNT) bundle-toolbar
 
-compile-structure:
-	NODE_PATH=./node_modules $(GRUNT) compile-structure
+bundle-structure:
+	NODE_PATH=./node_modules $(GRUNT) bundle-structure
 
 bootstrap: clean
 	mkdir -p build
@@ -54,7 +54,7 @@ test-ci:
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	rm -rf docs/dev
-	NODE_PATH=./node_modules $(GRUNT) docs
+	NODE_PATH=./node_modules $(GRUNT) bundle-docs
 
 docs-publish:
 	echo -e "Starting to update gh-pages\n"; cd docs; ls -la; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to gh-pages"; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
@@ -68,4 +68,4 @@ clean:
 clean-all: clean
 	if test -f $(BOWER); then $(BOWER) cache clean; fi
 
-.PHONY: compile bootstrap jshint test test-ci docs clean
+.PHONY: bundle bootstrap jshint test test-ci docs clean

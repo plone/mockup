@@ -15,7 +15,7 @@ install:
   - git config --global user.name "Travis CI"
 script:
   - make test-once
-  - make compile
+  - make bundle
   - make docs
   - if [ "$TRAVIS_BRANCH" == "master" ]; then make test-ci; fi
   - if [ "$TRAVIS_TRAVIS_PULL_REQUEST" == "true" ]; then make test-ci; fi

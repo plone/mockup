@@ -146,7 +146,7 @@ Hello World pattern. From the &lt;mockup&gt; directory run the following console
 command:</p>
 
 <pre>
-$ make compile-widgets
+$ make bundle-widgets
 </pre>
 
 <p>This determines all the dependecies and bundles them up into a single
@@ -156,7 +156,7 @@ resources (e.g. images and CSS files) to the same <em>build</em> directory.</p>
 
 <h3>Using the Pattern on a Page</h3>
 
-<p>Now that we have defined, configured and compiled our Hello World pattern, it's time
+<p>Now that we have defined, configured and bundled our Hello World pattern, it's time
 to use it and see how it works. Inside the root "mockup" directory create a simple HTML
 file called <em>hello.html</em> with the following contents:</p>
 
@@ -230,7 +230,7 @@ read through the <em>this.options</em> object (with <em>this</em> pointing to th
 object describing the pattern).</p>
 
 <p>NOTE: Since we have changed the pattern's code we need to run the
-<code>make compile-widgets</code> command from the console again, so that the JavaScript
+<code>make bundle-widgets</code> command from the console again, so that the JavaScript
 bundle will contain the enhanced version of the Hello World pattern we just created.</p>
 
 <h3>The <em>data-pat-&lt;pattern-name&gt;</em> Attribute</h3>
@@ -518,7 +518,7 @@ with it.</p>
 you're done with development, you somehow need to share your code with other people
 who might want to use it in their projects or in production environments.</p>
 
-<p>We have already mentioned the <code>make compile-widgets</code> command. It
+<p>We have already mentioned the <code>make bundle-widgets</code> command. It
 bundles all the patterns and their dependencies into a single JavaScript file
 <em>widgets.min.js</em> located in the <em>build</em> subdirectory. After a
 successful build all you have to do is copy this file to wherever you need it
@@ -527,7 +527,7 @@ earlier.</p>
 
 <p>If you want to develop patterns in the context of a larger project, you
 have an option to include them in development mode. This way you will not have to
-re-compile them every time you make a change. To achieve that, add Plone Mockup
+re-bundle them every time you make a change. To achieve that, add Plone Mockup
 project as a dependency to your <a href="http://www.buildout.org">buildout</a>
 config file, something like below:
 
