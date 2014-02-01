@@ -130,6 +130,7 @@ define([
         classFooterName: "modal-footer",
         classWrapperName: "modal-wrapper",
         classWrapperInnerName: "modal-wrapper-inner",
+        classLoadingName: "modal-loading",
         classActiveName: "in",
         classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
         classContentName: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
@@ -165,6 +166,10 @@ define([
         reloadWindowOnClose: true,
         error: '.portalMessage.error',
         formFieldError: '.field.error',
+        loading: '' +
+          '<div class="progress progress-striped active">' +
+          '  <div class="bar" style="width: 100%;"></div>' +
+          '</div>',
         onSuccess: null,
         onError: null,
         onFormError: null,
@@ -205,7 +210,7 @@ define([
               e.stopPropagation();
               e.preventDefault();
 
-              self.loading.show(false);
+              self.showLoading(false);
 
               // handle event on $action using a function on self
               if (actionOptions.modalFunction !== null) {
@@ -253,13 +258,13 @@ define([
         });
         $form.trigger('submit');
 
-        self.loading.show(false);
+        self.showLoading(false);
         $form.ajaxSubmit({
           timeout: options.timeout,
           data: extraData,
           url: url,
             error: function(xhr, textStatus, errorStatus) {
-              self.loading.hide();
+              self.$loading.hide();
               if (textStatus === 'timeout' && options.onTimeout) {
                 options.onTimeout.apply(self, xhr, errorStatus);
               // on "error", "abort", and "parsererror"
@@ -271,7 +276,7 @@ define([
               self.trigger('formActionError', [xhr, textStatus, errorStatus]);
             },
             success: function(response, state, xhr, form) {
-              self.loading.hide();
+              self.$loading.hide();
               // if error is found (NOTE: check for both the portal errors
               // and the form field-level errors)
               if ($(options.error, response).size() !== 0 ||
@@ -344,7 +349,7 @@ define([
             } else {
               console.log('error happened do something');
             }
-            self.loading.hide();
+            self.$loading.hide();
             self.trigger('linkActionError', [xhr, textStatus, errorStatus]);
           },
           success: function(response, state, xhr) {
@@ -352,7 +357,7 @@ define([
             if (options.onSuccess) {
               options.onSuccess(self, response, state, xhr);
             }
-            self.loading.hide();
+            self.$loading.hide();
             self.trigger('linkActionSuccess', [response, state, xhr]);
           }
         });
@@ -557,21 +562,12 @@ define([
           .appendTo(self.$wrapper);
       }
 
-      self.loading = new utils.ProgressIndicator({
-        container: self.$wrapperInner,
-        backdrop: self.backdrop,
-        wrapper: self.$wrapper,
-        zIndex: function(){
-          if(self.modalInitialized()){
-            var zIndex = self.$modal.css('zIndex');
-            if(zIndex){
-              return parseInt(zIndex, 10) + 1;
-            }
-          }else{
-            return 10005;
-          }
-        }
-      });
+      self.$loading = $('> .' + self.options.templateOptions.classLoadingName, self.$wrapperInner);
+      if (self.$loading.size() === 0) {
+        self.$loading = $('<div/>').hide()
+          .addClass(self.options.templateOptions.classLoadingName)
+          .appendTo(self.$wrapperInner);
+      }
 
       $(window.parent).resize(function() {
         self.positionModal();
@@ -608,16 +604,33 @@ define([
 
       self.initModal();
     },
+    showLoading: function(closable) {
+      var self = this;
+
+      if (closable === undefined) {
+        closable = true;
+      }
+
+      self.backdrop.closeOnClick = closable;
+      self.backdrop.closeOnEsc = closable;
+      self.backdrop.init();
+
+      self.$wrapper.parent().css('overflow', 'hidden');
+      self.$wrapper.show();
+      self.backdrop.show();
+      self.$loading.show();
+      self.positionLoading();
+    },
     createAjaxModal: function() {
       var self = this;
       self.trigger('before-ajax');
-      self.loading.show();
+      self.showLoading();
       self.ajaxXHR = $.ajax({
           url: self.options.ajaxUrl,
           type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
-        self.loading.hide();
+        self.$loading.hide();
         self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
         self.trigger('after-ajax', self, textStatus, xhr);
         self._show();
@@ -649,6 +662,24 @@ define([
         self.createModal = self.createHtmlModal;
       } else {
         self.createModal = self.createBasicModal;
+      }
+    },
+    positionLoading: function() {
+      var self = this;
+      self.$loading.css({
+        'margin-left': self.$wrapper.width()/2 - self.$loading.width()/2,
+        'margin-top': self.$wrapper.height()/2 - self.$loading.height()/2,
+        'position': 'absolute',
+        'bottom': '0',
+        'left': '0',
+        'right': '0',
+        'top': '0'
+      });
+      if(self.modalInitialized()){
+        var zIndex = self.$modal.css('zIndex');
+        if(zIndex){
+          self.$loading.css('zIndex', parseInt(zIndex, 10) + 1);
+        }
       }
     },
     findPosition: function(horpos, vertpos, margin, modalWidth, modalHeight,
@@ -792,7 +823,7 @@ define([
       self.trigger('show');
       self.backdrop.show();
       self.$wrapper.show();
-      self.loading.hide();
+      self.$loading.hide();
       self.$wrapper.parent().css('overflow', 'hidden');
       self.$el.addClass(self.options.templateOptions.classActiveName);
       self.$modal.addClass(self.options.templateOptions.classActiveName);
@@ -822,7 +853,7 @@ define([
         self.$wrapper.hide();
         self.$wrapper.parent().css('overflow', 'visible');
       }
-      self.loading.hide();
+      self.$loading.hide();
       self.$el.removeClass(self.options.templateOptions.classActiveName);
       if (self.$modal !== undefined) {
         self.$modal.remove();

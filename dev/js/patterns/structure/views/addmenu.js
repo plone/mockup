@@ -67,7 +67,6 @@ define([
     buttonClicked: function(e, button){
       var self = this;
       e.preventDefault();
-      self.app.loading.show();
 
       $.ajax({
         url: button.url,
@@ -76,7 +75,6 @@ define([
           '_authenticator': $('[name="_authenticator"]').val(),
         },
         success: function(response){
-          self.app.loading.hide();
           var modal = new Modal(self.$el, {
             html: utils.parseBodyTag(response),
             content: '#content',
@@ -111,7 +109,6 @@ define([
         },
         error: function(){
           // XXX handle error
-          self.app.loading.hide();
         }
       });
     },
