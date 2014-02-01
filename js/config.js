@@ -15,7 +15,7 @@ var requirejsOptions = {
     'bootstrap-transition': 'bower_components/bootstrap/js/transition',
     'docs-getting-started': 'GETTING_STARTED.md',
     'docs-tutorial': 'TUTORIAL.md',
-    'docs-about': 'ABOUT.md',
+    'docs-contribute': 'CONTRIBUTE.md',
     'domready': 'bower_components/domready/ready',
     'dropzone': "bower_components/dropzone/downloads/dropzone-amd-module",
     'expect': 'bower_components/expect/expect',
