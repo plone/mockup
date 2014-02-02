@@ -102,6 +102,21 @@ module.exports = function(grunt) {
     karma: {
       options: {
         exclude: [ 'tests/iframe-test.js' ],
+        test_ci: {
+          browsers: [
+            'SL_Chrome',
+            'SL_Firefox',
+            //'SL_Opera',
+            //'SL_Safari',
+            //'SL_IE_8',
+            //'SL_IE_9',
+            //'SL_IE_10',
+            //'SL_IE_11'
+            //'SL_IPhone',
+            //'SL_IPad',
+            //'SL_Android'
+          ]
+        }
       }
     },
     sed: {
