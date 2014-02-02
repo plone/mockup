@@ -41,6 +41,10 @@ define([
       this.queryHelper = options.queryHelper;
       Backbone.Paginator.requestPager.prototype.initialize.apply(this, [models, options]);
     },
+    pager: function(){
+      this.trigger('pager');
+      Backbone.Paginator.requestPager.prototype.pager.apply(this, []);
+    },
     paginator_core: {
       // the type of the request (GET by default)
       type: 'GET',

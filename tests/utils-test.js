@@ -158,6 +158,57 @@ define([
 
     });
 
+    describe('ProgressIndicator', function() {
+
+      it("creates element", function() {
+        var pi = new utils.ProgressIndicator();
+        expect($('.' + pi.options.className).length).to.equal(1);
+      });
+      it("hidden on creation", function() {
+        var pi = new utils.ProgressIndicator();
+        expect(pi.$loading.is(':visible')).to.equal(false);
+      });
+      it("shows loader", function() {
+        var pi = new utils.ProgressIndicator();
+        pi.show();
+        expect(pi.$loading.is(':visible')).to.equal(true);
+      });
+      it("hide loader", function() {
+        var pi = new utils.ProgressIndicator();
+        pi.show();
+        pi.hide();
+        expect(pi.$loading.is(':visible')).to.equal(false);
+      });
+      it("test custom zIndex", function() {
+        var pi = new utils.ProgressIndicator({
+          zIndex: function(){ return 999; }
+        });
+        pi.show();
+        expect(pi.$loading.css('zIndex')).to.equal('999');
+      });
+      it("works with backdrop", function() {
+        var initCalled = false;
+        var showCalled = false;
+        var fakeBackdrop = {
+          init: function(){
+            initCalled = true;
+          },
+          show: function(){
+            showCalled = true;
+          }
+        };
+        var pi = new utils.ProgressIndicator({
+          backdrop: fakeBackdrop
+        });
+        pi.show();
+        expect(initCalled).to.equal(true);
+        expect(showCalled).to.equal(true);
+        expect(fakeBackdrop.closeOnClick).to.equal(true);
+        expect(fakeBackdrop.closeOnEsc).to.equal(true);
+      });
+
+    });
+
 
   });
 

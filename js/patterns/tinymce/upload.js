@@ -129,10 +129,10 @@ define([
           self.$form.attr('action',
             locationData[0].getURL + '/' + self.options.rel_upload_path);
         }
-        self.modal.$loading.show();
+        self.modal.loading.show();
         self.$iframe.on('load', function(){
           var response = self.$iframe.contents();
-          self.modal.$loading.hide();
+          self.modal.loading.hide();
           self.hide();
           if (!response.length || !response[0].firstChild) {
             self.tinypattern.fileUploadError();
