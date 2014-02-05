@@ -6,6 +6,8 @@ var requirejsOptions = {
   paths: {
     'JSXTransformer': 'bower_components/react/JSXTransformer',
     'ace': "bower_components/ace-builds/src/ace",
+    'ace-theme-monokai': "bower_components/ace-builds/src/theme-monokai",
+    'ace-mode-text': "bower_components/ace-builds/src/mode-text",
     'backbone': 'bower_components/backbone/backbone',
     'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
     'bootstrap-alert': 'bower_components/bootstrap/js/alert',

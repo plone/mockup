@@ -12,8 +12,8 @@ MockupGrunt.prototype = {
         this.gruntConfig.requirejs[name].options = this.gruntConfig.requirejs[name].options || {};
         this.gruntConfig.requirejs[name].options = {
           name: 'node_modules/requirejs/require.js',
-          include: 'mockup-bundles-' + name,
-          insertRequire: ['mockup-bundles-' + name].concat(bundleOptions.insertExtraRequires),
+          include: ['mockup-bundles-' + name].concat(bundleOptions.extraInclude || []),
+          insertRequire: ['mockup-bundles-' + name],
           out: bundleOptions.path + name + '.min.js'
         };
       }
@@ -26,7 +26,7 @@ MockupGrunt.prototype = {
         this.gruntConfig.uglify[name].files[bundleOptions.path + name + '.js'] = [
           'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js',
           'bower_components/domready/ready.js',
-          'bower_components/requirejs/require.js',
+          'node_modules/requirejs/require.js',
           'bower_components/jquery/jquery.js',
           'js/bundles/' + name + '_develop.js'
         ];

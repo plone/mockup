@@ -2,14 +2,20 @@ module.exports = function(grunt) {
 
   var MockupGrunt = require('./js/grunt'),
       requirejsOptions = require('./js/config'),
-      mockup = new MockupGrunt(requirejsOptions);
+      mockup = new MockupGrunt(requirejsOptions),
+      docsExtraIncludes = [];
+
+
+  for (var i = 0; i < mockup.patterns.length; i++) {
+    docsExtraIncludes.push(mockup.patterns[i]);
+    docsExtraIncludes.push('text!' + requirejsOptions.paths[mockup.patterns[i]] + '.js');
+  }
 
   mockup.registerBundle('docs', {
     copy: {
       docs: {
         files: [
-          { expand: true, src: 'index.html', dest: 'docs/dev/' },
-          { expand: true, src: 'js/patterns/**', dest: 'docs/dev/' }
+          { expand: true, src: 'index.html', dest: 'docs/dev/' }
         ]
       }
     },
@@ -33,7 +39,7 @@ module.exports = function(grunt) {
   }, {
     path: 'docs/dev/',
     url: '',
-    insertExtraRequires: mockup.patterns
+    extraInclude: docsExtraIncludes, 
   }, ['requirejs', 'less', 'copy', 'sed']);
 
   mockup.registerBundle('structure', {}, {
