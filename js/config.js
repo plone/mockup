@@ -16,6 +16,7 @@ var requirejsOptions = {
     'docs-getting-started': 'GETTING_STARTED.md',
     'docs-tutorial': 'TUTORIAL.md',
     'docs-contribute': 'CONTRIBUTE.md',
+    'docs-about': 'ABOUT.md',
     'domready': 'bower_components/domready/ready',
     'dropzone': "bower_components/dropzone/downloads/dropzone-amd-module",
     'expect': 'bower_components/expect/expect',

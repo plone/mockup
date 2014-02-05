@@ -3,9 +3,10 @@ require([
   'text!docs-getting-started',
   'text!docs-tutorial',
   'text!docs-contribute',
+  'text!docs-about',
   'bootstrap-collapse',
   'mockup-fakeserver'
-], function(Docs, GETTING_STARTED, TUTORIAL, CONTRIBUTE) {
+], function(Docs, GETTING_STARTED, TUTORIAL, CONTRIBUTE, ABOUT) {
   new Docs({
     pages: [
       { id: 'index',
@@ -17,9 +18,14 @@ require([
       },
       { id: 'getting-started',
         title: 'Getting Started',
-        description: 'An overview of Mockup, how to install it and start ' +
-                     'using patterns.',
+        description: 'How to get mockup installed and running, and where to'
+                     + 'find more information',
         text: GETTING_STARTED
+      },
+      { id: 'about',
+        title: 'About Mockup',
+        description: 'What is the Mockup project?',
+        text: ABOUT,
       },
       { id: 'tutorial',
         title: 'Tutorial',

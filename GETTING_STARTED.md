@@ -8,6 +8,12 @@ To build this project, you will need:
   3. [GNU Make](http://www.gnu.org/software/make/), or a tool compatible with
      it's makefiles
 
+*NOTE:* The core developers for this project use Linux and OS X for
+development. These platforms are not requirements, but there may be build
+processes that are currently configured for them. If you run into patform
+specific problems, please consider [contributing](/#contribute) to the
+project to help improve it's availability on your platform of choice.
+
 
 # Quick-start
 
@@ -18,15 +24,17 @@ To build this project, you will need:
 Clone the code base, and run the bootstrap script to install all the project
 dependencies.
 
-From here, you can head on to the [tutorial](/#tutorial), checkout the
-[existing patterns](/#pattern), or start [contributing](/#contribute)!
+From there, head over the the [about](/#about) page to learn more about what
+the Mockup project is, and, in general, how to use it, or checkout the
+documenation listed below.
 
 
 # Documentation
 
+  * [About Mockup](/#about)
   * [The Tutorial](/#tutorial)
-  * [Concepts](/#concept)
   * [Pattern Examples](/#pattern)
+  * [Contributing](/#contribute)
 
 
 # Getting Help
