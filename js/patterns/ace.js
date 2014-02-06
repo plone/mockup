@@ -72,11 +72,11 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'ace/ace',
   'mockup-utils',
-  'ace/theme/monokai',
-  'ace/mode/text'
-], function($, Base, ace, utils) {
+  'ace',
+  'ace-theme-monokai',
+  'ace-mode-text'
+], function($, Base, utils, ace) {
   "use strict";
 
   var AcePattern = Base.extend({
