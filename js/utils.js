@@ -283,6 +283,7 @@ define([
 
     self.hide = function(){
       self.$loading.hide();
+      self.$wrapper.parent().css('overflow', '');
     };
 
     return self;

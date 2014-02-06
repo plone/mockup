@@ -165,6 +165,20 @@ define([
       expect(this.$el.find('.itemRow').length).to.equal(30);
     });
 
+    it('test paging does not apply overflow hidden to parent', function() {
+      /* 
+       * very odd here, overflow hidden is getting applied by something after
+       * the table of results is re-rendered with new data
+       */
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // click next page
+      var page1Btn = this.$el.find('.pagination li.active a');
+      page1Btn.parent().next().find('a').trigger('click');
+      this.clock.tick(1000);
+      expect(this.$el.css('overflow')).to.not.equal('hidden');
+    });
+
     it('test rearrange button', function() {
       registry.scan(this.$el);
       this.clock.tick(1000);

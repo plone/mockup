@@ -206,6 +206,18 @@ define([
         expect(fakeBackdrop.closeOnClick).to.equal(true);
         expect(fakeBackdrop.closeOnEsc).to.equal(true);
       });
+      it("removed overflow css", function() {
+        var $parent = $('<div><div /></div>');
+        var $el = $parent.children();
+        var pi = new utils.ProgressIndicator({
+          zIndex: function(){ return 999; },
+          container: $el
+        });
+        pi.show();
+        expect($parent.css('overflow')).to.equal('hidden');
+        pi.hide();
+        expect($parent.css('overflow')).to.not.equal('hidden');
+      });
 
     });
 
