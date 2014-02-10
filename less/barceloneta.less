@@ -1,8 +1,8 @@
-@import "mixins.less";
-@import "widgets.less";
-@import "pattern.livesearch.less";
-@import "pattern.autotoc.less";
-@import "pattern.modal.less";
+@import (reference) "mixins.less";
+@import (reference) "widgets.less";
+@import (reference) "pattern.livesearch.less";
+@import (reference) "pattern.autotoc.less";
+@import (reference) "pattern.modal.less";
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
 
@@ -272,7 +272,7 @@ body.userrole-authenticated {
 /* Above content wrapper */
 
 #above-content-wrapper {
-  padding: 0px; 
+  padding: 0px;
   margin: 0px;
 }
 
