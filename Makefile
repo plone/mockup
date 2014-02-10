@@ -7,13 +7,18 @@ BOWER = ./node_modules/.bin/bower
 
 all: test-once bundle docs
 
-bundle: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure
+bundle: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
 	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static
 	# cp build/barceloneta* path/to/plonetheme.barceloneta/plonetheme/barceloneta/static
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
+	# cp build/plone* path/to/Products.CMFPlone/Products/CMFPlone/static
 	# ----------------------------------------------------------------------- #
+
+bundle-plone:
+	mkdir -p build
+	NODE_PATH=./node_modules $(GRUNT) bundle-plone
 
 bundle-barceloneta:
 	mkdir -p build

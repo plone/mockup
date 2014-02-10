@@ -46,6 +46,8 @@ module.exports = function(grunt) {
     url: '++resource++wildcard.foldercontents-structure'
   });
 
+  mockup.registerBundle('plone');
+
   mockup.registerBundle('barceloneta', {
     uglify: {
       barceloneta: {
@@ -79,7 +81,8 @@ module.exports = function(grunt) {
       }
     }
   }, {
-    url: '++resource++plonetheme.barceloneta'
+    url: '++resource++plonetheme.barceloneta',
+    exclude: ['jquery', 'mockup-registry', 'mockup-patterns-base']
   });
 
   mockup.registerBundle('widgets');
