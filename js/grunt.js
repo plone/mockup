@@ -13,6 +13,7 @@ MockupGrunt.prototype = {
         this.gruntConfig.requirejs[name].options = {
           name: 'node_modules/requirejs/require.js',
           include: ['mockup-bundles-' + name].concat(bundleOptions.extraInclude || []),
+          exclude: bundleOptions.exclude || [],
           insertRequire: ['mockup-bundles-' + name],
           out: bundleOptions.path + name + '.min.js'
         };
