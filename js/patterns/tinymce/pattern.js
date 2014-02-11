@@ -67,6 +67,7 @@ define([
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
   'tinymce',
+  'mockup-patterns-autotoc',
   'mockup-patterns-dropzone',
   'dropzone',
   'text!js/patterns/tinymce/templates/result.xml',
@@ -74,8 +75,11 @@ define([
   'mockup-utils',
   'js/patterns/tinymce/links',
   'js/patterns/tinymce/upload'
-], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, dropzone,
-            ResultTemplate, SelectionTemplate, utils, LinkModal, UploadModal) {
+], function($, _,
+            Base, RelatedItems, Modal, tinymce,
+            AutoTOC, DropZone, dropzone,
+            ResultTemplate, SelectionTemplate,
+            utils, LinkModal, UploadModal) {
   "use strict";
 
   var TinyMCE = Base.extend({
@@ -312,7 +316,7 @@ define([
       tinyOptions.skin = false;
 
       self.options.relatedItems.generateImageUrl = function(data, scale){
-        // this is so, in our result and selection template, we can 
+        // this is so, in our result and selection template, we can
         // access getting actual urls from related items
         return self.generateImageUrl.apply(self, [data, scale]);
       };

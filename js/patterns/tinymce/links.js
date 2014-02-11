@@ -32,8 +32,10 @@ define([
   'mockup-patterns-modal',
   'tinymce',
   'mockup-patterns-dropzone',
-  'text!js/patterns/tinymce/templates/link.xml'
-], function($, _, Base, RelatedItems, Modal, tinymce, DropZone, LinkTemplate) {
+  'text!js/patterns/tinymce/templates/link.xml',
+  'text!js/patterns/tinymce/templates/image.xml'
+], function($, _, Base, RelatedItems, Modal, tinymce, DropZone,
+            LinkTemplate, ImageTemplate) {
   "use strict";
 
   var LinkType = Base.extend({
@@ -314,7 +316,21 @@ define([
         'externalImage': LinkType
       }
     },
-    template: _.template(LinkTemplate),
+    // XXX: this is a temporary work around for having separated templates.
+    // Image modal is going to have its own modal class, funcs and template.
+    linkTypeTemplateMapping: {
+      'internal': LinkTemplate,
+      'external': LinkTemplate,
+      'email': LinkTemplate,
+      'anchor': LinkTemplate,
+      'image': ImageTemplate,
+      'externalImage': ImageTemplate
+    },
+
+    template: function(data){
+      return  _.template(this.linkTypeTemplateMapping[this.linkType])(data);
+    },
+
     init: function(){
       var self = this;
       self.tinypattern = self.options.tinypattern;
@@ -370,7 +386,7 @@ define([
 
       /* load up all the link types */
       _.each(self.options.linkTypes, function(type){
-        var $container = $('.linkType.main.' + type, self.modal.$modal);
+        var $container = $('.linkType.' + type + ' .main', self.modal.$modal);
         self.linkTypes[type] = new self.options.linkTypeClassMapping[type]($container, {
           linkModal: self,
           tinypattern: self.tinypattern
@@ -383,13 +399,6 @@ define([
       if($linkType.length > 0){
         $linkType[0].checked = true;
       }
-      self.activateLinkTypeElements();
-    },
-    activateLinkTypeElements: function(){
-      /* handle specify url types */
-      var self = this;
-      $('.linkType', self.modal.$modal).hide();
-      $('.' + self.linkType).show();
     },
     getLinkUrl: function(){
       // get the url, only get one uid
@@ -478,10 +487,6 @@ define([
       $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function(e){
         e.preventDefault();
         self.hide();
-      });
-      $('.linkTypes input:radio', self.modal.$modal).change(function(){
-        self.linkType = $(this).val();
-        self.activateLinkTypeElements();
       });
       self.setupDropzone();
     },
