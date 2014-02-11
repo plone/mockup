@@ -8,41 +8,6 @@
 
 
 /*
- * Toolbar styles
- * --------------------------------------------------
- */
-body {
-    padding-top: 70px;
-}
-.contentViews {
-    .nav();
-    .navbar-nav();
-}
-#contentActionMenus {
-    .nav();
-    .navbar-nav();
-}
-#portal-personaltools-wrapper .actionMenu {
-    .nav();
-    .navbar-nav();
-    @media (min-width: @grid-float-breakpoint) {
-      .pull-right();
-    }
-}
-.navbar-collapse {
-  @media (min-width: @grid-float-breakpoint) {
-    #portal-personaltools-wrapper .actionMenu:last-child {
-      margin-right: -@navbar-padding-horizontal;
-    }
-  }
-}
-
-.actionMenuSelected {
-    .dropdown-header();
-}
-
-
-/*
  * Fonts
  * --------------------------------------------------
  */
@@ -176,18 +141,23 @@ body {
 // Fonts
 @font-family-sans-serif: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+// Text
+@text-color:            #45494c;
+@font-size-h1:            floor(@font-size-base * 3.4); // ~48px //h1 & h2 bigger than Bootstrap
+@font-size-h2:            floor(@font-size-base * 2.6); // ~36px
+
 // Navbar
 @navbar-margin-bottom: 0;
 
 //List
-@bullet-color: #a2c5e0;
+@bullet-color: #a3c5e0;
 
 // Input
 @input-border: #cccccc;
 
 // Footer
-@footer-bg: #2e3133;
-@footer-text-main: #777e83;
+@footer-bg: #2d3134;
+@footer-text-main: #777f82;
 @sep-line: @footer-text-main;
 
 /*
@@ -241,6 +211,7 @@ html {
 
 #portal-logo {
     .navbar-brand();
+    padding-left:0;
 }
 
 #portal-globalnav {
@@ -278,7 +249,7 @@ html {
 /* Authenticated user toolbar */
 
 body.userrole-authenticated {
-  padding-top: 70px;
+  padding-top: 50px;
 }
 
 .userrole-authenticated #edit-zone {
@@ -315,7 +286,7 @@ body.userrole-authenticated {
 
 #globalnav-wrapper {
   background: rgb(52,131,190,1);
-  box-shadow: 0px 5px 5px #aaa;
+  box-shadow: 0px 5px 5px rgba(0,0,0,.15);
   z-index: 50;
   position: relative;
 
@@ -323,9 +294,11 @@ body.userrole-authenticated {
     color: white;
     font-size: 1.1em;
     text-transform: uppercase;
+    font-weight:bold;
   }
 
-  #portal-globalnav>li>a:hover {
+  #portal-globalnav>li>a:hover, 
+  #portal-globalnav>li.selected>a,{
     background-color: rgba(154,189,214,1);
   }
 
@@ -348,6 +321,8 @@ body.userrole-authenticated {
   .jumbotron {
     background: url('@{pathPrefix}images/barceloneta-bg-watermark.png');
     margin-bottom: 0px;
+    padding-left:0;
+    padding-right: 0;
     img {
       width: 100%;
     }
@@ -364,8 +339,19 @@ body.userrole-authenticated {
   padding-top: 10px;
   padding-bottom: 10px;
   font-weight: bold;
+  font-size: 90%;
+  ol {
+    padding:0;
+    margin: 0;
+    display: inline-block;
+  }
   li {
     display: inline-block;
+  }
+  li+li:before {
+    content: ">"; // before /\00a0";
+    padding: 0 5px;
+    color: #999;
   }
 }
 
@@ -382,11 +368,20 @@ ul, ol {
 }
 
 #content {
+  .documentFirstHeading {
+    margin-top: 0;
+  } 
+  .documentByLine {
+    color: #7f7f7f;
+  } 
   .documentDescription {
     font-style: italic;
     font-size: 120%;
     margin-bottom: 1.5em;
   }
+  a { //underline links on content
+   text-decoration:underline;
+  } 
 
   ul, ol {
     counter-reset: ol;
@@ -406,9 +401,34 @@ ul, ol {
     content: counter(ol) ".";
     counter-increment: ol;
     padding-right: 1em;
+    color: #7f7f7f;
   }
-
+  //added class for highlighted ordered lists
+  .ol-primary li {
+    margin-bottom: 1.5em;
+  }
+  .ol-primary li:before {
+    content: counter(ol) "";
+    counter-increment: ol;
+    padding-right: 1em;
+    background: #0082be;
+    border-radius: 100%;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    margin-right:1em;
+  }
+  h2, .h2 { //h2 titles with border and more air
+    border-top:1px solid #e1e2ff;
+    padding-top:30px;
+    padding-bottom:30px;
+    margin-top: 40px;
+    margin-bottom:0;
+  }
 }
+
+
+
 /* Footer */
 
 footer {
@@ -420,13 +440,25 @@ footer {
   p {
     border-bottom: 1px solid @sep-line;
     padding-bottom: 28px;
+    font-weight: bold;
+  }
+  a  {
+    color: #1491E5;
   }
 }
 #portal-footer {
   text-align: center;
+  margin-bottom: 25px;
+}
+#portal-siteactions, #portal-colophon  {
+  display: inline-block;
+  text-transform: uppercase;
+  
+  font-size: 85%;
 }
 #portal-siteactions {
   li {
+    font-weight: bold;
     display: inline-block;
     margin-left: 50px;
     &:first-child {
