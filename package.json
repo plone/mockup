@@ -6,7 +6,8 @@
   "devDependencies": {
     "bower": "~1.2.8",
     "coveralls": "~2.7.0",
-    "extend": "1.2.1",
+    "extend": "~1.2.1",
+    "grunt": "~0.4.2",
     "grunt-cli": "~0.1.11",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.8.0",
@@ -24,7 +25,9 @@
     "karma-requirejs": "~0.2.1",
     "karma-sauce-launcher": "~0.2.0",
     "karma-script-launcher": "~0.1.0",
-    "lcov-result-merger": "~0.0.2"
+    "lcov-result-merger": "~0.0.2",
+    "mocha": "~1.17.1",
+    "requirejs": "~2.1.10"
   },
   "maintainers": [
     {
