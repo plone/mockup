@@ -31,6 +31,31 @@ define([
 ], function($) {
   "use strict";
 
+  var setupFormActions = function (actions, actionOptions, $scope) {
+    actionOptions = actionOptions || {
+      preventDefault: true,
+      stopPropagation: true,
+      eventType: 'click'
+    };
+
+    $.each(actions, function(action, options) {
+      var $action = $(action, $scope);
+      if ($action.length > 0) {
+        console.log($action);
+      }
+      $action.on(actionOptions.eventType,  function (e) {
+        alert(action+' clicked');
+        if (actionOptions.stopPropagation) {
+          e.stopPropagation();
+        };
+        if (actionOptions.preventDefault) {
+          e.preventDefault();
+        };
+        $action.parent('form').ajaxSubmit($.extend(true, {}, actionOptions, options));
+      });
+    });
+  };
+  
   var QueryHelper = function(options){
     /* if pattern argument provided, it can implement the interface of:
       *    - browsing: boolean if currently browsing
@@ -206,6 +231,7 @@ define([
     return self;
   };
 
+  
   var ProgressIndicator = function(options){
     /*
      * Options:
@@ -318,6 +344,7 @@ define([
       return ['true', true, 1].indexOf(val) !== -1;
     },
     QueryHelper: QueryHelper,
-    ProgressIndicator: ProgressIndicator
+    ProgressIndicator: ProgressIndicator,
+    setupFormActions: setupFormActions
   };
 });
