@@ -30,6 +30,7 @@ var requirejsOptions = {
     'marked': 'bower_components/marked/lib/marked',
     'mockup-bundles-barceloneta': 'js/bundles/barceloneta',
     'mockup-bundles-docs': 'js/bundles/docs',
+    'mockup-bundles-plone': 'js/bundles/plone',
     'mockup-bundles-structure': 'js/bundles/structure',
     'mockup-bundles-tiles': 'js/bundles/widgets',
     'mockup-bundles-toolbar': 'js/bundles/toolbar',

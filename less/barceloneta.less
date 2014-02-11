@@ -8,6 +8,41 @@
 
 
 /*
+ * Toolbar styles
+ * --------------------------------------------------
+ */
+body {
+    padding-top: 70px;
+}
+.contentViews {
+    .nav();
+    .navbar-nav();
+}
+#contentActionMenus {
+    .nav();
+    .navbar-nav();
+}
+#portal-personaltools-wrapper .actionMenu {
+    .nav();
+    .navbar-nav();
+    @media (min-width: @grid-float-breakpoint) {
+      .pull-right();
+    }
+}
+.navbar-collapse {
+  @media (min-width: @grid-float-breakpoint) {
+    #portal-personaltools-wrapper .actionMenu:last-child {
+      margin-right: -@navbar-padding-horizontal;
+    }
+  }
+}
+
+.actionMenuSelected {
+    .dropdown-header();
+}
+
+
+/*
  * Fonts
  * --------------------------------------------------
  */
