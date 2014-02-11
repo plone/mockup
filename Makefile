@@ -61,8 +61,25 @@ docs:
 	rm -rf docs/dev
 	NODE_PATH=./node_modules $(GRUNT) bundle-docs
 
-docs-publish:
-	echo -e "Starting to update gh-pages\n"; cd docs; ls -la; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to gh-pages"; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
+publish: publish-widgets publish-toolbar publish-structure publish-barceloneta publish-docs
+
+publish-docs: docs
+	echo -e "Publishing 'docs' bundle!\n"; cd docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
+
+publish-widgets:
+	echo -e "Publishing 'widgets' bundle!\n"; git clone git://github.com/plone/plone.app.widgets.git; cd plone.app.widgets; cp ../build/widgets* plone/app/widgets/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'widgets' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plone.app.widgets.git > /dev/null; cd ..;
+
+publish-toolbar:
+	echo -e "Publishing 'toolbar' bundle!\n"; git clone git://github.com/plone/plone.app.toolbar.git; cd plone.app.toolbar; cp ../build/toolbar* plone/app/toolbar/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'toolbar' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plone.app.toolbar.git > /dev/null; cd ..;
+
+publish-structure:
+	echo -e "Publishing 'structure' bundle!\n"; git clone git://github.com/collective/wildcard.foldercontents.git; cd wildcard.foldercontents; cp ../build/structure* wildcard/foldercontents/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'structure' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/collective/wildcard.foldercontents.git > /dev/null; cd ..;
+
+publish-barceloneta:
+	echo -e "Publishing 'barceloneta' bundle!\n"; git clone git://github.com/plone/plonetheme.barceloneta.git; cd plonetheme.barceloneta; cp ../build/barceloneta* plonetheme/barceloneta/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'barceloneta' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plonetheme.barceloneta.git > /dev/null; cd ..;
+
+publish-plone:
+	echo -e "Publishing 'plone' bundle!\n"; git clone git://github.com/plone/Products.CMFPlone.git; cd Products.CMFPlone; git add -fA .; cp build/plone* Products/CMFPlone/static; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'plone' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/Products.CMFPlone.git > /dev/null; cd ..;
 
 clean:
 	mkdir -p build
