@@ -55,7 +55,6 @@ var requirejsOptions = {
     'mockup-patterns-filemanager': 'js/patterns/filemanager/pattern',
     'mockup-patterns-formautofocus': 'js/patterns/formautofocus',
     'mockup-patterns-formunloadalert': 'js/patterns/formunloadalert',
-    'mockup-patterns-helloworld': 'js/patterns/helloworld',
     'mockup-patterns-livesearch': 'js/patterns/livesearch',
     'mockup-patterns-modal': 'js/patterns/modal',
     'mockup-patterns-moment': 'js/patterns/moment',

@@ -81,11 +81,6 @@ require([
             description: 'A pattern to warn user when changes are unsaved and they try to navigate away from page.',
             url: 'js/patterns/formunloadalert.js'
           },
-          { id: 'helloworld',
-            title: 'Hello World',
-            description: 'TODO',
-            url: 'js/patterns/helloworld.js'
-          },
           { id: 'livesearch',
             title: 'Live Search',
             description: 'Dynamically query the server and display results.',
