@@ -8,6 +8,41 @@
 
 
 /*
+ * Toolbar styles
+ * --------------------------------------------------
+ */
+body {
+    padding-top: 70px;
+}
+.contentViews {
+    .nav();
+    .navbar-nav();
+}
+#contentActionMenus {
+    .nav();
+    .navbar-nav();
+}
+#portal-personaltools-wrapper .actionMenu {
+    .nav();
+    .navbar-nav();
+    @media (min-width: @grid-float-breakpoint) {
+      .pull-right();
+    }
+}
+.navbar-collapse {
+  @media (min-width: @grid-float-breakpoint) {
+    #portal-personaltools-wrapper .actionMenu:last-child {
+      margin-right: -@navbar-padding-horizontal;
+    }
+  }
+}
+
+.actionMenuSelected {
+    .dropdown-header();
+}
+
+
+/*
  * Fonts
  * --------------------------------------------------
  */
@@ -156,10 +191,20 @@
 @input-border: #cccccc;
 
 // Footer
-@footer-bg: #2d3134;
-@footer-text-main: #929ba1;
-@footer-link-color : #16aie3;
+@footer-bg: #2e3133;
+@footer-text-main: #929BA1;
 @sep-line: @footer-text-main;
+
+// accessibility overrides
+@validgrey: #767676; //lightest gray that'll validate
+@brand-primary: #007BB3;
+@link-darkbg: #16a1e3;
+@input-color-placeholder: @validgrey;
+@input-border:  @validgrey;
+@input-bg-disabled: @validgrey;         
+
+
+
 
 /*
  * Toolbar styles
@@ -301,8 +346,8 @@ body.userrole-authenticated {
 /* Global nav wrapper */
 
 #globalnav-wrapper {
-  background: rgb(52,131,190,1);
-  box-shadow: 0px 5px 5px rgba(0,0,0,.15);
+  background: rgb(0,123,179,1);
+  box-shadow: 0px 5px 5px #aaa;
   z-index: 50;
   position: relative;
   padding:0; margin:0;
@@ -461,10 +506,9 @@ footer {
   p {
     border-bottom: 1px solid @sep-line;
     padding-bottom: 28px;
-    font-weight: bold;
-  }
-  a  {
-    color: @footer-link-color;
+  };
+  a {
+    color: @link-darkbg;
   }
 }
 #portal-footer {
