@@ -33,6 +33,7 @@ define([
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
   'mockup-patterns-modal',
+  'mockup-patterns-structure',
   'bootstrap-dropdown',
   'bootstrap-collapse'
 ], function($, Registry, Base) {
