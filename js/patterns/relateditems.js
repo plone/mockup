@@ -14,7 +14,7 @@
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    folderTypes(array): Types which should be considered browsable. (["Folder"])
  *    homeText(string): Text to display in the initial breadcrumb item. (home)
- *    maximumSelectionSize(integer): Do not change this option. (-1)
+ *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    multiple(boolean): Do not change this option. (true)
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    resultTemplate(string): Template for an item in the in the list of results. Refer to source for default. (Refer to source)
@@ -45,6 +45,10 @@
  *
  *    {{ example-3 }}
  *
+ *    # Select a single item
+ *
+ *    {{ example-4 }}
+ *
  * Example: example-1
  *    <input type="text" class="pat-relateditems"
  *           data-pat-relateditems="width:30em;
@@ -58,6 +62,10 @@
  * Example: example-3
  *    <input type="text" class="pat-relateditems"
              data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
+ *
+ * Example: example-4
+ *    <input type="text" class="pat-relateditems"
+             data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json", "maximumSelectionSize": 1}' />
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
