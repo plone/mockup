@@ -224,6 +224,16 @@ html {
   .alert-info();
 }
 
+.portalMessage.error {
+  .alert();
+  .alert-danger();
+}
+
+.portalMessage.warning {
+  .alert();
+  .alert-warning();
+}
+
 /* Styles */
 
 #content-header {
@@ -473,6 +483,28 @@ body.ajax_load {
   padding-top: 0px;
 }
 
+/* Generic portlet styling */
+
+.portlet {
+  .panel();
+  .panel-default();
+}
+
+.portletHeader {
+  .panel-heading();
+}
+
+ul.portletContent {
+  .list-group();
+}
+
+.portletItem {
+  .list-group-item();
+}
+
+.portletFooter {
+  .panel-footer();
+}
 
 /*
  * Off Canvas
