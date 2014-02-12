@@ -157,7 +157,8 @@
 
 // Footer
 @footer-bg: #2d3134;
-@footer-text-main: #777f82;
+@footer-text-main: #929ba1;
+@footer-link-color : #16aie3;
 @sep-line: @footer-text-main;
 
 /*
@@ -167,14 +168,18 @@
 body {
     padding-top: 70px;
 }
+
 .contentViews {
     .nav();
     .navbar-nav();
 }
+
 #contentActionMenus {
     .nav();
     .navbar-nav();
 }
+
+
 #portal-personaltools-wrapper .actionMenu {
     .nav();
     .navbar-nav();
@@ -212,6 +217,7 @@ html {
 #portal-logo {
     .navbar-brand();
     padding-left:0;
+    height: auto;
 }
 
 #portal-globalnav {
@@ -259,11 +265,11 @@ html {
 /* Authenticated user toolbar */
 
 body.userrole-authenticated {
-  padding-top: 50px;
+  padding-top: 0;
 }
 
 .userrole-authenticated #edit-zone {
-  background:rgba(15,15,15,0.8);
+  background:rgba(25,25,25,0.9);
   min-height: 50px;
   border: 0px;
 
@@ -299,6 +305,7 @@ body.userrole-authenticated {
   box-shadow: 0px 5px 5px rgba(0,0,0,.15);
   z-index: 50;
   position: relative;
+  padding:0; margin:0;
 
   #portal-globalnav>li>a {
     color: white;
@@ -343,6 +350,7 @@ body.userrole-authenticated {
 
 /* Breadcrumbs */
 
+#breadcrumbs-you-are-here {margin-right: 10px;}
 #portal-breadcrumbs {
   background: url('@{pathPrefix}images/barceloneta-bg-breadcrumb.png');
   background-repeat: repeat-x;
@@ -362,6 +370,8 @@ body.userrole-authenticated {
     content: ">"; // before /\00a0";
     padding: 0 5px;
     color: #999;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }
 
@@ -382,15 +392,12 @@ ul, ol {
     margin-top: 0;
   }
   .documentByLine {
-    color: #7f7f7f;
-  }
+    color: @gray-light;
+  } 
   .documentDescription {
     font-style: italic;
     font-size: 120%;
     margin-bottom: 1.5em;
-  }
-  a { //underline links on content
-   text-decoration:underline;
   }
 
   ul, ol {
@@ -411,7 +418,11 @@ ul, ol {
     content: counter(ol) ".";
     counter-increment: ol;
     padding-right: 1em;
-    color: #7f7f7f;
+    color: @gray-light;
+  }
+  .pagination { //annulate the bullet from concrete lists
+    li {padding-left: 0; text-indent: 0;}
+    :before {content:""; padding-right: 0; display: none;}
   }
   //added class for highlighted ordered lists
   .ol-primary li {
@@ -453,7 +464,7 @@ footer {
     font-weight: bold;
   }
   a  {
-    color: #1491E5;
+    color: @footer-link-color;
   }
 }
 #portal-footer {
@@ -463,14 +474,13 @@ footer {
 #portal-siteactions, #portal-colophon  {
   display: inline-block;
   text-transform: uppercase;
-
   font-size: 85%;
 }
 #portal-siteactions {
   li {
     font-weight: bold;
     display: inline-block;
-    margin-left: 50px;
+    margin-left: 30px;
     &:first-child {
       margin-left: 0;
     }
@@ -565,3 +575,39 @@ body.ajax_load {
         width: 50%; /* 6 columns */
     }
 }
+
+/* Form elements */
+.discreet {
+    color: @gray-light;
+    }
+.formHelp {
+    font-style: italic;
+    color: @gray-light;
+    }
+.formControls  {
+    margin-top:30px;
+    }
+.field  {
+    margin-top:15px;
+    margin-bottom:15px;
+    }
+
+.listing:extend(.table all) {}
+
+// I keep every extension separeted to show each element
+[type="text"]:extend(.form-control all),
+.textType:extend(.form-control all),
+.passwordType:extend(.form-control all),
+select:extend(.form-control all),
+textarea:extend(.form-control all) {font-size:100%;}
+
+
+button:extend(.btn all),
+[type="submit"]:extend(.btn all),
+.context:extend(.btn all),
+.standalone:extend(.btn all) { }
+.context:extend(.btn-primary all) { }
+
+
+/* help classes */
+.visualClear:extend(.clearfix all) {}
