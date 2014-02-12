@@ -12,9 +12,11 @@
  *    section(string): Tag type to use for TOC. ('section')
  *
  * Documentation:
- *    # Set custom levels
- *
+ *    # TOC
  *    {{ example-1 }}
+ *
+ *    # Tabs
+ *    {{ example-2-tabs }}
  *
  * Example: example-1
  *    <div class="pat-autotoc"
@@ -32,6 +34,36 @@
  *      <p>You boys know how to shovel coal? Don't worry, these young
  *      beauties have been nowhere near the bananas. I thought the two of
  *      us could talk man-on-man.</p>
+ *    </div>
+ *
+ * Example: example-2-tabs
+ *    <div class="pat-autotoc autotabs"
+ *          data-pat-autotoc="section:fieldset;levels:legend;">
+ *        <fieldset>
+ *          <legend>Tab 1</legend>
+ *          <div>
+ *            Lorem ipsum dolor sit amet, ex nam odio ceteros fastidii,
+ *            id porro lorem pro, homero facilisis in cum.
+ *            At doming voluptua indoctum mel, natum noster similique ne mel.
+ *          </div>
+ *        </fieldset>
+ *        <fieldset>
+ *          <legend>Tab 2</legend>
+ *          <div>
+ *            Reque repudiare eum et. Prompta expetendis percipitur eu eam,
+ *            et graece mandamus pro, eu vim harum audire tractatos.
+ *            Ad perpetua salutandi mea, soluta delicata aliquando eam ne.
+ *            Qui nostrum lucilius perpetua ut, eum suas stet oblique ut.
+ *          </div>
+ *        </fieldset>
+ *        <fieldset>
+ *          <legend>Tab 3</legend>
+ *          <div>
+ *            Vis mazim harum deterruisset ex, duo nemore nostro civibus ad,
+ *            eros vituperata id cum. Vim at erat solet soleat,
+ *            eum et iuvaret luptatum, pro an esse dolorum maiestatis.
+ *          </div>
+ *        </fieldset>
  *    </div>
  *
  * License:
@@ -56,10 +88,10 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var AutoTOC = Base.extend({
-    name: "autotoc",
+    name: 'autotoc',
     defaults: {
       section: 'section',
       levels: 'h1,h2,h3',
@@ -92,6 +124,8 @@ define([
 
       $(self.options.section, self.$el).addClass(self.options.classSectionName);
 
+      var as_tabs = self.$el.hasClass('autotabs');
+
       $(self.options.levels, self.$el).each(function(i) {
         var $level = $(this),
             id = $level.prop('id') ? '#' + $level.prop('id') :
@@ -115,7 +149,10 @@ define([
             $(e.target).addClass(self.options.classActiveName);
             $level.parents(self.options.section)
                 .addClass(self.options.classActiveName);
-            if (doScroll !== false && self.options.scrollDuration && $level) {
+            if (doScroll !== false &&
+                self.options.scrollDuration &&
+                $level &&
+                !as_tabs) {
               $('body,html').animate({
                 scrollTop: $level.offset().top
               }, self.options.scrollDuration, self.options.scrollEasing);
