@@ -4,3 +4,170 @@
 @import "pattern.autotoc.less";
 @import "pattern.modal.less";
 @import "pattern.structure.less";
+
+@font-face {
+  font-family: 'fontello';
+  src: url('@{pathPrefix}fonts/plone-toolbar-fontello.eot?13758537');
+  src: url('@{pathPrefix}fonts/plone-toolbar-fontello.eot?13758537#iefix') format('embedded-opentype'),
+       url('@{pathPrefix}fonts/plone-toolbar-fontello.woff?13758537') format('woff'),
+       url('@{pathPrefix}/plone-toolbar-fontello.ttf?13758537') format('truetype'),
+       url('@{pathPrefix}fonts/plone-toolbar-fontello.svg?13758537#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?13758537#fontello') format('svg');
+  }
+}
+*/
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-plus:before { content: '\e807'; } /* '' */
+.icon-resize-horizontal:before { content: '\e804'; } /* '' */
+.icon-down-dir:before { content: '\e800'; } /* '' */
+.icon-up-dir:before { content: '\e801'; } /* '' */
+.icon-right-dir:before { content: '\e80a'; } /* '' */
+.icon-dot-circled:before { content: '\e809'; } /* '' */
+.icon-pencil:before { content: '\e806'; } /* '' */
+.icon-user:before { content: '\e802'; } /* '' */
+.icon-group:before { content: '\e808'; } /* '' */
+.icon-folder-open:before { content: '\e803'; } /* '' */
+.icon-resize-vertical:before { content: '\e80b'; } /* '' */
+.icon-eye:before { content: '\e805'; } /* '' */
+
+
+
+
+
+/*toolbar*/
+.navbar-fixed-top {
+	width:50px;
+	height: 100%;
+	> .container {width: auto; padding: 0; margin: 0; }
+	.contentViews > li, #contentActionMenus > li {float:none !important;position: initial;}
+	.contentViews > li > a, #contentActionMenus > li > a {position: initial;}
+	.caret {
+		border-left: 4px solid;
+		border-bottom: 4px solid transparent;
+		border-top: 4px solid transparent;
+		position: absolute;
+		right:0;
+		margin-top:-17px;
+		opacity:.4;
+	}
+	.dropdown-menu { // provisional
+		background: rgba(51,51,51,.9);
+		margin:0; border-radius: 0; top:0; padding: 0; border:0;
+		left:50px;
+		height: 100%;
+	}
+	.dropdown.open:after {
+		border-right: 6px solid;
+		border-bottom: 6px solid transparent;
+		border-top: 6px solid transparent;
+		position: absolute;
+		right:0;
+		margin-top:-31px;
+		opacity:1;
+		content:"";
+	}
+
+}
+.navbar-fixed-top.expanded {
+	width:180px;
+	.text-toolbar { //cancel sr-only
+		position: relative;
+		width: auto;
+		height: auto;
+	}
+	.contentViews, #contentActionMenus {
+		float:none;
+	}
+	.caret {margin-top:7px;}
+	.dropdown-menu {left:180px;}
+}
+
+#edit-bar {
+	a { color: #fff; padding: 13px 8px !important; opacity: .9;}
+	a:hover, a:focus, .open > a, .selected a { background: @link-color !important; opacity: .9;} 
+	[class^="icon-"]:before, [class*=" icon-"]:before {font-size:24px;}//font-size = bigger icons
+	[class^="icon-"].state-published {color:saturate(@brand-success, 20%);}
+	[class^="icon-"].state-private {color:saturate(@brand-danger, 30%);}
+	[class^="icon-"].state-pending {color:saturate(@brand-warning, 30%);}
+}
+.text-toolbar {
+	position: absolute;
+  	width: 1px;
+  	height: 1px;
+  	margin: -1px;
+  	padding: 0;
+  	overflow: hidden;
+  	clip: rect(0,0,0,0);
+  	border: 0;
+}
+
+/*pretty*/
+.contentViews {background: rgba(0,0,0,.35);}
+
+/*switch*/
+@media (min-width: 768px) {
+	#edit-zone .navbar-header {
+		background: rgba(0,0,0,.75)
+	}
+	#edit-zone .navbar-toggle {
+	display: inline-block !important; //provissional
+	margin: 0;
+	border: 0; border-radius: 0;
+	padding: 18px 14px;
+	float:none;
+	}
+	.navbar-header {float: none !important;} //provissional
+}
+@media (max-width: 767px) {
+	#edit-zone .navbar-collapse {max-height: none;}
+}
+
+/*icons */
+	/*views*/
+	.icon-folderContents:extend(.icon-folder-open all) {}
+	.icon-view:extend(.icon-eye all) {}
+	.icon-edit:extend(.icon-pencil all) {}
+	.icon-local_roles:extend(.icon-group all) {}
+	/*views*/
+	.icon-plone-contentmenu-workflow:extend(.icon-dot-circled all) {}
+	.icon-plone-contentmenu-factories:extend(.icon-plus all) {}
