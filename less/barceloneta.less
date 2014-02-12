@@ -307,7 +307,7 @@ body.userrole-authenticated {
     font-weight:bold;
   }
 
-  #portal-globalnav>li>a:hover, 
+  #portal-globalnav>li>a:hover,
   #portal-globalnav>li.selected>a,{
     background-color: rgba(154,189,214,1);
   }
@@ -380,10 +380,10 @@ ul, ol {
 #content {
   .documentFirstHeading {
     margin-top: 0;
-  } 
+  }
   .documentByLine {
     color: #7f7f7f;
-  } 
+  }
   .documentDescription {
     font-style: italic;
     font-size: 120%;
@@ -391,7 +391,7 @@ ul, ol {
   }
   a { //underline links on content
    text-decoration:underline;
-  } 
+  }
 
   ul, ol {
     counter-reset: ol;
@@ -463,7 +463,7 @@ footer {
 #portal-siteactions, #portal-colophon  {
   display: inline-block;
   text-transform: uppercase;
-  
+
   font-size: 85%;
 }
 #portal-siteactions {
@@ -485,26 +485,49 @@ body.ajax_load {
 
 /* Generic portlet styling */
 
-.portlet {
-  .panel();
-  .panel-default();
+.portlet-variant(@border; @heading-text-color; @heading-bg-color; @heading-border) {
+  border-color: @border;
+
+  & > .portletHeader {
+    color: @heading-text-color;
+    background-color: @heading-bg-color;
+    border-color: @heading-border;
+
+    + .portletContent {
+      border-top-color: @border;
+    }
+  }
+  & > .portletFooter {
+    + .panel-collapse .panel-body {
+      border-bottom-color: @border;
+    }
+  }
 }
+
+.portlet {
+   .portlet-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border);
+   &:extend(.panel all);
+
+ }
 
 .portletHeader {
-  .panel-heading();
-}
-
-ul.portletContent {
-  .list-group();
-}
-
-.portletItem {
-  .list-group-item();
+  &:extend(.panel-heading all);
 }
 
 .portletFooter {
-  .panel-footer();
+  &:extend(.panel-footer all);
 }
+
+.portletContent {
+  &:extend(.list-group all);
+  &:extend(.panel > .list-group all);
+}
+
+.portletItem {
+  &:extend(.list-group-item all);
+  &:extend(.panel > .list-group .list-group-item all);
+}
+
 
 /*
  * Off Canvas
