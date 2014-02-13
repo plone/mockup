@@ -57,6 +57,7 @@
       'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
       'mockup-patterns-querystring': 'js/patterns/querystring',
       'mockup-patterns-relateditems': 'js/patterns/relateditems',
+      'mockup-patterns-search': 'js/patterns/search/pattern',
       'mockup-patterns-select2': 'js/patterns/select2',
       'mockup-patterns-structure': 'js/patterns/structure/pattern',
       'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
