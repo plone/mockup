@@ -2,8 +2,9 @@
 GIT = git
 NPM = npm
 
-GRUNT = ./node_modules/.bin/grunt
-BOWER = ./node_modules/.bin/bower
+GRUNT = ./node_modules/grunt-cli/bin/grunt
+BOWER = ./node_modules/bower/bin/bower
+NODE_PATH = ./node_modules
 
 all: test-once bundle docs
 
@@ -18,48 +19,55 @@ bundle: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure bundle
 
 bundle-plone:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) bundle-plone
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone
 
 bundle-barceloneta:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) bundle-barceloneta
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-barceloneta
 
 bundle-widgets:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) bundle-widgets
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-widgets
 
 bundle-toolbar:
 	mkdir -p build
-	NODE_PATH=./node_modules $(GRUNT) bundle-toolbar
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-toolbar
 
 bundle-structure:
-	NODE_PATH=./node_modules $(GRUNT) bundle-structure
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure
 
-bootstrap: clean
+bootstrap-common:
 	mkdir -p build
-	$(NPM) link --prefix=./node_modules
-	NODE_PATH=./node_modules $(GRUNT) sed:bootstrap
+
+bootstrap: clean bootstrap-common
+	$(NPM) link --prefix=$(NODE_PATH)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
 	$(BOWER) install
 
+bootstrap-nix: clean bootstrap-common
+	nix-build default.nix -A build -o nixenv
+	ln -s nixenv/lib/node_modules/plone-mockup/node_modules
+	ln -s nixenv/bower_components
+
 jshint:
-	NODE_PATH=./node_modules $(GRUNT) jshint
+	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint
 
 test:
-	NODE_PATH=./node_modules $(GRUNT) test --force --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test --force --pattern=$(pattern)
 
 test-once:
-	NODE_PATH=./node_modules $(GRUNT) test_once --force --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once --force --pattern=$(pattern)
 
 test-dev:
-	NODE_PATH=./node_modules $(GRUNT) test_dev --force --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev --force --pattern=$(pattern)
 
 test-ci:
-	NODE_PATH=./node_modules $(GRUNT) test_ci
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci
 
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	rm -rf docs/dev
-	NODE_PATH=./node_modules $(GRUNT) bundle-docs
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs
 
 publish: publish-widgets publish-toolbar publish-structure publish-barceloneta publish-docs
 
