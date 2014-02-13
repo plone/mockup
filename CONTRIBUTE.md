@@ -8,6 +8,16 @@ To run jshint on mockup code you have to type: ```make jshint```.
 
 # Git workflow / branching model
 
+1. Create a local branch
+2. Squash all your commits for this pull request into one commit
+3. Push your branch to origin: git@github.com:plone/mockup.git
+4. Open a pull request from your branch to master
+
+Note: If you don't have push access to the repo you can create a fork, but also
+create a branch in your fork i.e. don't open a pull request from the master
+branch of your fork to the master branch of the main mockup repo. We do it like
+this so that Travis builds the pull requests correctly.
+
 It is important that you *NEVER* commit to master directly. Even for the
 smallest and most trivial fix. *ALWAYS* open a pull request and ask somebody
 else to merge your code. *NEVER* merge it yourself.
