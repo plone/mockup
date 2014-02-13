@@ -35,7 +35,8 @@ define([
   'mockup-patterns-modal',
   'mockup-patterns-structure',
   'bootstrap-dropdown',
-  'bootstrap-collapse'
+  'bootstrap-collapse',
+  'bootstrap-tooltip'
 ], function($, Registry, Base) {
   "use strict";
 

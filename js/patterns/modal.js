@@ -752,10 +752,11 @@ define([
 
       var margin = typeof self.options.margin === 'function' ? self.options.margin() : self.options.margin;
       self.$modal.css({
-        'position': 'absolute'
+        'position': 'absolute',
+        'padding': margin
       });
       self.$modalDialog.css({
-        margin: margin,
+        margin: '0',
         padding: '0',
         width: self.options.width, // defaults to "", which doesn't override other css
         height: self.options.height // defaults to "", which doesn't override other css

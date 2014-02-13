@@ -22,13 +22,16 @@ body {
     .nav();
     .navbar-nav();
 }
-#portal-personaltools-wrapper .actionMenu {
+#portal-personaltools-wrapper {
     .nav();
     .navbar-nav();
+    /*
     @media (min-width: @grid-float-breakpoint) {
       .pull-right();
     }
+    */
 }
+/*
 .navbar-collapse {
   @media (min-width: @grid-float-breakpoint) {
     #portal-personaltools-wrapper .actionMenu:last-child {
@@ -36,6 +39,7 @@ body {
     }
   }
 }
+*/
 
 .actionMenuSelected {
     .dropdown-header();
@@ -314,7 +318,7 @@ body.userrole-authenticated {
 }
 
 .userrole-authenticated #edit-zone {
-  background:rgba(25,25,25,0.9);
+  background:rgba(35,35,35,0.9);
   min-height: 50px;
   border: 0px;
 
@@ -620,6 +624,8 @@ body.ajax_load {
     }
 }
 
+
+
 /* Form elements */
 .discreet {
     color: @gray-light;
@@ -640,6 +646,7 @@ body.ajax_load {
 
 // I keep every extension separeted to show each element
 [type="text"]:extend(.form-control all),
+[type="password"]:extend(.form-control all),
 .textType:extend(.form-control all),
 .passwordType:extend(.form-control all),
 select:extend(.form-control all),
