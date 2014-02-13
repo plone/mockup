@@ -64,6 +64,7 @@ var requirejsOptions = {
     'mockup-patterns-querystring': 'js/patterns/querystring',
     'mockup-patterns-relateditems': 'js/patterns/relateditems',
     'mockup-patterns-select2': 'js/patterns/select2',
+    'mockup-patterns-search': 'js/patterns/search/pattern',
     'mockup-patterns-structure': 'js/patterns/structure/pattern',
     'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
     'mockup-patterns-tinymce': 'js/patterns/tinymce/pattern',
