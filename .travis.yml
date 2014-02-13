@@ -17,8 +17,9 @@ script:
   - make test-once
   - make bundle
   - make docs
+  - rm docs -rf
   - if [ "$TRAVIS_BRANCH" == "master" ]; then make test-ci; fi
   - if [ "$TRAVIS_TRAVIS_PULL_REQUEST" == "true" ]; then make test-ci; fi
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then make docs-publish; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then make publish; fi
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
