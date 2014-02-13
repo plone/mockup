@@ -1,21 +1,121 @@
 /* Toggle pattern.
  *
  * Options:
+ *    target(string): selector of the target elements to toggle ('undefied')
+ *    targetScope(string): selector of a target scope element in anchestors ('global')
  *    attribute(string): element attribute which will be toggeled ('class')
  *    event(string): event which will trigger toggling ('click')
- *    externalClose(bool): TODO (true)
- *    preventDefault(bool): TODO (true)
- *    menu('global', 'parent', 'parents', 'children', 'child', 'siblings'): a jquery selector function that specifies where in relation to $el the list to use is. 'global' is special and will be the default and select in the entire document  ('global')
  *
  * Documentation:
- *    # Example 
+ *    # Toggle itself
  *
  *    {{ example-1 }}
+ *
+ *    # Toggle all targets (global scope)
+ *
+ *    {{ example-2 }}
+ *
+ *    # Toggle specific target inside a target scope
+ *
+ *    {{ example-3 }}
+ *
+ *    # Toggle more than one target inside a specific target scope
+ *
+ *    {{ example-4 }}
+ *
+ *    # Toggle an element by hover event
+ *
+ *    {{ example-5 }}
+ *
+ *    # Toggle another element than class, like 'rel'
+ *
+ *    {{ example-6 }}
+ *
+ *    # Build a collapsable with toggle
+ *
+ *    {{ example-7 }}
  *
  * Example: example-1
  *    <button type="button"
  *            class="btn btn-default pat-toggle"
- *            data-pat-toggle="value:btn-lg;externalClose:false">This button goes bigger/smaller!</button>
+ *            data-pat-toggle="value:btn-lg;">This button goes bigger/smaller!</button>
+ *
+ * Example: example-2
+ *    <div class="wrapper">
+ *      <button type="button"
+ *              class="btn btn-default pat-toggle"
+ *              data-pat-toggle="value:label-success;target:.targetElement">This button is toggling the background of a element.</button><br />
+ *      <p class="targetElement label label-default">Hello World</p>
+ *    </div>
+ *
+ * Example: example-3
+ *    <div class="wrapper">
+ *      <div class="myScope">
+ *        <button type="button"
+ *                class="btn btn-default pat-toggle"
+ *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
+ *        <p class="targetElement label label-default">Hello World</p>
+ *      </div>
+ *      <div class="myScope">
+ *        <button type="button"
+ *                class="btn btn-default pat-toggle"
+ *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
+ *        <p class="targetElement label label-default">Hello World</p>
+ *      </div>
+ *    </div>
+ *    
+ * Example: example-4
+ *    <div class="wrapper">
+ *      <div class="myScope">
+ *        <button type="button"
+ *                class="btn btn-default pat-toggle"
+ *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
+ *        <p class="targetElement label label-default">Hello World</p>
+ *        <p class="targetElement label label-default">Hello again</p>
+ *      </div>
+ *      <div class="myScope">
+ *        <button type="button"
+ *                class="btn btn-default pat-toggle"
+ *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
+ *        <p class="targetElement label label-default">Hello World</p>
+ *      </div>
+ *    </div>
+ *    
+ * Example: example-5
+ *    <div class="wrapper">
+ *      <div class="myScope">
+ *        <button type="button"
+ *                class="btn btn-default pat-toggle"
+ *                data-pat-toggle="event:hover;value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
+ *        <p class="targetElement label label-default">Hello World</p>
+ *      </div>
+ *    </div>
+ *    
+ * Example: example-6
+ *    <div class="wrapper">
+ *      <div class="myScope">
+ *        <button type="button"
+ *                class="btn btn-default pat-toggle"
+ *                data-pat-toggle="attribute:rel; value:myRel; target:.targetElement; targetScope:.myScope">toggle</button><br />
+ *        <p class="targetElement label label-default">Hello World</p>
+ *      </div>
+ *    </div>
+ *    
+ * Example: example-7
+ *    <div class="panel panel-default">
+ *      <div class="panel-heading">
+ *        <a class="btn btn-default pat-toggle"
+ *           data-pat-toggle="value:in; target:.collapse; targetScope:.panel">toggle</a>
+ *      </div>
+ *      <div>
+ *        <ul class="collapse in">
+ *          <li>We use toggle for</li>
+ *          <li>toggling collapsable CSS classes</li>
+ *          <li>this is awesome</li>
+ *        </ul>
+ *      </div>
+ *    </div>
+ *    
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
@@ -46,9 +146,7 @@ define([
     defaults: {
       attribute: 'class',
       event: 'click',
-      externalClose: true,
-      preventDefault: true,
-      menu: 'global'
+      targetScope: 'global'
     },
     ensureBool: function(value) {
       if (typeof(value) === 'string') {
@@ -63,16 +161,16 @@ define([
     init: function() {
       var self = this;
 
-      self.options.externalClose = self.ensureBool(self.options.externalClose);
-      self.options.preventDefault = self.ensureBool(self.options.preventDefault);
       if (!self.options.target) {
         self.$target = self.$el;
       }
-      else if(self.options.menu === 'global') {
+      else if(self.options.targetScope === 'global') {
         self.$target = $(self.options.target);
       }
       else {
-        self.$target = self.$el[self.options.menu](self.options.target);
+        //self.$target = self.$el[self.options.menu](self.options.target);
+        self.$target = self.$el.parents(
+          self.options.targetScope).first().find(self.options.target);
       }
 
       if (!self.$target || self.$target.size() === 0) {
@@ -82,25 +180,14 @@ define([
       self.on(self.options.event, function(e) {
         self.toggle();
         e.stopPropagation();
-        if (self.options.preventDefault){
-          return false;
-        }
+        e.preventDefault();
       });
-      if (self.options.externalClose) {
-        $('html').on(self.options.event, function () {
-          self.remove();
-        });
-      }
     },
     isMarked: function() {
       var self = this;
       var marked = false;
 
       for (var i=0;i<this.$target.length;i+=1){
-        if (this.$target.eq(i)[0] === self.$el[0]){
-          // If this is the toggle button, ignore checking
-          continue;
-        }
         if (self.options.attribute === 'class') {
           if (this.$target.eq(i).hasClass(this.options.value)){
             marked = true;
