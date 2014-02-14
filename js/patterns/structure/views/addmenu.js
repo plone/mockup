@@ -96,7 +96,7 @@ define([
                   if(self.$items.is(':visible')){
                     self.$dropdown.dropdown('toggle');
                   }
-                  modal.$loading.hide();
+                  modal.hide();
                 },
                 onError: function(){
                   alert('error on form');
