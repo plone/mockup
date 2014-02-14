@@ -47,7 +47,6 @@ define([
       results: items
     }));
   });
-
   server.respondWith("GET", /search\.json/, function (xhr, id) {
     var items = [
       {
@@ -377,6 +376,58 @@ define([
       '      <p>Thanks!</p>'+
       '  </body> '+
       '</html>'
+    );
+  });
+
+  server.respondWith('POST', /save-comment/, function(xhr, id) {
+    var text = 'This comment makes a rather interesting point'
+    xhr.respond(
+      200, {"content-Type": "text/html"},
+      '<html> '+
+	'  <body> '+
+	'    <div id="content">'+
+        '      <div class="discussion pat-discussion" data-pat-discussion="templateSelector:#commenting">'+
+        '        <div class="comment replyTreeLevel0 state-published" id="12345">'+
+        '          <div class="commentBody">'+
+        '            <p>' +text+ '</p>'+
+        '            <div class="commentActions">'+
+        '              <form name="delete" action="moderate-delete-comment" method="post" class="commentactionsform" id="delete">'+
+        '                <input name="form.button.DeleteComment" class="destructive" type="submit" value="Delete">'+
+        '              </form>'+
+        '            </div>'+
+        '          </div>'+
+        '          <button class="reply-to-comment-button">Reply</button>'+
+        '        </div>'+
+        '      </div>'+
+	'    </div>'+
+	'  </body> '+
+	'</html>'
+    );
+  });
+  
+  server.respondWith('POST', /moderate-delete-comment/, function(xhr, id) {
+    xhr.respond(
+      200, {"content-Type": "text/html"},
+      '<html> '+
+	'  <body> '+
+	'    <div id="content">'+
+	'    Comment published'+
+	'    </div>'+
+	'  </body> '+
+	'</html>'
+    );
+  });
+
+  server.respondWith('POST', /moderate-publish-comment/, function(xhr, id) {
+    xhr.respond(
+      200, {"content-Type": "text/html"},
+      '<html> '+
+	'  <body> '+
+	'    <div id="content">'+
+	'    Comment published'+
+	'    </div>'+
+	'  </body> '+
+	'</html>'
     );
   });
 

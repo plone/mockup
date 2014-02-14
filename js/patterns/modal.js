@@ -589,7 +589,8 @@ define([
         });
       }
 
-      if (self.$el.is('a')) {
+
+      if (self.$el.is('a') || self.$el.is('input')) {
         if (self.$el.attr('href')) {
           if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
             self.options.target = self.$el.attr('href');
@@ -838,7 +839,7 @@ define([
       self.$modal.remove();
       self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
       self.render.apply(self, [options || self.options]);
-      self.positionModal();
+      self._show();
       registry.scan(self.$modal);
       self.trigger('afterDraw');
     }
