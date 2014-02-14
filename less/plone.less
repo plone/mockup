@@ -4,14 +4,26 @@
 @import "pattern.autotoc.less";
 @import "pattern.modal.less";
 @import "pattern.structure.less";
+@import "plonelogo.less";
+
+@import "../bower_components/bootstrap/less/variables.less";
+@import "../bower_components/bootstrap/less/mixins.less";
+@import "../bower_components/bootstrap/less/utilities.less";
+@import "../bower_components/bootstrap/less/forms.less";
+@import "../bower_components/bootstrap/less/scaffolding.less";
+@import "../bower_components/bootstrap/less/dropdowns.less";
+
+@import "../bower_components/bootstrap/less/navs.less";
+@import "../bower_components/bootstrap/less/navbar.less";
+
 
 @font-face {
   font-family: 'fontello';
-  src: url('@{pathPrefix}fonts/plone-toolbar-fontello.eot?13758537');
-  src: url('@{pathPrefix}fonts/plone-toolbar-fontello.eot?13758537#iefix') format('embedded-opentype'),
-       url('@{pathPrefix}fonts/plone-toolbar-fontello.woff?13758537') format('woff'),
-       url('@{pathPrefix}/plone-toolbar-fontello.ttf?13758537') format('truetype'),
-       url('@{pathPrefix}fonts/plone-toolbar-fontello.svg?13758537#fontello') format('svg');
+  src: url('@{pathPrefix}fonts/plone-toolbar-fontello.eot?44831494');
+  src: url('@{pathPrefix}fonts/plone-toolbar-fontello.eot?44831494#iefix') format('embedded-opentype'),
+       url('@{pathPrefix}fonts/plone-toolbar-fontello.woff?44831494') format('woff'),
+       url('@{pathPrefix}fonts/plone-toolbar-fontello.ttf?44831494') format('truetype'),
+       url('@{pathPrefix}fonts/plone-toolbar-fontello.svg?44831494#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -57,23 +69,131 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
-.icon-plus:before { content: '\e807'; } /* '' ADD NEW */
+.icon-plus:before { content: '\e807'; } /* '' */
 .icon-resize-horizontal:before { content: '\e804'; } /* '' */
 .icon-down-dir:before { content: '\e800'; } /* '' */
 .icon-up-dir:before { content: '\e801'; } /* '' */
 .icon-right-dir:before { content: '\e80a'; } /* '' */
-.icon-dot-circled:before { content: '\e809'; } /* '' STATE */
-.icon-pencil:before { content: '\e806'; } /* '' EDIT */
-.icon-user:before { content: '\e802'; } /* '' USER */
-.icon-group:before { content: '\e808'; } /* '' GRANT ACCESS */
-.icon-folder-open:before { content: '\e803'; } /* '' CONTENTS */
+.icon-ellipsis:before { content: '\e80c'; } /* '' */
+.icon-dot-circled:before { content: '\e809'; } /* '' */
+.icon-pencil:before { content: '\e806'; } /* '' */
+.icon-user:before { content: '\e802'; } /* '' */
+.icon-group:before { content: '\e808'; } /* '' */
+.icon-view-mode:before { content: '\e80d'; } /* '' */
+.icon-folder-open:before { content: '\e803'; } /* '' */
 .icon-resize-vertical:before { content: '\e80b'; } /* '' */
-.icon-eye:before { content: '\e805'; } /* '' VIEW */
-.icon-view-mode:before { content: '\e80d'; } /* '' VIEWS */
+.icon-eye:before { content: '\e805'; } /* '' */
+
+/*TOOLBAR*/
+
+
+.contentViews {
+    .nav();
+    .navbar-nav();
+}
+
+#contentActionMenus {
+    .nav();
+    .navbar-nav();
+}
+
+
+#portal-personaltools-wrapper .actionMenu {
+    .nav();
+    .navbar-nav();
+    @media (min-width: @grid-float-breakpoint) {
+      .pull-right();
+    }
+}
+.navbar-collapse {
+  @media (min-width: @grid-float-breakpoint) {
+    #portal-personaltools-wrapper .actionMenu:last-child {
+      margin-right: -@navbar-padding-horizontal;
+    }
+  }
+}
+
+.actionMenuSelected {
+    .dropdown-header();
+}
+
+.contentViews {
+    .nav();
+    .navbar-nav();
+}
+#contentActionMenus {
+    .nav();
+    .navbar-nav();
+}
+#portal-personaltools-wrapper {
+    .nav();
+    .navbar-nav();
+    /*
+    @media (min-width: @grid-float-breakpoint) {
+      .pull-right();
+    }
+    */
+}
+/*
+.navbar-collapse {
+  @media (min-width: @grid-float-breakpoint) {
+    #portal-personaltools-wrapper .actionMenu:last-child {
+      margin-right: -@navbar-padding-horizontal;
+    }
+  }
+}
+*/
+
+.actionMenuSelected {
+    .dropdown-header();
+}
+
+
+/* Anonymous user toolbar */
+
+#edit-zone {
+  min-height: 20px;
+  border: 0px;
+
+  .actionMenu>li>a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+}
 
 
 
-/*toolbar*/
+/* Authenticated user toolbar */
+
+body.userrole-authenticated {
+  padding-top: 0;
+}
+
+.userrole-authenticated #edit-zone {
+  background:rgba(35,35,35,0.9);
+  min-height: 50px;
+  border: 0px;
+
+  .actionMenu>li>a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}
+
+
+@media (min-width: 767px) {
+
+  .actionMenu>li>a {
+    padding: 5px;
+  }
+
+  .userrole-authenticated .actionMenu>li>a {
+    padding: 15px;
+  }
+
+}
+
+
 #edit-zone.navbar-fixed-left {
 	position: fixed;
 	right: 0;
@@ -92,17 +212,17 @@
 	> .container {width: auto; padding: 0; margin: 0; }
 	.contentViews > li, 
 	#contentActionMenus > li,
-	#portal-personaltools-wrapper .actionMenu > li {float:none !important;position: initial;}
+	#portal-personaltools-wrapper .actionMenu > li {float:none !important; position: static; position: initial;}
 	.contentViews > li > a, 
 	#contentActionMenus > li > a,
-	#portal-personaltools-wrapper .actionMenu > li > a {position: initial;}
+	#portal-personaltools-wrapper .actionMenu > li > a {position: static; position: initial;}
 	.caret {
 		border-left: 4px solid;
 		border-bottom: 4px solid transparent;
 		border-top: 4px solid transparent;
 		position: absolute;
 		right:0;
-		margin-top:-17px;
+		margin-top:-18px;
 		opacity:.4;
 	}
 	.dropdown-menu { // provisional
@@ -110,6 +230,15 @@
 		margin:0; border-radius: 0; top:0; padding: 0; border:0;
 		left:50px;
 		height: 100%;
+		overflow: hidden;
+		overflow-y: visible;
+		ul {
+			padding: 0;
+			border-top: 1px solid rgba(255,255,255,.2);
+			margin-top: 10px;
+			padding-top: 10px;
+		}
+		li:first-child ul  {padding-top:0; margin-top:0; border-top: 0;}
 	}
 	.dropdown.open:after {
 		border-right: 6px solid;
@@ -122,7 +251,9 @@
 		content:"";
 	}
 	.navbar-collapse {margin-left: -15px; margin-right: -15px;}
-	.dropdown-header {font-weight: bold; font-size: inherit; padding: 8px;text-transform: uppercase;}
+	.dropdown-header {font-weight: bold; font-size: inherit; padding: 0;text-transform: uppercase;
+		> span {padding:8px; display: block;}
+	}
 
 }
 #edit-zone.navbar-fixed-left.expanded {
@@ -133,19 +264,40 @@
 		height: auto;
 	}
 	.contentViews, #contentActionMenus, #portal-personaltools-wrapper {
-		float:none;
+        float:none !important;
+        margin-right:0 !important;
 	}
 	.caret {margin-top:7px;}
 	.dropdown-menu {left:180px;}
 }
-
-#edit-bar {
+#edit-zone.navbar-fixed-top.expanded {
+    .text-toolbar { //cancel sr-only
+        position: relative;
+        width: auto;
+        height: auto;
+        display: inline-block;
+    }
+}
+#edit-zone.compressed {
+	height: 50px;
+	overflow: hidden;
+    border-radius: 50%;
+    background-color: transparent !important;
+    .plone-logo {
+        .makePloneLogo(24px, #222, #fff, 0.797);
+        > *:last-child {margin-left: 0}
+    }
+    .navbar-header {
+        background: transparent !important;
+    }
+}
+#edit-zone {
 	a { 
 		color: #fff; padding: 13px 8px !important; opacity: .9;
-		& + ul a {padding: 8px !important;}
+		& + ul a {padding: 8px !important; display: block;}
 	}
-	a:hover, a:focus, .open > a, .selected a { background: @gray-darker !important; opacity: .9;} 
-	[class^="icon-"]:before, [class*=" icon-"]:before {font-size:24px;}//font-size = bigger icons
+	a:hover, a:focus, .open > a, .selected a { background: @gray-darker !important; opacity: .9; text-decoration: none;} 
+	[class^="icon-"]:before, [class*=" icon-"]:before {font-size:24px;}//font-size++ = bigger icons
 	[class^="icon-"].state-published {color:saturate(@brand-success, 20%);}
 	[class^="icon-"].state-private {color:saturate(@brand-danger, 30%);}
 	[class^="icon-"].state-pending {color:saturate(@brand-warning, 30%);}
@@ -164,7 +316,12 @@
 /*pretty*/
 #edit-zone .contentViews {background: rgba(0,0,0,.15);}
 #edit-zone .dropdown-menu, #edit-zone .navbar-fixed-left {box-shadow: 2px 0 3px rgba(0,0,0,.25);}
-
+.plone-logo {
+	.makePloneLogo(24px, #fff, #222, 0.797);
+	> *:last-child {margin-left: 0}
+}
+#edit-zone .actionMenuSelected, #edit-zone #contextDefaultPageDisplay {padding: 8px; font-size: 100%; color: @gray-light;}
+#edit-zone.navbar-fixed-left {z-index: 51;} //change it for z positioning
 /*switch*/
 @media (min-width: 768px) {
 	#edit-zone .navbar-header {
@@ -174,7 +331,7 @@
 	display: inline-block !important; //provissional
 	margin: 0;
 	border: 0; border-radius: 0;
-	padding: 18px 14px;
+	padding: 13px;
 	float:none;
 	}
 	.navbar-header {float: none !important;} //provissional
@@ -184,11 +341,48 @@
 }
 
 /*icons */
-	/*views*/
-	.icon-folderContents:extend(.icon-folder-open all) {}
-	.icon-view:extend(.icon-eye all) {}
-	.icon-edit:extend(.icon-pencil all) {}
-	.icon-local_roles:extend(.icon-group all) {}
-	/*views*/
-	.icon-plone-contentmenu-workflow:extend(.icon-dot-circled all) {}
-	.icon-plone-contentmenu-factories:extend(.icon-plus all) {}
+/*views*/
+.icon-folderContents:extend(.icon-folder-open all) {}
+.icon-view:extend(.icon-eye all) {}
+.icon-edit:extend(.icon-pencil all) {}
+.icon-local_roles:extend(.icon-group all) {}
+/*views*/
+.icon-plone-contentmenu-workflow:extend(.icon-dot-circled all) {}
+.icon-plone-contentmenu-factories:extend(.icon-plus all) {}
+
+
+
+/* toolbar on top, just in case */
+#edit-zone.navbar-fixed-top {
+    .navbar-header {
+        float: left !important;
+    }
+    .dropdown-menu {
+        background: rgba(51,51,51,.9);
+        margin:0; border-radius: 0; padding: 0; border:0;
+        ul {
+            padding: 0;
+            border-top: 1px solid rgba(255,255,255,.2);
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+        li:first-child ul  {padding-top:0; margin-top:0; border-top: 0;}
+    }
+    .dropdown-header {font-weight: bold; font-size: inherit; padding: 0;text-transform: uppercase;
+        > span {padding:8px; display: block;}
+    }
+}
+
+
+#edit-zone.navbar-fixed-top  {
+    width: 100%;
+    height: auto;   
+}
+
+
+
+/*mobile*/
+// Undo the rounded corners
+@media (min-width: @grid-float-breakpoint) {
+    border-radius: 0;
+}

@@ -8,45 +8,6 @@
 
 
 /*
- * Toolbar styles
- * --------------------------------------------------
- */
-body {
-    padding-top: 70px;
-}
-.contentViews {
-    .nav();
-    .navbar-nav();
-}
-#contentActionMenus {
-    .nav();
-    .navbar-nav();
-}
-#portal-personaltools-wrapper {
-    .nav();
-    .navbar-nav();
-    /*
-    @media (min-width: @grid-float-breakpoint) {
-      .pull-right();
-    }
-    */
-}
-/*
-.navbar-collapse {
-  @media (min-width: @grid-float-breakpoint) {
-    #portal-personaltools-wrapper .actionMenu:last-child {
-      margin-right: -@navbar-padding-horizontal;
-    }
-  }
-}
-*/
-
-.actionMenuSelected {
-    .dropdown-header();
-}
-
-
-/*
  * Fonts
  * --------------------------------------------------
  */
@@ -205,48 +166,9 @@ body {
 @link-darkbg: #16a1e3;
 @input-color-placeholder: @validgrey;
 @input-border:  @validgrey;
-@input-bg-disabled: @validgrey;         
+@input-bg-disabled: @gray-lighter;         
 
 
-
-
-/*
- * Toolbar styles
- * --------------------------------------------------
- */
-body {
-    padding-top: 70px;
-}
-
-.contentViews {
-    .nav();
-    .navbar-nav();
-}
-
-#contentActionMenus {
-    .nav();
-    .navbar-nav();
-}
-
-
-#portal-personaltools-wrapper .actionMenu {
-    .nav();
-    .navbar-nav();
-    @media (min-width: @grid-float-breakpoint) {
-      .pull-right();
-    }
-}
-.navbar-collapse {
-  @media (min-width: @grid-float-breakpoint) {
-    #portal-personaltools-wrapper .actionMenu:last-child {
-      margin-right: -@navbar-padding-horizontal;
-    }
-  }
-}
-
-.actionMenuSelected {
-    .dropdown-header();
-}
 /*
  * Style tweaks
  * --------------------------------------------------
@@ -268,6 +190,8 @@ html {
     padding-left:0;
     height: auto;
 }
+#portal-languageselector {.list-inline; float:right; margin-top: 36px;margin-right: 10px;}
+#portal-searchbox {float:right; margin-top: 30px;}
 
 #portal-globalnav {
     .nav();
@@ -296,49 +220,6 @@ html {
     border: 0;
 }
 
-/* Anonymous user toolbar */
-
-#edit-zone {
-  background:rgba(235,235,235,0.5);
-  min-height: 20px;
-  border: 0px;
-
-  .actionMenu>li>a {
-    padding-top: 2px;
-    padding-bottom: 2px;
-  }
-}
-
-
-
-/* Authenticated user toolbar */
-
-body.userrole-authenticated {
-  padding-top: 0;
-}
-
-.userrole-authenticated #edit-zone {
-  background:rgba(35,35,35,0.9);
-  min-height: 50px;
-  border: 0px;
-
-  .actionMenu>li>a {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-}
-
-@media (min-width: 767px) {
-
-  .actionMenu>li>a {
-    padding: 5px;
-  }
-
-  .userrole-authenticated .actionMenu>li>a {
-    padding: 15px;
-  }
-
-}
 
 /* Above content wrapper */
 
@@ -386,6 +267,7 @@ body.userrole-authenticated {
 
   .jumbotron {
     background: url('@{pathPrefix}images/barceloneta-bg-watermark.png');
+    background-position: bottom right;
     margin-bottom: 0px;
     padding-left:0;
     padding-right: 0;
@@ -442,6 +324,14 @@ ul, ol {
   }
   .documentByLine {
     color: @gray-light;
+    > span {
+      .label;
+      .label-default;
+      background:@gray-lighter;
+      padding: .3em .5em;
+      margin: auto .25em;
+    }
+    :first-child {margin-left:0;}
   } 
   .documentDescription {
     font-style: italic;
@@ -469,7 +359,7 @@ ul, ol {
     padding-right: 1em;
     color: @gray-light;
   }
-  .pagination { //annulate the bullet from concrete lists
+  .pagination, .dropdown-menu, .historyTools { //annulate the bullet from concrete lists
     li {padding-left: 0; text-indent: 0;}
     :before {content:""; padding-right: 0; display: none;}
   }
@@ -513,6 +403,16 @@ footer {
   };
   a {
     color: @link-darkbg;
+  }
+  .portletWrapper {display: inline-block;}
+  .portlet { //unstyled portlet
+    background: transparent;
+    border: 0;
+    text-transform: uppercase;
+    font-size: 85%;
+    font-weight: bold;
+    .portletContent {}
+    .portletContent li {background: transparent; display: inline-block;border: 0;}
   }
 }
 #portal-footer {
@@ -651,7 +551,7 @@ body.ajax_load {
 .passwordType:extend(.form-control all),
 select:extend(.form-control all),
 textarea:extend(.form-control all) {font-size:100%;}
-
+textarea {resize:vertical;} //no free resize
 
 button:extend(.btn all),
 [type="submit"]:extend(.btn all),
@@ -659,6 +559,18 @@ button:extend(.btn all),
 .standalone:extend(.btn all) { }
 .context:extend(.btn-primary all) { }
 
+.label { //labels are not appearing
+  color:inherit;
+  font-size: 100%;
+  padding: 0;
+}
+.managedPortletActions form {
+  display: inline-block;
+}
+.link-parent {
+  .btn;
+  .btn-default;
+}
 
 /* help classes */
 .visualClear:extend(.clearfix all) {}
