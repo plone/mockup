@@ -838,6 +838,7 @@ define([
       self.$modal.remove();
       self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
       self.render.apply(self, [options || self.options]);
+      self.$modal.addClass(self.options.templateOptions.classActiveName);
       self.positionModal();
       registry.scan(self.$modal);
       self.trigger('afterDraw');
