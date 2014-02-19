@@ -64,6 +64,11 @@
     target = "1.0.2";
     outputHash = "1sdpz7pqymz53kidcxdpkl35xnv3ycdk9s2pa7x9vqmk2fb3z5mm";
   }
+  { name = "scroller";
+    version = "1.2.2";
+    target =  "1.2.2";
+    outputHash = "1i5dvdl5kn9psmvvw1scz0qhvkgihzdypk1psc9qcz9ml0y5zr04";
+  }
   { name = "expect";
     version = "0.2.0";
     target = "0.2.0";
