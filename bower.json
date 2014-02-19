@@ -20,8 +20,10 @@
     "mockup-core": "1.2.1",
     "moment": "2.5.1",
     "pickadate": "3.4.0",
+    "react": "0.8.0",
     "requirejs-text": "2.0.10",
     "respond": "1.4.2",
+    "scroller": "1.2.2",
     "select2": "3.4.5"
   },
   "devDependencies": {
