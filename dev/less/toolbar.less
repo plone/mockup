@@ -1,0 +1,305 @@
+@import "mixins.less";
+@import "plonetoolbar.less";
+@import "pattern.autotoc.less";
+@import "pattern.pickadate.less";
+@import "pattern.expose.less";
+@import "pattern.modal.less";
+@import "pattern.select2.less";
+@import "pattern.relateditems.less";
+@import "pattern.picture.less";
+@import "pattern.livesearch.less";
+@import "pattern.tinymce.less";
+@import "pattern.querystring.less";
+@import "pattern.structure.less";
+
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
+
+
+body {
+  padding: 0;
+}
+
+#plone-toolbar {
+  min-height: 50px;
+  padding-bottom: 6px;
+  .toolbar { .makeToolbar(44px); }
+  .toolbar-deco { .makeToolbar(44px, 4px, 1px, #f2f2f2, #e5e5e5); }
+}
+
+
+.hiddenStructure {
+  display: none !important;
+}
+
+.plonepopup {
+  top: 50px !important;
+}
+
+// MODAL {{{
+.modal-backdrop { overflow: hidden; }
+.modal-wrapper { left: 15%; margin-left: 0; width: 100%; }
+.modal {
+
+  &.fade.in > .modal-dialog {
+    margin: 0;
+    width: 70%;
+    top: 100px;
+    left: 15%;
+  }
+
+  .pat-select2,
+  .pattern-relateditems-container {
+    width: 98%;
+    .pat-relateditems {
+      width: 100%;
+    }
+  }
+
+  .modal-footer {
+    position: relative;
+  }
+  .modal-body {
+    max-height: none;
+    overflow-y: visible;
+    padding: 0 15px;
+
+    .pagination {
+      margin: 0;
+    }
+  }
+
+  .backdrop {
+    background-color: #FFFFFF;
+    position: absolute;
+    border-radius: 6px;
+  }
+  form { margin: 1em 0 2em 0; }
+
+  #sharing-user-group-search {
+    width: 20em;
+    display: inline;
+  }
+  #sharing-search-button {
+    .btn();
+    vertical-align: top;
+    margin-top: 0.3em;
+  }
+  table.listing { .table(); }
+  #cmfeditions_version_comment_block {
+    border-top: 1px solid #DDDDDD;
+    margin-top: 1em;
+    padding-top: 1em;
+  }
+  #atrb_relatedItems { display: none; }
+  .pat-autotoc.autotabs .autotoc-nav {
+    margin-bottom: 1em;
+  }
+  .pattern-pickadate-wrapper {
+    .pattern-pickadate-year,
+    .pattern-pickadate-month,
+    .pattern-pickadate-day,
+    .pattern-pickadate-hour,
+    .pattern-pickadate-minute,
+    .pattern-pickadate-ampm {
+      height: 2em;
+    }
+    .pickadate__calendar {
+      font-size: 0.8em;
+    }
+    .pickadate__select--year,
+    .pickadate__select--month {
+      height: 2.5em;
+    }
+    .pickadate__button--today,
+    .pickadate__button--clear {
+      font-size: 1em;
+    }
+    .pattern-pickadate-delimiter {
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 0.2em;
+    }
+    .pattern-pickadate-icon {
+      margin: 0 0.4em;
+      cursor: pointer;
+      
+      .glyphicon();
+      .glyphicon-calendar();
+
+      display: inline;
+      width: auto;
+      height: auto;
+      line-height: normal;
+      vertical-align: super;
+      background: none;
+      background-image: none;
+      background-position: 0% 0%;
+      background-repeat: repeat;
+    }
+
+    .modal div.field label span {
+      font-size: 0.8em;
+      font-weight: normal;
+      display: block;
+    }
+  }
+  input.destructive[type='submit'] {
+    .btn();
+    .btn-primary();
+    .btn-danger();
+  }
+  input.context[type='submit'] {
+    .btn();
+    .btn-primary();
+  }
+  input.standalone[type='submit'] {
+    .btn();
+  }
+  dl.default-page-listing {
+    dt {
+      input[type="radio"] {
+        margin: 0;
+      }
+      label {
+        display: inline-block;
+        font-weight: bold;
+        font-size: 1.5em;
+        line-height: 1.5em;
+        margin: 0 0 0 0.5em;
+      }
+    }
+    dd {
+      margin-left: 2em;
+    }
+  }
+  dl.portalMessage {
+    .alert();
+    &.info { .alert-info(); }
+    &.error {
+      .alert-warning();
+      dd { background: transparent; }
+    }
+    dt {
+      border-radius: 0;
+      float: none;
+      font-size: 1.2em;
+      line-height: 1.25em;
+      background: transparent;
+      color: inherit;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    dd {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  div.field {
+    &.error {
+      .has-warning();
+      .fieldRequired { color: transparent; }
+      label { color: @gray-darker; }
+      div {
+        color: #B94A48;
+        &.formHelp { color: @gray-darker; }
+      }
+      color: #B94A48;
+      background: transparent;
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+    .form-group();
+    input[type="radio"],
+    input[type="checkbox"] {
+      float: left;
+      margin-right: 0.5em;
+    }
+    label {
+      font-size: 1.2em;
+      font-weight: bold;
+      display: block;
+      .label {
+        background: transparent;
+        color: black;
+        text-shadow: none;
+        -moz-text-shadow: none;
+        -webkit-text-shadow: none;
+        -o-text-shadow: none;
+      }
+      span {
+        font-size: 0.8em;
+        font-weight: normal;
+        display: block;
+      }
+      span.required {
+        background-color: Red;
+        display: inline-block;
+        height: 0.3em;
+        width: 0.3em;
+        line-height: 1em;
+      }
+    }
+    .fieldRequired { color: transparent; }
+    & > div {
+      .help-block();
+      line-height: 2em;
+      padding: 0;
+      &.formHelp { line-height: 1em; }
+      &#form-widgets-IRelatedItems-relatedItems-autocomplete,
+      &.contenttreeWindow { display: none; }
+    }
+    textarea {
+      width: 98%;
+    }
+    input#title,
+    input#form-widgets-IDublinCore-title {
+      font-size: 2em;
+      margin-bottom: 0;
+    }
+    input[type="text"] {
+      margin-bottom: 1em;
+      margin-top: 0.2em;
+      height: 2em;
+      width: 98%;
+    }
+
+    margin-bottom: 1em;
+  }
+  div.modal-footer > input {
+    margin-left: 1em;
+  }
+}
+
+#dashboard > div{
+  float: left;
+  padding: 25px;
+}
+
+.modal .rowlike div.field label{
+  
+}
+
+.visualClear {
+  clear: both;
+}
+
+.modal form[name="folderContentsForm"] th,
+.modal form[name="folderContentsForm"] td{
+  line-height: 14px;
+  font-size: 14px;
+  padding: 5px 15px;
+}
+
+.modal-constrain-types {
+  .option {
+    display: inline-block;
+    padding: 3px 10px;
+  }
+  div.field label {
+    display: inline;
+  }
+}
+
+// }}}
