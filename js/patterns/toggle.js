@@ -63,7 +63,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-4
  *    <div class="wrapper">
  *      <div class="myScope">
@@ -80,7 +80,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-5
  *    <div class="wrapper">
  *      <div class="myScope">
@@ -90,7 +90,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-6
  *    <div class="wrapper">
  *      <div class="myScope">
@@ -100,7 +100,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-7
  *    <div class="panel panel-default">
  *      <div class="panel-heading">
@@ -115,7 +115,7 @@
  *        </ul>
  *      </div>
  *    </div>
- *    
+ *
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
@@ -147,16 +147,6 @@ define([
       attribute: 'class',
       event: 'click',
       targetScope: 'global'
-    },
-    ensureBool: function(value) {
-      if (typeof(value) === 'string') {
-        if (value === 'true') {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return value;
     },
     init: function() {
       var self = this;
@@ -211,30 +201,29 @@ define([
     },
     toggle: function() {
       var self = this;
-      if (self.isMarked()) {
-        self.remove();
-      } else {
-        self.add();
+      if (self.options.attribute === 'class') {
+        /** for class attribute we can just use jQuery toggleClass */
+        self.trigger('toggle-class');
+        self.$target.toggleClass(self.options.value);
+        self.trigger('class-toggled');
+      }else{
+        if (self.isMarked()) {
+          self.remove();
+        } else {
+          self.add();
+        }
       }
     },
     remove: function() {
       var self = this;
       self.trigger('remove-attr');
-      if (self.options.attribute === 'class') {
-        self.$target.removeClass(self.options.value);
-      } else {
-        self.$target.removeAttr(self.options.attribute);
-      }
+      self.$target.removeAttr(self.options.attribute);
       self.trigger('attr-removed');
     },
     add: function() {
       var self = this;
       self.trigger('add-attr');
-      if (self.options.attribute === 'class') {
-        self.$target.addClass(self.options.value);
-      } else {
-        self.$target.attr(self.options.attribute, self.options.value);
-      }
+      self.$target.attr(self.options.attribute, self.options.value);
       self.trigger('added-attr');
     }
   });
