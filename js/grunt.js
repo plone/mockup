@@ -320,7 +320,7 @@ MockupGrunt.prototype = {
       less: {
         options: {
           compress: true,
-          cleancss: true,
+          cleancss: false,
           ieCompat: true,
           paths: ['less']
         }
