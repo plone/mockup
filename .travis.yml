@@ -15,11 +15,10 @@ install:
   - git config --global user.name "Travis CI"
 script:
   - make test-once
-  - make bundle
+  - make bundles
   - make docs
   - rm docs -rf
   - if [ "$TRAVIS_BRANCH" == "master" ]; then make test-ci; fi
-  - if [ "$TRAVIS_TRAVIS_PULL_REQUEST" == "true" ]; then make test-ci; fi
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_TRAVIS_PULL_REQUEST" == "false" ]; then make publish; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish; fi
   - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls

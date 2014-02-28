@@ -15,7 +15,12 @@ module.exports = function(grunt) {
     copy: {
       docs: {
         files: [
-          { expand: true, src: 'index.html', dest: 'docs/dev/' }
+          { expand: true, src: 'index.html', dest: 'docs/dev/' },
+          { expand: true, src: 'js/*', dest: 'docs/dev/' },
+          { expand: true, src: 'lib/*', dest: 'docs/dev/' },
+          { expand: true, src: 'bower_components/*', dest: 'docs/dev/' },
+          { expand: true, src: 'build/*', dest: 'docs/dev/' },
+          { expand: true, src: 'less/*', dest: 'docs/dev/' }
         ]
       }
     },
