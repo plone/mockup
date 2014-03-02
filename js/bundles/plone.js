@@ -25,7 +25,13 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-base',
-  'mockup-bundles-widgets',
+
+  'mockup-patterns-select2',
+  'mockup-patterns-pickadate',
+  'mockup-patterns-relateditems',
+  'mockup-patterns-querystring',
+  'mockup-patterns-tinymce',
+
   'mockup-patterns-livesearch',
   'mockup-patterns-accessibility',
   'mockup-patterns-autotoc',
