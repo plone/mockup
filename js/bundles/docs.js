@@ -126,6 +126,11 @@ require([
             description: 'Autocompletes, multiple or single selections from any kind of data source (with search!).',
             url: 'js/patterns/select2.js'
           },
+          { id: 'search',
+            title: 'Search',
+            description: 'Dynamically query the server and display results.',
+            url: 'js/patterns/search/pattern.js'
+          },
           { id: 'sortable',
             title: 'Sortable',
             description: 'Sort items in list using drag and drop.',
