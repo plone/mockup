@@ -185,6 +185,7 @@ define([
       expect($('.pattern-relateditems-result-select')).to.have.length(13);
       $('.pattern-relateditems-result-select').first().on('click', function() {
         expect(pattern.$el.select2('data')).to.have.length(1);
+        expect(pattern.$el.select2('val')[0]).to.equal('gfn5634f');
       }).click();
       clock.tick(1000);
 
@@ -210,10 +211,11 @@ define([
         expect(pattern.$el.select2('data')).to.have.length(1);
       }).click();
       clock.tick(1000);
-      // select our first choice
+      // deselect our first choice
       var $choice = $('.select2-search-choice').first();
       $choice.find('.select2-search-choice-close').click();
       expect(pattern.$el.select2('data')).to.have.length(0);
+      expect(pattern.$el.select2('val')).to.have.length(0);
 
       // // Need to simulate a backspace to remove the selected item: below doesn't work
       // var backspaceEvent = $.Event("keydown");
@@ -252,6 +254,7 @@ define([
 
       expect($result.is('.pattern-relateditems-active')).to.equal(false);
       expect(pattern.$el.select2('data')).to.have.length(0);
+      expect(pattern.$el.select2('val')).to.have.length(0);
 
       $el.remove();
       $('.select2-sizer, .select2-drop').remove();
@@ -307,6 +310,33 @@ define([
 
       $el.remove();
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
+    });
+
+    it('after selecting a folder, it remains in the results list', function() {
+      var $el = $('' +
+        '<div>' +
+        ' <input class="pat-relateditems"' +
+        '        data-pat-relateditems="width: 300px;' +
+        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '</div>').appendTo('body');
+      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+
+      var clock = sinon.useFakeTimers();
+      pattern.$el.select2('open');
+      clock.tick(1000);
+      expect(pattern.$el.select2('data')).to.have.length(0);
+      expect($('.pattern-relateditems-result-select')).to.have.length(13);
+      $('.pattern-relateditems-result-path')
+        .filter(function() { return $(this).text() === '/about'; })
+        .click();
+      clock.tick(1000);
+      expect(pattern.$el.select2('val')[0]).to.equal('124asdfasasdaf34');
+      var result = $('.pattern-relateditems-result-path')
+        .filter(function() { return $(this).text() === '/about'; });
+      expect(result.length).to.equal(1);
+
+      $el.remove();
+      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('clicking on breadcrumbs goes back up', function() {
