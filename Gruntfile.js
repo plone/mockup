@@ -43,7 +43,7 @@ module.exports = function(grunt) {
     }
   }, {
     path: 'docs/dev/',
-    url: '',
+    url: 'docs',
     extraInclude: docsExtraIncludes, 
   }, ['requirejs', 'less', 'copy', 'sed']);
 
