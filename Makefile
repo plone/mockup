@@ -1,4 +1,3 @@
-
 GIT = git
 NPM = npm
 
@@ -17,14 +16,6 @@ bundles: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure bundl
 	# cp build/plone* path/to/Products.CMFPlone/Products/CMFPlone/static
 	# ----------------------------------------------------------------------- #
 
-bundle-plone:
-	mkdir -p build
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone
-
-bundle-barceloneta:
-	mkdir -p build
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-barceloneta
-
 bundle-widgets:
 	mkdir -p build
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-widgets
@@ -35,6 +26,19 @@ bundle-toolbar:
 
 bundle-structure:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure
+
+bundle-barceloneta:
+	mkdir -p build
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-barceloneta
+
+bundle-plone:
+	mkdir -p build
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone
+
+docs:
+	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
+	rm -rf docs/dev
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs
 
 bootstrap-common:
 	mkdir -p build
@@ -64,13 +68,6 @@ test-dev:
 test-ci:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci
 
-docs:
-	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
-	rm -rf docs/dev
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs
-
-publish: publish-widgets publish-toolbar publish-structure publish-barceloneta publish-plone publish-docs
-
 publish-widgets:
 	echo -e "Publishing 'widgets' bundle!\n"; git clone git://github.com/plone/plone.app.widgets.git; cd plone.app.widgets; cp ../build/widgets* plone/app/widgets/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'widgets' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plone.app.widgets.git > /dev/null; cd ..;
 
@@ -86,7 +83,7 @@ publish-barceloneta:
 publish-plone:
 	echo -e "Publishing 'plone' bundle!\n"; git clone git://github.com/plone/Products.CMFPlone.git; cd Products.CMFPlone; git add -fA .; cp build/plone* Products/CMFPlone/static; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'plone' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/Products.CMFPlone.git > /dev/null; cd ..;
 
-publish-docs: docs
+publish-docs:
 	echo -e "Publishing 'docs' bundle!\n"; cd docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
 
 clean:
@@ -95,7 +92,8 @@ clean:
 	rm -rf node_modules
 	rm -rf bower_components
 
-clean-all: clean
+clean-deep: clean
 	if test -f $(BOWER); then $(BOWER) cache clean; fi
+	if test -f $(NPM); then $(NPM) cache clean; fi
 
-.PHONY: bundle bootstrap jshint test test-ci docs clean
+.PHONY: bundle bundle-widgets bundle-toolbar bundle-structure bundle-barceloneta bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-widgets publish-toolbar publish-structure publish-barceloneta publish-plone publish-docs clean clean-deep
