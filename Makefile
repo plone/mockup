@@ -81,7 +81,7 @@ publish-barceloneta:
 	echo -e "Publishing 'barceloneta' bundle!\n"; git clone git://github.com/plone/plonetheme.barceloneta.git; cd plonetheme.barceloneta; cp ../build/barceloneta* plonetheme/barceloneta/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'barceloneta' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plonetheme.barceloneta.git > /dev/null; cd ..;
 
 publish-plone:
-	echo -e "Publishing 'plone' bundle!\n"; git clone git://github.com/plone/Products.CMFPlone.git; cd Products.CMFPlone; git add -fA .; cp ../build/plone* Products/CMFPlone/static; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'plone' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/Products.CMFPlone.git > /dev/null; cd ..;
+	echo -e "Publishing 'plone' bundle!\n"; git clone git://github.com/plone/Products.CMFPlone.git; cd Products.CMFPlone; cp ../build/plone* Products/CMFPlone/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'plone' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/Products.CMFPlone.git > /dev/null; cd ..;
 
 publish-docs:
 	echo -e "Publishing 'docs' bundle!\n"; cd docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
