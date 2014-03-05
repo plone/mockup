@@ -3,7 +3,7 @@ define([
   './../registry.js',
   './../patterns/tiles/tile.js'
 ], function($, registry) {
-  "use strict";
+  'use strict';
 
 
 

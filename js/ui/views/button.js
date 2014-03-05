@@ -29,9 +29,8 @@ define([
   'underscore',
   'js/ui/views/base',
   'bootstrap-tooltip'
-],
-  function($, Backbone, _, BaseView) {
-  "use strict";
+], function($, Backbone, _, BaseView) {
+  'use strict';
 
   var ButtonView = BaseView.extend({
     tagName: 'a',
@@ -62,7 +61,7 @@ define([
       }, this);
 
       this.on('render', function() {
-        if(this.context !== null){
+        if (this.context !== null) {
           this.$el.addClass('btn-' + this.context);
         }
 
@@ -72,15 +71,15 @@ define([
           });
           // XXX since tooltip triggers hidden
           // suppress so it plays nice with modals, backdrops, etc
-          this.$el.on('hidden', function(e){
-            if(e.type == 'hidden'){
+          this.$el.on('hidden', function(e) {
+            if (e.type === 'hidden') {
               e.stopPropagation();
             }
           });
         }
       }, this);
     },
-    handleClick: function(e){
+    handleClick: function(e) {
       e.preventDefault();
       if (!this.$el.is('.disabled')) {
         this.uiEventTrigger('click', this, e);

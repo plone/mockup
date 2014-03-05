@@ -27,8 +27,8 @@ define([
   'underscore',
   'backbone',
   'js/ui/views/container'
-  ], function(_, Backbone, ContainerView) {
-  "use strict";
+], function(_, Backbone, ContainerView) {
+  'use strict';
 
   var ButtonGroup = ContainerView.extend({
     tagName: 'div',

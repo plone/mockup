@@ -65,10 +65,10 @@ define([
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, Base, drag, drop) {
-  "use strict";
+  'use strict';
 
   var SortablePattern = Base.extend({
-    name: "sortable",
+    name: 'sortable',
     defaults: {
       selector: 'li',
       dragClass: 'item-dragging',
@@ -84,13 +84,12 @@ define([
         $(dragged).addClass(self.options.dragClass);
         drop({
           tolerance: function(event, proxy, target) {
-            if($(target.elem).closest(self.$el).length === 0){
+            if ($(target.elem).closest(self.$el).length === 0) {
               /* prevent dragging conflict over another drag area */
               return;
             }
             var test = event.pageY > (target.top + target.height / 2);
-            $.data(target.elem, "drop+reorder",
-                   test ? "insertAfter" : "insertBefore" );
+            $.data(target.elem, 'drop+reorder', test ? 'insertAfter' : 'insertBefore' );
             return this.contains(target, [event.pageX, event.pageY]);
           }
         });
@@ -107,9 +106,9 @@ define([
           left: dd.offsetX
         });
         var drop = dd.drop[0],
-            method = $.data(drop || {}, "drop+reorder");
+            method = $.data(drop || {}, 'drop+reorder');
         /* XXX Cannot use triple equals here */
-        if (method && drop && (drop != dd.current || method != dd.method)){
+        if (method && drop && (drop != dd.current || method != dd.method)) {
           $(this)[method](drop);
           dd.current = drop;
           dd.method = method;
@@ -120,7 +119,7 @@ define([
         var $el = $(this);
         $el.removeClass(self.options.dragClass);
         $(dd.proxy).remove();
-        if(self.options.drop){
+        if (self.options.drop) {
           self.options.drop($el, $el.index() - start);
         }
       })

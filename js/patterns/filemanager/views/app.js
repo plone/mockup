@@ -33,31 +33,31 @@ define([
   'mockup-patterns-ace',
   'text!js/patterns/filemanager/templates/app.xml'
 ], function($, _, Backbone, BaseView, DropZone, Tree, Ace, AppTemplate) {
-  "use strict";
+  'use strict';
 
   var AppView = BaseView.extend({
     tagName: 'div',
     className: 'filemanager',
     template: AppTemplate,
-    afterRender: function(){
+    afterRender: function() {
       var self = this;
       self.$tree = self.$('.tree');
       self.tree = new Tree(self.$tree, self.treeConfig);
 
-      if(self.uploadUrl){
+      if (self.uploadUrl) {
         self.dropzone = new DropZone(self.$el, {
           className: 'filemanager-dropzone',
           clickable: false,
           url: self.options.uploadUrl,
           autoCleanResults: true,
-          success: function(e, data){
+          success: function(e, data) {
             // XXX fill in here
           }
         }).dropzone;
-        self.dropzone.on('sending', function(){
+        self.dropzone.on('sending', function() {
           self.$el.addClass('dropping');
         });
-        self.dropzone.on('complete', function(){
+        self.dropzone.on('complete', function() {
           self.$el.removeClass('dropping');
         });
       }

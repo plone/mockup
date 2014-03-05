@@ -45,11 +45,11 @@ define([
 ], function($, Router, iframe, registry, Base, Toggle, Modal, TinyMCE,
             Structure, AutoTOC, Accessibility, FormUnloadAlert, LiveSearch,
             PloneWidgets) {
-  "use strict";
+  'use strict';
 
   // BBB: we need to hook pattern to classes which plone was using until now
   var Toolbar = Base.extend({
-    name: "plone-toolbar",
+    name: 'plone-toolbar',
     init: function() {
       var self = this;
 
@@ -82,16 +82,16 @@ define([
       $match.addClass('pat-formunloadalert');
       // TODO: need to get form_modified_message into body data attributes
       //$match.attr({
-      //  'data-pat-formunloadalert':'message: '+window.form_modified_message
+      //  'data-pat-formunloadalert':'message: ' +window.form_modified_message
       //});
 
-      // Use toggle to replace the toggleSelect from the select_all.js {{{
+      // Use toggle to replace the toggleSelect from the selectAll.js {{{
       // First, remove the previous onclick
-      $("[onclick^='toggleSelect']", self.$el).attr('onclick', null);
+      $('[onclick^="toggleSelect"]', self.$el).attr('onclick', null);
 
       // Assign the class and data attributes for the "select all of the content_status_history template
-      var select_all = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', self.$el);
-      select_all.addClass('pat-toggle').patternToggle({
+      var selectAll = $('form[action$=content_status_history] table.listing > thead tr th input[type=checkbox]', self.$el);
+      selectAll.addClass('pat-toggle').patternToggle({
         target: 'table.listing input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -100,8 +100,8 @@ define([
       });
 
       // Assign the class and data attributes for the "select all of the usergroup-groupmembership view
-      select_all = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', self.$el);
-      select_all.addClass('pat-toggle').patternToggle({
+      selectAll = $('form[action*=usergroup-groupmembership] table.listing tr th input[type=checkbox]', self.$el);
+      selectAll.addClass('pat-toggle').patternToggle({
         target: 'table.listing input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -110,8 +110,8 @@ define([
       });
 
       // Assign the class and data attributes for the "select all of the usergroup-usermembership view
-      select_all = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', self.$el);
-      select_all.addClass('pat-toggle').patternToggle({
+      selectAll = $('form[action*=usergroup-usermembership] table.listing tr th input[type=checkbox]', self.$el);
+      selectAll.addClass('pat-toggle').patternToggle({
         target: 'form[action*=usergroup-usermembership] table.listing:last input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -120,8 +120,8 @@ define([
       });
 
       // plone/app/search/search.pt
-      select_all = $("[onchange*='toggleSelect']", self.$el).attr('onchange', null);
-      select_all.addClass('pat-toggle').patternToggle({
+      selectAll = $('[onchange*="toggleSelect"]', self.$el).attr('onchange', null);
+      selectAll.addClass('pat-toggle').patternToggle({
         target: 'form[name=searchform] dd.actionMenuContent input[type=checkbox]',
         attribute: 'checked',
         value: 'checked',
@@ -136,14 +136,14 @@ define([
         .not('[action$="@@new-user"]')
         .not('[action$="@@usergroup-groupdetails"]')
         .patternPreventdoublesubmit({
-          message: window.form_resubmit_message
+          message: window['form_resubmit_message'] || '' // jshint ignore:line
         });
 
       // Add the form auto focus for the add or edit forms
-      var add_form = $('form[action*="++add++"]', self.$el);
-      add_form.addClass('pat-formautofocus');
-      var edit_form = $('form[action*="@@edit"]', self.$el);
-      edit_form.addClass('pat-formautofocus');
+      var addForm = $('form[action*="++add++"]', self.$el);
+      addForm.addClass('pat-formautofocus');
+      var editForm = $('form[action*="@@edit"]', self.$el);
+      editForm.addClass('pat-formautofocus');
 
       /*** Login ***/
       var loginOptions = {
@@ -197,10 +197,10 @@ define([
         .patternModal(defaultPage);
 
       /*** Add user form ***/
-      var users_add = $('form[name="users_add"]', self.$el);
-      if ( users_add.length > 0) {
+      var usersAdd = $('form[name="usersAdd"]', self.$el);
+      if ( usersAdd.length > 0) {
         var addUserOptions = {
-          ajaxUrl: users_add[0].action,
+          ajaxUrl: usersAdd[0].action,
           triggers: ['click input[name="form.button.AddUser"]'],
           buttons: 'input[name="form.actions.register"]',
           content: '#content',
@@ -212,10 +212,10 @@ define([
       }
 
       /*** Add group form ***/
-      var groups_add = $('form[name="groups_add"]', self.$el);
-      if ( groups_add.length > 0) {
+      var groupsAdd = $('form[name="groupsAdd"]', self.$el);
+      if ( groupsAdd.length > 0) {
         var addGroupOptions = {
-          ajaxUrl: groups_add[0].action,
+          ajaxUrl: groupsAdd[0].action,
           triggers: ['click input[name="form.button.AddGroup"]'],
           buttons: 'input[name="form.button.Save"]',
           content: '#content',
@@ -234,41 +234,41 @@ define([
         actionOptions: {
           displayInModal: false
         }
-      }).on('shown.modal.patterns', function(modal){
+      }).on('shown.modal.patterns', function(modal) {
         var $modal = modal.$modal;
-        var prefered = $(".current_prefer_form", $modal),
-            allowed = $(".current_allow_form", $modal),
-            constrain_mode = $(".constrain_types_mode_form", $modal),
-            prefered_field = prefered.parents('.field'),
-            allowed_field = allowed.parents('.field'),
+        var prefered = $('.current_prefer_form', $modal),
+            allowed = $('.current_allow_form', $modal),
+            constrainMode = $('.constrain_types_mode_form', $modal),
+            preferedField = prefered.parents('.field'),
+            allowedField = allowed.parents('.field'),
             ACQUIRE = -1,
             DISABLED = 0,
             ENABLED = 1;
-        function updateVisibility(){
-          var mode = parseInt(constrain_mode.val(), 10);
-          if(mode === ENABLED){
-            prefered_field.show();
-            allowed_field.show();
-          }else{
-            prefered_field.hide();
-            allowed_field.hide();
+        function updateVisibility() {
+          var mode = parseInt(constrainMode.val(), 10);
+          if (mode === ENABLED) {
+            preferedField.show();
+            allowedField.show();
+          } else {
+            preferedField.hide();
+            allowedField.hide();
           }
         }
-        function updateSelectable(){
-          prefered.each(function(){
-            var allowed_id = this.id.replace('prefer', 'allow'),
-                allowed_item = allowed_field.find("#" + allowed_id);
-            if (this.checked){
-              allowed_item[0].disabled = false;
-            }else{
-              allowed_item[0].disabled = true;
-              allowed_item[0].checked = false;
+        function updateSelectable() {
+          prefered.each(function() {
+            var allowedId = this.id.replace('prefer', 'allow'),
+                allowedItem = allowedField.find('#' + allowedId);
+            if (this.checked) {
+              allowedItem[0].disabled = false;
+            } else {
+              allowedItem[0].disabled = true;
+              allowedItem[0].checked = false;
             }
           });
         }
-        constrain_mode.change(updateVisibility);
+        constrainMode.change(updateVisibility);
         updateVisibility();
-        prefered_field.change(updateSelectable);
+        preferedField.change(updateSelectable);
         updateSelectable();
       });
 
@@ -305,16 +305,16 @@ define([
         .patternModal(renameOptions);
 
       /*** Delete action ***/
-      var delete_action = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete', self.$el);
-      delete_action
+      var deleteAction = $('#plone-contentmenu-actions-delete > a, #plone-contentmenu-actions-delete', self.$el);
+      deleteAction
         .addClass('pat-modal')
         .patternModal({
           actionOptions: {
             onSuccess: function(modal, responseBody, state, xhr, form) {
-              modal.$el.on('afterDraw.modal.patterns', function(e){
+              modal.$el.on('afterDraw.modal.patterns', function(e) {
                 // cleanup modal here, we only want to show the status
                 var $info = $('.portalMessage.info', modal.$modal);
-                if($info.length > 0){
+                if ($info.length > 0) {
                   var $modalBody = $('.modal-body', modal.$modal);
                   $modalBody.empty();
                   $modalBody.append($info);
@@ -343,7 +343,7 @@ define([
 
       // make sure clicking on anything in the menu closes the toggled element
       $('.toolbar-dropdown .toolbar-dropdown-menu a', self.$el).click(function(e) {
-          $(this).parents('.toolbar-dropdown').children('a').trigger('click');
+        $(this).parents('.toolbar-dropdown').children('a').trigger('click');
       });
 
       // at opening toolbar dropdown:
@@ -411,7 +411,7 @@ define([
         width: '96%',
         position: 'middle top',
         actionOptions: {
-          onSuccess: function(modal, response, state, xhr, form){
+          onSuccess: function(modal, response, state, xhr, form) {
           }
         }
       });
@@ -424,14 +424,14 @@ define([
           displayInModal: false
         }
       }).on('show.modal.patterns', function(evt, modal) {
-        $('a[href]', modal.$modal).each(function(){
+        $('a[href]', modal.$modal).each(function() {
           var href = this.href;
           var parts = href.split('/');
-          parts.splice(parts.length-1, 0, '++nodiazo++');
+          parts.splice(parts.length - 1, 0, ' ++nodiazo++');
           href = parts.join('/');
 
           $(this).attr('href', href);
-          $(this).click(function(){
+          $(this).click(function() {
             window.open(href);
           });
         });
@@ -456,38 +456,37 @@ define([
         // Kill the onchange method so we can wire up our own
         $('.section select', modal.$raw).removeAttr('onchange');
         modal.options.actions = {
-            // Handle adding portlets via the select
-            '.section select': {
-              eventType: 'change',
-              onSuccess: function(modal, response, state, xhr, form) {
-                  if (modal.$modal.find('.pattern-modal-buttons input').length === 0) {
-                      // The portlet didn't have an edit form (e.g. calendar)
-                      modal.reloadWindow();
-                  }
-              },
-              ajaxUrl: function($action, options) {
-                var portlet = $action.val();
-                var form_action = $action.parents('form').attr('action');
-                return form_action + portlet;
-              }
-            },
-            '.actionButtons input': {
-              // Handle errors on portlet submission
-              error: '.fieldErrorBox',
-              onSuccess: function(modal, response, state, xhr, form) {
+          // Handle adding portlets via the select
+          '.section select': {
+            eventType: 'change',
+            onSuccess: function(modal, response, state, xhr, form) {
+              if (modal.$modal.find('.pattern-modal-buttons input').length === 0) {
+                // The portlet didn't have an edit form (e.g. calendar)
                 modal.reloadWindow();
               }
             },
-            // Handle moving and hiding portlets
-            '.portlet-action': {
-              isForm: true
+            ajaxUrl: function($action, options) {
+              var portlet = $action.val();
+              var formAction = $action.parents('form').attr('action');
+              return formAction + portlet;
             }
-          };
+          },
+          '.actionButtons input': {
+            // Handle errors on portlet submission
+            error: '.fieldErrorBox',
+            onSuccess: function(modal, response, state, xhr, form) {
+              modal.reloadWindow();
+            }
+          },
+          // Handle moving and hiding portlets
+          '.portlet-action': {
+            isForm: true
+          }
+        };
       })
       .on('hidden.modal.patterns', function(e) {
-          $(this).data('pattern-modal').reloadWindow();
-        }
-      );
+        $(this).data('pattern-modal').reloadWindow();
+      });
 
       // Edit/Add
       $('#plone-contentmenu-factories ul li', self.$el).addClass('is-content');
@@ -498,7 +497,7 @@ define([
         backdropOptions: {
           closeOnClick: false
         },
-        position: "center top",
+        position: 'center top',
         content: '#content',
         automaticallyAddButtonActions: false,
         actionOptions: {
@@ -547,7 +546,7 @@ define([
           $(this).data('pattern-modal').options.actions = {
             'table.listing a': {
               ajaxUrl: function($action, options) {
-                return $action.attr('href').replace(/@@/g, "++nodiazo++/@@");
+                return $action.attr('href').replace(/@@/g, '++nodiazo++/@@');
               },
               displayInModal: false
             },
@@ -582,20 +581,20 @@ define([
         }
       });
 
-      self.$el.find('.mce_editable').addClass('pat-tinymce').each(function(){
+      self.$el.find('.mce_editable').addClass('pat-tinymce').each(function() {
         var $tiny = $(this);
         var config = $.parseJSON($tiny.attr('data-mce-config'));
-        config.content_css = config.portal_url + '/base.css';
+        config['content_css'] = config['portal_url'] + '/base.css'; // jshint ignore:line
         delete config.customplugins;
         delete config.plugins;
         delete config.theme;
         $tiny.attr({
           'data-pat-tinymce': JSON.stringify({
             relatedItems: {
-              vocabularyUrl: config.portal_url + '/@@getVocabulary?name=plone.app.vocabularies.Catalog'
+              vocabularyUrl: config['portal_url'] + '/@@getVocabulary?name=plone.app.vocabularies.Catalog' // jshint ignore:line
             },
-            rel_upload_path: '@@fileUpload',
-            folder_url: config.document_base_url,
+            'rel_upload_path': '@@fileUpload', // jshint ignore:line
+            'folder_url': config['document_base_url'], // jshint ignore:line
             tiny: config,
             prependToUrl: 'resolveuid/',
             linkAttribute: 'UID',
@@ -606,8 +605,8 @@ define([
 
 
       // XXX important, run pattern mods against overlays
-      $('body').on('rendered.modal.patterns', function(){
-        (new Toolbar($(this))); // just run init again...
+      $('body').on('rendered.modal.patterns', function() {
+        var toolbar = new Toolbar($(this)); // just run init again...
       });
 
     }
@@ -617,34 +616,34 @@ define([
 
   /* maybe hackish fix here, but.....  let's get these in and out widgets working in overlays
    * TODO: Override all in and out widgets in python to use select2 */
-  var updateValues = function(id, $to){
+  var updateValues = function(id, $to) {
     var $container = $('#' + id + '-toDataContainer');
     $container.empty();
     var name = id.replace('-', '.').replace('-', '.') + ':list';
-    $to.find('option').each(function(){
+    $to.find('option').each(function() {
       $container.append('<input name="' + name + '" type="hidden" value="' + $(this).val() + '" />');
     });
   };
 
-  window.from2to = function(id){
+  window.from2to = function(id) {
     var $el = $('#' + id);
     var $selects = $el.find('select');
     var $from = $selects.eq(0);
     var $to = $selects.eq(1);
-    $from.find('option').each(function(){
-      if(this.selected){
+    $from.find('option').each(function() {
+      if (this.selected) {
         $to.append($(this));
       }
     });
     updateValues(id, $to);
   };
-  window.to2from = function(id){
+  window.to2from = function(id) {
     var $el = $('#' + id);
     var $selects = $el.find('select');
     var $from = $selects.eq(0);
     var $to = $selects.eq(1);
-    $to.find('option').each(function(){
-      if(this.selected){
+    $to.find('option').each(function() {
+      if (this.selected) {
         $from.append($(this));
       }
     });

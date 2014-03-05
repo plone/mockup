@@ -28,7 +28,7 @@ define([
   'backbone',
   'js/ui/views/container'
 ], function(_, Backbone, ContainerView) {
-  "use strict";
+  'use strict';
 
   var Toolbar = ContainerView.extend({
     tagName: 'div',

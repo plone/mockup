@@ -92,7 +92,7 @@ define([
   'mockup-patterns-base',
   'moment'
 ], function($, Base, moment) {
-  "use strict";
+  'use strict';
 
   var Moment = Base.extend({
     name: 'moment',
@@ -102,34 +102,34 @@ define([
       // also available options are relative, calendar
       format: 'MMMM Do YYYY, h:mm:ss a'
     },
-    convert: function($el){
+    convert: function($el) {
       var self = this;
       var date = $el.attr('data-date');
-      if(!date){
+      if (!date) {
         date = $.trim($el.html());
       }
       date = moment(date);
-      if(!date.isValid()){
+      if (!date.isValid()) {
         return;
       }
-      if(self.options.format === 'relative'){
+      if (self.options.format === 'relative') {
         date = date.fromNow();
-      }else if(self.options.format === 'calendar'){
+      }else if (self.options.format === 'calendar') {
         date = date.calendar();
-      }else{
+      } else {
         date = date.format(self.options.format);
       }
-      if(date){
+      if (date) {
         $el.html(date);
       }
     },
     init: function() {
       var self = this;
-      if(self.options.selector){
-        self.$el.find(self.options.selector).each(function(){
+      if (self.options.selector) {
+        self.$el.find(self.options.selector).each(function() {
           self.convert($(this));
         });
-      }else{
+      } else {
         self.convert(self.$el);
       }
     }

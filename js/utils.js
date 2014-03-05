@@ -29,9 +29,9 @@
 define([
   'jquery'
 ], function($) {
-  "use strict";
+  'use strict';
 
-  var QueryHelper = function(options){
+  var QueryHelper = function(options) {
     /* if pattern argument provided, it can implement the interface of:
       *    - browsing: boolean if currently browsing
       *    - currentPath: string of current path to apply to search if browsing
@@ -50,7 +50,7 @@ define([
     };
     self.options = $.extend({}, defaults, options);
     self.pattern = self.options.pattern;
-    if(self.pattern === undefined || self.pattern === null){
+    if (self.pattern === undefined || self.pattern === null) {
       self.pattern = {
         browsing: false,
         basePath: '/'
@@ -59,46 +59,46 @@ define([
 
     if (self.options.url && !self.options.vocabularyUrl) {
       self.options.vocabularyUrl = self.options.url;
-    }else if(self.pattern.vocabularyUrl){
+    } else if (self.pattern.vocabularyUrl) {
       self.options.vocabularyUrl = self.pattern.vocabularyUrl;
     }
-    if(self.options.vocabularyUrl !== undefined &&
-        self.options.vocabularyUrl !== null){
+    if (self.options.vocabularyUrl !== undefined &&
+        self.options.vocabularyUrl !== null) {
       self.valid = true;
-    }else{
+    } else {
       self.valid = false;
     }
 
-    self.getCurrentPath = function(){
+    self.getCurrentPath = function() {
       var pattern = self.pattern;
       var currentPath;
       /* If currentPath is set on the QueryHelper object, use that first.
        * Then, check on the pattern.
        * Finally, see if it is a function and call it if it is.
        */
-      if(self.currentPath){
+      if (self.currentPath) {
         currentPath = self.currentPath;
-      }else{
+      } else {
         currentPath = pattern.currentPath;
       }
-      if(typeof(currentPath) === 'function'){
+      if (typeof(currentPath) === 'function') {
         currentPath = currentPath();
       }
       var path = currentPath;
-      if(!path){
-        if(pattern.basePath){
+      if (!path) {
+        if (pattern.basePath) {
           path = pattern.basePath;
-        }else if(pattern.options.basePath){
+        } else if (pattern.options.basePath) {
           path = pattern.options.basePath;
-        }else{
+        } else {
           path = '/';
         }
       }
       return path;
     };
 
-    self.getCriterias = function(term, options){
-      if(options === undefined){
+    self.getCriterias = function(term, options) {
+      if (options === undefined) {
         options = {};
       }
       options = $.extend({}, {
@@ -107,10 +107,10 @@ define([
       }, options);
 
       var criterias = [];
-      if(options.useBaseCriteria){
+      if (options.useBaseCriteria) {
         criterias = self.options.baseCriteria.slice(0);
       }
-      if(term){
+      if (term) {
         term += '*';
         criterias.push({
           i: self.options.searchParam,
@@ -118,7 +118,7 @@ define([
           v: term
         });
       }
-      if(self.pattern.browsing){
+      if (self.pattern.browsing) {
         criterias.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
@@ -129,8 +129,8 @@ define([
       return criterias;
     };
 
-    self.getBatch = function(page){
-      if(!page){
+    self.getBatch = function(page) {
+      if (!page) {
         page = 1;
       }
       return {
@@ -139,7 +139,7 @@ define([
       };
     };
 
-    self.selectAjax = function(){
+    self.selectAjax = function() {
       return {
         url: self.options.vocabularyUrl,
         dataType: 'JSON',
@@ -155,35 +155,35 @@ define([
       };
     };
 
-    self.getUrl = function(){
+    self.getUrl = function() {
       var url = self.options.vocabularyUrl;
-      if(url.indexOf('?') === -1){
+      if (url.indexOf('?') === -1) {
         url += '?';
-      }else{
+      } else {
         url += '&';
       }
       return url + $.param(self.getQueryData());
     };
 
-    self.getQueryData = function(term, page){
+    self.getQueryData = function(term, page) {
       var data = {
         query: JSON.stringify({
           criteria: self.getCriterias(term)
         }),
         attributes: JSON.stringify(self.options.attributes)
       };
-      if(page){
+      if (page) {
         data.batch = JSON.stringify(self.getBatch(page));
       }
       return data;
     };
 
-    self.search = function(term, operation, value, callback, useBaseCriteria){
-      if(useBaseCriteria === undefined){
+    self.search = function(term, operation, value, callback, useBaseCriteria) {
+      if (useBaseCriteria === undefined) {
         useBaseCriteria = true;
       }
       var criteria = [];
-      if(useBaseCriteria){
+      if (useBaseCriteria) {
         criteria = self.options.baseCriteria.slice(0);
       }
       criteria.push({
@@ -206,7 +206,7 @@ define([
     return self;
   };
 
-  var ProgressIndicator = function(options){
+  var ProgressIndicator = function(options) {
     /*
      * Options:
      *   className(string): Defaults to "progress-indicator"
@@ -226,21 +226,21 @@ define([
       wrapper: null,
       zIndex: 10005 // can be a function
     };
-    if(!options){
+    if (!options) {
       options = {};
     }
     self.options = $.extend({}, defaults, options);
-    if(self.options.container === null){
+    if (self.options.container === null) {
       self.options.container = $('body');
     }
     self.$loading = $('> .' + self.options.className, self.options.container);
-    if (self.$loading.size() === 0){
+    if (self.$loading.size() === 0) {
       self.$loading = $('<div/>').hide()
         .addClass(self.options.className)
         .appendTo(self.options.container);
     }
     self.$wrapper = self.options.wrapper;
-    if(self.$wrapper === null){
+    if (self.$wrapper === null) {
       self.$wrapper = self.options.container;
     }
 
@@ -249,7 +249,7 @@ define([
         closable = true;
       }
 
-      if(self.options.backdrop){
+      if (self.options.backdrop) {
         self.options.backdrop.closeOnClick = closable;
         self.options.backdrop.closeOnEsc = closable;
         self.options.backdrop.init();
@@ -257,7 +257,7 @@ define([
 
       self.$wrapper.parent().css('overflow', 'hidden');
       self.$wrapper.show();
-      if(self.options.backdrop){
+      if (self.options.backdrop) {
         self.options.backdrop.show();
       }
       self.$loading.show();
@@ -266,8 +266,8 @@ define([
 
     self.position = function() {
       self.$loading.css({
-        'margin-left': self.$wrapper.width()/2 - self.$loading.width()/2,
-        'margin-top': self.$wrapper.height()/2 - self.$loading.height()/2,
+        'margin-left': self.$wrapper.width() / 2 - self.$loading.width() / 2,
+        'margin-top': self.$wrapper.height() / 2 - self.$loading.height() / 2,
         'position': 'absolute',
         'bottom': '0',
         'left': '0',
@@ -275,13 +275,13 @@ define([
         'top': '0'
       });
       var zIndex = self.options.zIndex;
-      if(typeof(zIndex) === 'function'){
+      if (typeof(zIndex) === 'function') {
         zIndex = zIndex();
       }
       self.$loading.css('zIndex', zIndex);
     };
 
-    self.hide = function(){
+    self.hide = function() {
       self.$loading.hide();
       self.$wrapper.parent().css('overflow', '');
     };
@@ -291,16 +291,16 @@ define([
 
   return {
 
-    parseBodyTag: function(txt){
+    parseBodyTag: function(txt) {
       return $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(txt)[0]
           .replace('<body', '<div').replace('</body>', '</div>')).eq(0).html();
     },
-    setId: function($el, prefix){
-      if(prefix === undefined){
+    setId: function($el, prefix) {
+      if (prefix === undefined) {
         prefix = 'id';
       }
       var id = $el.attr('id');
-      if(id === undefined){
+      if (id === undefined) {
         id = prefix + (Math.floor((1 + Math.random()) * 0x10000)
           .toString(16).substring(1));
       } else {
@@ -311,8 +311,8 @@ define([
       $el.attr('id', id);
       return id;
     },
-    bool: function(val){
-      if(typeof(val) === 'string'){
+    bool: function(val) {
+      if (typeof(val) === 'string') {
         val = $.trim(val).toLowerCase();
       }
       return ['true', true, 1].indexOf(val) !== -1;

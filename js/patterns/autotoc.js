@@ -110,11 +110,9 @@ define([
 
       if (self.options.prependTo) {
         self.$toc.prependTo(self.options.prependTo);
-      }
-      else if (self.options.appendTo) {
+      } else if (self.options.appendTo) {
         self.$toc.appendTo(self.options.appendTo);
-      }
-      else{
+      } else {
         self.$toc.prependTo(self.$el);
       }
 
@@ -124,7 +122,7 @@ define([
 
       $(self.options.section, self.$el).addClass(self.options.classSectionName);
 
-      var as_tabs = self.$el.hasClass('autotabs');
+      var asTabs = self.$el.hasClass('autotabs');
 
       $(self.options.levels, self.$el).each(function(i) {
         var $level = $(this),
@@ -142,17 +140,14 @@ define([
           .on('click', function(e, doScroll) {
             e.stopPropagation();
             e.preventDefault();
-            self.$toc.children('.' + self.options.classActiveName).removeClass(
-              self.options.classActiveName);
-            self.$el.children('.' + self.options.classActiveName).removeClass(
-              self.options.classActiveName);
+            self.$toc.children('.' + self.options.classActiveName).removeClass(self.options.classActiveName);
+            self.$el.children('.' + self.options.classActiveName).removeClass(self.options.classActiveName);
             $(e.target).addClass(self.options.classActiveName);
-            $level.parents(self.options.section)
-                .addClass(self.options.classActiveName);
+            $level.parents(self.options.section).addClass(self.options.classActiveName);
             if (doScroll !== false &&
                 self.options.scrollDuration &&
                 $level &&
-                !as_tabs) {
+                !asTabs) {
               $('body,html').animate({
                 scrollTop: $level.offset().top
               }, self.options.scrollDuration, self.options.scrollEasing);

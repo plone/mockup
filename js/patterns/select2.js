@@ -82,14 +82,14 @@ define([
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var Select2 = Base.extend({
-    name: "select2",
+    name: 'select2',
     defaults: {
-      separator: ","
+      separator: ','
     },
-    initializeValues: function(){
+    initializeValues: function() {
       var self = this;
       // Init Selection ---------------------------------------------
       if (self.options.initialValues) {
@@ -106,7 +106,7 @@ define([
           if (typeof(self.options.initialValues) === 'string' && self.options.initialValues !== '') {
             // if default selection value starts with a '{', then treat the value as
             // a JSON object that needs to be parsed
-            if(self.options.initialValues[0] === '{') {
+            if (self.options.initialValues[0] === '{') {
               seldefaults = JSON.parse(self.options.initialValues);
             }
             // otherwise, treat the value as a list, separated by the defaults.separator value of
@@ -133,7 +133,7 @@ define([
         };
       }
     },
-    initializeTags: function(){
+    initializeTags: function() {
       var self = this;
       if (self.options.tags && typeof(self.options.tags) === 'string') {
         if (self.options.tags.substr(0, 1) === '[') {
@@ -144,33 +144,32 @@ define([
       }
 
       if (self.options.tags && !self.options.allowNewItems) {
-         self.options.data = $.map (self.options.tags, function (value, i) {
-             return { id: value, text: value };
-         });
-         self.options.multiple = true;
-         delete self.options.tags;
+        self.options.data = $.map (self.options.tags, function (value, i) {
+          return { id: value, text: value };
+        });
+        self.options.multiple = true;
+        delete self.options.tags;
       }
     },
-    initializeOrdering: function(){
+    initializeOrdering: function() {
       var self = this;
       if (self.options.orderable) {
-        var formatSelection = function(data, $container){
+        var formatSelection = function(data, $container) {
           return data ? data.text : undefined;
         };
-        if(self.options.formatSelection){
+        if (self.options.formatSelection) {
           formatSelection = self.options.formatSelection;
         }
 
         self.options.formatSelection = function(data, $container) {
           $container.parents('li')
-            .drag("start", function(e, dd) {
+            .drag('start', function(e, dd) {
               $(this).addClass('select2-choice-dragging');
-              self.$el.select2("onSortStart");
+              self.$el.select2('onSortStart');
               $.drop({
                 tolerance: function(event, proxy, target) {
                   var test = event.pageY > (target.top + target.height / 2);
-                  $.data(target.elem, "drop+reorder",
-                         test ? "insertAfter" : "insertBefore" );
+                  $.data(target.elem, 'drop+reorder', test ? 'insertAfter' : 'insertBefore' );
                   return this.contains(target, [event.pageX, event.pageY]);
                 }
               });
@@ -186,22 +185,22 @@ define([
                 left: dd.offsetX
               });
               var drop = dd.drop[0],
-                  method = $.data(drop || {}, "drop+reorder");
+                  method = $.data(drop || {}, 'drop+reorder');
 
               /* XXX Cannot use triple equals here */
-              if (drop && (drop != dd.current || method != dd.method)){
+              if (drop && (drop != dd.current || method != dd.method)) {
                 $(this)[method](drop);
                 dd.current = drop;
                 dd.method = method;
                 dd.update();
               }
             })
-            .drag("end", function(e, dd) {
+            .drag('end', function(e, dd) {
               $(this).removeClass('select2-choice-dragging');
-              self.$el.select2("onSortEnd");
+              self.$el.select2('onSortEnd');
               $( dd.proxy ).remove();
             })
-            .drop("init", function(e, dd ) {
+            .drop('init', function(e, dd ) {
               /*jshint eqeqeq:false */
               /* XXX Cannot use triple equals here */
               return (this == dd.drag) ? false: true;
@@ -210,12 +209,12 @@ define([
         };
       }
     },
-    initializeSelect2: function(){
+    initializeSelect2: function() {
       var self = this;
       self.$el.select2(self.options);
       self.$select2 = self.$el.parent().find('.select2-container');
       self.$el.parent().off('close.modal.patterns');
-      if(self.options.orderable){
+      if (self.options.orderable) {
         self.$select2.addClass('select2-orderable');
       }
     },
@@ -226,7 +225,7 @@ define([
             JSON.parse(self.options.allowNewItems) : true;
 
       if (self.options.ajax || self.options.vocabularyUrl) {
-        if(self.options.vocabularyUrl) {
+        if (self.options.vocabularyUrl) {
           self.options.multiple = true;
           self.options.ajax = self.options.ajax || {};
           self.options.ajax.url = self.options.vocabularyUrl;
@@ -240,34 +239,34 @@ define([
           };
         }
 
-        var query_term = '';
+        var queryTerm = '';
         self.options.ajax = $.extend({
           quietMillis: 300,
           data: function (term, page) {
-            query_term = term;
+            queryTerm = term;
             return {
               query: term,
-              page_limit: 10,
+              'page_limit': 10,
               page: page
             };
           },
           results: function (data, page) {
             var results = data.results;
             if (self.options.vocabularyUrl) {
-              var data_ids = [];
+              var dataIds = [];
               $.each(data.results, function(i, item) {
-                data_ids.push(item.id);
+                dataIds.push(item.id);
               });
               results = [];
 
-              var have_result = query_term === '' || $.inArray(query_term, data_ids) >= 0;
-              if (self.options.allowNewItems && !have_result) {
-                  results.push({id:query_term, text:query_term});
+              var haveResult = queryTerm === '' || $.inArray(queryTerm, dataIds) >= 0;
+              if (self.options.allowNewItems && !haveResult) {
+                results.push({id: queryTerm, text: queryTerm});
               }
 
-              if (have_result || self.options.allowNewItems) {
+              if (haveResult || self.options.allowNewItems) {
                 $.each(data.results, function(i, item) {
-                    results.push(item);
+                  results.push(item);
                 });
               }
             }
@@ -278,16 +277,13 @@ define([
         // Multiselects need to be converted to input[type=hidden]
         // for Select2
         var vals = self.$el.val() || [];
-        var options = $.map(self.$el.find('option'),
-                            function (o) {
-                                return {text: $(o).html(), id: o.value};
-                            });
+        var options = $.map(self.$el.find('option'), function (o) { return {text: $(o).html(), id: o.value}; });
         var $hidden = $('<input type="hidden" />');
         $hidden.val(vals.join(self.options.separator));
         $hidden.attr('class', self.$el.attr('class'));
         $hidden.attr('name', self.$el.attr('name'));
         $hidden.attr('id', self.$el.attr('id'));
-        self.$orig_el = self.$el;
+        self.$orig = self.$el;
         self.$el.replaceWith($hidden);
         self.$el = $hidden;
         self.options.data = options;

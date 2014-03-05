@@ -27,21 +27,21 @@ define([
   'backbone',
   'js/patterns/structure/models/result'
 ], function(Backbone, Result) {
-"use strict";
+  'use strict';
 
   var SelectedCollection = Backbone.Collection.extend({
     model: Result,
-    removeResult: function(model){
+    removeResult: function(model) {
       return this.removeByUID(model.uid());
     },
-    removeByUID: function(uid){
+    removeByUID: function(uid) {
       var found = this.getByUID(uid);
-      if(found){
+      if (found) {
         this.remove(found);
       }
       return found;
     },
-    getByUID: function(uid){
+    getByUID: function(uid) {
       return this.findWhere({UID: uid});
     }
   });

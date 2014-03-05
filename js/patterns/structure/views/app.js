@@ -54,7 +54,7 @@ define([
             WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, ResultCollection,
             SelectedCollection, DropZone, utils) {
-  "use strict";
+  'use strict';
 
   var DISABLE_EVENT = 'DISABLE';
 
@@ -85,12 +85,12 @@ define([
     status: '',
     statusType: 'warning',
     pasteOperation: null,
-    sort_on: 'getObjPositionInParent',
-    sort_order: 'ascending',
+    'sort_on': 'getObjPositionInParent',
+    'sort_order': 'ascending',
     additionalCriterias: [],
     pasteSelection: null,
     cookieSettingPrefix: '_fc_',
-    initialize: function(options){
+    initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.setAllCookieSettings();
@@ -101,21 +101,21 @@ define([
 
       self.collection = new ResultCollection([], {
         url: self.options.collectionUrl,
-        queryParser: function(){
+        queryParser: function() {
           var term = null;
-          if(self.toolbar){
+          if (self.toolbar) {
             term = self.toolbar.get('filter').term;
           }
-          var sort_on = self.sort_on;
-          if(!sort_on){
-            sort_on = 'getObjPositionInParent';
+          var sortOn = self['sort_on']; // jshint ignore:line
+          if (!sortOn) {
+            sortOn = 'getObjPositionInParent';
           }
           return JSON.stringify({
             criteria: self.queryHelper.getCriterias(term, {
               additionalCriterias: self.additionalCriterias
             }),
-            sort_on: sort_on,
-            sort_order: self.sort_order
+            'sort_on': sortOn,
+            'sort_order': self['sort_order'] // jshint ignore:line
           });
         },
         queryHelper: self.options.queryHelper
@@ -136,7 +136,7 @@ define([
       });
 
       self.buttonViews = {};
-      _.map(self.buttonViewMapping, function(ViewClass, key, list){
+      _.map(self.buttonViewMapping, function(ViewClass, key, list) {
         var name = key.split('.');
         var group = name[0];
         var buttonName = name[1];
@@ -155,7 +155,7 @@ define([
           self.toolbar.get('selected').enable();
           self.buttons.primary.enable();
           self.buttons.secondary.enable();
-          if(!self.pasteAllowed){
+          if (!self.pasteAllowed) {
             self.buttons.primary.get('paste').disable();
           }
         } else {
@@ -165,36 +165,37 @@ define([
         }
       }, self);
 
-      self.collection.on('sync', function(){
+      self.collection.on('sync', function() {
         // need to reload models inside selectedCollection so they get any
         // updated metadata
-        if(self.selectedCollection.models.length > 0){
+        if (self.selectedCollection.models.length > 0) {
           var uids = [];
-          self.selectedCollection.each(function(item){
+          self.selectedCollection.each(function(item) {
             uids.push(item.attributes.UID);
           });
           self.queryHelper.search(
             'UID', 'plone.app.querystring.operation.list.contains',
             uids,
-            function(data){
-              _.each(data.results, function(attributes){
+            function(data) {
+              _.each(data.results, function(attributes) {
                 var item = self.selectedCollection.getByUID(attributes.UID);
                 item.attributes = attributes;
               });
             },
-            false);
+            false
+          );
         }
 
-        if(self.contextInfoUrl){
+        if (self.contextInfoUrl) {
           $.ajax({
             url: self.getAjaxUrl(self.contextInfoUrl),
             dataType: 'json',
-            success: function(data){
+            success: function(data) {
               self.trigger('context-info-loaded', data);
             },
-            error: function(response){
+            error: function(response) {
               // XXX handle error?
-              if(response.status === 404){
+              if (response.status === 404) {
                 console.log('context info url not found');
               }
             }
@@ -203,71 +204,71 @@ define([
         self.loading.hide();
       });
 
-      self.collection.on('pager', function(){
+      self.collection.on('pager', function() {
         self.loading.show();
       });
 
       /* detect key events */
-      $(document).bind('keyup keydown', function(e){
+      $(document).bind('keyup keydown', function(e) {
         self.keyEvent = e;
       });
 
     },
-    inQueryMode: function(){
-      if(this.additionalCriterias.length > 0){
+    inQueryMode: function() {
+      if (this.additionalCriterias.length > 0) {
         return true;
       }
-      if(this.sort_on && this.sort_on !== 'getObjPositionInParent'){
+      if (this['sort_on'] && this['sort_on'] !== 'getObjPositionInParent') { // jshint ignore:line
         return true;
       }
-      if(this.sort_order !== 'ascending'){
+      if (this['sort_order'] !== 'ascending') { // jshint ignore:line
         return true;
       }
       return false;
     },
-    getSelectedUids: function(collection){
+    getSelectedUids: function(collection) {
       var self = this;
-      if(collection === undefined){
+      if (collection === undefined) {
         collection = self.selectedCollection;
       }
       var uids = [];
-      collection.each(function(item){
+      collection.each(function(item) {
         uids.push(item.uid());
       });
       return uids;
     },
-    getAjaxUrl: function(url){
+    getAjaxUrl: function(url) {
       return url.replace('{path}', this.options.queryHelper.getCurrentPath());
     },
-    defaultButtonClickEvent: function(button){
+    defaultButtonClickEvent: function(button) {
       var self = this;
       var data = null, callback = null;
 
-      if(button.url){
+      if (button.url) {
         self.loading.show();
         // handle ajax now
 
-        if(arguments.length > 1){
+        if (arguments.length > 1) {
           var arg1 = arguments[1];
-          if(!arg1.preventDefault){
+          if (!arg1.preventDefault) {
             data = arg1;
           }
         }
-        if(arguments.length > 2){
+        if (arguments.length > 2) {
           var arg2 = arguments[2];
-          if(typeof(arg2) === 'function'){
+          if (typeof(arg2) === 'function') {
             callback = arg2;
           }
         }
-        if(data === null){
+        if (data === null) {
           data = {};
         }
-        if(data.selection === undefined){
+        if (data.selection === undefined) {
           // if selection is overridden by another mechanism
           data.selection = JSON.stringify(self.getSelectedUids());
         }
         data._authenticator = $('input[name="_authenticator"]').val();
-        if(data.folder === undefined){
+        if (data.folder === undefined) {
           data.folder = self.options.queryHelper.getCurrentPath();
         }
 
@@ -276,42 +277,42 @@ define([
           url: url,
           type: 'POST',
           data: data,
-          success: function(data){
+          success: function(data) {
             self.ajaxSuccessResponse.apply(self, [data, callback]);
             self.loading.hide();
           },
-          error: function(response){
+          error: function(response) {
             self.ajaxErrorResponse.apply(self, [response, url]);
             self.loading.hide();
           }
         }, self);
       }
     },
-    ajaxSuccessResponse: function(data, callback){
+    ajaxSuccessResponse: function(data, callback) {
       var self = this;
-      if(data.status === 'success'){
+      if (data.status === 'success') {
         self.collection.reset();
       }
-      if(data.msg){
+      if (data.msg) {
         // give status message somewhere...
         self.setStatus(data.msg);
       }
-      if(callback !== null && callback !== undefined){
+      if (callback !== null && callback !== undefined) {
         callback(data);
       }
       self.collection.pager();
     },
-    ajaxErrorResponse: function(response, url){
+    ajaxErrorResponse: function(response, url) {
       var self = this;
-      if(response.status === 404){
+      if (response.status === 404) {
         window.alert('operation url "' + url + '" is not valid');
-      }else{
+      } else {
         window.alert('there was an error performing action');
       }
     },
-    pasteEvent: function(button, e, data){
+    pasteEvent: function(button, e, data) {
       var self = this;
-      if(data === undefined){
+      if (data === undefined) {
         data = {};
       }
       data = $.extend(true, {}, {
@@ -320,20 +321,20 @@ define([
       }, data);
       self.defaultButtonClickEvent(button, data);
     },
-    cutCopyClickEvent: function(button){
+    cutCopyClickEvent: function(button) {
       var self = this;
       var txt;
-      if(button.id === 'cut'){
+      if (button.id === 'cut') {
         txt = 'cut ';
         self.pasteOperation = 'cut';
-      }else{
+      } else {
         txt = 'copied ';
         self.pasteOperation = 'copy';
       }
 
       // clone selected items
       self.pasteSelection = new Backbone.Collection();
-      self.selectedCollection.each(function(item){
+      self.selectedCollection.each(function(item) {
         self.pasteSelection.add(item);
       });
       txt += 'selection';
@@ -341,7 +342,7 @@ define([
       self.pasteAllowed = true;
       self.buttons.primary.get('paste').enable();
     },
-    setupButtons: function(){
+    setupButtons: function() {
       var self = this;
       self.buttons = {};
       var items = [];
@@ -364,14 +365,14 @@ define([
         collection: this.selectedCollection
       }));
 
-      if(self.options.contextInfoUrl){
+      if (self.options.contextInfoUrl) {
         // only add menu if set
         items.push(new AddMenu({
           contextInfoUrl: self.options.contextInfoUrl,
           app: self
         }));
       }
-      if(self.options.rearrange){
+      if (self.options.rearrange) {
         var rearrangeButton = new ButtonView({
           id: 'rearrange',
           title: 'Rearrange',
@@ -385,15 +386,15 @@ define([
         items.push(rearrangeButton);
       }
 
-      _.each(_.pairs(this.options.buttonGroups), function(group){
+      _.each(_.pairs(this.options.buttonGroups), function(group) {
         var buttons = [];
-        _.each(group[1], function(button){
+        _.each(group[1], function(button) {
           button = new ButtonView(button);
           buttons.push(button);
           // bind click events now...
           var ev = self.buttonClickEvents[button.id];
-          if(ev !== DISABLE_EVENT){
-            if(ev === undefined){
+          if (ev !== DISABLE_EVENT) {
+            if (ev === undefined) {
               ev = 'defaultButtonClickEvent'; // default click event
             }
             button.on('button:click', self[ev], self);
@@ -406,14 +407,14 @@ define([
         });
         items.push(self.buttons[group[0]]);
       });
-      if(self.options.uploadUrl){
+      if (self.options.uploadUrl) {
         var uploadBtn = new ButtonView({
           title: 'Upload',
           context: 'success',
           icon: 'upload'
         });
         items.push(uploadBtn);
-        uploadBtn.on('button:click', function(){
+        uploadBtn.on('button:click', function() {
           // update because the url can change depending on the folder we're in.
           self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
           self.dropzone.hiddenFileInput.click();
@@ -427,7 +428,7 @@ define([
         items: items
       });
     },
-    moveItem: function(id, delta, subset_ids){
+    moveItem: function(id, delta, subsetIds) {
       var self = this;
       $.ajax({
         url: this.getAjaxUrl(this.options.moveUrl),
@@ -436,42 +437,42 @@ define([
           delta: delta,
           id: id,
           _authenticator: $('[name="_authenticator"]').val(),
-          subset_ids: JSON.stringify(subset_ids)
+          subsetIds: JSON.stringify(subsetIds)
         },
         dataType: 'json',
-        success: function(data){
-          if(data.msg){
+        success: function(data) {
+          if (data.msg) {
             self.setStatus(data.msg);
-          }else if(data.status !== "success"){
+          }else if (data.status !== 'success') {
             // XXX handle error here with something?
             self.setStatus('error moving item');
           }
           self.collection.pager(); // reload it all
         },
-        error: function(data){
+        error: function(data) {
           self.setStatus('error moving item');
         }
       });
     },
-    setStatus: function(txt, type){
+    setStatus: function(txt, type) {
       this.status = txt;
-      if(type === undefined){
+      if (type === undefined) {
         type = 'warning';
       }
       this.statusType = type;
       this.$('.status').addClass(type).html(txt);
     },
-    render: function(){
+    render: function() {
       var self = this;
 
       self.$el.append(self.toolbar.render().el);
       self.$el.append(self.wellView.render().el);
       self.$el.append(self.columnsView.render().el);
-      if(self.rearrangeView){
+      if (self.rearrangeView) {
         self.$el.append(self.rearrangeView.render().el);
       }
 
-      _.each(self.buttonViews, function(view){
+      _.each(self.buttonViews, function(view) {
         self.$el.append(view.render().el);
       });
 
@@ -479,7 +480,7 @@ define([
       self.$el.append(self.pagingView.render().el);
 
       /* dropzone support */
-      if(self.options.uploadUrl){
+      if (self.options.uploadUrl) {
         self.dropzone = new DropZone(self.$el, {
           className: 'structure-dropzone',
           //clickable: false,
@@ -487,11 +488,11 @@ define([
           url: self.getAjaxUrl(self.options.uploadUrl),
           autoCleanResults: true,
           useTus: self.options.useTus,
-          success: function(){
+          success: function() {
             self.collection.pager();
           }
         }).dropzone;
-        self.dropzone.on('drop', function(){
+        self.dropzone.on('drop', function() {
           // because this can change depending on the folder we're in
           self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
         });
@@ -508,29 +509,29 @@ define([
 
       return self;
     },
-    getCookieSetting: function(name, _default){
-      if(_default === undefined){
+    getCookieSetting: function(name, _default) {
+      if (_default === undefined) {
         _default = null;
       }
       var val;
-      try{
+      try {
         val = $.cookie(this.cookieSettingPrefix + name);
         val = $.parseJSON(val).value;
-      }catch(e){
+      } catch (e) {
         /* error parsing json, load default here now */
         return _default;
       }
-      if(val === undefined || val === null){
+      if (val === undefined || val === null) {
         return _default;
       }
       return val;
     },
-    setCookieSetting: function(name, val){
+    setCookieSetting: function(name, val) {
       $.cookie(this.cookieSettingPrefix + name,
                JSON.stringify({'value': val})
       );
     },
-    setAllCookieSettings: function(){
+    setAllCookieSettings: function() {
       this.activeColumns = this.getCookieSetting('activeColumns', this.activeColumns);
     }
   });

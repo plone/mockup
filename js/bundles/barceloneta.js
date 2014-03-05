@@ -26,11 +26,11 @@ define([
   'mockup-registry',
   'mockup-patterns-base'
 ], function($, Registry, Base) {
-  "use strict";
+  'use strict';
 
   // BBB: we need to hook pattern to classes which plone was using until now
   var PloneBarceloneta = Base.extend({
-    name: "plone-barceloneta",
+    name: 'plone-barceloneta',
     init: function() {
       var self = this;
 

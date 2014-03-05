@@ -5,7 +5,7 @@ define([
   'mockup-registry',
   'mockup-patterns-modal'
 ], function(expect, $, sinon, registry, Modal) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -14,46 +14,49 @@ define([
    TEST: Modal
   ========================== */
 
-  describe("Modal", function() {
-    beforeEach(function(){
+  describe('Modal', function() {
+    beforeEach(function() {
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
       this.server.respondWith(/patterns-modal-load-via-ajax/, function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "text/html" }, '' +
+        xhr.respond(200, { 'Content-Type': 'text/html' }, '' +
           '<html><body>' +
           '<div id="content">Exampel</div>' +
-          '</body></html>');
+          '</body></html>'
+        );
       });
 
-      this.server.respondWith("GET", /modal-form\.html/, function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "text/html" },
-          '<html>'+
-          '<head></head>'+
-          '<body>'+
-          '<div id="content">'+
-          '<h1>Modal with Form</h1>'+
-          '<p>This modal contains a form.</p>'+
+      this.server.respondWith('GET', /modal-form\.html/, function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'text/html' },
+          '<html>' +
+          '<head></head>' +
+          '<body>' +
+          '<div id="content">' +
+          '<h1>Modal with Form</h1>' +
+          '<p>This modal contains a form.</p>' +
           '<form method="POST" action="/modal-submit.html">' +
           '  <label for="name">Name:</label><input type="text" name="name" />' +
           '  <div class="formControls"> ' +
           '    <input type="submit" class="btn btn-primary" value="Submit" name="save" />' +
-          '  </div>'+
+          '  </div>' +
           '</form>' +
-          '</body>'+
-          '</html>');
-        });
+          '</body>' +
+          '</html>'
+        );
+      });
 
-        this.server.respondWith('POST', /modal-submit\.html/, function(xhr, id) {
-          xhr.respond(200, {"content-Type": "text/html"},
-            '<html> '+
-            '  <head></head>'+
-            '  <body> '+
-            '    <div id="content">'+
-            '      <h1>Form submitted</h1>'+
-            '      <p>Thanks!</p>'+
-            '  </body> '+
-            '</html>');
-        });
+      this.server.respondWith('POST', /modal-submit\.html/, function(xhr, id) {
+        xhr.respond(200, {'content-Type': 'text/html'},
+          '<html> ' +
+          '  <head></head>' +
+          '  <body> ' +
+          '    <div id="content">' +
+          '      <h1>Form submitted</h1>' +
+          '      <p>Thanks!</p>' +
+          '  </body> ' +
+          '</html>'
+        );
+      });
     });
 
     afterEach(function() {
@@ -61,7 +64,7 @@ define([
       this.server.restore();
     });
 
-    it("default behaviour", function() {
+    it('default behaviour', function() {
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
@@ -87,7 +90,7 @@ define([
       expect($('.modal .modal-body', $el).size()).to.equal(1);
       expect($('.modal .modal-footer', $el).size()).to.equal(1);
 
-      var keydown = $.Event("keydown");
+      var keydown = $.Event('keydown');
       keydown.keyCode = 27;
       $(document).trigger(keydown);
       expect($el.hasClass('backdrop-active')).to.be.equal(false);
@@ -96,7 +99,7 @@ define([
       $el.remove();
     });
 
-    it("customize modal on show event", function() {
+    it('customize modal on show event', function() {
       var $el = $('' +
         '<div id="body">' +
         ' <a class="pat-modal" href="#target"' +
@@ -107,43 +110,49 @@ define([
       $('a', $el)
         .patternModal()
         .on('show.modal.patterns', function(e) {
-            var modal = $(this).data('pattern-modal');
-            $('.modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
-          })
+          var modal = $(this).data('pattern-modal');
+          $('.modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
+        })
         .click();
       expect($('.modal .modal-header h3', $el).text()).to.equal('New Title');
 
       $el.remove();
     });
 
-    it("load modal content via ajax", function(done) {
+    it('load modal content via ajax', function(done) {
       $('<a class="pat-modal" />')
         .patternModal()
-        .on('show.modal.patterns', function(e){
+        .on('show.modal.patterns', function(e) {
           expect(true).to.be.equal(true);
           done();
-      }).click();
+        })
+        .click();
     });
 
-    it("redirects to base urls", function(done){
+    it('redirects to base urls', function(done) {
       $('<a class="pat-modal" />')
         .patternModal()
-        .on('show.modal.patterns', function(e){
+        .on('show.modal.patterns', function(e) {
           var modal = $(this).data('pattern-modal');
-          expect(modal.defaults.actionOptions.redirectToUrl('ignore',
-              '<html><head><base href="testurl"></base></head></html>')).to.equal('testurl');
-          expect(modal.defaults.actionOptions.redirectToUrl('ignore',
-              '<html><head><base href="testurl" /></head></html>')).to.equal('testurl');
+          expect(modal.defaults.actionOptions.redirectToUrl(
+            'ignore',
+            '<html><head><base href="testurl"></base></head></html>'
+          )).to.equal('testurl');
+          expect(modal.defaults.actionOptions.redirectToUrl(
+            'ignore',
+            '<html><head><base href="testurl" /></head></html>'
+          )).to.equal('testurl');
           done();
-      }).click();
+        })
+        .click();
     });
 
-    it("handles forms and form submits", function(done) {
+    it('handles forms and form submits', function(done) {
       var server = this.server;
       $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
         .appendTo('body')
         .patternModal()
-        .on('show.modal.patterns', function(e){
+        .on('show.modal.patterns', function(e) {
           var $input = $('.pattern-modal-buttons').find('input');
           expect($input.size()).to.equal(1);
           $input.click();
@@ -159,27 +168,27 @@ define([
       server.respond(); // XXX could not get autorespond to work
     });
 
-    it("handles form submits with enter key", function(done) {
-        var server = this.server;
-        $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
-            .appendTo('body')
-            .patternModal()
-            .on('show.modal.patterns', function(e){
-                var event = $.Event ('keydown');
-                event.which = event.keyCode = 13;
-                $('.modal form').trigger (event);
-                server.respond();
-            })
-            .on('formActionSuccess.modal.patterns', function() {
-                var title = $('.modal-header').find('h3').text();
-                expect(title).to.equal('Form submitted');
-                done();
-            })
-            .click();
-        server.respond();
+    it('handles form submits with enter key', function(done) {
+      var server = this.server;
+      $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
+        .appendTo('body')
+        .patternModal()
+        .on('show.modal.patterns', function(e) {
+          var event = $.Event ('keydown');
+          event.which = event.keyCode = 13;
+          $('.modal form').trigger (event);
+          server.respond();
+        })
+        .on('formActionSuccess.modal.patterns', function() {
+          var title = $('.modal-header').find('h3').text();
+          expect(title).to.equal('Form submitted');
+          done();
+        })
+        .click();
+      server.respond();
     });
 
-    describe("modal positioning (findPosition) ", function() {
+    describe('modal positioning (findPosition) ', function() {
       //
       // -- CHANGE POSITION ONLY ----------------------------------------------
       //

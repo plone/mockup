@@ -1,8 +1,8 @@
 /* Tooltip pattern.
  *
  * Options:
- *    event_enter(string): Event used to trigger tooltip. ('mouseenter')
- *    event_exit(string): Event used to dismiss tooltip. ('mouseleave')
+ *    enterEvent(string): Event used to trigger tooltip. ('mouseenter')
+ *    exitEvent(string): Event used to dismiss tooltip. ('mouseleave')
  *
  * Documentation:
  *    # Directions
@@ -19,7 +19,7 @@
  *      tooltip.
  *    - Select the view html button
  *    - Find your text. and wrap that text with an href tag, and add a class
- *      and the href tag. 
+ *      and the href tag.
  *    - It should look like < a class="pat-tooltip" href="#my-demo-tip"> My
  *      link text </a>
  *    - Choose Save
@@ -27,7 +27,7 @@
  *    Now that we have added our link we now need to add our tooltip.
  *
  *    - Choose "edit"
- *    - Immediently following the link click to add some text and hit your 
+ *    - Immediently following the link click to add some text and hit your
  *      "return" key
  *    - Add the text that you want to be the tip.
  *    - Choose the "edit html" button
@@ -40,7 +40,7 @@
  *    Note: it's important that the href AND the ID be named exactly the same
  *    thing. This is what links them together.
  *
- *    # Example 
+ *    # Example
  *
  *    {{ example-1 }}
  *
@@ -73,50 +73,49 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base, undefined) {
-  "use strict";
+  'use strict';
 
   var ToolTip = Base.extend({
     name: 'tooltip',
     defaults: {
       attribute: 'class',
-      event_enter: 'mouseenter',
-      event_exit: 'mouseleave'
+      enterEvent: 'mouseenter',
+      exitEvent: 'mouseleave'
     },
     init: function() {
       var self = this;
 
-      self.on(self.options.event_enter, function(e) {
+      self.on(self.options.enterEvent, function(e) {
         e.stopPropagation();
         self.show.apply(self, [e]);
       });
-      self.on(self.options.event_exit, function(e) {
+      self.on(self.options.exitEvent, function(e) {
         e.stopPropagation();
         self.hide.apply(self, [e]);
       });
 
     },
     closest: function($el, selector) {
-        var $closest;
-        $.each($el.parents(), function(i, el) {
-            $closest = $(selector, el);
-            if ($closest.size() !== 0) {
-                return false;
-            }
-        });
-        return $closest;
+      var $closest;
+      $.each($el.parents(), function(i, el) {
+        $closest = $(selector, el);
+        if ($closest.size() !== 0) {
+          return false;
+        }
+      });
+      return $closest;
     },
     show : function(e) {
-        var s = $(e.target).attr('href');
-        this.closest(this.$el, s).addClass('active');
+      var s = $(e.target).attr('href');
+      this.closest(this.$el, s).addClass('active');
     },
 
     hide : function(e) {
-        var s = $(e.target).attr('href');
-        this.closest(this.$el, s).removeClass('active');
+      var s = $(e.target).attr('href');
+      this.closest(this.$el, s).removeClass('active');
     }
 
   });
-
 
   return ToolTip;
 

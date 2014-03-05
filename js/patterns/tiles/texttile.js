@@ -3,6 +3,7 @@ define([
   'js/patterns/tiles/tiletype',
   'js/patterns/modalform'
 ], function($, TileType, ModalForm) {
+  'use strict';
 
   var TextTile = TileType.register('text', {
     actions: {

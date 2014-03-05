@@ -54,7 +54,7 @@ define([
   'text!js/patterns/structure/templates/table.xml',
   'text!js/ui/templates/popover.xml'
 ], function($, Base, utils, AppView) {
-  "use strict";
+  'use strict';
 
   var Structure = Base.extend({
     name: 'structure',
@@ -66,10 +66,12 @@ define([
       contextInfoUrl: null, // for add new dropdown and other info
       setDefaultPageUrl: null,
       backdropSelector: '.modal', // Element upon which to apply backdrops used for popovers
-      attributes: ['UID', 'Title', 'Type', 'path', 'review_state',
-                   'ModificationDate', 'EffectiveDate', 'CreationDate',
-                   'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
-                   'getObjSize', 'last_comment_date', 'total_comments'],
+      attributes: [
+        'UID', 'Title', 'Type', 'path', 'review_state',
+        'ModificationDate', 'EffectiveDate', 'CreationDate',
+        'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
+        'getObjSize', 'last_comment_date', 'total_comments'
+      ],
       activeColumns: [
         'ModificationDate',
         'EffectiveDate',

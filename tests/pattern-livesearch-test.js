@@ -5,7 +5,7 @@ define([
   'mockup-registry',
   'mockup-patterns-livesearch'
 ], function(expect, $, sinon, registry, Livesearch) {
-  "use strict";
+  'use strict';
 
   var errormsg;
   window.mocha.setup({globals: ['setTimeout', 'setInterval', 'clearTimeout', 'clearInterval']});
@@ -17,7 +17,7 @@ define([
   ========================== */
 
   describe('Livesearch', function() {
-    beforeEach(function(){
+    beforeEach(function() {
 
       this._error = $.error;
       $.error = function(msg) {
@@ -30,49 +30,50 @@ define([
 
       function getQueryVariable(url, variable) {
         var query = url.split('?')[1];
-        if(query === undefined){
+        if (query === undefined) {
           return null;
         }
         var vars = query.split('&');
         for (var i = 0; i < vars.length; i += 1) {
-            var pair = vars[i].split('=');
-            if (decodeURIComponent(pair[0]) === variable) {
-                return decodeURIComponent(pair[1]);
-            }
+          var pair = vars[i].split('=');
+          if (decodeURIComponent(pair[0]) === variable) {
+            return decodeURIComponent(pair[1]);
+          }
         }
         return null;
       }
-      this.server.respondWith("GET", /search.json/, function (xhr, id) {
+      this.server.respondWith('GET', /search.json/, function (xhr, id) {
         var items = [
           {
-            "UID": "123sdfasdf",
-            "getURL": "http://localhost:8081/news/aggregator",
-            "Type": "Collection", "Description": "Site News",
-            "Title": "News"
+            UID: '123sdfasdf',
+            getURL: 'http://localhost:8081/news/aggregator',
+            Type: 'Collection',
+            Description: 'Site News',
+            Title: 'News'
           },
           {
-            "UID": "fooasdfasdf1123asZ",
-            "getURL": "http://localhost:8081/news/aggregator",
-            "Type": "Collection", "Description": "Site News",
-            "Title": "Another Item"
+            UID: 'fooasdfasdf1123asZ',
+            getURL: 'http://localhost:8081/news/aggregator',
+            Type: 'Collection', Description: 'Site News',
+            Title: 'Another Item'
           },
           {
-            "UID": "fooasdfasdf1231as",
-            "getURL": "http://localhost:8081/news/aggregator",
-            "Type": "Collection", "Description": "Site News",
-            "Title": "News"
+            UID: 'fooasdfasdf1231as',
+            getURL: 'http://localhost:8081/news/aggregator',
+            Type: 'Collection', Description: 'Site News',
+            Title: 'News'
           },
           {
-            "UID": "fooasdfasdf12231451",
-            "getURL": "http://localhost:8081/news/aggregator",
-            "Type": "Collection", "Description": "Site News",
-            "Title": "Another Item"
+            UID: 'fooasdfasdf12231451',
+            getURL: 'http://localhost:8081/news/aggregator',
+            Type: 'Collection', Description: 'Site News',
+            Title: 'Another Item'
           },
           {
-            "UID": "sdfsdkfo12231451",
-            "getURL": "http://localhost:8081/news/aggregator",
-            "Type": "Collection", "Description": "Site News",
-            "Title": "Another Item"
+            UID: 'sdfsdkfo12231451',
+            getURL: 'http://localhost:8081/news/aggregator',
+            Type: 'Collection', Description: 'Site News',
+            Title: 'Another Item'
           }
         ];
 
@@ -84,14 +85,14 @@ define([
         } else {
           if (batch) {
             var start, end;
-            start = (batch.page-1) * batch.size;
+            start = (batch.page - 1) * batch.size;
             end = start + batch.size;
             results = items.slice(start, end);
           } else {
             results = items;
           }
         }
-        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
           total: results.length,
           results: results
         }));
@@ -104,20 +105,20 @@ define([
       this.server.restore();
 
       this.$el.remove();
-      $.error= this._error;
+      $.error = this._error;
       errormsg = undefined;
 
     });
 
     it('test default elements', function() {
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -130,14 +131,14 @@ define([
     });
 
     it('keyboard navigation and selection', function() {
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json; isTest: true">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json; isTest: true">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -229,14 +230,14 @@ define([
     });
 
     it('user help is shown indicating how many chars to type', function() {
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json;">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -260,14 +261,14 @@ define([
     });
 
     it('no results found message', function() {
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json;">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -286,14 +287,14 @@ define([
     });
 
     it('searching message is displayed', function() {
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json;">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -303,7 +304,7 @@ define([
       d.which = 68;
 
       $input.val('123').trigger(d);
-      this.clock.tick(pattern.options.delay+5);
+      this.clock.tick(pattern.options.delay + 5);
 
       expect(pattern.$results.text()).to.contain('Searching...');
 
@@ -311,15 +312,15 @@ define([
     });
 
     it('template from selector', function() {
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
               'data-pat-livesearch="url:/search.json;' +
-          '                          #tpl_livesearch">'+
-          ' <input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-          ' <div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+          '                          #tpl_livesearch">' +
+          ' <input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+          ' <div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
       var tpl = $('<script type="text/template" id="tpl_livesearch">' +
         '<li class="pattern-livesearch-result pattern-livesearch-type-<%= Type %>">' +
@@ -331,7 +332,7 @@ define([
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
 
-      var $input= pattern.$input;
+      var $input = pattern.$input;
       $input.val('abcd').trigger('keyup');
 
       this.clock.tick(1000);
@@ -339,20 +340,20 @@ define([
       var $results = pattern.items();
 
       expect($results.length).to.be.greaterThan(1);
-      expect($results.first().text().indexOf('Site News')).to.be.greaterThan(-1);
+      expect($results.first().text().indexOf('Site News')).to.be.greaterThan( -1 );
 
       $el.remove();
       tpl.remove();
     });
 
-    it('log error msg if there is no input field', function(){
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json">'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+    it('log error msg if there is no input field', function() {
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json">' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -361,15 +362,15 @@ define([
       $el.remove();
     });
 
-    it('log error msg if there is no url', function(){
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="">'+
-            ' <input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+    it('log error msg if there is no url', function() {
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="">' +
+            ' <input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -378,15 +379,15 @@ define([
       $el.remove();
     });
 
-    it('hide search result if clicking somewhere', function(){
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json;">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+    it('hide search result if clicking somewhere', function() {
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json;">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');
@@ -398,15 +399,15 @@ define([
 
     });
 
-    it('show cached result', function(){
-      var $el = $(''+
-          '<div class="pat-livesearch"'+
-              'data-pat-livesearch="url:/search.json; isTest: true">'+
-            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />'+
-            '<div class="pattern-livesearch-container">'+
-              '<div class="pattern-livesearch-results">'+
-              '</div>'+
-            '</div>'+
+    it('show cached result', function() {
+      var $el = $('' +
+          '<div class="pat-livesearch"' +
+              'data-pat-livesearch="url:/search.json; isTest: true">' +
+            '<input type="text" class="pattern-livesearch-input" placeholder="Search" />' +
+            '<div class="pattern-livesearch-container">' +
+              '<div class="pattern-livesearch-results">' +
+              '</div>' +
+            '</div>' +
           '</div>').appendTo('body');
 
       var pattern = $('.pat-livesearch').patternLivesearch().data('patternLivesearch');

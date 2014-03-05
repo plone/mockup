@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-pickadate'
 ], function(expect, $, registry, PickADate) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,7 +13,7 @@ define([
    TEST: PickADate
   ========================== */
 
-  describe("PickADate", function() {
+  describe('PickADate', function() {
 
     beforeEach(function() {
       this.$el = $('<div><input class="pat-pickadate" /></div>');

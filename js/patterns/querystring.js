@@ -28,7 +28,7 @@
  *    {{ example-1 }}
  *
  *    # Without Previews
- *    
+ *
  *    {{ example-2 }}
  *
  * Example: example-1
@@ -65,7 +65,7 @@ define([
   'mockup-patterns-pickadate',
   'select2'
 ], function($, Base, Select2, PickADate, undefined) {
-  "use strict";
+  'use strict';
 
   var Criteria = function() { this.init.apply(this, arguments); };
   Criteria.prototype = {
@@ -98,12 +98,12 @@ define([
               .appendTo($el);
 
       // Remove button
-      self.$remove = $('<div>'+self.options.remove+'</div>')
-              .addClass(self.options.classRemoveName)
-              .appendTo(self.$wrapper)
-              .on('click', function(e) {
-                self.remove();
-              });
+      self.$remove = $('<div>' + self.options.remove + '</div>')
+        .addClass(self.options.classRemoveName)
+        .appendTo(self.$wrapper)
+        .on('click', function(e) {
+          self.remove();
+        });
 
       // Index selection
       self.$index = $('<select><option></option></select>')
@@ -119,24 +119,26 @@ define([
           }
           self.indexGroups[options.group].append(
             $('<option/>')
-                .attr('value', value)
-                .html(options.title));
+              .attr('value', value)
+              .html(options.title)
+          );
         }
       });
 
       // attach index select to DOM
       self.$wrapper.append(
-          $('<div/>')
-              .addClass(self.options.classIndexName)
-              .append(self.$index));
+        $('<div/>')
+          .addClass(self.options.classIndexName)
+          .append(self.$index)
+      );
 
       // add blink (select2)
       self.$index
         .patternSelect2({
-            width: self.options.indexWidth,
-            placeholder: self.options.placeholder
+          width: self.options.indexWidth,
+          placeholder: self.options.placeholder
         })
-        .on("change", function(e) {
+        .on('change', function(e) {
           self.removeValue();
           self.createOperator(e.val);
           self.createClear();
@@ -168,14 +170,15 @@ define([
 
       // attach operators select to DOM
       self.$wrapper.append(
-          $('<div/>')
-              .addClass(self.options.classOperatorName)
-              .append(self.$operator));
+        $('<div/>')
+          .addClass(self.options.classOperatorName)
+          .append(self.$operator)
+      );
 
       // add blink (select2)
       self.$operator
         .patternSelect2({ width: '10em' })
-        .on("change", function(e) {
+        .on('change', function(e) {
           self.createValue(index);
           self.createClear();
           self.trigger('operator-changed');
@@ -204,7 +207,7 @@ define([
                 .addClass(self.options.classValueName + '-' + widget)
                 .val(value)
                 .appendTo($wrapper)
-                .change(function(){
+                .change(function() {
                   self.trigger('value-changed');
                 });
 
@@ -214,22 +217,22 @@ define([
                 .appendTo($wrapper)
                 .patternPickadate({
                   time: false,
-                  date: { format: "dd/mm/yyyy" }
+                  date: { format: 'dd/mm/yyyy' }
                 })
-                .change(function(){
+                .change(function() {
                   self.trigger('value-changed');
                 });
 
       } else if (widget === 'DateRangeWidget') {
         var startwrap = $('<span/>').appendTo($wrapper);
         var startdt = $('<input type="text"/>')
-                        .addClass(self.options.classValueName + '-' + widget)
-                        .addClass(self.options.classValueName + '-' + widget + '-start')
-                        .appendTo(startwrap)
-                        .patternPickadate({
-                          time: false,
-                          date: { format: "dd/mm/yyyy" }
-                        });
+          .addClass(self.options.classValueName + '-' + widget)
+          .addClass(self.options.classValueName + '-' + widget + '-start')
+          .appendTo(startwrap)
+          .patternPickadate({
+            time: false,
+            date: { format: 'dd/mm/yyyy' }
+          });
         $wrapper.append(
           $('<span/>')
             .html(self.options.betweendt)
@@ -242,7 +245,7 @@ define([
                         .appendTo(endwrap)
                         .patternPickadate({
                           time: false,
-                          date: { format: "dd/mm/yyyy" }
+                          date: { format: 'dd/mm/yyyy' }
                         });
         $wrapper.find('.picker__input').change(function() {
           self.trigger('value-changed');
@@ -254,7 +257,7 @@ define([
                 .after($('<span/>').html(self.options.days))
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
-                .change(function(){
+                .change(function() {
                   self.trigger('value-changed');
                 });
 
@@ -262,7 +265,7 @@ define([
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
-                .change(function(){
+                .change(function() {
                   self.trigger('value-changed');
                 });
 
@@ -271,7 +274,7 @@ define([
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .val(value)
-                .change(function(){
+                .change(function() {
                   self.trigger('value-changed');
                 });
 
@@ -279,7 +282,7 @@ define([
         self.$value = $('<select/>').attr('multiple', true)
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
-                .change(function(){
+                .change(function() {
                   self.trigger('value-changed');
                 });
         if (self.indexes[index]) {
@@ -293,7 +296,7 @@ define([
         self.$value.patternSelect2({ width: '250px' });
       }
 
-      if(value !== undefined && typeof self.$value !== 'undefined') {
+      if (value !== undefined && typeof self.$value !== 'undefined') {
         self.$value.select2('val', value);
       }
 
@@ -334,8 +337,8 @@ define([
     removeValue: function() {
       var self = this;
       self.trigger('remove-value');
-      if(self.$value) {
-        if($.isArray(self.$value)) { // date ranges have 2 values
+      if (self.$value) {
+        if ($.isArray(self.$value)) { // date ranges have 2 values
           self.$value[0].parents('.querystring-criteria-value').remove();
         }
         else {
@@ -350,26 +353,26 @@ define([
 
       // index
       var ival = self.$index.select2('val');
-      if(ival === "") { // no index selected, no query
-        return "";
+      if (ival === '') { // no index selected, no query
+        return '';
       }
-      var istr = 'query.i:records='+ival;
+      var istr = 'query.i:records=' + ival;
 
       // operator
-      if(typeof self.$operator === "undefined") { // no operator, no query
-        return "";
+      if (typeof self.$operator === 'undefined') { // no operator, no query
+        return '';
       }
       var oval = self.$operator.val(),
-          ostr = 'query.o:records='+oval;
+          ostr = 'query.o:records=' + oval;
 
       // value(s)
       var vstrbase = 'query.v:records=',
           vstrlistbase = 'query.v:records:list=',
           vstr = [];
-      if(typeof self.$value === "undefined") {
+      if (typeof self.$value === 'undefined') {
         vstr.push(vstrbase);
       }
-      else if($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
+      else if ($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
         $.each(self.$value, function(i, v) {
           vstr.push(vstrlistbase + $(this).parent().find('.picker__input').val());
         });
@@ -385,38 +388,38 @@ define([
 
       // index
       var ival = self.$index.select2('val');
-      if(ival === "") { // no index selected, no query
-        return "";
+      if (ival === '') { // no index selected, no query
+        return '';
       }
 
       // operator
-      if(typeof self.$operator === "undefined") { // no operator, no query
-        return "";
+      if (typeof self.$operator === 'undefined') { // no operator, no query
+        return '';
       }
       var oval = self.$operator.val();
 
       // value(s)
       var varr = [];
-      if($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
+      if ($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
         $.each(self.$value, function(i, v) {
           varr.push($(this).parent().find('.picker__input').val());
         });
       }
-      else if(typeof self.$value !== "undefined") {
+      else if (typeof self.$value !== 'undefined') {
         varr.push(self.$value.val());
       }
       var vval;
-      if(varr.length > 1) {
-        vval = '["'+varr.join('","')+'"]';
+      if (varr.length > 1) {
+        vval = '[j' + varr.join('","') + '"]';
       }
-      else if(varr.length === 1) {
+      else if (varr.length === 1) {
         vval = JSON.stringify(varr[0]);
       }
       else {
         vval = '""';
       }
 
-      return '{"i":"'+ival+'", "o":"'+oval+'", "v":'+vval+'}';
+      return '{"i":"' + ival + '", "o":"' + oval + '", "v":' + vval + '}';
     },
     trigger: function(name) {
       this.$wrapper.trigger(name + '-criteria.querystring.patterns', [ this ]);
@@ -464,23 +467,23 @@ define([
       // initialization can be detailed if by ajax
       self.initialized = false;
 
-      if(self.options.indexOptionsUrl){
+      if (self.options.indexOptionsUrl) {
         $.ajax({
           url: self.options.indexOptionsUrl,
-          success: function(data){
+          success: function(data) {
             self.options.indexes = data.indexes;
-            self.options.sortable_indexes = data.sortable_indexes;
+            self.options['sortable_indexes'] = data['sortable_indexes']; // jshint ignore:line
             self._init();
           },
-          error: function(xhr){
+          error: function(xhr) {
             // XXX handle this...
           }
         });
-      }else{
+      } else {
         self._init();
       }
     },
-    _init: function(){
+    _init: function() {
       var self = this;
       self.$criteriaWrapper = $('<div/>')
         .addClass(self.options.classWrapperName)
@@ -490,10 +493,10 @@ define([
         .addClass(self.options.classSortWrapperName)
         .appendTo(self.$wrapper);
 
-      if(self.options.showPreviews === 'false'){
+      if (self.options.showPreviews === 'false') {
         self.options.showPreviews = false;
       }
-      if(self.options.showPreviews){
+      if (self.options.showPreviews) {
         self.$previewWrapper = $('<div/>')
           .addClass(self.options.classPreviewWrapperName)
           .appendTo(self.$wrapper);
@@ -525,7 +528,7 @@ define([
       self.createSort();
 
       // add criteria preview pane to see results from criteria query
-      if(self.options.showPreviews){
+      if (self.options.showPreviews) {
         self.refreshPreviewEvent();
       }
       self.$el.trigger('initialized');
@@ -537,13 +540,13 @@ define([
             self.options.indexes, index, operator, value);
 
       criteria.on('remove', function(e) {
-        if (self.criterias[self.criterias.length-1] === criteria) {
+        if (self.criterias[self.criterias.length - 1] === criteria) {
           self.createCriteria();
         }
       });
 
       criteria.on('index-changed', function(e) {
-        if (self.criterias[self.criterias.length-1] === criteria) {
+        if (self.criterias[self.criterias.length - 1] === criteria) {
           self.createCriteria();
         }
       });
@@ -553,8 +556,8 @@ define([
         self.updateValue();
       };
 
-      criteria.on('remove', function(e, criteria){
-        if(self.criterias.indexOf(criteria) !== -1){
+      criteria.on('remove', function(e, criteria) {
+        if (self.criterias.indexOf(criteria) !== -1) {
           self.criterias.splice(self.criterias.indexOf(criteria), 1);
         }
         doupdates(e, criteria);
@@ -587,34 +590,31 @@ define([
       self.$sortOn = $('<select/>')
         .attr('name', 'sort_on')
         .appendTo(self.$sortWrapper)
-        .change(function(){
+        .change(function() {
           self.refreshPreviewEvent.call(self);
           $('[id$="sort_on"]', existingSortOn).val($(this).val());
         });
 
       self.$sortOn.append($('<option value="">No sorting</option>')); // default no sorting
-      for(var key in self.options.sortable_indexes) {
+      for (var key in self.options['sortable_indexes']) { // jshint ignore:line
         self.$sortOn.append(
           $('<option/>')
             .attr('value', key)
-            .html(self.options.indexes[key].title));
+            .html(self.options.indexes[key].title)
+        );
       }
       self.$sortOn.patternSelect2({width: 150});
 
-      self.$sortOrder = $("<input type='checkbox' />")
-                          .attr('name', 'sort_reversed:boolean')
-                          .change(function(){
-                            self.refreshPreviewEvent.call(self);
-                            if($(this).attr('checked') === "checked") {
-                              $('.option input[type="checkbox"]', existingSortOrder)
-                                .attr('checked', 'checked');
-                            }
-                            else {
-                              $('.option input[type="checkbox"]', existingSortOrder)
-                                .removeAttr('checked');
-                            }
-                          });
-
+      self.$sortOrder = $('<input type="checkbox" />')
+        .attr('name', 'sort_reversed:boolean')
+        .change(function() {
+          self.refreshPreviewEvent.call(self);
+          if ($(this).attr('checked') === 'checked') {
+            $('.option input[type="checkbox"]', existingSortOrder).attr('checked', 'checked');
+          } else {
+            $('.option input[type="checkbox"]', existingSortOrder).removeAttr('checked');
+          }
+        });
 
       $('<span/>')
         .addClass(self.options.classSortReverseName)
@@ -628,13 +628,13 @@ define([
 
       // if the form already contains the sort fields, hide them! Their values
       // will be synced back and forth between the querystring's form elements
-      if(existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
-        var reversed = $('.option input[type="checkbox"]', existingSortOrder).attr('checked') === "checked";
-        var sort_on = $('[id$="-sort_on"]', existingSortOn).val();
-        if(reversed) {
+      if (existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
+        var reversed = $('.option input[type="checkbox"]', existingSortOrder).attr('checked') === 'checked';
+        var sortOn = $('[id$="-sort_on"]', existingSortOn).val();
+        if (reversed) {
           self.$sortOrder.attr('checked', 'checked');
         }
-        self.$sortOn.select2('val', sort_on);
+        self.$sortOn.select2('val', sortOn);
         $(existingSortOn).hide();
         $(existingSortOrder).hide();
       }
@@ -642,31 +642,31 @@ define([
     refreshPreviewEvent: function() {
       var self = this;
 
-      if(!self.options.showPreviews){
+      if (!self.options.showPreviews) {
         return; // cut out of this if there are no previews available
       }
 
       /* TEMPORARY */
-      //if(typeof self._tmpcnt === "undefined") { self._tmpcnt = 0; }
+      //if (typeof self._tmpcnt === 'undefined') { self._tmpcnt = 0; }
       //self._tmpcnt++;
       /* /TEMPORARY */
 
-      if(typeof self._preview_xhr !== "undefined") {
-        self._preview_xhr.abort();
+      if (typeof self._previewXhr !== 'undefined') {
+        self._previewXhr.abort();
       }
       /*
-      if(typeof self._count_xhr !== "undefined") {
+      if (typeof self._count_xhr !== 'undefined') {
         self._count_xhr.abort();
       }
       */
-      if(typeof self.$previewPane !== "undefined") {
+      if (typeof self.$previewPane !== 'undefined') {
         self.$previewPane.remove();
       }
 
       var query = [], querypart;
       $.each(self.criterias, function(i, criteria) {
         querypart = criteria.buildQueryPart();
-        if(querypart !== "") {
+        if (querypart !== '') {
           query.push(criteria.buildQueryPart());
         }
       });
@@ -675,17 +675,17 @@ define([
         .addClass(self.options.classPreviewName)
         .appendTo(self.$previewWrapper);
 
-      if(query.length <= 0) {
+      if (query.length <= 0) {
         $('<div/>')
           .addClass(self.options.classPreviewCountWrapperName)
-          .html("No results to preview")
+          .html('No results to preview')
           .prependTo(self.$previewPane);
         return; // no query means nothing to send out requests for
       }
 
-      query.push('sort_on='+self.$sortOn.val());
+      query.push('sort_on=' + self.$sortOn.val());
       var sortorder = self.$sortOrder.attr('checked');
-      if(sortorder === "checked") {
+      if (sortorder === 'checked') {
         query.push('sort_order=reverse');
       }
 
@@ -697,15 +697,15 @@ define([
 
       /*
       self._count_xhr = $.get(self.options.previewCountURL + '?' + query.join('&'))
-          .done(function(data, stat){
+          .done(function(data, stat) {
             $('<div/>')
               .addClass(self.options.classPreviewCountWrapperName)
               .html(data)
               .prependTo(self.$previewPane);
           });
       */
-      self._preview_xhr = $.get(self.options.previewURL + '?' + query.join('&'))
-          .done(function(data, stat){
+      self._previewXhr = $.get(self.options.previewURL + '?' + query.join('&'))
+          .done(function(data, stat) {
             $('<div/>')
               .addClass(self.options.classPreviewResultsWrapperName)
               .html(data)
@@ -723,12 +723,12 @@ define([
       var criteriastrs = [];
       $.each(self.criterias, function(i, criteria) {
         var jsonstr = criteria.getJSONListStr();
-        if(jsonstr !== "") {
+        if (jsonstr !== '') {
           criteriastrs.push(jsonstr);
         }
       });
       var existing = self.$el.val();
-      var val = '['+criteriastrs.join(',')+']';
+      var val = '[' + criteriastrs.join(',') + ']';
       self.$el.val(val);
       self.$el.trigger('change');
     }

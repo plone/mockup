@@ -39,10 +39,10 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var PreventDoubleSubmit = Base.extend({
-    name: "preventdoublesubmit",
+    name: 'preventdoublesubmit',
     defaults: {
       message : 'You already clicked the submit button. ' +
                 'Do you really want to submit this form again?',
@@ -53,11 +53,11 @@ define([
       var self = this;
 
       // if this is not a form just return
-      if(!self.$el.is('form')){
+      if (!self.$el.is('form')) {
         return;
       }
 
-      $(':submit', self.$el).click(function(e){
+      $(':submit', self.$el).click(function(e) {
 
         // mark the button as clicked
         $(':submit').removeAttr('clicked');
@@ -66,7 +66,7 @@ define([
         // if submitting and no opt-out guardClassName is found
         // pop up confirmation dialog
         if ($(this).hasClass(self.options.guardClassName) &&
-              !$(this).hasClass(self.options.optOutClassName)){
+              !$(this).hasClass(self.options.optOutClassName)) {
           return self._confirm.call(self);
         }
 

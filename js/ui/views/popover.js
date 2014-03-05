@@ -31,7 +31,7 @@ define([
   'mockup-patterns-backdrop',
   'text!js/ui/templates/popover.xml',
 ], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
-  "use strict";
+  'use strict';
 
   var PopoverView = ContainerView.extend({
     tagName: 'div',
@@ -44,7 +44,7 @@ define([
     triggerEvents: {
       'button:click': 'toggle'
     },
-    placement: "bottom",
+    placement: 'bottom',
     events: {
     },
     opened: false,
@@ -54,10 +54,10 @@ define([
     $backdrop: null,
     useBackdrop: true,
     backdropOptions: {
-      zIndex: "1009",
-      opacity: "0.4",
-      className: "backdrop backdrop-popover",
-      classActiveName: "backdrop-active",
+      zIndex: '1009',
+      opacity: '0.4',
+      className: 'backdrop backdrop-popover',
+      classActiveName: 'backdrop-active',
       closeOnEsc: false,
       closeOnClick: true
     },
@@ -80,14 +80,14 @@ define([
         }, this);
       }
     },
-    getPosition: function(){
+    getPosition: function() {
       var $el = this.triggerView.$el;
       return $.extend({}, {
         width: $el[0].offsetWidth,
         height: $el[0].offsetHeight
       }, $el.offset());
     },
-    show: function(){
+    show: function() {
       var pos = this.getPosition();
       var $tip = this.$el, tp, placement, actualWidth, actualHeight;
 
@@ -117,19 +117,19 @@ define([
       this.applyPlacement(tp, placement);
 
       this.setBackdrop();
-      if(this.useBackdrop === true){
+      if (this.useBackdrop === true) {
         this.backdrop.show();
       }
 
       this.opened = true;
 
-      if(this.triggerView){
+      if (this.triggerView) {
         this.triggerView.$el.addClass('active');
       }
 
       this.uiEventTrigger('show', this);
     },
-    applyPlacement: function(offset, placement){
+    applyPlacement: function(offset, placement) {
       var $el = this.$el,
         $tip = this.$el,
         width = $tip[0].offsetWidth,
@@ -154,7 +154,7 @@ define([
       if (placement === 'bottom' || placement === 'top') {
         delta = 0;
 
-        if (offset.left < 0){
+        if (offset.left < 0) {
           delta = offset.left * -2;
           offset.left = 0;
           $el.offset(offset);
@@ -174,18 +174,18 @@ define([
     },
     positionArrow: function(delta, dimension, position) {
       var $arrow = this.$('.arrow');
-      $arrow.css(position, delta ? (50 * (1 - delta / dimension) + "%") : '');
+      $arrow.css(position, delta ? (50 * (1 - delta / dimension) + '%') : '');
     },
-    hide: function(){
+    hide: function() {
       this.opened = false;
       this.$el.removeClass('active');
-      if(this.triggerView){
+      if (this.triggerView) {
         this.triggerView.$el.removeClass('active');
       }
       this.uiEventTrigger('hide', this);
     },
-    toggle: function(button, e){
-      if(this.opened){
+    toggle: function(button, e) {
+      if (this.opened) {
         this.hide();
       } else {
         this.show();

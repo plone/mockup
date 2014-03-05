@@ -44,11 +44,11 @@ define([
   'bootstrap-collapse',
   'bootstrap-tooltip'
 ], function($, Registry, Base) {
-  "use strict";
+  'use strict';
 
   // BBB: we need to hook pattern to classes which plone was using until now
   var Plone = Base.extend({
-    name: "plone",
+    name: 'plone',
     init: function() {
       var self = this;
 

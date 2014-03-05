@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-preventdoublesubmit'
 ], function(expect, $, registry, PreventDoubleSubmit) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,17 +13,17 @@ define([
    TEST: PreventDoubleSubmit
   ========================== */
 
-  describe("PreventDoubleSubmit", function() {
+  describe('PreventDoubleSubmit', function() {
     beforeEach(function() {
       var self = this;
       // mock up `_confirm` func
-      self._old_confirm = PreventDoubleSubmit.prototype._confirm;
+      self._oldConfirm = PreventDoubleSubmit.prototype._confirm;
       PreventDoubleSubmit.prototype._confirm = function() {
         this.confirmed = true;
       };
     });
     afterEach(function() {
-      PreventDoubleSubmit.prototype._confirm = this._old_confirm;
+      PreventDoubleSubmit.prototype._confirm = this._oldConfirm;
     });
     it('prevent form to be submitted twice', function() {
       var $el = $('' +
@@ -40,29 +40,29 @@ define([
 
       var guardKlass = 'submitting';
       var optOutKlass = 'allowMultiSubmit';
-      var get_confirmed = function(el) {
+      var getConfirmed = function(el) {
         return el.data('pattern-preventdoublesubmit').confirmed;
       };
-      var reset_confirmed = function(el) {
+      var resetConfirmed = function(el) {
         el.data('pattern-preventdoublesubmit').confirmed = undefined;
       };
 
       var $b1 = $('#b1', $el);
       var $b2 = $('#b2', $el);
 
-      expect(get_confirmed($el)).to.be.equal(undefined);
+      expect(getConfirmed($el)).to.be.equal(undefined);
       $b1.trigger('click');
-      expect(get_confirmed($el)).to.be.equal(undefined);
+      expect(getConfirmed($el)).to.be.equal(undefined);
       expect($b1.hasClass(guardKlass)).to.be.equal(true);
       $b1.trigger('click');
-      expect(get_confirmed($el)).to.be.equal(true);
+      expect(getConfirmed($el)).to.be.equal(true);
 
       // reset confirmed flag
-      reset_confirmed($el);
+      resetConfirmed($el);
 
       $b2.trigger('click');
       expect($b2.hasClass(guardKlass)).to.be.equal(true);
-      expect(get_confirmed($el)).to.be.equal(undefined);
+      expect(getConfirmed($el)).to.be.equal(undefined);
 
     });
   });

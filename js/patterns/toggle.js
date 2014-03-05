@@ -63,7 +63,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-4
  *    <div class="wrapper">
  *      <div class="myScope">
@@ -80,7 +80,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-5
  *    <div class="wrapper">
  *      <div class="myScope">
@@ -90,7 +90,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-6
  *    <div class="wrapper">
  *      <div class="myScope">
@@ -100,7 +100,7 @@
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *    </div>
- *    
+ *
  * Example: example-7
  *    <div class="panel panel-default">
  *      <div class="panel-heading">
@@ -115,7 +115,7 @@
  *        </ul>
  *      </div>
  *    </div>
- *    
+ *
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
@@ -139,7 +139,7 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base, undefined) {
-  "use strict";
+  'use strict';
 
   var Toggle = Base.extend({
     name: 'toggle',
@@ -163,14 +163,11 @@ define([
 
       if (!self.options.target) {
         self.$target = self.$el;
-      }
-      else if(self.options.targetScope === 'global') {
+      } else if (self.options.targetScope === 'global') {
         self.$target = $(self.options.target);
-      }
-      else {
+      } else {
         //self.$target = self.$el[self.options.menu](self.options.target);
-        self.$target = self.$el.parents(
-          self.options.targetScope).first().find(self.options.target);
+        self.$target = self.$el.parents(self.options.targetScope).first().find(self.options.target);
       }
 
       if (!self.$target || self.$target.size() === 0) {
@@ -187,21 +184,18 @@ define([
       var self = this;
       var marked = false;
 
-      for (var i=0;i<this.$target.length;i+=1){
+      for (var i = 0; i < this.$target.length; i = i + 1) {
         if (self.options.attribute === 'class') {
-          if (this.$target.eq(i).hasClass(this.options.value)){
+          if (this.$target.eq(i).hasClass(this.options.value)) {
             marked = true;
-          }
-          else{
+          } else {
             marked = false;
             break;
           }
-        }
-        else{
-          if (this.$target.eq(i).attr(this.options.attribute) === this.options.value){
+        } else {
+          if (this.$target.eq(i).attr(this.options.attribute) === this.options.value) {
             marked = true;
-          }
-          else{
+          } else {
             marked = false;
             break;
           }

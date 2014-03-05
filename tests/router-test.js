@@ -4,18 +4,18 @@ define([
   'mockup-router',
   'backbone'
 ], function(expect, $, Router, Backbone) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
 
   Router.start();
 
-  describe("Router", function () {
+  describe('Router', function () {
 
     beforeEach(function() {
       var self = this;
-      Router._change_location = function(path, hash) {
+      Router._changeLocation = function(path, hash) {
         self.routerPath = path + '#' + hash;
       };
     });
@@ -24,7 +24,7 @@ define([
       this.routerPath = undefined;
     });
 
-    it("routes and calls back", function() {
+    it('routes and calls back', function() {
       var foo = {
         set: false
       };
@@ -34,12 +34,12 @@ define([
       };
 
       Router.addRoute('test', 'foo', callback, foo, '');
-      Router.navigate("test:foo", {trigger: true});
+      Router.navigate('test:foo', {trigger: true});
 
       expect(foo.set).to.equal(true);
     });
 
-    it("redirects from added action", function() {
+    it('redirects from added action', function() {
       var foo = {
         set: false
       };
@@ -57,7 +57,7 @@ define([
       Router.reset();
     });
 
-    it("basic redirect", function() {
+    it('basic redirect', function() {
 
       Router.addRedirect('/', 'test:two');
       Router.redirect();

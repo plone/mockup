@@ -28,7 +28,7 @@
 define([
   'jquery'
 ], function($, undefined) {
-  "use strict";
+  'use strict';
 
   $.IFrame = function(iframe) { this._init(iframe); };
   $.IFrame.prototype = {
@@ -41,7 +41,7 @@ define([
       self.$el = $(iframe.el);
       self.window = window.parent;
       self.document = window.parent.document;
-      self.is_stretched = false;
+      self.isStretched = false;
 
       // # Handle clicks inside iframe
       $(document).on('click', function(e) {
@@ -60,9 +60,9 @@ define([
           }
 
           if (e.which === 1) {
-            self._same_window(url);
+            self._sameWindow(url);
           } else if (e.which === 2) {
-            self._new_window(url);
+            self._neWindow(url);
           }
 
         // if we click on empty part of iframe then shrink it
@@ -83,10 +83,10 @@ define([
     },
 
     // Abstract calls to window.parent so its easier to stub/mock in tests
-    _same_window: function(url) {
+    _sameWindow: function(url) {
       this.window.location.href = url;
     },
-    _new_window: function(url) {
+    _neWindow: function(url) {
       this.window.open(url);
     },
 
@@ -95,9 +95,9 @@ define([
     // Shrink current frame to the size that was before stretching it.
     shrink: function() {
       var self = this;
-      if (self.is_stretched) {
+      if (self.isStretched) {
         self.$el.trigger('shrink.iframe');
-        self.is_stretched = false;
+        self.isStretched = false;
         self.fit();
         self.$el.trigger('shrinked.iframe');
       }
@@ -109,9 +109,9 @@ define([
     // iframe object trasparent
     stretch: function() {
       var self = this;
-      if (!self.is_stretched) {
+      if (!self.isStretched) {
         self.$el.trigger('stretch.iframe');
-        self.is_stretched = true;
+        self.isStretched = true;
         self.$el.css({ height: $(self.document).height() });
         self.$el.trigger('stretched.iframe');
       }
@@ -123,13 +123,16 @@ define([
     // action (stretch or shrink)
     toggle: function() {
       var self = this;
-      if (!self.is_stretched) { self.stretch(); }
-      else { self.shrink(); }
+      if (!self.isStretched) {
+        self.stretch();
+      } else {
+        self.shrink();
+      }
     },
 
     fit: function() {
       var self = this;
-      if (!self.is_stretched) {
+      if (!self.isStretched) {
         self.$el.css({ height: $('body', document).height() });
         $('body', self.document).css('margin-top', $('body', document).height());
       } else {

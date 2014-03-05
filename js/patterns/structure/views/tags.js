@@ -30,7 +30,7 @@ define([
   'js/ui/views/popover',
   'mockup-patterns-select2'
 ], function($, _, Backbone, PopoverView, Select2) {
-  "use strict";
+  'use strict';
 
   var TagsView = PopoverView.extend({
     title: _.template('Add/Remove tags'),
@@ -49,13 +49,13 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       this.removeSelect2 = null;
       this.addSelect2 = null;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function(){
+    render: function() {
       PopoverView.prototype.render.call(this);
       this.$remove = this.$('.toremove');
       this.$add = this.$('.toadd');
@@ -66,24 +66,24 @@ define([
       });
       return this;
     },
-    getSelect2Values: function($el){
+    getSelect2Values: function($el) {
       var values = [];
-      _.each($el.select2('data'), function(item){
+      _.each($el.select2('data'), function(item) {
         values.push(item.id);
       });
       return values;
     },
-    applyButtonClicked: function(e){
+    applyButtonClicked: function(e) {
       this.app.defaultButtonClickEvent(this.triggerView, {
         remove: JSON.stringify(this.getSelect2Values(this.$remove)),
         add: JSON.stringify(this.getSelect2Values(this.$add))
       });
       this.hide();
     },
-    toggle: function(button, e){
+    toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
-      if(!this.opened){
+      if (!this.opened) {
         return;
       }
       // clear out
@@ -91,12 +91,12 @@ define([
       self.$remove.empty();
       self.$add.select2('data', []);
 
-      self.app.selectedCollection.each(function(item){
-        if(!item.attributes.Subject){
+      self.app.selectedCollection.each(function(item) {
+        if (!item.attributes.Subject) {
           return;
         }
-        _.each(item.attributes.Subject, function(tag){
-          if(self.$remove.find('[value="' + tag + '"]').length === 0){
+        _.each(item.attributes.Subject, function(tag) {
+          if (self.$remove.find('[value="' + tag + '"]').length === 0) {
             self.$remove.append('<option value="' + tag + '">' + tag + '</option>');
           }
         });

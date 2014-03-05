@@ -2,7 +2,7 @@ define([
   'jquery',
   'js/patterns/modalform'
 ], function($, modalform) {
-  "use strict";
+  'use strict';
 
   var TileTypeBase = {
     init: function(name) {
@@ -12,7 +12,7 @@ define([
     },
 
     styleButtons: function(buttons) {
-      buttons.css("cssText", "color: #333333 !important;");
+      buttons.css('cssText', 'color: #333333 !important;');
       buttons.addClass('tile-button');
     },
 
@@ -27,7 +27,7 @@ define([
           actions = $('.tiletype-actions', el).clone();
 
       if (actions.size() === 0) {
-          actions = $('#tiletype-' + self.typeid + ' .tiletype-actions').clone();
+        actions = $('#tiletype-' + self.typeid + ' .tiletype-actions').clone();
       }
 
       self.styleActions(actions);
@@ -51,7 +51,8 @@ define([
 
     constructor.prototype = $.extend(
       base || TileTypeBase,
-      tiletype || {});
+      tiletype || {}
+    );
 
     return constructor;
   }
@@ -75,7 +76,7 @@ define([
     // tiletype -- optional object containing definitions for the tiletype instance
     // base -- optional base object to extend from
     register: function(name, tiletype, base) {
-      if(TypeRegistry[name] === undefined) {
+      if (TypeRegistry[name] === undefined) {
         TypeRegistry[name] = createTileType(name, tiletype, base);
       }
 

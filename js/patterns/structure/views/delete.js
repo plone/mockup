@@ -29,7 +29,7 @@ define([
   'backbone',
   'js/ui/views/popover'
 ], function($, _, Backbone, PopoverView) {
-  "use strict";
+  'use strict';
 
   var DeleteView = PopoverView.extend({
     className: 'popover delete',
@@ -41,17 +41,17 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function(){
+    render: function() {
       PopoverView.prototype.render.call(this);
       return this;
     },
-    applyButtonClicked: function(e){
+    applyButtonClicked: function(e) {
       var self = this;
-      this.app.defaultButtonClickEvent(this.triggerView, {}, function(data){
+      this.app.defaultButtonClickEvent(this.triggerView, {}, function(data) {
         self.app.selectedCollection.reset();
       });
       this.hide();

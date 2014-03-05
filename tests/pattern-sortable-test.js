@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-sortable'
 ], function(expect, $, registry, Sortable) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,7 +13,7 @@ define([
    TEST: Toggle
   ========================== */
 
-  describe("Sortable", function() {
+  describe('Sortable', function() {
     beforeEach(function() {
       this.$el = $('' +
         '<ul class="pat-sortable">' +
@@ -28,7 +28,7 @@ define([
       this.$el.remove();
     });
 
-    it("adds class on drag start", function() {
+    it('adds class on drag start', function() {
       var sortable = new Sortable(this.$el);
       var $todrag = this.$el.find('li').eq(0);
       $todrag.trigger('dragstart');

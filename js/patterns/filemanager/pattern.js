@@ -33,10 +33,10 @@ define([
   'mockup-patterns-base',
   'js/patterns/filemanager/views/app'
 ], function($, Base, AppView) {
-  "use strict";
+  'use strict';
 
   var FileManager = Base.extend({
-    name: "filemanager",
+    name: 'filemanager',
     defaults: {
       aceConfig: {},
       dataTreeUrl: null,
@@ -47,13 +47,13 @@ define([
     },
     init: function() {
       var self = this;
-      if(self.options.dataTreeUrl !== null){
+      if (self.options.dataTreeUrl !== null) {
         self.options.treeConfig = $.extend(true, {}, self.treeConfig, {
           dataUrl: self.options.dataTreeUrl
         });
         self.appView = new AppView(self.options);
         self.$el.append(self.appView.render().el);
-      }else{
+      } else {
         self.$el.html('Must specify dataTreeUrl setting for pattern');
       }
     }

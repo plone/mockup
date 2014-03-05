@@ -29,7 +29,7 @@ define([
   'backbone',
   'text!js/patterns/structure/templates/paging.xml'
 ], function($, _, Backbone, PagingTemplate) {
-  "use strict";
+  'use strict';
 
 
   var PagingView = Backbone.View.extend({
@@ -63,36 +63,36 @@ define([
       this.$el.html(html);
       return this;
     },
-    getPages: function(data){
+    getPages: function(data) {
       var perPage = data.perPage;
       var totalPages = data.totalPages;
-      if(!totalPages){
+      if (!totalPages) {
         return [];
       }
       var currentPage = data.currentPage;
       var left = 1;
       var right = totalPages;
-      if(totalPages > this.maxPages){
+      if (totalPages > this.maxPages) {
         left = Math.max(1, Math.floor(currentPage - (this.maxPages / 2)));
         right = Math.min(left + this.maxPages, totalPages);
-        if((right - left) < this.maxPages){
+        if ((right - left) < this.maxPages) {
           left = left - Math.floor(this.maxPages / 2);
         }
       }
       var pages = [];
-      for(var i=left; i<=right; i=i+1){
+      for (var i = left; i <= right; i = i + 1) {
         pages.push(i);
       }
 
       /* add before and after */
-      if(pages[0] > 1){
-        if(pages[0] > 2){
+      if (pages[0] > 1) {
+        if (pages[0] > 2) {
           pages = ['...'].concat(pages);
         }
         pages = [1].concat(pages);
       }
-      if(pages[pages.length - 1] < (totalPages - 1)){
-        if(pages[pages.length - 2] < totalPages - 2){
+      if (pages[pages.length - 1] < (totalPages - 1)) {
+        if (pages[pages.length - 2] < totalPages - 2) {
           pages.push('...');
         }
         pages.push(totalPages);

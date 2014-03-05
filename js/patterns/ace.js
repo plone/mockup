@@ -13,7 +13,7 @@
  *    readOnly(boolean): Read only editor. (false)
  *
  * Documentation:
- *    # Default 
+ *    # Default
  *
  *    {{ example-1 }}
  *
@@ -33,7 +33,7 @@
  * Example: example-2
  *    <pre class="pat-ace" data-pat-ace="mode:javascript;theme:dawn;">
  *    var foo = 'bar';
- *    function foobar(){
+ *    function foobar() {
  *      return foo;
  *    }
  *    </pre>
@@ -46,7 +46,7 @@
  *                       showGutter:false;
  *                       showPrintMargin:true;">
  *    var foo = 'bar';
- *    function foobar(){
+ *    function foobar() {
  *      return foo;
  *    }
  *    </pre>
@@ -77,10 +77,10 @@ define([
   'ace-theme-monokai',
   'ace-mode-text'
 ], function($, Base, utils, ace) {
-  "use strict";
+  'use strict';
 
   var AcePattern = Base.extend({
-    name: "ace",
+    name: 'ace',
     defaults: {
       theme: null,
       mode: 'text',
@@ -110,10 +110,10 @@ define([
       });
 
       self.editor = ace.edit(id);
-      if(self.options.theme){
+      if (self.options.theme) {
         self.setTheme(self.options.theme);
       }
-      self.editor.getSession().setMode("ace/mode/" + self.options.mode);
+      self.editor.getSession().setMode('ace/mode/' + self.options.mode);
       self.editor.getSession().setTabSize(parseInt(self.options.tabSize, 10));
       self.editor.getSession().setUseSoftTabs(utils.bool(self.options.softTabs));
       self.editor.getSession().setUseWrapMode(utils.bool(self.options.wrapMode));
@@ -121,9 +121,9 @@ define([
       self.editor.setShowPrintMargin(utils.bool(self.options.showPrintMargin));
       self.editor.setReadOnly(utils.bool(self.options.readOnly));
     },
-    setTheme: function(theme){
+    setTheme: function(theme) {
       var self = this;
-      self.editor.setTheme("ace/theme/" + theme);
+      self.editor.setTheme('ace/theme/' + theme);
     }
   });
 

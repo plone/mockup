@@ -24,16 +24,16 @@
 
 
 define(['backbone'], function(Backbone) {
-  "use strict";
+  'use strict';
 
   var Result = Backbone.Model.extend({
-    defaults: function(){
+    defaults: function() {
       return {
-        is_folderish: false,
-        review_state: ''
+        'is_folderish': false,
+        'review_state': ''
       };
     },
-    uid: function(){
+    uid: function() {
       return this.attributes.UID;
     }
   });
