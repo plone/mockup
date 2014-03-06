@@ -30,7 +30,7 @@ define([
   'js/ui/views/popover',
   'text!js/patterns/structure/templates/selection_item.xml'
 ], function($, _, Backbone, PopoverView, ItemTemplate) {
-  "use strict";
+  'use strict';
 
   var WellView = PopoverView.extend({
     className: 'popover selected',
@@ -38,18 +38,19 @@ define([
                       '<a href="#" class=" remove-all">' +
                         '<span class="glyphicon glyphicon-remove-circle"></span> remove all</a>'),
     content: _.template(
-      '<% collection.each(function(item){ %>' +
-        '<%= item_template(item.toJSON()) %>' +
-      '<% }); %>'),
+      '<% collection.each(function(item) { %>' +
+      '<%= item_template(item.toJSON()) %>' +
+      '<% }); %>'
+    ),
     events: {
       'click a.remove': 'itemRemoved',
       'keyup input.filter': 'filterSelected',
       'click .remove-all': 'removeAll'
     },
-    initialize: function(options){
+    initialize: function(options) {
       PopoverView.prototype.initialize.apply(this, [options]);
       this.listenTo(this.collection, 'reset all add remove', this.render);
-      this.options.item_template = _.template(ItemTemplate);
+      this.options['item_template'] = _.template(ItemTemplate); // jshint ignore:line
     },
     render: function () {
       PopoverView.prototype.render.call(this);
@@ -58,11 +59,11 @@ define([
       }
       return this;
     },
-    itemRemoved: function(e){
+    itemRemoved: function(e) {
       e.preventDefault();
       var uid = $(e.currentTarget).data('uid');
       this.collection.removeByUID(uid);
-      if(this.collection.length !== 0){
+      if (this.collection.length !== 0) {
         // re-rendering causes it to close, reopen
         this.show();
       }

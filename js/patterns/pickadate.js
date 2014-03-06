@@ -81,7 +81,7 @@ define([
   'picker.date',
   'picker.time'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var PickADate = Base.extend({
     name: 'pickadate',

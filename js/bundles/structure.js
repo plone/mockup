@@ -22,8 +22,8 @@
 
 
 if (window.jQuery) {
-  define( "jquery", [], function () {
-    "use strict";
+  define( 'jquery', [], function () {
+    'use strict';
     return window.jQuery;
   } );
 }
@@ -35,13 +35,13 @@ define([
   'mockup-patterns-modal',
   'mockup-patterns-structure'
 ], function($, registry, Base, Modal, Structure) {
-  "use strict";
+  'use strict';
 
-  $(document).ready(function(){
+  $(document).ready(function() {
     var $structure = $('.pat-structure');
-    if($structure.length === 1){
+    if ($structure.length === 1) {
       var $container = $structure.parents('#content');
-      if($container.length === 0){
+      if ($container.length === 0) {
         // uh oh, no content id, let's go up a few levels and use that as parent
         $container = $structure.parent().parent();
       }
@@ -56,12 +56,12 @@ define([
       });
       var modal = $modal.data('pattern-modal');
       modal.show();
-      modal.$modal.find('a.close').on('destroy.modal.patterns', function(){
+      modal.$modal.find('a.close').on('destroy.modal.patterns', function() {
         var $base = $('base');
         var url;
-        if($base.length === 0){
+        if ($base.length === 0) {
           url = window.location.href.replace('@@folder_contents', '').replace('folder_contents', '');
-        }else{
+        } else {
           url = $base.attr('href');
         }
         window.location = url;

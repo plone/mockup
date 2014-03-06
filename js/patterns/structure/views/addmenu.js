@@ -22,6 +22,7 @@
 // Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 
+/* global alert:true */
 
 define([
   'jquery',
@@ -33,19 +34,19 @@ define([
   'mockup-utils',
   'bootstrap-dropdown'
 ], function($, _, Backbone, ButtonGroup, ButtonView, Modal, utils) {
-  "use strict";
+  'use strict';
 
   var AddMenu = ButtonGroup.extend({
     title: 'Add',
     className: 'btn-group addnew',
     events: {
     },
-    initialize: function(options){
+    initialize: function(options) {
       var self = this;
       ButtonGroup.prototype.initialize.apply(self, [options]);
-      self.app.on('context-info-loaded', function(data){
+      self.app.on('context-info-loaded', function(data) {
         self.$items.empty();
-        _.each(data.addButtons, function(item){
+        _.each(data.addButtons, function(item) {
           var view = new ButtonView({
             id: item.id,
             title: item.title,
@@ -57,14 +58,14 @@ define([
 
           wrap.append(view.el);
           self.$items.append(wrap);
-          view.$el.click(function(e){
+          view.$el.click(function(e) {
             self.buttonClicked.apply(self, [e, view]);
             return false;
           });
         });
       });
     },
-    buttonClicked: function(e, button){
+    buttonClicked: function(e, button) {
       var self = this;
       e.preventDefault();
       self.app.loading.show();
@@ -75,7 +76,7 @@ define([
         data: {
           '_authenticator': $('[name="_authenticator"]').val(),
         },
-        success: function(response){
+        success: function(response) {
           self.app.loading.hide();
           var modal = new Modal(self.$el, {
             html: utils.parseBodyTag(response),
@@ -91,14 +92,14 @@ define([
             },
             actions: {
               'input#form-buttons-save, .formControls input[name="form.button.save"]': {
-                onSuccess: function(modal, response, state, xhr, form){
+                onSuccess: function(modal, response, state, xhr, form) {
                   self.app.collection.pager();
-                  if(self.$items.is(':visible')){
+                  if (self.$items.is(':visible')) {
                     self.$dropdown.dropdown('toggle');
                   }
                   modal.hide();
                 },
-                onError: function(){
+                onError: function() {
                   alert('error on form');
                 }
               },
@@ -109,13 +110,13 @@ define([
           });
           modal.show();
         },
-        error: function(){
+        error: function() {
           // XXX handle error
           self.app.loading.hide();
         }
       });
     },
-    render: function(){
+    render: function() {
       var self = this;
       self.$el.empty();
 

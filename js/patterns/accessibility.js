@@ -59,10 +59,10 @@ define([
   'mockup-patterns-base',
   'jquery.cookie'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var Accessibility = Base.extend({
-    name: "accessibility",
+    name: 'accessibility',
     defaults: {
       'smallbtn': null,
       'normalbtn': null,
@@ -72,13 +72,13 @@ define([
       if ($reset) {
         this.$el.removeClass('smallText').removeClass('largeText').
             removeClass('mediumText');
-        $.cookie('fontsize', $fontsize, { expires: 365, path:"/" });
+        $.cookie('fontsize', $fontsize, { expires: 365, path: '/' });
       }
       this.$el.addClass($fontsize);
     },
-    initBtn: function(btn){
+    initBtn: function(btn) {
       var self = this;
-      btn.el.click(function(e){
+      btn.el.click(function(e) {
         e.preventDefault();
         self.setBaseFontSize(btn.name + 'Text', 1);
       });
@@ -87,15 +87,15 @@ define([
       var self = this;
       var $fontsize = $.cookie('fontsize');
       if ($fontsize) {
-          self.setBaseFontSize($fontsize, 0);
+        self.setBaseFontSize($fontsize, 0);
       }
       var btns = ['smallbtn', 'normalbtn', 'largebtn'];
-      $.each(btns, function(idx, btn){
+      $.each(btns, function(idx, btn) {
         var btnName = btn.replace('btn', '');
         var btnSelector = self.options[btn];
-        if(btnSelector !== null){
+        if (btnSelector !== null) {
           var el = $(btnSelector, self.$el);
-          if(el){
+          if (el) {
             btn = {
               name: btnName,
               el: el

@@ -32,10 +32,10 @@ define([
   'mockup-patterns-querystring',
   'mockup-patterns-tinymce'
 ], function($, Registry, Base) {
-  "use strict";
+  'use strict';
 
   var PloneWidgets = Base.extend({
-    name: "plone-widgets",
+    name: 'plone-widgets',
     init: function() {
       var self = this;
     }

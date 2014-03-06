@@ -29,7 +29,7 @@ define([
   'backbone',
   'js/ui/views/popover'
 ], function($, _, Backbone, PopoverView) {
-  "use strict";
+  'use strict';
 
   var PropertiesView = PopoverView.extend({
     className: 'popover rename',
@@ -47,22 +47,23 @@ define([
           '<label>Short name</label>' +
           '<input class="form-control" name="newid" value="<%= id %>" />' +
         '</div>' +
-      '</div>'),
+      '</div>'
+    ),
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function(){
+    render: function() {
       PopoverView.prototype.render.call(this);
       this.$items = this.$('.itemstoremove');
       return this;
     },
-    applyButtonClicked: function(e){
+    applyButtonClicked: function(e) {
       var torename = [];
-      this.$items.find('.item').each(function(){
+      this.$items.find('.item').each(function() {
         var $item = $(this);
         torename.push({
           UID: $item.find('[name="UID"]').val(),
@@ -76,14 +77,14 @@ define([
       });
       this.hide();
     },
-    toggle: function(button, e){
+    toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
-      if(!self.opened){
+      if (!self.opened) {
         return;
       }
       self.$items.empty();
-      self.app.selectedCollection.each(function(item){
+      self.app.selectedCollection.each(function(item) {
         self.$items.append(self.itemTemplate(item.toJSON()));
       });
     }

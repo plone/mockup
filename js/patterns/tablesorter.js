@@ -21,7 +21,7 @@
  *      guesses about it. It can turn out weird (try sorting on the "No Date"
  *      column).
  *
- *    # Example 
+ *    # Example
  *
  *    {{ example-1 }}
  *
@@ -92,32 +92,35 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var TableSorter = Base.extend({
-    name: "tablesorter",
+    name: 'tablesorter',
     defaults: {},
-    sortabledataclass: function (cell){
+    sortabledataclass: function (cell) {
       var re, matches;
 
-      re = new RegExp("sortabledata-([^ ]*)","g");
+      re = new RegExp('sortabledata-([^ ]*)','g');
       matches = re.exec(cell.attr('class'));
-      if (matches) { return matches[1]; }
-        else { return null; }
+      if (matches) {
+        return matches[1];
+      } else {
+        return null;
+      }
     },
     sortable: function (cell) {
       var self = this;
-        // convert a cell into something sortable
+      // convert a cell into something sortable
 
       // use sortabledata-xxx cell class if it is defined
       var text = self.sortabledataclass(cell);
       if (text === null) { text = cell.text(); }
 
       // A number, but not a date?
-        if (text.charAt(4) !== '-' && text.charAt(7) !== '-' && !isNaN(parseFloat(text))) {
-            return parseFloat(text);
-        }
-        return text.toLowerCase();
+      if (text.charAt(4) !== '-' && text.charAt(7) !== '-' && !isNaN(parseFloat(text))) {
+        return parseFloat(text);
+      }
+      return text.toLowerCase();
     },
     sort: function ($this) {
       var self = this;
@@ -131,39 +134,39 @@ define([
 
       $($this).parent().find('th .sortdirection')
           .html('&#x2003;');
-      $($this).children('.sortdirection').html(
-          reverse ? '&#x25bc;': '&#x25b2;' );
+      $($this).children('.sortdirection').html( reverse ? '&#x25bc;': '&#x25b2;' );
 
       index = $($this).parent().children('th').index($this);
       data = [];
       usenumbers = true;
       tbody.find('tr').each(function() {
-          var cells, sortableitem;
+        var cells, sortableitem;
 
-          cells = $(this).children('td');
-          sortableitem = self.sortable.apply(self, [cells.slice(index,index+1)]);
-          if (isNaN(sortableitem)) { usenumbers = false; }
-          data.push([
-              sortableitem,
-              // crude way to sort by surname and name after first choice
-              self.sortable.apply(self, [cells.slice(1,2)]),
-              self.sortable.apply(self, [cells.slice(0,1)]),
-              this]);
+        cells = $(this).children('td');
+        sortableitem = self.sortable.apply(self, [cells.slice(index,index + 1)]);
+        if (isNaN(sortableitem)) { usenumbers = false; }
+        data.push([
+          sortableitem,
+          // crude way to sort by surname and name after first choice
+          self.sortable.apply(self, [cells.slice(1,2)]),
+          self.sortable.apply(self, [cells.slice(0,1)]),
+          this
+        ]);
       });
 
       if (data.length) {
-          if (usenumbers) {
-              data.sort(function(a,b) {return a[0]-b[0];});
-          } else {
-              data.sort();
-          }
-          if (reverse) { data.reverse(); }
-          table.attr('sorted', reverse ? '' : colnum);
+        if (usenumbers) {
+          data.sort(function(a,b) { return a[0] - b[0]; });
+        } else {
+          data.sort();
+        }
+        if (reverse) { data.reverse(); }
+        table.attr('sorted', reverse ? '' : colnum);
 
-          // appending the tr nodes in sorted order will remove them from their old ordering
-          tbody.append($.map(data, function(a) { return a[3]; }));
-          // jquery :odd and :even are 0 based
-          tbody.each(self.setoddeven);
+        // appending the tr nodes in sorted order will remove them from their old ordering
+        tbody.append($.map(data, function(a) { return a[3]; }));
+        // jquery :odd and :even are 0 based
+        tbody.each(self.setoddeven);
       }
     },
 
@@ -184,7 +187,7 @@ define([
       // the first one of the cells gets a up arrow instead.
       self.$el.find('thead th').append(blankarrow.clone())
           .css('cursor', 'pointer')
-          .on("click", function(e) {
+          .on('click', function(e) {
             self.sort.apply(self, [this]);
           });
 

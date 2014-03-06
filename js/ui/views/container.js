@@ -29,7 +29,7 @@ define([
   'backbone',
   'js/ui/views/base'
 ], function($, _, Backbone, BaseView) {
-  "use strict";
+  'use strict';
 
   var Container = BaseView.extend({
     id: '',
@@ -58,12 +58,12 @@ define([
       if (this.itemContainer !== null) {
         $container = $(this.itemContainer, this.$el);
         if ($container.length === 0) {
-          throw "Item Container element not found.";
+          throw 'Item Container element not found.';
         }
       } else {
         $container = this.$el;
       }
-      _.each(this.items, function(view){
+      _.each(this.items, function(view) {
         if (view.appendInContainer === true) {
           $container.append(view.render().$el);
         } else {
@@ -95,14 +95,14 @@ define([
         });
       });
     },
-    get: function(id){
+    get: function(id) {
       // Remove the recursive part because it was confusing if two children had the
       // same id
       return _.findWhere(this.items, {'id': id});
     },
     add: function(item) {
       if (item.id !== undefined && this.get(item.id)) {
-        throw "Another item with the same `id` already exists.";
+        throw 'Another item with the same `id` already exists.';
       }
       this.items.push(item);
     }

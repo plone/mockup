@@ -1,4 +1,4 @@
-{ plone-mockup ? { outPath = ./.; name = "plone-mockup"; }
+{ mockup ? { outPath = ./.; name = "mockup"; }
 }:
 let
   pkgs = import <nixpkgs> {};
@@ -11,11 +11,11 @@ let
     generated = ./package.nix;
   };
 in rec {
-  tarball = pkgs.runCommand "plone-mockup-1.4.0.tgz" { buildInputs = [ pkgs.nodejs ]; } ''
-    mv `HOME=$PWD npm pack ${plone-mockup}` $out
+  tarball = pkgs.runCommand "mockup-1.6.0.tgz" { buildInputs = [ pkgs.nodejs ]; } ''
+    mv `HOME=$PWD npm pack ${mockup}` $out
   '';
   build = nodePackages.buildNodePackage {
-    name = "plone-mockup-1.4.0";
+    name = "mockup-1.6.0";
     src = [ tarball ];
     buildInputs = [ ];
     deps = with nodePackages; [
@@ -29,6 +29,7 @@ in rec {
       grunt-contrib-less
       grunt-contrib-requirejs
       grunt-contrib-uglify
+      grunt-jscs-checker
       grunt-karma
       grunt-sed
       karma
@@ -52,6 +53,6 @@ in rec {
     '';
 
     peerDependencies = [];
-    passthru.names = [ "plone-mockup" ];
+    passthru.names = [ "mockup" ];
   };
 }

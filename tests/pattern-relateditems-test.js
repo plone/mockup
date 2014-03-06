@@ -1,11 +1,12 @@
 define([
   'expect',
   'jquery',
+  'underscore',
   'sinon',
   'mockup-registry',
   'mockup-patterns-relateditems'
-], function(expect, $, sinon, registry, RelatedItems) {
-  "use strict";
+], function(expect, $, _, sinon, registry, RelatedItems) {
+  'use strict';
 
   window.mocha.setup('bdd').globals(['jQuery*']);
   $.fx.off = true;
@@ -14,52 +15,52 @@ define([
    TEST: Related Items
   ========================== */
 
-  describe("Related Items", function() {
-    beforeEach(function(){
+  describe('Related Items', function() {
+    beforeEach(function() {
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
 
       function getQueryVariable(url, variable) {
         var query = url.split('?')[1];
-        if(query === undefined){
+        if (query === undefined) {
           return null;
         }
         var vars = query.split('&');
         for (var i = 0; i < vars.length; i += 1) {
-            var pair = vars[i].split('=');
-            if (decodeURIComponent(pair[0]) === variable) {
-                return decodeURIComponent(pair[1]);
-            }
+          var pair = vars[i].split('=');
+          if (decodeURIComponent(pair[0]) === variable) {
+            return decodeURIComponent(pair[1]);
+          }
         }
         return null;
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
         var root = [
-          {"UID": "jasdlfdlkdkjasdf", "Title": "Some Image", "path": "/test.png", "Type": "Image"},
-          {"UID": "asdlfkjasdlfkjasdf", "Title": "News", "path": "/news", "Type": "Folder"},
-          {"UID": "124asdfasasdaf34", "Title": "About", "path": "/about", "Type": "Folder"},
-          {"UID": "asdf1234", "Title": "Projects", "path": "/projects", "Type": "Folder"},
-          {"UID": "asdf1234gsad", "Title": "Contact", "path": "/contact", "Type": "Document"},
-          {"UID": "asdv34sdfs", "Title": "Privacy Policy", "path": "/policy", "Type": "Document"},
-          {"UID": "asdfasdf234sdf", "Title": "Our Process", "path": "/our-process", "Type": "Folder"},
-          {"UID": "asdhsfghyt45", "Title": "Donate", "path": "/donate-now", "Type": "Document"},
+          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image'},
+          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder'},
+          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder'},
+          {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder'},
+          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document'},
+          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document'},
+          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder'},
+          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document'},
         ];
         var about = [
-          {"UID": "gfn5634f", "Title": "About Us", "path": "/about/about-us", "Type": "Document"},
-          {"UID": "45dsfgsdcd", "Title": "Philosophy", "path": "/about/philosophy", "Type": "Document"},
-          {"UID": "dfgsdfgj675", "Title": "Staff", "path": "/about/staff", "Type": "Folder"},
-          {"UID": "sdfbsfdh345", "Title": "Board of Directors", "path": "/about/board-of-directors", "Type": "Document"}
+          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', Type: 'Document'},
+          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', Type: 'Document'},
+          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', Type: 'Folder'},
+          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', Type: 'Document'}
         ];
 
         var staff = [
-          {"UID": "asdfasdf9sdf", "Title": "Mike", "path": "/about/staff/mike", "Type": "Document"},
-          {"UID": "cvbcvb82345", "Title": "Joe", "path": "/about/staff/joe", "Type": "Document"}
+          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', Type: 'Document'},
+          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', Type: 'Document'}
         ];
         var searchables = about.concat(root).concat(staff);
 
-        var addUrls = function(list){
+        var addUrls = function(list) {
           /* add getURL value */
-          for(var i=0; i<list.length; i=i+1){
+          for(var i = 0; i < list.length; i = i + 1) {
             var data = list[i];
             data.getURL = window.location.origin + data.path;
           }
@@ -73,24 +74,24 @@ define([
         // grab the page number and number of items per page -- note, page is 1-based from Select2
         var batch = getQueryVariable(xhr.url, 'batch');
         var page = 1;
-        var page_size = 10;
-        if(batch){
+        var pageSize = 10;
+        if (batch) {
           batch = $.parseJSON(batch);
           page = batch.page;
-          page_size = batch.size;
+          pageSize = batch.size;
         }
         page = page - 1;
 
         var query = getQueryVariable(xhr.url, 'query');
         var path = null;
         var term = '';
-        if(query){
+        if (query) {
           query = $.parseJSON(query);
-          for(var i=0; i<query.criteria.length; i=i+1){
+          for (var i = 0; i < query.criteria.length; i = i + 1) {
             var criteria = query.criteria[i];
-            if(criteria.i === 'path'){
+            if (criteria.i === 'path') {
               path = criteria.v.split('::')[0];
-            }else{
+            } else {
               term = criteria.v;
             }
           }
@@ -99,23 +100,23 @@ define([
         // this seach is for basically searching the entire hierarchy -- this IS NOT the browse "search"
         function search(items, term) {
           results = [];
-          if (term === undefined){
+          if (term === undefined) {
             return searchables;
           }
           _.each(items, function(item) {
             var q;
             var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
-            if(typeof(term) === 'object'){
-              for(var i=0; i<term.length; i=i+1){
+            if (typeof(term) === 'object') {
+              for (var i = 0; i < term.length; i = i + 1) {
                 q = term[i].toLowerCase();
-                if (keys.indexOf(q) > -1){
+                if (keys.indexOf(q) > -1) {
                   results.push(item);
                   break;
                 }
               }
-            }else{
+            } else {
               q = term.toLowerCase();
-              if (keys.indexOf(q) > -1){
+              if (keys.indexOf(q) > -1) {
                 results.push(item);
               }
             }
@@ -124,16 +125,16 @@ define([
 
         function browse(items, q, p) {
           results = [];
-          var path = p.substring(0, p.length-1);
+          var path = p.substring(0, p.length - 1);
           var splitPath = path.split('/');
           var fromPath = [];
           _.each(items, function(item) {
             var itemSplit = item.path.split('/');
-            if (item.path.indexOf(path) === 0 && itemSplit.length-1 === splitPath.length) {
+            if (item.path.indexOf(path) === 0 && itemSplit.length - 1 === splitPath.length) {
               fromPath.push(item);
             }
           });
-          if (q === undefined){
+          if (q === undefined) {
             return fromPath;
           }
           search(fromPath, q);
@@ -144,15 +145,16 @@ define([
           search(searchables, term);
         }
 
-        xhr.respond(200, { "Content-Type": "application/json" },
+        xhr.respond(200, { 'Content-Type': 'application/json' },
           JSON.stringify({
-            "total": results.length,
-            "results": results.slice(page*page_size, (page*page_size)+(page_size-1))
-        }));
+            total: results.length,
+            results: results.slice(page * pageSize, (page * pageSize) + (pageSize - 1))
+          })
+        );
       });
     });
 
-    it('test initialize', function(){
+    it('test initialize', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -160,7 +162,7 @@ define([
         '                          vocabularyUrl: /relateditems-test.json" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
-      
+
       expect($('.select2-container-multi', $el)).to.have.length(1);
       expect($('.pattern-relateditems-container', $el)).to.have.length(1);
       expect($('.pattern-relateditems-path', $el)).to.have.length(1);
@@ -218,7 +220,7 @@ define([
       expect(pattern.$el.select2('val')).to.have.length(0);
 
       // // Need to simulate a backspace to remove the selected item: below doesn't work
-      // var backspaceEvent = $.Event("keydown");
+      // var backspaceEvent = $.Event('keydown');
       // backspaceEvent.ctrlKey = false;
       // backspaceEvent.which = 8;
       // $('.select2-search-field input').trigger( backspaceEvent );

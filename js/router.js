@@ -31,7 +31,7 @@ define([
   'underscore',
   'backbone'
 ], function($, _, Backbone) {
-  "use strict";
+  'use strict';
 
   var regexEscape = function(s) {
     return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -71,7 +71,7 @@ define([
           if (path.match(regex)) {
             hash = '!/' + action.patternName + ':' + action.id;
             var replaceWith = '';
-            if(action.expReplace){
+            if (action.expReplace) {
               replaceWith = action.expReplace;
             }
             newPath = path.replace(regex, replaceWith);
@@ -92,10 +92,10 @@ define([
       }
 
       if (hash !== undefined) {
-        this._change_location.apply(this, [newPath, hash]);
+        this._changeLocation.apply(this, [newPath, hash]);
       }
     },
-    _change_location: function(path, hash) {
+    _changeLocation: function(path, hash) {
       window.parent.location.hash = hash;
       window.parent.location.pathname = path;
     },

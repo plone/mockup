@@ -9,7 +9,7 @@
  *    # Responsive images pattern
  *
  *    This pattern loads the last image that fulfills the media-query
- *    criteria. When multiple pictures are displayed, it loads the images 
+ *    criteria. When multiple pictures are displayed, it loads the images
  *    within the visible viewport first. Will update images on resize event.
  *
  *    # Examples
@@ -61,10 +61,10 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var Picture = Base.extend({
-    name: "picture",
+    name: 'picture',
     defaults: {
       alt: null,
       className: {
@@ -80,14 +80,14 @@ define([
     init: function() {
       var self = this,
           resizeHandler;
-      if (Picture.__queue_picture_patterns === undefined) {
-        Picture.__queue_picture_patterns = [];
+      if (Picture.__queuePicturePatterns === undefined) {
+        Picture.__queuePicturePatterns = [];
         $(window).on('queue.picture.patterns', function() {
-          if ($('.pat-picture').length === Picture.__queue_picture_patterns.length) {
-            $.each(Picture.__queue_picture_patterns, function(index, val) {
+          if ($('.pat-picture').length === Picture.__queuePicturePatterns.length) {
+            $.each(Picture.__queuePicturePatterns, function(index, val) {
               val.display();
             });
-            Picture.__queue_picture_patterns = [];
+            Picture.__queuePicturePatterns = [];
           }
         });
       }
@@ -105,9 +105,9 @@ define([
       var self = this;
 
       if (self.visible()) {
-        Picture.__queue_picture_patterns.unshift(self);
+        Picture.__queuePicturePatterns.unshift(self);
       } else {
-        Picture.__queue_picture_patterns.push(self);
+        Picture.__queuePicturePatterns.push(self);
       }
       self.trigger('queue');
     },
@@ -117,7 +117,7 @@ define([
           matches = [],
           $img = $('img', self.$el);
 
-      $('[' + self.options.attribute.src +']', self.$el).each(function() {
+      $('[' + self.options.attribute.src + ']', self.$el).each(function() {
         var $candidate = $(this);
         if (!$candidate.attr(self.options.attribute.media) ||
             self.matchMedia($candidate.attr(self.options.attribute.media))) {
@@ -167,12 +167,12 @@ define([
           fakeBody = document.createElement('body'),
           div = document.createElement('div');
 
-      div.id = "mq-test-1";
-      div.style.cssText = "position:absolute;top:-100em";
-      fakeBody.style.background = "none";
+      div.id = 'mq-test-1';
+      div.style.cssText = 'position:absolute;top:-100em';
+      fakeBody.style.background = 'none';
       fakeBody.appendChild(div);
 
-      div.innerHTML = "&shy;<style media=\"" + mediaQuery + "\"> #mq-test-1 { width: 42px; }</style>";
+      div.innerHTML = '&shy;<style media="' + mediaQuery + '"> #mq-test-1 { width: 42px; }</style>';
       docElem.insertBefore(fakeBody, refNode);
       bool = div.offsetWidth === 42;
       docElem.removeChild(fakeBody);

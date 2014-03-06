@@ -30,7 +30,7 @@ define([
   'js/ui/views/popover',
   'mockup-patterns-sortable'
 ], function($, _, Backbone, PopoverView, Sortable) {
-  "use strict";
+  'use strict';
 
   var ColumnsView = PopoverView.extend({
     className: 'popover columns',
@@ -47,19 +47,20 @@ define([
           '<input type="checkbox" value="<%- id %>"/>' +
           '<%- title %>' +
         '</label>' +
-      '</li>'),
+      '</li>'
+    ),
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function(){
+    render: function() {
       var self = this;
       PopoverView.prototype.render.call(this);
       self.$container = self.$('ul');
-      _.each(self.app.activeColumns, function(id){
+      _.each(self.app.activeColumns, function(id) {
         var $el = $(self.itemTemplate({
           title: self.app.availableColumns[id],
           id: id
@@ -67,7 +68,7 @@ define([
         $el.find('input')[0].checked = true;
         self.$container.append($el);
       });
-      _.each(_.omit(self.app.availableColumns, self.app.activeColumns), function(name, id){
+      _.each(_.omit(self.app.availableColumns, self.app.activeColumns), function(name, id) {
         var $el = $(self.itemTemplate({
           title: name,
           id: id
@@ -81,11 +82,11 @@ define([
 
       return this;
     },
-    applyButtonClicked: function(){
+    applyButtonClicked: function() {
       var self = this;
       this.hide();
       self.app.activeColumns = [];
-      self.$('input:checked').each(function(){
+      self.$('input:checked').each(function() {
         self.app.activeColumns.push($(this).val());
       });
       self.app.setCookieSetting('activeColumns', this.app.activeColumns);

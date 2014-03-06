@@ -66,10 +66,10 @@ define([
   'mockup-patterns-select2', // TODO: is this still a dependency
   'mockup-utils'
 ], function($, _, Base, Toggle, Select2, utils) {
-  "use strict";
+  'use strict';
 
   var Livesearch = Base.extend({
-    name: "livesearch",
+    name: 'livesearch',
     timeout: null,
     blurTimout: null,
     $results: null,
@@ -117,7 +117,7 @@ define([
         var self = this;
         if (self.options.positionToggleWithInput) {
           var top = self.$input.position().top + self.$input.outerHeight();
-          self.$toggle.css({'top': top+'px'});
+          self.$toggle.css({'top': top + 'px'});
         }
       }
     },
@@ -133,7 +133,7 @@ define([
         $.error('No url provided for livesearch results ' + self.$el);
       }
 
-      if(self.query.valid){
+      if (self.query.valid) {
         self.options.ajax = self.query.selectAjax();
       }
       else {
@@ -152,7 +152,7 @@ define([
       });
 
       self.$input.on('blur.livesearch.patterns', function(e) {
-        self.blurTimeout = window.setInterval(function(){
+        self.blurTimeout = window.setInterval(function() {
           self.hide();
           window.clearInterval(self.blurTimeout);
         }, self.options.blurDelay);
@@ -213,9 +213,9 @@ define([
         self.options.ajax.url,
         $.param(params),
         function(data) {
-          if(data.results !== undefined){
+          if (data.results !== undefined) {
             self.cache[term] = data.results;
-          }else{
+          } else {
             console.log('error from server returning result');
           }
 
@@ -227,13 +227,13 @@ define([
     applyTemplate: function(tpl, item) {
       var self = this;
       var template;
-      if (self.options[tpl+'TemplateSelector']) {
-        template = $(self.options[tpl+'TemplateSelector']).html();
+      if (self.options[tpl + 'TemplateSelector']) {
+        template = $(self.options[tpl + 'TemplateSelector']).html();
         if (!template) {
-          template = self.options[tpl+'Template'];
+          template = self.options[tpl + 'Template'];
         }
       } else {
-        template = self.options[tpl+'Template'];
+        template = self.options[tpl + 'Template'];
       }
       return _.template(template, item);
     },
@@ -259,7 +259,7 @@ define([
       var self = this;
       var html = '';
       if (data.length > 0) {
-        $.each(data, function(index, value){
+        $.each(data, function(index, value) {
           html += self.applyTemplate('result', value);
         });
       } else {
@@ -321,7 +321,7 @@ define([
       if (self.$toggle) {
         self.$toggle.removeClass(self.options.toggleClass);
       }
-      $('.'+className, self.$results).removeClass(className);
+      $('.' + className, self.$results).removeClass(className);
       self.trigger('hidden');
     },
 
@@ -332,7 +332,7 @@ define([
     _keyUp: function() {
       var self = this;
       var className = self.options.highlight;
-      var selected = $('.'+className, self.$results);
+      var selected = $('.' + className, self.$results);
 
       if (selected.length > 0) {
         if (selected.prev().length > 0) {
@@ -345,7 +345,7 @@ define([
     _keyDown: function() {
       var self = this;
       var className = self.options.highlight;
-      var selected = $('.'+className, self.$results);
+      var selected = $('.' + className, self.$results);
 
       if (selected.length === 0) {
         selected = self.items().first().addClass(className);
@@ -364,7 +364,7 @@ define([
     _keyEnter: function() {
       var self = this;
       var hl = self.options.highlight;
-      var target = self.$results.find('.'+hl)
+      var target = self.$results.find('.' + hl)
         .find('a').attr('href');
       if (self.options.isTest) {
         self.testTarget = target;
@@ -391,10 +391,10 @@ define([
           default:
             self.currentTerm = self.$input.val();
             if (self.$input.val().length >= self.options.minimumInputLength) {
-              self.timeout = window.setInterval(function(){
-                try{
+              self.timeout = window.setInterval(function() {
+                try {
                   self.search();
-                }catch(e){
+                } catch (e) {
                   console.log('error trying to search');
                   window.clearInterval(self.timeout);
                 }

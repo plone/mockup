@@ -1,4 +1,7 @@
+/* globals module:true */
+
 module.exports = function(grunt) {
+  'use strict';
 
   var MockupGrunt = require('./js/grunt'),
       requirejsOptions = require('./js/config'),
@@ -6,7 +9,7 @@ module.exports = function(grunt) {
       docsExtraIncludes = [];
 
 
-  for (var i = 0; i < mockup.patterns.length; i++) {
+  for (var i = 0; i < mockup.patterns.length; i = i + 1) {
     docsExtraIncludes.push(mockup.patterns[i]);
     docsExtraIncludes.push('text!' + requirejsOptions.paths[mockup.patterns[i]] + '.js');
   }
@@ -44,7 +47,7 @@ module.exports = function(grunt) {
   }, {
     path: 'docs/dev/',
     url: 'docs',
-    extraInclude: docsExtraIncludes, 
+    extraInclude: docsExtraIncludes,
   }, ['requirejs', 'less', 'copy', 'sed']);
 
   mockup.registerBundle('structure', {}, {
@@ -78,7 +81,7 @@ module.exports = function(grunt) {
             'bower_components/html5shiv/dist/html5shiv.js',
             'bower_components/respond/dest/respond.matchmedia.addListener.src.js',
             'bower_components/respond/dest/respond.src.js'
-           ]
+          ]
         }
       }
     },
@@ -105,10 +108,9 @@ module.exports = function(grunt) {
   }, {
     url: '++resource++plonetheme.barceloneta',
     exclude: ['jquery', 'mockup-registry', 'mockup-patterns-base']
-  },
+
   // skip the uglify section; barceloneta has a custom dev loader, since it assumed the presence of the plone bundle
-  ['requirejs', 'less', 'copy', 'sed']
-  );
+  }, ['requirejs', 'less', 'copy', 'sed']);
 
   mockup.registerBundle('widgets');
 

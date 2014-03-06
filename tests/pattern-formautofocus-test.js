@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-formautofocus'
 ], function(expect, $, registry, FormAutoFocus) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,7 +13,7 @@ define([
    TEST: FormAutoFocus
   ========================== */
 
-  describe("FormAutoFocus", function() {
+  describe('FormAutoFocus', function() {
     beforeEach(function() {
       // We are including another form to the DOM, just to be sure we focus
       // inside the form that actually has the pattern
@@ -31,7 +31,7 @@ define([
     afterEach(function() {
       this.$el.remove();
     });
-    it("when the condition is met, focus on the first one", function(done) {
+    it('when the condition is met, focus on the first one', function(done) {
       var $el = $('' +
         '<div>' +
         ' <form class="pat-formautofocus">' +
@@ -55,7 +55,7 @@ define([
       registry.scan($el);
       $el.remove();
     });
-    it("when the condition is not met, focus on the first input", function(done) {
+    it('when the condition is not met, focus on the first input', function(done) {
       var $el = $('' +
         '<div>' +
         ' <form class="pat-formautofocus">' +

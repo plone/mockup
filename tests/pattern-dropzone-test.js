@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-dropzone'
 ], function(expect, $, registry, Dropzone) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,8 +13,8 @@ define([
    TEST: Dropzone
   ========================== */
 
-  describe("Dropzone", function () {
-    describe("Div", function () {
+  describe('Dropzone', function () {
+    describe('Div', function () {
       beforeEach(function() {
         this.$el = $('' +
           '<div>' +
@@ -115,8 +115,8 @@ define([
         //TODO
       });
     });
-    
-    describe("Form", function () {
+
+    describe('Form', function () {
       beforeEach(function() {
         this.$el = $('' +
           '<div>' +

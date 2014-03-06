@@ -39,7 +39,7 @@ define([
   'tinymce',
   'text!js/patterns/tinymce/templates/upload.xml'
 ], function($, _, Base, RelatedItems, Modal, tinymce, UploadTemplate) {
-  "use strict";
+  'use strict';
 
 
   tinymce.PluginManager.add('ploneimage', function(editor) {
@@ -85,11 +85,11 @@ define([
         file: 'File',
         uploadBtn: 'Upload',
         uploadLocationWarning: 'If you do not select a folder to upload to, ' +
-                               "the file will be uploaded to the current folder."
+                               'the file will be uploaded to the current folder.'
       }
     },
     template: _.template(UploadTemplate),
-    init: function(){
+    init: function() {
       var self = this;
       self.tinypattern = self.options.tinypattern;
       self.modal = new Modal(self.$el, {
@@ -103,17 +103,17 @@ define([
         content: null,
         buttons: '.btn'
       });
-      self.modal.on('shown', function(e){
+      self.modal.on('shown', function(e) {
         self.modalShown.apply(self, [e]);
       });
     },
-    show: function(){
+    show: function() {
       this.modal.show();
     },
-    hide: function(){
+    hide: function() {
       this.modal.hide();
     },
-    modalShown: function(){
+    modalShown: function() {
       var self = this;
       /* initialize elements so submit does the right thing.. */
       self.$uploadBtn = $('.modal-footer input[type="submit"]', self.modal.$modal);
@@ -122,15 +122,14 @@ define([
       self.$location = $('[name="location"]', self.modal.$modal);
       self.$location.addClass('pat-relateditems').patternRelateditems(self.options.relatedItems);
 
-      self.$form.on('submit', function(e){
+      self.$form.on('submit', function(e) {
         /* handle file upload */
         var locationData = self.$location.select2('data');
-        if(locationData.length > 0){
-          self.$form.attr('action',
-            locationData[0].getURL + '/' + self.options.rel_upload_path);
+        if (locationData.length > 0) {
+          self.$form.attr('action', locationData[0].getURL + '/' + self.options['rel_upload_path']); // jshint ignore:line
         }
         self.modal.loading.show();
-        self.$iframe.on('load', function(){
+        self.$iframe.on('load', function() {
           var response = self.$iframe.contents();
           self.modal.loading.hide();
           self.hide();
@@ -142,12 +141,12 @@ define([
         });
         self.$form[0].target = 'upload_target';
       });
-      self.$uploadBtn.on('click', function(e){
+      self.$uploadBtn.on('click', function(e) {
         e.preventDefault();
         self.$form.trigger('submit');
       });
     },
-    reinitialize: function(){
+    reinitialize: function() {
     }
   });
 

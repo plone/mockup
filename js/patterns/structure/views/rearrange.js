@@ -28,7 +28,7 @@ define([
   'underscore',
   'js/ui/views/popover'
 ], function($, _, PopoverView) {
-  "use strict";
+  'use strict';
 
   var RearrangeView = PopoverView.extend({
     className: 'popover rearrange',
@@ -37,7 +37,7 @@ define([
       '<div class="form-group">' +
         '<label>What to rearrange on</label>' +
         '<select name="rearrange_on" class="form-control">' +
-          '<% _.each(rearrangeProperties, function(title, property){ %>' +
+          '<% _.each(rearrangeProperties, function(title, property) { %>' +
             '<option value="<%- property %>"><%- title %></option>' +
           '<% }); %>' +
         '</select>' +
@@ -55,23 +55,23 @@ define([
     events: {
       'click button': 'rearrangeButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
       this.options.rearrangeProperties = this.app.options.rearrange.properties;
     },
-    render: function(){
+    render: function() {
       PopoverView.prototype.render.call(this);
       this.$rearrangeOn = this.$('[name="rearrange_on"]');
       this.$reversed = this.$('[name="reversed"]');
       return this;
     },
-    rearrangeButtonClicked: function(){
+    rearrangeButtonClicked: function() {
       var data = {
-        rearrange_on: this.$rearrangeOn.val(),
+        'rearrange_on': this.$rearrangeOn.val(),
         reversed: false
       };
-      if(this.$reversed[0].checked){
+      if (this.$reversed[0].checked) {
         data.reversed = true;
       }
       this.app.defaultButtonClickEvent(this.triggerView, data);

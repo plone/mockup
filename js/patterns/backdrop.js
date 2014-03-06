@@ -35,14 +35,14 @@ define([
   'jquery',
   'mockup-patterns-base'
 ], function($, Base) {
-  "use strict";
+  'use strict';
 
   var Backdrop = Base.extend({
-    name: "backdrop",
+    name: 'backdrop',
     defaults: {
       zIndex: null,
       opacity: 0.8,
-      className: "backdrop",
+      className: 'backdrop',
       classActiveName: 'backdrop-active',
       closeOnEsc: true,
       closeOnClick: true

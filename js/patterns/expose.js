@@ -71,17 +71,17 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-backdrop'
 ], function($, Base, Backdrop) {
-  "use strict";
+  'use strict';
 
   var Expose = Base.extend({
-    name: "expose",
+    name: 'expose',
     defaults: {
-      triggers: "focusin",
-      classActiveName: "active",
-      backdrop: "body",
+      triggers: 'focusin',
+      classActiveName: 'active',
+      backdrop: 'body',
       backdropZIndex: null,
-      backdropOpacity: "0.8",
-      backdropClassName: "backdrop",
+      backdropOpacity: '0.8',
+      backdropClassName: 'backdrop',
       backdropClassActiveName: 'backdrop-active',
       backdropCloseOnEsc: true,
       backdropCloseOnClick: true

@@ -36,32 +36,32 @@ define([
   'text!js/patterns/tinymce/templates/image.xml'
 ], function($, _, Base, RelatedItems, Modal, tinymce, DropZone,
             LinkTemplate, ImageTemplate) {
-  "use strict";
+  'use strict';
 
   var LinkType = Base.extend({
     defaults: {
       linkModal: null // required
     },
-    init: function(){
+    init: function() {
       this.linkModal = this.options.linkModal;
       this.tinypattern = this.options.tinypattern;
       this.tiny = this.tinypattern.tiny;
       this.dom = this.tiny.dom;
       this.$input = this.$el.find('input');
     },
-    value: function(){
+    value: function() {
       return this.$input.val();
     },
-    toUrl: function(){
+    toUrl: function() {
       return this.value();
     },
-    load: function(element){
+    load: function(element) {
       this.$input.attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
     },
-    set: function(val){
+    set: function(val) {
       this.$input.attr('value', val);
     },
-    attributes: function(){
+    attributes: function() {
       return {
         'data-val': this.value()
       };
@@ -69,38 +69,38 @@ define([
   });
 
   var InternalLink = LinkType.extend({
-    init: function(){
+    init: function() {
       var self = this;
       LinkType.prototype.init.call(self);
       self.$input.addClass('pat-relateditems');
       self.createRelatedItems();
     },
-    createRelatedItems: function(){
+    createRelatedItems: function() {
       this.relatedItems = new RelatedItems(this.$input,
         this.linkModal.options.relatedItems);
     },
-    value: function(){
+    value: function() {
       var self = this;
       var val = self.$input.select2('data');
-      if(val && typeof(val) === 'object'){
+      if (val && typeof(val) === 'object') {
         val = val[0];
       }
       return val;
     },
-    toUrl: function(){
+    toUrl: function() {
       var value = this.value();
-      if(value){
+      if (value) {
         return this.tinypattern.generateUrl(value);
       }
       return null;
     },
-    load: function(element){
+    load: function(element) {
       var val = this.tiny.dom.getAttrib(element, 'data-val');
-      if(val){
+      if (val) {
         this.set(val);
       }
     },
-    set: function(val){
+    set: function(val) {
       // kill it and then reinitialize since select2 will load data then
       this.$input.select2('destroy');
       this.$input.attr('data-relateditems', undefined); // reset the pattern
@@ -108,9 +108,9 @@ define([
       this.$input.attr('value', val);
       this.createRelatedItems();
     },
-    attributes: function(){
+    attributes: function() {
       var val = this.value();
-      if(val){
+      if (val) {
         return {
           'data-val': val.UID
         };
@@ -121,34 +121,34 @@ define([
   });
 
   var ImageLink = InternalLink.extend({
-    toUrl: function(){
+    toUrl: function() {
       var value = this.value();
       return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
     }
   });
 
   var EmailLink = LinkType.extend({
-    toUrl: function(){
+    toUrl: function() {
       var self = this;
       var val = self.value();
-      if(val){
+      if (val) {
         var subject = self.getSubject();
         var href = 'mailto:' + val;
-        if(subject){
+        if (subject) {
           href += '?subject=' + subject;
         }
         return href;
       }
       return null;
     },
-    load: function(element){
+    load: function(element) {
       LinkType.prototype.load.apply(this, [element]);
       this.linkModal.$subject.val(this.tiny.dom.getAttrib(element, 'data-subject'));
     },
-    getSubject: function(){
+    getSubject: function() {
       return this.linkModal.$subject.val();
     },
-    attributes: function(){
+    attributes: function() {
       var attribs = LinkType.prototype.attributes.call(this);
       attribs['data-subject'] = this.getSubject();
       return attribs;
@@ -156,7 +156,7 @@ define([
   });
 
   var AnchorLink = LinkType.extend({
-    init: function(){
+    init: function() {
       var self = this;
       LinkType.prototype.init.call(self);
       self.$select = self.$el.find('select');
@@ -164,15 +164,15 @@ define([
       self.anchorData = [];
       self.populate();
     },
-    value: function(){
+    value: function() {
       var self = this;
       var val = self.$select.select2('data');
-      if(val && typeof(val) === 'object'){
+      if (val && typeof(val) === 'object') {
         val = val[0];
       }
       return val;
     },
-    populate: function(){
+    populate: function() {
       var self = this;
       self.$select.find('option').remove();
       self.anchorNodes = [];
@@ -180,13 +180,13 @@ define([
       var node, i, name, title;
 
       var nodes = self.tiny.dom.select('a.mceItemAnchor,img.mceItemAnchor,a.mce-item-anchor,img.mce-item-anchor');
-      for (i = 0; i < nodes.length; i=i+1) {
+      for (i = 0; i < nodes.length; i = i + 1) {
         node = nodes[i];
-        name = self.tiny.dom.getAttrib(node, "name");
-        if(!name){
-          name = self.tiny.dom.getAttrib(node, "id");
+        name = self.tiny.dom.getAttrib(node, 'name');
+        if (!name) {
+          name = self.tiny.dom.getAttrib(node, 'id');
         }
-        if (name !== "") {
+        if (name !== '') {
           self.anchorNodes.push(node);
           self.anchorData.push({name: name, title: name});
         }
@@ -194,65 +194,65 @@ define([
 
       nodes = self.tiny.dom.select(self.linkModal.options.anchorSelector);
       if (nodes.length > 0) {
-        for (i = 0; i < nodes.length; i=i+1) {
+        for (i = 0; i < nodes.length; i = i + 1) {
           node = nodes[i];
           title = $(node).text().replace(/^\s+|\s+$/g, '');
-          if (title==='') {
+          if (title === '') {
             continue;
           }
           name = title.toLowerCase().substring(0,1024);
           name = name.replace(/[^a-z0-9]/g, '-');
           /* okay, ugly, but we need to first check that this anchor isn't already available */
           var found = false;
-          for(i=0; i<self.anchorNodes.length; i=i+1){
+          for (i = 0; i < self.anchorNodes.length; i = i + 1) {
             var anode = self.anchorData[i];
-            if(anode.name === name){
+            if (anode.name === name) {
               found = true;
               // so it's also found, let's update the title to be more presentable
               anode.title = title;
               break;
             }
           }
-          if(!found){
-            self.anchorData.push({name: name, title:title, newAnchor: true});
+          if (!found) {
+            self.anchorData.push({name: name, title: title, newAnchor: true});
             self.anchorNodes.push(node);
           }
         }
       }
-      if(self.anchorNodes.length > 0){
-        for(i = 0; i < self.anchorData.length; i=i+1){
+      if (self.anchorNodes.length > 0) {
+        for(i = 0; i < self.anchorData.length; i = i + 1) {
           var data = self.anchorData[i];
-          self.$select.append("<option value='" + i + "'>" + data.title + '</option>');
+          self.$select.append('<option value="' + i + '">' + data.title + '</option>');
         }
       } else {
         self.$select.append('<option>No anchors found..</option>');
       }
     },
-    getIndex: function(name){
+    getIndex: function(name) {
       var self = this;
-      for(var i=0; i<self.anchorData.length; i=i+1){
+      for (var i = 0; i < self.anchorData.length; i = i + 1) {
         var data = self.anchorData[i];
-        if(data.name === name){
+        if (data.name === name) {
           return i;
         }
       }
       return 0;
     },
-    toUrl: function(){
+    toUrl: function() {
       var self = this;
       var val = self.value();
-      if(val){
+      if (val) {
         var index = parseInt(val, 10);
         var node = self.anchorNodes[index];
         var data = self.anchorData[index];
-        if(data.newAnchor){
+        if (data.newAnchor) {
           node.innerHTML = '<a name="' + data.name + '" class="mce-item-anchor"></a>' + node.innerHTML;
         }
         return '#' + data.name;
       }
       return null;
     },
-    set: function(val){
+    set: function(val) {
       var anchor = this.getIndex(val);
       this.$select.select2('data', '' + anchor);
     }
@@ -327,14 +327,14 @@ define([
       'externalImage': ImageTemplate
     },
 
-    template: function(data){
+    template: function(data) {
       return  _.template(this.linkTypeTemplateMapping[this.linkType])(data);
     },
 
-    init: function(){
+    init: function() {
       var self = this;
       self.tinypattern = self.options.tinypattern;
-      if(self.tinypattern.options.anchorSelector){
+      if (self.tinypattern.options.anchorSelector) {
         self.options.anchorSelector = self.tinypattern.options.anchorSelector;
       }
       self.tiny = self.tinypattern.tiny;
@@ -346,11 +346,11 @@ define([
         content: null,
         buttons: '.btn'
       });
-      self.modal.on('shown', function(e){
+      self.modal.on('shown', function(e) {
         self.modalShown.apply(self, [e]);
       });
     },
-    generateModalHtml: function(){
+    generateModalHtml: function() {
       var self = this;
       return self.template({
         text: self.options.text,
@@ -370,10 +370,10 @@ define([
         insertBtn: self.options.text.insertBtn
       });
     },
-    isImageMode: function(){
+    isImageMode: function() {
       return ['image', 'externalImage'].indexOf(this.linkType) !== -1;
     },
-    initElements: function(){
+    initElements: function() {
       var self = this;
       self.$target = $('select[name="target"]', self.modal.$modal);
       self.$button = $('.modal-footer input[name="insert"]', self.modal.$modal);
@@ -385,7 +385,7 @@ define([
       self.$scale = $('select[name="scale"]', self.modal.$modal);
 
       /* load up all the link types */
-      _.each(self.options.linkTypes, function(type){
+      _.each(self.options.linkTypes, function(type) {
         var $container = $('.linkType.' + type + ' .main', self.modal.$modal);
         self.linkTypes[type] = new self.options.linkTypeClassMapping[type]($container, {
           linkModal: self,
@@ -396,44 +396,44 @@ define([
       /* modal els */
       self.$linkTypes = $('.linkTypes', self.modal.$modal);
       var $linkType = self.$linkTypes.find('input[value="' + self.linkType + '"]');
-      if($linkType.length > 0){
+      if ($linkType.length > 0) {
         $linkType[0].checked = true;
       }
     },
-    getLinkUrl: function(){
+    getLinkUrl: function() {
       // get the url, only get one uid
       var self = this;
       return self.linkTypes[self.linkType].toUrl();
     },
-    getValue: function(){
+    getValue: function() {
       return this.linkTypes[this.linkType].value();
     },
-    updateAnchor: function(href){
+    updateAnchor: function(href) {
       var self = this;
       var target = self.$target.val();
       var title = self.$title.val();
       var data = $.extend(true, {}, {
         title: title ? title : null,
         target: target ? target : null,
-        "data-linkType": self.linkType,
+        'data-linkType': self.linkType,
         href: href
       }, self.linkTypes[self.linkType].attributes());
       self.tiny.execCommand('mceInsertLink', false, data);
     },
-    focusElement: function(elm){
+    focusElement: function(elm) {
       var self = this;
       self.tiny.focus();
       self.tiny.selection.select(elm);
       self.tiny.nodeChanged();
     },
-    updateImage: function(src){
+    updateImage: function(src) {
       var self = this;
       var data = $.extend(true, {}, {
         src: src,
         alt: self.$alt.val(),
         'class': 'image-' + self.$align.val(),
-        "data-linkType": self.linkType,
-        "data-scale": self.$scale.val()
+        'data-linkType': self.linkType,
+        'data-scale': self.$scale.val()
       }, self.linkTypes[self.linkType].attributes());
       if (self.imgElm && !self.imgElm.getAttribute('data-mce-object')) {
         data.width = self.dom.getAttrib(self.imgElm, 'width');
@@ -459,24 +459,24 @@ define([
       }
 
       waitLoad(self.imgElm);
-      if(self.imgElm.complete){
+      if (self.imgElm.complete) {
         self.focusElement(self.imgElm);
       }
     },
-    modalShown: function(e){
+    modalShown: function(e) {
       var self = this;
 
       self.initElements();
       self.initData();
 
-      self.$button.off('click').on('click', function(e){
+      self.$button.off('click').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         var href = self.getLinkUrl();
-        if(!href){
+        if (!href) {
           return; // just cut out if no url
         }
-        if(self.isImageMode()){
+        if (self.isImageMode()) {
           self.updateImage(href);
         } else {
           /* regular anchor */
@@ -484,35 +484,35 @@ define([
         }
         self.hide();
       });
-      $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function(e){
+      $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function(e) {
         e.preventDefault();
         self.hide();
       });
       self.setupDropzone();
     },
-    setupDropzone: function(){
+    setupDropzone: function() {
       var self = this;
-      if(self.options.uploadUrl){
+      if (self.options.uploadUrl) {
         self.dropzone = new DropZone(self.modal.$modal, {
           className: 'tinymce-dropzone',
           clickable: false,
           url: self.options.uploadUrl,
           wrap: 'inner',
           autoCleanResults: true,
-          success: function(e, data){
+          success: function(e, data) {
             self.tinypattern.fileUploaded($.parseJSON(data));
             self.hide();
           }
         });
       }
     },
-    show: function(){
+    show: function() {
       this.modal.show();
     },
-    hide: function(){
+    hide: function() {
       this.modal.hide();
     },
-    initData: function(){
+    initData: function() {
       var self = this;
 
       self.selection = self.tiny.selection;
@@ -522,60 +522,60 @@ define([
       self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
 
       var linkType;
-      if(self.isImageMode()){
-        if(self.imgElm.nodeName !== 'IMG'){
+      if (self.isImageMode()) {
+        if (self.imgElm.nodeName !== 'IMG') {
           // try finding elsewhere
-          if(self.anchorElm){
+          if (self.anchorElm) {
             var imgs = self.anchorElm.getElementsByTagName('img');
-            if(imgs.length > 0){
+            if (imgs.length > 0) {
               self.imgElm = imgs[0];
               self.focusElement(self.imgElm);
             }
           }
         }
-        if(self.imgElm.nodeName !== 'IMG'){
+        if (self.imgElm.nodeName !== 'IMG') {
           // okay, still no image, unset
           self.imgElm = null;
         }
-        if(self.imgElm){
+        if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
           self.$alt.val(self.dom.getAttrib(self.imgElm, 'alt'));
           linkType = self.dom.getAttrib(self.imgElm, 'data-linktype');
-          if(linkType){
+          if (linkType) {
             self.linkType = linkType;
             self.linkTypes[self.linkType].load(self.imgElm);
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
             self.$scale.val(scale);
-          }else if(src){
+          }else if (src) {
             self.guessImageLink(src);
           }
           var className = self.dom.getAttrib(self.imgElm, 'class');
           var klasses = className.split(' ');
-          for(var i=0; i<klasses.length; i=i+1){
+          for (var i = 0; i < klasses.length; i = i + 1) {
             var klass = klasses[i];
-            if(klass.indexOf('image-') !== -1){
+            if (klass.indexOf('image-') !== -1) {
               self.$align.val(klass.replace('image-', ''));
             }
           }
         }
-      }else if(self.anchorElm){
+      }else if (self.anchorElm) {
         self.focusElement(self.anchorElm);
         var href = '';
         href = self.dom.getAttrib(self.anchorElm, 'href');
         self.$target.val(self.dom.getAttrib(self.anchorElm, 'target'));
         self.$title.val(self.dom.getAttrib(self.anchorElm, 'title'));
         linkType = self.dom.getAttrib(self.anchorElm, 'data-linktype');
-        if(linkType){
+        if (linkType) {
           self.linkType = linkType;
           self.linkTypes[self.linkType].load(self.anchorElm);
-        }else if(href){
+        }else if (href) {
           self.guessAnchorLink(href);
         }
       }
     },
-    guessImageLink: function(src){
+    guessImageLink: function(src) {
       var self = this;
-      if(src.indexOf(self.options.prependToScalePart) !== -1){
+      if (src.indexOf(self.options.prependToScalePart) !== -1) {
         self.linkType = 'image';
         self.$scale.val(self.tinypattern.getScaleFromUrl(src));
         self.linkTypes.image.set(self.tinypattern.stripGeneratedUrl(src));
@@ -584,23 +584,23 @@ define([
         self.linkTypes.externalImage.set(src);
       }
     },
-    guessAnchorLink: function(href){
+    guessAnchorLink: function(href) {
       var self = this;
-      if(self.options.prependToUrl &&
-          href.indexOf(self.options.prependToUrl) !== -1){
+      if (self.options.prependToUrl &&
+          href.indexOf(self.options.prependToUrl) !== -1) {
         // XXX if using default configuration, it gets more difficult
         // here to detect internal urls so this might need to change...
         self.linkType = 'internal';
         self.linkTypes.internal.set(self.tinypattern.stripGeneratedUrl(href));
-      } else if(href.indexOf('mailto:') !== -1){
+      } else if (href.indexOf('mailto:') !== -1) {
         self.linkType = 'email';
-        var email = href.substring("mailto:".length, href.length);
+        var email = href.substring('mailto:'.length, href.length);
         var split = email.split('?subject=');
         self.linkTypes.email.set(split[0]);
-        if(split.length > 1){
+        if (split.length > 1) {
           self.$subject.val(decodeURIComponent(split[1]));
         }
-      } else if(href[0] === '#'){
+      } else if (href[0] === '#') {
         self.linkType = 'anchor';
         self.linkTypes.anchor.setRaw(href.substring(1));
       } else {
@@ -608,14 +608,14 @@ define([
         self.linkTypes.external.setRaw(href);
       }
     },
-    setSelectElement: function($el, val){
+    setSelectElement: function($el, val) {
       $el.find('option:selected').attr('selected', '');
-      if(val){
+      if (val) {
         // update
-        $el.find('option[value="' + val + '"]').attr('selected', "true");
+        $el.find('option[value="' + val + '"]').attr('selected', 'true');
       }
     },
-    reinitialize: function(){
+    reinitialize: function() {
       /*
        * This will probably be called before show is run.
        * It will overwrite the base html template given to

@@ -29,13 +29,12 @@ define([
   'underscore',
   'js/ui/views/button',
   'text!js/patterns/structure/templates/selection_button.xml'
-  ],
-  function($, Backbone, _, ButtonView, tpl_button) {
-  "use strict";
+], function($, Backbone, _, ButtonView, tplButton) {
+  'use strict';
 
   var SelectionButton = ButtonView.extend({
     collection: null,
-    template: tpl_button,
+    template: tplButton,
     initialize: function(options) {
       ButtonView.prototype.initialize.apply(this, [options]);
 

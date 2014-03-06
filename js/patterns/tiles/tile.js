@@ -1,10 +1,11 @@
+
 define([
   'jquery',
   'js/patterns/base',
   'js/patterns/tiles/tiletype',
   'js/patterns/modalform.js'
 ], function($, Base, TileType) {
-  "use strict";
+  'use strict';
 
   // wire events to action buttons.
   //
@@ -20,13 +21,13 @@ define([
     $('> li > a', $el.actions).each(function(i, action) {
       var actionnames = [];
       $($(action).attr('class').split(' ')).each(function(i, classname) {
-        if(classname.substr(0, 7) === 'action-') {
+        if (classname.substr(0, 7) === 'action-') {
           actionnames.push(classname.substr(7, classname.length));
         }
       });
 
       $.each(actionnames, function(i, actionmethod) {
-        if($el.type.actions !== undefined && $el.type.actions[actionmethod] !== undefined) {
+        if ($el.type.actions !== undefined && $el.type.actions[actionmethod] !== undefined) {
           $(action).off('click').on('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -57,7 +58,7 @@ define([
   //  ajaxType -- type to use for the jquery $.ajax call
   //
   var Tile = Base.extend({
-    name: "tile",
+    name: 'tile',
     defaults: {
       type: 'text',
       autoshow: true,
@@ -78,13 +79,13 @@ define([
       // Grab the element that should contain all the tile content, if it does
       // not exist, create it and append it to the tiles child list
       self.wrapper = $(self.options.innerWrapper);
-      if(self.wrapper.length <= 0) {
+      if (self.wrapper.length <= 0) {
         self.wrapper = $('<div/>').addClass(self.options.innerWrapper);
         self.$el.append(self.wrapper);
         $(self.wrapper).css('position', 'relative'); // to make sure the buttons are positioned correctly
       }
 
-      if(self.options.autoshow) {
+      if (self.options.autoshow) {
         self.show();
       }
     },
@@ -92,46 +93,44 @@ define([
     show: function() {
       var self = this;
 
-      if(self.options.forceload) {
+      if (self.options.forceload) {
         self.hide(); // get rid of all visible content in the tile
       }
 
       // tiles with content don't need to be dynamically loaded,
       // unless the tile has been marked as forced to load
-      if($(self.wrapper).html().trim() === "") {
+      if ($(self.wrapper).html().trim() === '') {
         // add actions
         $(self.wrapper).append(self.actions);
         hookupActions(self);
 
         // show actions on hover
         $('li > a', self.actions).off('hover').on('hover', function(e) {
-          if(self.actions.is(":visible")) {
+          if (self.actions.is(':visible')) {
             self.actions.show();
-          }
-          else {
+          } else {
             self.actions.hide();
           }
         });
         self.wrapper.off('hover').on('hover', function(e) {
-          if(self.actions.is(":visible")) {
+          if (self.actions.is(':visible')) {
             self.actions.hide();
-          }
-          else {
+          } else {
             self.actions.show();
           }
         });
 
         // load content
         self.ajaxXHR = $.ajax({
-            url: self.options.url,
-            type: self.options.ajaxType
+          url: self.options.url,
+          type: self.options.ajaxType
         }).done(function(response, textStatus, xhr) {
           self.ajaxXHR = undefined;
 
           var respcontent = (/<body[^>]*>((.|[\n\r])*)<\/body>/im)
-                              .exec(response)[0]
-                              .replace('<body', '<div')
-                              .replace('</body>', '</div>');
+            .exec(response)[0]
+            .replace('<body', '<div')
+            .replace('</body>', '</div>');
           var contentcore = $('#content', respcontent).html();
           $(self.wrapper).append(contentcore);
 
@@ -142,7 +141,8 @@ define([
     },
 
     hide: function() {
-      $(self.wrapper).html("");
+      var self = this;
+      $(self.wrapper).html('');
     }
   });
 

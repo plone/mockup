@@ -5,22 +5,22 @@ define([
   'mockup-patterns-structure',
   'sinon',
 ], function(expect, $, registry, Structure, sinon) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
 
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
-    if(query === undefined){
+    if (query === undefined) {
       return null;
     }
     var vars = query.split('&');
     for (var i = 0; i < vars.length; i += 1) {
-        var pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) === variable) {
-            return decodeURIComponent(pair[1]);
-        }
+      var pair = vars[i].split('=');
+      if (decodeURIComponent(pair[0]) === variable) {
+        return decodeURIComponent(pair[1]);
+      }
     }
     return null;
   }
@@ -29,8 +29,8 @@ define([
    /* ==========================
    TEST: Structure
   ========================== */
-  describe("Structure", function() {
-    beforeEach(function(){
+  describe('Structure', function() {
+    beforeEach(function() {
       this.$el = $('' +
         '<div class="pat-structure" ' +
              'data-pat-structure="vocabularyUrl:/data.json;' +
@@ -46,55 +46,56 @@ define([
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
 
-      this.server.respondWith("GET", /data.json/, function (xhr, id) {
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
         var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
         var start = 0;
         var end = 15;
-        if(batch){
-          start = (batch.page-1) * batch.size;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
           end = start + batch.size;
         }
         var items = [];
-        for(var i=start; i<end; i++){
+        for (var i = start; i < end; i = i + 1) {
           items.push({
-            "UID": "123sdfasdf" + i,
-            "getURL": "http://localhost:8081/item" + i,
-            "path": '/item' + i,
-            "Type": "Page " + i, "Description": "page",
-            "Title": "Page " + i,
+            UID: '123sdfasdf' + i,
+            getURL: 'http://localhost:8081/item' + i,
+            path: '/item' + i,
+            Type: 'Page ' + i,
+            Description: 'page',
+            Title: 'Page ' + i,
             'review_state': 'published',
             'is_folderish': false,
-            'Subject': [],
-            'id': 'item' + i
+            Subject: [],
+            id: 'item' + i
           });
         }
 
-        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
           total: 100,
           results: items
         }));
       });
-      this.server.respondWith("POST", '/rearrange', function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-          status: "success",
+      this.server.respondWith('POST', '/rearrange', function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          status: 'success',
           msg: 'rearranged'
         }));
       });
-      this.server.respondWith("POST", '/paste', function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-          status: "success",
+      this.server.respondWith('POST', '/paste', function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          status: 'success',
           msg: 'pasted'
         }));
       });
-      this.server.respondWith("GET", '/contextInfo.json', function (xhr, id) {
-        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-          "addButtons": [{
-            "id": "page",
-            "title": "Page",
-            "url": "/addpage"
+      this.server.respondWith('GET', '/contextInfo.json', function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          addButtons: [{
+            id: 'page',
+            title: 'Page',
+            url: '/addpage'
           },{
-            "id": "folder",
-            "title": "Folder"
+            id: 'folder',
+            title: 'Folder'
           }]
         }));
       });
@@ -102,7 +103,7 @@ define([
       this.clock = sinon.useFakeTimers();
     });
 
-    afterEach(function(){
+    afterEach(function() {
       this.server.restore();
       this.clock.restore();
     });
@@ -118,7 +119,7 @@ define([
       var cb = this.$el.find('.itemRow td.selection input').eq(0);
       cb[0].checked = true;
       cb.trigger('change');
-      expect(this.$el.find("#selected").html()).to.contain('1');
+      expect(this.$el.find('#selected').html()).to.contain('1');
     });
 
     it('remove item from selection well', function() {
@@ -128,7 +129,7 @@ define([
       $item1[0].checked = true;
       $item1.trigger('change');
       this.$el.find('.items.popover-content a.remove').trigger('click').trigger('change');
-      expect(this.$el.find("#selected").html()).to.contain('0');
+      expect(this.$el.find('#selected').html()).to.contain('0');
     });
 
     it('remove all from selection well', function() {
@@ -140,9 +141,9 @@ define([
       var $item2 = this.$el.find('.itemRow td.selection input').eq(1);
       $item2[0].checked = true;
       $item2.trigger('change');
-      expect(this.$el.find("#selected").html()).to.contain('2');
+      expect(this.$el.find('#selected').html()).to.contain('2');
       this.$el.find('.popover.selected a.remove-all').trigger('click');
-      expect(this.$el.find("#selected").html()).to.contain('0');
+      expect(this.$el.find('#selected').html()).to.contain('0');
     });
 
     it('paging', function() {
@@ -166,7 +167,7 @@ define([
     });
 
     it('test paging does not apply overflow hidden to parent', function() {
-      /* 
+      /*
        * very odd here, overflow hidden is getting applied by something after
        * the table of results is re-rendered with new data
        */
@@ -242,7 +243,7 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find("#selected").html()).to.contain('15');
+      expect(this.$el.find('#selected').html()).to.contain('15');
 
     });
 
@@ -253,11 +254,10 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find("#selected").html()).to.contain('15');
+      expect(this.$el.find('#selected').html()).to.contain('15');
       $item[0].checked = false;
       $item.trigger('change');
-      expect(this.$el.find("#selected").html()).to.contain('0');
-
+      expect(this.$el.find('#selected').html()).to.contain('0');
     });
 
   });

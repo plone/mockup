@@ -26,8 +26,8 @@
 define([
   'underscore',
   'backbone'
-  ], function(_, Backbone) {
-  "use strict";
+], function(_, Backbone) {
+  'use strict';
 
   var BaseView = Backbone.View.extend({
     isUIView: true,
@@ -46,7 +46,7 @@ define([
       this.trigger('render', this);
       this.afterRender();
 
-      if(!this.$el.attr('id') && this.options.id){
+      if (!this.$el.attr('id') && this.options.id) {
         // apply id to element
         this.$el.attr('id', 'gen-' + this.options.id);
       }

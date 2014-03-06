@@ -1,6 +1,4 @@
-// Author: Nathan Van Gheem
-// Contact: nathan@vangheem.us
-// Version: 1.0
+// Author: Nathan Van Gheem Contact: nathan@vangheem.us Version: 1.0
 //
 // Description:
 //
@@ -31,7 +29,7 @@ define([
   'mockup-patterns-pickadate',
   'mockup-patterns-select2'
 ], function($, _, Backbone, PopoverView, PickADate, Select2) {
-  "use strict";
+  'use strict';
 
   var PropertiesView = PopoverView.extend({
     className: 'popover properties',
@@ -75,11 +73,11 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function(){
+    render: function() {
       PopoverView.prototype.render.call(this);
       this.$effective = this.$('[name="effective"]');
       this.$expiration = this.$('[name="expiration"]');
@@ -100,7 +98,7 @@ define([
       this.expirationPickADate = new PickADate(this.$expiration);
       return this;
     },
-    applyButtonClicked: function(e){
+    applyButtonClicked: function(e) {
       var data = {
         effectiveDate: this.effectivePickADate.$date.attr('value'),
         effectiveTime: this.effectivePickADate.$time.attr('value'),
@@ -110,16 +108,16 @@ define([
         contributors: JSON.stringify(this.$contributors.select2('data')),
         creators: JSON.stringify(this.$creators.select2('data'))
       };
-      if(this.$('[name="exclude-from-nav"]:checked').length > 0){
-        data.exclude_from_nav = this.$('[name="exclude-from-nav"]:checked').val();
+      if (this.$('[name="exclude-from-nav"]:checked').length > 0) {
+        data['exclude_from_nav'] = this.$('[name="exclude-from-nav"]:checked').val(); // jshint ignore:line
       }
       this.app.defaultButtonClickEvent(this.triggerView, data);
       this.hide();
     },
-    toggle: function(button, e){
+    toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
-      if(!this.opened){
+      if (!this.opened) {
         return;
       }
       this.$effective.attr('value', '');
@@ -127,7 +125,7 @@ define([
       this.$copyright.html('');
       this.$creators.select2('data', []);
       this.$contributors.select2('data', []);
-      this.$exclude.each(function(){
+      this.$exclude.each(function() {
         this.checked = false;
       });
     }

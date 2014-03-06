@@ -34,12 +34,12 @@ define([
   'mockup-patterns-moment'
 ], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
             Moment) {
-  "use strict";
+  'use strict';
 
   var TableView = BaseView.extend({
     tagName: 'div',
     template: _.template(TableTemplate),
-    initialize: function(options){
+    initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.collection = self.app.collection;
@@ -48,20 +48,20 @@ define([
       self.listenTo(self.selectedCollection, 'remove', self.render);
       self.listenTo(self.selectedCollection, 'reset', self.render);
       self.collection.pager();
-      self.subset_ids = [];
+      self.subsetIds = [];
 
-      self.app.on('context-info-loaded', function(data){
+      self.app.on('context-info-loaded', function(data) {
         /* set default page info */
         var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
-        if($defaultPage.length > 0){
+        if ($defaultPage.length > 0) {
           $defaultPage.find('td.title').prepend('<span>*</span> ');
           $defaultPage.addClass('default-page');
         }
         /* set breadcrumb title info */
         var crumbs = data.breadcrumbs;
-        if(crumbs && crumbs.length){
+        if (crumbs && crumbs.length) {
           var $crumbs = self.$('.breadcrumbs a.crumb');
-          _.each(crumbs, function(crumb, idx){
+          _.each(crumbs, function(crumb, idx) {
             $crumbs.eq(idx).html(crumb.title);
           });
         }
@@ -81,9 +81,9 @@ define([
         availableColumns: self.app.availableColumns
       }));
 
-      if(self.collection.length){
+      if (self.collection.length) {
         var container = self.$('tbody');
-        self.collection.each(function(result){
+        self.collection.each(function(result) {
           var view = (new TableRowView({
             model: result,
             app: self.app,
@@ -101,17 +101,17 @@ define([
       self.storeOrder();
       return this;
     },
-    breadcrumbClicked: function(e){
+    breadcrumbClicked: function(e) {
       e.preventDefault();
       var $el = $(e.target);
-      if($el[0].tagName !== 'A'){
+      if ($el[0].tagName !== 'A') {
         $el = $el.parent('a');
       }
       var path = '';
-      $($el.prevAll('a').get().reverse()).each(function(){
+      $($el.prevAll('a').get().reverse()).each(function() {
         var part = $(this).attr('data-path');
         path += part;
-        if(part !== '/'){
+        if (part !== '/') {
           path += '/';
         }
       });
@@ -132,10 +132,10 @@ define([
         this.$('.select-all').removeAttr('checked');
       }
     },
-    addReordering: function(){
+    addReordering: function() {
       var self = this;
       // if we have a custom query going on, we do not allow sorting.
-      if(self.app.inQueryMode()){
+      if (self.app.inQueryMode()) {
         self.app.setStatus('Can not order items while querying');
         self.$el.removeClass('order-support');
         return;
@@ -144,19 +144,19 @@ define([
       var dd = new Sortable(self.$('tbody'), {
         selector: 'tr',
         dragClass: 'structure-dragging',
-        drop: function($el, delta){
-          self.app.moveItem($el.attr('data-id'), delta, self.subset_ids);
+        drop: function($el, delta) {
+          self.app.moveItem($el.attr('data-id'), delta, self.subsetIds);
           self.storeOrder();
         }
       });
     },
-    storeOrder: function(){
+    storeOrder: function() {
       var self = this;
-      var subset_ids = [];
-      self.$('tbody tr.itemRow').each(function(idx){
-        subset_ids.push($(this).attr('data-id'));
+      var subsetIds = [];
+      self.$('tbody tr.itemRow').each(function(idx) {
+        subsetIds.push($(this).attr('data-id'));
       });
-      self.subset_ids = subset_ids;
+      self.subsetIds = subsetIds;
     }
   });
 

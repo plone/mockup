@@ -50,11 +50,11 @@ bootstrap: clean bootstrap-common
 
 bootstrap-nix: clean bootstrap-common
 	nix-build default.nix -A build -o nixenv
-	ln -s nixenv/lib/node_modules/plone-mockup/node_modules
+	ln -s nixenv/lib/node_modules/mockup/node_modules
 	ln -s nixenv/bower_components
 
 jshint:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint
+	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint jscs
 
 test:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test --pattern=$(pattern)

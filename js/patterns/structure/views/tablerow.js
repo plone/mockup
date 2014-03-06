@@ -30,7 +30,7 @@ define([
   'text!js/patterns/structure/templates/tablerow.xml',
   'bootstrap-dropdown'
 ], function($, _, Backbone, TableRowTemplate) {
-  "use strict";
+  'use strict';
 
   var TableRowView = Backbone.View.extend({
     tagName: 'tr',
@@ -48,7 +48,7 @@ define([
       'click .openItem a': 'openClicked',
       'click .editItem a': 'editClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.options = options;
       this.app = options.app;
       this.selectedCollection = this.app.selectedCollection;
@@ -58,7 +58,7 @@ define([
       var self = this;
       var data = this.model.toJSON();
       data.selected = false;
-      if(this.selectedCollection.findWhere({UID: data.UID})){
+      if (this.selectedCollection.findWhere({UID: data.UID})) {
         data.selected = true;
       }
       data.attributes = self.model.attributes;
@@ -69,16 +69,16 @@ define([
       data.inQueryMode = self.app.inQueryMode();
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
-      self.$el.addClass('state-' + attrs.review_state).
-        addClass('type-' + attrs.Type);
-      if(attrs.is_folderish){
+      self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.Type); // jshint ignore:line
+      if (attrs['is_folderish']) { // jshint ignore:line
         self.$el.addClass('folder');
       }
       self.$el.attr('data-path', data.path);
       self.$el.attr('data-UID', data.UID);
       self.$el.attr('data-id', data.id);
       self.$el.attr('data-type', data.Type);
-      self.$el.attr('data-folderish', data.is_folderish);
+      self.$el.attr('data-folderish', data['is_folderish']); // jshint ignore:line
+
       self.el.model = this.model;
 
       self.$dropdown = self.$('.dropdown-toggle');
@@ -86,27 +86,27 @@ define([
 
       return this;
     },
-    itemClicked: function(e){
+    itemClicked: function(e) {
       e.preventDefault();
       /* check if this should just be opened in new window */
       var keyEvent = this.app.keyEvent;
-      if(keyEvent && keyEvent.ctrlKey){
+      if (keyEvent && keyEvent.ctrlKey) {
         this.openClicked(e);
-      }else if(this.model.attributes.is_folderish){
+      } else if (this.model.attributes['is_folderish']) { // jshint ignore:line
         // it's a folder, go down path and show in contents window.
         this.app.queryHelper.currentPath = this.model.attributes.path;
         // also switch to fix page in batch
         var collection = this.app.collection;
         collection.goTo(collection.information.firstPage);
-      }else{
+      } else {
         this.openClicked(e);
       }
     },
-    itemSelected: function(){
+    itemSelected: function() {
       var checkbox = this.$('input')[0];
-      if(checkbox.checked){
+      if (checkbox.checked) {
         this.app.selectedCollection.add(this.model);
-      }else{
+      } else {
         this.app.selectedCollection.removeResult(this.model);
       }
 
@@ -114,43 +114,43 @@ define([
 
       /* check for shift click now */
       var keyEvent = this.app.keyEvent;
-      if(keyEvent && keyEvent.shiftKey && this.app.last_selected &&
-            this.app.last_selected.parentNode !== null){
-        var $el = $(this.app.last_selected);
-        var last_checked_index = $el.index();
-        var this_index = this.$el.index();
-        this.app.tableView.$('input[type="checkbox"]').each(function(){
+      if (keyEvent && keyEvent.shiftKey && this.app['last_selected'] && // jshint ignore:line
+            this.app['last_selected'].parentNode !== null) { // jshint ignore:line
+        var $el = $(this.app['last_selected']); // jshint ignore:line
+        var lastCheckedIndex = $el.index();
+        var thisIndex = this.$el.index();
+        this.app.tableView.$('input[type="checkbox"]').each(function() {
           $el = $(this);
           var index = $el.parents('tr').index();
-          if((index > last_checked_index && index < this_index) ||
-              (index < last_checked_index && index > this_index)){
+          if ((index > lastCheckedIndex && index < thisIndex) ||
+              (index < lastCheckedIndex && index > thisIndex)) {
             this.checked = checkbox.checked;
             var model = $(this).closest('tr')[0].model;
             var existing = selectedCollection.getByUID(model.attributes.UID);
-            if(this.checked){
-              if(!existing){
+            if (this.checked) {
+              if (!existing) {
                 selectedCollection.add(model);
               }
-            } else if(existing){
+            } else if (existing) {
               selectedCollection.remove(existing);
             }
           }
         });
 
       }
-      this.app.last_selected = this.el;
+      this.app['last_selected'] = this.el; // jshint ignore:line
     },
-    cutClicked: function(e){
+    cutClicked: function(e) {
       e.preventDefault();
       this.cutCopyClicked('cut');
       this.app.collection.pager(); // reload to be able to now show paste button
     },
-    copyClicked: function(e){
+    copyClicked: function(e) {
       e.preventDefault();
       this.cutCopyClicked('copy');
       this.app.collection.pager(); // reload to be able to now show paste button
     },
-    cutCopyClicked: function(operation){
+    cutCopyClicked: function(operation) {
       var self = this;
       self.app.pasteOperation = operation;
 
@@ -160,22 +160,22 @@ define([
       self.app.pasteAllowed = true;
       self.app.buttons.primary.get('paste').enable();
     },
-    pasteClicked: function(e){
+    pasteClicked: function(e) {
       e.preventDefault();
       this.app.pasteEvent(this.app.buttons.primary.get('paste'), e, {
         folder: this.model.attributes.path
       });
       this.app.collection.pager(); // reload to be able to now show paste button
     },
-    moveTopClicked: function(e){
+    moveTopClicked: function(e) {
       e.preventDefault();
       this.app.moveItem(this.model.attributes.id, 'top');
     },
-    moveBottomClicked: function(e){
+    moveBottomClicked: function(e) {
       e.preventDefault();
       this.app.moveItem(this.model.attributes.id, 'bottom');
     },
-    setDefaultPageClicked: function(e){
+    setDefaultPageClicked: function(e) {
       e.preventDefault();
       var self = this;
       $.ajax({
@@ -185,41 +185,41 @@ define([
           '_authenticator': $('[name="_authenticator"]').val(),
           'id': this.$active.attr('data-id')
         },
-        success: function(data){
+        success: function(data) {
           self.app.ajaxSuccessResponse.apply(self.app, [data]);
         },
-        error: function(data){
+        error: function(data) {
           self.app.ajaxErrorResponse.apply(self.app, [data]);
         }
       });
     },
-    getSelectedBaseUrl: function(){
+    getSelectedBaseUrl: function() {
       var self = this;
       return self.model.attributes.getURL;
     },
-    getWindow: function(){
+    getWindow: function() {
       var win = window;
       if (win.parent !== window) {
         win = win.parent;
       }
       return win;
     },
-    openUrl: function(url){
+    openUrl: function(url) {
       var self = this;
       var win = self.getWindow();
       var keyEvent = this.app.keyEvent;
-      if(keyEvent && keyEvent.ctrlKey){
+      if (keyEvent && keyEvent.ctrlKey) {
         win.open(url);
-      }else{
+      } else {
         win.location = url;
       }
     },
-    openClicked: function(e){
+    openClicked: function(e) {
       e.preventDefault();
       var self = this;
       self.openUrl(self.getSelectedBaseUrl() + '/view');
     },
-    editClicked: function(e){
+    editClicked: function(e) {
       e.preventDefault();
       var self = this;
       self.openUrl(self.getSelectedBaseUrl() + '/edit');

@@ -93,18 +93,18 @@ define([
   'mockup-utils',
   'mockup-patterns-tree'
 ], function($, _, Base, Select2, utils, Tree) {
-  "use strict";
+  'use strict';
 
   var RelatedItems = Base.extend({
-    name: "relateditems",
+    name: 'relateditems',
     browsing: false,
     currentPath: null,
     defaults: {
       vocabularyUrl: null, // must be set to work
       width: '300px',
       multiple: true,
-      tokenSeparators: [",", " "],
-      separator: ",",
+      tokenSeparators: [',', ' '],
+      separator: ',',
       orderable: true,
       cache: true,
       mode: 'search', // possible values are search and browse
@@ -161,7 +161,7 @@ define([
       setupAjax: function() {
         // Setup the ajax object to use during requests
         var self = this;
-        if(self.query.valid){
+        if (self.query.valid) {
           return self.query.selectAjax();
         }
         return {};
@@ -170,25 +170,25 @@ define([
     applyTemplate: function(tpl, item) {
       var self = this;
       var template;
-      if (self.options[tpl+'TemplateSelector']) {
-        template = $(self.options[tpl+'TemplateSelector']).html();
+      if (self.options[tpl + 'TemplateSelector']) {
+        template = $(self.options[tpl + 'TemplateSelector']).html();
         if (!template) {
-          template = self.options[tpl+'Template'];
+          template = self.options[tpl + 'Template'];
         }
       } else {
-        template = self.options[tpl+'Template'];
+        template = self.options[tpl + 'Template'];
       }
       // let's give all the options possible to the template generation
       var options = $.extend(true, {}, self.options, item);
       options._item = item;
       return _.template(template, options);
     },
-    activateBrowsing: function(){
+    activateBrowsing: function() {
       var self = this;
       self.browsing = true;
       self.setBreadCrumbs();
     },
-    deactivateBrowsing: function(){
+    deactivateBrowsing: function() {
       var self = this;
       self.browsing = false;
       self.setBreadCrumbs();
@@ -212,8 +212,8 @@ define([
       var html;
       if (path === '/') {
         var searchText = '';
-        if(self.options.mode === 'search'){
-          searchText = '<em>'+self.options.searchAllText+'</em>';
+        if (self.options.mode === 'search') {
+          searchText = '<em>' + self.options.searchAllText + '</em>';
         }
         html = self.applyTemplate('breadCrumbs', {
           items: searchText,
@@ -232,7 +232,7 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items:itemsHtml, searchText: self.options.searchText});
+        html = self.applyTemplate('breadCrumbs', {items: itemsHtml, searchText: self.options.searchText});
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -247,9 +247,9 @@ define([
       var selectedNode = null;
       var treePattern = new Tree($tree, {
         data: [],
-        dataFilter: function(data){
+        dataFilter: function(data) {
           var nodes = [];
-          _.each(data.results, function(item){
+          _.each(data.results, function(item) {
             nodes.push({
               label: item.Title,
               id: item.UID,
@@ -259,36 +259,36 @@ define([
           return nodes;
         }
       });
-      treePattern.$el.bind('tree.select', function(e){
+      treePattern.$el.bind('tree.select', function(e) {
         var node = e.node;
-        if(node && !node._loaded){
+        if (node && !node._loaded) {
           self.currentPath = node.path;
           selectedNode = node;
           treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node);
           node._loaded = true;
         }
       });
-      treePattern.$el.bind('tree.refresh', function(){
+      treePattern.$el.bind('tree.refresh', function() {
         /* the purpose of this is that when new data is loaded, the selected
          * node is cleared. This re-selects it as a user browses structure of site */
-        if(selectedNode){
+        if (selectedNode) {
           treePattern.$el.tree('selectNode', selectedNode);
         }
       });
-      $('a.pattern-relateditems-tree-cancel', $treeContainer).click(function(e){
+      $('a.pattern-relateditems-tree-cancel', $treeContainer).click(function(e) {
         e.preventDefault();
         $treeContainer.fadeOut();
         return false;
       });
 
-      $('a.pattern-relateditems-tree-itemselect', $treeContainer).click(function(e){
+      $('a.pattern-relateditems-tree-itemselect', $treeContainer).click(function(e) {
         e.preventDefault();
         self.browseTo(self.currentPath); // just browse to current path since it's set elsewhere
         $treeContainer.fadeOut();
         return false;
       });
 
-      $treeSelect.on('click', function(e){
+      $treeSelect.on('click', function(e) {
         e.preventDefault();
         self.browsing = true;
         self.currentPath = '/';
@@ -301,22 +301,22 @@ define([
     selectItem: function(item) {
       var self = this;
       self.trigger('selecting');
-      var data = self.$el.select2("data");
+      var data = self.$el.select2('data');
       data.push(item);
-      self.$el.select2("data", data);
+      self.$el.select2('data', data);
       item.selected = true;
       self.trigger('selected');
     },
     deselectItem: function(item) {
       var self = this;
       self.trigger('deselecting');
-      var data = self.$el.select2("data");
+      var data = self.$el.select2('data');
       _.each(data, function(obj, i) {
         if (obj.UID === item.UID) {
           data.splice(i, 1);
         }
       });
-      self.$el.select2("data", data);
+      self.$el.select2('data', data);
       item.selected = false;
       self.trigger('deselected');
     },
@@ -361,16 +361,16 @@ define([
       Select2.prototype.initializeOrdering.call(self);
 
       self.options.formatResult = function(item) {
-        if (!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1){
+        if (!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1) {
           item.folderish = false;
-        }else{
+        } else {
           item.folderish = true;
         }
 
         item.selectable = self.isSelectable(item);
 
         if (item.selected === undefined) {
-          var data = self.$el.select2("data");
+          var data = self.$el.select2('data');
           item.selected = false;
           _.each(data, function(obj) {
             if (obj.UID === item.UID) {
@@ -391,9 +391,9 @@ define([
             } else {
               self.selectItem(item);
               $parent.addClass('pattern-relateditems-active');
-              if(self.options.maximumSelectionSize > 0){
+              if (self.options.maximumSelectionSize > 0) {
                 var items = self.$select2.select2('data');
-                if(items.length >= self.options.maximumSelectionSize){
+                if (items.length >= self.options.maximumSelectionSize) {
                   self.$select2.select2('close');
                 }
               }
@@ -417,9 +417,11 @@ define([
           var ids = value.split(self.options.separator);
           self.query.search(
             'UID', 'plone.app.querystring.operation.list.contains', ids,
-            function(data){
+            function(data) {
               callback(data.results);
-          }, false);
+            },
+            false
+          );
         }
       };
 
@@ -438,15 +440,15 @@ define([
       self.$browsePath = $('<span class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);
 
-      if(self.options.mode === 'search'){
+      if (self.options.mode === 'search') {
         self.deactivateBrowsing();
         self.browsing = false;
-      }else{
+      } else {
         self.activateBrowsing();
         self.browsing = true;
       }
 
-      self.$el.on("select2-selecting", function(event) {
+      self.$el.on('select2-selecting', function(event) {
         event.preventDefault();
       });
 

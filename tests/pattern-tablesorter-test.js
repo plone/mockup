@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-tablesorter'
 ], function(expect, $, registry, Tablesorter) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,51 +13,51 @@ define([
    TEST: TableSorter
   ========================== */
 
-  describe("TableSorter", function () {
+  describe('TableSorter', function () {
     beforeEach(function() {
-      this.$el = $('' +
-        '<table class="pat-tablesorter">'+
-        '   <thead>'+
-        '     <tr>'+
-        '       <th>First Name</th>'+
-        '       <th>Last Name</th>'+
-        '       <th>Number</th>'+
-        '     </tr>'+
-        '   </thead>'+
-        '   <tbody>'+
-        '     <tr>'+
-        '       <td>AAA</td>'+
-        '       <td>ZZZ</td>'+
-        '       <td>3</td>'+
-        '     </tr>'+
-        '     <tr>'+
-        '       <td>BBB</td>'+
-        '       <td>YYY</td>'+
-        '       <td>1</td>'+
-        '     </tr>'+
-        '     <tr>'+
-        '       <td>CCC</td>'+
-        '       <td>XXX</td>'+
-        '       <td>2</td>'+
-        '     </tr>'+
-        '   </tbody>'+
+      this.$el = $ ('' +
+        '<table class="pat-tablesorter">' +
+        '   <thead>' +
+        '     <tr>' +
+        '       <th>First Name</th>' +
+        '       <th>Last Name</th>' +
+        '       <th>Number</th>' +
+        '     </tr>' +
+        '   </thead>' +
+        '   <tbody>' +
+        '     <tr>' +
+        '       <td>AAA</td>' +
+        '       <td>ZZZ</td>' +
+        '       <td>3</td>' +
+        '     </tr>' +
+        '     <tr>' +
+        '       <td>BBB</td>' +
+        '       <td>YYY</td>' +
+        '       <td>1</td>' +
+        '     </tr>' +
+        '     <tr>' +
+        '       <td>CCC</td>' +
+        '       <td>XXX</td>' +
+        '       <td>2</td>' +
+        '     </tr>' +
+        '   </tbody>' +
         ' </table>');
     });
-    it("test headers have the sort arrow", function() {
+    it('test headers have the sort arrow', function() {
       registry.scan(this.$el);
       expect(this.$el.find('.sortdirection').size()).to.equal(3);
     });
-    it("test sort by second column", function() {
+    it('test sort by second column', function() {
       registry.scan(this.$el);
-      this.$el.find('thead th').eq(1).trigger("click");
+      this.$el.find('thead th').eq(1).trigger('click');
 
-      var should_be = ["CCC", "BBB", "AAA"];
+      var shouldBe = ['CCC', 'BBB', 'AAA'];
       var elem;
-      for (var i=0;i<should_be.length;i+=1){
+      for (var i = 0; i < shouldBe.length; i += 1) {
         // We are checking first td of each tr of tbody, just to see the
         // order
-        elem = this.$el.find('tbody tr td').eq(i*3);
-        expect(elem.text()).to.equal(should_be[i]);
+        elem = this.$el.find('tbody tr td').eq(i * 3);
+        expect(elem.text()).to.equal(shouldBe[i]);
       }
 
       var trs = this.$el.find('tbody tr');
@@ -69,17 +69,17 @@ define([
       expect(trs.eq(2).hasClass('even')).to.be.equal(false);
 
     });
-    it("test sort by third column", function() {
+    it('test sort by third column', function() {
       registry.scan(this.$el);
-      this.$el.find('thead th').eq(2).trigger("click");
+      this.$el.find('thead th').eq(2).trigger('click');
 
-      var should_be = ["BBB", "CCC", "AAA"];
+      var shouldBe = ['BBB', 'CCC', 'AAA'];
       var elem;
-      for (var i=0;i<should_be.length;i+=1){
+      for (var i = 0; i < shouldBe.length; i += 1) {
         // We are checking first td of each tr of tbody, just to see the
         // order
-        elem = this.$el.find('tbody tr td').eq(i*3);
-        expect(elem.text()).to.equal(should_be[i]);
+        elem = this.$el.find('tbody tr td').eq(i * 3);
+        expect(elem.text()).to.equal(shouldBe[i]);
       }
 
       var trs = this.$el.find('tbody tr');
@@ -91,22 +91,22 @@ define([
       expect(trs.eq(2).hasClass('even')).to.be.equal(false);
 
     });
-    it("test several sorts and finally back to first column", function() {
+    it('test several sorts and finally back to first column', function() {
       registry.scan(this.$el);
-      this.$el.find('thead th').eq(2).trigger("click");
-      this.$el.find('thead th').eq(3).trigger("click");
-      this.$el.find('thead th').eq(2).trigger("click");
-      this.$el.find('thead th').eq(1).trigger("click");
-      this.$el.find('thead th').eq(3).trigger("click");
-      this.$el.find('thead th').eq(1).trigger("click");
+      this.$el.find('thead th').eq(2).trigger('click');
+      this.$el.find('thead th').eq(3).trigger('click');
+      this.$el.find('thead th').eq(2).trigger('click');
+      this.$el.find('thead th').eq(1).trigger('click');
+      this.$el.find('thead th').eq(3).trigger('click');
+      this.$el.find('thead th').eq(1).trigger('click');
 
-      var should_be = ["AAA", "BBB", "CCC"];
+      var shouldBe = ['AAA', 'BBB', 'CCC'];
       var elem;
-      for (var i=0;i<should_be.length;i+=1){
+      for (var i = 0; i < shouldBe.length; i += 1) {
         // We are checking first td of each tr of tbody, just to see the
         // order
-        elem = this.$el.find('tbody tr td').eq(i*3);
-        expect(elem.text()).to.equal(should_be[i]);
+        elem = this.$el.find('tbody tr td').eq(i * 3);
+        expect(elem.text()).to.equal(shouldBe[i]);
       }
 
       var trs = this.$el.find('tbody tr');

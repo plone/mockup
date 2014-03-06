@@ -29,7 +29,7 @@ define([
   'backbone',
   'js/ui/views/popover'
 ], function($, _, Backbone, PopoverView) {
-  "use strict";
+  'use strict';
 
   var WorkflowView = PopoverView.extend({
     className: 'popover workflow',
@@ -66,31 +66,31 @@ define([
     events: {
       'click button': 'applyButtonClicked'
     },
-    initialize: function(options){
+    initialize: function(options) {
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function(){
+    render: function() {
       PopoverView.prototype.render.call(this);
       this.$comments = this.$('textarea');
       this.$transition = this.$('select');
       return this;
     },
-    applyButtonClicked: function(e){
+    applyButtonClicked: function(e) {
       var data = {
         comments: this.$comments.val(),
         transition: this.$transition.val()
       };
-      if(this.$('[name="recurse"]')[0].checked){
+      if (this.$('[name="recurse"]')[0].checked) {
         data.recurse = 'yes';
       }
       this.app.defaultButtonClickEvent(this.triggerView, data);
       this.hide();
     },
-    toggle: function(button, e){
+    toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
-      if(!self.opened){
+      if (!self.opened) {
         return;
       }
       self.$comments.val('');
@@ -102,14 +102,12 @@ define([
           selection: JSON.stringify(self.app.getSelectedUids()),
           transitions: true
         },
-        success: function(data){
-          _.each(data.transitions, function(transition){
-            self.$transition.append(
-              '<option value="' + transition.id + '">' + transition.title +
-                '</option>');
+        success: function(data) {
+          _.each(data.transitions, function(transition) {
+            self.$transition.append('<option value="' + transition.id + '">' + transition.title + '</option>');
           });
         },
-        error: function(data){
+        error: function(data) {
           // XXX error handling...
           window.alert('error getting transition data');
         }

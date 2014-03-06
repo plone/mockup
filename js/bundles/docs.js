@@ -6,7 +6,9 @@ require([
   'bootstrap-collapse',
   'mockup-fakeserver'
 ], function(Docs, GETTING_STARTED, TUTORIAL, CONTRIBUTE) {
-  new Docs({
+  'use strict';
+
+  var docs = new Docs({
     pages: [
       { id: 'index',
         title: 'Mockup',
@@ -172,5 +174,6 @@ require([
     ]
   });
 
+  return docs;
 });
 

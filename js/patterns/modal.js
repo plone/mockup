@@ -9,7 +9,7 @@
  *    title(string): A string to place in the modal header. If title is provided, titleSelector is not used. (null)
  *    titleSelector(string): Selector for an element to extract from the content provided to the modal and place in the modal header. ('h1:first')
  *    content(string): Selector for an element within the content provided to the modal to use as the modal body. ('#content')
- *    prependContent(string): Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response. ('.portalMessage') 
+ *    prependContent(string): Selector for elements within the content provided to the modal which will be collected and inserted, by default above, the modal content. This is useful for extracting things like alerts or status messages on forms and displaying them to the user after an AJAX response. ('.portalMessage')
  *    backdrop(string): Selector for the element upon which the Backdrop pattern should be initiated. The Backdrop is a full width mask that will be apply above the content behind the modal which is useful for highlighting the modal dialog to the user. ('body')
  *    backdropOptions(object): Look at options at backdrop pattern. ({ zIndex: "1040", opacity: "0.8", className: "backdrop", classActiveName: "backdrop-active", closeOnEsc: true, closeOnClick: true })
  *    buttons(string): Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden. ('.formControls > input[type="submit"]')
@@ -82,6 +82,7 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+ /* globals confirm:true */
 
 define([
   'jquery',
@@ -93,24 +94,24 @@ define([
   'mockup-utils',
   'jquery.form'
 ], function($, _, Base, Backdrop, registry, Router, utils) {
-  "use strict";
+  'use strict';
 
   var Modal = Base.extend({
-    name: "modal",
+    name: 'modal',
     createModal: null,
     $model: null,
     defaults: {
-      width: "",
-      height: "",
+      width: '',
+      height: '',
       margin: 20,
-      position: "center middle", // format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle
+      position: 'center middle', // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
       triggers: [],
-      backdrop: "body", // Element to initiate the Backdrop on.
+      backdrop: 'body', // Element to initiate the Backdrop on.
       backdropOptions: {
-        zIndex: "1040",
-        opacity: "0.8",
-        className: "backdrop",
-        classActiveName: "backdrop-active",
+        zIndex: '1040',
+        opacity: '0.8',
+        className: 'backdrop',
+        classActiveName: 'backdrop-active',
         closeOnEsc: true,
         closeOnClick: true
       },
@@ -122,16 +123,16 @@ define([
       loadLinksWithinModal: true,
       prependContent: '.portalMessage',
       templateOptions: {
-        className: "modal fade",
-        classDialog: "modal-dialog",
-        classModal: "modal-content",
-        classHeaderName: "modal-header",
-        classBodyName: "modal-body",
-        classFooterName: "modal-footer",
-        classWrapperName: "modal-wrapper",
-        classWrapperInnerName: "modal-wrapper-inner",
-        classActiveName: "in",
-        classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
+        className: 'modal fade',
+        classDialog: 'modal-dialog',
+        classModal: 'modal-content',
+        classHeaderName: 'modal-header',
+        classBodyName: 'modal-body',
+        classFooterName: 'modal-footer',
+        classWrapperName: 'modal-wrapper',
+        classWrapperInnerName: 'modal-wrapper-inner',
+        classActiveName: 'in',
+        classPrependName: '', // String, css class to be applied to the wrapper of the prepended content
         classContentName: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         template: '' +
           '<div class="<%= options.className %>">' +
@@ -171,7 +172,7 @@ define([
         onTimeout: null,
         redirectOnResponse: false,
         redirectToUrl: function($action, response, options) {
-            var $base = $(/<base.*?(\/>|<\/base>)/im.exec(response)[0]);
+          var $base = $(/<base.*?(\/>|<\/base>)/im.exec(response)[0]);
           return $base.attr('href');
         }
       },
@@ -199,7 +200,7 @@ define([
           var patternKeys = _.union(_.keys(self.options.actionOptions), ['actions', 'actionOptions']);
           var patternOptions = $.extend(true, _.omit(options, patternKeys), self.options);
 
-          $(action, $('.'+options.templateOptions.classBodyName, $modal)).each(function(action) {
+          $(action, $('.' + options.templateOptions.classBodyName, $modal)).each(function(action) {
             var $action = $(this);
             $action.on(actionOptions.eventType, function(e) {
               e.stopPropagation();
@@ -248,7 +249,7 @@ define([
         }
 
         // We want to trigger the form submit event but NOT use the default
-        $form.on('submit', function(e){
+        $form.on('submit', function(e) {
           e.preventDefault();
         });
         $form.trigger('submit');
@@ -258,56 +259,56 @@ define([
           timeout: options.timeout,
           data: extraData,
           url: url,
-            error: function(xhr, textStatus, errorStatus) {
-              self.loading.hide();
-              if (textStatus === 'timeout' && options.onTimeout) {
-                options.onTimeout.apply(self, xhr, errorStatus);
-              // on "error", "abort", and "parsererror"
-              } else if (options.onError) {
-                options.onError(xhr, textStatus, errorStatus);
-              } else {
-                console.log('error happened do something');
-              }
-              self.trigger('formActionError', [xhr, textStatus, errorStatus]);
-            },
-            success: function(response, state, xhr, form) {
-              self.loading.hide();
-              // if error is found (NOTE: check for both the portal errors
-              // and the form field-level errors)
-              if ($(options.error, response).size() !== 0 ||
-                  $(options.formFieldError, response).size() !== 0) {
-                if (options.onFormError) {
-                  options.onFormError(self, response, state, xhr, form);
-                } else {
-                  self.redraw(response, patternOptions);
-                }
-                return;
-              }
-
-              if (options.redirectOnResponse === true) {
-                if (typeof options.redirectToUrl === 'function') {
-                  window.parent.location.href = options.redirectToUrl.apply(self, [$action, response, options]);
-                } else {
-                  window.parent.location.href = options.redirectToUrl;
-                }
-                return; // cut out right here since we're changing url
-              }
-
-              if (options.onSuccess) {
-                options.onSuccess(self, response, state, xhr, form);
-              }
-
-              if (options.displayInModal === true) {
-                self.redraw(response, patternOptions);
-              } else {
-                $action.trigger('destroy.modal.patterns');
-                // also calls hide
-                if (options.reloadWindowOnClose) {
-                  self.reloadWindow();
-                }
-              }
-              self.trigger('formActionSuccess', [response, state, xhr, form]);
+          error: function(xhr, textStatus, errorStatus) {
+            self.loading.hide();
+            if (textStatus === 'timeout' && options.onTimeout) {
+              options.onTimeout.apply(self, xhr, errorStatus);
+            // on "error", "abort", and "parsererror"
+            } else if (options.onError) {
+              options.onError(xhr, textStatus, errorStatus);
+            } else {
+              console.log('error happened do something');
             }
+            self.trigger('formActionError', [xhr, textStatus, errorStatus]);
+          },
+          success: function(response, state, xhr, form) {
+            self.loading.hide();
+            // if error is found (NOTE: check for both the portal errors
+            // and the form field-level errors)
+            if ($(options.error, response).size() !== 0 ||
+                $(options.formFieldError, response).size() !== 0) {
+              if (options.onFormError) {
+                options.onFormError(self, response, state, xhr, form);
+              } else {
+                self.redraw(response, patternOptions);
+              }
+              return;
+            }
+
+            if (options.redirectOnResponse === true) {
+              if (typeof options.redirectToUrl === 'function') {
+                window.parent.location.href = options.redirectToUrl.apply(self, [$action, response, options]);
+              } else {
+                window.parent.location.href = options.redirectToUrl;
+              }
+              return; // cut out right here since we're changing url
+            }
+
+            if (options.onSuccess) {
+              options.onSuccess(self, response, state, xhr, form);
+            }
+
+            if (options.displayInModal === true) {
+              self.redraw(response, patternOptions);
+            } else {
+              $action.trigger('destroy.modal.patterns');
+              // also calls hide
+              if (options.reloadWindowOnClose) {
+                self.reloadWindow();
+              }
+            }
+            self.trigger('formActionSuccess', [response, state, xhr, form]);
+          }
         });
       },
       handleLinkAction: function($action, options, patternOptions) {
@@ -368,11 +369,13 @@ define([
         var $raw = self.$raw.clone();
         // fix for IE9 bug (see http://bugs.jquery.com/ticket/10550)
         $('input:checked', $raw).each(function() {
-          if (this.setAttribute) this.setAttribute('checked', 'checked');
+          if (this.setAttribute) {
+            this.setAttribute('checked', 'checked');
+          }
         });
 
         // Object that will be passed to the template
-        var tpl_object = {
+        var tplObject = {
           title: '',
           prepend: '<div />',
           content: '',
@@ -383,27 +386,27 @@ define([
         // setup the Title
         if (options.title === null) {
           var $title = $(options.titleSelector, $raw);
-          tpl_object.title = $title.html();
+          tplObject.title = $title.html();
           $(options.titleSelector, $raw).remove();
         } else {
-          tpl_object.title = options.title;
+          tplObject.title = options.title;
         }
 
         // Grab items to to insert into the prepend area
         if (options.prependContent) {
-          tpl_object.prepend = $('<div />').append($(options.prependContent, $raw).clone()).html();
+          tplObject.prepend = $('<div />').append($(options.prependContent, $raw).clone()).html();
           $(options.prependContent, $raw).remove();
         }
 
         // Filter out the content if there is a selector provided
         if (options.content) {
-          tpl_object.content = $(options.content, $raw).html();
+          tplObject.content = $(options.content, $raw).html();
         } else {
-          tpl_object.content = $raw.html();
+          tplObject.content = $raw.html();
         }
 
         // Render html
-        self.$modal = $(_.template(self.options.templateOptions.template, tpl_object));
+        self.$modal = $(_.template(self.options.templateOptions.template, tplObject));
         self.$modalDialog = $('> .' + self.options.templateOptions.classDialog, self.$modal);
 
         // In most browsers, when you hit the enter key while a form element is focused
@@ -411,12 +414,12 @@ define([
         // but not when when the default submit button is hidden with 'display: none'.
         // The following code will work around this issue:
         $('form', self.$modal).on ('keydown', function (event) {
-            // ignore keys which are not enter, and ignore enter inside a textarea.
-            if (event.keyCode !== 13 || event.target.nodeName == 'TEXTAREA')
-                return;
-
-            event.preventDefault ();
-            $('input[type=submit], button[type=submit], button:not(type)', this).eq(0).trigger ('click');
+          // ignore keys which are not enter, and ignore enter inside a textarea.
+          if (event.keyCode !== 13 || event.target.nodeName === 'TEXTAREA') {
+            return;
+          }
+          event.preventDefault();
+          $('input[type=submit], button[type=submit], button:not(type)', this).eq(0).trigger('click');
         });
 
         // Setup buttons
@@ -561,13 +564,13 @@ define([
         container: self.$wrapperInner,
         backdrop: self.backdrop,
         wrapper: self.$wrapper,
-        zIndex: function(){
-          if(self.modalInitialized()){
+        zIndex: function() {
+          if (self.modalInitialized()) {
             var zIndex = self.$modal.css('zIndex');
-            if(zIndex){
+            if (zIndex) {
               return parseInt(zIndex, 10) + 1;
             }
-          }else{
+          } else {
             return 10005;
           }
         }
@@ -613,8 +616,8 @@ define([
       self.trigger('before-ajax');
       self.loading.show();
       self.ajaxXHR = $.ajax({
-          url: self.options.ajaxUrl,
-          type: self.options.ajaxType
+        url: self.options.ajaxUrl,
+        type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
         self.loading.hide();
@@ -658,20 +661,20 @@ define([
       absRight = absLeft = absTop = absLeft = 'auto';
 
       // -- HORIZONTAL POSITION -----------------------------------------------
-      if(horpos === 'left') {
+      if (horpos === 'left') {
         absLeft = margin + 'px';
         // if the width of the wrapper is smaller than the modal, and thus the
         // screen is smaller than the modal, force the left to simply be 0
-        if(modalWidth > wrapperInnerWidth) {
+        if (modalWidth > wrapperInnerWidth) {
           absLeft = '0px';
         }
         returnpos.left = absLeft;
       }
-      else if(horpos === 'right') {
+      else if (horpos === 'right') {
         absRight =  margin + 'px';
         // if the width of the wrapper is smaller than the modal, and thus the
         // screen is smaller than the modal, force the right to simply be 0
-        if(modalWidth > wrapperInnerWidth) {
+        if (modalWidth > wrapperInnerWidth) {
           absRight = '0px';
         }
         returnpos.right = absRight;
@@ -682,27 +685,27 @@ define([
         absLeft = ((wrapperInnerWidth / 2) - (modalWidth / 2) - margin) + 'px';
         // if the width of the wrapper is smaller than the modal, and thus the
         // screen is smaller than the modal, force the left to simply be 0
-        if(modalWidth > wrapperInnerWidth) {
+        if (modalWidth > wrapperInnerWidth) {
           absLeft = '0px';
         }
         returnpos.left = absLeft;
       }
 
       // -- VERTICAL POSITION -------------------------------------------------
-      if(vertpos === 'top') {
+      if (vertpos === 'top') {
         absTop = margin + 'px';
         // if the height of the wrapper is smaller than the modal, and thus the
         // screen is smaller than the modal, force the top to simply be 0
-        if(modalHeight > wrapperInnerHeight) {
+        if (modalHeight > wrapperInnerHeight) {
           absTop = '0px';
         }
         returnpos.top = absTop;
       }
-      else if(vertpos === 'bottom') {
+      else if (vertpos === 'bottom') {
         absBottom = margin + 'px';
         // if the height of the wrapper is smaller than the modal, and thus the
         // screen is smaller than the modal, force the bottom to simply be 0
-        if(modalHeight > wrapperInnerHeight) {
+        if (modalHeight > wrapperInnerHeight) {
           absBottom = '0px';
         }
         returnpos.bottom = absBottom;
@@ -713,7 +716,7 @@ define([
         absTop = ((wrapperInnerHeight / 2) - (modalHeight / 2) - margin) + 'px';
         // if the height of the wrapper is smaller than the modal, and thus the
         // screen is smaller than the modal, force the top to simply be 0
-        if(modalHeight > wrapperInnerHeight) {
+        if (modalHeight > wrapperInnerHeight) {
           absTop = '0px';
         }
         returnpos.top = absTop;
@@ -721,7 +724,7 @@ define([
 
       return returnpos;
     },
-    modalInitialized: function(){
+    modalInitialized: function() {
       var self = this;
       return self.$modal !== null && self.$modal !== undefined;
     },
@@ -736,7 +739,7 @@ define([
       var self = this;
 
       // modal isn't initialized
-      if(!self.modalInitialized()) { return; }
+      if (!self.modalInitialized()) { return; }
 
       // clear out any previously set styling
       self.$modal.removeAttr('style');
@@ -746,7 +749,7 @@ define([
 
       // if backdrop wrapper is set on body, then wrapper should have height of
       // the window, so we can do scrolling of inner wrapper
-      if(self.$wrapper.parent().is('body')) {
+      if (self.$wrapper.parent().is('body')) {
         self.$wrapper.height($(window.parent).height());
       }
 
@@ -770,9 +773,11 @@ define([
       var wrapperInnerWidth = self.$wrapperInner.width();
       var wrapperInnerHeight = self.$wrapperInner.height();
 
-      var pos = self.findPosition(horpos, vertpos, margin, modalWidth, modalHeight,
-                                  wrapperInnerWidth, wrapperInnerHeight);
-      for(var key in pos) {
+      var pos = self.findPosition(
+        horpos, vertpos, margin, modalWidth, modalHeight,
+        wrapperInnerWidth, wrapperInnerHeight
+      );
+      for (var key in pos) {
         self.$modalDialog.css(key, pos[key]);
       }
     },
@@ -788,8 +793,7 @@ define([
     },
     _show: function() {
       var self = this;
-      self.render.apply(self,
-          [self.options]);
+      self.render.apply(self, [ self.options ]);
       self.trigger('show');
       self.backdrop.show();
       self.$wrapper.show();
@@ -813,8 +817,8 @@ define([
         self.ajaxXHR.abort();
       }
       self.trigger('hide');
-      if(self._suppressHide){
-        if(!confirm(self._suppressHide)){
+      if (self._suppressHide) {
+        if (!confirm(self._suppressHide)) {
           return;
         }
       }

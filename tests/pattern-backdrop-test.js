@@ -4,7 +4,7 @@ define([
   'mockup-registry',
   'mockup-patterns-backdrop'
 ], function(expect, $, registry, Backdrop) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
@@ -13,8 +13,8 @@ define([
    TEST: Backdrop
   ========================== */
 
-  describe("Backdrop", function() {
-    it("default behaviour", function() {
+  describe('Backdrop', function() {
+    it('default behaviour', function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
       expect($('.backdrop', $el).size()).to.equal(1);
@@ -29,7 +29,7 @@ define([
       expect($el.hasClass('backdrop-active')).to.equal(false);
       backdrop.show();
       expect($el.hasClass('backdrop-active')).to.equal(true);
-      var keydown = $.Event("keydown");
+      var keydown = $.Event('keydown');
       keydown.keyCode = 50;
       $(document).trigger(keydown);
       expect($el.hasClass('backdrop-active')).to.equal(true);
