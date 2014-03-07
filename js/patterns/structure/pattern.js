@@ -22,7 +22,7 @@
  *                             tagsVocabularyUrl:/select2-test.json;
  *                             usersVocabularyUrl:/tests/json/users.json;
  *                             indexOptionsUrl:/tests/json/queryStringCriteria.json;
- *                             contextInfoUrl:/tests/json/contextInfo.json;"></div>
+ *                             contextInfoUrl:{path}/context-info;"></div>
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation

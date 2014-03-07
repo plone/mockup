@@ -27,9 +27,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!js/patterns/structure/templates/tablerow.xml',
-  'bootstrap-dropdown'
-], function($, _, Backbone, TableRowTemplate) {
+  'js/patterns/structure/views/actionmenu',
+  'text!js/patterns/structure/templates/tablerow.xml'
+], function($, _, Backbone, ActionMenu, TableRowTemplate) {
   'use strict';
 
   var TableRowView = Backbone.View.extend({
@@ -38,15 +38,7 @@ define([
     template: _.template(TableRowTemplate),
     events: {
       'change input': 'itemSelected',
-      'click td.title a': 'itemClicked',
-      'click .cutItem a': 'cutClicked',
-      'click .copyItem a': 'copyClicked',
-      'click .pasteItem a': 'pasteClicked',
-      'click .move-top a': 'moveTopClicked',
-      'click .move-bottom a': 'moveBottomClicked',
-      'click .set-default-page a': 'setDefaultPageClicked',
-      'click .openItem a': 'openClicked',
-      'click .editItem a': 'editClicked'
+      'click td.title a': 'itemClicked'
     },
     initialize: function(options) {
       this.options = options;
@@ -64,9 +56,6 @@ define([
       data.attributes = self.model.attributes;
       data.activeColumns = self.app.activeColumns;
       data.availableColumns = self.app.availableColumns;
-      data.pasteAllowed = self.app.pasteAllowed;
-      data.canSetDefaultPage = self.app.setDefaultPageUrl;
-      data.inQueryMode = self.app.inQueryMode();
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
       self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.Type); // jshint ignore:line
@@ -81,9 +70,12 @@ define([
 
       self.el.model = this.model;
 
-      self.$dropdown = self.$('.dropdown-toggle');
-      self.$dropdown.dropdown();
+      self.menu = new ActionMenu({
+        app: self.app,
+        model: self.model
+      });
 
+      $('.actionmenu-container', self.$el).append(self.menu.render().el);
       return this;
     },
     itemClicked: function(e) {
@@ -139,90 +131,6 @@ define([
 
       }
       this.app['last_selected'] = this.el; // jshint ignore:line
-    },
-    cutClicked: function(e) {
-      e.preventDefault();
-      this.cutCopyClicked('cut');
-      this.app.collection.pager(); // reload to be able to now show paste button
-    },
-    copyClicked: function(e) {
-      e.preventDefault();
-      this.cutCopyClicked('copy');
-      this.app.collection.pager(); // reload to be able to now show paste button
-    },
-    cutCopyClicked: function(operation) {
-      var self = this;
-      self.app.pasteOperation = operation;
-
-      self.app.pasteSelection = new Backbone.Collection();
-      self.app.pasteSelection.add(this.model);
-      self.app.setStatus(operation + ' 1 item');
-      self.app.pasteAllowed = true;
-      self.app.buttons.primary.get('paste').enable();
-    },
-    pasteClicked: function(e) {
-      e.preventDefault();
-      this.app.pasteEvent(this.app.buttons.primary.get('paste'), e, {
-        folder: this.model.attributes.path
-      });
-      this.app.collection.pager(); // reload to be able to now show paste button
-    },
-    moveTopClicked: function(e) {
-      e.preventDefault();
-      this.app.moveItem(this.model.attributes.id, 'top');
-    },
-    moveBottomClicked: function(e) {
-      e.preventDefault();
-      this.app.moveItem(this.model.attributes.id, 'bottom');
-    },
-    setDefaultPageClicked: function(e) {
-      e.preventDefault();
-      var self = this;
-      $.ajax({
-        url: self.app.getAjaxUrl(self.app.setDefaultPageUrl),
-        type: 'POST',
-        data: {
-          '_authenticator': $('[name="_authenticator"]').val(),
-          'id': this.$active.attr('data-id')
-        },
-        success: function(data) {
-          self.app.ajaxSuccessResponse.apply(self.app, [data]);
-        },
-        error: function(data) {
-          self.app.ajaxErrorResponse.apply(self.app, [data]);
-        }
-      });
-    },
-    getSelectedBaseUrl: function() {
-      var self = this;
-      return self.model.attributes.getURL;
-    },
-    getWindow: function() {
-      var win = window;
-      if (win.parent !== window) {
-        win = win.parent;
-      }
-      return win;
-    },
-    openUrl: function(url) {
-      var self = this;
-      var win = self.getWindow();
-      var keyEvent = this.app.keyEvent;
-      if (keyEvent && keyEvent.ctrlKey) {
-        win.open(url);
-      } else {
-        win.location = url;
-      }
-    },
-    openClicked: function(e) {
-      e.preventDefault();
-      var self = this;
-      self.openUrl(self.getSelectedBaseUrl() + '/view');
-    },
-    editClicked: function(e) {
-      e.preventDefault();
-      var self = this;
-      self.openUrl(self.getSelectedBaseUrl() + '/edit');
     }
   });
 
