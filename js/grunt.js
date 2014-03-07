@@ -304,7 +304,7 @@
             sauceLabs: { testName: 'Mockup', startConnect: true },
             browsers: [
               'SL_Chrome',
-              //'SL_Firefox',
+              'SL_Firefox',
               //'SL_Opera',
               //'SL_Safari',
               //'SL_IE_8',
