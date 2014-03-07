@@ -533,6 +533,25 @@ define([
     });
   });
 
+  server.respondWith('GET', /context-info/, function(xhr, id) {
+    server.autoRespondAfter = 200;
+    var data = {
+      breadcrumbs: []
+    };
+    if (xhr.url.indexOf('http://') === -1){
+      _.each(xhr.url.split('/'), function(val) {
+        if (val !== '' && val !== 'context-info'){
+          val = val.charAt(0).toUpperCase() + val.slice(1);
+          data.breadcrumbs.push({
+            title: val
+          });
+        }
+      });
+      data.object = {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder'};
+    }
+    xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+  });
+
   return server;
 
 });

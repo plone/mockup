@@ -31,9 +31,11 @@ define([
   'text!js/patterns/structure/templates/table.xml',
   'js/ui/views/base',
   'mockup-patterns-sortable',
-  'mockup-patterns-moment'
+  'mockup-patterns-moment',
+  'js/patterns/structure/models/result',
+  'js/patterns/structure/views/actionmenu'
 ], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
-            Moment) {
+            Moment, Result, ActionMenu) {
   'use strict';
 
   var TableView = BaseView.extend({
@@ -49,37 +51,67 @@ define([
       self.listenTo(self.selectedCollection, 'reset', self.render);
       self.collection.pager();
       self.subsetIds = [];
+      self.contextInfo = self.folderModel = self.folderMenu = null;
 
       self.app.on('context-info-loaded', function(data) {
+        self.contextInfo = data;
         /* set default page info */
-        var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
-        if ($defaultPage.length > 0) {
-          $defaultPage.find('td.title').prepend('<span>*</span> ');
-          $defaultPage.addClass('default-page');
-        }
-        /* set breadcrumb title info */
-        var crumbs = data.breadcrumbs;
-        if (crumbs && crumbs.length) {
-          var $crumbs = self.$('.breadcrumbs a.crumb');
-          _.each(crumbs, function(crumb, idx) {
-            $crumbs.eq(idx).html(crumb.title);
-          });
-        }
+        self.setContextInfo();
       });
     },
     events: {
       'click .breadcrumbs a': 'breadcrumbClicked',
-      'change .select-all': 'selectAll'
+      'change .select-all': 'selectAll',
+      'change .breadcrumbs-container input[type="checkbox"]': 'selectFolder'
+    },
+    setContextInfo: function() {
+      var self = this;
+      var data = self.contextInfo;
+      var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
+      if ($defaultPage.length > 0) {
+        $defaultPage.find('td.title').prepend('<span>*</span> ');
+        $defaultPage.addClass('default-page');
+      }
+      /* set breadcrumb title info */
+      var crumbs = data.breadcrumbs;
+      if (crumbs && crumbs.length) {
+        var $crumbs = self.$('.breadcrumbs a.crumb');
+        _.each(crumbs, function(crumb, idx) {
+          $crumbs.eq(idx).html(crumb.title);
+        });
+      }
+      if (data.object){
+        self.folderModel = new Result(data.object);
+        $('.context-buttons', self.$el).show();
+        if (self.selectedCollection.findWhere({UID: data.object.UID})){
+          $('input[type="checkbox"]', self.$breadcrumbs)[0].checked = true;
+        }
+        self.folderMenu = new ActionMenu({
+          app: self.app,
+          model: self.folderModel,
+          header: 'Actions on current folder',
+          canMove: false
+        });
+        $('.input-group-btn', self.$breadcrumbs).empty().append(self.folderMenu.render().el);
+      }else {
+        self.folderModel = null;
+      }
     },
     render: function() {
       var self = this;
       self.$el.html(self.template({
-        pathParts: self.app.queryHelper.getCurrentPath().split('/').slice(1),
+        pathParts: _.filter(
+          self.app.queryHelper.getCurrentPath().split('/').slice(1),
+          function(val) {
+            return val.length > 0;
+          }
+        ),
         status: self.app.status,
         statusType: self.app.statusType,
         activeColumns: self.app.activeColumns,
         availableColumns: self.app.availableColumns
       }));
+      self.$breadcrumbs = $('.breadcrumbs-container', self.$el);
 
       if (self.collection.length) {
         var container = self.$('tbody');
@@ -119,12 +151,24 @@ define([
       this.app.queryHelper.currentPath = path;
       this.collection.pager();
     },
+    selectFolder: function(e) {
+      var self = this;
+      if (self.folderModel){
+        if ($(e.target).is(':checked')) {
+          self.selectedCollection.add(self.folderModel);
+        } else {
+          this.selectedCollection.removeByUID(self.folderModel.attributes.UID);
+        }
+        self.setContextInfo();
+      }
+    },
     selectAll: function(e) {
       if ($(e.target).is(':checked')) {
         $('input[type="checkbox"]', this.$('tbody')).attr('checked', 'checked').change();
       } else {
         this.selectedCollection.remove(this.collection.models);
       }
+      this.setContextInfo();
     },
     toggleSelectAll: function(e) {
       var $el = $(e.target);
@@ -145,8 +189,10 @@ define([
         selector: 'tr',
         dragClass: 'structure-dragging',
         drop: function($el, delta) {
-          self.app.moveItem($el.attr('data-id'), delta, self.subsetIds);
-          self.storeOrder();
+          if(delta !== 0){
+            self.app.moveItem($el.attr('data-id'), delta, self.subsetIds);
+            self.storeOrder();
+          }
         }
       });
     },
