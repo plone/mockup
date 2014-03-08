@@ -39,7 +39,7 @@ define([
                                  'tagsVocabularyUrl:/select2-test.json;' +
                                  'usersVocabularyUrl:/tests/json/users.json;' +
                                  'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
-                                 'contextInfoUrl:/contextInfo.json;' +
+                                 'contextInfoUrl:{path}/contextInfo;' +
                                  ' ">' +
         '</div>');
 
@@ -55,6 +55,18 @@ define([
           end = start + batch.size;
         }
         var items = [];
+        items.push({
+          UID: '123sdfasdfFolder',
+          getURL: 'http://localhost:8081/folder',
+          path: '/folder',
+          Type: 'Folder',
+          Description: 'folder',
+          Title: 'Folder',
+          'review_state': 'published',
+          'is_folderish': true,
+          Subject: [],
+          id: 'folder'
+        });
         for (var i = start; i < end; i = i + 1) {
           items.push({
             UID: '123sdfasdf' + i,
@@ -87,8 +99,8 @@ define([
           msg: 'pasted'
         }));
       });
-      this.server.respondWith('GET', '/contextInfo.json', function (xhr, id) {
-        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
           addButtons: [{
             id: 'page',
             title: 'Page',
@@ -96,8 +108,23 @@ define([
           },{
             id: 'folder',
             title: 'Folder'
-          }]
-        }));
+          }],
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            Type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
       });
 
       this.clock = sinon.useFakeTimers();
@@ -160,10 +187,10 @@ define([
     it('per page', function() {
       registry.scan(this.$el);
       this.clock.tick(1000);
-      expect(this.$el.find('.itemRow').length).to.equal(15);
+      expect(this.$el.find('.itemRow').length).to.equal(16);
       this.$el.find('.serverhowmany30 a').trigger('click');
       this.clock.tick(1000);
-      expect(this.$el.find('.itemRow').length).to.equal(30);
+      expect(this.$el.find('.itemRow').length).to.equal(31);
     });
 
     it('test paging does not apply overflow hidden to parent', function() {
@@ -243,7 +270,7 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('15');
+      expect(this.$el.find('#selected').html()).to.contain('16');
 
     });
 
@@ -254,10 +281,40 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('15');
+      expect(this.$el.find('#selected').html()).to.contain('16');
       $item[0].checked = false;
       $item.trigger('change');
       expect(this.$el.find('#selected').html()).to.contain('0');
+    });
+
+    it('test current folder buttons do not show on root', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      expect(this.$el.find('.context-buttons').length).to.equal(0);
+    });
+
+    it('test current folder buttons do show on subfolder', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      var $item = this.$el.find('.itemRow').eq(0);
+      $('.title a', $item).trigger('click');
+      this.clock.tick(1000);
+      expect(this.$el.find('.context-buttons').length).to.equal(1);
+    });
+
+    it('test select current folder', function() {
+      registry.scan(this.$el);
+      var pattern = this.$el.data('patternStructure');
+      this.clock.tick(1000);
+      var $item = this.$el.find('.itemRow').eq(0);
+      $('.title a', $item).trigger('click');
+      this.clock.tick(1000);
+      var $checkbox = $('.breadcrumbs-container input[type="checkbox"]', this.$el);
+      $checkbox[0].checked = true;
+      $checkbox.trigger('change');
+      expect(this.$el.find('#selected').html()).to.contain('1');
     });
 
   });
