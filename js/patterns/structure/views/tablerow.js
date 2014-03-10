@@ -83,7 +83,7 @@ define([
       /* check if this should just be opened in new window */
       var keyEvent = this.app.keyEvent;
       if (keyEvent && keyEvent.ctrlKey) {
-        this.openClicked(e);
+        this.menu.openClicked(e);
       } else if (this.model.attributes['is_folderish']) { // jshint ignore:line
         // it's a folder, go down path and show in contents window.
         this.app.queryHelper.currentPath = this.model.attributes.path;
@@ -91,7 +91,7 @@ define([
         var collection = this.app.collection;
         collection.goTo(collection.information.firstPage);
       } else {
-        this.openClicked(e);
+        this.menu.openClicked(e);
       }
     },
     itemSelected: function() {
