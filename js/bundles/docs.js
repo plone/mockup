@@ -103,11 +103,6 @@ require([
             description: 'Allows the user to select a date (with or without time) through a calendar.',
             url: './js/patterns/pickadate.js'
           },
-          { id: 'picture',
-            title: 'Picture',
-            description: 'A responsive image widget.',
-            url: 'js/patterns/picture.js'
-          },
           { id: 'preventdoublesubmit',
             title: 'Prevent Double Submit',
             description: 'A pattern to prevent submitting a form twice.',

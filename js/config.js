@@ -62,7 +62,6 @@
       'mockup-patterns-modal': 'js/patterns/modal',
       'mockup-patterns-moment': 'js/patterns/moment',
       'mockup-patterns-pickadate': 'js/patterns/pickadate',
-      'mockup-patterns-picture': 'js/patterns/picture',
       'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
       'mockup-patterns-querystring': 'js/patterns/querystring',
       'mockup-patterns-relateditems': 'js/patterns/relateditems',
