@@ -48,6 +48,11 @@ require([
             description: 'TODO',
             url: 'js/patterns/backdrop.js'
           },
+          { id: 'burgerbar',
+            title: 'BurgerBar',
+            description: 'TODO',
+            url: 'js/patterns/burgerbar/pattern.js'
+          },
           { id: 'dropzone',
             title: 'DropZone',
             description: 'File upload with drag and drop support.',

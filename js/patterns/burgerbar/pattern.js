@@ -9,6 +9,23 @@
  *    {{ example-1 }}
  *
  * Example: example-1
+ *    <div class="pat-burgerbar">
+ *      <div>
+ *        <a href="#" class="burgerbar-menuitem-add-content">Add...</a>
+ *        <ul>
+ *          <li><a href="#">Folder contents</a></li>
+ *          <li><a href="#">View</a></li>
+ *          <li><a href="#">Edit</a></li>
+ *          <li><a href="#"></a></li>
+ *        </ul>
+ *      </div>
+ *      <div>
+ *        <a href="#" class="burgerbar-menuitem-edit">Edit</a>
+ *      </div>
+ *      <div>
+ *        <a href="#" class="burgerbar-menuitem-browse">Browse</a>
+ *      </div>
+ *    </div>
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
