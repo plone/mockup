@@ -7,9 +7,6 @@
     <% if(attributes.is_folderish) { %>
       <span class="glyphicon glyphicon-folder-open"></span>
     <% } %>
-    <% if(attributes.is_folderish) { %>
-      <span class="icon icon-folder-open"></span>
-    <% } %>
     <%- Title %>
   </a>
 </td>
