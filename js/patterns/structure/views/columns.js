@@ -56,9 +56,9 @@ define([
       this.app = options.app;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    render: function() {
+    afterRender: function() {
       var self = this;
-      PopoverView.prototype.render.call(this);
+
       self.$container = self.$('ul');
       _.each(self.app.activeColumns, function(id) {
         var $el = $(self.itemTemplate({
@@ -79,7 +79,6 @@ define([
       var dd = new Sortable(self.$container, {
         selector: 'li'
       });
-
       return this;
     },
     applyButtonClicked: function() {
