@@ -61,11 +61,21 @@ define([
       closeOnEsc: false,
       closeOnClick: true
     },
-    afterRender: function () {
-      var self = this;
-      this.bindTriggerEvents();
+    initialize: function(options) {
+      ContainerView.prototype.initialize.apply(this, [options]);
 
+      this.on('render', function() {
+        this.bindTriggerEvents();
+        this.renderTitle();
+        this.renderContent();
+      }, this);
+    },
+    afterRender: function () {
+    },
+    renderTitle: function() {
       this.$('.popover-title').append(this.title(this.options));
+    },
+    renderContent: function() {
       this.$('.popover-content').append(this.content(this.options));
     },
     bindTriggerEvents: function() {
@@ -139,6 +149,8 @@ define([
         delta,
         replace;
 
+      $el.removeClass(placement);
+
       $el.offset(offset)
         .addClass(placement)
         .addClass('active');
@@ -157,7 +169,8 @@ define([
         if (offset.left < 0) {
           delta = offset.left * -2;
           offset.left = 0;
-          $el.offset(offset);
+          $el.removeClass(placement);
+          $el.offset(offset).addClass(placement);
           actualWidth = $tip[0].offsetWidth;
           actualHeight = $tip[0].offsetHeight;
         }
