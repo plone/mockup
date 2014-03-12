@@ -45,8 +45,8 @@ bootstrap-common:
 
 bootstrap: clean bootstrap-common
 	$(NPM) link --prefix=$(NODE_PATH)
+	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
 	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
-	$(BOWER) install
 
 bootstrap-nix: clean bootstrap-common
 	nix-build default.nix -A build -o nixenv

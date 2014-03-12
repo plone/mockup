@@ -3,7 +3,7 @@
 module.exports = function(grunt) {
   'use strict';
 
-  var MockupGrunt = require('./js/grunt'),
+  var MockupGrunt = require('./bower_components/mockup-core/js/grunt'),
       requirejsOptions = require('./js/config'),
       mockup = new MockupGrunt(requirejsOptions),
       docsExtraIncludes = [];
@@ -19,11 +19,11 @@ module.exports = function(grunt) {
       docs: {
         files: [
           { expand: true, src: 'index.html', dest: 'docs/dev/' },
-          { expand: true, src: 'js/*', dest: 'docs/dev/' },
-          { expand: true, src: 'lib/*', dest: 'docs/dev/' },
-          { expand: true, src: 'bower_components/*', dest: 'docs/dev/' },
-          { expand: true, src: 'build/*', dest: 'docs/dev/' },
-          { expand: true, src: 'less/*', dest: 'docs/dev/' }
+          { expand: true, src: 'js/**', dest: 'docs/dev/' },
+          { expand: true, src: 'lib/**', dest: 'docs/dev/' },
+          { expand: true, src: 'bower_components/**', dest: 'docs/dev/' },
+          { expand: true, src: 'build/**', dest: 'docs/dev/' },
+          { expand: true, src: 'less/**', dest: 'docs/dev/' }
         ]
       }
     },
