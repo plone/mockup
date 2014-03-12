@@ -1,0 +1,19 @@
+<td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+<td class="title">
+  <a href="<%- getURL %>">
+    <% if(['File', 'Image'].indexOf(attributes.Type) !== -1){ %>
+      <span class="glyphicon glyphicon-file"></span>
+    <% } %>
+    <% if(attributes.is_folderish) { %>
+      <span class="glyphicon glyphicon-folder-open"></span>
+    <% } %>
+    <%- Title %>
+  </a>
+</td>
+<% _.each(activeColumns, function(column){ %>
+  <% if(_.has(availableColumns, column)) { %>
+    <td class="<%- column %>"><%- attributes[column] %></td>
+  <% } %>
+<% }); %>
+<td class="actionmenu-container">
+</td>

@@ -315,7 +315,33 @@ html {
 
 ul, ol {
   list-style: none;
-  padding-left: none;
+  counter-reset: ol;
+  padding-left: 0;
+  li {
+    margin-bottom: .5em;
+    padding-left: 2em;
+    text-indent: -2em;
+  }
+}
+ul li:before {
+  content: "●";
+  color: @bullet-color;
+  padding-right: 1em;
+}
+ol li:before {
+  content: counter(ol) ".";
+  counter-increment: ol;
+  padding-right: 1em;
+  color: @gray-light;
+}
+// reset list styles in certain contexts
+.navbar, .breadcrumb, .navTree, .field, #portal-globalnav, .historyTools, .pagination, .select2-drop {
+  li:before, li:before { content: none; }
+  li {
+    margin-bottom: initial;
+    padding-left: initial;
+    text-indent: initial;
+  }
 }
 
 #content {
@@ -339,30 +365,6 @@ ul, ol {
     margin-bottom: 1.5em;
   }
 
-  ul, ol {
-    counter-reset: ol;
-    padding-left: 0;
-    li {
-      margin-bottom: .5em;
-      padding-left: 2em;
-      text-indent: -2em;
-    }
-  }
-  ul li:before {
-    content: "●";
-    color: @bullet-color;
-    padding-right: 1em;
-  }
-  ol li:before {
-    content: counter(ol) ".";
-    counter-increment: ol;
-    padding-right: 1em;
-    color: @gray-light;
-  }
-  .pagination, .dropdown-menu, .historyTools { //annulate the bullet from concrete lists
-    li {padding-left: 0; text-indent: 0;}
-    :before {content:""; padding-right: 0; display: none;}
-  }
   //added class for highlighted ordered lists
   .ol-primary li {
     margin-bottom: 1.5em;
