@@ -109,7 +109,8 @@
       'sinon': {exports: 'window.sinon'},
       'tinymce': { exports: 'window.tinyMCE', init: function () { this.tinyMCE.DOM.events.domLoaded = true; return this.tinyMCE; }},
       'underscore': { exports: 'window._' }
-    }
+    },
+    wrapShim: true
   };
 
   if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
