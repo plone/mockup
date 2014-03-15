@@ -326,11 +326,11 @@ define([
   });
 
   server.respondWith(/users-test\.json/, function(xhr, id) {
-    var results = [
-        {UID: 'foo-user', Title: 'Foo Bar',
-         path: '/author/foo-user', Type: 'User'}
-    ];
-    var page = 1;
+    var results = [{UID: 'foo-user', Title: 'Foo Bar', Type: 'User'}];
+    results[0].path = '/author/' + results[0].UID;
+    results[0].getURL = window.location.origin + results[0].path;
+    
+    var page = 0;
     var pageSize = 10;
     xhr.respond(200, { 'Content-Type': 'application/json' },
       JSON.stringify({

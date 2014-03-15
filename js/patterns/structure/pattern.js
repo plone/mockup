@@ -30,8 +30,30 @@
  *
  * Example: example-2
  *    <div class="pat-structure"
- *         data-pat-structure="vocabularyUrl:/users-test.json;
- *                             buttonGroups: {};"></div>
+ *         data-pat-structure="{&quot;vocabularyUrl&quot;: &quot;/users-test.json&quot;,
+ *                             &quot;tagsVocabularyUrl&quot;: &quot;/select2-test.json&quot;,
+ *                             &quot;usersVocabularyUrl&quot;: &quot;/tests/json/users.json&quot;,
+ *                             &quot;contextInfoUrl&quot;: &quot;/users-context-info&quot;,
+ *                             &quot;rearrange&quot;: null,
+ *                             &quot;buttonGroups&quot;: {
+ *                               &quot;primary&quot;: [
+ *                                 {&quot;title&quot;: &quot;Delete&quot;,
+ *                                  &quot;url&quot;: &quot;/delete&quot;},
+ *                                 {&quot;title&quot;: &quot;Reset Password&quot;,
+ *                                  &quot;url&quot;: &quot;/reset-password&quot;},
+ *                                 {&quot;title&quot;: &quot;Deactivate&quot;,
+ *                                  &quot;url&quot;: &quot;/deactivate&quot;},
+ *                                 {&quot;title&quot;: &quot;Activate&quot;,
+ *                                  &quot;url&quot;: &quot;/activate&quot;}
+ *                               ],
+ *                               &quot;secondary&quot;: [
+ *                                 {&quot;title&quot;: &quot;Add To Group&quot;,
+ *                                  &quot;url&quot;: &quot;/add-to-group&quot;},
+ *                                 {&quot;title&quot;: &quot;Add Roles&quot;,
+ *                                  &quot;url&quot;: &quot;/add-roles&quot;}
+ *                               ]}
+ *                             }">
+ *    </div>
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
