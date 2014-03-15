@@ -325,6 +325,21 @@ define([
     );
   });
 
+  server.respondWith(/users-test\.json/, function(xhr, id) {
+    var results = [
+        {UID: 'foo-user', Title: 'Foo Bar',
+         path: '/author/foo-user', Type: 'User'}
+    ];
+    var page = 1;
+    var pageSize = 10;
+    xhr.respond(200, { 'Content-Type': 'application/json' },
+      JSON.stringify({
+        total: results.length,
+        results: results.slice(page * pageSize, (page * pageSize) + (pageSize - 1))
+      })
+    );
+  });
+
   server.respondWith('GET', /something\.html/, [
     200,
     { 'Content-Type': 'text/html' },

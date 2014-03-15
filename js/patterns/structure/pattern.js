@@ -10,9 +10,13 @@
  *    contextInfoUrl(string): For supporting add menu (null)
  *
  * Documentation:
- *    # Example
+ *    # Site Structure Example
  *
  *    {{ example-1 }}
+ *
+ *    # Users and Groups Example
+ *
+ *    {{ example-2 }}
  *
  * Example: example-1
  *    <div class="pat-structure"
@@ -23,6 +27,11 @@
  *                             usersVocabularyUrl:/tests/json/users.json;
  *                             indexOptionsUrl:/tests/json/queryStringCriteria.json;
  *                             contextInfoUrl:{path}/context-info;"></div>
+ *
+ * Example: example-2
+ *    <div class="pat-structure"
+ *         data-pat-structure="vocabularyUrl:/users-test.json;
+ *                             buttonGroups: {};"></div>
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
