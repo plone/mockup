@@ -31,7 +31,6 @@
     </tr>
     <tr>
       <th><input type="checkbox" class="select-all" /></th>
-      <th>Title</th>
       <% _.each(activeColumns, function(column){ %>
         <% if(_.has(availableColumns, column)) { %>
           <th><%- availableColumns[column] %></th>

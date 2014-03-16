@@ -51,7 +51,26 @@
  *                                  &quot;url&quot;: &quot;/add-to-group&quot;},
  *                                 {&quot;title&quot;: &quot;Add Roles&quot;,
  *                                  &quot;url&quot;: &quot;/add-roles&quot;}
- *                               ]}
+ *                               ]},
+ *                             &quot;activeColumns&quot;: [
+ *                                 &quot;fullName&quot;,
+ *                                 &quot;email&quot;,
+ *                                 &quot;dateJoined&quot;,
+ *                                 &quot;userRoles&quot;
+ *                             ],
+ *                             &quot;availableColumns&quot;: {
+ *                                 &quot;fullName&quot;: &quot;Full Name&quot;,
+ *                                 &quot;email&quot;: &quot;Email&quot;,
+ *                                 &quot;dateJoined&quot;: &quot;Date Joined&quot;,
+ *                                 &quot;dateLastActivity&quot;: &quot;Date of Last Activity&quot;,
+ *                                 &quot;dateLastLogin&quot;: &quot;Date of Last Login&quot;,
+ *                                 &quot;userRoles&quot;: &quot;Roles&quot;,
+ *                                 &quot;hasConfirmed&quot;: &quot;Confirmed&quot;,
+ *                                 &quot;profileComplete&quot;: &quot;Profile Complete&quot;
+ *                             },
+ *                             &quot;iconMapping&quot;: {
+ *                                 &quot;User&quot;: &quot;user&quot;
+ *                                }
  *                             }">
  *    </div>
  *
@@ -104,11 +123,13 @@ define([
         'getObjSize', 'last_comment_date', 'total_comments'
       ],
       activeColumns: [
+        'Title',
         'ModificationDate',
         'EffectiveDate',
         'review_state'
       ],
       availableColumns: {
+        'Title': 'Title',
         'ModificationDate': 'Last modified',
         'EffectiveDate': 'Published',
         'CreationDate': 'Created',
@@ -120,6 +141,10 @@ define([
         'getObjSize': 'Object Size',
         'last_comment_date': 'Last comment date',
         'total_comments': 'Total comments'
+      },
+      iconMapping: {
+        'File': 'file',
+        'Image': 'picture',
       },
       rearrange: {
         properties: {

@@ -326,7 +326,12 @@ define([
   });
 
   server.respondWith(/users-test\.json/, function(xhr, id) {
-    var results = [{UID: 'foo-user', Title: 'Foo Bar', Type: 'User'}];
+    var results = [{UID: 'foo-user', 
+                    fullName: 'Foo Bar', 
+                    Type: 'User', 
+                    email: 'foo@bar.com', 
+                    dateJoined: '2014-02-01',
+                    userRoles: ['Member', 'Reviewer'] }];
     results[0].path = '/author/' + results[0].UID;
     results[0].getURL = window.location.origin + results[0].path;
     

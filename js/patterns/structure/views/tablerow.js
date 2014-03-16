@@ -56,6 +56,8 @@ define([
       data.attributes = self.model.attributes;
       data.activeColumns = self.app.activeColumns;
       data.availableColumns = self.app.availableColumns;
+      data.iconMapping = self.app.iconMapping;
+
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
       self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.Type); // jshint ignore:line
