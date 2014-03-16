@@ -275,7 +275,7 @@ separate multiple <em>key:value</em> pairs.</p>
 
 <h4>JSON Dictionary</h4>
 <p>This format, too, uses the <em>key:value</em> pairs, but they are passed in
-a JSON dictionary, like this: <code>data-pat-helloworld="{color:white, bgcolor:black}"</code></p>
+a JSON dictionary, like this: <code>data-pat-helloworld="{&quot;color&quot;: &quot;white&quot;, &quot;bgcolor&quot;: &quot;black&quot;}"</code></p>
 
 <p>Generally it doesn't really matter which of the two formats you use. In most
 cases it is simply a matter of personal preference. There is, however, one notable
