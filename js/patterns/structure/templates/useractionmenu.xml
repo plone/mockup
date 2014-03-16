@@ -1,0 +1,15 @@
+<a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+  <span class="glyphicon glyphicon-cog"></i>
+  <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+  <li class="edit"><a href="#">Edit Profile</a></li>
+  <li class="groups"><a href="#">Groups</a></li>
+  <li class="roles"><a href="#">Roles</a></li>
+  <li class="password"><a href="#">Reset Password</a></li>
+  <% if (attributes.loginEnabled) { %>
+    <li class="disable-login"><a href="#">Disable Login</a></li>
+  <% } else { %>
+    <li class="enable-login"><a href="#">Enable Login</a></li>
+  <% } %>
+</ul>
