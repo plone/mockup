@@ -39,7 +39,7 @@ define([
                         '<span class="glyphicon glyphicon-remove-circle"></span> remove all</a>'),
     content: _.template(
       '<% collection.each(function(item) { %>' +
-      '<%= item_template(item.toJSON()) %>' +
+      '<%= item_template(item) %>' +
       '<% }); %>'
     ),
     events: {

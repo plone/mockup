@@ -28,8 +28,9 @@ define([
   'underscore',
   'backbone',
   'js/patterns/structure/views/actionmenu',
+  'js/patterns/structure/views/useractionmenu',
   'text!js/patterns/structure/templates/tablerow.xml'
-], function($, _, Backbone, ActionMenu, TableRowTemplate) {
+], function($, _, Backbone, ActionMenu, UserActionMenu, TableRowTemplate) {
   'use strict';
 
   var TableRowView = Backbone.View.extend({
@@ -72,10 +73,18 @@ define([
 
       self.el.model = this.model;
 
-      self.menu = new ActionMenu({
-        app: self.app,
-        model: self.model
-      });
+      var menu;
+      if (data.Type == 'User') {
+        self.menu = new UserActionMenu({
+          app: self.app,
+          model: self.model
+        });
+      } else {
+        self.menu = new ActionMenu({
+          app: self.app,
+          model: self.model
+        });
+      }
 
       $('.actionmenu-container', self.$el).append(self.menu.render().el);
       return this;

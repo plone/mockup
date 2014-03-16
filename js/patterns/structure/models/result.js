@@ -35,6 +35,10 @@ define(['backbone'], function(Backbone) {
     },
     uid: function() {
       return this.attributes.UID;
+    },
+    Title: function() {
+      // return first attribute
+      return this.attributes[Object.keys(this.attributes)[1]];
     }
   });
 

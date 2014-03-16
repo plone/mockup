@@ -63,8 +63,6 @@
  *                                  &quot;url&quot;: &quot;/delete&quot;,
  *                                  &quot;context&quot;: &quot;danger&quot;,
  *                                  &quot;icon&quot;: &quot;trash&quot;},
- *                                 {&quot;title&quot;: &quot;Reset Password&quot;,
- *                                  &quot;url&quot;: &quot;/reset-password&quot;},
  *                                 {&quot;title&quot;: &quot;Deactivate&quot;,
  *                                  &quot;url&quot;: &quot;/deactivate&quot;},
  *                                 {&quot;title&quot;: &quot;Activate&quot;,
@@ -92,7 +90,7 @@
  *                                 &quot;dateLastLogin&quot;: &quot;Date of Last Login&quot;,
  *                                 &quot;userRoles&quot;: &quot;Roles&quot;,
  *                                 &quot;hasConfirmed&quot;: &quot;Confirmed&quot;,
- *                                 &quot;profileComplete&quot;: &quot;Profile Complete&quot;
+ *                                 &quot;loginEnabled&quot;: &quot;Can Log in&quot;
  *                               },
  *                             &quot;cookieSettingPrefix&quot;: &quot;_u_&quot;
  *                             }"></div>

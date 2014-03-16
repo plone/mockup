@@ -335,7 +335,7 @@ define([
                     dateLastActivity: '2014-03-01',
                     dateLastLogin: '2014-03-14',
                     hasConfirmed: true,
-                    profileComplete: false}];
+                    loginEnabled: true}];
     results[0].path = '/author/' + results[0].UID;
     results[0].getURL = window.location.origin + results[0].path;
     
