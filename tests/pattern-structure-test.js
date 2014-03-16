@@ -32,16 +32,40 @@ define([
   describe('Structure', function() {
     beforeEach(function() {
       this.$el = $('' +
-        '<div class="pat-structure" ' +
-             'data-pat-structure="vocabularyUrl:/data.json;' +
-                                 'uploadUrl:/upload;' +
-                                 'moveUrl:/moveitem;' +
-                                 'tagsVocabularyUrl:/select2-test.json;' +
-                                 'usersVocabularyUrl:/tests/json/users.json;' +
-                                 'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
-                                 'contextInfoUrl:{path}/contextInfo;' +
-                                 ' ">' +
-        '</div>');
+         '<div class="pat-structure" ' +
+              'data-pat-structure="{&quot;vocabularyUrl&quot;: &quot;/data.json&quot;,' +
+                                   '&quot;uploadUrl&quot;: &quot;/upload&quot;,' +
+                                   '&quot;moveUrl&quot;: &quot;/moveitem&quot;,' +
+                                   '&quot;tagsVocabularyUrl&quot;: &quot;/select2-test.json&quot;,' +
+                                   '&quot;usersVocabularyUrl&quot;: &quot;/tests/json/users.json&quot;,' +
+                                   '&quot;indexOptionsUrl&quot;: &quot;/tests/json/queryStringCriteria.json&quot;,' +
+                                   '&quot;contextInfoUrl&quot;: &quot;{path}/contextInfo&quot;,' +
+                                   '&quot;availableColumns&quot;: {' +
+                                     '&quot;Title&quot;: &quot;Title&quot;,' +
+                                     '&quot;ModificationDate&quot;: &quot;Last modified&quot;,' +
+                                     '&quot;EffectiveDate&quot;: &quot;Published&quot;,' +
+                                     '&quot;CreationDate&quot;: &quot;Created&quot;,' +
+                                     '&quot;review_state&quot;: &quot;Review state&quot;,' +
+                                     '&quot;Subject&quot;: &quot;Tags&quot;,' +
+                                     '&quot;Type&quot;: &quot;Type&quot;,' +
+                                     '&quot;is_folderish&quot;: &quot;Folder&quot;,' +
+                                     '&quot;exclude_from_nav&quot;: &quot;Excluded from nav&quot;,' +
+                                     '&quot;getObjSize&quot;: &quot;Object Size&quot;,' +
+                                     '&quot;last_comment_date&quot;: &quot;Last comment date&quot;,' +
+                                     '&quot;total_comments&quot;: &quot;Total comments&quot;' +
+                                   '},' +
+                                   '&quot;rearrange&quot;: {' +
+                                    '&quot;properties&quot;: {' +
+                                      '&quot;id&quot;: &quot;ID&quot;,' +
+                                      '&quot;sortable_title&quot;: &quot;Title&quot;,' +
+                                      '&quot;modified&quot;: &quot;Last Modified&quot;,' +
+                                      '&quot;created&quot;: &quot;Created on&quot;,' +
+                                      '&quot;effective&quot;: &quot;Publication Date&quot;,' +
+                                      '&quot;Type&quot;: &quot;Type&quot;' +
+                                    '},' +
+                                    '&quot;url&quot;: &quot;/rearrange&quot;' +
+                                  '}' +
+                                 '}"></div>');
 
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
@@ -299,7 +323,7 @@ define([
       var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
       var $item = this.$el.find('.itemRow').eq(0);
-      $('.title a', $item).trigger('click');
+      $('.structure-first-column a', $item).trigger('click');
       this.clock.tick(1000);
       expect(this.$el.find('.context-buttons').length).to.equal(1);
     });
@@ -309,7 +333,7 @@ define([
       var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
       var $item = this.$el.find('.itemRow').eq(0);
-      $('.title a', $item).trigger('click');
+      $('.structure-first-column a', $item).trigger('click');
       this.clock.tick(1000);
       var $checkbox = $('.breadcrumbs-container input[type="checkbox"]', this.$el);
       $checkbox[0].checked = true;

@@ -39,7 +39,7 @@ define([
     template: _.template(TableRowTemplate),
     events: {
       'change input': 'itemSelected',
-      'click td.title a': 'itemClicked'
+      'click td.structure-first-column a': 'itemClicked'
     },
     initialize: function(options) {
       this.options = options;
@@ -74,7 +74,7 @@ define([
       self.el.model = this.model;
 
       var menu;
-      if (data.Type == 'User') {
+      if (data.Type === 'User') {
         self.menu = new UserActionMenu({
           app: self.app,
           model: self.model
