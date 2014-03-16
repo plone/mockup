@@ -20,21 +20,43 @@
  *
  * Example: example-1
  *    <div class="pat-structure"
- *         data-pat-structure="vocabularyUrl:/relateditems-test.json;
- *                             uploadUrl:/upload;
- *                             moveUrl:/moveitem;
- *                             tagsVocabularyUrl:/select2-test.json;
- *                             usersVocabularyUrl:/tests/json/users.json;
- *                             indexOptionsUrl:/tests/json/queryStringCriteria.json;
- *                             contextInfoUrl:{path}/context-info;"></div>
+ *         data-pat-structure="{&quot;vocabularyUrl&quot;: &quot;/relateditems-test.json&quot;,
+ *                              &quot;uploadUrl&quot;: &quot;/upload&quot;,
+ *                              &quot;moveUrl&quot;: &quot;/moveitem&quot;,
+ *                              &quot;tagsVocabularyUrl&quot;: &quot;/select2-test.json&quot;,
+ *                              &quot;usersVocabularyUrl&quot;: &quot;/tests/json/users.json&quot;,
+ *                              &quot;indexOptionsUrl&quot;: &quot;/tests/json/queryStringCriteria.json&quot;,
+ *                              &quot;contextInfoUrl&quot;: &quot;{path}/context-info&quot;,
+ *                              &quot;availableColumns&quot;: {
+ *                                &quot;Title&quot;: &quot;Title&quot;,
+ *                                &quot;ModificationDate&quot;: &quot;Last modified&quot;,
+ *                                &quot;EffectiveDate&quot;: &quot;Published&quot;,
+ *                                &quot;CreationDate&quot;: &quot;Created&quot;,
+ *                                &quot;review_state&quot;: &quot;Review state&quot;,
+ *                                &quot;Subject&quot;: &quot;Tags&quot;,
+ *                                &quot;Type&quot;: &quot;Type&quot;,
+ *                                &quot;is_folderish&quot;: &quot;Folder&quot;,
+ *                                &quot;exclude_from_nav&quot;: &quot;Excluded from nav&quot;,
+ *                                &quot;getObjSize&quot;: &quot;Object Size&quot;,
+ *                                &quot;last_comment_date&quot;: &quot;Last comment date&quot;,
+ *                                &quot;total_comments&quot;: &quot;Total comments&quot;
+ *                              },
+ *                              &quot;rearrange&quot;: {
+ *                               &quot;properties&quot;: {
+ *                                 &quot;id&quot;: &quot;ID&quot;,
+ *                                 &quot;sortable_title&quot;: &quot;Title&quot;,
+ *                                 &quot;modified&quot;: &quot;Last Modified&quot;,
+ *                                 &quot;created&quot;: &quot;Created on&quot;,
+ *                                 &quot;effective&quot;: &quot;Publication Date&quot;,
+ *                                 &quot;Type&quot;: &quot;Type&quot;
+ *                               },
+ *                               &quot;url&quot;: &quot;/rearrange&quot;
+ *                             }
+ *                            }"></div>
  *
  * Example: example-2
  *    <div class="pat-structure"
  *         data-pat-structure="{&quot;vocabularyUrl&quot;: &quot;/users-test.json&quot;,
- *                             &quot;tagsVocabularyUrl&quot;: &quot;/select2-test.json&quot;,
- *                             &quot;usersVocabularyUrl&quot;: &quot;/tests/json/users.json&quot;,
- *                             &quot;contextInfoUrl&quot;: &quot;/users-context-info&quot;,
- *                             &quot;rearrange&quot;: null,
  *                             &quot;buttonGroups&quot;: {
  *                               &quot;primary&quot;: [
  *                                 {&quot;title&quot;: &quot;Delete&quot;,
@@ -72,9 +94,7 @@
  *                                 &quot;hasConfirmed&quot;: &quot;Confirmed&quot;,
  *                                 &quot;profileComplete&quot;: &quot;Profile Complete&quot;
  *                               },
- *                             &quot;iconMapping&quot;: {
- *                                 &quot;User&quot;: &quot;user&quot;
- *                               }
+ *                             &quot;cookieSettingPrefix&quot;: &quot;_u_&quot;
  *                             }"></div>
  *
  * License:
@@ -129,42 +149,19 @@ define([
         'UID', 'Title', 'Type', 'path', 'review_state',
         'ModificationDate', 'EffectiveDate', 'CreationDate',
         'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
-        'getObjSize', 'last_comment_date', 'total_comments'
-      ],
+        'getObjSize', 'last_comment_date', 'total_comments'],
       activeColumns: [
         'Title',
         'ModificationDate',
         'EffectiveDate',
         'review_state'
       ],
-      availableColumns: {
-        'Title': 'Title',
-        'ModificationDate': 'Last modified',
-        'EffectiveDate': 'Published',
-        'CreationDate': 'Created',
-        'review_state': 'Review state',
-        'Subject': 'Tags',
-        'Type': 'Type',
-        'is_folderish': 'Folder',
-        'exclude_from_nav': 'Excluded from nav',
-        'getObjSize': 'Object Size',
-        'last_comment_date': 'Last comment date',
-        'total_comments': 'Total comments'
-      },
-      iconMapping: {
+      availableColumns: {}, // Object mapping field name to column label
+      iconMapping: { // Object mapping type name to icon name
         'File': 'file',
         'Image': 'picture',
-      },
-      rearrange: {
-        properties: {
-          'id': 'ID',
-          'sortable_title': 'Title',
-          'modified': 'Last Modified',
-          'created': 'Created on',
-          'effective': 'Publication Date',
-          'Type': 'Type'
-        },
-        url: '/rearrange'
+        'User': 'user',
+        'Group': 'group'
       },
       buttonViewMapping: {  // deprecated - should now be specified in buttonGroups
         'tags': TagsView,
