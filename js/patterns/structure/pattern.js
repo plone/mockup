@@ -38,13 +38,17 @@
  *                             &quot;buttonGroups&quot;: {
  *                               &quot;primary&quot;: [
  *                                 {&quot;title&quot;: &quot;Delete&quot;,
- *                                  &quot;url&quot;: &quot;/delete&quot;},
+ *                                  &quot;url&quot;: &quot;/delete&quot;,
+ *                                  &quot;context&quot;: &quot;danger&quot;,
+ *                                  &quot;icon&quot;: &quot;trash&quot;},
  *                                 {&quot;title&quot;: &quot;Reset Password&quot;,
  *                                  &quot;url&quot;: &quot;/reset-password&quot;},
  *                                 {&quot;title&quot;: &quot;Deactivate&quot;,
  *                                  &quot;url&quot;: &quot;/deactivate&quot;},
  *                                 {&quot;title&quot;: &quot;Activate&quot;,
- *                                  &quot;url&quot;: &quot;/activate&quot;}
+ *                                  &quot;context&quot;: &quot;default&quot;,
+ *                                  &quot;url&quot;: &quot;/activate&quot;,
+ *                                  &quot;icon&quot;: &quot;&quot;}
  *                               ],
  *                               &quot;secondary&quot;: [
  *                                 {&quot;title&quot;: &quot;Add To Group&quot;,
