@@ -16,6 +16,8 @@
         <td class="<%- column %>">
           <% if(attributes[column] instanceof Array) { %>
             <span><%= attributes[column].join('</span>, <span>') %></span>
+          <% } else if(typeof(attributes[column]) == "boolean" ) { %>
+            <% if(attributes[column]) {  %> Yes <% } else { %> No <% } %>
           <% } else { %>
             <%- attributes[column] %>
           <% } %>

@@ -331,7 +331,11 @@ define([
                     Type: 'User', 
                     email: 'foo@bar.com', 
                     dateJoined: '2014-02-01',
-                    userRoles: ['Member', 'Reviewer'] }];
+                    userRoles: ['Member', 'Reviewer'],
+                    dateLastActivity: '2014-03-01',
+                    dateLastLogin: '2014-03-14',
+                    hasConfirmed: true,
+                    profileComplete: false}];
     results[0].path = '/author/' + results[0].UID;
     results[0].getURL = window.location.origin + results[0].path;
     

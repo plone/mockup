@@ -61,7 +61,7 @@
  *                                 &quot;email&quot;,
  *                                 &quot;dateJoined&quot;,
  *                                 &quot;userRoles&quot;
- *                             ],
+ *                               ],
  *                             &quot;availableColumns&quot;: {
  *                                 &quot;fullName&quot;: &quot;Full Name&quot;,
  *                                 &quot;email&quot;: &quot;Email&quot;,
@@ -71,12 +71,11 @@
  *                                 &quot;userRoles&quot;: &quot;Roles&quot;,
  *                                 &quot;hasConfirmed&quot;: &quot;Confirmed&quot;,
  *                                 &quot;profileComplete&quot;: &quot;Profile Complete&quot;
- *                             },
+ *                               },
  *                             &quot;iconMapping&quot;: {
  *                                 &quot;User&quot;: &quot;user&quot;
- *                                }
- *                             }">
- *    </div>
+ *                               }
+ *                             }"></div>
  *
  * License:
  *    Copyright (C) 2010 Plone Foundation
