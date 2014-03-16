@@ -67,6 +67,9 @@ define([
     setContextInfo: function() {
       var self = this;
       var data = self.contextInfo;
+      if (!data) {
+        return;
+      }
       var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
       if ($defaultPage.length > 0) {
         $defaultPage.find('td.title').prepend('<span>*</span> ');

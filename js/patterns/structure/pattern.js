@@ -100,13 +100,19 @@ define([
   'mockup-patterns-base',
   'mockup-utils',
   'js/patterns/structure/views/app',
+  'js/patterns/structure/views/tags',
+  'js/patterns/structure/views/properties',
+  'js/patterns/structure/views/workflow',
+  'js/patterns/structure/views/delete',
+  'js/patterns/structure/views/rename',
   'text!js/patterns/structure/templates/paging.xml',
   'text!js/patterns/structure/templates/selection_button.xml',
   'text!js/patterns/structure/templates/selection_item.xml',
   'text!js/patterns/structure/templates/tablerow.xml',
   'text!js/patterns/structure/templates/table.xml',
   'text!js/ui/templates/popover.xml'
-], function($, Base, utils, AppView) {
+], function($, Base, utils, AppView, TagsView, PropertiesView, WorkflowView,
+            DeleteView, RenameView) {
   'use strict';
 
   var Structure = Base.extend({
@@ -160,14 +166,21 @@ define([
         },
         url: '/rearrange'
       },
+      buttonViewMapping: {  // deprecated - should now be specified in buttonGroups
+        'tags': TagsView,
+        'properties': PropertiesView,
+        'workflow': WorkflowView,
+        'delete': DeleteView,
+        'rename': RenameView
+      },
       basePath: '/',
       uploadUrl: null,
       moveUrl: null,
       /*
        * all these base buttons are required
        */
-      buttonGroups: {
-        primary: [{
+      buttonGroups: [
+        [{
           title: 'Cut',
           url: '/cut'
         },{
@@ -175,27 +188,35 @@ define([
           url: '/copy'
         },{
           title: 'Paste',
-          url: '/paste'
+          url: '/paste',
+          isEnabled: function(view, selected) {
+            return view.pasteAllowed;
+          }
         },{
           title: 'Delete',
           url: '/delete',
           context: 'danger',
-          icon: 'trash'
+          icon: 'trash',
+          view: DeleteView
         }],
-        secondary: [{
+        [{
           title: 'Workflow',
-          url: '/workflow'
+          url: '/workflow',
+          view: WorkflowView
         },{
           title: 'Tags',
-          url: '/tags'
+          url: '/tags',
+          view: TagsView
         },{
           title: 'Properties',
-          url: '/properties'
+          url: '/properties',
+          view: PropertiesView
         },{
           title: 'Rename',
-          url: '/rename'
+          url: '/rename',
+          view: RenameView
         }]
-      },
+      ],
       useTus: false
     },
     init: function() {

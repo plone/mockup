@@ -75,13 +75,7 @@ define([
       'rename': DISABLE_EVENT,
       'rearrange': DISABLE_EVENT
     },
-    buttonViewMapping: {
-      'secondary.tags': TagsView,
-      'secondary.properties': PropertiesView,
-      'secondary.workflow': WorkflowView,
-      'primary.delete': DeleteView,
-      'secondary.rename': RenameView
-    },
+    buttonViewMapping: {},  // deprecated
     status: '',
     statusType: 'warning',
     pasteOperation: null,
@@ -135,34 +129,11 @@ define([
         app: self
       });
 
-      self.buttonViews = {};
-      _.map(self.buttonViewMapping, function(ViewClass, key, list) {
-        var name = key.split('.');
-        var group = name[0];
-        var buttonName = name[1];
-        self.buttonViews[key] = new ViewClass({
-          triggerView: self.buttons[group].get(buttonName),
-          app: self
-        });
-      });
-
       self.toolbar.get('selected').disable();
-      self.buttons.primary.disable();
-      self.buttons.secondary.disable();
+      _.each(self.buttons, function(button) { button.disable(); });
 
       self.selectedCollection.on('add remove reset', function(modal, collection) {
-        if (collection.length) {
-          self.toolbar.get('selected').enable();
-          self.buttons.primary.enable();
-          self.buttons.secondary.enable();
-          if (!self.pasteAllowed) {
-            self.buttons.primary.get('paste').disable();
-          }
-        } else {
-          this.toolbar.get('selected').disable();
-          self.buttons.primary.disable();
-          self.buttons.secondary.disable();
-        }
+        self.updateButtons();
       }, self);
 
       self.collection.on('sync', function() {
@@ -340,11 +311,10 @@ define([
       txt += 'selection';
       self.setStatus(txt);
       self.pasteAllowed = true;
-      self.buttons.primary.get('paste').enable();
+      self.updateButtons();
     },
     setupButtons: function() {
       var self = this;
-      self.buttons = {};
       var items = [];
 
       var columnsBtn = new ButtonView({
@@ -386,26 +356,37 @@ define([
         items.push(rearrangeButton);
       }
 
-      _.each(_.pairs(this.options.buttonGroups), function(group) {
+      self.flyoutViews = [];
+      self.buttons = [];
+      _.each(this.options.buttonGroups, function(group) {
         var buttons = [];
-        _.each(group[1], function(button) {
-          button = new ButtonView(button);
-          buttons.push(button);
+        _.each(group, function(button) {
+          var buttonView = new ButtonView(button);
+          buttons.push(buttonView);
+          self.buttons.push(buttonView);
           // bind click events now...
-          var ev = self.buttonClickEvents[button.id];
+          var ev = self.buttonClickEvents[buttonView.id];
           if (ev !== DISABLE_EVENT) {
             if (ev === undefined) {
               ev = 'defaultButtonClickEvent'; // default click event
             }
-            button.on('button:click', self[ev], self);
+            buttonView.on('button:click', self[ev], self);
+          }
+
+          var FlyoutView = button.view || self.options.buttonViewMapping[buttonView.id];
+          if (FlyoutView !== undefined) {
+            var flyoutView = new FlyoutView({
+              triggerView: buttonView,
+              app: self
+            });
+            self.flyoutViews.push(flyoutView);
           }
         });
-        self.buttons[group[0]] = new ButtonGroup({
+        var buttonGroup = new ButtonGroup({
           items: buttons,
-          id: group[0],
           app: self
         });
-        items.push(self.buttons[group[0]]);
+        items.push(buttonGroup);
       });
       if (self.options.uploadUrl) {
         var uploadBtn = new ButtonView({
@@ -427,6 +408,30 @@ define([
       this.toolbar = new Toolbar({
         items: items
       });
+    },
+    updateButtons: function() {
+      var self = this;
+      var collection = self.selectedCollection;
+      _.each(self.buttons, function(button) {
+        if (button.isEnabled !== undefined) {
+          if (button.isEnabled(self, collection)) {
+            button.enable();
+          } else {
+            button.disable();
+          }
+        } else {
+          if (collection.length) {
+            button.enable();
+          } else {
+            button.disable();
+          }
+        }
+      });
+      if (collection.length) {
+        self.toolbar.get('selected').enable();
+      } else {
+        this.toolbar.get('selected').disable();
+      }
     },
     moveItem: function(id, delta, subsetIds) {
       var self = this;
@@ -472,7 +477,7 @@ define([
         self.$el.append(self.rearrangeView.render().el);
       }
 
-      _.each(self.buttonViews, function(view) {
+      _.each(self.flyoutViews, function(view) {
         self.$el.append(view.render().el);
       });
 
