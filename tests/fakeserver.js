@@ -325,28 +325,65 @@ define([
     );
   });
 
-  server.respondWith(/users-test\.json/, function(xhr, id) {
-    var results = [{
-      UID: 'foo-user',
-      fullName: 'Foo Bar',
+  // define here so it's the same for the entire page load.
+  // these are all random users on the site
+  var randomUsers = [];
+  var possibleNames = ['Alice', 'Bob', 'Charles', 'Dorothy'];
+  var possibleRoles = ['Member', 'Reviewer', 'Editor', 'Contributor', 'Reader', 'Site Administrator', 'Manager'];
+  var possibleTLDs = ['com', 'net', 'org', 'co', 'edu', 'gov'];
+  var possibleOrgs = ['abc', 'foo', 'bar', 'uw', 'baz'];
+
+  for (var j = 0; j < 1000; j = j + 1) {
+    var name = possibleNames[Math.floor(Math.random() * possibleNames.length)];
+    name = name + ' ' + j;
+    var uid = name.replace(' ', '-').toLowerCase();
+    var org = possibleOrgs[Math.floor(Math.random() * possibleOrgs.length)];
+    var tld = possibleTLDs[Math.floor(Math.random() * possibleTLDs.length)];
+    randomUsers.push({
+      UID: uid,
+      fullName: name,
       Type: 'User',
-      email: 'foo@bar.com',
-      dateJoined: '2014-02-01',
-      userRoles: ['Member', 'Reviewer'],
-      dateLastActivity: '2014-03-01',
-      dateLastLogin: '2014-03-14',
-      hasConfirmed: true,
-      loginEnabled: true
-    }];
-    results[0].path = '/author/' + results[0].UID;
-    results[0].getURL = window.location.origin + results[0].path;
+      email: uid + '@' + org + '.' + tld
+    });
+  }
+
+  server.respondWith(/users-test\.json/, function(xhr, id) {
+    var searchables = randomUsers;
+    var addSomeData = function(list) {
+      /* add dateJoined value, userRoles, dateLastActivity, dateLastLogin, hasConfirmed, loginEnabled */
+      var dates = [
+        'January 1, 2011',
+        'February 10, 2012',
+        'March 12, 2013',
+        'April 1, 2012',
+        'May 20, 2013'
+      ];
+      for (var i = 0; i < list.length; i = i + 1) {
+        var data = list[i];
+        data.path = '/author/' + data.UID;
+        data.getURL = window.location.origin + data.path;
+        data.userRoles = [];
+        var iterRoles = possibleRoles.slice(0);
+        var countRoles = 1 + Math.floor(Math.random() * iterRoles.length);
+        for (var r = 0; r < countRoles; r = r + 1) {
+          data.userRoles.push(iterRoles.splice(Math.floor(Math.random() * iterRoles.length),1));  // jshint ignore:line
+        }
+        /* These dates are not guaranteed to come out in a realistic order. */
+        data.dateJoined = dates[Math.floor(Math.random() * dates.length)];
+        data.dateLastActivity = dates[Math.floor(Math.random() * dates.length)];
+        data.dateLastLogin = dates[Math.floor(Math.random() * dates.length)];
+        data.hasConfirmed = Math.floor(Math.random() * 2) == 0;
+        data.loginEnabled = Math.floor(Math.random() * 2) == 0;
+      }
+    };
+    addSomeData(searchables);
 
     var page = 0;
     var pageSize = 10;
     xhr.respond(200, { 'Content-Type': 'application/json' },
       JSON.stringify({
-        total: results.length,
-        results: results.slice(page * pageSize, (page * pageSize) + (pageSize - 1))
+        total: searchables.length,
+        results: searchables.slice(page * pageSize, (page * pageSize) + (pageSize - 1))
       })
     );
   });
