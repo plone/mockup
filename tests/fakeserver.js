@@ -328,14 +328,14 @@ define([
   // define here so it's the same for the entire page load.
   // these are all random users on the site
   var randomUsers = [];
-  var possibleNames = ['Alice', 'Bob', 'Charles', 'Dorothy'];
+  var possibleUserNames = ['Alice', 'Bob', 'Charles', 'Dorothy'];
   var possibleRoles = ['Member', 'Reviewer', 'Editor', 'Contributor', 'Reader', 'Site Administrator', 'Manager'];
   var possibleTLDs = ['com', 'net', 'org', 'co', 'edu', 'gov'];
   var possibleOrgs = ['abc', 'foo', 'bar', 'uw', 'baz'];
 
-  for (var j = 0; j < 1000; j = j + 1) {
-    var name = possibleNames[Math.floor(Math.random() * possibleNames.length)];
-    name = name + ' ' + j;
+  for (var k = 0; k < 1000; k = k + 1) {
+    var name = possibleUserNames[Math.floor(Math.random() * possibleUserNames.length)];
+    name = name + ' ' + k;
     var uid = name.replace(' ', '-').toLowerCase();
     var org = possibleOrgs[Math.floor(Math.random() * possibleOrgs.length)];
     var tld = possibleTLDs[Math.floor(Math.random() * possibleTLDs.length)];
@@ -372,8 +372,8 @@ define([
         data.dateJoined = dates[Math.floor(Math.random() * dates.length)];
         data.dateLastActivity = dates[Math.floor(Math.random() * dates.length)];
         data.dateLastLogin = dates[Math.floor(Math.random() * dates.length)];
-        data.hasConfirmed = Math.floor(Math.random() * 2) == 0;
-        data.loginEnabled = Math.floor(Math.random() * 2) == 0;
+        data.hasConfirmed = Math.floor(Math.random() * 2) === 0;
+        data.loginEnabled = Math.floor(Math.random() * 2) === 0;
       }
     };
     addSomeData(searchables);
