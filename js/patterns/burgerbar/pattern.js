@@ -10,20 +10,20 @@
  *
  * Example: example-1
  *    <div class="pat-burgerbar">
- *      <div>
- *        <a href="#" class="burgerbar-menuitem-add-content">Add...</a>
+ *      <div class="burgerbar-menuitem-add-content">
+ *        <a href="#">Add...</a>
  *        <ul>
- *          <li><a href="#">Folder contents</a></li>
- *          <li><a href="#">View</a></li>
- *          <li><a href="#">Edit</a></li>
- *          <li><a href="#"></a></li>
+ *          <li><a href="#">Folder</a></li>
+ *          <li><a href="#">Page</a></li>
+ *          <li><a href="#">Event</a></li>
+ *          <li><a href="#">News Item</a></li>
  *        </ul>
  *      </div>
- *      <div>
- *        <a href="#" class="burgerbar-menuitem-edit">Edit</a>
+ *      <div class="burgerbar-menuitem-edit">
+ *        <a href="#">Edit</a>
  *      </div>
- *      <div>
- *        <a href="#" class="burgerbar-menuitem-browse">Browse</a>
+ *      <div class="burgerbar-menuitem-browse">
+ *        <a href="#">Browse</a>
  *      </div>
  *    </div>
  *
@@ -49,7 +49,7 @@ define([
   'jquery',
   'mockup-patterns-base',
   'react',
-  'scroller'
+  //  'scroller'
 ], function($, Base, React, Scroller) {
   "use strict";
 
@@ -61,10 +61,7 @@ define([
       ul = React.DOM.ul,
       nav = React.DOM.nav,
       span = React.DOM.span,
-      button = React.DOM.button,
-      iframe = React.DOM.iframe,
-      header = React.DOM.header,
-      footer = React.DOM.footer;
+      button = React.DOM.button;
 
   var BurgerBarPattern = React.createClass({
     getInitialState: function() {
