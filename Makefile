@@ -56,6 +56,9 @@ bootstrap-nix: clean bootstrap-common
 jshint:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint jscs
 
+watch:
+	NODE_PATH=$(NODE_PATH) $(GRUNT) watch
+
 test:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test --pattern=$(pattern)
 

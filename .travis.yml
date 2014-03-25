@@ -7,8 +7,16 @@ env:
     - secure: "kC1ondeLedcnmrpI5McHHjd3AAl0piErC3iCy8hwdJXSkanG36XF0nM3VoiudhJX1c0iTD0uod3cglChRq7stmYsHLlCvWJAf/19+ce6wG7MBw2M31qRRcktIYEPKlm3iMRWy+WwWOivTrjVwWG3/mcCdyeDTvSFFSjtMSqmLOg="
     - secure: "CyxPivnm/mpBX5Def/VlFHthxjMTjlThgd07tiGvd0vtDG1PPNzD0Y0q+4AmBilWZeIu1O1bP1vYMgMQ0rvcXr5K7+wZqoyss+ynRzMzdGLYQSU73zN5THKNeClioR90stsTr9GxX43VvgEIX9W3Zx1eSnmzT+ddnLYL94bAP9Q="
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
+  matrix:
+    - BROWSERS="SL_Chrome,SL_Firefox"
+    - BROWSERS="SL_IE_8,SL_IE_9"
+    - BROWSERS="SL_IE_10,SL_IE_11"
+    - BROWSERS="SL_Opera,SL_Safari"
+    - BROWSERS="SL_IPhone"
+    - BROWSERS="SL_IPad"
+    - BROWSERS="SL_Android"
 install:
-  - make bootstrap
+  - travis_retry make bootstrap
   - echo "Host github.com" >> ~/.ssh/config
   - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
   - git config --global user.email "mockup@garbas.si"
@@ -19,10 +27,22 @@ script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then make test-ci; fi
   - make docs
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-docs; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-widgets; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-toolbar; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-structure; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-barceloneta; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-plone; fi
-  - ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-docs; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-widgets; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-toolbar; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-structure; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-barceloneta; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-plone; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ]; then ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls; fi
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: BROWSERS="SL_IE_8,SL_IE_9"
+    - env: BROWSERS="SL_IE_10,SL_IE_11"
+    - env: BROWSERS="SL_Opera,SL_Safari"
+    - env: BROWSERS="SL_IPhone"
+    - env: BROWSERS="SL_IPad"
+    - env: BROWSERS="SL_Android"
+branches:
+  only:
+    - master
