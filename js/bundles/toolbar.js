@@ -593,8 +593,13 @@ define([
             relatedItems: {
               vocabularyUrl: config['portal_url'] + '/@@getVocabulary?name=plone.app.vocabularies.Catalog' // jshint ignore:line
             },
-            'rel_upload_path': '@@fileUpload', // jshint ignore:line
-            'folder_url': config['document_base_url'], // jshint ignore:line
+            upload: {
+              baseUrl: config['document_base_url'], // jshint ignore:line
+              relativePath: '@@fileUpload',
+              uploadMultiple: false,
+              maxFiles: 1,
+              showTitle: false
+            },
             tiny: config,
             prependToUrl: 'resolveuid/',
             linkAttribute: 'UID',

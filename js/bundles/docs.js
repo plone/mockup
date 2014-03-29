@@ -47,11 +47,6 @@ require([
             description: 'TODO',
             url: 'js/patterns/backdrop.js'
           },
-          { id: 'dropzone',
-            title: 'DropZone',
-            description: 'File upload with drag and drop support',
-            url: 'js/patterns/dropzone.js'
-          },
           { id: 'formautofocus',
             title: 'Form Auto Focus',
             description: 'TODO',
@@ -131,6 +126,11 @@ require([
             title: 'Tree',
             description: 'Manage tree of items',
             url: 'js/patterns/tree.js'
+          },
+          { id: 'upload',
+            title: 'Upload',
+            description: 'File upload with drag and drop support.',
+            url: 'js/patterns/upload/pattern.js'
           }
         ]
       },

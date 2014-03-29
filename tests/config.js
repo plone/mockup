@@ -3,7 +3,6 @@ var tests = Object.keys(window.__karma__.files).filter(function (file) {
 
   var pattern,
       args = window.__karma__.config.args;
-
   if (args) {
     // workaround for cmd line arguments not parsed
     if (Object.prototype.toString.call(args) === '[object Array]') {

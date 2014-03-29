@@ -44,16 +44,16 @@ define([
   'js/patterns/structure/views/addmenu',
   'js/patterns/structure/views/columns',
   'js/patterns/structure/views/textfilter',
+  'js/patterns/structure/views/upload',
   'js/patterns/structure/collections/result',
   'js/patterns/structure/collections/selected',
-  'mockup-patterns-dropzone',
   'mockup-utils',
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
-            PagingView, AddMenu, ColumnsView, TextFilterView, ResultCollection,
-            SelectedCollection, DropZone, utils) {
+            PagingView, AddMenu, ColumnsView, TextFilterView, UploadView,
+            ResultCollection, SelectedCollection, utils) {
   'use strict';
 
   var DISABLE_EVENT = 'DISABLE';
@@ -407,18 +407,19 @@ define([
         });
         items.push(self.buttons[group[0]]);
       });
-      if (self.options.uploadUrl) {
-        var uploadBtn = new ButtonView({
+      if (self.options.upload) {
+        var uploadButton = new ButtonView({
+          id: 'upload',
           title: 'Upload',
-          context: 'success',
-          icon: 'upload'
+          tooltip: 'Upload files',
+          icon: 'upload',
+          context: 'success'
         });
-        items.push(uploadBtn);
-        uploadBtn.on('button:click', function() {
-          // update because the url can change depending on the folder we're in.
-          self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
-          self.dropzone.hiddenFileInput.click();
+        self.uploadView = new UploadView({
+          triggerView: uploadButton,
+          app: self
         });
+        items.push(uploadButton);
       }
       items.push(new TextFilterView({
         id: 'filter',
@@ -471,6 +472,9 @@ define([
       if (self.rearrangeView) {
         self.$el.append(self.rearrangeView.render().el);
       }
+      if (self.uploadView) {
+        self.$el.append(self.uploadView.render().el);
+      }
 
       _.each(self.buttonViews, function(view) {
         self.$el.append(view.render().el);
@@ -478,27 +482,6 @@ define([
 
       self.$el.append(self.tableView.render().el);
       self.$el.append(self.pagingView.render().el);
-
-      /* dropzone support */
-      if (self.options.uploadUrl) {
-        self.dropzone = new DropZone(self.$el, {
-          className: 'structure-dropzone',
-          //clickable: false,
-          clickable: $('<div/>')[0],
-          url: self.getAjaxUrl(self.options.uploadUrl),
-          autoCleanResults: true,
-          useTus: self.options.useTus,
-          success: function() {
-            self.collection.pager();
-          }
-        }).dropzone;
-        self.dropzone.on('drop', function() {
-          // because this can change depending on the folder we're in
-          self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
-        });
-        /* allow multiple to upload at once */
-        $(self.dropzone.hiddenFileInput).attr('multiple', 'true');
-      }
 
       // Backdrop class
       if (self.options.backdropSelector !== null) {

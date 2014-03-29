@@ -114,32 +114,6 @@ define([
       expect($el.val()).to.equal('<p>foobar</p>');
     });
 
-    it('auto adds image on upload', function() {
-      var tinymce = createTinymce({
-        prependToUrl: 'resolveuid/',
-        linkAttribute: 'UID'
-      });
-
-      tinymce.fileUploaded({
-        filename: 'foobar.png',
-        UID: 'foobar'
-      });
-      expect(tinymce.tiny.getContent()).to.contain('resolveuid/foobar');
-
-    });
-    it('auto adds link on file upload', function() {
-      var $el = $('<textarea class="pat-tinymce"></textarea>').appendTo('body');
-
-      var tinymce = new TinyMCE($el);
-
-      tinymce.fileUploaded({
-        filename: 'foobar.txt',
-        UID: 'foobar'
-      });
-      expect(tinymce.tiny.getContent()).to.contain('foobar.txt</a>');
-
-    });
-
     it('test create correct url from metadata', function() {
       var tiny = createTinymce({
         prependToUrl: 'resolveuid/',
@@ -298,21 +272,6 @@ define([
       /* XXX ajax not loading quickly enough here...
       expect(val.UID).to.equal('123sdfasdf');
       */
-    });
-
-    it('test create upload file modal', function() {
-      var pattern = createTinymce();
-      pattern.uploadFileClicked();
-      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(true);
-    });
-
-    it('test reopen upload file modal', function() {
-      var pattern = createTinymce();
-      pattern.uploadFileClicked();
-      pattern.uploadModal.hide();
-      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(false);
-      pattern.uploadFileClicked();
-      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(true);
     });
 
     it('test reopen add link modal', function() {

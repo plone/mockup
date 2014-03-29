@@ -5,7 +5,7 @@
  *    tagsVocabularyUrl(string): Url to return tags query results (null)
  *    usersVocabularyUrl(string): Url to query users (null)
  *    indexOptionsUrl(string): Url to configure querystring widget with (null)
- *    uploadUrl(string): For setting up dropzone (null)
+ *    upload(string): upload configuration settings(null)
  *    moveUrl(string): For supporting drag drop reordering (null)
  *    contextInfoUrl(string): For supporting add menu (null)
  *
@@ -102,7 +102,6 @@ define([
         url: '/rearrange'
       },
       basePath: '/',
-      uploadUrl: null,
       moveUrl: null,
       /*
        * all these base buttons are required
@@ -137,7 +136,10 @@ define([
           url: '/rename'
         }]
       },
-      useTus: false
+      upload: {
+        uploadMultiple: true,
+        showTitle: true
+      }
     },
     init: function() {
       var self = this;
