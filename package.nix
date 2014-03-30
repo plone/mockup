@@ -1,5 +1,7 @@
 { self, fetchurl, fetchgit ? null, lib }:
-
+let
+  pkgs = import <nixpkgs> { };
+in
 {
   by-spec."StringScanner"."~0.0.3" =
     self.by-version."StringScanner"."0.0.3";
@@ -910,9 +912,8 @@
     buildInputs =
       (self.nativeDeps."chokidar" or []);
     deps = [
-      self.by-version."fsevents"."0.2.0"
       self.by-version."recursive-readdir"."0.0.2"
-    ];
+    ] ++ lib.optional (pkgs.stdenv.isDarwin) self.by-version."fsevents"."0.2.0";
     peerDependencies = [
     ];
     passthru.names = [ "chokidar" ];
