@@ -29,7 +29,6 @@ script:
 after_success:
   - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-docs; fi
   - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-widgets; fi
-  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-toolbar; fi
   - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-structure; fi
   - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-barceloneta; fi
   - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then make publish-plone; fi

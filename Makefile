@@ -7,10 +7,9 @@ NODE_PATH = ./node_modules
 
 all: test-once bundles docs
 
-bundles: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure bundle-plone
+bundles: bundle-barceloneta bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
-	# cp build/toolbar* path/to/plone.app.toolbar/plone/app/toolbar/static
 	# cp build/barceloneta* path/to/plonetheme.barceloneta/plonetheme/barceloneta/static
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
 	# cp build/plone* path/to/Products.CMFPlone/Products/CMFPlone/static
@@ -19,10 +18,6 @@ bundles: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure bundl
 bundle-widgets:
 	mkdir -p build
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-widgets
-
-bundle-toolbar:
-	mkdir -p build
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-toolbar
 
 bundle-structure:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure
@@ -74,9 +69,6 @@ test-ci:
 publish-widgets:
 	echo -e "Publishing 'widgets' bundle!\n"; git clone git://github.com/plone/plone.app.widgets.git; cd plone.app.widgets; cp ../build/widgets* plone/app/widgets/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'widgets' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plone.app.widgets.git > /dev/null; cd ..;
 
-publish-toolbar:
-	echo -e "Publishing 'toolbar' bundle!\n"; git clone git://github.com/plone/plone.app.toolbar.git; cd plone.app.toolbar; cp ../build/toolbar* plone/app/toolbar/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'toolbar' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/plone/plone.app.toolbar.git > /dev/null; cd ..;
-
 publish-structure:
 	echo -e "Publishing 'structure' bundle!\n"; git clone git://github.com/collective/wildcard.foldercontents.git; cd wildcard.foldercontents; cp ../build/structure* wildcard/foldercontents/static; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed 'structure' bundle resources."; git push -fq https://$(GH_TOKEN)@github.com/collective/wildcard.foldercontents.git > /dev/null; cd ..;
 
@@ -99,4 +91,4 @@ clean-deep: clean
 	if test -f $(BOWER); then $(BOWER) cache clean; fi
 	if test -f $(NPM); then $(NPM) cache clean; fi
 
-.PHONY: bundle bundle-widgets bundle-toolbar bundle-structure bundle-barceloneta bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-widgets publish-toolbar publish-structure publish-barceloneta publish-plone publish-docs clean clean-deep
+.PHONY: bundle bundle-widgets bundle-structure bundle-barceloneta bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-widgets publish-structure publish-barceloneta publish-plone publish-docs clean clean-deep
