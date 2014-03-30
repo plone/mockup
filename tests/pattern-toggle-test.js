@@ -217,6 +217,24 @@ define([
       expect($('.parent2 .toggled', $el).size()).to.equal(0);
     });
 
+    it('should use the target when targetScope is global', function() {
+      var $el = $('' +
+        '<div id="body">' +
+        ' <a class="pat-toggle"' +
+        '    data-pat-toggle="target: #target;' +
+        '                     targetScope: global;' +
+        '                     value: toggled">Button</a>' +
+        ' <div id="target"><div>' +
+        '</div>').appendTo('body');
+      var $target = $('#target');
+      expect($target.hasClass('toggled')).to.equal(false);
+      registry.scan($el);
+      expect($target.hasClass('toggled')).to.equal(false);
+      $el.find('.pat-toggle').first().trigger('click');
+      expect($target.hasClass('toggled')).to.equal(true);
+      $el.remove();
+    });
+
     it('the targetScope option should also work with other tags like p tag', function() {
       var $el = $('' +
         '<div>' +
