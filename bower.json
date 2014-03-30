@@ -17,7 +17,7 @@
     "jquery-form": "3.46.0",
     "jquery.cookie": "1.4.0",
     "lodash": "2.4.1",
-    "mockup-core": "1.2.0",
+    "mockup-core": "1.2.1",
     "moment": "2.5.1",
     "pickadate": "3.4.0",
     "requirejs-text": "2.0.10",
@@ -25,8 +25,8 @@
     "select2": "3.4.5"
   },
   "devDependencies": {
-    "expect": "0.2.0",
-    "sinonjs": "1.7.3"
+    "expect": "0.3.1",
+    "sinonjs": "1.9.0"
   },
   "resolutions": {
     "jquery": "1.8.3"

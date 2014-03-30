@@ -5,7 +5,7 @@ GRUNT = ./node_modules/grunt-cli/bin/grunt
 BOWER = ./node_modules/bower/bin/bower
 NODE_PATH = ./node_modules
 
-all: test-once bundle docs
+all: test-once bundles docs
 
 bundles: bundle-barceloneta bundle-widgets bundle-toolbar bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #

@@ -30,14 +30,15 @@ define([
           total: items.length,
           results: items
         }));
-
       });
 
+      this.clock = sinon.useFakeTimers();
     });
 
     afterEach(function() {
       $('body').empty();
       this.server.restore();
+      this.clock.restore();
     });
 
     it('tagging', function() {
@@ -132,12 +133,11 @@ define([
       ).appendTo('body');
       var pattern = $('.pat-select2').patternSelect2();
 
-      var clock = sinon.useFakeTimers();
       var $input = $('.select2-input');
       $input.click().val('AAA');
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
-      clock.tick(1000);
+      this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
       expect($results.size()).to.equal(4);
@@ -210,12 +210,11 @@ define([
         '                     width:20em" />'
       ).appendTo('body');
       var pattern = $('.pat-select2').patternSelect2();
-      var clock = sinon.useFakeTimers();
       var $input = $('.select2-input');
       $input.click().val('AAA');
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
-      clock.tick(1000);
+      this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
       expect($results.size()).to.equal(0);
@@ -231,12 +230,11 @@ define([
         '                     width:20em" />'
       ).appendTo('body');
       var pattern = $('.pat-select2').patternSelect2();
-      var clock = sinon.useFakeTimers();
       var $input = $('.select2-input');
       $input.click().val('AAA');
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
-      clock.tick(1000);
+      this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
       expect($results.size()).to.equal(0);

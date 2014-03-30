@@ -23,7 +23,7 @@
       'docs-contribute': 'CONTRIBUTE.md',
       'domready': 'bower_components/domready/ready',
       'dropzone': 'bower_components/dropzone/downloads/dropzone-amd-module',
-      'expect': 'bower_components/expect/expect',
+      'expect': 'bower_components/expect/index',
       'jqtree': 'bower_components/jqtree/tree.jquery',
       'jquery': 'bower_components/jquery/jquery',
       'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
