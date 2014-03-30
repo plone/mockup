@@ -20,9 +20,9 @@
     outputHash = "0s83zzk9syh568fjlzfdzmbb2csx1nmkcbvcjimi1achl0v7sk4q";
   }
   { name = "mockup-core";
-    version = "1.1.0";
-    target = "1.1.0";
-    outputHash = "056ahxj4p890cpwsa1jklysf01x4w2nw50pnh8ihzjljafmyxsr9";
+    version = "1.2.1";
+    target = "1.2.1";
+    outputHash = "0hp0bxligqqlbxmnzdsgpfwsv6mksl1hx0w369rsn6c1wx2b1idx";
   }
   { name = "jquery-form";
     version = "3.46.0";
@@ -33,6 +33,16 @@
     version = "1.4.2";
     target = "1.4.2";
     outputHash = "0nhrsy1iyrqvrb7pxpw8d3dqhzd0wgbbscf3wzixx3xbi6v4j6fk";
+  }
+  { name = "sinonjs";
+    version = "1.9.0";
+    target = "1.9.0";
+    outputHash = "1s9hn5x3vzxs41mhgfagbj0m6s8x53598y4h1za1nr9z6ymvig3l";
+  }
+  { name = "expect";
+    version = "0.3.1";
+    target = "0.3.1";
+    outputHash = "0b32higq1g005i066gk6anyv1yrb450rbhaw9cfrrqpw9wxlgcfm";
   }
   { name = "dropzone";
     version = "3.8.4";

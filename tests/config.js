@@ -1,9 +1,21 @@
 var tests = Object.keys(window.__karma__.files).filter(function (file) {
   'use strict';
 
-  if (window.__karma__.config.args.pattern) {
-    return (new RegExp(window.__karma__.config.args.pattern + '-test.js$')).test(file);
+  var pattern,
+      args = window.__karma__.config.args;
+
+  if (args) {
+    // workaround for cmd line arguments not parsed
+    if (Object.prototype.toString.call(args) === '[object Array]') {
+      args.join(' ').replace(/--pattern[\s|=]+(\S+)?\s*/, function(match, value) {
+        pattern = value;
+      });
+    }
+    if (pattern) {
+      return (new RegExp(pattern + '-test.js$')).test(file);
+    }
   }
+
   return (/\-test\.js$/).test(file);
 });
 

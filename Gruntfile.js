@@ -108,9 +108,7 @@ module.exports = function(grunt) {
   }, {
     url: '++resource++plonetheme.barceloneta',
     exclude: ['jquery', 'mockup-registry', 'mockup-patterns-base']
-
-  // skip the uglify section; barceloneta has a custom dev loader, since it assumed the presence of the plone bundle
-  }, ['requirejs', 'less', 'copy', 'sed']);
+  });
 
   mockup.registerBundle('widgets');
 
