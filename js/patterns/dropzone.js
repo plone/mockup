@@ -167,7 +167,7 @@ define([
 
 
       if (autoClean) {
-        self.dropzone.on('complete', function(file) {
+        self.$dropzone.on('complete', function(file) {
           setTimeout(function() {
             $(file.previewElement).fadeOut();
           }, 3000);
@@ -225,7 +225,7 @@ define([
           setTimeout(process, 100);
         }
       }
-      self.dropzone.on('addedfile', function() {
+      self.$dropzone.on('addedfile', function() {
         self.$dropzone.addClass(fileaddedClassName);
         setTimeout(function() {
           if (!processing) {

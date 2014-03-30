@@ -492,7 +492,7 @@ define([
             self.collection.pager();
           }
         }).dropzone;
-        self.dropzone.on('drop', function() {
+        $(self.dropzone).on('drop', function() {
           // because this can change depending on the folder we're in
           self.dropzone.options.url = self.getAjaxUrl(self.options.uploadUrl);
         });
