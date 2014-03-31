@@ -63,9 +63,9 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
-  'select2',
-  'mockup-patterns-relateditems'
-], function($, Base, Select2, PickADate, undefined, RelatedItems) {
+  'mockup-patterns-relateditems',
+  'select2'
+], function($, Base, Select2, PickADate, RelatedItems) {
   'use strict';
 
   var Criteria = function() { this.init.apply(this, arguments); };
