@@ -38,11 +38,6 @@ require([
             description: 'Easily change text size on a page.',
             url: './js/patterns/accessibility.js'
           },
-          { id: 'ace',
-            title: 'Ace Editor',
-            description: 'Edit files in the browser.',
-            url: './js/patterns/ace.js'
-          },
           { id: 'autotoc',
             title: 'Autotoc',
             description: 'Automatically generate a table of contents.',
@@ -53,25 +48,10 @@ require([
             description: 'TODO',
             url: 'js/patterns/backdrop.js'
           },
-          { id: 'cookiedirective',
-            title: 'Cookie Directive',
-            description: 'A pattern that checks cookies enabled and asks permission for the user to allow cookies or not.',
-            url: 'js/patterns/cookiedirective.js'
-          },
           { id: 'dropzone',
             title: 'DropZone',
             description: 'File upload with drag and drop support.',
             url: 'js/patterns/dropzone.js'
-          },
-          { id: 'expose',
-            title: 'Expose',
-            description: 'Exposes the focused element by darkening everything else on the page. Useful to focus the user attention on a particular area.',
-            url: 'js/patterns/expose.js'
-          },
-          { id: 'filemanager',
-            title: 'Filemanager',
-            description: 'TODO',
-            url: 'js/patterns/filemanager/pattern.js'
           },
           { id: 'formautofocus',
             title: 'Form Auto Focus',
@@ -82,11 +62,6 @@ require([
             title: 'Form Unload Alert',
             description: 'A pattern to warn user when changes are unsaved and they try to navigate away from page.',
             url: 'js/patterns/formunloadalert.js'
-          },
-          { id: 'livesearch',
-            title: 'Live Search',
-            description: 'Dynamically query the server and display results.',
-            url: 'js/patterns/livesearch.js'
           },
           { id: 'modal',
             title: 'Modal',
