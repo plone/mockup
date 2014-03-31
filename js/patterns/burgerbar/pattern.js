@@ -113,9 +113,9 @@ define([
       if (!this.state.isMobile) {
 
         if (this.state.isExpanded) {
-          wrapperClassName += ' pat-burgerbar-expanded'
+          wrapperClassName += ' pat-burgerbar-expanded';
         } else if (this.state.isHidden) {
-          wrapperClassName += ' pat-burgerbar-hidden'
+          wrapperClassName += ' pat-burgerbar-hidden';
         }
 
         HideButton = button({
