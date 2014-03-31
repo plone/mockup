@@ -16,18 +16,18 @@
   .querystring-criteria-remove {
     float: left;
     display: block;
-
-    width: 20px;
+    
+    width: 80px;
     height: 13px;
     right: 3px;
     top: 4px;
-
+    
     line-height: 13px;
     font-style: italic;
     outline: 0;
     margin: 8px 4px;
     cursor: pointer;
-
+    
     .glyphicon();
     .glyphicon-remove();
   }
@@ -47,36 +47,15 @@
   .querystring-criteria-value {
     float: left;
     margin-right: 0em;
-
+    margin-bottom: 0.3em;
     .querystring-criteria-value-StringWidget {
       width: 200px;
       line-height: 1.5em;
     }
-
     .querystring-criteria-value-RelativeDateWidget {
       width: 50px;
       line-height: 1.5em;
       margin-right: 0.3em !important;
-    }
-
-    .pattern-pickadate-wrapper {
-      margin-bottom: 0;
-    }
-
-    .pattern-pickadate-date-wrapper .picker__input {
-      line-height: 1.5em;
-      width: 100px;
-      margin-bottom: 0;
-    }
-
-    .pattern-pickadate-time-wrapper .picker__input {
-      line-height: 1.5em;
-      width: 100px;
-      margin-bottom: 0;
-    }
-
-    .querystring-criteria-value-UserPickerWidget {
-      font-size: 80%;
     }
 
   }
@@ -84,9 +63,14 @@
     clear: both;
   }
 
+  .pattern-pickadate-date-wrapper .picker__input {
+    line-height: 1.5em;
+    width: 180px;
+  }
+
   .querystring-criteria-betweendt {
     float: left;
-    padding: 4px 8px;
+    padding: 5px 8px;
     display: inline-block;
   }
 
@@ -96,13 +80,6 @@
   }
 }
 
-.querystring-criteria-wrapper:last-child {
-
-  .querystring-criteria-remove:before {
-    content:""
-  }
-
-}
 
 .querystring-preview-wrapper {
 
@@ -129,9 +106,6 @@
 
 }
 
-.querystring-sort-clear {
-  clear:both;
-}
 
 .querystring-sort-wrapper {
 

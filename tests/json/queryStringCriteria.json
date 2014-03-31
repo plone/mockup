@@ -416,7 +416,7 @@
                     "title": "Current logged in user"
                 },
                 "plone.app.querystring.operation.string.is": {
-                    "widget": "UserPickerWidget",
+                    "widget": "StringWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
                     "title": "Is"
@@ -1013,7 +1013,7 @@
                     "title": "Current logged in user"
                 },
                 "plone.app.querystring.operation.string.is": {
-                    "widget": "UserPickerWidget",
+                    "widget": "StringWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
                     "title": "Is"

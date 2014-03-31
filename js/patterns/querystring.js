@@ -63,9 +63,8 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
-  'select2',
-  'mockup-patterns-relateditems'
-], function($, Base, Select2, PickADate, undefined, RelatedItems) {
+  'select2'
+], function($, Base, Select2, PickADate, undefined) {
   'use strict';
 
   var Criteria = function() { this.init.apply(this, arguments); };
@@ -217,6 +216,7 @@ define([
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .patternPickadate({
+                  time: false,
                   date: { format: 'dd/mm/yyyy' }
                 })
                 .change(function() {
@@ -230,6 +230,7 @@ define([
           .addClass(self.options.classValueName + '-' + widget + '-start')
           .appendTo(startwrap)
           .patternPickadate({
+            time: false,
             date: { format: 'dd/mm/yyyy' }
           });
         $wrapper.append(
@@ -243,6 +244,7 @@ define([
                         .addClass(self.options.classValueName + '-' + widget + '-end')
                         .appendTo(endwrap)
                         .patternPickadate({
+                          time: false,
                           date: { format: 'dd/mm/yyyy' }
                         });
         $wrapper.find('.picker__input').change(function() {
@@ -262,17 +264,10 @@ define([
       } else if (widget === 'ReferenceWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + '-' + widget)
-                .addClass('pat-relateditems')
                 .appendTo($wrapper)
                 .change(function() {
                   self.trigger('value-changed');
                 });
-        self.$value.patternRelateditems({
-          width: '250px',
-          vocabularyUrl: '/relateditems-test.json',
-          placeholder: 'Search for an item',
-          maximumSelectionSize: 1
-        });
 
       } else if (widget === 'RelativePathWidget') {
         self.$value = $('<input type="text"/>')
@@ -299,21 +294,6 @@ define([
           });
         }
         self.$value.patternSelect2({ width: '250px' });
-
-      } else if (widget === 'UserPickerWidget') {
-        self.$value = $('<input type="text" />')
-                .addClass(self.options.classValueName + '-' + widget)
-                .addClass('pat-select2')
-                .val(value)
-                .appendTo($wrapper)
-                .change(function() {
-                  self.trigger('value-changed');
-                });
-        self.$value.patternSelect2({
-          width: '250px',
-          vocabularyUrl: 'select2-user-test.json',
-          placeholder: 'Search for a User'
-        });
       }
 
       if (value !== undefined && typeof self.$value !== 'undefined') {
@@ -472,7 +452,6 @@ define([
       classPreviewTitleName: 'querystring-preview-title',
       classPreviewDescriptionName: 'querystring-preview-description',
       classSortWrapperName: 'querystring-sort-wrapper',
-      sortClearName: 'querystring-sort-clear',
       showPreviews: true
     },
     init: function() {
@@ -508,11 +487,6 @@ define([
       var self = this;
       self.$criteriaWrapper = $('<div/>')
         .addClass(self.options.classWrapperName)
-        .appendTo(self.$wrapper);
-
-      // add another clear to separate criteria from sort on
-      self.$criteriaClear = $('<div/>')
-        .addClass(self.options.sortClearName)
         .appendTo(self.$wrapper);
 
       self.$sortWrapper = $('<div/>')

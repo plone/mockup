@@ -48,20 +48,6 @@ define([
     }));
   });
 
-  server.respondWith('GET', /select2-user-test\.json/, function (xhr, id) {
-    var items = [
-      {id: 'ada@example.org', text: 'Ada Smith'},
-      {id: 'lp@plone.org', text: 'Laureen Peters'},
-      {id: 'rok@mockup.io', text: 'Rok Garbas'},
-      {id: 'nvg@mockup.io', text: 'Nathan'},
-      {id: 'david@mockup.io', text: 'David'}
-    ];
-    xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
-      total: items.length,
-      results: items
-    }));
-  });
-
   server.respondWith('GET', /search\.json/, function (xhr, id) {
     var items = [
       {
