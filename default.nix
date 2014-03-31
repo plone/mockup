@@ -29,6 +29,7 @@ in rec {
       grunt-contrib-less
       grunt-contrib-requirejs
       grunt-contrib-uglify
+      grunt-contrib-watch
       grunt-jscs-checker
       grunt-karma
       grunt-sed
@@ -42,6 +43,7 @@ in rec {
       karma-sauce-launcher
       karma-script-launcher
       lcov-result-merger
+      less
       mocha
       requirejs
     ];
