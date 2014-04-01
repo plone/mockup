@@ -160,6 +160,7 @@ define([
         target: null,
         ajaxUrl: null, // string, or function($el, options) that returns a string
         modalFunction: null, // String, function name on self to call
+        formsUseAjax: true,
         isForm: false,
         timeout: 5000,
         displayInModal: true,
@@ -172,8 +173,13 @@ define([
         onTimeout: null,
         redirectOnResponse: false,
         redirectToUrl: function($action, response, options) {
-          var $base = $(/<base.*?(\/>|<\/base>)/im.exec(response)[0]);
-          return $base.attr('href');
+          var href = /<base.*?(\/>|<\/base>)/im.exec(response);
+          if (href !== null){
+            href = $(href[0]).attr('href');
+          } else {
+            href = $('body').data('base-url');
+          }
+          return href;
         }
       },
       routerOptions: {
@@ -248,6 +254,12 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+
+        if (options.formsUseAjax !== true){
+          // EJECT EJECT!!
+          $action.unbind('click').click();
+          return;
+        }
         // We want to trigger the form submit event but NOT use the default
         $form.on('submit', function(e) {
           e.preventDefault();
@@ -434,7 +446,7 @@ define([
             .appendTo($('.pattern-modal-buttons', self.$modal))
             .off('click').on('click', function(e) {
               e.stopPropagation();
-              e.preventDefault();
+              //e.preventDefault();
               $button.trigger('click');
             });
           $button.hide();
