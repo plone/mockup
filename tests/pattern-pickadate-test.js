@@ -1,9 +1,11 @@
 define([
   'expect',
   'jquery',
+  'sinon',
   'mockup-registry',
-  'mockup-patterns-pickadate'
-], function(expect, $, registry, PickADate) {
+  'mockup-patterns-pickadate',
+  'mockup-patterns-select2'
+], function(expect, $, sinon, registry, PickADate, Select2) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -17,6 +19,10 @@ define([
 
     beforeEach(function() {
       this.$el = $('<div><input class="pat-pickadate" /></div>');
+    });
+
+    afterEach(function() {
+      $('body').empty();
     });
 
     it('date and time element', function() {
@@ -121,7 +127,7 @@ define([
       expect($('.pattern-pickadate-separator', self.$el).text()).to.be.equal('===');
     });
 
-    it('date and time picker except custom setttings', function() {
+    it('date and time picker except custom settings', function() {
       var self = this;
 
       // custom settings for date and time widget
@@ -338,6 +344,115 @@ define([
       expect($('.pattern-pickadate-time', self.$el).parent().find('.picker__list-item--selected').attr('data-pick')).to.be.equal('0');
 
     });
+
+    describe('PickADate with timezone', function() {
+      it('has date, time and timezone', function() {
+        var self = this,
+            $input = $('.pat-pickadate', self.$el)
+              .attr('data-pat-pickadate', '{"timezone": {"data": [' +
+                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
+                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
+                                          ']}}'
+              );
+        self.$el.appendTo('body');
+        registry.scan($input);
+
+        // date and time should exist by default
+        var $timeWrapper = $('.pattern-pickadate-time-wrapper', self.$el),
+            $dateWrapper = $('.pattern-pickadate-date-wrapper', self.$el);
+        expect($timeWrapper.size()).to.equal(1);
+        expect($dateWrapper.size()).to.equal(1);
+
+        // timezone elements should not be available
+        var $results = $('li.select2-result-selectable');
+        expect($results.size()).to.equal(0);
+
+        var $pattern = $('input.pattern-pickadate-timezone.select2-offscreen');
+        $pattern.on('select2-open', function() {
+          // timezone elements should be available
+          $results = $('li.select2-result-selectable');
+          expect($results.size()).to.equal(2);
+        });
+        $('a.select2-choice').trigger('mousedown');
+
+        // value of main element should be empty
+        expect($('.pat-pickadate').val()).to.equal('');
+
+        // after changing timezone the value should still be empty
+        $pattern.select2('val', 'Europe/Berlin', { triggerChange: true });
+        expect($pattern.val()).to.equal('Europe/Berlin');
+        expect($input.val()).to.equal('');
+
+        // set date and time and check if value of main element gets timezone
+        $('.pattern-pickadate-date', self.$el).click();
+        var $selectedDate = $dateWrapper.find('td > div').first().click();
+        expect($input.val()).to.equal('');
+        $('.pattern-pickadate-time', self.$el).click();
+        var $selectedTime = $timeWrapper.find('li').first().next().click();
+        expect($input.val()).to.equal($('input:last', $dateWrapper).val() + ' ' + $('input:last', $timeWrapper).val() + ' ' + 'Europe/Berlin');
+
+        // change timezone to second value and check if value of main element changes
+        $pattern.select2('val', 'Europe/Vienna', { triggerChange: true });
+        expect($pattern.val()).to.equal('Europe/Vienna');
+        expect($input.val()).to.equal($('input:last', $dateWrapper).val() + ' ' + $('input:last', $timeWrapper).val() + ' ' + 'Europe/Vienna');
+      });
+
+      it('should take the default timezone when it is set', function() {
+        var self = this,
+            $input = $('.pat-pickadate', self.$el)
+              .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Vienna", "data": [' +
+                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
+                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
+                                          ']}}'
+              );
+        self.$el.appendTo('body');
+        registry.scan($input);
+
+        // check if data values are set to default
+        expect($('.pattern-pickadate-timezone .select2-chosen').text()).to.equal('Europe/Vienna');
+        expect($('input.pattern-pickadate-timezone.select2-offscreen').attr('data-value')).to.equal('Europe/Vienna');
+
+      });
+
+      it('should only set the default value when it exists in the list', function() {
+        var self = this,
+            $input = $('.pat-pickadate', self.$el)
+              .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Madrid", "data": [' +
+                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
+                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
+                                          ']}}'
+              );
+        self.$el.appendTo('body');
+        registry.scan($input);
+
+        // check if visible and data value are set to default
+        expect($('.pattern-pickadate-timezone .select2-chosen').text()).to.equal('Enter timezone...');
+        expect($('input.pattern-pickadate-timezone.select2-offscreen').attr('data-value')).to.equal(undefined);
+
+      });
+
+      it('should write to default and disable the dropdown field if only one value exists', function() {
+        var self = this,
+            $input = $('.pat-pickadate', self.$el)
+              .attr('data-pat-pickadate', '{"timezone": {"data": [' +
+                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"}' +
+                                          ']}}'
+              );
+        self.$el.appendTo('body');
+        registry.scan($input);
+
+        var $time = $('.pattern-pickadate-timezone');
+
+        // check if data values are set to default
+        expect($('.select2-chosen', $time).text()).to.equal('Europe/Berlin');
+        expect($('input.pattern-pickadate-timezone.select2-offscreen').attr('data-value')).to.equal('Europe/Berlin');
+
+        expect($('.pattern-pickadate-timezone').data('select2')._enabled).to.equal(false);
+        expect($('.select2-container-disabled').size()).to.equal(1);
+      });
+
+    });
+
   });
 
 });

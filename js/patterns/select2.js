@@ -226,7 +226,7 @@ define([
 
       if (self.options.ajax || self.options.vocabularyUrl) {
         if (self.options.vocabularyUrl) {
-          self.options.multiple = true;
+          self.options.multiple = self.options.multiple === undefined ? true : self.options.multiple;
           self.options.ajax = self.options.ajax || {};
           self.options.ajax.url = self.options.vocabularyUrl;
           // XXX removing the following function does'nt break tests. dead code?
