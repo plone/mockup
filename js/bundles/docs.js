@@ -48,11 +48,6 @@ require([
             description: 'TODO',
             url: 'js/patterns/backdrop.js'
           },
-          { id: 'burgerbar',
-            title: 'BurgerBar',
-            description: 'TODO',
-            url: 'js/patterns/burgerbar/pattern.js'
-          },
           { id: 'dropzone',
             title: 'DropZone',
             description: 'File upload with drag and drop support.',
@@ -127,6 +122,11 @@ require([
             title: 'Toggle',
             description: 'Toggles any attribute value after some event is fired.',
             url: './js/patterns/toggle.js'
+          },
+          { id: 'toolbar',
+            title: 'Toolbar',
+            description: 'Responsive toolbar',
+            url: 'js/patterns/toolbar/pattern.js'
           },
           { id: 'tooltip',
             title: 'Tooltip',

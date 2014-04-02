@@ -1,0 +1,1 @@
+]; postBuild = " for p in $paths; do p_fullname=\${p:44}; p_array=(`echo $p_fullname | tr '-' ' '`); p_version=\${p_array[@]:(-1)}; p_name=\${p_fullname:0:$((\${#p_version}*-1-1))}; ln -s $p/packages/*/$p_version $out/$p_name; done";}

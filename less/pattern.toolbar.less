@@ -1,0 +1,20 @@
+@import "mixins.less";
+@import (reference) "../bower_components/bootstrap/less/bootstrap.less";
+@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
+
+.pat-toolbar {
+
+  .toolbar-wrapper {
+    background: rgba(35,35,35,0.9);
+  }
+
+  .toolbar-burger {
+    .plone-logo {
+      background-color: transparent;
+      .plone-logo-circle { background: rgba(35,35,35,1); }
+      .plone-logo-innerCircle { background: rgba(255,255,255,1); }
+      .plone-logo-innerCircle > span { background: rgba(35,35,35,1); }
+    }
+  }
+
+}

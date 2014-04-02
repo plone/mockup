@@ -44,6 +44,10 @@ bootstrap: clean bootstrap-common
 	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
 
 bootstrap-nix: clean bootstrap-common
+	sed -i 's@self.by-version."fsevents"."0.2.0"$$@@' package.nix
+	sed -i 's@url = "git://github.com/michaelficarra/cscodegen.git";$$@url = "git://github.com/michaelficarra/cscodegen.git";fetchSubmodules = false;@' package.nix
+	head -n -1 bower.nix > temp.nix; mv temp.nix bower.nix
+	cat bower_end.nix >> bower.nix
 	nix-build default.nix -A build -o nixenv
 	ln -s nixenv/lib/node_modules/mockup/node_modules
 	ln -s nixenv/bower_components

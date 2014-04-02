@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mockup</title>
+
+  <link rel="stylesheet" href="toolbar.css" type="text/css" >
+  <script src="node_modules/requirejs/require.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    window.DEBUG = true;
+    require([
+      'mockup-registry',
+      'mockup-patterns-toolbar'
+    ], function(registry) {
+      registry.scan(document);
+    });
+  </script>
+</head>
+
+<body>
+    <div class="pat-toolbar">
+      <div class="toolabar-wrapper" style="display: none">
+        <div class="toolbar-burger"></div>
+        <div class="toolbar-container">
+          <div>
+            <div class="toolbar-logo">
+              Plone
+            </div>
+            <div class="toolbar-container">
+              <ul>
+                <li id="toolbar-icon-folderContents">
+                  <a href="folder_contents">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">Contents</span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-view">
+                  <a href="folder_contents">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">View</span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-edit">
+                  <a href="edit">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">Edit</span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-local_roles">
+                  <a href="@@sharing">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">Sharing</span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-workflow">
+                  <a href="content_status_history">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">
+                      State:
+                      <span class="state-published">Published</span>
+                    </span>
+                    <span class="toolbar-caret"></span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-factories">
+                  <a href="folder_factories">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">Add new...</span>
+                    <span class="toolbar-caret"></span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-moreoptions">
+                  <a href="#">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">More options</span>
+                    <span class="toolbar-caret"></span>
+                  </a>
+                </li>
+                <li id="toolbar-icon-personaltools">
+                  <a href="#">
+                    <span class="toolbar-icon"></span>
+                    <span class="toolbar-text">admin</span>
+                    <span class="toolbar-caret"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
+
