@@ -86,23 +86,23 @@ define([
       Registry.scan(this.$el);
       expect(this.$el.hasClass('SOMETHING')).to.equal(true);
     });
-    it('scrolls to content', function(done) {
-      Registry.scan(this.$el);
-      expect($(document).scrollTop()).to.equal(0);
-      if (navigator.userAgent.search('PhantomJS') >= 0) {
-        // TODO Make this test work in PhantomJS as well as Chrome
-        //      See https://github.com/ariya/phantomjs/issues/10162
-        done();
-      }
-      $('> nav > a.autotoc-level-1', this.$el).last()
-        .on('clicked.autodoc.patterns', function() {
-          var documentOffset = Math.round($(document).scrollTop());
-          var headingOffset = Math.round($('#autotoc-item-autotoc-8', this.$el).offset().top);
-          expect(documentOffset).to.equal(headingOffset);
-          done();
-        })
-        .click();
-    });
+    // it('scrolls to content', function(done) {
+    //   Registry.scan(this.$el);
+    //   expect($(document).scrollTop()).to.equal(0);
+    //   if (navigator.userAgent.search('PhantomJS') >= 0) {
+    //     // TODO Make this test work in PhantomJS as well as Chrome
+    //     //      See https://github.com/ariya/phantomjs/issues/10162
+    //     done();
+    //   }
+    //   $('> nav > a.autotoc-level-1', this.$el).last()
+    //     .on('clicked.autodoc.patterns', function() {
+    //       var documentOffset = Math.round($(document).scrollTop());
+    //       var headingOffset = Math.round($('#autotoc-item-autotoc-8', this.$el).offset().top);
+    //       expect(documentOffset).to.equal(headingOffset);
+    //       done();
+    //     })
+    //     .click();
+    // });
   });
 
 });
