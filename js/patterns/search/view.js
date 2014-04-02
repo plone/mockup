@@ -15,7 +15,7 @@ define([
     propTypes: {
       isLive: React.PropTypes.bool,
       ajaxSearch: React.PropTypes.any.isRequired,
-      labelSearch: React.PropTypes.string
+      i18n: React.PropTypes.object
     },
 
     getInitialState: function() {
@@ -30,11 +30,16 @@ define([
           className: 'search-wrapper',
         }, [
             SearchInput({
+              key: 'input',
               isLive: this.props.isLive,
               ajaxSearch: this.props.ajaxSearch,
-              labelSearch: this.props.labelSearch
+              i18n: this.props.i18n
             }),
-              SearchResults({results: this.state.results})
+              SearchResults({
+                key: 'results',
+                results: this.state.results,
+                i18n: this.props.i18n
+              })
            ]
          )
       );

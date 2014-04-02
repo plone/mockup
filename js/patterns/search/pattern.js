@@ -40,7 +40,18 @@
     name: 'search',
     defaults: {
       isLive: false,
-      labelSearch: 'Search'
+      querystring: {},
+      sorts: [],
+      i18n: {
+        'button': 'Search',
+        'results': 'Search Results',
+        'matching': 'items matching your search terms.',
+        'filter': 'Filter the results.',
+        'sortby': 'Sort by',
+        'relevance': 'Relevance',
+        'newest': 'date (newest first)',
+        'alphabetically': 'alphabetically'
+      }
     },
 
     init: function() {
@@ -51,7 +62,7 @@
       self.view = SearchView({
         isLive: this.options.isLive,
         ajaxSearch: this.getAjaxSearch(),
-        labelSearch: this.options.labelSearch
+        i18n: this.options.i18n
       });
 
       React.renderComponent(self.view, self.$el[0]);

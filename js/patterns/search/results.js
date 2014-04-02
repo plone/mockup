@@ -1,7 +1,6 @@
 define([
-  'react',
-  'js/patterns/search/result'
-], function(React, SearchResult) {
+  'react'
+], function(React) {
   "use strict";
 
   var D = React.DOM,
@@ -12,23 +11,21 @@ define([
     displayName: 'SearchResults',
 
     propTypes: {
-      results: React.PropTypes.arrayOf(React.PropTypes.object)
-    },
-
-    getDefaultProps: function() {
-      return {
-        key: 'results'
-      };
+      results: React.PropTypes.arrayOf(React.PropTypes.object),
+      i18n: React.PropTypes.object
     },
 
     render: function() {
       var self = this;
       return (
-        D.div({
+        D.ul({
           className: 'search-results',
         }, this.props.results.map(function(item) {
-          item.key = self.props.results.indexOf(item);
-          return SearchResult(item);
+          return D.li({
+            key: self.props.results.indexOf(item),
+            className: 'search-result',
+            dangerouslySetInnerHTML: { __html: this.props.html }
+          });
         }))
       );
     }
