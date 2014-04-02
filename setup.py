@@ -20,7 +20,6 @@ setup(
     license='GPL',
     packages=find_packages(),
     include_package_data=True,
-    package_dir={'': 'plone'},
     zip_safe=False,
     install_requires=[],
     entry_points={
