@@ -168,7 +168,7 @@ Inside the root "mockup" directory create a simple HTML file called *hello.html*
 &lt;html&gt;
   &lt;head&gt;
     &lt;title&gt;Hello World Pattern&lt;/title&gt;
-    &lt;script type="text/javascript" src="build/widgets.min.js"&gt;&lt;/script&gt;
+    &lt;script src="build/widgets.min.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
 
   &lt;body&gt;
@@ -527,6 +527,7 @@ It bundles all the patterns and their dependencies into a single JavaScript file
 After a successful build all you have to do is copy this file to wherever you need it and link to it in your HTML pages -
 just like we did in *hello.html* earlier.
 
+
 ### Using Buildout
 
 [Buildout](http://www.buildout.org) is a Python based build system.
@@ -562,6 +563,146 @@ cmds =
 &hellip;
 [sources]
 mockup = git https://github.com/plone/mockup
+</pre>
+
+
+## Development Tips
+
+### Use the Unbundled Code
+
+It's not much fun to run `make bundle-widgets` every time we want to update our code.
+It also makes it difficult to debug, since it has been minified.
+Let's set up our html page to use the source instead of the bundle.
+We need to include require.js and our js/config.js and then we need to scan the page to initialized mockup patterns.
+
+**hello.html:**
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Hello World Pattern&lt;/title&gt;
+    &lt;script src="node_modules/requirejs/require.js"&gt;&lt;/script&gt;
+    &lt;script src="js/config.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+       require(['jquery', 'mockup-registry','mockup-patterns-helloworld'],
+         function($, registry) {
+           $(document).ready(function (){
+             registry.scan($('body'));
+           });
+       });
+     &lt;/script&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+    &lt;label class="pat-helloworld"&gt;(no greeting yet)&lt;/label&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+## HowTo: Convert a jQuery Plugin to a Pattern
+
+jQuery plugins can easily be used as Mockup Patterns.
+Let's convert a jQuery plugin called [Foggy](http://nbartlomiej.github.io/foggy) to a pattern.
+`Foggy` makes elements blurry and has support for older browsers.
+
+### Get it and Put it into the lib/ Folder
+<pre>
+$ wget https://raw.github.com/nbartlomiej/foggy/foggy-1.1.1/jquery.foggy.min.js
+$ mv jquery.foggy.min.js lib/
+</pre>
+
+### Create a Wrapper Pattern
+**js/patterns/foggy.js:**
+
+    define([
+      'jquery',
+      'mockup-patterns-base',
+      'jquery.foggy'
+    ], function ($, Base) {
+      'use strict';
+    
+      var Foggy = Base.extend({
+        name: 'foggy',
+        init: function () {
+          this.$el.foggy();
+        }
+      });
+    
+      return Foggy;
+    });
+
+
+### Register the Pattern and the jQuery Plugin
+
+Note, we need to map the jquery.foggy Pattern name to the path and we also need to add it to the `shim` section so `RequireJS` can find it.
+
+**js/config.js:**
+<pre>
+    &hellip;
+      var requirejsOptions = {
+        baseUrl: './',
+        paths: {
+          &hellip;
+          'mockup-patterns-foggy': 'js/patterns/foggy',
+          'jquery.foggy': 'lib/jquery.foggy.min'
+      },
+      shim: {
+          &hellip;
+          'jquery.foggy': { },
+          &hellip;
+      },
+    &hellip;
+</pre>
+
+### Use it!
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Foggy Pattern&lt;/title&gt;
+    &lt;script src="node_modules/requirejs/require.js"&gt;&lt;/script&gt;
+    &lt;script src="js/config.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+       require(['jquery', 'mockup-registry','mockup-patterns-foggy'],
+         function($, registry) {
+           $(document).ready(function (){
+             registry.scan($('body'));
+           });
+       });
+     &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div class="pat-foggy"&gt;
+      &lt;img src="http://fc05.deviantart.net/fs70/i/2013/321/4/e/doge_powerpoint_by_buraiyen4880-d6ukedg.jpg"/&gt;
+      so fog
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+### Add Configuration Options
+
+`Foggy` lets you set the blur radius in pixels,
+so we can add support for that to the Pattern.
+
+**js/patterns/foggy.js:**
+
+    var Foggy = Base.extend({
+      name: 'foggy',
+      defaults: {blurradius: "20"},
+      init: function () {
+        this.$el.foggy({blurRadius: this.options.blurradius});
+      }
+    });
+
+
+**foggy.html:**
+
+<pre>
+  &lt;div class="pat-foggy"&gt;
+    &lt;img data-pat-foggy-blurradius="100"
+         src="http://fc05.deviantart.net/fs70/i/2013/321/4/e/doge_powerpoint_by_buraiyen4880-d6ukedg.jpg"/&gt;
+  &lt;/div&gt;
 </pre>
 
 
