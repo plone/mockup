@@ -93,6 +93,11 @@ require([
             description: 'An advanced widget for selecting related items.',
             url: 'js/patterns/relateditems.js'
           },
+          { id: 'search',
+            title: 'Search',
+            description: 'Live and full search pattern.',
+            url: 'js/patterns/search/pattern.js'
+          },
           { id: 'select2',
             title: 'Select2',
             description: 'Autocompletes, multiple or single selections from any kind of data source (with search!).',
