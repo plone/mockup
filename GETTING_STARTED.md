@@ -1,134 +1,105 @@
-# Quick-start
+# Before We Begin
 
-Install Git.
+To build and hack on Mockup you will need recent versions of git, node, npm and make.
 
-Install Node (v0.10.20) / NPM.:
+Right now development of this project is being done primarily on Linux and OS X,
+so setting up the tooling on MS Windows might be an adventure for you to explore --
+though, all of the tools used have equivalent versions for that platform,
+so with a little effort, it should work!
 
-    $ git clone git://github.com/plone/mockup.git
+# Clone and Bootstrap
+
+    $ git clone https://github.com/plone/mockup.git
     $ cd mockup
     $ make bootstrap
 
-And your environment is ready to start working on testable, modular,
-JavaScript!
+Now you have the complete source code for all Patterns from Mockup.
+From here on you generate bundles of common functionality and minify them.
 
-# Slower-start
+You're ready to start working on testable,
+modular and beautiful JavaScript!
 
-## Step 1: Get the tools
+To see it in action, you must compile everything once, with
 
-Download and install the latest versions of [git](http://git-scm.org "git") and
-[Node/NPM](http://www.nodejs.org/ "node and npm").
+    $ make docs
 
-Also make certain your system supports the `make` command.  Right now
-development of this project is being done primarily on Linux and OS X, so
-setting up the tooling on MS Windows might be an adventure for you to
-explore -- though, all of the tools used have equivalent versions for that
-platform, so with a little effort, it should work!
+and then you open index.html with your browser!
 
+# Get hacking!
 
-## Step 2: Checkout the Mockup project from GitHub
+## Mockup Project Structure
 
-This will give you a starting point, and a lot of example code. It's used to
-build *bundles* which are then added to various Plone products.  You do
-not need to develop code for the existing Plone products when you use the
-Mockup project.:
-
-    git clone git://github.com/plone/mockup.git
-
-## Step 3: Bootstrap the environment
-
-Run the following commands::
-
-    cd mockup
-    make bootstrap
-
-This will use Node/NPM to download and install all the requirements for
-building and bundling, as well as all the external libraries needed to build
-the patterns developed within the framework of the mockup project.
-
-## Step 4: Get hacking!
-
-### Mockup Project Structure
-
- * `build/` : All combined, optimized, and minimized JavaScript code, as well
-   as compiled less and media are copied and placed here
+ * `build/` : Contains all combined, optimized, and minimized JavaScript code,
+   as well as compiled CSS (Less) and media files
 
  * `docs/` : Documentation files built with `make docs`
 
- * `js/` : This directory contains all of the modularized JavaScript code
+ * `js/` : Contains all of the modularized JavaScript code
 
-    * `js/config.js` : This file contains the RequireJS configuration
+    * `js/config.js` : Contains the RequireJS configuration
 
-    * `js/bundles` : This is where a bundle is defined -- it is a set of
-      requirements and code that provide the features being packaged into
-      a Plone product
+    * `js/bundles` : This is where a bundle is defined --
+      a bundle is a set of requirements,
+      code that specify the features being packaged and bootstraps your page.
 
-    * `js/patterns` : This is a directory that contains all individual,
-      encapsulated patterns (i.e. widgets/JavaScript)
+    * `js/patterns` : Contains all individual, encapsulated patterns
+      e.g. widgets.js
 
- * `less/` : This directory contains all the [less](http://lesscss.org/) code
-   for all the patterns and bundles
+ * `less/` : Contains all the [Less](http://lesscss.org/) code for all the patterns and bundles
 
- * `lib/` : This directory contains external libraries not necessarily found in
-   the bower repositories
+ * `lib/` : Contains external libraries not necessarily found in the bower repositories
 
- * `tests/` : This directory contains all tests for patterns and bundles,
-   including general setup and configuration code
+ * `tests/` : Contains all tests for patterns and bundles, including general setup and configuration code
 
- * `Gruntfile.js` : This file contains the directives for compiling less, and
-   combining/optimizing/minimizing JavaScript for the defined bundles
+ * `Gruntfile.js` : Defines the directives for compiling Less,
+   and for combining/optimizing/minimizing JavaScript to the defined bundles
 
- * `index.html` : This is the main source of documentation for the mockup
-   project.
+ * `index.html` : The main source of documentation for the mockup project
 
- * `Makefile` :  This is the Makefile used to define what tasks should run when
-   you want to build a bundle, or bootstrap the environment
+ * `Makefile` : Scripts to build bundles, bootstrap the environment etc.
 
-### What's a Pattern? What Are Bundles? How do they relate?
 
-`Patterns` are units of JavaScript, defined by a RequireJS/AMD style module.
-Patterns may require other patterns to operate, and may require third party
-libraries. Think of patterns as a module -- encapsulated and separate, and
-providing a widget or tool to use by other patterns or in html.
+## What's a Pattern? What Are Bundles? How do they relate?
 
-`Bundles` are defined similar to <em>Patterns</em> -- they are encapsulated
-bits of JavaScript that define requirements for a bundle, and have some extra
-code in them that's useful for integrating the required patterns into Plone
-products.
+`Patterns` are units of JavaScript,
+defined by a RequireJS/AMD style module.
+Patterns may require other patterns to operate,
+and may also require third party libraries.
+Think of a pattern as a module -- encapsulated and separate,
+and providing a widget or tool to be used by other patterns or in html.
 
-So, the end result is that a front-end developer might spend their time
-creating patterns, while a Plone developer might create a bundle and integrate
-it into a Plone product.
+`Bundles` are defined in a similar way to *Patterns* --
+they are encapsulated bits of JavaScript that define requirements for a bundle and have some extra code in them that's useful for integrating the required patterns into Plone products.
 
-For more information how to create patterns please read [Hello
-world](#hello-world) example.
+Have a look at the [HelloWorld](#learn) example to see how to create your own Pattern and then how to bundle, test, build and use it.
 
-## Step 5: Bundling
+# Bundling
 
-To build bundles::
+To build all bundles:
 
-    make bundle
+    make bundles
 
-## Step 6: Testing
+To build one bundle:
 
-You can run tests with::
+    make bundle-widgets
+
+# Testing
+
+You can run tests with:
 
     make test
 
-This will start a continuous process that will rerun the tests when you change
-any of the js files.
+This will start a process which runs the tests when you change any of the js files.
 
-If you want to run tests on once and then quick::
+If you just want to run tests just once you can use:
 
     make test-once
 
-If you have Chrome installed you can alternatively run your tests with::
+For debugging, or testing in a chrome browser use the following and open [localhost:9876](localhost:9876)
 
     make test-dev
 
-Running tests in Chrome is useful when you want to debug them.
-
-If you want to just run the tests for the pattern you are working on you can
-run tests with::
+If you want to just run the tests for a particular pattern you can use:
 
     make test pattern=foobar
 

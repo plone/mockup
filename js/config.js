@@ -19,7 +19,7 @@
       'bootstrap-tooltip': 'bower_components/bootstrap/js/tooltip',
       'bootstrap-transition': 'bower_components/bootstrap/js/transition',
       'docs-getting-started': 'GETTING_STARTED.md',
-      'docs-tutorial': 'TUTORIAL.md',
+      'docs-learn': 'LEARN.md',
       'docs-contribute': 'CONTRIBUTE.md',
       'domready': 'bower_components/domready/ready',
       'dropzone': 'bower_components/dropzone/downloads/dropzone-amd-module',
