@@ -55,7 +55,7 @@
       'mockup-patterns-moment': 'js/patterns/moment',
       'mockup-patterns-pickadate': 'js/patterns/pickadate',
       'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
-      'mockup-patterns-querystring': 'js/patterns/querystring',
+      'mockup-patterns-querystring': 'js/patterns/querystring/pattern',
       'mockup-patterns-relateditems': 'js/patterns/relateditems',
       'mockup-patterns-search': 'js/patterns/search/pattern',
       'mockup-patterns-select2': 'js/patterns/select2',

@@ -86,7 +86,7 @@ require([
           { id: 'querystring',
             title: 'Querystring',
             description: 'A widget for creating queries for collections.',
-            url: 'js/patterns/querystring.js'
+            url: 'js/patterns/querystring/pattern.js'
           },
           { id: 'relateditems',
             title: 'Related Items',
