@@ -71,15 +71,15 @@
 .pat-toolbar .toolbar-wrapper {
   background: rgba(35, 35, 35, 0.9);
 }
-.pat-toolbar .toolbar-burger .plone-logo {
+.pat-toolbar .toolbar-logo .plone-logo {
   background-color: transparent;
 }
-.pat-toolbar .toolbar-burger .plone-logo .plone-logo-circle {
+.pat-toolbar .toolbar-logo .plone-logo .plone-logo-circle {
   background: #232323;
 }
-.pat-toolbar .toolbar-burger .plone-logo .plone-logo-innerCircle {
+.pat-toolbar .toolbar-logo .plone-logo .plone-logo-innerCircle {
   background: #ffffff;
 }
-.pat-toolbar .toolbar-burger .plone-logo .plone-logo-innerCircle > span {
+.pat-toolbar .toolbar-logo .plone-logo .plone-logo-innerCircle > span {
   background: #232323;
 }

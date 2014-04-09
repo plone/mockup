@@ -24,13 +24,15 @@ define([
     render: function() {
       return (
         d.div({
-          className: 'toolbar-container',
+          className: 'toolbar-menu',
           style: {
             background: 'red',
-            bottom: '0px',
-            left: (this.props.size * -1 + this.props.scrollPosition) + 'px',
             position: 'absolute',
+            //left: ((-1 * this.props.size) + this.props.scrollPosition) + 'px',
+            '-webkit-transform': 'translate3d(' + this.props.scrollPosition + 'px, 0px, 0px)',
+            left: (-1 * this.props.size) + 'px',
             top: '0px',
+            bottom: '0px',
             width: this.props.size + 'px'
           }
         },

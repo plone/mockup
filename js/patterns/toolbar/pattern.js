@@ -111,7 +111,7 @@ define([
   var Toolbar = Base.extend({
     name: 'toolbar',
     defaults: {
-      sizeMobileRatio: 0.87,
+      sizeMobileRatio: 0.8,
       sizeDesktopClosed: 50,
       sizeDesktopOpen: 200,
       mobileWidth: 450, // width of device where we switch to mobile/desktop
@@ -143,6 +143,72 @@ define([
       }
     },
 
+    // inspired by:
+    //  - https://gist.github.com/lorenzopolidori/3794226 and
+    //  - https://gist.github.com/jgonera/5250507
+    detect3DTransform: function() {
+      var $el1 = $('<div>'),
+          $el2 = $('<div>'),
+          $iframe = $('<iframe>'),
+          BreakException = {},
+          detectedTransform = false,
+          detected3DTranslate = false,
+          detected3DRotate = false,
+          transforms = {
+            'webkitTransform': '-webkit-transform',
+            'MozTransform': '-moz-transform',
+            'OTransform': '-o-transform',
+            'msTransform': '-ms-transform',
+            'transform': 'transform'
+          };
+
+ 
+      // Add it to the body to get the computed style
+      // Sandbox it inside an iframe to avoid Android Browser quirks
+	    $iframe.appendTo('body').contents().find('body').append($el1).append($el2);
+ 
+      try {
+        [ 'transform',
+          'webkitTransform',
+          'MozTransform',
+          'OTransform',
+          'msTransform'
+        ].forEach(function(transform) {
+          if ($el1[0].style[transform] !== undefined) {
+            detectedTransform = transforms[transform];
+
+            // 3D translate
+            $el1[0].style[transform] = 'translate3d(1px,1px,1px)';
+            if (window.getComputedStyle($el1[0]).getPropertyValue(transforms[transform])) {
+              detected3DTranslate = true;
+            }
+
+            // 3D rotate
+            $el2[0].style[transform] = 'rotate3d(1px,1px,1px,1deg)';
+            if (window.getComputedStyle($el2[0]).getPropertyValue(transforms[transform])) {
+              detected3DRotate = true;
+            }
+
+            if (detected3DRotate && detected3DTranslate) {
+              throw BreakException;
+            }
+          }
+        });
+      } catch(e) {
+        if (e !== BreakException) {
+          throw e;
+        }
+      }
+ 
+	    $iframe.remove();
+ 
+      return {
+        'transform': detectedTransform,
+        '3DTranslate': detected3DTranslate,
+        '3DRotate': detected3DRotate
+      };
+    },
+
     init: function() {
       var self = this,
           isMobile = self.isMobile();
@@ -150,25 +216,22 @@ define([
       React.initializeTouchEvents(true);
 
       self.view = ToolbarView({
-        burgerSize: self.getBurgerSize(isMobile),
-        isMobile: isMobile,
         position: self.options.position,
-        size: self.getToolbarSize(isMobile)
+        size: $(window).width() * this.options.sizeMobileRatio,
+        '3DTransform': self.detect3DTransform()
       });
-      console.log('view created')
 
-      $(window).on('resize', function() {
-        var isMobile = self.isMobile();
-        debugger;
-        self.view.setState({
-          isMobile: isMobile,
-          burgerSize: self.getBurgerSize.apply(self, [ isMobile, self.view.state.isClosed ]),
-          size: self.getToolbarSize.apply(self, [ isMobile ])
-        });
-      });
+      // TODO: should work when switching from landscape to portrait
+      //$(window).on('resize', function() {
+      //  var isMobile = self.isMobile();
+      //  self.view.setState({
+      //    isMobile: isMobile,
+      //    burgerSize: self.getBurgerSize.apply(self, [ isMobile, self.view.state.isClosed ]),
+      //    size: self.getToolbarSize.apply(self, [ isMobile ])
+      //  });
+      //});
 
       React.renderComponent(self.view, self.$el[0]);
-      console.log('view rendered')
     }
   });
 

@@ -4,9 +4,10 @@
  */
 
 define([
+  'underscore',
   'react',
-  'js/utils/styles'
-], function(React, styles) {
+  'js/components/styles'
+], function(_, React, styles, undefined) {
 
   var d = React.DOM,
       ratio = 0.797,
@@ -15,7 +16,7 @@ define([
   PloneLogo = React.createClass({
 
     propTypes: {
-      margin: React.PropTypes.number,
+      style: React.PropTypes.object,
       size: React.PropTypes.number,
       svg: React.PropTypes.object,
       svgpath: React.PropTypes.string
@@ -23,7 +24,7 @@ define([
 
     getDefaultProps: function() {
       return {
-        margin: 0,
+        style: {},
         size: 100,
         svg: {
           'xmlns': 'http://www.w3.org/2000/svg',
@@ -57,14 +58,14 @@ define([
 
     render: function() {
       var logoStyles = {
-            wrapper: {
+            wrapper: _.extend({
               background: this.props.backgroundColor,
               position: 'relative',
               fontSize: ratio * this.props.size,
               lineHeight: this.props.size,
-            },
+            }, this.props.style),
             circle: {
-              margin: this.props.margin,
+              margin: this.props.size * 0.02,
               float: 'left',
               display: 'block',
               position: 'relative',
