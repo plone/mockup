@@ -1,7 +1,7 @@
 define([
   'react'
 ], function(React, undefined) {
-  "use strict";
+  'use strict';
 
   var Touchable = React.createClass({
 

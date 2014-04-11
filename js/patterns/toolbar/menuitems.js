@@ -1,9 +1,11 @@
 define([
-  'react'
-], function(React, undefined) {
-  "use strict";
+  'jquery',
+  'react',
+  'scoller'
+], function($, React, Scoller, undefined) {
+  'use strict';
 
-  var ToolbarMenuItems = React.createClass({
+  var toolbarMenuItems = React.createClass({
 
     displayName: 'ToolbarMenuItems',
 
@@ -26,7 +28,7 @@ define([
         level: 0,
         menuStyle: {},
         selected: []
-      }
+      };
     },
 
     handleMenuItemTap: function(e) {
@@ -42,7 +44,7 @@ define([
         this.props.menu.setState({ selected: selected });
 
       } else if (this.props.level !== 0 && index === 0) {
-        selected.pop()
+        selected.pop();
         this.props.menu.setState({ selected: selected });
 
       } else {
@@ -76,7 +78,7 @@ define([
         }
       } else {
         menuStyle.left = this.props.size;
-      } 
+      }
 
       return (
         React.DOM.ul({
@@ -95,26 +97,31 @@ define([
                 onTouchTap: self.handleMenuItemTap
               }, [
                 React.DOM.span({ key: 'icon', className: 'toolbar-icon' }),
-                React.DOM.span({ key: 'text', className: 'toolbar-text',
-                        dangerouslySetInnerHTML: { __html: item.html } })
+                React.DOM.span({
+                  key: 'text',
+                  className: 'toolbar-text',
+                  dangerouslySetInnerHTML: { __html: item.html }
+                })
               ].concat(item.items.length > 0 ? [React.DOM.span({ key: 'caret', className: 'toolbar-caret' })] : []))
-            ].concat(item.items.length > 0 ? ToolbarMenuItems(
-              { key: 'menu',
-                index: i,
-                items: [{ id: 'toolbar-back-button',
-                          html: self.props.backLabel }].concat(item.items),
-                level: self.props.level + 1,
-                selected: selected,
-                menu: self.props.menu,
-                size: self.props.size
-              }) : [])
-          )
+            ].concat(item.items.length > 0 ? toolbarMenuItems({
+              key: 'menu',
+              index: i,
+              items: [{
+                id: 'toolbar-back-button',
+                html: self.props.backLabel
+              }].concat(item.items),
+              level: self.props.level + 1,
+              selected: selected,
+              menu: self.props.menu,
+              size: self.props.size
+            }) : [])
+          );
         }))
       );
     }
 
   });
 
-  return ToolbarMenuItems;
+  return toolbarMenuItems;
 
 });

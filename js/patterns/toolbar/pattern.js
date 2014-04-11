@@ -63,9 +63,8 @@ define([
   'mockup-patterns-base',
   'react',
   'js/patterns/toolbar/view'
-  //  'scroller'
-], function($, Base, React, ToolbarView) {
-  "use strict";
+], function($, Base, React, toolbarView, undefined) {
+  'use strict';
 
   var Toolbar = Base.extend({
 
@@ -85,7 +84,7 @@ define([
     },
 
     isMobile: function() {
-      return $(window).width() < this.options.mobileWidth
+      return $(window).width() < this.options.mobileWidth;
     },
 
     getBurgerSize: function(isMobile, isClosed) {
@@ -128,11 +127,11 @@ define([
             'transform': 'transform'
           };
 
- 
+
       // Add it to the body to get the computed style
       // Sandbox it inside an iframe to avoid Android Browser quirks
-	    $iframe.appendTo('body').contents().find('body').append($el1).append($el2);
- 
+      $iframe.appendTo('body').contents().find('body').append($el1).append($el2);
+
       try {
         [ 'transform',
           'webkitTransform',
@@ -160,14 +159,14 @@ define([
             }
           }
         });
-      } catch(e) {
+      } catch (e) {
         if (e !== BreakException) {
           throw e;
         }
       }
- 
-	    $iframe.remove();
- 
+
+      $iframe.remove();
+
       return {
         'transform': detectedTransform,
         '3DTranslate': detected3DTranslate,
@@ -205,7 +204,7 @@ define([
 
       React.initializeTouchEvents(true);
 
-      self.view = ToolbarView({
+      self.view = toolbarView({
         backLabel: this.options.backLabel,
         touchableSize: this.options.touchableSize,
         endOpacity: this.options.endOpacity,

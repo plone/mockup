@@ -1,12 +1,13 @@
 define([
+  'jquery',
   'react',
   'scroller',
   'js/components/touchable',
   'js/components/plonelogo',
   'js/patterns/toolbar/menu'
-], function(React, Scroller, Touchable, PloneLogo, ToolbarMenu,
+], function($, React, Scroller, touchable, ploneLogo, toolbarMenu,
             undefined) {
-  "use strict";
+  'use strict';
 
   var ToolbarView = React.createClass({
 
@@ -48,7 +49,7 @@ define([
       };
     },
 
-    _setScrollPosition:function(left, top, zoom) {
+    _setScrollPosition: function(left, top, zoom) {
       if (['left', 'right'].indexOf(this.props.position) !== -1) {
         this.setState({ scrollPosition: Math.round(this.props.size - left) });
       } else if (['top', 'bottom'].indexOf(this.props.position) !== -1) {
@@ -195,7 +196,7 @@ define([
         style.bottom = 0;
         style.right = 0;
       } else if (this.props.position === 'bottom') {
-        style.bottom= 0;
+        style.bottom = 0;
         style.left = 0;
       }
 
@@ -230,21 +231,23 @@ define([
 
       return (
         React.DOM.div({
-          className: 'toolbar-wrapper toolbar-position-' + this.props.position 
+          className: 'toolbar-wrapper toolbar-position-' + this.props.position
         }, [
-          Touchable({
+          touchable({
             key: 'logo',
             className: 'toolbar-logo',
             scroller: this.scroller,
             style: this.getScrollPositionStyle(touchableSize),
             onTouchTap:  this.onTouchTapLogo
-          }, PloneLogo({ size: this.props.logoSize,
-                         style: this.getLogoStyle() })),
-          Touchable({
+          }, ploneLogo({
+            size: this.props.logoSize,
+            style: this.getLogoStyle()
+          })),
+          touchable({
             key: 'menu',
             className: 'toolbar-menu',
             style: menuStyle
-          }, ToolbarMenu({
+          }, toolbarMenu({
             backLabel: this.props.backLabel,
             items: this.props.menuItems,
             size: this.props.size,

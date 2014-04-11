@@ -1,8 +1,9 @@
 define([
   'react',
+  'scroller',
   'js/patterns/toolbar/menuitems'
-], function(React, ToolbarMenuItems, undefined) {
-  "use strict";
+], function(React, Scroller, toolbarMenuItems, undefined) {
+  'use strict';
 
   var ToolbarMenu = React.createClass({
 
@@ -25,7 +26,7 @@ define([
           '3DTranslate': false,
           '3DRotate': false
         }
-      }
+      };
     },
 
     getInitialState: function() {
@@ -35,7 +36,7 @@ define([
       };
     },
 
-    _setScrollPosition:function(left, top, zoom) {
+    _setScrollPosition: function(left, top, zoom) {
       this.setState({ scrollPosition: left });
     },
 
@@ -80,7 +81,7 @@ define([
       }
 
       return (
-        ToolbarMenuItems({
+        toolbarMenuItems({
           backLabel: this.props.backLabel,
           items: this.props.items,
           menu: this,
