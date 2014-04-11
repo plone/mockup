@@ -1,7 +1,7 @@
 define([
   'jquery',
   'react',
-  'scoller'
+  'scroller'
 ], function($, React, Scoller, undefined) {
   'use strict';
 
