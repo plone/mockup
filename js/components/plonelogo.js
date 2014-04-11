@@ -15,7 +15,10 @@ define([
 
   PloneLogo = React.createClass({
 
+    displayName: 'PloneLogo',
+
     propTypes: {
+      onClick: React.PropTypes.func,
       style: React.PropTypes.object,
       size: React.PropTypes.number,
       svg: React.PropTypes.object,
@@ -24,6 +27,7 @@ define([
 
     getDefaultProps: function() {
       return {
+        onClick: undefined,
         style: {},
         size: 100,
         svg: {

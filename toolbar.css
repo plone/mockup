@@ -68,8 +68,15 @@
 .modal-footer:after {
   clear: both;
 }
-.pat-toolbar .toolbar-wrapper {
-  background: rgba(35, 35, 35, 0.9);
+.pat-toolbar .toolbar-menu {
+  background: #232323;
+  color: #FFF;
+}
+.pat-toolbar .toolbar-menu a {
+  color: #ffffff;
+}
+.pat-toolbar .toolbar-logo {
+  background-color: transparent;
 }
 .pat-toolbar .toolbar-logo .plone-logo {
   background-color: transparent;

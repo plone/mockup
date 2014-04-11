@@ -10,7 +10,6 @@ define([
     propTypes: {
       className: React.PropTypes.string,
       component: React.PropTypes.component,
-      scrollPosition: React.PropTypes.number,
       scroller: React.PropTypes.object,
       style: React.PropTypes.object
     },
@@ -19,7 +18,6 @@ define([
       return {
         className: '',
         component: React.DOM.div,
-        scrollPosition: 0,
         scroller: undefined,
         style: {}
       };
@@ -30,6 +28,7 @@ define([
         this.props.scroller.doTouchStart(e.touches, e.timeStamp);
       }
       e.preventDefault();
+      e.stopPropagation();
     },
 
     handleTouchMove: function(e) {
@@ -37,6 +36,7 @@ define([
         this.props.scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
       }
       e.preventDefault();
+      e.stopPropagation();
     },
 
     handleTouchEnd: function(e) {
@@ -44,6 +44,7 @@ define([
         this.props.scroller.doTouchEnd(e.timeStamp);
       }
       e.preventDefault();
+      e.stopPropagation();
     },
 
     render: function() {
@@ -53,6 +54,7 @@ define([
           onTouchMove: this.handleTouchMove,
           onTouchEnd: this.handleTouchEnd,
           onTouchCancel: this.handleTouchEnd,
+          onTouchTap: this.props.onTouchTap,
           className: this.props.className,
           style: this.props.style
         }, this.props.children)

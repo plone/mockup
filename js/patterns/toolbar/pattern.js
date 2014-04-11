@@ -10,75 +10,34 @@
  *
  * Example: example-1
  *    <div class="pat-toolbar">
- *      <div class="toolbar-drag-handle"></div>
- *      <div class="toolbar-container">
- *        <div>
- *          <div class="toolbar-logo">
- *            Plone
- *          </div>
- *          <div class="toolbar-container">
- *            <ul>
- *              <li id="toolbar-icon-folderContents">
- *                <a href="folder_contents">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">Contents</span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-view">
- *                <a href="folder_contents">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">View</span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-edit">
- *                <a href="edit">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">Edit</span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-local_roles">
- *                <a href="@@sharing">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">Sharing</span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-workflow">
- *                <a href="content_status_history">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">
- *                    State:
- *                    <span class="state-published">Published</span>
- *                  </span>
- *                  <span class="toolbar-caret"></span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-factories">
- *                <a href="folder_factories">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">Add new...</span>
- *                  <span class="toolbar-caret"></span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-moreoptions">
- *                <a href="#">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">More options</span>
- *                  <span class="toolbar-caret"></span>
- *                </a>
- *              </li>
- *              <li id="toolbar-icon-personaltools">
- *                <a href="#">
- *                  <span class="toolbar-icon"></span>
- *                  <span class="toolbar-text">admin</span>
- *                  <span class="toolbar-caret"></span>
- *                </a>
- *              </li>
- *            </ul>
- *          </div>
- *        </div>
- *        <div>
- *        </div>
- *      </div>
+ *      <ul>
+ *        <li id="toolbar-icon-folderContents">
+ *          <a href="folder_contents">Contents</a>
+ *        </li>
+ *        <li id="toolbar-icon-view">
+ *          <a href="folder_contents">View</a>
+ *        </li>
+ *        <li id="toolbar-icon-edit">
+ *          <a href="edit">Edit</a>
+ *        </li>
+ *        <li id="toolbar-icon-local_roles">
+ *          <a href="@@sharing">Sharing</a>
+ *        </li>
+ *        <li id="toolbar-icon-workflow">
+ *          <a href="content_status_history">
+ *            State:
+ *            <span class="state-published">Published</span>
+ *          </a>
+ *        </li>
+ *        <li id="toolbar-icon-factories">
+ *          <a href="folder_factories">
+ *            <span class="toolbar-text">Add new...</span>
+ *          </a>
+ *        </li>
+ *        <li id="toolbar-icon-personaltools">
+ *          <a href="#">admin</a>
+ *        </li>
+ *      </ul>
  *    </div>
  *
  * License:
@@ -109,13 +68,20 @@ define([
   "use strict";
 
   var Toolbar = Base.extend({
+
     name: 'toolbar',
+
     defaults: {
-      sizeMobileRatio: 0.8,
+      backLabel: 'Back',
+      endOpacity: 0.9,
+      logoSize: 50,
+      mobileWidth: 450, // width of device where we switch to mobile/desktop
+      position: 'left', // position of toolbar
       sizeDesktopClosed: 50,
       sizeDesktopOpen: 200,
-      mobileWidth: 450, // width of device where we switch to mobile/desktop
-      position: 'left' // position of toolbar
+      sizeMobileRatio: 0.8,
+      startOpacity: 0.2,
+      touchableSize: 10,
     },
 
     isMobile: function() {
@@ -125,7 +91,7 @@ define([
     getBurgerSize: function(isMobile, isClosed) {
       isClosed = isClosed || true;
       if (isMobile) {
-        return $(window).width() * (1 - this.options.sizeMobileRatio);
+        return $(window).width() * this.options.logoSize;
       } else {
         if (isClosed) {
           return this.options.sizeDesktopClosed;
@@ -209,27 +175,47 @@ define([
       };
     },
 
+    getMenuItems: function($ul) {
+      var self = this,
+          items = [],
+          $el;
+
+      $ul.find('> li').each(function() {
+        $el = $(this);
+
+        items.push({
+          id: $el.attr('id'),
+          href: $el.find('>a').attr('href'),
+          html: $el.find('>a').html(),
+          items: $el.find('>ul').size() === 1 ? self.getMenuItems.apply(self, [$el.find('>ul')]) : []
+        });
+      });
+
+      return items;
+    },
+
     init: function() {
       var self = this,
           isMobile = self.isMobile();
 
+      React.addons.injectEventPluginsByName({
+        TapEventPlugin: React.addons.TapEventPlugin,
+        ResponderEventPlugin: React.addons.ResponderEventPlugin
+      });
+
       React.initializeTouchEvents(true);
 
       self.view = ToolbarView({
+        backLabel: this.options.backLabel,
+        touchableSize: this.options.touchableSize,
+        endOpacity: this.options.endOpacity,
+        logoSize: this.options.logoSize,
+        menuItems: self.getMenuItems(self.$el.find('> ul')),
         position: self.options.position,
-        size: $(window).width() * this.options.sizeMobileRatio,
+        size: $(window).width() - self.options.logoSize,
+        startOpacity: this.options.startOpacity,
         '3DTransform': self.detect3DTransform()
       });
-
-      // TODO: should work when switching from landscape to portrait
-      //$(window).on('resize', function() {
-      //  var isMobile = self.isMobile();
-      //  self.view.setState({
-      //    isMobile: isMobile,
-      //    burgerSize: self.getBurgerSize.apply(self, [ isMobile, self.view.state.isClosed ]),
-      //    size: self.getToolbarSize.apply(self, [ isMobile ])
-      //  });
-      //});
 
       React.renderComponent(self.view, self.$el[0]);
     }
