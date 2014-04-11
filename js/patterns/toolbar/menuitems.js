@@ -107,7 +107,7 @@ define([
               key: 'menu',
               index: i,
               items: [{
-                id: 'toolbar-back-button',
+                id: 'toolbar-icon-back',
                 html: self.props.backLabel
               }].concat(item.items),
               level: self.props.level + 1,
