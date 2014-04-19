@@ -2,9 +2,13 @@
 
 .importCSS() when not (@isBrowser) {
   @import (less) "../lib/tinymce/skins/lightgray/skin.min.css";
+  @import (less) "../lib/tinymce/skins/lightgray/content.inline.min.css";
+  @import (less) "../lib/tinymce/plugins/visualblocks/css/visualblocks.css";
 }
 .importCSS() when (@isBrowser) {
   @import (css) "@{pathPrefix}../lib/tinymce/skins/lightgray/skin.min.css";
+  @import (css) "@{pathPrefix}../lib/tinymce/skins/lightgray/content.inline.min.css";
+  @import (css) "@{pathPrefix}../lib/tinymce/plugins/visualblocks/css/visualblocks.css";
 }
 .importCSS();
 
