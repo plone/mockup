@@ -1,6 +1,7 @@
 define([
-  "jquery"
+  'jquery'
 ], function($, undefined) {
+  'use strict';
 
   var Registry = {
 
@@ -58,8 +59,7 @@ define([
             pattern = new Registry.patterns[patternName]($el,
                 Registry.getOptions($el, patternName, options));
           } catch (e) {
-            Registry.warn(
-                'Failed while initializing "' + patternName + '" pattern.');
+            Registry.warn('Failed while initializing "' + patternName + '" pattern.');
           }
         }
         $el.data('pattern-' + patternName, pattern);
@@ -78,7 +78,7 @@ define([
         $el = $($el);
         $.each($el.attr('class').split(' '), function(j, className) {
           if (className.indexOf('pat-') === 0) {
-              Registry.init($el, className.substr(4));
+            Registry.init($el, className.substr(4));
           }
         });
       });
@@ -88,20 +88,20 @@ define([
 
       // require name
       if (!Pattern.prototype.name) {
-        Registry.warn("Pattern didn't specified a name.");
+        Registry.warn('Pattern didn\'t specified a name.');
         return false;
       }
 
       // automatically create jquery plugin from pattern
       if (Pattern.prototype.jqueryPlugin === undefined) {
-        Pattern.prototype.jqueryPlugin = "pattern" +
+        Pattern.prototype.jqueryPlugin = 'pattern' +
             Pattern.prototype.name.charAt(0).toUpperCase() +
             Pattern.prototype.name.slice(1);
       }
 
       $.fn[Pattern.prototype.jqueryPlugin] = function(method, options) {
         $(this).each(function() {
-          if (typeof method === "object") {
+          if (typeof method === 'object') {
             options = method;
             method = undefined;
           }

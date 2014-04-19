@@ -19,11 +19,11 @@
       'bootstrap-tooltip': 'bower_components/bootstrap/js/tooltip',
       'bootstrap-transition': 'bower_components/bootstrap/js/transition',
       'docs-getting-started': 'GETTING_STARTED.md',
-      'docs-tutorial': 'TUTORIAL.md',
+      'docs-learn': 'LEARN.md',
       'docs-contribute': 'CONTRIBUTE.md',
       'domready': 'bower_components/domready/ready',
       'dropzone': 'bower_components/dropzone/downloads/dropzone-amd-module',
-      'expect': 'bower_components/expect/expect',
+      'expect': 'bower_components/expect/index',
       'jqtree': 'bower_components/jqtree/tree.jquery',
       'jquery': 'bower_components/jquery/jquery',
       'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
@@ -36,7 +36,6 @@
       'mockup-bundles-plone': 'js/bundles/plone',
       'mockup-bundles-structure': 'js/bundles/structure',
       'mockup-bundles-tiles': 'js/bundles/widgets',
-      'mockup-bundles-toolbar': 'js/bundles/toolbar',
       'mockup-bundles-widgets': 'js/bundles/widgets',
       'mockup-docs': 'bower_components/mockup-core/js/docs/app',
       'mockup-docs-navigation': 'bower_components/mockup-core/js/docs/navigation',
@@ -44,21 +43,14 @@
       'mockup-docs-pattern': 'bower_components/mockup-core/js/docs/pattern',
       'mockup-docs-view': 'bower_components/mockup-core/js/docs/view',
       'mockup-fakeserver': 'tests/fakeserver',
-      'mockup-iframe': 'js/iframe',
-      'mockup-iframe_init': 'js/iframe_init',
       'mockup-patterns-accessibility': 'js/patterns/accessibility',
-      'mockup-patterns-ace': 'js/patterns/ace',
       'mockup-patterns-autotoc': 'js/patterns/autotoc',
       'mockup-patterns-backdrop': 'js/patterns/backdrop',
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
-      'mockup-patterns-cookiedirective': 'js/patterns/cookiedirective',
       'mockup-patterns-sortable': 'js/patterns/sortable',
       'mockup-patterns-dropzone': 'js/patterns/dropzone',
-      'mockup-patterns-expose': 'js/patterns/expose',
-      'mockup-patterns-filemanager': 'js/patterns/filemanager/pattern',
       'mockup-patterns-formautofocus': 'js/patterns/formautofocus',
       'mockup-patterns-formunloadalert': 'js/patterns/formunloadalert',
-      'mockup-patterns-livesearch': 'js/patterns/livesearch',
       'mockup-patterns-modal': 'js/patterns/modal',
       'mockup-patterns-moment': 'js/patterns/moment',
       'mockup-patterns-pickadate': 'js/patterns/pickadate',
@@ -109,7 +101,8 @@
       'sinon': {exports: 'window.sinon'},
       'tinymce': { exports: 'window.tinyMCE', init: function () { this.tinyMCE.DOM.events.domLoaded = true; return this.tinyMCE; }},
       'underscore': { exports: 'window._' }
-    }
+    },
+    wrapShim: true
   };
 
   if (typeof exports !== 'undefined' && typeof module !== 'undefined') {

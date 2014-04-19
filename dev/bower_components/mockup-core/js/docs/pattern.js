@@ -1,17 +1,19 @@
 define([
+  'underscore',
   'marked',
   'react',
   'mockup-registry'
-], function(marked, React, Registry) {
+], function(_, marked, React, Registry) {
+  'use strict';
 
   var div = React.DOM.div,
       a = React.DOM.a,
       h2 = React.DOM.h2,
-      tr = React.DOM.tr;
-      th = React.DOM.th;
-      td = React.DOM.td;
-      tbody = React.DOM.tbody;
-      thead = React.DOM.thead;
+      tr = React.DOM.tr,
+      th = React.DOM.th,
+      td = React.DOM.td,
+      tbody = React.DOM.tbody,
+      thead = React.DOM.thead,
       table = React.DOM.table;
 
   var Pattern = React.createClass({
@@ -36,10 +38,10 @@ define([
       text = text.substring(1, text.length - 1);
       _.each(text.split('\n'), function(line, lineNumber) {
         line = line.substring(line.indexOf('*') + 2).replace('\r', '');
-      
+
         if (section.exec(line) !== null) {
           currentSection = section.exec(line)[0].toLowerCase();
-          currentSection = currentSection.substring(0, currentSection.length - 1)
+          currentSection = currentSection.substring(0, currentSection.length - 1);
           if (currentSection === 'example') {
             currentExample = line.substring(8).trim();
           }
@@ -77,9 +79,9 @@ define([
           _.each(value.split('\n'), function(line, j) {
             pattern[i] += line.substring(firstLineSpaces) + '\n';
           });
-      
+
           pattern[i] = marked(pattern[i]);
-      
+
           _.each(examples, function(example, name) {
             example = '' +
               '<div class="mockup-pattern-example">' + example +
@@ -87,7 +89,7 @@ define([
               '</div>';
             pattern[i] = pattern[i].replace('{{ ' + name + ' }}', example);
           });
-      
+
         }
       });
       return pattern;
@@ -120,7 +122,7 @@ define([
           h2({}, 'Configuration'),
           div({ className: 'table-responsive mockup-pattern-configuration' },
             table({ className: 'table table-stripped table-condensed' }, [
-              thead({}, 
+              thead({},
                 tr({}, [
                   th({}, 'Option'),
                   th({}, 'Type'),
@@ -128,7 +130,7 @@ define([
                   th({}, 'Description')
                 ])
               ),
-              tbody({}, 
+              tbody({},
                 Object.keys(options).map(function(name) {
                   return (
                     tr({ key: name }, [

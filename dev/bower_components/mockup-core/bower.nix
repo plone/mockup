@@ -54,4 +54,9 @@
     target = "1.1.2";
     outputHash = "1h5yy2lbwd8ik6cyi234hv4i0cy1dijlh6s65kqi0asq1qzi18bs";
   }
+  { name = "selectivizr";
+    version = "1.0.2";
+    target = "1.0.2";
+    outputHash = "0dzy131cg158c79jbgrrgksca068g7xddmpjsimpy0pm24zdas51";
+  }
 ]

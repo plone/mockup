@@ -1,13 +1,14 @@
 define([
+  'jquery',
   'expect',
   'react',
   'mockup-docs-view'
-], function(expect, React, View) {
-  "use strict";
+], function($, expect, React, View) {
+  'use strict';
 
   window.mocha.setup('bdd');
 
-  describe("DocsApp:View", function () {
+  describe('DocsApp:View', function () {
 
     beforeEach(function() {
       this.$root = $('<div/>');
@@ -18,7 +19,7 @@ define([
       this.$root.remove();
     });
 
-    it("default layout", function() {
+    it('default layout', function() {
       var view = new View();
       React.renderComponent(view, this.$root[0]);
       expect($('header', this.$root).size()).to.be(1);
@@ -26,7 +27,7 @@ define([
       expect($('footer', this.$root).size()).to.be(1);
     });
 
-    it("switch pages", function() {
+    it('switch pages', function() {
       var view = new View({
         pages: [
           { id: 'page1',
@@ -43,7 +44,7 @@ define([
       expect($('.header .nav li', this.$root).size()).to.be(2);
       expect($('.header .nav li.active', this.$root).size()).to.be(0);
       expect($('.page-index', this.$root).size()).to.be(1);
-      view.setState({page:'page1'});
+      view.setState({page: 'page1'});
       expect($('.page-index', this.$root).size()).to.be(0);
       expect($('.page-page1', this.$root).size()).to.be(1);
     });

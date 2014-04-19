@@ -11,11 +11,11 @@ let
     generated = ./package.nix;
   };
 in rec {
-  tarball = pkgs.runCommand "mockup-core-1.6.0.tgz" { buildInputs = [ pkgs.nodejs ]; } ''
+  tarball = pkgs.runCommand "mockup-core-1.2.4.tgz" { buildInputs = [ pkgs.nodejs ]; } ''
     mv `HOME=$PWD npm pack ${mockup-core}` $out
   '';
   build = nodePackages.buildNodePackage {
-    name = "mockup-core-1.6.0";
+    name = "mockup-core-1.2.4";
     src = [ tarball ];
     buildInputs = [ ];
     deps = with nodePackages; [
@@ -24,9 +24,15 @@ in rec {
       extend
       grunt
       grunt-cli
+      grunt-contrib-copy
       grunt-contrib-jshint
+      grunt-contrib-less
+      grunt-contrib-requirejs
+      grunt-contrib-uglify
+      grunt-contrib-watch
       grunt-jscs-checker
       grunt-karma
+      grunt-sed
       karma
       karma-chrome-launcher
       karma-coverage
@@ -37,6 +43,7 @@ in rec {
       karma-sauce-launcher
       karma-script-launcher
       lcov-result-merger
+      less
       mocha
       requirejs
     ];

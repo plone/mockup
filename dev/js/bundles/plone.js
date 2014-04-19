@@ -32,7 +32,6 @@ define([
   'mockup-patterns-querystring',
   'mockup-patterns-tinymce',
 
-  'mockup-patterns-livesearch',
   'mockup-patterns-accessibility',
   'mockup-patterns-autotoc',
   'mockup-patterns-formunloadalert',

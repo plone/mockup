@@ -1,13 +1,22 @@
-/* globals module:true */
+/* globals module:true,process:true */
 
 (function() {
   'use strict';
 
-  var extend = require('extend'),
+  var fs = require('fs'),
+      less = require('less'),
+      extend = require('extend'),
       path = require('path'),
-      appDir = path.dirname(require.main.filename),
-      karmaConfig = require(appDir + '/../../../node_modules/karma/lib/config'),
-      MockupGrunt = function (requirejsOptions) { this.init(requirejsOptions); };
+      appDir = process.cwd(),
+      karmaConfig = require(appDir + '/node_modules/karma/lib/config'),
+      MockupGrunt = function (requirejsOptions) { this.init(requirejsOptions); },
+      BROWSERS = process.env.BROWSERS;
+
+  if (BROWSERS) {
+    BROWSERS = BROWSERS.split(',');
+  } else {
+    BROWSERS = [ 'SL_Chrome', 'SL_Firefox' ];
+  }
 
   MockupGrunt.prototype = {
 
@@ -32,7 +41,6 @@
           this.gruntConfig.uglify[name] = this.gruntConfig.uglify[name] || {};
           this.gruntConfig.uglify[name].files = this.gruntConfig.uglify[name].files || {};
           this.gruntConfig.uglify[name].files[bundleOptions.path + name + '.js'] = [
-            'node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js',
             'bower_components/domready/ready.js',
             'node_modules/requirejs/require.js',
             'bower_components/jquery/jquery.js',
@@ -42,10 +50,28 @@
       },
       less: {
         registerBundle: function(name, customGruntConfig, bundleOptions, sections) {
-          this.gruntConfig.less = this.gruntConfig.less || {};
-          this.gruntConfig.less[name] = this.gruntConfig.less[name] || {};
-          this.gruntConfig.less[name].files = this.gruntConfig.less[name].files || {};
-          this.gruntConfig.less[name].files[bundleOptions.path + name + '.min.css'] = 'less/' + name + '.less';
+          var gruntConfig = this.gruntConfig;
+
+          gruntConfig.less = gruntConfig.less || {};
+          gruntConfig.less[name] = gruntConfig.less[name] || {};
+          gruntConfig.less[name].files = gruntConfig.less[name].files || {};
+          gruntConfig.less[name].files[bundleOptions.path + name + '.min.css'] = 'less/' + name + '.less';
+
+
+          gruntConfig.watch = gruntConfig.watch || {};
+          gruntConfig.watch['less-' + name] = gruntConfig.watch['less-' + name] || {
+            files: [ 'less/' + name + '.less' ],
+            tasks: [ 'less:' + name ]
+          };
+
+          var parser = new(less.Parser)({ syncImport: true, paths: ['less'], filename: name + '.less' }),
+              bundleFile = fs.readFileSync('less/' + name + '.less', { encoding: 'utf-8' });
+
+          parser.parse(bundleFile, function() {
+            for(var file in parser.imports.files) {
+              gruntConfig.watch['less-' + name].files.push(file);
+            }
+          });
         }
       },
       copy: {
@@ -58,10 +84,13 @@
               expand: true, cwd: 'bower_components/bootstrap/dist/fonts/', src: 'glyphicons-halflings-regular.*', dest: bundleOptions.path,
               rename: function(dest, src) { return dest + name + '-bootstrap-' + src; }
             }, {
-              expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'icomoon.*', dest: bundleOptions.path,
-              rename: function(dest, src) { return dest + name + '-tinymce-' + src; }
+              expand: true, cwd: 'lib/tinymce/skins/lightgray/fonts/', src: 'tinymce*', dest: bundleOptions.path,
+              rename: function(dest, src) { return dest + name + '-tinymce-font-' + src; }
             }, {
-              expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: 'loader.gif', dest: bundleOptions.path,
+              expand: true, cwd: 'lib/tinymce/skins/lightgray/img/', src: '*', dest: bundleOptions.path,
+              rename: function(dest, src) { return dest + name + '-tinymce-img-' + src; }
+            }, {
+              expand: true, cwd: 'lib/tinymce/skins/lightgray/', src: 'content.min.css', dest: bundleOptions.path,
               rename: function(dest, src) { return dest + name + '-tinymce-' + src; }
             }, {
               expand: true, cwd: 'bower_components/jqtree/', src: 'jqtree-circle.png', dest: bundleOptions.path,
@@ -97,15 +126,25 @@
             pattern: 'url\\(\'select2',
             replacement: 'url(\'' + bundleOptions.url + '-select2-select2'
           };
-          this.gruntConfig.sed[name + '-tinymce-icomoon'] = {
+          this.gruntConfig.sed[name + '-tinymce-fonts'] = {
             path: bundleOptions.path + name + '.min.css',
-            pattern: 'url\\(\'fonts/icomoon',
-            replacement: 'url(\'' + bundleOptions.url + '-tinymce-icomoon'
+            pattern: 'url\\(\'fonts/tinymce',
+            replacement: 'url(\'' + bundleOptions.url + '-tinymce-font-tinymce'
           };
-          this.gruntConfig.sed[name + '-tinymce-loader'] = {
+          this.gruntConfig.sed[name + '-tinymce-img-loader'] = {
             path: bundleOptions.path + name + '.min.css',
             pattern: 'url\\(\'img/loader.gif',
-            replacement: 'url(\'' + bundleOptions.url + '-tinymce-loader.gif'
+            replacement: 'url(\'' + bundleOptions.url + '-tinymce-img-loader.gif'
+          };
+          this.gruntConfig.sed[name + '-tinymce-img-anchor'] = {
+            path: bundleOptions.path + name + '.min.css',
+            pattern: 'url\\(\'img/anchor.gif',
+            replacement: 'url(\'' + bundleOptions.url + '-tinymce-img-anchor.gif'
+          };
+          this.gruntConfig.sed[name + '-tinymce-img-object'] = {
+            path: bundleOptions.path + name + '.min.css',
+            pattern: 'url\\(\'img/object.gif',
+            replacement: 'url(\'' + bundleOptions.url + '-tinymce-img-object.gif'
           };
           this.gruntConfig.sed[name + '-jqtree-circle'] = {
             path: bundleOptions.path + name + '.min.css',
@@ -126,6 +165,7 @@
         * include initial framework (mocha and requirejs) with html5
         * shims/shams/polyfills
         */
+        'bower_components/selectivizr/selectivizr.js',
         'bower_components/es5-shim/es5-shim.js',
         'bower_components/es5-shim/es5-sham.js',
         'bower_components/console-polyfill/index.js',
@@ -133,6 +173,7 @@
         'node_modules/karma-mocha/lib/adapter.js',
         'node_modules/requirejs/require.js',
         'node_modules/karma-requirejs/lib/adapter.js',
+
         /*
         * include requirejs configuration
         */
@@ -165,21 +206,13 @@
       /*
       * provide (but not include) all files in "tests/" and "js/" folder
       * those files will be loaded by requirejs at later points
+      *
+      * TODO: simplify the pattern to include everything inside js/ and
+      * tests/ folders.
       */
       this.files = this.files.concat([
-        {pattern: 'tests/example-resource*', included: false},
-        {pattern: 'tests/json/*.json', included: false},
-        {pattern: 'tests/fakeserver*', included: false},
-        {pattern: 'tests/*-test.js', included: false},
-        {pattern: 'tests/**/*-test.js', included: false},
-        {pattern: 'js/ui/**/*.js', included: false},
-        {pattern: 'js/ui/**/*.xml', included: false},
-        {pattern: 'js/patterns/structure/**/*.js', included: false},
-        {pattern: 'js/patterns/structure/**/*.xml', included: false},
-        {pattern: 'js/patterns/filemanager/**/*.xml', included: false},
-        {pattern: 'js/patterns/filemanager/**/*.js', included: false},
-        {pattern: 'js/patterns/tinymce/**/*.xml', included: false},
-        {pattern: 'js/patterns/tinymce/**/*.js', included: false},
+        {pattern: 'tests/**/*', included: false},
+        {pattern: 'js/**/*', included: false}
       ]);
 
 
@@ -304,31 +337,19 @@
             reporters: ['junit', 'coverage', 'saucelabs'],
             junitReporter: { outputFile: 'test-results.xml' },
             sauceLabs: { testName: 'Mockup', startConnect: true },
-            browsers: [
-              'SL_Chrome',
-              'SL_Firefox',
-              //'SL_Opera',
-              //'SL_Safari',
-              //'SL_IE_8',
-              //'SL_IE_9',
-              //'SL_IE_10',
-              //'SL_IE_11'
-              //'SL_IPhone',
-              //'SL_IPad',
-              //'SL_Android'
-            ],
+            browsers: BROWSERS,
             customLaunchers: {
-              'SL_Chrome': { base: 'SauceLabs', browserName: 'chrome', platform: 'Windows 8', version: '31' },
-              'SL_Firefox': { base: 'SauceLabs', browserName: 'firefox', platform: 'Windows 8', version: '26' },
+              'SL_Chrome': { base: 'SauceLabs', browserName: 'chrome', platform: 'Windows 8.1', version: '33' },
+              'SL_Firefox': { base: 'SauceLabs', browserName: 'firefox', platform: 'Windows 8.1', version: '28' },
               'SL_Opera': { base: 'SauceLabs', browserName: 'opera', platform: 'Windows 7', version: '12' },
-              'SL_Safari': { base: 'SauceLabs', browserName: 'safari', platform: 'Mac 10.8', version: '6' },
+              'SL_Safari': { base: 'SauceLabs', browserName: 'safari', platform: 'Mac 10.9', version: '7' },
               'SL_IE_8': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 7', version: '8' },
-              'SL_IE_9': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 2008', version: '9' },
-              'SL_IE_10': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 2012', version: '10' },
+              'SL_IE_9': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 7', version: '9' },
+              'SL_IE_10': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 7', version: '10' },
               'SL_IE_11': { base: 'SauceLabs', browserName: 'internet explorer', platform: 'Windows 8.1', version: '11' },
-              'SL_IPhone': { base: 'SauceLabs', browserName: 'iphone', platform: 'OS X 10.8', version: '6.1' },
-              'SL_IPad': { base: 'SauceLabs', browserName: 'ipad', platform: 'OS X 10.8', version: '6.1' },
-              'SL_Android': { base: 'SauceLabs', browserName: 'android', platform: 'Linux', version: '4.0' }
+              'SL_IPhone': { base: 'SauceLabs', browserName: 'iphone', platform: 'OS X 10.9', version: '7.1' },
+              'SL_IPad': { base: 'SauceLabs', browserName: 'ipad', platform: 'OS X 10.9', version: '7.1' },
+              'SL_Android': { base: 'SauceLabs', browserName: 'android', platform: 'Linux', version: '4.3' }
             }
           }
         },
@@ -360,6 +381,7 @@
       grunt.loadNpmTasks('grunt-contrib-less');
       grunt.loadNpmTasks('grunt-contrib-requirejs');
       grunt.loadNpmTasks('grunt-contrib-uglify');
+      grunt.loadNpmTasks('grunt-contrib-watch');
       grunt.loadNpmTasks('grunt-jscs-checker');
       grunt.loadNpmTasks('grunt-karma');
       grunt.loadNpmTasks('grunt-sed');

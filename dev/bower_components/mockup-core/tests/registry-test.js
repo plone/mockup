@@ -29,11 +29,11 @@ define([
   'jquery',
   'mockup-registry'
 ], function(expect, $, Registry) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
 
-  describe("Registry", function () {
+  describe('Registry', function () {
     beforeEach(function() {
       var self = this;
       self.warnMsg = '';
@@ -63,24 +63,23 @@ define([
       });
     });
 
-    it("skip initializing pattern if not in registry", function() {
+    it('skip initializing pattern if not in registry', function() {
       var $el = $('<div/>');
       Registry.init($el, 'example', {});
       expect($el.data('example')).to.be.equal(undefined);
     });
 
-    it("failing pattern initialization", function() {
+    it('failing pattern initialization', function() {
       window.DEBUG = false;
       Registry.patterns.example = function($el, options) {
-        throw new Error("some random error");
+        throw new Error('some random error');
       };
       Registry.init($('<div/>'), 'example', {});
-      expect(this.warnMsg).to.be.equal(
-        'Failed while initializing "example" pattern.');
+      expect(this.warnMsg).to.be.equal('Failed while initializing "example" pattern.');
       window.DEBUG = true;
     });
 
-    it("pattern initialization", function() {
+    it('pattern initialization', function() {
       var $pattern = $('<div/>');
       Registry.patterns.example = function($el, options) {
         this.example = 'works';
@@ -89,7 +88,7 @@ define([
       expect($pattern.data('pattern-example').example).to.be.equal('works');
     });
 
-    it("pattern wont get initialized twice", function() {
+    it('pattern wont get initialized twice', function() {
       var $pattern = $('<div/>');
       Registry.patterns.example = function($pattern, options) {
         this.example = 'works';
@@ -102,7 +101,7 @@ define([
       expect(pattern1.example2).to.be.equal('works');
     });
 
-    it("scan for pattern", function() {
+    it('scan for pattern', function() {
       var $dom = $('' +
         '<div class="pat-example">' +
         '  <div class="pat-example" />' +
@@ -115,7 +114,7 @@ define([
       expect($dom.find('div').data('pattern-example').example).to.be.equal('works');
     });
 
-    it("scan for pattern among other class names on element", function() {
+    it('scan for pattern among other class names on element', function() {
       var $el = $('<div class="some-other-stuff pat-example" />');
       Registry.patterns.example = function($el, options) {
         this.example = 'works';
@@ -124,12 +123,12 @@ define([
       expect($el.data('pattern-example').example).to.be.equal('works');
     });
 
-    it("try register a pattern without name", function() {
+    it('try register a pattern without name', function() {
       Registry.register(function($el, options) {});
       expect(this.warnMsg).to.be.equal('Pattern didn\'t specified a name.');
     });
 
-    it("register a pattern", function() {
+    it('register a pattern', function() {
       var ExamplePattern = function($el, options) { };
       ExamplePattern.prototype.name = 'example';
       Registry.register(ExamplePattern);
@@ -137,7 +136,7 @@ define([
       expect($.fn.patternExample).to.not.equal(undefined);
     });
 
-    it("custom jquery plugin name for pattern", function() {
+    it('custom jquery plugin name for pattern', function() {
       var ExamplePattern = function($el, options) { };
       ExamplePattern.prototype.name = 'example';
       ExamplePattern.prototype.jqueryPlugin = 'example';
@@ -146,7 +145,7 @@ define([
       expect($.fn.example).to.not.equal(undefined);
     });
 
-    it("jquery plugin with custom options", function() {
+    it('jquery plugin with custom options', function() {
       var ExamplePattern = function($el, options) {
         this.options = options;
       };
@@ -162,16 +161,16 @@ define([
       expect($el.data('pattern-example').options.option1).to.be.equal('value1');
     });
 
-    it("call methods via jquery plugin", function() {
+    it('call methods via jquery plugin', function() {
       var ExamplePattern = function($el, options) { }, value = '';
       ExamplePattern.prototype.name = 'example';
       ExamplePattern.prototype.method = function() { value = 'method'; };
-      ExamplePattern.prototype.method_with_options = function(options) {
+      ExamplePattern.prototype.methodWithOptions = function(options) {
         if (options.optionA && options.optionA === 'valueA') {
-          value = 'method_with_options';
+          value = 'methodWithOptions';
         }
       };
-      ExamplePattern.prototype._method_private = function() { };
+      ExamplePattern.prototype._methodPrivate = function() { };
       Registry.register(ExamplePattern);
 
       var self = this, $el = $('<div/>');
@@ -186,20 +185,20 @@ define([
       expect(value).to.be.equal('method');
 
       value = '';
-      $el.patternExample('method_with_options', {optionA: 'valueB'});
+      $el.patternExample('methodWithOptions', {optionA: 'valueB'});
       expect(value).to.be.equal('');
 
       value = '';
-      $el.patternExample('method_with_options', {optionA: 'valueA'});
-      expect(value).to.be.equal('method_with_options');
+      $el.patternExample('methodWithOptions', {optionA: 'valueA'});
+      expect(value).to.be.equal('methodWithOptions');
 
       value = '';
-      $el.patternExample('_method_private');
+      $el.patternExample('_methodPrivate');
       expect(value).to.be.equal('');
-      expect(self.warnMsg).to.be.equal('Method "_method_private" is private.');
+      expect(self.warnMsg).to.be.equal('Method "_methodPrivate" is private.');
     });
 
-    it("read options from dom tree", function() {
+    it('read options from dom tree', function() {
       var $el = $('' +
         '<div data-pat-example="{&quot;name1&quot;: &quot;value1&quot;,' +
         '    &quot;name2&quot;: &quot;value2&quot;}">' +
@@ -213,13 +212,13 @@ define([
         $('.pat-example', $el),
         'example',
         { name3: 'value3'}
-        );
+      );
 
       expect(options.name1).to.equal('value1');
       expect(options.name2).to.equal('something');
       expect(options.name3).to.equal('value3');
-      expect(options["some-thing-name4"]).to.equal('value4');
-      expect(options["some-stuff"]).to.equal('value5');
+      expect(options['some-thing-name4']).to.equal('value4');
+      expect(options['some-stuff']).to.equal('value5');
     });
 
   });

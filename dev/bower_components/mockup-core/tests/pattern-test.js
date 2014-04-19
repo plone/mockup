@@ -30,11 +30,11 @@ define([
   'mockup-registry',
   'mockup-patterns-base'
 ], function(expect, $, Registry, Base) {
-  "use strict";
+  'use strict';
 
   window.mocha.setup('bdd');
 
-  describe("Base", function () {
+  describe('Base', function () {
 
     beforeEach(function() {
       this._patterns = $.extend({}, Registry.patterns);
@@ -44,7 +44,7 @@ define([
       Registry.patterns = this._patterns;
     });
 
-    it("can be extended and used in similar way as classes", function(done) {
+    it('can be extended and used in similar way as classes', function(done) {
       var Tmp = Base.extend({
         some: 'thing',
         init: function() {
@@ -57,10 +57,10 @@ define([
           done();
         }
       });
-      new Tmp('element', {option: 'value'});
+      var tmp = new Tmp('element', {option: 'value'});
     });
 
-    it("can be extended multiple times", function(done) {
+    it('can be extended multiple times', function(done) {
       var Tmp1 = Base.extend({
         some: 'thing1',
         something: 'else',
@@ -86,10 +86,10 @@ define([
           this.constructor.__super__.init.call(this);
         }
       });
-      new Tmp3('element', {option: 'value'});
+      var tmp3 = new Tmp3('element', {option: 'value'});
     });
 
-    it("can also extend with already existing constructors", function(done) {
+    it('can also extend with already existing constructors', function(done) {
       var Tmp1 = function() {
         expect(1).to.be(1);
         done();
@@ -99,7 +99,7 @@ define([
       new Base.extend(Tmp2)('element');
     });
 
-    it("has on/trigger helpers to prefix events", function(done) {
+    it('has on/trigger helpers to prefix events', function(done) {
       var Tmp = Base.extend({
         name: 'tmp',
         init: function() {
@@ -110,7 +110,7 @@ define([
           this.trigger('somethingelse', ['yaay!']);
         }
       });
-      new Tmp(
+      var tmp = new Tmp(
         $('<div/>').on('somethingelse.tmp.patterns', function(e, arg1) {
           $(this).trigger('something.tmp.patterns', [arg1]);
           done();

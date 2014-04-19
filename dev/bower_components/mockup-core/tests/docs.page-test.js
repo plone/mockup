@@ -1,13 +1,14 @@
 define([
+  'jquery',
   'expect',
   'react',
   'mockup-docs-page'
-], function(expect, React, Page) {
-  "use strict";
+], function($, expect, React, Page) {
+  'use strict';
 
   window.mocha.setup('bdd');
 
-  describe("DocsApp:Page", function () {
+  describe('DocsApp:Page', function () {
 
     beforeEach(function() {
       this.$root = $('<div/>');
@@ -18,7 +19,7 @@ define([
       this.$root.remove();
     });
 
-    it("without autotoc", function() {
+    it('without autotoc', function() {
       var page = new Page({
         id: 'somepage',
         title: 'some title',
@@ -32,7 +33,7 @@ define([
       expect($('.page-content > div', this.$root).html().toLowerCase()).to.be('<p>some text</p>');
     });
 
-    it("autotoc and markdown", function() {
+    it('autotoc and markdown', function() {
       var page = new Page({
         id: 'somepage',
         title: 'some title',
@@ -47,7 +48,7 @@ define([
       expect($('.page-content > div > div.col-md-9 > h1', this.$root).html()).to.be('something');
     });
 
-    it("patterns", function() {
+    it('patterns', function() {
       var page = new Page({
         id: 'somepage',
         title: 'some title',

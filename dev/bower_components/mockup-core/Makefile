@@ -19,16 +19,16 @@ bootstrap-nix: bootstrap-common
 	ln -s nixenv/bower_components
 
 jshint:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint
+	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint jscs
 
 test:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test --force --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test --pattern=$(pattern)
 
 test-once:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once --force --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once --pattern=$(pattern)
 
 test-dev:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev --force --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev --pattern=$(pattern)
 
 test-ci:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci

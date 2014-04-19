@@ -30,7 +30,7 @@ define([
   'jquery',
   'mockup-registry'
 ], function($, Registry) {
-  "use strict";
+  'use strict';
 
   // Base Pattern
   var Base = function($el, options) {

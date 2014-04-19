@@ -1,15 +1,17 @@
+/*jshint ignore:start */
+
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 if (!Array.prototype.filter) {
   Array.prototype.filter = function(fun /*, thisp */)
   {
-    "use strict";
+    'use strict';
 
     if (this === null)
       throw new TypeError();
 
     var t = Object(this);
     var len = t.length >>> 0;
-    if (typeof fun != "function")
+    if (typeof fun != 'function')
       throw new TypeError();
 
     var res = [];
@@ -73,46 +75,51 @@ if (!Object.keys) {
 // https://github.com/facebook/react/blob/master/src/test/phantomjs-shims.js
 (function() {
 
-var Ap = Array.prototype;
-var slice = Ap.slice;
-var Fp = Function.prototype;
+  var Ap = Array.prototype;
+  var slice = Ap.slice;
+  var Fp = Function.prototype;
 
-if (!Fp.bind) {
-  // PhantomJS doesn't support Function.prototype.bind natively, so
-  // polyfill it whenever this module is required.
-  Fp.bind = function(context) {
-    var func = this;
-    var args = slice.call(arguments, 1);
+  if (!Fp.bind) {
+    // PhantomJS doesn't support Function.prototype.bind natively, so
+    // polyfill it whenever this module is required.
+    Fp.bind = function(context) {
+      var func = this;
+      var args = slice.call(arguments, 1);
 
-    function bound() {
-      var invokedAsConstructor = func.prototype && (this instanceof func);
-      return func.apply(
-        // Ignore the context parameter when invoking the bound function
-        // as a constructor. Note that this includes not only constructor
-        // invocations using the new keyword but also calls to base class
-        // constructors such as BaseClass.call(this, ...) or super(...).
-        !invokedAsConstructor && context || this,
-        args.concat(slice.call(arguments))
-      );
-    }
+      function bound() {
+        var invokedAsConstructor = func.prototype && (this instanceof func);
+        return func.apply(
+          // Ignore the context parameter when invoking the bound function
+          // as a constructor. Note that this includes not only constructor
+          // invocations using the new keyword but also calls to base class
+          // constructors such as BaseClass.call(this, ...) or super(...).
+          !invokedAsConstructor && context || this,
+          args.concat(slice.call(arguments))
+        );
+      }
 
-    // The bound function must share the .prototype of the unbound
-    // function so that any object created by one constructor will count
-    // as an instance of both constructors.
-    bound.prototype = func.prototype;
+      // The bound function must share the .prototype of the unbound
+      // function so that any object created by one constructor will count
+      // as an instance of both constructors.
+      bound.prototype = func.prototype;
 
-    return bound;
-  };
-}
+      return bound;
+    };
+  }
 
 })();
 
+/*jshint ignore:end*/
+
 
 var tests = Object.keys(window.__karma__.files).filter(function (file) {
-    if (window.__karma__.config.args.pattern) {
-      return (new RegExp(window.__karma__.config.args.pattern + "-test.js$")).test(file);
-    }
-    return (/\-test\.js$/).test(file);
+  'use strict';
+
+  if (window.__karma__.config.args.pattern) {
+    return (new RegExp(window.__karma__.config.args.pattern + '-test.js$')).test(file);
+  }
+  return (/\-test\.js$/).test(file);
+
 });
 
 requirejs.config({

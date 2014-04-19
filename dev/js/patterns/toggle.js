@@ -148,16 +148,6 @@ define([
       event: 'click',
       targetScope: 'global'
     },
-    ensureBool: function(value) {
-      if (typeof(value) === 'string') {
-        if (value === 'true') {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return value;
-    },
     init: function() {
       var self = this;
 

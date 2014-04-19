@@ -1,16 +1,17 @@
 define([
+  'jquery',
   'underscore',
   'expect',
   'sinon',
   'react',
   'mockup-registry',
   'mockup-docs-pattern'
-], function(_, expect, sinon, React, Registry, Pattern) {
-  "use strict";
+], function($, _, expect, sinon, React, Registry, Pattern) {
+  'use strict';
 
   window.mocha.setup('bdd');
 
-  describe("DocsApp:Pattern", function () {
+  describe('DocsApp:Pattern', function () {
 
     beforeEach(function() {
       this.$root = $('<div/>');
@@ -21,7 +22,7 @@ define([
       this.$root.remove();
     });
 
-    it("displays documentation, options and license", function() {
+    it('displays documentation, options and license', function() {
       var pattern = new Pattern();
       React.renderComponent(pattern, this.$root[0]);
       expect($('.mockup-pattern', this.$root).size()).to.be(1);
@@ -47,7 +48,7 @@ define([
       expect($('.mockup-pattern-configuration > table > tbody > tr', this.$root).size()).to.be(2);
     });
 
-    it("parses first comment of pattern script", function() {
+    it('parses first comment of pattern script', function() {
       var pattern = Pattern.componentConstructor.prototype.parsePattern('' +
         '/* Toggle pattern.\n' +
         ' *\n' +

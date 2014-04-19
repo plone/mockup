@@ -5,7 +5,8 @@ define([
   'mockup-docs-page',
   'bootstrap-collapse',
   'bootstrap-transition'
-], function(_, React, Nav, Page) {
+], function(_, React, navigation, page) {
+  'use strict';
 
   var div = React.DOM.div,
       a = React.DOM.a,
@@ -37,15 +38,14 @@ define([
     },
     render: function() {
       var pageID = this.state.page.split('/')[0],
-          CurrentPage = Page(_.findWhere(this.props.pages, {id: pageID}));
+          CurrentPage = page(_.findWhere(this.props.pages, {id: pageID}));
       return (
         div({ className: 'wrapper page-' + pageID }, [
           a({ href: '#content', className: 'sr-only' }, 'Skip to main content' ),
           header({ className: 'navbar navbar-inverse navbar-fixed-top mockup-header' },
             div({ className: 'header container' }, [
               div({ className: 'navbar-header' }, [
-                button({ type: 'button', className: 'navbar-toggle',
-                         'data-toggle': 'collapse', 'data-target': '#navigation' }, [
+                button({ type: 'button', className: 'navbar-toggle', 'data-toggle': 'collapse', 'data-target': '#navigation' }, [
                   span({ className: 'sr-only' }, 'Toggle navigation'),
                   span({ className: 'icon0bar' }, ''),
                   span({ className: 'icon0bar' }, ''),
@@ -54,8 +54,8 @@ define([
                 a({ className: 'navbar-brand', href: '#' }, 'Mockup')
               ]),
               nav({ className: 'collapse navbar-collapse', id: 'navigation'}, [
-                this.transferPropsTo(Nav()),
-                this.transferPropsTo(Nav({ position: 'right' }))
+                this.transferPropsTo(navigation()),
+                this.transferPropsTo(navigation({ position: 'right' }))
               ])
             ])
           ),
@@ -64,7 +64,7 @@ define([
             div({ className: 'container' }, [
               div({ className: 'row' }, [
                 div({ className: 'col-xs-12 col-sm-6 mockup-credits' }, [
-                  p({}, ['Build by ', a({ href: 'http://plone.org' }, 'Plone'),' community.']),
+                  p({}, ['Built by ', a({ href: 'http://plone.org' }, 'Plone'),' community.']),
                   p({}, ['Code and documentation licensed under ', a({ href: 'http://www.opensource.org/licenses/mit-license.php' }, 'MIT'),'.']),
                 ]),
                 div({ className: 'col-xs-12 col-sm-6' },
@@ -76,18 +76,24 @@ define([
               ]),
               div({ className: 'row' },
                 div({ className: 'col-xs-12 mockup-github' }, [
-                  iframe({ src: 'http://ghbtns.com/github-btn.html?user=plone&amp;repo=mockup&amp;type=watch&amp;count=true',
-                           className: 'github-btn', width: '100', height: '20', title: 'Star on GitHub' }),
-                  iframe({ src: 'http://ghbtns.com/github-btn.html?user=plone&amp;repo=mockup&amp;type=fork&amp;count=true',
-                           className: 'github-btn', width: '102', height: '20', title: 'Fork on GitHub' }),
-                  iframe({src: 'http://ghbtns.com/github-btn.html?user=plone&amp;type=follow&amp;count=true',
-                           className: 'github-btn', width: '130', height: '20', title: 'Follow on GitHub' })
+                  iframe({
+                    src: 'http://ghbtns.com/github-btn.html?user=plone&amp;repo=mockup&amp;type=watch&amp;count=true',
+                    className: 'github-btn', width: '100', height: '20', title: 'Star on GitHub'
+                  }),
+                  iframe({
+                    src: 'http://ghbtns.com/github-btn.html?user=plone&amp;repo=mockup&amp;type=fork&amp;count=true',
+                    className: 'github-btn', width: '102', height: '20', title: 'Fork on GitHub'
+                  }),
+                  iframe({
+                    src: 'http://ghbtns.com/github-btn.html?user=plone&amp;type=follow&amp;count=true',
+                    className: 'github-btn', width: '130', height: '20', title: 'Follow on GitHub'
+                  })
                 ])
               )
             ])
           )
         ])
-      )
+      );
     }
   });
 

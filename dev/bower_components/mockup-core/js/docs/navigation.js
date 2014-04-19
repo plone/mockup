@@ -1,7 +1,9 @@
 define([
+  'underscore',
   'react',
   'backbone'
-], function(React, Backbone) {
+], function(_, React, Backbone) {
+  'use strict';
 
   var ul = React.DOM.ul,
       li = React.DOM.li,
