@@ -18,13 +18,14 @@ setup(
     author_email='rok@garbas.si',
     url='https://github.com/plone/mockup',
     license='GPL',
-    packages=find_packages(),
+    packages=find_packages('plone'),
+    package_dir={'': 'plone'},
+
     include_package_data=True,
     zip_safe=False,
     install_requires=[],
-    entry_points={
-        'z3c.autoinclude.plugin': [
-            "target = plone"
-        ],
-    },
+    entry_points='''
+        [z3c.autoinclude.plugin]
+        target = plone
+    ''',
 )
