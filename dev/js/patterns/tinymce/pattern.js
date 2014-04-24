@@ -132,7 +132,7 @@ define([
       folderTypes: 'Folder,Plone Site',
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
-        content_css: '++resource++plone-tinymce-content.css',
+        'content_css': '++resource++plone-tinymce-content.css',
         plugins: [
           'advlist autolink lists charmap print preview anchor ploneupload',
           'searchreplace visualblocks code fullscreen autoresize',
