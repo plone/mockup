@@ -189,7 +189,7 @@ define([
         selector: 'tr',
         dragClass: 'structure-dragging',
         drop: function($el, delta) {
-          if(delta !== 0){
+          if (delta !== 0){
             self.app.moveItem($el.attr('data-id'), delta, self.subsetIds);
             self.storeOrder();
           }

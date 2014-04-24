@@ -220,7 +220,7 @@ define([
         }
       }
       if (self.anchorNodes.length > 0) {
-        for(i = 0; i < self.anchorData.length; i = i + 1) {
+        for (i = 0; i < self.anchorData.length; i = i + 1) {
           var data = self.anchorData[i];
           self.$select.append('<option value="' + i + '">' + data.title + '</option>');
         }
@@ -328,7 +328,7 @@ define([
     },
 
     template: function(data) {
-      return  _.template(this.linkTypeTemplateMapping[this.linkType])(data);
+      return _.template(this.linkTypeTemplateMapping[this.linkType])(data);
     },
 
     init: function() {

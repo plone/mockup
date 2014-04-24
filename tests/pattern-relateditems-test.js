@@ -60,7 +60,7 @@ define([
 
         var addUrls = function(list) {
           /* add getURL value */
-          for(var i = 0; i < list.length; i = i + 1) {
+          for (var i = 0; i < list.length; i = i + 1) {
             var data = list[i];
             data.getURL = window.location.origin + data.path;
           }
