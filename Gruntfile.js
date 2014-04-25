@@ -19,9 +19,12 @@ module.exports = function(grunt) {
       docs: {
         files: [
           { expand: true, src: 'index.html', dest: 'docs/dev/' },
+          { expand: true, src: '*.md', dest: 'docs/dev/' },
           { expand: true, src: 'js/**', dest: 'docs/dev/' },
+          { expand: true, src: 'tests/**', dest: 'docs/dev/' },
           { expand: true, src: 'lib/**', dest: 'docs/dev/' },
           { expand: true, src: 'bower_components/**', dest: 'docs/dev/' },
+          { expand: true, src: 'node_modules/requirejs/require.js', dest: 'docs/dev/' },
           { expand: true, src: 'build/**', dest: 'docs/dev/' },
           { expand: true, src: 'less/**', dest: 'docs/dev/' }
         ]
@@ -30,8 +33,8 @@ module.exports = function(grunt) {
     sed: {
       'docs-css': {
         path: 'docs/dev/index.html',
-        pattern: '<style type="text/less">@import "less/docs.less";@isBrowser: true;</style>',
-        replacement: '<link rel="stylesheet" type="text/css" href="docs.min.css" />'
+        pattern: 'href="docs/dev/docs.min.css"',
+        replacement: 'href="docs.min.css"'
       },
       'docs-js': {
         path: 'docs/dev/index.html',
