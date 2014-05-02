@@ -54,7 +54,11 @@ define([
           });
           view.render();
           var wrap = $('<li/>');
-          view.$el.removeClass('btn'); // in this sort of btn group, can not have btn class
+          // As we are reusing the whole ButtonView for render the add content
+          // list we should remove entirely the "btn btn-default" classes.
+          // This element in fact, should not have any class at all, so we
+          // remove the attribute completely
+          view.$el.removeAttr('class');
 
           wrap.append(view.el);
           self.$items.append(wrap);

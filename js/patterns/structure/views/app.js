@@ -350,7 +350,7 @@ define([
       var columnsBtn = new ButtonView({
         id: 'columns',
         tooltip: 'Configure displayed columns',
-        icon: 'align-justify'
+        icon: 'th'
       });
 
       self.columnsView = new ColumnsView({
