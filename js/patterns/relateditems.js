@@ -418,7 +418,15 @@ define([
           self.query.search(
             'UID', 'plone.app.querystring.operation.list.contains', ids,
             function(data) {
-              callback(data.results);
+              var results = data.results.reduce(function(prev, item) {
+                prev[item.UID] = item;
+                return prev;
+              }, {});
+              callback(
+                ids
+                  .map(function(uid) { return results[uid]; })
+                  .filter(function(item) { return item !== undefined; })
+              );
             },
             false
           );

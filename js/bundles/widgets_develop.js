@@ -51,7 +51,7 @@
         basePath = window.getScriptPath().path();
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
-    link.setAttribute('href', basePath + '++resource++mockup/build/plone.min.css');
+    link.setAttribute('href', basePath + '++resource++mockup/build/widgets.min.css');
     document.getElementsByTagName('head')[0].appendChild(link);
 
     var script = document.createElement('script');
