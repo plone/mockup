@@ -393,12 +393,15 @@ define([
         });
       });
 
-      /* modal els */
-      self.$linkTypes = $('.linkTypes', self.modal.$modal);
-      var $linkType = self.$linkTypes.find('input[value="' + self.linkType + '"]');
-      if ($linkType.length > 0) {
-        $linkType[0].checked = true;
-      }
+      $('.autotoc-nav a', self.modal.$modal).click(function() {
+        var $fieldset = $('fieldset.linkType', self.modal.$modal).eq($(this).index());
+        var classes = $fieldset[0].className.split(/\s+/);
+        _.each(classes, function(val) {
+          if (_.indexOf(self.options.linkTypes, val) !== -1){
+            self.linkType = val;
+          }
+        });
+      });
     },
     getLinkUrl: function() {
       // get the url, only get one uid
