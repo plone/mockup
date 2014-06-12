@@ -396,6 +396,15 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#blah');
     });
 
+    it('test tracks link type changes', function() {
+      var pattern = createTinymce({
+        anchorSelector: 'h1'
+      });
+
+      pattern.addLinkClicked();
+      pattern.linkModal.modal.$modal.find('.autotoc-nav a').eq(1).trigger('click');
+      expect(pattern.linkModal.linkType).to.equal('external');
+    });
 
 
   });
