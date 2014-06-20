@@ -1,23 +1,7 @@
 <div>
   <div class="linkModal">
-    <form method="POST" class="disableAutoSubmit"
-          action="<%- uploadUrl %>"
-          enctype="multipart/form-data">
-      <h1><%- uploadHeading %></h1>
-      <div class="">
-        <input type="text" name="location" />
-      </div>
-      <p><%- uploadLocationWarning %></p>
-      <div class="control-group">
-        <label><%- file %></label>
-        <div class="controls">
-          <input type='file' name='file' />
-        </div>
-      </div>
-      <input type="submit" class="btn btn-primary" name="upload"
-             value="<%- uploadBtn %>" />
-      <iframe id="upload_target" name="upload_target" src=""
-              style="width:0;height:0;border:0px solid #fff;"></iframe>
-    </form>
+    <h1><%- uploadHeading %></h1>
+    <input type="text" name="upload" style="display:none" />
+    <div class="uploadify-me"></div>
   </div>
 </div>

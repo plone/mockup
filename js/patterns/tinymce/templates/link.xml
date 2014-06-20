@@ -6,16 +6,22 @@
     <div class="linkTypes pat-autotoc autotabs"
          data-pat-autotoc="section:fieldset;levels:legend;">
 
-      <fieldset class="linkType internal">
+      <fieldset class="linkType internal" data-linkType="internal">
         <legend>Internal</legend>
         <div>
           <div class="form-group main">
+            <!-- this gives the name to the "linkType" -->
             <input type="text" name="internal" />
           </div>
         </div>
       </fieldset>
 
-      <fieldset class="linkType external">
+      <fieldset class="linkType upload" data-linkType="upload">
+        <legend>Upload</legend>
+        <div class="uploadify-me"></div>
+      </fieldset>
+
+      <fieldset class="linkType external" data-linkType="external">
         <legend>External</legend>
         <div class="form-group main">
           <label for="external"><%- externalText %></label>
@@ -23,7 +29,7 @@
         </div>
       </fieldset>
 
-      <fieldset class="linkType email">
+      <fieldset class="linkType email" data-linkType="email">
         <legend>Email</legend>
         <div class="form-inline">
           <div class="form-group main">
@@ -37,7 +43,7 @@
         </div>
       </fieldset>
 
-      <fieldset class="linkType anchor">
+      <fieldset class="linkType anchor" data-linkType="anchor">
         <legend>Anchor</legend>
         <div>
           <div class="form-group main">

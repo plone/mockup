@@ -31,10 +31,10 @@ define([
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
   'tinymce',
-  'mockup-patterns-dropzone',
+  'mockup-patterns-upload',
   'text!js/patterns/tinymce/templates/link.xml',
   'text!js/patterns/tinymce/templates/image.xml'
-], function($, _, Base, RelatedItems, Modal, tinymce, DropZone,
+], function($, _, Base, RelatedItems, Modal, tinymce, Upload,
             LinkTemplate, ImageTemplate) {
   'use strict';
 
@@ -116,6 +116,19 @@ define([
         };
       }
       return {};
+    }
+
+  });
+
+  var UploadLink = InternalLink.extend({
+    toUrl: function() {
+      var filename = $('.pat-upload').data('filename');
+      var path = $('.pat-upload').data('path');
+      var paths = [path, filename];
+      if (path){
+        paths.unshift(''); // add root node
+      }
+      return paths.join('/');
     }
 
   });
@@ -258,6 +271,23 @@ define([
     }
   });
 
+  tinymce.PluginManager.add('ploneimage', function(editor) {
+    editor.addButton('ploneimage', {
+      icon: 'image',
+      tooltip: 'Insert/edit image',
+      onclick: editor.settings.addImageClicked,
+      stateSelector: 'img:not([data-mce-object])'
+    });
+
+    editor.addMenuItem('ploneimage', {
+      icon: 'image',
+      text: 'Insert image',
+      onclick: editor.settings.addImageClicked,
+      context: 'insert',
+      prependToContext: true
+    });
+  });
+
   /* register the tinymce plugin */
   tinymce.PluginManager.add('plonelink', function(editor) {
     editor.addButton('plonelink', {
@@ -297,6 +327,7 @@ define([
         /* available, none activate by default because these options
          * only get merged, not set.
         'internal',
+        'upload',
         'external',
         'email',
         'anchor',
@@ -309,10 +340,12 @@ define([
       },
       linkTypeClassMapping: {
         'internal': InternalLink,
+        'upload': UploadLink,
         'external': LinkType,
         'email': EmailLink,
         'anchor': AnchorLink,
         'image': ImageLink,
+        'uploadImage': UploadLink,
         'externalImage': LinkType
       }
     },
@@ -320,10 +353,12 @@ define([
     // Image modal is going to have its own modal class, funcs and template.
     linkTypeTemplateMapping: {
       'internal': LinkTemplate,
+      'upload': LinkTemplate,
       'external': LinkTemplate,
       'email': LinkTemplate,
       'anchor': LinkTemplate,
       'image': ImageTemplate,
+      'uploadImage': ImageTemplate,
       'externalImage': ImageTemplate
     },
 
@@ -371,7 +406,7 @@ define([
       });
     },
     isImageMode: function() {
-      return ['image', 'externalImage'].indexOf(this.linkType) !== -1;
+      return ['image', 'uploadImage', 'externalImage'].indexOf(this.linkType) !== -1;
     },
     initElements: function() {
       var self = this;
@@ -472,9 +507,22 @@ define([
       self.initElements();
       self.initData();
 
+      // upload init
+      self.$upload = $('.uploadify-me', self.modal.$modal);
+      self.options.upload.relatedItems = self.options.relatedItems;
+      self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
+      self.$upload.on('uploadAllCompleted', function(evt, data) {
+        self.$upload.attr({
+          'data-filename': data.files ? data.files[0].name : '',
+          'data-path': data.path
+        });
+      });
+
       self.$button.off('click').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        self.linkType = self.modal.$modal.find('fieldset.active').data('linktype');
+
         var href = self.getLinkUrl();
         if (!href) {
           return; // just cut out if no url
@@ -491,23 +539,6 @@ define([
         e.preventDefault();
         self.hide();
       });
-      self.setupDropzone();
-    },
-    setupDropzone: function() {
-      var self = this;
-      if (self.options.uploadUrl) {
-        self.dropzone = new DropZone(self.modal.$modal, {
-          className: 'tinymce-dropzone',
-          clickable: false,
-          url: self.options.uploadUrl,
-          wrap: 'inner',
-          autoCleanResults: true,
-          success: function(e, data) {
-            self.tinypattern.fileUploaded($.parseJSON(data));
-            self.hide();
-          }
-        });
-      }
     },
     show: function() {
       this.modal.show();
