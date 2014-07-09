@@ -362,7 +362,7 @@ define([
 
       pattern.addLinkClicked();
       pattern.linkModal.modal.$modal.find('.autotoc-nav a').eq(1).trigger('click');
-      expect(pattern.linkModal.linkType).to.equal('external');
+      expect(pattern.linkModal.linkType).to.equal('upload');
     });
 
 
