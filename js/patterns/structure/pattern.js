@@ -47,14 +47,18 @@ define([
   'mockup-patterns-base',
   'mockup-utils',
   'js/patterns/structure/views/app',
+  'mockup-i18n',
   'text!js/patterns/structure/templates/paging.xml',
   'text!js/patterns/structure/templates/selection_button.xml',
   'text!js/patterns/structure/templates/selection_item.xml',
   'text!js/patterns/structure/templates/tablerow.xml',
   'text!js/patterns/structure/templates/table.xml',
-  'text!js/ui/templates/popover.xml'
-], function($, Base, utils, AppView) {
+  'text!js/ui/templates/popover.xml',
+], function($, Base, utils, AppView, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _ = i18n.MessageFactory('widgets');
 
   var Structure = Base.extend({
     name: 'structure',
@@ -78,26 +82,26 @@ define([
         'review_state'
       ],
       availableColumns: {
-        'ModificationDate': 'Last modified',
-        'EffectiveDate': 'Published',
-        'CreationDate': 'Created',
-        'review_state': 'Review state',
-        'Subject': 'Tags',
-        'Type': 'Type',
-        'is_folderish': 'Folder',
-        'exclude_from_nav': 'Excluded from nav',
-        'getObjSize': 'Object Size',
-        'last_comment_date': 'Last comment date',
-        'total_comments': 'Total comments'
+        'ModificationDate': _('Last modified'),
+        'EffectiveDate': _('Published'),
+        'CreationDate': _('Created'),
+        'review_state': _('Review state'),
+        'Subject': _('Tags'),
+        'Type': _('Type'),
+        'is_folderish': _('Folder'),
+        'exclude_from_nav': _('Excluded from nav'),
+        'getObjSize': _('Object Size'),
+        'last_comment_date': _('Last comment date'),
+        'total_comments': _('Total comments')
       },
       rearrange: {
         properties: {
-          'id': 'ID',
-          'sortable_title': 'Title',
-          'modified': 'Last Modified',
-          'created': 'Created on',
-          'effective': 'Publication Date',
-          'Type': 'Type'
+          'id': _('ID'),
+          'sortable_title': _('Title'),
+          'modified': _('Last Modified'),
+          'created': _('Created on'),
+          'effective': _('Publication Date'),
+          'Type': _('Type')
         },
         url: '/rearrange'
       },
@@ -108,31 +112,31 @@ define([
        */
       buttonGroups: {
         primary: [{
-          title: 'Cut',
+          title: _('Cut'),
           url: '/cut'
         },{
-          title: 'Copy',
+          title: _('Copy'),
           url: '/copy'
         },{
-          title: 'Paste',
+          title: _('Paste'),
           url: '/paste'
         },{
-          title: 'Delete',
+          title: _('Delete'),
           url: '/delete',
           context: 'danger',
           icon: 'trash'
         }],
         secondary: [{
-          title: 'Workflow',
+          title: _('Workflow'),
           url: '/workflow'
         },{
-          title: 'Tags',
+          title: _('Tags'),
           url: '/tags'
         },{
-          title: 'Properties',
+          title: _('Properties'),
           url: '/properties'
         },{
-          title: 'Rename',
+          title: _('Rename'),
           url: '/rename'
         }]
       },

@@ -67,6 +67,7 @@
       'mockup-registry': 'bower_components/mockup-core/js/registry',
       'mockup-router': 'js/router',
       'mockup-utils': 'js/utils',
+      'mockup-i18n': 'js/i18n',
       'moment': 'bower_components/moment/moment',
       'picker': 'bower_components/pickadate/lib/picker',
       'picker.date': 'bower_components/pickadate/lib/picker.date',
