@@ -91,8 +91,7 @@ define([
   'mockup-patterns-backdrop',
   'mockup-registry',
   'mockup-router',
-  'mockup-utils',
-  'jquery.form'
+  'mockup-utils'
 ], function($, _, Base, Backdrop, registry, Router, utils) {
   'use strict';
 
@@ -211,7 +210,7 @@ define([
               // handle event on $action using a function on self
               if (actionOptions.modalFunction !== null) {
                 self[actionOptions.modalFunction]();
-              // handle event on input/button using jquery.form library
+              // handle event on input/button with jQuery.ajax
               } else if ($.nodeName($action[0], 'input') || $.nodeName($action[0], 'button') || options.isForm === true) {
                 self.options.handleFormAction.apply(self, [$action, actionOptions, patternOptions]);
               // handle event on link with jQuery.ajax
@@ -225,17 +224,23 @@ define([
       },
       handleFormAction: function($action, options, patternOptions) {
         var self = this;
-        // pass action that was clicked when submiting form
-        var extraData = {};
-        extraData[$action.attr('name')] = $action.attr('value');
 
         var $form;
-
         if ($.nodeName($action[0], 'form')) {
           $form = $action;
         } else {
           $form = $action.parents('form:not(.disableAutoSubmit)');
         }
+
+        var method = $form.prop('method');
+        method = (method && method.toUpperCase()) || 'POST';
+
+        var data = $form.serializeArray();
+        // pass action that was clicked when submiting form
+        data.push({
+            'name': $action.attr('name'),
+            'value': $action.attr('value')
+        });
 
         var url;
         if (options.ajaxUrl !== null) {
@@ -255,10 +260,12 @@ define([
         $form.trigger('submit');
 
         self.loading.show(false);
-        $form.ajaxSubmit({
-          timeout: options.timeout,
-          data: extraData,
+
+        $.ajax({
+          type: method,
           url: url,
+          data: data,
+          timeout: options.timeout,
           error: function(xhr, textStatus, errorStatus) {
             self.loading.hide();
             if (textStatus === 'timeout' && options.onTimeout) {
@@ -309,7 +316,9 @@ define([
             }
             self.trigger('formActionSuccess', [response, state, xhr, form]);
           }
+
         });
+
       },
       handleLinkAction: function($action, options, patternOptions) {
         var self = this;
