@@ -262,6 +262,12 @@ define([
         return self.generateImageUrl.apply(self, [data, scale]);
       };
 
+      tinyOptions.init_instance_callback = function(editor) {
+        if (self.tiny === undefined) {
+          self.tiny = editor;
+        }
+      };
+
       tinymce.init(tinyOptions);
 
       self.tiny = tinymce.get(id);
