@@ -1,5 +1,5 @@
-// Author: Ryan Foster
-// Contact: ryan@rynamic.com
+// Author: Nathan Van Gheem
+// Contact: nathan@vangheem.us
 // Version: 1.0
 //
 // Description:
@@ -24,16 +24,28 @@
 
 
 define([
-  'underscore',
   'backbone',
-  'mockup-ui-url/views/container'
-], function(_, Backbone, ContainerView) {
+  'mockup-patterns-structure-url/js/models/result'
+], function(Backbone, Result) {
   'use strict';
 
-  var Toolbar = ContainerView.extend({
-    tagName: 'div',
-    className: 'navbar'
+  var SelectedCollection = Backbone.Collection.extend({
+    model: Result,
+    removeResult: function(model) {
+      return this.removeByUID(model.uid());
+    },
+    removeByUID: function(uid) {
+      var found = this.getByUID(uid);
+      if (found) {
+        this.remove(found);
+      }
+      return found;
+    },
+    getByUID: function(uid) {
+      return this.findWhere({UID: uid});
+    }
   });
 
-  return Toolbar;
+  return SelectedCollection;
 });
+

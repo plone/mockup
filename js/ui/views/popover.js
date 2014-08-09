@@ -27,9 +27,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'js/ui/views/container',
+  'mockup-ui-url/views/container',
   'mockup-patterns-backdrop',
-  'text!js/ui/templates/popover.xml',
+  'text!mockup-ui-url/templates/popover.xml',
 ], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
   'use strict';
 

@@ -1,0 +1,234 @@
+
+.importStructureDep() when not (@isMockup) {
+  @icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+  @import (reference) "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
+  @import (reference) "@{bowerPath}/bootstrap/less/mixins.less";
+  @import (reference) "@{bowerPath}/bootstrap/less/button-groups.less";
+  @import (reference) "@{bowerPath}/bootstrap/less/glyphicons.less";
+  @import (reference) "@{bowerPath}/bootstrap/less/badges.less";
+}
+.importStructureDep() when (@isMockup) {
+  @icon-font-path: "../../../bower_components/bootstrap/dist/fonts/";
+  @import "../../../bower_components/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
+  @import "../../../bower_components/bootstrap/less/mixins.less";
+  @import "../../../bower_components/bootstrap/less/button-groups.less";
+  @import "../../../bower_components/bootstrap/less/glyphicons.less";
+  @import "../../../bower_components/bootstrap/less/badges.less";
+}
+.importStructureDep();
+
+.pat-structure {
+    table{
+        margin-bottom: 0;
+
+        tr{
+            td.selection{
+                width: 15px;
+            }
+        }
+        .breadcrumbs-container{
+            .input-group{
+                .input-group-addon{
+                    padding: 2px 5px;
+                }
+
+                float: left;
+                padding-right: 5px;
+            }
+        }
+    }
+    .navbar {
+        margin-bottom: 5px;
+
+        .btn-group, #selected{
+            margin-left: 5px;
+        }
+    }
+    .table th, .table td {
+        padding: 4px;
+    }
+
+    .contextmenu {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+
+        ul{
+            display:block;
+            position:static;
+            margin-bottom:5px;
+        }
+    }
+    .contextmenuactive{
+        outline: 1px dashed orange;
+    }
+
+    .navbar-search{
+        margin-top: 5px;
+    }
+    .alert.status{
+        margin-bottom: 5px;
+        padding: 5px;
+    }
+
+    #filter{
+        width: 200px;
+        float: right;
+    }
+    #rearrange, #gen-upload{
+        margin-left: 5px;
+    }
+
+    .popover.upload{
+        max-width: 650px;
+    }
+
+    .upload-container .upload-area{
+        width: 500px;
+    }
+
+}
+
+.pat-structure {
+
+    .popover {
+        min-width: 111px;
+        max-width: 500px;
+
+        .popover-title {
+
+            padding-bottom: 0;
+            input {
+                margin-bottom: 0;
+            }
+            .remove-all {
+                display: inline-block;
+                clear: left;
+                margin-top: 5px;
+                margin-left: 6px;
+
+                &:before {
+                    padding-right: 5px;
+                }
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+        &.active {
+            display: block;
+        }
+    }
+
+    .clear{
+        clear:both;
+    }
+
+    .pattern-pickadate-wrapper .pattern-pickadate-date-wrapper .pattern-pickadate-date{
+        width: 200px;
+    }
+
+    .pattern-pickadate-wrapper .pattern-pickadate-time-wrapper .pattern-pickadate-time{
+        width: 120px;
+    }
+
+    .itemRow .title a{
+        color: #333333;
+    }
+    .itemRow.folder .title a{
+        color: #005580;
+    }
+}
+
+.popover.selected {
+    .items {
+        max-height: 300px;
+        overflow-y: auto;
+
+        .selected-item {
+            display: block;
+            margin: 0 8px 3px 0;
+            border-radius: 6px;
+            padding: 4px 6px;
+
+            &:hover {
+                background-color: #f2f2f2;
+            }
+
+            a:hover {
+                text-decoration: none;
+            }
+
+            a:before {
+                .glyphicon-remove-sign();
+                color: #999;
+
+                &:hover {
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+
+.popover.query {
+    width: 700px;
+    max-width: 700px;
+}
+
+.popover.rename {
+    width: 400px;
+
+    .popover-content{
+        max-height: 500px;
+        overflow-y: scroll;
+    }
+    input{
+        width: 100%;
+        height: 24px;
+        line-height: 110%;
+        font-size: 110%;
+    }
+    div.item{
+        border-bottom: 1px solid #0E6EB0;
+        margin-bottom: 5px;
+        padding-bottom: 10px;
+    }
+}
+
+.popover.columns{
+    ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li{
+            list-style: none;
+            cursor: move;
+            border: 1px solid #DDD;
+            border-bottom: none;
+            padding: 3px 7px;
+
+            label{
+                margin-bottom: 0;
+            }
+        }
+
+    }
+
+}
+
+.order-support tbody tr{
+    cursor: move;
+}
+
+.structure-dragging{
+    outline: 1px dashed black;
+}
+
+
+.backdrop-popover {
+    background-color: #fff;
+    z-index: 1009;
+}
