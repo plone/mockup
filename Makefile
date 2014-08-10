@@ -29,7 +29,7 @@ bundle-barceloneta:
 bundle-plone:
 	mkdir -p build
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone
-	
+
 bundle-filemanager:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-filemanager
 
@@ -42,7 +42,7 @@ bootstrap-common:
 	mkdir -p build
 
 bootstrap: clean bootstrap-common
-	$(NPM) link --prefix=$(NODE_PATH)
+	$(NPM) link
 	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
 	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
 
