@@ -26,7 +26,7 @@
 define([
   'underscore',
   'backbone',
-  'js/ui/views/container'
+  'mockup-ui-url/views/container'
 ], function(_, Backbone, ContainerView) {
   'use strict';
 

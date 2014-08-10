@@ -10,8 +10,10 @@ module.exports = function(grunt) {
 
 
   for (var i = 0; i < mockup.patterns.length; i = i + 1) {
-    docsExtraIncludes.push(mockup.patterns[i]);
-    docsExtraIncludes.push('text!' + requirejsOptions.paths[mockup.patterns[i]] + '.js');
+    if (mockup.patterns[i].indexOf('-url') === -1) {
+      docsExtraIncludes.push(mockup.patterns[i]);
+      docsExtraIncludes.push('text!' + requirejsOptions.paths[mockup.patterns[i]] + '.js');
+    }
   }
 
   mockup.registerBundle('docs', {
@@ -74,43 +76,6 @@ module.exports = function(grunt) {
     }
   }, {
     url: '++resource++plone'
-  });
-
-  mockup.registerBundle('barceloneta', {
-    uglify: {
-      barceloneta: {
-        files: {
-          'build/barceloneta-legacy.js': [
-            'bower_components/html5shiv/dist/html5shiv.js',
-            'bower_components/respond/dest/respond.matchmedia.addListener.src.js',
-            'bower_components/respond/dest/respond.src.js'
-          ]
-        }
-      }
-    },
-    copy: {
-      barceloneta: {
-        files: [
-          { expand: true, cwd: 'less/images/', src: 'barceloneta-*', dest: 'build/' },
-          { expand: true, cwd: 'less/fonts/', src: 'barceloneta-*', dest: 'build/' }
-        ]
-      }
-    },
-    sed: {
-      'barceloneta-images': {
-        path: 'build/barceloneta.min.css',
-        pattern: 'url\\(\'images/barceloneta-',
-        replacement: 'url(\'++resource++plonetheme.barceloneta-'
-      },
-      'barceloneta-fonts': {
-        path: 'build/barceloneta.min.css',
-        pattern: 'url\\(\'fonts/barceloneta-',
-        replacement: 'url(\'++resource++plonetheme.barceloneta-'
-      }
-    }
-  }, {
-    url: '++resource++plonetheme.barceloneta',
-    exclude: ['jquery', 'mockup-registry', 'mockup-patterns-base']
   });
 
   mockup.registerBundle('widgets');

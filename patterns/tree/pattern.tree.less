@@ -1,0 +1,7 @@
+.importTreeDep() when (@isMockup) {
+  @import (less) "../../bower_components/jqtree/jqtree.css";
+}
+.importTreeDep() when not (@isMockup) {
+}
+
+.importTreeDep();

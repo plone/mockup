@@ -27,7 +27,7 @@ define([
   'jquery',
   'backbone',
   'underscore',
-  'js/ui/views/base',
+  'mockup-ui-url/views/base',
   'bootstrap-tooltip'
 ], function($, Backbone, _, BaseView) {
   'use strict';
