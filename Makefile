@@ -38,6 +38,7 @@ bootstrap-common:
 
 bootstrap: clean bootstrap-common
 	$(NPM) link
+	# $(NPM) link --prefix=$(NODE_PATH) ## for node < v0.10.30
 	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
 	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
 
