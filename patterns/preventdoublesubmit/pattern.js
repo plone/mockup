@@ -37,15 +37,19 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
-], function($, Base) {
+  'mockup-patterns-base',
+  'mockup-i18n'
+], function($, Base, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var PreventDoubleSubmit = Base.extend({
     name: 'preventdoublesubmit',
     defaults: {
-      message : 'You already clicked the submit button. ' +
-                'Do you really want to submit this form again?',
+      message : _t('You already clicked the submit button. ' +
+                'Do you really want to submit this form again?'),
       guardClassName: 'submitting',
       optOutClassName: 'allowMultiSubmit'
     },

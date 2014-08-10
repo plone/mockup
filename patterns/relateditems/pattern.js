@@ -91,9 +91,13 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-utils',
-  'mockup-patterns-tree'
-], function($, _, Base, Select2, utils, Tree) {
+  'mockup-patterns-tree',
+  'mockup-i18n'
+], function($, _, Base, Select2, utils, Tree, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var RelatedItems = Base.extend({
     name: 'relateditems',
@@ -110,9 +114,9 @@ define([
       mode: 'search', // possible values are search and browse
       closeOnSelect: false,
       basePath: '/',
-      searchText: 'Search:',
-      searchAllText: 'entire site',
-      homeText: 'home',
+      searchText: _t('Search:'),
+      searchAllText: _t('entire site'),
+      homeText: _t('home'),
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       attributes: ['UID', 'Title', 'Type', 'path'],

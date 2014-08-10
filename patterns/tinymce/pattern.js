@@ -119,13 +119,16 @@ define([
   'text!mockup-patterns-tinymce-url/templates/result.xml',
   'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
-  'mockup-patterns-tinymce-url/js/links'
+  'mockup-patterns-tinymce-url/js/links',
+  'mockup-i18n'
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,
-            utils, LinkModal) {
+            utils, LinkModal, i18n) {
   'use strict';
 
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var TinyMCE = Base.extend({
     name: 'tinymce',
@@ -143,23 +146,23 @@ define([
         vocabularyUrl: null,
         width: 500,
         maximumSelectionSize: 1,
-        placeholder: 'Search for item on site...'
+        placeholder: _t('Search for item on site...')
       },
       text: {
-        insertBtn: 'Insert', // so this can be configurable for different languages
-        cancelBtn: 'Cancel',
-        insertHeading: 'Insert link',
-        title: 'Title',
-        internal: 'Internal',
-        external: 'External',
-        email: 'Email',
-        anchor: 'Anchor',
-        subject: 'Subject',
-        image: 'Image',
-        imageAlign: 'Align',
-        scale: 'Size',
-        alt: 'Alternative Text',
-        externalImage: 'External Image URI'
+        insertBtn: _t('Insert'), // so this can be configurable for different languages
+        cancelBtn: _t('Cancel'),
+        insertHeading: _t('Insert link'),
+        title: _t('Title'),
+        internal: _t('Internal'),
+        external: _t('External'),
+        email: _t('Email'),
+        anchor: _t('Anchor'),
+        subject: _t('Subject'),
+        image: _t('Image'),
+        imageAlign: _t('Align'),
+        scale: _t('Size'),
+        alt: _t('Alternative Text'),
+        externalImage: _t('External Image URI')
       },
       // URL generation options
       loadingBaseUrl: '../../../bower_components/tinymce-builded/js/tinymce/',
@@ -168,14 +171,14 @@ define([
       linkAttribute: 'path', // attribute to get link value from data
       prependToScalePart: '/imagescale/', // some value here is required to be able to parse scales back
       appendToScalePart: '',
-      scales: 'Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
+      scales: _t('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
               'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
-              'Large (768x768):large',
+              'Large (768x768):large'),
       targetList: [
-        {text: 'Open in this window / frame', value: ''},
-        {text: 'Open in new window', value: '_blank'},
-        {text: 'Open in parent window / frame', value: '_parent'},
-        {text: 'Open in top frame (replaces all frames)', value: '_top'}
+        {text: _t('Open in this window / frame'), value: ''},
+        {text: _t('Open in new window'), value: '_blank'},
+        {text: _t('Open in parent window / frame'), value: '_parent'},
+        {text: _t('Open in top frame (replaces all frames)'), value: '_top'}
       ],
       imageTypes: 'Image',
       folderTypes: 'Folder,Plone Site',
@@ -226,7 +229,7 @@ define([
           linkTypes: ['image', 'uploadImage', 'externalImage'],
           initialLinkType: 'image',
           text: {
-            insertHeading: 'Insert Image'
+            insertHeading: _t('Insert Image')
           },
           relatedItems: {
             baseCriteria: [{

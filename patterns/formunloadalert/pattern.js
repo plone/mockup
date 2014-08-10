@@ -44,17 +44,21 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
-], function ($, Base) {
+  'mockup-patterns-base',
+  'mockup-i18n'
+], function ($, Base, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var FormUnloadAlert = Base.extend({
     name: 'formunloadalert',
     _changed : false,       // Stores a listing of raised changes by their key
     _suppressed : false,     // whether or not warning should be suppressed
     defaults: {
-      message :  'Discard changes? If you click OK, ' +
-                 'any changes you have made will be lost.',
+      message :  _t('Discard changes? If you click OK, ' +
+                 'any changes you have made will be lost.'),
       // events on which to check for changes
       changingEvents: 'change keyup paste',
       // fields on which to check for changes

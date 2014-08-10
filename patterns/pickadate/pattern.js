@@ -103,9 +103,13 @@ define([
   'picker',
   'picker.date',
   'picker.time',
-  'mockup-patterns-select2'
-], function($, Base) {
+  'mockup-patterns-select2',
+  'mockup-i18n'
+], function($, Base, Picker, PickerDate, PickerTime, Select2, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var PickADate = Base.extend({
     name: 'pickadate',
@@ -127,9 +131,9 @@ define([
       classTimezoneName: 'pattern-pickadate-timezone',
       classTimezoneWrapperName: 'pattern-pickadate-timezone-wrapper',
       classClearName: 'pattern-pickadate-clear',
-      placeholderDate: 'Enter date...',
-      placeholderTime: 'Enter time...',
-      placeholderTimezone: 'Enter timezone...'
+      placeholderDate: _t('Enter date...'),
+      placeholderTime: _t('Enter time...'),
+      placeholderTimezone: _t('Enter timezone...')
     },
     isFalse: function(value) {
       if (typeof(value) === 'string' && value === 'false') {

@@ -63,19 +63,23 @@ define([
   'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
-  'select2'
-], function($, Base, Select2, PickADate, undefined) {
+  'select2',
+  'mockup-i18n'
+], function($, Base, Select2, PickADate, undefined, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var Criteria = function() { this.init.apply(this, arguments); };
   Criteria.prototype = {
     defaults: {
       indexWidth: '20em',
-      placeholder: 'Select criteria',
+      placeholder: _t('Select criteria'),
       remove: '',
-      results: ' items matching your search.',
-      days: 'days',
-      betweendt: 'to',
+      results: _t(' items matching your search.'),
+      days: _t('days'),
+      betweendt: _t('to'),
       classBetweenDtName: 'querystring-criteria-betweendt',
       classWrapperName: 'querystring-criteria-wrapper',
       classIndexName: 'querystring-criteria-index',
@@ -438,10 +442,10 @@ define([
       indexOptionsUrl: null,
       previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
       previewCountURL: 'portal_factory/@@querybuildernumberofresults',
-      sorttxt: 'Sort On',
-      reversetxt: 'Reversed Order',
-      previewTitle: 'Preview',
-      previewDescription: 'Preview of at most 10 items',
+      sorttxt: _t('Sort On'),
+      reversetxt: _t('Reversed Order'),
+      previewTitle: _t('Preview'),
+      previewDescription: _t('Preview of at most 10 items'),
       classSortLabelName: 'querystring-sort-label',
       classSortReverseName: 'querystring-sortreverse',
       classSortReverseLabelName: 'querystring-sortreverse-label',
