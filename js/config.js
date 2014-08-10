@@ -72,6 +72,7 @@
       'mockup-patterns-tree': 'patterns/tree/pattern',
       'mockup-patterns-upload-url': 'patterns/upload',
       'mockup-patterns-upload': 'patterns/upload/pattern',
+      'mockup-patterns-patternsregistry': 'patterns/patternsregistry/pattern',
       'mockup-registry': 'bower_components/mockup-core/js/registry',
       'mockup-router': 'js/router',
       'mockup-utils': 'js/utils',
