@@ -25,7 +25,7 @@ define([
   var okayUrls = [
   ];
   server.xhr.addFilter(function(method, url) {
-    //whenever the this returns true the request will not faked
+    //whenever the this returns true the request will not faked, is this working?
     return url.indexOf('tests/json/') !== -1 ||
            url.indexOf('ace/lib') !== -1 ||
            /(?![filemanager])\..*\.xml$/i.test(url) ||
@@ -635,6 +635,18 @@ define([
     }, {
       id: 'plonetheme.sunburst.resources.logo.png'
     }]));
+  });
+
+  server.respondWith('GET', /patterns-resources/, function(xhr, id) {
+    server.autoRespondAfter = 200;
+    xhr.respond(200, {'Content-Type': 'text/plain'}, 'var foo = "bar";');
+  });
+
+  server.respondWith('POST', /pattern-override-manager/, function(xhr, id) {
+    server.autoRespondAfter = 200;
+    xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+      success: true
+    }));
   });
 
   return server;

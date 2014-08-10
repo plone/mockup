@@ -24,9 +24,10 @@
 
 
 define([
+  'jquery',
   'underscore',
   'backbone'
-], function(_, Backbone) {
+], function($, _, Backbone) {
   'use strict';
 
   var BaseView = Backbone.View.extend({
@@ -60,7 +61,12 @@ define([
     },
     applyTemplate: function() {
       if (this.template !== null) {
-        this.$el.html(_.template(this.template, this.serializedModel()));
+        var data = $.extend({}, this.options, this.serializedModel());
+        var template = this.template;
+        if(typeof(template) === 'string'){
+          template = _.template(template);
+        }
+        this.$el.html(template(data));
       }
     },
     propagateEvent: function(eventName) {
