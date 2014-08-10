@@ -318,6 +318,9 @@ define([
       return ['true', true, 1].indexOf(val) !== -1;
     },
     QueryHelper: QueryHelper,
-    ProgressIndicator: ProgressIndicator
+    ProgressIndicator: ProgressIndicator,
+    getAuthenticator: function() {
+      return $('input[name="_authenticator"]').val();
+    }
   };
 });

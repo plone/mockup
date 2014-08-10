@@ -131,7 +131,22 @@ require([
             title: 'Upload',
             description: 'File upload with drag and drop support.',
             url: 'patterns/upload/pattern.js'
-          }
+          },
+          { id: 'filemanager',
+            title: 'File Manager',
+            description: 'Manage file system-like resources',
+            url: 'patterns/filemanager/pattern.js'
+          },
+          { id: 'texteditor',
+            title: 'Text editor',
+            description: 'Edit files TTW nicely',
+            url: 'patterns/texteditor/pattern.js'
+          },
+          { id: 'thememapper',
+            title: 'Theme Mapper',
+            description: 'Map theme rules',
+            url: 'patterns/thememapper/pattern.js'
+          } 
         ]
       },
       { id: 'contribute',

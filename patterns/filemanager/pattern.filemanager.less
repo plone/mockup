@@ -1,0 +1,92 @@
+@import "popover.less";
+
+.importFileManagerDep() when not (@isMockup) {
+  @import (reference) "popover.less";
+}
+.importFileManagerDep() when (@isMockup) {
+  @import "../../less/popover.less";
+}
+.importFileManagerDep();
+
+
+.pat-filemanager {
+    #fileselector li label {
+        display: inline;
+    }
+    .glyphicon {
+        top: 2px;
+    }
+    ul li,
+    ol li {
+        text-indent: 0;
+        padding-left: 0;
+    }
+    li::before {
+        content: "";
+        padding-right: 0;
+    }
+    #fileselector li label {
+       font-weight: normal;
+       margin-bottom: 0;
+    }
+    .popover.upload{
+        max-width: 700px;
+    }
+    .tree {
+        float: left;
+        width: 17%;
+        ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
+        background: #E7E7E7;
+        }
+        ul.jqtree-tree {
+            margin-left: 0px;
+            li span {
+            padding-left: 12px;
+            }
+        }
+    }
+    .navbar-default {
+        min-height: 250px
+    }
+    .nav-and-editor {
+        float: left;
+        width: 75%;
+    }
+    .navbar-nav > li {
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color: #F8F8F8;
+        -webkit-border-top-left-radius: 10px;
+        -webkit-border-top-right-radius: 10px;
+        -moz-border-radius-topleft: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        margin-right: 5px;
+        margin-top: 9px;
+        border-top: 1px solid #CCC;
+        border-right: 1px solid #CCC;
+        border-left: 1px solid #CCC;
+        &.active {
+            border-top: 1px solid #999;
+            border-right: 1px solid #999;
+            border-left: 1px solid #999;
+            background-color: #E7E7E7;
+            a {
+                background-color: #E7E7E7;
+            }
+        }
+        > a {
+            float: left;
+            padding: 8px 0px;
+            +a {
+                padding-left: 4px;
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+    
+
+}

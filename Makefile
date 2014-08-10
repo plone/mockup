@@ -29,6 +29,9 @@ bundle-barceloneta:
 bundle-plone:
 	mkdir -p build
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone
+	
+bundle-filemanager:
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-filemanager
 
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi

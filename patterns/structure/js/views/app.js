@@ -267,7 +267,7 @@ define([
           // if selection is overridden by another mechanism
           data.selection = JSON.stringify(self.getSelectedUids());
         }
-        data._authenticator = $('input[name="_authenticator"]').val();
+        data._authenticator = utils.getAuthenticator();
         if (data.folder === undefined) {
           data.folder = self.options.queryHelper.getCurrentPath();
         }
@@ -437,7 +437,7 @@ define([
         data: {
           delta: delta,
           id: id,
-          _authenticator: $('[name="_authenticator"]').val(),
+          _authenticator: utils.getAuthenticator(),
           subsetIds: JSON.stringify(subsetIds)
         },
         dataType: 'json',

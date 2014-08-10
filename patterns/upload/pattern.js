@@ -144,7 +144,7 @@ define([
         self.$pathInput = $('input[name="location"]', self.$el);
         self.relatedItems = self.setupRelatedItems(self.$pathInput);
       } else {
-        $('input[name="location"]', self.$el).remove();
+        $('input[name="location"]', self.$el).parent().remove();
         self.relatedItems = null;
       }
 

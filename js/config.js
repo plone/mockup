@@ -1,4 +1,4 @@
-/* globals module:true */
+  /* globals module:true */
 
 (function() {
   'use strict';
@@ -37,6 +37,7 @@
       'mockup-bundles-structure': 'js/bundles/structure',
       'mockup-bundles-tiles': 'js/bundles/widgets',
       'mockup-bundles-widgets': 'js/bundles/widgets',
+      'mockup-bundles-filemanager': 'js/bundles/filemanager',
       'mockup-docs': 'bower_components/mockup-core/js/docs/app',
       'mockup-docs-navigation': 'bower_components/mockup-core/js/docs/navigation',
       'mockup-docs-page': 'bower_components/mockup-core/js/docs/page',
@@ -59,6 +60,11 @@
       'mockup-patterns-select2': 'patterns/select2/pattern',
       'mockup-patterns-structure-url': 'patterns/structure',
       'mockup-patterns-structure': 'patterns/structure/pattern',
+      'mockup-patterns-texteditor': 'patterns/texteditor/pattern',
+      'mockup-patterns-filemanager-url': 'patterns/filemanager',
+      'mockup-patterns-filemanager': 'patterns/filemanager/pattern',
+      'mockup-patterns-thememapper-url': 'patterns/thememapper',
+      'mockup-patterns-thememapper': 'patterns/thememapper/pattern',
       'mockup-patterns-tablesorter': 'patterns/tablesorter/pattern',
       'mockup-patterns-tinymce-url': 'patterns/tinymce',
       'mockup-patterns-tinymce': 'patterns/tinymce/pattern',

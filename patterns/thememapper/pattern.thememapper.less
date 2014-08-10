@@ -1,0 +1,86 @@
+
+.pat-thememapper{
+    iframe{
+        width: 100%;
+        height: 300px;
+        border: solid #eee 1px;
+        position: relative;
+    }
+
+    iframe.fullscreen-frame {
+        height: 600px;
+    }
+
+    .fullscreen {
+        vertical-align: top;
+        display: inline-block;
+        line-height: 12px;
+        padding: 0 0 0 18px;
+        margin: 4px 0 0 2px;
+        background-image: url('./full.png');
+        background-repeat: no-repeat;
+        text-decoration: none;
+        border-bottom: none !important;
+        color: #333 !important;
+        font-size: 90%;
+        content: none;
+    }
+    .fullscreenActive {
+        background-image: url('./small.png');
+    }
+
+    .refresh {
+        vertical-align: top;
+        display: inline-block;
+        line-height: 12px;
+        padding: 0 0 0 12px;
+        margin: 4px 0 0 5px;
+        background-image: url('./refresh.png');
+        background-repeat: no-repeat;
+        text-decoration: none;
+        border-bottom: none !important;
+        color: #333 !important;
+        font-size: 90%;
+        content: none;
+    }
+
+
+    /* Frame info */
+    .frame-info {
+        background-color: #EEEEEE;
+        height: 1.5em;
+        margin-right: -2px;
+        padding: 0 5px;
+        vertical-align: middle;
+    }
+
+    .frame-shelf {
+        float: right;
+    }
+
+    .clear-shelf {
+        font-size: 85%;
+        vertical-align: top;
+        text-decoration: none;
+        border-bottom: none !important;
+    }
+
+    .panel-toolbar, .frame-shelf-container {
+        float: right;
+    }
+
+    .show-fullscreen .frame-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 99999999;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+
+        iframe {
+            height: 80%;
+        }
+    }
+
+}
