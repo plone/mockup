@@ -1,4 +1,4 @@
-GIT = git
+	GIT = git
 NPM = npm
 
 GRUNT = ./node_modules/grunt-cli/bin/grunt
@@ -7,10 +7,9 @@ NODE_PATH = ./node_modules
 
 all: test-once bundles docs
 
-bundles: bundle-barceloneta bundle-widgets bundle-structure bundle-plone
+bundles: bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
-	# cp build/barceloneta* path/to/plonetheme.barceloneta/plonetheme/barceloneta/static
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
 	# cp build/plone* path/to/Products.CMFPlone/Products/CMFPlone/static
 	# ----------------------------------------------------------------------- #
@@ -21,10 +20,6 @@ bundle-widgets:
 
 bundle-structure:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure
-
-bundle-barceloneta:
-	mkdir -p build
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-barceloneta
 
 bundle-plone:
 	mkdir -p build
@@ -79,4 +74,7 @@ clean-deep: clean
 	if test -f $(BOWER); then $(BOWER) cache clean; fi
 	if test -f $(NPM); then $(NPM) cache clean; fi
 
-.PHONY: bundle bundle-widgets bundle-structure bundle-barceloneta bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-widgets publish-structure publish-barceloneta publish-plone publish-docs clean clean-deep
+publish-docs:
+	echo -e "Publishing 'docs' bundle!\n"; cd docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
+
+.PHONY: bundle bundle-widgets bundle-structure bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-docs clean clean-deep

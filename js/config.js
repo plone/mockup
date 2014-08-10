@@ -31,7 +31,6 @@
       'jquery.event.drop': 'lib/jquery.event.drop',
       'jquery.form': 'bower_components/jquery-form/jquery.form',
       'marked': 'bower_components/marked/lib/marked',
-      'mockup-bundles-barceloneta': 'js/bundles/barceloneta',
       'mockup-bundles-docs': 'js/bundles/docs',
       'mockup-bundles-plone': 'js/bundles/plone',
       'mockup-bundles-structure': 'js/bundles/structure',

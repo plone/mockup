@@ -85,13 +85,6 @@ module.exports = function(grunt) {
   mockup.registerBundle('widgets');
 
   mockup.initGrunt(grunt, {
-    uglify: {
-      barceloneta: {
-        files: {
-          'build/barceloneta.js': 'js/bundles/barceloneta_develop.js'
-        }
-      }
-    },
     sed: {
       bootstrap: {
         path: 'node_modules/lcov-result-merger/index.js',
