@@ -124,7 +124,7 @@
       'tinymce-textpattern': 'bower_components/tinymce/plugins/textpattern/plugin',
       'tinymce-visualblocks': 'bower_components/tinymce/plugins/visualblocks/plugin',
       'tinymce-visualchars': 'bower_components/tinymce/plugins/visualchars/plugin',
-      'tinymce-wordcount': 'bower_components/tinymce/plugins/wordcount/plugin',    
+      'tinymce-wordcount': 'bower_components/tinymce/plugins/wordcount/plugin',
       'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme.min',
       'tinymce': 'bower_components/tinymce/tinymce',
       'underscore': 'bower_components/lodash/dist/lodash.underscore'

@@ -64,12 +64,16 @@ define([
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',
   'text!mockup-patterns-upload-url/templates/preview.xml',
+  'mockup-i18n'
 ], function($, _, Base, RelatedItems, Dropzone,
-            UploadTemplate, PreviewTemplate) {
+            UploadTemplate, PreviewTemplate, i18n) {
   'use strict';
 
   /* we do not want this plugin to auto discover */
   Dropzone.autoDiscover = false;
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var UploadPattern = Base.extend({
     name: 'upload',
@@ -101,10 +105,11 @@ define([
         vocabularyUrl: null,
         width: 500,
         maximumSelectionSize: 1,
-        placeholder: 'Search for item on site...'
+        placeholder: _t('Search for item on site...')
       }
     },
 
+    //placeholder: 'Search for item on site...'
     init: function() {
       var self = this,
           template = UploadTemplate;
@@ -114,7 +119,7 @@ define([
       self.numFiles = 0;
       self.currentFile = 0;
 
-      template = _.template(template);
+      template = _.template(template, {_t: _t});
       self.$el.addClass(self.options.className);
       self.$el.append(template);
 
@@ -389,7 +394,7 @@ define([
       }).progress(function(e, bytesUploaded, bytesTotal) {
         var percentage = (bytesUploaded / bytesTotal * 100);
         self.$progress.attr('aria-valuenow', percentage).css('width', percentage + '%');
-        self.$progress.html('uploading...<br />' +
+        self.$progress.html(_t('uploading...<br />') +
                             self.formatBytes(bytesUploaded) +
                             ' / ' + self.formatBytes(bytesTotal));
       }).done(function(url, file) {
