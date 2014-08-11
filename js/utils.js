@@ -289,8 +289,16 @@ define([
     return self;
   };
 
-  return {
+  var generateId = function(prefix){
+    if (prefix === undefined) {
+      prefix = 'id';
+    }
+    return prefix + (Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16).substring(1));
+  };
 
+  return {
+    generateId: generateId,
     parseBodyTag: function(txt) {
       return $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(txt)[0]
           .replace('<body', '<div').replace('</body>', '</div>')).eq(0).html();
@@ -301,8 +309,7 @@ define([
       }
       var id = $el.attr('id');
       if (id === undefined) {
-        id = prefix + (Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16).substring(1));
+        id = generateId(prefix);
       } else {
         /* hopefully we don't screw anything up here... changing the id
          * in some cases so we get a decent selector */

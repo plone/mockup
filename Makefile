@@ -29,6 +29,9 @@ bundle-plone:
 bundle-filemanager:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-filemanager
 
+bundle-resourceregistry:
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-resourceregistry
+
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	rm -rf docs/dev
