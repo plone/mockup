@@ -28,32 +28,32 @@ define([
                       },
                       "resources": {
                         "plone": {
-                          "url": "js/bundles", "js": "plone.js", "css_deps": "",
+                          "url": "js/bundles", "js": "plone.js",
                           "css": [], "deps": "", "export": "",
                           "conf": "", "force": false
                         },
                         "plone-auth": {
-                          "url": "js/bundles", "js": "plone-auth.js", "css_deps": [],
+                          "url": "js/bundles", "js": "plone-auth.js",
                           "css": [], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "barceloneta": {
-                          "url": "js/bundles", "js": "barceloneta.js", "css_deps": [],
+                          "url": "js/bundles", "js": "barceloneta.js",
                           "css": ["barceloneta.less"], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "modal": {
-                          "url": "patterns/modal", "js": "pattern.js", "css_deps": [],
+                          "url": "patterns/modal", "js": "pattern.js",
                           "css": ["pattern.modal.less"], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "autotoc": {
-                          "url": "patterns/autotoc", "js": "pattern.js", "css_deps": [],
+                          "url": "patterns/autotoc", "js": "pattern.js",
                           "css": ["pattern.autotoc.less", "pattern.other.less"],
                           "deps": "", "export": "", "conf": "", "enabled": true
                         },
                         "pickadate": {
-                          "url": "patterns/pickadate", "js": "pattern.js", "css_deps": [],
+                          "url": "patterns/pickadate", "js": "pattern.js",
                           "css": ["pattern.pickadate.less"], "deps": "", "export": "",
                           "conf": "", "enabled": true
                         }
