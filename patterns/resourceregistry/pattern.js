@@ -19,48 +19,48 @@
  *    <div class="pat-resourceregistry"
  *        data-pat-resourceregistry='{"bundles":{
  *                                     "plone": {
- *                                       "resource": "plone", "after": null,
- *                                       "expression": "", "enabled": true, "ie_condition": ""
+ *                                       "resource": "plone", "depends": "",
+ *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     },
  *                                     "plone-auth": {
- *                                       "resource": "plone-auth", "after": "plone",
- *                                       "expression": "", "enabled": true, "ie_condition": ""
+ *                                       "resource": "plone-auth", "depends": "plone",
+ *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     },
  *                                     "barceloneta": {
- *                                       "resource": "plone", "after": "*",
- *                                       "expression": "", "enabled": true, "ie_condition": ""
+ *                                       "resource": "barceloneta", "depends": "*",
+ *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     }
  *                                   },
  *                                   "resources": {
  *                                     "plone": {
- *                                       "url": "js/bundles", "js": "plone.js", "css_deps": [],
+ *                                       "url": "js/bundles", "js": "plone.js", "css_deps": "",
  *                                       "css": [], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "plone-auth": {
- *                                       "url": "js/bundles", "js": "plone-auth.js", "css_deps": [],
+ *                                       "url": "js/bundles", "js": "plone-auth.js", "css_deps": "",
  *                                       "css": [], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "barceloneta": {
- *                                       "url": "js/bundles", "js": "barceloneta.js", "css_deps": [],
+ *                                       "url": "js/bundles", "js": "barceloneta.js", "css_deps": "",
  *                                       "css": ["barceloneta.less"], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "modal": {
- *                                       "url": "patterns/modal", "js": "pattern.js", "css_deps": [],
+ *                                       "url": "patterns/modal", "js": "pattern.js", "css_deps": "",
  *                                       "css": ["pattern.modal.less"], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "autotoc": {
- *                                       "url": "patterns/autotoc", "js": "pattern.js", "css_deps": [],
+ *                                       "url": "patterns/autotoc", "js": "pattern.js", "css_deps": "",
  *                                       "css": ["pattern.autotoc.less", "pattern.other.less"],
- *                                       "deps": "", "export": "", "conf": "", "enabled": true
+ *                                       "deps": "", "export": "", "conf": ""
  *                                     },
  *                                     "pickadate": {
- *                                       "url": "patterns/pickadate", "js": "pattern.js", "css_deps": [],
+ *                                       "url": "patterns/pickadate", "js": "pattern.js", "css_deps": "",
  *                                       "css": ["pattern.pickadate.less"], "deps": "", "export": "",
- *                                       "conf": "", "enabled": true
+ *                                       "conf": "", "force": true
  *                                     }
  *                                   },
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
@@ -160,10 +160,10 @@ define([
       }
     },
     afterRender: function(){
+      ResourceInputFieldView.prototype.afterRender.apply(this);
       if(this.options.value){
         this.$('input')[0].checked = true;
       }
-      this.$el.addClass('field-' + this.options.name);
     }
   });
 
@@ -196,8 +196,8 @@ define([
     },
 
     afterRender: function(){
+      ResourceInputFieldView.prototype.afterRender.apply(this);
       var self = this;
-      self.$el.addClass('field-' + self.options.name);
       var $container = self.$('.fields');
       _.each(self.options.value, function(value){
         $container.append('<li class="list-group-item"><input class="form-control input-sm" value="' + value + '" /></li>');
@@ -230,6 +230,62 @@ define([
       '<div class="col-sm-10">' +
         '<textarea class="form-control input-sm" name="name"><%- value %></textarea>' +
       '</div>')
+  });
+
+  var ResourceSelectFieldView = ResourceInputFieldView.extend({
+    events: {
+      'change select': 'inputChanged'
+    },
+    inputChanged: function(){
+      this.options.registryData[this.options.name] = this.options.value = this.$('select').val();
+    },
+
+    getSelectOptions: function(){
+      return [];
+    },
+
+    serializedModel: function(){
+      var self = this;
+      return $.extend({}, self.options, {
+        'options': self.getSelectOptions()
+      });
+    },
+
+    afterRender: function(){
+      ResourceInputFieldView.prototype.afterRender.apply(this);
+      var $el = this.$('option[value="' + this.options.value + '"]');
+      if($el.length > 0){
+        $el[0].selected = true;
+      }
+    },
+
+    template: _.template(
+      '<label class="col-sm-2 control-label"><%- title %></label>' +
+      '<div class="col-sm-10">' +
+        '<select class="form-control select-sm" name="name">' +
+          '<% _.each(options, function(option) { %>' +
+            '<option value="<%- option %>"><%- option %></option>' +
+          '<% }); %>' +
+        '</select>' +
+      '</div>')
+  });
+
+  var BundleDependsFieldView = ResourceSelectFieldView.extend({
+    getSelectOptions: function(){
+      var self = this;
+      return ['', '*'].concat(_.filter(_.keys(self.options.containerData), function(name){
+        return name !== self.options.name;
+      }));
+    }
+      });
+
+  var BundleResourceFieldView = ResourceSelectFieldView.extend({
+    getSelectOptions: function(){
+      var self = this;
+      return [''].concat(_.filter(_.keys(self.options.registryView.options.data.resources), function(name){
+        return name !== self.options.name;
+      }));
+    }
   });
 
   var ResourceNameFieldView = ResourceInputFieldView.extend({
@@ -319,34 +375,33 @@ define([
       view: ResourceNameFieldView
     }, {
       name: 'url',
-      title: 'Resources base url'
+      title: 'Resources base URL'
     }, {
       name: 'js',
       title: 'Main JavaScript file'
     }, {
       name: 'css',
-      title: 'CSS/LESS',
+      title: 'CSS/LESS Files',
       view: ResourceSortableListFieldView
     }, {
       name: 'css_deps',
-      title: 'CSS Dependencies',
-      view: ResourceListFieldView
+      title: 'Coma separated values of resources to load their CSS before this one'
     },{
       name: 'init',
-      title: 'Init instruction for requirejs shim(if used)'
+      title: 'Init instruction for shim'
     }, {
       name: 'deps',
-      title: 'Dependencies'
+      title: 'Coma separated values of resource for shim'
     }, {
       name: 'export',
       title: 'Export vars for shim(if used)'
     }, {
       name: 'conf',
-      title: 'Configuration',
+      title: 'Configuration in JSON for the widget',
       view: ResourceTextAreaFieldView
     }, {
-      name: 'enabled',
-      title: 'Enabled',
+      name: 'force',
+      title: 'Force to load it at the end',
       view: ResourceBoolFieldView
     }]
   });
@@ -358,10 +413,12 @@ define([
       view: ResourceNameFieldView
     }, {
       name: 'resource',
-      title: 'Resource'
+      title: 'Resource',
+      view: BundleResourceFieldView
     }, {
-      name: 'after',
-      title: 'After'
+      name: 'depends',
+      title: 'Depends',
+      view: BundleDependsFieldView
     }, {
       name: 'expression',
       title: 'Expression'
@@ -370,8 +427,8 @@ define([
       title: 'Enabled',
       view: ResourceBoolFieldView
     }, {
-      name: 'ie_condition',
-      title: 'IE Condition'
+      name: 'conditionalcomment',
+      title: 'Conditional comment'
     }]
   });
 
