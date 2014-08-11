@@ -60,6 +60,27 @@ toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignrig
 
 /*global alert:true */
 
+
+define([
+  'jquery',
+  'underscore',
+  'mockup-patterns-base',
+  'mockup-patterns-relateditems',
+  'mockup-patterns-modal',
+  'tinymce',
+  'mockup-patterns-autotoc',
+  'text!mockup-patterns-tinymce-url/templates/result.xml',
+  'text!mockup-patterns-tinymce-url/templates/selection.xml',
+  'mockup-utils',
+  'mockup-patterns-tinymce-url/js/links',
+  'mockup-i18n'
+], function($, _,
+            Base, RelatedItems, Modal, tinymce,
+            AutoTOC, ResultTemplate, SelectionTemplate,
+            utils, LinkModal, i18n) {
+  'use strict';
+
+
 require(['tinymce'], 
   function(tinymce){
   require([
@@ -107,26 +128,6 @@ require(['tinymce'],
       function(undefined){
   })
 })
-
-define([
-  'jquery',
-  'underscore',
-  'mockup-patterns-base',
-  'mockup-patterns-relateditems',
-  'mockup-patterns-modal',
-  'tinymce',
-  'mockup-patterns-autotoc',
-  'text!mockup-patterns-tinymce-url/templates/result.xml',
-  'text!mockup-patterns-tinymce-url/templates/selection.xml',
-  'mockup-utils',
-  'mockup-patterns-tinymce-url/js/links',
-  'mockup-i18n'
-], function($, _,
-            Base, RelatedItems, Modal, tinymce,
-            AutoTOC, ResultTemplate, SelectionTemplate,
-            utils, LinkModal, i18n) {
-  'use strict';
-
   i18n.loadCatalog('widgets');
   var _t = i18n.MessageFactory('widgets');
 
