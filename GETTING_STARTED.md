@@ -113,6 +113,10 @@ or:
 
 These will run only the tests that end with foobar-test.js
 
+You can pass the ``verbose=true`` and ``debug=true`` command line options to
+increase log output.
+
+
 # Creating docs
 
 First, build the documentation with:

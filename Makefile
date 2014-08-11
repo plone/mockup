@@ -6,6 +6,16 @@ GRUNT = ./node_modules/grunt-cli/bin/grunt
 BOWER = ./node_modules/bower/bin/bower
 NODE_PATH = ./node_modules
 
+DEBUG =
+ifeq ($(debug), true)
+	DEBUG = --debug
+endif
+VERBOSE =
+ifeq ($(verbose), true)
+	VERBOSE = --verbose
+endif
+
+
 all: test-once bundles docs
 
 bundles: bundle-widgets bundle-structure bundle-plone
@@ -63,16 +73,16 @@ watch:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) watch
 
 test:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-once:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-dev:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-ci:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci $(DEBUG) $(VERBOSE)
 
 clean:
 	mkdir -p build
