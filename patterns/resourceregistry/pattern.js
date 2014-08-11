@@ -709,8 +709,11 @@ define([
             filepath: self.options.filepath
           },
           success: function(){
-            self.canSave = false;
-            self.render();
+            var index = _.indexOf(self.options.overridesView.data.overrides, self.options.filepath);
+            if(index !== -1){
+              self.options.overridesView.data.overrides.splice(index, 1);
+            }
+            self.options.overridesView.render();
           },
           error: function(){
             alert('Error deleting override');
