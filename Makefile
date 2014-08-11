@@ -1,5 +1,6 @@
-	GIT = git
+GIT = git
 NPM = npm
+NODE_VERSION = $(shell node -v)
 
 GRUNT = ./node_modules/grunt-cli/bin/grunt
 BOWER = ./node_modules/bower/bin/bower
@@ -40,8 +41,13 @@ bootstrap-common:
 	mkdir -p build
 
 bootstrap: clean bootstrap-common
+	@echo $(NODE_VERSION)
+ifeq (,$(findstring v0.10.3, $(NODE_VERSION)))
+	# for node < v0.10.30
+	$(NPM) link --prefix=$(NODE_PATH)
+else
 	$(NPM) link
-	# $(NPM) link --prefix=$(NODE_PATH) ## for node < v0.10.30
+endif
 	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
 	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
 
