@@ -1,6 +1,6 @@
 GIT = git
 NPM = npm
-NODE_VERSION = $(shell node -v)
+NPM_VERSION = $(shell npm -v)
 
 GRUNT = ./node_modules/grunt-cli/bin/grunt
 BOWER = ./node_modules/bower/bin/bower
@@ -42,8 +42,8 @@ bootstrap-common:
 
 bootstrap: clean bootstrap-common
 	@echo $(NODE_VERSION)
-ifeq (,$(findstring v0.10.3, $(NODE_VERSION)))
-	# for node < v0.10.30
+ifeq (,$(findstring 1.4, $(NPM_VERSION)))
+	# for node < v0.10.30, npm < 1.4.x
 	$(NPM) link --prefix=$(NODE_PATH)
 else
 	$(NPM) link
