@@ -147,10 +147,10 @@ require([
             description: 'Map theme rules',
             url: 'patterns/thememapper/pattern.js'
           },
-          { id: 'patternsregistry',
-            title: 'Patterns Registry',
-            description: 'Register and override patterns',
-            url: 'patterns/patternsregistry/pattern.js'
+          { id: 'resourceregistry',
+            title: 'Resource Registry',
+            description: 'Register and override resources',
+            url: 'patterns/resourceregistry/pattern.js'
           }  
         ]
       },

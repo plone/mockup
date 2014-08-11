@@ -6,9 +6,14 @@ define([
   'use strict';
 
   function getQueryVariable(url, variable) {
-    var query = url.split('?')[1];
-    if (query === undefined) {
-      return null;
+    var query;
+    if(url.indexOf('?') !== -1){
+      query = url.split('?')[1];
+      if (query === undefined) {
+        return null;
+      }
+    }else{
+      query = url;
     }
     var vars = query.split('&');
     for (var i = 0; i < vars.length; i += 1) {
@@ -637,18 +642,24 @@ define([
     }]));
   });
 
-  server.respondWith('GET', /patterns-resources/, function(xhr, id) {
+  server.respondWith('GET', /resources-registry/, function(xhr, id) {
     server.autoRespondAfter = 200;
     xhr.respond(200, {'Content-Type': 'text/plain'}, 'var foo = "bar";');
   });
 
-  server.respondWith('POST', /pattern-override-manager/, function(xhr, id) {
+  server.respondWith('POST', /resource-override-manager/, function(xhr, id) {
     server.autoRespondAfter = 200;
     xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
       success: true
     }));
   });
 
+  server.respondWith('POST', /save-resource-registry/, function(xhr, id) {
+    server.autoRespondAfter = 200;
+    xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+      success: true
+    }));
+  });
   return server;
 
 });
