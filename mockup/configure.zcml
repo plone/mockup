@@ -22,4 +22,8 @@
         name="mockuplib"
         directory="../lib" />
 
+    <browser:resourceDirectory
+        name="bower"
+        directory="../bower_components" />
+
 </configure>

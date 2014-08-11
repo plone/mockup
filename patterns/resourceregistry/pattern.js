@@ -4,9 +4,7 @@
  *    registry(array): List of registry entries ([])
  *    bundleOrder(array): List of bundle names for their order ([])
  *    overrides(array): List of current overrides ([])
- *    saveUrl(string): url to save registry to (null)
- *    buildUrl(string): url to save build current bundles (null)
- *    overrideManageUrl(string): url to save/delete overridden resource with(null)
+ *    managerUrl(string): url to handle manage actions(null)
  *    baseUrl(string): to render resources from(null)
  *
  * Documentation:
@@ -65,8 +63,7 @@
  *                                   },
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
  *                                   "baseUrl": "/resources-registry",
- *                                   "overrideManageUrl": "/resource-override-manager",
- *                                   "saveUrl": "/save-resource-registry"}'>
+ *                                   "manageUrl": "/resource-manager"}'>
  *    </div>
  *
  * License:
@@ -99,17 +96,6 @@ define([
   'mockup-utils'
 ], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils) {
   'use strict';
-
-  Array.prototype.move = function (old_index, new_index) {
-    if (new_index >= this.length) {
-      var k = new_index - this.length;
-      while ((k--) + 1) {
-        this.push(undefined);
-      }
-    }
-    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; // for testing purposes
-  };
 
   var ResourceInputFieldView = BaseView.extend({
     tagName: 'div',
@@ -177,6 +163,13 @@ define([
       'click button': 'addRowClicked',
       'change input': 'inputChanged',
       'keyup input': 'textChanged'
+    },
+
+    initialize: function(options){
+      ResourceInputFieldView.prototype.initialize.apply(this, [options]);
+      if(!this.options.value){
+        this.options.value = [];
+      }
     },
 
     inputChanged: function(){
@@ -505,27 +498,55 @@ define([
         '</div>' +
       '</div>' +
       '<div class="row">' +
-        '<div class="items col-md-3">' +
+        '<div class="items col-md-4">' +
           '<ul class="bundles list-group">' +
             '<li class="list-group-item list-group-item-warning">Bundles</li>' +
           '</ul>' +
           '<ul class="resources list-group">' +
-            '<li class="list-group-item list-group-item-warning">Resources</li>' +
+            '<li class="list-group-item list-group-item-warning">Resources ' +
+              '<input class="float-right form-control input-xs" ' +
+                      'placeholder="Filter..." />' +
+            '</li>' +
           '</ul>' +
         '</div>' +
-        '<div class="form col-md-9"></div>'),
+        '<div class="form col-md-8"></div>'),
     events: {
       'click button.build': 'buildClicked',
       'click button.save': 'saveClicked',
       'click button.add-resource': 'addResourceClicked',
       'click button.add-bundle': 'addBundleClicked',
-      'click button.cancel': 'revertChanges'
+      'click button.cancel': 'revertChanges',
+      'keyup .resources input': 'filterResources'
     },
+    filterTimeout: 0,
 
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.previousData = $.extend(true, {}, options.data);
+    },
+
+    filterResources: function(){
+      var self = this;
+      if(self.filterTimeout){
+        clearTimeout(self.filterTimeout);
+      }
+      self.filterTimeout = setTimeout(function(){
+        var filterText = self.$('.resources input').val().toLowerCase();
+        var $els = self.$('.resources .list-group-item:not(.list-group-item-warning)');
+        if(!filterText || filterText.length < 3){
+          $els.removeClass('hidden');
+        }else{
+          $els.each(function(){
+            var $el = $(this);
+            if($el.find('a').html().toLowerCase().indexOf(filterText) !== -1){
+              $el.removeClass('hidden');
+            }else{
+              $el.addClass('hidden');
+            }
+          });
+        }
+      }, 200);
     },
 
     showResourceEditor: function(resource){
@@ -547,8 +568,7 @@ define([
       self.$bundles = self.$('ul.bundles');
       self.$resources = self.$('ul.resources');
       var data = self.options.data;
-      var bundles = _.keys(data.bundles);
-      bundles.sort();
+      var bundles = _.sortBy(_.keys(data.bundles), function(v){ return v.toLowerCase(); });
       self.items = {
         bundles: {},
         resources: {}
@@ -561,8 +581,7 @@ define([
         self.items.bundles[resourceName] = item;
         self.$bundles.append(item.render().el);
       });
-      var resources = _.keys(data.resources);
-      resources.sort();
+      var resources = _.sortBy(_.keys(data.resources), function(v){ return v.toLowerCase(); });
       _.each(resources, function(resourceName){
         var item = new RegistryResourceListItem({
           data: data.resources[resourceName],
@@ -598,9 +617,10 @@ define([
       var self = this;
       e.preventDefault();
       $.ajax({
-        url: self.options.data.saveUrl,
+        url: self.options.data.manageUrl,
         type: 'POST',
         data: {
+          action: 'save-registry',
           _authenticator: utils.getAuthenticator(),
           resources: JSON.stringify(self.options.data.resources),
           bundles: JSON.stringify(self.options.data.bundles)
@@ -617,9 +637,10 @@ define([
     buildClicked: function(e){
       e.preventDefault();
       $.ajax({
-        url: this.options.buildUrl,
+        url: this.options.manageUrl,
         type: 'POST',
         data: {
+          action: 'build',
           _authenticator: utils.getAuthenticator()
         },
         error: function(){
@@ -658,11 +679,11 @@ define([
       e.preventDefault();
       var self = this;
       $.ajax({
-        url: self.options.data.overrideManageUrl,
+        url: self.options.data.manageUrl,
         type: 'POST',
         data: {
           _authenticator: utils.getAuthenticator(),
-          action: 'save',
+          action: 'save-file',
           filepath: self.options.filepath,
           data: self.editor.editor.getValue()
         },
@@ -683,11 +704,11 @@ define([
         this.options.data.overrides.splice(self.options.index, 1);
         this.render();
         $.ajax({
-          url: this.options.data.overrideManageUrl,
+          url: this.options.data.manageUrl,
           type: 'POST',
           data: {
             _authenticator: utils.getAuthenticator(),
-            action: 'delete',
+            action: 'delete-file',
             filepath: self.options.filepath
           },
           success: function(){
@@ -724,7 +745,8 @@ define([
           $pre.html(data);
           self.options.overridesView.$editorContainer.empty().append($pre);
           self.editor = new TextEditor($pre, {
-            width: 500
+            width: 600,
+            height: 500
           });
           self.editor.setSyntax(override);
           self.editor.editor.on('change', function(){
@@ -801,12 +823,16 @@ define([
       var matches = [];
       var data = self.options.data;
       _.each(data.resources, function(resource){
-        if((resource.url + resource.js).toLowerCase().indexOf(q) !== -1){
-          matches.push(resource.url + '/' + resource.js);
+        var base = resource.url || '';
+        if(base){
+          base += '/';
+        }
+        if((base + (resource.js || '')).toLowerCase().indexOf(q) !== -1){
+          matches.push(base + resource.js);
         }
         for(var i=0; i<resource.css.length; i=i+1){
-          if((resource.url + resource.css[i]).toLowerCase().indexOf(q) !== -1){
-            matches.push(resource.url + '/' + resource.css[i]);
+          if((base + (resource.css[i] || '')).toLowerCase().indexOf(q) !== -1){
+            matches.push(base + resource.css[i]);
             break;
           }
         }
@@ -902,14 +928,11 @@ define([
       bundles: [],
       resources: [],
       overrides: [],
-      overrideManageUrl: null,
-      saveUrl: null,
-      buildUrl: null,
+      manageUrl: null,
       baseUrl: null
     },
     init: function() {
       var self = this;
-
       self.tabs = new TabView(self.options);
       self.$el.append(self.tabs.render().el);
     }
