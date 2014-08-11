@@ -25,7 +25,7 @@
       'dropzone': 'bower_components/dropzone/downloads/dropzone-amd-module',
       'expect': 'bower_components/expect/index',
       'jqtree': 'bower_components/jqtree/tree.jquery',
-      'jquery': 'bower_components/jquery/jquery',
+      'jquery': 'bower_components/jquery/dist/jquery',
       'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
