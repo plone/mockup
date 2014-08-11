@@ -112,3 +112,17 @@ or:
     make test-dev pattern=foobar
 
 These will run only the tests that end with foobar-test.js
+
+# Creating docs
+
+First, build the documentation with:
+
+    make docs
+
+Then, start the python test server like so:
+
+    python -m SimpleHTTPServer
+
+After that, access the served site in a webbrowser under the url:
+
+    http://localhost:8000
