@@ -819,18 +819,24 @@ define([
         'Results<button class="btn btn-default pull-right btn-xs clear">Clear</button></li>');
       var matches = [];
       var data = self.options.data;
+      var urlMatches = function(base, path){
+        var filepath = (base + (path || '')).toLowerCase();
+        if(filepath.indexOf('++plone++') === -1){
+          return false;
+        }
+        return filepath.indexOf(q) !== -1;
+      };
       _.each(data.resources, function(resource){
         var base = resource.url || '';
         if(base){
           base += '/';
         }
-        if((base + (resource.js || '')).toLowerCase().indexOf(q) !== -1){
+        if(urlMatches(base, resource.js)){
           matches.push(base + resource.js);
         }
         for(var i=0; i<resource.css.length; i=i+1){
-          if((base + (resource.css[i] || '')).toLowerCase().indexOf(q) !== -1){
+          if(urlMatches(base, resource.css[i])){
             matches.push(base + resource.css[i]);
-            break;
           }
         }
       });
