@@ -88,7 +88,7 @@ define([
       });
       $(this.$el).trigger('submit');
     });
-    it('shows the right message on beforeunload event', function(done) {
+    it.skip('shows the right message on beforeunload event', function(done) {
       registry.scan(this.$el);
       var returnValue = '';
       // current instance of the pattern
