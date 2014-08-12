@@ -1120,7 +1120,7 @@ define([
         var pos = _.indexOf(order, name);
         if(pos !== -1){
           // already added from depends
-          if(data[dependsOn]){
+          if(data[dependsOn] && _.indexOf(order, dependsOn) === -1){
             // need to insert BEFORE current
             order.splice(pos, 0, dependsOn);
           }
