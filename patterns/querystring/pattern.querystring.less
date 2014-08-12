@@ -1,16 +1,7 @@
 
-.importQueryStringDep() when not (@isMockup) {
-  @icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-  @import (reference) "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import (reference) "@{bowerPath}/bootstrap/less/glyphicons.less";
-}
-
-.importQueryStringDep() when (@isMockup) {
-  @icon-font-path: "../../bower_components/bootstrap/dist/fonts/";
-  @import "../../bower_components/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import "../../bower_components/bootstrap/less/glyphicons.less";
-}
-.importQueryStringDep();
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+@import url("@{bowerPath}/bootstrap/less/variables.less"); // Modify this for custom colors, font-sizes, etc
+@import url("@{bowerPath}/bootstrap/less/glyphicons.less");
 
 #content .field .querystring-criteria-wrapper .picker__input {
   font-size: 16px;

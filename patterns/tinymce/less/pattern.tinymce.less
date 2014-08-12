@@ -1,26 +1,13 @@
-.importTinyMCEDep() when (@isMockup) {
-  @import (less) "../../../bower_components/tinymce/skins/lightgray/skin.min.css";
-  @import (less) "../../../bower_components/tinymce/skins/lightgray/content.inline.min.css";
-  @import (less) "../../../bower_components/tinymce/plugins/visualblocks/css/visualblocks.css";
-  @import "../../modal/pattern.modal.less";
-  @import "../../autotoc/pattern.autotoc.less";
-  @import "../../../bower_components/bootstrap/less/buttons.less";
-  @import "../../../bower_components/bootstrap/less/button-groups.less";
-  @import "../../../bower_components/bootstrap/less/close.less";
-  @import "../../upload/less/pattern.upload.less";
-}
 
-.importTinyMCEDep() when not (@isMockup) {
-  @import (reference) "../../modal/pattern.modal.less";
-  @import (reference) "../../autotoc/pattern.autotoc.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/buttons.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/button-groups.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/close.less";
-  @import (reference) "../../upload/less/pattern.upload.less";
-}
-.importTinyMCEDep();
-
-
+@import url("@{bowerPath}/tinymce/skins/lightgray/skin.min.css");
+@import url("@{bowerPath}/tinymce/skins/lightgray/content.inline.min.css");
+@import url("@{bowerPath}/tinymce/plugins/visualblocks/css/visualblocks.css");
+@import "@{mockupPath}/modal/pattern.modal.less";
+@import "@{mockupPath}/autotoc/pattern.autotoc.less";
+@import url("@{bowerPath}/bootstrap/less/buttons.less");
+@import url("@{bowerPath}/bootstrap/less/button-groups.less");
+@import url("@{bowerPath}/bootstrap/less/close.less");
+@import "@{mockupPath}/upload/less/pattern.upload.less";
 
 div.linkModal {
     .pattern-relateditems-container{

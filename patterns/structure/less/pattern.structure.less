@@ -1,23 +1,11 @@
 
-.importStructureDep() when not (@isMockup) {
-  @icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-  @import (reference) "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import (reference) "@{bowerPath}/bootstrap/less/mixins.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/button-groups.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/glyphicons.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/badges.less";
-  @import (reference) "popover.less";
-}
-.importStructureDep() when (@isMockup) {
-  @icon-font-path: "../../../bower_components/bootstrap/dist/fonts/";
-  @import "../../../bower_components/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import "../../../bower_components/bootstrap/less/mixins.less";
-  @import "../../../bower_components/bootstrap/less/button-groups.less";
-  @import "../../../bower_components/bootstrap/less/glyphicons.less";
-  @import "../../../bower_components/bootstrap/less/badges.less";
-  @import "../../../less/popover.less";
-}
-.importStructureDep();
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+@import url("@{bowerPath}/bootstrap/less/variables.less"); // Modify this for custom colors, font-sizes, etc
+@import url("@{bowerPath}/bootstrap/less/mixins.less");
+@import url("@{bowerPath}/bootstrap/less/button-groups.less");
+@import url("@{bowerPath}/bootstrap/less/glyphicons.less");
+@import url("@{bowerPath}/bootstrap/less/badges.less");
+@import url("@{mockuplessPath}/popover.less");
 
 
 .pat-structure {
