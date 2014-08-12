@@ -29,6 +29,7 @@
       'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
+      'jquery.form': 'bower_components/jquery-form/jquery.form',
       'marked': 'bower_components/marked/lib/marked',
       'mockup-bundles-docs': 'js/bundles/docs',
       'mockup-bundles-plone': 'js/bundles/plone',
