@@ -16,7 +16,7 @@
     "jquery": "1.11.1",
     "jquery.cookie": "1.4.1",
     "lodash": "2.4.1",
-    "mockup-core": "file:///home/thet-data/data/dev/plone/mockup/mockup-core/.git/#thet-zidanca",
+    "mockup-core": "~1.2.6",
     "moment": "2.5.1",
     "pickadate": "3.4.0",
     "requirejs-text": "2.0.10",
