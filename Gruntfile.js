@@ -17,6 +17,16 @@ module.exports = function(grunt) {
   }
 
   mockup.registerBundle('docs', {
+    less: {
+      options : {
+        paths : ['../../../'],
+        modifyVars : { 
+          bowerPath: '"bower_components/"', 
+          mockupPath: '"patterns/"',
+          mockuplessPath: '"less/"'
+        }
+      }
+    },
     copy: {
       docs: {
         files: [
