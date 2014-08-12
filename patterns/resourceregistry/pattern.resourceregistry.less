@@ -1,11 +1,18 @@
-@import "../bower_components/bootstrap/less/variables.less";
-@import "../bower_components/bootstrap/less/mixins.less";
-@import "../bower_components/bootstrap/less/list-group.less";
+@import "../../bower_components/bootstrap/less/variables.less";
+@import "../../bower_components/bootstrap/less/mixins.less";
+@import "../../bower_components/bootstrap/less/list-group.less";
+@import "../../bower_components/bootstrap/less/forms.less";
+@import "../../bower_components/bootstrap/less/input-groups.less";
 
 .pat-resourceregistry{
     .nav-tabs{
         a {
             color: black;
+        }
+    }
+    .tab-pane.overrides{
+        .list-group-item a{
+            font-size: 11px; /* need to try and fit long strings */
         }
     }
     .resources.list-group{

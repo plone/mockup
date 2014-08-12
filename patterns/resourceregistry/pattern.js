@@ -114,18 +114,23 @@ define([
       'keyup input': 'textChanged'
     },
     template: _.template(
-      '<label class="col-sm-2 control-label"><%- title %></label>' +
-      '<div class="col-sm-10">' +
+      '<label class="col-sm-3 control-label"><%- title %></label>' +
+      '<div class="col-sm-9">' +
         '<input class="form-control input-sm" name="name" value="<%- value %>" />' +
+        '<%= description %>' +
       '</div>'),
     timeout: -1,
+
+    serializedModel: function(){
+      return $.extend({}, {description: ''}, this.options);
+    },
 
     textChanged: function(){
       var self = this;
       if(self.timeout){
         clearTimeout(self.timeout);
       }
-      setTimeout(function(){
+      self.timeout = setTimeout(function(){
         self.inputChanged();
       }, 200);
     },
@@ -141,7 +146,7 @@ define([
   });
 
   var ResourceBoolFieldView = ResourceInputFieldView.extend({
-    className: 'col-sm-offset-2 col-sm-10',
+    className: 'col-sm-offset-3 col-sm-9',
     template: _.template(
       '<div class="checkbox">' +
         '<label>' +
@@ -165,13 +170,14 @@ define([
   var ResourceListFieldView = ResourceInputFieldView.extend({
     sortable: false,
     template: _.template(
-      '<label class="col-sm-2 control-label"><%- title %></label>' +
-      '<ul class="col-sm-10 fields list-group" />' +
-      '<button class="col-sm-offset-2 btn btn-default">Add</button>'),
+      '<label class="col-sm-3 control-label"><%- title %></label>' +
+      '<ul class="col-sm-9 fields list-group" />' +
+      '<button class="btn btn-default add pull-right">Add</button>'),
     events: {
-      'click button': 'addRowClicked',
+      'click button.add': 'addRowClicked',
       'change input': 'inputChanged',
-      'keyup input': 'textChanged'
+      'keyup input': 'textChanged',
+      'click button.remove': 'removeItem'
     },
 
     initialize: function(options){
@@ -197,12 +203,23 @@ define([
       self.render();
     },
 
+    removeItem: function(e){
+      e.preventDefault();
+      var $el = $(e.target).parents('li');
+      var index = $el.index();
+      this.options.value.splice(index, 1);
+      $el.remove();
+    },
+
     afterRender: function(){
       ResourceInputFieldView.prototype.afterRender.apply(this);
       var self = this;
       var $container = self.$('.fields');
       _.each(self.options.value, function(value){
-        $container.append('<li class="list-group-item"><input class="form-control input-sm" value="' + value + '" /></li>');
+        $container.append('<li class="list-group-item"><div class="input-group">' +
+          '<input class="form-control input-sm" value="' + value + '" />' +
+          '<span class="input-group-btn">' +
+            '<button class="btn btn-default remove btn-sm">Remove</button></div></li>');
       });
 
       if(self.sortable){
@@ -228,8 +245,8 @@ define([
       this.options.registryData[this.options.name] = this.options.value = this.$('textarea').val();
     },
     template: _.template(
-      '<label class="col-sm-2 control-label"><%- title %></label>' +
-      '<div class="col-sm-10">' +
+      '<label class="col-sm-3 control-label"><%- title %></label>' +
+      '<div class="col-sm-9">' +
         '<textarea class="form-control input-sm" name="name"><%- value %></textarea>' +
       '</div>')
   });
@@ -248,9 +265,10 @@ define([
 
     serializedModel: function(){
       var self = this;
-      return $.extend({}, self.options, {
-        'options': self.getSelectOptions()
-      });
+      return $.extend({}, {
+        'options': self.getSelectOptions(),
+        'description': ''
+      }, self.options);
     },
 
     afterRender: function(){
@@ -262,13 +280,14 @@ define([
     },
 
     template: _.template(
-      '<label class="col-sm-2 control-label"><%- title %></label>' +
-      '<div class="col-sm-10">' +
+      '<label class="col-sm-3 control-label"><%- title %></label>' +
+      '<div class="col-sm-9">' +
         '<select class="form-control select-sm" name="name">' +
           '<% _.each(options, function(option) { %>' +
             '<option value="<%- option %>"><%- option %></option>' +
           '<% }); %>' +
         '</select>' +
+        '<%= description %>' +
       '</div>')
   });
 
@@ -329,7 +348,11 @@ define([
       return this.handleError(false);
     },
     serializedModel: function(){
-      return $.extend({}, this.options, {value: this.resourceName});
+      var data = $.extend({}, {
+        description: ''
+      }, this.options);
+      data.value = this.options.resourceName;
+      return data;
     }
   });
 
@@ -377,31 +400,34 @@ define([
       view: ResourceNameFieldView
     }, {
       name: 'url',
-      title: 'Resources base URL'
+      title: 'URL',
+      description: 'Resources base URL'
     }, {
       name: 'js',
-      title: 'Main JavaScript file'
+      title: 'JS',
+      description: 'Main JavaScript file'
     }, {
       name: 'css',
-      title: 'CSS/LESS Files',
+      title: 'CSS/LESS',
+      description: 'List of CSS/LESS files to use for resource',
       view: ResourceSortableListFieldView
     },{
       name: 'init',
-      title: 'Init instruction for shim'
+      title: 'Init', 
+      description: 'Init instruction for requirejs shim'
     }, {
       name: 'deps',
-      title: 'Coma separated values of resource for shim'
+      title: 'Dependencies',
+      description: 'Coma separated values of resources for requirejs shim'
     }, {
       name: 'export',
-      title: 'Export vars for shim(if used)'
+      title: 'Export',
+      description: 'Export vars for requirejs shim'
     }, {
       name: 'conf',
-      title: 'Configuration in JSON for the widget',
+      title: 'Configuration',
+      description: 'Configuration in JSON for the widget',
       view: ResourceTextAreaFieldView
-    }, {
-      name: 'force',
-      title: 'Force to load it at the end',
-      view: ResourceBoolFieldView
     }]
   });
 
@@ -413,21 +439,25 @@ define([
     }, {
       name: 'resource',
       title: 'Resource',
+      description: 'Main resource file to bootstrap bundle',
       view: BundleResourceFieldView
     }, {
       name: 'depends',
       title: 'Depends',
+      description: 'Bundle this depends on',
       view: BundleDependsFieldView
     }, {
       name: 'expression',
-      title: 'Expression'
+      title: 'Expression',
+      description: 'Conditional expression to decide if this resource will run'
     }, {
       name: 'enabled',
       title: 'Enabled',
       view: ResourceBoolFieldView
     }, {
       name: 'conditionalcomment',
-      title: 'Conditional comment'
+      title: 'Conditional comment',
+      description: 'For Internet Exploder hacks...'
     }]
   });
 
@@ -491,15 +521,30 @@ define([
   var BaseResourcesPane = BaseView.extend({
     tagName: 'div',
     className: 'tab-pane',
+    $form: null,
 
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.previousData = self._copyData();
+      /* setup scroll spy to move form into view if necessary */
+      /* disabled, at least for now, forms too bad to do this with...
+      $(window).scroll(function(){
+        if(self.$form){
+          var offset = self.$el.parent().offset();
+          var top = $(document).scrollTop();
+          if(top > offset.top){
+            self.$form.css({marginTop: top - offset.top});
+          }else{
+            self.$form.css({marginTop: null});
+          }
+        }
+      });
+      */
     },
 
     showResourceEditor: function(resource){
-      this.$('.form').empty().append(resource.render().el);
+      this.$form.empty().append(resource.render().el);
     },
 
     _copyData: function(){
@@ -518,6 +563,9 @@ define([
         this._revertData(this.previousData);
         this.render();
       }
+    },
+    afterRender: function(){
+      this.$form = this.$('.form');
     }
   });
 
@@ -619,6 +667,7 @@ define([
         self.items.resources[resourceName] = item;
         self.$resources.append(item.render().el);
       });
+      BaseResourcesPane.prototype.afterRender.apply(self);
       return self;
     },
 
@@ -771,7 +820,9 @@ define([
         url += '/';
       }
       $.ajax({
-        url: url + override,
+        // cache busting url
+        url: url + override + '?' + utils.generateId(),
+        dataType: 'text',
         success: function(data){
           var $pre = $('<pre class="pat-texteditor" />');
           $pre.html(data);
@@ -798,7 +849,7 @@ define([
 
   var OverridesView = BaseView.extend({
     tagName: 'div',
-    className: 'tab-pane',
+    className: 'tab-pane overrides',
     template: _.template(
       '<form class="row">' +
         '<div class="col-md-6 col-md-offset-6">' +
@@ -1119,6 +1170,7 @@ define([
           }
         }
       });
+      BaseResourcesPane.prototype.afterRender.apply(self); 
       return self;
     },
 
