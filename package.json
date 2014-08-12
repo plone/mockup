@@ -30,7 +30,6 @@
     "lcov-result-merger": "~0.0.2",
     "less": "~1.7.0",
     "mocha": "~1.18.2",
-    "node-inspector": "",
     "requirejs": "~2.1.11"
   },
   "maintainers": [

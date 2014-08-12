@@ -4,7 +4,6 @@ NPM_VERSION = $(shell npm -v)
 
 GRUNT = ./node_modules/grunt-cli/bin/grunt
 BOWER = ./node_modules/bower/bin/bower
-NODE_DEBUG = ./node_modules/node-inspector/bin/node-debug.js --cli
 NODE_PATH = ./node_modules
 
 DEBUG =
@@ -77,7 +76,7 @@ test:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-once:
-	NODE_PATH=$(NODE_PATH) $(NODE_DEBUG) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --pattern=$(pattern)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-dev:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev $(DEBUG) $(VERBOSE) --pattern=$(pattern)
