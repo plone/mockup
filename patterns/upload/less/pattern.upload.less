@@ -1,9 +1,4 @@
-.importUploadDep() when (@isMockup) {
-  @import (less) "../../../bower_components/dropzone/downloads/css/dropzone.css";
-}
-.importUploadDep() when not (@isMockup) {
-}
-.importUploadDep();
+@import url("@{bowerPath}/dropzone/downloads/css/dropzone.css");
 
 .upload-container {
     .upload-area {

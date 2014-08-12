@@ -1,19 +1,8 @@
-.importRelatedItemsDep() when not (@isMockup) {
-  @icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-  @import (reference) "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import (reference) "@{bowerPath}/bootstrap/less/glyphicons.less";
-  @import (reference) "../select2/pattern.select2.less";
-  @import (reference) "../tree/pattern.tree.less";
-}
-
-.importRelatedItemsDep() when (@isMockup) {
-  @icon-font-path: "../../bower_components/bootstrap/dist/fonts/";
-  @import "../../bower_components/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import "../../bower_components/bootstrap/less/glyphicons.less";
-  @import "../select2/pattern.select2.less";
-  @import "../tree/pattern.tree.less";
-}
-.importRelatedItemsDep();
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+@import url("@{bowerPath}/bootstrap/less/variables.less"); // Modify this for custom colors, font-sizes, etc
+@import url("@{bowerPath}/bootstrap/less/glyphicons.less");
+@import "@{mockupPath}/select2/pattern.select2.less";
+@import "@{mockupPath}/tree/pattern.tree.less";
 
 
 .pattern-relateditems-dropdown {

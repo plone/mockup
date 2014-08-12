@@ -1,17 +1,8 @@
-.importModalDep() when not (@isMockup) {
-  @import (reference) "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import (reference) "@{bowerPath}/bootstrap/less/mixins.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/modals.less";
-  @import (reference) "@{bowerPath}/bootstrap/less/progress-bars.less";
-}
 
-.importModalDep() when (@isMockup) {
-  @import "../../bower_components/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-  @import "../../bower_components/bootstrap/less/mixins.less";
-  @import "../../bower_components/bootstrap/less/modals.less";
-  @import "../../bower_components/bootstrap/less/progress-bars.less";
-}
-.importModalDep();
+@import url("@{bowerPath}/bootstrap/less/variables.less"); // Modify this for custom colors, font-sizes, etc
+@import url("@{bowerPath}/bootstrap/less/mixins.less");
+@import url("@{bowerPath}/bootstrap/less/modals.less");
+@import url("@{bowerPath}/bootstrap/less/progress-bars.less");
 
 
 .modal-loading {

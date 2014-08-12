@@ -14,46 +14,46 @@ define([
     beforeEach(function() {
       var testData = {"bundles":{
                         "plone": {
-                          "resource": "plone", "after": null,
-                          "expression": "", "enabled": true, "ie_condition": ""
+                          "resource": "plone", "depends": null,
+                          "expression": "", "enabled": true, "conditionalcomment": ""
                         },
                         "plone-auth": {
-                          "resource": "plone-auth", "after": "plone",
-                          "expression": "", "enabled": true, "ie_condition": ""
+                          "resource": "plone-auth", "depends": "plone",
+                          "expression": "", "enabled": true, "conditionalcomment": ""
                         },
                         "barceloneta": {
-                          "resource": "plone", "after": "*",
-                          "expression": "", "enabled": true, "ie_condition": ""
+                          "resource": "plone", "depends": "*",
+                          "expression": "", "enabled": true, "conditionalcomment": ""
                         }
                       },
                       "resources": {
                         "plone": {
-                          "url": "js/bundles", "js": "plone.js", "css_deps": [],
+                          "url": "++plone++js/bundles", "js": "plone.js",
                           "css": [], "deps": "", "export": "",
-                          "conf": "", "bundle": false
+                          "conf": "", "force": false
                         },
                         "plone-auth": {
-                          "url": "js/bundles", "js": "plone-auth.js", "css_deps": [],
+                          "url": "++plone++js/bundles", "js": "plone-auth.js",
                           "css": [], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "barceloneta": {
-                          "url": "js/bundles", "js": "barceloneta.js", "css_deps": [],
+                          "url": "++plone++js/bundles", "js": "barceloneta.js",
                           "css": ["barceloneta.less"], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "modal": {
-                          "url": "patterns/modal", "js": "pattern.js", "css_deps": [],
+                          "url": "patterns/modal", "js": "pattern.js",
                           "css": ["pattern.modal.less"], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "autotoc": {
-                          "url": "patterns/autotoc", "js": "pattern.js", "css_deps": [],
+                          "url": "patterns/autotoc", "js": "pattern.js",
                           "css": ["pattern.autotoc.less", "pattern.other.less"],
                           "deps": "", "export": "", "conf": "", "enabled": true
                         },
                         "pickadate": {
-                          "url": "patterns/pickadate", "js": "pattern.js", "css_deps": [],
+                          "url": "patterns/pickadate", "js": "pattern.js",
                           "css": ["pattern.pickadate.less"], "deps": "", "export": "",
                           "conf": "", "enabled": true
                         }
@@ -85,9 +85,9 @@ define([
     it('searches', function(){
       this.pat.tabs.showOverrides = true;
       this.pat.tabs.hideShow();
-      this.$el.find('.search-field').attr('value', 'pattern');
+      this.$el.find('.search-field').attr('value', 'bundles');
       this.pat.tabs.overridesView.textChange();
-      expect(this.$el.find('.search-results li').length).to.equal(7);
+      expect(this.$el.find('.search-results li').length).to.equal(4);
     });
 
     it('customize resource', function(){
@@ -106,7 +106,7 @@ define([
 
     it('loads bundle data', function(){
       this.$pat.find('.bundle-list-item-plone a').trigger('click');
-      expect(this.$pat.find('.resource-entry .field-resource input').attr('value')).to.equal('plone');
+      expect(this.$pat.find('.resource-entry .field-resource select').val()).to.equal('plone');
     });
 
     it('edit resource data', function(){
@@ -117,8 +117,8 @@ define([
 
     it('edit bundle data', function(){
       this.$pat.find('.bundle-list-item-plone a').trigger('click');
-      this.$pat.find('.resource-entry .field-resource input').attr('value', 'foobar').trigger('change');
-      expect(this.pat.options.bundles.plone.resource).to.equal('foobar');
+      this.$pat.find('.resource-entry .field-expression input').attr('value', 'foobar').trigger('change');
+      expect(this.pat.options.bundles.plone.expression).to.equal('foobar');
     });
 
     it('delete resource', function(){

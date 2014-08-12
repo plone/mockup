@@ -1,12 +1,12 @@
 /* Resource Registry pattern.
  *
  * Options:
- *    registry(array): List of registry entries ([])
- *    bundleOrder(array): List of bundle names for their order ([])
+ *    bundles(object): object with all bundles ({})
+ *    resources(object): object with all resources ({})
+ *    javascripts(object): object with all legacy type javascripts ({})
+ *    css(object): object with all legacy type css ({}) 
  *    overrides(array): List of current overrides ([])
- *    saveUrl(string): url to save registry to (null)
- *    buildUrl(string): url to save build current bundles (null)
- *    overrideManageUrl(string): url to save/delete overridden resource with(null)
+ *    managerUrl(string): url to handle manage actions(null)
  *    baseUrl(string): to render resources from(null)
  *
  * Documentation:
@@ -19,54 +19,60 @@
  *    <div class="pat-resourceregistry"
  *        data-pat-resourceregistry='{"bundles":{
  *                                     "plone": {
- *                                       "resource": "plone", "after": null,
- *                                       "expression": "", "enabled": true, "ie_condition": ""
+ *                                       "resource": "plone", "depends": "",
+ *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     },
  *                                     "plone-auth": {
- *                                       "resource": "plone-auth", "after": "plone",
- *                                       "expression": "", "enabled": true, "ie_condition": ""
+ *                                       "resource": "plone-auth", "depends": "plone",
+ *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     },
  *                                     "barceloneta": {
- *                                       "resource": "plone", "after": "*",
- *                                       "expression": "", "enabled": true, "ie_condition": ""
+ *                                       "resource": "barceloneta", "depends": "*",
+ *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     }
  *                                   },
  *                                   "resources": {
  *                                     "plone": {
- *                                       "url": "js/bundles", "js": "plone.js", "css_deps": [],
+ *                                       "url": "js/bundles", "js": "plone.js",
  *                                       "css": [], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "plone-auth": {
- *                                       "url": "js/bundles", "js": "plone-auth.js", "css_deps": [],
+ *                                       "url": "js/bundles", "js": "plone-auth.js",
  *                                       "css": [], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "barceloneta": {
- *                                       "url": "js/bundles", "js": "barceloneta.js", "css_deps": [],
+ *                                       "url": "js/bundles", "js": "barceloneta.js",
  *                                       "css": ["barceloneta.less"], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "modal": {
- *                                       "url": "patterns/modal", "js": "pattern.js", "css_deps": [],
+ *                                       "url": "patterns/modal", "js": "pattern.js",
  *                                       "css": ["pattern.modal.less"], "deps": "", "export": "",
- *                                       "conf": "", "bundle": false
+ *                                       "conf": "", "force": false
  *                                     },
  *                                     "autotoc": {
- *                                       "url": "patterns/autotoc", "js": "pattern.js", "css_deps": [],
+ *                                       "url": "patterns/autotoc", "js": "pattern.js",
  *                                       "css": ["pattern.autotoc.less", "pattern.other.less"],
- *                                       "deps": "", "export": "", "conf": "", "enabled": true
+ *                                       "deps": "", "export": "", "conf": ""
  *                                     },
  *                                     "pickadate": {
- *                                       "url": "patterns/pickadate", "js": "pattern.js", "css_deps": [],
+ *                                       "url": "patterns/pickadate", "js": "pattern.js",
  *                                       "css": ["pattern.pickadate.less"], "deps": "", "export": "",
- *                                       "conf": "", "enabled": true
+ *                                       "conf": "", "force": true
  *                                     }
  *                                   },
+ *                                   "javascripts": {
+ *                                     "jquery-plugin-other": {
+ *                                       "url": "jquery-plugin-2.js", "conditionalcomment": "",
+ *                                       "enabled": true, "expression": "", "depends": "jquery-plugin"},
+ *                                     "jquery-plugin": {
+ *                                       "url": "jquery-plugin.js", "conditionalcomment": "",
+ *                                       "enabled": true, "expression": "", "depends": ""}},
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
  *                                   "baseUrl": "/resources-registry",
- *                                   "overrideManageUrl": "/resource-override-manager",
- *                                   "saveUrl": "/save-resource-registry"}'>
+ *                                   "manageUrl": "/resource-manager"}'>
  *    </div>
  *
  * License:
@@ -99,17 +105,6 @@ define([
   'mockup-utils'
 ], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils) {
   'use strict';
-
-  Array.prototype.move = function (old_index, new_index) {
-    if (new_index >= this.length) {
-      var k = new_index - this.length;
-      while ((k--) + 1) {
-        this.push(undefined);
-      }
-    }
-    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; // for testing purposes
-  };
 
   var ResourceInputFieldView = BaseView.extend({
     tagName: 'div',
@@ -160,10 +155,10 @@ define([
       }
     },
     afterRender: function(){
+      ResourceInputFieldView.prototype.afterRender.apply(this);
       if(this.options.value){
         this.$('input')[0].checked = true;
       }
-      this.$el.addClass('field-' + this.options.name);
     }
   });
 
@@ -177,6 +172,13 @@ define([
       'click button': 'addRowClicked',
       'change input': 'inputChanged',
       'keyup input': 'textChanged'
+    },
+
+    initialize: function(options){
+      ResourceInputFieldView.prototype.initialize.apply(this, [options]);
+      if(!this.options.value){
+        this.options.value = [];
+      }
     },
 
     inputChanged: function(){
@@ -196,8 +198,8 @@ define([
     },
 
     afterRender: function(){
+      ResourceInputFieldView.prototype.afterRender.apply(this);
       var self = this;
-      self.$el.addClass('field-' + self.options.name);
       var $container = self.$('.fields');
       _.each(self.options.value, function(value){
         $container.append('<li class="list-group-item"><input class="form-control input-sm" value="' + value + '" /></li>');
@@ -230,6 +232,62 @@ define([
       '<div class="col-sm-10">' +
         '<textarea class="form-control input-sm" name="name"><%- value %></textarea>' +
       '</div>')
+  });
+
+  var ResourceSelectFieldView = ResourceInputFieldView.extend({
+    events: {
+      'change select': 'inputChanged'
+    },
+    inputChanged: function(){
+      this.options.registryData[this.options.name] = this.options.value = this.$('select').val();
+    },
+
+    getSelectOptions: function(){
+      return [];
+    },
+
+    serializedModel: function(){
+      var self = this;
+      return $.extend({}, self.options, {
+        'options': self.getSelectOptions()
+      });
+    },
+
+    afterRender: function(){
+      ResourceInputFieldView.prototype.afterRender.apply(this);
+      var $el = this.$('option[value="' + this.options.value + '"]');
+      if($el.length > 0){
+        $el[0].selected = true;
+      }
+    },
+
+    template: _.template(
+      '<label class="col-sm-2 control-label"><%- title %></label>' +
+      '<div class="col-sm-10">' +
+        '<select class="form-control select-sm" name="name">' +
+          '<% _.each(options, function(option) { %>' +
+            '<option value="<%- option %>"><%- option %></option>' +
+          '<% }); %>' +
+        '</select>' +
+      '</div>')
+  });
+
+  var BundleDependsFieldView = ResourceSelectFieldView.extend({
+    getSelectOptions: function(){
+      var self = this;
+      return ['', '*'].concat(_.filter(_.keys(self.options.containerData), function(name){
+        return name !== self.options.name;
+      }));
+    }
+      });
+
+  var BundleResourceFieldView = ResourceSelectFieldView.extend({
+    getSelectOptions: function(){
+      var self = this;
+      return [''].concat(_.filter(_.keys(self.options.registryView.options.data.resources), function(name){
+        return name !== self.options.name;
+      }));
+    }
   });
 
   var ResourceNameFieldView = ResourceInputFieldView.extend({
@@ -319,34 +377,30 @@ define([
       view: ResourceNameFieldView
     }, {
       name: 'url',
-      title: 'Resources base url'
+      title: 'Resources base URL'
     }, {
       name: 'js',
       title: 'Main JavaScript file'
     }, {
       name: 'css',
-      title: 'CSS/LESS',
+      title: 'CSS/LESS Files',
       view: ResourceSortableListFieldView
-    }, {
-      name: 'css_deps',
-      title: 'CSS Dependencies',
-      view: ResourceListFieldView
     },{
       name: 'init',
-      title: 'Init instruction for requirejs shim(if used)'
+      title: 'Init instruction for shim'
     }, {
       name: 'deps',
-      title: 'Dependencies'
+      title: 'Coma separated values of resource for shim'
     }, {
       name: 'export',
       title: 'Export vars for shim(if used)'
     }, {
       name: 'conf',
-      title: 'Configuration',
+      title: 'Configuration in JSON for the widget',
       view: ResourceTextAreaFieldView
     }, {
-      name: 'enabled',
-      title: 'Enabled',
+      name: 'force',
+      title: 'Force to load it at the end',
       view: ResourceBoolFieldView
     }]
   });
@@ -358,10 +412,12 @@ define([
       view: ResourceNameFieldView
     }, {
       name: 'resource',
-      title: 'Resource'
+      title: 'Resource',
+      view: BundleResourceFieldView
     }, {
-      name: 'after',
-      title: 'After'
+      name: 'depends',
+      title: 'Depends',
+      view: BundleDependsFieldView
     }, {
       name: 'expression',
       title: 'Expression'
@@ -370,8 +426,8 @@ define([
       title: 'Enabled',
       view: ResourceBoolFieldView
     }, {
-      name: 'ie_condition',
-      title: 'IE Condition'
+      name: 'conditionalcomment',
+      title: 'Conditional comment'
     }]
   });
 
@@ -432,9 +488,40 @@ define([
     }
   });
 
-  var RegistryView = BaseView.extend({
+  var BaseResourcesPane = BaseView.extend({
     tagName: 'div',
     className: 'tab-pane',
+
+    initialize: function(options) {
+      var self = this;
+      BaseView.prototype.initialize.apply(self, [options]);
+      self.previousData = self._copyData();
+    },
+
+    showResourceEditor: function(resource){
+      this.$('.form').empty().append(resource.render().el);
+    },
+
+    _copyData: function(){
+      return $.extend(true, {}, this.options.data);
+    },
+
+    _revertData: function(data){
+      this.options.data = $.extend(true, {}, data);
+    },
+
+    revertChanges: function(e){
+      if(e){
+        e.preventDefault();
+      }
+      if(confirm('Are you sure you want to cancel? You will lose all changes.')){
+        this._revertData(this.previousData);
+        this.render();
+      }
+    }
+  });
+
+  var RegistryView = BaseResourcesPane.extend({
     template: _.template(
       '<div class="clearfix">' +
         '<div class="btn-group pull-right">' +
@@ -448,41 +535,61 @@ define([
         '</div>' +
       '</div>' +
       '<div class="row">' +
-        '<div class="items col-md-3">' +
+        '<div class="items col-md-4">' +
           '<ul class="bundles list-group">' +
             '<li class="list-group-item list-group-item-warning">Bundles</li>' +
           '</ul>' +
           '<ul class="resources list-group">' +
-            '<li class="list-group-item list-group-item-warning">Resources</li>' +
+            '<li class="list-group-item list-group-item-warning">Resources ' +
+              '<input class="float-right form-control input-xs" ' +
+                      'placeholder="Filter..." />' +
+            '</li>' +
           '</ul>' +
         '</div>' +
-        '<div class="form col-md-9"></div>'),
+        '<div class="form col-md-8"></div>'),
     events: {
       'click button.build': 'buildClicked',
       'click button.save': 'saveClicked',
       'click button.add-resource': 'addResourceClicked',
       'click button.add-bundle': 'addBundleClicked',
-      'click button.cancel': 'revertChanges'
+      'click button.cancel': 'revertChanges',
+      'keyup .resources input': 'filterResources'
     },
+    filterTimeout: 0,
 
-    initialize: function(options) {
+    filterResources: function(){
       var self = this;
-      BaseView.prototype.initialize.apply(self, [options]);
-      self.previousData = $.extend(true, {}, options.data);
+      if(self.filterTimeout){
+        clearTimeout(self.filterTimeout);
+      }
+      self.filterTimeout = setTimeout(function(){
+        var filterText = self.$('.resources input').val().toLowerCase();
+        var $els = self.$('.resources .list-group-item:not(.list-group-item-warning)');
+        if(!filterText || filterText.length < 3){
+          $els.removeClass('hidden');
+        }else{
+          $els.each(function(){
+            var $el = $(this);
+            if($el.find('a').html().toLowerCase().indexOf(filterText) !== -1){
+              $el.removeClass('hidden');
+            }else{
+              $el.addClass('hidden');
+            }
+          });
+        }
+      }, 200);
     },
 
-    showResourceEditor: function(resource){
-      this.$('.form').empty().append(resource.render().el);
+    _copyData: function(){
+      return $.extend(true, {}, {
+        bundles: this.options.data.bundles,
+        resources: this.options.data.resources
+      });
     },
 
-    revertChanges: function(e){
-      if(e){
-        e.preventDefault();
-      }
-      if(confirm('Are you sure you want to cancel? You will lose all changes.')){
-        this.options.data = this.previousData;
-        this.render();
-      }
+    _revertData: function(data){
+      this.options.data.bundles = $.extend(true, {}, data.bundles);
+      this.options.data.resources = $.extend(true, {}, data.resources);
     },
 
     afterRender: function(){
@@ -490,8 +597,7 @@ define([
       self.$bundles = self.$('ul.bundles');
       self.$resources = self.$('ul.resources');
       var data = self.options.data;
-      var bundles = _.keys(data.bundles);
-      bundles.sort();
+      var bundles = _.sortBy(_.keys(data.bundles), function(v){ return v.toLowerCase(); });
       self.items = {
         bundles: {},
         resources: {}
@@ -504,8 +610,7 @@ define([
         self.items.bundles[resourceName] = item;
         self.$bundles.append(item.render().el);
       });
-      var resources = _.keys(data.resources);
-      resources.sort();
+      var resources = _.sortBy(_.keys(data.resources), function(v){ return v.toLowerCase(); });
       _.each(resources, function(resourceName){
         var item = new RegistryResourceListItem({
           data: data.resources[resourceName],
@@ -541,15 +646,16 @@ define([
       var self = this;
       e.preventDefault();
       $.ajax({
-        url: self.options.data.saveUrl,
+        url: self.options.data.manageUrl,
         type: 'POST',
         data: {
+          action: 'save-registry',
           _authenticator: utils.getAuthenticator(),
           resources: JSON.stringify(self.options.data.resources),
           bundles: JSON.stringify(self.options.data.bundles)
         },
         success: function(){
-          self.previousData = $.extend(true, {}, self.options.data);
+          self.previousData = self._copyData();
         },
         error: function(){
           alert('Error saving data');
@@ -560,9 +666,10 @@ define([
     buildClicked: function(e){
       e.preventDefault();
       $.ajax({
-        url: this.options.buildUrl,
+        url: this.options.manageUrl,
         type: 'POST',
         data: {
+          action: 'build',
           _authenticator: utils.getAuthenticator()
         },
         error: function(){
@@ -601,11 +708,11 @@ define([
       e.preventDefault();
       var self = this;
       $.ajax({
-        url: self.options.data.overrideManageUrl,
+        url: self.options.data.manageUrl,
         type: 'POST',
         data: {
           _authenticator: utils.getAuthenticator(),
-          action: 'save',
+          action: 'save-file',
           filepath: self.options.filepath,
           data: self.editor.editor.getValue()
         },
@@ -626,16 +733,19 @@ define([
         this.options.data.overrides.splice(self.options.index, 1);
         this.render();
         $.ajax({
-          url: this.options.data.overrideManageUrl,
+          url: this.options.data.manageUrl,
           type: 'POST',
           data: {
             _authenticator: utils.getAuthenticator(),
-            action: 'delete',
+            action: 'delete-file',
             filepath: self.options.filepath
           },
           success: function(){
-            self.canSave = false;
-            self.render();
+            var index = _.indexOf(self.options.overridesView.data.overrides, self.options.filepath);
+            if(index !== -1){
+              self.options.overridesView.data.overrides.splice(index, 1);
+            }
+            self.options.overridesView.render();
           },
           error: function(){
             alert('Error deleting override');
@@ -667,7 +777,8 @@ define([
           $pre.html(data);
           self.options.overridesView.$editorContainer.empty().append($pre);
           self.editor = new TextEditor($pre, {
-            width: 500
+            width: 600,
+            height: 500
           });
           self.editor.setSyntax(override);
           self.editor.editor.on('change', function(){
@@ -743,14 +854,24 @@ define([
         'Results<button class="btn btn-default pull-right btn-xs clear">Clear</button></li>');
       var matches = [];
       var data = self.options.data;
+      var urlMatches = function(base, path){
+        var filepath = (base + (path || '')).toLowerCase();
+        if(filepath.indexOf('++plone++') === -1){
+          return false;
+        }
+        return filepath.indexOf(q) !== -1;
+      };
       _.each(data.resources, function(resource){
-        if((resource.url + resource.js).toLowerCase().indexOf(q) !== -1){
-          matches.push(resource.url + '/' + resource.js);
+        var base = resource.url || '';
+        if(base){
+          base += '/';
+        }
+        if(urlMatches(base, resource.js)){
+          matches.push(base + resource.js);
         }
         for(var i=0; i<resource.css.length; i=i+1){
-          if((resource.url + resource.css[i]).toLowerCase().indexOf(q) !== -1){
-            matches.push(resource.url + '/' + resource.css[i]);
-            break;
+          if(urlMatches(base, resource.css[i])){
+            matches.push(base + resource.css[i]);
           }
         }
       });
@@ -780,38 +901,275 @@ define([
     }
   });
 
+  var ManualEntryView = ResourceEntryView.extend({
+   fields: [{
+      name: 'name',
+      title: 'Name',
+      view: ResourceNameFieldView
+    }, {
+      name: 'url',
+      title: 'Resources base URL'
+    }, { 
+      name: 'expression',
+      title: 'Expression to decide if this should render'
+    }, { 
+      name: 'conditionalcomment',
+      title: 'Conditional Comment'
+    }, {
+      name: 'enabled',
+      title: 'Enabled',
+      view: ResourceBoolFieldView
+    }]
+  });
+
+  var ManualListItem = RegistryResourceListItem.extend({
+    type: 'manual',
+    editResource: function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var options = $.extend({}, this.options, {
+        containerData: this.options.container,
+        parent: this
+      });
+      var resource = new ManualEntryView(options);
+      this.manualView.showResourceEditor(resource);
+    },
+    deleteClicked: function(e){
+      e.preventDefault();
+      delete this.options.container[this.options.name];
+      this.$el.remove();
+      this.options.manualView.updateOrder();
+      this.options.manualView.render();
+    }
+  });
+
+  var ManualView = BaseResourcesPane.extend({
+    template: _.template(
+      '<div class="clearfix">' +
+        '<div class="btn-group pull-right">' +
+          '<button class="btn btn-success save">Save</button>' +
+          '<button class="btn btn-default cancel">Cancel</button>' +
+        '</div>' +
+        '<div class="btn-group pull-right">' +
+          '<button class="btn btn-default add-javascript">Add JavaScript</button>' +
+          '<button class="btn btn-default add-css">Add CSS</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="row">' +
+        '<div class="col-md-5 lists">' +
+          '<ul class="js list-group">' +
+            '<li class="list-group-item list-group-item-warning">JavaScripts</li>' +
+          '</ul>' +
+          '<ul class="css list-group">' +
+            '<li class="list-group-item list-group-item-warning">CSS</li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="col-md-7">' +
+          '<div class="form" />' +
+        '</div>' +
+      '</div>'),
+    events: {
+      'click .btn.add-javascript': 'addJavascript',
+      'click .btn.add-css': 'addCSS',
+      'click .btn.cancel': 'revertChanges',
+      'click .btn.save': 'saveChanges'
+    },
+
+    _copyData: function(){
+      return $.extend(true, {}, {
+        javascripts: $.extend(true, {}, this.options.data.javascripts),
+        css: $.extend(true, {}, this.options.data.css)
+      });
+    },
+
+    _revertData: function(data){
+      this.options.data.css = $.extend(true, {}, data.css);
+      this.options.data.javascripts = $.extend(true, {}, data.javascripts);
+    },
+
+    addJavascript: function(e){
+      e.preventDefault();
+      var name = utils.generateId('new-file-');
+      this.options.data.javascripts[name] = {
+        enabled: true,
+        depends: _.last(_.keys(this.options.data.javascripts))
+      };
+      this.render();
+      this.items[name].editResource();
+    },
+
+    addCSS: function(e){
+      e.preventDefault();
+      var name = utils.generateId('new-file-');
+      this.options.data.css[name] = {
+        enabled: true,
+        depends: _.last(_.keys(this.options.data.css))
+      };
+      this.render();
+      this.items[name].editResource();
+    },
+
+    _updateOrder: function(container, order){
+      order = _.filter(order, function(v){ return container[v]; });
+      if(order.length > 0){
+        var prev = _.first(order);
+        container[prev].depends = '';
+        _.each(_.rest(order), function(item){
+          container[item].depends = prev;
+          prev = item;
+        });
+      }
+    },
+
+    updateOrder: function(){
+      /* read through orders and update */
+      var self = this;
+      var data = self.options.data;
+      var css = [];
+      self.$css.find('li:not(.list-group-item-warning)').each(function(){
+        css.push($(this).attr('data-name'));
+      });
+      self._updateOrder(data.css, css);
+      var js = [];
+      self.$javascripts.find('li:not(.list-group-item-warning)').each(function(){
+        js.push($(this).attr('data-name'));
+      });
+      self._updateOrder(data.javascripts, js);
+    },
+
+    showResourceEditor: function(resource){
+      this.$('.form').empty().append(resource.render().el);
+    },
+
+    addListItem: function(container, name, $el){
+      var self = this;
+      if(container[name]){
+        var item = new ManualListItem({
+          container: container,
+          data: container[name],
+          name: name,
+          manualView: self});
+        $el.append(item.render().el);
+        self.items[name] = item;
+      }
+    },
+
+    getOrder: function(data){
+      var order = [];  // list of names
+      var noDepends = []; // add these do the end
+      _.each(_.keys(data), function(name){
+        /* cases:
+         *  - no depends
+         *  - depends already added
+         *  - already added(from a depends), need to check depends
+         */
+        var item = data[name];
+        var dependsOn =  item.depends;
+        var pos = _.indexOf(order, name);
+        if(pos !== -1){
+          // already added from depends
+          if(data[dependsOn]){
+            // need to insert BEFORE current
+            order.splice(pos, 0, dependsOn);
+          }
+          return;
+        }
+        if(!dependsOn || !data[dependsOn]){
+          return noDepends.push(name);
+        }
+        if(_.indexOf(order, dependsOn) === -1){
+          order.push(dependsOn);
+        }
+        order.push(name);
+      });
+      // append everything left
+      return order.concat(_.difference(noDepends, order));
+    },
+
+    afterRender: function(){
+      var self = this;
+      self.$css = self.$('ul.css');
+      self.$javascripts = self.$('ul.js');
+      var data = self.options.data;
+      self.items = {};
+      _.each(self.getOrder(data.css), function(cssName){
+        self.addListItem(data.css, cssName, self.$css);
+      });
+
+      _.each(self.getOrder(data.javascripts), function(jsName){
+        self.addListItem(data.javascripts, jsName, self.$javascripts);
+      });
+
+      self.ddCSS = new Sortable(self.$css, {
+        selector: 'li:not(.list-group-item-warning)',
+        dragClass: 'dragging',
+        drop: function($el, delta) {
+          if (delta !== 0){
+            self.updateOrder();
+          }
+        }
+      });
+      self.ddJS = new Sortable(self.$javascripts, {
+        selector: 'li:not(.list-group-item-warning)',
+        dragClass: 'dragging',
+        drop: function($el, delta) {
+          if (delta !== 0){
+            self.updateOrder();
+          }
+        }
+      });
+      return self;
+    },
+
+    saveChanges: function(e){
+      e.preventDefault();
+      var self = this;
+      $.ajax({
+        url: self.options.data.manageUrl,
+        type: 'POST',
+        data: {
+          action: 'save-manual',
+          _authenticator: utils.getAuthenticator(),
+          css: JSON.stringify(self.options.data.css),
+          javascripts: JSON.stringify(self.options.data.javascripts),
+        },
+        success: function(){
+          self.previousData = self._copyData();
+        },
+        error: function(){
+          alert('Error saving data');
+        }
+      });
+    }
+  });
+
   var TabView = BaseView.extend({
     tagName: 'div',
-    showOverrides: false,
+    activeTab: 'registry',
     template: _.template('' +
-      '<ul class="nav nav-tabs" role="tablist" />' +
+      '<ul class="main-tabs nav nav-tabs" role="tablist">' +
+        '<li class="registry-btn"><a href="#">Registry</a></li>' +
+        '<li class="manual-btn"><a href="#">Manual</a></li>' +
+        '<li class="overrides-btn"><a href="#">Overrides</a></li>' +
+      '</div>' +
       '<div class="tab-content" />'
     ),
     events: {
       'click .registry-btn a': 'hideShow',
-      'click .overrides-btn a': 'hideShow'
+      'click .overrides-btn a': 'hideShow',
+      'click .manual-btn a': 'hideShow'
     },
     hideShow: function(e){
       var self = this;
       if(e !== undefined){
         e.preventDefault();
-        if($(e.target).parent().hasClass('registry-btn')){
-          self.showOverrides = false;
-        }else{
-          self.showOverrides = true;
-        }
+        self.activeTab = $(e.target).parent()[0].className.replace('-btn', '');
       }
-      if(self.showOverrides){
-        self.$overridesBtn.addClass('active');
-        self.overridesView.$el.addClass('active');
-        self.$registryBtn.removeClass('active');
-        self.registryView.$el.removeClass('active');
-      }else{
-        self.$registryBtn.addClass('active');
-        self.registryView.$el.addClass('active');
-        self.$overridesBtn.removeClass('active');
-        self.overridesView.$el.removeClass('active');
-      }
+      self.$('.main-tabs > li').removeClass('active');
+      self.$content.find('.tab-pane').removeClass('active');
+      self.tabs[self.activeTab].btn.addClass('active');
+      self.tabs[self.activeTab].content.addClass('active');
     },
     initialize: function(options) {
       var self = this;
@@ -822,18 +1180,34 @@ define([
       self.overridesView = new OverridesView({
         data: options,
         tabView: self});
+      self.manualView = new ManualView({
+        data: options,
+        tabView: self});
+      self.tabs = {};
     },
 
     render: function(){
       var self = this;
       self.$el.append(self.template());
-      self.$tabs = self.$('ul.nav-tabs');
+      self.$tabs = self.$('ul.main-tabs');
       self.$content = self.$('.tab-content');
-      self.$registryBtn = $('<li class="registry-btn"><a href="#">Registry</a></li>');
-      self.$overridesBtn = $('<li class="overrides-btn"><a href="#">Overrides</a></li>');
-      self.$tabs.append(self.$registryBtn).append(self.$overridesBtn);
       self.$content.append(self.registryView.render().el);
       self.$content.append(self.overridesView.render().el);
+      self.$content.append(self.manualView.render().el);
+      self.tabs = {
+        registry: {
+          btn: self.$('.registry-btn'),
+          content: self.registryView.$el
+        },
+        manual: {
+          btn: self.$('.manual-btn'),
+          content: self.manualView.$el
+        },
+        overrides: {
+          btn: self.$('.overrides-btn'),
+          content: self.overridesView.$el
+        }
+      };
       self.hideShow();
       return self;
     }
@@ -842,17 +1216,16 @@ define([
   var ResourceRegistry = Base.extend({
     name: 'resourceregistry',
     defaults: {
-      bundles: [],
-      resources: [],
+      bundles: {},
+      resources: {},
+      javascripts: {},
+      css: {},
       overrides: [],
-      overrideManageUrl: null,
-      saveUrl: null,
-      buildUrl: null,
+      manageUrl: null,
       baseUrl: null
     },
     init: function() {
       var self = this;
-
       self.tabs = new TabView(self.options);
       self.$el.append(self.tabs.render().el);
     }
