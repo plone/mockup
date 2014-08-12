@@ -1,10 +1,7 @@
 
-.importPickADateDep() when (@isMockup) {
-  @import (css) "../../bower_components/pickadate/lib/themes/classic.css";
-  @import (css) "../../bower_components/pickadate/lib/themes/classic.date.css";
-  @import (css) "../../bower_components/pickadate/lib/themes/classic.time.css";
-}
-.importPickADateDep();
+@import url("@{bowerPath}/pickadate/lib/themes/classic.css");
+@import url("@{bowerPath}/pickadate/lib/themes/classic.date.css");
+@import url("@{bowerPath}/pickadate/lib/themes/classic.time.css");
 
 .pattern-pickadate-wrapper {
   position: relative;

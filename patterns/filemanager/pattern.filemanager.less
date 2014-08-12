@@ -1,13 +1,5 @@
-@import "popover.less";
 
-.importFileManagerDep() when not (@isMockup) {
-  @import (reference) "popover.less";
-}
-.importFileManagerDep() when (@isMockup) {
-  @import "../../less/popover.less";
-}
-.importFileManagerDep();
-
+@import url("@{mockuplessPath}/popover.less");
 
 .pat-filemanager {
     #fileselector li label {
