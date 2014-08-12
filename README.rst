@@ -4,7 +4,7 @@ The Goals of Mockup
 -------------------
 
 1. Standardize configuration of patterns implemented in js
-   to use HTML data attributes, so they can be developed and
+   to use HTML data attributes, so they can be developed
    without running a backend server.
 2. Use modern AMD approach to declaring dependencies on other js libs.
 3. Full unit testing of js
