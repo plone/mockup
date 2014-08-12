@@ -153,7 +153,7 @@ define([
         self.relatedItems = null;
       }
 
-      var $uploadArea = $('.upload-area', self.$el);
+      self.$dropzone = $('.upload-area', self.$el);
 
       $('button.browse', self.$el).click(function(e) {
         e.preventDefault();
@@ -170,7 +170,7 @@ define([
         // that if you break it w/ some weird or missing option
         // you can get a proper log of it
         //
-        self.dropzone = new Dropzone($uploadArea[0], dzoneOptions);
+        self.dropzone = new Dropzone(self.$dropzone[0], dzoneOptions);
       } catch (e) {
         if (window.DEBUG) {
           // log it!
@@ -179,39 +179,31 @@ define([
         throw e;
       }
 
-      self.dropzone.on('addedfile', function(file) {
-        //console.log('file added!!');
-        // show upload controls
+      self.$dropzone.on('addedfile', function(file) {
         self.showControls();
-        // self.$el.addClass(fileaddedClassName);
-        // setTimeout(function() {
-        //   if (!processing) {
-        //     process();
-        //   }
-        // }, 100);
       });
 
-      self.dropzone.on('removedfile', function() {
+      self.$dropzone.on('removedfile', function() {
         if (self.dropzone.files.length < 1) {
           self.hideControls();
         }
       });
 
       if (self.options.autoCleanResults) {
-        self.dropzone.on('complete', function(file) {
+        self.$dropzone.on('complete', function(file) {
           setTimeout(function() {
             $(file.previewElement).fadeOut();
           }, 3000);
         });
       }
 
-      self.dropzone.on('complete', function(file) {
+      self.$dropzone.on('complete', function(file) {
         if (self.dropzone.files.length < 1) {
           self.hideControls();
         }
       });
 
-      self.dropzone.on('totaluploadprogress', function(pct) {
+      self.$dropzone.on('totaluploadprogress', function(pct) {
         // need to caclulate total pct here in reality since we're manually
         // processing each file one at a time.
         pct = ((((self.currentFile - 1) * 100) + pct) / (self.numFiles * 100)) * 100;
@@ -389,7 +381,9 @@ define([
         },
         chunkSize: chunkSize
       }).fail(function() {
-        console.alert('Error uploading with TUS resumable uploads');
+        if(window.DEBUG){
+          console.alert('Error uploading with TUS resumable uploads');
+        }
         file.status = Dropzone.ERROR;
       }).progress(function(e, bytesUploaded, bytesTotal) {
         var percentage = (bytesUploaded / bytesTotal * 100);
