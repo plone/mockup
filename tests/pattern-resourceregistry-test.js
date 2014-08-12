@@ -28,17 +28,17 @@ define([
                       },
                       "resources": {
                         "plone": {
-                          "url": "js/bundles", "js": "plone.js",
+                          "url": "++plone++js/bundles", "js": "plone.js",
                           "css": [], "deps": "", "export": "",
                           "conf": "", "force": false
                         },
                         "plone-auth": {
-                          "url": "js/bundles", "js": "plone-auth.js",
+                          "url": "++plone++js/bundles", "js": "plone-auth.js",
                           "css": [], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
                         "barceloneta": {
-                          "url": "js/bundles", "js": "barceloneta.js",
+                          "url": "++plone++js/bundles", "js": "barceloneta.js",
                           "css": ["barceloneta.less"], "deps": "", "export": "",
                           "conf": "", "bundle": false
                         },
@@ -85,9 +85,9 @@ define([
     it('searches', function(){
       this.pat.tabs.showOverrides = true;
       this.pat.tabs.hideShow();
-      this.$el.find('.search-field').attr('value', 'pattern');
+      this.$el.find('.search-field').attr('value', 'bundles');
       this.pat.tabs.overridesView.textChange();
-      expect(this.$el.find('.search-results li').length).to.equal(7);
+      expect(this.$el.find('.search-results li').length).to.equal(4);
     });
 
     it('customize resource', function(){

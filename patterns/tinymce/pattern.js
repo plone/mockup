@@ -279,7 +279,7 @@ define([
       if (tinyOptions.language != 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
       }
-      require(['tinymce'], 
+      require(['tinymce'],
         function(tinymce){
         require([
           'tinymce-advlist',
