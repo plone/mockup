@@ -113,6 +113,10 @@ or:
 
 These will run only the tests that end with foobar-test.js
 
+You can pass the ``verbose=true`` and ``debug=true`` command line options to
+increase log output.
+
+
 # Creating docs
 
 First, build the documentation with:
@@ -126,3 +130,14 @@ Then, start the python test server like so:
 After that, access the served site in a webbrowser under the url:
 
     http://localhost:8000
+
+# Including a local mockup-core checkout for developing
+
+If you want to also hack on mockup-core together with mockup and not push the
+changes from mockup-core to github, you can include it from a local checkout.
+Just replace the mockup-core line in bower.json with:
+
+    "mockup-core": "file:///PATH/TO/mockup-core/.git/#BRANCHNAME"
+
+Please note, you have to commit the changes on mockup-core before running
+``make bootstrap``.
