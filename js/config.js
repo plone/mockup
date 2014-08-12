@@ -11,6 +11,8 @@
       'ace': 'bower_components/ace-builds/src/ace',
       'ace-theme-monokai': 'bower_components/ace-builds/src/theme-monokai',
       'ace-mode-text': 'bower_components/ace-builds/src/mode-text',
+      'ace-mode-javascript': 'bower_components/ace-builds/src/mode-javascript',
+      'ace-mode-css': 'bower_components/ace-builds/src/mode-css',
       'backbone': 'bower_components/backbone/backbone',
       'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
       'bootstrap-alert': 'bower_components/bootstrap/js/alert',

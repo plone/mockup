@@ -1,6 +1,14 @@
 @import "mixins.less";
+
+@import "../bower_components/bootstrap/less/variables.less";
+@icon-font-path: "../dev/bower_components/bootstrap/dist/fonts/";
 @import "../bower_components/bootstrap/less/bootstrap.less";
-@icon-font-path: "@{pathPrefix}../bower_components/bootstrap/dist/fonts/";
+@icon-font-path: "../dev/bower_components/bootstrap/dist/fonts/";
+
+@bowerPath: '../bower_components/';
+@mockupPath: '../patterns/';
+@mockuplessPath: '../less/';
+
 
 @import "../patterns/autotoc/pattern.autotoc.less";
 @import "../patterns/modal/pattern.modal.less";
@@ -127,7 +135,7 @@ body {
       padding: 0.5em;
       border: 1px solid #CCC;
       display: block;
-      height: 175px;
+      height: 135px;
 
       &:focus {
         outline: none;
@@ -245,7 +253,7 @@ body {
       margin-right: 15px;
     }
   }
-[]
+
   .mockup-content .page-header {
     text-align: left;
 

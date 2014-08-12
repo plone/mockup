@@ -40,6 +40,7 @@ define([
     attributes: {
       'href': '#'
     },
+    extraClasses: [],
     tooltip: null,
     template: '<% if (icon) { %><span class="glyphicon glyphicon-<%= icon %>"></span><% } %> <%= title %>',
     events: {
@@ -64,6 +65,9 @@ define([
         if (this.context !== null) {
           this.$el.addClass('btn-' + this.context);
         }
+        _.each(this.extraClasses, function(klass){
+          this.$el.addClass(klass);
+        });
 
         if (this.tooltip !== null) {
           this.$el.tooltip({

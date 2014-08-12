@@ -76,7 +76,9 @@ define([
   'mockup-utils',
   'ace',
   'ace-theme-monokai',
-  'ace-mode-text'
+  'ace-mode-text',
+  'ace-mode-javascript',
+  'ace-mode-css'
 ], function($, Base, utils) {
   'use strict';
 

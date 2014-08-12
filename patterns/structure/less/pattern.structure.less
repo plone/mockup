@@ -1,14 +1,22 @@
 
-@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+
 @import url("@{bowerPath}/bootstrap/less/variables.less"); // Modify this for custom colors, font-sizes, etc
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+
 @import url("@{bowerPath}/bootstrap/less/mixins.less");
 @import url("@{bowerPath}/bootstrap/less/button-groups.less");
 @import url("@{bowerPath}/bootstrap/less/glyphicons.less");
 @import url("@{bowerPath}/bootstrap/less/badges.less");
+@import url("@{bowerPath}/bootstrap/less/popovers.less");
+@import url("@{bowerPath}/bootstrap/less/pagination.less");
+@import url("@{bowerPath}/bootstrap/less/tables.less");
 @import url("@{mockuplessPath}/popover.less");
 
 
 .pat-structure {
+    .btn{
+        .btn-xs();
+    }
     table{
         margin-bottom: 0;
 
@@ -56,6 +64,9 @@
 
     .navbar-search{
         margin-top: 5px;
+        input.form-control{
+            height: 22px;
+        }
     }
     .alert.status{
         margin-bottom: 5px;
