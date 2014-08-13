@@ -467,11 +467,11 @@ define([
     className: 'list-group-item',
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<button class="pull-right btn btn-danger btn-xs">Delete</button>'
+      '<button class="pull-right btn btn-danger delete btn-xs">Delete</button>'
     ),
     events: {
       'click a': 'editResource',
-      'click button.btn-danger': 'deleteClicked'
+      'click button.delete': 'deleteClicked'
     },
     afterRender: function(){
       this.$el.attr('data-name', this.options.name);
@@ -500,6 +500,16 @@ define([
 
   var RegistryBundleListItem = RegistryResourceListItem.extend({
     type: 'bundle',
+    template: _.template(
+      '<a href="#"><%- name %></a> ' +
+      '<div class="btn-group pull-right">' +
+        '<button class="btn btn-default build btn-xs">Build</button>' +
+        '<button class="btn btn-danger delete btn-xs">Delete</button>' +
+      '</div>'
+    ),
+    events: $.extend({}, RegistryResourceListItem.events, {
+      'click button.build': 'buildClicked'
+    }),
     editResource: function(e){
       if(e){
         e.preventDefault();
@@ -515,6 +525,27 @@ define([
       e.preventDefault();
       delete this.options.registryView.options.data.bundles[this.options.name];
       this.options.registryView.render();
+    },
+    buildClicked: function(e){
+      e.preventDefault();
+      var self = this;
+      var rview = self.options.registryView;
+      rview.loading.show();
+      $.ajax({
+        url: rview.options.data.manageUrl,
+        type: 'POST',
+        data: {
+          action: 'build',
+          _authenticator: utils.getAuthenticator()
+        },
+        success: function(){
+          rview.loading.hide();
+        },
+        error: function(){
+          rview.loading.hide();
+          alert('Error building resources');
+        }
+      });
     }
   });
 
@@ -574,7 +605,6 @@ define([
     template: _.template(
       '<div class="clearfix">' +
         '<div class="btn-group pull-right">' +
-          '<button class="btn btn-warning build">Build</button>' +
           '<button class="btn btn-success save">Save</button>' +
           '<button class="btn btn-default cancel">Cancel</button>' +
         '</div>' +
@@ -597,7 +627,6 @@ define([
         '</div>' +
         '<div class="form col-md-8"></div>'),
     events: {
-      'click button.build': 'buildClicked',
       'click button.save': 'saveClicked',
       'click button.add-resource': 'addResourceClicked',
       'click button.add-bundle': 'addBundleClicked',
@@ -714,22 +743,8 @@ define([
           alert('Error saving data');
         }
       });
-    },
-
-    buildClicked: function(e){
-      e.preventDefault();
-      $.ajax({
-        url: this.options.manageUrl,
-        type: 'POST',
-        data: {
-          action: 'build',
-          _authenticator: utils.getAuthenticator()
-        },
-        error: function(){
-          alert('Error building resources');
-        }
-      });
     }
+    
   });
 
   var OverrideResource = BaseView.extend({
