@@ -73,7 +73,15 @@ module.exports = function(grunt) {
     url: '++resource++plone.resourceeditor-filemanager'
   });
 
-  mockup.registerBundle('resourceregistry', {}, {}, ['requirejs', 'uglify', 'less', 'copy']);
+  mockup.registerBundle('resourceregistry', {
+    sed: {
+      'plone-fonts': {
+        path: 'build/resourceregistry.min.css',
+        pattern: '../bower_components',
+        replacement: '../++plone++static/bower'
+      }
+    }
+  }, {});
 
   mockup.registerBundle('plone', {
     copy: {

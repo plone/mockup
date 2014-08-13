@@ -476,9 +476,8 @@ define([
       title: 'Conditional comment',
       description: 'For Internet Exploder hacks...'
     }, {
-      name: 'compress',
-      title: 'Compress',
-      description: 'Whether a compressed version should be used.',
+      name: 'compile',
+      title: 'Does your bundle contains any RequireJS or LESS file?',
       view: ResourceBoolFieldView
     }]
   });
