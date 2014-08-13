@@ -223,12 +223,13 @@ define([
       });
 
       if(self.sortable){
+        $container.addClass('pat-sortable');
         self.dd = new Sortable($container, {
           selector: 'li',
           dragClass: 'dragging',
           drop: function($el, delta) {
             if (delta !== 0){
-              // XXX save order
+              self.inputChanged();
             }
           }
         });
@@ -1028,6 +1029,7 @@ define([
   });
 
   var ManualView = BaseResourcesPane.extend({
+    className: 'tab-pane manual',
     template: _.template(
       '<div class="clearfix">' +
         '<div class="btn-group pull-right">' +
