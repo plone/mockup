@@ -132,6 +132,7 @@ define([
 
     inputChanged: function(){
       this.options.registryData[this.options.name] = this.$('input').val();
+      $(document).trigger('resource-data-changed');
     },
 
     afterRender: function(){
@@ -154,6 +155,7 @@ define([
       }else{
         this.options.registryData[this.options.name] = false;
       }
+      $(document).trigger('resource-data-changed');
     },
     afterRender: function(){
       ResourceInputFieldView.prototype.afterRender.apply(this);
@@ -191,6 +193,7 @@ define([
         data.push($(this).val());
       });
       self.options.registryData[self.options.name] = self.options.value = data;
+      $(document).trigger('resource-data-changed');
     },
 
     addRowClicked: function(e){
@@ -258,6 +261,7 @@ define([
     },
     inputChanged: function(){
       this.options.registryData[this.options.name] = this.options.value = this.$('select').val();
+      $(document).trigger('resource-data-changed');
     },
 
     getSelectOptions: function(){
@@ -343,6 +347,7 @@ define([
     },
 
     inputChanged: function(){
+      $(document).trigger('resource-data-changed');
       var value = this.$('input').val();
       if(value === this.resourceName){
         return this.handleError(false);
@@ -520,6 +525,7 @@ define([
     deleteClicked: function(e){
       e.preventDefault();
       delete this.options.registryView.options.data.resources[this.options.name];
+      this.options.registryView.dirty = true;
       this.options.registryView.render();
     }
   });
@@ -551,6 +557,7 @@ define([
     deleteClicked: function(e){
       e.preventDefault();
       delete this.options.registryView.options.data.bundles[this.options.name];
+      this.options.registryView.dirty = true;
       this.options.registryView.render();
     },
     buildClicked: function(e){
@@ -663,6 +670,25 @@ define([
       'keyup .resources input': 'filterResources'
     },
     filterTimeout: 0,
+    dirty: false,
+
+    initialize: function(options){
+      var self = this;
+      BaseResourcesPane.prototype.initialize.apply(self, [options]);
+      $(document).on('resource-data-changed', function(){
+        self.dirty = true;
+        self.showHideButtons();
+      });
+    },
+
+    showHideButtons: function(){
+      var val = 'disabled';
+      if(this.dirty){
+        val = null;
+      }
+      this.$('button.save').attr('disabled', val);
+      this.$('button.cancel').attr('disabled', val);
+    },
 
     filterResources: function(){
       var self = this;
@@ -697,10 +723,12 @@ define([
     _revertData: function(data){
       this.options.data.bundles = $.extend(true, {}, data.bundles);
       this.options.data.resources = $.extend(true, {}, data.resources);
+      this.dirty = false;
     },
 
     afterRender: function(){
       var self = this;
+      self.showHideButtons();
       self.$bundles = self.$('ul.bundles');
       self.$resources = self.$('ul.resources');
       var data = self.options.data;
@@ -736,6 +764,7 @@ define([
       this.options.data.resources[name] = {
         enabled: true
       };
+      this.dirty = true;
       this.render();
       this.items.resources[name].editResource();
     },
@@ -746,6 +775,7 @@ define([
       this.options.data.bundles[name] = {
         enabled: true
       };
+      this.dirty = true;
       this.render();
       this.items.bundles[name].editResource();
     },
@@ -765,6 +795,7 @@ define([
         },
         success: function(){
           self.loading.hide();
+          this.dirty = false;
           self.previousData = self._copyData();
         },
         error: function(){
