@@ -478,6 +478,11 @@ define([
       name: 'conditionalcomment',
       title: 'Conditional comment',
       description: 'For Internet Exploder hacks...'
+    }, {
+      name: 'compress',
+      title: 'Compress',
+      description: 'Whether a compressed version should be used.',
+      view: ResourceBoolFieldView
     }]
   });
 
@@ -558,6 +563,7 @@ define([
         type: 'POST',
         data: {
           action: 'build',
+          bundle: self.options.name,
           _authenticator: utils.getAuthenticator()
         },
         success: function(){
