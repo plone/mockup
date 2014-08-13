@@ -566,6 +566,7 @@ define([
     },
     afterRender: function(){
       this.$form = this.$('.form');
+      this.loading = this.options.tabView.loading;
     }
   });
 
@@ -694,6 +695,7 @@ define([
     saveClicked: function(e){
       var self = this;
       e.preventDefault();
+      self.loading.show();
       $.ajax({
         url: self.options.data.manageUrl,
         type: 'POST',
@@ -704,9 +706,11 @@ define([
           bundles: JSON.stringify(self.options.data.bundles)
         },
         success: function(){
+          self.loading.hide();
           self.previousData = self._copyData();
         },
         error: function(){
+          self.loading.hide();
           alert('Error saving data');
         }
       });
@@ -746,8 +750,12 @@ define([
       'click button.btn-primary': 'itemSaved',
       'click button.btn-default': 'itemCancel'
     },
-
     canSave: false,
+
+    initialize: function(options){
+      BaseView.prototype.initialize.apply(this, [options]);
+      this.loading = this.options.overridesView.tabView.loading;
+    },
 
     serializedModel: function(){
       return $.extend({}, { view: this }, this.options);
@@ -756,6 +764,7 @@ define([
     itemSaved: function(e){
       e.preventDefault();
       var self = this;
+      self.loading.show();
       $.ajax({
         url: self.options.data.manageUrl,
         type: 'POST',
@@ -768,9 +777,11 @@ define([
         success: function(){
           self.canSave = false;
           self.render();
+          self.loading.hide();
         },
         error: function(){
           alert('Error saving override');
+          self.loading.hide();
         }
       });
     },
@@ -781,6 +792,7 @@ define([
       if(confirm('Are you sure you want to delete this override?')){
         this.options.data.overrides.splice(self.options.index, 1);
         this.render();
+        this.loading.show();
         $.ajax({
           url: this.options.data.manageUrl,
           type: 'POST',
@@ -795,8 +807,10 @@ define([
               self.options.overridesView.data.overrides.splice(index, 1);
             }
             self.options.overridesView.render();
+            self.loading.hide();
           },
           error: function(){
+            self.loading.show();
             alert('Error deleting override');
           }
         });
@@ -819,6 +833,7 @@ define([
       if(url[url.length - 1] !== '/'){
         url += '/';
       }
+      self.loading.show();
       $.ajax({
         // cache busting url
         url: url + override + '?' + utils.generateId(),
@@ -839,9 +854,11 @@ define([
             }
           });
           self.render();
+          self.loading.hide();
         },
         error: function(){
           alert('error loading resource for editing');
+          self.loading.hide();
         }
       });
     }
@@ -1177,6 +1194,7 @@ define([
     saveChanges: function(e){
       e.preventDefault();
       var self = this;
+      self.loading.show();
       $.ajax({
         url: self.options.data.manageUrl,
         type: 'POST',
@@ -1187,9 +1205,11 @@ define([
           javascripts: JSON.stringify(self.options.data.javascripts),
         },
         success: function(){
+          self.loading.hide();
           self.previousData = self._copyData();
         },
         error: function(){
+          self.loading.hide();
           alert('Error saving data');
         }
       });
@@ -1241,6 +1261,10 @@ define([
     render: function(){
       var self = this;
       self.$el.append(self.template());
+      self.loading = new utils.ProgressIndicator({
+        container: self.$el,
+        full: true
+      });
       self.$tabs = self.$('ul.main-tabs');
       self.$content = self.$('.tab-content');
       self.$content.append(self.registryView.render().el);

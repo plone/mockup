@@ -223,6 +223,7 @@ define([
       className: 'progress-indicator',
       container: null,
       backdrop: null,
+      full: false,
       wrapper: null,
       zIndex: 10005 // can be a function
     };
@@ -235,7 +236,9 @@ define([
     }
     self.$loading = $('> .' + self.options.className, self.options.container);
     if (self.$loading.size() === 0) {
-      self.$loading = $('<div/>').hide()
+      self.$loading = $('<div class="progress ' + self.options.className + '">' +
+        '<div class="progress-bar progress-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">' +
+        'loading...</div></div>').hide()
         .addClass(self.options.className)
         .appendTo(self.options.container);
     }
@@ -265,15 +268,24 @@ define([
     };
 
     self.position = function() {
-      self.$loading.css({
-        'margin-left': self.$wrapper.width() / 2 - self.$loading.width() / 2,
-        'margin-top': self.$wrapper.height() / 2 - self.$loading.height() / 2,
-        'position': 'absolute',
-        'bottom': '0',
-        'left': '0',
-        'right': '0',
-        'top': '0'
-      });
+      if(options.full){
+        self.$loading.css({
+          top: '50%',
+          left: '10%',
+          width: '90%',
+          position: 'fixed'
+        });
+      }else{
+        self.$loading.css({
+          'margin-left': self.$wrapper.width() / 2 - self.$loading.width() / 2,
+          'margin-top': self.$wrapper.height() / 2 - self.$loading.height() / 2,
+          'position': 'absolute',
+          'bottom': '0',
+          'left': '0',
+          'right': '0',
+          'top': '0'
+        });
+      }
       var zIndex = self.options.zIndex;
       if (typeof(zIndex) === 'function') {
         zIndex = zIndex();
