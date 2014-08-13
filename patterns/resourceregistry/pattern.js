@@ -19,15 +19,15 @@
  *    <div class="pat-resourceregistry"
  *        data-pat-resourceregistry='{"bundles":{
  *                                     "plone": {
- *                                       "resource": "plone", "depends": "",
+ *                                       "resources": ["plone"], "depends": "",
  *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     },
  *                                     "plone-auth": {
- *                                       "resource": "plone-auth", "depends": "plone",
+ *                                       "resources": ["plone-auth"], "depends": "plone",
  *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     },
  *                                     "barceloneta": {
- *                                       "resource": "barceloneta", "depends": "*",
+ *                                       "resources": ["barceloneta"], "depends": "*",
  *                                       "expression": "", "enabled": true, "conditionalcomment": ""
  *                                     }
  *                                   },
@@ -63,13 +63,6 @@
  *                                       "conf": "", "force": true
  *                                     }
  *                                   },
- *                                   "javascripts": {
- *                                     "jquery-plugin-other": {
- *                                       "url": "jquery-plugin-2.js", "conditionalcomment": "",
- *                                       "enabled": true, "expression": "", "depends": "jquery-plugin"},
- *                                     "jquery-plugin": {
- *                                       "url": "jquery-plugin.js", "conditionalcomment": "",
- *                                       "enabled": true, "expression": "", "depends": ""}},
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
  *                                   "baseUrl": "/resources-registry",
  *                                   "manageUrl": "/resource-manager"}'>
@@ -102,9 +95,11 @@ define([
   'mockup-ui-url/views/base',
   'mockup-patterns-sortable',
   'mockup-patterns-texteditor',
-  'mockup-utils'
+  'mockup-utils',
+  'select2'
 ], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils) {
   'use strict';
+
 
   var ResourceInputFieldView = BaseView.extend({
     tagName: 'div',
@@ -145,6 +140,7 @@ define([
 
   });
 
+
   var ResourceBoolFieldView = ResourceInputFieldView.extend({
     className: 'col-sm-offset-3 col-sm-9',
     template: _.template(
@@ -166,6 +162,7 @@ define([
       }
     }
   });
+
 
   var ResourceListFieldView = ResourceInputFieldView.extend({
     sortable: false,
@@ -237,9 +234,11 @@ define([
     }
   });
 
+
   var ResourceSortableListFieldView = ResourceListFieldView.extend({
     sortable: true
   });
+
 
   var ResourceTextAreaFieldView = ResourceInputFieldView.extend({
     inputChanged: function(){
@@ -251,6 +250,7 @@ define([
         '<textarea class="form-control input-sm" name="name"><%- value %></textarea>' +
       '</div>')
   });
+
 
   var ResourceSelectFieldView = ResourceInputFieldView.extend({
     events: {
@@ -274,16 +274,28 @@ define([
 
     afterRender: function(){
       ResourceInputFieldView.prototype.afterRender.apply(this);
-      var $el = this.$('option[value="' + this.options.value + '"]');
-      if($el.length > 0){
-        $el[0].selected = true;
+      var self = this;
+      var values = self.options.values;
+      var $select = self.$('select');
+      if(!self.multiple){
+        values = [values];
+      }else{
+        $select.attr('multiple', true);
       }
+      $select.select2();
+
+      _.each(values, function(value){
+        var $el = self.$('option[value="' + value + '"]');
+        if($el.length > 0){
+          $el[0].selected = true;
+        }
+      });
     },
 
     template: _.template(
       '<label class="col-sm-3 control-label"><%- title %></label>' +
       '<div class="col-sm-9">' +
-        '<select class="form-control select-sm" name="name">' +
+        '<select name="name" style="width: 100%">' +
           '<% _.each(options, function(option) { %>' +
             '<option value="<%- option %>"><%- option %></option>' +
           '<% }); %>' +
@@ -292,6 +304,7 @@ define([
       '</div>')
   });
 
+
   var BundleDependsFieldView = ResourceSelectFieldView.extend({
     getSelectOptions: function(){
       var self = this;
@@ -299,16 +312,19 @@ define([
         return name !== self.options.name;
       }));
     }
-      });
+  });
 
-  var BundleResourceFieldView = ResourceSelectFieldView.extend({
+
+  var BundleResourcesFieldView = ResourceSelectFieldView.extend({
+    multiple: true,
     getSelectOptions: function(){
       var self = this;
-      return [''].concat(_.filter(_.keys(self.options.registryView.options.data.resources), function(name){
+      return _.filter(_.keys(self.options.registryView.options.data.resources), function(name){
         return name !== self.options.name;
-      }));
+      });
     }
   });
+
 
   var ResourceNameFieldView = ResourceInputFieldView.extend({
     afterRender: function(){
@@ -357,6 +373,7 @@ define([
     }
   });
 
+
   var AbstractResourceEntryView = BaseView.extend({
     tagName: 'div',
     className: 'resource-entry',
@@ -393,6 +410,7 @@ define([
       });
     }
   });
+
 
   var ResourceEntryView = AbstractResourceEntryView.extend({
     fields: [{
@@ -432,16 +450,17 @@ define([
     }]
   });
 
+
   var BundleEntryView = AbstractResourceEntryView.extend({
     fields: [{
       name: 'name',
       title: 'Name',
       view: ResourceNameFieldView
     }, {
-      name: 'resource',
-      title: 'Resource',
-      description: 'Main resource file to bootstrap bundle',
-      view: BundleResourceFieldView
+      name: 'resources',
+      title: 'Resources',
+      description: 'A main resource file to bootstrap bundle or a list of resources to load.',
+      view: BundleResourcesFieldView
     }, {
       name: 'depends',
       title: 'Depends',
@@ -461,6 +480,7 @@ define([
       description: 'For Internet Exploder hacks...'
     }]
   });
+
 
   var RegistryResourceListItem = BaseView.extend({
     tagName: 'li',
@@ -499,6 +519,7 @@ define([
     }
   });
 
+
   var RegistryBundleListItem = RegistryResourceListItem.extend({
     type: 'bundle',
     template: _.template(
@@ -508,7 +529,7 @@ define([
         '<button class="btn btn-danger delete btn-xs">Delete</button>' +
       '</div>'
     ),
-    events: $.extend({}, RegistryResourceListItem.events, {
+    events: $.extend({}, RegistryResourceListItem.prototype.events, {
       'click button.build': 'buildClicked'
     }),
     editResource: function(e){
@@ -601,6 +622,7 @@ define([
       this.loading = this.options.tabView.loading;
     }
   });
+
 
   var RegistryView = BaseResourcesPane.extend({
     template: _.template(
@@ -748,6 +770,7 @@ define([
     
   });
 
+
   var OverrideResource = BaseView.extend({
     tagName: 'li',
     className: 'list-group-item',
@@ -880,6 +903,7 @@ define([
     }
   });
 
+
   var OverridesView = BaseView.extend({
     tagName: 'div',
     className: 'tab-pane overrides',
@@ -985,253 +1009,6 @@ define([
     }
   });
 
-  var ManualEntryView = ResourceEntryView.extend({
-   fields: [{
-      name: 'name',
-      title: 'Name',
-      view: ResourceNameFieldView
-    }, {
-      name: 'url',
-      title: 'Resources base URL'
-    }, { 
-      name: 'expression',
-      title: 'Expression to decide if this should render'
-    }, { 
-      name: 'conditionalcomment',
-      title: 'Conditional Comment'
-    }, {
-      name: 'enabled',
-      title: 'Enabled',
-      view: ResourceBoolFieldView
-    }]
-  });
-
-  var ManualListItem = RegistryResourceListItem.extend({
-    type: 'manual',
-    editResource: function(e){
-      if(e){
-        e.preventDefault();
-      }
-      var options = $.extend({}, this.options, {
-        containerData: this.options.container,
-        parent: this
-      });
-      var resource = new ManualEntryView(options);
-      this.manualView.showResourceEditor(resource);
-    },
-    deleteClicked: function(e){
-      e.preventDefault();
-      delete this.options.container[this.options.name];
-      this.$el.remove();
-      this.options.manualView.updateOrder();
-      this.options.manualView.render();
-    }
-  });
-
-  var ManualView = BaseResourcesPane.extend({
-    className: 'tab-pane manual',
-    template: _.template(
-      '<div class="clearfix">' +
-        '<div class="btn-group pull-right">' +
-          '<button class="btn btn-success save">Save</button>' +
-          '<button class="btn btn-default cancel">Cancel</button>' +
-        '</div>' +
-        '<div class="btn-group pull-right">' +
-          '<button class="btn btn-default add-javascript">Add JavaScript</button>' +
-          '<button class="btn btn-default add-css">Add CSS</button>' +
-        '</div>' +
-      '</div>' +
-      '<div class="row">' +
-        '<div class="col-md-5 lists">' +
-          '<ul class="js list-group">' +
-            '<li class="list-group-item list-group-item-warning">JavaScripts</li>' +
-          '</ul>' +
-          '<ul class="css list-group">' +
-            '<li class="list-group-item list-group-item-warning">CSS</li>' +
-          '</ul>' +
-        '</div>' +
-        '<div class="col-md-7">' +
-          '<div class="form" />' +
-        '</div>' +
-      '</div>'),
-    events: {
-      'click .btn.add-javascript': 'addJavascript',
-      'click .btn.add-css': 'addCSS',
-      'click .btn.cancel': 'revertChanges',
-      'click .btn.save': 'saveChanges'
-    },
-
-    _copyData: function(){
-      return $.extend(true, {}, {
-        javascripts: $.extend(true, {}, this.options.data.javascripts),
-        css: $.extend(true, {}, this.options.data.css)
-      });
-    },
-
-    _revertData: function(data){
-      this.options.data.css = $.extend(true, {}, data.css);
-      this.options.data.javascripts = $.extend(true, {}, data.javascripts);
-    },
-
-    addJavascript: function(e){
-      e.preventDefault();
-      var name = utils.generateId('new-file-');
-      this.options.data.javascripts[name] = {
-        enabled: true,
-        depends: _.last(_.keys(this.options.data.javascripts))
-      };
-      this.render();
-      this.items[name].editResource();
-    },
-
-    addCSS: function(e){
-      e.preventDefault();
-      var name = utils.generateId('new-file-');
-      this.options.data.css[name] = {
-        enabled: true,
-        depends: _.last(_.keys(this.options.data.css))
-      };
-      this.render();
-      this.items[name].editResource();
-    },
-
-    _updateOrder: function(container, order){
-      order = _.filter(order, function(v){ return container[v]; });
-      if(order.length > 0){
-        var prev = _.first(order);
-        container[prev].depends = '';
-        _.each(_.rest(order), function(item){
-          container[item].depends = prev;
-          prev = item;
-        });
-      }
-    },
-
-    updateOrder: function(){
-      /* read through orders and update */
-      var self = this;
-      var data = self.options.data;
-      var css = [];
-      self.$css.find('li:not(.list-group-item-warning)').each(function(){
-        css.push($(this).attr('data-name'));
-      });
-      self._updateOrder(data.css, css);
-      var js = [];
-      self.$javascripts.find('li:not(.list-group-item-warning)').each(function(){
-        js.push($(this).attr('data-name'));
-      });
-      self._updateOrder(data.javascripts, js);
-    },
-
-    showResourceEditor: function(resource){
-      this.$('.form').empty().append(resource.render().el);
-    },
-
-    addListItem: function(container, name, $el){
-      var self = this;
-      if(container[name]){
-        var item = new ManualListItem({
-          container: container,
-          data: container[name],
-          name: name,
-          manualView: self});
-        $el.append(item.render().el);
-        self.items[name] = item;
-      }
-    },
-
-    getOrder: function(data){
-      var order = [];  // list of names
-      var noDepends = []; // add these do the end
-      _.each(_.keys(data), function(name){
-        /* cases:
-         *  - no depends
-         *  - depends already added
-         *  - already added(from a depends), need to check depends
-         */
-        var item = data[name];
-        var dependsOn =  item.depends;
-        var pos = _.indexOf(order, name);
-        if(pos !== -1){
-          // already added from depends
-          if(data[dependsOn] && _.indexOf(order, dependsOn) === -1){
-            // need to insert BEFORE current
-            order.splice(pos, 0, dependsOn);
-          }
-          return;
-        }
-        if(!dependsOn || !data[dependsOn]){
-          return noDepends.push(name);
-        }
-        if(_.indexOf(order, dependsOn) === -1){
-          order.push(dependsOn);
-        }
-        order.push(name);
-      });
-      // append everything left
-      return order.concat(_.difference(noDepends, order));
-    },
-
-    afterRender: function(){
-      var self = this;
-      self.$css = self.$('ul.css');
-      self.$javascripts = self.$('ul.js');
-      var data = self.options.data;
-      self.items = {};
-      _.each(self.getOrder(data.css), function(cssName){
-        self.addListItem(data.css, cssName, self.$css);
-      });
-
-      _.each(self.getOrder(data.javascripts), function(jsName){
-        self.addListItem(data.javascripts, jsName, self.$javascripts);
-      });
-
-      self.ddCSS = new Sortable(self.$css, {
-        selector: 'li:not(.list-group-item-warning)',
-        dragClass: 'dragging',
-        drop: function($el, delta) {
-          if (delta !== 0){
-            self.updateOrder();
-          }
-        }
-      });
-      self.ddJS = new Sortable(self.$javascripts, {
-        selector: 'li:not(.list-group-item-warning)',
-        dragClass: 'dragging',
-        drop: function($el, delta) {
-          if (delta !== 0){
-            self.updateOrder();
-          }
-        }
-      });
-      BaseResourcesPane.prototype.afterRender.apply(self); 
-      return self;
-    },
-
-    saveChanges: function(e){
-      e.preventDefault();
-      var self = this;
-      self.loading.show();
-      $.ajax({
-        url: self.options.data.manageUrl,
-        type: 'POST',
-        data: {
-          action: 'save-manual',
-          _authenticator: utils.getAuthenticator(),
-          css: JSON.stringify(self.options.data.css),
-          javascripts: JSON.stringify(self.options.data.javascripts),
-        },
-        success: function(){
-          self.loading.hide();
-          self.previousData = self._copyData();
-        },
-        error: function(){
-          self.loading.hide();
-          alert('Error saving data');
-        }
-      });
-    }
-  });
 
   var TabView = BaseView.extend({
     tagName: 'div',
@@ -1239,15 +1016,13 @@ define([
     template: _.template('' +
       '<ul class="main-tabs nav nav-tabs" role="tablist">' +
         '<li class="registry-btn"><a href="#">Registry</a></li>' +
-        '<li class="manual-btn"><a href="#">Manual</a></li>' +
         '<li class="overrides-btn"><a href="#">Overrides</a></li>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
     events: {
       'click .registry-btn a': 'hideShow',
-      'click .overrides-btn a': 'hideShow',
-      'click .manual-btn a': 'hideShow'
+      'click .overrides-btn a': 'hideShow'
     },
     hideShow: function(e){
       var self = this;
@@ -1269,9 +1044,6 @@ define([
       self.overridesView = new OverridesView({
         data: options,
         tabView: self});
-      self.manualView = new ManualView({
-        data: options,
-        tabView: self});
       self.tabs = {};
     },
 
@@ -1283,15 +1055,10 @@ define([
       self.$content = self.$('.tab-content');
       self.$content.append(self.registryView.render().el);
       self.$content.append(self.overridesView.render().el);
-      self.$content.append(self.manualView.render().el);
       self.tabs = {
         registry: {
           btn: self.$('.registry-btn'),
           content: self.registryView.$el
-        },
-        manual: {
-          btn: self.$('.manual-btn'),
-          content: self.manualView.$el
         },
         overrides: {
           btn: self.$('.overrides-btn'),
@@ -1302,6 +1069,7 @@ define([
       return self;
     }
   });
+
 
   var ResourceRegistry = Base.extend({
     name: 'resourceregistry',
