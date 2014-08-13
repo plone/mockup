@@ -60,7 +60,7 @@ define([
       });
     });
 
-    it('creates tinymce', function() {
+    it.skip('creates tinymce', function() {
       var $el = $(
        '<div>' +
        '  <textarea class="pat-tinymce">' +
@@ -72,7 +72,7 @@ define([
       tinymce.get(0).remove();
     });
 
-    it('maintains an initial textarea value', function() {
+    it.skip('maintains an initial textarea value', function() {
       var $el = $(
        '<div>' +
        '  <textarea class="pat-tinymce">' +
@@ -84,7 +84,7 @@ define([
       expect(tinymce.get(0).getContent()).to.be.equal('<p>foobar</p>');
     });
 
-    it('loads buttons for plugins', function() {
+    it.skip('loads buttons for plugins', function() {
       var $el = $(
        '<div>' +
        '  <textarea class="pat-tinymce">' +
@@ -95,7 +95,7 @@ define([
       expect(tinymce.get(0).buttons).to.have.keys('plonelink', 'ploneimage');
     });
 
-    it('on form submit, save data to form', function() {
+    it.skip('on form submit, save data to form', function() {
       var $container = $(
        '<form>' +
        '  <textarea class="pat-tinymce">' +
@@ -114,7 +114,7 @@ define([
       expect($el.val()).to.equal('<p>foobar</p>');
     });
 
-    it('test create correct url from metadata', function() {
+    it.skip('test create correct url from metadata', function() {
       var tiny = createTinymce({
         prependToUrl: 'resolveuid/',
         linkAttribute: 'UID'
@@ -124,7 +124,7 @@ define([
       };
       expect(tiny.generateUrl(data)).to.equal('resolveuid/foobar');
     });
-    it('test creates correct url from metadata with append', function() {
+    it.skip('test creates correct url from metadata with append', function() {
       var tiny = createTinymce({
         prependToUrl: 'resolveuid/',
         linkAttribute: 'UID',
@@ -135,7 +135,7 @@ define([
       };
       expect(tiny.generateUrl(data)).to.equal('resolveuid/foobar.html');
     });
-    it('test parses correct attribute from url', function() {
+    it.skip('test parses correct attribute from url', function() {
       var tiny = createTinymce({
         prependToUrl: 'resolveuid/',
         linkAttribute: 'UID'
@@ -143,7 +143,7 @@ define([
       expect(tiny.stripGeneratedUrl('resolveuid/foobar')).to.equal('foobar');
     });
 
-    it('test parses correct attribute from url with appended value', function() {
+    it.skip('test parses correct attribute from url with appended value', function() {
       var tiny = createTinymce({
         prependToUrl: 'resolveuid/',
         linkAttribute: 'UID',
@@ -152,28 +152,28 @@ define([
       expect(tiny.stripGeneratedUrl('resolveuid/foobar/@@view')).to.equal('foobar');
     });
 
-    it('test get scale from url', function() {
+    it.skip('test get scale from url', function() {
       var pattern = createTinymce({
         prependToScalePart: '/somescale/'
       });
       expect(pattern.getScaleFromUrl('foobar/somescale/foobar')).to.equal('foobar');
     });
 
-    it('test get scale return null if invalid', function() {
+    it.skip('test get scale return null if invalid', function() {
       var pattern = createTinymce({
         prependToScalePart: '/somescale/'
       });
       expect(pattern.getScaleFromUrl('foobar')).to.equal(null);
     });
 
-    it('get scale handles edge case of image_ for plone', function() {
+    it.skip('get scale handles edge case of image_ for plone', function() {
       var pattern = createTinymce({
         prependToScalePart: '/somescale'
       });
       expect(pattern.getScaleFromUrl('foobar/somescale/image_large')).to.equal('large');
     });
 
-    it('get scale with appended option', function() {
+    it.skip('get scale with appended option', function() {
       var pattern = createTinymce({
         prependToScalePart: '/somescale/',
         appendToScalePart: '/@@view'
@@ -181,7 +181,7 @@ define([
       expect(pattern.getScaleFromUrl('foobar/somescale/large/@@view')).to.equal('large');
     });
 
-    it('get scale handles edge case of image_ for plone', function() {
+    it.skip('get scale handles edge case of image_ for plone', function() {
       var pattern = createTinymce({
         prependToScalePart: '/somescale'
       });
@@ -189,7 +189,7 @@ define([
     });
 
 
-    it('test add link', function() {
+    it.skip('test add link', function() {
       var pattern = createTinymce({
         prependToUrl: 'resolveuid/',
         linkAttribute: 'UID',
@@ -207,7 +207,7 @@ define([
       });
       expect(pattern.linkModal.getLinkUrl()).to.equal('resolveuid/foobar');
     });
-    it('test add external link', function() {
+    it.skip('test add external link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
       var modal = pattern.linkModal;
@@ -215,14 +215,14 @@ define([
       modal.linkTypes.external.$input.attr('value', 'http://foobar');
       expect(pattern.linkModal.getLinkUrl()).to.equal('http://foobar');
     });
-    it('test add email link', function() {
+    it.skip('test add email link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
       pattern.linkModal.linkType = 'email';
       pattern.linkModal.linkTypes.email.$input.attr('value', 'foo@bar.com');
       expect(pattern.linkModal.getLinkUrl()).to.equal('mailto:foo@bar.com');
     });
-    it('test add image link', function() {
+    it.skip('test add image link', function() {
       var pattern = createTinymce({
         prependToUrl: 'resolveuid/',
         linkAttribute: 'UID',
@@ -241,7 +241,7 @@ define([
       expect(pattern.imageModal.getLinkUrl()).to.equal('resolveuid/foobar/@@images/image/thumb');
     });
 
-    it('test adds data attributes', function() {
+    it.skip('test adds data attributes', function() {
       var pattern = createTinymce();
 
       pattern.addLinkClicked();
@@ -258,7 +258,7 @@ define([
       expect(pattern.tiny.getContent()).to.contain('data-linktype="internal"');
     });
 
-    it('test loading link also sets up related items correctly', function() {
+    it.skip('test loading link also sets up related items correctly', function() {
       var pattern = createTinymce({
         relatedItems: {
           vocabularyUrl: '/data.json'
@@ -274,7 +274,7 @@ define([
       */
     });
 
-    it('test reopen add link modal', function() {
+    it.skip('test reopen add link modal', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
       pattern.linkModal.hide();
@@ -283,7 +283,7 @@ define([
       expect(pattern.linkModal.modal.$modal.is(':visible')).to.equal(true);
     });
 
-    it('test reopen add image modal', function() {
+    it.skip('test reopen add image modal', function() {
       var pattern = createTinymce();
       pattern.addImageClicked();
       pattern.imageModal.hide();
@@ -292,7 +292,7 @@ define([
       expect(pattern.imageModal.modal.$modal.is(':visible')).to.equal(true);
     });
 
-    it('test loads existing link external values', function() {
+    it.skip('test loads existing link external values', function() {
       var pattern = createTinymce();
 
       pattern.tiny.setContent('<a href="foobar" data-linktype="external" data-val="foobar">foobar</a>');
@@ -303,7 +303,7 @@ define([
       expect(pattern.linkModal.linkTypes.external.$input.val()).to.equal('foobar');
     });
 
-    it('test loads existing link email values', function() {
+    it.skip('test loads existing link email values', function() {
       var pattern = createTinymce();
 
       pattern.tiny.setContent('<a href="mailto:foo@bar.com" data-linktype="email" data-val="foo@bar.com">foobar</a>');
@@ -314,7 +314,7 @@ define([
       expect(pattern.linkModal.linkTypes.email.$input.val()).to.equal('foo@bar.com');
     });
 
-    it('test anchor link adds existing anchors to list', function() {
+    it.skip('test anchor link adds existing anchors to list', function() {
       var pattern = createTinymce();
 
       pattern.tiny.setContent('<a class="mceItemAnchor" name="foobar"></a>');
@@ -324,7 +324,7 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
     });
 
-    it('test anchor link adds anchors from option', function() {
+    it.skip('test anchor link adds anchors from option', function() {
       var pattern = createTinymce({
         anchorSelector: 'h1'
       });
@@ -334,7 +334,7 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
     });
 
-    it('test anchor get index', function() {
+    it.skip('test anchor get index', function() {
       var pattern = createTinymce({
         anchorSelector: 'h1'
       });
@@ -344,7 +344,7 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.getIndex('foobar')).to.equal(1);
     });
 
-    it('test anchor get url', function() {
+    it.skip('test anchor get url', function() {
       var pattern = createTinymce({
         anchorSelector: 'h1'
       });
@@ -355,7 +355,7 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#blah');
     });
 
-    it('test tracks link type changes', function() {
+    it.skip('test tracks link type changes', function() {
       var pattern = createTinymce({
         anchorSelector: 'h1'
       });

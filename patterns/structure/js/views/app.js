@@ -94,9 +94,7 @@ define([
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.setAllCookieSettings();
-      self.loading = new utils.ProgressIndicator({
-        container: self.$el
-      });
+      self.loading = new utils.Loading();
       self.loading.show();
 
       self.collection = new ResultCollection([], {

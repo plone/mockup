@@ -560,10 +560,8 @@ define([
           .appendTo(self.$wrapper);
       }
 
-      self.loading = new utils.ProgressIndicator({
-        container: self.$wrapperInner,
+      self.loading = new utils.Loading({
         backdrop: self.backdrop,
-        wrapper: self.$wrapper,
         zIndex: function() {
           if (self.modalInitialized()) {
             var zIndex = self.$modal.css('zIndex');

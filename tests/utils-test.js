@@ -157,33 +157,33 @@ define([
 
     });
 
-    describe('ProgressIndicator', function() {
+    describe('Loading', function() {
 
       it('creates element', function() {
-        var pi = new utils.ProgressIndicator();
-        expect($('.' + pi.options.className).length).to.equal(1);
+        var loading = new utils.Loading();
+        expect($('.' + loading.className).length).to.equal(1);
       });
       it('hidden on creation', function() {
-        var pi = new utils.ProgressIndicator();
-        expect(pi.$loading.is(':visible')).to.equal(false);
+        var loading = new utils.Loading();
+        expect(loading.$el.is(':visible')).to.equal(false);
       });
       it('shows loader', function() {
-        var pi = new utils.ProgressIndicator();
-        pi.show();
-        expect(pi.$loading.is(':visible')).to.equal(true);
+        var loading = new utils.Loading();
+        loading.show();
+        expect(loading.$el.is(':visible')).to.equal(true);
       });
       it('hide loader', function() {
-        var pi = new utils.ProgressIndicator();
-        pi.show();
-        pi.hide();
-        expect(pi.$loading.is(':visible')).to.equal(false);
+        var loading = new utils.Loading(); 
+        loading.show();
+        loading.hide();
+        expect(loading.$el.is(':visible')).to.equal(false);
       });
       it('test custom zIndex', function() {
-        var pi = new utils.ProgressIndicator({
+        var loading = new utils.Loading({
           zIndex: function() { return 999; }
         });
-        pi.show();
-        expect(pi.$loading.css('zIndex') + '').to.equal('999');
+        loading.show();
+        expect(loading.$el[0].style.zIndex).to.equal('999');
       });
       it('works with backdrop', function() {
         var initCalled = false;
@@ -196,26 +196,14 @@ define([
             showCalled = true;
           }
         };
-        var pi = new utils.ProgressIndicator({
+        var loading = new utils.Loading({
           backdrop: fakeBackdrop
         });
-        pi.show();
+        loading.show();
         expect(initCalled).to.equal(true);
         expect(showCalled).to.equal(true);
         expect(fakeBackdrop.closeOnClick).to.equal(true);
         expect(fakeBackdrop.closeOnEsc).to.equal(true);
-      });
-      it('removed overflow css', function() {
-        var $parent = $('<div><div /></div>');
-        var $el = $parent.children();
-        var pi = new utils.ProgressIndicator({
-          zIndex: function() { return 999; },
-          container: $el
-        });
-        pi.show();
-        expect($parent.css('overflow')).to.equal('hidden');
-        pi.hide();
-        expect($parent.css('overflow')).to.not.equal('hidden');
       });
 
     });

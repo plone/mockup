@@ -1261,10 +1261,7 @@ define([
     render: function(){
       var self = this;
       self.$el.append(self.template());
-      self.loading = new utils.ProgressIndicator({
-        container: self.$el,
-        full: true
-      });
+      self.loading = new utils.Loading();
       self.$tabs = self.$('ul.main-tabs');
       self.$content = self.$('.tab-content');
       self.$content.append(self.registryView.render().el);

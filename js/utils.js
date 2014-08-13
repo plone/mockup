@@ -206,96 +206,50 @@ define([
     return self;
   };
 
-  var ProgressIndicator = function(options) {
+  var Loading = function(options){
     /*
      * Options:
-     *   className(string): Defaults to "progress-indicator"
-     *   container($element): Defaults to null and will create the $element on
-     *                        intialization
      *   backdrop(pattern): if you want to have the progress indicator work
      *                      seamlessly with backdrop pattern
-     *   wrapper($element): manually set container element to calculate position
-     *                      from. If unset, will just use container option
      *   zIndex(integer or function): to override default z-index used
      */
     var self = this;
+    self.className = 'mockup-loader-icon';
     var defaults = {
-      className: 'progress-indicator',
-      container: null,
       backdrop: null,
-      full: false,
-      wrapper: null,
       zIndex: 10005 // can be a function
     };
-    if (!options) {
+    if(!options){
       options = {};
     }
     self.options = $.extend({}, defaults, options);
-    if (self.options.container === null) {
-      self.options.container = $('body');
-    }
-    self.$loading = $('> .' + self.options.className, self.options.container);
-    if (self.$loading.size() === 0) {
-      self.$loading = $('<div class="progress ' + self.options.className + '">' +
-        '<div class="progress-bar progress-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">' +
-        'loading...</div></div>').hide()
-        .addClass(self.options.className)
-        .appendTo(self.options.container);
-    }
-    self.$wrapper = self.options.wrapper;
-    if (self.$wrapper === null) {
-      self.$wrapper = self.options.container;
+    self.$el = $('.' + self.className);
+    if(self.$el.length === 0){
+      self.$el = $('<div><span class="glyphicon glyphicon-refresh" /></div>');
+      self.$el.addClass(self.className).hide().appendTo('body');
     }
 
-    self.show = function(closable) {
-      if (closable === undefined) {
-        closable = true;
-      }
-
-      if (self.options.backdrop) {
-        self.options.backdrop.closeOnClick = closable;
-        self.options.backdrop.closeOnEsc = closable;
-        self.options.backdrop.init();
-      }
-
-      self.$wrapper.parent().css('overflow', 'hidden');
-      self.$wrapper.show();
-      if (self.options.backdrop) {
-        self.options.backdrop.show();
-      }
-      self.$loading.show();
-      self.position();
-    };
-
-    self.position = function() {
-      if(options.full){
-        self.$loading.css({
-          top: '50%',
-          left: '10%',
-          width: '90%',
-          position: 'fixed'
-        });
-      }else{
-        self.$loading.css({
-          'margin-left': self.$wrapper.width() / 2 - self.$loading.width() / 2,
-          'margin-top': self.$wrapper.height() / 2 - self.$loading.height() / 2,
-          'position': 'absolute',
-          'bottom': '0',
-          'left': '0',
-          'right': '0',
-          'top': '0'
-        });
-      }
+    self.show = function(closable){
+      self.$el.show();
       var zIndex = self.options.zIndex;
       if (typeof(zIndex) === 'function') {
         zIndex = zIndex();
       }
-      self.$loading.css('zIndex', zIndex);
+      self.$el.css('zIndex', zIndex);
+
+      if (closable === undefined) {
+        closable = true;
+      }
+      if (self.options.backdrop) {
+        self.options.backdrop.closeOnClick = closable;
+        self.options.backdrop.closeOnEsc = closable;
+        self.options.backdrop.init();
+        self.options.backdrop.show();
+      }
     };
 
-    self.hide = function() {
-      self.$loading.hide();
-      self.$wrapper.parent().css('overflow', '');
+    self.hide = function(){
+      self.$el.hide();
     };
 
     return self;
@@ -337,7 +291,7 @@ define([
       return ['true', true, 1].indexOf(val) !== -1;
     },
     QueryHelper: QueryHelper,
-    ProgressIndicator: ProgressIndicator,
+    Loading: Loading,
     getAuthenticator: function() {
       return $('input[name="_authenticator"]').val();
     }

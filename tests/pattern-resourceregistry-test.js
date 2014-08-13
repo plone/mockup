@@ -87,13 +87,13 @@ define([
       this.pat.tabs.hideShow();
       this.$el.find('.search-field').attr('value', 'bundles');
       this.pat.tabs.overridesView.textChange();
-      expect(this.$el.find('.search-results li').length).to.equal(4);
+      expect(this.$el.find('.search-results li').length).to.equal(5);
     });
 
     it('customize resource', function(){
       this.pat.tabs.showOverrides = true;
       this.pat.tabs.hideShow();
-      this.$el.find('.search-field').attr('value', 'pattern');
+      this.$el.find('.search-field').attr('value', 'plone');
       this.pat.tabs.overridesView.textChange();
       this.$el.find('.search-results li:last button').trigger('click');
       expect(this.pat.options.overrides.length).to.equal(2);
