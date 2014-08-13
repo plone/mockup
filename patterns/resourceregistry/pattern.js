@@ -279,21 +279,13 @@ define([
     afterRender: function(){
       ResourceInputFieldView.prototype.afterRender.apply(this);
       var self = this;
-      var values = self.options.values;
+      var values = self.options.value;
       var $select = self.$('select');
-      if(!self.multiple){
-        values = [values];
-      }else{
+      if(self.multiple){
         $select.attr('multiple', true);
       }
       $select.select2();
-
-      _.each(values, function(value){
-        var $el = self.$('option[value="' + value + '"]');
-        if($el.length > 0){
-          $el[0].selected = true;
-        }
-      });
+      $select.select2('val', values);
     },
 
     template: _.template(
