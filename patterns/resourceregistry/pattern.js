@@ -8,6 +8,8 @@
  *    overrides(array): List of current overrides ([])
  *    managerUrl(string): url to handle manage actions(null)
  *    baseUrl(string): to render resources from(null)
+ *    lesscUrl(string): url to lessc to load for compiling less(null)
+ *
  *
  * Documentation:
  *    # Defaults
@@ -65,7 +67,9 @@
  *                                   },
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
  *                                   "baseUrl": "/resources-registry",
- *                                   "manageUrl": "/resource-manager"}'>
+ *                                   "manageUrl": "/registry-manager",
+ *                                   "lessUrl": "node_modules/less/dist/less-1.7.4.min.js",
+ *                                   "lessConfigUrl": "tests/files/lessconfig.js"}'>
  *    </div>
  *
  * License:
@@ -96,8 +100,9 @@ define([
   'mockup-patterns-sortable',
   'mockup-patterns-texteditor',
   'mockup-utils',
+  'rjs',
   'select2'
-], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils) {
+], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils, rjs) {
   'use strict';
 
 
@@ -315,8 +320,10 @@ define([
     multiple: true,
     getSelectOptions: function(){
       var self = this;
-      return _.filter(_.keys(self.options.registryView.options.data.resources), function(name){
+      return _.sortBy(_.filter(_.keys(self.options.registryView.options.data.resources), function(name){
         return name !== self.options.name;
+      }), function(item){
+        return item.toLowerCase();
       });
     }
   });
@@ -477,7 +484,7 @@ define([
       description: 'For Internet Exploder hacks...'
     }, {
       name: 'compile',
-      title: 'Does your bundle contains any RequireJS or LESS file?',
+      title: 'Does your bundle contain any RequireJS or LESS files?',
       view: ResourceBoolFieldView
     }]
   });
@@ -551,6 +558,119 @@ define([
       this.options.registryView.dirty = true;
       this.options.registryView.render();
     },
+
+    _buildCSSBundle: function(config){
+      var self = this;
+      var rview = self.options.registryView;
+      var $iframe = $('<iframe><html><head></head><body></body></html></iframe').
+          appendTo('body').on('load', function(){
+      });
+      var head = $iframe.contents().find('head')[0];
+      _.each(config.less, function(less){
+        var link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet/less');
+        link.setAttribute('type', 'text/css');
+        link.setAttribute('href', less);
+        head.appendChild(link); 
+      });
+      var script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('src', rview.options.data.lessConfigUrl);
+      head.appendChild(script);
+      script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('src', rview.options.data.lessUrl);
+      head.appendChild(script);
+
+      /* XXX okay, wish there were a better way,
+         but we need to pool to find the */
+      var checkFinished = function(){
+        var styles =  $('style[type="text/css"][id]', head);
+        if(styles.length === config.less.length){
+          // we're finished, save it
+          var data = {};
+          styles.each(function(){
+            var $el = $(this);
+            data['data-' + $el.attr('id')] = $el.html();
+          });
+          $.ajax({
+            url: rview.options.data.manageUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: $.extend(data, {
+              action: 'save-less-build',
+              bundle: self.options.name,
+              _authenticator: utils.getAuthenticator()
+            }),
+            success: function(){
+              rview.loading.hide();
+            },
+            error: function(){
+              rview.loading.hide();
+              alert('Error saving css bundle');
+            }
+          });
+        }else{
+          setTimeout(checkFinished, 300);
+        }
+      };
+      checkFinished();
+    },
+
+    buildCSSBundle: function(){
+      var self = this;
+      var rview = self.options.registryView;
+      $.ajax({
+        url: rview.options.data.manageUrl,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          action: 'less-build-config',
+          bundle: self.options.name,
+          _authenticator: utils.getAuthenticator()
+        },
+        success: function(data){
+          /* sort of weird here, follow along. We'll build CSS after JS */
+          self._buildCSSBundle(data);
+        },
+        error: function(){
+          rview.loading.hide();
+          alert('Error building css bundle');
+        }
+      });
+    },
+
+    _buildJSBundle: function(config){
+      var self = this;
+      var rview = self.options.registryView;
+      if(config.include.length === 0){
+        return self.buildCSSBundle();
+      }
+      config.out = function(results){
+        $.ajax({
+          url: rview.options.data.manageUrl,
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            action: 'save-js-build',
+            bundle: self.options.name,
+            data: results,
+            _authenticator: utils.getAuthenticator()
+          },
+          success: function(){
+            rview.loading.hide();
+          },
+          error: function(){
+            rview.loading.hide();
+            alert('Error building bundle');
+          }
+        });
+      };
+      requirejs.optimize(config, function(combined_files){
+        self.buildCSSBundle();
+      });
+    },
+
     buildClicked: function(e){
       e.preventDefault();
       var self = this;
@@ -559,13 +679,15 @@ define([
       $.ajax({
         url: rview.options.data.manageUrl,
         type: 'POST',
+        dataType: 'json',
         data: {
-          action: 'build',
+          action: 'js-build-config',
           bundle: self.options.name,
           _authenticator: utils.getAuthenticator()
         },
-        success: function(){
-          rview.loading.hide();
+        success: function(data){
+          /* sort of weird here, follow along. We'll build CSS after JS */
+          self._buildJSBundle(data);
         },
         error: function(){
           rview.loading.hide();
@@ -641,7 +763,7 @@ define([
         '</div>' +
       '</div>' +
       '<div class="row">' +
-        '<div class="items col-md-4">' +
+        '<div class="items col-md-5">' +
           '<ul class="bundles list-group">' +
             '<li class="list-group-item list-group-item-warning">Bundles</li>' +
           '</ul>' +
@@ -652,7 +774,7 @@ define([
             '</li>' +
           '</ul>' +
         '</div>' +
-        '<div class="form col-md-8"></div>'),
+        '<div class="form col-md-7"></div>'),
     events: {
       'click button.save': 'saveClicked',
       'click button.add-resource': 'addResourceClicked',

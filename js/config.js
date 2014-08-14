@@ -131,7 +131,8 @@
       'tinymce-wordcount': 'bower_components/tinymce/plugins/wordcount/plugin',
       'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme.min',
       'tinymce': 'bower_components/tinymce/tinymce',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore'
+      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+      'rjs': 'bower_components/r.js/dist/r'
     },
     shim: {
       'JSXTransformer': { exports: 'window.JSXTransformer' },
