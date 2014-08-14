@@ -151,7 +151,12 @@ require([
             title: 'Resource Registry',
             description: 'Register and override resources',
             url: 'patterns/resourceregistry/pattern.js'
-          }  
+          }, 
+          { id: 'eventedit',
+            title: 'Event Edit Forms',
+            description: 'Start/End delta, validation whole day and open end handling',
+            url: 'patterns/eventedit/pattern.js'
+          }
         ]
       },
       { id: 'contribute',

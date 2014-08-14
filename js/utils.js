@@ -81,7 +81,7 @@ define([
       } else {
         currentPath = pattern.currentPath;
       }
-      if (typeof(currentPath) === 'function') {
+      if (typeof currentPath  === 'function') {
         currentPath = currentPath();
       }
       var path = currentPath;
@@ -285,7 +285,7 @@ define([
       return id;
     },
     bool: function(val) {
-      if (typeof(val) === 'string') {
+      if (typeof val === 'string') {
         val = $.trim(val).toLowerCase();
       }
       return ['true', true, 1].indexOf(val) !== -1;
