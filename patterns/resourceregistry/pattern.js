@@ -649,7 +649,7 @@ define([
       var checkFinished = function(){
         var $styles =  $('style[type="text/css"][id]', head);
         for(var i=0; i<$styles.length; i=i+1){
-          var $style = $styles[i]; 
+          var $style = $styles.eq(i); 
           if($style.attr('id') === 'less:error-message'){
             self.addResult('Error compiling less');
             return self.finished(true);
