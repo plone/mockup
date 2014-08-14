@@ -14,15 +14,15 @@ define([
     beforeEach(function() {
       var testData = {"bundles":{
                         "plone": {
-                          "resource": "plone", "depends": null,
+                          "resources": "plone", "depends": null,
                           "expression": "", "enabled": true, "conditionalcomment": ""
                         },
                         "plone-auth": {
-                          "resource": "plone-auth", "depends": "plone",
+                          "resources": "plone-auth", "depends": "plone",
                           "expression": "", "enabled": true, "conditionalcomment": ""
                         },
                         "barceloneta": {
-                          "resource": "plone", "depends": "*",
+                          "resources": "plone", "depends": "*",
                           "expression": "", "enabled": true, "conditionalcomment": ""
                         }
                       },
@@ -106,7 +106,7 @@ define([
 
     it('loads bundle data', function(){
       this.$pat.find('.bundle-list-item-plone a').trigger('click');
-      expect(this.$pat.find('.resource-entry .field-resource select').val()).to.equal('plone');
+      expect(this.$pat.find('.resource-entry .field-resources select').select2('val').length).to.equal(1);
     });
 
     it('edit resource data', function(){

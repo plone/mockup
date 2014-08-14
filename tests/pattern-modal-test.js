@@ -160,7 +160,7 @@ define([
         })
         .on('formActionSuccess.modal.patterns', function() {
           expect($('.modal').hasClass('in')).to.be.equal(true);
-          var title = $('.modal-header').find('h3').text();
+          var title = $('.modal-header').find('h4').text();
           expect(title).to.equal('Form submitted');
           done();
         })
@@ -180,7 +180,7 @@ define([
           server.respond();
         })
         .on('formActionSuccess.modal.patterns', function() {
-          var title = $('.modal-header').find('h3').text();
+          var title = $('.modal-header').find('h4').text();
           expect(title).to.equal('Form submitted');
           done();
         })
