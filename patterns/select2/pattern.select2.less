@@ -1,9 +1,5 @@
-
-.importSelect2Dependencies() when (@isMockup) {
-  @import (css) "../../bower_components/select2/select2.css";
-}
-.importSelect2Dependencies();
-
+/* specifying (less) here forces it to be included inline */
+@import (less) "@{bowerPath}/select2/select2.css";
 
 .select2-container {
   margin-bottom: 1em;
