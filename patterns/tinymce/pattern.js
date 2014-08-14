@@ -73,7 +73,48 @@ define([
   'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
   'mockup-patterns-tinymce-url/js/links',
-  'mockup-i18n'
+  'mockup-i18n',
+  'tinymce-modern-theme',
+  'tinymce-advlist',
+  'tinymce-anchor',
+  'tinymce-autolink',
+  'tinymce-autoresize',
+  'tinymce-autosave',
+  'tinymce-bbcode',
+  'tinymce-charmap',
+  'tinymce-code',
+  'tinymce-colorpicker',
+  'tinymce-contextmenu',
+  'tinymce-directionality',
+  'tinymce-emoticons',
+  'tinymce-fullpage',
+  'tinymce-fullscreen',
+  'tinymce-hr',
+  'tinymce-image',
+  'tinymce-importcss',
+  'tinymce-insertdatetime',
+  'tinymce-layer',
+  'tinymce-legacyoutput',
+  'tinymce-link',
+  'tinymce-lists',
+  'tinymce-media',
+  'tinymce-nonbreaking',
+  'tinymce-noneditable',
+  'tinymce-pagebreak',
+  'tinymce-paste',
+  'tinymce-preview',
+  'tinymce-print',
+  'tinymce-save',
+  'tinymce-searchreplace',
+  'tinymce-spellchecker',
+  'tinymce-tabfocus',
+  'tinymce-table',
+  'tinymce-template',
+  'tinymce-textcolor',
+  'tinymce-textpattern',
+  'tinymce-visualblocks',
+  'tinymce-visualchars',
+  'tinymce-wordcount'
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,
@@ -276,59 +317,12 @@ define([
           self.tiny = editor;
         }
       };
-      if (tinyOptions.language != 'en') {
+      if (tinyOptions.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
       }
-      require(['tinymce'],
-        function(tinymce){
-        require([
-          'tinymce-advlist',
-          'tinymce-anchor',
-          'tinymce-autolink',
-          'tinymce-autoresize',
-          'tinymce-autosave',
-          'tinymce-bbcode',
-          'tinymce-charmap',
-          'tinymce-code',
-          'tinymce-colorpicker',
-          'tinymce-contextmenu',
-          'tinymce-directionality',
-          'tinymce-emoticons',
-          'tinymce-fullpage',
-          'tinymce-fullscreen',
-          'tinymce-hr',
-          'tinymce-image',
-          'tinymce-importcss',
-          'tinymce-insertdatetime',
-          'tinymce-layer',
-          'tinymce-legacyoutput',
-          'tinymce-link',
-          'tinymce-lists',
-          'tinymce-media',
-          'tinymce-nonbreaking',
-          'tinymce-noneditable',
-          'tinymce-pagebreak',
-          'tinymce-paste',
-          'tinymce-preview',
-          'tinymce-print',
-          'tinymce-save',
-          'tinymce-searchreplace',
-          'tinymce-spellchecker',
-          'tinymce-tabfocus',
-          'tinymce-table',
-          'tinymce-template',
-          'tinymce-textcolor',
-          'tinymce-textpattern',
-          'tinymce-visualblocks',
-          'tinymce-visualchars',
-          'tinymce-wordcount',
-          'tinymce-modern-theme'], 
-            function(undefined){
-              tinymce.init(tinyOptions);
-              self.tiny = tinymce.get(id);
-        })
-      })
 
+      tinymce.init(tinyOptions);
+      self.tiny = tinymce.get(id);
 
       /* tiny really should be doing this by default
        * but this fixes overlays not saving data */

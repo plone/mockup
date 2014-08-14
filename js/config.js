@@ -3,6 +3,49 @@
 (function() {
   'use strict';
 
+  var tinymcePlugins = [
+    'advlist',
+    'anchor',
+    'autolink',
+    'autoresize',
+    'autosave',
+    'bbcode',
+    'charmap',
+    'code',
+    'colorpicker',
+    'contextmenu',
+    'directionality',
+    'emoticons',
+    'fullpage',
+    'fullscreen',
+    'hr',
+    'image',
+    'importcss',
+    'insertdatetime',
+    'layer',
+    'legacyoutput',
+    'link',
+    'lists',
+    'media',
+    'nonbreaking',
+    'noneditable',
+    'pagebreak',
+    'paste',
+    'preview',
+    'print',
+    'save',
+    'searchreplace',
+    'spellchecker',
+    'tabfocus',
+    'table',
+    'template',
+    'textcolor',
+    'textpattern',
+    'visualblocks',
+    'visualchars',
+    'wordcount'
+  ];
+
   var requirejsOptions = {
     baseUrl: './',
     optimize: 'none',
@@ -90,48 +133,8 @@
       'select2': 'bower_components/select2/select2',
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
-      'tinymce-advlist': 'bower_components/tinymce/plugins/advlist/plugin',
-      'tinymce-anchor': 'bower_components/tinymce/plugins/anchor/plugin',
-      'tinymce-autolink': 'bower_components/tinymce/plugins/autolink/plugin',
-      'tinymce-autoresize': 'bower_components/tinymce/plugins/autoresize/plugin',
-      'tinymce-autosave': 'bower_components/tinymce/plugins/autosave/plugin',
-      'tinymce-bbcode': 'bower_components/tinymce/plugins/bbcode/plugin',
-      'tinymce-charmap': 'bower_components/tinymce/plugins/charmap/plugin',
-      'tinymce-code': 'bower_components/tinymce/plugins/code/plugin',
-      'tinymce-colorpicker': 'bower_components/tinymce/plugins/colorpicker/plugin',
-      'tinymce-contextmenu': 'bower_components/tinymce/plugins/contextmenu/plugin',
-      'tinymce-directionality': 'bower_components/tinymce/plugins/directionality/plugin',
-      'tinymce-emoticons': 'bower_components/tinymce/plugins/emoticons/plugin',
-      'tinymce-fullpage': 'bower_components/tinymce/plugins/fullpage/plugin',
-      'tinymce-fullscreen': 'bower_components/tinymce/plugins/fullscreen/plugin',
-      'tinymce-hr': 'bower_components/tinymce/plugins/hr/plugin',
-      'tinymce-image': 'bower_components/tinymce/plugins/image/plugin',
-      'tinymce-importcss': 'bower_components/tinymce/plugins/importcss/plugin',
-      'tinymce-insertdatetime': 'bower_components/tinymce/plugins/insertdatetime/plugin',
-      'tinymce-layer': 'bower_components/tinymce/plugins/layer/plugin',
-      'tinymce-legacyoutput': 'bower_components/tinymce/plugins/legacyoutput/plugin',
-      'tinymce-link': 'bower_components/tinymce/plugins/link/plugin',
-      'tinymce-lists': 'bower_components/tinymce/plugins/lists/plugin',
-      'tinymce-media': 'bower_components/tinymce/plugins/media/plugin',
-      'tinymce-nonbreaking': 'bower_components/tinymce/plugins/nonbreaking/plugin',
-      'tinymce-noneditable': 'bower_components/tinymce/plugins/noneditable/plugin',
-      'tinymce-pagebreak': 'bower_components/tinymce/plugins/pagebreak/plugin',
-      'tinymce-paste': 'bower_components/tinymce/plugins/paste/plugin',
-      'tinymce-preview': 'bower_components/tinymce/plugins/preview/plugin',
-      'tinymce-print': 'bower_components/tinymce/plugins/print/plugin',
-      'tinymce-save': 'bower_components/tinymce/plugins/save/plugin',
-      'tinymce-searchreplace': 'bower_components/tinymce/plugins/searchreplace/plugin',
-      'tinymce-spellchecker': 'bower_components/tinymce/plugins/spellchecker/plugin',
-      'tinymce-tabfocus': 'bower_components/tinymce/plugins/tabfocus/plugin',
-      'tinymce-table': 'bower_components/tinymce/plugins/table/plugin',
-      'tinymce-template': 'bower_components/tinymce/plugins/template/plugin',
-      'tinymce-textcolor': 'bower_components/tinymce/plugins/textcolor/plugin',
-      'tinymce-textpattern': 'bower_components/tinymce/plugins/textpattern/plugin',
-      'tinymce-visualblocks': 'bower_components/tinymce/plugins/visualblocks/plugin',
-      'tinymce-visualchars': 'bower_components/tinymce/plugins/visualchars/plugin',
-      'tinymce-wordcount': 'bower_components/tinymce/plugins/wordcount/plugin',
       'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme.min',
-      'tinymce': 'bower_components/tinymce/tinymce',
+      'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
       'underscore': 'bower_components/lodash/dist/lodash.underscore'
     },
     shim: {
@@ -156,10 +159,20 @@
       'picker.time': { deps: [ 'picker' ] },
       'sinon': {exports: 'window.sinon'},
       'tinymce': { exports: 'window.tinyMCE', init: function () { this.tinyMCE.DOM.events.domLoaded = true; return this.tinyMCE; }},
-      'underscore': { exports: 'window._' }
+      'underscore': { exports: 'window._' },
+      'tinymce-modern-theme': {
+        deps: ['tinymce']
+      }
     },
     wrapShim: true
   };
+  for(var i=0; i<tinymcePlugins.length; i=i+1){
+    var plugin = tinymcePlugins[i];
+    requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce/plugins/' + plugin + '/plugin';
+    requirejsOptions.shim['tinymce-' + plugin] = {
+      deps: ['tinymce']
+    };
+  }
 
   if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
     module.exports = requirejsOptions;

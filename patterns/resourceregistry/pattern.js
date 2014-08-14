@@ -10,6 +10,7 @@
  *    baseUrl(string): to render resources from(null)
  *    lesscUrl(string): url to lessc to load for compiling less(null)
  *    rjsUrl(string): url to lessc to load for compiling less(null)
+ *    lessVariables(object): group of settings that can be configured({})
  *
  *
  * Documentation:
@@ -65,6 +66,9 @@
  *                                       "css": ["pattern.pickadate.less"], "deps": "", "export": "",
  *                                       "conf": "", "force": true
  *                                     }
+ *                                   },
+ *                                   "lessVariables": {
+ *                                     "foo": "bar"
  *                                   },
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
  *                                   "baseUrl": "/resources-registry",
@@ -1258,6 +1262,31 @@ define([
   });
 
 
+  var LessVariablesView = BaseView.extend({
+    tagName: 'div',
+    className: 'tab-pane lessVariables',
+    template: _.template(
+      '<div class="row clearfix">' +
+        '<div class="form col-md-8"></div></div>'),
+    events: {
+    },
+    afterRender: function(){
+
+      var self = this;
+      var settings = self.options.data.lessVariables;
+      var $form = self.$('.form');
+      _.each(_.keys(settings), function(name){
+        $form.append((new ResourceInputFieldView({
+          registryData: settings,
+          title: name,
+          name: name,
+          value: settings[name]
+         }).render().el));
+      });
+    }
+  });
+
+
   var TabView = BaseView.extend({
     tagName: 'div',
     activeTab: 'registry',
@@ -1265,12 +1294,14 @@ define([
       '<ul class="main-tabs nav nav-tabs" role="tablist">' +
         '<li class="registry-btn"><a href="#">Registry</a></li>' +
         '<li class="overrides-btn"><a href="#">Overrides</a></li>' +
+        '<li class="lessVariables-btn"><a href="#">Less Variables</a></li>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
     events: {
       'click .registry-btn a': 'hideShow',
-      'click .overrides-btn a': 'hideShow'
+      'click .overrides-btn a': 'hideShow',
+      'click .lessVariables-btn a': 'hideShow'
     },
     hideShow: function(e){
       var self = this;
@@ -1292,6 +1323,9 @@ define([
       self.overridesView = new OverridesView({
         data: options,
         tabView: self});
+      self.lessVariablesView = new LessVariablesView({
+        data: options,
+        tabView: self});
       self.tabs = {};
     },
 
@@ -1303,6 +1337,7 @@ define([
       self.$content = self.$('.tab-content');
       self.$content.append(self.registryView.render().el);
       self.$content.append(self.overridesView.render().el);
+      self.$content.append(self.lessVariablesView.render().el);
       self.tabs = {
         registry: {
           btn: self.$('.registry-btn'),
@@ -1311,6 +1346,10 @@ define([
         overrides: {
           btn: self.$('.overrides-btn'),
           content: self.overridesView.$el
+        },
+        lessVariables: {
+          btn: self.$('.lessVariables-btn'),
+          content: self.lessVariablesView.$el
         }
       };
       self.hideShow();
@@ -1329,7 +1368,8 @@ define([
       overrides: [],
       manageUrl: null,
       baseUrl: null,
-      rjsUrl: null
+      rjsUrl: null,
+      lessVariables: {}
     },
     init: function() {
       var self = this;
