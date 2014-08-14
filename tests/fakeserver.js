@@ -665,6 +665,14 @@ define([
       data = {
         'less': ['patterns/resourceregistry/pattern.resourceregistry.less']
       };
+    }else if(action === 'save-js-build'){
+      data = {
+        'filepath': '++plone++static/autotoc.js'
+      };
+    }else if(action === 'save-less-build'){
+      data = {
+        'filepath': '++plone++static/autotoc.css'
+      };
     }
     xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(data));
   });

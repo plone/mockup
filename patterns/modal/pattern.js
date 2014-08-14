@@ -140,7 +140,7 @@ define([
           '    <div class="<%= options.classModal %>">' +
           '      <div class="<%= options.classHeaderName %>">' +
           '        <a class="close">&times;</a>' +
-          '        <% if (title) { %><h3><%= title %></h3><% } %>' +
+          '        <% if (title) { %><h4 class="modal-title"><%= title %></h4><% } %>' +
           '      </div>' +
           '      <div class="<%= options.classBodyName %>">' +
           '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
@@ -808,6 +808,7 @@ define([
         self.positionModal();
       });
       self.trigger('shown');
+      $('body').addClass('modal-open');
     },
     hide: function() {
       var self = this;
@@ -833,6 +834,7 @@ define([
       }
       $(window.parent).off('resize.modal.patterns');
       self.trigger('hidden');
+      $('body').removeClass('modal-open');
     },
     redraw: function(response, options) {
       var self = this;

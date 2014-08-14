@@ -536,8 +536,8 @@ define([
     self.bundleName = bundleName;
     self.bundleListItem = bundleListItem;
     self.rview = bundleListItem.options.registryView;
-    self.$progress = null;
     self.$results = null;
+    self.$btnClose = null;
 
     self.rview.loading.show();
     self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {
@@ -547,14 +547,9 @@ define([
           '<%= name %></span> pattern. This may take some a bit of time so ' +
           'we will try to keep you updated on the progress. Press the "Build it" ' +
           'button to proceed.</div>' +
-        '<div class="progress hidden">' +
-          '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"' +
-                'aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">' +
-            '<span class="sr-only">Building</span>' +
-          '</div>' +
-        '</div>' +
-        '<div class="alert alert-warning hidden" role="alert"><ul></ul></div>' +
-        '<button class="btn btn-primary">Build it</button>' +
+        '<ul class="list-group hidden"></ul>' +
+        '<button class="btn btn-default cancel hidden">Close</button>' +
+        '<button class="btn btn-primary build">Build it</button>' +
       '</div>', bundleListItem.options),
       content: null,
       width: 500,
@@ -563,25 +558,41 @@ define([
     self.modal.on('shown', function() {
       var $el = self.modal.$modal;
       var $info = $el.find('.start-info');
-      var $btn = $el.find('button');
-
+      self.$btnClose = $el.find('button.cancel');
+      var $btn = $el.find('button.build');
       $btn.off('click').on('click', function(e){
         e.preventDefault();
         $info.addClass('hidden');
         $btn.attr('disabled', 'true');
-        self.$progress = $el.find('.progress').removeClass('hidden');
-        self.$results = $el.find('.alert').removeClass('hidden').find('ul');
+        self.$results = $el.find('.list-group').removeClass('hidden');
         self.buildJS();
         self.rview.loading.show();
       });
+
+      self.$btnClose.off('click').on('click', function(){
+        self.modal.hide();
+      });
     });
 
-    self.addResult = function(txt){
-      self.$results.append('<li>' + txt + '</li>');
+    self.addResult = function(txt, klass){
+      if(!klass){
+        klass = '';
+      }
+      self.$results.append('<li class="list-group-item ' + klass + '">' + txt + '</li>');
     };
 
     self.run = function(){
       self.modal.show();
+    };
+
+    self.finished = function(error){
+      var msg = 'Finished!';
+      if(error){
+        msg = 'Error in build process';
+      }
+      self.addResult(msg, 'list-group-item-warning');
+      self.$btnClose.removeClass('hidden');
+      self.rview.loading.hide();
     };
 
     self.buildJS = function(){
@@ -600,8 +611,8 @@ define([
           self._buildJSBundle(data);
         },
         error: function(){
-          self.rview.loading.hide();
           self.addResult('Error building resources');
+          self.finished(true);
         }
       });
     };
@@ -610,6 +621,8 @@ define([
       var $iframe = $('<iframe><html><head></head><body></body></html></iframe').
           appendTo('body').on('load', function(){
       });
+      var iframe = $iframe[0];
+      var win = iframe.contentWindow || iframe;
       var head = $iframe.contents().find('head')[0];
       _.each(config.less, function(less){
         var link = document.createElement('link');
@@ -626,16 +639,26 @@ define([
       script.setAttribute('type', 'text/javascript');
       script.setAttribute('src', self.rview.options.data.lessUrl);
       head.appendChild(script);
+      win.lessErrorReporting = function(){
+        debugger;
+      };
 
       /* XXX okay, wish there were a better way,
          but we need to pool to find the */
       self.addResult(config.less.length + ' css files to build');
       var checkFinished = function(){
-        var styles =  $('style[type="text/css"][id]', head);
-        if(styles.length === config.less.length){
+        var $styles =  $('style[type="text/css"][id]', head);
+        for(var i=0; i<$styles.length; i=i+1){
+          var $style = $styles[i]; 
+          if($style.attr('id') === 'less:error-message'){
+            self.addResult('Error compiling less');
+            return self.finished(true);
+          }
+        }
+        if($styles.length === config.less.length){
           // we're finished, save it
           var data = {};
-          styles.each(function(){
+          $styles.each(function(){
             var $el = $(this);
             data['data-' + $el.attr('id')] = $el.html();
           });
@@ -648,13 +671,15 @@ define([
               bundle: self.bundleName,
               _authenticator: utils.getAuthenticator()
             }),
-            success: function(){
+            success: function(data){
+              self.rview.options.data.overrides.push(data.filepath);
+              self.rview.tabView.overridesView.render();
               self.addResult('finished saving css bundles');
-              self.rview.loading.hide();
+              self.finished();
             },
             error: function(){
-              self.rview.loading.hide();
               self.addResult('Error saving css bundle');
+              self.finished(true);
             }
           });
         }else{
@@ -680,8 +705,8 @@ define([
           self._buildCSSBundle(data);
         },
         error: function(){
-          self.rview.loading.hide();
           self.addResult('Error building css bundle');
+          self.finished(true);
         }
       });
     };
@@ -704,9 +729,11 @@ define([
           },
           success: function(data){
             self.rview.options.data.overrides.push(data.filepath);
+            self.rview.tabView.overridesView.render();
           },
           error: function(){
             self.addResult('Error building bundle');
+            self.finished(true);
           }
         });
       };
@@ -1301,7 +1328,8 @@ define([
       css: {},
       overrides: [],
       manageUrl: null,
-      baseUrl: null
+      baseUrl: null,
+      rjsUrl: null
     },
     init: function() {
       var self = this;
