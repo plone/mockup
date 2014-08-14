@@ -1,4 +1,4 @@
-  /* globals module:true */
+ /* globals module:true */
 
 (function() {
   'use strict';
@@ -132,8 +132,7 @@
       'tinymce-wordcount': 'bower_components/tinymce/plugins/wordcount/plugin',
       'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme.min',
       'tinymce': 'bower_components/tinymce/tinymce',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore',
-      'rjs': 'bower_components/r.js/dist/r'
+      'underscore': 'bower_components/lodash/dist/lodash.underscore'
     },
     shim: {
       'JSXTransformer': { exports: 'window.JSXTransformer' },

@@ -9,6 +9,7 @@
  *    managerUrl(string): url to handle manage actions(null)
  *    baseUrl(string): to render resources from(null)
  *    lesscUrl(string): url to lessc to load for compiling less(null)
+ *    rjsUrl(string): url to lessc to load for compiling less(null)
  *
  *
  * Documentation:
@@ -69,7 +70,8 @@
  *                                   "baseUrl": "/resources-registry",
  *                                   "manageUrl": "/registry-manager",
  *                                   "lessUrl": "node_modules/less/dist/less-1.7.4.min.js",
- *                                   "lessConfigUrl": "tests/files/lessconfig.js"}'>
+ *                                   "lessConfigUrl": "tests/files/lessconfig.js",
+ *                                   "rjsUrl": "tests/files/r.js"}'>
  *    </div>
  *
  * License:
@@ -100,9 +102,9 @@ define([
   'mockup-patterns-sortable',
   'mockup-patterns-texteditor',
   'mockup-utils',
-  'rjs',
+  'mockup-patterns-modal',
   'select2'
-], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils, rjs) {
+], function($, Base, _, Backbone, BaseView, Sortable, TextEditor, utils, Modal) {
   'use strict';
 
 
@@ -529,6 +531,205 @@ define([
   });
 
 
+  var Builder = function(bundleName, bundleListItem){
+    var self = this;
+    self.bundleName = bundleName;
+    self.bundleListItem = bundleListItem;
+    self.rview = bundleListItem.options.registryView;
+    self.$progress = null;
+    self.$results = null;
+
+    self.rview.loading.show();
+    self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {
+      html: _.template('<div id="content">' +
+        '<h1>Bundle Builder</h1>' +
+        '<div class="start-info">You are about to build the <span class="label label-primary">' +
+          '<%= name %></span> pattern. This may take some a bit of time so ' +
+          'we will try to keep you updated on the progress. Press the "Build it" ' +
+          'button to proceed.</div>' +
+        '<div class="progress hidden">' +
+          '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"' +
+                'aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">' +
+            '<span class="sr-only">Building</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="alert alert-warning hidden" role="alert"><ul></ul></div>' +
+        '<button class="btn btn-primary">Build it</button>' +
+      '</div>', bundleListItem.options),
+      content: null,
+      width: 500,
+      buttons: '.btn'
+    });
+    self.modal.on('shown', function() {
+      var $el = self.modal.$modal;
+      var $info = $el.find('.start-info');
+      var $btn = $el.find('button');
+
+      $btn.off('click').on('click', function(e){
+        e.preventDefault();
+        $info.addClass('hidden');
+        $btn.attr('disabled', 'true');
+        self.$progress = $el.find('.progress').removeClass('hidden');
+        self.$results = $el.find('.alert').removeClass('hidden').find('ul');
+        self.buildJS();
+        self.rview.loading.show();
+      });
+    });
+
+    self.addResult = function(txt){
+      self.$results.append('<li>' + txt + '</li>');
+    };
+
+    self.run = function(){
+      self.modal.show();
+    };
+
+    self.buildJS = function(){
+      self.addResult('building javascripts');
+      $.ajax({
+        url: self.rview.options.data.manageUrl,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          action: 'js-build-config',
+          bundle: self.bundleName,
+          _authenticator: utils.getAuthenticator()
+        },
+        success: function(data){
+          /* sort of weird here, follow along. We'll build CSS after JS */
+          self._buildJSBundle(data);
+        },
+        error: function(){
+          self.rview.loading.hide();
+          self.addResult('Error building resources');
+        }
+      });
+    };
+
+    self._buildCSSBundle = function(config){
+      var $iframe = $('<iframe><html><head></head><body></body></html></iframe').
+          appendTo('body').on('load', function(){
+      });
+      var head = $iframe.contents().find('head')[0];
+      _.each(config.less, function(less){
+        var link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet/less');
+        link.setAttribute('type', 'text/css');
+        link.setAttribute('href', less);
+        head.appendChild(link); 
+      });
+      var script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('src', self.rview.options.data.lessConfigUrl);
+      head.appendChild(script);
+      script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('src', self.rview.options.data.lessUrl);
+      head.appendChild(script);
+
+      /* XXX okay, wish there were a better way,
+         but we need to pool to find the */
+      self.addResult(config.less.length + ' css files to build');
+      var checkFinished = function(){
+        var styles =  $('style[type="text/css"][id]', head);
+        if(styles.length === config.less.length){
+          // we're finished, save it
+          var data = {};
+          styles.each(function(){
+            var $el = $(this);
+            data['data-' + $el.attr('id')] = $el.html();
+          });
+          $.ajax({
+            url: self.rview.options.data.manageUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: $.extend(data, {
+              action: 'save-less-build',
+              bundle: self.bundleName,
+              _authenticator: utils.getAuthenticator()
+            }),
+            success: function(){
+              self.addResult('finished saving css bundles');
+              self.rview.loading.hide();
+            },
+            error: function(){
+              self.rview.loading.hide();
+              self.addResult('Error saving css bundle');
+            }
+          });
+        }else{
+          setTimeout(checkFinished, 300);
+        }
+      };
+      checkFinished();
+    };
+
+    self.buildCSSBundle = function(){
+      self.addResult('building CSS bundle');
+      $.ajax({
+        url: self.rview.options.data.manageUrl,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          action: 'less-build-config',
+          bundle: self.bundleName,
+          _authenticator: utils.getAuthenticator()
+        },
+        success: function(data){
+          /* sort of weird here, follow along. We'll build CSS after JS */
+          self._buildCSSBundle(data);
+        },
+        error: function(){
+          self.rview.loading.hide();
+          self.addResult('Error building css bundle');
+        }
+      });
+    };
+
+    self._buildJSBundle = function(config){
+      if(config.include.length === 0){
+        self.addResult('No javascripts to build, skipping');
+        return self.buildCSSBundle();
+      }
+      config.out = function(results){
+        $.ajax({
+          url: self.rview.options.data.manageUrl,
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            action: 'save-js-build',
+            bundle: self.bundleName,
+            data: results,
+            _authenticator: utils.getAuthenticator()
+          },
+          success: function(data){
+            self.rview.options.data.overrides.push(data.filepath);
+          },
+          error: function(){
+            self.addResult('Error building bundle');
+          }
+        });
+      };
+      var $iframe = $('<iframe><html><head></head><body></body></html></iframe').appendTo('body');
+      var iframe = $iframe[0];
+      var win = iframe.contentWindow || iframe;
+      var head = $iframe.contents().find('head')[0];
+      var script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('src', self.rview.options.data.rjsUrl);
+      script.onload = function(){
+        win.requirejs.optimize(config, function(combined_files){
+          self.addResult('Saved javascript bundle, Build results: <pre>' + combined_files + '</pre>');
+          self.buildCSSBundle();
+        });
+      };
+      head.appendChild(script);
+    };
+
+    return self;
+  };
+
+
   var RegistryBundleListItem = RegistryResourceListItem.extend({
     type: 'bundle',
     template: _.template(
@@ -558,142 +759,12 @@ define([
       this.options.registryView.dirty = true;
       this.options.registryView.render();
     },
-
-    _buildCSSBundle: function(config){
-      var self = this;
-      var rview = self.options.registryView;
-      var $iframe = $('<iframe><html><head></head><body></body></html></iframe').
-          appendTo('body').on('load', function(){
-      });
-      var head = $iframe.contents().find('head')[0];
-      _.each(config.less, function(less){
-        var link = document.createElement('link');
-        link.setAttribute('rel', 'stylesheet/less');
-        link.setAttribute('type', 'text/css');
-        link.setAttribute('href', less);
-        head.appendChild(link); 
-      });
-      var script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.setAttribute('src', rview.options.data.lessConfigUrl);
-      head.appendChild(script);
-      script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.setAttribute('src', rview.options.data.lessUrl);
-      head.appendChild(script);
-
-      /* XXX okay, wish there were a better way,
-         but we need to pool to find the */
-      var checkFinished = function(){
-        var styles =  $('style[type="text/css"][id]', head);
-        if(styles.length === config.less.length){
-          // we're finished, save it
-          var data = {};
-          styles.each(function(){
-            var $el = $(this);
-            data['data-' + $el.attr('id')] = $el.html();
-          });
-          $.ajax({
-            url: rview.options.data.manageUrl,
-            type: 'POST',
-            dataType: 'json',
-            data: $.extend(data, {
-              action: 'save-less-build',
-              bundle: self.options.name,
-              _authenticator: utils.getAuthenticator()
-            }),
-            success: function(){
-              rview.loading.hide();
-            },
-            error: function(){
-              rview.loading.hide();
-              alert('Error saving css bundle');
-            }
-          });
-        }else{
-          setTimeout(checkFinished, 300);
-        }
-      };
-      checkFinished();
-    },
-
-    buildCSSBundle: function(){
-      var self = this;
-      var rview = self.options.registryView;
-      $.ajax({
-        url: rview.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'less-build-config',
-          bundle: self.options.name,
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(data){
-          /* sort of weird here, follow along. We'll build CSS after JS */
-          self._buildCSSBundle(data);
-        },
-        error: function(){
-          rview.loading.hide();
-          alert('Error building css bundle');
-        }
-      });
-    },
-
-    _buildJSBundle: function(config){
-      var self = this;
-      var rview = self.options.registryView;
-      if(config.include.length === 0){
-        return self.buildCSSBundle();
-      }
-      config.out = function(results){
-        $.ajax({
-          url: rview.options.data.manageUrl,
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            action: 'save-js-build',
-            bundle: self.options.name,
-            data: results,
-            _authenticator: utils.getAuthenticator()
-          },
-          success: function(){
-            rview.loading.hide();
-          },
-          error: function(){
-            rview.loading.hide();
-            alert('Error building bundle');
-          }
-        });
-      };
-      requirejs.optimize(config, function(combined_files){
-        self.buildCSSBundle();
-      });
-    },
-
+    
     buildClicked: function(e){
       e.preventDefault();
       var self = this;
-      var rview = self.options.registryView;
-      rview.loading.show();
-      $.ajax({
-        url: rview.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'js-build-config',
-          bundle: self.options.name,
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(data){
-          /* sort of weird here, follow along. We'll build CSS after JS */
-          self._buildJSBundle(data);
-        },
-        error: function(){
-          rview.loading.hide();
-          alert('Error building resources');
-        }
-      });
+      var builder = new Builder(self.options.name, self);
+      builder.run(); 
     }
   });
 
