@@ -207,8 +207,10 @@ define([
         new_end_date = new Date(start_date);
         new_end_date.setMinutes(start_date.getMinutes() + self.startEndDelta);
 
-        $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
-        $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
+        if (new_end_date) {
+          $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
+          $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
+        }
     },
     validateEndDate: function () {
         var self = this, $el = self.$el, jq_start, jq_end, start_datetime, end_datetime;
