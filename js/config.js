@@ -97,7 +97,7 @@
       'select2': 'bower_components/select2/select2',
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
-      'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme.min',
+      'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme',
       'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
       'underscore': 'bower_components/lodash/dist/lodash.underscore'
     },
