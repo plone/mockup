@@ -1,6 +1,6 @@
 {
   "name": "mockup",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Collection of Plone CMS Core Patterns",
   "homepage": "http://plone.github.io/mockup",
   "devDependencies": {
