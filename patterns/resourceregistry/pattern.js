@@ -10,7 +10,7 @@
  *    baseUrl(string): to render resources from(null)
  *    lesscUrl(string): url to lessc to load for compiling less(null)
  *    rjsUrl(string): url to lessc to load for compiling less(null)
- *    lessVariables(object): group of settings that can be configured({})
+ *    lessvariables(object): group of settings that can be configured({})
  *
  *
  * Documentation:
@@ -67,7 +67,7 @@
  *                                       "conf": "", "force": true
  *                                     }
  *                                   },
- *                                   "lessVariables": {
+ *                                   "lessvariables": {
  *                                     "foo": "bar"
  *                                   },
  *                                   "overrides": ["patterns/pickadate/pattern.js"],
@@ -150,6 +150,34 @@ define([
       this.$el.addClass('field-' + this.options.name);
     }
 
+  });
+
+  var VariableFieldView = ResourceInputFieldView.extend({
+    template: _.template(
+      '<div class="col-sm-4">' +
+        '<input class="form-control input-sm field-name" value="<%- name %>" />' +
+      '</div>' +
+      '<div class="col-sm-7">' +
+        '<input class="form-control input-sm field-value" value="<%- value %>" />' +
+      '</div>' +
+      '<div class="col-sm-1">' +
+        '<button class="btn btn-danger btn-xs">Remove</button>' +
+      '</div>'),
+    events: {
+      'change input': 'inputChanged',
+      'keyup input': 'textChanged',
+      'click .btn-danger': 'removeClicked'
+    },
+    removeClicked: function(e){
+      e.preventDefault();
+      this.$el.remove();
+      this.inputChanged();
+    },
+    inputChanged: function(e){
+      if(this.options.onChange){
+        this.options.onChange(e);
+      }
+    }
   });
 
 
@@ -1264,23 +1292,78 @@ define([
 
   var LessVariablesView = BaseView.extend({
     tagName: 'div',
-    className: 'tab-pane lessVariables',
+    className: 'tab-pane lessvariables',
     template: _.template(
+      '<div class="clearfix">' +
+        '<div class="btn-group pull-right">' +
+          '<button class="btn btn-default add-variable">Add variable</button>' +
+          '<button class="btn btn-default save">save</button>' +
+        '</div>' +
+      '</div>' +
       '<div class="row clearfix">' +
-        '<div class="form col-md-8"></div></div>'),
+        '<div class="form col-md-12"></div></div>'),
     events: {
+      'click .btn.save': 'saveClicked',
+      'click .btn.add-variable': 'addVariable'
     },
-    afterRender: function(){
 
+    initialize: function(options){
+      BaseView.prototype.initialize.apply(this, [options]);
+      this.loading = this.options.tabView.loading;
+    },
+
+    saveClicked: function(e){
+      e.preventDefault();
       var self = this;
-      var settings = self.options.data.lessVariables;
+      self.options.tabView.loading.show();
+      $.ajax({
+        url: self.options.data.manageUrl,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          action: 'save-less-variables',
+          data: JSON.stringify(self.options.data.lessvariables),
+          _authenticator: utils.getAuthenticator()
+        },
+        success: function(){
+          self.options.tabView.loading.hide();
+        },
+        error: function(){
+          self.options.tabView.loading.hide();
+          alert('error saving less variables');
+        }
+      });
+    },
+
+    addVariable: function(e){
+      e.preventDefault();
+      var self = this;
+      self.options.data.lessvariables[utils.generateId('new-variable-')] = '';
+      self.render();
+    },
+
+    inputChanged: function(){
+      var self = this;
+      var data = {};
+      self.$('.form-group').each(function(){
+        data[$(this).find('.field-name').val()] = $(this).find('.field-value').val();
+      });
+     self.options.data.lessvariables = data;
+    },
+
+    afterRender: function(){
+      var self = this;
+      var settings = self.options.data.lessvariables;
       var $form = self.$('.form');
       _.each(_.keys(settings), function(name){
-        $form.append((new ResourceInputFieldView({
+        $form.append((new VariableFieldView({
           registryData: settings,
           title: name,
           name: name,
-          value: settings[name]
+          value: settings[name],
+          onChange: function(){
+            self.inputChanged();
+          }
          }).render().el));
       });
     }
@@ -1294,14 +1377,14 @@ define([
       '<ul class="main-tabs nav nav-tabs" role="tablist">' +
         '<li class="registry-btn"><a href="#">Registry</a></li>' +
         '<li class="overrides-btn"><a href="#">Overrides</a></li>' +
-        '<li class="lessVariables-btn"><a href="#">Less Variables</a></li>' +
+        '<li class="lessvariables-btn"><a href="#">Less Variables</a></li>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
     events: {
       'click .registry-btn a': 'hideShow',
       'click .overrides-btn a': 'hideShow',
-      'click .lessVariables-btn a': 'hideShow'
+      'click .lessvariables-btn a': 'hideShow'
     },
     hideShow: function(e){
       var self = this;
@@ -1323,7 +1406,7 @@ define([
       self.overridesView = new OverridesView({
         data: options,
         tabView: self});
-      self.lessVariablesView = new LessVariablesView({
+      self.lessvariablesView = new LessVariablesView({
         data: options,
         tabView: self});
       self.tabs = {};
@@ -1337,7 +1420,7 @@ define([
       self.$content = self.$('.tab-content');
       self.$content.append(self.registryView.render().el);
       self.$content.append(self.overridesView.render().el);
-      self.$content.append(self.lessVariablesView.render().el);
+      self.$content.append(self.lessvariablesView.render().el);
       self.tabs = {
         registry: {
           btn: self.$('.registry-btn'),
@@ -1347,9 +1430,9 @@ define([
           btn: self.$('.overrides-btn'),
           content: self.overridesView.$el
         },
-        lessVariables: {
-          btn: self.$('.lessVariables-btn'),
-          content: self.lessVariablesView.$el
+        lessvariables: {
+          btn: self.$('.lessvariables-btn'),
+          content: self.lessvariablesView.$el
         }
       };
       self.hideShow();
@@ -1369,7 +1452,7 @@ define([
       manageUrl: null,
       baseUrl: null,
       rjsUrl: null,
-      lessVariables: {}
+      lessvariables: {}
     },
     init: function() {
       var self = this;
