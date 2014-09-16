@@ -244,7 +244,6 @@ define([
     getScaleFromUrl: function(url) {
       var self = this;
       var split = url.split(self.options.prependToScalePart);
-      var baseUrl = split[0];
       if (split.length !== 2) {
         // not valid scale, screw it
         return null;
@@ -260,7 +259,6 @@ define([
       return url;
     },
     init: function() {
-      debugger;
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
