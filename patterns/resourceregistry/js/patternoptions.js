@@ -80,8 +80,17 @@ define([
           title: name,
           name: name,
           value: settings[name],
-          onChange: function(){
-            self.inputChanged();
+          onChange: function(e, field){
+            try{
+              // check that the json is in correct structure
+              $.parseJSON(field.$el.find('.field-value').val());
+              field.$el.removeClass('has-error').removeClass('has-feedback');
+              field.$('.form-control-feedback').addClass('hidden');
+              self.inputChanged();
+            }catch(err){
+              field.$el.addClass('has-error').addClass('has-feedback');
+              field.$('.form-control-feedback').removeClass('hidden');
+            }
           }
          }).render().el));
       });

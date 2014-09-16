@@ -72,7 +72,7 @@ define([
     },
     inputChanged: function(e){
       if(this.options.onChange){
-        this.options.onChange(e);
+        this.options.onChange(e, this);
       }
     }
   });
@@ -92,6 +92,7 @@ define([
       '</div>' +
       '<div class="col-sm-7">' +
         '<textarea class="form-control field-value"><%- value %></textarea>' +
+        '<span class="hidden glyphicon glyphicon-remove form-control-feedback"></span>' +
       '</div>' +
       '<div class="col-sm-1">' +
         '<button class="btn btn-danger btn-xs">Remove</button>' +
