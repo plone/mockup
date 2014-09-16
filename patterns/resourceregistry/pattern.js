@@ -104,7 +104,8 @@ define([
   'mockup-patterns-resourceregistry-url/js/less',
   'mockup-patterns-resourceregistry-url/js/overrides',
   'mockup-patterns-resourceregistry-url/js/registry',
-], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView, RegistryView) {
+  'mockup-patterns-resourceregistry-url/js/patternoptions'
+], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView, RegistryView, PatternOptionsView) {
   'use strict';
 
 
@@ -116,13 +117,15 @@ define([
         '<li class="registry-btn"><a href="#">Registry</a></li>' +
         '<li class="overrides-btn"><a href="#">Overrides</a></li>' +
         '<li class="lessvariables-btn"><a href="#">Less Variables</a></li>' +
+        '<li class="patternoptions-btn"><a href="#">Pattern Options</a></li>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
     events: {
       'click .registry-btn a': 'hideShow',
       'click .overrides-btn a': 'hideShow',
-      'click .lessvariables-btn a': 'hideShow'
+      'click .lessvariables-btn a': 'hideShow',
+      'click .patternoptions-btn a': 'hideShow'
     },
     hideShow: function(e){
       var self = this;
@@ -147,6 +150,9 @@ define([
       self.lessvariablesView = new LessVariablesView({
         data: options,
         tabView: self});
+      self.patternoptionsView = new PatternOptionsView({
+        data: options,
+        tabView: self});
       self.tabs = {};
     },
 
@@ -159,6 +165,7 @@ define([
       self.$content.append(self.registryView.render().el);
       self.$content.append(self.overridesView.render().el);
       self.$content.append(self.lessvariablesView.render().el);
+      self.$content.append(self.patternoptionsView.render().el);
       self.tabs = {
         registry: {
           btn: self.$('.registry-btn'),
@@ -171,6 +178,10 @@ define([
         lessvariables: {
           btn: self.$('.lessvariables-btn'),
           content: self.lessvariablesView.$el
+        },
+        patternoptions: {
+          btn: self.$('.patternoptions-btn'),
+          content: self.patternoptionsView.$el
         }
       };
       self.hideShow();
@@ -190,7 +201,8 @@ define([
       manageUrl: null,
       baseUrl: null,
       rjsUrl: null,
-      lessvariables: {}
+      lessvariables: {},
+      patternoptions: {}
     },
     init: function() {
       var self = this;

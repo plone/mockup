@@ -78,6 +78,20 @@ define([
   });
 
 
+  var PatternFieldView = VariableFieldView.extend({
+    template: _.template(
+      '<div class="col-sm-4">' +
+        '<input class="form-control input-sm field-name" value="<%- name %>" />' +
+      '</div>' +
+      '<div class="col-sm-7">' +
+        '<textarea class="form-control field-value"><%- value %></textarea>' +
+      '</div>' +
+      '<div class="col-sm-1">' +
+        '<button class="btn btn-danger btn-xs">Remove</button>' +
+      '</div>')
+  });
+
+
   var ResourceBoolFieldView = ResourceInputFieldView.extend({
     className: 'col-sm-offset-3 col-sm-9',
     template: _.template(
@@ -316,6 +330,7 @@ define([
     ResourceTextAreaFieldView: ResourceTextAreaFieldView,
     BundleResourcesFieldView: BundleResourcesFieldView,
     BundleDependsFieldView: BundleDependsFieldView,
-    ResourceBoolFieldView: ResourceBoolFieldView
+    ResourceBoolFieldView: ResourceBoolFieldView,
+    PatternFieldView: PatternFieldView
   };
 });
