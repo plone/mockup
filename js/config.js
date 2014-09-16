@@ -83,6 +83,7 @@
       'mockup-patterns-upload-url': 'patterns/upload',
       'mockup-patterns-upload': 'patterns/upload/pattern',
       'mockup-patterns-resourceregistry': 'patterns/resourceregistry/pattern',
+      'mockup-patterns-resourceregistry-url': 'patterns/resourceregistry',
       'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
       'mockup-registry': 'bower_components/mockup-core/js/registry',
       'mockup-router': 'js/router',
