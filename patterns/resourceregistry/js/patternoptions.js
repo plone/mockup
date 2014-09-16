@@ -49,7 +49,7 @@ define([
         },
         error: function(){
           self.options.tabView.loading.hide();
-          alert('error saving less variables');
+          alert('error saving pattern options');
         }
       });
     },

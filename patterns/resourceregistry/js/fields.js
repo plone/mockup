@@ -79,6 +79,13 @@ define([
 
 
   var PatternFieldView = VariableFieldView.extend({
+    events: {
+      'change input': 'inputChanged',
+      'keyup input': 'textChanged',
+      'change textarea': 'inputChanged',
+      'keyup textarea': 'textChanged',
+      'click .btn-danger': 'removeClicked'
+    },
     template: _.template(
       '<div class="col-sm-4">' +
         '<input class="form-control input-sm field-name" value="<%- name %>" />' +
