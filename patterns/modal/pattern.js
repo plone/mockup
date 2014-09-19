@@ -110,7 +110,7 @@ define([
       backdropOptions: {
         zIndex: '1040',
         opacity: '0.8',
-        className: 'backdrop',
+        className: 'modal-backdrop',
         classActiveName: 'backdrop-active',
         closeOnEsc: true,
         closeOnClick: true
