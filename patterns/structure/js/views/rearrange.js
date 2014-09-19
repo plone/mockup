@@ -50,7 +50,7 @@ define([
       '<div class="checkbox">' +
         '<label>Reverse <input type="checkbox" name="reversed" /></label>' +
       '</div>' +
-      '<button class="btn btn-block btn-primary">Rearrange</button>'
+      '<button class="plone-btn plone-btn-block plone-btn-primary">Rearrange</button>'
     ),
     events: {
       'click button': 'rearrangeButtonClicked'

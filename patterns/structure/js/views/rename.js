@@ -36,7 +36,7 @@ define([
     title: _.template('Rename items'),
     content: _.template(
       '<div class="itemstoremove"></div>' +
-      '<button class="btn btn-block btn-primary">Apply</button>'
+      '<button class="plone-btn plone-btn-block plone-btn-primary">Apply</button>'
     ),
     itemTemplate: _.template(
       '<div class="item">' +

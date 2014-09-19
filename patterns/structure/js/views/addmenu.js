@@ -38,7 +38,7 @@ define([
 
   var AddMenu = ButtonGroup.extend({
     title: 'Add',
-    className: 'btn-group addnew',
+    className: 'plone-btn-group addnew',
     events: {
     },
     initialize: function(options) {
@@ -125,7 +125,7 @@ define([
       self.$el.empty();
 
       self.$el.append(
-        '<a class="btn dropdown-toggle btn-success" data-toggle="dropdown" href="#">' +
+        '<a class="plone-btn dropdown-toggle plone-btn-success" data-toggle="dropdown" href="#">' +
           self.title +
           '<span class="caret"></span>' +
         '</a>' +

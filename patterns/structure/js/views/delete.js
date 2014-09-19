@@ -36,7 +36,7 @@ define([
     title: _.template('Delete selected items'),
     content: _.template(
       '<label>Are you certain you want to delete the selected items</label>' +
-      '<button class="btn btn-block btn-danger">Yes</button>'
+      '<button class="plone-btn plone-btn-block plone-btn-danger">Yes</button>'
     ),
     events: {
       'click button': 'applyButtonClicked'

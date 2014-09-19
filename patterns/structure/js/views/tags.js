@@ -44,7 +44,7 @@ define([
       '<div class="form-group">' +
         '<input class="toadd" style="width:300px" />' +
       '</div>' +
-      '<button class="btn btn-block btn-primary">Apply</button>'
+      '<button class="plone-btn plone-btn-block plone-btn-primary">Apply</button>'
     ),
     events: {
       'click button': 'applyButtonClicked'

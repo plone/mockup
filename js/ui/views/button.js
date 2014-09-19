@@ -34,7 +34,7 @@ define([
 
   var ButtonView = BaseView.extend({
     tagName: 'a',
-    className: 'btn',
+    className: 'plone-btn',
     eventPrefix: 'button',
     context: 'default',
     attributes: {
@@ -63,7 +63,7 @@ define([
 
       this.on('render', function() {
         if (this.context !== null) {
-          this.$el.addClass('btn-' + this.context);
+          this.$el.addClass('plone-btn-' + this.context);
         }
         _.each(this.extraClasses, function(klass){
           this.$el.addClass(klass);

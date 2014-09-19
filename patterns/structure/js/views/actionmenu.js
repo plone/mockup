@@ -36,7 +36,7 @@ define([
   'use strict';
 
   var ActionMenu = BaseView.extend({
-    className: 'btn-group actionmenu',
+    className: 'plone-btn-group actionmenu',
     template: _.template(ActionMenuTemplate),
     events: {
       'click .cutItem a': 'cutClicked',

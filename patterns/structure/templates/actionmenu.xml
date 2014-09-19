@@ -1,4 +1,4 @@
-<a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+<a class="plone-btn plone-btn-default plone-btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
   <span class="glyphicon glyphicon-cog"></i>
   <span class="caret"></span>
 </a>

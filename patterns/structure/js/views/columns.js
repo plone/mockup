@@ -39,7 +39,7 @@ define([
       '<label>Select columns to show, drag and drop to reorder</label>' +
       '<ul>' +
       '</ul>' +
-      '<button class="btn btn-block btn-success">Save</button>'
+      '<button class="plone-btn plone-btn-block plone-btn-success">Save</button>'
     ),
     itemTemplate: _.template(
       '<li>' +
