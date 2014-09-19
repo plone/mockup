@@ -39,6 +39,7 @@ define([
   'use strict';
 
   var LinkType = Base.extend({
+    name: 'linktype',
     defaults: {
       linkModal: null // required
     },
