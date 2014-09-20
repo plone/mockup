@@ -109,9 +109,9 @@ define([
       backdrop: 'body', // Element to initiate the Backdrop on.
       backdropOptions: {
         zIndex: '1040',
-        opacity: '0.8',
-        className: 'backdrop',
-        classActiveName: 'backdrop-active',
+        opacity: '0.85',
+        className: 'plone-modal-backdrop',
+        classActiveName: 'plone-backdrop-active',
         closeOnEsc: true,
         closeOnClick: true
       },
@@ -123,13 +123,13 @@ define([
       loadLinksWithinModal: true,
       prependContent: '.portalMessage',
       templateOptions: {
-        className: 'modal fade',
-        classDialog: 'modal-dialog',
-        classModal: 'modal-content',
-        classHeaderName: 'modal-header',
-        classBodyName: 'modal-body',
-        classFooterName: 'modal-footer',
-        classWrapperName: 'modal-wrapper',
+        className: 'plone-modal fade',
+        classDialog: 'plone-modal-dialog',
+        classModal: 'plone-modal-content',
+        classHeaderName: 'plone-modal-header',
+        classBodyName: 'plone-modal-body',
+        classFooterName: 'plone-modal-footer',
+        classWrapperName: 'plone-modal-wrapper',
         classWrapperInnerName: 'modal-wrapper-inner',
         classActiveName: 'in',
         classPrependName: '', // String, css class to be applied to the wrapper of the prepended content
@@ -139,16 +139,15 @@ define([
           '  <div class="<%= options.classDialog %>">' +
           '    <div class="<%= options.classModal %>">' +
           '      <div class="<%= options.classHeaderName %>">' +
-          '        <a class="close">&times;</a>' +
-          '        <% if (title) { %><h4 class="modal-title"><%= title %></h4><% } %>' +
+          '        <a class="plone-modal-close">&times;</a>' +
+          '        <% if (title) { %><h2 class="plone-modal-title"><%= title %></h2><% } %>' +
           '      </div>' +
           '      <div class="<%= options.classBodyName %>">' +
           '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
           '        <div class="<%= options.classContentName %>"><%= content %></div>' +
           '      </div>' +
           '      <div class="<%= options.classFooterName %>"> ' +
-          '        <%= buttons %> ' +
-          '        <a class="close hiddenStructure">&times;</a>' +
+          '        <% if (buttons) { %><%= buttons %><% } %>' +
           '      </div>' +
           '    </div>' +
           '  </div>' +
@@ -443,7 +442,7 @@ define([
         self.trigger('before-events-setup');
 
         // Wire up events
-        $('.modal-header > a.close, .modal-footer > a.close', self.$modal)
+        $('.plone-modal-header > a.plone-modal-close, .plone-modal-footer > a.plone-modal-close', self.$modal)
           .off('click')
           .on('click', function(e) {
             e.stopPropagation();
@@ -808,7 +807,7 @@ define([
         self.positionModal();
       });
       self.trigger('shown');
-      $('body').addClass('modal-open');
+      $('body').addClass('plone-modal-open');
     },
     hide: function() {
       var self = this;
@@ -834,7 +833,7 @@ define([
       }
       $(window.parent).off('resize.modal.patterns');
       self.trigger('hidden');
-      $('body').removeClass('modal-open');
+      $('body').removeClass('plone-modal-open');
     },
     redraw: function(response, options) {
       var self = this;
