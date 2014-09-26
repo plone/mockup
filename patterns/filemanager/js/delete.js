@@ -37,7 +37,7 @@ define([
     content: _.template(
       '<span class="current-path"></span>' +
       '<p><%= translations.delete_question %></p>' +
-      '<button class="btn btn-block btn-danger"><%= translations.yes_delete %></button>'
+      '<button class="plone-btn plone-btn-block plone-btn-danger"><%= translations.yes_delete %></button>'
     ),
     events: {
       'click button': 'deleteButtonClicked'

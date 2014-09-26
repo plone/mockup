@@ -13,19 +13,19 @@ define([
     tagName: 'li',
     className: 'list-group-item',
     template: _.template('<a href="#"><%- filepath %></a> ' +
-      '<div class="btn-group pull-right">' +
-        '<button class="btn btn-danger btn-xs">Delete</button>' +
+      '<div class="plone-btn-group pull-right">' +
+        '<button class="plone-btn plone-btn-danger plone-btn-xs">Delete</button>' +
         '<% if(view.canSave) { %> ' +
-          '<button class="btn btn-primary btn-xs">Save</button> ' +
-          '<button class="btn btn-default btn-xs">Cancel</button> ' +
+          '<button class="plone-btn plone-btn-primary plone-btn-xs">Save</button> ' +
+          '<button class="plone-btn plone-btn-default plone-btn-xs">Cancel</button> ' +
         ' <% } %>' +
       '</div>'),
 
     events: {
       'click a': 'itemClicked',
-      'click button.btn-danger': 'itemDeleted',
-      'click button.btn-primary': 'itemSaved',
-      'click button.btn-default': 'itemCancel'
+      'click button.plone-btn-danger': 'itemDeleted',
+      'click button.plone-btn-primary': 'itemSaved',
+      'click button.plone-btn-default': 'itemCancel'
     },
     canSave: false,
 
@@ -151,7 +151,7 @@ define([
           '<div class="input-group">' +
             '<input type="text" class="form-control search-field" />' +
             '<span class="input-group-btn">' +
-              '<button class="btn btn-default" type="button">Search</button>' +
+              '<button class="plone-btn plone-btn-default" type="button">Search</button>' +
             '</span>' +
           '</div>' +
         '</div>' +
@@ -197,7 +197,7 @@ define([
       q = q.toLowerCase();
       self.$searchResults.empty().removeClass('hidden');
       self.$searchResults.append('<li class="list-group-item list-group-item-warning">' +
-        'Results<button class="btn btn-default pull-right btn-xs clear">Clear</button></li>');
+        'Results<button class="plone-btn plone-btn-default pull-right plone-btn-xs clear">Clear</button></li>');
       var matches = [];
       var data = self.options.data;
       var urlMatches = function(base, path){
@@ -224,7 +224,7 @@ define([
       _.each(matches, function(filepath){
         self.$searchResults.append(
           '<li class="list-group-item"><span>' + filepath + '</span> ' +
-          '<button class="btn btn-danger pull-right btn-xs customize">Customize</button></li>'
+          '<button class="plone-btn plone-btn-danger pull-right plone-btn-xs customize">Customize</button></li>'
         );
       });
     },

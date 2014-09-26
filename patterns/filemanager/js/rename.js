@@ -41,7 +41,7 @@ define([
         '<input type="text" class="form-control" ' +
                 'id="filename-field">' +
       '</div>' +
-      '<button class="btn btn-block btn-primary"><%= translations.rename %></button>'
+      '<button class="plone-btn plone-btn-block plone-btn-primary"><%= translations.rename %></button>'
     ),
     events: {
       'click button': 'renameButtonClicked'

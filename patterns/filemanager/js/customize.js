@@ -40,7 +40,7 @@ define([
           '<input type="text" class="search form-control" ' +
                   'id="search-field" placeholder="<%= translations.search_resources %>">' +
           '<span class="input-group-btn">' +
-            '<input type="submit" class="btn btn-primary" value="<%= translations.search %>"/>' +
+            '<input type="submit" class="plone-btn plone-btn-primary" value="<%= translations.search %>"/>' +
           '</span>' +
         '</div>' +
       '</form>' +

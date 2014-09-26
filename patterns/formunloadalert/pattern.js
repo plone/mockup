@@ -18,7 +18,7 @@
  *        <option value="2">value 2</option>
  *      </select>
  *      <input
- *        class="btn btn-large btn-primary"
+ *        class="plone-btn plone-btn-large plone-btn-primary"
  *        type="submit" value="Submit" />
  *      <br />
  *      <a href="/">Click here to go somewhere else</a>

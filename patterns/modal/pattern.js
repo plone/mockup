@@ -29,7 +29,7 @@
  *
  *
  * Example: example-basic
- *    <a href="#modal1" class="btn btn-large btn-primary pat-modal"
+ *    <a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-modal"
  *                      data-pat-modal="width: 400">Modal basic</a>
  *    <div id="modal1" style="display: none">
  *      <h1>Basic modal!</h1>
@@ -37,7 +37,7 @@
  *    </div>
  *
  * Example: example-long
- *    <a href="#modal2" class="btn btn-large btn-primary pat-modal"
+ *    <a href="#modal2" class="plone-btn plone-btn-large plone-btn-primary pat-modal"
  *                      data-pat-modal="width: 500">Modal long scrolling</a>
  *    <div id="modal2" style="display: none">
  *      <h1>Basic with scrolling</h1>
@@ -56,7 +56,7 @@
  *
  *
  * Example: example-tinymce
- *    <a href="#modaltinymce" class="btn btn-large btn-primary pat-modal"
+ *    <a href="#modaltinymce" class="plone-btn plone-btn-large plone-btn-primary pat-modal"
  *       data-pat-modal="height: 600px;
  *                       width: 80%">
  *       Modal with TinyMCE</a>

@@ -129,7 +129,7 @@ define([
     className: 'list-group-item',
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<button class="pull-right btn btn-danger delete btn-xs">Delete</button>'
+      '<button class="pull-right plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>'
     ),
     events: {
       'click a': 'editResource',
@@ -179,12 +179,12 @@ define([
           'we will try to keep you updated on the progress. Press the "Build it" ' +
           'button to proceed.</div>' +
         '<ul class="list-group hidden"></ul>' +
-        '<button class="btn btn-default cancel hidden">Close</button>' +
-        '<button class="btn btn-primary build">Build it</button>' +
+        '<button class="plone-btn plone-btn-default cancel hidden">Close</button>' +
+        '<button class="plone-btn plone-btn-primary build">Build it</button>' +
       '</div>', bundleListItem.options),
       content: null,
       width: 500,
-      buttons: '.btn'
+      buttons: '.plone-btn'
     });
     self.modal.on('shown', function() {
       var $el = self.modal.$modal;
@@ -394,9 +394,9 @@ define([
     type: 'bundle',
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<div class="btn-group pull-right">' +
-        '<button class="btn btn-default build btn-xs">Build</button>' +
-        '<button class="btn btn-danger delete btn-xs">Delete</button>' +
+      '<div class="plone-btn-group pull-right">' +
+        '<button class="plone-btn plone-btn-default build plone-btn-xs">Build</button>' +
+        '<button class="plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>' +
       '</div>'
     ),
     events: $.extend({}, RegistryResourceListItem.prototype.events, {
@@ -484,13 +484,13 @@ define([
   var RegistryView = BaseResourcesPane.extend({
     template: _.template(
       '<div class="clearfix">' +
-        '<div class="btn-group pull-right">' +
-          '<button class="btn btn-success save">Save</button>' +
-          '<button class="btn btn-default cancel">Cancel</button>' +
+        '<div class="plone-btn-group pull-right">' +
+          '<button class="plone-btn plone-btn-success save">Save</button>' +
+          '<button class="plone-btn plone-btn-default cancel">Cancel</button>' +
         '</div>' +
-        '<div class="btn-group pull-right">' +
-          '<button class="btn btn-default add-bundle">Add bundle</button>' +
-          '<button class="btn btn-default add-resource">Add resource</button>' +
+        '<div class="plone-btn-group pull-right">' +
+          '<button class="plone-btn plone-btn-default add-bundle">Add bundle</button>' +
+          '<button class="plone-btn plone-btn-default add-resource">Add resource</button>' +
         '</div>' +
       '</div>' +
       '<div class="row">' +

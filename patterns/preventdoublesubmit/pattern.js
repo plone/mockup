@@ -13,8 +13,8 @@
  * Example: example-1
  *    <form class="pat-preventdoublesubmit" onsubmit="javascript:return false;">
  *      <input type="text" value="submit this value please!" />
- *      <input class="btn btn-large btn-primary" type="submit" value="Single submit" />
- *      <input class="btn btn-large btn-primary allowMultiSubmit" type="submit" value="Multi submit" />
+ *      <input class="plone-btn plone-btn-large plone-btn-primary" type="submit" value="Single submit" />
+ *      <input class="plone-btn plone-btn-large plone-btn-primary allowMultiSubmit" type="submit" value="Multi submit" />
  *    </form>
  *
  * License:

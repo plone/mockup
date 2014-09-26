@@ -37,13 +37,13 @@
  *
  * Example: example-1
  *    <button type="button"
- *            class="btn btn-default pat-toggle"
- *            data-pat-toggle="value:btn-lg;">This button goes bigger/smaller!</button>
+ *            class="plone-btn plone-btn-default pat-toggle"
+ *            data-pat-toggle="value:plone-btn-lg;">This button goes bigger/smaller!</button>
  *
  * Example: example-2
  *    <div class="wrapper">
  *      <button type="button"
- *              class="btn btn-default pat-toggle"
+ *              class="plone-btn plone-btn-default pat-toggle"
  *              data-pat-toggle="value:label-success;target:.targetElement">This button is toggling the background of a element.</button><br />
  *      <p class="targetElement label label-default">Hello World</p>
  *    </div>
@@ -52,13 +52,13 @@
  *    <div class="wrapper">
  *      <div class="myScope">
  *        <button type="button"
- *                class="btn btn-default pat-toggle"
+ *                class="plone-btn plone-btn-default pat-toggle"
  *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
  *      <div class="myScope">
  *        <button type="button"
- *                class="btn btn-default pat-toggle"
+ *                class="plone-btn plone-btn-default pat-toggle"
  *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
@@ -68,14 +68,14 @@
  *    <div class="wrapper">
  *      <div class="myScope">
  *        <button type="button"
- *                class="btn btn-default pat-toggle"
+ *                class="plone-btn plone-btn-default pat-toggle"
  *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
  *        <p class="targetElement label label-default">Hello World</p>
  *        <p class="targetElement label label-default">Hello again</p>
  *      </div>
  *      <div class="myScope">
  *        <button type="button"
- *                class="btn btn-default pat-toggle"
+ *                class="plone-btn plone-btn-default pat-toggle"
  *                data-pat-toggle="value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
@@ -85,7 +85,7 @@
  *    <div class="wrapper">
  *      <div class="myScope">
  *        <button type="button"
- *                class="btn btn-default pat-toggle"
+ *                class="plone-btn plone-btn-default pat-toggle"
  *                data-pat-toggle="event:hover;value:label-success;target:.targetElement;targetScope:.myScope;">toggle</button><br />
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
@@ -95,7 +95,7 @@
  *    <div class="wrapper">
  *      <div class="myScope">
  *        <button type="button"
- *                class="btn btn-default pat-toggle"
+ *                class="plone-btn plone-btn-default pat-toggle"
  *                data-pat-toggle="attribute:rel; value:myRel; target:.targetElement; targetScope:.myScope">toggle</button><br />
  *        <p class="targetElement label label-default">Hello World</p>
  *      </div>
@@ -104,7 +104,7 @@
  * Example: example-7
  *    <div class="panel panel-default">
  *      <div class="panel-heading">
- *        <a class="btn btn-default pat-toggle"
+ *        <a class="plone-btn plone-btn-default pat-toggle"
  *           data-pat-toggle="value:in; target:.collapse; targetScope:.panel">toggle</a>
  *      </div>
  *      <div>

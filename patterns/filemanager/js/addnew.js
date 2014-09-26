@@ -41,7 +41,7 @@ define([
         '<input type="text" class="form-control" ' +
                 'id="filename-field" placeholder="<%= translations.enter_filename %>">' +
       '</div>' +
-      '<button class="btn btn-block btn-primary"><%= translations.add %></button>'
+      '<button class="plone-btn plone-btn-block plone-btn-primary"><%= translations.add %></button>'
     ),
     events: {
       'click button': 'addButtonClicked'

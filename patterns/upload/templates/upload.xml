@@ -20,7 +20,7 @@
             <div class="col-md-3">
                 <button
                     type="button"
-                    class="btn btn-primary browse">
+                    class="plone-btn plone-btn-primary browse">
                     Browse
                 </button>
             </div>
@@ -55,7 +55,7 @@
                     <div class="col-md-3 align-right">
                         <button
                             type="button"
-                            class="btn btn-primary upload-all">
+                            class="plone-btn plone-btn-primary upload-all">
                             Upload
                         </button>
                     </div>

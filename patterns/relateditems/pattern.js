@@ -146,9 +146,9 @@ define([
           '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
           '<div class="tree-container">' +
             '<span class="select-folder-label">Select folder</span>' +
-            '<a href="#" class="btn close pattern-relateditems-tree-cancel">X</a>' +
+            '<a href="#" class="plone-btn close pattern-relateditems-tree-cancel">X</a>' +
             '<div class="pat-tree" />' +
-            '<a href="#" class="btn btn-default pattern-relateditems-tree-itemselect">Select</a>' +
+            '<a href="#" class="plone-btn plone-btn-default pattern-relateditems-tree-itemselect">Select</a>' +
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +

@@ -38,46 +38,6 @@
 }
 
 
-// Link buttons
-// -------------------------
-
-// Make a button look and behave like a link
-.plone-btn-link {
-  color: @link-color;
-  font-weight: normal;
-  cursor: pointer;
-  border-radius: 0;
-
-  &,
-  &:active,
-  &[disabled],
-  fieldset[disabled] & {
-    background-color: transparent;
-    .box-shadow(none);
-  }
-  &,
-  &:hover,
-  &:focus,
-  &:active {
-    border-color: transparent;
-  }
-  &:hover,
-  &:focus {
-    color: @link-hover-color;
-    text-decoration: underline;
-    background-color: transparent;
-  }
-  &[disabled],
-  fieldset[disabled] & {
-    &:hover,
-    &:focus {
-      color: @btn-link-disabled-color;
-      text-decoration: none;
-    }
-  }
-}
-
-
 // Button Sizes
 // --------------------------------------------------
 .plone-button-size(@padding-vertical; @padding-horizontal; @font-size; @line-height; @border-radius) {
@@ -103,8 +63,7 @@
 // --------------------------------------------------
 
 .plone-btn-block {
-  display: block;
-  width: 100%;
+  .btn-block();
 }
 
 // Vertically space out multiple block buttons

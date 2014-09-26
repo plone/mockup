@@ -379,7 +379,7 @@ define([
       self.modal = new Modal(self.$el, {
         html: self.generateModalHtml(),
         content: null,
-        buttons: '.btn'
+        buttons: '.plone-btn'
       });
       self.modal.on('shown', function(e) {
         self.modalShown.apply(self, [e]);

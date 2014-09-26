@@ -2,7 +2,7 @@
     <div class="col-md-1 action">
         <button
             type="button"
-            class="btn btn-danger btn-xs remove-item"
+            class="plone-btn plone-btn-danger plone-btn-xs remove-item"
             data-dz-remove=""
             href="javascript:undefined;">
             <span class="glyphicon glyphicon-remove"></span>
