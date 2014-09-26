@@ -494,6 +494,15 @@ define([
         '</div>' +
       '</div>' +
       '<div class="row">' +
+        '<div class="checkbox development-mode">' +
+          '<label>' +
+            '<input type="checkbox" ' +
+              '<% if(data.development){ %> checked="checked" <% } %>' +
+              ' > Development Mode' +
+          '</label>' +
+        '</div>' +
+      '</div>' +
+      '<div class="row">' +
         '<div class="items col-md-5">' +
           '<ul class="bundles list-group">' +
             '<li class="list-group-item list-group-item-warning">Bundles</li>' +
@@ -505,13 +514,15 @@ define([
             '</li>' +
           '</ul>' +
         '</div>' +
-        '<div class="form col-md-7"></div>'),
+        '<div class="form col-md-7"></div>' +
+      '</div>'),
     events: {
       'click button.save': 'saveClicked',
       'click button.add-resource': 'addResourceClicked',
       'click button.add-bundle': 'addBundleClicked',
       'click button.cancel': 'revertChanges',
-      'keyup .resources input': 'filterResources'
+      'keyup .resources input': 'filterResources',
+      'change .development-mode input': 'developmentModeChanged'
     },
     filterTimeout: 0,
     dirty: false,
@@ -627,28 +638,25 @@ define([
     saveClicked: function(e){
       var self = this;
       e.preventDefault();
-      self.loading.show();
-      $.ajax({
-        url: self.options.data.manageUrl,
-        type: 'POST',
-        data: {
-          action: 'save-registry',
-          _authenticator: utils.getAuthenticator(),
-          resources: JSON.stringify(self.options.data.resources),
-          bundles: JSON.stringify(self.options.data.bundles)
-        },
-        success: function(){
-          self.loading.hide();
-          this.dirty = false;
-          self.previousData = self._copyData();
-        },
-        error: function(){
-          self.loading.hide();
-          alert('Error saving data');
-        }
+      self.options.tabView.saveData('save-registry', {
+        resources: JSON.stringify(self.options.data.resources),
+        bundles: JSON.stringify(self.options.data.bundles)
+      }, function(){
+        self.dirty = false;
+        self.previousData = self._copyData();
+      });
+    },
+
+    developmentModeChanged: function(){
+      var self = this;
+      var value = 'false';
+      if(self.$('.development-mode input')[0].checked){
+        value = 'true';
+      }
+      self.options.tabView.saveData('save-development-mode', {
+        value: value
       });
     }
-    
   });
 
   return RegistryView;

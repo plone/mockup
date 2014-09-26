@@ -31,7 +31,8 @@ define([
 
     initialize: function(options){
       BaseView.prototype.initialize.apply(this, [options]);
-      this.loading = this.options.overridesView.tabView.loading;
+      this.tabView = this.options.overridesView.tabView;
+      this.loading = this.tabView.loading;
     },
 
     serializedModel: function(){
@@ -41,25 +42,12 @@ define([
     itemSaved: function(e){
       e.preventDefault();
       var self = this;
-      self.loading.show();
-      $.ajax({
-        url: self.options.data.manageUrl,
-        type: 'POST',
-        data: {
-          _authenticator: utils.getAuthenticator(),
-          action: 'save-file',
-          filepath: self.options.filepath,
-          data: self.editor.editor.getValue()
-        },
-        success: function(){
-          self.canSave = false;
-          self.render();
-          self.loading.hide();
-        },
-        error: function(){
-          alert('Error saving override');
-          self.loading.hide();
-        }
+      self.tabView.saveData('save-file', {
+        filepath: self.options.filepath,
+        data: self.editor.editor.getValue()
+      }, function(){
+        self.canSave = false;
+        self.render();
       });
     },
 
@@ -69,27 +57,15 @@ define([
       if(confirm('Are you sure you want to delete this override?')){
         this.options.data.overrides.splice(self.options.index, 1);
         this.render();
-        this.loading.show();
-        $.ajax({
-          url: this.options.data.manageUrl,
-          type: 'POST',
-          data: {
-            _authenticator: utils.getAuthenticator(),
-            action: 'delete-file',
-            filepath: self.options.filepath
-          },
-          success: function(){
-            var index = _.indexOf(self.options.overridesView.data.overrides, self.options.filepath);
-            if(index !== -1){
-              self.options.overridesView.data.overrides.splice(index, 1);
-            }
-            self.options.overridesView.render();
-            self.loading.hide();
-          },
-          error: function(){
-            self.loading.show();
-            alert('Error deleting override');
+        self.tabView.saveData('delete-file', {
+          filepath: self.options.filepath
+        }, function(){
+          var index = _.indexOf(self.options.overridesView.data.overrides, self.options.filepath);
+          if(index !== -1){
+            self.options.overridesView.data.overrides.splice(index, 1);
           }
+          self.options.overridesView.render();
+          self.loading.hide();
         });
       }
     },
@@ -114,29 +90,27 @@ define([
       $.ajax({
         // cache busting url
         url: url + override + '?' + utils.generateId(),
-        dataType: 'text',
-        success: function(data){
-          var $pre = $('<pre class="pat-texteditor" />');
-          $pre.html(data);
-          self.options.overridesView.$editorContainer.empty().append($pre);
-          self.editor = new TextEditor($pre, {
-            width: 600,
-            height: 500
-          });
-          self.editor.setSyntax(override);
-          self.editor.editor.on('change', function(){
-            if(!self.canSave){
-              self.canSave = true;
-              self.render();
-            }
-          });
-          self.render();
-          self.loading.hide();
-        },
-        error: function(){
-          alert('error loading resource for editing');
-          self.loading.hide();
-        }
+        dataType: 'text'
+      }).done(function(data){
+        var $pre = $('<pre class="pat-texteditor" />');
+        $pre.html(data);
+        self.options.overridesView.$editorContainer.empty().append($pre);
+        self.editor = new TextEditor($pre, {
+          width: 600,
+          height: 500
+        });
+        self.editor.setSyntax(override);
+        self.editor.editor.on('change', function(){
+          if(!self.canSave){
+            self.canSave = true;
+            self.render();
+          }
+        });
+        self.render();
+        self.loading.hide();
+      }).fail(function(){
+        alert('error loading resource for editing');
+        self.loading.hide();
       });
     }
   });

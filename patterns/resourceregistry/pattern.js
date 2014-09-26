@@ -95,6 +95,7 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/* global alert */
 define([
   'jquery',
   'mockup-patterns-base',
@@ -105,7 +106,7 @@ define([
   'mockup-patterns-resourceregistry-url/js/overrides',
   'mockup-patterns-resourceregistry-url/js/registry',
   'mockup-patterns-resourceregistry-url/js/patternoptions'
-], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView, RegistryView, PatternOptionsView) {
+], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView,RegistryView, PatternOptionsView) {
   'use strict';
 
 
@@ -186,6 +187,39 @@ define([
       };
       self.hideShow();
       return self;
+    },
+
+    saveData: function(action, data, onSave, onError){
+      var self = this;
+      self.loading.show();
+      if(!data){
+        data = {};
+      }
+      data = $.extend({}, data, {
+        action: action,
+        _authenticator: utils.getAuthenticator()
+      });
+      $.ajax({
+        url: self.options.manageUrl,
+        type: 'POST',
+        dataType: 'json',
+        data: data
+      }).done(function(resp){
+        if(onSave){
+          onSave(resp);
+        }
+        if(resp.success !== undefined && !resp.success && resp.msg){
+          alert(resp.msg);
+        }
+      }).always(function(){
+        self.loading.hide();
+      }).fail(function(resp){
+        if(onError){
+          onError(resp);
+        }else{
+          alert('Error processing ajax request for action: ' + action);
+        }
+      });
     }
   });
 

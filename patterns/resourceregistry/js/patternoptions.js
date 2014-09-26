@@ -34,23 +34,8 @@ define([
     saveClicked: function(e){
       e.preventDefault();
       var self = this;
-      self.options.tabView.loading.show();
-      $.ajax({
-        url: self.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'save-pattern-options',
-          data: JSON.stringify(self.options.data.patternoptions),
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(){
-          self.options.tabView.loading.hide();
-        },
-        error: function(){
-          self.options.tabView.loading.hide();
-          alert('error saving pattern options');
-        }
+      self.options.tabView.saveData('save-pattern-options', {
+        data: JSON.stringify(self.options.data.patternoptions),
       });
     },
 
@@ -67,7 +52,7 @@ define([
       self.$('.form-group').each(function(){
         data[$(this).find('.field-name').val()] = $(this).find('.field-value').val();
       });
-     self.options.data.patternoptions = data;
+      self.options.data.patternoptions = data;
     },
 
     afterRender: function(){
@@ -86,11 +71,11 @@ define([
               $.parseJSON(field.$el.find('.field-value').val());
               field.$el.removeClass('has-error').removeClass('has-feedback');
               field.$('.form-control-feedback').addClass('hidden');
-              self.inputChanged();
             }catch(err){
               field.$el.addClass('has-error').addClass('has-feedback');
               field.$('.form-control-feedback').removeClass('hidden');
             }
+            self.inputChanged();
           }
          }).render().el));
       });

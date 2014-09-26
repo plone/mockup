@@ -1,5 +1,3 @@
-/* global alert */
-
 define([
   'jquery',
   'mockup-ui-url/views/base',
@@ -34,23 +32,8 @@ define([
     saveClicked: function(e){
       e.preventDefault();
       var self = this;
-      self.options.tabView.loading.show();
-      $.ajax({
-        url: self.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'save-less-variables',
-          data: JSON.stringify(self.options.data.lessvariables),
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(){
-          self.options.tabView.loading.hide();
-        },
-        error: function(){
-          self.options.tabView.loading.hide();
-          alert('error saving less variables');
-        }
+      self.options.tabView.saveData('save-less-variables', {
+        data: JSON.stringify(self.options.data.lessvariables)
       });
     },
 
