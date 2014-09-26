@@ -32,7 +32,7 @@ define([
 
   var ButtonGroup = ContainerView.extend({
     tagName: 'div',
-    className: 'btn-group',
+    className: 'plone-btn-group',
     disable: function() {
       _.each(this.items, function(button) {
         button.trigger('disable');
