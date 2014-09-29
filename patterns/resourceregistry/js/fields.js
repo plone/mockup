@@ -4,8 +4,8 @@ define([
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-patterns-sortable',
-  'select2'
-], function($, _, BaseView, Sortable) {
+  'mockup-patterns-select2'
+], function($, _, BaseView, Sortable, Select2) {
   'use strict';
 
 
@@ -218,7 +218,7 @@ define([
       'change select': 'inputChanged'
     },
     inputChanged: function(){
-      this.options.registryData[this.options.name] = this.options.value = this.$('select').val();
+      this.options.registryData[this.options.name] = this.options.value = this.$('.select').select2('val');
       $(document).trigger('resource-data-changed');
     },
 
@@ -238,22 +238,24 @@ define([
       ResourceInputFieldView.prototype.afterRender.apply(this);
       var self = this;
       var values = self.options.value;
-      var $select = self.$('select');
-      if(self.multiple){
-        $select.attr('multiple', true);
-      }
-      $select.select2();
+      var $select = self.$('.select');
+      self.select2 = new Select2($select, {
+        orderable: self.multiple,
+        multiple: self.multiple,
+        data: _.map(self.getSelectOptions(), function(val){
+          return {id: val, text: val};
+        })
+      });
       $select.select2('val', values);
+      $select.on('change', function(){
+        self.inputChanged();
+      });
     },
 
     template: _.template(
       '<label class="col-sm-3 control-label"><%- title %></label>' +
       '<div class="col-sm-9">' +
-        '<select name="name" style="width: 100%">' +
-          '<% _.each(options, function(option) { %>' +
-            '<option value="<%- option %>"><%- option %></option>' +
-          '<% }); %>' +
-        '</select>' +
+        '<input name="name" class="select" type="hidden" style="width: 100%" />' +
         '<%= description %>' +
       '</div>')
   });

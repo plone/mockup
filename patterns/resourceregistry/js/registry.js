@@ -6,7 +6,7 @@ define([
   'mockup-ui-url/views/base',
   'mockup-utils',
   'mockup-patterns-modal',
-  'mockup-patterns-resourceregistry-url/js/fields',
+  'mockup-patterns-resourceregistry-url/js/fields'
 ], function($, _, BaseView, utils, Modal, fields) {
   'use strict';
 
