@@ -47,7 +47,7 @@ define([
     if (!self.baseUrl) {
       self.baseUrl = '/jsi18n';
     }
-    self.currentLanguage = $('html').attr('lang');
+    self.currentLanguage = $('html').attr('lang') || 'en';
     self.storage = null;
     self.catalogs = {};
     self.ttl = 24 * 3600 * 1000;
@@ -93,7 +93,7 @@ define([
     };
 
     self.loadCatalog = function (domain, language) {
-      if (typeof (language) === 'undefined') {
+      if (language === undefined) {
         language = self.currentLanguage;
       }
       if (self.storage !== null) {

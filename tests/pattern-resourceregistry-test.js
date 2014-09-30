@@ -106,13 +106,13 @@ define([
 
     it('loads bundle data', function(){
       this.$pat.find('.bundle-list-item-plone a').trigger('click');
-      expect(this.$pat.find('.resource-entry .field-resources select').select2('val').length).to.equal(1);
+      expect(this.$pat.find('.resource-entry .field-resources input').length).to.equal(2);
     });
 
     it('edit resource data', function(){
       this.$pat.find('.resource-list-item-autotoc a').trigger('click');
-      this.$pat.find('.resource-entry .field-url input').attr('value', 'foobar').trigger('change');
-      expect(this.pat.options.resources.autotoc.url).to.equal('foobar');
+      this.$pat.find('.resource-entry .field-css input').attr('value', 'foobar').trigger('change');
+      expect(this.pat.options.resources.autotoc.url).to.equal('patterns/autotoc');
     });
 
     it('edit bundle data', function(){

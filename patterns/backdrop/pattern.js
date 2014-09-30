@@ -42,8 +42,8 @@ define([
     defaults: {
       zIndex: null,
       opacity: 0.8,
-      className: 'backdrop',
-      classActiveName: 'backdrop-active',
+      className: 'plone-backdrop',
+      classActiveName: 'plone-backdrop-active',
       closeOnEsc: true,
       closeOnClick: true
     },

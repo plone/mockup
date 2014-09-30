@@ -15,15 +15,15 @@ define([
     template: _.template(
       '<div class="clearfix">' +
         '<div class="btn-group pull-right">' +
-          '<button class="btn btn-default add-pattern">Add pattern</button>' +
-          '<button class="btn btn-default save">save</button>' +
+          '<button class="plone-btn plone-btn-default add-pattern">Add pattern</button>' +
+          '<button class="plone-btn plone-btn-default save">save</button>' +
         '</div>' +
       '</div>' +
       '<div class="row clearfix">' +
         '<div class="form col-md-12"></div></div>'),
     events: {
-      'click .btn.save': 'saveClicked',
-      'click .btn.add-pattern': 'addPattern'
+      'click .plone-btn.save': 'saveClicked',
+      'click .plone-btn.add-pattern': 'addPattern'
     },
 
     initialize: function(options){

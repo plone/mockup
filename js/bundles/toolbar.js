@@ -315,7 +315,7 @@ define([
                 // cleanup modal here, we only want to show the status
                 var $info = $('.portalMessage.info', modal.$modal);
                 if ($info.length > 0) {
-                  var $modalBody = $('.modal-body', modal.$modal);
+                  var $modalBody = $('.plone-modal-body', modal.$modal);
                   $modalBody.empty();
                   $modalBody.append($info);
                 }

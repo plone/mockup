@@ -412,7 +412,7 @@ define([
     initElements: function() {
       var self = this;
       self.$target = $('select[name="target"]', self.modal.$modal);
-      self.$button = $('.modal-footer input[name="insert"]', self.modal.$modal);
+      self.$button = $('.plone-modal-footer input[name="insert"]', self.modal.$modal);
       self.$title = $('input[name="title"]', self.modal.$modal);
       self.$subject = $('input[name="subject"]', self.modal.$modal);
 
@@ -536,7 +536,7 @@ define([
         }
         self.hide();
       });
-      $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function(e) {
+      $('.plone-modal-footer input[name="cancel"]', self.modal.$modal).click(function(e) {
         e.preventDefault();
         self.hide();
       });
