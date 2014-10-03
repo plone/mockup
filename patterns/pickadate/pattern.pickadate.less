@@ -5,6 +5,13 @@
 .pattern-pickadate-wrapper {
   position: relative;
   margin-bottom: 0.5em;
+
+  .picker{
+    display: none;
+    &.picker--opened{
+      display: block;
+    }
+  }
   .pattern-pickadate-date-wrapper {
     float: left;
     .picker__input {
