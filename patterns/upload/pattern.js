@@ -179,31 +179,32 @@ define([
         throw e;
       }
 
-      self.$dropzone.on('addedfile', function(file) {
+      self.dropzone.on('addedfile', function(file) {
+        debugger;
         self.showControls();
       });
 
-      self.$dropzone.on('removedfile', function() {
+      self.dropzone.on('removedfile', function() {
         if (self.dropzone.files.length < 1) {
           self.hideControls();
         }
       });
 
       if (self.options.autoCleanResults) {
-        self.$dropzone.on('complete', function(file) {
+        self.dropzone.on('complete', function(file) {
           setTimeout(function() {
             $(file.previewElement).fadeOut();
           }, 3000);
         });
       }
 
-      self.$dropzone.on('complete', function(file) {
+      self.dropzone.on('complete', function(file) {
         if (self.dropzone.files.length < 1) {
           self.hideControls();
         }
       });
 
-      self.$dropzone.on('totaluploadprogress', function(pct) {
+      self.dropzone.on('totaluploadprogress', function(pct) {
         // need to caclulate total pct here in reality since we're manually
         // processing each file one at a time.
         pct = ((((self.currentFile - 1) * 100) + pct) / (self.numFiles * 100)) * 100;
