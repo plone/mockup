@@ -180,7 +180,6 @@ define([
       }
 
       self.dropzone.on('addedfile', function(file) {
-        debugger;
         self.showControls();
       });
 
