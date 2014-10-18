@@ -106,7 +106,7 @@ define([
   'mockup-patterns-resourceregistry-url/js/overrides',
   'mockup-patterns-resourceregistry-url/js/registry',
   'mockup-patterns-resourceregistry-url/js/patternoptions'
-], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView,RegistryView, PatternOptionsView) {
+], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView, RegistryView, PatternOptionsView) {
   'use strict';
 
 
