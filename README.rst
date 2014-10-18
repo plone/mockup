@@ -56,3 +56,11 @@ Status of builds
 .. image:: https://d2weczhvl823v0.cloudfront.net/plone/mockup/trend.png
    :target: https://bitdeli.com/free
    :alt: Bitdeli
+
+
+Changelog
+---------
+
+- While bundling, do the copying of resources from dependencies of mockup in
+  here, not mockup-core.
+  [thet]
