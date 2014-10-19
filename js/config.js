@@ -99,7 +99,7 @@
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
       'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme',
-      'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
+      'tinymce': 'bower_components/tinymce/tinymce',
       'underscore': 'bower_components/lodash/dist/lodash.underscore'
     },
     shim: {
