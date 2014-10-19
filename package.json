@@ -1,7 +1,7 @@
 {
   "name": "mockup",
-  "version": "1.7.0",
-  "description": "Collection of Plone CMS Core Patterns",
+  "version": "1.8.0-dev",
+  "description": "A collection of client side patterns for faster and easier web development",
   "homepage": "http://plone.github.io/mockup",
   "devDependencies": {
     "bower": "~1.3.2",
@@ -33,9 +33,9 @@
   },
   "maintainers": [
     {
-      "name": "Rok Garbas",
-      "email": "rok@garbas.si",
-      "url": "http://garbas.si"
+      "name": "Plone Foundation",
+      "email": "plone-developers@lists.sourceforge.net",
+      "url": "http://plone.org"
     }
   ],
   "repository": {
@@ -44,7 +44,7 @@
   },
   "bugs": {
     "url": "https://github.com/plone/mockup/issues",
-    "email": "rok@garbas.si"
+    "email": "plone-developers@lists.sourceforge.net"
   },
   "licenses": [
     {

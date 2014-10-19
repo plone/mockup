@@ -42,6 +42,15 @@ Run tests with Chrome::
 
     $ make test-dev
 
+
+Credits
+-------
+
+Originally created by `Rok Garbas <http://garbas.si/>`_ using parts of `Patterns
+library <http://patternslib.com/>`_. Now maintained by the `Plone Foundation
+<http://plone.org/>`_.
+
+
 Status of builds
 ----------------
 
