@@ -1,7 +1,6 @@
 {
   "name": "mockup",
-  "version": "1.7.0",
-  "description": "Plone core patterns",
+  "description": "A collection of client side patterns for faster and easier web development",
   "dependencies": {
     "ace-builds": "1.1.5",
     "backbone": "1.1.2",
