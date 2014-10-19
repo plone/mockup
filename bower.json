@@ -23,8 +23,7 @@
     "requirejs-text": "2.0.12",
     "respond": "1.4.2",
     "select2": "3.5.1",
-    "tinymce": "4.1.3",
-    "tinymce-builded": "4.1.0"
+    "tinymce": "4.1.6"
   },
   "devDependencies": {
     "expect": "0.3.1",
