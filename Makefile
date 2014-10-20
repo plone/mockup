@@ -30,25 +30,25 @@ bundles: bundle-widgets bundle-structure bundle-plone
 
 bundle-widgets:
 	mkdir -p build
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-widgets
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-widgets $(DEBUG) $(VERBOSE)
 
 bundle-structure:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure $(DEBUG) $(VERBOSE)
 
 bundle-plone:
 	mkdir -p build
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone $(DEBUG) $(VERBOSE)
 
 bundle-filemanager:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-filemanager
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-filemanager $(DEBUG) $(VERBOSE)
 
 bundle-resourceregistry:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-resourceregistry
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-resourceregistry $(DEBUG) $(VERBOSE)
 
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
 	rm -rf docs/dev
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs $(DEBUG) $(VERBOSE)
 
 bootstrap-common:
 	mkdir -p build
@@ -62,7 +62,7 @@ else
 	$(NPM) link
 endif
 	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
-	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap
+	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap $(DEBUG) $(VERBOSE)
 
 bootstrap-nix: clean bootstrap-common
 	nix-build default.nix -A build -o nixenv
@@ -70,10 +70,10 @@ bootstrap-nix: clean bootstrap-common
 	ln -s nixenv/bower_components
 
 jshint:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint jscs
+	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint jscs $(DEBUG) $(VERBOSE)
 
 watch:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) watch
+	NODE_PATH=$(NODE_PATH) $(GRUNT) watch $(DEBUG) $(VERBOSE)
 
 test:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test $(DEBUG) $(VERBOSE) --pattern=$(pattern)
