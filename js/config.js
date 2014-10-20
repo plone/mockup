@@ -1,4 +1,7 @@
- /* globals module:true */
+/* RequireJS configuration
+ */
+
+/* global module */
 
 (function() {
   'use strict';
