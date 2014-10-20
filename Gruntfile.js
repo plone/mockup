@@ -1,4 +1,8 @@
-/* globals module:true */
+/* Grunt software build task definitions.
+ */
+
+/* global module:true */
+
 
 module.exports = function(grunt) {
   'use strict';
@@ -20,8 +24,8 @@ module.exports = function(grunt) {
     less: {
       options : {
         paths : ['../../../'],
-        modifyVars : { 
-          bowerPath: '"bower_components/"', 
+        modifyVars : {
+          bowerPath: '"bower_components/"',
           mockupPath: '"patterns/"',
           mockuplessPath: '"less/"'
         }

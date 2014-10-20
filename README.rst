@@ -43,6 +43,13 @@ Run tests with Chrome::
     $ make test-dev
 
 
+License
+=======
+
+The MIT License (MIT). Copyrights hold the Plone Foundation.
+See `LICENSE.rst <LICENSE.rst>`_ for details.
+
+
 Credits
 -------
 

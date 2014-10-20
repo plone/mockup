@@ -1,4 +1,4 @@
-/* global alert */
+/* global alert:true */
 
 define([
   'jquery',
