@@ -1,5 +1,3 @@
- /* globals confirm:true */
-
 /* Modal pattern.
  *
  * Options:
@@ -67,6 +65,8 @@
  *    </div>
  *
  */
+
+ /* global confirm:true */
 
 
 define([

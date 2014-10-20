@@ -1,5 +1,7 @@
-/* globals module:true */
-// Grunt software build task definitions.
+/* Grunt software build task definitions.
+ */
+
+/* global module:true */
 
 
 module.exports = function(grunt) {

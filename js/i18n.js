@@ -1,5 +1,3 @@
-/* global portal_url */
-
 /* i18n integration. This is forked from jarn.jsi18n
  *
  * This is a singleton.
@@ -8,6 +6,8 @@
  *
  *  Or, it'll default to "/jsi18n"
  */
+
+/* global portal_url:true */
 
 
 define([

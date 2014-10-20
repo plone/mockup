@@ -43,7 +43,7 @@ toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignrig
  *
  */
 
-/*global alert:true */
+/* global alert:true */
 
 
 define([

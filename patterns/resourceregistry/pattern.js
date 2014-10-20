@@ -1,5 +1,3 @@
-/* global alert */
-
 /* Resource Registry pattern.
  *
  * Options:
@@ -81,6 +79,8 @@
  *    </div>
  *
  */
+
+/* global alert:true */
 
 
 define([

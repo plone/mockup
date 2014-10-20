@@ -1,4 +1,4 @@
-/* global alert, confirm */
+/* global alert:true, confirm:true */
 
 define([
   'jquery',

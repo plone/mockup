@@ -1,4 +1,4 @@
-/* globals less:true, domready:true */
+/* global less:true, domready:true */
 
 (function() {
   'use strict';
