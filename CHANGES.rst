@@ -4,6 +4,9 @@ Changelog
 v1.8.0 (unreleased)
 -------------------
 
+- Bower updates, except pickadate and backbone.paginator.
+  [thet]
+
 - Cleanup: Remove unused ``*._develop.js`` bundles. Remove unused bundles
   ``toolbar`` and ``tiles``. Remove unused bower dependencies ``domready``,
   ``respond`` and ``html5shiv``. Move all NixOS plattform specific ``*.nix``
