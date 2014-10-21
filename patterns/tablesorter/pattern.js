@@ -1,8 +1,5 @@
 /* Tablesorter pattern.
  *
- * Options:
- *    someoptions(XXX): TODO: we need to expose options (XXX)
- *
  * Documentation:
  *    # Directions
  *
