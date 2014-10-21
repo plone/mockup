@@ -4,11 +4,6 @@
     target = "0.1.1";
     outputHash = "1ql54f9mwzn0kmgy01bsdfgx04hs3a6vzk9yjzckfaikigad5czv";
   }
-  { name = "domready";
-    version = "1.0.4";
-    target = "1.0.4";
-    outputHash = "1d3h4vyp9lswbz9603mrci54gmj89vgd9rfffrb9r4n439vwcwif";
-  }
   { name = "jquery.cookie";
     version = "1.4.0";
     target = "1.4.0";
@@ -28,11 +23,6 @@
     version = "3.46.0";
     target = "3.46.0";
     outputHash = "11bnyx8ig3bc4vwskd99zxzbnzayh18vdkaklmjiwkg8jbcxix40";
-  }
-  { name = "respond";
-    version = "1.4.2";
-    target = "1.4.2";
-    outputHash = "0nhrsy1iyrqvrb7pxpw8d3dqhzd0wgbbscf3wzixx3xbi6v4j6fk";
   }
   { name = "sinonjs";
     version = "1.9.0";
@@ -108,11 +98,6 @@
     version = "1.1.2";
     target = "1.1.2";
     outputHash = "1h5yy2lbwd8ik6cyi234hv4i0cy1dijlh6s65kqi0asq1qzi18bs";
-  }
-  { name = "html5shiv";
-    version = "3.7.0";
-    target = "3.7.0";
-    outputHash = "14cig7a7bjnbyvnk4rpf6l74j33rp1jaacigasgkgg6rzay7lcgs";
   }
   { name = "underscore";
     version = "1.6.0";
