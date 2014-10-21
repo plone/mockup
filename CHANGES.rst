@@ -16,3 +16,6 @@ v1.8.0 (unreleased)
   dependency already points to the official builded ``tinymce-dist``
   reposotory. Raise TinyMCE version to 4.1.6.
   [thet]
+
+- Fix Makefile for node versions < and >= 0.11.x.
+  [petschki, thet]

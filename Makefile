@@ -58,6 +58,9 @@ bootstrap: clean bootstrap-common
 ifeq ($(NODE_VERSION_LT_011),true)
 	# for node < v0.11.x
 	$(NPM) link --prefix=.
+	# remove lib/node_modules, which contains a symlink to the project root.
+	# This leads to infinite recursion at the grunt copy task on make docs.
+	rm -rf lib/node_modules
 else
 	$(NPM) link
 endif
