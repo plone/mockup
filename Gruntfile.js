@@ -69,43 +69,10 @@ module.exports = function(grunt) {
     extraInclude: docsExtraIncludes,
   }, ['requirejs', 'less', 'copy', 'sed']);
 
-  mockup.registerBundle('structure', {}, {
-    url: '++resource++wildcard.foldercontents-structure'
-  });
-
-  mockup.registerBundle('filemanager', {}, {
-    url: '++resource++plone.resourceeditor-filemanager'
-  });
-
-  mockup.registerBundle('resourceregistry', {
-    sed: {
-      'plone-fonts': {
-        path: 'build/resourceregistry.min.css',
-        pattern: '../bower_components',
-        replacement: '../++plone++static/bower'
-      }
-    }
-  }, {});
-
-  mockup.registerBundle('plone', {
-    copy: {
-      plone: {
-        files: [
-          { expand: true, cwd: 'less/fonts/', src: 'plone-*', dest: 'build/' }
-        ]
-      }
-    },
-    sed: {
-      'plone-fonts': {
-        path: 'build/plone.min.css',
-        pattern: 'url\\(\'fonts/plone-',
-        replacement: 'url(\'++resource++plone-'
-      }
-    }
-  }, {
-    url: '++resource++plone'
-  });
-
+  mockup.registerBundle('structure', {}, { url: '++resource++wildcard.foldercontents-structure' });
+  mockup.registerBundle('filemanager', {}, { url: '++resource++plone.resourceeditor-filemanager' });
+  mockup.registerBundle('resourceregistry');
+  mockup.registerBundle('plone', {}, {url: '++resource++plone'});
   mockup.registerBundle('widgets');
 
   mockup.initGrunt(grunt, {
