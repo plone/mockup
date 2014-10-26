@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.8.0 (unreleased)
+v1.8.0 (2014-10-26)
 -------------------
 
 - Bower updates, except pickadate and backbone.paginator.
