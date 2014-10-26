@@ -10,7 +10,8 @@ v1.8.0 (unreleased)
 - Cleanup: Remove unused ``*._develop.js`` bundles. Remove unused bundles
   ``toolbar`` and ``tiles``. Remove unused bower dependencies ``domready``,
   ``respond`` and ``html5shiv``. Move all NixOS plattform specific ``*.nix``
-  config files to a ``.nix`` subdirectory. Fix index.html markup.
+  config files to a ``.nix`` subdirectory. Fix index.html markup. Remove unused
+  __init__.py.
   [thet]
 
 - Remove licensing and author information from source files. Fixes #421 Fixes
