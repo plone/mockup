@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     virtualbox.vm.network :private_network, ip: "10.0.1.2"
     virtualbox.vm.network :public_network, ip: "172.16.1.3"
 
-    virtualbox.vm.network "forwarded_port", guest: 8080, host: 8080
+    virtualbox.vm.network "forwarded_port", guest: 8000, host: 8000
 
     virtualbox.vm.provision :shell,
     :inline => "(grep -q -E '^mesg n$' /root/.profile && " \
