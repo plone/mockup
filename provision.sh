@@ -31,8 +31,8 @@ cd /vagrant
 npm install -g
 
 echo 'export LC_ALL="en_US.UTF-8"' >> ~vagrant/.bashrc
-echo 'export PATH=/usr/local/lib/node_modules/generator-plonemockup/node_modules/.bin/:$PATH' >> ~vagrant/.bashrc
-echo 'export NODE_PATH=/usr/local/lib/node_modules/' >> ~vagrant/.bashrc
+echo 'export PATH=/vagrant/node_modules/.bin/:$PATH' >> ~vagrant/.bashrc
+echo 'export NODE_PATH=/vagrant/node_modules/' >> ~vagrant/.bashrc
 
 echo "Finished."
 echo "Run 'vagrant reload' and after, 'vagrant ssh' to access the machine."
