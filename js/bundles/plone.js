@@ -12,6 +12,7 @@ define([
   'mockup-patterns-accessibility',
   'mockup-patterns-autotoc',
   'mockup-patterns-formunloadalert',
+  'mockup-patterns-livesearch',
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
   'mockup-patterns-modal',

@@ -57,6 +57,11 @@ require([
             description: 'A pattern to warn user when changes are unsaved and they try to navigate away from page',
             url: 'patterns/formunloadalert/pattern.js'
           },
+          { id: 'livesearch',
+            title: 'Live search',
+            description: 'A pattern to show a livesearch input',
+            url: 'patterns/livesearch/pattern.js'
+          },
           { id: 'modal',
             title: 'Modal',
             description: 'Creates a modal dialog (also called overlay)',
@@ -171,4 +176,3 @@ require([
 
   return docs;
 });
-

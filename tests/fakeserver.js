@@ -39,6 +39,37 @@ define([
   server.autoRespond = true;
   server.autoRespondAfter = 200;
 
+  server.respondWith('GET', /livesearch_reply/, function (xhr, id) {
+    var items = [
+      {id: 'red', text: 'Red'},
+      {id: 'green', text: 'Green'},
+      {id: 'blue', text: 'Blue'},
+      {id: 'orange', text: 'Orange'},
+      {id: 'yellow', text: 'Yellow'}
+    ];
+    xhr.respond(200, { 'Content-Type': 'application/html' },
+'<fieldset class="livesearchContainer">' +
+'<legend id="livesearchLegend">Search</legend>' +
+'<div class="LSIEFix">' +
+'<ul class="LSTable">' +
+'<li class="LSRow">' +
+'<img width="16" height="16" src="/favicon.ico" alt="Server Troff document" />' +
+'<a href="/one" title="one" class="contenttype-one">one</a>' +
+'<div class="LSDescr">One</div>' +
+'</li>' +
+'<li class="LSRow">' +
+'<a href="@@search" class="advancedsearchlink advanced-search">Advanced search…</a>' +
+'</li>' +
+'<li class="LSRow">' +
+'<a href="@@search?SearchableText=test%2A&path=/" class="advancedsearchlink show-all-items">Show all items</a>' +
+'</li>' +
+'</ul>' +
+'</div>' +
+'</fieldset>'
+        );
+    });
+
+
   server.respondWith('GET', /select2-test\.json/, function (xhr, id) {
     var items = [
       {id: 'red', text: 'Red'},
