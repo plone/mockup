@@ -57,6 +57,11 @@ require([
             description: 'A pattern to warn user when changes are unsaved and they try to navigate away from page',
             url: 'patterns/formunloadalert/pattern.js'
           },
+          { id: 'markspeciallinks',
+            title: 'Mark special links',
+            description: 'Mark special links based on protocoll and optionally open in new window.',
+            url: 'patterns/markspeciallinks/pattern.js'
+          },
           { id: 'modal',
             title: 'Modal',
             description: 'Creates a modal dialog (also called overlay)',
