@@ -32,18 +32,17 @@ define([
 
     cleanup: function() {
         var self = this;
-        $(window).unbind('unload', self.execute());
+        $(window).unbind('unload', self.execute);
         clearInterval(self._refresher);
     },
     
-    execute: function() {
+    execute: function(event) {
         // this.submitting is set from the form unload handler
         // (formUnload.js) and signifies that we are in the
         // form submit process. This means: no unlock needed,
         // and it also would be harmful (ConflictError)
-        var self = this;
-        if (self.$el.submitting) {return;}
-        $.ajax({url: self._baseUrl() + '/@@plone_lock_operations/safe_unlock', async: false});
+        if (event.data.self.$el.submitting) {return;}
+        $.ajax({url: event.data.self._baseUrl() + '/@@plone_lock_operations/safe_unlock', async: false});
     },
     
     refresh: function() {
@@ -66,9 +65,9 @@ define([
     init: function() {
         var self = this;
         // set up the handler, if there are any forms
-        $(window).unload(self.execute());
-        // $(window).on('beforeunload', self.execute());
-        self._refresher = setInterval(self.refresh(), 300000);
+        //$(window).unload(self.execute());
+        $(window).on('beforeunload', null, {'self': self}, self.execute);
+        self._refresher = setInterval(self.refresh, 300000);
     }
   });
 
