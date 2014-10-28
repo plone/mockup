@@ -174,10 +174,10 @@ define([
     self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {
       html: _.template('<div id="content">' +
         '<h1>Bundle Builder</h1>' +
-        '<div class="start-info">You are about to build the <span class="label label-primary">' +
-          '<%= name %></span> pattern. This may take some a bit of time so ' +
-          'we will try to keep you updated on the progress. Press the "Build it" ' +
-          'button to proceed.</div>' +
+        '<div class="start-info"><p>You are about to build the <span class="label label-primary">' +
+          '<%= name %></span> pattern. </p><p>This may take some a bit of time so ' +
+          'we will try to keep you updated on the progress.</p><p> Press the "Build it" ' +
+          'button to proceed.</p></div>' +
         '<ul class="list-group hidden"></ul>' +
         '<button class="plone-btn plone-btn-default cancel hidden">Close</button>' +
         '<button class="plone-btn plone-btn-primary build">Build it</button>' +

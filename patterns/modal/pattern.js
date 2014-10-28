@@ -392,6 +392,7 @@ define([
         // Render html
         self.$modal = $(_.template(self.options.templateOptions.template, tplObject));
         self.$modalDialog = $('> .' + self.options.templateOptions.classDialog, self.$modal);
+        self.$modalContent = $('> .' + self.options.templateOptions.classModal, self.$modalDialog);
 
         // In most browsers, when you hit the enter key while a form element is focused
         // the browser will trigger the form 'submit' event.  Google Chrome also does this,
@@ -745,6 +746,9 @@ define([
         padding: '0',
         width: self.options.width, // defaults to "", which doesn't override other css
         height: self.options.height // defaults to "", which doesn't override other css
+      });
+      self.$modalContent.css({
+        width: self.options.width, // defaults to "", which doesn't override other css
       });
 
       var posopt = self.options.position.split(' '),
