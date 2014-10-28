@@ -127,6 +127,11 @@ require([
             description: 'Manage tree of items',
             url: 'patterns/tree/pattern.js'
           },
+          { id: 'unlockonformunload',
+            title: 'Unlock on form unload',
+            description: 'Plone unlock handler',
+            url: 'patterns/unlockonformunload/pattern.js'
+          },
           { id: 'upload',
             title: 'Upload',
             description: 'File upload with drag and drop support.',

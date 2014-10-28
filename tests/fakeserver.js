@@ -5,6 +5,18 @@ define([
 ], function(sinon, $, _) {
   'use strict';
 
+  function _baseUrl() {
+    var baseUrl, pieces;
+
+    baseUrl = $('base').attr('href');
+    if (!baseUrl) {
+        pieces = window.location.href.split('/');
+        pieces.pop();
+        baseUrl = pieces.join('/');
+    }
+    return baseUrl;
+  }
+
   function getQueryVariable(url, variable) {
     var query;
     if(url.indexOf('?') !== -1){
@@ -676,6 +688,8 @@ define([
     }
     xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(data));
   });
+  server.respondWith(/safe_unlock/, '{ "result": true }');
+  server.respondWith(/refresh_lock/, '{ "result": true }');
   return server;
 
 });

@@ -89,6 +89,7 @@
       'mockup-patterns-toggle': 'patterns/toggle/pattern',
       'mockup-patterns-tooltip': 'patterns/tooltip/pattern',
       'mockup-patterns-tree': 'patterns/tree/pattern',
+      'mockup-patterns-unlockonformunload': 'patterns/unlockonformunload/pattern',
       'mockup-patterns-upload': 'patterns/upload/pattern',
       'mockup-patterns-upload-url': 'patterns/upload',
       'mockup-registry': 'bower_components/mockup-core/js/registry',
