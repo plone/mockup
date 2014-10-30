@@ -5,37 +5,36 @@
  *    format(string): Format to use to render date. Also available is "relative" and "calendar" formats. (MMMM Do YYYY, h:mm:ss a)
  *
  * Documentation:
- *    # Defaults
+ *
+ *    # Simple
  *
  *    {{ example-1 }}
  *
- *    # Relative format
+ *    # Defaults
  *
  *    {{ example-2 }}
  *
- *    # Calendar format
+ *    # Relative format
  *
  *    {{ example-3 }}
  *
- *    # Custom format
+ *    # Calendar format
  *
  *    {{ example-4 }}
  *
- *    # Setting date by attribute
+ *    # Custom format
  *
  *    {{ example-5 }}
  *
+ *    # Setting date by attribute
+ *
+ *    {{ example-6 }}
+ *
  * Example: example-1
- *    <ul class="pat-moment" data-pat-moment="selector:li">
- *      <li>2013-10-01T10:00:00-05:00</li>
- *      <li>2013-01-01T22:10:00-05:00</li>
- *      <li>2013-01-05T04:34:00-05:00</li>
- *      <li>2013-02-14T16:55:00-05:00</li>
- *    </ul>
+ *    <span class="pat-moment">2014-10-30T15:10:00</span>
  *
  * Example: example-2
- *    <ul class="pat-moment"
- *        data-pat-moment="selector:li;format:relative;">
+ *    <ul class="pat-moment" data-pat-moment="selector:li">
  *      <li>2013-10-01T10:00:00-05:00</li>
  *      <li>2013-01-01T22:10:00-05:00</li>
  *      <li>2013-01-05T04:34:00-05:00</li>
@@ -44,6 +43,15 @@
  *
  * Example: example-3
  *    <ul class="pat-moment"
+ *        data-pat-moment="selector:li;format:relative;">
+ *      <li>2013-10-01T10:00:00-05:00</li>
+ *      <li>2013-01-01T22:10:00-05:00</li>
+ *      <li>2013-01-05T04:34:00-05:00</li>
+ *      <li>2013-02-14T16:55:00-05:00</li>
+ *    </ul>
+ *
+ * Example: example-4
+ *    <ul class="pat-moment"
  *        data-pat-moment="selector:li;format:calendar;">
  *      <li>2013-10-01T10:00:00-05:00</li>
  *      <li>2013-10-02T22:10:00-05:00</li>
@@ -51,7 +59,7 @@
  *      <li>2013-10-03T16:55:00-05:00</li>
  *    </ul>
  *
- * Example: example-4
+ * Example: example-5
  *    <ul class="pat-moment"
  *        data-pat-moment="selector:li;format:MMM Do, YYYY h:m a;">
  *      <li>2013-10-01T10:00:00-05:00</li>
@@ -60,7 +68,7 @@
  *      <li>2013-02-14T16:55:00-05:00</li>
  *    </ul>
  *
- * Example: example-5
+ * Example: example-6
  *    <ul class="pat-moment"
  *        data-pat-moment="selector:li;format:MMM Do, YYYY h:m a;">
  *      <li data-date="2013-10-01T10:00:00-05:00"></li>
