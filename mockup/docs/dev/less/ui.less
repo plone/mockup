@@ -1,0 +1,26 @@
+/* ui helper less rules */
+@import "@{mockuplessPath}/base.less";
+
+/* loading icon animation */
+.mockup-loader-icon {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-size: 30px;
+    .glyphicon-refresh {
+        .animation-name(rotateThis);
+        .animation-duration(2s);
+        .animation-iteration-count(infinite);
+        .animation-timing-function(linear);
+    }
+}
+
+@-webkit-keyframes rotateThis{
+ from { -webkit-transform: rotate( 0deg ); }
+ to  { -webkit-transform: rotate( 360deg ); }
+}
+
+@keyframes rotateThis{
+  from { transform: rotate( 0deg ); }
+  to { transform: rotate( 360deg ); }
+}

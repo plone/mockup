@@ -21,7 +21,6 @@ setup(
     url='https://github.com/plone/mockup',
     license='MIT',
     packages=find_packages(),
-
     include_package_data=True,
     zip_safe=False,
     install_requires=[],

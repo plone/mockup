@@ -8,18 +8,18 @@
     <!-- Static resources -->
     <browser:resourceDirectory
         name="mockupjs"
-        directory="../js" />
+        directory="./js" />
 
     <browser:resourceDirectory
         name="mockup"
-        directory="../patterns" />
+        directory="./patterns" />
 
     <browser:resourceDirectory
         name="mockupless"
-        directory="../less" />
+        directory="./less" />
 
     <browser:resourceDirectory
         name="mockuplib"
-        directory="../lib" />
+        directory="./lib" />
 
 </configure>
