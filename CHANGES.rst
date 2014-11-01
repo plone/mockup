@@ -1,10 +1,11 @@
 Changelog
 =========
 
-v1.9.0 (unreleased)
--------------------
+1.8.1 (2014-11-01)
+------------------
 
-- Nothing changed yet.
+- Size for modals may be specified
+  [bloodbare]
 
 
 v1.8.0 (2014-10-26)
@@ -17,7 +18,7 @@ v1.8.0 (2014-10-26)
   ``toolbar`` and ``tiles``. Remove unused bower dependencies ``domready``,
   ``respond`` and ``html5shiv``. Move all NixOS plattform specific ``*.nix``
   config files to a ``.nix`` subdirectory. Fix index.html markup. Remove unused
-  __init__.py.
+  ``__init__.py``.
   [thet]
 
 - Remove licensing and author information from source files. Fixes #421 Fixes
