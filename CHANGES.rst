@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.8.2 (Unreleased)
+1.8.2 (2014-11-01)
 ------------------
 
 - Reorganize folders so that javascript is included in the cooked egg.
