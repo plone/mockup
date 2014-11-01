@@ -4,7 +4,8 @@ Changelog
 1.8.2 (Unreleased)
 ------------------
 
-- No changes yet
+- Reorganize folders so that javascript is included in the cooked egg.
+  [esteele]
 
 
 1.8.1 (2014-11-01)
