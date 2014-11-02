@@ -25,12 +25,15 @@ define([
       this.server.respondWith('GET', /filemanager-actions/, function (xhr, id) {
         var data = [{
           label: 'css',
+          path: '/css',
           folder: true,
           children: [{
             label: 'style.css',
+            path: '/css/style.css',
             folder: false
           },{
             label: 'tree.css',
+            path: '/css/style.css',
             folder: false
           }]
         }];
