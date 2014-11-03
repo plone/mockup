@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import json
 
-package_json = json.load(open('package.json'))
+package_json = json.load(open('mockup/package.json'))
 version = package_json['version']
 
 setup(
@@ -21,7 +21,6 @@ setup(
     url='https://github.com/plone/mockup',
     license='MIT',
     packages=find_packages(),
-
     include_package_data=True,
     zip_safe=False,
     install_requires=[],

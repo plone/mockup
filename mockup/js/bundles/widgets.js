@@ -3,7 +3,6 @@ define([
   'mockup-registry',
   'mockup-patterns-base',
   'mockup-patterns-select2',
-  'mockup-patterns-passwordstrength',
   'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
   'mockup-patterns-querystring',
