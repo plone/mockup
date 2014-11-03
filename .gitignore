@@ -1,6 +1,6 @@
 *.py?
 .idea
-
+*.egg-info
 /bower_components
 /build/
 /coverage/
