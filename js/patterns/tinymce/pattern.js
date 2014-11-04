@@ -256,6 +256,12 @@ define([
       // include in widgets.min.css
       tinyOptions.skin = false;
 
+      tinyOptions.init_instance_callback = function(editor) {
+        if (self.tiny === undefined || self.tiny === null) {
+          self.tiny = editor;
+        }
+      };
+
       self.options.relatedItems.generateImageUrl = function(data, scale) {
         // this is so, in our result and selection template, we can
         // access getting actual urls from related items
