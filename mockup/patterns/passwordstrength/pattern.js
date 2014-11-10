@@ -58,7 +58,7 @@ define([
     name: 'passwordstrength',
     defaults: {
         zxcvbn: '//cdnjs.cloudflare.com/ajax/libs/zxcvbn/1.0/zxcvbn.js'
-    },     
+    },
     init: function () {
       var self = this,
           $pwfield = this.$el,
@@ -77,11 +77,13 @@ define([
                   [].map.call(
                       ($pwfield[0].form || { elements: [] }).elements,
                       function (inp) {
-                          if (inp === $pwfield[0]) return null;
+                          if (inp === $pwfield[0]) {
+                            return null;
+                          }
                           return inp.value || null;
                       }
                   ).filter(function (x) { return x; })
-              ).score)
+              ).score);
           }
           $pwmeter.attr('class', 'pat-passwordstrength-meter level-' + score);
       }

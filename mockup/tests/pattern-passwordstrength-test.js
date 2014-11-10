@@ -3,7 +3,7 @@ define([
   'jquery',
   'mockup-registry',
   'mockup-patterns-passwordstrength'
-], function(expect, $, registry, Moment) {
+], function(expect, $, registry, PasswordStrength) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -14,6 +14,9 @@ define([
    ========================== */
 
   describe('Password strength', function () {
+
+    var orig_setTimeout = window.setTimeout;
+
     function fakeZxcvbn(input, strings) {
         window.providedStrings = strings;
         return {
@@ -34,6 +37,10 @@ define([
             fun();
             return 0;
         };
+    });
+
+    afterEach(function() {
+      window.setTimeout = orig_setTimeout;
     });
 
     it('adds markup below input element', function() {
