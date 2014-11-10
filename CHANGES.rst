@@ -10,6 +10,10 @@ Changelog
 - File label cannot be used as path.
   [ebrehault]
 
+- Include ``docs.less`` from ``mockup-core``, which can better be reused. Use
+  ``@{bowerPath}`` less variable where possible.
+  [thet]
+
 - Eventedit pattern: Use more specific CSS selectors, so that switching
   whole_day on and off doesn't hide the publication date's time component.
   Refs: https://github.com/plone/plone.app.event/pull/169
