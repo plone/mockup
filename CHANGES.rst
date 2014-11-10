@@ -4,7 +4,14 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add passwordstrength pattern based on the ``zxcvbn`` library. Ref: #433.
+  [lentinj]
+
+- File label cannot be used as path.
+  [ebrehault]
+
+- Fix tests to run within reorganized folder structure from 1.8.2.
+  [thet]
 
 
 1.8.2 (2014-11-01)
@@ -17,8 +24,11 @@ Changelog
 1.8.1 (2014-11-01)
 ------------------
 
-- Size for modals may be specified
+- Size for modals may be specified.
   [bloodbare]
+
+- Include vagrant setup as an install option for Mockup.
+  [frapell]
 
 
 v1.8.0 (2014-10-26)
