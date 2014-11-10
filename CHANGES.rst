@@ -10,6 +10,14 @@ Changelog
 - File label cannot be used as path.
   [ebrehault]
 
+- Eventedit pattern: Use more specific CSS selectors, so that switching
+  whole_day on and off doesn't hide the publication date's time component.
+  Refs: https://github.com/plone/plone.app.event/pull/169
+  [thet]
+
+- Depend on newer `mockup-core` version.
+  [thet]
+
 - Fix tests to run within reorganized folder structure from 1.8.2.
   [thet]
 
