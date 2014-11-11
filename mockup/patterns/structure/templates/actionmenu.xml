@@ -1,5 +1,5 @@
 <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
-  <span class="glyphicon glyphicon-cog"></i>
+  <span class="glyphicon glyphicon-cog"></span>
   <span class="caret"></span>
 </a>
 <ul class="dropdown-menu pull-right">
