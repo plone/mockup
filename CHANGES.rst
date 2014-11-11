@@ -4,6 +4,9 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
+- Fix broken HTML tag on structure pattern's ``actionmenu.xml``.
+  [datakurre]
+
 - Add passwordstrength pattern based on the ``zxcvbn`` library. Ref: #433.
   [lentinj]
 
