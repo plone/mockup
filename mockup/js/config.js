@@ -63,6 +63,7 @@
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
+      'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
       'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
       'mockup-patterns-filemanager': 'patterns/filemanager/pattern',
       'mockup-patterns-filemanager-url': 'patterns/filemanager',

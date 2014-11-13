@@ -47,6 +47,11 @@ require([
             description: 'TODO',
             url: 'patterns/backdrop/pattern.js'
           },
+          { id: 'cookiewarning',
+            title: 'Cookie Warning',
+            description: "Warns the user that they won't be able to log in until cookies are enabled.",
+            url: 'patterns/cookiewarning/pattern.js'
+          },
           { id: 'formautofocus',
             title: 'Form Auto Focus',
             description: 'TODO',
