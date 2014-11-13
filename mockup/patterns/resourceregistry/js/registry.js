@@ -254,13 +254,12 @@ define([
       });
       var iframe = $iframe[0];
       var win = iframe.contentWindow || iframe;
-
-      // special error reporting
       win.lessErrorReporting = function(what, error, href){
-        if(what !== 'remove'){
+        if(what !== "remove"){
           self.addResult('less compilation error on file ' + href + ': ' + error);
         }
       };
+      var head = $iframe.contents().find('head')[0];
       _.each(config.less, function(less){
         var link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet/less');
@@ -268,7 +267,6 @@ define([
         link.setAttribute('href', less);
         head.appendChild(link); 
       });
-
       var script = document.createElement('script');
       script.setAttribute('type', 'text/javascript');
       script.setAttribute('src', self.rview.options.data.lessConfigUrl);
