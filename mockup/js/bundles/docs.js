@@ -57,6 +57,11 @@ require([
             description: 'A pattern to warn user when changes are unsaved and they try to navigate away from page',
             url: 'patterns/formunloadalert/pattern.js'
           },
+          { id: 'inlinevalidation',
+            title: 'Inline Validation',
+            description: 'Client side validation of form fields',
+            url: 'patterns/inlinevalidation/pattern.js'
+          },
           { id: 'modal',
             title: 'Modal',
             description: 'Creates a modal dialog (also called overlay)',
