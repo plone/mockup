@@ -1,25 +1,20 @@
 language: node_js
 node_js:
   - 0.10
-addons:
-  sauce_connect:
-    username: $SAUCE_USERNAME
-    access_key: $SAUCE_ACCESS_KEY
 env:
   global:
     - secure: "fPRKgxcbSXyiLqkUjAjPkn5eGBqMqf6c5haTZ9x76sDl1792nDyiL2FXSpiv2s8PeOqMbWgcXly0r+CLXypYkWba9nIxb4bhvtXyDoYAaoBV0lG1NbBakuOwqW/u60WpPJS1qTqmEUSEbSxdntqk7HF1yG6MdMi3PdubxMyw9h0="
-    - secure: "kC1ondeLedcnmrpI5McHHjd3AAl0piErC3iCy8hwdJXSkanG36XF0nM3VoiudhJX1c0iTD0uod3cglChRq7stmYsHLlCvWJAf/19+ce6wG7MBw2M31qRRcktIYEPKlm3iMRWy+WwWOivTrjVwWG3/mcCdyeDTvSFFSjtMSqmLOg="
-    - secure: "CyxPivnm/mpBX5Def/VlFHthxjMTjlThgd07tiGvd0vtDG1PPNzD0Y0q+4AmBilWZeIu1O1bP1vYMgMQ0rvcXr5K7+wZqoyss+ynRzMzdGLYQSU73zN5THKNeClioR90stsTr9GxX43VvgEIX9W3Zx1eSnmzT+ddnLYL94bAP9Q="
+    - secure: VFB17+mogAMLzk1RkwQo4qY8jgc8tD8lUWV6j2xtqDBG6gdkUl+mhuUm8ibbD910/kjQJc47FAHiZi4xrRW1vDmOizw7K48Fq+V180bf+2fAvAJNakI6Z4uuPcA7VnuRYoNfUPXAmWgtvMzgMAF+sXeV+jhgha6Kx02xj39LjD0=
+    - secure: lLMAD0VmG1/SpfuJKwOT9xn4lV1pUq71WszWjpF8TgxJfIgRBYLp9QkRTXQ6pfTwXTL22YSsc8N5yhJsALKV2V57Og6Pfta6jQqRIzJU6maIZBBLqW6LQThuazF6tmEcTpty1j1LdFf3tuNVchsbsii2eRhXNdIPXLjBliMJkuo=
     - SAUCE_CONNECT_READY_FILE=/tmp/sauce-connect-ready
   matrix:
-    - BROWSERS="SL_Firefox"
-#   - BROWSERS="SL_Chrome,SL_Firefox"
-#   - BROWSERS="SL_IE_8,SL_IE_9"
-#   - BROWSERS="SL_IE_10,SL_IE_11"
-#   - BROWSERS="SL_Opera,SL_Safari"
-#   - BROWSERS="SL_IPhone"
-#   - BROWSERS="SL_IPad"
-#   - BROWSERS="SL_Android"
+    - BROWSERS="SL_Chrome,SL_Firefox"
+    - BROWSERS="SL_IE_8,SL_IE_9"
+    - BROWSERS="SL_IE_10,SL_IE_11"
+    - BROWSERS="SL_Opera,SL_Safari"
+    - BROWSERS="SL_IPhone"
+    - BROWSERS="SL_IPad"
+    - BROWSERS="SL_Android"
 install:
   - cd mockup
   - travis_retry make bootstrap
@@ -33,7 +28,7 @@ script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then make test-ci; fi
   - make docs
 after_success:
-  - if [ "$BROWSERS" == "SL_Firefox" ]; then ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls; fi
+  - if [ "$BROWSERS" == "SL_Chrome,SL_Firefox" ]; then ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls; fi
 matrix:
   fast_finish: true
   allow_failures:

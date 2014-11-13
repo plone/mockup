@@ -82,13 +82,6 @@ module.exports = function(grunt) {
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       }
-    },
-    karma: {
-      testCI: {
-        sauceLabs: {
-          startConnect: false;
-        }
-      }
     }
   });
 
