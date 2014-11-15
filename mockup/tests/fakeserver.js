@@ -40,27 +40,25 @@ define([
   server.autoRespondAfter = 200;
 
   server.respondWith('GET', /livesearch_reply/, function (xhr, id) {
-    var items = [
-      {id: 'red', text: 'Red'},
-      {id: 'green', text: 'Green'},
-      {id: 'blue', text: 'Blue'},
-      {id: 'orange', text: 'Orange'},
-      {id: 'yellow', text: 'Yellow'}
-    ];
     xhr.respond(200, { 'Content-Type': 'application/html' },
-'<fieldset class="livesearchContainer">' +
-'<legend id="livesearchLegend">Search</legend>' +
-'<div class="LSIEFix">' +
-'<ul class="LSTable">' +
-'<li class="LSRow">' +
-'<img width="16" height="16" src="/favicon.ico" alt="Server Troff document" />' +
-'<a href="/one" title="one" class="contenttype-one">one</a>' +
-'<div class="LSDescr">One</div>' +
+'<fieldset class="livesearch-container">' +
+'<legend class="livesearch-legend">Search</legend>' +
+'<div>' +
+'<ul>' +
+'<li>' +
+'<img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEX///+dsMSNvfD///9OTk6Li4vi7vvZ6vr6+/7C3Pfx9/2z0/Xe7Pvg7fr9/f32+v7u9f3J4Pi+2fbW5vn9/v/3+/6nzfPP4/nk8Pz1+f3H3/jq8/y/QnJnAAAAAXRSTlMAQObYZgAAAFNJREFUeF6NykcOwCAMRFHcSO293P+esRIJw46/mMXTuKzkiyMgTYgT6HXYAAiEtehR1ohoABtoBuswnsVRGVzg08fTLdPc7AYt3OkD/wJwyOX0AkS1AoySkvA+AAAAAElFTkSuQmCC" alt="Server Troff document" />' +
+'<a href="/one" title="one" class="contenttype-one">Document one (with description)</a>' +
+'<div class="livesearch-description">Element with a description</div>' +
 '</li>' +
-'<li class="LSRow">' +
+'<li>' +
+'<img width="16" height="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEX///+dsMSNvfD///9OTk6Li4vi7vvZ6vr6+/7C3Pfx9/2z0/Xe7Pvg7fr9/f32+v7u9f3J4Pi+2fbW5vn9/v/3+/6nzfPP4/nk8Pz1+f3H3/jq8/y/QnJnAAAAAXRSTlMAQObYZgAAAFNJREFUeF6NykcOwCAMRFHcSO293P+esRIJw46/mMXTuKzkiyMgTYgT6HXYAAiEtehR1ohoABtoBuswnsVRGVzg08fTLdPc7AYt3OkD/wJwyOX0AkS1AoySkvA+AAAAAElFTkSuQmCC" alt="Server Troff document" />' +
+'<a href="/two" title="two" class="contenttype-one">Document two (without description)</a>' +
+'<div class="livesearch-description"></div>' +
+'</li>' +
+'<li>' +
 '<a href="@@search" class="advancedsearchlink advanced-search">Advanced search…</a>' +
 '</li>' +
-'<li class="LSRow">' +
+'<li>' +
 '<a href="@@search?SearchableText=test%2A&path=/" class="advancedsearchlink show-all-items">Show all items</a>' +
 '</li>' +
 '</ul>' +
