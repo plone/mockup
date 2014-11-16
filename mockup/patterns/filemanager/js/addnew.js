@@ -30,7 +30,7 @@ define([
           type: 'POST',
           data: {
             filename: filename,
-            path: self.getFolderPath()
+            path: self.app.getFolderPath()
           },
           success: function(data) {
             self.hide();
