@@ -297,7 +297,8 @@ define([
             $('li', self.$tabs).removeClass('active');
             var $li = $(this).parent();
             $li.addClass('active');
-            self.openEditor($li.attr('data-path'));
+            self.$tree.tree('selectNode', event.node);
+            self.openFile({node: event.node});
           });
         }else{
           $existing.addClass('active');
