@@ -63,7 +63,10 @@ define([
           // clear out
           self.$('input.search').attr('value', '');
           self.$results.empty();
-          self.app.$tree.tree('reload');
+          self.app.$tree.tree(
+              'loadDataFromUrl',
+              self.app.options.actionUrl + '?action=dataTree'
+            );
         }
       });
     }
