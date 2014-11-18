@@ -262,7 +262,7 @@ define([
     },
     openFile: function(event) {
       var self = this;
-      var doc = event.node.name;
+      var doc = event.node.path;
       if (event.node.folder){
         return true;
       }
