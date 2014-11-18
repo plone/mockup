@@ -48,6 +48,8 @@ define([
               'loadDataFromUrl',
               self.app.options.actionUrl + '?action=dataTree'
             );
+            // ugly, $tabs should have an API
+            $('.nav .active .remove').click();
           }
         });
         // XXX show loading
