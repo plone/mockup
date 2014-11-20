@@ -19,6 +19,8 @@
     "pickadate": "3.4.0",
     "requirejs-text": "2.0.12",
     "select2": "3.5.1",
+    "blueimp-file-upload": "9.5.0",
+    "jquery.ui": "1.10",
     "tinymce": "4.1.6"
   },
   "devDependencies": {

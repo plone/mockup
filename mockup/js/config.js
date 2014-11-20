@@ -109,7 +109,24 @@
       'text': 'bower_components/requirejs-text/text',
       'tinymce': 'bower_components/tinymce/tinymce',
       'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore'
+      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+      'mockup-patterns-fileupload': 'patterns/fileupload/pattern',
+      'jquery.fileupload': 'bower_components/blueimp-file-upload/js/jquery.fileupload',
+      'jquery.fileupload-process': 'bower_components/blueimp-file-upload/js/jquery.fileupload-process',
+      'jquery.fileupload-validate': 'bower_components/blueimp-file-upload/js/jquery.fileupload-validate',
+      'jquery.fileupload-image': 'bower_components/blueimp-file-upload/js/jquery.fileupload-image',
+      'jquery.fileupload-audio': 'bower_components/blueimp-file-upload/js/jquery.fileupload-audio',
+      'jquery.fileupload-video': 'bower_components/blueimp-file-upload/js/jquery.fileupload-video',
+      'jquery.iframe-transport': 'bower_components/blueimp-file-upload/js/jquery.iframe-transport',
+      'jquery.ui': 'bower_components/jquery.ui/ui/jquery.ui',
+      'jquery.ui.widget': 'bower_components/jquery.ui/ui/jquery.ui.widget',
+      'load-image': 'bower_components/blueimp-load-image/js/load-image',
+      'load-image-meta': 'bower_components/blueimp-load-image/js/load-image-meta',
+      'load-image-exif': 'bower_components/blueimp-load-image/js/load-image-exif',
+      'load-image-exif-map': 'bower_components/blueimp-load-image/js/load-image-exif-map',
+      'load-image-ios': 'bower_components/blueimp-load-image/js/load-image-ios',
+      'load-image-orientation': 'bower_components/blueimp-load-image/js/load-image-orientation',
+      'canvas-to-blob': 'bower_components/blueimp-canvas-to-blob/js/canvas-to-blob'
     },
     shim: {
       'JSXTransformer': { exports: 'window.JSXTransformer' },
@@ -130,7 +147,21 @@
       'sinon': {exports: 'window.sinon'},
       'tinymce': { exports: 'window.tinyMCE', init: function () { this.tinyMCE.DOM.events.domLoaded = true; return this.tinyMCE; }},
       'tinymce-modern-theme': { deps: ['tinymce'] },
-      'underscore': { exports: 'window._' }
+      'underscore': { exports: 'window._' },
+      'jquery.fileupload': { },
+      'jquery.fileupload-process': { },
+      'jquery.fileupload-validate': { },
+      'jquery.fileupload-image': { },
+      'jquery.fileupload-audio': { },
+      'jquery.fileupload-video': { },
+      'jquery.iframe-transport': { },
+      'load-image': { },
+      'load-image-meta': { },
+      'load-image-exif': { },
+      'load-image-exif-map': { },
+      'load-image-ios': { },
+      'load-image-orientation': { },
+      'canvas-to-blob': { }
     },
     wrapShim: true
   };
