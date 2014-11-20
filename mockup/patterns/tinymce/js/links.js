@@ -165,7 +165,7 @@ define([
       self.$select.find('option').remove();
       self.anchorNodes = [];
       self.anchorData = [];
-      var node, i, name, title;
+      var node, i, j, name, title;
 
       var nodes = self.tiny.dom.select('a.mceItemAnchor,img.mceItemAnchor,a.mce-item-anchor,img.mce-item-anchor');
       for (i = 0; i < nodes.length; i = i + 1) {
@@ -192,8 +192,8 @@ define([
           name = name.replace(/[^a-z0-9]/g, '-');
           /* okay, ugly, but we need to first check that this anchor isn't already available */
           var found = false;
-          for (i = 0; i < self.anchorNodes.length; i = i + 1) {
-            var anode = self.anchorData[i];
+          for (j = 0; j < self.anchorNodes.length; j = j + 1) {
+            var anode = self.anchorData[j];
             if (anode.name === name) {
               found = true;
               // so it's also found, let's update the title to be more presentable
