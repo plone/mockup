@@ -156,7 +156,7 @@ define([
       var self = this;
       var val = self.$select.select2('data');
       if (val && typeof(val) === 'object') {
-        val = val[0];
+        val = val['id'];
       }
       return val;
     },
