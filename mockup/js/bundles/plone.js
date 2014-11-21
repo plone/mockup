@@ -16,6 +16,7 @@ define([
   'mockup-patterns-formautofocus',
   'mockup-patterns-modal',
   'mockup-patterns-structure',
+  'mockup-patterns-textareamimetypeselector',
   'bootstrap-dropdown',
   'bootstrap-collapse',
   'bootstrap-tooltip'
