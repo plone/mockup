@@ -284,6 +284,9 @@ define([
       $form.on('submit', function() {
         self.tiny.save();
       });
+    },
+    destroy: function() {
+      this.tiny.destroy();
     }
   });
 

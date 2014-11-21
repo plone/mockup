@@ -4,6 +4,9 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
+- Add mimetype selector pattern for textareas.
+  [thet]
+
 - Fix broken HTML tag on structure pattern's ``actionmenu.xml``.
   [datakurre]
 

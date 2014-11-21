@@ -7,6 +7,7 @@ define([
   'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
   'mockup-patterns-querystring',
+  'mockup-patterns-textareamimetypeselector',
   'mockup-patterns-tinymce'
 ], function($, Registry, Base) {
   'use strict';

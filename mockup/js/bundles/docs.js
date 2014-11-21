@@ -117,6 +117,11 @@ require([
             description: 'A pattern you can apply to a table so it can have its items rearranged when clicking the header',
             url: 'patterns/tablesorter/pattern.js'
           },
+          { id: 'textareamimetypeselector',
+            title: 'Textarea MimeType Selector',
+            description: 'Selects the MimeType for a textarea and changes the widget according to the MimeType',
+            url: 'patterns/textareamimetypeselector/pattern.js'
+          },
           { id: 'tinymce',
             title: 'TinyMCE',
             description: 'Rich text editor',
