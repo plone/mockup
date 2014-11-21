@@ -426,6 +426,16 @@ define([
           linkModal: self,
           tinypattern: self.tinypattern
         });
+        /* XXX: I don't know the proper way of doing this, but basically we want
+         to be able to select Folders when uploading an image */
+        if (type === "uploadImage"){
+            self.linkTypes[type]
+            .options
+            .linkModal
+            .options
+            .relatedItems
+            .selectableTypes = ["Folder"];
+        }
       });
 
       $('.autotoc-nav a', self.modal.$modal).click(function() {

@@ -333,6 +333,24 @@ define([
 
       self.numFiles = self.dropzone.files.length;
       self.currentFile = 0;
+      if (self.$pathInput.val()){
+        // Recalculate url for uploading to chosen location
+        var url = self.pathJoin(self.options.baseUrl,
+                                '@@getFolderUrl');
+        // We want to call url/resolveuid/uuid/@@fileUpload but resolveuid
+        // redirects as a 301, and POST is not kept, so we need to call this
+        // to get the proper URL
+        $.ajax({
+            url: url,
+            data:{'uuid': self.$pathInput.val()},
+            async: false,
+            success: function(response, statusCode, xmlHttpRequest){
+                self.dropzone.options.url = self.pathJoin(
+                    JSON.parse(response), self.options.relativePath
+                );
+            }
+        });
+      }
 
       function process() {
         processing = true;
