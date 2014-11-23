@@ -47,6 +47,11 @@ require([
             description: 'TODO',
             url: 'patterns/backdrop/pattern.js'
           },
+          { id: 'cookietrigger',
+            title: 'Cookie Trigger',
+            description: "Shows a DOM element if browser cookies are disabled.",
+            url: 'patterns/cookietrigger/pattern.js'
+          },
           { id: 'formautofocus',
             title: 'Form Auto Focus',
             description: 'TODO',
