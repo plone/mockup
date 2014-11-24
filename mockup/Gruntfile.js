@@ -46,12 +46,14 @@ module.exports = function(grunt) {
 
     ret[name + '-tinymce-fonts'] = {
       path: path + name + '.min.css',
-      pattern: 'url\\(\'?fonts/tinymce\'?',  // match urls with and without quotes
-      replacement: 'url(\'' + url + '-tinymce-font-tinymce\''
+      pattern: 'url\\(fonts/tinymce',
+      replacement: 'url(' + url + '-tinymce-font-tinymce'
+      //pattern: 'url\\(\'?fonts/tinymce(.*)\'?',  // match urls with and without quotes
+      //replacement: 'url(\'' + url + '-tinymce-font-tinymce$1\''
     };
     ret[name + '-tinymce-img-loader'] = {
       path: path + name + '.min.css',
-      pattern: 'url\\(\'?img/loader.gif\'?',
+      pattern: 'url\\(\'?img/loader.gif\'?',  // match urls with and without quotes
       replacement: 'url(\'' + url + '-tinymce-img-loader.gif\''
     };
     ret[name + '-tinymce-img-anchor'] = {
@@ -67,8 +69,8 @@ module.exports = function(grunt) {
 
     ret[name + '-tinymce-fonts2'] = {
       path: path + name + '-tinymce-content.min.css',
-      pattern: 'url\\(\'?fonts/tinymce\'?',  // match urls with and without quotes
-      replacement: 'url(\'' + url + '-tinymce-font-tinymce\''
+      pattern: 'url\\(fonts/tinymce',
+      replacement: 'url(' + url + '-tinymce-font-tinymce'
     };
     ret[name + '-tinymce-img-loader2'] = {
       path: path + name + '-tinymce-content.min.css',

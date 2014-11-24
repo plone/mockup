@@ -137,7 +137,7 @@
   };
   for(var i=0; i<tinymcePlugins.length; i=i+1){
     var plugin = tinymcePlugins[i];
-    requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce/plugins/' + plugin + '/plugin';
+    requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce-builded/js/tinymce/plugins/' + plugin + '/plugin';
     requirejsOptions.shim['tinymce-' + plugin] = {
       deps: ['tinymce']
     };

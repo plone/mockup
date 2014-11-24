@@ -135,7 +135,7 @@ define([
       folderTypes: 'Folder,Plone Site',
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
-        'content_css': '../../../bower_components/tinymce/skins/lightgray/content.min.css',
+        'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
         theme: '-modern',
         plugins: [
           '-advlist -autolink -lists -charmap -print -preview -anchor ' +
