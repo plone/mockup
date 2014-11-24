@@ -29,7 +29,12 @@ define([
         },
         success: function(data) {
           self.hide();
-          self.app.$tree.tree('reload');
+          self.app.$tree.tree(
+            'loadDataFromUrl',
+            self.app.options.actionUrl + '?action=dataTree'
+          );
+          // ugly, $tabs should have an API
+          $('.nav .active .remove').click();
         }
       });
       // XXX show loading

@@ -116,6 +116,8 @@ define([
       var translations = self.options.translations;
 
       self.fileData = {};
+      self.currentPath;
+
       self.saveBtn = new ButtonView({
         id: 'save',
         title: translations.save,
@@ -220,7 +222,9 @@ define([
         self.doAction('saveFile', {
           type: 'POST',
           data: {
-            path: self.$tree.tree('getSelectedNode').label
+            path: self.getNodePath(),
+            data: self.ace.editor.getValue(),
+            _authenticator: utils.getAuthenticator()
           },
           success: function(data) {
             /* XXX unhighlight save button */
@@ -262,50 +266,54 @@ define([
       if (event.node.folder){
         return true;
       }
-
-      self.doAction('getFile', {
-        data: { path: doc },
-        dataType: 'json',
-        success: function(data) {
-          self.fileData[doc] = data;
-          $('li', self.$tabs).removeClass('active');
-          var $existing = $('[data-path="' + doc + '"]');
-          if ($existing.length === 0){
-            var $item = $(self.tabItemTemplate({path: doc}));
-            self.$tabs.append($item);
-            $('.remove', $item).click(function(e){
-              e.preventDefault();
-              if ($(this).parent().hasClass('active'))
-              {
-                var $siblings = $(this).parent().siblings();
-                if ($siblings.length > 0){
-                  var $item;
-                  if ($(this).parent().prev().length > 0){
-                    $item = $(this).parent().prev();
-                  } else {
-                    $item = $(this).parent().next();
-                  }
-                  $item.addClass('active');
-                  self.openEditor($item.attr('data-path'));
+      if(self.fileData[doc]) {
+        $('li', self.$tabs).removeClass('active');
+        var $existing = $('[data-path="' + doc + '"]');
+        if ($existing.length === 0){
+          var $item = $(self.tabItemTemplate({path: doc}));
+          self.$tabs.append($item);
+          $('.remove', $item).click(function(e){
+            e.preventDefault();
+            if ($(this).parent().hasClass('active'))
+            {
+              var $siblings = $(this).parent().siblings();
+              if ($siblings.length > 0){
+                var $item;
+                if ($(this).parent().prev().length > 0){
+                  $item = $(this).parent().prev();
                 } else {
-                  self.ace.setText('');
+                  $item = $(this).parent().next();
                 }
+                $item.addClass('active');
+                self.openEditor($item.attr('data-path'));
+              } else {
+                self.ace.setText('');
               }
-              $(this).parent().remove();
-            });
-            $('.select', $item).click(function(e){
-              e.preventDefault();
-              $('li', self.$tabs).removeClass('active');
-              var $li = $(this).parent();
-              $li.addClass('active');
-              self.openEditor($li.attr('data-path'));
-            });
-          }else{
-            $existing.addClass('active');
-          }
-          self.openEditor(doc);
+            }
+            $(this).parent().remove();
+          });
+          $('.select', $item).click(function(e){
+            e.preventDefault();
+            $('li', self.$tabs).removeClass('active');
+            var $li = $(this).parent();
+            $li.addClass('active');
+            self.$tree.tree('selectNode', event.node);
+            self.openFile({node: event.node});
+          });
+        }else{
+          $existing.addClass('active');
         }
-      });
+        self.openEditor(doc);
+      } else {
+        self.doAction('getFile', {
+          data: { path: doc },
+          dataType: 'json',
+          success: function(data) {
+            self.fileData[doc] = data;
+            self.openFile(event);
+          }
+        });
+      }
     },
     doAction: function(action, options) {
       var self = this;
@@ -325,6 +333,11 @@ define([
     },
     openEditor: function(path) {
       var self = this;
+      // first we need to save the current editor content
+      if(self.currentPath) {
+        self.fileData[self.currentPath].contents = self.ace.editor.getValue();
+      }
+      self.currentPath = path;
       if (self.ace !== undefined){
         self.ace.editor.destroy();
       }
@@ -332,7 +345,7 @@ define([
         width: self.$editor.width()
       });
       self.ace.setSyntax(path);
-      self.ace.setText(self.fileData[path].data);
+      self.ace.setText(self.fileData[path].contents);
       self.ace.editor.clearSelection();
     },
     getSelectedNode: function() {

@@ -30,11 +30,14 @@ define([
           type: 'POST',
           data: {
             filename: filename,
-            path: self.getFolderPath()
+            path: self.app.getFolderPath()
           },
           success: function(data) {
             self.hide();
-            self.app.$tree.tree('reload');
+            self.app.$tree.tree(
+              'loadDataFromUrl',
+              self.app.options.actionUrl + '?action=dataTree'
+            );
           }
         });
         // XXX show loading
