@@ -4,6 +4,14 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
+- Depend on ``tinymce-builded`` 4.1.6, include TinyMCE copy and sed
+  configuration in here and fix some sed tasks.
+  Revert cd89d377e10a28b797fd3c9d48410ad6ad597486: "Remove bower dependency on
+  ``tinymce-builded``, since the ``tinymce`` dependency already points to the
+  official builded ``tinymce-dist`` reposotory." ``tinymce-dist`` doesn't
+  include the language files, which are needed. 
+  [thet]
+
 - Add mimetype selector pattern for textareas.
   [thet]
 

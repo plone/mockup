@@ -116,7 +116,7 @@ define([
         externalImage: _t('External Image URI')
       },
       // URL generation options
-      loadingBaseUrl: '../../../bower_components/tinymce/',
+      loadingBaseUrl: '../../../bower_components/tinymce-builded/js/tinymce/',
       prependToUrl: '',
       appendToUrl: '',
       linkAttribute: 'path', // attribute to get link value from data
