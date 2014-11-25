@@ -4,22 +4,38 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
+New patterns:
+
+- Add mimetype selector pattern for textareas.
+  [thet]
+
+- Add Cookie Trigger pattern. It shows a DOM element if browser cookies are
+  disabled.
+  [jcbrand]
+
+- Add Inline Validation pattern for z3c.form, Archetypes and zope.formlib
+  inline validation.
+  [jcbrand]
+
+- Add passwordstrength pattern based on the ``zxcvbn`` library. Ref: #433.
+  [lentinj]
+
+
+Fixes and enhancements:
+
 - Depend on ``tinymce-builded`` 4.1.6, include TinyMCE copy and sed
   configuration in here and fix some sed tasks.
   Revert cd89d377e10a28b797fd3c9d48410ad6ad597486: "Remove bower dependency on
   ``tinymce-builded``, since the ``tinymce`` dependency already points to the
   official builded ``tinymce-dist`` reposotory." ``tinymce-dist`` doesn't
-  include the language files, which are needed. 
+  include the language files, which are needed.
   [thet]
 
-- Add mimetype selector pattern for textareas.
-  [thet]
+- Fix thememapper pattern.
+  [ebrehault]
 
 - Fix broken HTML tag on structure pattern's ``actionmenu.xml``.
   [datakurre]
-
-- Add passwordstrength pattern based on the ``zxcvbn`` library. Ref: #433.
-  [lentinj]
 
 - File label cannot be used as path.
   [ebrehault]
