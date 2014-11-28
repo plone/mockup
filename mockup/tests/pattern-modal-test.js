@@ -136,12 +136,16 @@ define([
           var modal = $(this).data('pattern-modal');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><head><base href="testurl"></base></head></html>'
-          )).to.equal('testurl');
+            '<html><head><base href="testurl1"></base></head></html>'
+          )).to.equal('testurl1');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><head><base href="testurl" /></head></html>'
-          )).to.equal('testurl');
+            '<html><head><base href="testurl2" /></head></html>'
+          )).to.equal('testurl2');
+          expect(modal.defaults.actionOptions.redirectToUrl(
+            'ignore',
+            '<html><body data-base-url="testurl3"></body></html>'
+          )).to.equal('testurl3');
           done();
         })
         .click();
