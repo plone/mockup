@@ -26,16 +26,22 @@
  *
  * Example: example-1
  *    <div class="pat-markspeciallinks">
- *        <p>Find out What's new in <a href="http://www.plone.org">Plone</a>.<br>
- *           Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.
- *        </p>
+ *      <ul>
+ *        <li>Find out What's new in <a href="http://www.plone.org">Plone</a>.</li>
+ *        <li>Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.</li>
+ *        <li>Plone builds on <a href="http://zope.org">Zope</a>.</li>
+ *        <li>Plone uses <a href="/">Mockup</a>.</li>
+ *      </ul>
  *    </div>
  *
  * Example: example-2
  *    <div class="pat-markspeciallinks" data-pat-markspeciallinks='{"external_links_open_new_window": "true"}'>
- *        <p>Find out What's new in <a href="http://www.plone.org">Plone</a>.<br>
- *           Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.
- *        </p>
+ *      <ul>
+ *        <li>Find out What's new in <a href="http://www.plone.org">Plone</a>.</li>
+ *        <li>Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.</li>
+ *        <li>Plone builds on <a href="http://zope.org">Zope</a>.</li>
+ *        <li>Plone uses <a href="/">Mockup</a>.</li>
+ *      </ul>
  *    </div>
  *
  * Example: example-3
