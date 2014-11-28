@@ -426,16 +426,6 @@ define([
           linkModal: self,
           tinypattern: self.tinypattern
         });
-        /* XXX: I don't know the proper way of doing this, but basically we want
-         to be able to select Folders when uploading an image */
-        if (type === "uploadImage"){
-            self.linkTypes[type]
-            .options
-            .linkModal
-            .options
-            .relatedItems
-            .selectableTypes = ["Folder"];
-        }
       });
 
       $('.autotoc-nav a', self.modal.$modal).click(function() {
@@ -519,7 +509,11 @@ define([
 
       // upload init
       self.$upload = $('.uploadify-me', self.modal.$modal);
-      self.options.upload.relatedItems = self.options.relatedItems;
+
+      var related_items_options = $.extend(
+          true, {}, self.options.relatedItems);
+      related_items_options.selectableTypes = ["Folder"];
+      self.options.upload.relatedItems = related_items_options;
       self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
       self.$upload.on('uploadAllCompleted', function(evt, data) {
         self.$upload.attr({
