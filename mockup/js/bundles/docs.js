@@ -67,6 +67,11 @@ require([
             description: 'Client side validation of form fields',
             url: 'patterns/inlinevalidation/pattern.js'
           },
+          { id: 'markspeciallinks',
+            title: 'Mark special links',
+            description: 'Mark special links based on protocoll and optionally open in new window.',
+            url: 'patterns/markspeciallinks/pattern.js'
+          },
           { id: 'modal',
             title: 'Modal',
             description: 'Creates a modal dialog (also called overlay)',

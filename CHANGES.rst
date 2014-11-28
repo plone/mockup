@@ -6,6 +6,9 @@ Changelog
 
 New patterns:
 
+- Add "markspeciallinks" pattern.
+  [agitator, fulv]
+
 - Add mimetype selector pattern for textareas.
   [thet]
 

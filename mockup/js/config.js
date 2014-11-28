@@ -70,6 +70,7 @@
       'mockup-patterns-formautofocus': 'patterns/formautofocus/pattern',
       'mockup-patterns-formunloadalert': 'patterns/formunloadalert/pattern',
       'mockup-patterns-inlinevalidation': 'patterns/inlinevalidation/pattern',
+      'mockup-patterns-markspeciallinks': 'patterns/markspeciallinks/pattern',
       'mockup-patterns-modal': 'patterns/modal/pattern',
       'mockup-patterns-moment': 'patterns/moment/pattern',
       'mockup-patterns-pickadate': 'patterns/pickadate/pattern',
