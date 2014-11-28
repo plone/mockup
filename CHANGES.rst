@@ -26,6 +26,11 @@ New patterns:
 
 Fixes and enhancements:
 
+- Modal Pattern: If ``data-base-url`` attribute is available on the body, use
+  it. Otherwise search for a ``<base>`` tag. Plone 5 dropped the usage of base
+  tags.
+  [ACatlla, thet]
+
 - Depend on ``tinymce-builded`` 4.1.6, include TinyMCE copy and sed
   configuration in here and fix some sed tasks.
   Revert cd89d377e10a28b797fd3c9d48410ad6ad597486: "Remove bower dependency on
