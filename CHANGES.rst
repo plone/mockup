@@ -31,6 +31,10 @@ Fixes and enhancements:
   tags.
   [ACatlla, thet]
 
+- Fix less variable overrides on resourceregistry pattern when building
+  CSS from less resources
+  [datakurre]
+
 - Depend on ``tinymce-builded`` 4.1.6, include TinyMCE copy and sed
   configuration in here and fix some sed tasks.
   Revert cd89d377e10a28b797fd3c9d48410ad6ad597486: "Remove bower dependency on
