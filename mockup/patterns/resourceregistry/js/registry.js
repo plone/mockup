@@ -281,9 +281,10 @@ define([
       /* XXX okay, wish there were a better way,
          but we need to pool to find the */
       self.addResult(config.less.length + ' css files to build');
-      var lessModified =
+      var lessModified = Boolean(
           self.rview.options.data.lessModifyUrl === null ||
-          self.rview.options.data.lessModifyUrl === undefined;
+          self.rview.options.data.lessModifyUrl === undefined
+      );
       var checkFinished = function(){
         var $styles =  $('style[type="text/css"][id]', head);
         for(var i=0; i<$styles.length; i=i+1){
