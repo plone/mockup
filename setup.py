@@ -19,7 +19,7 @@ setup(
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
     url='https://github.com/plone/mockup',
-    license='MIT',
+    license='BSD',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
