@@ -18,8 +18,6 @@
  *    previewsContainer(selector): JavaScript selector for file preview in div element. (.upload-previews)
  *    container(selector): JavaScript selector for where to put upload stuff into in case of form. If not provided it will be place before the first submit button. ('')
  *    relatedItems(object): Related items pattern options. Will only use only if relativePath is used to use correct upload destination ({ attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
- *    isWidget(boolean): true or false for determining if this is a widget for Named Files
- *    existing(object): Existing files pattern option. List of files already uploaded. Format: {[{name: 'filename', size: 12345, tmpname: 'filename', url: 'downloadurl'}, {name: 'otherfile', size: 23456, tmpname: 'otherfile', url: 'downloadurl'}]}
  *
  * Documentation:
  *
@@ -60,7 +58,6 @@ define([
 
   i18n.loadCatalog('widgets');
   var _t = i18n.MessageFactory('widgets');
-  var files = [];
 
   var UploadPattern = Base.extend({
     name: 'upload',
@@ -93,9 +90,7 @@ define([
         width: 500,
         maximumSelectionSize: 1,
         placeholder: _t('Search for item on site...')
-      },
-      isWidget: false,
-      existing: []
+      }
     },
 
     //placeholder: 'Search for item on site...'
@@ -107,10 +102,6 @@ define([
       self.currentPath = self.options.currentPath;
       self.numFiles = 0;
       self.currentFile = 0;
- 
-      var $hidden = $('<input type="hidden" value="">');
-      $hidden.attr('name', self.options.paramName + 'uploaded');
-      self.$el.append($hidden);
 
       template = _.template(template, {_t: _t});
       self.$el.addClass(self.options.className);
@@ -120,16 +111,6 @@ define([
 
       if (!self.options.showTitle) {
         self.$el.find('h2.title').hide();
-      }
-
-      if (self.options.maxFiles === 1) {
-        self.$el.find('div.dz-message').find('p').text(_t('Drop file here...'));
-      }
-
-      if (self.options.isWidget) {
-        self.$el.find('p.help').hide();
-        self.$el.find('div.path').hide();
-        self.$el.find('.upload-all').hide();
       }
 
       if (!self.options.ajaxUpload) {
@@ -184,9 +165,6 @@ define([
 
       self.dropzone.on('addedfile', function(file) {
         self.showControls();
-        if ((files.length + 1) > self.options.maxFiles) {
-            self.dropzone.emit('maxfilesexceeded', file);
-        }
       });
 
       self.dropzone.on('removedfile', function() {
@@ -204,48 +182,8 @@ define([
       }
 
       self.dropzone.on('complete', function(file) {
-       if (self.dropzone.files.length < 1) {
+        if (self.dropzone.files.length < 1) {
           self.hideControls();
-       }
-        if (self.options.isWidget) {
-           self.dropzone.removeFile(file);
-        }
-      });
-
-      self.dropzone.on('success', function(file, response) {
-        var jsonResp = JSON.parse(response);
-        var $uploaded = self.$el.find('.uploaded');
-        var pushFile = {};
-        pushFile.name = jsonResp.name;
-        pushFile.tmpname = jsonResp.tmpname;
-        pushFile.size = jsonResp.size;
-        pushFile.url = jsonResp.url;
-        var $newfile = $('<div>');
-        $newfile.addClass('newfileupload');
-        var $url = $('<a>');
-        $url.attr('href', jsonResp.url);
-        $newfile.append($url);
-        var $filename = $('<span>');
-        $filename.addClass('filename');
-        $filename.text(jsonResp.name);
-        $url.append($filename);
-        var $filesize = $('<span>');
-        $filesize.append('  size: '+ self.formatBytes(jsonResp.size) );
-        $filesize.addClass('filesize');
-        $url.after($filesize);
-        var $remove = $('<button type="button" class="btn btn-danger btn-xs remove-item"> <span class="glyphicon glyphicon-remove"></span> </button>');
-        $remove.on( "click", function() {
-                  files = $.grep(files, function(value) {
-                                 return value !== pushFile;
-                   });
-                   $hidden.val(JSON.stringify(files));
-                   $newfile.remove();
-                   });
-        $filesize.after($remove);
-        files.push(pushFile);
-        $hidden.val(JSON.stringify(files));
-        if (self.options.isWidget) {
-            $uploaded.append($newfile);
         }
       });
 
@@ -254,17 +192,6 @@ define([
         // processing each file one at a time.
         pct = ((((self.currentFile - 1) * 100) + pct) / (self.numFiles * 100)) * 100;
         self.$progress.attr('aria-valuenow', pct).css('width', pct + '%');
-      });
-
-      self.dropzone.on('maxfilesexceeded', function(file) {
-       self.dropzone.removeFile(file);
-       var $uploaded = self.$el.find('.uploaded');
-       var $errmsg =$('<div>');
-       $errmsg.addClass('has-error');
-       $errmsg.text(_t('Maximum number of files reached'));
-       $uploaded.append($errmsg);
-       $errmsg.fadeIn('slow');
-       $errmsg.delay(5000).fadeOut();
       });
 
       $('.upload-all', self.$el).click(function (e) {
@@ -276,7 +203,6 @@ define([
           }
         });
       });
-    self.uploadExisting();
     },
 
     showControls: function() {
@@ -353,8 +279,6 @@ define([
       delete options.autoCleanResults;
       delete options.fileaddedClassName;
       delete options.useTus;
-      delete options.isWidget;
-      delete options.existing;
 
       if (self.options.previewsContainer) {
         /*
@@ -369,9 +293,6 @@ define([
 
       // XXX: do we need to allow this?
       options.autoProcessQueue = false;
-      if (self.options.isWidget) {
-          options.autoProcessQueue = true;
-      }
       // options.addRemoveLinks = true;  // we show them in the template
       options.previewTemplate = PreviewTemplate;
 
@@ -490,48 +411,6 @@ define([
         self.options.url = self.dropzone.options.url = self.getUrl();
       });
       return ri;
-    },
-
-    uploadExisting: function () {
-      // Load existing files:
-      var self = this;
-      var existing = self.options.existing;
-      var $hidden = this.$el.find('input[name="'+self.options.paramName+'uploaded"]');
-      var $container = this.$el.find('.upload-area');
-      var $uploaded = $('<div class="uploaded">');
-      $container.after($uploaded);
-      existing.forEach( function (file) {
-          var pushFile = {};
-          pushFile.name = file.name;
-          pushFile.tmpname = file.tmpname;
-          pushFile.size = file.size;
-          pushFile.url = file.url;
-          var $existing = $('<div>');
-          $existing.addClass('existfileupload');
-          var $url = $('<a>');
-          $url.attr('href', file.url);
-          $existing.append($url);
-          var $filename = $('<span>');
-          $filename.addClass('filename');
-          $filename.text(file.name);
-          $url.append($filename);
-          var $filesize = $('<span>');
-          $filesize.append('  size: '+ self.formatBytes(file.size) );
-          $filesize.addClass('filesize');
-          $url.after($filesize);
-          var $remove = $('<button type="button" class="btn btn-danger btn-xs remove-item"> <span class="glyphicon glyphicon-remove"></span> </button>');
-          $remove.on( "click", function() {
-                    files = $.grep(files, function(value) {
-                                   return value !== pushFile;
-                     });
-                     $hidden.val(JSON.stringify(files));
-                     $existing.remove();
-                     });
-          $filesize.after($remove);
-          files.push(pushFile);
-          $hidden.val(JSON.stringify(files));
-          $uploaded.append($existing);
-      });
     }
 
   });
