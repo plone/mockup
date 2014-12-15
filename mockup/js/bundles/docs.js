@@ -69,7 +69,7 @@ require([
           },
           { id: 'markspeciallinks',
             title: 'Mark special links',
-            description: 'Mark special links based on protocoll and optionally open in new window.',
+            description: 'Mark special links based on protocol and optionally open in new window.',
             url: 'patterns/markspeciallinks/pattern.js'
           },
           { id: 'modal',
