@@ -49,12 +49,9 @@ define([
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'select2',
-  'mockup-i18n'
-], function($, Base, Select2, PickADate, undefined, i18n) {
+  'translate'
+], function($, Base, Select2, PickADate, undefined, _t) {
   'use strict';
-
-  i18n.loadCatalog('widgets');
-  var _t = i18n.MessageFactory('widgets');
 
   var Criteria = function() { this.init.apply(this, arguments); };
   Criteria.prototype = {

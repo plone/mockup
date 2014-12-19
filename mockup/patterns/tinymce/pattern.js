@@ -58,7 +58,7 @@ define([
   'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
   'mockup-patterns-tinymce-url/js/links',
-  'mockup-i18n',
+  'translate',
   'tinymce-modern-theme', 'tinymce-advlist', 'tinymce-anchor', 'tinymce-autolink',
   'tinymce-autoresize', 'tinymce-autosave', 'tinymce-bbcode', 'tinymce-charmap',
   'tinymce-code', 'tinymce-colorpicker', 'tinymce-contextmenu', 'tinymce-directionality',
@@ -73,13 +73,8 @@ define([
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,
-            utils, LinkModal, i18n) {
+            utils, LinkModal, _t) {
   'use strict';
-
-
-
-  i18n.loadCatalog('widgets');
-  var _t = i18n.MessageFactory('widgets');
 
   var TinyMCE = Base.extend({
     name: 'tinymce',

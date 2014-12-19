@@ -44,6 +44,7 @@
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
       'jquery.form': 'bower_components/jquery-form/jquery.form',
+      'translate': 'js/i18n-wrapper',
       'marked': 'bower_components/marked/lib/marked',
       'mockup-bundles-docs': 'js/bundles/docs',
       'mockup-bundles-filemanager': 'js/bundles/filemanager',
