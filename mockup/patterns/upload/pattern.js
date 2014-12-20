@@ -48,13 +48,16 @@ define([
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',
   'text!mockup-patterns-upload-url/templates/preview.xml',
-  'translate'
+  'mockup-i18n'
 ], function($, _, Base, RelatedItems, Dropzone,
-            UploadTemplate, PreviewTemplate, _t) {
+            UploadTemplate, PreviewTemplate, i18n) {
   'use strict';
 
   /* we do not want this plugin to auto discover */
   Dropzone.autoDiscover = false;
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var UploadPattern = Base.extend({
     name: 'upload',

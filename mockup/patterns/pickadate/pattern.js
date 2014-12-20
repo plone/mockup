@@ -89,9 +89,12 @@ define([
   'picker.date',
   'picker.time',
   'mockup-patterns-select2',
-  'translate'
-], function($, Base, Picker, PickerDate, PickerTime, Select2, _t) {
+  'mockup-i18n'
+], function($, Base, Picker, PickerDate, PickerTime, Select2, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var PickADate = Base.extend({
     name: 'pickadate',

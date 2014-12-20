@@ -77,9 +77,12 @@ define([
   'mockup-patterns-select2',
   'mockup-utils',
   'mockup-patterns-tree',
-  'translate'
-], function($, _, Base, Select2, utils, Tree, _t) {
+  'mockup-i18n'
+], function($, _, Base, Select2, utils, Tree, i18n) {
   'use strict';
+
+  i18n.loadCatalog('widgets');
+  var _t = i18n.MessageFactory('widgets');
 
   var RelatedItems = Base.extend({
     name: 'relateditems',
