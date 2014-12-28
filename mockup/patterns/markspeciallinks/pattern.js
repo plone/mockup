@@ -2,6 +2,7 @@
  *
  * Options:
  *    external_links_open_new_window(boolean): Open external links in a new window. (false)
+ *    mark_special_links(boolean): Marks external or special protocl links with class. (true)
  *
  * Documentation:
  *   # General
@@ -20,9 +21,13 @@
  *
  *   {{ example-2 }}
  *
- *   # List of all protocol icons
+ *   # Open external link in new window, without icons
  *
  *   {{ example-3 }}
+ *
+ *   # List of all protocol icons
+ *
+ *   {{ example-4 }}
  *
  * Example: example-1
  *    <div class="pat-markspeciallinks">
@@ -45,6 +50,16 @@
  *    </div>
  *
  * Example: example-3
+ *    <div class="pat-markspeciallinks" data-pat-markspeciallinks='{"external_links_open_new_window": "true", "mark_special_links": "false"}'>
+ *      <ul>
+ *        <li>Find out What's new in <a href="http://www.plone.org">Plone</a>.</li>
+ *        <li>Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.</li>
+ *        <li>Plone builds on <a href="http://zope.org">Zope</a>.</li>
+ *        <li>Plone uses <a href="/">Mockup</a>.</li>
+ *      </ul>
+ *    </div>
+ *
+ * Example: example-4
  *    <div class="pat-markspeciallinks">
  *        <ul>
  *          <li><a href="http://www.plone.org">http</a></li>
@@ -72,14 +87,16 @@ define([
   var MarkSpecialLinks = Base.extend({
     name: 'markspeciallinks',
     defaults: {
-      external_links_open_new_window: false
+      external_links_open_new_window: false,
+      mark_special_links: true
     },
     init: function () {
       var self = this, $el = self.$el;
 
       // first make external links open in a new window, afterwards do the
       // normal plone link wrapping in only the content area
-      var elonw,
+      var elonw = false,
+          msl = true,
           url,
           protocols,
           contentarea,
@@ -87,8 +104,10 @@ define([
 
       if (typeof self.options.external_links_open_new_window === 'string') {
           elonw = self.options.external_links_open_new_window.toLowerCase() === 'true';
-      } else {
-          elonw = false;
+      }
+
+      if (typeof self.options.mark_special_links === 'string') {
+          msl = self.options.mark_special_links.toLowerCase() === 'true';
       }
 
       url = window.location.protocol + '//' + window.location.host;
@@ -101,25 +120,27 @@ define([
                      .attr('target', '_blank');
       }
 
-      // All links with an http href (without the link-plain class), not within this site,
-      // and no img children should be wrapped in a link-external span
-      contentarea.find(
-          'a[href^="http:"]:not(.link-plain):not([href^="' + url + '"]):not(:has(img))')
-          .before('<i class="glyphicon link-external"></i>');
-      // All links without an http href (without the link-plain class), not within this site,
-      // and no img children should be wrapped in a link-[protocol] span
-      contentarea.find(
-          'a[href]:not([href^="http:"]):not(.link-plain):not([href^="' + url + '"]):not(:has(img))')
-          .each(function() {
-              // those without a http link may have another interesting protocol
-              // wrap these in a link-[protocol] span
-              res = protocols.exec(this.href);
-              if (res) {
-                  var iconclass = 'glyphicon link-' + res[0];
-                  jQuery(this).before('<i class="' + iconclass + '"></i>');
-              }
-          }
-      );
+      if (msl) {
+        // All links with an http href (without the link-plain class), not within this site,
+        // and no img children should be wrapped in a link-external span
+        contentarea.find(
+            'a[href^="http:"]:not(.link-plain):not([href^="' + url + '"]):not(:has(img))')
+            .before('<i class="glyphicon link-external"></i>');
+        // All links without an http href (without the link-plain class), not within this site,
+        // and no img children should be wrapped in a link-[protocol] span
+        contentarea.find(
+            'a[href]:not([href^="http:"]):not(.link-plain):not([href^="' + url + '"]):not(:has(img))')
+            .each(function() {
+                // those without a http link may have another interesting protocol
+                // wrap these in a link-[protocol] span
+                res = protocols.exec(this.href);
+                if (res) {
+                    var iconclass = 'glyphicon link-' + res[0];
+                    jQuery(this).before('<i class="' + iconclass + '"></i>');
+                }
+            }
+        );
+      }
 
     }
   });

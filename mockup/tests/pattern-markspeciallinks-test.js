@@ -26,6 +26,11 @@ define([
         '     Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.' +
         '  </p>' +
         '</div>' +
+        '<div class="pat-markspeciallinks" data-pat-markspeciallinks="mark_special_links: false">' +
+        '  <p>Find out What&#39s new in <a href="http://www.plone.org">Plone</a>.<br>' +
+        '     Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.' +
+        '  </p>' +
+        '</div>' +
         '<div class="icons pat-markspeciallinks">' +
         '    <ul>' +
         '      <li><a href="http://www.plone.org">http</a></li>' +
@@ -51,6 +56,10 @@ define([
       expect(link.eq(1).attr("target")===undefined).to.be.equal(true);
       expect(link.eq(2).attr("target")).to.be.equal("_blank");
       expect(link.eq(3).attr("target")===undefined).to.be.equal(true);
+      expect(link.eq(0).parent("i").length).to.be.equal(1);
+      expect(link.eq(1).parent("i").length).to.be.equal(0);
+      expect(link.eq(4).parent("i").length).to.be.equal(0);
+      expect(link.eq(5).parent("i").length).to.be.equal(0);
     });
     it('check for correct icon classes per protocol', function() {
       registry.scan(this.$el);
