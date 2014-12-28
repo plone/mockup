@@ -23,12 +23,9 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'mockup-i18n'
-], function($, Base, i18n) {
+  'translate'
+], function($, Base, _t) {
   'use strict';
-
-  i18n.loadCatalog('widgets');
-  var _t = i18n.MessageFactory('widgets');
 
   var PreventDoubleSubmit = Base.extend({
     name: 'preventdoublesubmit',
