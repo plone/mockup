@@ -95,8 +95,8 @@ define([
 
       // first make external links open in a new window, afterwards do the
       // normal plone link wrapping in only the content area
-      var elonw = false,
-          msl = true,
+      var elonw,
+          msl,
           url,
           protocols,
           contentarea,
@@ -104,10 +104,14 @@ define([
 
       if (typeof self.options.external_links_open_new_window === 'string') {
           elonw = self.options.external_links_open_new_window.toLowerCase() === 'true';
+      } else if (typeof self.options.external_links_open_new_window === 'boolean') {
+          elonw = self.options.external_links_open_new_window;
       }
 
       if (typeof self.options.mark_special_links === 'string') {
           msl = self.options.mark_special_links.toLowerCase() === 'true';
+      } else if (typeof self.options.mark_special_links === 'boolean') {
+          msl = self.options.mark_special_links;
       }
 
       url = window.location.protocol + '//' + window.location.host;
