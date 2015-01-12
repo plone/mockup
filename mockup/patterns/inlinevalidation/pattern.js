@@ -59,7 +59,7 @@ define([
 
         // value is null for empty multiSelection select, turn it into a [] instead
         // so it does not break at_validate_field
-        if ($input.attr('multiple') === 'multiple' && value === null) {
+        if ($input.prop('multiple') && value === null) {
             value = $([]).serialize();
         }
 

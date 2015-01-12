@@ -139,7 +139,7 @@ define([
     },
     selectAll: function(e) {
       if ($(e.target).is(':checked')) {
-        $('input[type="checkbox"]', this.$('tbody')).attr('checked', 'checked').change();
+        $('input[type="checkbox"]', this.$('tbody')).prop('checked', true).change();
       } else {
         this.selectedCollection.remove(this.collection.models);
       }
@@ -148,7 +148,7 @@ define([
     toggleSelectAll: function(e) {
       var $el = $(e.target);
       if (!$el.is(':checked')) {
-        this.$('.select-all').removeAttr('checked');
+        this.$('.select-all').prop('checked', false);
       }
     },
     addReordering: function() {

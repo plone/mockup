@@ -26,6 +26,11 @@ New patterns:
 
 Fixes and enhancements:
 
+- More jQuery 1.9 compatibility changes: Change ``attr`` to ``prop`` for
+  setting / getting the state of ``multiple``, ``selected``, ``checked`` and
+  ``disabled`` states.
+  [thet]
+
 - Modal Pattern: If ``data-base-url`` attribute is available on the body, use
   it. Otherwise search for a ``<base>`` tag. Plone 5 dropped the usage of base
   tags.

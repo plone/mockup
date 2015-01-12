@@ -194,7 +194,7 @@ define([
       $btn.off('click').on('click', function(e){
         e.preventDefault();
         $info.addClass('hidden');
-        $btn.attr('disabled', 'true');
+        $btn.prop('disabled', true);
         self.$results = $el.find('.list-group').removeClass('hidden');
         self.buildJS();
         self.rview.loading.show();
@@ -539,12 +539,12 @@ define([
     },
 
     showHideButtons: function(){
-      var val = 'disabled';
+      var val = true;
       if(this.dirty){
-        val = null;
+        val = false;
       }
-      this.$('button.save').attr('disabled', val);
-      this.$('button.cancel').attr('disabled', val);
+      this.$('button.save').prop('disabled', val);
+      this.$('button.cancel').prop('disabled', val);
     },
 
     filterResources: function(){

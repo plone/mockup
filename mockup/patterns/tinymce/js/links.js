@@ -618,10 +618,10 @@ define([
       }
     },
     setSelectElement: function($el, val) {
-      $el.find('option:selected').attr('selected', '');
+      $el.find('option:selected').prop('selected', false);
       if (val) {
         // update
-        $el.find('option[value="' + val + '"]').attr('selected', 'true');
+        $el.find('option[value="' + val + '"]').prop('selected', true);
       }
     },
     reinitialize: function() {

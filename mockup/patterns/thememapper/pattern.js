@@ -282,14 +282,14 @@ define([
     },
     on: function() {
       var self = this;
-      self.$off.attr('disabled', null);
-      self.$on.attr('disabled', 'disabled');
+      self.$off.prop('disabled', false);
+      self.$on.prop('disabled', true);
       self.enabled = true;
     },
     off: function() {
       var self = this;
-      self.$on.attr('disabled', null);
-      self.$off.attr('disabled', 'disabled');
+      self.$on.prop('disabled', false);
+      self.$off.prop('disabled', true);
       self.enabled = false;
     },
     setupFrame: function() {

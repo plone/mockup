@@ -265,7 +265,7 @@ define([
                 });
 
       } else if (widget === 'MultipleSelectionWidget') {
-        self.$value = $('<select/>').attr('multiple', true)
+        self.$value = $('<select/>').prop('multiple', true)
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function() {
@@ -595,10 +595,10 @@ define([
         .attr('name', 'sort_reversed:boolean')
         .change(function() {
           self.refreshPreviewEvent.call(self);
-          if ($(this).attr('checked') === 'checked') {
-            $('.option input[type="checkbox"]', existingSortOrder).attr('checked', 'checked');
+          if ($(this).prop('checked')) {
+            $('.option input[type="checkbox"]', existingSortOrder).prop('checked', true);
           } else {
-            $('.option input[type="checkbox"]', existingSortOrder).removeAttr('checked');
+            $('.option input[type="checkbox"]', existingSortOrder).prop('checked', false);
           }
         });
 
@@ -615,10 +615,10 @@ define([
       // if the form already contains the sort fields, hide them! Their values
       // will be synced back and forth between the querystring's form elements
       if (existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
-        var reversed = $('.option input[type="checkbox"]', existingSortOrder).attr('checked') === 'checked';
+        var reversed = $('.option input[type="checkbox"]', existingSortOrder).prop('checked');
         var sortOn = $('[id$="-sort_on"]', existingSortOn).val();
         if (reversed) {
-          self.$sortOrder.attr('checked', 'checked');
+          self.$sortOrder.prop('checked', true);
         }
         self.$sortOn.select2('val', sortOn);
         $(existingSortOn).hide();
@@ -670,8 +670,7 @@ define([
       }
 
       query.push('sort_on=' + self.$sortOn.val());
-      var sortorder = self.$sortOrder.attr('checked');
-      if (sortorder === 'checked') {
+      if (self.$sortOrder.prop('checked')) {
         query.push('sort_order=reverse');
       }
 
