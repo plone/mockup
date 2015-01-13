@@ -26,6 +26,11 @@ New patterns:
 
 Fixes and enhancements:
 
+- In the resource registry bundle detail view, add the fields
+  ``last_compilation``, ``jscompilation`` and ``csscompilation`` for display.
+  This gives more insight about the state of each bundle.
+  [thet]
+
 - More jQuery 1.9 compatibility changes: Change ``attr`` to ``prop`` for
   setting / getting the state of ``multiple``, ``selected``, ``checked`` and
   ``disabled`` states.
