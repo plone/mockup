@@ -204,7 +204,11 @@ define([
     generateImageUrl: function(data, scale) {
       var self = this;
       var url = self.generateUrl(data);
-      return url + self.options.prependToScalePart + scale + self.options.appendToScalePart;
+      if (scale !== ""){
+          url = (url + self.options.prependToScalePart + scale +
+                 self.options.appendToScalePart);
+      }
+      return url;
     },
     stripGeneratedUrl: function(url) {
       // to get original attribute back
