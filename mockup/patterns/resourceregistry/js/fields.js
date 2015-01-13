@@ -8,6 +8,32 @@ define([
   'use strict';
 
 
+  var ResourceDisplayFieldView = BaseView.extend({
+    tagName: 'div',
+    className: 'form-group',
+    template: _.template(
+      '<label class="col-sm-3 control-label"><%- title %></label>' +
+      '<div class="col-sm-9">' +
+        '<strong><%- value %></strong><br/>' +
+        '<%= description %>' +
+      '</div>'),
+    initialize: function(options) {
+      this.options = options;
+      for (var key in this.options) {
+        this[key] = this.options[key];
+      }
+      if (! this.value) {
+        this.template = _.template('');
+      }
+    },
+    serializedModel: function(){
+    },
+    afterRender: function(){
+      this.$el.addClass('field-' + this.options.name);
+    }
+
+  });
+
   var ResourceInputFieldView = BaseView.extend({
     tagName: 'div',
     className: 'form-group',
@@ -332,6 +358,7 @@ define([
   });
 
   return {
+    ResourceDisplayFieldView: ResourceDisplayFieldView,
     VariableFieldView: VariableFieldView,
     ResourceInputFieldView: ResourceInputFieldView,
     ResourceNameFieldView: ResourceNameFieldView,

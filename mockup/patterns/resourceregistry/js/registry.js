@@ -119,6 +119,21 @@ define([
       name: 'compile',
       title: 'Does your bundle contain any RequireJS or LESS files?',
       view: fields.ResourceBoolFieldView
+    }, {
+      name: 'last_compilation',
+      title: 'Last compilation',
+      description: 'Date/Time when your bundle was last compiled. Empty, if it was never compiled.',
+      view: fields.ResourceDisplayFieldView
+    }, {
+      name: 'jscompilation',
+      title: 'Compiled JavaScript',
+      description: 'Automatically generated path to the compiled JavaScript.',
+      view: fields.ResourceDisplayFieldView
+    }, {
+      name: 'csscompilation',
+      title: 'Compiled CSS',
+      description: 'Automatically generated path to the compiled CSS.',
+      view: fields.ResourceDisplayFieldView
     }]
   });
 
@@ -249,7 +264,7 @@ define([
     };
 
     self._buildCSSBundle = function(config){
-      var $iframe = $('<iframe><html><head></head><body></body></html></iframe').
+      var $iframe = $('<iframe><html><head></head><body></body></html></iframe>').
           appendTo('body').on('load', function(){
       });
       var iframe = $iframe[0];
