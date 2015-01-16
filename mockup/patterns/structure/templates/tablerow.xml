@@ -1,12 +1,6 @@
 <td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 <td class="title">
-  <a href="<%- getURL %>">
-    <% if(['File', 'Image'].indexOf(attributes.Type) !== -1){ %>
-      <span class="glyphicon glyphicon-file"></span>
-    <% } %>
-    <% if(attributes.is_folderish) { %>
-      <span class="glyphicon glyphicon-folder-open"></span>
-    <% } %>
+  <a href="<%- getURL %>" class="state-<%- review_state %> contenttype-<%- Type.toLowerCase() %>">
     <%- Title %>
   </a>
 </td>
