@@ -53,7 +53,7 @@ define([
       backdropSelector: '.plone-modal', // Element upon which to apply backdrops used for popovers
       attributes: [
         'UID', 'Title', 'Type', 'path', 'review_state',
-        'ModificationDate', 'EffectiveDate', 'CreationDate',
+        'ModificationDate', 'EffectiveDate', 'ExpirationDate', 'CreationDate',
         'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
         'getObjSize', 'last_comment_date', 'total_comments'
       ],
@@ -65,6 +65,7 @@ define([
       availableColumns: {
         'ModificationDate': _t('Last modified'),
         'EffectiveDate': _t('Published'),
+        'ExpirationDate': _t('Expiration'),
         'CreationDate': _t('Created'),
         'review_state': _t('Review state'),
         'Subject': _t('Tags'),
