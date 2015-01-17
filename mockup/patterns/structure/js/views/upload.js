@@ -46,7 +46,6 @@ define([
       if (!this.opened) {
         return;
       }
-
       var currentPath = self.app.queryHelper.getCurrentPath();
       var relatedItems = self.upload.relatedItems;
       if (self.currentPathData && relatedItems && currentPath !== self.upload.currentPath){
@@ -55,7 +54,7 @@ define([
         } else {
           relatedItems.$el.select2('data', [self.currentPathData.object]);
         }
-        self.upload.setPath(currentPath);
+        self.upload.currentPath = currentPath;
       }
     }
 
