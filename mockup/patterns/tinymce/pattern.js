@@ -58,6 +58,7 @@ define([
   'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
   'mockup-patterns-tinymce-url/js/links',
+  "mockup-i18n",
   'translate',
   'tinymce-modern-theme', 'tinymce-advlist', 'tinymce-anchor', 'tinymce-autolink',
   'tinymce-autoresize', 'tinymce-autosave', 'tinymce-bbcode', 'tinymce-charmap',
@@ -73,7 +74,7 @@ define([
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,
-            utils, LinkModal, _t) {
+            utils, LinkModal, i18n, _t) {
   'use strict';
 
   var TinyMCE = Base.extend({
@@ -242,6 +243,29 @@ define([
       }
       return url;
     },
+    initLanguage: function(call_back){
+      var self = this;
+      var ploneLanguage = i18n.currentLanguage;
+      var languages = [ploneLanguage];
+      if (ploneLanguage.split("_") > 1){
+        languages.push(ploneLanguage.split("_")[0]);
+      }
+      else{
+        languages.push(ploneLanguage + "_" + ploneLanguage.toUpperCase());
+      }
+
+      for (var i = 0; i < languages.length; i++) {
+        var language_tmp = languages[i];
+        $.ajax({
+            url: tinymce.baseURL + "/langs/" + language_tmp + ".js",
+            type:'HEAD',
+            success: function()
+            {
+                call_back(language_tmp);
+            }
+        });
+      };
+    },
     init: function() {
       var self = this;
       self.linkModal = self.imageModal = self.uploadModal = null;
@@ -258,7 +282,6 @@ define([
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
       tinyOptions.skin = false;
-
       self.options.relatedItems.generateImageUrl = function(data, scale) {
         // this is so, in our result and selection template, we can
         // access getting actual urls from related items
@@ -270,13 +293,19 @@ define([
           self.tiny = editor;
         }
       };
-      if (tinyOptions.language !== 'en') {
+
+      if (i18n.currentLanguage != 'en' && tinyOptions.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
+        self.initLanguage(function(lang) {
+          tinyOptions.language = lang;
+          tinymce.init(tinyOptions);
+          self.tiny = tinymce.get(id);
+        });
       }
-
-      tinymce.init(tinyOptions);
-      self.tiny = tinymce.get(id);
-
+      else{
+        tinymce.init(tinyOptions);
+        self.tiny = tinymce.get(id);
+      }
       /* tiny really should be doing this by default
        * but this fixes overlays not saving data */
       var $form = self.$el.parents('form');
