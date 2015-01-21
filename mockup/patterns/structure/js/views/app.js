@@ -164,7 +164,7 @@ define([
             url: self.getAjaxUrl(self.contextInfoUrl),
             dataType: 'json',
             success: function(data) {
-              self.trigger('context-info-loaded', data);
+              self.emit('context-info-loaded', data);
             },
             error: function(response) {
               // XXX handle error?

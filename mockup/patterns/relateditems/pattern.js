@@ -181,7 +181,7 @@ define([
     },
     browseTo: function(path) {
       var self = this;
-      self.trigger('before-browse');
+      self.emit('before-browse');
       self.currentPath = path;
       if (path === '/' && self.options.mode === 'search') {
         self.deactivateBrowsing();
@@ -190,7 +190,7 @@ define([
       }
       self.$el.select2('close');
       self.$el.select2('open');
-      self.trigger('after-browse');
+      self.emit('after-browse');
     },
     setBreadCrumbs: function() {
       var self = this;
@@ -286,16 +286,16 @@ define([
     },
     selectItem: function(item) {
       var self = this;
-      self.trigger('selecting');
+      self.emit('selecting');
       var data = self.$el.select2('data');
       data.push(item);
       self.$el.select2('data', data);
       item.selected = true;
-      self.trigger('selected');
+      self.emit('selected');
     },
     deselectItem: function(item) {
       var self = this;
-      self.trigger('deselecting');
+      self.emit('deselecting');
       var data = self.$el.select2('data');
       _.each(data, function(obj, i) {
         if (obj.UID === item.UID) {
@@ -304,7 +304,7 @@ define([
       });
       self.$el.select2('data', data);
       item.selected = false;
-      self.trigger('deselected');
+      self.emit('deselected');
     },
     isSelectable: function(item) {
       var self = this;

@@ -187,23 +187,23 @@ define([
     },
     remove: function() {
       var self = this;
-      self.trigger('remove-attr');
+      self.emit('remove-attr');
       if (self.options.attribute === 'class') {
         self.$target.removeClass(self.options.value);
       } else {
         self.$target.removeAttr(self.options.attribute);
       }
-      self.trigger('attr-removed');
+      self.emit('attr-removed');
     },
     add: function() {
       var self = this;
-      self.trigger('add-attr');
+      self.emit('add-attr');
       if (self.options.attribute === 'class') {
         self.$target.addClass(self.options.value);
       } else {
         self.$target.attr(self.options.attribute, self.options.value);
       }
-      self.trigger('added-attr');
+      self.emit('added-attr');
     }
   });
 

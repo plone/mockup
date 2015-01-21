@@ -301,7 +301,7 @@ define([
 
       self.$el.attr('value', value);
 
-      self.trigger('updated');
+      self.emit('updated');
     }
   });
 

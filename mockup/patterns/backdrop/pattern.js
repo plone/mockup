@@ -64,20 +64,20 @@ define([
     show: function() {
       var self = this;
       if (!self.$el.hasClass(self.options.classActiveName)) {
-        self.trigger('show');
+        self.emit('show');
         self.$backdrop.css('opacity', '0').show();
         self.$el.addClass(self.options.classActiveName);
         self.$backdrop.animate({ opacity: self.options.opacity }, 500);
-        self.trigger('shown');
+        self.emit('shown');
       }
     },
     hide: function() {
       var self = this;
       if (self.$el.hasClass(self.options.classActiveName)) {
-        self.trigger('hide');
+        self.emit('hide');
         self.$backdrop.animate({ opacity: '0' }, 500).hide();
         self.$el.removeClass(self.options.classActiveName);
-        self.trigger('hidden');
+        self.emit('hidden');
       }
     }
   });
