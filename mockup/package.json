@@ -26,9 +26,11 @@
     "karma-requirejs": "~0.2.1",
     "karma-sauce-launcher": "~0.2.10",
     "karma-script-launcher": "~0.1.0",
+    "karma-spec-reporter": "0.0.16",
     "lcov-result-merger": "~0.0.2",
     "less": "~1.7.0",
     "mocha": "~1.18.2",
+    "phantomjs": "^1.9.13",
     "requirejs": "~2.1.11"
   },
   "maintainers": [

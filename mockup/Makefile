@@ -29,7 +29,7 @@ stamp-bower: stamp-npm bower.json
 	$(BOWER) install
 	touch stamp-bower
 
-bundles: bundle-widgets bundle-structure bundle-plone
+bundles: stamp-bower bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
@@ -89,7 +89,7 @@ watch:
 test:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
-test-once:
+test-once: stamp-bower
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-dev:
