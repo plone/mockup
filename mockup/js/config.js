@@ -98,7 +98,7 @@
       'mockup-patterns-upload-url': 'patterns/upload',
       'mockup-patterns-passwordstrength': 'patterns/passwordstrength/pattern',
       'mockup-patterns-passwordstrength-url': 'patterns/passwordstrength',
-      'mockup-registry': 'bower_components/mockup-core/js/registry',
+      'mockup-registry': 'bower_components/patternslib/src/core/registry',
       'mockup-router': 'js/router',
       'mockup-ui-url': 'js/ui',
       'mockup-utils': 'js/utils',
@@ -112,7 +112,15 @@
       'text': 'bower_components/requirejs-text/text',
       'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
       'tinymce-modern-theme': 'bower_components/tinymce-builded/js/tinymce/themes/modern/theme',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore'
+      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+
+      // Patternslib
+      "pat-compat": "bower_components/patternslib/src/core/compat",
+      "pat-jquery-ext": "bower_components/patternslib/src/core/jquery-ext",
+      "pat-logger": "bower_components/patternslib/src/core/logger",
+      "pat-registry": "bower_components/patternslib/src/core/registry",
+      "pat-utils": "bower_components/patternslib/src/core/utils",
+      "logging": "bower_components/logging/src/logging"
     },
     shim: {
       'JSXTransformer': { exports: 'window.JSXTransformer' },
