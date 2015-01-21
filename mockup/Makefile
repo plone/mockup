@@ -22,11 +22,12 @@ endif
 all: test-once bundles docs
 
 stamp-npm: package.json
-    npm install
-    touch stamp-npm
+	npm install
+	touch stamp-npm
+
 stamp-bower: stamp-npm bower.json
-    $(BOWER) install
-    touch stamp-bower
+	$(BOWER) install
+	touch stamp-bower
 
 bundles: bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
