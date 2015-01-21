@@ -84,30 +84,23 @@ define([
     },
     init: function () {
       var self = this, $el = self.$el, jq_open_end, jq_end, jq_start;
+      var jq_whole_day, jq_time;
+      jq_whole_day = self.aOrB(
+        $('#formfield-form-widgets-IEventBasic-whole_day input', $el),
+        $('#archetypes-fieldname-wholeDay input#wholeDay', $el)
+      );
 
-      $(document).on('scan-completed.registry.mockup-core', function(event) {
-        // Wait for the registry scan to be finished, because we depend on DOM
-        // structures from pickadate, which are not ready yet.
-        var jq_whole_day, jq_time;
+      jq_time = self.aOrB(
+        $('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper', $el),
+        $('#archetypes-fieldname-startDate .pattern-pickadate-time-wrapper, #archetypes-fieldname-endDate .pattern-pickadate-time-wrapper', $el)
+      );
 
-        jq_whole_day = self.aOrB(
-          $('#formfield-form-widgets-IEventBasic-whole_day input', $el),
-          $('#archetypes-fieldname-wholeDay input#wholeDay', $el)
-        );
-
-        jq_time = self.aOrB(
-          $('#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper', $el),
-          $('#archetypes-fieldname-startDate .pattern-pickadate-time-wrapper, #archetypes-fieldname-endDate .pattern-pickadate-time-wrapper', $el)
-        );
-
-        if (jq_whole_day.length > 0 && jq_time.length > 0) {
-          jq_whole_day.bind('change', function (e) {
-            self.showHideWidget(jq_time, e.target.checked, true);
-          });
-          self.showHideWidget(jq_time, jq_whole_day.get(0).checked, false);
-        }
-
-      });
+      if (jq_whole_day.length > 0 && jq_time.length > 0) {
+        jq_whole_day.bind('change', function (e) {
+          self.showHideWidget(jq_time, e.target.checked, true);
+        });
+        self.showHideWidget(jq_time, jq_whole_day.get(0).checked, false);
+      }
 
       // OPEN END INIT
       jq_open_end = self.aOrB(
@@ -240,8 +233,6 @@ define([
             else { $widget.show(); }
         }
     }
-
   });
-
   return EventEdit;
 });
