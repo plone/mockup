@@ -20,7 +20,7 @@ define([
       it('baseUrl', function() {
         i18n.configure({ baseUrl: '/something' });
         expect(i18n.baseUrl).to.be('/something');
-        i18n.configure({ baseUrl: '/jsi18n' });
+        i18n.configure({ baseUrl: '/plonejsi18n' });
       });
     });
 
@@ -29,7 +29,7 @@ define([
       it('correct params', function() {
         i18n.configure({ baseUrl: '/foobar' });
         expect(i18n.getUrl('foobar', 'es')).to.be('/foobar?domain=foobar&language=es');
-        i18n.configure({ baseUrl: '/jsi18n' });
+        i18n.configure({ baseUrl: '/plonejsi18n' });
       });
     });
 
@@ -64,14 +64,14 @@ define([
         server.autoRespond = true;
         var clock = sinon.useFakeTimers();
 
-        server.respondWith('GET', /jsi18n/, function (xhr) {
+        server.respondWith('GET', /plonejsi18n/, function (xhr) {
           xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
             foo: 'bar',
           }));
         });
         i18n.configure({
           currentLanguage: 'en',
-          baseUrl: '/jsi18n'
+          baseUrl: '/plonejsi18n'
         });
         i18n.loadCatalog('foobar');
         clock.tick(500);
