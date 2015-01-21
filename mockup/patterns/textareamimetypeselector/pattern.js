@@ -66,6 +66,7 @@ define([
 
   var TextareaMimetypeSelector = Base.extend({
     name: 'textareamimetypeselector',
+    trigger: '.pat-textareamimetypeselector',
     textarea: undefined,
     currentWidget: undefined,
     defaults: {

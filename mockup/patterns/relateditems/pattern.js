@@ -83,6 +83,7 @@ define([
 
   var RelatedItems = Base.extend({
     name: 'relateditems',
+    trigger: '.pat-relateditems',
     browsing: false,
     currentPath: null,
     defaults: {

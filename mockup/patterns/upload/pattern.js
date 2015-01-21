@@ -58,6 +58,7 @@ define([
 
   var UploadPattern = Base.extend({
     name: 'upload',
+    trigger: '.pat-upload',
     defaults: {
       showTitle: true,
       url: null, // XXX MUST provide url to submit to OR be in a form

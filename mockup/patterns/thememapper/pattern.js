@@ -420,6 +420,7 @@ define([
 
   var ThemeMapper = Base.extend({
     name: 'thememapper',
+    trigger: '.pat-thememapper',
     defaults: {
       filemanagerConfig: {},
       mockupUrl: null,

@@ -78,6 +78,7 @@ define([
 
   var EventEdit = Base.extend({
     name: 'eventedit',
+    trigger: '.pat-eventedit',
     defaults: {
       errorClass: 'error'
     },

@@ -36,6 +36,7 @@ define([
 
   var FormUnloadAlert = Base.extend({
     name: 'formunloadalert',
+    trigger: '.pat-formunloadalert',
     _changed : false,       // Stores a listing of raised changes by their key
     _suppressed : false,     // whether or not warning should be suppressed
     defaults: {

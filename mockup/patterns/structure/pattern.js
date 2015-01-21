@@ -43,6 +43,7 @@ define([
 
   var Structure = Base.extend({
     name: 'structure',
+    trigger: '.pat-structure',
     defaults: {
       vocabularyUrl: null,
       tagsVocabularyUrl: null,

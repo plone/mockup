@@ -62,6 +62,7 @@ define([
 
   var ToolTip = Base.extend({
     name: 'tooltip',
+    trigger: '.pat-tooltip',
     defaults: {
       attribute: 'class',
       enterEvent: 'mouseenter',

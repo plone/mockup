@@ -78,6 +78,7 @@ define([
 
   var TinyMCE = Base.extend({
     name: 'tinymce',
+    trigger: '.pat-tinymce',
     defaults: {
       upload: {
         uploadMultiple: false,

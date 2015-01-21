@@ -83,6 +83,7 @@ define([
 
   var Modal = Base.extend({
     name: 'modal',
+    trigger: '.pat-modal',
     createModal: null,
     $model: null,
     defaults: {

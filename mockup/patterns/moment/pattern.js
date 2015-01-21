@@ -89,6 +89,7 @@ define([
 
   var Moment = Base.extend({
     name: 'moment',
+    trigger: '.pat-moment',
     defaults: {
       // selector of elements to format dates for
       selector: null,

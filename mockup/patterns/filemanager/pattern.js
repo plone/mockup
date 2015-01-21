@@ -59,6 +59,7 @@ define([
 
   var FileManager = Base.extend({
     name: 'filemanager',
+    trigger: '.pat-filemanager',
     template: _.template(AppTemplate),
     tabItemTemplate: _.template(
       '<li class="active" data-path="<%= path %>">' +

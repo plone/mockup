@@ -56,6 +56,7 @@ define([
 
   var PasswordStrength = Base.extend({
     name: 'passwordstrength',
+    trigger: '.pat-passwordstrength',
     defaults: {
         zxcvbn: '//cdnjs.cloudflare.com/ajax/libs/zxcvbn/1.0/zxcvbn.js'
     },

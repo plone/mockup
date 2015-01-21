@@ -24,6 +24,7 @@ define([
 
   var Backdrop = Base.extend({
     name: 'backdrop',
+    trigger: '.pat-backdrop',
     defaults: {
       zIndex: null,
       opacity: 0.8,

@@ -79,6 +79,7 @@ define([
 
   var TableSorter = Base.extend({
     name: 'tablesorter',
+    trigger: '.pat-tablesorter',
     defaults: {},
     sortabledataclass: function (cell) {
       var re, matches;
