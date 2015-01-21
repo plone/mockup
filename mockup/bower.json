@@ -19,10 +19,15 @@
     "pickadate": "3.4.0",
     "requirejs-text": "2.0.12",
     "select2": "3.5.1",
-    "tinymce-builded": "4.1.6"
+    "tinymce-builded": "4.1.6",
+    "patternslib": "~2.0.6"
   },
   "devDependencies": {
     "expect": "0.3.1",
     "sinonjs": "1.10.2"
+  },
+  "resolutions": {
+    "jquery": "1.11.1",
+    "select2": "3.5.1"
   }
 }
