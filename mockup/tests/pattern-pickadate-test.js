@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-pickadate',
   'mockup-patterns-select2'
 ], function(expect, $, sinon, registry, PickADate, Select2) {

@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-upload'
 ], function(expect, $, registry, Upload) {
   'use strict';

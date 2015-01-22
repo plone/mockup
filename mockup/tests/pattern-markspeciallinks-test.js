@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-markspeciallinks'
 ], function(expect, $, registry, MarkSpecialLinks) {
   'use strict';

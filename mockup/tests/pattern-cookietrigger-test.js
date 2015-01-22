@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-cookietrigger'
 ], function(expect, $, sinon, registry, Pattern) {
   'use strict';

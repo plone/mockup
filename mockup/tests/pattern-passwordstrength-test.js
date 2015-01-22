@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-passwordstrength'
 ], function(expect, $, registry, PasswordStrength) {
   'use strict';
