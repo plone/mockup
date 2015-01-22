@@ -26,9 +26,9 @@ define([
         '</div>';
 
       var $el = $(widget).appendTo('body').hide();
-      Pattern.extend({isCookiesEnabled: sinon.stub().returns(0)});
+      $.extend(true, Pattern.prototype, {isCookiesEnabled: sinon.stub().returns(0)});
       expect($el.is(':visible')).to.equal(false);
-      var pattern = registry.init($el, 'cookietrigger');
+      var pattern = registry.patterns.cookietrigger.init($el);
       expect($el.is(':visible')).to.equal(true);
     });
 
@@ -39,9 +39,9 @@ define([
         '</div>';
 
       var $el = $(widget).appendTo('body').hide();
-      Pattern.extend({isCookiesEnabled: sinon.stub().returns(1)});
+      $.extend(true, Pattern.prototype, {isCookiesEnabled: sinon.stub().returns(1)});
       expect($el.is(':visible')).to.equal(false);
-      var pattern = registry.init($el, 'cookietrigger');
+      var pattern = registry.patterns.cookietrigger.init($el);
       expect($el.is(':visible')).to.equal(false);
     });
   });
