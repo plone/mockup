@@ -14,6 +14,7 @@ define([
 
   var LinkType = Base.extend({
     name: 'linktype',
+    trigger: '.pat-linktype',
     defaults: {
       linkModal: null // required
     },
@@ -296,6 +297,7 @@ define([
 
   var LinkModal = Base.extend({
     name: 'linkmodal',
+    trigger: '.pat-linkmodal',
     defaults: {
       anchorSelector: 'h1,h2,h3',
       linkTypes: [
