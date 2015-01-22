@@ -70,6 +70,7 @@
       'mockup-patterns-filemanager-url': 'patterns/filemanager',
       'mockup-patterns-formautofocus': 'patterns/formautofocus/pattern',
       'mockup-patterns-formunloadalert': 'patterns/formunloadalert/pattern',
+      'mockup-patterns-helloworld': 'patterns/pattern',
       'mockup-patterns-inlinevalidation': 'patterns/inlinevalidation/pattern',
       'mockup-patterns-markspeciallinks': 'patterns/markspeciallinks/pattern',
       'mockup-patterns-modal': 'patterns/modal/pattern',

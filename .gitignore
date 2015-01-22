@@ -9,3 +9,5 @@ nixenv/
 node_modules/
 sauce_connect.log*
 test-results.xml
+stamp-bower
+stamp-npm
