@@ -28,7 +28,6 @@ define([
         '</div>';
       var $el = $(widget).appendTo('body');
       $.extend(true, Pattern.prototype, {validate_z3cform_field: sinon.spy()});
-      debugger;
       var pattern = registry.patterns.inlinevalidation.init($el, null, {type: 'z3c.form'});
       expect(pattern.validate_z3cform_field.called).to.equal(false);
       $el.children('input').blur();
