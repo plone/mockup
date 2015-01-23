@@ -74,7 +74,7 @@ define([
   'underscore',
   'mockup-patterns-base',
   'mockup-patterns-backdrop',
-  'mockup-registry',
+  'pat-registry',
   'mockup-router',
   'mockup-utils',
   'jquery.form'
@@ -603,9 +603,9 @@ define([
           self.show();
         });
       }
-
       self.initModal();
     },
+
     createAjaxModal: function() {
       var self = this;
       self.emit('before-ajax');
@@ -621,22 +621,26 @@ define([
         self._show();
       });
     },
+
     createTargetModal: function() {
       var self = this;
       self.$raw = $(self.options.target).clone();
       self._show();
     },
+
     createBasicModal: function() {
       var self = this;
       self.$raw = $('<div/>').html(self.$el.clone());
       self._show();
     },
+
     createHtmlModal: function() {
       var self = this;
       var $el = $(self.options.html);
       self.$raw = $el;
       self._show();
     },
+
     initModal: function() {
       var self = this;
       if (self.options.ajaxUrl) {
