@@ -1,6 +1,7 @@
 define([
   'jquery',
   'underscore',
+  'pat-registry',
   'mockup-patterns-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
@@ -8,8 +9,7 @@ define([
   'mockup-patterns-upload',
   'text!mockup-patterns-tinymce-url/templates/link.xml',
   'text!mockup-patterns-tinymce-url/templates/image.xml'
-], function($, _, Base, RelatedItems, Modal, tinymce, Upload,
-            LinkTemplate, ImageTemplate) {
+], function($, _, registry, Base, RelatedItems, Modal, tinymce, Upload, LinkTemplate, ImageTemplate) {
   'use strict';
 
   var LinkType = Base.extend({
@@ -353,7 +353,7 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-      self.modal = new Modal(self.$el, {
+      self.modal = registry.patterns.modal.init(self.$el, null, null, {
         html: self.generateModalHtml(),
         content: null,
         buttons: '.btn'

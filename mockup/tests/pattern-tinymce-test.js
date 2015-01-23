@@ -16,8 +16,7 @@ define([
       options = {};
     }
     var $el = $('<textarea class="pat-tinymce"></textarea>').appendTo('body');
-
-    return new TinyMCE($el, options);
+    return registry.patterns.tinymce.init($el, null, null, options);
   };
 
   describe('TinyMCE', function() {
@@ -197,7 +196,6 @@ define([
           ajaxvocabulary: '/data.json'
         }
       });
-
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
@@ -207,6 +205,7 @@ define([
       });
       expect(pattern.linkModal.getLinkUrl()).to.equal('resolveuid/foobar');
     });
+
     it('test add external link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
@@ -243,7 +242,6 @@ define([
 
     it('test adds data attributes', function() {
       var pattern = createTinymce();
-
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
