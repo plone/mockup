@@ -124,15 +124,13 @@ define([
         $('#archetypes-fieldname-startDate', $el)
       );
       jq_start.each(function () {
-        $(this).on('focus', '.picker__input', function () { self.initDelta(); });
         $(this).on('change', '.picker__input', function () { self.updateEndDate(); });
       });
       jq_end.each(function () {
-        $(this).on('focus', '.picker__input', function () { self.initDelta(); });
         $(this).on('change', '.picker__input', function () { self.validateEndDate(); });
       });
-
     },
+
     aOrB: function (a, b) {
       /* Return element a or element b, depending on which is available.
        * Parameter a and b: CSS selectors.
@@ -146,6 +144,7 @@ define([
       }
       return $(ret);
     },
+
     getDateTime: function (datetimewidget) {
       var date, time, datetime;
       date = $('.pattern-pickadate-date-wrapper input[name="_submit"]', datetimewidget).prop('value');
@@ -166,7 +165,9 @@ define([
       );
       return datetime;
     },
-    initDelta: function () {
+
+    getTimeDelta: function () {
+        // Return time delta between the start and end dates in days
         var self = this, $el = self.$el, start_datetime, end_datetime;
         start_datetime = self.getDateTime(
           self.aOrB(
@@ -180,9 +181,9 @@ define([
             $('#archetypes-fieldname-endDate', $el)
           )
         );
-        // delta in days
-        self.startEndDelta = (end_datetime - start_datetime) / 1000 / 60;
+        return (end_datetime - start_datetime) / 1000 / 60;
     },
+
     updateEndDate: function () {
         var self = this, $el = self.$el, jq_start, jq_end, start_date, new_end_date;
         jq_start = self.aOrB(
@@ -196,13 +197,14 @@ define([
 
         start_date = self.getDateTime(jq_start);
         new_end_date = new Date(start_date);
-        new_end_date.setMinutes(start_date.getMinutes() + self.startEndDelta);
+        new_end_date.setMinutes(start_date.getMinutes() + self.getTimeDelta());
 
         if (new_end_date) {
           $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
           $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
         }
     },
+
     validateEndDate: function () {
         var self = this, $el = self.$el, jq_start, jq_end, start_datetime, end_datetime;
         jq_start = self.aOrB(
@@ -213,16 +215,15 @@ define([
           $('#formfield-form-widgets-IEventBasic-end', $el),
           $('#archetypes-fieldname-endDate', $el)
         );
-
         start_datetime = self.getDateTime(jq_start);
         end_datetime = self.getDateTime(jq_end);
-
         if (end_datetime < start_datetime) {
             jq_end.addClass(self.options.errorClass);
         } else {
             jq_end.removeClass(self.options.errorClass);
         }
     },
+
     showHideWidget: function (widget, hide, fade) {
         var $widget = $(widget);
         if (hide === true) {
