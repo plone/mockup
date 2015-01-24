@@ -112,6 +112,11 @@ require([
             description: 'Sort items in list using drag and drop',
             url: 'patterns/sortable/pattern.js'
           },
+          { id: 'sticky-kit',
+            title: 'Sticky Kit',
+            description: 'Sticky elements',
+            url: 'patterns/sticky-kit/pattern.js'
+          },
           { id: 'structure',
             title: 'Structure',
             description: 'Managing a folder of items',
