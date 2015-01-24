@@ -183,7 +183,7 @@ define([
           zIndex: function() { return 999; }
         });
         loading.show();
-        expect(loading.$el[0].style.zIndex).to.equal('999');
+        expect(loading.$el[0].style.zIndex + '').to.equal('999');
       });
       it('works with backdrop', function() {
         var initCalled = false;
