@@ -68,7 +68,7 @@ define([
       $(sel_start + ' .pattern-pickadate-time', $el).click();
       $(sel_start + ' .pattern-pickadate-time-wrapper li:contains("10:00 AM")', $el).click();
       expect($(sel_start + ' .pattern-pickadate-time-wrapper input[name="_submit"]', $el).prop('value')).to.be.equal('10:00');
-      expect($(sel_end + ' .pattern-pickadate-time-wrapper input[name="_submit"]', $el).prop('value')).to.be.equal('10:30');
+      expect($(sel_end + ' .pattern-pickadate-time-wrapper input[name="_submit"]', $el).prop('value')).to.be.equal('11:30');
     }
 
     it('Editing an Dexterity event', function() {

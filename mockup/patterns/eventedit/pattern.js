@@ -201,10 +201,10 @@ define([
         );
 
         start_date = self.getDateTime(jq_start);
-        new_end_date = new Date(start_date);
-        new_end_date.setMinutes(start_date.getMinutes() + self.startEndDelta);
+        new_end_date = new Date(start_date.getTime());
+        new_end_date.setMinutes(start_date.getMinutes() + 90);
 
-        if (new_end_date) {
+        if (new_end_date && !isNaN(new_end_date.getTime())) {
           $('.pattern-pickadate-date', jq_end).pickadate('picker').set('select', new_end_date);
           $('.pattern-pickadate-time', jq_end).pickatime('picker').set('select', new_end_date);
         }
