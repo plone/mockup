@@ -54,7 +54,7 @@ define([
         } else {
           relatedItems.$el.select2('data', [self.currentPathData.object]);
         }
-        self.upload.currentPath = currentPath;
+        self.upload.setPath(currentPath);
       }
     }
 

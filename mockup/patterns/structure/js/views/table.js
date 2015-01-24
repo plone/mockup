@@ -101,7 +101,7 @@ define([
       }
 
       self.moment = new Moment(self.$el, {
-        selector: '.ModificationDate,.EffectiveDate,.CreationDate',
+        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
         format: 'relative'
       });
       self.addReordering();

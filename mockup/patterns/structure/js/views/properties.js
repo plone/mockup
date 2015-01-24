@@ -77,10 +77,10 @@ define([
     },
     applyButtonClicked: function(e) {
       var data = {
-        effectiveDate: this.effectivePickADate.$date.attr('value'),
-        effectiveTime: this.effectivePickADate.$time.attr('value'),
-        expirationDate: this.expirationPickADate.$date.attr('value'),
-        expirationTime: this.expirationPickADate.$time.attr('value'),
+        effectiveDate: this.effectivePickADate.$date.val(),
+        effectiveTime: this.effectivePickADate.$time.val(),
+        expirationDate: this.expirationPickADate.$date.val(),
+        expirationTime: this.expirationPickADate.$time.val(),
         copyright: this.$copyright.val(),
         contributors: JSON.stringify(this.$contributors.select2('data')),
         creators: JSON.stringify(this.$creators.select2('data'))
