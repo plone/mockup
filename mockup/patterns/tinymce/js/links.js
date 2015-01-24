@@ -353,7 +353,7 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-      self.modal = registry.patterns.modal.init(self.$el, null, null, {
+      self.modal = registry.patterns.modal.init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
         buttons: '.btn'
@@ -417,8 +417,7 @@ define([
     },
     getLinkUrl: function() {
       // get the url, only get one uid
-      var self = this;
-      return self.linkTypes[self.linkType].toUrl();
+      return this.linkTypes[this.linkType].toUrl();
     },
     getValue: function() {
       return this.linkTypes[this.linkType].value();

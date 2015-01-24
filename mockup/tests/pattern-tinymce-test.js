@@ -12,11 +12,10 @@ define([
   $.fx.off = true;
 
   var createTinymce = function(options) {
-    if (options === undefined) {
-      options = {};
-    }
-    var $el = $('<textarea class="pat-tinymce"></textarea>').appendTo('body');
-    return registry.patterns.tinymce.init($el, null, null, options);
+    return registry.patterns.tinymce.init(
+      $('<textarea class="pat-tinymce"></textarea>').appendTo('body'),
+        options || {}
+      );
   };
 
   describe('TinyMCE', function() {
@@ -186,7 +185,6 @@ define([
       });
       expect(pattern.getScaleFromUrl('foobar/somescale/image_large')).to.equal('large');
     });
-
 
     it('test add link', function() {
       var pattern = createTinymce({
