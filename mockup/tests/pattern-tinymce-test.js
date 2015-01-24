@@ -240,6 +240,7 @@ define([
 
     it('test adds data attributes', function() {
       var pattern = createTinymce();
+      pattern.tiny.setContent('<p>blah</p>');
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
@@ -247,7 +248,6 @@ define([
         Title: 'Foobar',
         path: '/foobar'
       });
-      pattern.tiny.setContent('<p>blah</p>');
       pattern.linkModal.focusElement(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
       pattern.linkModal.$button.trigger('click');
       expect(pattern.tiny.getContent()).to.contain('data-val="foobar"');

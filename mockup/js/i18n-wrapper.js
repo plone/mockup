@@ -2,9 +2,9 @@
  *
  * This is a singleton.
  * Configuration is done on the body tag data-i18ncatalogurl attribute
- *     <body data-i18ncatalogurl="/jsi18n">
+ *     <body data-i18ncatalogurl="/plonejsi18n">
  *
- *  Or, it'll default to "/jsi18n"
+ *  Or, it'll default to "/plonejsi18n"
  */
 
 define([

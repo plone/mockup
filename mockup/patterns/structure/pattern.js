@@ -66,6 +66,7 @@ define([
       availableColumns: {
         'ModificationDate': _t('Last modified'),
         'EffectiveDate': _t('Published'),
+        'ExpirationDate': _t('Expiration'),
         'CreationDate': _t('Created'),
         'review_state': _t('Review state'),
         'Subject': _t('Tags'),

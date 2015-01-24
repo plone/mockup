@@ -28,7 +28,7 @@
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation.
  *    ([",", " "])
- *    width(string): Specify a width for the widget. ('300px')
+ *    width(string): Specify a width for the widget. ('100%')
  *
  * Documentation:
  *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
@@ -88,7 +88,7 @@ define([
     currentPath: null,
     defaults: {
       vocabularyUrl: null, // must be set to work
-      width: '300px',
+      width: '100%',
       multiple: true,
       tokenSeparators: [',', ' '],
       separator: ',',
