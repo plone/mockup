@@ -41,4 +41,4 @@ matrix:
     - env: BROWSERS="SL_Android"
 branches:
   only:
-    - patternslib-merge
+    - master
