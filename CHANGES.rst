@@ -1,7 +1,17 @@
 Changelog
 =========
 
-1.8.3 (unreleased)
+2.0.0 (unreleased)
+------------------
+
+- Patternslib merge: Use Patternslib's scanner and registry.  This allows us
+  to: Use Patternslib patterns with Mockup/Plone and use Mockup patterns with
+  Patternslib outside of Plone. For changes required to patterns, see:
+  mockup/GETTING_STARTED.md . Refs: #460.
+  [jcbrand]
+
+
+1.8.3 (2015-01-26)
 ------------------
 
 New patterns:
@@ -26,6 +36,22 @@ New patterns:
 
 Fixes and enhancements:
 
+- Test fixes.
+  [vangheem]
+
+- Various structure pattern fixes.
+  [vangheem]
+
+- Make relateditems fullwidth.
+  [vangheem]
+
+- Add npm and bower tasks to Makefile.
+  [benniboy]
+
+- TinyMCE pattern fix: Don't append scale to generated image url, if no scale
+  is given.
+  [frapell]
+
 - In the resource registry bundle detail view, add the fields
   ``last_compilation``, ``jscompilation`` and ``csscompilation`` for display.
   This gives more insight about the state of each bundle.
@@ -34,6 +60,9 @@ Fixes and enhancements:
 - More jQuery 1.9 compatibility changes: Change ``attr`` to ``prop`` for
   setting / getting the state of ``multiple``, ``selected``, ``checked`` and
   ``disabled`` states.
+  [thet]
+
+- Relicensing from MIT to BSD. Refs #24
   [thet]
 
 - Modal Pattern: If ``data-base-url`` attribute is available on the body, use
