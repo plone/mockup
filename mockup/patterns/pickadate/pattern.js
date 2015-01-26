@@ -95,6 +95,7 @@ define([
 
   var PickADate = Base.extend({
     name: 'pickadate',
+    trigger: '.pat-pickadate',
     defaults: {
       separator: ' ',
       date: {
@@ -301,7 +302,7 @@ define([
 
       self.$el.attr('value', value);
 
-      self.trigger('updated');
+      self.emit('updated');
     }
   });
 

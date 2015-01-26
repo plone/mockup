@@ -213,6 +213,7 @@ define([
 
   var ResourceRegistry = Base.extend({
     name: 'resourceregistry',
+    trigger: '.pat-resourceregistry',
     defaults: {
       bundles: {},
       resources: {},

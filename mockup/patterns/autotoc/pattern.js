@@ -77,6 +77,7 @@ define([
 
   var AutoTOC = Base.extend({
     name: 'autotoc',
+    trigger: '.pat-autotoc',
     defaults: {
       section: 'section',
       levels: 'h1,h2,h3',

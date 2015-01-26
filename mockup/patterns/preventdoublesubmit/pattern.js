@@ -29,6 +29,7 @@ define([
 
   var PreventDoubleSubmit = Base.extend({
     name: 'preventdoublesubmit',
+    trigger: '.pat-preventdoublesubmit',
     defaults: {
       message : _t('You already clicked the submit button. ' +
                 'Do you really want to submit this form again?'),

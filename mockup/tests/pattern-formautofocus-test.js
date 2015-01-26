@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-formautofocus'
 ], function(expect, $, registry, FormAutoFocus) {
   'use strict';
@@ -55,6 +55,7 @@ define([
       registry.scan($el);
       $el.remove();
     });
+
     it('when the condition is not met, focus on the first input', function(done) {
       var $el = $('' +
         '<div>' +

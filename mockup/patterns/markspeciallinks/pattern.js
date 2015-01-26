@@ -86,6 +86,7 @@ define([
 
   var MarkSpecialLinks = Base.extend({
     name: 'markspeciallinks',
+    trigger: '.pat-markspeciallinks',
     defaults: {
       external_links_open_new_window: false,
       mark_special_links: true
@@ -140,12 +141,11 @@ define([
                 res = protocols.exec(this.href);
                 if (res) {
                     var iconclass = 'glyphicon link-' + res[0];
-                    jQuery(this).before('<i class="' + iconclass + '"></i>');
+                    $(this).before('<i class="' + iconclass + '"></i>');
                 }
             }
         );
       }
-
     }
   });
   return MarkSpecialLinks;

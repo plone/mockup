@@ -20,6 +20,7 @@ define([
 
   var CookieTrigger = Base.extend({
     name: 'cookietrigger',
+    trigger: '.pat-cookietrigger',
 
     isCookiesEnabled: function() {
       /* Test whether cookies are enabled by attempting to set a cookie
