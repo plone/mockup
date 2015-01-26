@@ -1,6 +1,6 @@
 {
   "name": "mockup",
-  "version": "1.8.2",
+  "version": "2.0.0",
   "description": "A collection of client side patterns for faster and easier web development",
   "homepage": "http://plone.github.io/mockup",
   "devDependencies": {
