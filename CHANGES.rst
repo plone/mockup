@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.8.3 (unreleased)
+1.8.3 (2015-01-26)
 ------------------
 
 New patterns:
