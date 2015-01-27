@@ -515,7 +515,7 @@ define([
           '<label>' +
             '<input type="checkbox" ' +
               '<% if(data.development){ %> checked="checked" <% } %>' +
-              ' > Development Mode' +
+              ' > Development Mode(only logged in users)' +
           '</label>' +
         '</div>' +
       '</div>' +
