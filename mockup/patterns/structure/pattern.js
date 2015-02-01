@@ -135,6 +135,10 @@ define([
       self.options.queryHelper = new utils.QueryHelper(
         $.extend(true, {}, self.options, {pattern: self}));
 
+      // check and see if a hash is provided for initial path
+      if(window.location.hash.substring(0, 2) === '#/'){
+        self.options.queryHelper.currentPath = window.location.hash.substring(1);
+      }
       delete self.options.attributes; // not compatible with backbone
 
       self.view = new AppView(self.options);
