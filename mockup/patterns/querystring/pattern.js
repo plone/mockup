@@ -128,7 +128,7 @@ define([
           self.removeValue();
           self.createOperator(e.val);
           self.createClear();
-          self.emit('index-changed');
+          self.trigger('index-changed');
         });
 
       if (index !== undefined) {
@@ -137,7 +137,7 @@ define([
         self.createClear();
       }
 
-      self.emit('create-criteria');
+      self.trigger('create-criteria');
     },
     createOperator: function(index, operator, value) {
       var self = this;
@@ -167,7 +167,7 @@ define([
         .on('change', function(e) {
           self.createValue(index);
           self.createClear();
-          self.emit('operator-changed');
+          self.trigger('operator-changed');
         });
 
       if (operator === undefined) {
@@ -177,7 +177,7 @@ define([
       self.$operator.select2('val', operator);
       self.createValue(index, value);
 
-      self.emit('create-operator');
+      self.trigger('create-operator');
     },
     createValue: function(index, value) {
       var self = this,
@@ -194,7 +194,7 @@ define([
                 .val(value)
                 .appendTo($wrapper)
                 .change(function() {
-                  self.emit('value-changed');
+                  self.trigger('value-changed');
                 });
 
       } else if (widget === 'DateWidget') {
@@ -206,7 +206,7 @@ define([
                   date: { format: 'dd/mm/yyyy' }
                 })
                 .change(function() {
-                  self.emit('value-changed');
+                  self.trigger('value-changed');
                 });
 
       } else if (widget === 'DateRangeWidget') {
@@ -234,7 +234,7 @@ define([
                           date: { format: 'dd/mm/yyyy' }
                         });
         $wrapper.find('.picker__input').change(function() {
-          self.emit('value-changed');
+          self.trigger('value-changed');
         });
         self.$value = [startdt, enddt];
 
@@ -244,7 +244,7 @@ define([
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function() {
-                  self.emit('value-changed');
+                  self.trigger('value-changed');
                 });
 
       } else if (widget === 'ReferenceWidget') {
@@ -252,7 +252,7 @@ define([
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function() {
-                  self.emit('value-changed');
+                  self.trigger('value-changed');
                 });
 
       } else if (widget === 'RelativePathWidget') {
@@ -261,7 +261,7 @@ define([
                 .appendTo($wrapper)
                 .val(value)
                 .change(function() {
-                  self.emit('value-changed');
+                  self.trigger('value-changed');
                 });
 
       } else if (widget === 'MultipleSelectionWidget') {
@@ -269,7 +269,7 @@ define([
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function() {
-                  self.emit('value-changed');
+                  self.trigger('value-changed');
                 });
         if (self.indexes[index]) {
           $.each(self.indexes[index].values, function(value, options) {
@@ -286,7 +286,7 @@ define([
         self.$value.select2('val', value);
       }
 
-      self.emit('create-value');
+      self.trigger('create-value');
 
     },
     createClear: function() {
@@ -298,7 +298,7 @@ define([
     },
     remove: function() {
       var self = this;
-      self.emit('remove');
+      self.trigger('remove');
       self.$remove.remove();
       self.$index.parent().remove();
       self.removeOperator();
@@ -308,21 +308,21 @@ define([
     },
     removeClear: function() {
       var self = this;
-      self.emit('remove-clear');
+      self.trigger('remove-clear');
       if (self.$clear) {
         self.$clear.remove();
       }
     },
     removeOperator: function() {
       var self = this;
-      self.emit('remove-operator');
+      self.trigger('remove-operator');
       if (self.$operator) {
         self.$operator.parent().remove();
       }
     },
     removeValue: function() {
       var self = this;
-      self.emit('remove-value');
+      self.trigger('remove-value');
       if (self.$value) {
         if ($.isArray(self.$value)) { // date ranges have 2 values
           self.$value[0].parents('.querystring-criteria-value').remove();
