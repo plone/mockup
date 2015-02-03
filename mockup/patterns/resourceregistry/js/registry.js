@@ -194,7 +194,7 @@ define([
           'we will try to keep you updated on the progress.</p><p> Press the "Build it" ' +
           'button to proceed.</p></div>' +
         '<ul class="list-group hidden"></ul>' +
-        '<button class="plone-btn plone-btn-default cancel hidden">Close</button>' +
+        '<button class="plone-btn plone-btn-default cancel hidden cancel-build">Close</button>' +
         '<button class="plone-btn plone-btn-primary build">Build it</button>' +
       '</div>', bundleListItem.options),
       content: null,
@@ -204,7 +204,7 @@ define([
     self.modal.on('shown', function() {
       var $el = self.modal.$modal;
       var $info = $el.find('.start-info');
-      self.$btnClose = $el.find('button.cancel');
+      self.$btnClose = $el.find('button.cancel-build');
       var $btn = $el.find('button.build');
       $btn.off('click').on('click', function(e){
         e.preventDefault();
@@ -264,13 +264,13 @@ define([
     };
 
     self._buildCSSBundle = function(config){
-      var $iframe = $('<iframe><html><head></head><body></body></html></iframe>').
+      var $iframe = $('<iframe style="display:none"><html><head></head><body></body></html></iframe>').
           appendTo('body').on('load', function(){
       });
       var iframe = $iframe[0];
       var win = iframe.contentWindow || iframe;
       win.lessErrorReporting = function(what, error, href){
-        if(what !== "remove"){
+        if(what !== 'remove'){
           self.addResult('less compilation error on file ' + href + ': ' + error);
         }
       };
@@ -312,6 +312,7 @@ define([
             var $el = $(this);
             data['data-' + $el.attr('id')] = $el.html();
           });
+          $iframe.remove();
           $.ajax({
             url: self.rview.options.data.manageUrl,
             type: 'POST',
@@ -387,7 +388,7 @@ define([
           }
         });
       };
-      var $iframe = $('<iframe><html><head></head><body></body></html></iframe').appendTo('body');
+      var $iframe = $('<iframe style="display:none"><html><head></head><body></body></html></iframe').appendTo('body');
       var iframe = $iframe[0];
       var win = iframe.contentWindow || iframe;
       var head = $iframe.contents().find('head')[0];
@@ -398,6 +399,7 @@ define([
         win.requirejs.optimize(config, function(combined_files){
           self.addResult('Saved javascript bundle, Build results: <pre>' + combined_files + '</pre>');
           self.buildCSSBundle();
+          $iframe.remove();
         });
       };
       head.appendChild(script);
