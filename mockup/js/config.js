@@ -141,7 +141,13 @@
       'picker.date': { deps: [ 'picker' ] },
       'picker.time': { deps: [ 'picker' ] },
       'sinon': {exports: 'window.sinon'},
-      'tinymce': { exports: 'window.tinyMCE', init: function () { this.tinyMCE.DOM.events.domLoaded = true; return this.tinyMCE; }},
+      'tinymce': {
+        exports: 'window.tinyMCE',
+        init: function () {
+          this.tinyMCE.DOM.events.domLoaded = true;
+          return this.tinyMCE;
+        }
+      },
       'tinymce-modern-theme': { deps: ['tinymce'] },
       'underscore': { exports: 'window._' }
     },
