@@ -15,13 +15,13 @@
     "jquery.cookie": "1.4.1",
     "lodash": "2.4.1",
     "logging": "",
-    "mockup-core": "master",
+    "mockup-core": "2.0.0",
     "moment": "2.8.3",
     "pickadate": "3.4.0",
     "requirejs-text": "2.0.12",
     "select2": "3.5.1",
     "tinymce-builded": "4.1.6",
-    "patternslib": "master"
+    "patternslib": "2.0.7"
   },
   "devDependencies": {
     "expect": "0.3.1",
@@ -29,6 +29,7 @@
   },
   "resolutions": {
     "jquery": "1.11.1",
-    "select2": "3.5.1"
+    "select2": "3.5.1",
+    "patternslib": "2.0.7"
   }
 }
