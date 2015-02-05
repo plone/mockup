@@ -30,6 +30,6 @@
   "resolutions": {
     "jquery": "1.11.1",
     "select2": "3.5.1",
-    "patternslib": "2.0.7"
+    "patternslib": "2.0.8"
   }
 }
