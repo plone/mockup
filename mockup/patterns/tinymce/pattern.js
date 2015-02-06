@@ -276,26 +276,40 @@ define([
     },
     initLanguage: function(call_back){
       var self = this;
-      var ploneLanguage = i18n.currentLanguage;
-      var languages = [ploneLanguage];
-      if (ploneLanguage.split("_") > 1){
-        languages.push(ploneLanguage.split("_")[0]);
-      }
-      else{
-        languages.push(ploneLanguage + "_" + ploneLanguage.toUpperCase());
-      }
-
-      for (var i = 0; i < languages.length; i++) {
-        var language_tmp = languages[i];
+      var lang = i18n.currentLanguage;
+      if (lang != 'en' && self.options.tiny.language !== 'en') {
+        tinymce.baseURL = self.options.loadingBaseUrl;
+        // does the expected language exist?
         $.ajax({
-            url: tinymce.baseURL + "/langs/" + language_tmp + ".js",
-            type:'HEAD',
-            success: function()
-            {
-                call_back(language_tmp);
+          url: tinymce.baseURL + "/langs/" + lang + ".js",
+          type:'HEAD',
+          success: function() {
+            self.options.tiny.language = lang;
+            call_back();
+          },
+          error: function() {
+            // expected lang not available, let's fallback to closest one
+            if (lang.split("_") > 1){
+              lang = lang.split("_")[0];
+            } else {
+              lang = lang + "_" + lang.toUpperCase();
             }
+            $.ajax({
+              url: tinymce.baseURL + "/langs/" + lang + ".js",
+              type:'HEAD',
+              success: function() {
+                self.options.tiny.language = lang;
+                call_back();
+              },
+              error: function() {
+                call_back();
+              }
+            });
+          }
         });
-      };
+      } else {
+        call_back();
+      }
     },
     init: function() {
       var self = this;
@@ -325,23 +339,15 @@ define([
         }
       };
 
-      if (i18n.currentLanguage != 'en' && tinyOptions.language !== 'en') {
-        tinymce.baseURL = self.options.loadingBaseUrl;
-        self.initLanguage(function(lang) {
-          tinyOptions.language = lang;
-          tinymce.init(tinyOptions);
-          self.tiny = tinymce.get(id);
-        });
-      }
-      else{
+      self.initLanguage(function() {
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(id);
-      }
-      /* tiny really should be doing this by default
-       * but this fixes overlays not saving data */
-      var $form = self.$el.parents('form');
-      $form.on('submit', function() {
-        self.tiny.save();
+        /* tiny really should be doing this by default
+         * but this fixes overlays not saving data */
+        var $form = self.$el.parents('form');
+        $form.on('submit', function() {
+          self.tiny.save();
+        });
       });
     },
     destroy: function() {
