@@ -48,6 +48,7 @@ define([
 
   var Accessibility = Base.extend({
     name: 'accessibility',
+    trigger: '.pat-accessibility',
     defaults: {
       'smallbtn': null,
       'normalbtn': null,

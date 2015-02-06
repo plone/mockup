@@ -28,7 +28,7 @@
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation.
  *    ([",", " "])
- *    width(string): Specify a width for the widget. ('300px')
+ *    width(string): Specify a width for the widget. ('100%')
  *
  * Documentation:
  *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
@@ -83,11 +83,12 @@ define([
 
   var RelatedItems = Base.extend({
     name: 'relateditems',
+    trigger: '.pat-relateditems',
     browsing: false,
     currentPath: null,
     defaults: {
       vocabularyUrl: null, // must be set to work
-      width: '300px',
+      width: '100%',
       multiple: true,
       tokenSeparators: [',', ' '],
       separator: ',',
@@ -181,7 +182,7 @@ define([
     },
     browseTo: function(path) {
       var self = this;
-      self.trigger('before-browse');
+      self.emit('before-browse');
       self.currentPath = path;
       if (path === '/' && self.options.mode === 'search') {
         self.deactivateBrowsing();
@@ -190,7 +191,7 @@ define([
       }
       self.$el.select2('close');
       self.$el.select2('open');
-      self.trigger('after-browse');
+      self.emit('after-browse');
     },
     setBreadCrumbs: function() {
       var self = this;
@@ -286,16 +287,16 @@ define([
     },
     selectItem: function(item) {
       var self = this;
-      self.trigger('selecting');
+      self.emit('selecting');
       var data = self.$el.select2('data');
       data.push(item);
       self.$el.select2('data', data);
       item.selected = true;
-      self.trigger('selected');
+      self.emit('selected');
     },
     deselectItem: function(item) {
       var self = this;
-      self.trigger('deselecting');
+      self.emit('deselecting');
       var data = self.$el.select2('data');
       _.each(data, function(obj, i) {
         if (obj.UID === item.UID) {
@@ -304,7 +305,7 @@ define([
       });
       self.$el.select2('data', data);
       item.selected = false;
-      self.trigger('deselected');
+      self.emit('deselected');
     },
     isSelectable: function(item) {
       var self = this;

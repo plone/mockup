@@ -131,6 +131,7 @@ After that, access the served site in a webbrowser under the url:
 
     http://localhost:8000
 
+
 # Including a local mockup-core checkout for developing
 
 If you want to also hack on mockup-core together with mockup and not push the
@@ -141,3 +142,30 @@ Just replace the mockup-core line in bower.json with:
 
 Please note, you have to commit the changes on mockup-core before running
 ``make bootstrap``.
+
+
+# Upgrade from pre-2.0 to 2.0 based Mockup patterns
+
+Since version 2.0, Mockup uses the Patternslib scanner and it's registry. This
+allows us to: Use Patternslib patterns with Mockup/Plone and use Mockup
+patterns with Patternslib outside of Plone. The integration with Patternslib
+require that some small changes be made to newly developed Mockup patterns:
+
+1. Patterns should now use pat-registry as dependency instead of
+   mockup-registry.
+
+        define([
+            'jquery'
+            'mockup-patterns-base',
+            'pat-registry'
+        ], function($, Base, registry) {
+
+2. Patterns' selectors are now explicitly specified via the trigger attribute.
+   For example:
+
+       var Modal = Base.extend({
+         name: 'modal',
+         trigger: '.pat-modal',
+
+3. Because of change 2, patterns now fire events via the emit method, instead
+   of the trigger method.

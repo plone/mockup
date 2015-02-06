@@ -74,7 +74,7 @@ define([
   'underscore',
   'mockup-patterns-base',
   'mockup-patterns-backdrop',
-  'mockup-registry',
+  'pat-registry',
   'mockup-router',
   'mockup-utils',
   'jquery.form'
@@ -83,6 +83,7 @@ define([
 
   var Modal = Base.extend({
     name: 'modal',
+    trigger: '.pat-modal',
     createModal: null,
     $model: null,
     defaults: {
@@ -264,7 +265,7 @@ define([
             } else {
               console.log('error happened do something');
             }
-            self.trigger('formActionError', [xhr, textStatus, errorStatus]);
+            self.emit('formActionError', [xhr, textStatus, errorStatus]);
           },
           success: function(response, state, xhr, form) {
             self.loading.hide();
@@ -302,7 +303,7 @@ define([
                 self.reloadWindow();
               }
             }
-            self.trigger('formActionSuccess', [response, state, xhr, form]);
+            self.emit('formActionSuccess', [response, state, xhr, form]);
           }
         });
       },
@@ -341,7 +342,7 @@ define([
               console.log('error happened do something');
             }
             self.loading.hide();
-            self.trigger('linkActionError', [xhr, textStatus, errorStatus]);
+            self.emit('linkActionError', [xhr, textStatus, errorStatus]);
           },
           success: function(response, state, xhr) {
             self.redraw(response, patternOptions);
@@ -349,14 +350,14 @@ define([
               options.onSuccess(self, response, state, xhr);
             }
             self.loading.hide();
-            self.trigger('linkActionSuccess', [response, state, xhr]);
+            self.emit('linkActionSuccess', [response, state, xhr]);
           }
         });
       },
       render: function(options) {
         var self = this;
 
-        self.trigger('before-render');
+        self.emit('before-render');
 
         if (!self.$raw) {
           return;
@@ -436,7 +437,7 @@ define([
           $button.hide();
         });
 
-        self.trigger('before-events-setup');
+        self.emit('before-events-setup');
 
         // Wire up events
         $('.plone-modal-header > a.plone-modal-close, .plone-modal-footer > a.plone-modal-close', self.$modal)
@@ -479,7 +480,7 @@ define([
           .appendTo(self.$wrapperInner);
         self.$modal.data('pattern-' + self.name, self);
 
-        self.trigger('after-render');
+        self.emit('after-render');
       }
     },
     reloadWindow: function() {
@@ -602,12 +603,12 @@ define([
           self.show();
         });
       }
-
       self.initModal();
     },
+
     createAjaxModal: function() {
       var self = this;
-      self.trigger('before-ajax');
+      self.emit('before-ajax');
       self.loading.show();
       self.ajaxXHR = $.ajax({
         url: self.options.ajaxUrl,
@@ -616,26 +617,30 @@ define([
         self.ajaxXHR = undefined;
         self.loading.hide();
         self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
-        self.trigger('after-ajax', self, textStatus, xhr);
+        self.emit('after-ajax', self, textStatus, xhr);
         self._show();
       });
     },
+
     createTargetModal: function() {
       var self = this;
       self.$raw = $(self.options.target).clone();
       self._show();
     },
+
     createBasicModal: function() {
       var self = this;
       self.$raw = $('<div/>').html(self.$el.clone());
       self._show();
     },
+
     createHtmlModal: function() {
       var self = this;
       var $el = $(self.options.html);
       self.$raw = $el;
       self._show();
     },
+
     initModal: function() {
       var self = this;
       if (self.options.ajaxUrl) {
@@ -780,9 +785,9 @@ define([
     },
     render: function(options) {
       var self = this;
-      self.trigger('render');
+      self.emit('render');
       self.options.render.apply(self, [options]);
-      self.trigger('rendered');
+      self.emit('rendered');
     },
     show: function() {
       var self = this;
@@ -791,7 +796,7 @@ define([
     _show: function() {
       var self = this;
       self.render.apply(self, [ self.options ]);
-      self.trigger('show');
+      self.emit('show');
       self.backdrop.show();
       self.$wrapper.show();
       self.loading.hide();
@@ -806,7 +811,7 @@ define([
       $(window.parent).on('resize.modal.patterns', function() {
         self.positionModal();
       });
-      self.trigger('shown');
+      self.emit('shown');
       $('body').addClass('plone-modal-open');
     },
     hide: function() {
@@ -814,7 +819,7 @@ define([
       if (self.ajaxXHR) {
         self.ajaxXHR.abort();
       }
-      self.trigger('hide');
+      self.emit('hide');
       if (self._suppressHide) {
         if (!confirm(self._suppressHide)) {
           return;
@@ -832,19 +837,19 @@ define([
         self.initModal();
       }
       $(window.parent).off('resize.modal.patterns');
-      self.trigger('hidden');
+      self.emit('hidden');
       $('body').removeClass('plone-modal-open');
     },
     redraw: function(response, options) {
       var self = this;
-      self.trigger('beforeDraw');
+      self.emit('beforeDraw');
       self.$modal.remove();
       self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
       self.render.apply(self, [options || self.options]);
       self.$modal.addClass(self.options.templateOptions.classActiveName);
       self.positionModal();
       registry.scan(self.$modal);
-      self.trigger('afterDraw');
+      self.emit('afterDraw');
     }
   });
 

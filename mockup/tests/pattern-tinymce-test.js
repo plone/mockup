@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'tinymce',
   'mockup-patterns-tinymce'
 ], function(expect, $, sinon, registry, tinymce, TinyMCE) {
@@ -12,12 +12,10 @@ define([
   $.fx.off = true;
 
   var createTinymce = function(options) {
-    if (options === undefined) {
-      options = {};
-    }
-    var $el = $('<textarea class="pat-tinymce"></textarea>').appendTo('body');
-
-    return new TinyMCE($el, options);
+    return registry.patterns.tinymce.init(
+      $('<textarea class="pat-tinymce"></textarea>').appendTo('body'),
+        options || {}
+      );
   };
 
   describe('TinyMCE', function() {
@@ -188,7 +186,6 @@ define([
       expect(pattern.getScaleFromUrl('foobar/somescale/image_large')).to.equal('large');
     });
 
-
     it('test add link', function() {
       var pattern = createTinymce({
         prependToUrl: 'resolveuid/',
@@ -197,7 +194,6 @@ define([
           ajaxvocabulary: '/data.json'
         }
       });
-
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
@@ -207,6 +203,7 @@ define([
       });
       expect(pattern.linkModal.getLinkUrl()).to.equal('resolveuid/foobar');
     });
+
     it('test add external link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
@@ -243,7 +240,7 @@ define([
 
     it('test adds data attributes', function() {
       var pattern = createTinymce();
-
+      pattern.tiny.setContent('<p>blah</p>');
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
@@ -251,7 +248,6 @@ define([
         Title: 'Foobar',
         path: '/foobar'
       });
-      pattern.tiny.setContent('<p>blah</p>');
       pattern.linkModal.focusElement(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
       pattern.linkModal.$button.trigger('click');
       expect(pattern.tiny.getContent()).to.contain('data-val="foobar"');

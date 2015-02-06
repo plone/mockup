@@ -21,6 +21,7 @@ define([
 
   var FormAutoFocus = Base.extend({
     name: 'formautofocus',
+    trigger: '.pat-formautofocus',
     defaults: {
       condition: 'div.error',
       target: 'div.error :input:not(.formTabs):visible:first',
@@ -29,9 +30,9 @@ define([
     init: function() {
       var self = this;
       if ($(self.options.condition, self.$el).size() !== 0) {
-        $(self.options.target, self.$el).focus();
+        $(self.options.target, self.$el).focusin();
       } else {
-        $(self.options.always, self.$el).focus();
+        $(self.options.always, self.$el).focusin();
       }
 
     }

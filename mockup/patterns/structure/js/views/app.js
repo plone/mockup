@@ -179,6 +179,7 @@ define([
 
       self.collection.on('pager', function() {
         self.loading.show();
+        window.location.hash = self.queryHelper.getCurrentPath();
       });
 
       /* detect key events */

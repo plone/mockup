@@ -61,6 +61,7 @@ define([
 
   var Tree = Base.extend({
     name: 'tree',
+    trigger: '.pat-tree',
     defaults: {
       dragAndDrop: false,
       autoOpen: false,

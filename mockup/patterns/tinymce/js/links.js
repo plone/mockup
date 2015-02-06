@@ -1,6 +1,7 @@
 define([
   'jquery',
   'underscore',
+  'pat-registry',
   'mockup-patterns-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
@@ -8,15 +9,16 @@ define([
   'mockup-patterns-upload',
   'text!mockup-patterns-tinymce-url/templates/link.xml',
   'text!mockup-patterns-tinymce-url/templates/image.xml'
-], function($, _, Base, RelatedItems, Modal, tinymce, Upload,
-            LinkTemplate, ImageTemplate) {
+], function($, _, registry, Base, RelatedItems, Modal, tinymce, Upload, LinkTemplate, ImageTemplate) {
   'use strict';
 
   var LinkType = Base.extend({
     name: 'linktype',
+    trigger: '.pat-linktype',
     defaults: {
       linkModal: null // required
     },
+
     init: function() {
       this.linkModal = this.options.linkModal;
       this.tinypattern = this.options.tinypattern;
@@ -24,18 +26,23 @@ define([
       this.dom = this.tiny.dom;
       this.$input = this.$el.find('input');
     },
+
     value: function() {
       return this.$input.val();
     },
+
     toUrl: function() {
       return this.value();
     },
+
     load: function(element) {
       this.$input.attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
     },
+
     set: function(val) {
       this.$input.attr('value', val);
     },
+
     attributes: function() {
       return {
         'data-val': this.value()
@@ -45,23 +52,24 @@ define([
 
   var InternalLink = LinkType.extend({
     init: function() {
-      var self = this;
-      LinkType.prototype.init.call(self);
-      self.$input.addClass('pat-relateditems');
-      self.createRelatedItems();
+      LinkType.prototype.init.call(this);
+      this.$input.addClass('pat-relateditems');
+      this.createRelatedItems();
     },
+
     createRelatedItems: function() {
       this.relatedItems = new RelatedItems(this.$input,
         this.linkModal.options.relatedItems);
     },
+
     value: function() {
-      var self = this;
-      var val = self.$input.select2('data');
+      var val = this.$input.select2('data');
       if (val && typeof(val) === 'object') {
         val = val[0];
       }
       return val;
     },
+
     toUrl: function() {
       var value = this.value();
       if (value) {
@@ -75,6 +83,7 @@ define([
         this.set(val);
       }
     },
+
     set: function(val) {
       // kill it and then reinitialize since select2 will load data then
       this.$input.select2('destroy');
@@ -83,6 +92,7 @@ define([
       this.$input.attr('value', val);
       this.createRelatedItems();
     },
+
     attributes: function() {
       var val = this.value();
       if (val) {
@@ -92,7 +102,6 @@ define([
       }
       return {};
     }
-
   });
 
   var UploadLink = InternalLink.extend({
@@ -105,7 +114,6 @@ define([
       }
       return paths.join('/');
     }
-
   });
 
   var ImageLink = InternalLink.extend({
@@ -129,13 +137,16 @@ define([
       }
       return null;
     },
+
     load: function(element) {
       LinkType.prototype.load.apply(this, [element]);
       this.linkModal.$subject.val(this.tiny.dom.getAttrib(element, 'data-subject'));
     },
+
     getSubject: function() {
       return this.linkModal.$subject.val();
     },
+
     attributes: function() {
       var attribs = LinkType.prototype.attributes.call(this);
       attribs['data-subject'] = this.getSubject();
@@ -145,21 +156,21 @@ define([
 
   var AnchorLink = LinkType.extend({
     init: function() {
-      var self = this;
-      LinkType.prototype.init.call(self);
-      self.$select = self.$el.find('select');
-      self.anchorNodes = [];
-      self.anchorData = [];
-      self.populate();
+      LinkType.prototype.init.call(this);
+      this.$select = this.$el.find('select');
+      this.anchorNodes = [];
+      this.anchorData = [];
+      this.populate();
     },
+
     value: function() {
-      var self = this;
-      var val = self.$select.select2('data');
+      var val = this.$select.select2('data');
       if (val && typeof(val) === 'object') {
-        val = val['id'];
+        val = val.id;
       }
       return val;
     },
+
     populate: function() {
       var self = this;
       self.$select.find('option').remove();
@@ -216,23 +227,23 @@ define([
         self.$select.append('<option>No anchors found..</option>');
       }
     },
+
     getIndex: function(name) {
-      var self = this;
-      for (var i = 0; i < self.anchorData.length; i = i + 1) {
-        var data = self.anchorData[i];
+      for (var i = 0; i < this.anchorData.length; i = i + 1) {
+        var data = this.anchorData[i];
         if (data.name === name) {
           return i;
         }
       }
       return 0;
     },
+
     toUrl: function() {
-      var self = this;
-      var val = self.value();
+      var val = this.value();
       if (val) {
         var index = parseInt(val, 10);
-        var node = self.anchorNodes[index];
-        var data = self.anchorData[index];
+        var node = this.anchorNodes[index];
+        var data = this.anchorData[index];
         if (data.newAnchor) {
           node.innerHTML = '<a name="' + data.name + '" class="mce-item-anchor"></a>' + node.innerHTML;
         }
@@ -240,6 +251,7 @@ define([
       }
       return null;
     },
+
     set: function(val) {
       var anchor = this.getIndex(val);
       this.$select.select2('data', '' + anchor);
@@ -296,6 +308,7 @@ define([
 
   var LinkModal = Base.extend({
     name: 'linkmodal',
+    trigger: '.pat-linkmodal',
     defaults: {
       anchorSelector: 'h1,h2,h3',
       linkTypes: [
@@ -351,7 +364,7 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-      self.modal = new Modal(self.$el, {
+      self.modal = registry.patterns.modal.init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
         buttons: '.btn'
@@ -360,29 +373,31 @@ define([
         self.modalShown.apply(self, [e]);
       });
     },
+
     generateModalHtml: function() {
-      var self = this;
-      return self.template({
-        text: self.options.text,
-        insertHeading: self.options.text.insertHeading,
-        linkTypes: self.options.linkTypes,
-        externalText: self.options.text.external,
-        emailText: self.options.text.email,
-        subjectText: self.options.text.subject,
-        targetList: self.options.targetList,
-        titleText: self.options.text.title,
-        externalImageText: self.options.text.externalImage,
-        altText: self.options.text.alt,
-        imageAlignText: self.options.text.imageAlign,
-        scaleText: self.options.text.scale,
-        scales: self.options.scales,
-        cancelBtn: self.options.text.cancelBtn,
-        insertBtn: self.options.text.insertBtn
+      return this.template({
+        text: this.options.text,
+        insertHeading: this.options.text.insertHeading,
+        linkTypes: this.options.linkTypes,
+        externalText: this.options.text.external,
+        emailText: this.options.text.email,
+        subjectText: this.options.text.subject,
+        targetList: this.options.targetList,
+        titleText: this.options.text.title,
+        externalImageText: this.options.text.externalImage,
+        altText: this.options.text.alt,
+        imageAlignText: this.options.text.imageAlign,
+        scaleText: this.options.text.scale,
+        scales: this.options.scales,
+        cancelBtn: this.options.text.cancelBtn,
+        insertBtn: this.options.text.insertBtn
       });
     },
+
     isImageMode: function() {
       return ['image', 'uploadImage', 'externalImage'].indexOf(this.linkType) !== -1;
     },
+
     initElements: function() {
       var self = this;
       self.$target = $('select[name="target"]', self.modal.$modal);
@@ -413,14 +428,16 @@ define([
         });
       });
     },
+
     getLinkUrl: function() {
       // get the url, only get one uid
-      var self = this;
-      return self.linkTypes[self.linkType].toUrl();
+      return this.linkTypes[this.linkType].toUrl();
     },
+
     getValue: function() {
       return this.linkTypes[this.linkType].value();
     },
+
     updateAnchor: function(href) {
       var self = this;
       var target = self.$target.val();
@@ -433,12 +450,13 @@ define([
       }, self.linkTypes[self.linkType].attributes());
       self.tiny.execCommand('mceInsertLink', false, data);
     },
+
     focusElement: function(elm) {
-      var self = this;
-      self.tiny.focus();
-      self.tiny.selection.select(elm);
-      self.tiny.nodeChanged();
+      this.tiny.focus();
+      this.tiny.selection.select(elm);
+      this.tiny.nodeChanged();
     },
+
     updateImage: function(src) {
       var self = this;
       var data = $.extend(true, {}, {
@@ -476,12 +494,11 @@ define([
         self.focusElement(self.imgElm);
       }
     },
+
     modalShown: function(e) {
       var self = this;
-
       self.initElements();
       self.initData();
-
       // upload init
       self.$upload = $('.uploadify-me', self.modal.$modal);
       self.options.upload.relatedItems = self.options.relatedItems;
@@ -515,18 +532,19 @@ define([
         self.hide();
       });
     },
+
     show: function() {
       this.modal.show();
     },
+
     hide: function() {
       this.modal.hide();
     },
+
     initData: function() {
       var self = this;
-
       self.selection = self.tiny.selection;
       self.tiny.focus();
-
       var selectedElm = self.imgElm = self.selection.getNode();
       self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
 
@@ -582,41 +600,42 @@ define([
         }
       }
     },
+
     guessImageLink: function(src) {
-      var self = this;
-      if (src.indexOf(self.options.prependToScalePart) !== -1) {
-        self.linkType = 'image';
-        self.$scale.val(self.tinypattern.getScaleFromUrl(src));
-        self.linkTypes.image.set(self.tinypattern.stripGeneratedUrl(src));
+      if (src.indexOf(this.options.prependToScalePart) !== -1) {
+        this.linkType = 'image';
+        this.$scale.val(this.tinypattern.getScaleFromUrl(src));
+        this.linkTypes.image.set(this.tinypattern.stripGeneratedUrl(src));
       } else {
-        self.linkType = 'externalImage';
-        self.linkTypes.externalImage.set(src);
+        this.linkType = 'externalImage';
+        this.linkTypes.externalImage.set(src);
       }
     },
+
     guessAnchorLink: function(href) {
-      var self = this;
-      if (self.options.prependToUrl &&
-          href.indexOf(self.options.prependToUrl) !== -1) {
+      if (this.options.prependToUrl &&
+          href.indexOf(this.options.prependToUrl) !== -1) {
         // XXX if using default configuration, it gets more difficult
         // here to detect internal urls so this might need to change...
-        self.linkType = 'internal';
-        self.linkTypes.internal.set(self.tinypattern.stripGeneratedUrl(href));
+        this.linkType = 'internal';
+        this.linkTypes.internal.set(this.tinypattern.stripGeneratedUrl(href));
       } else if (href.indexOf('mailto:') !== -1) {
-        self.linkType = 'email';
+        this.linkType = 'email';
         var email = href.substring('mailto:'.length, href.length);
         var split = email.split('?subject=');
-        self.linkTypes.email.set(split[0]);
+        this.linkTypes.email.set(split[0]);
         if (split.length > 1) {
-          self.$subject.val(decodeURIComponent(split[1]));
+          this.$subject.val(decodeURIComponent(split[1]));
         }
       } else if (href[0] === '#') {
-        self.linkType = 'anchor';
-        self.linkTypes.anchor.setRaw(href.substring(1));
+        this.linkType = 'anchor';
+        this.linkTypes.anchor.setRaw(href.substring(1));
       } else {
-        self.linkType = 'external';
-        self.linkTypes.external.setRaw(href);
+        this.linkType = 'external';
+        this.linkTypes.external.setRaw(href);
       }
     },
+
     setSelectElement: function($el, val) {
       $el.find('option:selected').prop('selected', false);
       if (val) {
@@ -624,17 +643,16 @@ define([
         $el.find('option[value="' + val + '"]').prop('selected', true);
       }
     },
+
     reinitialize: function() {
       /*
        * This will probably be called before show is run.
        * It will overwrite the base html template given to
        * be able to privde default values for the overlay
        */
-      var self = this;
-      self.modal.options.html = self.generateModalHtml();
+      this.modal.options.html = this.generateModalHtml();
     }
   });
-
   return LinkModal;
 
 });

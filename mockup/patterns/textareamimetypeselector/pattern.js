@@ -59,13 +59,14 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-tinymce'
 ], function ($, Base, registry, tinymce) {
   'use strict';
 
   var TextareaMimetypeSelector = Base.extend({
     name: 'textareamimetypeselector',
+    trigger: '.pat-textareamimetypeselector',
     textarea: undefined,
     currentWidget: undefined,
     defaults: {

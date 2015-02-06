@@ -21,7 +21,15 @@ endif
 
 all: test-once bundles docs
 
-bundles: bundle-widgets bundle-structure bundle-plone
+stamp-npm: package.json
+	npm install
+	touch stamp-npm
+
+stamp-bower: stamp-npm bower.json
+	$(BOWER) install
+	touch stamp-bower
+
+bundles: stamp-bower bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
@@ -81,11 +89,14 @@ watch:
 test:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
-test-once:
+test-once: stamp-bower
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-dev:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev $(DEBUG) $(VERBOSE) --pattern=$(pattern)
+
+test-serve:
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_serve $(DEBUG) $(VERBOSE) --pattern=$(pattern)
 
 test-ci:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci $(DEBUG) $(VERBOSE)
@@ -95,6 +106,8 @@ clean:
 	rm -rf build
 	rm -rf node_modules
 	rm -rf bower_components
+	rm -f stamp-npm stamp-bower
+	rm -rf node_modules src/bower_components
 
 clean-deep: clean
 	if test -f $(BOWER); then $(BOWER) cache clean; fi

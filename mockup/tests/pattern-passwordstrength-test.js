@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-passwordstrength'
 ], function(expect, $, registry, PasswordStrength) {
   'use strict';
@@ -48,11 +48,8 @@ define([
       window.zxcvbn = fakeZxcvbn;
       registry.scan($el);
 
-      expect($el.html()).to.equal(
-          '<input type="password" class="pat-passwordstrength">' +
-          '<div class="pat-passwordstrength-meter level-0">' +
-          '<div></div>' + '<div></div>' + '<div></div>' + '<div></div>' +
-          '</div>');
+      expect($el.find('.pat-passwordstrength').size()).to.be.equal(1);
+      expect($el.find('.pat-passwordstrength-meter').hasClass('level-0')).to.be.equal(true);
     });
 
     it('tries to load zxcvbn once if not available', function() {

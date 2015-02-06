@@ -58,6 +58,7 @@ define([
 
   var UploadPattern = Base.extend({
     name: 'upload',
+    trigger: '.pat-upload',
     defaults: {
       showTitle: true,
       url: null, // XXX MUST provide url to submit to OR be in a form
@@ -391,6 +392,12 @@ define([
       return Math.round(mb / 1024) + ' GB';
     },
 
+    setPath: function(path){
+      var self = this;
+      self.currentPath = path;
+      self.options.url = self.dropzone.options.url = self.getUrl();
+    },
+
     setupRelatedItems: function($input) {
       var self = this;
       var options = self.options.relatedItems;
@@ -400,12 +407,11 @@ define([
       var ri = new RelatedItems($input, options);
       ri.$el.on('change', function() {
         var result = $(this).select2('data');
+        var path = null;
         if (result.length > 0){
-          self.currentPath = result[0].path;
-        } else {
-          self.currentPath = null;
+          path = result[0].path;
         }
-        self.options.url = self.dropzone.options.url = self.getUrl();
+        self.setPath(path);
       });
       return ri;
     }

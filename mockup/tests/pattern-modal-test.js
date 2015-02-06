@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-modal'
 ], function(expect, $, sinon, registry, Modal) {
   'use strict';

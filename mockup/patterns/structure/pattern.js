@@ -43,6 +43,7 @@ define([
 
   var Structure = Base.extend({
     name: 'structure',
+    trigger: '.pat-structure',
     defaults: {
       vocabularyUrl: null,
       tagsVocabularyUrl: null,
@@ -65,6 +66,7 @@ define([
       availableColumns: {
         'ModificationDate': _t('Last modified'),
         'EffectiveDate': _t('Published'),
+        'ExpirationDate': _t('Expiration'),
         'CreationDate': _t('Created'),
         'review_state': _t('Review state'),
         'Subject': _t('Tags'),
@@ -133,6 +135,10 @@ define([
       self.options.queryHelper = new utils.QueryHelper(
         $.extend(true, {}, self.options, {pattern: self}));
 
+      // check and see if a hash is provided for initial path
+      if(window.location.hash.substring(0, 2) === '#/'){
+        self.options.queryHelper.currentPath = window.location.hash.substring(1);
+      }
       delete self.options.attributes; // not compatible with backbone
 
       self.view = new AppView(self.options);

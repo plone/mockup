@@ -417,6 +417,7 @@ define([
 
   var QueryString = Base.extend({
     name: 'querystring',
+    trigger: '.pat-querystring',
     defaults: {
       indexes: [],
       classWrapperName: 'querystring-wrapper',
