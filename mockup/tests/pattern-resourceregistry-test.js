@@ -82,20 +82,10 @@ define([
       expect(this.$el.find('ul.resources li').length).to.equal(7);
     });
 
-    it('searches', function(){
-      this.pat.tabs.showOverrides = true;
-      this.pat.tabs.hideShow();
-      this.$el.find('.search-field').attr('value', 'bundles');
-      this.pat.tabs.overridesView.textChange();
-      expect(this.$el.find('.search-results li').length).to.equal(5);
-    });
-
     it('customize resource', function(){
       this.pat.tabs.showOverrides = true;
       this.pat.tabs.hideShow();
-      this.$el.find('.search-field').attr('value', 'plone');
-      this.pat.tabs.overridesView.textChange();
-      this.$el.find('.search-results li:last button').trigger('click');
+      this.$el.find('.select').select2('val', 'plone', true);
       expect(this.pat.options.overrides.length).to.equal(2);
     });
 
