@@ -19,7 +19,7 @@ define([
     template: _.template(
       '<form class="row">' +
         '<div class="col-md-12">' +
-          '<input class="select" type="hidden" placeholder="Search..." style="width: 100%" />' +
+          '<input class="select" type="hidden" placeholder="Select resource to override..." style="width: 100%" />' +
         '</div>' +
       '</form>' +
       '<div class="row">' +
