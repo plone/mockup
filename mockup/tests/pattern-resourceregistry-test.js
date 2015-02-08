@@ -79,7 +79,7 @@ define([
 
     it('loads', function() {
       expect(this.$el.find('ul.bundles li').length).to.equal(4);
-      expect(this.$el.find('ul.resources li').length).to.equal(7);
+      expect(this.$el.find('ul.resources li').length).to.equal(6);
     });
 
     it('customize resource', function(){
@@ -127,7 +127,7 @@ define([
 
     it('add resource', function(){
       this.$pat.find('button.add-resource').trigger('click');
-      expect(this.$el.find('ul.resources li').length).to.equal(8);
+      expect(this.$el.find('ul.resources li').length).to.equal(7);
     });
 
     it('add bundle', function(){
