@@ -181,15 +181,18 @@ define([
         self.loading.show();
 
         /* maintain history here */
-        if (!self.doNotPushState && self.options.urlStructure && window.history && window.history.pushState){
-          var path = self.queryHelper.getCurrentPath();
-          if(path === '/'){
-            path = '';
+        if(self.options.urlStructure && window.history && window.history.pushState){
+          if (!self.doNotPushState){
+            var path = self.queryHelper.getCurrentPath();
+            if(path === '/'){
+              path = '';
+            }
+            var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
+            window.history.pushState(null, null, url);
+            $('body').trigger('structure-url-changed', path);
+          }else{
+            self.doNotPushState = false;
           }
-          var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
-          window.history.pushState(null, null, url);
-        }else{
-          self.doNotPushState = false;
         }
       });
 
@@ -214,6 +217,7 @@ define([
             path = '/';
           }
           self.queryHelper.currentPath = path;
+          $('body').trigger('structure-url-changed', path);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
           self.collection.goTo(self.collection.information.firstPage);
