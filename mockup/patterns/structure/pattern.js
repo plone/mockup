@@ -45,6 +45,9 @@ define([
     name: 'structure',
     trigger: '.pat-structure',
     defaults: {
+      // for implementing history changes
+      // Example: {base: 'http://mysite.com', appended: '/folder_contents'}
+      urlStructure: null,
       vocabularyUrl: null,
       tagsVocabularyUrl: null,
       usersVocabularyUrl: null,
