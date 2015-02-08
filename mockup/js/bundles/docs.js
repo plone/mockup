@@ -176,6 +176,11 @@ require([
             title: 'Event Edit Forms',
             description: 'Start/End delta, validation whole day and open end handling',
             url: 'patterns/eventedit/pattern.js'
+          },
+          { id: 'livesearch',
+            title: 'Live search',
+            description: 'Live search widget',
+            url: 'patterns/livesearch/pattern.js'
           }
         ]
       },

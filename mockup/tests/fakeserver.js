@@ -163,6 +163,24 @@ define([
     }));
   });
 
+  server.respondWith('GET', /livesearch\.json/, function (xhr, id) {
+    var items = [{
+      url: 'http://localhost:8081/news/aggregator',
+      description: 'Site News',
+      title: 'News',
+      state: 'published'
+    }, {
+      url: 'http://localhost:8081/news/aggregator',
+      description: 'Site News',
+      title: 'News',
+      state: 'published'
+    }];
+    xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+      total: items.length,
+      items: items
+    }));
+  });
+
   // define here so it's the same for the entire page load.
   // these are all random items on the root of the site
   var randomItems = [];

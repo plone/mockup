@@ -99,6 +99,7 @@
       'mockup-patterns-upload-url': 'patterns/upload',
       'mockup-patterns-passwordstrength': 'patterns/passwordstrength/pattern',
       'mockup-patterns-passwordstrength-url': 'patterns/passwordstrength',
+      'mockup-patterns-livesearch': 'patterns/livesearch/pattern',
       'mockup-registry': 'bower_components/mockup-core/js/registry',
       'mockup-router': 'js/router',
       'mockup-ui-url': 'js/ui',
