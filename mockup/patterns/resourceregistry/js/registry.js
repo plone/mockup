@@ -167,6 +167,11 @@ define([
       });
       var resource = new ResourceEntryView(options);
       this.registryView.showResourceEditor(resource);
+
+      // and scroll to resource since huge list makes this hard to notice
+      $('html, body').animate({
+        scrollTop: resource.$el.offset().top
+      }, 1000);
     },
     deleteClicked: function(e){
       e.preventDefault();
@@ -526,11 +531,13 @@ define([
           '<ul class="bundles list-group">' +
             '<li class="list-group-item list-group-item-warning">Bundles</li>' +
           '</ul>' +
-          '<ul class="resources list-group">' +
+          '<ul class="resources-header list-group">' +
             '<li class="list-group-item list-group-item-warning">Resources ' +
               '<input class="float-right form-control input-xs" ' +
                       'placeholder="Filter..." />' +
             '</li>' +
+          '</ul>' +
+          '<ul class="resources list-group">' +
           '</ul>' +
         '</div>' +
         '<div class="form col-md-7"></div>' +
@@ -540,7 +547,7 @@ define([
       'click button.add-resource': 'addResourceClicked',
       'click button.add-bundle': 'addBundleClicked',
       'click button.cancel': 'revertChanges',
-      'keyup .resources input': 'filterResources',
+      'keyup .resources-header input': 'filterResources',
       'change .development-mode input': 'developmentModeChanged'
     },
     filterTimeout: 0,
@@ -570,8 +577,8 @@ define([
         clearTimeout(self.filterTimeout);
       }
       self.filterTimeout = setTimeout(function(){
-        var filterText = self.$('.resources input').val().toLowerCase();
-        var $els = self.$('.resources .list-group-item:not(.list-group-item-warning)');
+        var filterText = self.$('.resources-header input').val().toLowerCase();
+        var $els = self.$('.resources .list-group-item');
         if(!filterText || filterText.length < 3){
           $els.removeClass('hidden');
         }else{

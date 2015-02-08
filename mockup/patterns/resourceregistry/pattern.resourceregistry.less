@@ -18,7 +18,23 @@
             font-size: 11px; /* need to try and fit long strings */
         }
     }
+    .resources-header.list-group{
+        margin-bottom: 0;
+        li{
+            border-bottom: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
     .resources.list-group{
+        max-height: 700px;
+        overflow-x: scroll;
+
+        li{
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+        }
+
         .list-group-item-warning{
             position: relative;
 
