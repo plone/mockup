@@ -181,6 +181,11 @@ require([
             title: 'Live search',
             description: 'Live search widget',
             url: 'patterns/livesearch/pattern.js'
+          },
+          { id: 'contentloader',
+            title: 'Content Loader',
+            description: 'Dynamically configure content to be reloaded',
+            url: 'patterns/contentloader/pattern.js'
           }
         ]
       },
