@@ -1,7 +1,7 @@
 /* Content loader pattern.
  *
  * Options:
- *    url(string): To load content from remote resource.
+ *    url(string): To load content from remote resource. Use 'el' to use with anchor tag href.
  *    content(string): CSS selector for content already on page. Can be used in conjunction with url to load remote content on page.
  *    trigger(string): Event to trigger content loading. Defaults to "click"
  *    target(string): CSS selector of target for content loading. If this is empty, it's assume content will replace pattern element.
@@ -46,6 +46,9 @@ define([
     },
     init: function() {
       var that = this;
+      if(that.options.url === 'el' && that.$el[0].tagName === 'A'){
+        that.options.url = that.$el.attr('href');
+      }
       that.$el.on(that.options.trigger, function(e){
         e.preventDefault();
         that.$el.addClass('loading-content');
