@@ -155,7 +155,10 @@ define([
       this.$el.addClass(this.type + '-list-item-' + this.options.name);
     },
     serializedModel: function(){
-      return $.extend({}, {name: this.options.name}, this.options.data);
+      return $.extend({}, {
+        name: this.options.name,
+        view: this.options.registryView
+      }, this.options.data);
     },
     editResource: function(e){
       if(e){
@@ -419,8 +422,10 @@ define([
     template: _.template(
       '<a href="#"><%- name %></a> ' +
       '<div class="plone-btn-group pull-right">' +
-        '<button class="plone-btn plone-btn-default build plone-btn-xs">Build</button>' +
-        '<button class="plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>' +
+        '<% if(view.options.data.nonBuildableBundles.indexOf(name) === -1){ %>' +
+          '<button class="plone-btn plone-btn-default build plone-btn-xs">Build</button>' +
+          '<button class="plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>' +
+        '<% } %>' +
       '</div>'
     ),
     events: $.extend({}, RegistryResourceListItem.prototype.events, {

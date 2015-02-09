@@ -75,7 +75,8 @@
  *                                   "manageUrl": "/registry-manager",
  *                                   "lessUrl": "node_modules/less/dist/less-1.7.4.min.js",
  *                                   "lessConfigUrl": "tests/files/lessconfig.js",
- *                                   "rjsUrl": "tests/files/r.js"}'>
+ *                                   "rjsUrl": "tests/files/r.js",
+ *                                   "nonBuildableBundles": ["plone-legacy"]}'>
  *    </div>
  *
  */
@@ -224,7 +225,8 @@ define([
       baseUrl: null,
       rjsUrl: null,
       lessvariables: {},
-      patternoptions: {}
+      patternoptions: {},
+      nonBuildableBundles: ['plone-legacy']
     },
     init: function() {
       var self = this;
