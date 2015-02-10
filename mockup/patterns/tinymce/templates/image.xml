@@ -65,8 +65,8 @@
       </div>
     </div>
 
-    <input type="submit" class="btn" name="cancel" value="<%- cancelBtn %>" />
-    <input type="submit" class="btn btn-primary" name="insert" value="<%- insertBtn %>" />
+    <input type="submit" class="plone-btn" name="cancel" value="<%- cancelBtn %>" />
+    <input type="submit" class="plone-btn plone-btn-primary" name="insert" value="<%- insertBtn %>" />
 
   </div>
 </div>

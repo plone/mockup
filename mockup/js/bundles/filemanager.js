@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-base',
   'mockup-patterns-filemanager'
 ], function($, Registry, Base) {

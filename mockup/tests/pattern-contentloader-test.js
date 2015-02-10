@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-contentloader'
 ], function(expect, $, sinon, registry, ContentLoader) {
   'use strict';

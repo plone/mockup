@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-resourceregistry',
 ], function($, Registry) {
   'use strict';

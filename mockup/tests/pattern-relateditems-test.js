@@ -3,7 +3,7 @@ define([
   'jquery',
   'underscore',
   'sinon',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-relateditems'
 ], function(expect, $, _, sinon, registry, RelatedItems) {
   'use strict';

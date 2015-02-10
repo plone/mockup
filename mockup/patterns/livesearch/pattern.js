@@ -25,8 +25,9 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'underscore'
-], function ($, Base, _){
+  'underscore',
+  'translate'
+], function ($, Base, _, _t){
   'use strict';
 
   var Livesearch = Base.extend({
@@ -74,8 +75,8 @@ define([
         self.results = {
           items: [{
             url: '',
-            title: 'Error',
-            description: 'There was an error searching…',
+            title: _t('Error'),
+            description: _t('There was an error searching…'),
             state: 'error',
             error: false
           }],
@@ -96,20 +97,21 @@ define([
       /* find a status message */
 
       if(self.active){
-        self.$results.append($('<li class="searching">searching…</li>'));
+        self.$results.append($('<li class="searching">' + _t('searching…') + '</li>'));
       }else if(self.results === null){
         // no results gathered yet
-        self.$results.append($('<li class="no-results no-search">enter search phrase</li>'));
+        self.$results.append($('<li class="no-results no-search">' + _t('enter search phrase') + '</li>'));
       } else if(self.results.total === 0){
-        self.$results.append($('<li class="no-results">no results found</li>'));
+        self.$results.append($('<li class="no-results">' + _t('no results found') + '</li>'));
       } else{
-        self.$results.append($('<li class="results-summary">found ' + self.results.total + ' results</li>'));
+        self.$results.append($('<li class="results-summary">' + _t('found') +
+                               ' ' + self.results.total + ' ' + _t('results') + '</li>'));
       }
 
       if(self.results !== null){
         var template = _.template(self.options.itemTemplate);
         _.each(self.results.items, function(item, index){
-          var $el = $(template(item));
+          var $el = $(template($.extend({_t: _t}, item)));
           $el.attr('data-url', item.url).on('click', function(){
             if(!item.error){
               window.location = item.url;
@@ -122,7 +124,7 @@ define([
         });
         var nav = [];
         if(self.page > 1){
-          var $prev = $('<a href="#" class="prev">Previous</a>');
+          var $prev = $('<a href="#" class="prev">' + _t('Previous') + '</a>');
           $prev.click(function(e){
             self.disableHiding = true;
             e.preventDefault();
@@ -131,7 +133,7 @@ define([
           nav.push($prev);
         }
         if((self.page * self.options.perPage) < self.results.total){
-          var $next = $('<a href="#" class="next">Next</a>');
+          var $next = $('<a href="#" class="next">' + _t('Next') + '</a>');
           $next.click(function(e){
             self.disableHiding = true;
             e.preventDefault();

@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-preventdoublesubmit'
 ], function(expect, $, registry, PreventDoubleSubmit) {
   'use strict';

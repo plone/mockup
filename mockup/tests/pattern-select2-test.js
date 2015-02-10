@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-select2'
 ], function(expect, $, sinon, registry, Select2) {
   'use strict';

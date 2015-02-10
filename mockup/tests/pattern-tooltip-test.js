@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-tooltip'
 ], function(expect, $, registry, ToolTip) {
   'use strict';

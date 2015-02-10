@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-livesearch'
 ], function(expect, $, sinon, registry, Livesearch) {
   'use strict';

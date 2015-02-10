@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
@@ -367,7 +367,7 @@ define([
       self.modal = registry.patterns.modal.init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
-        buttons: '.btn'
+        buttons: '.plone-btn'
       });
       self.modal.on('shown', function(e) {
         self.modalShown.apply(self, [e]);
