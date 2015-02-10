@@ -4,6 +4,18 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- fix bootstrap css bleeding into global namespaces
+  [vangheem]
+
+- add recurrence pattern
+  [vangheem]
+
+- add livesearch pattern
+  [vangheem]
+
+- add history support for structure
+  [vangheem]
+
 - Patternslib merge: Use Patternslib's scanner and registry.  This allows us
   to: Use Patternslib patterns with Mockup/Plone and use Mockup patterns with
   Patternslib outside of Plone. For changes required to patterns, see:
