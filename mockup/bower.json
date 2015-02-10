@@ -21,7 +21,8 @@
     "requirejs-text": "2.0.12",
     "select2": "3.5.1",
     "tinymce-builded": "4.1.6",
-    "patternslib": "2.0.8"
+    "patternslib": "2.0.8",
+    "jquery.recurrenceinput.js": "v1.0.1"
   },
   "devDependencies": {
     "expect": "0.3.1",

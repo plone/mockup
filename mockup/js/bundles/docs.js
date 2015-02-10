@@ -186,6 +186,11 @@ require([
             title: 'Content Loader',
             description: 'Dynamically configure content to be reloaded',
             url: 'patterns/contentloader/pattern.js'
+          },
+          { id: 'recurrence',
+            title: 'Recurrence Widget',
+            description: 'Recurrence widget',
+            url: 'patterns/recurrence/pattern.js'
           }
         ]
       },
