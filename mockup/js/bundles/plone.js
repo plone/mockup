@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-base',
 
   'mockup-patterns-select2',
@@ -20,7 +20,7 @@ define([
   'bootstrap-dropdown',
   'bootstrap-collapse',
   'bootstrap-tooltip'
-], function($, Registry, Base) {
+], function($, registry, Base) {
   'use strict';
 
   // BBB: we need to hook pattern to classes which plone was using until now
@@ -28,18 +28,17 @@ define([
     name: 'plone',
     init: function() {
       var self = this;
-
     }
-
   });
 
   // initialize only if we are in top frame
   if (window.parent === window) {
     $(document).ready(function() {
       $('body').addClass('pat-plone');
-      Registry.scan($('body'));
+      if (!registry.initialized) {
+        registry.init();
+      }
     });
   }
-
   return Plone;
 });

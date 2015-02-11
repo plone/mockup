@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',

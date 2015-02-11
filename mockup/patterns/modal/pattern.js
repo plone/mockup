@@ -74,7 +74,7 @@ define([
   'underscore',
   'mockup-patterns-base',
   'mockup-patterns-backdrop',
-  'mockup-registry',
+  'pat-registry',
   'mockup-router',
   'mockup-utils',
   'jquery.form'

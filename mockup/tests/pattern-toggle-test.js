@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-toggle'
 ], function(expect, $, registry, Toggle) {
   'use strict';

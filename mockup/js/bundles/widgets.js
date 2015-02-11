@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-patterns-passwordstrength',
@@ -9,7 +9,7 @@ define([
   'mockup-patterns-querystring',
   'mockup-patterns-textareamimetypeselector',
   'mockup-patterns-tinymce'
-], function($, Registry, Base) {
+], function($, registry, Base) {
   'use strict';
 
   var PloneWidgets = Base.extend({
@@ -23,9 +23,10 @@ define([
   if (window.parent === window) {
     $(document).ready(function() {
       $('body').addClass('pat-plone-widgets');
-      Registry.scan($('body'));
+      if (!registry.initialized) {
+        registry.init();
+      }
     });
   }
-
   return PloneWidgets;
 });
