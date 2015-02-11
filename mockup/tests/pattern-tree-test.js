@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-tree'
 ], function(expect, $, registry, Tree) {
   'use strict';

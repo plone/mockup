@@ -375,6 +375,7 @@ define([
         self.addResult('No javascripts to build, skipping');
         return self.buildCSSBundle();
       }
+
       config.out = function(results){
         $.ajax({
           url: self.rview.options.data.manageUrl,

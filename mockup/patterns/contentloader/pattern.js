@@ -29,7 +29,7 @@ define([
   'jquery',
   'mockup-patterns-base',
   'pat-logger',
-  'pat-registry',
+  'mockup-registry',
   'mockup-utils'
 ], function($, Base, logger, Registry, utils) {
   'use strict';

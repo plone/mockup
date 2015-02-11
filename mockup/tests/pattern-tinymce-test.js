@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'pat-registry',
+  'mockup-registry',
   'tinymce',
   'mockup-patterns-tinymce'
 ], function(expect, $, sinon, registry, tinymce, TinyMCE) {

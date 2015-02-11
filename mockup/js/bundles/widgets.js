@@ -1,5 +1,6 @@
 define([
   'jquery',
+  'pat-registry',
   'mockup-patterns-base',
   'mockup-patterns-select2',
   'mockup-patterns-passwordstrength',

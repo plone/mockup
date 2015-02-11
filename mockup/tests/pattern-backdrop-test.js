@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-backdrop'
 ], function(expect, $, registry, Backdrop) {
   'use strict';

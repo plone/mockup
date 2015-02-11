@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'pat-registry',
+  'mockup-registry',
   'mockup-patterns-eventedit'
 ], function(expect, $, registry, EventEdit) {
   'use strict';
