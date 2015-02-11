@@ -2,12 +2,9 @@ define([
   'jquery',
   'pat-registry',
   'mockup-patterns-resourceregistry',
-], function($, Registry) {
+], function($, registry, resource_registry) {
   'use strict';
-
-  $(document).ready(function() {
-    var $registry = $('.pat-resourceregistry');
-    Registry.scan($registry);
-  });
-
+  if (!registry.initialized) {
+    registry.init();
+  }
 });
