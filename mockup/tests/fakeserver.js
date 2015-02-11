@@ -675,7 +675,7 @@ define([
           'autotoc': 'patterns/autotoc/pattern',
           'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
           'jquery': 'bower_components/jquery/dist/jquery',
-          'mockup-registry': 'bower_components/mockup-core/js/registry',
+          'pat-registry': 'bower_components/patternslib/src/core/registry'
         },
         include: ['autotoc']
       };

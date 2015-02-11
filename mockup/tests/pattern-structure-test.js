@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-structure',
   'sinon',
 ], function(expect, $, registry, Structure, sinon) {

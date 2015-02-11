@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-formunloadalert'
 ], function(expect, $, registry, FormUnloadAlert) {
   'use strict';

@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-formautofocus'
 ], function(expect, $, registry, FormAutoFocus) {
   'use strict';

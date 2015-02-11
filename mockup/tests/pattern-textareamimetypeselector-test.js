@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-textareamimetypeselector',
   'mockup-patterns-tinymce'
 ], function(expect, $, registry, textareamimetypeselector, tinymce) {
