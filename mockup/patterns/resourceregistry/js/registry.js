@@ -6,8 +6,9 @@ define([
   'mockup-ui-url/views/base',
   'mockup-utils',
   'mockup-patterns-modal',
-  'mockup-patterns-resourceregistry-url/js/fields'
-], function($, _, BaseView, utils, Modal, fields) {
+  'mockup-patterns-resourceregistry-url/js/fields',
+  'mockup-patterns-resourceregistry-url/js/iframe'
+], function($, _, BaseView, utils, Modal, fields, IFrame) {
   'use strict';
 
 
@@ -272,40 +273,25 @@ define([
     };
 
     self._buildCSSBundle = function(config){
-      var $iframe = $('<iframe style="display:none"><html><head></head><body></body></html></iframe>').
-          appendTo('body').on('load', function(){
-      });
-      var iframe = $iframe[0];
-      var win = iframe.contentWindow || iframe;
-      win.lessErrorReporting = function(what, error, href){
-        if(what !== 'remove'){
-          self.addResult('less compilation error on file ' + href + ': ' + error);
+      var iframe = new IFrame({
+        name: 'lessc',
+        resources: config.less.concat([
+          self.rview.options.data.lessConfigUrl,
+          self.rview.options.data.lessUrl]),
+        configure: function(iframe){
+          iframe.window.lessErrorReporting = function(what, error, href){
+            if(what !== 'remove'){
+              self.addResult('less compilation error on file ' + href + ': ' + error);
+            }
+          };
         }
-      };
-      var head = $iframe.contents().find('head')[0];
-      _.each(config.less, function(less){
-        var link = document.createElement('link');
-        link.setAttribute('rel', 'stylesheet/less');
-        link.setAttribute('type', 'text/css');
-        link.setAttribute('href', less);
-        head.appendChild(link); 
       });
-      var script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.setAttribute('src', self.rview.options.data.lessConfigUrl);
-      script.onload = function(){
-        script = document.createElement('script');
-        script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', self.rview.options.data.lessUrl);
-        head.appendChild(script);
-      };
-      head.appendChild(script);
 
       /* XXX okay, wish there were a better way,
-         but we need to pool to find the */
+         but we need to pool to find the out if it's down loading less */
       self.addResult(config.less.length + ' css files to build');
       var checkFinished = function(){
-        var $styles =  $('style[type="text/css"][id]', head);
+        var $styles =  $('style[type="text/css"][id]', iframe.document);
         for(var i=0; i<$styles.length; i=i+1){
           var $style = $styles.eq(i); 
           if($style.attr('id') === 'less:error-message'){
@@ -320,7 +306,7 @@ define([
             var $el = $(this);
             data['data-' + $el.attr('id')] = $el.html();
           });
-          $iframe.remove();
+          iframe.destroy();
           $.ajax({
             url: self.rview.options.data.manageUrl,
             type: 'POST',
@@ -397,21 +383,17 @@ define([
           }
         });
       };
-      var $iframe = $('<iframe style="display:none"><html><head></head><body></body></html></iframe').appendTo('body');
-      var iframe = $iframe[0];
-      var win = iframe.contentWindow || iframe;
-      var head = $iframe.contents().find('head')[0];
-      var script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.setAttribute('src', self.rview.options.data.rjsUrl);
-      script.onload = function(){
-        win.requirejs.optimize(config, function(combined_files){
-          self.addResult('Saved javascript bundle, Build results: <pre>' + combined_files + '</pre>');
-          self.buildCSSBundle();
-          $iframe.remove();
-        });
-      };
-      head.appendChild(script);
+      new IFrame({
+        name: 'rjs',
+        resources: [self.rview.options.data.rjsUrl],
+        onLoad: function(iframe){
+          iframe.window.requirejs.optimize(config, function(combined_files){
+            self.addResult('Saved javascript bundle, Build results: <pre>' + combined_files + '</pre>');
+            self.buildCSSBundle();
+            iframe.destroy();
+          });
+        }
+      });
     };
 
     return self;
