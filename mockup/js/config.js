@@ -57,6 +57,7 @@
       'mockup-bundles-structure': 'js/bundles/structure',
       'mockup-bundles-tiles': 'js/bundles/widgets',
       'mockup-bundles-widgets': 'js/bundles/widgets',
+      'mockup-bundles-thememapper': 'js/bundles/thememapper',
       'mockup-docs': 'bower_components/mockup-core/js/docs/app',
       'mockup-docs-navigation': 'bower_components/mockup-core/js/docs/navigation',
       'mockup-docs-page': 'bower_components/mockup-core/js/docs/page',

@@ -157,6 +157,10 @@ module.exports = function(grunt) {
     copy: copy_tinymce('widgets', 'build/'),
     sed: sed_tinymce('widgets', 'build/', '++resource++plone.app.widgets')
   }, {path: 'build/', url: '++resource++plone.app.widgets'});
+  mockup.registerBundle(
+    'thememapper',
+    {},
+    {path: 'build/', url: '++resource++plone.app.theming'});
 
 
   mockup.initGrunt(grunt, {
