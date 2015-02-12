@@ -34,7 +34,7 @@ bundles: stamp-bower bundle-widgets bundle-structure bundle-plone bundle-themema
 	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
 	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
 	# cp build/plone* path/to/Products.CMFPlone/Products/CMFPlone/static
-	# cp build/thememapperbundle* path/to/plone.app.theming/src/plone/app/theming/browser/resources
+	# cp build/thememapper* path/to/plone.app.theming/src/plone/app/theming/browser/resources
 	# ----------------------------------------------------------------------- #
 
 bundle-widgets:
@@ -55,7 +55,7 @@ bundle-resourceregistry:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-resourceregistry $(DEBUG) $(VERBOSE)
 
 bundle-thememapper:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-thememapperbundle $(DEBUG) $(VERBOSE)
+	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-thememapper $(DEBUG) $(VERBOSE)
 
 docs:
 	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
