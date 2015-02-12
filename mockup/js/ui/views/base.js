@@ -1,8 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone'
-], function($, _, Backbone) {
+  'backbone',
+  'translate'
+], function($, _, Backbone, _t) {
   'use strict';
 
   var BaseView = Backbone.View.extend({
@@ -36,7 +37,7 @@ define([
     },
     applyTemplate: function() {
       if (this.template !== null) {
-        var data = $.extend({}, this.options, this.serializedModel());
+        var data = $.extend({_t: _t}, this.options, this.serializedModel());
         var template = this.template;
         if(typeof(template) === 'string'){
           template = _.template(template);

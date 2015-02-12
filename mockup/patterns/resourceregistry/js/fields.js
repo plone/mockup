@@ -120,7 +120,7 @@ define([
         '<span class="hidden glyphicon glyphicon-remove form-control-feedback"></span>' +
       '</div>' +
       '<div class="col-sm-1">' +
-        '<button class="plone-btn plone-btn-danger plone-btn-xs">Remove</button>' +
+        '<button class="plone-btn plone-btn-danger plone-btn-xs"><%- _t("Remove") %></button>' +
       '</div>')
   });
 
@@ -154,7 +154,7 @@ define([
     template: _.template(
       '<label class="col-sm-3 control-label"><%- title %></label>' +
       '<ul class="col-sm-9 fields list-group" />' +
-      '<button class="plone-btn plone-btn-default add pull-right">Add</button>'),
+      '<button class="plone-btn plone-btn-default add pull-right"><%- _t("Add") %></button>'),
     events: {
       'click button.add': 'addRowClicked',
       'change input': 'inputChanged',
@@ -202,7 +202,7 @@ define([
         $container.append('<li class="list-group-item"><div class="input-group">' +
           '<input class="form-control input-sm" value="' + value + '" />' +
           '<span class="input-group-btn">' +
-            '<button class="plone-btn plone-btn-default remove plone-btn-sm">Remove</button></div></li>');
+            '<button class="plone-btn plone-btn-default remove plone-btn-sm"><%- _t("Remove") %></button></div></li>');
       });
 
       if(self.sortable){

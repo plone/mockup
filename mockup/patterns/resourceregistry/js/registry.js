@@ -7,8 +7,9 @@ define([
   'mockup-utils',
   'mockup-patterns-modal',
   'mockup-patterns-resourceregistry-url/js/fields',
-  'mockup-patterns-resourceregistry-url/js/iframe'
-], function($, _, BaseView, utils, Modal, fields, IFrame) {
+  'mockup-patterns-resourceregistry-url/js/iframe',
+  'translate'
+], function($, _, BaseView, utils, Modal, fields, IFrame, _t) {
   'use strict';
 
 
@@ -53,37 +54,37 @@ define([
   var ResourceEntryView = AbstractResourceEntryView.extend({
     fields: [{
       name: 'name',
-      title: 'Name',
+      title: _t('Name'),
       view: fields.ResourceNameFieldView
     }, {
       name: 'url',
-      title: 'URL',
-      description: 'Resources base URL'
+      title: _t('URL'),
+      description: _t('Resources base URL')
     }, {
       name: 'js',
-      title: 'JS',
-      description: 'Main JavaScript file'
+      title: _t('JS'),
+      description: _t('Main JavaScript file')
     }, {
       name: 'css',
-      title: 'CSS/LESS',
-      description: 'List of CSS/LESS files to use for resource',
+      title: _t('CSS/LESS'),
+      description: _t('List of CSS/LESS files to use for resource'),
       view: fields.ResourceSortableListFieldView
     },{
       name: 'init',
-      title: 'Init', 
-      description: 'Init instruction for requirejs shim'
+      title: _t('Init'), 
+      description: _t('Init instruction for requirejs shim')
     }, {
       name: 'deps',
-      title: 'Dependencies',
-      description: 'Coma separated values of resources for requirejs shim'
+      title: _t('Dependencies'),
+      description: _t('Coma separated values of resources for requirejs shim')
     }, {
       name: 'export',
-      title: 'Export',
-      description: 'Export vars for requirejs shim'
+      title: _t('Export'),
+      description: _t('Export vars for requirejs shim')
     }, {
       name: 'conf',
-      title: 'Configuration',
-      description: 'Configuration in JSON for the widget',
+      title: _t('Configuration'),
+      description: _t('Configuration in JSON for the widget'),
       view: fields.ResourceTextAreaFieldView
     }]
   });
@@ -92,48 +93,48 @@ define([
   var BundleEntryView = AbstractResourceEntryView.extend({
     fields: [{
       name: 'name',
-      title: 'Name',
+      title: _t('Name'),
       view: fields.ResourceNameFieldView
     }, {
       name: 'resources',
-      title: 'Resources',
-      description: 'A main resource file to bootstrap bundle or a list of resources to load.',
+      title: _t('Resources'),
+      description: _t('A main resource file to bootstrap bundle or a list of resources to load.'),
       view: fields.BundleResourcesFieldView
     }, {
       name: 'depends',
-      title: 'Depends',
-      description: 'Bundle this depends on',
+      title: _t('Depends'),
+      description: _t('Bundle this depends on'),
       view: fields.BundleDependsFieldView
     }, {
       name: 'expression',
-      title: 'Expression',
-      description: 'Conditional expression to decide if this resource will run'
+      title: _t('Expression'),
+      description: _t('Conditional expression to decide if this resource will run')
     }, {
       name: 'enabled',
-      title: 'Enabled',
+      title: _t('Enabled'),
       view: fields.ResourceBoolFieldView
     }, {
       name: 'conditionalcomment',
-      title: 'Conditional comment',
-      description: 'For Internet Exploder hacks...'
+      title: _t('Conditional comment'),
+      description: _t('For Internet Exploder hacks...')
     }, {
       name: 'compile',
-      title: 'Does your bundle contain any RequireJS or LESS files?',
+      title: _t('Does your bundle contain any RequireJS or LESS files?'),
       view: fields.ResourceBoolFieldView
     }, {
       name: 'last_compilation',
-      title: 'Last compilation',
-      description: 'Date/Time when your bundle was last compiled. Empty, if it was never compiled.',
+      title: _t('Last compilation'),
+      description: _t('Date/Time when your bundle was last compiled. Empty, if it was never compiled.'),
       view: fields.ResourceDisplayFieldView
     }, {
       name: 'jscompilation',
-      title: 'Compiled JavaScript',
-      description: 'Automatically generated path to the compiled JavaScript.',
+      title: _t('Compiled JavaScript'),
+      description: _t('Automatically generated path to the compiled JavaScript.'),
       view: fields.ResourceDisplayFieldView
     }, {
       name: 'csscompilation',
-      title: 'Compiled CSS',
-      description: 'Automatically generated path to the compiled CSS.',
+      title: _t('Compiled CSS'),
+      description: _t('Automatically generated path to the compiled CSS.'),
       view: fields.ResourceDisplayFieldView
     }]
   });
@@ -145,7 +146,7 @@ define([
     className: 'list-group-item',
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<button class="pull-right plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>'
+      '<button class="pull-right plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>'
     ),
     events: {
       'click a': 'editResource',
@@ -203,9 +204,9 @@ define([
           'we will try to keep you updated on the progress.</p><p> Press the "Build it" ' +
           'button to proceed.</p></div>' +
         '<ul class="list-group hidden"></ul>' +
-        '<button class="plone-btn plone-btn-default cancel hidden cancel-build">Close</button>' +
-        '<button class="plone-btn plone-btn-primary build">Build it</button>' +
-      '</div>', bundleListItem.options),
+        '<button class="plone-btn plone-btn-default cancel hidden cancel-build"><%- _t("Close") %></button>' +
+        '<button class="plone-btn plone-btn-primary build"><%- _t("Build it") %></button>' +
+      '</div>', $.extend({ _t: _t }, bundleListItem.options)),
       content: null,
       width: 500,
       buttons: '.plone-btn'
@@ -241,9 +242,9 @@ define([
     };
 
     self.finished = function(error){
-      var msg = 'Finished!';
+      var msg = _t('Finished!');
       if(error){
-        msg = 'Error in build process';
+        msg = _t('Error in build process');
       }
       self.addResult(msg, 'list-group-item-warning');
       self.$btnClose.removeClass('hidden');
@@ -251,7 +252,7 @@ define([
     };
 
     self.buildJS = function(){
-      self.addResult('building javascripts');
+      self.addResult(_t('building javascripts'));
       $.ajax({
         url: self.rview.options.data.manageUrl,
         type: 'POST',
@@ -266,7 +267,7 @@ define([
           self._buildJSBundle(data);
         },
         error: function(){
-          self.addResult('Error building resources');
+          self.addResult(_t('Error building resources'));
           self.finished(true);
         }
       });
@@ -281,7 +282,7 @@ define([
         configure: function(iframe){
           iframe.window.lessErrorReporting = function(what, error, href){
             if(what !== 'remove'){
-              self.addResult('less compilation error on file ' + href + ': ' + error);
+              self.addResult(_t('less compilation error on file ') + href + ': ' + error);
             }
           };
         }
@@ -289,13 +290,13 @@ define([
 
       /* XXX okay, wish there were a better way,
          but we need to pool to find the out if it's down loading less */
-      self.addResult(config.less.length + ' css files to build');
+      self.addResult(config.less.length + _t(' css files to build'));
       var checkFinished = function(){
         var $styles =  $('style[type="text/css"][id]', iframe.document);
         for(var i=0; i<$styles.length; i=i+1){
           var $style = $styles.eq(i); 
           if($style.attr('id') === 'less:error-message'){
-            self.addResult('Error compiling less');
+            self.addResult(_t('Error compiling less'));
             return self.finished(true);
           }
         }
@@ -319,11 +320,11 @@ define([
             success: function(data){
               self.rview.options.data.overrides.push(data.filepath);
               self.rview.tabView.overridesView.render();
-              self.addResult('finished saving css bundles');
+              self.addResult(_t('finished saving css bundles'));
               self.finished();
             },
             error: function(){
-              self.addResult('Error saving css bundle');
+              self.addResult(_t('Error saving css bundle'));
               self.finished(true);
             }
           });
@@ -335,7 +336,7 @@ define([
     };
 
     self.buildCSSBundle = function(){
-      self.addResult('building CSS bundle');
+      self.addResult(_t('building CSS bundle'));
       $.ajax({
         url: self.rview.options.data.manageUrl,
         type: 'POST',
@@ -350,7 +351,7 @@ define([
           self._buildCSSBundle(data);
         },
         error: function(){
-          self.addResult('Error building css bundle');
+          self.addResult(_t('Error building css bundle'));
           self.finished(true);
         }
       });
@@ -358,7 +359,7 @@ define([
 
     self._buildJSBundle = function(config){
       if(config.include.length === 0){
-        self.addResult('No javascripts to build, skipping');
+        self.addResult(_t('No javascripts to build, skipping'));
         return self.buildCSSBundle();
       }
 
@@ -378,7 +379,7 @@ define([
             self.rview.tabView.overridesView.render();
           },
           error: function(){
-            self.addResult('Error building bundle');
+            self.addResult(_t('Error building bundle'));
             self.finished(true);
           }
         });
@@ -388,7 +389,7 @@ define([
         resources: [self.rview.options.data.rjsUrl],
         onLoad: function(iframe){
           iframe.window.requirejs.optimize(config, function(combined_files){
-            self.addResult('Saved javascript bundle, Build results: <pre>' + combined_files + '</pre>');
+            self.addResult(_t('Saved javascript bundle, Build results') + ': <pre>' + combined_files + '</pre>');
             self.buildCSSBundle();
             iframe.destroy();
           });
@@ -406,8 +407,8 @@ define([
       '<a href="#"><%- name %></a> ' +
       '<div class="plone-btn-group pull-right">' +
         '<% if(view.options.data.nonBuildableBundles.indexOf(name) === -1){ %>' +
-          '<button class="plone-btn plone-btn-default build plone-btn-xs">Build</button>' +
-          '<button class="plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>' +
+          '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
+          '<button class="plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
         '<% } %>' +
       '</div>'
     ),
@@ -436,7 +437,7 @@ define([
       e.preventDefault();
       var self = this;
       if(this.options.registryView.dirty){
-        alert('You have unsaved changes. Save or discard before building.');
+        alert(_t('You have unsaved changes. Save or discard before building.'));
       }else{
         var builder = new Builder(self.options.name, self);
         builder.run();
@@ -485,7 +486,7 @@ define([
       if(e){
         e.preventDefault();
       }
-      if(confirm('Are you sure you want to cancel? You will lose all changes.')){
+      if(confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
         this._revertData(this.previousData);
         this.render();
       }
@@ -501,12 +502,12 @@ define([
     template: _.template(
       '<div class="clearfix">' +
         '<div class="plone-btn-group pull-right">' +
-          '<button class="plone-btn plone-btn-success save">Save</button>' +
-          '<button class="plone-btn plone-btn-default cancel">Cancel</button>' +
+          '<button class="plone-btn plone-btn-success save"><%- _t("Save") %></button>' +
+          '<button class="plone-btn plone-btn-default cancel"><%- _t("Cancel") %></button>' +
         '</div>' +
         '<div class="plone-btn-group pull-right">' +
-          '<button class="plone-btn plone-btn-default add-bundle">Add bundle</button>' +
-          '<button class="plone-btn plone-btn-default add-resource">Add resource</button>' +
+          '<button class="plone-btn plone-btn-default add-bundle"><%- _t("Add bundle") %></button>' +
+          '<button class="plone-btn plone-btn-default add-resource"><%- _t("Add resource") %></button>' +
         '</div>' +
       '</div>' +
       '<div class="row">' +
@@ -514,19 +515,19 @@ define([
           '<label>' +
             '<input type="checkbox" ' +
               '<% if(data.development){ %> checked="checked" <% } %>' +
-              ' > Development Mode(only logged in users)' +
+              ' > <%- _t("Development Mode(only logged in users)") %>' +
           '</label>' +
         '</div>' +
       '</div>' +
       '<div class="row">' +
         '<div class="items col-md-5">' +
           '<ul class="bundles list-group">' +
-            '<li class="list-group-item list-group-item-warning">Bundles</li>' +
+            '<li class="list-group-item list-group-item-warning"><%- _t("Bundles") %></li>' +
           '</ul>' +
           '<ul class="resources-header list-group">' +
-            '<li class="list-group-item list-group-item-warning">Resources ' +
+            '<li class="list-group-item list-group-item-warning"><%- _t("Resources") %> ' +
               '<input class="float-right form-control input-xs" ' +
-                      'placeholder="Filter..." />' +
+                      'placeholder="<%- _t("Filter...") %>" />' +
             '</li>' +
           '</ul>' +
           '<ul class="resources list-group">' +

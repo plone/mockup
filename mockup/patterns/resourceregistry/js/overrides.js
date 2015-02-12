@@ -6,8 +6,9 @@ define([
   'mockup-ui-url/views/base',
   'mockup-patterns-texteditor',
   'mockup-utils',
-  'mockup-patterns-select2' 
-], function($, _, BaseView, TextEditor, utils, Select2) {
+  'mockup-patterns-select2',
+  'translate'
+], function($, _, BaseView, TextEditor, utils, Select2, _t) {
   'use strict';
 
   var OverridesView = BaseView.extend({
@@ -19,8 +20,8 @@ define([
     template: _.template(
       '<form class="row">' +
         '<div class="col-md-12">' +
-          '<p>Only ++plone++ resources are available to override</p>' +
-          '<input class="select" type="hidden" placeholder="Select resource to override..." style="width: 100%" />' +
+          '<p><%- _t("Only ++plone++ resources are available to override") %></p>' +
+          '<input class="select" type="hidden" placeholder="<%- _t("Select resource to override...") %>" style="width: 100%" />' +
         '</div>' +
       '</form>' +
       '<div class="row">' +
@@ -28,9 +29,9 @@ define([
           '<% if(view.editing){ %>' +
             '<p class="resource-name text-primary"><%- view.editing %></p> ' +
             '<div class="plone-btn-group">' +
-              '<button class="plone-btn plone-btn-primary plone-btn-xs disabled">Save</button> ' +
-              '<button class="plone-btn plone-btn-default plone-btn-xs disabled">Cancel</button>' +
-              '<button class="plone-btn plone-btn-danger plone-btn-xs">Delete customizations</button>' +
+              '<button class="plone-btn plone-btn-primary plone-btn-xs disabled"><%- _t("Save") %></button> ' +
+              '<button class="plone-btn plone-btn-default plone-btn-xs disabled"><%- _t("Cancel") %></button>' +
+              '<button class="plone-btn plone-btn-danger plone-btn-xs"><%- _t("Delete customizations") %></button>' +
             '</div>' +
           '<% } %>' +
           '<div class="editor" />' +
@@ -125,7 +126,7 @@ define([
 
       var format = function(data){
         if(data.override){
-          return '<span class="customized">' + data.text + ' - customized</span>';
+          return '<span class="customized">' + data.text + ' - ' + _t('customized') + '</span>';
         }
         return data.text;
       };
@@ -164,7 +165,7 @@ define([
             that.$el.find('.plone-btn-primary,.plone-btn-default').removeClass('disabled');
           });
         }).fail(function(){
-          alert('error loading resource for editing');
+          alert(_t('error loading resource for editing'));
           that.tabView.loading.hide();
         });
       }
