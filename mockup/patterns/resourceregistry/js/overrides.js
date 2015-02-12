@@ -19,6 +19,7 @@ define([
     template: _.template(
       '<form class="row">' +
         '<div class="col-md-12">' +
+          '<p>Only ++plone++ resources are available to override</p>' +
           '<input class="select" type="hidden" placeholder="Select resource to override..." style="width: 100%" />' +
         '</div>' +
       '</form>' +
@@ -107,7 +108,7 @@ define([
         }
         var items = [];
         var url;
-        if(resource.js){
+        if(resource.js && resource.js.indexOf('++plone++') !== -1){
           url = base + resource.js;
           if(overrides.indexOf(url) === -1){
             items.push({id: url, text: url});
@@ -115,7 +116,7 @@ define([
         }
         for(var i=0; i<resource.css.length; i=i+1){
           url = base + resource.css[i];
-          if(overrides.indexOf(url) === -1){
+          if(overrides.indexOf(url) === -1 && url.indexOf('++plone++') !== -1){
             items.push({id: url, text: url});
           }
         }
