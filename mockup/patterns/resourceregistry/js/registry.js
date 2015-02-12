@@ -435,8 +435,12 @@ define([
     buildClicked: function(e){
       e.preventDefault();
       var self = this;
-      var builder = new Builder(self.options.name, self);
-      builder.run(); 
+      if(this.options.registryView.dirty){
+        alert('You have unsaved changes. Save or discard before building.');
+      }else{
+        var builder = new Builder(self.options.name, self);
+        builder.run();
+      }
     }
   });
 
