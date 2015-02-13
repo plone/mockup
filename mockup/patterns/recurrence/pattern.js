@@ -1,7 +1,7 @@
 /* Recurrence pattern.
  *
  * Options:
- *    locatization(object): Customizations to locatizations. Default to null
+ *    localization(object): Customizations to locatizations. Default to null
  *    configuration(object): recurrent input widget configuration
  *
  * Documentation:
@@ -30,7 +30,7 @@ define([
     defaults: {
       // just passed onto the widget
       language: 'en',
-      locatization: null,
+      localization: null,
       configuration: {}
     },
     init: function() {
