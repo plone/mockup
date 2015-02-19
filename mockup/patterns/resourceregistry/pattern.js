@@ -24,15 +24,21 @@
  *        data-pat-resourceregistry='{"bundles":{
  *                                     "plone": {
  *                                       "resources": ["plone"], "depends": "",
- *                                       "expression": "", "enabled": true, "conditionalcomment": ""
+ *                                       "expression": "", "enabled": true, "conditionalcomment": "",
+ *                                       "develop_javascript": false, "develop_css": false,
+ *                                       "compile": true
  *                                     },
  *                                     "plone-auth": {
  *                                       "resources": ["plone-auth"], "depends": "plone",
- *                                       "expression": "", "enabled": true, "conditionalcomment": ""
+ *                                       "expression": "", "enabled": true, "conditionalcomment": "",
+ *                                       "develop_javascript": false, "develop_css": false,
+ *                                       "compile": true
  *                                     },
  *                                     "barceloneta": {
  *                                       "resources": ["barceloneta"], "depends": "*",
- *                                       "expression": "", "enabled": true, "conditionalcomment": ""
+ *                                       "expression": "", "enabled": true, "conditionalcomment": "",
+ *                                       "develop_javascript": false, "develop_css": false,
+ *                                       "compile": false
  *                                     }
  *                                   },
  *                                   "resources": {
@@ -75,8 +81,7 @@
  *                                   "manageUrl": "/registry-manager",
  *                                   "lessUrl": "node_modules/less/dist/less-1.7.4.min.js",
  *                                   "lessConfigUrl": "tests/files/lessconfig.js",
- *                                   "rjsUrl": "tests/files/r.js",
- *                                   "nonBuildableBundles": ["plone-legacy"]}'>
+ *                                   "rjsUrl": "tests/files/r.js"}'>
  *    </div>
  *
  */
@@ -227,8 +232,7 @@ define([
       baseUrl: null,
       rjsUrl: null,
       lessvariables: {},
-      patternoptions: {},
-      nonBuildableBundles: ['plone-legacy']
+      patternoptions: {}
     },
     init: function() {
       var self = this;

@@ -152,12 +152,17 @@ define([
       'click a': 'editResource',
       'click button.delete': 'deleteClicked'
     },
+    defaults: {
+      develop_javascript: false,
+      develop_css: false,
+      compile: true
+    },
     afterRender: function(){
       this.$el.attr('data-name', this.options.name);
       this.$el.addClass(this.type + '-list-item-' + this.options.name);
     },
     serializedModel: function(){
-      return $.extend({}, {
+      return $.extend({}, this.defaults, {
         name: this.options.name,
         view: this.options.registryView
       }, this.options.data);
@@ -180,9 +185,11 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      delete this.options.registryView.options.data.resources[this.options.name];
-      this.options.registryView.dirty = true;
-      this.options.registryView.render();
+      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' resource?'))){
+        delete this.options.registryView.options.data.resources[this.options.name];
+        this.options.registryView.dirty = true;
+        this.options.registryView.render();
+      }
     }
   });
 
@@ -403,18 +410,53 @@ define([
 
   var RegistryBundleListItem = RegistryResourceListItem.extend({
     type: 'bundle',
+    showActions: false,
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<div class="plone-btn-group pull-right">' +
-        '<% if(view.options.data.nonBuildableBundles.indexOf(name) === -1){ %>' +
-          '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
+      '<div class="actions>' +
+        '<div class="plone-btn-group">' +
+          '<% if(view.options.data.development) { %>' +
+            '<% if(develop_javascript){ %>' +
+              '<button class="plone-btn plone-btn-warning on develop-js plone-btn-xs"><%- _t("Stop Developing JavaScript") %></button>' +
+            '<% } else { %>' +
+              '<button class="plone-btn plone-btn-default develop-js plone-btn-xs"><%- _t("Develop JavaScript") %></button>' +
+            '<% } %>' +
+            '<% if(develop_css){ %>' +
+              '<button class="plone-btn plone-btn-warning on develop-css plone-btn-xs"><%- _t("Stop Developing CSS") %></button>' +
+            '<% } else { %>' +
+              '<button class="plone-btn plone-btn-default develop-css plone-btn-xs"><%- _t("Develop CSS") %></button>' +
+            '<% } %>' +
+          '<% } %>' +
+          '<% if(compile){ %>' +
+            '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
+          '<% } %>' +
           '<button class="plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
-        '<% } %>' +
+        '</div>' +
       '</div>'
     ),
     events: $.extend({}, RegistryResourceListItem.prototype.events, {
-      'click button.build': 'buildClicked'
+      'click button.build': 'buildClicked',
+      'click button.develop-js': 'developJavaScriptClicked',
+      'click button.develop-css': 'developCSSClicked'
     }),
+    developJavaScriptClicked: function(e){
+      e.preventDefault();
+      this.options.data.develop_javascript = !this.options.data.develop_javascript;
+      this.options.registryView.dirty = true;
+      this.options.registryView.render();
+    },
+    developCSSClicked: function(e){
+      e.preventDefault();
+      this.options.data.develop_css = !this.options.data.develop_css;
+      this.options.registryView.dirty = true;
+      this.options.registryView.render();
+    },
+    afterRender: function(){
+      RegistryResourceListItem.prototype.afterRender.apply(this);
+      if(this.showActions){
+        this.$el.find('.actions').show();
+      }
+    },
     editResource: function(e){
       if(e){
         e.preventDefault();
@@ -428,9 +470,11 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      delete this.options.registryView.options.data.bundles[this.options.name];
-      this.options.registryView.dirty = true;
-      this.options.registryView.render();
+      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' bundle?'))){
+        delete this.options.registryView.options.data.bundles[this.options.name];
+        this.options.registryView.dirty = true;
+        this.options.registryView.render();
+      }
     },
     
     buildClicked: function(e){
@@ -674,6 +718,9 @@ define([
       }
       self.options.tabView.saveData('save-development-mode', {
         value: value
+      }, function(){
+        self.options.data.development = self.$('.development-mode input')[0].checked;
+        self.render();
       });
     }
   });

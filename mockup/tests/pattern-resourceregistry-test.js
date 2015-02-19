@@ -4,7 +4,7 @@ define([
   'jquery',
   'pat-registry',
   'mockup-patterns-resourceregistry'
-], function(sinon, expect, $, registry) {
+], function(sinon, expect, $, registry, ResourceRegistry) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -15,15 +15,18 @@ define([
       var testData = {"bundles":{
                         "plone": {
                           "resources": "plone", "depends": null,
-                          "expression": "", "enabled": true, "conditionalcomment": ""
+                          "expression": "", "enabled": true, "conditionalcomment": "",
+                          "develop_javascript": false, "develop_css": false, "compile": true
                         },
                         "plone-auth": {
                           "resources": "plone-auth", "depends": "plone",
-                          "expression": "", "enabled": true, "conditionalcomment": ""
+                          "expression": "", "enabled": true, "conditionalcomment": "",
+                          "develop_javascript": false, "develop_css": false, "compile": true
                         },
                         "barceloneta": {
                           "resources": "plone", "depends": "*",
-                          "expression": "", "enabled": true, "conditionalcomment": ""
+                          "expression": "", "enabled": true, "conditionalcomment": "",
+                          "develop_javascript": false, "develop_css": false, "compile": true
                         }
                       },
                       "resources": {
@@ -65,13 +68,11 @@ define([
       this.$el = $('' +
         '<div>' +
         '  <div class="pat-resourceregistry "' +
-        "    data-pat-resourceregistry='" + JSON.stringify(testData) + "'>" +
         '  </div>' +
         '</div>');
 
-      registry.scan(this.$el);
       this.$pat =  this.$el.find('.pat-resourceregistry');
-      this.pat = this.$pat.data('pattern-resourceregistry');
+      this.pat = new ResourceRegistry(this.$pat, testData);
     });
     afterEach(function() {
       this.$el.remove();
@@ -112,11 +113,13 @@ define([
     });
 
     it('delete resource', function(){
+      window.confirm = function() { return true; };
       this.$pat.find('.resource-list-item-autotoc button').trigger('click');
       expect(this.pat.options.resources.autotoc).to.equal(undefined);
     });
 
     it('delete bundle', function(){
+      window.confirm = function() { return true; };
       this.$pat.find('.bundle-list-item-plone button').trigger('click');
       expect(this.pat.options.bundles.plone).to.equal(undefined);
     });
