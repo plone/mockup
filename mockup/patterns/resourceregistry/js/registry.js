@@ -5,13 +5,11 @@ define([
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-utils',
-  'mockup-patterns-modal',
   'mockup-patterns-resourceregistry-url/js/fields',
-  'mockup-patterns-resourceregistry-url/js/iframe',
+  'mockup-patterns-resourceregistry-url/js/builder',
   'translate'
-], function($, _, BaseView, utils, Modal, fields, IFrame, _t) {
+], function($, _, BaseView, utils, fields, Builder, _t) {
   'use strict';
-
 
   var AbstractResourceEntryView = BaseView.extend({
     tagName: 'div',
@@ -176,7 +174,7 @@ define([
         parent: this
       });
       var resource = new ResourceEntryView(options);
-      this.registryView.showResourceEditor(resource);
+      this.registryView.showResourceEditor(resource, this, 'resource');
 
       // and scroll to resource since huge list makes this hard to notice
       $('html, body').animate({
@@ -194,226 +192,12 @@ define([
   });
 
 
-  var Builder = function(bundleName, bundleListItem){
-    var self = this;
-    self.bundleName = bundleName;
-    self.bundleListItem = bundleListItem;
-    self.rview = bundleListItem.options.registryView;
-    self.$results = null;
-    self.$btnClose = null;
-
-    self.rview.loading.show();
-    self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {
-      html: _.template('<div id="content">' +
-        '<h1>Bundle Builder</h1>' +
-        '<div class="start-info"><p>You are about to build the <span class="label label-primary">' +
-          '<%= name %></span> pattern. </p><p>This may take some a bit of time so ' +
-          'we will try to keep you updated on the progress.</p><p> Press the "Build it" ' +
-          'button to proceed.</p></div>' +
-        '<ul class="list-group hidden"></ul>' +
-        '<button class="plone-btn plone-btn-default cancel hidden cancel-build"><%- _t("Close") %></button>' +
-        '<button class="plone-btn plone-btn-primary build"><%- _t("Build it") %></button>' +
-      '</div>', $.extend({ _t: _t }, bundleListItem.options)),
-      content: null,
-      width: 500,
-      buttons: '.plone-btn'
-    });
-    self.modal.on('shown', function() {
-      var $el = self.modal.$modal;
-      var $info = $el.find('.start-info');
-      self.$btnClose = $el.find('button.cancel-build');
-      var $btn = $el.find('button.build');
-      $btn.off('click').on('click', function(e){
-        e.preventDefault();
-        $info.addClass('hidden');
-        $btn.prop('disabled', true);
-        self.$results = $el.find('.list-group').removeClass('hidden');
-        self.buildJS();
-        self.rview.loading.show();
-      });
-
-      self.$btnClose.off('click').on('click', function(){
-        self.modal.hide();
-      });
-    });
-
-    self.addResult = function(txt, klass){
-      if(!klass){
-        klass = '';
-      }
-      self.$results.append('<li class="list-group-item ' + klass + '">' + txt + '</li>');
-    };
-
-    self.run = function(){
-      self.modal.show();
-    };
-
-    self.finished = function(error){
-      var msg = _t('Finished!');
-      if(error){
-        msg = _t('Error in build process');
-      }
-      self.addResult(msg, 'list-group-item-warning');
-      self.$btnClose.removeClass('hidden');
-      self.rview.loading.hide();
-    };
-
-    self.buildJS = function(){
-      self.addResult(_t('building javascripts'));
-      $.ajax({
-        url: self.rview.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'js-build-config',
-          bundle: self.bundleName,
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(data){
-          /* sort of weird here, follow along. We'll build CSS after JS */
-          self._buildJSBundle(data);
-        },
-        error: function(){
-          self.addResult(_t('Error building resources'));
-          self.finished(true);
-        }
-      });
-    };
-
-    self._buildCSSBundle = function(config){
-      var iframe = new IFrame({
-        name: 'lessc',
-        resources: config.less.concat([
-          self.rview.options.data.lessConfigUrl,
-          self.rview.options.data.lessUrl]),
-        configure: function(iframe){
-          iframe.window.lessErrorReporting = function(what, error, href){
-            if(what !== 'remove'){
-              self.addResult(_t('less compilation error on file ') + href + ': ' + error);
-            }
-          };
-        }
-      });
-
-      /* XXX okay, wish there were a better way,
-         but we need to pool to find the out if it's down loading less */
-      self.addResult(config.less.length + _t(' css files to build'));
-      var checkFinished = function(){
-        var $styles =  $('style[type="text/css"][id]', iframe.document);
-        for(var i=0; i<$styles.length; i=i+1){
-          var $style = $styles.eq(i); 
-          if($style.attr('id') === 'less:error-message'){
-            self.addResult(_t('Error compiling less'));
-            return self.finished(true);
-          }
-        }
-        if($styles.length === config.less.length){
-          // we're finished, save it
-          var data = {};
-          $styles.each(function(){
-            var $el = $(this);
-            data['data-' + $el.attr('id')] = $el.html();
-          });
-          iframe.destroy();
-          $.ajax({
-            url: self.rview.options.data.manageUrl,
-            type: 'POST',
-            dataType: 'json',
-            data: $.extend(data, {
-              action: 'save-less-build',
-              bundle: self.bundleName,
-              _authenticator: utils.getAuthenticator()
-            }),
-            success: function(data){
-              self.rview.options.data.overrides.push(data.filepath);
-              self.rview.tabView.overridesView.render();
-              self.addResult(_t('finished saving css bundles'));
-              self.finished();
-            },
-            error: function(){
-              self.addResult(_t('Error saving css bundle'));
-              self.finished(true);
-            }
-          });
-        }else{
-          setTimeout(checkFinished, 300);
-        }
-      };
-      checkFinished();
-    };
-
-    self.buildCSSBundle = function(){
-      self.addResult(_t('building CSS bundle'));
-      $.ajax({
-        url: self.rview.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'less-build-config',
-          bundle: self.bundleName,
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(data){
-          /* sort of weird here, follow along. We'll build CSS after JS */
-          self._buildCSSBundle(data);
-        },
-        error: function(){
-          self.addResult(_t('Error building css bundle'));
-          self.finished(true);
-        }
-      });
-    };
-
-    self._buildJSBundle = function(config){
-      if(config.include.length === 0){
-        self.addResult(_t('No javascripts to build, skipping'));
-        return self.buildCSSBundle();
-      }
-
-      config.out = function(results){
-        $.ajax({
-          url: self.rview.options.data.manageUrl,
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            action: 'save-js-build',
-            bundle: self.bundleName,
-            data: results,
-            _authenticator: utils.getAuthenticator()
-          },
-          success: function(data){
-            self.rview.options.data.overrides.push(data.filepath);
-            self.rview.tabView.overridesView.render();
-          },
-          error: function(){
-            self.addResult(_t('Error building bundle'));
-            self.finished(true);
-          }
-        });
-      };
-      new IFrame({
-        name: 'rjs',
-        resources: [self.rview.options.data.rjsUrl],
-        onLoad: function(iframe){
-          iframe.window.requirejs.optimize(config, function(combined_files){
-            self.addResult(_t('Saved javascript bundle, Build results') + ': <pre>' + combined_files + '</pre>');
-            self.buildCSSBundle();
-            iframe.destroy();
-          });
-        }
-      });
-    };
-
-    return self;
-  };
-
-
   var RegistryBundleListItem = RegistryResourceListItem.extend({
     type: 'bundle',
-    showActions: false,
+    active: false,
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<div class="actions>' +
+      '<div class="actions">' +
         '<div class="plone-btn-group">' +
           '<% if(view.options.data.development) { %>' +
             '<% if(develop_javascript){ %>' +
@@ -453,8 +237,8 @@ define([
     },
     afterRender: function(){
       RegistryResourceListItem.prototype.afterRender.apply(this);
-      if(this.showActions){
-        this.$el.find('.actions').show();
+      if(this.active){
+        this.editResource();
       }
     },
     editResource: function(e){
@@ -466,7 +250,15 @@ define([
         parent: this
       });
       var resource = new BundleEntryView(options);
-      this.registryView.showResourceEditor(resource);
+      this.registryView.showResourceEditor(resource, this, 'bundle');
+
+      // only one can be edited at a time, deactivate
+      _.each(this.options.registryView.items.bundles, function(bundleItem){
+        bundleItem.active = false;
+      });
+      this.active = true;
+      this.$el.parent().find('.list-group-item').removeClass('active');
+      this.$el.addClass('active');
     },
     deleteClicked: function(e){
       e.preventDefault();
@@ -493,6 +285,7 @@ define([
     tagName: 'div',
     className: 'tab-pane',
     $form: null,
+    activeResource: null,
 
     initialize: function(options) {
       var self = this;
@@ -514,7 +307,12 @@ define([
       */
     },
 
-    showResourceEditor: function(resource){
+    showResourceEditor: function(resource, view, type){
+      this.activeResource = {
+        resource: resource,
+        item: view,
+        type: type
+      };
       this.$form.empty().append(resource.render().el);
     },
 
@@ -656,23 +454,38 @@ define([
         resources: {}
       };
       _.each(bundles, function(resourceName){
-        var item = new RegistryBundleListItem({
-          data: data.bundles[resourceName],
-          name: resourceName,
-          registryView: self});
+        var item;
+        if(self.activeResource && self.activeResource.type === 'bundle' && self.activeResource.item.options.name === resourceName){
+          item = self.activeResource.item;
+        }else{
+          item = new RegistryBundleListItem({
+            data: data.bundles[resourceName],
+            name: resourceName,
+            registryView: self});
+        }
         self.items.bundles[resourceName] = item;
         self.$bundles.append(item.render().el);
       });
       var resources = _.sortBy(_.keys(data.resources), function(v){ return v.toLowerCase(); });
       _.each(resources, function(resourceName){
-        var item = new RegistryResourceListItem({
-          data: data.resources[resourceName],
-          name: resourceName,
-          registryView: self});
+        var item;
+        if(self.activeResource && self.activeResource.type === 'resource' && self.activeResource.item.options.name === resourceName){
+          item = self.activeResource.item;
+        } else {
+          item = new RegistryResourceListItem({
+            data: data.resources[resourceName],
+            name: resourceName,
+            registryView: self});
+        }
         self.items.resources[resourceName] = item;
         self.$resources.append(item.render().el);
       });
       BaseResourcesPane.prototype.afterRender.apply(self);
+
+      // finally, show edit pane if there is an active resource
+      if(self.activeResource){
+        self.showResourceEditor(self.activeResource.resource, self.activeResource.item, self.activeResource.type);
+      }
       return self;
     },
 
