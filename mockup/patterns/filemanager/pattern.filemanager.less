@@ -93,13 +93,19 @@
     .tree {
         float: left;
         width: 17%;
+        word-wrap: break-word;
+        font-size: 0.8em;
+        margin-top: 2.5em;
         ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
         background: #E7E7E7;
         }
         ul.jqtree-tree {
             margin-left: 0px;
-            li span {
-            padding-left: 12px;
+            li.jqtree_common {
+                margin-bottom: 0.2em;
+            }
+            .jqtree-title {
+                margin-left: 0em;
             }
         }
     }
