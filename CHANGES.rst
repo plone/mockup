@@ -22,6 +22,9 @@ Changelog
   mockup/GETTING_STARTED.md . Refs: #460.
   [jcbrand]
 
+- Add icons to relateditems pattern (see https://github.com/plone/mockup/issues/442)
+  [petschki]
+
 
 1.8.3 (2015-01-26)
 ------------------

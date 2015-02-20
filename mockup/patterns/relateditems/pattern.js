@@ -102,12 +102,13 @@ define([
       homeText: _t('home'),
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID', 'Title', 'Type', 'path'],
+      attributes: ['UID', 'Title', 'Type', 'path', 'getIcon'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       resultTemplate: '' +
         '<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
+        '    <span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span>' +
         '    <span class="pattern-relateditems-result-title"><%= Title %></span>' +
         '    <span class="pattern-relateditems-result-path"><%= path %></span>' +
         '  </a>' +
@@ -120,6 +121,7 @@ define([
       resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item pattern-relateditems-type-<%= Type %>">' +
+        ' <span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span>' +
         ' <span class="pattern-relateditems-item-title"><%= Title %></span>' +
         ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
         '</span>',
