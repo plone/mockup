@@ -36,25 +36,25 @@ define([
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
         var root = [
-          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image'},
-          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder'},
-          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder'},
-          {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder'},
-          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document'},
-          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document'},
-          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder'},
-          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document'},
+          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image', getIcon: "jpeg.png"},
+          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder', getIcon: ""},
+          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder', getIcon: ""},
+          {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder', getIcon: ""},
+          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document', getIcon: "document.png"},
+          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document', getIcon: ""},
+          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder', getIcon: ""},
+          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document', getIcon: ""},
         ];
         var about = [
-          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', Type: 'Document'},
-          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', Type: 'Document'},
-          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', Type: 'Folder'},
-          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', Type: 'Document'}
+          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', Type: 'Document', getIcon: ""},
+          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', Type: 'Document', getIcon: ""},
+          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', Type: 'Folder', getIcon: ""},
+          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', Type: 'Document', getIcon: ""}
         ];
 
         var staff = [
-          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', Type: 'Document'},
-          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', Type: 'Document'}
+          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', Type: 'Document', getIcon: ""},
+          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', Type: 'Document', getIcon: ""}
         ];
         var searchables = about.concat(root).concat(staff);
 
