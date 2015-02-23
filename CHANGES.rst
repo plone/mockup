@@ -4,6 +4,10 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Add ``id`` and ``Title`` to the default available columns of the structure
+  pattern.
+  [thet]
+
 - fix bootstrap css bleeding into global namespaces
   [vangheem]
 

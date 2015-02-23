@@ -67,6 +67,8 @@ define([
         'review_state'
       ],
       availableColumns: {
+        'id': _t('ID'),
+        'Title': _t('Title'),
         'ModificationDate': _t('Last modified'),
         'EffectiveDate': _t('Published'),
         'ExpirationDate': _t('Expiration'),
