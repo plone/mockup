@@ -114,7 +114,7 @@ define([
       },
       relatedItems: {
         // UID attribute is required here since we're working with related items
-        attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
+        attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate', 'getIcon'],
         batchSize: 20,
         basePath: '/',
         vocabularyUrl: null,

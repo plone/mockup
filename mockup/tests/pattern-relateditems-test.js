@@ -36,13 +36,13 @@ define([
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
         var root = [
-          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image', getIcon: "jpeg.png"},
+          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image', getIcon: "image.png"},
           {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder', getIcon: ""},
           {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder', getIcon: ""},
           {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder', getIcon: ""},
           {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document', getIcon: "document.png"},
           {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document', getIcon: ""},
-          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder', getIcon: ""},
+          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder', getIcon: "folder.png"},
           {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document', getIcon: ""},
         ];
         var about = [
