@@ -4,6 +4,12 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Bring back TinyMCE ``sed`` and ``copy`` from ``mockup`` into ``mockup-core``.
+  If we create bundles from an external package based on patterns from mockup,
+  we don't want to care about the sed and copy tasks too. Instead, those should
+  be defined on the patterns itself, but thats for a future release.
+  [thet]
+
 - Add ``id`` and ``Title`` to the default available columns of the structure
   pattern.
   [thet]
