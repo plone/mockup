@@ -2,9 +2,11 @@ define([
   'jquery',
   'pat-registry',
   'mockup-patterns-base',
+
   'mockup-patterns-select2',
   'mockup-patterns-passwordstrength',
   'mockup-patterns-pickadate',
+  'mockup-patterns-recurrence',
   'mockup-patterns-relateditems',
   'mockup-patterns-querystring',
   'mockup-patterns-textareamimetypeselector',
