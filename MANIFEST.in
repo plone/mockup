@@ -3,6 +3,6 @@ recursive-include js *
 recursive-include less *
 recursive-include lib *
 recursive-include patterns *
-recursive-include docs *
+recursive-include tests *
 include *
-global-exclude *.pyc
+global-exclude *.py?

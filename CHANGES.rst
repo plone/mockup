@@ -4,6 +4,10 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Split out the Python package into ``plone.mockup`` and make ``mockup``
+  installable via ``bower`` again.
+  [thet]
+
 - Bring back TinyMCE ``sed`` and ``copy`` from ``mockup`` into ``mockup-core``.
   If we create bundles from an external package based on patterns from mockup,
   we don't want to care about the sed and copy tasks too. Instead, those should
