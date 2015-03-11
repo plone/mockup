@@ -30,8 +30,9 @@ define([
   'mockup-patterns-base',
   'pat-logger',
   'pat-registry',
-  'mockup-utils'
-], function($, Base, logger, Registry, utils) {
+  'mockup-utils',
+  'underscore'
+], function($, Base, logger, Registry, utils, _) {
   'use strict';
   var log = logger.getLogger('pat-contentloader');
 
@@ -42,36 +43,68 @@ define([
       url: null,
       content: null,
       trigger: 'click',
-      target: null
+      target: null,
+      template: null,
+      dataType: 'html'
     },
     init: function() {
       var that = this;
       if(that.options.url === 'el' && that.$el[0].tagName === 'A'){
         that.options.url = that.$el.attr('href');
       }
-      that.$el.on(that.options.trigger, function(e){
-        e.preventDefault();
-        that.$el.addClass('loading-content');
-        if(that.options.url){
-          that.loadRemote();
-        }else{
-          that.loadLocal();
-        }
-      });
+      if(that.options.trigger === 'immediate'){
+        that._load();
+      }else{
+        that.$el.on(that.options.trigger, function(e){
+          e.preventDefault();
+          that._load();
+        });
+      }
+    },
+    _load: function(){
+      var that = this;
+      that.$el.addClass('loading-content');
+      if(that.options.url){
+        that.loadRemote();
+      }else{
+        that.loadLocal();
+      }
     },
     loadRemote: function(){
       var that = this;
       $.ajax({
-        url: that.options.url
-      }).done(function(data){
-        if(data.indexOf('<html') !== -1){
-          data = utils.parseBodyTag(data);
+        url: that.options.url,
+        dataType: that.options.dataType,
+        success: function(data){
+          var $el;
+          if(that.options.dataType === 'html'){
+            if(data.indexOf('<html') !== -1){
+              data = utils.parseBodyTag(data);
+            }
+            $el = $(data);
+          }else if(that.options.dataType.indexOf('json') !== -1){
+            // must have template defined with json
+            if(data.constructor === Array && data.length === 1){
+              // normalize json if it makes sense since some json returns as array with one item
+              data = data[0];
+            }
+            try{
+              $el = $(_.template(that.options.template, data));
+            }catch(e){
+              // log this
+              log.warn('error rendering template. pat-contentloader will not work');
+              return;
+            }
+          }
+          if(that.options.content !== null){
+            $el = $el.find(that.options.content);
+          }
+          that.loadLocal($el);
+          that.$el.removeClass('loading-content');
+        },
+        error: function(){
+          that.$el.addClass('content-load-error');
         }
-        var $el = $(data);
-        if(that.options.content !== null){
-          $el = $el.find(that.options.content);
-        }
-        that.loadLocal($el);
       });
     },
     loadLocal: function($content){
