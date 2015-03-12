@@ -113,6 +113,10 @@ define([
       /* XXX okay, wish there were a better way,
          but we need to pool to find the out if it's down loading less */
       self.addResult(config.less.length + _t(' css files to build'));
+      var lessModified = Boolean(
+          self.rview.options.data.lessModifyUrl === null ||
+          self.rview.options.data.lessModifyUrl === undefined
+      );
       var checkFinished = function(){
         var $styles =  $('style[type="text/css"][id]', iframe.document);
         for(var i=0; i<$styles.length; i=i+1){
@@ -122,7 +126,7 @@ define([
             return self.finished(true);
           }
         }
-        if($styles.length === config.less.length){
+        if($styles.length === config.less.length && lessModified === true){
           // we're finished, save it
           var data = {};
           $styles.each(function(){
@@ -150,6 +154,16 @@ define([
               self.finished(true);
             }
           });
+        }else if($styles.length === config.less.length){
+          $styles.each(function(){$(this).remove();});
+
+          script = document.createElement('script');
+          script.setAttribute('type', 'text/javascript');
+          script.setAttribute('src', self.rview.options.data.lessModifyUrl);
+          head.appendChild(script);
+
+          lessModified = true;
+          setTimeout(checkFinished, 300);
         }else{
           setTimeout(checkFinished, 300);
         }
