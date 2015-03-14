@@ -161,16 +161,17 @@ define([
         'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
         theme: '-modern',
         plugins: [
-          '-advlist -autolink -lists -charmap -print -preview -anchor ' +
-          '-searchreplace -visualblocks -code -fullscreen -autoresize ' +
-          '-insertdatetime -media -table -contextmenu -paste -plonelink -ploneimage'
+          'advlist autolink lists charmap print preview anchor ' +
+          'searchreplace visualblocks code fullscreen ' +
+          'insertdatetime media table contextmenu paste plonelink ploneimage'
         ],
         menubar: 'edit table format tools view insert',
         toolbar: 'undo redo | styleselect | bold italic | ' +
                  'alignleft aligncenter alignright alignjustify | ' +
                  'bullist numlist outdent indent | ' +
                  'unlink plonelink ploneimage',
-        'autoresize_max_height': 1500
+        //'autoresize_max_height': 900,
+        'height': 400
       }
     },
     addLinkClicked: function() {
