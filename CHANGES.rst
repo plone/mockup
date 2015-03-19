@@ -4,6 +4,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- make sure mockup can be installable with bower again
+  [vangheem]
+
 - Bring back TinyMCE ``sed`` and ``copy`` from ``mockup`` into ``mockup-core``.
   If we create bundles from an external package based on patterns from mockup,
   we don't want to care about the sed and copy tasks too. Instead, those should
