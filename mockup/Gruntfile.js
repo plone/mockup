@@ -30,12 +30,12 @@ module.exports = function(grunt) {
       docs: {
         files: [
           { expand: true, src: 'index.html', dest: 'docs/dev/' },
-          { expand: true, src: '*.md', dest: 'docs/dev/' },
+          { expand: true, src: '../*.md', dest: 'docs/dev/' },
           { expand: true, src: 'js/**', dest: 'docs/dev/' },
           { expand: true, src: 'tests/**', dest: 'docs/dev/' },
           { expand: true, src: 'lib/**', dest: 'docs/dev/' },
           { expand: true, src: 'bower_components/**', dest: 'docs/dev/' },
-          { expand: true, src: 'node_modules/requirejs/require.js', dest: 'docs/dev/' },
+          { expand: true, src: '../node_modules/requirejs/require.js', dest: 'docs/dev/' },
           { expand: true, src: 'build/**', dest: 'docs/dev/' },
           { expand: true, src: 'less/**', dest: 'docs/dev/' }
         ]
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
   mockup.initGrunt(grunt, {
     sed: {
       bootstrap: {
-        path: 'node_modules/lcov-result-merger/index.js',
+        path: '../node_modules/lcov-result-merger/index.js',
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       }
