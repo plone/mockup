@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import json
 
-package_json = json.load(open('mockup/package.json'))
+package_json = json.load(open('package.json'))
 version = package_json['version']
 
 setup(
