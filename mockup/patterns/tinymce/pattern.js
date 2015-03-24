@@ -155,7 +155,7 @@ define([
         {text: _t('Open in top frame (replaces all frames)'), value: '_top'}
       ],
       imageTypes: 'Image',
-      folderTypes: 'Folder,Plone Site',
+      folderTypes: ['Folder', 'Plone Site'],
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
         'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
@@ -178,16 +178,14 @@ define([
       var self = this;
       if (self.linkModal === null) {
         var $el = $('<div/>').insertAfter(self.$el);
+        var linkTypes = ['internal', 'upload', 'external', 'email', 'anchor'];
+        if(!self.options.upload){
+          linkTypes.splice(1, 1);
+        }
         self.linkModal = new LinkModal($el,
           $.extend(true, {}, self.options, {
             tinypattern: self,
-            linkTypes: [
-              'internal',
-              'upload',
-              'external',
-              'email',
-              'anchor'
-            ]
+            linkTypes: linkTypes
           })
         );
         self.linkModal.show();
@@ -199,9 +197,13 @@ define([
     addImageClicked: function() {
       var self = this;
       if (self.imageModal === null) {
+        var linkTypes = ['image', 'uploadImage', 'externalImage'];
+        if(!self.options.upload){
+          linkTypes.splice(1, 1);
+        }
         var options = $.extend(true, {}, self.options, {
           tinypattern: self,
-          linkTypes: ['image', 'uploadImage', 'externalImage'],
+          linkTypes: linkTypes,
           initialLinkType: 'image',
           text: {
             insertHeading: _t('Insert Image')
@@ -210,9 +212,9 @@ define([
             baseCriteria: [{
               i: 'Type',
               o: 'plone.app.querystring.operation.list.contains',
-              v: self.options.imageTypes.split(',').concat(self.options.folderTypes.split(','))
+              v: self.options.imageTypes.concat(self.options.folderTypes)
             }],
-            selectableTypes: self.options.imageTypes.split(','),
+            selectableTypes: self.options.imageTypes,
             resultTemplate: ResultTemplate,
             selectionTemplate: SelectionTemplate
           }
@@ -230,12 +232,18 @@ define([
       var part = data[self.options.linkAttribute];
       return self.options.prependToUrl + part + self.options.appendToUrl;
     },
-    generateImageUrl: function(data, scale) {
+    generateImageUrl: function(data, scale_name) {
       var self = this;
       var url = self.generateUrl(data);
-      if (scale !== ""){
-          url = (url + self.options.prependToScalePart + scale +
-                 self.options.appendToScalePart);
+      if (scale_name !== ""){
+        var part = scale_name;
+        for(var i=0; i<self.options.scales.length; i++){
+          if(self.options.scales[i].name == scale_name){
+            part = self.options.scales[i].part;
+          }
+        }
+        url = (url + self.options.prependToScalePart + part +
+               self.options.appendToScalePart);
       }
       return url;
     },
@@ -301,6 +309,23 @@ define([
       };
       if (tinyOptions.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
+      }
+
+      if(typeof(self.options.scales) === 'string'){
+        self.options.scales = _.map(self.options.scales.split(','), function(scale){
+          var scale = scale.split(':');
+          return {
+            part: scale[0],
+            name: scale[0],
+            label: scale[1]
+          }
+        });
+      }
+      if(typeof(self.options.folderTypes) === 'string'){
+        self.options.folderTypes = self.options.folderTypes.split(',');
+      }
+      if(typeof(self.options.imageTypes) === 'string'){
+        self.options.imageTypes = self.options.imageTypes.split(',');
       }
 
       tinymce.init(tinyOptions);
