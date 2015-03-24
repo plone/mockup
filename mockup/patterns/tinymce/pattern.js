@@ -315,9 +315,9 @@ define([
         self.options.scales = _.map(self.options.scales.split(','), function(scale){
           var scale = scale.split(':');
           return {
-            part: scale[0],
-            name: scale[0],
-            label: scale[1]
+            part: scale[1],
+            name: scale[1],
+            label: scale[0]
           }
         });
       }
