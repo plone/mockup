@@ -1,7 +1,13 @@
 Changelog
 =========
 
-2.0.0 (unreleased)
+2.0.1 (unreleased)
+------------------
+
+- be able to use tinymce plone plugins without image upload part
+
+
+2.0.0 (2015-03-17)
 ------------------
 
 - make sure mockup can be installable with bower again
