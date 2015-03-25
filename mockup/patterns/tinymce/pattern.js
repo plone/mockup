@@ -145,6 +145,7 @@ define([
       linkAttribute: 'path', // attribute to get link value from data
       prependToScalePart: '/imagescale/', // some value here is required to be able to parse scales back
       appendToScalePart: '',
+      appendToOriginalScalePart: '',
       scales: _t('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
               'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
               'Large (768x768):large'),
@@ -244,6 +245,8 @@ define([
         }
         url = (url + self.options.prependToScalePart + part +
                self.options.appendToScalePart);
+      }else{
+        url = url + self.options.appendToOriginalScalePart;
       }
       return url;
     },
