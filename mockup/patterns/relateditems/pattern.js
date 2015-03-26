@@ -239,11 +239,13 @@ define([
         dataFilter: function(data) {
           var nodes = [];
           _.each(data.results, function(item) {
-            nodes.push({
+            var node = {
               label: item.Title,
               id: item.UID,
-              path: item.path
-            });
+              path: item.path,
+              folder: self.options.folderTypes.indexOf(item.Type) !== -1
+            };
+            nodes.push(node);
           });
           return nodes;
         }
@@ -253,8 +255,17 @@ define([
         if (node && !node._loaded) {
           self.currentPath = node.path;
           selectedNode = node;
-          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node);
+          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function(){
+            treePattern.$el.tree('openNode', node);
+          });
           node._loaded = true;
+        }
+      });
+      treePattern.$el.bind('tree.dblclick', function(e){
+        if(e.node){
+          self.currentPath = e.node.path;
+          self.browseTo(self.currentPath);
+          $treeContainer.fadeOut();
         }
       });
       treePattern.$el.bind('tree.refresh', function() {
