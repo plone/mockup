@@ -3,8 +3,8 @@ define([
   'backbone',
   'underscore',
   'mockup-ui-url/views/base',
-  'bootstrap-tooltip'
-], function($, Backbone, _, BaseView) {
+  'mockup-patterns-tooltip'
+], function($, Backbone, _, BaseView, Tooltip) {
   'use strict';
 
   var ButtonView = BaseView.extend({
@@ -45,6 +45,10 @@ define([
         });
 
         if (this.tooltip !== null) {
+          //Check if the Tooltip pattern has overwritten $.fn.tooltip
+          if( $.fn.tooltip.noConflict === undefined ) {
+              var tooltipPattern = new Tooltip(this.$el);
+          }
           this.$el.tooltip({
             title: this.tooltip
           });
