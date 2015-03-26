@@ -64,23 +64,8 @@
 
   .pattern-relateditems-result-select {
     display: block;
-
-    &.selectable:after {
-      .glyphicon();
-      .glyphicon-chevron-right();
-      position: absolute;
-      left: 0;
-      font-size: 14px;
-      right: 0;
-      top: 50%;
-      margin-top: -14px;
-
-      color: @link-color;
-    }
-    &.selectable{
-      .glyphicon();
-      .glyphicon-record();
-    }
+    line-height: 15px;
+    padding-top: 5px;
   }
 
   .pattern-relateditems-buttons {
@@ -104,7 +89,6 @@
     display: block;
     color: #444;
     font-size: 11px;
-    padding-left: 25px;
   }
 }
 
@@ -129,6 +113,8 @@
         top: 4px;
         display: none;
         z-index: 10000;
+        min-width: 350px;
+        margin-top: 10px;
 
         .pat-tree {
             max-height: 400px;

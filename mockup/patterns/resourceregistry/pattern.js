@@ -24,15 +24,21 @@
  *        data-pat-resourceregistry='{"bundles":{
  *                                     "plone": {
  *                                       "resources": ["plone"], "depends": "",
- *                                       "expression": "", "enabled": true, "conditionalcomment": ""
+ *                                       "expression": "", "enabled": true, "conditionalcomment": "",
+ *                                       "develop_javascript": false, "develop_css": false,
+ *                                       "compile": true
  *                                     },
  *                                     "plone-auth": {
  *                                       "resources": ["plone-auth"], "depends": "plone",
- *                                       "expression": "", "enabled": true, "conditionalcomment": ""
+ *                                       "expression": "", "enabled": true, "conditionalcomment": "",
+ *                                       "develop_javascript": false, "develop_css": false,
+ *                                       "compile": true
  *                                     },
  *                                     "barceloneta": {
  *                                       "resources": ["barceloneta"], "depends": "*",
- *                                       "expression": "", "enabled": true, "conditionalcomment": ""
+ *                                       "expression": "", "enabled": true, "conditionalcomment": "",
+ *                                       "develop_javascript": false, "develop_css": false,
+ *                                       "compile": false
  *                                     }
  *                                   },
  *                                   "resources": {
@@ -92,8 +98,10 @@ define([
   'mockup-patterns-resourceregistry-url/js/less',
   'mockup-patterns-resourceregistry-url/js/overrides',
   'mockup-patterns-resourceregistry-url/js/registry',
-  'mockup-patterns-resourceregistry-url/js/patternoptions'
-], function($, Base, _, BaseView, utils, LessVariablesView, OverridesView,RegistryView, PatternOptionsView) {
+  'mockup-patterns-resourceregistry-url/js/patternoptions',
+  'translate'
+], function($, Base, _, BaseView, utils, LessVariablesView,
+            OverridesView,RegistryView, PatternOptionsView, _t) {
   'use strict';
 
 
@@ -102,10 +110,10 @@ define([
     activeTab: 'registry',
     template: _.template('' +
       '<ul class="main-tabs nav nav-tabs" role="tablist">' +
-        '<li class="registry-btn"><a href="#">Registry</a></li>' +
-        '<li class="overrides-btn"><a href="#">Overrides</a></li>' +
-        '<li class="lessvariables-btn"><a href="#">Less Variables</a></li>' +
-        '<li class="patternoptions-btn"><a href="#">Pattern Options</a></li>' +
+        '<li class="registry-btn"><a href="#"><%- _t("Registry") %></a></li>' +
+        '<li class="overrides-btn"><a href="#"><%- _t("Overrides") %></a></li>' +
+        '<li class="lessvariables-btn"><a href="#"><%- _t("Less Variables") %></a></li>' +
+        '<li class="patternoptions-btn"><a href="#"><%- _t("Pattern Options") %></a></li>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
@@ -146,7 +154,7 @@ define([
 
     render: function(){
       var self = this;
-      self.$el.append(self.template());
+      self.$el.append(self.template({_t: _t}));
       self.loading = new utils.Loading();
       self.$tabs = self.$('ul.main-tabs');
       self.$content = self.$('.tab-content');
@@ -204,7 +212,7 @@ define([
         if(onError){
           onError(resp);
         }else{
-          alert('Error processing ajax request for action: ' + action);
+          alert(_t('Error processing ajax request for action: ') + action);
         }
       });
     }

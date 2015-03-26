@@ -1,14 +1,58 @@
 Changelog
 =========
 
-2.0.0 (unreleased)
+2.0.2 (unreleased)
 ------------------
+
+- update related items tree widget integration to have a bit better
+  user interaction. Automatically open folder nodes and implement double click
+  [vangheem]
+
+- fix rendering issue with tinymce link/image overlay and tree selector
+  [vangheem]
+
+2.0.1 (2015-03-25)
+------------------
+
+- be able to use tinymce plone plugins without image upload part
+  [vangheem]
+
+2.0.0 (2015-03-17)
+------------------
+
+- make sure mockup can be installable with bower again
+  [vangheem]
+
+- Bring back TinyMCE ``sed`` and ``copy`` from ``mockup`` into ``mockup-core``.
+  If we create bundles from an external package based on patterns from mockup,
+  we don't want to care about the sed and copy tasks too. Instead, those should
+  be defined on the patterns itself, but thats for a future release.
+  [thet]
+
+- Add ``id`` and ``Title`` to the default available columns of the structure
+  pattern.
+  [thet]
+
+- fix bootstrap css bleeding into global namespaces
+  [vangheem]
+
+- add recurrence pattern
+  [vangheem]
+
+- add livesearch pattern
+  [vangheem]
+
+- add history support for structure
+  [vangheem]
 
 - Patternslib merge: Use Patternslib's scanner and registry.  This allows us
   to: Use Patternslib patterns with Mockup/Plone and use Mockup patterns with
   Patternslib outside of Plone. For changes required to patterns, see:
   mockup/GETTING_STARTED.md . Refs: #460.
   [jcbrand]
+
+- Add icons to relateditems pattern (see https://github.com/plone/mockup/issues/442)
+  [petschki]
 
 
 1.8.3 (2015-01-26)
@@ -69,6 +113,10 @@ Fixes and enhancements:
   it. Otherwise search for a ``<base>`` tag. Plone 5 dropped the usage of base
   tags.
   [ACatlla, thet]
+
+- Fix less variable overrides on resourceregistry pattern when building
+  CSS from less resources
+  [datakurre]
 
 - Depend on ``tinymce-builded`` 4.1.6, include TinyMCE copy and sed
   configuration in here and fix some sed tasks.

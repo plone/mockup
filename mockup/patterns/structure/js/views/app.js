@@ -179,14 +179,54 @@ define([
 
       self.collection.on('pager', function() {
         self.loading.show();
-        window.location.hash = self.queryHelper.getCurrentPath();
+
+        /* maintain history here */
+        if(self.options.urlStructure && window.history && window.history.pushState){
+          if (!self.doNotPushState){
+            var path = self.queryHelper.getCurrentPath();
+            if(path === '/'){
+              path = '';
+            }
+            var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
+            window.history.pushState(null, null, url);
+            $('body').trigger('structure-url-changed', path);
+          }else{
+            self.doNotPushState = false;
+          }
+        }
       });
 
-      /* detect key events */
-      $(document).bind('keyup keydown', function(e) {
-        self.keyEvent = e;
-      });
-
+      if (self.options.urlStructure && window.history && window.history.pushState){
+        $(window).bind('popstate', function () {
+          /* normalize this url first... */
+          var url = window.location.href;
+          if(url.indexOf('?') !== -1){
+            url = url.split('?')[0];
+          }
+          if(url.indexOf('#') !== -1){
+            url = url.split('#')[0];
+          }
+          // take off the base url
+          var path = url.substring(self.options.urlStructure.base.length);
+          if(path.substring(path.length - self.options.urlStructure.appended.length) ===
+              self.options.urlStructure.appended){
+            /* check that it ends with appended value */
+            path = path.substring(0, path.length - self.options.urlStructure.appended.length);
+          }
+          if(!path){
+            path = '/';
+          }
+          self.queryHelper.currentPath = path;
+          $('body').trigger('structure-url-changed', path);
+          // since this next call causes state to be pushed...
+          self.doNotPushState = true;
+          self.collection.goTo(self.collection.information.firstPage);
+        });
+        /* detect key events */
+        $(document).bind('keyup keydown', function(e) {
+          self.keyEvent = e;
+        });
+      }
     },
     inQueryMode: function() {
       if (this.additionalCriterias.length > 0) {

@@ -367,7 +367,7 @@ define([
       self.modal = registry.patterns.modal.init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
-        buttons: '.btn'
+        buttons: '.plone-btn'
       });
       self.modal.on('shown', function(e) {
         self.modalShown.apply(self, [e]);
@@ -376,6 +376,7 @@ define([
 
     generateModalHtml: function() {
       return this.template({
+        upload: this.options.upload,
         text: this.options.text,
         insertHeading: this.options.text.insertHeading,
         linkTypes: this.options.linkTypes,
@@ -500,15 +501,17 @@ define([
       self.initElements();
       self.initData();
       // upload init
-      self.$upload = $('.uploadify-me', self.modal.$modal);
-      self.options.upload.relatedItems = self.options.relatedItems;
-      self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
-      self.$upload.on('uploadAllCompleted', function(evt, data) {
-        self.$upload.attr({
-          'data-filename': data.files ? data.files[0].name : '',
-          'data-path': data.path
+      if(self.options.upload){
+        self.$upload = $('.uploadify-me', self.modal.$modal);
+        self.options.upload.relatedItems = self.options.relatedItems;
+        self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
+        self.$upload.on('uploadAllCompleted', function(evt, data) {
+          self.$upload.attr({
+            'data-filename': data.files ? data.files[0].name : '',
+            'data-path': data.path
+          });
         });
-      });
+      }
 
       self.$button.off('click').on('click', function(e) {
         e.preventDefault();

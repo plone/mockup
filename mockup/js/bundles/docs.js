@@ -176,6 +176,21 @@ require([
             title: 'Event Edit Forms',
             description: 'Start/End delta, validation whole day and open end handling',
             url: 'patterns/eventedit/pattern.js'
+          },
+          { id: 'livesearch',
+            title: 'Live search',
+            description: 'Live search widget',
+            url: 'patterns/livesearch/pattern.js'
+          },
+          { id: 'contentloader',
+            title: 'Content Loader',
+            description: 'Dynamically configure content to be reloaded',
+            url: 'patterns/contentloader/pattern.js'
+          },
+          { id: 'recurrence',
+            title: 'Recurrence Widget',
+            description: 'Recurrence widget',
+            url: 'patterns/recurrence/pattern.js'
           }
         ]
       },

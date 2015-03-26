@@ -5,11 +5,11 @@ define([
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-utils',
-  'mockup-patterns-modal',
-  'mockup-patterns-resourceregistry-url/js/fields'
-], function($, _, BaseView, utils, Modal, fields) {
+  'mockup-patterns-resourceregistry-url/js/fields',
+  'mockup-patterns-resourceregistry-url/js/builder',
+  'translate'
+], function($, _, BaseView, utils, fields, Builder, _t) {
   'use strict';
-
 
   var AbstractResourceEntryView = BaseView.extend({
     tagName: 'div',
@@ -52,37 +52,37 @@ define([
   var ResourceEntryView = AbstractResourceEntryView.extend({
     fields: [{
       name: 'name',
-      title: 'Name',
+      title: _t('Name'),
       view: fields.ResourceNameFieldView
     }, {
       name: 'url',
-      title: 'URL',
-      description: 'Resources base URL'
+      title: _t('URL'),
+      description: _t('Resources base URL')
     }, {
       name: 'js',
-      title: 'JS',
-      description: 'Main JavaScript file'
+      title: _t('JS'),
+      description: _t('Main JavaScript file')
     }, {
       name: 'css',
-      title: 'CSS/LESS',
-      description: 'List of CSS/LESS files to use for resource',
+      title: _t('CSS/LESS'),
+      description: _t('List of CSS/LESS files to use for resource'),
       view: fields.ResourceSortableListFieldView
     },{
       name: 'init',
-      title: 'Init', 
-      description: 'Init instruction for requirejs shim'
+      title: _t('Init'), 
+      description: _t('Init instruction for requirejs shim')
     }, {
       name: 'deps',
-      title: 'Dependencies',
-      description: 'Coma separated values of resources for requirejs shim'
+      title: _t('Dependencies'),
+      description: _t('Coma separated values of resources for requirejs shim')
     }, {
       name: 'export',
-      title: 'Export',
-      description: 'Export vars for requirejs shim'
+      title: _t('Export'),
+      description: _t('Export vars for requirejs shim')
     }, {
       name: 'conf',
-      title: 'Configuration',
-      description: 'Configuration in JSON for the widget',
+      title: _t('Configuration'),
+      description: _t('Configuration in JSON for the widget'),
       view: fields.ResourceTextAreaFieldView
     }]
   });
@@ -91,48 +91,48 @@ define([
   var BundleEntryView = AbstractResourceEntryView.extend({
     fields: [{
       name: 'name',
-      title: 'Name',
+      title: _t('Name'),
       view: fields.ResourceNameFieldView
     }, {
       name: 'resources',
-      title: 'Resources',
-      description: 'A main resource file to bootstrap bundle or a list of resources to load.',
+      title: _t('Resources'),
+      description: _t('A main resource file to bootstrap bundle or a list of resources to load.'),
       view: fields.BundleResourcesFieldView
     }, {
       name: 'depends',
-      title: 'Depends',
-      description: 'Bundle this depends on',
+      title: _t('Depends'),
+      description: _t('Bundle this depends on'),
       view: fields.BundleDependsFieldView
     }, {
       name: 'expression',
-      title: 'Expression',
-      description: 'Conditional expression to decide if this resource will run'
+      title: _t('Expression'),
+      description: _t('Conditional expression to decide if this resource will run')
     }, {
       name: 'enabled',
-      title: 'Enabled',
+      title: _t('Enabled'),
       view: fields.ResourceBoolFieldView
     }, {
       name: 'conditionalcomment',
-      title: 'Conditional comment',
-      description: 'For Internet Exploder hacks...'
+      title: _t('Conditional comment'),
+      description: _t('For Internet Exploder hacks...')
     }, {
       name: 'compile',
-      title: 'Does your bundle contain any RequireJS or LESS files?',
+      title: _t('Does your bundle contain any RequireJS or LESS files?'),
       view: fields.ResourceBoolFieldView
     }, {
       name: 'last_compilation',
-      title: 'Last compilation',
-      description: 'Date/Time when your bundle was last compiled. Empty, if it was never compiled.',
+      title: _t('Last compilation'),
+      description: _t('Date/Time when your bundle was last compiled. Empty, if it was never compiled.'),
       view: fields.ResourceDisplayFieldView
     }, {
       name: 'jscompilation',
-      title: 'Compiled JavaScript',
-      description: 'Automatically generated path to the compiled JavaScript.',
+      title: _t('Compiled JavaScript'),
+      description: _t('Automatically generated path to the compiled JavaScript.'),
       view: fields.ResourceDisplayFieldView
     }, {
       name: 'csscompilation',
-      title: 'Compiled CSS',
-      description: 'Automatically generated path to the compiled CSS.',
+      title: _t('Compiled CSS'),
+      description: _t('Automatically generated path to the compiled CSS.'),
       view: fields.ResourceDisplayFieldView
     }]
   });
@@ -144,18 +144,26 @@ define([
     className: 'list-group-item',
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<button class="pull-right plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>'
+      '<button class="pull-right plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>'
     ),
     events: {
       'click a': 'editResource',
       'click button.delete': 'deleteClicked'
+    },
+    defaults: {
+      develop_javascript: false,
+      develop_css: false,
+      compile: true
     },
     afterRender: function(){
       this.$el.attr('data-name', this.options.name);
       this.$el.addClass(this.type + '-list-item-' + this.options.name);
     },
     serializedModel: function(){
-      return $.extend({}, {name: this.options.name}, this.options.data);
+      return $.extend({}, this.defaults, {
+        name: this.options.name,
+        view: this.options.registryView
+      }, this.options.data);
     },
     editResource: function(e){
       if(e){
@@ -166,261 +174,73 @@ define([
         parent: this
       });
       var resource = new ResourceEntryView(options);
-      this.registryView.showResourceEditor(resource);
+      this.registryView.showResourceEditor(resource, this, 'resource');
+
+      // and scroll to resource since huge list makes this hard to notice
+      $('html, body').animate({
+        scrollTop: resource.$el.offset().top
+      }, 1000);
     },
     deleteClicked: function(e){
       e.preventDefault();
-      delete this.options.registryView.options.data.resources[this.options.name];
-      this.options.registryView.dirty = true;
-      this.options.registryView.render();
+      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' resource?'))){
+        delete this.options.registryView.options.data.resources[this.options.name];
+        this.options.registryView.dirty = true;
+        this.options.registryView.render();
+      }
     }
   });
 
 
-  var Builder = function(bundleName, bundleListItem){
-    var self = this;
-    self.bundleName = bundleName;
-    self.bundleListItem = bundleListItem;
-    self.rview = bundleListItem.options.registryView;
-    self.$results = null;
-    self.$btnClose = null;
-
-    self.rview.loading.show();
-    self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {
-      html: _.template('<div id="content">' +
-        '<h1>Bundle Builder</h1>' +
-        '<div class="start-info"><p>You are about to build the <span class="label label-primary">' +
-          '<%= name %></span> pattern. </p><p>This may take some a bit of time so ' +
-          'we will try to keep you updated on the progress.</p><p> Press the "Build it" ' +
-          'button to proceed.</p></div>' +
-        '<ul class="list-group hidden"></ul>' +
-        '<button class="plone-btn plone-btn-default cancel hidden cancel-build">Close</button>' +
-        '<button class="plone-btn plone-btn-primary build">Build it</button>' +
-      '</div>', bundleListItem.options),
-      content: null,
-      width: 500,
-      buttons: '.plone-btn'
-    });
-    self.modal.on('shown', function() {
-      var $el = self.modal.$modal;
-      var $info = $el.find('.start-info');
-      self.$btnClose = $el.find('button.cancel-build');
-      var $btn = $el.find('button.build');
-      $btn.off('click').on('click', function(e){
-        e.preventDefault();
-        $info.addClass('hidden');
-        $btn.prop('disabled', true);
-        self.$results = $el.find('.list-group').removeClass('hidden');
-        self.buildJS();
-        self.rview.loading.show();
-      });
-
-      self.$btnClose.off('click').on('click', function(){
-        self.modal.hide();
-      });
-    });
-
-    self.addResult = function(txt, klass){
-      if(!klass){
-        klass = '';
-      }
-      self.$results.append('<li class="list-group-item ' + klass + '">' + txt + '</li>');
-    };
-
-    self.run = function(){
-      self.modal.show();
-    };
-
-    self.finished = function(error){
-      var msg = 'Finished!';
-      if(error){
-        msg = 'Error in build process';
-      }
-      self.addResult(msg, 'list-group-item-warning');
-      self.$btnClose.removeClass('hidden');
-      self.rview.loading.hide();
-    };
-
-    self.buildJS = function(){
-      self.addResult('building javascripts');
-      $.ajax({
-        url: self.rview.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'js-build-config',
-          bundle: self.bundleName,
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(data){
-          /* sort of weird here, follow along. We'll build CSS after JS */
-          self._buildJSBundle(data);
-        },
-        error: function(){
-          self.addResult('Error building resources');
-          self.finished(true);
-        }
-      });
-    };
-
-    self._buildCSSBundle = function(config){
-      var $iframe = $('<iframe style="display:none"><html><head></head><body></body></html></iframe>').
-          appendTo('body').on('load', function(){
-      });
-      var iframe = $iframe[0];
-      var win = iframe.contentWindow || iframe;
-      win.lessErrorReporting = function(what, error, href){
-        if(what !== 'remove'){
-          self.addResult('less compilation error on file ' + href + ': ' + error);
-        }
-      };
-      var head = $iframe.contents().find('head')[0];
-      _.each(config.less, function(less){
-        var link = document.createElement('link');
-        link.setAttribute('rel', 'stylesheet/less');
-        link.setAttribute('type', 'text/css');
-        link.setAttribute('href', less);
-        head.appendChild(link); 
-      });
-      var script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.setAttribute('src', self.rview.options.data.lessConfigUrl);
-      script.onload = function(){
-        script = document.createElement('script');
-        script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', self.rview.options.data.lessUrl);
-        head.appendChild(script);
-      };
-      head.appendChild(script);
-
-      /* XXX okay, wish there were a better way,
-         but we need to pool to find the */
-      self.addResult(config.less.length + ' css files to build');
-      var checkFinished = function(){
-        var $styles =  $('style[type="text/css"][id]', head);
-        for(var i=0; i<$styles.length; i=i+1){
-          var $style = $styles.eq(i); 
-          if($style.attr('id') === 'less:error-message'){
-            self.addResult('Error compiling less');
-            return self.finished(true);
-          }
-        }
-        if($styles.length === config.less.length){
-          // we're finished, save it
-          var data = {};
-          $styles.each(function(){
-            var $el = $(this);
-            data['data-' + $el.attr('id')] = $el.html();
-          });
-          $iframe.remove();
-          $.ajax({
-            url: self.rview.options.data.manageUrl,
-            type: 'POST',
-            dataType: 'json',
-            data: $.extend(data, {
-              action: 'save-less-build',
-              bundle: self.bundleName,
-              _authenticator: utils.getAuthenticator()
-            }),
-            success: function(data){
-              self.rview.options.data.overrides.push(data.filepath);
-              self.rview.tabView.overridesView.render();
-              self.addResult('finished saving css bundles');
-              self.finished();
-            },
-            error: function(){
-              self.addResult('Error saving css bundle');
-              self.finished(true);
-            }
-          });
-        }else{
-          setTimeout(checkFinished, 300);
-        }
-      };
-      checkFinished();
-    };
-
-    self.buildCSSBundle = function(){
-      self.addResult('building CSS bundle');
-      $.ajax({
-        url: self.rview.options.data.manageUrl,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          action: 'less-build-config',
-          bundle: self.bundleName,
-          _authenticator: utils.getAuthenticator()
-        },
-        success: function(data){
-          /* sort of weird here, follow along. We'll build CSS after JS */
-          self._buildCSSBundle(data);
-        },
-        error: function(){
-          self.addResult('Error building css bundle');
-          self.finished(true);
-        }
-      });
-    };
-
-    self._buildJSBundle = function(config){
-      if(config.include.length === 0){
-        self.addResult('No javascripts to build, skipping');
-        return self.buildCSSBundle();
-      }
-      config.out = function(results){
-        $.ajax({
-          url: self.rview.options.data.manageUrl,
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            action: 'save-js-build',
-            bundle: self.bundleName,
-            data: results,
-            _authenticator: utils.getAuthenticator()
-          },
-          success: function(data){
-            self.rview.options.data.overrides.push(data.filepath);
-            self.rview.tabView.overridesView.render();
-          },
-          error: function(){
-            self.addResult('Error building bundle');
-            self.finished(true);
-          }
-        });
-      };
-      var $iframe = $('<iframe style="display:none"><html><head></head><body></body></html></iframe').appendTo('body');
-      var iframe = $iframe[0];
-      var win = iframe.contentWindow || iframe;
-      var head = $iframe.contents().find('head')[0];
-      var script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.setAttribute('src', self.rview.options.data.rjsUrl);
-      script.onload = function(){
-        win.requirejs.optimize(config, function(combined_files){
-          self.addResult('Saved javascript bundle, Build results: <pre>' + combined_files + '</pre>');
-          self.buildCSSBundle();
-          $iframe.remove();
-        });
-      };
-      head.appendChild(script);
-    };
-
-    return self;
-  };
-
-
   var RegistryBundleListItem = RegistryResourceListItem.extend({
     type: 'bundle',
+    active: false,
     template: _.template(
       '<a href="#"><%- name %></a> ' +
-      '<div class="plone-btn-group pull-right">' +
-        '<button class="plone-btn plone-btn-default build plone-btn-xs">Build</button>' +
-        '<button class="plone-btn plone-btn-danger delete plone-btn-xs">Delete</button>' +
+      '<div class="actions">' +
+        '<div class="plone-btn-group">' +
+          '<% if(view.options.data.development) { %>' +
+            '<% if(develop_javascript){ %>' +
+              '<button class="plone-btn plone-btn-warning on develop-js plone-btn-xs"><%- _t("Stop Developing JavaScript") %></button>' +
+            '<% } else { %>' +
+              '<button class="plone-btn plone-btn-default develop-js plone-btn-xs"><%- _t("Develop JavaScript") %></button>' +
+            '<% } %>' +
+            '<% if(develop_css){ %>' +
+              '<button class="plone-btn plone-btn-warning on develop-css plone-btn-xs"><%- _t("Stop Developing CSS") %></button>' +
+            '<% } else { %>' +
+              '<button class="plone-btn plone-btn-default develop-css plone-btn-xs"><%- _t("Develop CSS") %></button>' +
+            '<% } %>' +
+          '<% } %>' +
+          '<% if(compile){ %>' +
+            '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
+          '<% } %>' +
+          '<button class="plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
+        '</div>' +
       '</div>'
     ),
     events: $.extend({}, RegistryResourceListItem.prototype.events, {
-      'click button.build': 'buildClicked'
+      'click button.build': 'buildClicked',
+      'click button.develop-js': 'developJavaScriptClicked',
+      'click button.develop-css': 'developCSSClicked'
     }),
+    developJavaScriptClicked: function(e){
+      e.preventDefault();
+      this.options.data.develop_javascript = !this.options.data.develop_javascript;
+      this.options.registryView.dirty = true;
+      this.options.registryView.render();
+    },
+    developCSSClicked: function(e){
+      e.preventDefault();
+      this.options.data.develop_css = !this.options.data.develop_css;
+      this.options.registryView.dirty = true;
+      this.options.registryView.render();
+    },
+    afterRender: function(){
+      RegistryResourceListItem.prototype.afterRender.apply(this);
+      if(this.active){
+        this.editResource();
+      }
+    },
     editResource: function(e){
       if(e){
         e.preventDefault();
@@ -430,20 +250,34 @@ define([
         parent: this
       });
       var resource = new BundleEntryView(options);
-      this.registryView.showResourceEditor(resource);
+      this.registryView.showResourceEditor(resource, this, 'bundle');
+
+      // only one can be edited at a time, deactivate
+      _.each(this.options.registryView.items.bundles, function(bundleItem){
+        bundleItem.active = false;
+      });
+      this.active = true;
+      this.$el.parent().find('.list-group-item').removeClass('active');
+      this.$el.addClass('active');
     },
     deleteClicked: function(e){
       e.preventDefault();
-      delete this.options.registryView.options.data.bundles[this.options.name];
-      this.options.registryView.dirty = true;
-      this.options.registryView.render();
+      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' bundle?'))){
+        delete this.options.registryView.options.data.bundles[this.options.name];
+        this.options.registryView.dirty = true;
+        this.options.registryView.render();
+      }
     },
     
     buildClicked: function(e){
       e.preventDefault();
       var self = this;
-      var builder = new Builder(self.options.name, self);
-      builder.run(); 
+      if(this.options.registryView.dirty){
+        alert(_t('You have unsaved changes. Save or discard before building.'));
+      }else{
+        var builder = new Builder(self.options.name, self);
+        builder.run();
+      }
     }
   });
 
@@ -451,6 +285,7 @@ define([
     tagName: 'div',
     className: 'tab-pane',
     $form: null,
+    activeResource: null,
 
     initialize: function(options) {
       var self = this;
@@ -472,7 +307,12 @@ define([
       */
     },
 
-    showResourceEditor: function(resource){
+    showResourceEditor: function(resource, view, type){
+      this.activeResource = {
+        resource: resource,
+        item: view,
+        type: type
+      };
       this.$form.empty().append(resource.render().el);
     },
 
@@ -488,7 +328,7 @@ define([
       if(e){
         e.preventDefault();
       }
-      if(confirm('Are you sure you want to cancel? You will lose all changes.')){
+      if(confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
         this._revertData(this.previousData);
         this.render();
       }
@@ -504,12 +344,12 @@ define([
     template: _.template(
       '<div class="clearfix">' +
         '<div class="plone-btn-group pull-right">' +
-          '<button class="plone-btn plone-btn-success save">Save</button>' +
-          '<button class="plone-btn plone-btn-default cancel">Cancel</button>' +
+          '<button class="plone-btn plone-btn-success save"><%- _t("Save") %></button>' +
+          '<button class="plone-btn plone-btn-default cancel"><%- _t("Cancel") %></button>' +
         '</div>' +
         '<div class="plone-btn-group pull-right">' +
-          '<button class="plone-btn plone-btn-default add-bundle">Add bundle</button>' +
-          '<button class="plone-btn plone-btn-default add-resource">Add resource</button>' +
+          '<button class="plone-btn plone-btn-default add-bundle"><%- _t("Add bundle") %></button>' +
+          '<button class="plone-btn plone-btn-default add-resource"><%- _t("Add resource") %></button>' +
         '</div>' +
       '</div>' +
       '<div class="row">' +
@@ -517,20 +357,22 @@ define([
           '<label>' +
             '<input type="checkbox" ' +
               '<% if(data.development){ %> checked="checked" <% } %>' +
-              ' > Development Mode(only logged in users)' +
+              ' > <%- _t("Development Mode(only logged in users)") %>' +
           '</label>' +
         '</div>' +
       '</div>' +
       '<div class="row">' +
         '<div class="items col-md-5">' +
           '<ul class="bundles list-group">' +
-            '<li class="list-group-item list-group-item-warning">Bundles</li>' +
+            '<li class="list-group-item list-group-item-warning"><%- _t("Bundles") %></li>' +
+          '</ul>' +
+          '<ul class="resources-header list-group">' +
+            '<li class="list-group-item list-group-item-warning"><%- _t("Resources") %> ' +
+              '<input class="float-right form-control input-xs" ' +
+                      'placeholder="<%- _t("Filter...") %>" />' +
+            '</li>' +
           '</ul>' +
           '<ul class="resources list-group">' +
-            '<li class="list-group-item list-group-item-warning">Resources ' +
-              '<input class="float-right form-control input-xs" ' +
-                      'placeholder="Filter..." />' +
-            '</li>' +
           '</ul>' +
         '</div>' +
         '<div class="form col-md-7"></div>' +
@@ -540,7 +382,7 @@ define([
       'click button.add-resource': 'addResourceClicked',
       'click button.add-bundle': 'addBundleClicked',
       'click button.cancel': 'revertChanges',
-      'keyup .resources input': 'filterResources',
+      'keyup .resources-header input': 'filterResources',
       'change .development-mode input': 'developmentModeChanged'
     },
     filterTimeout: 0,
@@ -570,8 +412,8 @@ define([
         clearTimeout(self.filterTimeout);
       }
       self.filterTimeout = setTimeout(function(){
-        var filterText = self.$('.resources input').val().toLowerCase();
-        var $els = self.$('.resources .list-group-item:not(.list-group-item-warning)');
+        var filterText = self.$('.resources-header input').val().toLowerCase();
+        var $els = self.$('.resources .list-group-item');
         if(!filterText || filterText.length < 3){
           $els.removeClass('hidden');
         }else{
@@ -612,23 +454,38 @@ define([
         resources: {}
       };
       _.each(bundles, function(resourceName){
-        var item = new RegistryBundleListItem({
-          data: data.bundles[resourceName],
-          name: resourceName,
-          registryView: self});
+        var item;
+        if(self.activeResource && self.activeResource.type === 'bundle' && self.activeResource.item.options.name === resourceName){
+          item = self.activeResource.item;
+        }else{
+          item = new RegistryBundleListItem({
+            data: data.bundles[resourceName],
+            name: resourceName,
+            registryView: self});
+        }
         self.items.bundles[resourceName] = item;
         self.$bundles.append(item.render().el);
       });
       var resources = _.sortBy(_.keys(data.resources), function(v){ return v.toLowerCase(); });
       _.each(resources, function(resourceName){
-        var item = new RegistryResourceListItem({
-          data: data.resources[resourceName],
-          name: resourceName,
-          registryView: self});
+        var item;
+        if(self.activeResource && self.activeResource.type === 'resource' && self.activeResource.item.options.name === resourceName){
+          item = self.activeResource.item;
+        } else {
+          item = new RegistryResourceListItem({
+            data: data.resources[resourceName],
+            name: resourceName,
+            registryView: self});
+        }
         self.items.resources[resourceName] = item;
         self.$resources.append(item.render().el);
       });
       BaseResourcesPane.prototype.afterRender.apply(self);
+
+      // finally, show edit pane if there is an active resource
+      if(self.activeResource){
+        self.showResourceEditor(self.activeResource.resource, self.activeResource.item, self.activeResource.type);
+      }
       return self;
     },
 
@@ -674,6 +531,9 @@ define([
       }
       self.options.tabView.saveData('save-development-mode', {
         value: value
+      }, function(){
+        self.options.data.development = self.$('.development-mode input')[0].checked;
+        self.render();
       });
     }
   });

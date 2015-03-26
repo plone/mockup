@@ -5,34 +5,47 @@ define([
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-patterns-texteditor',
-  'mockup-utils'
-], function($, _, BaseView, TextEditor, utils) {
+  'mockup-utils',
+  'mockup-patterns-select2',
+  'translate'
+], function($, _, BaseView, TextEditor, utils, Select2, _t) {
   'use strict';
 
-  var OverrideResource = BaseView.extend({
-    tagName: 'li',
-    className: 'list-group-item',
-    template: _.template('<a href="#"><%- filepath %></a> ' +
-      '<div class="plone-btn-group pull-right">' +
-        '<button class="plone-btn plone-btn-danger plone-btn-xs">Delete</button>' +
-        '<% if(view.canSave) { %> ' +
-          '<button class="plone-btn plone-btn-primary plone-btn-xs">Save</button> ' +
-          '<button class="plone-btn plone-btn-default plone-btn-xs">Cancel</button> ' +
-        ' <% } %>' +
-      '</div>'),
+  var OverridesView = BaseView.extend({
+    tagName: 'div',
+    className: 'tab-pane overrides',
+    editing: null,
+    canSave: false,
 
+    template: _.template(
+      '<form class="row">' +
+        '<div class="col-md-12">' +
+          '<p><%- _t("Only ++plone++ resources are available to override") %></p>' +
+          '<input class="select" type="hidden" placeholder="<%- _t("Select resource to override...") %>" style="width: 100%" />' +
+        '</div>' +
+      '</form>' +
+      '<div class="row">' +
+        '<div class="col-md-12">' +
+          '<% if(view.editing){ %>' +
+            '<p class="resource-name text-primary"><%- view.editing %></p> ' +
+            '<div class="plone-btn-group">' +
+              '<button class="plone-btn plone-btn-primary plone-btn-xs disabled"><%- _t("Save") %></button> ' +
+              '<button class="plone-btn plone-btn-default plone-btn-xs disabled"><%- _t("Cancel") %></button>' +
+              '<button class="plone-btn plone-btn-danger plone-btn-xs"><%- _t("Delete customizations") %></button>' +
+            '</div>' +
+          '<% } %>' +
+          '<div class="editor" />' +
+        '</div>' +
+      '</div>'),
     events: {
-      'click a': 'itemClicked',
       'click button.plone-btn-danger': 'itemDeleted',
       'click button.plone-btn-primary': 'itemSaved',
       'click button.plone-btn-default': 'itemCancel'
     },
-    canSave: false,
 
     initialize: function(options){
       BaseView.prototype.initialize.apply(this, [options]);
-      this.tabView = this.options.overridesView.tabView;
-      this.loading = this.tabView.loading;
+      this.tabView = options.tabView;
     },
 
     serializedModel: function(){
@@ -41,183 +54,121 @@ define([
 
     itemSaved: function(e){
       e.preventDefault();
-      var self = this;
-      self.tabView.saveData('save-file', {
-        filepath: self.options.filepath,
-        data: self.editor.editor.getValue()
+      var that = this;
+      that.tabView.saveData('save-file', {
+        filepath: that.editing,
+        data: that.editor.editor.getValue()
       }, function(){
-        self.canSave = false;
-        self.render();
+        that.$el.find('.plone-btn-primary,.plone-btn-default').addClass('disabled');
       });
     },
 
     itemDeleted: function(e){
       e.preventDefault();
-      var self = this;
+      var that = this;
       if(confirm('Are you sure you want to delete this override?')){
-        this.options.data.overrides.splice(self.options.index, 1);
-        this.render();
-        self.tabView.saveData('delete-file', {
-          filepath: self.options.filepath
+        that.options.data.overrides.splice(
+          that.options.data.overrides.indexOf(that.editing), 1);
+        that.tabView.saveData('delete-file', {
+          filepath: that.editing
         }, function(){
-          var index = _.indexOf(self.options.overridesView.data.overrides, self.options.filepath);
-          if(index !== -1){
-            self.options.overridesView.data.overrides.splice(index, 1);
-          }
-          self.options.overridesView.render();
-          self.loading.hide();
+          that.editing = null;
+          that.render();
         });
       }
     },
 
     itemCancel: function(e){
       e.preventDefault();
-      this.editor.$el.remove();
-      this.canSave = false;
+      this.editing = null;
       this.render();
     },
 
-    itemClicked: function(e){
-      var self = this;
-      e.preventDefault();
-      var data = self.options.data;
-      var override = data.overrides[self.options.index];
-      var url = data.baseUrl;
-      if(url[url.length - 1] !== '/'){
-        url += '/';
+    customizeResource: function(resource){
+      if(this.options.data.overrides.indexOf(resource) === -1){
+        this.options.data.overrides.push(resource);
       }
-      self.loading.show();
-      $.ajax({
-        // cache busting url
-        url: url + override + '?' + utils.generateId(),
-        dataType: 'text'
-      }).done(function(data){
-        var $pre = $('<pre class="pat-texteditor" />');
-        $pre.html(data);
-        self.options.overridesView.$editorContainer.empty().append($pre);
-        self.editor = new TextEditor($pre, {
-          width: 600,
-          height: 500
-        });
-        self.editor.setSyntax(override);
-        self.editor.editor.on('change', function(){
-          if(!self.canSave){
-            self.canSave = true;
-            self.render();
-          }
-        });
-        self.render();
-        self.loading.hide();
-      }).fail(function(){
-        alert('error loading resource for editing');
-        self.loading.hide();
+      this.editing = resource;
+      this.render();
+    },
+
+    afterRender: function(){
+      var that = this;
+      var $select = that.$el.find('.select');
+      var overrides = _.map(that.options.data.overrides, function(override){
+        return {
+          id: override,
+          text: override,
+          override: true
+        };
       });
-    }
-  });
-
-
-  var OverridesView = BaseView.extend({
-    tagName: 'div',
-    className: 'tab-pane overrides',
-    template: _.template(
-      '<form class="row">' +
-        '<div class="col-md-6 col-md-offset-6">' +
-          '<div class="input-group">' +
-            '<input type="text" class="form-control search-field" />' +
-            '<span class="input-group-btn">' +
-              '<button class="plone-btn plone-btn-default" type="button">Search</button>' +
-            '</span>' +
-          '</div>' +
-        '</div>' +
-      '</form>' +
-      '<div class="row">' +
-        '<ul class="items list-group col-md-5"></ul>' +
-        '<div class="col-md-7">' +
-          '<ul class="hidden list-group search-results" />' +
-          '<div class="editor" />' +
-        '</div>' +
-      '</div>'),
-    events: {
-      'submit form': 'noSubmit',
-      'keyup form input': 'textChange',
-      'click button.clear': 'clearSearchResults',
-      'click button.customize': 'customizeResource'
-    },
-
-    noSubmit: function(e){
-      e.preventDefault();
-    },
-
-    clearSearchResults: function(e){
-      e.preventDefault();
-      this.$searchResults.addClass('hidden');
-      this.$searchInput.attr('value', '');
-    },
-
-    customizeResource: function(e){
-      e.preventDefault();
-      var $btn = $(e.target);
-      this.options.data.overrides.push($btn.parent().find('span').html());
-      this.render();
-    },
-
-    textChange: function(){
-      var self = this;
-      var q = self.$searchInput.val();
-      if(q.length < 4){
-        self.$searchResults.addClass('hidden');
-        return;
-      }
-      q = q.toLowerCase();
-      self.$searchResults.empty().removeClass('hidden');
-      self.$searchResults.append('<li class="list-group-item list-group-item-warning">' +
-        'Results<button class="plone-btn plone-btn-default pull-right plone-btn-xs clear">Clear</button></li>');
-      var matches = [];
-      var data = self.options.data;
-      var urlMatches = function(base, path){
-        var filepath = (base + (path || '')).toLowerCase();
-        if(filepath.indexOf('++plone++') === -1){
-          return false;
-        }
-        return filepath.indexOf(q) !== -1;
-      };
-      _.each(data.resources, function(resource){
+      var resources = _.flatten(_.map(that.options.data.resources, function(resource){
         var base = resource.url || '';
         if(base){
           base += '/';
         }
-        if(urlMatches(base, resource.js)){
-          matches.push(base + resource.js);
-        }
-        for(var i=0; i<resource.css.length; i=i+1){
-          if(urlMatches(base, resource.css[i])){
-            matches.push(base + resource.css[i]);
+        var items = [];
+        var url;
+        if(resource.js && resource.js.indexOf('++plone++') !== -1){
+          url = base + resource.js;
+          if(overrides.indexOf(url) === -1){
+            items.push({id: url, text: url});
           }
         }
-      });
-      _.each(matches, function(filepath){
-        self.$searchResults.append(
-          '<li class="list-group-item"><span>' + filepath + '</span> ' +
-          '<button class="plone-btn plone-btn-danger pull-right plone-btn-xs customize">Customize</button></li>'
-        );
-      });
-    },
+        for(var i=0; i<resource.css.length; i=i+1){
+          url = base + resource.css[i];
+          if(overrides.indexOf(url) === -1 && url.indexOf('++plone++') !== -1){
+            items.push({id: url, text: url});
+          }
+        }
+        return items;
+      }));
 
-    afterRender: function(){
-      var self = this;
-      self.$ul = self.$('ul.items');
-      _.each(self.options.data.overrides, function(filepath, index){
-        var view = new OverrideResource({
-          index: index,
-          filepath: filepath,
-          overridesView: self,
-          data: self.options.data
-        });
-        self.$ul.append(view.render().el);
+      var format = function(data){
+        if(data.override){
+          return '<span class="customized">' + data.text + ' - ' + _t('customized') + '</span>';
+        }
+        return data.text;
+      };
+      that.select2 = new Select2($select, {
+        data: overrides.concat(_.sortBy(resources, function(d){ return d.id; })),
+        formatResult: format,
+        formatSelection: format
       });
-      self.$editorContainer = self.$('.editor');
-      self.$searchInput = self.$('form input');
-      self.$searchResults = self.$('.search-results');
+
+      $select.on('change', function(){
+        that.customizeResource($select.select2('val'));
+      });
+
+      that.$editorContainer = that.$('.editor');
+      if(that.editing !== null){
+        var url = that.options.data.baseUrl;
+        if(url[url.length - 1] !== '/'){
+          url += '/';
+        }
+        that.tabView.loading.show();
+        $.ajax({
+          // cache busting url
+          url: url + that.editing + '?' + utils.generateId(),
+          dataType: 'text'
+        }).done(function(data){
+          var $pre = $('<pre class="pat-texteditor" />');
+          $pre.text(data);
+          that.$editorContainer.empty().append($pre);
+          that.editor = new TextEditor($pre, {
+            width: $('.editor').width(),
+            height: 500
+          });
+          that.editor.setSyntax(that.editing);
+          that.tabView.loading.hide();
+          that.editor.editor.on('change', function(){
+            that.$el.find('.plone-btn-primary,.plone-btn-default').removeClass('disabled');
+          });
+        }).fail(function(){
+          alert(_t('error loading resource for editing'));
+          that.tabView.loading.hide();
+        });
+      }
     }
   });
 

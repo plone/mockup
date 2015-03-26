@@ -35,7 +35,8 @@ define([
             path: '/news/aggregator',
             Type: 'Collection',
             Description: 'Site News',
-            Title: 'News'
+            Title: 'News',
+            getIcon: ''
           },
           {
             UID: 'fooasdfasdf1123asZ',
@@ -43,7 +44,8 @@ define([
             getURL: 'http://localhost:8081/about',
             Type: 'Page',
             Description: 'About',
-            Title: 'About'
+            Title: 'About',
+            getIcon: 'document.png'
           },
         ];
 
@@ -199,7 +201,8 @@ define([
         UID: 'foobar',
         Type: 'Page',
         Title: 'Foobar',
-        path: '/foobar'
+        path: '/foobar',
+        getIcon: ''
       });
       expect(pattern.linkModal.getLinkUrl()).to.equal('resolveuid/foobar');
     });
@@ -246,7 +249,8 @@ define([
         UID: 'foobar',
         Type: 'Page',
         Title: 'Foobar',
-        path: '/foobar'
+        path: '/foobar',
+        getIcon: ''
       });
       pattern.linkModal.focusElement(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
       pattern.linkModal.$button.trigger('click');

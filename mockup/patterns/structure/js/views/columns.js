@@ -70,8 +70,3 @@ define([
 
   return ColumnsView;
 });
-
-
-
-
-

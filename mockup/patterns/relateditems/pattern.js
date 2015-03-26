@@ -102,12 +102,13 @@ define([
       homeText: _t('home'),
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID', 'Title', 'Type', 'path'],
+      attributes: ['UID', 'Title', 'Type', 'path', 'getIcon'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       resultTemplate: '' +
         '<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-relateditems-active<% } %>">' +
-        '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
+        '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %> contenttype-<%= Type.toLowerCase() %>">' +
+        '    <% if (getIcon) { %><span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span><% } %>' +
         '    <span class="pattern-relateditems-result-title"><%= Title %></span>' +
         '    <span class="pattern-relateditems-result-path"><%= path %></span>' +
         '  </a>' +
@@ -120,6 +121,7 @@ define([
       resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item pattern-relateditems-type-<%= Type %>">' +
+        ' <% if (getIcon) { %><span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span><% } %>' +
         ' <span class="pattern-relateditems-item-title"><%= Title %></span>' +
         ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
         '</span>',
@@ -237,11 +239,13 @@ define([
         dataFilter: function(data) {
           var nodes = [];
           _.each(data.results, function(item) {
-            nodes.push({
+            var node = {
               label: item.Title,
               id: item.UID,
-              path: item.path
-            });
+              path: item.path,
+              folder: self.options.folderTypes.indexOf(item.Type) !== -1
+            };
+            nodes.push(node);
           });
           return nodes;
         }
@@ -251,8 +255,17 @@ define([
         if (node && !node._loaded) {
           self.currentPath = node.path;
           selectedNode = node;
-          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node);
+          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function(){
+            treePattern.$el.tree('openNode', node);
+          });
           node._loaded = true;
+        }
+      });
+      treePattern.$el.bind('tree.dblclick', function(e){
+        if(e.node){
+          self.currentPath = e.node.path;
+          self.browseTo(self.currentPath);
+          $treeContainer.fadeOut();
         }
       });
       treePattern.$el.bind('tree.refresh', function() {

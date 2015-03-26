@@ -6,6 +6,7 @@
 @import (reference) "@{bowerPath}/bootstrap/less/buttons.less";
 @import (reference) "@{bowerPath}/bootstrap/less/button-groups.less";
 @import (reference) "@{bowerPath}/bootstrap/less/progress-bars.less";
+@import (reference) "@{bowerPath}/bootstrap/less/close.less";
 
 
 /* buttons */
@@ -22,8 +23,18 @@
 .plone-btn-danger{ .btn-danger() }
 .plone-btn-link{ .btn-link() }
 
-.plone-btn-group { .btn-group() }
+.plone-btn-group {
+  .plone-btn + .plone-btn,
+  .plone-btn + .plone-btn-group,
+  .plone-btn-group + .plone-btn,
+  .plone-btn-group + .plone-btn-group {
+    margin-left: -1px;
+  }
+}
+
 .plone-btn-block { .btn-block() }
+
+.plone-close { .close() }
 
 
 /* modals */

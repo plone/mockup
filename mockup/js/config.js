@@ -44,6 +44,10 @@
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
       'jquery.form': 'bower_components/jquery-form/jquery.form',
+      'jquery.recurrenceinput': 'bower_components/jquery.recurrenceinput.js/src/jquery.recurrenceinput',
+      'jquery.tools.dateinput': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.dateinput',
+      'jquery.tools.overlay': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.overlay',
+      'jquery.tmpl': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tmpl',
       'translate': 'js/i18n-wrapper',
       'marked': 'bower_components/marked/lib/marked',
       'mockup-bundles-docs': 'js/bundles/docs',
@@ -65,6 +69,7 @@
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
+      'mockup-patterns-contentloader': 'patterns/contentloader/pattern', 
       'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
       'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
       'mockup-patterns-filemanager': 'patterns/filemanager/pattern',
@@ -79,6 +84,7 @@
       'mockup-patterns-preventdoublesubmit': 'patterns/preventdoublesubmit/pattern',
       'mockup-patterns-querystring': 'patterns/querystring/pattern',
       'mockup-patterns-relateditems': 'patterns/relateditems/pattern',
+      'mockup-patterns-recurrence': 'patterns/recurrence/pattern',
       'mockup-patterns-resourceregistry': 'patterns/resourceregistry/pattern',
       'mockup-patterns-resourceregistry-url': 'patterns/resourceregistry',
       'mockup-patterns-select2': 'patterns/select2/pattern',
@@ -99,7 +105,7 @@
       'mockup-patterns-upload-url': 'patterns/upload',
       'mockup-patterns-passwordstrength': 'patterns/passwordstrength/pattern',
       'mockup-patterns-passwordstrength-url': 'patterns/passwordstrength',
-      'mockup-registry': 'bower_components/mockup-core/js/registry',
+      'mockup-patterns-livesearch': 'patterns/livesearch/pattern',
       'mockup-router': 'js/router',
       'mockup-ui-url': 'js/ui',
       'mockup-utils': 'js/utils',
@@ -116,13 +122,12 @@
       'underscore': 'bower_components/lodash/dist/lodash.underscore',
 
       // Patternslib
-      "pat-compat": "bower_components/patternslib/src/core/compat",
-      "pat-jquery-ext": "bower_components/patternslib/src/core/jquery-ext",
-      "pat-logger": "bower_components/patternslib/src/core/logger",
-      "pat-parser": "bower_components/patternslib/src/core/parser",
-      "pat-registry": "bower_components/patternslib/src/core/registry",
-      "pat-utils": "bower_components/patternslib/src/core/utils",
-      "logging": "bower_components/logging/src/logging"
+      'pat-compat': 'bower_components/patternslib/src/core/compat',
+      'pat-jquery-ext': 'bower_components/patternslib/src/core/jquery-ext',
+      'pat-logger': 'bower_components/patternslib/src/core/logger',
+      'pat-registry': 'bower_components/patternslib/src/core/registry',
+      'pat-utils': 'bower_components/patternslib/src/core/utils',
+      'logging': 'bower_components/logging/src/logging'
     },
     shim: {
       'JSXTransformer': { exports: 'window.JSXTransformer' },
@@ -149,7 +154,18 @@
         }
       },
       'tinymce-modern-theme': { deps: ['tinymce'] },
-      'underscore': { exports: 'window._' }
+      'underscore': { exports: 'window._' },
+      'jquery.recurrenceinput': {
+        deps: [
+          'jquery',
+          'jquery.tools.overlay',
+          'jquery.tools.dateinput',
+          'jquery.tmpl'
+        ]
+      },
+      'jquery.tools.dateinput': { deps: ['jquery'] },
+      'jquery.tools.overlay': { deps: ['jquery'] },
+      'jquery.tmpl': { deps: ['jquery'] }
     },
     wrapShim: true
   };

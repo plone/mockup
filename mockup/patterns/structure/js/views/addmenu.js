@@ -6,10 +6,9 @@ define([
   'backbone',
   'mockup-ui-url/views/buttongroup',
   'mockup-ui-url/views/button',
-  'mockup-patterns-modal',
   'mockup-utils',
   'bootstrap-dropdown'
-], function($, _, Backbone, ButtonGroup, ButtonView, Modal, utils) {
+], function($, _, Backbone, ButtonGroup, ButtonView, utils) {
   'use strict';
 
   var AddMenu = ButtonGroup.extend({
@@ -49,7 +48,10 @@ define([
       var self = this;
       e.preventDefault();
       self.app.loading.show();
-
+      window.location = button.url;
+      /* Do not launch in overlay otherwise you get overlays insides of
+         overlays potentials--nasty. Leave here if we change our mind
+         for some reason.
       $.ajax({
         url: button.url,
         type: 'POST',
@@ -95,6 +97,7 @@ define([
           self.app.loading.hide();
         }
       });
+    */
     },
     render: function() {
       var self = this;
