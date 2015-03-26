@@ -68,7 +68,12 @@ transition: opacity .5s linear;
     margin: 30px auto;
   }
 }
-.plone-modal-content {  background: #fff; overflow: hidden;}
+.plone-modal-content {
+  background: #fff;
+  /* XXX this is necessary for some content inside modals
+     to behave properly */
+  overflow: inherit;
+}
 .plone-modal-body {padding: 15px; position: relative;}
 .plone-modal-footer { text-align: right; border-top: 1px solid #e5e5e5; padding: 15px;}
 

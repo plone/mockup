@@ -1,11 +1,21 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
+2.0.2 (unreleased)
+------------------
+
+- update related items tree widget integration to have a bit better
+  user interaction. Automatically open folder nodes and implement double click
+  [vangheem]
+
+- fix rendering issue with tinymce link/image overlay and tree selector
+  [vangheem]
+
+2.0.1 (2015-03-25)
 ------------------
 
 - be able to use tinymce plone plugins without image upload part
-
+  [vangheem]
 
 2.0.0 (2015-03-17)
 ------------------
