@@ -18,39 +18,20 @@
  *    - Create some text that you want to be the link that will reveal the
  *      tooltip.
  *    - Select the view html button
- *    - Find your text. and wrap that text with an href tag, and add a class
- *      and the href tag.
- *    - It should look like < a class="pat-tooltip" href="#my-demo-tip"> My
- *      link text </a>
+ *    - Find your text, and surround it with an HTML tag. Any normal tag works fine.
+ *    - It should look like:
+ *      <span class="pat-tooltip" data-toggle="tooltip" title="Tooltip text">My link text</span>
  *    - Choose Save
- *
- *    Now that we have added our link we now need to add our tooltip.
- *
- *    - Choose "edit"
- *    - Immediently following the link click to add some text and hit your
- *      "return" key
- *    - Add the text that you want to be the tip.
- *    - Choose the "edit html" button
- *    - Find the tip text and wrap that text with a div tag, an ID tag and a
- *      class.
- *    - It should look like <div id="my-demo-tip" class="tooltips"> My Tip
- *      Text here </div>
- *    - Choose Save and test your tooltip.
- *
- *    Note: it's important that the href AND the ID be named exactly the same
- *    thing. This is what links them together.
  *
  *    # Example
  *
  *    {{ example-1 }}
  *
  * Example: example-1
- *    <p href=".example-class" class="pat-tooltip" data-toggle="tooltip" title="test">
- *      Hover over this line to see a tooltip
- *    </p>
- *    <p class="tooltips example-class">
- *      Setting the .example-class in the href makes this show up
- *    </p>
+ *      <a href="#" data-toggle="tooltip" class="pat-tooltip"
+ *            title="Setting the data-toggle and title makes this show up">
+ *            Hover over this line to see a tooltip
+ *      </a>
  *
  */
 
