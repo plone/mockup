@@ -145,6 +145,7 @@ define([
       linkAttribute: 'path', // attribute to get link value from data
       prependToScalePart: '/imagescale/', // some value here is required to be able to parse scales back
       appendToScalePart: '',
+      appendToOriginalScalePart: '',
       scales: _t('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
               'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
               'Large (768x768):large'),
@@ -155,38 +156,37 @@ define([
         {text: _t('Open in top frame (replaces all frames)'), value: '_top'}
       ],
       imageTypes: 'Image',
-      folderTypes: 'Folder,Plone Site',
+      folderTypes: ['Folder', 'Plone Site'],
       linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
         'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
         theme: '-modern',
         plugins: [
-          '-advlist -autolink -lists -charmap -print -preview -anchor ' +
-          '-searchreplace -visualblocks -code -fullscreen -autoresize ' +
-          '-insertdatetime -media -table -contextmenu -paste -plonelink -ploneimage'
+          'advlist autolink lists charmap print preview anchor ' +
+          'searchreplace visualblocks code fullscreen ' +
+          'insertdatetime media table contextmenu paste plonelink ploneimage'
         ],
         menubar: 'edit table format tools view insert',
         toolbar: 'undo redo | styleselect | bold italic | ' +
                  'alignleft aligncenter alignright alignjustify | ' +
                  'bullist numlist outdent indent | ' +
                  'unlink plonelink ploneimage',
-        'autoresize_max_height': 1500
+        //'autoresize_max_height': 900,
+        'height': 400
       }
     },
     addLinkClicked: function() {
       var self = this;
       if (self.linkModal === null) {
         var $el = $('<div/>').insertAfter(self.$el);
+        var linkTypes = ['internal', 'upload', 'external', 'email', 'anchor'];
+        if(!self.options.upload){
+          linkTypes.splice(1, 1);
+        }
         self.linkModal = new LinkModal($el,
           $.extend(true, {}, self.options, {
             tinypattern: self,
-            linkTypes: [
-              'internal',
-              'upload',
-              'external',
-              'email',
-              'anchor'
-            ]
+            linkTypes: linkTypes
           })
         );
         self.linkModal.show();
@@ -198,9 +198,13 @@ define([
     addImageClicked: function() {
       var self = this;
       if (self.imageModal === null) {
+        var linkTypes = ['image', 'uploadImage', 'externalImage'];
+        if(!self.options.upload){
+          linkTypes.splice(1, 1);
+        }
         var options = $.extend(true, {}, self.options, {
           tinypattern: self,
-          linkTypes: ['image', 'uploadImage', 'externalImage'],
+          linkTypes: linkTypes,
           initialLinkType: 'image',
           text: {
             insertHeading: _t('Insert Image')
@@ -209,9 +213,9 @@ define([
             baseCriteria: [{
               i: 'Type',
               o: 'plone.app.querystring.operation.list.contains',
-              v: self.options.imageTypes.split(',').concat(self.options.folderTypes.split(','))
+              v: self.options.imageTypes.concat(self.options.folderTypes)
             }],
-            selectableTypes: self.options.imageTypes.split(','),
+            selectableTypes: self.options.imageTypes,
             resultTemplate: ResultTemplate,
             selectionTemplate: SelectionTemplate
           }
@@ -229,12 +233,20 @@ define([
       var part = data[self.options.linkAttribute];
       return self.options.prependToUrl + part + self.options.appendToUrl;
     },
-    generateImageUrl: function(data, scale) {
+    generateImageUrl: function(data, scale_name) {
       var self = this;
       var url = self.generateUrl(data);
-      if (scale !== ""){
-          url = (url + self.options.prependToScalePart + scale +
-                 self.options.appendToScalePart);
+      if (scale_name !== ""){
+        var part = scale_name;
+        for(var i=0; i<self.options.scales.length; i++){
+          if(self.options.scales[i].name == scale_name){
+            part = self.options.scales[i].part;
+          }
+        }
+        url = (url + self.options.prependToScalePart + part +
+               self.options.appendToScalePart);
+      }else{
+        url = url + self.options.appendToOriginalScalePart;
       }
       return url;
     },
@@ -300,6 +312,23 @@ define([
       };
       if (tinyOptions.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
+      }
+
+      if(typeof(self.options.scales) === 'string'){
+        self.options.scales = _.map(self.options.scales.split(','), function(scale){
+          var scale = scale.split(':');
+          return {
+            part: scale[1],
+            name: scale[1],
+            label: scale[0]
+          }
+        });
+      }
+      if(typeof(self.options.folderTypes) === 'string'){
+        self.options.folderTypes = self.options.folderTypes.split(',');
+      }
+      if(typeof(self.options.imageTypes) === 'string'){
+        self.options.imageTypes = self.options.imageTypes.split(',');
       }
 
       tinymce.init(tinyOptions);

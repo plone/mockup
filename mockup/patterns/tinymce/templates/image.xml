@@ -1,7 +1,9 @@
 <div>
   <div class="linkModal">
     <h1><%- insertHeading %></h1>
+    <% if(upload){ %>
     <p class="info">Drag and drop files from your desktop onto dialog to upload</p>
+    <% } %>
 
     <div class="linkTypes pat-autotoc autotabs"
          data-pat-autotoc="section:fieldset;levels:legend;">
@@ -16,10 +18,9 @@
             <label><%- scaleText %></label>
             <select name="scale">
               <option value="">Original</option>
-                <% _.each(scales.split(','), function(scale){ %>
-                  <% var scale = scale.split(':'); %>
-                  <option value="<%- scale[1] %>">
-                    <%- scale[0] %>
+                <% _.each(scales, function(scale){ %>
+                  <option value="<%- scale.part %>">
+                    <%- scale.label %>
                   </option>
                 <% }); %>
             </select>
@@ -27,10 +28,12 @@
         </div>
       </fieldset>
 
+      <% if(upload){ %>
       <fieldset class="linkType uploadImage" data-linkType="uploadImage">
         <legend>Upload</legend>
         <div class="uploadify-me"></div>
       </fieldset>
+      <% } %>
 
       <fieldset class="linkType externalImage" data-linkType="externalImage">
         <legend>External image</legend>

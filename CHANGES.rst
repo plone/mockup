@@ -1,8 +1,30 @@
 Changelog
 =========
 
-2.0.0 (unreleased)
+2.0.2 (unreleased)
 ------------------
+
+- Fix building of docs with ``make docs``.
+  [thet]
+
+- update related items tree widget integration to have a bit better
+  user interaction. Automatically open folder nodes and implement double click
+  [vangheem]
+
+- fix rendering issue with tinymce link/image overlay and tree selector
+  [vangheem]
+
+2.0.1 (2015-03-25)
+------------------
+
+- be able to use tinymce plone plugins without image upload part
+  [vangheem]
+
+2.0.0 (2015-03-17)
+------------------
+
+- make sure mockup can be installable with bower again
+  [vangheem]
 
 - Bring back TinyMCE ``sed`` and ``copy`` from ``mockup`` into ``mockup-core``.
   If we create bundles from an external package based on patterns from mockup,
@@ -94,6 +116,10 @@ Fixes and enhancements:
   it. Otherwise search for a ``<base>`` tag. Plone 5 dropped the usage of base
   tags.
   [ACatlla, thet]
+
+- Fix less variable overrides on resourceregistry pattern when building
+  CSS from less resources
+  [datakurre]
 
 - Depend on ``tinymce-builded`` 4.1.6, include TinyMCE copy and sed
   configuration in here and fix some sed tasks.

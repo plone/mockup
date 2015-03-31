@@ -29,15 +29,15 @@ module.exports = function(grunt) {
     copy: {
       docs: {
         files: [
-          { expand: true, src: 'index.html', dest: 'docs/dev/' },
           { expand: true, src: '*.md', dest: 'docs/dev/' },
-          { expand: true, src: 'js/**', dest: 'docs/dev/' },
-          { expand: true, src: 'tests/**', dest: 'docs/dev/' },
-          { expand: true, src: 'lib/**', dest: 'docs/dev/' },
           { expand: true, src: 'bower_components/**', dest: 'docs/dev/' },
+          { expand: true, src: 'index.html', dest: 'docs/dev/' },
+          { expand: true, src: 'js/**', dest: 'docs/dev/' },
+          { expand: true, src: 'less/**', dest: 'docs/dev/' },
+          { expand: true, src: 'lib/**', dest: 'docs/dev/' },
           { expand: true, src: 'node_modules/requirejs/require.js', dest: 'docs/dev/' },
-          { expand: true, src: 'build/**', dest: 'docs/dev/' },
-          { expand: true, src: 'less/**', dest: 'docs/dev/' }
+          { expand: true, src: 'patterns/**', dest: 'docs/dev/' },
+          { expand: true, src: 'tests/**', dest: 'docs/dev/' },
         ]
       },
     },
@@ -47,15 +47,20 @@ module.exports = function(grunt) {
         pattern: 'href="docs/dev/docs.min.css"',
         replacement: 'href="docs.min.css"'
       },
-      'docs-js': {
-        path: 'docs/dev/index.html',
-        pattern: '<script src="node_modules/grunt-contrib-less/node_modules/less/dist/less-1.6.1.js"></script>\n  <script src="node_modules/requirejs/require.js"></script>\n  <script src="js/config.js"></script>\n  <script>require\\(\\[\'mockup-bundles-docs\'\\]\\);</script>',
-        replacement: '<script src="docs.min.js"></script>'
-      },
+      //'docs-js': {
+      //  path: 'docs/dev/index.html',
+      //  pattern: '<script src="node_modules/requirejs/require.js"></script>\n  <script src="js/config.js"></script>\n  <script>\n    window.DEBUG = true;\n    require\\(\\[\'mockup-bundles-docs\'\\]\\);\n  </script>',
+      //  replacement: '<script src="docs.min.js"></script>'
+      //},
       'docs-legacy-js': {
         path: 'docs/dev/index.html',
         pattern: '<script src="bower_components/es5-shim/es5-shim.js"></script>\n    <script src="bower_components/es5-shim/es5-sham.js"></script>\n    <script src="bower_components/console-polyfill/index.js"></script>',
         replacement: '<script src="docs-legacy.js"></script>'
+      },
+      'docs-catalogurl': {
+        path: 'docs/dev/index.html',
+        pattern: 'data-i18ncatalogurl="/tests/json/i18n.json"',
+        replacement: 'data-i18ncatalogurl="/mockup/dev/tests/json/i18n.json"',
       }
     },
   }, {
@@ -73,7 +78,7 @@ module.exports = function(grunt) {
   mockup.initGrunt(grunt, {
     sed: {
       bootstrap: {
-        path: 'node_modules/lcov-result-merger/index.js',
+        path: '../node_modules/lcov-result-merger/index.js',
         pattern: 'throw new Error\\(\'Unknown Prefix ',
         replacement: '//throw// new Error(\'Unknown Prefix '
       }

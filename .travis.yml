@@ -17,7 +17,6 @@ env:
     - BROWSERS="SL_IPad"
     - BROWSERS="SL_Android"
 install:
-  - cd mockup
   - travis_retry make bootstrap
   - echo "Host github.com" >> ~/.ssh/config
   - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
