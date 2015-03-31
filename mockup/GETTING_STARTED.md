@@ -143,6 +143,9 @@ Just replace the mockup-core line in bower.json with:
 Please note, you have to commit the changes on mockup-core before running
 ``make bootstrap``.
 
+Alternatively, on UNIX based systems, simply make a symlink from
+bower_components/mockup-core/ to your local mockup-core checkout.
+
 
 # Upgrade from pre-2.0 to 2.0 based Mockup patterns
 

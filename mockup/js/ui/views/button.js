@@ -3,8 +3,8 @@ define([
   'backbone',
   'underscore',
   'mockup-ui-url/views/base',
-  'bootstrap-tooltip'
-], function($, Backbone, _, BaseView) {
+  'mockup-patterns-tooltip'
+], function($, Backbone, _, BaseView, Tooltip) {
   'use strict';
 
   var ButtonView = BaseView.extend({
@@ -45,9 +45,9 @@ define([
         });
 
         if (this.tooltip !== null) {
-          this.$el.tooltip({
-            title: this.tooltip
-          });
+
+          this.$el.attr('title', this.tooltip);
+          var tooltipPattern = new Tooltip(this.$el);
           // XXX since tooltip triggers hidden
           // suppress so it plays nice with modals, backdrops, etc
           this.$el.on('hidden', function(e) {
