@@ -4,6 +4,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fix building of docs with ``make docs``.
+  [thet]
+
 - update related items tree widget integration to have a bit better
   user interaction. Automatically open folder nodes and implement double click
   [vangheem]

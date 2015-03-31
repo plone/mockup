@@ -54,8 +54,9 @@ bundle-resourceregistry:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-resourceregistry $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 docs:
-	if test ! -d docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages docs; fi
-	rm -rf docs/dev
+	rm -Rf mockup/docs; mkdir mockup/docs; cp -R .git mockup/docs; cd mockup/docs; $(GIT) checkout gh-pages;
+	# if test ! -d mockup/docs; then $(GIT) clone git://github.com/plone/mockup.git -b gh-pages mockup/docs; fi
+	rm -rf mockup/docs/dev
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 bootstrap-common:
@@ -114,6 +115,7 @@ clean-deep: clean
 	if test -f $(NPM); then $(NPM) cache clean; fi
 
 publish-docs:
-	echo -e "Publishing 'docs' bundle!\n"; cd docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
+	echo -e "Publishing 'docs' bundle!\n"; cd mockup/docs; git add -fA .; git commit -m "Publishing docs"; git push -f git@github.com:plone/mockup.git gh-pages; cd ../..;
+	# echo -e "Publishing 'docs' bundle!\n"; cd mockup/docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
 
 .PHONY: bundle bundle-widgets bundle-structure bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-docs clean clean-deep
