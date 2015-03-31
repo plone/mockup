@@ -353,7 +353,7 @@ we create a file called *tests/pattern-helloworld-test.js* and put the following
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-helloworld'
 ], function (expect, $, registry, HelloWorld) {
   "use strict";
@@ -392,7 +392,7 @@ Let's first explain some of the dependencies:
 * **[expect](https://github.com/LearnBoost/expect.js)** -
   A minimalistic BDD assertion toolkit based on the should.js test framework.
    <code>expect(result).to.be.above(0).and.not.equal(7)</code>.
-* **mockup-registry** -
+* **pat-registry** -
   the *registry* is a collection of tools used for managing the patterns.
   It also keeps track of which patterns have been registered, hence its name.  
   In our example we use its **scan()** method,
@@ -584,7 +584,7 @@ We need to include require.js and our js/config.js and then we need to scan the 
     &lt;script src="node_modules/requirejs/require.js"&gt;&lt;/script&gt;
     &lt;script src="js/config.js"&gt;&lt;/script&gt;
     &lt;script&gt;
-       require(['jquery', 'mockup-registry','mockup-patterns-helloworld'],
+       require(['jquery', 'pat-registry','mockup-patterns-helloworld'],
          function($, registry) {
            $(document).ready(function (){
              registry.scan($('body'));
@@ -663,7 +663,7 @@ Note, we need to map the jquery.foggy Pattern name to the path and we also need 
     &lt;script src="node_modules/requirejs/require.js"&gt;&lt;/script&gt;
     &lt;script src="js/config.js"&gt;&lt;/script&gt;
     &lt;script&gt;
-       require(['jquery', 'mockup-registry','mockup-patterns-foggy'],
+       require(['jquery', 'pat-registry','mockup-patterns-foggy'],
          function($, registry) {
            $(document).ready(function (){
              registry.scan($('body'));

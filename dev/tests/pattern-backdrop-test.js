@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-backdrop'
 ], function(expect, $, registry, Backdrop) {
   'use strict';
@@ -17,25 +17,25 @@ define([
     it('default behaviour', function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
-      expect($('.backdrop', $el).size()).to.equal(1);
-      expect($el.hasClass('backdrop-active')).to.equal(false);
+      expect($('.plone-backdrop', $el).size()).to.equal(1);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(false);
       backdrop.show();
-      expect($el.hasClass('backdrop-active')).to.equal(true);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(true);
       backdrop.hide();
-      expect($el.hasClass('backdrop-active')).to.equal(false);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(false);
       backdrop.show();
-      expect($el.hasClass('backdrop-active')).to.equal(true);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(true);
       backdrop.$backdrop.trigger('click');
-      expect($el.hasClass('backdrop-active')).to.equal(false);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(false);
       backdrop.show();
-      expect($el.hasClass('backdrop-active')).to.equal(true);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(true);
       var keydown = $.Event('keydown');
       keydown.keyCode = 50;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).to.equal(true);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(true);
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).to.equal(false);
+      expect($el.hasClass('plone-backdrop-active')).to.equal(false);
     });
   });
 

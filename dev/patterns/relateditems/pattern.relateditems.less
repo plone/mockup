@@ -1,0 +1,170 @@
+@import "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
+@import "@{bowerPath}/bootstrap/less/glyphicons.less";
+@import "@{mockupPath}/select2/pattern.select2.less";
+@import "@{mockupPath}/tree/pattern.tree.less";
+
+
+.pattern-relateditems-dropdown {
+  z-index: 10002;
+
+  .select2-results {
+    .select2-highlighted {
+      color: #000;
+      background: #d8d8d8;
+    }
+    .select2-selected {
+      display: list-item;
+    }
+  }
+}
+.pat-relateditems {
+
+}
+
+.pattern-relateditems-active {
+    padding: 5px;
+    background-color: #DDD;
+}
+
+.pattern-relateditems-container {
+  display: inline-block;
+  position: relative;
+}
+.pattern-relateditems-path {
+  display: block;
+  line-height: 20px;
+  background-color: #f1f1f1;
+  font-size: 12px;
+  border: 1px solid #aaa;
+  border-bottom-style: none;
+  z-index: 9999;
+  position: relative;
+  padding: 0 6px;
+  color: #333;
+
+  a {
+    padding: 0 6px;
+  }
+
+  em {
+    color: #666;
+  }
+}
+
+.pattern-relateditems-result {
+  padding-right: 30px;
+  position: relative;
+
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .pattern-relateditems-result-select {
+    display: block;
+    line-height: 15px;
+    padding-top: 5px;
+  }
+
+  .pattern-relateditems-buttons {
+    position: absolute;
+    display: inline-block;
+    text-align: right;
+    font-size: 18px;
+    right: 0;
+    top: 50%;
+    margin-top: -16px;
+    a {
+      display: block;
+      height: 36px;
+      line-height: 36px;
+      .glyphicon();
+      .glyphicon-chevron-right();
+    }
+  }
+
+  .pattern-relateditems-result-path {
+    display: block;
+    color: #444;
+    font-size: 11px;
+  }
+}
+
+.pattern-relateditems-item {
+  .pattern-relateditems-item-path {
+    font-size: 11px;
+    color: #444;
+    display: block;
+  }
+}
+
+/* tree parts */
+.pattern-relateditems-tree {
+    .tree-container {
+        position: absolute;
+        background-color: white;
+        min-width: 200px;
+        padding: 0px;
+        left: 4px;
+        border: 3px solid #DDD;
+        border-radius: 7px;
+        top: 4px;
+        display: none;
+        z-index: 10000;
+        min-width: 350px;
+        margin-top: 10px;
+
+        .pat-tree {
+            max-height: 400px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-top: 1px solid #DDD;
+            border-bottom: 1px solid #DDD;
+            padding: 2px 0;
+        }
+
+        .select-folder-label {
+            display: block;
+            margin: 10px 5px 5px 5px;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .btn.close.pattern-relateditems-tree-itemselect{
+            display: block;
+            margin: 2px;
+            opacity: 1.0;
+        }
+        .btn.close.pattern-relateditems-tree-cancel{
+            display: block;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        .jqtree-tree {
+            .jqtree_common {
+                padding-left: 2px;
+            }
+
+            .jqtree_common.jqtree-selected {
+                .jqtree_common.jqtree-element {
+                    background: #97BDD6;
+                    text-shadow: none;
+                }
+            }
+
+            li.jqtree_common {
+                padding-right: 6px;
+
+                .jqtree_common.jqtree-element {
+                    &:hover {
+                        background: #DDD;
+                    }
+                }
+            }
+        }
+    }
+}

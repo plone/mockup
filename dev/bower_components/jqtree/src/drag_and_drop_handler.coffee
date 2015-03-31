@@ -6,9 +6,13 @@ class DragAndDropHandler
         @$ghost = null
         @hit_areas = []
         @is_dragging = false
+        @current_item = null
 
     mouseCapture: (position_info) ->
         $element = $(position_info.target)
+
+        if not @mustCaptureElement($element)
+            return null
 
         if @tree_widget.options.onIsMoveHandle and not @tree_widget.options.onIsMoveHandle($element)
             return null
@@ -23,7 +27,7 @@ class DragAndDropHandler
         return (@current_item != null)
 
     mouseStart: (position_info) ->
-        @refreshHitAreas()
+        @refresh()
 
         offset = $(position_info.target).offset()
 
@@ -45,12 +49,17 @@ class DragAndDropHandler
         can_move_to = @canMoveToArea(area)
 
         if can_move_to and area
+            if !area.node.isFolder()
+                @stopOpenFolderTimer();
+
             if @hovered_area != area
                 @hovered_area = area
 
                 # If this is a closed folder, start timer to open it
                 if @mustOpenFolderTimer(area)
                     @startOpenFolderTimer(area.node)
+                else
+                    @stopOpenFolderTimer()
 
                 @updateDropHint()
         else
@@ -59,6 +68,9 @@ class DragAndDropHandler
             @stopOpenFolderTimer()
 
         return true
+
+    mustCaptureElement: ($element) ->
+        return not $element.is('input,select')
 
     canMoveToArea: (area) ->
         if not area
@@ -79,13 +91,21 @@ class DragAndDropHandler
 
         if @current_item
             @current_item.$element.removeClass('jqtree-moving')
+            @current_item = null
 
         @is_dragging = false
         return false
 
-    refreshHitAreas: ->
+    refresh: ->
         @removeHitAreas()
-        @generateHitAreas()
+
+        if @current_item
+            @generateHitAreas()
+
+            @current_item = @tree_widget._getNodeElementForNode(@current_item.node)
+
+            if @is_dragging
+                @current_item.$element.addClass('jqtree-moving')
 
     removeHitAreas: ->
         @hit_areas = []
@@ -104,7 +124,7 @@ class DragAndDropHandler
     generateHitAreas: ->
         hit_areas_generator = new HitAreasGenerator(
             @tree_widget.tree,
-            @current_item.node,            
+            @current_item.node,
             @getTreeDimensions().bottom
         )
         @hit_areas = hit_areas_generator.generate()
@@ -161,7 +181,7 @@ class DragAndDropHandler
                 folder,
                 @tree_widget.options.slide,
                 =>
-                    @refreshHitAreas()
+                    @refresh()
                     @updateDropHint()
             )
 
@@ -218,6 +238,7 @@ class DragAndDropHandler
             bottom: offset.top + @tree_widget.element.height() + 16
         }
 
+
 class VisibleNodeIterator
     constructor: (tree) ->
         @tree = tree
@@ -230,7 +251,7 @@ class VisibleNodeIterator
                 (node.is_open or not node.element) and node.hasChildren()
             )
 
-            if node.element                
+            if node.element
                 $element = $(node.element)
 
                 if not $element.is(':visible')
@@ -302,7 +323,7 @@ class HitAreasGenerator extends VisibleNodeIterator
         area = {
             top: top
             node: node
-            position: position            
+            position: position
         }
 
         @positions.push(area)

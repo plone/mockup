@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-modal'
 ], function(expect, $, sinon, registry, Modal) {
   'use strict';
@@ -74,27 +74,27 @@ define([
 
       registry.scan($el);
 
-      expect($('.backdrop', $el).is(':hidden')).to.be.equal(true);
-      expect($el.hasClass('backdrop-active')).to.be.equal(false);
-      expect($('.modal-wrapper', $el).is(':hidden')).to.be.equal(true);
-      expect($('.modal', $el).size()).to.equal(0);
+      expect($('.plone-modal-backdrop', $el).is(':hidden')).to.be.equal(true);
+      expect($el.hasClass('plone-backdrop-active')).to.be.equal(false);
+      expect($('.plone-modal-wrapper', $el).is(':hidden')).to.be.equal(true);
+      expect($('.plone-modal', $el).size()).to.equal(0);
 
       $('a.pat-modal', $el).click();
 
-      expect($('.backdrop', $el).is(':visible')).to.be.equal(true);
-      expect($el.hasClass('backdrop-active')).to.be.equal(true);
-      expect($('.modal-wrapper', $el).is(':visible')).to.be.equal(true);
-      expect($('.modal', $el).size()).to.equal(1);
-      expect($('.modal', $el).hasClass('in')).to.be.equal(true);
-      expect($('.modal .modal-header', $el).size()).to.equal(1);
-      expect($('.modal .modal-body', $el).size()).to.equal(1);
-      expect($('.modal .modal-footer', $el).size()).to.equal(1);
+      expect($('.plone-modal-backdrop', $el).is(':visible')).to.be.equal(true);
+      expect($el.hasClass('plone-backdrop-active')).to.be.equal(true);
+      expect($('.plone-modal-wrapper', $el).is(':visible')).to.be.equal(true);
+      expect($('.plone-modal', $el).size()).to.equal(1);
+      expect($('.plone-modal', $el).hasClass('in')).to.be.equal(true);
+      expect($('.plone-modal .plone-modal-header', $el).size()).to.equal(1);
+      expect($('.plone-modal .plone-modal-body', $el).size()).to.equal(1);
+      expect($('.plone-modal .plone-modal-footer', $el).size()).to.equal(1);
 
       var keydown = $.Event('keydown');
       keydown.keyCode = 27;
       $(document).trigger(keydown);
-      expect($el.hasClass('backdrop-active')).to.be.equal(false);
-      expect($('.modal', $el).size()).to.equal(0);
+      expect($el.hasClass('plone-backdrop-active')).to.be.equal(false);
+      expect($('.plone-modal', $el).size()).to.equal(0);
 
       $el.remove();
     });
@@ -111,10 +111,10 @@ define([
         .patternModal()
         .on('show.modal.patterns', function(e) {
           var modal = $(this).data('pattern-modal');
-          $('.modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
+          $('.plone-modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
         })
         .click();
-      expect($('.modal .modal-header h3', $el).text()).to.equal('New Title');
+      expect($('.plone-modal .plone-modal-header h3', $el).text()).to.equal('New Title');
 
       $el.remove();
     });
@@ -136,12 +136,16 @@ define([
           var modal = $(this).data('pattern-modal');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><head><base href="testurl"></base></head></html>'
-          )).to.equal('testurl');
+            '<html><head><base href="testurl1"></base></head></html>'
+          )).to.equal('testurl1');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><head><base href="testurl" /></head></html>'
-          )).to.equal('testurl');
+            '<html><head><base href="testurl2" /></head></html>'
+          )).to.equal('testurl2');
+          expect(modal.defaults.actionOptions.redirectToUrl(
+            'ignore',
+            '<html><body data-base-url="testurl3"></body></html>'
+          )).to.equal('testurl3');
           done();
         })
         .click();
@@ -159,14 +163,15 @@ define([
           server.respond(); // XXX could not get autorespond to work
         })
         .on('formActionSuccess.modal.patterns', function() {
-          expect($('.modal').hasClass('in')).to.be.equal(true);
-          var title = $('.modal-header').find('h3').text();
+          expect($('.plone-modal').hasClass('in')).to.be.equal(true);
+          var title = $('.plone-modal-header').find('h2').text();
           expect(title).to.equal('Form submitted');
           done();
         })
       .click();
       server.respond(); // XXX could not get autorespond to work
     });
+
 
     it('handles form submits with enter key', function(done) {
       var server = this.server;
@@ -176,11 +181,11 @@ define([
         .on('show.modal.patterns', function(e) {
           var event = $.Event ('keydown');
           event.which = event.keyCode = 13;
-          $('.modal form').trigger (event);
+          $('.plone-modal form').trigger (event);
           server.respond();
         })
         .on('formActionSuccess.modal.patterns', function() {
-          var title = $('.modal-header').find('h3').text();
+          var title = $('.plone-modal-header').find('h2').text();
           expect(title).to.equal('Form submitted');
           done();
         })

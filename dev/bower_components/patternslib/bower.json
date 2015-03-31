@@ -1,0 +1,34 @@
+{
+  "name": "patterns",
+  "version": "2.0.6",
+  "main": "bundle.js",
+  "devDependencies": {
+    "jasmine": "https://github.com/jcbrand/jasmine.git#1_3_x"
+  },
+  "dependencies": {
+    "almond": "",
+    "jquery": "1.8.3",
+    "modernizr": "",
+    "requirejs": "",
+    "klass": "",
+    "jcrop": "0.9.12",
+    "less.js": "1.6.3",
+    "AnythingSlider": "1.8.17",
+    "chosen": "0.9.11",
+    "jquery-form": "3.46.0",
+    "fullcalendar": "https://github.com/arshaw/fullcalendar/releases/download/v2.0.0/fullcalendar-2.0.0.zip",
+    "jquery-placeholder": "2.0.7",
+    "prefixfree": "",
+    "select2": "3.4.3",
+    "slides": "",
+    "spectrum": "",
+    "jquery-textchange": "0.2.2",
+    "logging": "",
+    "parsleyjs": "1.1.18",
+    "jquery.tinymce": "",
+    "moment": "",
+    "moment-timezone": "",
+    "imagesloaded": "~3.1.8",
+    "masonry": "~3.2.2"
+  }
+}

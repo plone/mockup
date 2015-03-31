@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-tablesorter'
 ], function(expect, $, registry, Tablesorter) {
   'use strict';

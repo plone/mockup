@@ -112,3 +112,63 @@ or:
     make test-dev pattern=foobar
 
 These will run only the tests that end with foobar-test.js
+
+You can pass the ``verbose=true`` and ``debug=true`` command line options to
+increase log output.
+
+
+# Creating docs
+
+First, build the documentation with:
+
+    make docs
+
+Then, start the python test server like so:
+
+    python -m SimpleHTTPServer
+
+After that, access the served site in a webbrowser under the url:
+
+    http://localhost:8000
+
+
+# Including a local mockup-core checkout for developing
+
+If you want to also hack on mockup-core together with mockup and not push the
+changes from mockup-core to github, you can include it from a local checkout.
+Just replace the mockup-core line in bower.json with:
+
+    "mockup-core": "file:///PATH/TO/mockup-core/.git/#BRANCHNAME"
+
+Please note, you have to commit the changes on mockup-core before running
+``make bootstrap``.
+
+Alternatively, on UNIX based systems, simply make a symlink from
+bower_components/mockup-core/ to your local mockup-core checkout.
+
+
+# Upgrade from pre-2.0 to 2.0 based Mockup patterns
+
+Since version 2.0, Mockup uses the Patternslib scanner and it's registry. This
+allows us to: Use Patternslib patterns with Mockup/Plone and use Mockup
+patterns with Patternslib outside of Plone. The integration with Patternslib
+require that some small changes be made to newly developed Mockup patterns:
+
+1. Patterns should now use pat-registry as dependency instead of
+   mockup-registry.
+
+        define([
+            'jquery'
+            'mockup-patterns-base',
+            'pat-registry'
+        ], function($, Base, registry) {
+
+2. Patterns' selectors are now explicitly specified via the trigger attribute.
+   For example:
+
+       var Modal = Base.extend({
+         name: 'modal',
+         trigger: '.pat-modal',
+
+3. Because of change 2, patterns now fire events via the emit method, instead
+   of the trigger method.

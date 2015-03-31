@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'tinymce',
   'mockup-patterns-tinymce'
 ], function(expect, $, sinon, registry, tinymce, TinyMCE) {
@@ -12,12 +12,10 @@ define([
   $.fx.off = true;
 
   var createTinymce = function(options) {
-    if (options === undefined) {
-      options = {};
-    }
-    var $el = $('<textarea class="pat-tinymce"></textarea>').appendTo('body');
-
-    return new TinyMCE($el, options);
+    return registry.patterns.tinymce.init(
+      $('<textarea class="pat-tinymce"></textarea>').appendTo('body'),
+        options || {}
+      );
   };
 
   describe('TinyMCE', function() {
@@ -37,7 +35,8 @@ define([
             path: '/news/aggregator',
             Type: 'Collection',
             Description: 'Site News',
-            Title: 'News'
+            Title: 'News',
+            getIcon: ''
           },
           {
             UID: 'fooasdfasdf1123asZ',
@@ -45,7 +44,8 @@ define([
             getURL: 'http://localhost:8081/about',
             Type: 'Page',
             Description: 'About',
-            Title: 'About'
+            Title: 'About',
+            getIcon: 'document.png'
           },
         ];
 
@@ -112,32 +112,6 @@ define([
       $container.trigger('submit');
 
       expect($el.val()).to.equal('<p>foobar</p>');
-    });
-
-    it('auto adds image on upload', function() {
-      var tinymce = createTinymce({
-        prependToUrl: 'resolveuid/',
-        linkAttribute: 'UID'
-      });
-
-      tinymce.fileUploaded({
-        filename: 'foobar.png',
-        UID: 'foobar'
-      });
-      expect(tinymce.tiny.getContent()).to.contain('resolveuid/foobar');
-
-    });
-    it('auto adds link on file upload', function() {
-      var $el = $('<textarea class="pat-tinymce"></textarea>').appendTo('body');
-
-      var tinymce = new TinyMCE($el);
-
-      tinymce.fileUploaded({
-        filename: 'foobar.txt',
-        UID: 'foobar'
-      });
-      expect(tinymce.tiny.getContent()).to.contain('foobar.txt</a>');
-
     });
 
     it('test create correct url from metadata', function() {
@@ -214,7 +188,6 @@ define([
       expect(pattern.getScaleFromUrl('foobar/somescale/image_large')).to.equal('large');
     });
 
-
     it('test add link', function() {
       var pattern = createTinymce({
         prependToUrl: 'resolveuid/',
@@ -223,16 +196,17 @@ define([
           ajaxvocabulary: '/data.json'
         }
       });
-
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
         Type: 'Page',
         Title: 'Foobar',
-        path: '/foobar'
+        path: '/foobar',
+        getIcon: ''
       });
       expect(pattern.linkModal.getLinkUrl()).to.equal('resolveuid/foobar');
     });
+
     it('test add external link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
@@ -269,15 +243,15 @@ define([
 
     it('test adds data attributes', function() {
       var pattern = createTinymce();
-
+      pattern.tiny.setContent('<p>blah</p>');
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
         Type: 'Page',
         Title: 'Foobar',
-        path: '/foobar'
+        path: '/foobar',
+        getIcon: ''
       });
-      pattern.tiny.setContent('<p>blah</p>');
       pattern.linkModal.focusElement(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
       pattern.linkModal.$button.trigger('click');
       expect(pattern.tiny.getContent()).to.contain('data-val="foobar"');
@@ -298,21 +272,6 @@ define([
       /* XXX ajax not loading quickly enough here...
       expect(val.UID).to.equal('123sdfasdf');
       */
-    });
-
-    it('test create upload file modal', function() {
-      var pattern = createTinymce();
-      pattern.uploadFileClicked();
-      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(true);
-    });
-
-    it('test reopen upload file modal', function() {
-      var pattern = createTinymce();
-      pattern.uploadFileClicked();
-      pattern.uploadModal.hide();
-      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(false);
-      pattern.uploadFileClicked();
-      expect(pattern.uploadModal.modal.$modal.is(':visible')).to.equal(true);
     });
 
     it('test reopen add link modal', function() {
@@ -396,6 +355,15 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#blah');
     });
 
+    it('test tracks link type changes', function() {
+      var pattern = createTinymce({
+        anchorSelector: 'h1'
+      });
+
+      pattern.addLinkClicked();
+      pattern.linkModal.modal.$modal.find('.autotoc-nav a').eq(1).trigger('click');
+      expect(pattern.linkModal.linkType).to.equal('upload');
+    });
 
 
   });

@@ -1,7 +1,7 @@
 define([
   'expect',
   'jquery',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-structure',
   'sinon',
 ], function(expect, $, registry, Structure, sinon) {
@@ -41,7 +41,7 @@ define([
                                  'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
                                  'contextInfoUrl:{path}/contextInfo;' +
                                  ' ">' +
-        '</div>');
+        '</div>').appendTo('body');
 
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;

@@ -1,4 +1,7 @@
-/* globals module:true */
+/* RequireJS configuration
+ */
+
+/* global module:true */
 
 (function() {
   'use strict';
@@ -12,19 +15,29 @@
       'bootstrap-collapse': 'bower_components/bootstrap/js/collapse',
       'bootstrap-transition': 'bower_components/bootstrap/js/transition',
       'expect': 'bower_components/expect/index',
-      'jquery': 'bower_components/jquery/jquery',
+      'jquery': 'bower_components/jquery/dist/jquery',
       'marked': 'bower_components/marked/lib/marked',
       'mockup-docs': 'js/docs/app',
+      'mockup-docs-navigation': 'js/docs/navigation',
       'mockup-docs-page': 'js/docs/page',
       'mockup-docs-pattern': 'js/docs/pattern',
       'mockup-docs-view': 'js/docs/view',
-      'mockup-docs-navigation': 'js/docs/navigation',
-      'mockup-patterns-base': 'js/pattern',
+      'mockup-parser': 'js/parser',
       'mockup-registry': 'js/registry',
+      'mockup-patterns-base': 'js/pattern',
       'react': 'bower_components/react/react',
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore'
+      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+
+      // Patternslib
+      'pat-compat': 'bower_components/patternslib/src/core/compat',
+      'pat-jquery-ext': 'bower_components/patternslib/src/core/jquery-ext',
+      'pat-logger': 'bower_components/patternslib/src/core/logger',
+      'pat-parser': 'bower_components/patternslib/src/core/parser',
+      'pat-registry': 'bower_components/patternslib/src/core/registry',
+      'pat-utils': 'bower_components/patternslib/src/core/utils',
+      'logging': 'bower_components/logging/src/logging'
     },
     shim: {
       'backbone': {exports: 'window.Backbone', deps: ['underscore', 'jquery']},

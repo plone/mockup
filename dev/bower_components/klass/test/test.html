@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>klass tests</title>
+    <link rel="stylesheet" href="../node_modules/sink-test/src/sink.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script src="../node_modules/sink-test/src/sink.js"></script>
+    <script>
+      function klass() {
+        return 'success'
+      }
+    </script>
+    <script src="../src/klass.js"></script>
+    <script>
+      $k = klass.noConflict()
+    </script>
+  </head>
+  <body>
+    <h1>Klass tests</h1>
+    <ol id="tests"></ol>
+    <script src="tests.js"></script>
+  </body>
+</html>

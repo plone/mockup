@@ -2,7 +2,7 @@ define([
   'expect',
   'jquery',
   'sinon',
-  'mockup-registry',
+  'pat-registry',
   'mockup-patterns-pickadate',
   'mockup-patterns-select2'
 ], function(expect, $, sinon, registry, PickADate, Select2) {
@@ -423,7 +423,7 @@ define([
                                           ']}}'
               );
         self.$el.appendTo('body');
-        registry.scan($input);
+        registry.scan($input, ['pickadate']);
 
         // check if visible and data value are set to default
         expect($('.pattern-pickadate-timezone .select2-chosen').text()).to.equal('Enter timezone...');
@@ -439,7 +439,7 @@ define([
                                           ']}}'
               );
         self.$el.appendTo('body');
-        registry.scan($input);
+        registry.scan($input, ['pickadate']);
 
         var $time = $('.pattern-pickadate-timezone');
 

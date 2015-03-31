@@ -1,16 +1,31 @@
-/* globals module:true */
+/* RequireJS configuration
+ */
+
+/* global module:true */
 
 (function() {
   'use strict';
 
+  var tinymcePlugins = [
+    'advlist', 'anchor', 'autolink', 'autoresize', 'autosave', 'bbcode',
+    'charmap', 'code', 'colorpicker', 'contextmenu', 'directionality',
+    'emoticons', 'fullpage', 'fullscreen', 'hr', 'image', 'importcss',
+    'insertdatetime', 'layer', 'legacyoutput', 'link', 'lists', 'media',
+    'nonbreaking', 'noneditable', 'pagebreak', 'paste', 'preview', 'print',
+    'save', 'searchreplace', 'spellchecker', 'tabfocus', 'table', 'template',
+    'textcolor', 'textpattern', 'visualblocks', 'visualchars', 'wordcount'
+  ];
+
   var requirejsOptions = {
     baseUrl: './',
-    optimize: 'uglify',
+    optimize: 'none',
     paths: {
       'JSXTransformer': 'bower_components/react/JSXTransformer',
       'ace': 'bower_components/ace-builds/src/ace',
-      'ace-theme-monokai': 'bower_components/ace-builds/src/theme-monokai',
+      'ace-mode-css': 'bower_components/ace-builds/src/mode-css',
+      'ace-mode-javascript': 'bower_components/ace-builds/src/mode-javascript',
       'ace-mode-text': 'bower_components/ace-builds/src/mode-text',
+      'ace-theme-monokai': 'bower_components/ace-builds/src/theme-monokai',
       'backbone': 'bower_components/backbone/backbone',
       'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
       'bootstrap-alert': 'bower_components/bootstrap/js/alert',
@@ -18,22 +33,27 @@
       'bootstrap-dropdown': 'bower_components/bootstrap/js/dropdown',
       'bootstrap-tooltip': 'bower_components/bootstrap/js/tooltip',
       'bootstrap-transition': 'bower_components/bootstrap/js/transition',
+      'docs-contribute': 'CONTRIBUTE.md',
       'docs-getting-started': 'GETTING_STARTED.md',
       'docs-learn': 'LEARN.md',
-      'docs-contribute': 'CONTRIBUTE.md',
-      'domready': 'bower_components/domready/ready',
       'dropzone': 'bower_components/dropzone/downloads/dropzone-amd-module',
       'expect': 'bower_components/expect/index',
       'jqtree': 'bower_components/jqtree/tree.jquery',
-      'jquery': 'bower_components/jquery/jquery',
+      'jquery': 'bower_components/jquery/dist/jquery',
       'jquery.cookie': 'bower_components/jquery.cookie/jquery.cookie',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
       'jquery.form': 'bower_components/jquery-form/jquery.form',
+      'jquery.recurrenceinput': 'bower_components/jquery.recurrenceinput.js/src/jquery.recurrenceinput',
+      'jquery.tools.dateinput': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.dateinput',
+      'jquery.tools.overlay': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.overlay',
+      'jquery.tmpl': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tmpl',
+      'translate': 'js/i18n-wrapper',
       'marked': 'bower_components/marked/lib/marked',
-      'mockup-bundles-barceloneta': 'js/bundles/barceloneta',
       'mockup-bundles-docs': 'js/bundles/docs',
+      'mockup-bundles-filemanager': 'js/bundles/filemanager',
       'mockup-bundles-plone': 'js/bundles/plone',
+      'mockup-bundles-resourceregistry': 'js/bundles/resourceregistry',
       'mockup-bundles-structure': 'js/bundles/structure',
       'mockup-bundles-tiles': 'js/bundles/widgets',
       'mockup-bundles-widgets': 'js/bundles/widgets',
@@ -43,29 +63,51 @@
       'mockup-docs-pattern': 'bower_components/mockup-core/js/docs/pattern',
       'mockup-docs-view': 'bower_components/mockup-core/js/docs/view',
       'mockup-fakeserver': 'tests/fakeserver',
-      'mockup-patterns-accessibility': 'js/patterns/accessibility',
-      'mockup-patterns-autotoc': 'js/patterns/autotoc',
-      'mockup-patterns-backdrop': 'js/patterns/backdrop',
+      'mockup-i18n': 'js/i18n',
+      'mockup-parser': 'bower_components/mockup-core/js/parser',
+      'mockup-patterns-accessibility': 'patterns/accessibility/pattern',
+      'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
+      'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
-      'mockup-patterns-sortable': 'js/patterns/sortable',
-      'mockup-patterns-dropzone': 'js/patterns/dropzone',
-      'mockup-patterns-formautofocus': 'js/patterns/formautofocus',
-      'mockup-patterns-formunloadalert': 'js/patterns/formunloadalert',
-      'mockup-patterns-modal': 'js/patterns/modal',
-      'mockup-patterns-moment': 'js/patterns/moment',
-      'mockup-patterns-pickadate': 'js/patterns/pickadate',
-      'mockup-patterns-preventdoublesubmit': 'js/patterns/preventdoublesubmit',
-      'mockup-patterns-querystring': 'js/patterns/querystring',
-      'mockup-patterns-relateditems': 'js/patterns/relateditems',
-      'mockup-patterns-select2': 'js/patterns/select2',
-      'mockup-patterns-structure': 'js/patterns/structure/pattern',
-      'mockup-patterns-tablesorter': 'js/patterns/tablesorter',
-      'mockup-patterns-tinymce': 'js/patterns/tinymce/pattern',
-      'mockup-patterns-toggle': 'js/patterns/toggle',
-      'mockup-patterns-tooltip': 'js/patterns/tooltip',
-      'mockup-patterns-tree': 'js/patterns/tree',
-      'mockup-registry': 'bower_components/mockup-core/js/registry',
+      'mockup-patterns-contentloader': 'patterns/contentloader/pattern', 
+      'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
+      'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
+      'mockup-patterns-filemanager': 'patterns/filemanager/pattern',
+      'mockup-patterns-filemanager-url': 'patterns/filemanager',
+      'mockup-patterns-formautofocus': 'patterns/formautofocus/pattern',
+      'mockup-patterns-formunloadalert': 'patterns/formunloadalert/pattern',
+      'mockup-patterns-inlinevalidation': 'patterns/inlinevalidation/pattern',
+      'mockup-patterns-markspeciallinks': 'patterns/markspeciallinks/pattern',
+      'mockup-patterns-modal': 'patterns/modal/pattern',
+      'mockup-patterns-moment': 'patterns/moment/pattern',
+      'mockup-patterns-pickadate': 'patterns/pickadate/pattern',
+      'mockup-patterns-preventdoublesubmit': 'patterns/preventdoublesubmit/pattern',
+      'mockup-patterns-querystring': 'patterns/querystring/pattern',
+      'mockup-patterns-relateditems': 'patterns/relateditems/pattern',
+      'mockup-patterns-recurrence': 'patterns/recurrence/pattern',
+      'mockup-patterns-resourceregistry': 'patterns/resourceregistry/pattern',
+      'mockup-patterns-resourceregistry-url': 'patterns/resourceregistry',
+      'mockup-patterns-select2': 'patterns/select2/pattern',
+      'mockup-patterns-sortable': 'patterns/sortable/pattern',
+      'mockup-patterns-structure': 'patterns/structure/pattern',
+      'mockup-patterns-structure-url': 'patterns/structure',
+      'mockup-patterns-tablesorter': 'patterns/tablesorter/pattern',
+      'mockup-patterns-textareamimetypeselector': 'patterns/textareamimetypeselector/pattern',
+      'mockup-patterns-texteditor': 'patterns/texteditor/pattern',
+      'mockup-patterns-thememapper': 'patterns/thememapper/pattern',
+      'mockup-patterns-thememapper-url': 'patterns/thememapper',
+      'mockup-patterns-tinymce': 'patterns/tinymce/pattern',
+      'mockup-patterns-tinymce-url': 'patterns/tinymce',
+      'mockup-patterns-toggle': 'patterns/toggle/pattern',
+      'mockup-patterns-tooltip': 'patterns/tooltip/pattern',
+      'mockup-patterns-tree': 'patterns/tree/pattern',
+      'mockup-patterns-upload': 'patterns/upload/pattern',
+      'mockup-patterns-upload-url': 'patterns/upload',
+      'mockup-patterns-passwordstrength': 'patterns/passwordstrength/pattern',
+      'mockup-patterns-passwordstrength-url': 'patterns/passwordstrength',
+      'mockup-patterns-livesearch': 'patterns/livesearch/pattern',
       'mockup-router': 'js/router',
+      'mockup-ui-url': 'js/ui',
       'mockup-utils': 'js/utils',
       'moment': 'bower_components/moment/moment',
       'picker': 'bower_components/pickadate/lib/picker',
@@ -75,8 +117,17 @@
       'select2': 'bower_components/select2/select2',
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
-      'tinymce': 'lib/tinymce/tinymce.min',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore'
+      'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
+      'tinymce-modern-theme': 'bower_components/tinymce-builded/js/tinymce/themes/modern/theme',
+      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+
+      // Patternslib
+      'pat-compat': 'bower_components/patternslib/src/core/compat',
+      'pat-jquery-ext': 'bower_components/patternslib/src/core/jquery-ext',
+      'pat-logger': 'bower_components/patternslib/src/core/logger',
+      'pat-registry': 'bower_components/patternslib/src/core/registry',
+      'pat-utils': 'bower_components/patternslib/src/core/utils',
+      'logging': 'bower_components/logging/src/logging'
     },
     shim: {
       'JSXTransformer': { exports: 'window.JSXTransformer' },
@@ -91,19 +142,40 @@
       'jqtree': { deps: ['jquery'] },
       'jquery.cookie': { deps: ['jquery'] },
       'jquery.event.drag': { deps: ['jquery'] },
-      'jquery.event.drop': {
-        deps: ['jquery'],
-        exports: '$.drop'
-      },
-      'mockup-iframe_init': { deps: ['domready'] },
+      'jquery.event.drop': { deps: ['jquery'], exports: '$.drop' },
       'picker.date': { deps: [ 'picker' ] },
       'picker.time': { deps: [ 'picker' ] },
       'sinon': {exports: 'window.sinon'},
-      'tinymce': { exports: 'window.tinyMCE', init: function () { this.tinyMCE.DOM.events.domLoaded = true; return this.tinyMCE; }},
-      'underscore': { exports: 'window._' }
+      'tinymce': {
+        exports: 'window.tinyMCE',
+        init: function () {
+          this.tinyMCE.DOM.events.domLoaded = true;
+          return this.tinyMCE;
+        }
+      },
+      'tinymce-modern-theme': { deps: ['tinymce'] },
+      'underscore': { exports: 'window._' },
+      'jquery.recurrenceinput': {
+        deps: [
+          'jquery',
+          'jquery.tools.overlay',
+          'jquery.tools.dateinput',
+          'jquery.tmpl'
+        ]
+      },
+      'jquery.tools.dateinput': { deps: ['jquery'] },
+      'jquery.tools.overlay': { deps: ['jquery'] },
+      'jquery.tmpl': { deps: ['jquery'] }
     },
     wrapShim: true
   };
+  for(var i=0; i<tinymcePlugins.length; i=i+1){
+    var plugin = tinymcePlugins[i];
+    requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce-builded/js/tinymce/plugins/' + plugin + '/plugin';
+    requirejsOptions.shim['tinymce-' + plugin] = {
+      deps: ['tinymce']
+    };
+  }
 
   if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
     module.exports = requirejsOptions;

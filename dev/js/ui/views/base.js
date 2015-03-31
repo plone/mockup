@@ -1,32 +1,9 @@
-// Author: Ryan Foster
-// Contact: ryan@rynamic.com
-// Version: 1.0
-//
-// Description:
-//
-// License:
-//
-// Copyright (C) 2010 Plone Foundation
-//
-// This program is free software; you can redistribute it and/or modify it
-// under the terms of the GNU General Public License as published by the Free
-// Software Foundation; either version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-// more details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 51
-// Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-//
-
-
 define([
+  'jquery',
   'underscore',
-  'backbone'
-], function(_, Backbone) {
+  'backbone',
+  'translate'
+], function($, _, Backbone, _t) {
   'use strict';
 
   var BaseView = Backbone.View.extend({
@@ -60,7 +37,12 @@ define([
     },
     applyTemplate: function() {
       if (this.template !== null) {
-        this.$el.html(_.template(this.template, this.serializedModel()));
+        var data = $.extend({_t: _t}, this.options, this.serializedModel());
+        var template = this.template;
+        if(typeof(template) === 'string'){
+          template = _.template(template);
+        }
+        this.$el.html(template(data));
       }
     },
     propagateEvent: function(eventName) {
