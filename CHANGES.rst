@@ -4,6 +4,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Upgrade patternslib and mockup-core to fix install issues
+  [vangheem]
+
 - Use i18n.currentLanguage to initialise TinyMCE lang option. Fallback to
   closest lang if the required one is missing in TinyMCE (for instance, if
   fr_be.js is missing, we try fr.js and if fr.js is missing, we try fr_Fr.js).
