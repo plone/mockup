@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.2 (unreleased)
+2.0.2 (2015-04-01)
 ------------------
 
 - Upgrade patternslib and mockup-core to fix install issues
