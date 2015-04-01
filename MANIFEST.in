@@ -1,8 +1,8 @@
-recursive-include mockup *
-recursive-include js *
-recursive-include less *
-recursive-include lib *
-recursive-include patterns *
-recursive-include docs *
+recursive-include mockup/js *
+recursive-include mockup/less *
+recursive-include mockup/lib *
+recursive-include mockup/patterns *
+recursive-include mockup/docs *
 include *
+include mockup
 global-exclude *.pyc
