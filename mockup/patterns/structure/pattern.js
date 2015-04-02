@@ -56,7 +56,7 @@ define([
       setDefaultPageUrl: null,
       backdropSelector: '.plone-modal', // Element upon which to apply backdrops used for popovers
       attributes: [
-        'UID', 'Title', 'Type', 'path', 'review_state',
+        'UID', 'Title', 'portal_type', 'path', 'review_state',
         'ModificationDate', 'EffectiveDate', 'CreationDate',
         'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
         'getObjSize', 'last_comment_date', 'total_comments'
@@ -75,7 +75,7 @@ define([
         'CreationDate': _t('Created'),
         'review_state': _t('Review state'),
         'Subject': _t('Tags'),
-        'Type': _t('Type'),
+        'portal_type': _t('Type'),
         'is_folderish': _t('Folder'),
         'exclude_from_nav': _t('Excluded from nav'),
         'getObjSize': _t('Object Size'),
@@ -89,7 +89,7 @@ define([
           'modified': _t('Last Modified'),
           'created': _t('Created on'),
           'effective': _t('Publication Date'),
-          'Type': _t('Type')
+          'portal_type': _t('Type')
         },
         url: '/rearrange'
       },

@@ -1,7 +1,7 @@
 /* TinyMCE pattern.
  *
  * Options:
- *    relatedItems(object): Related items pattern options. ({ attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
+ *    relatedItems(object): Related items pattern options. ({ attributes: ["UID", "Title", "Description", "getURL", "portal_type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
  *    upload(object): Upload pattern options. ({ attributes: look at upload pattern for getting the options list })
  *    text(object): Translation strings ({ insertBtn: "Insert", cancelBtn: "Cancel", insertHeading: "Insert link", title: "Title", internal: "Internal", external: "External", email: "Email", anchor: "Anchor", subject: "Subject" image: "Image", imageAlign: "Align", scale: "Size", alt: "Alternative Text", externalImage: "External Image URI"})
  *    scales(string): TODO: is this even used ('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,Large (768x768):large')
@@ -118,7 +118,7 @@ define([
       },
       relatedItems: {
         // UID attribute is required here since we're working with related items
-        attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate', 'getIcon'],
+        attributes: ['UID', 'Title', 'Description', 'getURL', 'portal_type', 'path', 'ModificationDate', 'getIcon'],
         batchSize: 20,
         basePath: '/',
         vocabularyUrl: null,
@@ -215,7 +215,7 @@ define([
           },
           relatedItems: {
             baseCriteria: [{
-              i: 'Type',
+              i: 'portal_type',
               o: 'plone.app.querystring.operation.list.contains',
               v: self.options.imageTypes.concat(self.options.folderTypes)
             }],

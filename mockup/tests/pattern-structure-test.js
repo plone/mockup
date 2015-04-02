@@ -59,7 +59,7 @@ define([
           UID: '123sdfasdfFolder',
           getURL: 'http://localhost:8081/folder',
           path: '/folder',
-          Type: 'Folder',
+          portal_type: 'Folder',
           Description: 'folder',
           Title: 'Folder',
           'review_state': 'published',
@@ -72,9 +72,9 @@ define([
             UID: '123sdfasdf' + i,
             getURL: 'http://localhost:8081/item' + i,
             path: '/item' + i,
-            Type: 'Page ' + i,
-            Description: 'page',
-            Title: 'Page ' + i,
+            portal_type: 'Document ' + i,
+            Description: 'document',
+            Title: 'Document ' + i,
             'review_state': 'published',
             'is_folderish': false,
             Subject: [],
@@ -102,9 +102,9 @@ define([
       this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
         var data = {
           addButtons: [{
-            id: 'page',
-            title: 'Page',
-            url: '/addpage'
+            id: 'document',
+            title: 'Document',
+            url: '/adddocument'
           },{
             id: 'folder',
             title: 'Folder'
@@ -115,7 +115,7 @@ define([
             UID: '123sdfasdfFolder',
             getURL: 'http://localhost:8081/folder',
             path: '/folder',
-            Type: 'Folder',
+            portal_type: 'Folder',
             Description: 'folder',
             Title: 'Folder',
             'review_state': 'published',

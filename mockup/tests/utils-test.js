@@ -140,11 +140,11 @@ define([
 
       it('getUrl correct', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
-        expect(qh.getUrl()).to.equal('http://foobar.com/?query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22Type%22%5D');
+        expect(qh.getUrl()).to.equal('http://foobar.com/?query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22portal_type%22%5D');
       });
       it('getUrl correct and url query params already present', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/?foo=bar'});
-        expect(qh.getUrl()).to.equal('http://foobar.com/?foo=bar&query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22Type%22%5D');
+        expect(qh.getUrl()).to.equal('http://foobar.com/?foo=bar&query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22portal_type%22%5D');
       });
 
 

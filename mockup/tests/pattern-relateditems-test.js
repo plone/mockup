@@ -36,25 +36,25 @@ define([
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
         var root = [
-          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image', getIcon: "image.png"},
-          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder', getIcon: ""},
-          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder', getIcon: ""},
-          {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder', getIcon: ""},
-          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document', getIcon: "document.png"},
-          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document', getIcon: ""},
-          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder', getIcon: "folder.png"},
-          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document', getIcon: ""},
+          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', portal_type: 'Image', getIcon: "image.png"},
+          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', portal_type: 'Folder', getIcon: ""},
+          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', portal_type: 'Folder', getIcon: ""},
+          {UID: 'asdf1234', Title: 'Projects', path: '/projects', portal_type: 'Folder', getIcon: ""},
+          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', portal_type: 'Document', getIcon: "document.png"},
+          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', portal_type: 'Document', getIcon: ""},
+          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', portal_type: 'Folder', getIcon: "folder.png"},
+          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', portal_type: 'Document', getIcon: ""},
         ];
         var about = [
-          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', Type: 'Document', getIcon: ""},
-          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', Type: 'Document', getIcon: ""},
-          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', Type: 'Folder', getIcon: ""},
-          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', Type: 'Document', getIcon: ""}
+          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', portal_type: 'Document', getIcon: ""},
+          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', portal_type: 'Document', getIcon: ""},
+          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', portal_type: 'Folder', getIcon: ""},
+          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', portal_type: 'Document', getIcon: ""}
         ];
 
         var staff = [
-          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', Type: 'Document', getIcon: ""},
-          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', Type: 'Document', getIcon: ""}
+          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document', getIcon: ""},
+          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document', getIcon: ""}
         ];
         var searchables = about.concat(root).concat(staff);
 
@@ -105,7 +105,7 @@ define([
           }
           _.each(items, function(item) {
             var q;
-            var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
+            var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.portal_type).toLowerCase();
             if (typeof(term) === 'object') {
               for (var i = 0; i < term.length; i = i + 1) {
                 q = term[i].toLowerCase();
