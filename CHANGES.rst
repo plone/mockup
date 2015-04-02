@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.0.3 (unreleased)
+------------------
+
+- Change all index references from ``Type`` to ``portal_type``. E.g. the
+  TinyMCE configuration option ``containsobjects`` expects portal_type values,
+  not Type.
+  [thet]
+
+
 2.0.2 (2015-04-01)
 ------------------
 

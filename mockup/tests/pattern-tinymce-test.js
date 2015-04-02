@@ -33,7 +33,7 @@ define([
             UID: '123sdfasdf',
             getURL: 'http://localhost:8081/news/aggregator',
             path: '/news/aggregator',
-            Type: 'Collection',
+            portal_type: 'Collection',
             Description: 'Site News',
             Title: 'News',
             getIcon: ''
@@ -42,7 +42,7 @@ define([
             UID: 'fooasdfasdf1123asZ',
             path: '/about',
             getURL: 'http://localhost:8081/about',
-            Type: 'Page',
+            portal_type: 'Document',
             Description: 'About',
             Title: 'About',
             getIcon: 'document.png'
@@ -199,7 +199,7 @@ define([
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
-        Type: 'Page',
+        portal_type: 'Document',
         Title: 'Foobar',
         path: '/foobar',
         getIcon: ''
@@ -231,7 +231,7 @@ define([
       pattern.addImageClicked();
       pattern.imageModal.linkTypes.image.$input.select2('data', {
         UID: 'foobar',
-        Type: 'Page',
+        portal_type: 'Document',
         Title: 'Foobar',
         path: '/foobar'
       });
@@ -247,7 +247,7 @@ define([
       pattern.addLinkClicked();
       pattern.linkModal.linkTypes.internal.$input.select2('data', {
         UID: 'foobar',
-        Type: 'Page',
+        portal_type: 'Document',
         Title: 'Foobar',
         path: '/foobar',
         getIcon: ''

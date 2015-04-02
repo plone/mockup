@@ -1,4 +1,4 @@
-<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-active<% } %>">
+<div class="pattern-relateditems-result pattern-relateditems-type-<%= portal_type %> <% if (selected) { %>pattern-active<% } %>">
   <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">
     <% if (!folderish) { %>
     <span class="pattern-relateditems-result-image">

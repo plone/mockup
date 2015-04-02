@@ -2,7 +2,7 @@
  *
  * Options:
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
- *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'Type', 'path'])
+ *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
  *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%= path %>"><%= text %></a>')
@@ -103,12 +103,12 @@ define([
       homeText: _t('home'),
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID', 'Title', 'Type', 'path', 'getIcon'],
+      attributes: ['UID', 'Title', 'portal_type', 'path', 'getIcon'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       resultTemplate: '' +
-        '<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-relateditems-active<% } %>">' +
-        '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %> contenttype-<%= Type.toLowerCase() %>">' +
+        '<div class="pattern-relateditems-result pattern-relateditems-type-<%= portal_type %> <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %> contenttype-<%= portal_type.toLowerCase() %>">' +
         '    <% if (getIcon) { %><span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span><% } %>' +
         '    <span class="pattern-relateditems-result-title"><%= Title %></span>' +
         '    <span class="pattern-relateditems-result-path"><%= path %></span>' +
@@ -121,7 +121,7 @@ define([
         '</div>',
       resultTemplateSelector: null,
       selectionTemplate: '' +
-        '<span class="pattern-relateditems-item pattern-relateditems-type-<%= Type %>">' +
+        '<span class="pattern-relateditems-item pattern-relateditems-type-<%= portal_type %>">' +
         ' <% if (getIcon) { %><span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span><% } %>' +
         ' <span class="pattern-relateditems-item-title"><%= Title %></span>' +
         ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
@@ -244,7 +244,7 @@ define([
               label: item.Title,
               id: item.UID,
               path: item.path,
-              folder: self.options.folderTypes.indexOf(item.Type) !== -1
+              folder: self.options.folderTypes.indexOf(item.portal_type) !== -1
             };
             nodes.push(node);
           });
@@ -326,7 +326,7 @@ define([
       if (self.options.selectableTypes === null) {
         return true;
       } else {
-        return _.indexOf(self.options.selectableTypes, item.Type) > -1;
+        return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
       }
     },
     init: function() {
@@ -339,7 +339,7 @@ define([
         $.extend(true, {}, self.options, {
           pattern: self,
           baseCriteria: [{
-            i: 'Type',
+            i: 'portal_type',
             o: 'plone.app.querystring.operation.list.contains',
             v: self.options.folderTypes
           }]
@@ -362,7 +362,7 @@ define([
       Select2.prototype.initializeOrdering.call(self);
 
       self.options.formatResult = function(item) {
-        if (!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1) {
+        if (!item.portal_type || _.indexOf(self.options.folderTypes, item.portal_type) === -1) {
           item.folderish = false;
         } else {
           item.folderish = true;

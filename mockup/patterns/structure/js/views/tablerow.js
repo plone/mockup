@@ -33,14 +33,14 @@ define([
       data.availableColumns = self.app.availableColumns;
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
-      self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.Type); // jshint ignore:line
+      self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.portal_type); // jshint ignore:line
       if (attrs['is_folderish']) { // jshint ignore:line
         self.$el.addClass('folder');
       }
       self.$el.attr('data-path', data.path);
       self.$el.attr('data-UID', data.UID);
       self.$el.attr('data-id', data.id);
-      self.$el.attr('data-type', data.Type);
+      self.$el.attr('data-type', data.portal_type);
       self.$el.attr('data-folderish', data['is_folderish']); // jshint ignore:line
 
       self.el.model = this.model;
