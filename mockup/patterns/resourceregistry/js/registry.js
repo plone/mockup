@@ -114,7 +114,7 @@ define([
     }, {
       name: 'conditionalcomment',
       title: _t('Conditional comment'),
-      description: _t('For Internet Exploder hacks...')
+      description: _t('Internet Explorer conditional comment')
     }, {
       name: 'compile',
       title: _t('Does your bundle contain any RequireJS or LESS files?'),
