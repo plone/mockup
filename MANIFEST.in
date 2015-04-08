@@ -1,0 +1,11 @@
+recursive-include mockup/js *
+recursive-include mockup/less *
+recursive-include mockup/lib *
+recursive-include mockup/patterns *
+recursive-include mockup/tests *
+prune mockup/docs
+prune mockup/build
+prune mockup/coverage
+prune dist
+prune mockup/bower_components
+global-exclude *.pyc

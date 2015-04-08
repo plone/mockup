@@ -4,7 +4,7 @@ The Goals of Mockup
 -------------------
 
 1. Standardize configuration of patterns implemented in js
-   to use HTML data attributes, so they can be developed and
+   to use HTML data attributes, so they can be developed
    without running a backend server.
 2. Use modern AMD approach to declaring dependencies on other js libs.
 3. Full unit testing of js
@@ -40,7 +40,23 @@ Run tests with PhantomJS::
 
 Run tests with Chrome::
 
-    $ make test-chrome
+    $ make test-dev
+
+
+License
+=======
+
+The BSD 3-Clause License. Copyrights hold the Plone Foundation.
+See `LICENSE.rst <LICENSE.rst>`_ for details.
+
+
+Credits
+-------
+
+Originally created by `Rok Garbas <http://garbas.si/>`_ using parts of `Patterns
+library <http://patternslib.com/>`_. Now maintained by the `Plone Foundation
+<http://plone.org/>`_.
+
 
 Status of builds
 ----------------

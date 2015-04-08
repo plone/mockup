@@ -1,0 +1,11 @@
+<td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+<td class="title">
+  <a href="<%- getURL %>" class="state-<%- review_state %> contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></a>
+</td>
+<% _.each(activeColumns, function(column){ %>
+  <% if(_.has(availableColumns, column)) { %>
+    <td class="<%- column %>"><%- attributes[column] %></td>
+  <% } %>
+<% }); %>
+<td class="actionmenu-container">
+</td>
