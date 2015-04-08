@@ -96,7 +96,7 @@
         word-wrap: break-word;
         font-size: 0.8em;
         margin-top: 2.5em;
-        ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
+        ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li > .jqtree-element:hover {
         background: #E7E7E7;
         }
         ul.jqtree-tree {
@@ -107,6 +107,11 @@
             .jqtree-title {
                 margin-left: 0em;
             }
+        }
+    }
+    .navbar {
+        a.btn {
+            text-decoration: none;
         }
     }
     .navbar-default {
@@ -143,6 +148,8 @@
         > a {
             float: left;
             padding: 8px 0px;
+            text-decoration: none;
+            color: #333;
             +a {
                 padding-left: 4px;
             }
