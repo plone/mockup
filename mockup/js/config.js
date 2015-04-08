@@ -71,7 +71,7 @@
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
       'mockup-patterns-contentloader': 'patterns/contentloader/pattern', 
       'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
-      'mockup-patterns-discussion': 'patterns/discussion',
+      'mockup-patterns-discussion': 'patterns/discussion/pattern',
       'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
       'mockup-patterns-filemanager': 'patterns/filemanager/pattern',
       'mockup-patterns-filemanager-url': 'patterns/filemanager',

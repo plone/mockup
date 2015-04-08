@@ -47,6 +47,11 @@ require([
             description: 'TODO',
             url: 'patterns/backdrop/pattern.js'
           },
+          { id: 'discussion',
+            title: 'Discussion',
+            description: 'Simple commenting interface.',
+            url: 'patterns/discussion/pattern.js'
+          },
           { id: 'cookietrigger',
             title: 'Cookie Trigger',
             description: "Shows a DOM element if browser cookies are disabled.",
