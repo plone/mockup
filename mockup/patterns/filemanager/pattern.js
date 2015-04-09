@@ -228,7 +228,7 @@ define([
             _authenticator: utils.getAuthenticator()
           },
           success: function(data) {
-            /* XXX unhighlight save button */
+            $('[data-path="'+self.getNodePath()+'"]').removeClass("modified");
           }
         });
       });
@@ -348,6 +348,11 @@ define([
       self.ace.setSyntax(path);
       self.ace.setText(self.fileData[path].contents);
       self.ace.editor.clearSelection();
+      self.ace.editor.on('change', function() {
+        if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
+          $('[data-path="'+path+'"]').addClass("modified");
+        }
+      });
     },
     getSelectedNode: function() {
       return this.$tree.tree('getSelectedNode');
