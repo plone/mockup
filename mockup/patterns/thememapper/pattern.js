@@ -481,7 +481,7 @@ define([
       self.showInspectorsButton.applyTemplate();
       $('html, body').animate({
         scrollTop: $parent.offset().top - 50
-      }, 1000); 
+      }, 1000);
     },
     hideInspectors: function(){
       var self = this;
