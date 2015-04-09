@@ -219,7 +219,7 @@ define([
         ]
       });
 
-      self.saveBtn.on('button:click', function(e) {
+      self._save = function() {
         self.doAction('saveFile', {
           type: 'POST',
           data: {
@@ -231,6 +231,10 @@ define([
             $('[data-path="'+self.getNodePath()+'"]').removeClass("modified");
           }
         });
+      };
+
+      self.saveBtn.on('button:click', function(e) {
+        self._save();
       });
       self.render();
     },
@@ -351,6 +355,16 @@ define([
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
           $('[data-path="'+path+'"]').addClass("modified");
+        }
+      });
+      self.ace.editor.commands.addCommand({
+        name: 'saveFile',
+        bindKey: {
+          win: 'Ctrl-S', mac: 'Command-S',
+          sender: 'editor|cli'
+        },
+        exec: function (env, args, request) {
+          self._save();
         }
       });
     },
