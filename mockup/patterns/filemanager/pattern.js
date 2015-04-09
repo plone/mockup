@@ -419,6 +419,8 @@ define([
         h -= tabBox.outerHeight();
 
         //accounts for the borders/margin
+        var borderOffset = (container.outerHeight() - container.innerHeight())/2;
+        h -= borderOffset;
         self.$editor.height(h);
 
         var w = container.innerWidth();
