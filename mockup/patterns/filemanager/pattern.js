@@ -346,12 +346,23 @@ define([
       if (self.ace !== undefined){
         self.ace.editor.destroy();
       }
-      self.ace = new TextEditor(self.$editor, {
-        width: self.$editor.width()
-      });
-      self.ace.setSyntax(path);
-      self.ace.setText(self.fileData[path].contents);
-      self.ace.editor.clearSelection();
+      self.ace = new TextEditor(self.$editor);
+
+      self.resizeEditor();
+
+      if( typeof self.fileData[path].info !== 'undefined' )
+      {
+          var preview = self.fileData[path].info;
+          self.ace.editor.off();
+          $('.ace_editor').empty().append(preview);
+      }
+      else
+      {
+          self.ace.setText(self.fileData[path].contents);
+          self.ace.setSyntax(path);
+          self.ace.editor.clearSelection();
+      }
+
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
           $('[data-path="'+path+'"]').addClass("modified");
@@ -396,8 +407,25 @@ define([
         node = node.parent;
       }
       return '/' + parts.join('/');
-    }
+    },
 
+    resizeEditor: function() {
+        var self = this;
+        var tabBox = self.$tabs.parent();
+
+        //Contains both the tabs, and editor window
+        var container = tabBox.parent().parent();
+        var h = container.innerHeight();
+        h -= tabBox.outerHeight();
+
+        //accounts for the borders/margin
+        self.$editor.height(h);
+
+        var w = container.innerWidth();
+        w -= (container.outerWidth(true) - container.innerWidth());
+
+        self.$editor.width(w);
+    }
   });
 
   return FileManager;
