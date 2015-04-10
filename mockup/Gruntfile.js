@@ -113,8 +113,8 @@ module.exports = function(grunt) {
       console.log('reading file: ' + filepath);
       var file = fs.readFileSync(filepath, {encoding: 'utf-8'});
       var re = /_t\(('|")([\s\d\w…\.\,\!\+\\\/]+)('|")(,\W{.*})?\)/g;
-      var m;
-      while (m = re.exec(file)) {
+      var m = re.exec(file);
+      while (m) {
         if (m) {
           re.lastIndex = Math.max(m.index+1, re.lastIndex + 1);
           if(found.indexOf(m[2]) === -1){
@@ -123,6 +123,7 @@ module.exports = function(grunt) {
                       'msgstr ""\n\n';
             found.push(m[2]);
           }
+          m = re.exec(file);
         }
       }
     };
