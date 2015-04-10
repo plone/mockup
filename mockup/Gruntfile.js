@@ -3,6 +3,8 @@
 module.exports = function(grunt) {
   'use strict';
 
+  var fs = require('fs');
+
   var MockupGrunt = require('./bower_components/mockup-core/js/grunt'),
       requirejsOptions = require('./js/config'),
       mockup = new MockupGrunt(requirejsOptions),
@@ -83,6 +85,64 @@ module.exports = function(grunt) {
         replacement: '//throw// new Error(\'Unknown Prefix '
       }
     }
+  });
+
+  grunt.registerTask('i18n-dump', 'Dump i18n file for widgets', function(){
+    var output = '# Gettext Message File for Plone mockup\n' +
+                 'msgid ""\n' +
+                 'msgstr ""\n' +
+                 '"Project-Id-Version: mockup\\n"\n' +
+                 '"Last-Translator: Plone i18n <plone-i18n@lists.sourceforge.net>\\n"\n' +
+                 '"Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\\n"\n' +
+                 '"MIME-Version: 1.0\\n"\n' +
+                 '"Content-Type: text/plain; charset=utf-8\\n"\n' +
+                 '"Content-Transfer-Encoding: 8bit\\n"\n' +
+                 '"Plural-Forms: nplurals=1; plural=0;\\n"\n' +
+                 '"Language-Code: en\\n"\n' +
+                 '"Language-Name: English\\n"\n' +
+                 '"Preferred-Encodings: utf-8\\n"\n' +
+                 '"Domain: widgets\\n"\n\n';
+
+    var okayFiles = ['xml', 'js', 'htm', 'html'];
+    var found = [];
+    var checkFile = function(filepath){
+      var split = filepath.split('.');
+      if(okayFiles.indexOf(split[split.length - 1]) === -1){
+        return;
+      }
+      console.log('reading file: ' + filepath);
+      var file = fs.readFileSync(filepath, {encoding: 'utf-8'});
+      var re = /_t\(('|")([\s\d\w…\.\,\!\+\\\/]+)('|")(,\W{.*})?\)/g;
+      var m;
+      while (m = re.exec(file)) {
+        if (m) {
+          re.lastIndex = Math.max(m.index+1, re.lastIndex + 1);
+          if(found.indexOf(m[2]) === -1){
+            output += '#: ' + filepath + '\n' +
+                      'msgid "' + m[2] + '"\n' +
+                      'msgstr ""\n\n';
+            found.push(m[2]);
+          }
+        }
+      }
+    };
+    var checkDir = function(path){
+      console.log('read folder: ' + path);
+      var files = fs.readdirSync(path);
+      files.forEach(function(filename){
+        if(filename === 'bower_components' || filename === 'node_modules'){
+          return;
+        }
+        var stats = fs.statSync(path + filename);
+        if(stats.isDirectory()){
+          checkDir(path + filename + '/');
+        }else{
+          checkFile(path + filename);
+        }
+      });
+    };
+    checkDir('./');
+    fs.writeFileSync('../widgets.pot', output);
   });
 
 };

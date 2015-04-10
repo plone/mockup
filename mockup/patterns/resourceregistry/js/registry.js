@@ -183,7 +183,7 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' resource?'))){
+      if(confirm(_t('Are you sure you want to delete the ${name} resource?', {name: this.options.name}))){
         delete this.options.registryView.options.data.resources[this.options.name];
         this.options.registryView.dirty = true;
         this.options.registryView.render();
@@ -262,7 +262,7 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' bundle?'))){
+      if(confirm(_t('Are you sure you want to delete the ${name} bundle?', {name: this.options.name}))){
         delete this.options.registryView.options.data.bundles[this.options.name];
         this.options.registryView.dirty = true;
         this.options.registryView.render();
