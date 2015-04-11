@@ -112,16 +112,17 @@ module.exports = function(grunt) {
       }
       console.log('reading file: ' + filepath);
       var file = fs.readFileSync(filepath, {encoding: 'utf-8'});
-      var re = /_t\(('|")([^'^"]+)('|")(,\W{.*})?\)/g;
+      var re = /_t\((("[^"]+")|('[^']+'))(,\W{.*})?\)?\)/g;
       var m = re.exec(file);
       while (m) {
         if (m) {
           re.lastIndex = Math.max(m.index+1, re.lastIndex + 1);
-          if(found.indexOf(m[2]) === -1){
+          var val = m[1].replace(/['"]+/g, '');
+          if(found.indexOf(val) === -1){
             output += '#: ' + filepath + '\n' +
-                      'msgid "' + m[2] + '"\n' +
+                      'msgid "' + val + '"\n' +
                       'msgstr ""\n\n';
-            found.push(m[2]);
+            found.push(val);
           }
           m = re.exec(file);
         }
