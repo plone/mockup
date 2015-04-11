@@ -364,7 +364,7 @@ define([
         chunkSize: chunkSize
       }).fail(function() {
         if(window.DEBUG){
-          console.alert('Error uploading with TUS resumable uploads');
+          console.alert(_t('Error uploading with TUS resumable uploads'));
         }
         file.status = Dropzone.ERROR;
       }).progress(function(e, bytesUploaded, bytesTotal) {

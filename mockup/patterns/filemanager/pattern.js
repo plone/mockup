@@ -51,10 +51,11 @@ define([
   'mockup-patterns-filemanager-url/js/rename',
   'mockup-patterns-filemanager-url/js/upload',
   'mockup-utils',
+  'translate',
   'text!mockup-ui-url/templates/popover.xml'
 ], function($, Base, _, Backbone, BaseView, Tree, TextEditor, AppTemplate, Toolbar,
             ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
-            CustomizeView, RenameView, UploadView, utils) {
+            CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';
 
   var FileManager = Base.extend({
@@ -76,29 +77,29 @@ define([
       uploadUrl: null,
       resourceSearchUrl: null,
       translations: {
-        add_new_file: 'New file',
-        add_new_file_tooltip: 'Add new file to current folder',
-        add_override: 'Add new override',
-        add_override_tooltip: 'Find resource in plone to override',
-        delete: 'Delete',
-        delete_tooltip: 'Delete currently selected file',
-        new_folder: 'New folder',
-        new_folder_tooltip: 'Add new folder to current directory',
-        rename: 'Rename',
-        rename_tooltip: 'Rename currently selected resource',
-        upload: 'Upload',
-        upload_tooltip: 'Upload file to current directory',
-        filename: 'Filename',
-        enter_filename: 'Enter filename',
-        add: 'Add',
-        search: 'Search',
-        search_resources: 'Search resources',
-        customize: 'Customize',
-        yes_delete: 'Yes, delete',
-        delete_question: 'Are you sure you want to delete this resource?',
-        folder_name: 'Folder name',
-        enter_folder_name: 'Enter folder name',
-        save: 'Save'
+        add_new_file: _t('New file'),
+        add_new_file_tooltip: _t('Add new file to current folder'),
+        add_override: _t('Add new override'),
+        add_override_tooltip: _t('Find resource in plone to override'),
+        delete: _t('Delete'),
+        delete_tooltip: _t('Delete currently selected file'),
+        new_folder: _t('New folder'),
+        new_folder_tooltip: _t('Add new folder to current directory'),
+        rename: _t('Rename'),
+        rename_tooltip: _t('Rename currently selected resource'),
+        upload: _t('Upload'),
+        upload_tooltip: _t('Upload file to current directory'),
+        filename: _t('Filename'),
+        enter_filename: _t('Enter filename'),
+        add: _t('Add'),
+        search: _t('Search'),
+        search_resources: _('Search resources'),
+        customize: _t('Customize'),
+        yes_delete: _t('Yes, delete'),
+        delete_question: _t('Are you sure you want to delete this resource?'),
+        folder_name: _t('Folder name'),
+        enter_folder_name: _t('Enter folder name'),
+        save: _t('Save')
       },
       treeConfig: {
         autoOpen: true
