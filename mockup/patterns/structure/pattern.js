@@ -67,29 +67,29 @@ define([
         'review_state'
       ],
       availableColumns: {
-        'id': _t('ID'),
-        'Title': _t('Title'),
-        'ModificationDate': _t('Last modified'),
-        'EffectiveDate': _t('Published'),
-        'ExpirationDate': _t('Expiration'),
-        'CreationDate': _t('Created'),
-        'review_state': _t('Review state'),
-        'Subject': _t('Tags'),
-        'portal_type': _t('Type'),
-        'is_folderish': _t('Folder'),
-        'exclude_from_nav': _t('Excluded from nav'),
-        'getObjSize': _t('Object Size'),
-        'last_comment_date': _t('Last comment date'),
-        'total_comments': _t('Total comments')
+        'id': 'ID',
+        'Title': 'Title',
+        'ModificationDate': 'Last modified',
+        'EffectiveDate': 'Published',
+        'ExpirationDate': 'Expiration',
+        'CreationDate': 'Created',
+        'review_state': 'Review state',
+        'Subject': 'Tags',
+        'portal_type': 'Type',
+        'is_folderish': 'Folder',
+        'exclude_from_nav': 'Excluded from nav',
+        'getObjSize': 'Object Size',
+        'last_comment_date': 'Last comment date',
+        'total_comments': 'Total comments'
       },
       rearrange: {
         properties: {
-          'id': _t('ID'),
-          'sortable_title': _t('Title'),
-          'modified': _t('Last Modified'),
-          'created': _t('Created on'),
-          'effective': _t('Publication Date'),
-          'portal_type': _t('Type')
+          'id': 'ID',
+          'sortable_title': 'Title',
+          'modified': 'Last Modified',
+          'created': 'Created on',
+          'effective': 'Publication Date',
+          'portal_type': 'Type'
         },
         url: '/rearrange'
       },
@@ -100,31 +100,31 @@ define([
        */
       buttonGroups: {
         primary: [{
-          title: _t('Cut'),
+          title: 'Cut',
           url: '/cut'
         },{
-          title: _t('Copy'),
+          title: 'Copy',
           url: '/copy'
         },{
-          title: _t('Paste'),
+          title: 'Paste',
           url: '/paste'
         },{
-          title: _t('Delete'),
+          title: 'Delete',
           url: '/delete',
           context: 'danger',
           icon: 'trash'
         }],
         secondary: [{
-          title: _t('Workflow'),
+          title: 'Workflow',
           url: '/workflow'
         },{
-          title: _t('Tags'),
+          title: 'Tags',
           url: '/tags'
         },{
-          title: _t('Properties'),
+          title: 'Properties',
           url: '/properties'
         },{
-          title: _t('Rename'),
+          title: 'Rename',
           url: '/rename'
         }]
       },

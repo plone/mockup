@@ -22,13 +22,14 @@ define([
   'mockup-patterns-structure-url/js/views/upload',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-patterns-structure-url/js/collections/selected',
+  'translate',
   'mockup-utils',
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, UploadView,
-            ResultCollection, SelectedCollection, utils) {
+            ResultCollection, SelectedCollection, _t, utils) {
   'use strict';
 
   var DISABLE_EVENT = 'DISABLE';
@@ -339,10 +340,10 @@ define([
       var self = this;
       var txt;
       if (button.id === 'cut') {
-        txt = 'cut ';
+        txt = _t('cut ');
         self.pasteOperation = 'cut';
       } else {
-        txt = 'copied ';
+        txt = _t('copied ');
         self.pasteOperation = 'copy';
       }
 
