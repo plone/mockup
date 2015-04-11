@@ -50,8 +50,8 @@ define([
   'mockup-patterns-filemanager-url/js/customize',
   'mockup-patterns-filemanager-url/js/rename',
   'mockup-patterns-filemanager-url/js/upload',
-  'mockup-utils',
   'translate',
+  'mockup-utils',
   'text!mockup-ui-url/templates/popover.xml'
 ], function($, Base, _, Backbone, BaseView, Tree, TextEditor, AppTemplate, Toolbar,
             ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
