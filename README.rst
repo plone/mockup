@@ -42,6 +42,10 @@ Run tests with Chrome::
 
     $ make test-dev
 
+Generate widgets pot file for plone translations::
+
+    $ make i18n-dump
+
 
 License
 =======
