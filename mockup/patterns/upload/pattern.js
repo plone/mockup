@@ -370,7 +370,7 @@ define([
       }).progress(function(e, bytesUploaded, bytesTotal) {
         var percentage = (bytesUploaded / bytesTotal * 100);
         self.$progress.attr('aria-valuenow', percentage).css('width', percentage + '%');
-        self.$progress.html(_t('uploading...<br />') +
+        self.$progress.html(_t('uploading...') + '<br />' +
                             self.formatBytes(bytesUploaded) +
                             ' / ' + self.formatBytes(bytesTotal));
       }).done(function(url, file) {
