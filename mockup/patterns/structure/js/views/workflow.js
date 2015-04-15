@@ -8,35 +8,32 @@ define([
 
   var WorkflowView = PopoverView.extend({
     className: 'popover workflow',
-    title: _.template('Modify dates on items'),
+    title: _.template('<%- _t("Modify dates on items") %>'),
     content: _.template(
       '<form>' +
         '<fieldset>' +
           '<div class="form-group">' +
-            '<label>Comments</label>' +
+            '<label><%- _t("Comments") %></label>' +
             '<textarea class="form-control" rows="4"></textarea>' +
-            '<p class="help-block">Select the transition to be used for ' +
-              'modifying the items state.</p>' +
+            '<p class="help-block"><%- _t("Select the transition to be used for modifying the items state.") %></p>' +
           '</div>' +
           '<div class="form-group">' +
-            '<label>Change State</label>' +
-            '<p class="help-block">Select the transition to be used for ' +
-              'modifying the items state.</p>' +
+            '<label><%- _t("Change State") %></label>' +
+            '<p class="help-block"><%- _t("Select the transition to be used for modifying the items state.") %></p>' +
             '<select class="form-control" name="transition">' +
             '</select>' +
           '</div>' +
           '<div class="checkbox">' +
             '<label>' +
               '<input type="checkbox" name="recurse" />' +
-              'Include contained items?</label>' +
+              '<%- _t("Include contained items?") %></label>' +
             '<p class="help-block">' +
-              'If checked, this will attempt to modify the status of all ' +
-              'content in any selected folders and their subfolders.' +
+              '<%- _t("If checked, this will attempt to modify the status of all content in any selected folders and their subfolders.") %>' +
             '</p>' +
           '</div>' +
         '</fieldset>' +
       '</form>' +
-      '<button class="btn btn-block btn-primary">Apply</button>'
+      '<button class="btn btn-block btn-primary"><%- _t("Apply") %></button>'
     ),
     events: {
       'click button': 'applyButtonClicked'

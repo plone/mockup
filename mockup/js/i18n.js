@@ -17,8 +17,8 @@ define([
 
   var I18N = function() {
     var self = this;
-
     self.baseUrl = $('body').attr('data-i18ncatalogurl');
+
     if (!self.baseUrl) {
       self.baseUrl = '/plonejsi18n';
     }

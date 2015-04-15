@@ -5,8 +5,8 @@ define([
   'underscore',
   'mockup-utils',
   'mockup-patterns-resourceregistry-url/js/iframe',
-  'translate'
-], function($, Modal, _, utils, IFrame, _t){
+  'mockup-i18n'
+], function($, Modal, _, utils, IFrame, i18n){
   'use strict';
 
   var Builder = function(bundleName, bundleListItem){
@@ -16,6 +16,9 @@ define([
     self.rview = bundleListItem.options.registryView;
     self.$results = null;
     self.$btnClose = null;
+
+    i18n.loadCatalog('widgets');
+    var _t = i18n.MessageFactory('widgets');
 
     self.rview.loading.show();
     self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {
@@ -156,7 +159,7 @@ define([
           });
         }else if($styles.length === config.less.length){
           $styles.each(function(){$(this).remove();});
-
+          /* XXX is this dead code? */
           script = document.createElement('script');
           script.setAttribute('type', 'text/javascript');
           script.setAttribute('src', self.rview.options.data.lessModifyUrl);

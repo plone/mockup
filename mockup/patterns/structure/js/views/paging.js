@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!mockup-patterns-structure-url/templates/paging.xml'
-], function($, _, Backbone, PagingTemplate) {
+  'text!mockup-patterns-structure-url/templates/paging.xml',
+  'mockup-i18n'
+], function($, _, Backbone, PagingTemplate, i18n) {
   'use strict';
 
 
@@ -30,16 +31,19 @@ define([
 
       this.$el.appendTo('#pagination');
 
+      i18n.loadCatalog('widgets');
+      this._t = i18n.MessageFactory('widgets');
     },
+
     render: function () {
       var data = this.collection.info();
       data.pages = this.getPages(data);
-      var html = this.template(data);
+      var html = this.template($.extend({ _t: this._t}, data));
       this.$el.html(html);
       return this;
     },
+
     getPages: function(data) {
-      var perPage = data.perPage;
       var totalPages = data.totalPages;
       if (!totalPages) {
         return [];

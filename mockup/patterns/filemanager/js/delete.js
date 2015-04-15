@@ -8,11 +8,11 @@ define([
 
   var DeleteView = PopoverView.extend({
     className: 'popover delete',
-    title: _.template('<%= translations.delete %>'),
+    title: _.template('<%= _t("Delete") %>'),
     content: _.template(
       '<span class="current-path"></span>' +
-      '<p><%= translations.delete_question %></p>' +
-      '<button class="btn btn-block btn-danger"><%= translations.yes_delete %></button>'
+      '<p><%= _t("Are you sure you want to delete this resource?") %></p>' +
+      '<button class="btn btn-block btn-danger"><%= _t("Yes, delete") %></button>'
     ),
     events: {
       'click button': 'deleteButtonClicked'

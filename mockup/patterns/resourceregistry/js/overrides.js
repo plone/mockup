@@ -7,8 +7,8 @@ define([
   'mockup-patterns-texteditor',
   'mockup-utils',
   'mockup-patterns-select2',
-  'translate'
-], function($, _, BaseView, TextEditor, utils, Select2, _t) {
+  'mockup-i18n'
+], function($, _, BaseView, TextEditor, utils, Select2, i18n) {
   'use strict';
 
   var OverridesView = BaseView.extend({
@@ -46,6 +46,9 @@ define([
     initialize: function(options){
       BaseView.prototype.initialize.apply(this, [options]);
       this.tabView = options.tabView;
+
+      i18n.loadCatalog('widgets');
+      this._t = i18n.MessageFactory('widgets');
     },
 
     serializedModel: function(){
@@ -126,7 +129,7 @@ define([
 
       var format = function(data){
         if(data.override){
-          return '<span class="customized">' + data.text + ' - ' + _t('customized') + '</span>';
+          return '<span class="customized">' + data.text + ' - ' + this._t('customized') + '</span>';
         }
         return data.text;
       };
@@ -165,7 +168,7 @@ define([
             that.$el.find('.plone-btn-primary,.plone-btn-default').removeClass('disabled');
           });
         }).fail(function(){
-          alert(_t('error loading resource for editing'));
+          alert(that._t('error loading resource for editing'));
           that.tabView.loading.hide();
         });
       }

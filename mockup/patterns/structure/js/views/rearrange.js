@@ -7,25 +7,23 @@ define([
 
   var RearrangeView = PopoverView.extend({
     className: 'popover rearrange',
-    title: _.template('Rearrange items in this folder'),
+    title: _.template('<%- _t("Rearrange items in this folder") %>'),
     content: _.template(
       '<div class="form-group">' +
-        '<label>What to rearrange on</label>' +
+        '<label><%- _t("What to rearrange on") %></label>' +
         '<select name="rearrange_on" class="form-control">' +
           '<% _.each(rearrangeProperties, function(title, property) { %>' +
             '<option value="<%- property %>"><%- title %></option>' +
           '<% }); %>' +
         '</select>' +
         '<p class="help-block">' +
-          'This permanently changes the order of items in this folder.' +
-          'This operation may take a long time depending on the size ' +
-          'of the folder.' +
+          '<%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %>' +
         '</p>' +
       '</div>' +
       '<div class="checkbox">' +
-        '<label>Reverse <input type="checkbox" name="reversed" /></label>' +
+        '<label><%- _t("Reverse") %> <input type="checkbox" name="reversed" /></label>' +
       '</div>' +
-      '<button class="btn btn-block btn-primary">Rearrange</button>'
+      '<button class="btn btn-block btn-primary"><%- _t("Rearrange") %></button>'
     ),
     events: {
       'click button': 'rearrangeButtonClicked'

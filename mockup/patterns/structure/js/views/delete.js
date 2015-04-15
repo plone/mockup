@@ -8,10 +8,10 @@ define([
 
   var DeleteView = PopoverView.extend({
     className: 'popover delete',
-    title: _.template('Delete selected items'),
+    title: _.template('<%- _t("Delete selected items") %>'),
     content: _.template(
-      '<label>Are you certain you want to delete the selected items</label>' +
-      '<button class="btn btn-block btn-danger">Yes</button>'
+      '<label><%- _t("Are you certain you want to delete the selected items") %></label>' +
+      '<button class="btn btn-block btn-danger"><%- _t("Yes") %></button>'
     ),
     events: {
       'click button': 'applyButtonClicked'

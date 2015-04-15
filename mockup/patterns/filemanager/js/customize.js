@@ -8,14 +8,14 @@ define([
 
   var CustomizeView = PopoverView.extend({
     className: 'popover customize',
-    title: _.template('<%= translations.add_override %>'),
+    title: _.template('<%= _t("Add new override") %>'),
     content: _.template(
       '<form>' +
         '<div class="input-group">' +
           '<input type="text" class="search form-control" ' +
-                  'id="search-field" placeholder="<%= translations.search_resources %>">' +
+                  'id="search-field" placeholder="<%= _t("Find resource in plone to override") %>">' +
           '<span class="input-group-btn">' +
-            '<input type="submit" class="btn btn-primary" value="<%= translations.search %>"/>' +
+            '<input type="submit" class="btn btn-primary" value="<%= _t("Search") %>"/>' +
           '</span>' +
         '</div>' +
       '</form>' +
@@ -37,7 +37,7 @@ define([
             _.each(data, function(item){
               var $item = $(
                 '<li class="list-group-item" data-id="' + item.id + '">' +
-                  '<span class="badge"><a href=#">' + self.options.transitions.customize + '</a></span>' +
+                  '<span class="badge"><a href=#">' + self.app._t('Customize') + '</a></span>' +
                   item.id +
                 '</li>');
               $('a', $item).click(function(e){

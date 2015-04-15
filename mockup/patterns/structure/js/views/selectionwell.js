@@ -11,7 +11,7 @@ define([
     className: 'popover selected',
     title: _.template('<input type="text" class="filter" placeholder="Filter" />' +
                       '<a href="#" class=" remove-all">' +
-                        '<span class="glyphicon glyphicon-remove-circle"></span> remove all</a>'),
+                        '<span class="glyphicon glyphicon-remove-circle"></span> <%- _t("remove all") %></a>'),
     content: _.template(
       '<% collection.each(function(item) { %>' +
       '<%= item_template(item.toJSON()) %>' +

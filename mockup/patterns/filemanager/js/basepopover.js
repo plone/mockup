@@ -12,7 +12,6 @@ define([
     content: _.template('<div/>'),
     initialize: function(options) {
       this.app = options.app;
-      options.translations = this.app.options.translations;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
     render: function() {

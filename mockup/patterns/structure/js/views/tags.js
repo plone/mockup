@@ -10,16 +10,16 @@ define([
   var TagsView = PopoverView.extend({
     title: _.template('Add/Remove tags'),
     content: _.template(
-      '<label>Tags to remove</label>' +
+      '<label><%- _t("Tags to remove") %></label>' +
       '<div class="form-group">' +
         '<select multiple class="toremove" style="width: 300px">' +
         '</select>' +
       '</div>' +
-      '<label>Tags to add</label>' +
+      '<label><%- _t("Tags to add") %></label>' +
       '<div class="form-group">' +
         '<input class="toadd" style="width:300px" />' +
       '</div>' +
-      '<button class="btn btn-block btn-primary">Apply</button>'
+      '<button class="btn btn-block btn-primary"><%- _t("Apply") %></button>'
     ),
     events: {
       'click button': 'applyButtonClicked'

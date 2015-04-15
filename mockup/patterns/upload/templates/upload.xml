@@ -1,8 +1,7 @@
 <div class="upload-container upload-multiple">
-    <h2 class="title">Upload stuff here</h2>
+    <h2 class="title"><%- _t("Upload stuff here") %></h2>
     <p class="help">
-        Just drag N drop stuff on the area below
-        or press "upload" button.
+        <%- _t('Just drag N drop stuff on the area below or press "upload" button.') %>
     </p>
     <div class="upload-area">
         <div class="fallback">
@@ -13,7 +12,7 @@
             <div class="col-md-9">
                 <input
                     id="fakeUploadFile"
-                    placeholder="Choose File"
+                    placeholder="<%- _t("Choose File") %>"
                     disabled="disabled"
                     />
             </div>
@@ -30,9 +29,9 @@
             </div>
             <div class="controls">
                 <div class="path">
-                    <label>Upload to...</label>
+                    <label><%- _t("Upload to...") %></label>
                     <p class="form-help">
-                        If nothing selected files we be added to current context.
+                        <%- _t("If nothing selected files we be added to current context.") %>
                     </p>
                     <input
                         type="text"
@@ -56,7 +55,7 @@
                         <button
                             type="button"
                             class="btn btn-primary upload-all">
-                            Upload
+                            <%- _t("Upload") %>
                         </button>
                     </div>
                 </div>

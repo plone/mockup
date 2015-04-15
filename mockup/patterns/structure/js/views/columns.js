@@ -11,10 +11,10 @@ define([
     className: 'popover columns',
     title: _.template('Columns'),
     content: _.template(
-      '<label>Select columns to show, drag and drop to reorder</label>' +
+      '<label><%- _t("Select columns to show, drag and drop to reorder") %></label>' +
       '<ul>' +
       '</ul>' +
-      '<button class="btn btn-block btn-success">Save</button>'
+      '<button class="btn btn-block btn-success"><%- _t("Save") %></button>'
     ),
     itemTemplate: _.template(
       '<li>' +

@@ -5,7 +5,6 @@
  *    actionUrl(string): base url to get/put data. Action is passed is an a parameters, ?action=(dataTree, newFile, deleteFile, getFile, saveFile)
  *    uploadUrl(string): url to upload files to
  *    resourceSearchUrl(string): url to search for resources to customize
- *    translations(object): mapping of translation strings
  *
  * Documentation:
  *
@@ -50,12 +49,12 @@ define([
   'mockup-patterns-filemanager-url/js/customize',
   'mockup-patterns-filemanager-url/js/rename',
   'mockup-patterns-filemanager-url/js/upload',
-  'translate',
+  'mockup-i18n',
   'mockup-utils',
   'text!mockup-ui-url/templates/popover.xml'
 ], function($, Base, _, Backbone, BaseView, Tree, TextEditor, AppTemplate, Toolbar,
             ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
-            CustomizeView, RenameView, UploadView, _t, utils) {
+            CustomizeView, RenameView, UploadView, i18n, utils) {
   'use strict';
 
   var FileManager = Base.extend({
@@ -76,37 +75,17 @@ define([
       actionUrl: null,
       uploadUrl: null,
       resourceSearchUrl: null,
-      translations: {
-        add_new_file: _t('New file'),
-        add_new_file_tooltip: _t('Add new file to current folder'),
-        add_override: _t('Add new override'),
-        add_override_tooltip: _t('Find resource in plone to override'),
-        delete: _t('Delete'),
-        delete_tooltip: _t('Delete currently selected file'),
-        new_folder: _t('New folder'),
-        new_folder_tooltip: _t('Add new folder to current directory'),
-        rename: _t('Rename'),
-        rename_tooltip: _t('Rename currently selected resource'),
-        upload: _t('Upload'),
-        upload_tooltip: _t('Upload file to current directory'),
-        filename: _t('Filename'),
-        enter_filename: _t('Enter filename'),
-        add: _t('Add'),
-        search: _t('Search'),
-        search_resources: _('Search resources'),
-        customize: _t('Customize'),
-        yes_delete: _t('Yes, delete'),
-        delete_question: _t('Are you sure you want to delete this resource?'),
-        folder_name: _t('Folder name'),
-        enter_folder_name: _t('Enter folder name'),
-        save: _t('Save')
-      },
       treeConfig: {
         autoOpen: true
       }
     },
     init: function() {
       var self = this;
+
+      i18n.loadCatalog('widgets');
+      self._t = i18n.MessageFactory('widgets');
+      var _t = self._t;
+
       if (self.options.actionUrl === null) {
         self.$el.html('Must specify actionUrl setting for pattern');
         return;
@@ -115,22 +94,19 @@ define([
         dataUrl: self.options.actionUrl + '?action=dataTree'
       });
 
-      var translations = self.options.translations;
-
       self.fileData = {};
-      self.currentPath;
 
       self.saveBtn = new ButtonView({
         id: 'save',
-        title: translations.save,
+        title: _t('Save'),
         context: 'success'
       });
 
       var newFolderView = new NewFolderView({
         triggerView: new ButtonView({
           id: 'newfolder',
-          title: translations.new_folder,
-          tooltip: translations.new_folder_tooltip,
+          title: _t('New folder'),
+          tooltip: _t('Add new folder to current directory'),
           context: 'default'
         }),
         app: self
@@ -138,8 +114,8 @@ define([
       var addNewView = new AddNewView({
         triggerView: new ButtonView({
           id: 'addnew',
-          title: translations.add_new_file,
-          tooltip: translations.add_new_file_tooltip,
+          title: _t('Add new file'),
+          tooltip: _t('Add new file to current folder'),
           context: 'default'
         }),
         app: self
@@ -147,8 +123,8 @@ define([
       var renameView = new RenameView({
         triggerView: new ButtonView({
           id: 'rename',
-          title: translations.rename,
-          tooltip: translations.rename_tooltip,
+          title: _t('Rename'),
+          tooltip: _t('Rename currently selected resource'),
           context: 'default'
         }),
         app: self
@@ -156,8 +132,8 @@ define([
       var deleteView = new DeleteView({
         triggerView: new ButtonView({
           id: 'delete',
-          title: translations.delete,
-          tooltip: translations.delete_tooltip,
+          title: _t('Delete'),
+          tooltip: _('Delete currently selected resource'),
           context: 'danger'
         }),
         app: self
@@ -178,8 +154,8 @@ define([
         var uploadView = new UploadView({
           triggerView: new ButtonView({
             id: 'upload',
-            title: translations.upload,
-            tooltip: translations.upload_tooltip,
+            title: _t('Upload'),
+            tooltip: _t('Upload file to current directory'),
             context: 'default'
           }),
           app: self
@@ -191,8 +167,8 @@ define([
         var customizeView = new CustomizeView({
           triggerView: new ButtonView({
             id: 'customize',
-            title: translations.add_override,
-            tooltip: translations.add_override_tooltip,
+            title: _t('Add new override'),
+            tooltip: _t('Find resource in plone to override'),
             context: 'default'
           }),
           app: self
@@ -229,12 +205,12 @@ define([
             _authenticator: utils.getAuthenticator()
           },
           success: function(data) {
-            $('[data-path="'+self.getNodePath()+'"]').removeClass("modified");
+            $('[data-path="' + self.getNodePath() + '"]').removeClass("modified");
           }
         });
       };
 
-      self.saveBtn.on('button:click', function(e) {
+      self.saveBtn.on('button:click', function() {
         self._save();
       });
       self.render();
@@ -252,7 +228,7 @@ define([
       self.$tree = self.$('.tree');
       self.$nav = self.$('nav');
       self.$tabs = $('ul.nav', self.$nav);
-      self.options.treeConfig.onLoad = function(tree) {
+      self.options.treeConfig.onLoad = function() {
         // on loading initial data, activate first node if available
         var node = self.$tree.tree('getNodeById', 1);
         if (node){
@@ -366,7 +342,7 @@ define([
 
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
-          $('[data-path="'+path+'"]').addClass("modified");
+          $('[data-path="' + path + '"]').addClass("modified");
         }
       });
       self.ace.editor.commands.addCommand({

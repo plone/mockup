@@ -8,18 +8,18 @@ define([
 
   var PropertiesView = PopoverView.extend({
     className: 'popover rename',
-    title: _.template('Rename items'),
+    title: _.template('<%- _t("Rename items") %>'),
     content: _.template(
       '<div class="itemstoremove"></div>' +
-      '<button class="btn btn-block btn-primary">Apply</button>'
+      '<button class="btn btn-block btn-primary"><% _t("Apply") %></button>'
     ),
     itemTemplate: _.template(
       '<div class="item">' +
         '<div class="form-group">' +
           '<input name="UID" type="hidden" value="<%- UID %>" />' +
-          '<label>Title</label>' +
+          '<label><%- _t("Title") %></label>' +
           '<input class="form-control" name="newtitle" value="<%= Title %>" />' +
-          '<label>Short name</label>' +
+          '<label><%- _t("Short name") %></label>' +
           '<input class="form-control" name="newid" value="<%= id %>" />' +
         '</div>' +
       '</div>'

@@ -8,15 +8,15 @@ define([
 
   var AddNewView = PopoverView.extend({
     className: 'popover addnew',
-    title: _.template('<%= translations.add_new_file %>'),
+    title: _.template('<%= _t("Add new file") %>'),
     content: _.template(
       '<span class="current-path"></span>' +
       '<div class="form-group">' +
-        '<label for="filename-field"><%= translations.filename %></label>' +
+        '<label for="filename-field"><%= _t("Filename") %></label>' +
         '<input type="text" class="form-control" ' +
-                'id="filename-field" placeholder="<%= translations.enter_filename %>">' +
+                'id="filename-field" placeholder="<%= _t("Enter filename") %>">' +
       '</div>' +
-      '<button class="btn btn-block btn-primary"><%= translations.add %></button>'
+      '<button class="btn btn-block btn-primary"><%= _t("Add") %></button>'
     ),
     events: {
       'click button': 'addButtonClicked'

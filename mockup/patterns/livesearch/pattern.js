@@ -26,8 +26,8 @@ define([
   'jquery',
   'mockup-patterns-base',
   'underscore',
-  'translate'
-], function ($, Base, _, _t){
+  'mockup-i18n'
+], function ($, Base, _, i18n){
   'use strict';
 
   var Livesearch = Base.extend({
@@ -75,8 +75,8 @@ define([
         self.results = {
           items: [{
             url: '',
-            title: _t('Error'),
-            description: _t('There was an error searching…'),
+            title: self._t('Error'),
+            description: self._t('There was an error searching…'),
             state: 'error',
             error: false
           }],
@@ -97,21 +97,21 @@ define([
       /* find a status message */
 
       if(self.active){
-        self.$results.append($('<li class="searching">' + _t('searching…') + '</li>'));
+        self.$results.append($('<li class="searching">' + self._t('searching…') + '</li>'));
       }else if(self.results === null){
         // no results gathered yet
-        self.$results.append($('<li class="no-results no-search">' + _t('enter search phrase') + '</li>'));
+        self.$results.append($('<li class="no-results no-search">' + self._t('enter search phrase') + '</li>'));
       } else if(self.results.total === 0){
-        self.$results.append($('<li class="no-results">' + _t('no results found') + '</li>'));
+        self.$results.append($('<li class="no-results">' + self._t('no results found') + '</li>'));
       } else{
-        self.$results.append($('<li class="results-summary">' + _t('found') +
-                               ' ' + self.results.total + ' ' + _t('results') + '</li>'));
+        self.$results.append($('<li class="results-summary">' + self._t('found') +
+                               ' ' + self.results.total + ' ' + self._t('results') + '</li>'));
       }
 
       if(self.results !== null){
         var template = _.template(self.options.itemTemplate);
         _.each(self.results.items, function(item, index){
-          var $el = $(template($.extend({_t: _t}, item)));
+          var $el = $(template($.extend({_t: self._t}, item)));
           $el.attr('data-url', item.url).on('click', function(){
             if(!item.error){
               window.location = item.url;
@@ -124,7 +124,7 @@ define([
         });
         var nav = [];
         if(self.page > 1){
-          var $prev = $('<a href="#" class="prev">' + _t('Previous') + '</a>');
+          var $prev = $('<a href="#" class="prev">' + self._t('Previous') + '</a>');
           $prev.click(function(e){
             self.disableHiding = true;
             e.preventDefault();
@@ -133,7 +133,7 @@ define([
           nav.push($prev);
         }
         if((self.page * self.options.perPage) < self.results.total){
-          var $next = $('<a href="#" class="next">' + _t('Next') + '</a>');
+          var $next = $('<a href="#" class="next">' + self._t('Next') + '</a>');
           $next.click(function(e){
             self.disableHiding = true;
             e.preventDefault();
@@ -169,6 +169,10 @@ define([
     },
     init: function(){
       var self = this;
+
+      i18n.loadCatalog('widgets');
+      self._t = i18n.MessageFactory('widgets');
+
       self.$input = self.$el.find(self.options.inputSelector);
       self.$input.off('focusout').on('focusout', function(){
         /* we put this in a timer so click events still

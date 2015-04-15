@@ -64,7 +64,7 @@ define([
         self.folderMenu = new ActionMenu({
           app: self.app,
           model: self.folderModel,
-          header: 'Actions on current folder',
+          header: self._t('Actions on current folder'),
           canMove: false
         });
         $('.input-group-btn', self.$breadcrumbs).empty().append(self.folderMenu.render().el);
@@ -75,6 +75,7 @@ define([
     render: function() {
       var self = this;
       self.$el.html(self.template({
+        _t: self._t,
         pathParts: _.filter(
           self.app.queryHelper.getCurrentPath().split('/').slice(1),
           function(val) {
@@ -155,7 +156,7 @@ define([
       var self = this;
       // if we have a custom query going on, we do not allow sorting.
       if (self.app.inQueryMode()) {
-        self.app.setStatus('Can not order items while querying');
+        self.app.setStatus(self._t('Can not order items while querying'));
         self.$el.removeClass('order-support');
         return;
       }

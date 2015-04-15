@@ -14,7 +14,7 @@ define([
     className: 'navbar-search form-search ui-offset-parent',
     template: _.template(
       '<div class="input-group">' +
-      '<input type="text" class="form-control search-query" placeholder="Filter">' +
+      '<input type="text" class="form-control search-query" placeholder="<%- _t("Filter") %>">' +
       '<span class="input-group-btn">' +
       '</span>' +
       '</div>'
@@ -28,12 +28,14 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
+
     initialize: function(options) {
       BaseView.prototype.initialize.apply(this, [options]);
       this.app = this.options.app;
     },
+
     render: function() {
-      this.$el.html(this.template({}));
+      this.$el.html(this.template({_t: this._t}));
       this.button = new ButtonView({
         title: 'Query'
       });
@@ -79,6 +81,7 @@ define([
       });
       return this;
     },
+
     filter: function(event) {
       var self = this;
       if (self.timeoutId) {

@@ -9,7 +9,7 @@ define([
 
   var UploadView = PopoverView.extend({
     className: 'popover upload',
-    title: _.template('Upload files'),
+    title: _.template('<%- _t("Upload files") %>'),
     content: _.template(
       '<input type="text" name="upload" style="display:none" />' +
       '<div class="uploadify-me"></div>'),

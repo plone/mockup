@@ -10,42 +10,42 @@ define([
 
   var PropertiesView = PopoverView.extend({
     className: 'popover properties',
-    title: _.template('Modify properties on items'),
+    title: _.template('<%- _t("Modify properties on items") %>'),
     content: _.template(
       '<div class="form-group">' +
-        '<label>Publication Date</label>' +
+        '<label><%- _t("Publication Date") %></label>' +
         '<input class="form-control" name="effective" />' +
       '</div>' +
       '<div class="form-group">' +
-        '<label>Expiration Date</label>' +
+        '<label><%- _t("Expiration Date") %></label>' +
         '<input class="form-control" name="expiration" />' +
       '</div>' +
       '<div class="form-group">' +
-        '<label>Copyright</label>' +
+        '<label><%- _t("Copyright") %></label>' +
         '<textarea class="form-control" name="copyright"></textarea>' +
       '</div>' +
-      '<label>Creators</label>' +
+      '<label><%- _t("Creators") %></label>' +
       '<div class="form-group">' +
         '<input name="creators" style="width: 300px" />' +
       '</div>' +
-      '<label>Contributors</label>' +
+      '<label><%- _t("Contributors") %></label>' +
       '<div class="form-group">' +
         '<input name="contributors" style="width: 300px" />' +
       '</div>' +
-      '<label>Exclude from nav</label>' +
+      '<label><%- _t("Exclude from nav") %></label>' +
       '<div class="radio">' +
         '<label>' +
           '<input type="radio" name="exclude-from-nav" value="yes" />' +
-          'Yes' +
+          '<%- _t("Yes") %>' +
         '</label>' +
       '</div>' +
       '<div class="radio">' +
         '<label>' +
           '<input type="radio" name="exclude-from-nav" value="no" />' +
-          'No' +
+          '<%- _t("No") %>' +
         '</label>' +
       '</div>' +
-      '<button class="btn btn-block btn-primary">Apply</button>'
+      '<button class="btn btn-block btn-primary"><%- _t("Apply") %></button>'
     ),
     events: {
       'click button': 'applyButtonClicked'
@@ -93,7 +93,6 @@ define([
     },
     toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
-      var self = this;
       if (!this.opened) {
         return;
       }

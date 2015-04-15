@@ -8,15 +8,15 @@ define([
 
   var RenameView = PopoverView.extend({
     className: 'popover addnew',
-    title: _.template('<%= translations.rename %>'),
+    title: _.template('<%= _t("Rename") %>'),
     content: _.template(
       '<span class="current-path"></span>' +
       '<div class="form-group">' +
-        '<label for="filename-field"><%= translations.filename %></label>' +
+        '<label for="filename-field"><%= _t("Filename") %></label>' +
         '<input type="text" class="form-control" ' +
                 'id="filename-field">' +
       '</div>' +
-      '<button class="btn btn-block btn-primary"><%= translations.rename %></button>'
+      '<button class="btn btn-block btn-primary"><%= _t("Rename") %></button>'
     ),
     events: {
       'click button': 'renameButtonClicked'

@@ -32,13 +32,12 @@ define([
   'mockup-patterns-base',
   'mockup-utils',
   'mockup-patterns-structure-url/js/views/app',
-  'translate',
   'text!mockup-patterns-structure-url/templates/paging.xml',
   'text!mockup-patterns-structure-url/templates/selection_item.xml',
   'text!mockup-patterns-structure-url/templates/tablerow.xml',
   'text!mockup-patterns-structure-url/templates/table.xml',
   'text!mockup-ui-url/templates/popover.xml',
-], function($, Base, utils, AppView, _t) {
+], function($, Base, utils, AppView) {
   'use strict';
 
   var Structure = Base.extend({

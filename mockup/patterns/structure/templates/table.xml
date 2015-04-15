@@ -37,7 +37,7 @@
           <th><%- availableColumns[column] %></th>
         <% } %>
       <% }); %>
-      <th>Actions</th>
+      <th><%- _t("Actions") %></th>
     </tr>
   </thead>
   <tbody>

@@ -22,14 +22,13 @@ define([
   'mockup-patterns-structure-url/js/views/upload',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-patterns-structure-url/js/collections/selected',
-  'translate',
   'mockup-utils',
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, UploadView,
-            ResultCollection, SelectedCollection, _t, utils) {
+            ResultCollection, SelectedCollection, utils) {
   'use strict';
 
   var DISABLE_EVENT = 'DISABLE';
@@ -66,6 +65,7 @@ define([
     additionalCriterias: [],
     pasteSelection: null,
     cookieSettingPrefix: '_fc_',
+    pasteAllowed: false,
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
@@ -97,8 +97,8 @@ define([
       self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
       self.tableView = new TableView({app: self});
+
       self.pagingView = new PagingView({app: self});
-      self.pasteAllowed = self.options.pasteAllowed;
 
       /* initialize buttons */
       self.setupButtons();
@@ -318,11 +318,10 @@ define([
       self.collection.pager();
     },
     ajaxErrorResponse: function(response, url) {
-      var self = this;
       if (response.status === 404) {
-        window.alert('operation url "' + url + '" is not valid');
+        window.alert(this._t('operation url ${url} is not valid', {url: url}));
       } else {
-        window.alert('there was an error performing action');
+        window.alert(this._t('there was an error performing action'));
       }
     },
     pasteEvent: function(button, e, data) {
@@ -340,10 +339,10 @@ define([
       var self = this;
       var txt;
       if (button.id === 'cut') {
-        txt = _t('cut ');
+        txt = self._t('cut ');
         self.pasteOperation = 'cut';
       } else {
-        txt = _t('copied ');
+        txt = self._t('copied ');
         self.pasteOperation = 'copy';
       }
 

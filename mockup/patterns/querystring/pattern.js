@@ -5,10 +5,6 @@
  *    indexOptionsUrl(string): URL to grab index option data from. Must contain "sortable_indexes" and "indexes" data in JSON object. (null)
  *    previewURL(string): URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML list of results ('portal_factory/@@querybuilder_html_results')
  *    previewCountURL(string): URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML string of the total number of records found with the query ('portal_factory/@@querybuildernumberofresults')
- *    sorttxt(string): Text to use to label the sort dropdown ('Sort On')
- *    reversetxt(string): Text to use to label the sort order checkbox ('Reversed Order')
- *    previewTitle(string): Title for the preview area ('Preview')
- *    previewDescription(string): Description for the preview area ('Preview of at most 10 items')
  *    classWrapperName(string): CSS class to apply to the wrapper element ('querystring-wrapper')
  *    classSortLabelName(string): CSS class to apply to the sort on label ('querystring-sort-label')
  *    classSortReverseName(string): CSS class to apply to the sort order label and checkbox container ('querystring-sortreverse')
@@ -49,19 +45,15 @@ define([
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'select2',
-  'translate'
-], function($, Base, Select2, PickADate, undefined, _t) {
+  'mockup-i18n'
+], function($, Base, Select2, PickADate, undefined, i18n) {
   'use strict';
 
   var Criteria = function() { this.init.apply(this, arguments); };
   Criteria.prototype = {
     defaults: {
       indexWidth: '20em',
-      placeholder: _t('Select criteria'),
       remove: '',
-      results: _t(' items matching your search.'),
-      days: _t('days'),
-      betweendt: _t('to'),
       classBetweenDtName: 'querystring-criteria-betweendt',
       classWrapperName: 'querystring-criteria-wrapper',
       classIndexName: 'querystring-criteria-index',
@@ -73,6 +65,9 @@ define([
     },
     init: function($el, options, indexes, index, operator, value) {
       var self = this;
+
+      i18n.loadCatalog('widgets');
+      self._t = i18n.MessageFactory('widgets');
 
       self.options = $.extend(true, {}, self.defaults, options);
       self.indexes = indexes;
@@ -93,7 +88,7 @@ define([
 
       // Index selection
       self.$index = $('<select><option></option></select>')
-          .attr('placeholder', self.options.placeholder);
+          .attr('placeholder', self._t('Select criteria'));
 
       // list of indexes
       $.each(self.indexes, function(value, options) {
@@ -122,7 +117,7 @@ define([
       self.$index
         .patternSelect2({
           width: self.options.indexWidth,
-          placeholder: self.options.placeholder
+          placeholder: self._t('Select criteria')
         })
         .on('change', function(e) {
           self.removeValue();
@@ -221,7 +216,7 @@ define([
           });
         $wrapper.append(
           $('<span/>')
-            .html(self.options.betweendt)
+            .html(self._t('to'))
             .addClass(self.options.classBetweenDtName)
         );
         var endwrap = $('<span/>').appendTo($wrapper);
@@ -240,7 +235,7 @@ define([
 
       } else if (widget === 'RelativeDateWidget') {
         self.$value = $('<input type="text"/>')
-                .after($('<span/>').html(self.options.days))
+                .after($('<span/>').html(self._t('days')))
                 .addClass(self.options.classValueName + '-' + widget)
                 .appendTo($wrapper)
                 .change(function() {
@@ -425,10 +420,6 @@ define([
       indexOptionsUrl: null,
       previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
       previewCountURL: 'portal_factory/@@querybuildernumberofresults',
-      sorttxt: _t('Sort On'),
-      reversetxt: _t('Reversed Order'),
-      previewTitle: _t('Preview'),
-      previewDescription: _t('Preview of at most 10 items'),
       classSortLabelName: 'querystring-sort-label',
       classSortReverseName: 'querystring-sortreverse',
       classSortReverseLabelName: 'querystring-sortreverse-label',
@@ -443,6 +434,9 @@ define([
     },
     init: function() {
       var self = this;
+
+      i18n.loadCatalog('widgets');
+      self._t = i18n.MessageFactory('widgets');
 
       // hide input element
       self.$el.hide();
@@ -491,11 +485,11 @@ define([
         // preview title and description
         $('<div/>')
           .addClass(self.options.classPreviewTitleName)
-          .html(self.options.previewTitle)
+          .html(self._t('Preview'))
           .appendTo(self.$previewWrapper);
         $('<div/>')
           .addClass(self.options.classPreviewDescriptionName)
-          .html(self.options.previewDescription)
+          .html(self._t('Preview of at most 10 items'))
           .appendTo(self.$previewWrapper);
       }
 
@@ -572,7 +566,7 @@ define([
 
       $('<span/>')
         .addClass(self.options.classSortLabelName)
-        .html(self.options.sorttxt)
+        .html(self._t('Sort on'))
         .appendTo(self.$sortWrapper);
       self.$sortOn = $('<select/>')
         .attr('name', 'sort_on')
@@ -609,7 +603,7 @@ define([
         .append(self.$sortOrder)
         .append(
           $('<span/>')
-            .html(self.options.reversetxt)
+            .html(self._t('Reserved Order'))
             .addClass(self.options.classSortReverseLabelName)
         );
 

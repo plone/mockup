@@ -99,9 +99,9 @@ define([
   'mockup-patterns-resourceregistry-url/js/overrides',
   'mockup-patterns-resourceregistry-url/js/registry',
   'mockup-patterns-resourceregistry-url/js/patternoptions',
-  'translate'
+  'mockup-i18n'
 ], function($, Base, _, BaseView, utils, LessVariablesView,
-            OverridesView,RegistryView, PatternOptionsView, _t) {
+            OverridesView,RegistryView, PatternOptionsView, i18n) {
   'use strict';
 
 
@@ -136,6 +136,10 @@ define([
     },
     initialize: function(options) {
       var self = this;
+
+      i18n.loadCatalog('widgets');
+      self._t = i18n.MessageFactory('widgets');
+
       BaseView.prototype.initialize.apply(self, [options]);
       self.registryView = new RegistryView({
         data: options,
@@ -154,7 +158,7 @@ define([
 
     render: function(){
       var self = this;
-      self.$el.append(self.template({_t: _t}));
+      self.$el.append(self.template({_t: self._t}));
       self.loading = new utils.Loading();
       self.$tabs = self.$('ul.main-tabs');
       self.$content = self.$('.tab-content');
