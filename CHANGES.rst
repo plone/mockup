@@ -1,6 +1,20 @@
 Changelog
 =========
 
+1.8.4 (unreleased)
+------------------
+
+Fixes and enhancements:
+
+- Implement support for Navigation Root in relatedItems pattern by allowing
+  an options rootPath parameter.
+  [alecpm]
+
+- TinyMCE: bugfix, where a link had to be guessed because of missing data-
+  attributes, use set instead of setRaw. Add tests.
+  [frapell]
+
+
 1.8.3 (2015-01-26)
 ------------------
 

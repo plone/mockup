@@ -610,11 +610,11 @@ define([
           self.$subject.val(decodeURIComponent(split[1]));
         }
       } else if (href[0] === '#') {
-        self.linkType = 'anchor';
-        self.linkTypes.anchor.setRaw(href.substring(1));
+        this.linkType = 'anchor';
+        this.linkTypes.anchor.set(href.substring(1));
       } else {
-        self.linkType = 'external';
-        self.linkTypes.external.setRaw(href);
+        this.linkType = 'external';
+        this.linkTypes.external.set(href);
       }
     },
     setSelectElement: function($el, val) {
