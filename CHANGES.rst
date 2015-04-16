@@ -4,6 +4,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- TinyMCE: bugfix, where a link had to be guessed because of missing data-
+  attributes, use set instead of setRaw. Add tests.
+  [frapell]
+
 - Add recurrence pattern styles to widget bundle.
   [thet]
 

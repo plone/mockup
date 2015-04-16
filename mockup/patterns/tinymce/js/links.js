@@ -632,10 +632,10 @@ define([
         }
       } else if (href[0] === '#') {
         this.linkType = 'anchor';
-        this.linkTypes.anchor.setRaw(href.substring(1));
+        this.linkTypes.anchor.set(href.substring(1));
       } else {
         this.linkType = 'external';
-        this.linkTypes.external.setRaw(href);
+        this.linkTypes.external.set(href);
       }
     },
 

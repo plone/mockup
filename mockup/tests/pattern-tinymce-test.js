@@ -365,6 +365,27 @@ define([
       expect(pattern.linkModal.linkType).to.equal('upload');
     });
 
+    it('test guess link when no data- attribute present', function() {
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent('<a href="foobar">foobar</a>');
+
+      pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.external.$input.val()).to.equal('foobar');
+    });
+
+    it('test guess anchor when no data- attribute present', function() {
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent('<a href="#foobar">foobar</a><a class="mceItemAnchor" name="foobar"></a>');
+
+      pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#foobar');
+    });
 
   });
 
