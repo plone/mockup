@@ -48,9 +48,9 @@ define([
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',
   'text!mockup-patterns-upload-url/templates/preview.xml',
-  'mockup-i18n'
+  'translate'
 ], function($, _, Base, RelatedItems, Dropzone,
-            UploadTemplate, PreviewTemplate, i18n) {
+            UploadTemplate, PreviewTemplate, _t) {
   'use strict';
 
   /* we do not want this plugin to auto discover */
@@ -94,15 +94,12 @@ define([
       var self = this,
           template = UploadTemplate;
 
-      i18n.loadCatalog('widgets');
-      self._t = i18n.MessageFactory('widgets');
-
       // values that will change current processing
       self.currentPath = self.options.currentPath;
       self.numFiles = 0;
       self.currentFile = 0;
 
-      template = _.template(template, {_t: self._t});
+      template = _.template(template, {_t: _t});
       self.$el.addClass(self.options.className);
       self.$el.append(template);
 
@@ -365,13 +362,13 @@ define([
         chunkSize: chunkSize
       }).fail(function() {
         if(window.DEBUG){
-          console.alert(self._t('Error uploading with TUS resumable uploads'));
+          console.alert(_t('Error uploading with TUS resumable uploads'));
         }
         file.status = Dropzone.ERROR;
       }).progress(function(e, bytesUploaded, bytesTotal) {
         var percentage = (bytesUploaded / bytesTotal * 100);
         self.$progress.attr('aria-valuenow', percentage).css('width', percentage + '%');
-        self.$progress.html(self._t('uploading...') + '<br />' +
+        self.$progress.html(_t('uploading...') + '<br />' +
                             self.formatBytes(bytesUploaded) +
                             ' / ' + self.formatBytes(bytesTotal));
       }).done(function(url, file) {

@@ -23,12 +23,13 @@ define([
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-patterns-structure-url/js/collections/selected',
   'mockup-utils',
+  'translate',
   'jquery.cookie'
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView, TagsView, PropertiesView,
             WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
             PagingView, AddMenu, ColumnsView, TextFilterView, UploadView,
-            ResultCollection, SelectedCollection, utils) {
+            ResultCollection, SelectedCollection, utils, _t) {
   'use strict';
 
   var DISABLE_EVENT = 'DISABLE';
@@ -110,7 +111,7 @@ define([
       });
 
       self.buttonViews = {};
-      _.map(self.buttonViewMapping, function(ViewClass, key, list) {
+      _.map(self.buttonViewMapping, function(ViewClass, key) {
         var name = key.split('.');
         var group = name[0];
         var buttonName = name[1];
@@ -319,9 +320,9 @@ define([
     },
     ajaxErrorResponse: function(response, url) {
       if (response.status === 404) {
-        window.alert(this._t('operation url ${url} is not valid', {url: url}));
+        window.alert(_t('operation url ${url} is not valid', {url: url}));
       } else {
-        window.alert(this._t('there was an error performing action'));
+        window.alert(_t('there was an error performing action'));
       }
     },
     pasteEvent: function(button, e, data) {
@@ -339,10 +340,10 @@ define([
       var self = this;
       var txt;
       if (button.id === 'cut') {
-        txt = self._t('cut ');
+        txt = _t('cut ');
         self.pasteOperation = 'cut';
       } else {
-        txt = self._t('copied ');
+        txt = _t('copied ');
         self.pasteOperation = 'copy';
       }
 

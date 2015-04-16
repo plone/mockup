@@ -2,8 +2,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'mockup-i18n'
-], function($, _, Backbone, i18n) {
+  'translate'
+], function($, _, Backbone, _t) {
   'use strict';
 
   var BaseView = Backbone.View.extend({
@@ -16,8 +16,7 @@ define([
       for (var key in this.options) {
         this[key] = this.options[key];
       }
-      i18n.loadCatalog('widgets');
-      this._t = this.options._t = i18n.MessageFactory('widgets');
+      this.options._t = _t;
     },
     render: function() {
       this.applyTemplate();
@@ -39,7 +38,7 @@ define([
     },
     applyTemplate: function() {
       if (this.template !== null) {
-        var data = $.extend({}, this.options, this.serializedModel());
+        var data = $.extend({_t: _t}, this.options, this.serializedModel());
         var template = this.template;
         if(typeof(template) === 'string'){
           template = _.template(template);

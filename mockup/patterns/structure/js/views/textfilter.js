@@ -5,8 +5,9 @@ define([
   'mockup-ui-url/views/base',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/popover',
-  'mockup-patterns-querystring'
-], function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString) {
+  'mockup-patterns-querystring',
+  'translate'
+], function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString, _t) {
   'use strict';
 
   var TextFilterView = BaseView.extend({
@@ -35,7 +36,7 @@ define([
     },
 
     render: function() {
-      this.$el.html(this.template({_t: this._t}));
+      this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
         title: 'Query'
       });

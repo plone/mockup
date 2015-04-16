@@ -4,8 +4,8 @@ define([
   'mockup-ui-url/views/base',
   'mockup-patterns-sortable',
   'mockup-patterns-select2',
-  'mockup-i18n'
-], function($, _, BaseView, Sortable, Select2, i18n) {
+  'translate'
+], function($, _, BaseView, Sortable, Select2, _t) {
   'use strict';
 
 
@@ -203,7 +203,7 @@ define([
         $container.append('<li class="list-group-item"><div class="input-group">' +
           '<input class="form-control input-sm" value="' + value + '" />' +
           '<span class="input-group-btn">' +
-            '<button class="plone-btn plone-btn-default remove plone-btn-sm">' + self._t('Remove') + '</button></div></li>');
+            '<button class="plone-btn plone-btn-default remove plone-btn-sm">' + _t('Remove') + '</button></div></li>');
       });
 
       if(self.sortable){

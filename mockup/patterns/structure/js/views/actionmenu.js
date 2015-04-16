@@ -7,9 +7,9 @@ define([
   'mockup-ui-url/views/base',
   'mockup-utils',
   'text!mockup-patterns-structure-url/templates/actionmenu.xml',
-  'mockup-i18n',
+  'translate',
   'bootstrap-dropdown'
-], function($, _, Backbone, BaseView, utils, ActionMenuTemplate, i18n) {
+], function($, _, Backbone, BaseView, utils, ActionMenuTemplate, _t) {
   'use strict';
 
   var ActionMenu = BaseView.extend({
@@ -35,8 +35,6 @@ define([
       }else {
         this.canMove = true;
       }
-      i18n.loadCatalog('widgets');
-      this._t = i18n.MessageFactory('widgets');
     },
     cutClicked: function(e) {
       e.preventDefault();
@@ -134,7 +132,7 @@ define([
       data.header = self.options.header || null;
       data.canMove = self.canMove;
 
-      self.$el.html(self.template($.extend({ _t: self._t }, data)));
+      self.$el.html(self.template($.extend({ _t: _t }, data)));
 
       self.$dropdown = self.$('.dropdown-toggle');
       self.$dropdown.dropdown();

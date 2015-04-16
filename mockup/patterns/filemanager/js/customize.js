@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'mockup-patterns-filemanager-url/js/basepopover'
-], function($, _, Backbone, PopoverView) {
+  'mockup-patterns-filemanager-url/js/basepopover',
+  'translate'
+], function($, _, Backbone, PopoverView, _t) {
   'use strict';
 
   var CustomizeView = PopoverView.extend({
@@ -37,7 +38,7 @@ define([
             _.each(data, function(item){
               var $item = $(
                 '<li class="list-group-item" data-id="' + item.id + '">' +
-                  '<span class="badge"><a href=#">' + self.app._t('Customize') + '</a></span>' +
+                  '<span class="badge"><a href=#">' + _t('Customize') + '</a></span>' +
                   item.id +
                 '</li>');
               $('a', $item).click(function(e){

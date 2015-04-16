@@ -104,7 +104,7 @@ define([
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,
-            utils, LinkModal, i18n, _t) {
+            utils, LinkModal, I18n, _t) {
   'use strict';
 
   var TinyMCE = Base.extend({
@@ -288,12 +288,13 @@ define([
     },
     initLanguage: function(call_back){
       var self = this;
+      var i18n = new I18n();
       var lang = i18n.currentLanguage;
-      if (lang != 'en' && self.options.tiny.language !== 'en') {
+      if (lang !== 'en' && self.options.tiny.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
         // does the expected language exist?
         $.ajax({
-          url: tinymce.baseURL + "/langs/" + lang + ".js",
+          url: tinymce.baseURL + '/langs/' + lang + '.js',
           type:'HEAD',
           success: function() {
             self.options.tiny.language = lang;
@@ -301,13 +302,13 @@ define([
           },
           error: function() {
             // expected lang not available, let's fallback to closest one
-            if (lang.split("_") > 1){
-              lang = lang.split("_")[0];
+            if (lang.split('_') > 1){
+              lang = lang.split('_')[0];
             } else {
-              lang = lang + "_" + lang.toUpperCase();
+              lang = lang + '_' + lang.toUpperCase();
             }
             $.ajax({
-              url: tinymce.baseURL + "/langs/" + lang + ".js",
+              url: tinymce.baseURL + '/langs/' + lang + '.js',
               type:'HEAD',
               success: function() {
                 self.options.tiny.language = lang;
@@ -359,7 +360,7 @@ define([
               part: scale[1],
               name: scale[1],
               label: scale[0]
-            }
+            };
           });
         }
         if(typeof(self.options.folderTypes) === 'string'){

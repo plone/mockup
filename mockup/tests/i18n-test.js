@@ -3,7 +3,7 @@ define([
   'jquery',
   'mockup-i18n',
   'sinon'
-], function(expect, $, i18n, sinon) {
+], function(expect, $, I18n, sinon) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -13,6 +13,7 @@ define([
 
     describe('configure', function() {
 
+      var i18n = new I18n();
       it('ttl', function() {
         i18n.configure({ ttl: 10 });
         expect(i18n.ttl).to.be(10);
@@ -27,6 +28,7 @@ define([
     describe('getUrl', function() {
 
       it('correct params', function() {
+        var i18n = new I18n();
         i18n.configure({ baseUrl: '/foobar' });
         expect(i18n.getUrl('foobar', 'es')).to.be('/foobar?domain=foobar&language=es');
         i18n.configure({ baseUrl: '/plonejsi18n' });
@@ -35,11 +37,13 @@ define([
 
     describe('MessageFactory', function() {
       it('loads default message if no catalog', function() {
+        var i18n = new I18n();
         var _ = i18n.MessageFactory('foobar');
         expect(_('foobar')).to.be('foobar');
       });
 
       it('loads from stored catalog', function() {
+        var i18n = new I18n();
         i18n.configure({
           currentLanguage: 'en',
           catalogs: {
@@ -60,6 +64,7 @@ define([
       });
 
       it('loads from server', function() {
+        var i18n = new I18n();
         var server = sinon.fakeServer.create();
         server.autoRespond = true;
         var clock = sinon.useFakeTimers();

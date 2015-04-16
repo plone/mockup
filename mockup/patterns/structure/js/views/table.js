@@ -8,9 +8,10 @@ define([
   'mockup-patterns-sortable',
   'mockup-patterns-moment',
   'mockup-patterns-structure-url/js/models/result',
-  'mockup-patterns-structure-url/js/views/actionmenu'
+  'mockup-patterns-structure-url/js/views/actionmenu',
+  'translate'
 ], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
-            Moment, Result, ActionMenu) {
+            Moment, Result, ActionMenu, _t) {
   'use strict';
 
   var TableView = BaseView.extend({
@@ -64,7 +65,7 @@ define([
         self.folderMenu = new ActionMenu({
           app: self.app,
           model: self.folderModel,
-          header: self._t('Actions on current folder'),
+          header: _t('Actions on current folder'),
           canMove: false
         });
         $('.input-group-btn', self.$breadcrumbs).empty().append(self.folderMenu.render().el);
@@ -75,7 +76,7 @@ define([
     render: function() {
       var self = this;
       self.$el.html(self.template({
-        _t: self._t,
+        _t: _t,
         pathParts: _.filter(
           self.app.queryHelper.getCurrentPath().split('/').slice(1),
           function(val) {
@@ -156,7 +157,7 @@ define([
       var self = this;
       // if we have a custom query going on, we do not allow sorting.
       if (self.app.inQueryMode()) {
-        self.app.setStatus(self._t('Can not order items while querying'));
+        self.app.setStatus(_t('Can not order items while querying'));
         self.$el.removeClass('order-support');
         return;
       }

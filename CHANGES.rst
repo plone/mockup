@@ -4,6 +4,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- lazy load translations so we can potential hold off detecting language until
+  the DOM is loaded
+  [vangheem]
+
 - Change all index references from ``Type`` to ``portal_type``. E.g. the
   TinyMCE configuration option ``containsobjects`` expects portal_type values,
   not Type.

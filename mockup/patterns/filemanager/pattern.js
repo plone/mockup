@@ -49,12 +49,12 @@ define([
   'mockup-patterns-filemanager-url/js/customize',
   'mockup-patterns-filemanager-url/js/rename',
   'mockup-patterns-filemanager-url/js/upload',
-  'mockup-i18n',
+  'translate',
   'mockup-utils',
   'text!mockup-ui-url/templates/popover.xml'
 ], function($, Base, _, Backbone, BaseView, Tree, TextEditor, AppTemplate, Toolbar,
             ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
-            CustomizeView, RenameView, UploadView, i18n, utils) {
+            CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';
 
   var FileManager = Base.extend({
@@ -81,10 +81,6 @@ define([
     },
     init: function() {
       var self = this;
-
-      i18n.loadCatalog('widgets');
-      self._t = i18n.MessageFactory('widgets');
-      var _t = self._t;
 
       if (self.options.actionUrl === null) {
         self.$el.html('Must specify actionUrl setting for pattern');

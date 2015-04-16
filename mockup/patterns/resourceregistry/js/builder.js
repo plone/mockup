@@ -5,8 +5,8 @@ define([
   'underscore',
   'mockup-utils',
   'mockup-patterns-resourceregistry-url/js/iframe',
-  'mockup-i18n'
-], function($, Modal, _, utils, IFrame, i18n){
+  'translate'
+], function($, Modal, _, utils, IFrame, _t){
   'use strict';
 
   var Builder = function(bundleName, bundleListItem){
@@ -16,9 +16,6 @@ define([
     self.rview = bundleListItem.options.registryView;
     self.$results = null;
     self.$btnClose = null;
-
-    i18n.loadCatalog('widgets');
-    var _t = i18n.MessageFactory('widgets');
 
     self.rview.loading.show();
     self.modal = new Modal($('<div/>').appendTo(self.rview.$el), {

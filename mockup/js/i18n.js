@@ -114,5 +114,5 @@ define([
     };
   };
 
-  return new I18N();
+  return I18N;
 });

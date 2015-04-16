@@ -3,8 +3,8 @@ define([
   'underscore',
   'backbone',
   'text!mockup-patterns-structure-url/templates/paging.xml',
-  'mockup-i18n'
-], function($, _, Backbone, PagingTemplate, i18n) {
+  'translate'
+], function($, _, Backbone, PagingTemplate, _t) {
   'use strict';
 
 
@@ -30,15 +30,12 @@ define([
       this.collection.on('sync', this.render, this);
 
       this.$el.appendTo('#pagination');
-
-      i18n.loadCatalog('widgets');
-      this._t = i18n.MessageFactory('widgets');
     },
 
     render: function () {
       var data = this.collection.info();
       data.pages = this.getPages(data);
-      var html = this.template($.extend({ _t: this._t}, data));
+      var html = this.template($.extend({ _t: _t}, data));
       this.$el.html(html);
       return this;
     },
