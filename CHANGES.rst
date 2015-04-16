@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Add recurrence pattern styles to widget bundle.
+  [thet]
+
 - lazy load translations so we can potential hold off detecting language until
   the DOM is loaded
   [vangheem]
