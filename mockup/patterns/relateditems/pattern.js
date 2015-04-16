@@ -20,9 +20,6 @@
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    resultTemplate(string): Template for an item in the in the list of results. Refer to source for default. (Refer to source)
  *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
- *    searchText(string): Text which will be inserted to the left of the
- *    path. (Search)
- *    searchAllText(string): Displays next to the path when the path is set to the root. (All)
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
  *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
@@ -98,8 +95,6 @@ define([
       mode: 'search', // possible values are search and browse
       closeOnSelect: false,
       basePath: '/',
-      searchText: _t('Search:'),
-      searchAllText: _t('entire site'),
       homeText: _t('home'),
       folderTypes: ['Folder'],
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -203,11 +198,11 @@ define([
       if (path === '/') {
         var searchText = '';
         if (self.options.mode === 'search') {
-          searchText = '<em>' + self.options.searchAllText + '</em>';
+          searchText = '<em>' + _t('entire site') + '</em>';
         }
         html = self.applyTemplate('breadCrumbs', {
           items: searchText,
-          searchText: self.options.searchText
+          searchText: _t('Search:')
         });
       } else {
         var paths = path.split('/');
@@ -222,7 +217,7 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items: itemsHtml, searchText: self.options.searchText});
+        html = self.applyTemplate('breadCrumbs', {items: itemsHtml, searchText: _t('Search:') });
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -439,12 +434,6 @@ define([
       };
 
       Select2.prototype.initializeSelect2.call(self);
-
-      // Browsing functionality
-      var browseOpts = {
-        browseText: self.options.browseText,
-        searchText: self.options.searchText
-      };
 
       self.$browsePath = $('<span class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);
