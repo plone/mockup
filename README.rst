@@ -19,15 +19,6 @@ Install Node version 0.10 or greater
     `Install without using package manager
     <https://github.com/joyent/node/wiki/Installation>`_
 
-Install PhantomJS
-
-    `Download and install PhantomJS
-    <http://phantomjs.org/download.html>`_
-
-Maybe use your package manager::
-
-    $ apt-get install phantomjs
-
 Now git clone & build Mockup::
 
     $ git clone https://github.com/plone/mockup.git
