@@ -50,7 +50,7 @@ Generate widgets pot file for plone translations::
 License
 =======
 
-The BSD 3-Clause License. Copyrights hold the Plone Foundation.
+The BSD 3-Clause License. Copyrights held by the Plone Foundation.
 See `LICENSE.rst <LICENSE.rst>`_ for details.
 
 
