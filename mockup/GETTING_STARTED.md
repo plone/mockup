@@ -91,7 +91,7 @@ You can run tests with:
 
 This will start a process which runs the tests when you change any of the js files.
 
-If you just want to run tests just once you can use:
+If you want to run tests just once you can use:
 
     make test-once
 

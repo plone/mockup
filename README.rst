@@ -36,7 +36,7 @@ Now git clone & build Mockup::
 
 Run tests with PhantomJS::
 
-    $ make test
+    $ make test-once
 
 Run tests with Chrome::
 
