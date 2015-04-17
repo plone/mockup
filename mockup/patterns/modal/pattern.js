@@ -29,16 +29,16 @@
  *
  *
  * Example: example-basic
- *    <a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-modal"
- *                      data-pat-modal="width: 400">Modal basic</a>
+ *    <a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+ *                      data-pat-plone-modal="width: 400">Modal basic</a>
  *    <div id="modal1" style="display: none">
  *      <h1>Basic modal!</h1>
  *      <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
  *    </div>
  *
  * Example: example-long
- *    <a href="#modal2" class="plone-btn plone-btn-lg plone-btn-primary pat-modal"
- *                      data-pat-modal="width: 500">Modal long scrolling</a>
+ *    <a href="#modal2" class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal"
+ *                      data-pat-plone-modal="width: 500">Modal long scrolling</a>
  *    <div id="modal2" style="display: none">
  *      <h1>Basic with scrolling</h1>
  *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
@@ -56,8 +56,8 @@
  *
  *
  * Example: example-tinymce
- *    <a href="#modaltinymce" class="btn btn-lg btn-primary pat-modal"
- *       data-pat-modal="height: 600px;
+ *    <a href="#modaltinymce" class="btn btn-lg btn-primary pat-plone-modal"
+ *       data-pat-plone-modal="height: 600px;
  *                       width: 80%">
  *       Modal with TinyMCE</a>
  *    <div id="modaltinymce" style="display:none">
@@ -82,8 +82,8 @@ define([
   'use strict';
 
   var Modal = Base.extend({
-    name: 'modal',
-    trigger: '.pat-modal',
+    name: 'plone-modal',
+    trigger: '.pat-plone-modal',
     createModal: null,
     $model: null,
     defaults: {
@@ -297,7 +297,7 @@ define([
             if (options.displayInModal === true) {
               self.redraw(response, patternOptions);
             } else {
-              $action.trigger('destroy.modal.patterns');
+              $action.trigger('destroy.plone-modal.patterns');
               // also calls hide
               if (options.reloadWindowOnClose) {
                 self.reloadWindow();
@@ -445,7 +445,7 @@ define([
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            $(e.target).trigger('destroy.modal.patterns');
+            $(e.target).trigger('destroy.plone-modal.patterns');
           });
 
         // cleanup html
@@ -468,11 +468,11 @@ define([
             }
             self.$modal.trigger('modal-click');
           })
-          .on('destroy.modal.patterns', function(e) {
+          .on('destroy.plone-modal.patterns', function(e) {
             e.stopPropagation();
             self.hide();
           })
-          .on('resize.modal.patterns', function(e) {
+          .on('resize.plone-modal.patterns', function(e) {
             e.stopPropagation();
             e.preventDefault();
             self.positionModal();
@@ -808,7 +808,7 @@ define([
       $('img', self.$modal).load(function() {
         self.positionModal();
       });
-      $(window.parent).on('resize.modal.patterns', function() {
+      $(window.parent).on('resize.plone-modal.patterns', function() {
         self.positionModal();
       });
       self.emit('shown');
@@ -836,7 +836,7 @@ define([
         self.$modal.remove();
         self.initModal();
       }
-      $(window.parent).off('resize.modal.patterns');
+      $(window.parent).off('resize.plone-modal.patterns');
       self.emit('hidden');
       $('body').removeClass('plone-modal-open');
     },
