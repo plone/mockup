@@ -139,7 +139,7 @@ define([
               }, self.options.scrollDuration, self.options.scrollEasing);
             }
             if (self.$el.parents('.plone-modal').size() !== 0) {
-              self.$el.trigger('resize.modal.patterns');
+              self.$el.trigger('resize.plone-modal.patterns');
             }
             $(this).trigger('clicked');
           });

@@ -199,7 +199,7 @@ define([
       var self = this;
       self.$el.select2(self.options);
       self.$select2 = self.$el.parent().find('.select2-container');
-      self.$el.parent().off('close.modal.patterns');
+      self.$el.parent().off('close.plone-modal.patterns');
       if (self.options.orderable) {
         self.$select2.addClass('select2-orderable');
       }

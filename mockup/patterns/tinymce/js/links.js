@@ -364,7 +364,7 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-      self.modal = registry.patterns.modal.init(self.$el, {
+      self.modal = registry.patterns['plone-modal'].init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
         buttons: '.plone-btn'
