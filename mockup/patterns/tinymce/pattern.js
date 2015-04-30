@@ -16,6 +16,7 @@ toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignrig
  *    prependToScalePart(string): Text to prepend to generated image scale url part. ('/imagescale/')
  *    appendToScalePart(string): Text to append to generated image scale url part. ('')
  *    linkAttribute(string): Ajax response data attribute to use for url. ('path')
+ *    defaultScale(string): Scale name to default to. ('Original')
  *
  * Documentation:
  *    # Default
@@ -150,6 +151,7 @@ define([
       prependToScalePart: '/imagescale/', // some value here is required to be able to parse scales back
       appendToScalePart: '',
       appendToOriginalScalePart: '',
+      defaultScale: 'large',
       scales: _t('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
               'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
               'Large (768x768):large'),

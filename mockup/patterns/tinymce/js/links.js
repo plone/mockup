@@ -376,6 +376,7 @@ define([
 
     generateModalHtml: function() {
       return this.template({
+        options: this.options,
         upload: this.options.upload,
         text: this.options.text,
         insertHeading: this.options.text.insertHeading,

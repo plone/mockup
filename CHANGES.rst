@@ -4,6 +4,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Be able to provide default scale selection so users do not select
+  original scale as often
+  [vangheem]
+
 - TinyMCE: bugfix, where a link had to be guessed because of missing data-
   attributes, use set instead of setRaw. Add tests.
   [frapell]

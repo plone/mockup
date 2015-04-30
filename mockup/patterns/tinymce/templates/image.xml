@@ -19,7 +19,7 @@
             <select name="scale">
               <option value="">Original</option>
                 <% _.each(scales, function(scale){ %>
-                  <option value="<%- scale.part %>">
+                  <option value="<%- scale.part %>" <% if(scale.name === options.defaultScale){ %>selected<% } %> >
                     <%- scale.label %>
                   </option>
                 <% }); %>
