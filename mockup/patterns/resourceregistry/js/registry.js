@@ -212,7 +212,9 @@ define([
               '<button class="plone-btn plone-btn-default develop-css plone-btn-xs"><%- _t("Develop CSS") %></button>' +
             '<% } %>' +
           '<% } %>' +
-          '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
+          '<% if(compile){ %>' +
+            '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
+          '<% } %>' +
           '<button class="plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
         '</div>' +
       '</div>'
