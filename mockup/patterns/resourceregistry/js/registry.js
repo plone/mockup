@@ -520,21 +520,19 @@ define([
       }, function(){
         self.dirty = false;
         self.previousData = self._copyData();
+        self.render();
       });
     },
 
     developmentModeChanged: function(){
       var self = this;
-      var value = 'false';
       if(self.$('.development-mode input')[0].checked){
-        value = 'true';
+        this.options.data.development = true;
+      }else{
+        this.options.data.development = false;
       }
-      self.options.tabView.saveData('save-development-mode', {
-        value: value
-      }, function(){
-        self.options.data.development = self.$('.development-mode input')[0].checked;
-        self.render();
-      });
+      this.dirty = true;
+      this.render();
     }
   });
 

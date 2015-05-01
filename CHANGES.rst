@@ -4,6 +4,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- consistent behavior in changing development mode settings for
+  resource registries pattern
+  [vangheem]
+
 - Be able to provide default scale selection so users do not select
   original scale as often
   [vangheem]
