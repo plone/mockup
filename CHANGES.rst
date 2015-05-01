@@ -4,6 +4,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- hide some fields from plone-legacy bundle interface since that bundle
+  is a special case
+  [vangheem]
+
 - consistent behavior in changing development mode settings for
   resource registries pattern
   [vangheem]

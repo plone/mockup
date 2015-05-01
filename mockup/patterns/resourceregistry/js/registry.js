@@ -27,6 +27,7 @@ define([
     afterRender: function(){
       var self = this;
       var $body = self.$('.panel-body');
+      self.$el.addClass(self.name + '-resource-entry');
       _.each(self.fields, function(field){
         var options = $.extend({}, field, {
           value: self.options.data[field.name],
@@ -211,9 +212,7 @@ define([
               '<button class="plone-btn plone-btn-default develop-css plone-btn-xs"><%- _t("Develop CSS") %></button>' +
             '<% } %>' +
           '<% } %>' +
-          '<% if(compile){ %>' +
-            '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
-          '<% } %>' +
+          '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
           '<button class="plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
         '</div>' +
       '</div>'
