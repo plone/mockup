@@ -503,7 +503,7 @@ define([
 
     addBundleClicked: function(e){
       e.preventDefault();
-      var name = utils.generateId('new-resource-');
+      var name = utils.generateId('new-bundle-');
       this.options.data.bundles[name] = {
         enabled: true
       };
@@ -517,7 +517,8 @@ define([
       e.preventDefault();
       self.options.tabView.saveData('save-registry', {
         resources: JSON.stringify(self.options.data.resources),
-        bundles: JSON.stringify(self.options.data.bundles)
+        bundles: JSON.stringify(self.options.data.bundles),
+        development: self.options.data.development && 'true' || 'false'
       }, function(){
         self.dirty = false;
         self.previousData = self._copyData();
