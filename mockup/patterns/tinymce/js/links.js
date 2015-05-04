@@ -106,13 +106,9 @@ define([
 
   var UploadLink = InternalLink.extend({
     toUrl: function() {
-      var filename = $('.pat-upload').data('filename');
-      var path = $('.pat-upload').data('path');
-      var paths = [path, filename];
-      if (path){
-        paths.unshift(''); // add root node
-      }
-      return paths.join('/');
+      // Make a URL from the servers uuid of the uploaded file.
+      var upload_data = $('.pat-upload').data('uploaddata');
+      return 'resolveuid/' + upload_data.UID;
     }
   });
 
@@ -507,9 +503,10 @@ define([
         self.options.upload.relatedItems = self.options.relatedItems;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {
+          // Add upload data and path_uid to the upload node's data attributes.
           self.$upload.attr({
-            'data-filename': data.files ? data.files[0].name : '',
-            'data-path': data.path
+            'data-uploaddata': data.data,
+            'data-path': data.path_uid
           });
         });
       }

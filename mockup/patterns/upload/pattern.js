@@ -169,6 +169,16 @@ define([
         }
       });
 
+      self.dropzone.on('success', function(e, response){
+        // Trigger event 'uploadAllCompleted' and pass the server's reponse and
+        // the path uid. This event can be listened to by patterns using the
+        // upload pattern, e.g. the TinyMCE pattern's link plugin.
+        self.$el.trigger('uploadAllCompleted', {
+          'data': response,
+          'path_uid': self.$pathInput.val()
+        });
+      });
+
       if (self.options.autoCleanResults) {
         self.dropzone.on('complete', function(file) {
           setTimeout(function() {

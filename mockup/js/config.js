@@ -36,7 +36,7 @@
       'docs-contribute': 'CONTRIBUTE.md',
       'docs-getting-started': 'GETTING_STARTED.md',
       'docs-learn': 'LEARN.md',
-      'dropzone': 'bower_components/dropzone/downloads/dropzone-amd-module',
+      'dropzone': 'bower_components/dropzone/dist/dropzone-amd-module',
       'expect': 'bower_components/expect/index',
       'jqtree': 'bower_components/jqtree/tree.jquery',
       'jquery': 'bower_components/jquery/dist/jquery',
