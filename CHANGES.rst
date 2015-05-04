@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Update Dropzone.js to it's latest 4.0.1 version.
+  [thet]
+
 - hide some fields from plone-legacy bundle interface since that bundle
   is a special case
   [vangheem]
