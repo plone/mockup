@@ -4,6 +4,12 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- TinyMCE and upload pattern: Re-add triggering of the ``uploadAllCompleted``
+  event and pass the server's response and path uid to it. TinyMCE's link
+  plugin is listening to it and uses the information to create a URL out of the
+  uploaded files. Fixes #471.
+  [thet]
+
 - Update Dropzone.js to it's latest 4.0.1 version.
   [thet]
 
