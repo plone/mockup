@@ -94,6 +94,20 @@ define([
       var self = this,
           template = UploadTemplate;
 
+      // TODO: find a way to make this work in firefox (and IE)
+      $(document).bind('paste', function(e){
+        var oe = e.originalEvent;
+        var target = $(oe.target);
+        var items = oe.clipboardData.items;
+        if (items) {
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf("image") !== -1) {
+              var blob = items[i].getAsFile();
+              self.dropzone.addFile(blob);
+            }
+          }
+        }
+      });
       // values that will change current processing
       self.currentPath = self.options.currentPath;
       self.numFiles = 0;
@@ -209,6 +223,9 @@ define([
           }
         });
       });
+      if(self.options.clipboardfile){
+        self.dropzone.addFile(self.options.clipboardfile);
+      }
     },
 
     showControls: function() {

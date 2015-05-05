@@ -39,7 +39,9 @@ toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignrig
  *    <form>
  *      <textarea class="pat-tinymce"
  *          data-pat-tinymce='{"relatedItems": {"vocabularyUrl": "/relateditems-test.json" },
- *                            {"upload": {"baseUrl": "/", relativePath: "upload"} } }'></textarea>
+ *                            "upload": {"baseUrl": "/", "relativePath": "upload"},
+ *                            "pasteImages": true
+ *                            }'></textarea>
  *    </form>
  *
  */
@@ -179,7 +181,8 @@ define([
                  'unlink plonelink ploneimage',
         //'autoresize_max_height': 900,
         'height': 400
-      }
+      },
+      pasteImages: false
     },
     addLinkClicked: function() {
       var self = this;
@@ -232,6 +235,43 @@ define([
       } else {
         self.imageModal.reinitialize();
         self.imageModal.show();
+      }
+    },
+    addImagePasted: function(file){
+      var self = this;
+      if (self.pasteModal === null) {
+        var linkTypes = ['uploadImage'];
+        /*if(!self.options.upload){
+          linkTypes.splice(1, 1);
+        }*/
+        var options = $.extend(true, {}, self.options, {
+          tinypattern: self,
+          linkTypes: linkTypes,
+          initialLinkType: 'uploadImage',
+          text: {
+            insertHeading: _t('Insert Image')
+          },
+          /*relatedItems: {
+            baseCriteria: [{
+              i: 'portal_type',
+              o: 'plone.app.querystring.operation.list.contains',
+              v: self.options.imageTypes.concat(self.options.folderTypes)
+            }],
+            selectableTypes: self.options.imageTypes,
+            resultTemplate: ResultTemplate,
+            selectionTemplate: SelectionTemplate
+          }*/
+        });
+        var $el = $('<div/>').insertAfter(self.$el);
+        self.pasteModal = new LinkModal($el, options);
+        self.pasteModal.options.upload.clipboardfile = file;
+        self.pasteModal.show();
+        $('a[href=' + $('.linkType.uploadImage legend').attr('id') + ']').click();
+      } else {
+        self.pasteModal.reinitialize();
+        self.pasteModal.options.upload.clipboardfile = file;
+        self.pasteModal.show();
+        $('a[href=' + $('.linkType.uploadImage legend').attr('id') + ']').click();
       }
     },
     generateUrl: function(data) {
@@ -330,7 +370,7 @@ define([
     },
     init: function() {
       var self = this;
-      self.linkModal = self.imageModal = self.uploadModal = null;
+      self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
       var id = utils.setId(self.$el);
       var tinyOptions = self.options.tiny;
@@ -338,8 +378,14 @@ define([
       tinyOptions.addLinkClicked = function() {
         self.addLinkClicked.apply(self, []);
       };
-      tinyOptions.addImageClicked = function() {
-        self.addImageClicked.apply(self, []);
+      if(self.options.pasteImages){
+        tinyOptions.paste_data_images = 'true';
+        tinyOptions.addImageClicked = function() {
+          self.addImageClicked.apply(self, []);
+        };
+      }
+      tinyOptions.addImagePasted = function(file) {
+        self.addImagePasted.apply(self, [file] );
       };
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
