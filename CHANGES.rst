@@ -4,6 +4,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Update Bootstrap to 3.3.4, which includes the WOFF2 version of Glyphicons.
+  Removes some 404s.
+  [thet]
+
 - TinyMCE and upload pattern: Re-add triggering of the ``uploadAllCompleted``
   event and pass the server's response and path uid to it. TinyMCE's link
   plugin is listening to it and uses the information to create a URL out of the
