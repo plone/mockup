@@ -4,6 +4,12 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Change TinyMCE initLanguage's ajax calls to ``GET`` method, as Zope's
+  ZPublisher doesn't know about ``HEAD`` requests. Explicitly set the request
+  to be cached, so there shouldn't be a negative performance impact. Removes
+  some Plone 404's.
+  [thet]
+
 - Update Bootstrap to 3.3.4, which includes the WOFF2 version of Glyphicons.
   Removes some 404s.
   [thet]
