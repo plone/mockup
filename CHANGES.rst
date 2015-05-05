@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Update more framework dependencies.
+  [thet]
+
 - Update to jQuery 1.11.2.
   [thet]
 
