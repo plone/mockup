@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Update to jQuery 1.11.2.
+  [thet]
+
 - Change TinyMCE initLanguage's ajax calls to ``GET`` method, as Zope's
   ZPublisher doesn't know about ``HEAD`` requests. Explicitly set the request
   to be cached, so there shouldn't be a negative performance impact. Removes
