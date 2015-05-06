@@ -287,7 +287,7 @@ define([
       expect(this.$el.find('#selected').html()).to.contain('0');
     });
 
-    it.skip('test current folder buttons do not show on root', function() {
+    it('test current folder buttons do not show on root', function() {
       registry.scan(this.$el);
       var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);

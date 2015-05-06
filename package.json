@@ -25,15 +25,15 @@
     "karma-firefox-launcher": "~0.1.4",
     "karma-junit-reporter": "~0.2.2",
     "karma-mocha": "~0.1.10",
-    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-phantomjs-launcher": "~0.1.2",
     "karma-requirejs": "~0.2.2",
     "karma-sauce-launcher": "~0.2.10",
     "karma-script-launcher": "~0.1.0",
     "karma-spec-reporter": "0.0.19",
     "lcov-result-merger": "~1.0.2",
-	"less": "~1.7.0",
+  	"less": "~1.7.0",
     "mocha": "~2.2.4",
-    "phantomjs": "^1.9.16",
+    "phantomjs": "^1.9.13",
     "requirejs": "~2.1.17"
   },
   "maintainers": [
