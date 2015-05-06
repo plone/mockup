@@ -380,12 +380,12 @@ define([
       };
       if(self.options.pasteImages){
         tinyOptions.paste_data_images = 'true';
-        tinyOptions.addImageClicked = function() {
-          self.addImageClicked.apply(self, []);
+        tinyOptions.addImagePasted = function() {
+          self.addImagePasted.apply(self, []);
         };
       }
-      tinyOptions.addImagePasted = function(file) {
-        self.addImagePasted.apply(self, [file] );
+      tinyOptions.addImageClicked = function(file) {
+        self.addImageClicked.apply(self, [file] );
       };
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
