@@ -59,10 +59,6 @@ define([
   'mockup-patterns-base',
   'mockup-utils',
   'ace',
-  'ace-theme-monokai',
-  'ace-mode-text',
-  'ace-mode-javascript',
-  'ace-mode-css'
 ], function($, Base, utils) {
   'use strict';
 
@@ -92,6 +88,9 @@ define([
         return;
       }
       var ace = window.ace;
+
+      ace.config.set("packaged", true);
+      ace.config.set("basePath", "++plone++static/components/ace-builds/src/");
 
       // set id on current element
       var id = utils.setId(self.$el);
@@ -127,7 +126,9 @@ define([
         'txt': 'text',
         'css': 'css',
         'html': 'html',
-        'xml': 'xml'
+        'xml': 'xml',
+        'less': 'less',
+        'cfg': 'ini'
       };
 
       var extension = name.substr(name.lastIndexOf('.') + 1);

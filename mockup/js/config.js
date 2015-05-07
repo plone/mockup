@@ -22,10 +22,6 @@
     paths: {
       'JSXTransformer': 'bower_components/react/JSXTransformer',
       'ace': 'bower_components/ace-builds/src/ace',
-      'ace-mode-css': 'bower_components/ace-builds/src/mode-css',
-      'ace-mode-javascript': 'bower_components/ace-builds/src/mode-javascript',
-      'ace-mode-text': 'bower_components/ace-builds/src/mode-text',
-      'ace-theme-monokai': 'bower_components/ace-builds/src/theme-monokai',
       'backbone': 'bower_components/backbone/backbone',
       'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
       'bootstrap-alert': 'bower_components/bootstrap/js/alert',
@@ -69,7 +65,7 @@
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
-      'mockup-patterns-contentloader': 'patterns/contentloader/pattern', 
+      'mockup-patterns-contentloader': 'patterns/contentloader/pattern',
       'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
       'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
       'mockup-patterns-filemanager': 'patterns/filemanager/pattern',
@@ -151,7 +147,7 @@
         init: function () {
           this.tinyMCE.DOM.events.domLoaded = true;
           return this.tinyMCE;
-        }
+        },
       },
       'tinymce-modern-theme': { deps: ['tinymce'] },
       'underscore': { exports: 'window._' },
