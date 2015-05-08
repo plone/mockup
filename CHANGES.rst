@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- cancel should also clear created bundle or resource
+  [vangheem]
+
 - fix some structure styling issues
   [vangheem]
 

@@ -331,6 +331,7 @@ define([
       }
       if(confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
         this._revertData(this.previousData);
+        this.activeResource = null;
         this.render();
       }
     },
