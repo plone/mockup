@@ -61,7 +61,7 @@ define([
   'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
   'mockup-patterns-tinymce-url/js/links',
-  "mockup-i18n",
+  'mockup-i18n',
   'translate',
   'tinymce-modern-theme',
   'tinymce-advlist',
@@ -103,7 +103,8 @@ define([
   'tinymce-textpattern',
   'tinymce-visualblocks',
   'tinymce-visualchars',
-  'tinymce-wordcount'
+  'tinymce-wordcount',
+  'tinymce-compat3x'
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,
@@ -163,17 +164,14 @@ define([
         {text: _t('Open in parent window / frame'), value: '_parent'},
         {text: _t('Open in top frame (replaces all frames)'), value: '_top'}
       ],
-      imageTypes: 'Image',
+      imageTypes: ['Image'],
       folderTypes: ['Folder', 'Plone Site'],
-      linkableTypes: 'Document,Event,File,Folder,Image,News Item,Topic',
       tiny: {
         'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
         theme: '-modern',
-        plugins: [
-          'advlist autolink lists charmap print preview anchor ' +
-          'searchreplace visualblocks code fullscreen ' +
-          'insertdatetime media table contextmenu paste plonelink ploneimage'
-        ],
+        plugins: ['advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'anchor', 'searchreplace',
+                  'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'contextmenu',
+                  'paste', 'plonelink', 'ploneimage'],
         menubar: 'edit table format tools view insert',
         toolbar: 'undo redo | styleselect | bold italic | ' +
                  'alignleft aligncenter alignright alignjustify | ' +
