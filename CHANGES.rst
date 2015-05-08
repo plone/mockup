@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- fix some structure styling issues
+  [vangheem]
+
 - Update more framework dependencies.
   [thet]
 

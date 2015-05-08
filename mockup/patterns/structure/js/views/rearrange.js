@@ -20,8 +20,8 @@ define([
           '<%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %>' +
         '</p>' +
       '</div>' +
-      '<div class="checkbox">' +
-        '<label><%- _t("Reverse") %> <input type="checkbox" name="reversed" /></label>' +
+      '<div>' + 
+        '<label> <input type="checkbox" name="reversed" /> <%- _t("Reverse") %></label>' +
       '</div>' +
       '<button class="btn btn-block btn-primary"><%- _t("Rearrange") %></button>'
     ),
