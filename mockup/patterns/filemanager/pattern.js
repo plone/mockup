@@ -379,6 +379,7 @@ define([
         parts.push(node.name);
         node = node.parent;
       }
+      parts.reverse();
       return '/' + parts.join('/');
     },
 
