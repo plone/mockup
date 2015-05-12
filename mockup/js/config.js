@@ -78,6 +78,7 @@
       'mockup-patterns-modal': 'patterns/modal/pattern',
       'mockup-patterns-moment': 'patterns/moment/pattern',
       'mockup-patterns-pickadate': 'patterns/pickadate/pattern',
+      'mockup-patterns-portletmanager': 'patterns/portletmanager/pattern',
       'mockup-patterns-preventdoublesubmit': 'patterns/preventdoublesubmit/pattern',
       'mockup-patterns-querystring': 'patterns/querystring/pattern',
       'mockup-patterns-relateditems': 'patterns/relateditems/pattern',
