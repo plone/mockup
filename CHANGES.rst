@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.3 (unreleased)
+2.0.3 (2015-05-13)
 ------------------
 
 - modal should emit shown and hidden event after body class toggled
