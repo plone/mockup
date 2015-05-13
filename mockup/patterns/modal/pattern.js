@@ -811,8 +811,8 @@ define([
       $(window.parent).on('resize.plone-modal.patterns', function() {
         self.positionModal();
       });
-      self.emit('shown');
       $('body').addClass('plone-modal-open');
+      self.emit('shown');
     },
     hide: function() {
       var self = this;
@@ -837,8 +837,8 @@ define([
         self.initModal();
       }
       $(window.parent).off('resize.plone-modal.patterns');
-      self.emit('hidden');
       $('body').removeClass('plone-modal-open');
+      self.emit('hidden');
     },
     redraw: function(response, options) {
       var self = this;

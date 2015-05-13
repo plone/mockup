@@ -4,6 +4,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- modal should emit shown and hidden event after body class toggled
+  [vangheem]
+
 - cancel should also clear created bundle or resource
   [vangheem]
 
