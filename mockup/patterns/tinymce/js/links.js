@@ -531,6 +531,7 @@ define([
       if(self.options.upload){
         self.$upload = $('.uploadify-me', self.modal.$modal);
         self.options.upload.relatedItems = self.options.relatedItems;
+        self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {
           // Add upload data and path_uid to the upload node's data attributes.

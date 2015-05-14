@@ -299,7 +299,7 @@ define([
       self.emit('selecting');
       var data = self.$el.select2('data');
       data.push(item);
-      self.$el.select2('data', data);
+      self.$el.select2('data', data, true);
       item.selected = true;
       self.emit('selected');
     },
@@ -312,7 +312,7 @@ define([
           data.splice(i, 1);
         }
       });
-      self.$el.select2('data', data);
+      self.$el.select2('data', data, true);
       item.selected = false;
       self.emit('deselected');
     },

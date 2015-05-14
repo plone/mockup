@@ -86,7 +86,8 @@ define([
         basePath: '/',
         vocabularyUrl: null,
         width: 500,
-        maximumSelectionSize: 1
+        maximumSelectionSize: 1,
+        selectableTypes: ['Folder']
       }
     },
 

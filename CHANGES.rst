@@ -4,7 +4,9 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
-- No changes yet.
+- fix selecting a folder to upload to for upload pattern
+  [vangheem]
+
 
 2.0.3 (2015-05-13)
 ------------------
