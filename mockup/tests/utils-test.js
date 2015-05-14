@@ -180,10 +180,10 @@ define([
       });
       it('test custom zIndex', function() {
         var loading = new utils.Loading({
-          zIndex: function() { return 999; }
+          zIndex: function() { return 99999; }
         });
         loading.show();
-        expect(loading.$el[0].style.zIndex + '').to.equal('999');
+        expect(loading.$el[0].style.zIndex + '').to.equal('99999');
       });
       it('works with backdrop', function() {
         var initCalled = false;
