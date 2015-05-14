@@ -558,17 +558,7 @@ define([
       }
 
       self.loading = new utils.Loading({
-        backdrop: self.backdrop,
-        zIndex: function() {
-          if (self.modalInitialized()) {
-            var zIndex = self.$modal.css('zIndex');
-            if (zIndex) {
-              return parseInt(zIndex, 10) + 1;
-            }
-          } else {
-            return 10005;
-          }
-        }
+        backdrop: self.backdrop
       });
 
       $(window.parent).resize(function() {

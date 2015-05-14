@@ -4,6 +4,10 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- update loading icon to work without font icons and handle
+  using with modals and backdrops better
+  [vangheem]
+
 - fix selecting a folder to upload to for upload pattern
   [vangheem]
 

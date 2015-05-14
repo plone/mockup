@@ -190,7 +190,7 @@ define([
      *   zIndex(integer or function): to override default z-index used
      */
     var self = this;
-    self.className = 'mockup-loader-icon';
+    self.className = 'plone-loader';
     var defaults = {
       backdrop: null,
       zIndex: 10005 // can be a function
@@ -201,7 +201,7 @@ define([
     self.options = $.extend({}, defaults, options);
     self.$el = $('.' + self.className);
     if(self.$el.length === 0){
-      self.$el = $('<div><span class="glyphicon glyphicon-refresh" /></div>');
+      self.$el = $('<div><div></div></div>');
       self.$el.addClass(self.className).hide().appendTo('body');
     }
 
@@ -209,7 +209,15 @@ define([
       self.$el.show();
       var zIndex = self.options.zIndex;
       if (typeof(zIndex) === 'function') {
-        zIndex = zIndex();
+        zIndex = Math.max(zIndex(), 10005);
+      }else{
+        // go through all modals and backdrops and make sure we have a higher
+        // z-index to use
+        zIndex = 10005;
+        $('.plone-modal-wrapper,.plone-modal-backdrop').each(function(){
+          zIndex = Math.max(zIndex, $(this).css('zIndex') || 10005);
+        });
+        zIndex += 1;
       }
       self.$el.css('zIndex', zIndex);
 
@@ -268,6 +276,8 @@ define([
     },
     QueryHelper: QueryHelper,
     Loading: Loading,
+    // provide default loader
+    loading: new Loading(),
     getAuthenticator: function() {
       return $('input[name="_authenticator"]').val();
     }
