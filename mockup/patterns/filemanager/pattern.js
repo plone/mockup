@@ -237,6 +237,10 @@ define([
         self.openFile(e);
       });
       self.$editor = self.$('.editor');
+
+      $(window).on('resize', function() {
+        self.resizeEditor();
+      });
     },
     openFile: function(event) {
       var self = this;
@@ -385,6 +389,7 @@ define([
 
     resizeEditor: function() {
         var self = this;
+
         var tabBox = self.$tabs.parent();
 
         //Contains both the tabs, and editor window
@@ -392,13 +397,18 @@ define([
         var h = container.innerHeight();
         h -= tabBox.outerHeight();
 
+        //+2 for the editor borders
+        h -= 2;
+
         //accounts for the borders/margin
         self.$editor.height(h);
-
         var w = container.innerWidth();
         w -= (container.outerWidth(true) - container.innerWidth());
 
         self.$editor.width(w);
+        //This forces ace to redraw if the container has changed size
+        self.ace.editor.resize();
+        self.ace.editor.$blockScrolling = Infinity;
     }
   });
 
