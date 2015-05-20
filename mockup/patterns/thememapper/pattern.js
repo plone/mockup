@@ -31,11 +31,12 @@ define([
   'jquery',
   'mockup-patterns-base',
   'underscore',
+  'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup'
-], function($, Base, _, InspectorTemplate, FileManager, ButtonView, ButtonGroup) {
+], function($, Base, _, _t, InspectorTemplate, FileManager, ButtonView, ButtonGroup) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
@@ -457,13 +458,13 @@ define([
       });
       self.fileManager = new FileManager(self.$fileManager, self.options.filemanagerConfig);
       self.mockupInspector = new Inspector(self.$mockupInspector, {
-        name: 'HTML mockup',
+        name: _t('HTML mockup'),
         ruleBuilder: self.ruleBuilder,
         url: self.options.mockupUrl,
         showReload: true
       });
       self.unthemedInspector = new Inspector(self.$unthemedInspector, {
-        name: 'Unthemed content',
+        name: _t('Unthemed content'),
         ruleBuilder: self.ruleBuilder,
         url: self.options.unthemedUrl
       });
@@ -495,8 +496,8 @@ define([
       var self = this;
       self.showInspectorsButton = new ButtonView({
         id: 'showinspectors',
-        title: 'Show inspectors',
-        tooltip: 'Show inspector panels',
+        title: _t('Show inspectors'),
+        tooltip: _t('Show inspector panels'),
         context: 'default'
       });
       self.showInspectorsButton.on('button:click', function(){
@@ -509,19 +510,19 @@ define([
 
       self.buildRuleButton = new ButtonView({
         id: 'buildrule',
-        title: 'Build rule',
-        tooltip: 'rule building wizard',
+        title: _t('Build rule'),
+        tooltip: _t('rule building wizard'),
         context: 'default'
       });
       self.fullscreenButton = new ButtonView({
         id: 'fullscreenEditor',
-        title: 'Fullscreen',
-        tooltip: 'view the editor in fullscreen',
+        title: _t('Fullscreen'),
+        tooltip: _t('view the editor in fullscreen'),
         context: 'default'
       });
       self.fullscreenButton.on('button:click', function() {
         var btn = $('<a href="#">'+
-            '<span class="btn btn-danger closeeditor">Close Fullscreen</span>'+
+            '<span class="btn btn-danger closeeditor">' + _t("Close Fullscreen") + '</span>'+
             '</a>').prependTo($('.tree'));
 
         $(btn).click(function() {
@@ -533,8 +534,8 @@ define([
       });
       self.previewThemeButton = new ButtonView({
         id: 'previewtheme',
-        title: 'Preview theme',
-        tooltip: 'preview theme in a new window',
+        title: _t('Preview theme'),
+        tooltip: _t('preview theme in a new window'),
         context: 'default'
       });
       self.previewThemeButton.on('button:click', function(){
@@ -543,8 +544,8 @@ define([
 
       self.helpButton = new ButtonView({
         id: 'helpbutton',
-        title: 'Help',
-        tooltip: 'Show help',
+        title: _t('Help'),
+        tooltip: _t('Show help'),
         context: 'default'
       });
       self.helpButton.on('button:click', function(){
