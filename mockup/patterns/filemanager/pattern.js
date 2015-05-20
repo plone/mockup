@@ -224,6 +224,8 @@ define([
       self.$tree = self.$('.tree');
       self.$nav = self.$('nav');
       self.$tabs = $('ul.nav', self.$nav);
+      self.$editorContainer = $('.nav-and-editor');
+
       self.options.treeConfig.onLoad = function() {
         // on loading initial data, activate first node if available
         var node = self.$tree.tree('getNodeById', 1);
@@ -237,6 +239,10 @@ define([
         self.openFile(e);
       });
       self.$editor = self.$('.editor');
+
+      $(window).on('resize', function() {
+        self.resizeEditor();
+      });
     },
     openFile: function(event) {
       var self = this;
@@ -390,7 +396,11 @@ define([
         //Contains both the tabs, and editor window
         var container = tabBox.parent().parent();
         var h = container.innerHeight();
+
         h -= tabBox.outerHeight();
+
+        //+2 for the editor borders
+        h -= 2;
 
         //accounts for the borders/margin
         self.$editor.height(h);

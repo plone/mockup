@@ -435,6 +435,7 @@ define([
     helpButton: null,
     hidden: true,
     fileManager: null,
+    editor: null,
     mockupInspector: null,
     unthemedInspector: null,
     $fileManager: null,
@@ -513,7 +514,25 @@ define([
         tooltip: 'rule building wizard',
         context: 'default'
       });
+      self.fullscreenButton = new ButtonView({
+        id: 'fullscreenEditor',
+        title: 'Fullscreen',
+        tooltip: 'view the editor in fullscreen',
+        context: 'default'
+      });
+      self.fullscreenButton.on('button:click', function() {
+        var btn = $('<a href="#">'+
+            '<span class="btn btn-danger closeeditor">Close Fullscreen</span>'+
+            '</a>').prependTo($('.tree'));
 
+        $(btn).click(function() {
+          $('.container').removeClass('fullscreen').trigger('resize');
+          $(btn).remove();
+        });
+
+        //resize tells the editor window to resize as well.
+        $('.container').addClass('fullscreen').trigger('resize');
+      });
       self.previewThemeButton = new ButtonView({
         id: 'previewtheme',
         title: 'Preview theme',
@@ -539,6 +558,7 @@ define([
           self.showInspectorsButton,
           self.buildRuleButton,
           self.previewThemeButton,
+          self.fullscreenButton,
           self.helpButton
         ],
         id: 'mapper'
