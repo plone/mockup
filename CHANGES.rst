@@ -4,6 +4,9 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- fix rename structure popover. It was missing _t template param
+  [vangheem]
+
 - update loading icon to work without font icons and handle
   using with modals and backdrops better
   [vangheem]
