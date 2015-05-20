@@ -269,6 +269,7 @@ define([
                 $item.addClass('active');
                 self.openEditor($item.attr('data-path'));
               } else {
+                self.fileData[self.currentPath].contents = self.ace.editor.getValue();
                 self.ace.setText('');
               }
             }
@@ -316,7 +317,7 @@ define([
     openEditor: function(path) {
       var self = this;
       // first we need to save the current editor content
-      if(self.currentPath) {
+      if(self.currentPath && self.$tabs.length > 1) {
         self.fileData[self.currentPath].contents = self.ace.editor.getValue();
       }
       self.currentPath = path;
