@@ -435,7 +435,6 @@ define([
     helpButton: null,
     hidden: true,
     fileManager: null,
-    editor: null,
     mockupInspector: null,
     unthemedInspector: null,
     $fileManager: null,
@@ -529,7 +528,6 @@ define([
           $('.container').removeClass('fullscreen').trigger('resize');
           $(btn).remove();
         });
-
         //resize tells the editor window to resize as well.
         $('.container').addClass('fullscreen').trigger('resize');
       });
