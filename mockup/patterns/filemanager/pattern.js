@@ -408,6 +408,7 @@ define([
         self.$editor.width(w);
         //This forces ace to redraw if the container has changed size
         self.ace.editor.resize();
+        self.ace.editor.$blockScrolling = Infinity;
     }
   });
 
