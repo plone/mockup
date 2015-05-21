@@ -46,9 +46,6 @@ toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignrig
  *
  */
 
-/* global alert:true */
-
-
 define([
   'jquery',
   'underscore',

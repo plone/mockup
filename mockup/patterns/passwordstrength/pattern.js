@@ -24,8 +24,6 @@
  *
  */
 
-/* global alert:true */
-
 define([
   'jquery',
   'mockup-patterns-base'

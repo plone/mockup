@@ -66,9 +66,6 @@
  *
  */
 
- /* global confirm:true */
-
-
 define([
   'jquery',
   'underscore',
@@ -811,7 +808,7 @@ define([
       }
       self.emit('hide');
       if (self._suppressHide) {
-        if (!confirm(self._suppressHide)) {
+        if (!window.confirm(self._suppressHide)) {
           return;
         }
       }

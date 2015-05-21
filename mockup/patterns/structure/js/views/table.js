@@ -9,7 +9,8 @@ define([
   'mockup-patterns-moment',
   'mockup-patterns-structure-url/js/models/result',
   'mockup-patterns-structure-url/js/views/actionmenu',
-  'translate'
+  'translate',
+  'bootstrap-alert'
 ], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
             Moment, Result, ActionMenu, _t) {
   'use strict';

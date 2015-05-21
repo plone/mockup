@@ -86,9 +86,6 @@
  *
  */
 
-/* global alert:true */
-
-
 define([
   'jquery',
   'mockup-patterns-base',
@@ -205,7 +202,7 @@ define([
           onSave(resp);
         }
         if(resp.success !== undefined && !resp.success && resp.msg){
-          alert(resp.msg);
+          window.alert(resp.msg);
         }
       }).always(function(){
         self.loading.hide();
@@ -213,7 +210,7 @@ define([
         if(onError){
           onError(resp);
         }else{
-          alert(_t('Error processing ajax request for action: ') + action);
+          window.alert(_t('Error processing ajax request for action: ') + action);
         }
       });
     }

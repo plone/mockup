@@ -1,5 +1,3 @@
-/* global alert:true */
-
 define([
   'jquery',
   'underscore',

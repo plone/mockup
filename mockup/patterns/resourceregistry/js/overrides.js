@@ -1,5 +1,3 @@
-/* global alert:true, confirm:true */
-
 define([
   'jquery',
   'underscore',
@@ -66,7 +64,7 @@ define([
     itemDeleted: function(e){
       e.preventDefault();
       var that = this;
-      if(confirm('Are you sure you want to delete this override?')){
+      if(window.confirm('Are you sure you want to delete this override?')){
         that.options.data.overrides.splice(
           that.options.data.overrides.indexOf(that.editing), 1);
         that.tabView.saveData('delete-file', {
@@ -165,7 +163,7 @@ define([
             that.$el.find('.plone-btn-primary,.plone-btn-default').removeClass('disabled');
           });
         }).fail(function(){
-          alert(_t('error loading resource for editing'));
+          window.alert(_t('error loading resource for editing'));
           that.tabView.loading.hide();
         });
       }
