@@ -1,5 +1,3 @@
-/* global alert:true, confirm:true */
-
 define([
   'jquery',
   'underscore',
@@ -184,7 +182,7 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      if(confirm(_t('Are you sure you want to delete the ${name} resource?', {name: this.options.name}))){
+      if(window.confirm(_t('Are you sure you want to delete the ${name} resource?', {name: this.options.name}))){
         delete this.options.registryView.options.data.resources[this.options.name];
         this.options.registryView.dirty = true;
         this.options.registryView.render();
@@ -263,7 +261,7 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      if(confirm(_t('Are you sure you want to delete the ${name} bundle?', {name: this.options.name}))){
+      if(window.confirm(_t('Are you sure you want to delete the ${name} bundle?', {name: this.options.name}))){
         delete this.options.registryView.options.data.bundles[this.options.name];
         this.options.registryView.dirty = true;
         this.options.registryView.render();
@@ -274,7 +272,7 @@ define([
       e.preventDefault();
       var self = this;
       if(this.options.registryView.dirty){
-        alert(_t('You have unsaved changes. Save or discard before building.'));
+        window.alert(_t('You have unsaved changes. Save or discard before building.'));
       }else{
         var builder = new Builder(self.options.name, self);
         builder.run();
@@ -329,7 +327,7 @@ define([
       if(e){
         e.preventDefault();
       }
-      if(confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
+      if(window.confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
         this._revertData(this.previousData);
         this.activeResource = null;
         this.render();

@@ -1,5 +1,3 @@
-/* global alert:true */
-
 define([
   'jquery',
   'underscore',
@@ -82,7 +80,7 @@ define([
                   modal.hide();
                 },
                 onError: function() {
-                  alert('error on form');
+                  window.alert('error on form');
                 }
               },
               'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
