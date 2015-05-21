@@ -4,6 +4,11 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- Cleanup: Use ``windows.alert`` and ``window.confirm`` instead globals. Remove
+  bootstrap-tooltip from requirejs config, as we have our own. Define more
+  export variables for Bootstrap plugins.
+  [thet]
+
 - fix rename structure popover. It was missing _t template param
   [vangheem]
 
