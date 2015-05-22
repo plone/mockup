@@ -18,8 +18,7 @@ define([
   'mockup-patterns-structure',
   'mockup-patterns-textareamimetypeselector',
   'bootstrap-dropdown',
-  'bootstrap-collapse',
-  'bootstrap-tooltip'
+  'bootstrap-collapse'
 ], function($, registry, Base) {
   'use strict';
 
