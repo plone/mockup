@@ -4,6 +4,10 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- fix weird issue with selecting multiple links and images on a page
+  while you are editing
+  [vangheem]
+
 - Update to jQuery 1.11.3 and moment 2.10.3.
   [thet]
 

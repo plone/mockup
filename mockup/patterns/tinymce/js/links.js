@@ -530,7 +530,7 @@ define([
       // upload init
       if(self.options.upload){
         self.$upload = $('.uploadify-me', self.modal.$modal);
-        self.options.upload.relatedItems = self.options.relatedItems;
+        self.options.upload.relatedItems = $.extend(true, {}, self.options.relatedItems);
         self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {

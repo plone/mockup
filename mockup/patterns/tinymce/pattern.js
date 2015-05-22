@@ -277,10 +277,10 @@ define([
     generateImageUrl: function(data, scale_name) {
       var self = this;
       var url = self.generateUrl(data);
-      if (scale_name !== ""){
+      if (scale_name !== ''){
         var part = scale_name;
-        for(var i=0; i<self.options.scales.length; i++){
-          if(self.options.scales[i].name == scale_name){
+        for(var i=0; i<self.options.scales.length; i=i+1){
+          if(self.options.scales[i].name === scale_name){
             part = self.options.scales[i].part;
           }
         }
