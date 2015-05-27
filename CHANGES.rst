@@ -8,7 +8,7 @@ Changelog
   while you are editing
   [vangheem]
 
-- Update to jQuery 1.11.3 and moment 2.10.3.
+- Update to jQuery 1.11.3, moment 2.10.3 and jquery.recurrenceinput.js v1.4.
   [thet]
 
 - Cleanup: Use ``windows.alert`` and ``window.confirm`` instead globals. Remove
