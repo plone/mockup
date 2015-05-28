@@ -13,7 +13,7 @@
     "jquery": "1.11.3",
     "jquery-form": "3.46.0",
     "jquery.cookie": "1.4.1",
-    "jquery.recurrenceinput.js": "v1.4",
+    "jquery.recurrenceinput.js": "v1.5",
     "lodash": "2.4.1",
     "logging": "",
     "mockup-core": "2.1.8",
