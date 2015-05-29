@@ -4,6 +4,9 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- handle errors better with the modal pattern
+  [vangheem]
+
 - fix weird issue with selecting multiple links and images on a page
   while you are editing
   [vangheem]
