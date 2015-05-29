@@ -10,6 +10,9 @@ Changelog
 - add image modal type
   [vangheem]
 
+- Allow to provide a sort_on and sort_order attributes for the QueryHelper
+  [frapell]
+
 - handle errors better with the modal pattern
   [vangheem]
 
