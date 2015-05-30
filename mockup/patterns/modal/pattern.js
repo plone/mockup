@@ -575,7 +575,7 @@ define([
       }
 
       if (self.$el.is('a')) {
-        if (self.$el.attr('href')) {
+        if (self.$el.attr('href') && !self.options.image) {
           if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
             self.options.target = self.$el.attr('href');
             self.options.content = '';
@@ -640,6 +640,15 @@ define([
       self._show();
     },
 
+    createImageModal: function(){
+      var self = this;
+      self.$wrapper.addClass('image-modal');
+      var src = self.$el.attr('href');
+      // XXX aria?
+      self.$raw = $('<div><h1>Image</h1><div id="content"><div class="modal-image"><img src="' + src + '" /></div></div></div>');
+      self._show();
+    },
+
     initModal: function() {
       var self = this;
       if (self.options.ajaxUrl) {
@@ -648,10 +657,13 @@ define([
         self.createModal = self.createTargetModal;
       } else if (self.options.html) {
         self.createModal = self.createHtmlModal;
+      } else if (self.options.image){
+        self.createModal = self.createImageModal;
       } else {
         self.createModal = self.createBasicModal;
       }
     },
+
     findPosition: function(horpos, vertpos, margin, modalWidth, modalHeight,
                            wrapperInnerWidth, wrapperInnerHeight) {
       var returnpos = {};

@@ -4,6 +4,9 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- add image modal type
+  [vangheem]
+
 - handle errors better with the modal pattern
   [vangheem]
 
