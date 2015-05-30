@@ -109,7 +109,7 @@ define([
       it('getQueryData correctly', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
         var qd = qh.getQueryData('foobar');
-        expect(qd.query).to.equal('{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}]}');
+        expect(qd.query).to.equal('{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}],"sort_on":"is_folderish","sort_order":"reverse"}');
       });
       it('getQueryData use attributes correctly', function() {
         var qh = new utils.QueryHelper({
@@ -128,7 +128,7 @@ define([
       it('selectAjax gets data correctly', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
         var sa = qh.selectAjax();
-        expect(sa.data('foobar').query).to.equal('{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}]}');
+        expect(sa.data('foobar').query).to.equal('{"criteria":[{"i":"SearchableText","o":"plone.app.querystring.operation.string.contains","v":"foobar*"}],"sort_on":"is_folderish","sort_order":"reverse"}');
       });
       it('selectAjax formats results correctly', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
@@ -140,11 +140,11 @@ define([
 
       it('getUrl correct', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/'});
-        expect(qh.getUrl()).to.equal('http://foobar.com/?query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22portal_type%22%5D');
+        expect(qh.getUrl()).to.equal('http://foobar.com/?query=%7B%22criteria%22%3A%5B%5D%2C%22sort_on%22%3A%22is_folderish%22%2C%22sort_order%22%3A%22reverse%22%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22portal_type%22%5D');
       });
       it('getUrl correct and url query params already present', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/?foo=bar'});
-        expect(qh.getUrl()).to.equal('http://foobar.com/?foo=bar&query=%7B%22criteria%22%3A%5B%5D%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22portal_type%22%5D');
+        expect(qh.getUrl()).to.equal('http://foobar.com/?foo=bar&query=%7B%22criteria%22%3A%5B%5D%2C%22sort_on%22%3A%22is_folderish%22%2C%22sort_order%22%3A%22reverse%22%7D&attributes=%5B%22UID%22%2C%22Title%22%2C%22Description%22%2C%22getURL%22%2C%22portal_type%22%5D');
       });
 
 
