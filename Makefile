@@ -93,6 +93,9 @@ test: stamp-bower
 test-once: stamp-bower
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
+test-jenkins: stamp-bower
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_jenkins $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
+
 test-dev:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
