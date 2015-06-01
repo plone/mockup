@@ -4,11 +4,17 @@ Changelog
 2.0.4 (Unreleased)
 ------------------
 
+- Allow to provide a sort_on and sort_order attributes for the QueryHelper
+  [frapell]
+
+- handle errors better with the modal pattern
+  [vangheem]
+
 - fix weird issue with selecting multiple links and images on a page
   while you are editing
   [vangheem]
 
-- Update to jQuery 1.11.3 and moment 2.10.3.
+- Update to jQuery 1.11.3, moment 2.10.3 and jquery.recurrenceinput.js v1.5.
   [thet]
 
 - Cleanup: Use ``windows.alert`` and ``window.confirm`` instead globals. Remove

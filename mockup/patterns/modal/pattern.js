@@ -74,8 +74,9 @@ define([
   'pat-registry',
   'mockup-router',
   'mockup-utils',
+  'translate',
   'jquery.form'
-], function($, _, Base, Backdrop, registry, Router, utils) {
+], function($, _, Base, Backdrop, registry, Router, utils, _t) {
   'use strict';
 
   var Modal = Base.extend({
@@ -260,6 +261,7 @@ define([
             } else if (options.onError) {
               options.onError(xhr, textStatus, errorStatus);
             } else {
+              window.alert(_t('There was an error submitting the form.'));
               console.log('error happened do something');
             }
             self.emit('formActionError', [xhr, textStatus, errorStatus]);
@@ -327,28 +329,26 @@ define([
 
         // ajax version
         $.ajax({
-          url: url,
-          error: function(xhr, textStatus, errorStatus) {
-            if (textStatus === 'timeout' && options.onTimeout) {
-              options.onTimeout(self.$modal, xhr, errorStatus);
+          url: url
+        }).fail(function(xhr, textStatus, errorStatus) {
+          if (textStatus === 'timeout' && options.onTimeout) {
+            options.onTimeout(self.$modal, xhr, errorStatus);
 
-            // on "error", "abort", and "parsererror"
-            } else if (options.onError) {
-              options.onError(xhr, textStatus, errorStatus);
-            } else {
-              console.log('error happened do something');
-            }
-            self.loading.hide();
-            self.emit('linkActionError', [xhr, textStatus, errorStatus]);
-          },
-          success: function(response, state, xhr) {
-            self.redraw(response, patternOptions);
-            if (options.onSuccess) {
-              options.onSuccess(self, response, state, xhr);
-            }
-            self.loading.hide();
-            self.emit('linkActionSuccess', [response, state, xhr]);
+          // on "error", "abort", and "parsererror"
+          } else if (options.onError) {
+            options.onError(xhr, textStatus, errorStatus);
+          } else {
+            window.alert(_t('There was an error loading modal.'));
           }
+          self.emit('linkActionError', [xhr, textStatus, errorStatus]);
+        }).done(function(response, state, xhr) {
+          self.redraw(response, patternOptions);
+          if (options.onSuccess) {
+            options.onSuccess(self, response, state, xhr);
+          }
+          self.emit('linkActionSuccess', [response, state, xhr]);
+        }).always(function(){
+          self.loading.hide();
         });
       },
       render: function(options) {
@@ -602,10 +602,22 @@ define([
         type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
-        self.loading.hide();
         self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
         self.emit('after-ajax', self, textStatus, xhr);
         self._show();
+      }).fail(function(xhr, textStatus, errorStatus){
+        var options = self.options.actionOptions;
+        if (textStatus === 'timeout' && options.onTimeout) {
+          options.onTimeout(self.$modal, xhr, errorStatus);
+        } else if (options.onError) {
+          options.onError(xhr, textStatus, errorStatus);
+        } else {
+          window.alert(_t('There was an error loading modal.'));
+          self.hide();
+        }
+        self.emit('linkActionError', [xhr, textStatus, errorStatus]);
+      }).always(function(){
+        self.loading.hide();
       });
     },
 
