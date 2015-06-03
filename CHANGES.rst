@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0.5 (unreleased)
+------------------
+
+- Bugfix in pat-tooltip's HTML support.
+  [thet]
+
+
 2.0.4 (2015-05-31)
 ------------------
 
