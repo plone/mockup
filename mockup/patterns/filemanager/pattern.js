@@ -246,6 +246,9 @@ define([
       var self = this;
       var doc = event.node.path;
       if (event.node.folder){
+        if( self.options.theme ) {
+          self.setUploadUrl(event.node.path);
+        }
         return true;
       }
       if(self.fileData[doc]) {
@@ -386,7 +389,20 @@ define([
       parts.reverse();
       return '/' + parts.join('/');
     },
+    getUpload: function() {
+      var self = this;
 
+      return _.find(self.views, function(x) { return x.upload !== undefined });
+    },
+    getUploadUrl: function(relativePath) {
+      var self = this;
+
+      var url = self.options.uploadUrl;
+      url += relativePath;
+      url += "?_authenticator=" + utils.getAuthenticator();
+
+      return url;
+    },
     resizeEditor: function() {
         var self = this;
 
@@ -411,6 +427,24 @@ define([
           self.ace.editor.resize();
           self.ace.editor.$blockScrolling = Infinity;
         }
+    },
+    setUploadUrl: function(path) {
+      var self = this;
+
+      if( path === undefined ) {
+        path = "";
+      }
+
+      var view = self.getUpload();
+      if( view !== undefined ) {
+        var url = self.options.uploadUrl +
+                  path +
+                  "/themeFileUpload" +
+                  "?_authenticator=" +
+                  utils.getAuthenticator();
+
+        view.upload.dropzone.options.url = url;
+      }
     }
   });
 

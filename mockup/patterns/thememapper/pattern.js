@@ -424,6 +424,7 @@ define([
     trigger: '.pat-thememapper',
     defaults: {
       filemanagerConfig: {},
+      themeUrl: null,
       mockupUrl: null,
       unthemedUrl: null,
       helpUrl: null,
@@ -456,7 +457,12 @@ define([
       self.ruleBuilder = new RuleBuilder(function(){
         debugger; //callback
       });
+
+      self.options.filemanagerConfig.uploadUrl = self.options.themeUrl;
+      self.options.filemanagerConfig.theme = true;
       self.fileManager = new FileManager(self.$fileManager, self.options.filemanagerConfig);
+      self.fileManager.setUploadUrl();
+
       self.mockupInspector = new Inspector(self.$mockupInspector, {
         name: _t('HTML mockup'),
         ruleBuilder: self.ruleBuilder,
