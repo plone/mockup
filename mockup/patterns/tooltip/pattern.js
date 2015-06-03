@@ -44,8 +44,10 @@ define([
   var Tooltip = Base.extend({
     name: 'tooltip',
     trigger: '.pat-tooltip',
-
-    init: function(element, options) {
+    defaults: {
+      html: false
+    },
+    init: function() {
         this.data = new bootstrapTooltip(this.$el[0], this.options);
     },
   });
@@ -308,7 +310,7 @@ define([
     var $tip  = this.tip()
     var title = this.getTitle()
 
-    $tip.find('.tooltip-inner')[this.options.html ? 'ht`ml' : 'text'](title)
+    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
     $tip.removeClass('fade in top bottom left right')
   }
 
