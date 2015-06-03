@@ -48,6 +48,12 @@ define([
       html: false
     },
     init: function() {
+        if (this.options.html === 'true') {
+          // TODO: fix the parser!
+          this.options.html = true;
+        } else {
+          this.options.html = false;
+        }
         this.data = new bootstrapTooltip(this.$el[0], this.options);
     },
   });
