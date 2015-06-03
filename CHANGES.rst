@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Set pat-tooltip's html option to ``true`` by default, as it cannot be set by
+  the options. Real fix has still to be done.
+  [thet]
+
 - Bugfix in pat-tooltip's HTML support.
   [thet]
 
