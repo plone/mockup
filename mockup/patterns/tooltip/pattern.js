@@ -81,7 +81,7 @@ define([
     trigger: 'hover focus',
     title: '',
     delay: 0,
-    html: false,
+    html: true,  // TODO: fix bug, where this setting overwrites whatever is set in options
     container: false,
     viewport: {
       selector: 'body',
