@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- fix livesearch word wrapping issue
+  [vangheem]
+
 - capitalize "Save" buttons on resource registry
   [vangheem]
 

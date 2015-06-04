@@ -156,7 +156,7 @@ define([
 
       self.$el.addClass('livesearch-active');
       var pos = self.$input.position();
-      self.$results.width(self.$input.outerWidth());
+      self.$results.width(self.$el.outerWidth());
       self.$results.css({
         top: pos.top + self.$input.outerHeight(),
         left: pos.left
