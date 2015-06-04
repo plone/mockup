@@ -14,7 +14,7 @@ define([
       '<div class="clearfix">' +
         '<div class="btn-group pull-right">' +
           '<button class="plone-btn plone-btn-default add-pattern"><%- _t("Add pattern") %></button>' +
-          '<button class="plone-btn plone-btn-default save"><%- _t("save") %></button>' +
+          '<button class="plone-btn plone-btn-default save"><%- _t("Save") %></button>' +
         '</div>' +
       '</div>' +
       '<div class="row clearfix">' +
