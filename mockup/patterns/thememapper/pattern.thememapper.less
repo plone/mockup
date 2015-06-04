@@ -194,32 +194,45 @@
             display: inline;
         }
 
+        .item {
+            margin: 10px 0;
+            height: 50px;
+            div {
+                display: table-cell;
+            }
+        }
+
         .browse {
             margin: 0 0 10px 75px;
         }
 
-        .col-md-9 {
-            width: 75%;
+        .title {
+            width: 250px;
         }
 
-        .col-md-8 {
-            width: 66%;
+        .action {
+            width: 20px;
         }
 
-        .col-md-1 {
-            width: 8%;
+        .info {
+            width: 100px;
+
+            img {
+                display: inline;
+                background-color: white;
+                max-height: 50px;
+                float: right;
+                max-width: 50px;
+                margin-top: -35px;
+            }
         }
 
-        .col-md-3 {
-            width: 25%;
+        .controls {
+            display: none;
         }
 
         .sr-only {
             display: none;
-        }
-
-        .upload-queue {
-            clear: both;
         }
     }
 }
