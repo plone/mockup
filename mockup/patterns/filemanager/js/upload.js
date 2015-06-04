@@ -19,7 +19,10 @@ define([
       PopoverView.prototype.render.call(this);
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), {
         url: self.app.options.uploadUrl,
-        success: function() {
+        success: function(response) {
+          if( self.callback ) {
+            self.callback.apply(self.app, [response]);
+          }
         }
       });
       return this;

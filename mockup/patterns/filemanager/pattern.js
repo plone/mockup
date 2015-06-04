@@ -154,7 +154,8 @@ define([
             tooltip: _t('Upload file to current directory'),
             context: 'default'
           }),
-          app: self
+          app: self,
+          callback: self.addTreeElement
         });
         self.views.push(uploadView);
         mainButtons.push(uploadView.triggerView);
@@ -213,6 +214,43 @@ define([
     },
     $: function(selector){
       return this.$el.find(selector);
+    },
+    addTreeElement: function(file) {
+      var self = this;
+
+      if( self.$tree === undefined ) {
+        return;
+      }
+
+      var node = self.getSelectedNode();
+      var path = "";
+      var name = file.name;
+
+      if( node.filename ) {
+        //We just want the selected folder, not an object in it.
+        path = node.path.substr(0, node.path.indexOf(node.filename) - 1);
+        node = self.$tree.tree('moveUp');
+      }
+      else if( node.path ){
+        path = node.path;
+      }
+
+      var options = {
+        label: name,
+        path: path + '/' + name,
+        filename: name,
+        fileType: name.substr(name.lastIndexOf('.') + 1, name.length),
+        folder: false,
+        name: name
+      };
+
+      if( node === false )
+      {
+        //If node is empty, jqtree makes the new node a root
+        node = null
+      }
+
+      self.$tree.tree('appendNode', options, node);
     },
     render: function(){
       var self = this;
@@ -393,15 +431,6 @@ define([
       var self = this;
 
       return _.find(self.views, function(x) { return x.upload !== undefined });
-    },
-    getUploadUrl: function(relativePath) {
-      var self = this;
-
-      var url = self.options.uploadUrl;
-      url += relativePath;
-      url += "?_authenticator=" + utils.getAuthenticator();
-
-      return url;
     },
     resizeEditor: function() {
         var self = this;

@@ -1,7 +1,7 @@
 <div class="upload-container upload-multiple">
     <h2 class="title"><%- _t("Upload stuff here") %></h2>
     <p class="help">
-        <%- _t('Just drag N drop stuff on the area below or press "upload" button.') %>
+        <%- _t('Just drag N drop stuff on the area below or press the "browse" button.') %>
     </p>
     <div class="upload-area">
         <div class="fallback">
