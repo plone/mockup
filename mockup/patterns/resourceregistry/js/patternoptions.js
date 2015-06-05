@@ -11,7 +11,7 @@ define([
     tagName: 'div',
     className: 'tab-pane patternoptions',
     template: _.template(
-      '<div class="clearfix">' +
+      '<div class="buttons-container">' +
         '<div class="btn-group pull-right">' +
           '<button class="plone-btn plone-btn-default add-pattern"><%- _t("Add pattern") %></button>' +
           '<button class="plone-btn plone-btn-primary save"><%- _t("Save") %></button>' +

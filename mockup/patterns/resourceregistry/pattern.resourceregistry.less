@@ -32,6 +32,10 @@
         display: block;
       }
     }
+    .tab-content{
+        padding: 0 10px;
+        background-color:white;
+    }
 
     .form-group:extend(.form-group all){}
     .help-block:extend(.help-block all){}
@@ -111,6 +115,23 @@
     .plone-legacy-resource-entry{
         .field-compile, .field-expression, .field-enabled, .field-conditionalcomment, .field-name{
             display: none;
+        }
+    }
+
+    .buttons-container{
+        position: relative;
+        top: -45px;
+        right: 10px;
+    }
+
+    .autotabs{
+        margin-bottom:0;
+        border-bottom: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        .autotoc-nav{
+            margin: -6px -12px -6px;
         }
     }
 }

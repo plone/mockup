@@ -106,11 +106,13 @@ define([
     tagName: 'div',
     activeTab: 'registry',
     template: _.template('' +
-      '<ul class="main-tabs nav nav-tabs" role="tablist">' +
-        '<li class="registry-btn"><a href="#"><%- _t("Registry") %></a></li>' +
-        '<li class="overrides-btn"><a href="#"><%- _t("Overrides") %></a></li>' +
-        '<li class="lessvariables-btn"><a href="#"><%- _t("Less Variables") %></a></li>' +
-        '<li class="patternoptions-btn"><a href="#"><%- _t("Pattern Options") %></a></li>' +
+      '<div class="autotabs">' +
+        '<ul class="main-tabs autotoc-nav" role="tablist">' +
+          '<li class="registry-btn"><a href="#"><%- _t("Registry") %></a></li>' +
+          '<li class="overrides-btn"><a href="#"><%- _t("Overrides") %></a></li>' +
+          '<li class="lessvariables-btn"><a href="#"><%- _t("Less Variables") %></a></li>' +
+          '<li class="patternoptions-btn"><a href="#"><%- _t("Pattern Options") %></a></li>' +
+        '</ul>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
@@ -126,9 +128,9 @@ define([
         e.preventDefault();
         self.activeTab = $(e.target).parent()[0].className.replace('-btn', '');
       }
-      self.$('.main-tabs > li').removeClass('active');
+      self.$('.main-tabs > li a').removeClass('active');
       self.$content.find('.tab-pane').removeClass('active');
-      self.tabs[self.activeTab].btn.addClass('active');
+      self.tabs[self.activeTab].btn.find('a').addClass('active');
       self.tabs[self.activeTab].content.addClass('active');
     },
     initialize: function(options) {

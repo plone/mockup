@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- use autotoc tab style for resource registry
+  [vangheem]
+
 - be able to add new file to resource registry overrides
   [vangheem]
 

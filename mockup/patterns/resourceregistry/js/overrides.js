@@ -17,7 +17,7 @@ define([
     newFile: false,
 
     template: _.template(
-      '<div class="clearfix">' +
+      '<div class="buttons-container">' +
         '<div class="btn-group pull-right">' +
           '<button class="plone-btn plone-btn-primary add-file"><%- _t("Add file") %></button> ' +
         '</div>' +
