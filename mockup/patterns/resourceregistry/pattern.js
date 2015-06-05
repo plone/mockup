@@ -234,6 +234,7 @@ define([
     },
     init: function() {
       var self = this;
+      self.$el.empty();
       self.tabs = new TabView(self.options);
       self.$el.append(self.tabs.render().el);
     }

@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- be able to add new file to resource registry overrides
+  [vangheem]
+
 - fix livesearch word wrapping issue
   [vangheem]
 

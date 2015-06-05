@@ -344,7 +344,7 @@ define([
     template: _.template(
       '<div class="clearfix">' +
         '<div class="plone-btn-group pull-right">' +
-          '<button class="plone-btn plone-btn-success save"><%- _t("Save") %></button>' +
+          '<button class="plone-btn plone-btn-primary save"><%- _t("Save") %></button>' +
           '<button class="plone-btn plone-btn-default cancel"><%- _t("Cancel") %></button>' +
         '</div>' +
         '<div class="plone-btn-group pull-right">' +
