@@ -33,7 +33,8 @@ define([
           containerData: self.options.containerData,
           resourceName: self.options.name,
           registryView: self.options.registryView,
-          parent: self.options.parent
+          parent: self.options.parent,
+          form: self
         });
         if(!options.value){
           options.value = '';
@@ -185,6 +186,10 @@ define([
       if(window.confirm(_t('Are you sure you want to delete the ${name} resource?', {name: this.options.name}))){
         delete this.options.registryView.options.data.resources[this.options.name];
         this.options.registryView.dirty = true;
+        if(this.options.registryView.activeResource &&
+           this.options.registryView.activeResource.resource.name === this.options.name){
+          this.options.registryView.activeResource = null;
+        }
         this.options.registryView.render();
       }
     }
@@ -245,8 +250,7 @@ define([
         e.preventDefault();
       }
       var options = $.extend({}, this.options, {
-        containerData: this.options.registryView.options.data.bundles,
-        parent: this
+        containerData: this.options.registryView.options.data.bundles
       });
       var resource = new BundleEntryView(options);
       this.registryView.showResourceEditor(resource, this, 'bundle');
@@ -264,6 +268,10 @@ define([
       if(window.confirm(_t('Are you sure you want to delete the ${name} bundle?', {name: this.options.name}))){
         delete this.options.registryView.options.data.bundles[this.options.name];
         this.options.registryView.dirty = true;
+        if(this.options.registryView.activeResource &&
+           this.options.registryView.activeResource.resource.name === this.options.name){
+          this.options.registryView.activeResource = null;
+        }
         this.options.registryView.render();
       }
     },
@@ -520,8 +528,17 @@ define([
         development: self.options.data.development && 'true' || 'false'
       }, function(){
         self.dirty = false;
+        var activeResource = self.activeResource;
+        self.activeResource = null;
         self.previousData = self._copyData();
         self.render();
+        if(activeResource){
+          var name = activeResource.resource.name;
+          self.options.data.resources[name] = {
+            enabled: true
+          };
+          self.items.resources[name].editResource();
+        }
       });
     },
 

@@ -128,16 +128,20 @@ define([
         }
         var items = [];
         var url;
-        if(resource.js && resource.js.indexOf('++plone++') !== -1){
-          url = base + resource.js;
-          if(overrides.indexOf(url) === -1){
-            items.push({id: url, text: url});
+        if(resource.js){
+          if(resource.js && resource.js.indexOf('++plone++') !== -1){
+            url = base + resource.js;
+            if(overrides.indexOf(url) === -1){
+              items.push({id: url, text: url});
+            }
           }
         }
-        for(var i=0; i<resource.css.length; i=i+1){
-          url = base + resource.css[i];
-          if(overrides.indexOf(url) === -1 && url.indexOf('++plone++') !== -1){
-            items.push({id: url, text: url});
+        if(resource.css){
+          for(var i=0; i<resource.css.length; i=i+1){
+            url = base + resource.css[i];
+            if(overrides.indexOf(url) === -1 && url.indexOf('++plone++') !== -1){
+              items.push({id: url, text: url});
+            }
           }
         }
         return items;
