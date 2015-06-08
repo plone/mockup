@@ -251,6 +251,8 @@ define([
       }
       var newNode = self.$tree.tree('appendNode', options, node);
       self.$tree.tree('selectNode', newNode);
+      self.openFile({node: newNode});
+      //Close the upload popover
       self.getUpload().options.triggerView.$el.click();
     },
     render: function(){
