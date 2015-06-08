@@ -249,8 +249,9 @@ define([
         //If node is empty, jqtree makes the new node a root
         node = null
       }
-
-      self.$tree.tree('appendNode', options, node);
+      var newNode = self.$tree.tree('appendNode', options, node);
+      self.$tree.tree('selectNode', newNode);
+      self.getUpload().options.triggerView.$el.click();
     },
     render: function(){
       var self = this;
@@ -310,10 +311,11 @@ define([
                 $item.addClass('active');
                 self.openEditor($item.attr('data-path'));
               } else {
-                self.ace.setText('');
+                self.openEditor();
               }
             }
             $(this).parent().remove();
+            self.resizeEditor();
           });
           $('.select', $item).click(function(e){
             e.preventDefault();
@@ -368,7 +370,12 @@ define([
 
       self.resizeEditor();
 
-      if( typeof self.fileData[path].info !== 'undefined' )
+      if( self.currentPath === undefined ) {
+          self.ace.setText();
+          self.ace.setSyntax('text');
+          self.ace.editor.clearSelection();
+      }
+      else if( typeof self.fileData[path].info !== 'undefined' )
       {
           var preview = self.fileData[path].info;
           self.ace.editor.off();
@@ -444,7 +451,6 @@ define([
 
         //+2 for the editor borders
         h -= 2;
-
         //accounts for the borders/margin
         self.$editor.height(h);
         var w = container.innerWidth();
