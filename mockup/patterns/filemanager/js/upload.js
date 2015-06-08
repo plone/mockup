@@ -11,7 +11,7 @@ define([
     className: 'popover upload',
     title: _.template('<%= _t("Upload") %>'),
     content: _.template(
-      '<span class="current-path"></span>' +
+      '<span>Location: <span class="current-path"></span></span>' +
       '<input type="text" name="upload" style="display:none" />' +
       '<div class="uploadify-me"></div>'),
     render: function() {
