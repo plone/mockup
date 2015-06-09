@@ -94,12 +94,14 @@ define([
 
       // set id on current element
       var id = utils.setId(self.$el);
-      self.$wrapper = $('<div/>').css({
+      self.$wrapper = $('<div class="editorWrapper" />').css({
         height: self.options.height + 25, // weird sizing issue here...
         width: self.options.width,
         position: 'relative'
       });
-      self.$el.wrap(self.$wrapper);
+      if( !self.$el.parent().hasClass('editorWrapper') ) {
+          self.$el.wrap(self.$wrapper);
+      }
       self.$el.css({
         width: self.options.width,
         height: self.options.height,

@@ -190,7 +190,7 @@ define([
         // upload pattern, e.g. the TinyMCE pattern's link plugin.
         self.$el.trigger('uploadAllCompleted', {
           'data': response,
-          'path_uid': self.$pathInput.val()
+          'path_uid': (self.$pathInput) ? self.$pathInput.val() : null
         });
       });
 

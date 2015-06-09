@@ -154,7 +154,8 @@ define([
             tooltip: _t('Upload file to current directory'),
             context: 'default'
           }),
-          app: self
+          app: self,
+          callback: self.addTreeElement
         });
         self.views.push(uploadView);
         mainButtons.push(uploadView.triggerView);
@@ -214,6 +215,55 @@ define([
     $: function(selector){
       return this.$el.find(selector);
     },
+    addTreeElement: function(file) {
+      var self = this;
+
+      if( file.status !== 'success' )
+      {
+          alert('There was a problem during the upload process.');
+          return;
+      }
+
+      if( self.$tree === undefined ) {
+        return;
+      }
+
+      var node = self.getSelectedNode();
+      var path = "";
+      var name = file.name;
+
+      if( node.filename ) {
+        //We just want the selected folder, not an object in it.
+        path = node.path.substr(0, node.path.indexOf(node.filename) - 1);
+        node = self.$tree.tree('moveUp');
+      }
+      else if( node.path ){
+        path = node.path;
+      }
+
+      var options = {
+        label: name,
+        path: path + '/' + name,
+        filename: name,
+        fileType: name.substr(name.lastIndexOf('.') + 1, name.length),
+        folder: false,
+        name: name
+      };
+
+      if( node === false )
+      {
+        //If node is empty, jqtree makes the new node a root
+        node = null
+      }
+      var newNode = self.$tree.tree('appendNode', options, node);
+      self.$tree.tree('selectNode', newNode);
+      self.openFile({node: newNode});
+      //Close the upload popover
+      var upload = self.getUpload();
+      if( upload.triggerView.$el.hasClass('active') ) {
+        upload.options.triggerView.$el.click();
+      }
+    },
     render: function(){
       var self = this;
       self.$el.html(self.template(self.options));
@@ -246,6 +296,9 @@ define([
       var self = this;
       var doc = event.node.path;
       if (event.node.folder){
+        if( self.options.theme ) {
+          self.setUploadUrl(event.node.path);
+        }
         return true;
       }
       if(self.fileData[doc]) {
@@ -269,10 +322,11 @@ define([
                 $item.addClass('active');
                 self.openEditor($item.attr('data-path'));
               } else {
-                self.ace.setText('');
+                self.openEditor();
               }
             }
             $(this).parent().remove();
+            self.resizeEditor();
           });
           $('.select', $item).click(function(e){
             e.preventDefault();
@@ -327,7 +381,12 @@ define([
 
       self.resizeEditor();
 
-      if( typeof self.fileData[path].info !== 'undefined' )
+      if( self.currentPath === undefined ) {
+          self.ace.setText();
+          self.ace.setSyntax('text');
+          self.ace.editor.clearSelection();
+      }
+      else if( typeof self.fileData[path].info !== 'undefined' )
       {
           var preview = self.fileData[path].info;
           self.ace.editor.off();
@@ -386,7 +445,11 @@ define([
       parts.reverse();
       return '/' + parts.join('/');
     },
+    getUpload: function() {
+      var self = this;
 
+      return _.find(self.views, function(x) { return x.upload !== undefined });
+    },
     resizeEditor: function() {
         var self = this;
 
@@ -399,7 +462,6 @@ define([
 
         //+2 for the editor borders
         h -= 2;
-
         //accounts for the borders/margin
         self.$editor.height(h);
         var w = container.innerWidth();
@@ -411,6 +473,24 @@ define([
           self.ace.editor.resize();
           self.ace.editor.$blockScrolling = Infinity;
         }
+    },
+    setUploadUrl: function(path) {
+      var self = this;
+
+      if( path === undefined ) {
+        path = "";
+      }
+
+      var view = self.getUpload();
+      if( view !== undefined ) {
+        var url = self.options.uploadUrl +
+                  path +
+                  "/themeFileUpload" +
+                  "?_authenticator=" +
+                  utils.getAuthenticator();
+
+        view.upload.dropzone.options.url = url;
+      }
     }
   });
 

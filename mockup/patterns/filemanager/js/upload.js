@@ -11,7 +11,7 @@ define([
     className: 'popover upload',
     title: _.template('<%= _t("Upload") %>'),
     content: _.template(
-      '<span class="current-path"></span>' +
+      '<span>Location: <span class="current-path"></span></span>' +
       '<input type="text" name="upload" style="display:none" />' +
       '<div class="uploadify-me"></div>'),
     render: function() {
@@ -19,7 +19,10 @@ define([
       PopoverView.prototype.render.call(this);
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), {
         url: self.app.options.uploadUrl,
-        success: function() {
+        success: function(response) {
+          if( self.callback ) {
+            self.callback.apply(self.app, [response]);
+          }
         }
       });
       return this;
