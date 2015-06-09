@@ -218,6 +218,12 @@ define([
     addTreeElement: function(file) {
       var self = this;
 
+      if( file.status !== 'success' )
+      {
+          alert('There was a problem during the upload process.');
+          return;
+      }
+
       if( self.$tree === undefined ) {
         return;
       }
