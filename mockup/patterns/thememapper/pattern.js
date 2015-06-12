@@ -429,7 +429,7 @@ define([
       unthemedUrl: null,
       helpUrl: null,
       previewUrl: null,
-	  editable: false
+      editable: false
     },
     buttonGroup: null,
     showInspectorsButton: null,
@@ -458,7 +458,7 @@ define([
       self.ruleBuilder = new RuleBuilder(function(){
         debugger; //callback
       });
-	  self.editable = (self.options.editable == "True") ? true : false;
+      self.editable = (self.options.editable == "True") ? true : false;
 
       self.options.filemanagerConfig.uploadUrl = self.options.themeUrl;
       self.options.filemanagerConfig.theme = true;
@@ -478,12 +478,12 @@ define([
       });
       self.setupButtons();
 
-	  if( !self.editable ) {
-		var items = self.fileManager.toolbar.items;
-		$(items).each(function() {
-			this.disable();
-		});	
-	  }
+      if( !self.editable ) {
+        var items = self.fileManager.toolbar.items;
+        $(items).each(function() {
+          this.disable();
+        });
+      }
       // initially, let's hide the panels
       self.hideInspectors();
     },
