@@ -24,13 +24,7 @@
  *                               previewUrl:http://www.google.com;
  *                               helpUrl:http://docs.diazo.org/en/latest'></div>
  *
-.warning {
-        padding: 10px;
-        border: 1px solid grey;
-        border-radius: 5px;
-        background-color: pink;
-        color: red;
-    } */
+ */
 
 
 define([
