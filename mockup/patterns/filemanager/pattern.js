@@ -292,6 +292,18 @@ define([
         self.resizeEditor();
       });
     },
+    shrinkTab: function(tab) {
+        var self = this;
+        if( self.$tabs.hasClass('smallTabs') ) {
+            tab = $(tab);
+            var text = tab.text();
+            if( text.lastIndexOf('/') > 0 )
+            {
+                text = text.substr(text.lastIndexOf('/') + 1);
+                tab.find('.select').text(text);
+            }
+        }
+    },
     openFile: function(event) {
       var self = this;
       var doc = event.node.path;
@@ -306,6 +318,7 @@ define([
         var $existing = $('[data-path="' + doc + '"]');
         if ($existing.length === 0){
           var $item = $(self.tabItemTemplate({path: doc}));
+          self.shrinkTab($item);
           self.$tabs.append($item);
           $('.remove', $item).click(function(e){
             e.preventDefault();
@@ -453,6 +466,14 @@ define([
     resizeEditor: function() {
         var self = this;
 
+        var tab = self.$tabs.children()[0];
+
+        if( $(tab).height() < (self.$tabs.height() - 1) ) {
+            self.$tabs.addClass('smallTabs');
+            $(self.$tabs.children()).each(function() {
+                self.shrinkTab(this);
+            });
+        }
         var tabBox = self.$tabs.parent();
 
         //Contains both the tabs, and editor window
