@@ -34,201 +34,19 @@ define([
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',
+  'mockup-patterns-thememapper-url/js/rulebuilder',
+  'mockup-patterns-thememapper-url/js/rulebuilderView',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup'
-], function($, Base, _, _t, InspectorTemplate, FileManager, ButtonView, ButtonGroup) {
+], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, ButtonView, ButtonGroup) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
-
-
-  var RuleBuilder = function(callback){
-    /**
-      * Rule builder
-      *
-      * Contains functions to build CSS and XPath selectors as well as a Diazo rule
-      * from a given node, and acts as a state machine for the rules wizard.
-      *
-      * The callback is called whenever the state machine progresses.
-      */
-
-    var self = this;
-    self.callback = callback;
-
-    self.active = false;
-    self.currentScope = null;
-
-    self.ruleType = null;
-    self.subtype = null;
-
-    self._contentElement = null;
-    self._themeElement = null;
-
-    self.end = function() {
-      self._contentElement = null;
-      self._themeElement = null;
-      self.currentScope = null;
-      self.active = false;
-      self.ruleType = null;
-      self.subtype = null;
-
-      self.callback(this);
-    };
-
-    /**
-    * Build a diazo rule. 'themeChildren' and 'contentChildren' should be true or
-    * false to indicate whether a -children selector is to be used.
-    */
-    self.buildRule = function(themeChildren, contentChildren) {
-      if (self.ruleType === null) {
-        return '';
-      }
-
-      if (self.subtype !== null) {
-        if (self.subtype === 'content') {
-          return '<' + self.ruleType + '\n    ' +
-            self.calculateDiazoSelector(self._contentElement, 'content', contentChildren) +
-            '\n    />';
-        } else if (self.subtype === 'theme') {
-          return '<' + self.ruleType + '\n    ' +
-            self.calculateDiazoSelector(self._themeElement, 'theme', themeChildren) +
-            '\n    />';
-        }
-
-      } else {
-        return '<' + self.ruleType + '\n    ' +
-          self.calculateDiazoSelector(self._themeElement, 'theme', themeChildren) + '\n    ' +
-          self.calculateDiazoSelector(self._contentElement, 'content', contentChildren) +
-          '\n    />';
-      }
-
-      // Should never happen
-      return 'Error';
-    };
-
-    /**
-    * Return a valid (but not necessarily unique) CSS selector for the given
-    * element.
-    */
-    self.calculateCSSSelector = function(element) {
-      var selector = element.tagName.toLowerCase();
-
-      if (element.id) {
-        selector += '#' + element.id;
-      } else {
-        var classes = $(element).attr('class');
-        if(classes !== undefined) {
-          var splitClasses = classes.split(/\s+/);
-          for(var i = 0; i < splitClasses.length; i=i+1) {
-            if(splitClasses[i] !== '' && splitClasses[i].indexOf('_theming') === -1) {
-              selector += '.' + splitClasses[i];
-              break;
-            }
-          }
-        }
-      }
-
-      return selector;
-    };
-
-    /**
-    * Return a valid, unqiue CSS selector for the given element. Returns null if
-    * no reasoanble unique selector can be built.
-    */
-    self.calculateUniqueCSSSelector = function(element) {
-      var paths = [];
-      var path = null;
-
-      var parents = $(element).parents();
-      var ultimateParent = parents[parents.length - 1];
-
-      while (element && element.nodeType === 1) {
-        var selector = this.calculateCSSSelector(element);
-            paths.splice(0, 0, selector);
-            path = paths.join(' ');
-
-        // The ultimateParent constraint is necessary since
-        // this may be inside an iframe
-        if($(path, ultimateParent).length === 1) {
-          return path;
-        }
-
-        element = element.parentNode;
-      }
-
-      return null;
-    };
-
-    /**
-    * Return a valid, unique XPath selector for the given element.
-    */
-    self.calculateUniqueXPathExpression = function(element) {
-      var parents = $(element).parents();
-
-      function elementIndex(e) {
-        var siblings = $(e).siblings(e.tagName.toLowerCase());
-        if(siblings.length > 0) {
-          return '[' + ($(e).index() + 1) + ']';
-        } else {
-          return '';
-        }
-      }
-
-      var xpathString = '/' + element.tagName.toLowerCase();
-      if(element.id) {
-        return '/' + xpathString + '[@id="' + element.id + '"]';
-      } else {
-        xpathString += elementIndex(element);
-      }
-
-      for(var i = 0; i < parents.length; i=i+1) {
-        var p = parents[i];
-        var pString = '/' + p.tagName.toLowerCase();
-
-        if(p.id) {
-          return '/' + pString + '[@id="' + p.id + '"]' + xpathString;
-        } else {
-          xpathString = pString + elementIndex(p) + xpathString;
-        }
-      }
-
-      return xpathString;
-    };
-
-    /**
-    * Return a unique CSS or XPath selector, preferring a CSS one.
-    */
-    self.bestSelector = function(element) {
-      return self.calculateUniqueCSSSelector(element) ||
-             self.calculateUniqueXPathExpression(element);
-    };
-
-    /**
-    * Build a Diazo selector element with the appropriate namespace.
-    */
-    self.calculateDiazoSelector = function(element, scope, children) {
-      var selectorType = scope;
-      if(children) {
-        selectorType += '-children';
-      }
-
-      var cssSelector = self.calculateUniqueCSSSelector(element);
-      if(cssSelector) {
-        return 'css:' + selectorType + '="' + cssSelector + '"';
-      } else {
-        var xpathSelector = self.calculateUniqueXPathExpression(element);
-        return selectorType + '="' + xpathSelector + '"';
-      }
-
-    };
-  };
 
   var Inspector = Base.extend({
     defaults: {
       name: 'name',
       ruleBuilder: null,
-      onsave: function() {},
-      onselect: function() {},
       showReload: false
     },
     init: function() {
@@ -369,7 +187,7 @@ define([
       self.animateSelector();
       self.$selectorInfo.text(element === null ? '' : self.ruleBuilder.bestSelector(element));
 
-      this.options.onsave(this, element);
+      self.onsave(this, element);
     },
     clearOutline: function(element){
       var self = this;
@@ -380,7 +198,7 @@ define([
 
       self.currentOutline = null;
       self.$currentSelector.text('');
-      self.options.onselect(self, null);
+      self.onselect(self, null);
     },
     setOutline: function(element) {
       var self = this;
@@ -394,11 +212,10 @@ define([
       if(self.currentOutline !== null) {
         self.clearOutline(self.currentOutline);
       }
-
       self.currentOutline = element;
       self.$currentSelector.text(self.ruleBuilder.bestSelector(element));
 
-      self.options.onselect(self, element);
+      self.onselect(self, element);
     },
     animateSelector: function(highlightColor, duration) {
       var self = this;
@@ -415,6 +232,27 @@ define([
         .animate({ backgroundColor: originalBg }, animateMs, null, function () {
           self.$frameInfo.css('backgroundColor', originalBg);
         });
+    },
+    onsave: function(highlighter, node) {
+      var self = this;
+      if(node == null) {
+        self.$el.find('.frame-shelf-container').hide();
+      } else {
+        self.$el.find('.frame-shelf-container').show();
+      }
+
+      self.animateSelector(self.$el.find('.frame-info'));
+      self.$el.find('.selector-info').text(node == null? "" : self.ruleBuilder.bestSelector(node));
+
+      if(self.ruleBuilder.active) {
+        self.ruleBuilder.select(node);
+        self.ruleBuilder.next();
+      }
+
+    },
+    onselect: function(highlighter, node) {
+      var self = this;
+      self.$currentSelector.text(node == null? "" : self.ruleBuilder.bestSelector(node));
     }
   });
 
@@ -440,8 +278,11 @@ define([
     fileManager: null,
     mockupInspector: null,
     unthemedInspector: null,
+    ruleBuilder: null,
+    rulebuilderView: null,
     $fileManager: null,
     $container: null,
+    $inspectorContainer: null,
     $mockupInspector: null,
     $unthemedInspector: null,
     init: function() {
@@ -451,13 +292,11 @@ define([
       }
       self.$fileManager = $('<div class="pat-filemanager"/>').appendTo(self.$el);
       self.$container = $('<div class="row"></div>').appendTo(self.$el);
-      self.$mockupInspector = $('<div class="mockup-inspector"/>').appendTo(self.$container);
-      self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(self.$container);
+      self.$inspectorContainer = $('<div id="inspectors"></div>').appendTo(self.$container);
+      self.$mockupInspector = $('<div class="mockup-inspector"/>').appendTo(self.$inspectorContainer);
+      self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(self.$inspectorContainer);
 
       // initialize patterns now
-      self.ruleBuilder = new RuleBuilder(function(){
-        debugger; //callback
-      });
       self.editable = (self.options.editable == "True") ? true : false;
 
       self.options.filemanagerConfig.uploadUrl = self.options.themeUrl;
@@ -465,25 +304,28 @@ define([
       self.fileManager = new FileManager(self.$fileManager, self.options.filemanagerConfig);
       self.fileManager.setUploadUrl();
 
+      self.setupButtons();
+
+      self.ruleBuilder = new RuleBuilder(self, self.ruleBuilderCallback);
+
       self.mockupInspector = new Inspector(self.$mockupInspector, {
         name: _t('HTML mockup'),
         ruleBuilder: self.ruleBuilder,
         url: self.options.mockupUrl,
-        showReload: true
+        showReload: true,
       });
       self.unthemedInspector = new Inspector(self.$unthemedInspector, {
         name: _t('Unthemed content'),
         ruleBuilder: self.ruleBuilder,
-        url: self.options.unthemedUrl
+        url: self.options.unthemedUrl,
       });
-      self.setupButtons();
-
       if( !self.editable ) {
         var items = self.fileManager.toolbar.items;
         $(items).each(function() {
           this.disable();
         });
-      }
+      };
+
       // initially, let's hide the panels
       self.hideInspectors();
     },
@@ -496,7 +338,7 @@ define([
       self.showInspectorsButton.applyTemplate();
       $('html, body').animate({
         scrollTop: $parent.offset().top - 50
-      }, 1000);
+      }, 500);
     },
     hideInspectors: function(){
       var self = this;
@@ -565,7 +407,10 @@ define([
       self.helpButton.on('button:click', function(){
         window.open(self.options.helpUrl);
       });
-
+      self.rulebuilderView = new RuleBuilderView({
+        triggerView: self.buildRuleButton,
+        app: self
+      });
       self.buttonGroup = new ButtonGroup({
         items: [
           self.showInspectorsButton,
@@ -577,6 +422,7 @@ define([
         id: 'mapper'
       });
       $('#toolbar .navbar', self.$el).append(self.buttonGroup.render().el);
+      $('#toolbar .navbar', self.$el).append(self.rulebuilderView.render().el);
     }
   });
 

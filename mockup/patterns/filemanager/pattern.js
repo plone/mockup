@@ -389,6 +389,10 @@ define([
       self.currentPath = path;
       if (self.ace !== undefined){
         self.ace.editor.destroy();
+        self.ace.editor.container.parentNode.replaceChild(
+          self.ace.editor.container.cloneNode(true),
+          self.ace.editor.container
+        );
       }
       self.ace = new TextEditor(self.$editor);
 
