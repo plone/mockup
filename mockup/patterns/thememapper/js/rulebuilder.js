@@ -476,14 +476,19 @@ define([
     *   option to use those.
     */
     self.checkSelectors = function() {
+      var selected = false;
       $('.selector-info').each(function() {
         if( $(this).text() != "" ) {
+          //Theres an item selected, so show the option to use it
           $els.reusePanel.show();
-          return true;
+          selected = true;
         }
       });
-
-      return false;
+      if( !selected ) {
+        //if we opened the panel previously, close it now
+        $els.reusePanel.hide();
+      }
+      return selected;
     };
     self.callback = function(ruleBuilder) {
       $els.wizardSteps.hide();

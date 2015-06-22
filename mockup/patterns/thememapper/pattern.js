@@ -68,7 +68,7 @@ define([
 
       self.$reloadBtn = $('a.refresh', self.$el);
 
-      $('a.clear', self.$frameShelfContainer).click(function(e) {
+      $('a.clearInspector', self.$frameShelfContainer).click(function(e) {
         e.preventDefault();
         self.save(null);
       });

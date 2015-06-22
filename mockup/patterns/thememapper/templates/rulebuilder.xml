@@ -55,56 +55,53 @@
 
         <div class="formControls new-rule-actions">
             <input type="submit" class="allowMultiSubmit context next submitting" value="Next" />
-            <input type="submit" class="allowMultiSubmit standalone close" value="Cancel">
-            </div>
-
+            <input type="submit" class="allowMultiSubmit standalone close" value="Cancel" />
         </div>
-        <div id="new-rule-select-theme" class="rule-wizard-step" style="display: none;">
-            <div class="documentDescription">
-                Please select an element using the <strong>HTML mockup</strong> inspector.
-            </div>
-            <div class="formControls new-rule-actions">
-                <input type="submit" class="allowMultiSubmit context next" value="Ok" />
-                <input type="submit" class="allowMultiSubmit standalone wizard-cancel" value="Cancel">
-                </div>
-            </div>
-            <div id="new-rule-select-content" class="rule-wizard-step" style="display: none;">
-                <div class="documentDescription">
-                    Please select an element using the <strong>Unthemed content</strong> inspector.
-                </div>
-                <div class="formControls new-rule-actions">
-                    <input type="submit" class="allowMultiSubmit context next submitting" value="Ok" />
-                    <input type="submit" class="allowMultiSubmit standalone wizard-cancel" value="Cancel" />
-                </div>
-            </div>
-            <div id="new-rule-step-2" class="rule-wizard-step" style="display: none;">
-                <div class="documentDescription">
-                    The rule can be found below. Use the checkboxes
-                    to further refine it.
-                </div>
-                <form>
-                    <div id="new-rule-output-panel">
-                        <textarea name="new-rule-output" id="new-rule-output"></textarea>
-                    </div>
-                    <div id="new-rule-selector-panel">
-                        <div>
-                            <input type="checkbox" class="rule-modifier" name="new-rule-theme-children" value="replace" id="new-rule-theme-children" />
-                            <label for="new-rule-theme-children">Apply rule to children of the matched theme node(s)</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" class="rule-modifier" name="new-rule-content-children" value="replace" id="new-rule-content-children" />
-                            <label for="new-rule-content-children">Apply rule to children of the matched content node(s)</label>
-                        </div>
-                    </div>
 
-                </form>
-
-                <div class="formControls new-rule-actions">
-                    <input type="submit" class="allowMultiSubmit context insert submitting" title="Insert rule into the rules.xml file" value="Insert" />
-                    <input type="submit" class="allowMultiSubmit context copy" value="Copy to clipboard" style="display: none;" />
-                    <input type="submit" class="allowMultiSubmit standalone close" value="Close" />
-                </div>
-            </div>
-
-
+    </div>
+    <div id="new-rule-select-theme" class="rule-wizard-step" style="display: none;">
+        <div class="documentDescription">
+            Please select an element using the <strong>HTML mockup</strong> inspector.
         </div>
+        <div class="formControls new-rule-actions">
+            <input type="submit" class="allowMultiSubmit context next" value="Ok" />
+            <input type="submit" class="allowMultiSubmit standalone wizard-cancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="new-rule-select-content" class="rule-wizard-step" style="display: none;">
+        <div class="documentDescription">
+            Please select an element using the <strong>Unthemed content</strong> inspector.
+        </div>
+        <div class="formControls new-rule-actions">
+            <input type="submit" class="allowMultiSubmit context next submitting" value="Ok" />
+            <input type="submit" class="allowMultiSubmit standalone wizard-cancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="new-rule-step-2" class="rule-wizard-step" style="display: none;">
+        <div class="documentDescription">
+            The rule can be found below. Use the checkboxes
+            to further refine it.
+        </div>
+        <form>
+            <div id="new-rule-output-panel">
+                <textarea name="new-rule-output" id="new-rule-output"></textarea>
+            </div>
+            <div id="new-rule-selector-panel">
+                <div>
+                    <input type="checkbox" class="rule-modifier" name="new-rule-theme-children" value="replace" id="new-rule-theme-children" />
+                    <label for="new-rule-theme-children">Apply rule to children of the matched theme node(s)</label>
+                </div>
+                <div>
+                    <input type="checkbox" class="rule-modifier" name="new-rule-content-children" value="replace" id="new-rule-content-children" />
+                    <label for="new-rule-content-children">Apply rule to children of the matched content node(s)</label>
+                </div>
+            </div>
+
+        </form>
+        <div class="formControls new-rule-actions">
+            <input type="submit" class="allowMultiSubmit context insert submitting" title="Insert rule into the rules.xml file" value="Insert" />
+            <input type="submit" class="allowMultiSubmit context copy" value="Copy to clipboard" style="display: none;" />
+            <input type="submit" class="allowMultiSubmit standalone close" value="Close" />
+        </div>
+    </div>
+</div>

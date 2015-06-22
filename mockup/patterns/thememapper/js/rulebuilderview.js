@@ -18,7 +18,6 @@ define([
       return this;
     },
     toggle: function(button, e) {
-      /* we need to be able to change the current default upload directory */
       PopoverView.prototype.toggle.apply(this, [button, e]);
       var self = this;
       if (!this.opened) {
