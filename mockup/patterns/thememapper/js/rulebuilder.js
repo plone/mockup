@@ -79,12 +79,18 @@ define([
       newRuleThemeChildren: $('#new-rule-theme-children'),
       newRuleUnthemedChildren: $('#new-rule-content-children'),
       modifiers: $('.rule-modifier'),
-      selectors: $('.selector-info')
+      selectors: $('.selector-info'),
+      closers: $('.new-rule .close, .new-rule .wizard-cancel')
     };
 
     $els.step1Next.click(function() {
       var ruleType = self.getSelectedType();
       self.start(ruleType);
+    });
+
+    $els.closers.click(function() {
+      self.end();
+      self.ruleBuilderPopover.close();
     });
 
     $els.selectThemeNext.click(function() {
