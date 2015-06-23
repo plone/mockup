@@ -35,7 +35,7 @@ define([
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',
   'mockup-patterns-thememapper-url/js/rulebuilder',
-  'mockup-patterns-thememapper-url/js/rulebuilderView',
+  'mockup-patterns-thememapper-url/js/rulebuilderview',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup'
 ], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, ButtonView, ButtonGroup) {
@@ -320,10 +320,12 @@ define([
         url: self.options.unthemedUrl,
       });
       if( !self.editable ) {
-        var items = self.fileManager.toolbar.items;
-        $(items).each(function() {
-          this.disable();
-        });
+        if( self.fileManager.toolbar ) {
+          var items = self.fileManager.toolbar.items;
+          $(items).each(function() {
+            this.disable();
+          });
+        }
       };
 
       // initially, let's hide the panels
