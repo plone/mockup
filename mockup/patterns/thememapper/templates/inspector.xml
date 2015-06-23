@@ -17,7 +17,7 @@
     <div class="frame-shelf-container" style="display:none">
       <span i18n:translate="theming_mapper_shelf_label">Selected:</span>
       <span class="selector-info"></span>
-      <a class="clear" href="#clear"
+      <a class="clearInspector" href="#clearInspector"
          title="Clear selection" i18n:attributes="title">x</a>
     </div>
     <span class="current-selector"></span>
