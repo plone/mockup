@@ -421,6 +421,7 @@ define([
     setPath: function(path){
       var self = this;
       self.currentPath = path;
+      self.options.url = null;
       self.options.url = self.dropzone.options.url = self.getUrl();
     },
 

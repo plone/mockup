@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- When refreshing the upload path for the upload pattern in tinymce, clear its
+  value first
+  [frapell]
+
 - use autotoc tab style for resource registry
   [vangheem]
 
