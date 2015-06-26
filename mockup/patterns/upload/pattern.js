@@ -181,6 +181,10 @@ define([
       self.dropzone.on('removedfile', function() {
         if (self.dropzone.files.length < 1) {
           self.hideControls();
+        } else {
+          // Clear the "you can not upload any more files" message
+          var file = self.dropzone.files[0];
+          $(".dz-error-message span", file.previewElement).html("");
         }
       });
 
@@ -196,15 +200,24 @@ define([
 
       if (self.options.autoCleanResults) {
         self.dropzone.on('complete', function(file) {
-          setTimeout(function() {
-            $(file.previewElement).fadeOut();
-          }, 3000);
+          if (file.status === Dropzone.SUCCESS){
+            setTimeout(function() {
+              $(file.previewElement).fadeOut();
+            }, 3000);
+          }
         });
       }
 
       self.dropzone.on('complete', function(file) {
-        if (self.dropzone.files.length < 1) {
+        if (file.status === Dropzone.SUCCESS && self.dropzone.files.length < 1) {
           self.hideControls();
+        }
+      });
+
+      self.dropzone.on('error', function(file, response, xmlhr) {
+        if (typeof xmlhr !== "undefined" && xmlhr.status !== 403){
+          // If error other than 403, just print a generic message
+          $(".dz-error-message span", file.previewElement).html("The file transfer failed");
         }
       });
 
@@ -343,14 +356,27 @@ define([
         processing = true;
         if (self.dropzone.files.length === 0) {
           processing = false;
+        }
+
+        if (processing){
+          var file = self.dropzone.files[0];
+
+          if (file.status === Dropzone.ERROR){
+            // Put the file back as "queued" for retrying
+            file.status = Dropzone.QUEUED;
+            processing = false;
+          }
+        }
+
+        if (!processing){
           self.$el.removeClass(fileaddedClassName);
           if (finished !== undefined && typeof(finished) === 'function'){
             finished();
           }
           return;
         }
-        var file = self.dropzone.files[0];
-        if ([Dropzone.SUCCESS, Dropzone.ERROR, Dropzone.CANCELED]
+
+        if ([Dropzone.SUCCESS, Dropzone.CANCELED]
             .indexOf(file.status) !== -1) {
           // remove it
           self.dropzone.removeFile(file);

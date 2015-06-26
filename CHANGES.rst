@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Improve the upload pattern so it shows useful messages in case of errors
+  [frapell]
+
 - When refreshing the upload path for the upload pattern in tinymce, clear its
   value first
   [frapell]
