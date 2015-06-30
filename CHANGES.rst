@@ -4,7 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- fix title not being set on images
+- correctly set href and id for autotoc pattern
+  [vangheem]
+
+- fix title not being set on images in tinymce
   [vangheem]
 
 - Improve the upload pattern so it shows useful messages in case of errors

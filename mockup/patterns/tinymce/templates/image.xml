@@ -6,7 +6,7 @@
     <% } %>
 
     <div class="linkTypes pat-autotoc autotabs"
-         data-pat-autotoc="section:fieldset;levels:legend;">
+         data-pat-autotoc="section:fieldset;levels:legend;IDPrefix:tinymce-autotoc-">
 
         <% if(_.contains(linkTypes, 'image')){ %>
       <fieldset class="linkType image" data-linkType="image">
