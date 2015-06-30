@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- fix title not being set on images
+  [vangheem]
+
 - Improve the upload pattern so it shows useful messages in case of errors
   [frapell]
 

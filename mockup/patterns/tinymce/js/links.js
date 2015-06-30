@@ -487,8 +487,10 @@ define([
 
     updateImage: function(src) {
       var self = this;
+      var title = self.$title.val();
       var data = $.extend(true, {}, {
         src: src,
+        title: title ? title : null,
         alt: self.$alt.val(),
         'class': 'image-' + self.$align.val(),
         'data-linkType': self.linkType,
@@ -598,6 +600,7 @@ define([
         }
         if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
+          self.$title.val(self.dom.getAttrib(self.imgElm, 'title'));
           self.$alt.val(self.dom.getAttrib(self.imgElm, 'alt'));
           linkType = self.dom.getAttrib(self.imgElm, 'data-linktype');
           if (linkType) {
