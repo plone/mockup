@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- UI/UX improvements to related items folder tree select
+  [vangheem]
+
 - correctly set href and id for autotoc pattern
   [vangheem]
 

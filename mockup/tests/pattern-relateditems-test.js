@@ -450,7 +450,7 @@ define([
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
-      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+      $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       clock.tick(1000);
 
@@ -459,10 +459,7 @@ define([
       $el.find('.pattern-relateditems-tree-select').trigger('click');
       clock.tick(1000);
 
-      $el.find('.pat-tree ul li div').eq(2).trigger('click');
-      clock.tick(1000);
-
-      $el.find('.pattern-relateditems-tree-itemselect').trigger('click');
+      $el.find('.pat-tree ul li .pattern-relateditems-buttons a').eq(2).trigger('click');
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(2);
@@ -482,7 +479,7 @@ define([
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
-      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+      $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       clock.tick(1000);
 
@@ -494,10 +491,7 @@ define([
       $el.find('.pat-tree ul li div').eq(1).trigger('click');
       clock.tick(1000);
 
-      $el.find('.pat-tree ul li div').eq(2).trigger('click');
-      clock.tick(1000);
-
-      $el.find('.pattern-relateditems-tree-itemselect').trigger('click');
+      $el.find('.pat-tree ul li .pattern-relateditems-buttons a').eq(2).trigger('click');
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(3);
