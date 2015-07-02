@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Fix problem where wrong items would get selected when moving from
+  page to page with structure pattern
+  [vangheem]
+
 - UI/UX improvements to related items folder tree select
   [vangheem]
 

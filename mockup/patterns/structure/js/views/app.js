@@ -144,10 +144,7 @@ define([
         // need to reload models inside selectedCollection so they get any
         // updated metadata
         if (self.selectedCollection.models.length > 0) {
-          var uids = [];
-          self.selectedCollection.each(function(item) {
-            uids.push(item.attributes.UID);
-          });
+          var uids = self.getSelectedUids(self.selectedCollection);
           self.queryHelper.search(
             'UID', 'plone.app.querystring.operation.list.contains',
             uids,

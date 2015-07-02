@@ -72,7 +72,7 @@ define([
     itemSelected: function() {
       var checkbox = this.$('input')[0];
       if (checkbox.checked) {
-        this.app.selectedCollection.add(this.model);
+        this.app.selectedCollection.add(this.model.clone());
       } else {
         this.app.selectedCollection.removeResult(this.model);
       }
@@ -96,10 +96,10 @@ define([
             var existing = selectedCollection.getByUID(model.attributes.UID);
             if (this.checked) {
               if (!existing) {
-                selectedCollection.add(model);
+                selectedCollection.add(model.clone());
               }
             } else if (existing) {
-              selectedCollection.remove(existing);
+              selectedCollection.removeResult(existing);
             }
           }
         });

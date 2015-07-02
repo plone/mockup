@@ -511,7 +511,7 @@ define([
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
-      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+      $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       clock.tick(1000);
 

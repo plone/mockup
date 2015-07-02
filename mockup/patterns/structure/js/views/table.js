@@ -133,7 +133,7 @@ define([
       var self = this;
       if (self.folderModel){
         if ($(e.target).is(':checked')) {
-          self.selectedCollection.add(self.folderModel);
+          self.selectedCollection.add(self.folderModel.clone());
         } else {
           this.selectedCollection.removeByUID(self.folderModel.attributes.UID);
         }
