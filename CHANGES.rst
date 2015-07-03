@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Upgrade pickadate to 3.5.6
+  [vangheem]
+
 - Fix problem where wrong items would get selected when moving from
   page to page with structure pattern
   [vangheem]
