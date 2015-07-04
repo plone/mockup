@@ -102,7 +102,8 @@ define([
       self.$el.empty();
 
       self.$el.append(
-        '<a class="btn dropdown-toggle btn-success" data-toggle="dropdown" href="#">' +
+        '<a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#">' +
+          '<span class="glyphicon glyphicon-plus"></span>' +
           self.title +
           '<span class="caret"></span>' +
         '</a>' +

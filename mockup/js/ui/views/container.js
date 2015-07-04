@@ -11,7 +11,12 @@ define([
     items: [],
     itemContainer: null,
     isOffsetParent: true,
+    idPrefix: 'container-',
     render: function() {
+      if (this.options.id) {
+        this.$el.attr('id', this.idPrefix + this.options.id);
+      }
+
       this.applyTemplate();
 
       this.renderItems();
@@ -25,6 +30,7 @@ define([
 
       this.afterRender();
 
+      this.$el.data('component', this);
       return this;
     },
     renderItems: function() {

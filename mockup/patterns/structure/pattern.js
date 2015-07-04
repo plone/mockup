@@ -2,8 +2,6 @@
  *
  * Options:
  *    vocabularyUrl(string): Url to return query results (null)
- *    tagsVocabularyUrl(string): Url to return tags query results (null)
- *    usersVocabularyUrl(string): Url to query users (null)
  *    indexOptionsUrl(string): Url to configure querystring widget with (null)
  *    upload(string): upload configuration settings(null)
  *    moveUrl(string): For supporting drag drop reordering (null)
@@ -19,8 +17,6 @@
  *         data-pat-structure="vocabularyUrl:/relateditems-test.json;
  *                             uploadUrl:/upload;
  *                             moveUrl:/moveitem;
- *                             tagsVocabularyUrl:/select2-test.json;
- *                             usersVocabularyUrl:/tests/json/users.json;
  *                             indexOptionsUrl:/tests/json/queryStringCriteria.json;
  *                             contextInfoUrl:{path}/context-info;"></div>
  *
@@ -48,8 +44,6 @@ define([
       // Example: {base: 'http://mysite.com', appended: '/folder_contents'}
       urlStructure: null,
       vocabularyUrl: null,
-      tagsVocabularyUrl: null,
-      usersVocabularyUrl: null,
       indexOptionsUrl: null, // for querystring widget
       contextInfoUrl: null, // for add new dropdown and other info
       setDefaultPageUrl: null,
@@ -84,49 +78,40 @@ define([
       rearrange: {
         properties: {
           'id': 'ID',
-          'sortable_title': 'Title',
-          'modified': 'Last Modified',
-          'created': 'Created on',
-          'effective': 'Publication Date',
-          'portal_type': 'Type'
+          'sortable_title': 'Title'
         },
         url: '/rearrange'
       },
       basePath: '/',
       moveUrl: null,
-      /*
-       * all these base buttons are required
-       */
-      buttonGroups: {
-        primary: [{
-          title: 'Cut',
-          url: '/cut'
-        },{
-          title: 'Copy',
-          url: '/copy'
-        },{
-          title: 'Paste',
-          url: '/paste'
-        },{
-          title: 'Delete',
-          url: '/delete',
-          context: 'danger',
-          icon: 'trash'
-        }],
-        secondary: [{
-          title: 'Workflow',
-          url: '/workflow'
-        },{
-          title: 'Tags',
-          url: '/tags'
-        },{
-          title: 'Properties',
-          url: '/properties'
-        },{
-          title: 'Rename',
-          url: '/rename'
-        }]
-      },
+      buttons: [],
+      demoButtons: [{
+        title: 'Cut',
+        url: '/cut'
+      },{
+        title: 'Copy',
+        url: '/copy'
+      },{
+        title: 'Paste',
+        url: '/paste'
+      },{
+        title: 'Delete',
+        url: '/delete',
+        context: 'danger',
+        icon: 'trash'
+      },{
+        title: 'Workflow',
+        url: '/workflow'
+      },{
+        title: 'Tags',
+        url: '/tags'
+      },{
+        title: 'Properties',
+        url: '/properties'
+      },{
+        title: 'Rename',
+        url: '/rename'
+      }],
       upload: {
         uploadMultiple: true,
         showTitle: true
@@ -134,6 +119,11 @@ define([
     },
     init: function() {
       var self = this;
+      if(self.options.buttons.length === 0){
+        /* XXX I know this is wonky... but this prevents
+           weird option merging issues */
+        self.options.buttons = self.options.demoButtons;
+      }
       self.browsing = true; // so all queries will be correct with QueryHelper
       self.options.collectionUrl = self.options.vocabularyUrl;
       self.options.queryHelper = new utils.QueryHelper(

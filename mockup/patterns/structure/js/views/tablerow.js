@@ -92,14 +92,17 @@ define([
           if ((index > lastCheckedIndex && index < thisIndex) ||
               (index < lastCheckedIndex && index > thisIndex)) {
             this.checked = checkbox.checked;
-            var model = $(this).closest('tr')[0].model;
-            var existing = selectedCollection.getByUID(model.attributes.UID);
-            if (this.checked) {
-              if (!existing) {
-                selectedCollection.add(model.clone());
+            var $tr = $(this).closest('tr.itemRow');
+            if($tr.length > 0){
+              var model = $tr[0].model;
+              var existing = selectedCollection.getByUID(model.attributes.UID);
+              if (this.checked) {
+                if (!existing) {
+                  selectedCollection.add(model.clone());
+                }
+              } else if (existing) {
+                selectedCollection.removeResult(existing);
               }
-            } else if (existing) {
-              selectedCollection.removeResult(existing);
             }
           }
         });

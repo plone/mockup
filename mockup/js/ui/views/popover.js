@@ -16,6 +16,7 @@ define([
     content: null,
     title: null,
     triggerView: null,
+    idPrefix: 'popover-',
     triggerEvents: {
       'button:click': 'toggle'
     },
@@ -38,20 +39,27 @@ define([
     },
     initialize: function(options) {
       ContainerView.prototype.initialize.apply(this, [options]);
+      this.bindTriggerEvents();
 
       this.on('render', function() {
-        this.bindTriggerEvents();
         this.renderTitle();
         this.renderContent();
       }, this);
     },
     afterRender: function () {
     },
+    getTemplateOptions: function(){
+      return this.options;
+    },
     renderTitle: function() {
-      this.$('.popover-title').append(this.title(this.options));
+      var title = this.title;
+      if(typeof(title) === 'function'){
+        title = title(this.getTemplateOptions());
+      }
+      this.$('.popover-title').empty().append(title);
     },
     renderContent: function() {
-      this.$('.popover-content').append(this.content(this.options));
+      this.$('.popover-content').empty().append(this.content(this.getTemplateOptions()));
     },
     bindTriggerEvents: function() {
       if (this.triggerView) {
@@ -73,13 +81,20 @@ define([
       }, $el.offset());
     },
     show: function() {
+      /* hide existing */
+      $('.popover:visible').each(function(){
+        var popover = $(this).data('component');
+        if(popover){
+          popover.hide();
+        }
+      });
+
       var pos = this.getPosition();
       var $tip = this.$el, tp, placement, actualWidth, actualHeight;
 
       placement = this.placement;
 
       $tip.css({ top: 0, left: 0 }).addClass('active');
-
 
       actualWidth = $tip[0].offsetWidth;
       actualHeight = $tip[0].offsetHeight;

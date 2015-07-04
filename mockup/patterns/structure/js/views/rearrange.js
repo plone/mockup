@@ -47,7 +47,7 @@ define([
       if (this.$reversed[0].checked) {
         data.reversed = true;
       }
-      this.app.defaultButtonClickEvent(this.triggerView, data);
+      this.app.buttonClickEvent(this.triggerView, data);
       this.hide();
     }
   });

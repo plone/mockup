@@ -31,13 +31,14 @@ define([
   ========================== */
   describe('Structure', function() {
     beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+
       this.$el = $('' +
         '<div class="pat-structure" ' +
              'data-pat-structure="vocabularyUrl:/data.json;' +
                                  'uploadUrl:/upload;' +
                                  'moveUrl:/moveitem;' +
-                                 'tagsVocabularyUrl:/select2-test.json;' +
-                                 'usersVocabularyUrl:/tests/json/users.json;' +
                                  'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
                                  'contextInfoUrl:{path}/contextInfo;' +
                                  ' ">' +
@@ -146,7 +147,8 @@ define([
       var cb = this.$el.find('.itemRow td.selection input').eq(0);
       cb[0].checked = true;
       cb.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('1');
+      this.clock.tick(500);
+      expect(this.$el.find('#btn-selected').html()).to.contain('1');
     });
 
     it('remove item from selection well', function() {
@@ -156,7 +158,7 @@ define([
       $item1[0].checked = true;
       $item1.trigger('change');
       this.$el.find('.items.popover-content a.remove').trigger('click').trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('0');
+      expect(this.$el.find('#btn-selected').html()).to.contain('0');
     });
 
     it('remove all from selection well', function() {
@@ -165,12 +167,15 @@ define([
       var $item1 = this.$el.find('.itemRow td.selection input').eq(0);
       $item1[0].checked = true;
       $item1.trigger('change');
+      this.clock.tick(1000);
       var $item2 = this.$el.find('.itemRow td.selection input').eq(1);
       $item2[0].checked = true;
       $item2.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('2');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected').html()).to.contain('2');
       this.$el.find('.popover.selected a.remove-all').trigger('click');
-      expect(this.$el.find('#selected').html()).to.contain('0');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected').html()).to.contain('0');
     });
 
     it('paging', function() {
@@ -186,6 +191,8 @@ define([
 
     it('per page', function() {
       registry.scan(this.$el);
+      this.clock.tick(1000);
+      this.$el.find('.serverhowmany15 a').trigger('click');
       this.clock.tick(1000);
       expect(this.$el.find('.itemRow').length).to.equal(16);
       this.$el.find('.serverhowmany30 a').trigger('click');
@@ -220,50 +227,6 @@ define([
       expect(this.$el.find('.order-support .status').html()).to.contain('rearrange');
     });
 
-    it('test copy button', function() {
-      registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
-      this.clock.tick(1000);
-      var $item = this.$el.find('.itemRow td.selection input').eq(0);
-      $item[0].checked = true;
-      $item.trigger('change');
-      this.$el.find('#gen-copy').trigger('click');
-      expect(pattern.view.pasteOperation).to.equal('copy');
-    });
-
-    it('test cut button', function() {
-      registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
-      this.clock.tick(1000);
-      var $item = this.$el.find('.itemRow td.selection input').eq(0);
-      $item[0].checked = true;
-      $item.trigger('change');
-      this.$el.find('#gen-cut').trigger('click');
-      expect(pattern.view.pasteOperation).to.equal('cut');
-    });
-
-    it('test paste button', function() {
-      registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
-      this.clock.tick(1000);
-      var $item = this.$el.find('.itemRow td.selection input').eq(0);
-      $item[0].checked = true;
-      $item.trigger('change');
-      this.$el.find('#gen-copy').trigger('click');
-      this.$el.find('#gen-paste').trigger('click');
-    });
-
-    it('test button updates status', function() {
-      registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
-      this.clock.tick(1000);
-      var $item = this.$el.find('.itemRow td.selection input').eq(0);
-      $item[0].checked = true;
-      $item.trigger('change');
-      this.$el.find('#gen-cut').trigger('click');
-      expect(this.$el.find('.order-support .status').html()).to.contain('cut');
-    });
-
     it('test select all', function() {
       registry.scan(this.$el);
       var pattern = this.$el.data('patternStructure');
@@ -271,7 +234,8 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('16');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected').html()).to.contain('16');
 
     });
 
@@ -283,10 +247,10 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('16');
+      expect(this.$el.find('#btn-selected').html()).to.contain('16');
       $item[0].checked = false;
       $item.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('0');
+      expect(this.$el.find('#btn-selected').html()).to.contain('0');
     });
 
     it('test current folder buttons do not show on root', function() {
@@ -316,7 +280,8 @@ define([
       var $checkbox = $('.breadcrumbs-container input[type="checkbox"]', this.$el);
       $checkbox[0].checked = true;
       $checkbox.trigger('change');
-      expect(this.$el.find('#selected').html()).to.contain('1');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected').html()).to.contain('1');
     });
 
   });

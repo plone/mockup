@@ -7,7 +7,8 @@ define([
 
   var Toolbar = ContainerView.extend({
     tagName: 'div',
-    className: 'navbar'
+    className: 'navbar',
+    idPrefix: 'toolbar-'
   });
 
   return Toolbar;

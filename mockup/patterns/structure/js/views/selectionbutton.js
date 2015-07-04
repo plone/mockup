@@ -12,13 +12,18 @@ define([
     template: tplButton,
     initialize: function(options) {
       ButtonView.prototype.initialize.apply(this, [options]);
-
+      var self = this;
+      self.timeout = 0;
       if (this.collection !== null) {
         this.collection.on('add remove reset', function() {
-          this.render();
-          if (this.collection.length === 0) {
-            this.$el.removeClass('active');
-          }
+          /* delay it */
+          clearTimeout(self.timeout);
+          self.timeout = setTimeout(function(){
+            self.render();
+            if (self.collection.length === 0) {
+              self.$el.removeClass('active');
+            }
+          }, 50);
         }, this);
       }
     },

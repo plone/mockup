@@ -37,13 +37,13 @@ define([
       this.clock = sinon.useFakeTimers();
       this.clock.tick(1000);
       expect($('.pat-filemanager', this.$el).length > 0).to.be.equal(true);
-      expect($('#mapper', this.$el).length > 0).to.be.equal(true);
-      expect($('#showinspectors', this.$el).length > 0).to.be.equal(true);
-      expect($('#buildrule', this.$el).length > 0).to.be.equal(true);
-      expect($('#previewtheme', this.$el).length > 0).to.be.equal(true);
-      expect($('#fullscreenEditor', this.$el).length > 0).to.be.equal(true);
-      expect($('#helpbutton', this.$el).length > 0).to.be.equal(true);
-      expect($('#inspectors', this.$el).length > 0).to.be.equal(true);
+      expect($('#container-mapper', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-showinspectors', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-buildrule', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-previewtheme', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-fullscreenEditor', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-helpbutton', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-inspectors', this.$el).length > 0).to.be.equal(true);
       expect($('.container', this.$el).length > 0).to.be.equal(true);
 
       //This one is added after clicking the "fullscreen" button
@@ -58,7 +58,7 @@ define([
 
       expect($('.closeeditor', this.$el).length === 0).to.be.equal(true);
       expect($('.container', this.$el).hasClass('fullscreen')).to.be.equal(false);
-      $('#fullscreenEditor', this.$el).click();
+      $('#btn-fullscreenEditor', this.$el).click();
       expect($('.container', this.$el).hasClass('fullscreen')).to.be.equal(true);
       expect($('.closeeditor', this.$el).length > 0).to.be.equal(true);
 
@@ -66,11 +66,11 @@ define([
       expect($('.container', this.$el).hasClass('fullscreen')).to.be.equal(false);
       expect($('.closeeditor', this.$el).length === 0).to.be.equal(true);
 
-      expect($('#inspectors', this.$el).is(':visible')).to.be.equal(false);
-      $('#showinspectors', this.$el).click();
+      expect($('#btn-inspectors', this.$el).is(':visible')).to.be.equal(false);
+      $('#btn-showinspectors', this.$el).click();
       expect($('#inspectors', this.$el).is(':visible')).to.be.equal(true);
-      $('#showinspectors', this.$el).click();
-      expect($('#inspectors', this.$el).is(':visible')).to.be.equal(false);
+      $('#btn-showinspectors', this.$el).click();
+      expect($('#btn-inspectors', this.$el).is(':visible')).to.be.equal(false);
     });
   });
 });

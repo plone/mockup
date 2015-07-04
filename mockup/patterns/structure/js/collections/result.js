@@ -20,7 +20,7 @@ define([
       this.trigger('pager');
       Backbone.Paginator.requestPager.prototype.pager.apply(this, []);
     },
-    'paginator_core': {
+    paginator_core: {
       // the type of the request (GET by default)
       type: 'GET',
       // the type of reply (jsonp by default)
@@ -29,7 +29,7 @@ define([
         return this.url;
       }
     },
-    'paginator_ui': {
+    paginator_ui: {
       // the lowest page index your API allows to be accessed
       firstPage: 1,
       // which page should the paginator start from
@@ -38,7 +38,7 @@ define([
       // how many items per page should be shown
       perPage: 15
     },
-    'server_api': {
+    server_api: {
       query: function() {
         return this.queryParser();
       },
@@ -50,13 +50,16 @@ define([
         return JSON.stringify(this.queryHelper.options.attributes);
       }
     },
-    parse: function (response) {
+    parse: function (response, baseSortIdx) {
+      if(baseSortIdx === undefined){
+        baseSortIdx = 0;
+      }
       this.totalRecords = response.total;
       var results = response.results;
       // XXX manually set sort order here since backbone will otherwise
       // do arbitrary sorting?
       _.each(results, function(item, idx) {
-        item._sort = idx;
+        item._sort = idx + baseSortIdx;
       });
       return results;
     },

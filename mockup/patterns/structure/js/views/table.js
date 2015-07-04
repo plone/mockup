@@ -46,7 +46,6 @@ define([
       var data = self.contextInfo;
       var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
       if ($defaultPage.length > 0) {
-        $defaultPage.find('td.title').prepend('<span>*</span> ');
         $defaultPage.addClass('default-page');
       }
       /* set breadcrumb title info */
@@ -144,7 +143,9 @@ define([
       if ($(e.target).is(':checked')) {
         $('input[type="checkbox"]', this.$('tbody')).prop('checked', true).change();
       } else {
-        this.selectedCollection.remove(this.collection.models);
+        /* delaying the re-rendering is much faster in this case */
+        this.selectedCollection.remove(this.collection.models, { silent: true });
+        this.selectedCollection.trigger('remove');
       }
       this.setContextInfo();
     },
@@ -165,7 +166,17 @@ define([
       self.$el.addClass('order-support');
       var dd = new Sortable(self.$('tbody'), {
         selector: 'tr',
-        dragClass: 'structure-dragging',
+        createDragItem: function(pattern, $el){
+          var $tr = $el.clone();
+          var $table = $('<table><tbody></tbody></table>');
+          $('tbody', $table).append($tr);
+          $table.addClass('structure-dragging')
+            .css({opacity: 0.85, position: 'absolute'});
+          $table.width($el.width());
+          $table.height($el.height());
+          $table.appendTo(document.body);
+          return $table;
+        },
         drop: function($el, delta) {
           if (delta !== 0){
             self.app.moveItem($el.attr('data-id'), delta, self.subsetIds);

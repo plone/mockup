@@ -38,11 +38,12 @@ define([
     render: function() {
       this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
-        title: 'Query'
+        title: _t('Query'),
+        icon: 'search'
       });
       this.popover = new PopoverView({
         triggerView: this.button,
-        title: _.template('Query'),
+        title: _.template(_t('Query')),
         content: this.popoverContent,
         placement: 'left'
       });

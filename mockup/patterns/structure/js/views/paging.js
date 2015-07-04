@@ -100,6 +100,7 @@ define([
       e.preventDefault();
       var per = $(e.target).text();
       this.collection.howManyPer(per);
+      this.app.setCookieSetting('perPage', per);
     }
   });
 

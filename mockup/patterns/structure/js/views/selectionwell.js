@@ -24,7 +24,14 @@ define([
     },
     initialize: function(options) {
       PopoverView.prototype.initialize.apply(this, [options]);
-      this.listenTo(this.collection, 'reset all add remove', this.render);
+      var self = this;
+      var timeout = 0;
+      this.listenTo(this.collection, 'reset all add remove', function(){
+        clearTimeout(timeout);
+        timeout = setTimeout(function(){
+          self.render();
+        }, 50);
+      });
       this.options['item_template'] = _.template(ItemTemplate); // jshint ignore:line
     },
     render: function () {

@@ -12,6 +12,7 @@ define([
     className: 'btn',
     eventPrefix: 'button',
     context: 'default',
+    idPrefix: 'btn-',
     attributes: {
       'href': '#'
     },

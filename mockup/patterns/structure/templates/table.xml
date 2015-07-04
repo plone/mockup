@@ -30,14 +30,14 @@
       </td>
     </tr>
     <tr>
-      <th><input type="checkbox" class="select-all" /></th>
-      <th>Title</th>
+      <th class="selection"><input type="checkbox" class="select-all" /></th>
+      <th class="title">Title</th>
       <% _.each(activeColumns, function(column){ %>
         <% if(_.has(availableColumns, column)) { %>
           <th><%- availableColumns[column] %></th>
         <% } %>
       <% }); %>
-      <th><%- _t("Actions") %></th>
+      <th class="actions"><%- _t("Actions") %></th>
     </tr>
   </thead>
   <tbody>

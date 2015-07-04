@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Update structure pattern to have buttons be more generic and extensible
+  [vangheem]
+
 - Upgrade pickadate to 3.5.6
   [vangheem]
 
