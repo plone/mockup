@@ -37,13 +37,13 @@ define([
       this.clock = sinon.useFakeTimers();
       this.clock.tick(1000);
       expect($('.pat-filemanager', this.$el).length > 0).to.be.equal(true);
-      expect($('#container-mapper', this.$el).length > 0).to.be.equal(true);
+      expect($('#btngroup-mapper', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-showinspectors', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-buildrule', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-previewtheme', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-fullscreenEditor', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-helpbutton', this.$el).length > 0).to.be.equal(true);
-      expect($('#btn-inspectors', this.$el).length > 0).to.be.equal(true);
+      expect($('#inspectors', this.$el).length > 0).to.be.equal(true);
       expect($('.container', this.$el).length > 0).to.be.equal(true);
 
       //This one is added after clicking the "fullscreen" button
