@@ -70,7 +70,7 @@ define([
         'Subject': 'Tags',
         'portal_type': 'Type',
         'is_folderish': 'Folder',
-        'exclude_from_nav': 'Excluded from nav',
+        'exclude_from_nav': 'Excluded from navigation',
         'getObjSize': 'Object Size',
         'last_comment_date': 'Last comment date',
         'total_comments': 'Total comments'
