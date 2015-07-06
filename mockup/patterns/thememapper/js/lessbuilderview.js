@@ -3,7 +3,8 @@ define([
   'underscore',
   'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
-], function($, _, Backbone, PopoverView ) {
+  'mockup-patterns-resourceregistry-url/js/iframe'
+], function($, _, Backbone, PopoverView, IFrame ) {
   'use strict';
   var lessBuilderTemplate = _.template(
     '<div id="lessBuilder">' +
@@ -114,7 +115,6 @@ define([
               self.showError(error);
             }
           };
-
           iframe.styles = [];
         },
         onLoad: function(self) {

@@ -37,11 +37,10 @@ define([
   'mockup-patterns-thememapper-url/js/rulebuilder',
   'mockup-patterns-thememapper-url/js/rulebuilderview',
   'mockup-patterns-thememapper-url/js/lessbuilderview',
-  'mockup-patterns-resourceregistry-url/js/iframe',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup',
   'mockup-utils'
-], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, LessBuilderView, IFrame, ButtonView, ButtonGroup, utils) {
+], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, LessBuilderView, ButtonView, ButtonGroup, utils) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
