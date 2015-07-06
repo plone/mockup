@@ -120,7 +120,7 @@ define([
       var checkFinished = function(){
         var $styles =  $('style[type="text/css"][id]', iframe.document);
         for(var i=0; i<$styles.length; i=i+1){
-          var $style = $styles.eq(i); 
+          var $style = $styles.eq(i);
           if($style.attr('id') === 'less:error-message'){
             self.addResult(_t('Error compiling less'));
             return self.finished(true);

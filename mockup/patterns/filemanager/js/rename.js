@@ -44,10 +44,7 @@ define([
           },
           success: function(data) {
             self.hide();
-            self.app.$tree.tree(
-              'loadDataFromUrl',
-              self.app.options.actionUrl + '?action=dataTree'
-            );
+            self.app.refreshTree();
             // ugly, $tabs should have an API
             $('.nav .active .remove').click();
           }

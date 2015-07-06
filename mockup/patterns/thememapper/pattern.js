@@ -34,11 +34,15 @@ define([
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',
+  'mockup-patterns-modal',
   'mockup-patterns-thememapper-url/js/rulebuilder',
   'mockup-patterns-thememapper-url/js/rulebuilderview',
+  'mockup-patterns-thememapper-url/js/lessbuilderview',
+  'mockup-patterns-resourceregistry-url/js/iframe',
   'mockup-ui-url/views/button',
-  'mockup-ui-url/views/buttongroup'
-], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, ButtonView, ButtonGroup) {
+  'mockup-ui-url/views/buttongroup',
+  'mockup-utils'
+], function($, Base, _, _t, InspectorTemplate, FileManager, Modal, RuleBuilder, RuleBuilderView, LessBuilderView, IFrame, ButtonView, ButtonGroup, utils) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
@@ -280,6 +284,8 @@ define([
     unthemedInspector: null,
     ruleBuilder: null,
     rulebuilderView: null,
+    lessUrl: null,
+    lessPaths: {},
     $fileManager: null,
     $container: null,
     $inspectorContainer: null,
@@ -292,12 +298,14 @@ define([
       }
       self.$fileManager = $('<div class="pat-filemanager"/>').appendTo(self.$el);
       self.$container = $('<div class="row"></div>').appendTo(self.$el);
+      self.$styleBox = $('<div id="styleBox"></div>').appendTo(self.$el);
       self.$inspectorContainer = $('<div id="inspectors"></div>').appendTo(self.$container);
       self.$mockupInspector = $('<div class="mockup-inspector"/>').appendTo(self.$inspectorContainer);
       self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(self.$inspectorContainer);
 
       // initialize patterns now
       self.editable = (self.options.editable == "True") ? true : false;
+      self.lessUrl = (self.options.lessUrl !== undefined ) ? self.options.lessUrl : false;
 
       self.options.filemanagerConfig.uploadUrl = self.options.themeUrl;
       self.options.filemanagerConfig.theme = true;
@@ -307,6 +315,11 @@ define([
       self.setupButtons();
 
       self.ruleBuilder = new RuleBuilder(self, self.ruleBuilderCallback);
+
+      self.fileManager.on("fileChange", function() {
+        var node = self.fileManager.getSelectedNode();
+        self.setLessPaths(node);
+      });
 
       self.mockupInspector = new Inspector(self.$mockupInspector, {
         name: _t('HTML mockup'),
@@ -319,6 +332,10 @@ define([
         ruleBuilder: self.ruleBuilder,
         url: self.options.unthemedUrl,
       });
+      self.fileManager.$tree.bind('tree.click', function(e){
+      });
+      self.buildLessButton.$el.hide();
+
       if( !self.editable ) {
         if( self.fileManager.toolbar ) {
           var items = self.fileManager.toolbar.items;
@@ -330,6 +347,135 @@ define([
 
       // initially, let's hide the panels
       self.hideInspectors();
+    },
+    setLessPaths: function(node) {
+      var self = this;
+
+      if( node.fileType == "less" ){
+        self.buildLessButton.$el.show();
+      }
+      else{
+        self.buildLessButton.$el.hide();
+      }
+      
+      if( node.path != "" ) {
+        var reg = new RegExp("/(.*\\.)less$", "m");
+        var path = reg.exec(node.path);
+
+        if( path === null ) {
+          self.lessPaths = {};
+          return false;
+        }
+        var lessPath = path[1] + "less";
+        var cssPath = path[1] + "css";
+
+        //file paths should be in the form of:
+        // "[directory/]filename.less"
+        self.lessPaths = {
+          'less': lessPath,
+          'save': cssPath
+        };
+
+        return true;
+      }
+      else {
+        self.lessPaths = {};
+        return false;
+      }
+    },
+    saveThemeCSS: function() {
+      var self = this.env;
+      var css = self.$styleBox.html();
+
+      if( css === "" ) {
+        //There was probably a problem during compilation
+        return false;
+      }
+
+      self.fileManager.doAction('saveFile', {
+        type: 'POST',
+        data: {
+          path: self.lessPaths['save'],
+          data: css,
+          _authenticator: utils.getAuthenticator()
+        },
+        success: function(data) {
+          self.fileManager.refreshTree(function() {
+            //We need to make sure we open the newest version
+            delete self.fileManager.fileData['/' + self.lessPaths['save']]
+            self.fileManager.openFileByPath(self.lessPaths['save'])
+          }); 
+          self.lessbuilderView.end();
+        }
+      });
+
+      window.iframe['lessc'].destroy();
+
+    },
+    showLessBuilder: function() {
+      var self = this;
+
+      if( self.lessPaths['save'] === undefined ) {
+        self.lessbuilderView.showError("Error: invalid filetype");
+        return false;
+      }
+
+      self.lessbuilderView.working();
+
+      //TODO remove hardcoded variable URL
+      var config = {
+        less: ['http://localhost:8080/Plone/less-variables.js',
+                self.lessPaths['less'],
+                self.lessUrl]
+      }
+
+      var iframe = new IFrame({
+        name: 'lessc',
+        resources: config.less,
+        callback: self.saveThemeCSS,
+        env: self,
+        configure: function(iframe){
+          iframe.window.lessErrorReporting = function(what, error, href){
+            if( error.href !== undefined )
+            {
+              self.fileManager.ace.editor.scrollToLine(error.line, true);
+              if( error.type == "Name" ) {
+                var reg = new RegExp(".*(@\\S+)\\s.*");
+                var matches = reg.exec(error.message);
+                if( matches !== null ) {
+                  var varName = matches[1];
+                  var result = self.fileManager.ace.editor.findAll(varName);
+                }
+              }
+              else {
+                //The line number is always off by 1? (and LESS indexes from 0) so -2
+                self.fileManager.ace.editor.moveCursorToPosition({row: error.line - 2, column: error.column});
+              }
+              self.lessbuilderView.showError(error);
+            }
+          };
+
+          iframe.styles = [];
+        },
+        onLoad: function(self) {
+          less.pageLoadFinished.then(
+            function() {
+              var $ = window.parent.$;
+              var iframe = window.iframe['lessc'];
+              var styles = $('style', iframe.document);
+              var styleBox = $('#styleBox');
+
+              $(styleBox).empty();
+              $(styles).each(function() {
+                styleBox.append(this.innerHTML);
+              });
+
+              iframe.options.callback();
+            }
+          );
+        }
+      });
+
     },
     showInspectors: function(){
       var self = this;
@@ -399,7 +545,12 @@ define([
       self.previewThemeButton.on('button:click', function(){
         window.open(self.options.previewUrl);
       });
-
+      self.buildLessButton = new ButtonView({
+        id: 'buildless',
+        title: _t('Build CSS'),
+        tooltip: _t('Compile LESS file'),
+        context: 'default'
+      });
       self.helpButton = new ButtonView({
         id: 'helpbutton',
         title: _t('Help'),
@@ -413,18 +564,24 @@ define([
         triggerView: self.buildRuleButton,
         app: self
       });
+      self.lessbuilderView = new LessBuilderView({
+        triggerView: self.buildLessButton,
+        app: self
+      });
       self.buttonGroup = new ButtonGroup({
         items: [
           self.showInspectorsButton,
           self.buildRuleButton,
           self.previewThemeButton,
           self.fullscreenButton,
+          self.buildLessButton,
           self.helpButton
         ],
         id: 'mapper'
       });
       $('#toolbar .navbar', self.$el).append(self.buttonGroup.render().el);
       $('#toolbar .navbar', self.$el).append(self.rulebuilderView.render().el);
+      $('#toolbar .navbar', self.$el).append(self.lessbuilderView.render().el);
     }
   });
 

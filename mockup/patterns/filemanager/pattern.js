@@ -129,7 +129,7 @@ define([
         triggerView: new ButtonView({
           id: 'delete',
           title: _t('Delete'),
-          tooltip: _('Delete currently selected resource'),
+          tooltip: _t('Delete currently selected resource'),
           context: 'danger'
         }),
         app: self
@@ -155,7 +155,7 @@ define([
             context: 'default'
           }),
           app: self,
-          callback: self.addTreeElement
+          callback: self.refreshTree
         });
         self.views.push(uploadView);
         mainButtons.push(uploadView.triggerView);
@@ -215,54 +215,16 @@ define([
     $: function(selector){
       return this.$el.find(selector);
     },
-    addTreeElement: function(file) {
+    refreshTree: function(callback) {
       var self = this;
-
-      if( file.status !== 'success' )
-      {
-          alert('There was a problem during the upload process.');
-          return;
+      if( callback === undefined ) {
+        callback = function() {};
       }
-
-      if( self.$tree === undefined ) {
-        return;
-      }
-
-      var node = self.getSelectedNode();
-      var path = "";
-      var name = file.name;
-
-      if( node.filename ) {
-        //We just want the selected folder, not an object in it.
-        path = node.path.substr(0, node.path.indexOf(node.filename) - 1);
-        node = self.$tree.tree('moveUp');
-      }
-      else if( node.path ){
-        path = node.path;
-      }
-
-      var options = {
-        label: name,
-        path: path + '/' + name,
-        filename: name,
-        fileType: name.substr(name.lastIndexOf('.') + 1, name.length),
-        folder: false,
-        name: name
-      };
-
-      if( node === false )
-      {
-        //If node is empty, jqtree makes the new node a root
-        node = null
-      }
-      var newNode = self.$tree.tree('appendNode', options, node);
-      self.$tree.tree('selectNode', newNode);
-      self.openFile({node: newNode});
-      //Close the upload popover
-      var upload = self.getUpload();
-      if( upload.triggerView.$el.hasClass('active') ) {
-        upload.options.triggerView.$el.click();
-      }
+      self.$tree.tree('loadDataFromUrl', 
+        self.options.actionUrl + '?action=dataTree',
+        null,
+        callback
+      );
     },
     render: function(){
       var self = this;
@@ -313,6 +275,9 @@ define([
         }
         return true;
       }
+      if( event.node ) {
+        self.$tree.tree('selectNode', event.node);
+      }
       if(self.fileData[doc]) {
         $('li', self.$tabs).removeClass('active');
         var $existing = $('[data-path="' + doc + '"]');
@@ -333,20 +298,22 @@ define([
                   $item = $(this).parent().next();
                 }
                 $item.addClass('active');
-                self.openEditor($item.attr('data-path'));
+                $(this).parent().remove();
+                self.openFileByPath($item.attr('data-path'));
               } else {
+                $(this).parent().remove();
                 self.openEditor();
               }
             }
-            $(this).parent().remove();
-            self.resizeEditor();
+            else {
+              $(this).parent().remove();
+            }
           });
           $('.select', $item).click(function(e){
             e.preventDefault();
             $('li', self.$tabs).removeClass('active');
             var $li = $(this).parent();
             $li.addClass('active');
-            self.$tree.tree('selectNode', event.node);
             self.openFile({node: event.node});
           });
         }else{
@@ -363,6 +330,41 @@ define([
           }
         });
       }
+    },
+    openFileByPath: function(path) {
+      var self = this;
+      if( path === undefined || path === "" )
+      {
+       return false;
+      }
+
+      if( path.indexOf('/') === 0 )
+      {
+        path = path.substr(1,path.length);
+      }
+      
+      var folders = path.split('/');
+      var children = self.$tree.tree('getTree').children;
+
+      for( var i = 0; i < folders.length; i++ )
+      {
+        for( var z = 0; z < children.length; z++ )
+        {
+          if( children[z].name == folders[i] ) {
+            if( children[z].folder == true ) {
+              children = children[z].children;
+              break;
+            }
+            else {
+              self.$tree.tree('selectNode', children[z]);
+              self.openFile({node: children[z]});
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
     },
     doAction: function(action, options) {
       var self = this;
@@ -396,12 +398,11 @@ define([
       }
       self.ace = new TextEditor(self.$editor);
 
-      self.resizeEditor();
-
       if( self.currentPath === undefined ) {
           self.ace.setText();
           self.ace.setSyntax('text');
           self.ace.editor.clearSelection();
+          self.$tree.tree('selectNode', null);
       }
       else if( typeof self.fileData[path].info !== 'undefined' )
       {
@@ -416,6 +417,8 @@ define([
           self.ace.editor.clearSelection();
       }
 
+      self.resizeEditor();
+      self.$el.trigger("fileChange");
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
           $('[data-path="' + path + '"]').addClass("modified");
@@ -470,9 +473,9 @@ define([
     resizeEditor: function() {
         var self = this;
 
+        self.$editor = $('.editor', self.$el);
         var tab = self.$tabs.children()[0];
-
-        if( $(tab).height() < (self.$tabs.height() - 1) ) {
+        if( $(tab).outerHeight() < (self.$tabs.height() - 1) ) {
             self.$tabs.addClass('smallTabs');
             $(self.$tabs.children()).each(function() {
                 self.shrinkTab(this);

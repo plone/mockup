@@ -64,10 +64,7 @@ define([
           // clear out
           self.$('input.search').attr('value', '');
           self.$results.empty();
-          self.app.$tree.tree(
-              'loadDataFromUrl',
-              self.app.options.actionUrl + '?action=dataTree'
-            );
+          self.app.refreshTree();
         }
       });
     }
