@@ -450,6 +450,7 @@ define([
               else {
                 //The line number is always off by 1? (and LESS indexes from 0) so -2
                 self.fileManager.ace.editor.moveCursorToPosition({row: error.line - 2, column: error.column});
+                self.fileManager.ace.editor.focus();
               }
               self.lessbuilderView.showError(error);
             }

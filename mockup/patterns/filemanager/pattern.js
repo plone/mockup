@@ -501,6 +501,8 @@ define([
           self.ace.editor.resize();
           self.ace.editor.$blockScrolling = Infinity;
         }
+
+        self.ace.editor.focus();
     },
     setUploadUrl: function(path) {
       var self = this;
