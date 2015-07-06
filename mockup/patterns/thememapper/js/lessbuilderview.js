@@ -9,7 +9,7 @@ define([
     '<div id="lessBuilder">' +
       '<span class="message"></span>' +
       '<span style="display: none;" class="errorMessage"></span>' +
-      '<div>' +
+      '<div class="buttonBox">' +
         '<a id="compileBtn" class="btn btn-success" href="#">Compile</a>' +
         '<a id="errorBtn" class="btn btn-default" href="#">Clear</a>' +
       '</div>' +
