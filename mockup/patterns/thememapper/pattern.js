@@ -34,7 +34,6 @@ define([
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',
-  'mockup-patterns-modal',
   'mockup-patterns-thememapper-url/js/rulebuilder',
   'mockup-patterns-thememapper-url/js/rulebuilderview',
   'mockup-patterns-thememapper-url/js/lessbuilderview',
@@ -42,7 +41,7 @@ define([
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup',
   'mockup-utils'
-], function($, Base, _, _t, InspectorTemplate, FileManager, Modal, RuleBuilder, RuleBuilderView, LessBuilderView, IFrame, ButtonView, ButtonGroup, utils) {
+], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, LessBuilderView, IFrame, ButtonView, ButtonGroup, utils) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
@@ -286,6 +285,7 @@ define([
     rulebuilderView: null,
     lessUrl: null,
     lessPaths: {},
+    lessVariableUrl: null,
     $fileManager: null,
     $container: null,
     $inspectorContainer: null,
@@ -306,6 +306,7 @@ define([
       // initialize patterns now
       self.editable = (self.options.editable == "True") ? true : false;
       self.lessUrl = (self.options.lessUrl !== undefined ) ? self.options.lessUrl : false;
+      self.lessVariableUrl = (self.options.lessVariables !== undefined ) ? self.options.lessVariables : false;
 
       self.options.filemanagerConfig.uploadUrl = self.options.themeUrl;
       self.options.filemanagerConfig.theme = true;
@@ -422,9 +423,8 @@ define([
 
       self.lessbuilderView.working();
 
-      //TODO remove hardcoded variable URL
       var config = {
-        less: ['http://localhost:8080/Plone/less-variables.js',
+        less: [ self.lessVariableUrl,
                 self.lessPaths['less'],
                 self.lessUrl]
       }
