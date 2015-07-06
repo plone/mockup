@@ -21,7 +21,13 @@ define([
         url: self.app.options.uploadUrl,
         success: function(response) {
           if( self.callback ) {
-            self.callback.apply(self.app, [response]);
+            if( response.status == "success" ) {  
+              self.callback.apply(self.app, [response]);
+            }
+            else
+            {
+                alert("There was a problem during the upload process");
+            }
           }
         }
       });

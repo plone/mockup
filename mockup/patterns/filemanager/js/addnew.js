@@ -34,10 +34,7 @@ define([
           },
           success: function(data) {
             self.hide();
-            self.app.$tree.tree(
-              'loadDataFromUrl',
-              self.app.options.actionUrl + '?action=dataTree'
-            );
+            self.app.refreshTree();          
           }
         });
         // XXX show loading
