@@ -8,7 +8,7 @@ define([
   'use strict';
 
   var WellView = PopoverView.extend({
-    className: 'popover selected',
+    className: 'popover selected-items',
     title: _.template('<input type="text" class="filter" placeholder="Filter" />' +
                       '<a href="#" class=" remove-all">' +
                         '<span class="glyphicon glyphicon-remove-circle"></span> <%- _t("remove all") %></a>'),

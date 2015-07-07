@@ -111,7 +111,7 @@
         min-height: inherit;
         margin-bottom: 5px;
 
-        .btn-group, #selected{
+        .btn-group{
             margin-left: 5px;
         }
     }
@@ -160,12 +160,12 @@
 
     /* button overrides to make it look
        more streamlined */
-    #btn-columns{
+    #btn-attribute-columns{
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         border-right: 0;
     }
-    #btn-selected, #btn-rearrange, #btn-upload{
+    #btn-selected-items, #btn-rearrange, #btn-upload{
         border-radius: 0;
         border-right: 0;
     }
@@ -190,10 +190,10 @@
         }
     }
     @media all and (max-width: 620px) {
-        #btn-columns{
+        #btn-attribute-columns{
             display:none;
         }
-        #btn-selected{
+        #btn-selected-items{
             border-top-left-radius: 3px;
             border-bottom-left-radius: 3px;
             border-left: 1px solid #cccccc;
@@ -264,7 +264,7 @@
     }
 }
 
-.popover.selected {
+.popover.selected-items {
     .items {
         max-height: 300px;
         overflow-y: auto;
@@ -320,7 +320,7 @@
     }
 }
 
-.popover.columns{
+.popover.attribute-columns{
     ul{
         list-style: none;
         margin: 0;
