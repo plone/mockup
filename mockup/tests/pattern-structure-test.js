@@ -148,7 +148,7 @@ define([
       cb[0].checked = true;
       cb.trigger('change');
       this.clock.tick(500);
-      expect(this.$el.find('#btn-selected').html()).to.contain('1');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
     });
 
     it('remove item from selection well', function() {
@@ -158,7 +158,7 @@ define([
       $item1[0].checked = true;
       $item1.trigger('change');
       this.$el.find('.items.popover-content a.remove').trigger('click').trigger('change');
-      expect(this.$el.find('#btn-selected').html()).to.contain('0');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
     });
 
     it('remove all from selection well', function() {
@@ -172,10 +172,10 @@ define([
       $item2[0].checked = true;
       $item2.trigger('change');
       this.clock.tick(1000);
-      expect(this.$el.find('#btn-selected').html()).to.contain('2');
-      this.$el.find('.popover.selected a.remove-all').trigger('click');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('2');
+      this.$el.find('.popover.selected-items a.remove-all').trigger('click');
       this.clock.tick(1000);
-      expect(this.$el.find('#btn-selected').html()).to.contain('0');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
     });
 
     it('paging', function() {
@@ -235,7 +235,7 @@ define([
       $item[0].checked = true;
       $item.trigger('change');
       this.clock.tick(1000);
-      expect(this.$el.find('#btn-selected').html()).to.contain('16');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('16');
 
     });
 
@@ -247,10 +247,10 @@ define([
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
-      expect(this.$el.find('#btn-selected').html()).to.contain('16');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('16');
       $item[0].checked = false;
       $item.trigger('change');
-      expect(this.$el.find('#btn-selected').html()).to.contain('0');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
     });
 
     it('test current folder buttons do not show on root', function() {
@@ -281,7 +281,7 @@ define([
       $checkbox[0].checked = true;
       $checkbox.trigger('change');
       this.clock.tick(1000);
-      expect(this.$el.find('#btn-selected').html()).to.contain('1');
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
     });
 
   });

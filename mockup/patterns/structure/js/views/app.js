@@ -103,11 +103,11 @@ define([
 
       self.wellView = new SelectionWellView({
         collection: self.selectedCollection,
-        triggerView: self.toolbar.get('selected'),
+        triggerView: self.toolbar.get('selected-items'),
         app: self
       });
 
-      self.toolbar.get('selected').disable();
+      self.toolbar.get('selected-items').disable();
       self.buttons.disable();
 
       var timeout = 0;
@@ -193,10 +193,10 @@ define([
     updateButtons: function(){
       var self = this;
       if (self.selectedCollection.length) {
-        self.toolbar.get('selected').enable();
+        self.toolbar.get('selected-items').enable();
         self.buttons.enable();
       } else {
-        this.toolbar.get('selected').disable();
+        this.toolbar.get('selected-items').disable();
         self.buttons.disable();
       }
 
@@ -308,7 +308,7 @@ define([
       var items = [];
 
       var columnsBtn = new ButtonView({
-        id: 'columns',
+        id: 'attribute-columns',
         tooltip: 'Configure displayed columns',
         icon: 'th'
       });
@@ -321,7 +321,7 @@ define([
 
       items.push(new SelectionButtonView({
         title: 'Selected',
-        id: 'selected',
+        id: 'selected-items',
         collection: this.selectedCollection
       }));
 

@@ -4,6 +4,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- rename "columns" and "selected" structure popover classes to "attribute-columns"
+  and "selected-items" to prevent the possibility of clashing with other css
+  as they are common class names.
+  [vangheem]
+
 - Update structure pattern to have buttons be more generic and extensible
   [vangheem]
 

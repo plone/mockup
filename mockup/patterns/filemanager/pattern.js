@@ -500,9 +500,8 @@ define([
           //This forces ace to redraw if the container has changed size
           self.ace.editor.resize();
           self.ace.editor.$blockScrolling = Infinity;
+          self.ace.editor.focus();
         }
-
-        self.ace.editor.focus();
     },
     setUploadUrl: function(path) {
       var self = this;
