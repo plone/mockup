@@ -294,6 +294,17 @@ define([
     loading: new Loading(),
     getAuthenticator: function() {
       return $('input[name="_authenticator"]').val();
+    },
+    featureSupport: {
+      dragAndDrop: function(){
+        return 'draggable' in document.createElement('span');
+      },
+      fileApi: function(){
+        return typeof FileReader != 'undefined';
+      },
+      history: function(){
+        return !!(window.history && window.history.pushState);
+      }
     }
   };
 });

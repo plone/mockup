@@ -4,8 +4,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- rename structure "breadcrumbs" class to "fc-breadcrumbs" to prevent name clashes
+- add feature detection support to upload pattern usage. Upload pattern
+  will not work without drag n' drop and file api.
   [vangheem]
+
+- rename structure "breadcrumbs" class to "fc-breadcrumbs" to prevent name clashes
 
 - fix select2 widget's use of allowNewItems so that we can restrict select2
   value to only what is in the vocabulary
