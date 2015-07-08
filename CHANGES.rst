@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Fix 'Reserved Order' typo
+  [frapell]
+
 - add feature detection support to upload pattern usage. Upload pattern
   will not work without drag n' drop and file api.
   [vangheem]

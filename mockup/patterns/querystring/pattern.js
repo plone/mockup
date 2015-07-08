@@ -597,7 +597,7 @@ define([
         .append(self.$sortOrder)
         .append(
           $('<span/>')
-            .html(_t('Reserved Order'))
+            .html(_t('Reversed Order'))
             .addClass(self.options.classSortReverseLabelName)
         );
 
