@@ -4,9 +4,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- rename structure "breadcrumbs" class to "fc-breadcrumbs" to prevent name clashes
+  [vangheem]
+
 - fix select2 widget's use of allowNewItems so that we can restrict select2
   value to only what is in the vocabulary
-  [vangheem]
 
 - rename "columns" and "selected" structure popover classes to "attribute-columns"
   and "selected-items" to prevent the possibility of clashing with other css

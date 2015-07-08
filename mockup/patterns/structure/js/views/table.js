@@ -37,9 +37,9 @@ define([
       });
     },
     events: {
-      'click .breadcrumbs a': 'breadcrumbClicked',
+      'click .fc-breadcrumbs a': 'breadcrumbClicked',
       'change .select-all': 'selectAll',
-      'change .breadcrumbs-container input[type="checkbox"]': 'selectFolder'
+      'change .fc-breadcrumbs-container input[type="checkbox"]': 'selectFolder'
     },
     setContextInfo: function() {
       var self = this;
@@ -51,7 +51,7 @@ define([
       /* set breadcrumb title info */
       var crumbs = data.breadcrumbs;
       if (crumbs && crumbs.length) {
-        var $crumbs = self.$('.breadcrumbs a.crumb');
+        var $crumbs = self.$('.fc-breadcrumbs a.crumb');
         _.each(crumbs, function(crumb, idx) {
           $crumbs.eq(idx).html(crumb.title);
         });
@@ -88,7 +88,7 @@ define([
         activeColumns: self.app.activeColumns,
         availableColumns: self.app.availableColumns
       }));
-      self.$breadcrumbs = $('.breadcrumbs-container', self.$el);
+      self.$breadcrumbs = $('.fc-breadcrumbs-container', self.$el);
 
       if (self.collection.length) {
         var container = self.$('tbody');

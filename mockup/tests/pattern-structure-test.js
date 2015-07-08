@@ -277,7 +277,7 @@ define([
       var $item = this.$el.find('.itemRow').eq(0);
       $('.title a', $item).trigger('click');
       this.clock.tick(1000);
-      var $checkbox = $('.breadcrumbs-container input[type="checkbox"]', this.$el);
+      var $checkbox = $('.fc-breadcrumbs-container input[type="checkbox"]', this.$el);
       $checkbox[0].checked = true;
       $checkbox.trigger('change');
       this.clock.tick(1000);
