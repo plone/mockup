@@ -296,6 +296,11 @@ define([
       return $('input[name="_authenticator"]').val();
     },
     featureSupport: {
+      /*
+        well tested feature support for things we use in mockup.
+        All gathered from: http://diveintohtml5.info/everything.html
+        Alternative to using some form of modernizr.
+      */
       dragAndDrop: function(){
         return 'draggable' in document.createElement('span');
       },
