@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- add feature detection support to upload pattern usage. Upload pattern
+  will not work without drag n' drop and file api.
+  [vangheem]
+
 - fix select2 widget's use of allowNewItems so that we can restrict select2
   value to only what is in the vocabulary
   [vangheem]

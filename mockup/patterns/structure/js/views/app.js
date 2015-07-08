@@ -158,7 +158,7 @@ define([
         }
       });
 
-      if (self.options.urlStructure && window.history && window.history.pushState){
+      if (self.options.urlStructure && utils.featureSupport.history()){
         $(window).bind('popstate', function () {
           /* normalize this url first... */
           var url = window.location.href;
@@ -339,7 +339,7 @@ define([
         });
         items.push(rearrangeButton);
       }
-      if (self.options.upload) {
+      if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
         var uploadButton = new ButtonView({
           id: 'upload',
           title: 'Upload',
