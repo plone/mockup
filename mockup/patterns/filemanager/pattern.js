@@ -95,6 +95,7 @@ define([
       self.saveBtn = new ButtonView({
         id: 'save',
         title: _t('Save'),
+        icon: 'floppy-disk',
         context: 'success'
       });
 
@@ -103,6 +104,7 @@ define([
           id: 'newfolder',
           title: _t('New folder'),
           tooltip: _t('Add new folder to current directory'),
+          icon: 'folder-open',
           context: 'default'
         }),
         app: self
@@ -112,6 +114,7 @@ define([
           id: 'addnew',
           title: _t('Add new file'),
           tooltip: _t('Add new file to current folder'),
+          icon: 'file',
           context: 'default'
         }),
         app: self
@@ -121,6 +124,7 @@ define([
           id: 'rename',
           title: _t('Rename'),
           tooltip: _t('Rename currently selected resource'),
+          icon: 'erase',
           context: 'default'
         }),
         app: self
@@ -130,6 +134,7 @@ define([
           id: 'delete',
           title: _t('Delete'),
           tooltip: _t('Delete currently selected resource'),
+          icon: 'trash',
           context: 'danger'
         }),
         app: self
@@ -152,6 +157,7 @@ define([
             id: 'upload',
             title: _t('Upload'),
             tooltip: _t('Upload file to current directory'),
+            icon: 'upload',
             context: 'default'
           }),
           app: self,
@@ -220,7 +226,7 @@ define([
       if( callback === undefined ) {
         callback = function() {};
       }
-      self.$tree.tree('loadDataFromUrl', 
+      self.$tree.tree('loadDataFromUrl',
         self.options.actionUrl + '?action=dataTree',
         null,
         callback
@@ -236,23 +242,78 @@ define([
       self.$tree = self.$('.tree');
       self.$nav = self.$('nav');
       self.$tabs = $('ul.nav', self.$nav);
-      self.options.treeConfig.onLoad = function() {
-        // on loading initial data, activate first node if available
-        var node = self.$tree.tree('getNodeById', 1);
-        if (node){
-          self.$tree.tree('selectNode', node);
-          self.openFile({node: node});
-        }
-      };
       self.tree = new Tree(self.$tree, self.options.treeConfig);
-      self.$tree.bind('tree.click', function(e) {
-        self.openFile(e);
-      });
       self.$editor = self.$('.editor');
 
+      self.$tree.bind('tree.select', function(e) {
+        self.handleClick(e);
+      });
+
+      $(self.$tabs).on('click', function(e) {
+        var path = $(e.target).data('path');
+        if( path === undefined ) {
+          path = $(e.target.parentElement).data('path');
+          if( path === undefined ) {
+            return false;
+          }
+        }
+        self.selectItem(path);
+      });
       $(window).on('resize', function() {
         self.resizeEditor();
       });
+    },
+    handleClick: function(event) {
+      var self = this;
+      self.openFile(event);
+    },
+    createTab: function(path) {
+      var self = this;
+      var $item = $(self.tabItemTemplate({path: path}));
+      self.shrinkTab($item);
+      self.$tabs.append($item);
+      $('.remove', $item).click(function(e){
+        e.preventDefault();
+        if ($(this).parent().hasClass('active'))
+        {
+          var $siblings = $(this).parent().siblings();
+          if ($siblings.length > 0){
+            var $item;
+            if ($(this).parent().prev().length > 0){
+              $item = $(this).parent().prev();
+            } else {
+              $item = $(this).parent().next();
+            }
+            $(this).parent().remove();
+            $item.click();
+          } else {
+            $(this).parent().remove();
+            self.openEditor();
+          }
+        }
+        else {
+          $(this).parent().remove();
+        }
+      });
+      $('.select', $item).click(function(e){
+        e.preventDefault();
+        $('li', self.$tabs).removeClass('active');
+        var $li = $(this).parent();
+        $li.addClass('active');
+      });
+    },
+    updateTabs: function(path) {
+      var self = this;
+      if( path === undefined ) {
+        return;
+      }
+      $('li', self.$tabs).removeClass('active');
+      var $existing = $('[data-path="' + path + '"]', self.$tabs);
+      if ($existing.length === 0){
+        self.createTab(path);
+      }else{
+        $existing.addClass('active');
+      }
     },
     shrinkTab: function(tab) {
         var self = this;
@@ -275,50 +336,7 @@ define([
         }
         return true;
       }
-      if( event.node ) {
-        self.$tree.tree('selectNode', event.node);
-      }
       if(self.fileData[doc]) {
-        $('li', self.$tabs).removeClass('active');
-        var $existing = $('[data-path="' + doc + '"]');
-        if ($existing.length === 0){
-          var $item = $(self.tabItemTemplate({path: doc}));
-          self.shrinkTab($item);
-          self.$tabs.append($item);
-          $('.remove', $item).click(function(e){
-            e.preventDefault();
-            if ($(this).parent().hasClass('active'))
-            {
-              var $siblings = $(this).parent().siblings();
-              if ($siblings.length > 0){
-                var $item;
-                if ($(this).parent().prev().length > 0){
-                  $item = $(this).parent().prev();
-                } else {
-                  $item = $(this).parent().next();
-                }
-                $item.addClass('active');
-                $(this).parent().remove();
-                self.openFileByPath($item.attr('data-path'));
-              } else {
-                $(this).parent().remove();
-                self.openEditor();
-              }
-            }
-            else {
-              $(this).parent().remove();
-            }
-          });
-          $('.select', $item).click(function(e){
-            e.preventDefault();
-            $('li', self.$tabs).removeClass('active');
-            var $li = $(this).parent();
-            $li.addClass('active');
-            self.openFile({node: event.node});
-          });
-        }else{
-          $existing.addClass('active');
-        }
         self.openEditor(doc);
       } else {
         self.doAction('getFile', {
@@ -326,23 +344,23 @@ define([
           dataType: 'json',
           success: function(data) {
             self.fileData[doc] = data;
-            self.openFile(event);
+            self.openEditor(doc);
           }
         });
       }
     },
-    openFileByPath: function(path) {
+    getNodeByPath: function(path) {
       var self = this;
       if( path === undefined || path === "" )
       {
-       return false;
+       return null;
       }
 
       if( path.indexOf('/') === 0 )
       {
         path = path.substr(1,path.length);
       }
-      
+
       var folders = path.split('/');
       var children = self.$tree.tree('getTree').children;
 
@@ -356,15 +374,13 @@ define([
               break;
             }
             else {
-              self.$tree.tree('selectNode', children[z]);
-              self.openFile({node: children[z]});
-              return true;
+              return children[z];
             }
           }
         }
       }
 
-      return false;
+      return null;
     },
     doAction: function(action, options) {
       var self = this;
@@ -384,6 +400,8 @@ define([
     },
     openEditor: function(path) {
       var self = this;
+
+      self.updateTabs(path);
       // first we need to save the current editor content
       if(self.currentPath) {
         self.fileData[self.currentPath].contents = self.ace.editor.getValue();
@@ -502,6 +520,11 @@ define([
           self.ace.editor.$blockScrolling = Infinity;
           self.ace.editor.focus();
         }
+    },
+    selectItem: function(path) {
+      var self = this;
+      var node = self.getNodeByPath(path);
+      self.$tree.tree('selectNode', node);
     },
     setUploadUrl: function(path) {
       var self = this;

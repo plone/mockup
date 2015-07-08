@@ -66,11 +66,11 @@ define([
       expect($('.container', this.$el).hasClass('fullscreen')).to.be.equal(false);
       expect($('.closeeditor', this.$el).length === 0).to.be.equal(true);
 
-      expect($('#btn-inspectors', this.$el).is(':visible')).to.be.equal(false);
+      expect($('#inspectors', this.$el).is(':visible')).to.be.equal(false);
       $('#btn-showinspectors', this.$el).click();
       expect($('#inspectors', this.$el).is(':visible')).to.be.equal(true);
       $('#btn-showinspectors', this.$el).click();
-      expect($('#btn-inspectors', this.$el).is(':visible')).to.be.equal(false);
+      expect($('#inspectors', this.$el).is(':visible')).to.be.equal(false);
     });
   });
 });

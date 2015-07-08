@@ -357,7 +357,7 @@ define([
       else{
         self.buildLessButton.$el.hide();
       }
-      
+
       if( node.path != "" ) {
         var reg = new RegExp("/(.*\\.)less$", "m");
         var path = reg.exec(node.path);
@@ -403,8 +403,8 @@ define([
           self.fileManager.refreshTree(function() {
             //We need to make sure we open the newest version
             delete self.fileManager.fileData['/' + self.lessPaths['save']]
-            self.fileManager.openFileByPath(self.lessPaths['save'])
-          }); 
+            self.fileManager.selectItem(self.lessPaths['save'])
+          });
           self.lessbuilderView.end();
         }
       });
@@ -436,6 +436,7 @@ define([
       self.showInspectorsButton = new ButtonView({
         id: 'showinspectors',
         title: _t('Show inspectors'),
+        icon: 'search',
         tooltip: _t('Show inspector panels'),
         context: 'default'
       });
@@ -450,12 +451,14 @@ define([
       self.buildRuleButton = new ButtonView({
         id: 'buildrule',
         title: _t('Build rule'),
+        icon: 'wrench',
         tooltip: _t('rule building wizard'),
         context: 'default'
       });
       self.fullscreenButton = new ButtonView({
         id: 'fullscreenEditor',
         title: _t('Fullscreen'),
+        icon: 'fullscreen',
         tooltip: _t('view the editor in fullscreen'),
         context: 'default'
       });
@@ -474,6 +477,7 @@ define([
       self.previewThemeButton = new ButtonView({
         id: 'previewtheme',
         title: _t('Preview theme'),
+        icon: 'new-window',
         tooltip: _t('preview theme in a new window'),
         context: 'default'
       });
@@ -483,12 +487,14 @@ define([
       self.buildLessButton = new ButtonView({
         id: 'buildless',
         title: _t('Build CSS'),
+        icon: 'cog',
         tooltip: _t('Compile LESS file'),
         context: 'default'
       });
       self.helpButton = new ButtonView({
         id: 'helpbutton',
         title: _t('Help'),
+        icon: 'question-sign',
         tooltip: _t('Show help'),
         context: 'default'
       });
