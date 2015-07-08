@@ -300,7 +300,7 @@ define([
         return 'draggable' in document.createElement('span');
       },
       fileApi: function(){
-        return typeof FileReader != 'undefined';
+        return typeof FileReader != 'undefined'; // jshint ignore:line
       },
       history: function(){
         return !!(window.history && window.history.pushState);
