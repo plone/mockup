@@ -157,8 +157,18 @@ body.plone-toolbar-left-default {
             margin-top: 0px;
 
             li {
-                padding-bottom: 2px;
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 3px 0 3px 0;
             }
+        }
+
+        .glyphicon {
+            top: -1px;
+        }
+
+        .glyphicon:before {
+            margin-right: 5px;
         }
 
         .jqtree-selected {
@@ -292,6 +302,10 @@ body.plone-toolbar-left-default {
         .frame-shelf-container {
             margin-right: 5px;
         }
+    }
+
+    .btn-group {
+        margin-right: 30px;
     }
 
     #lessBuilder .buttonBox {

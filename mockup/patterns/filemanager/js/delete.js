@@ -30,9 +30,8 @@ define([
         success: function(data) {
           self.hide();
           self.app.refreshTree()
+          self.app.closeActiveTab();
           self.app.resizeEditor();
-          // ugly, $tabs should have an API
-          $('.nav .active .remove').click();
         }
       });
       // XXX show loading
