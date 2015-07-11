@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- be able to specify not submit modal forms with ajax
+  [vangheem]
+
 - Fix 'Reserved Order' typo
   [frapell]
 
