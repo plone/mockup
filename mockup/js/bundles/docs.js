@@ -32,11 +32,6 @@ require([
         description: 'All the patterns you\'ll ever need',
         autotoc: false,
         patterns: [
-          { id: 'accessibility',
-            title: 'Accessibility',
-            description: 'Easily change text size on a page',
-            url: 'patterns/accessibility/pattern.js'
-          },
           { id: 'autotoc',
             title: 'Autotoc',
             description: 'Automatically generate a table of contents',
