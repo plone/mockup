@@ -22,17 +22,21 @@ define([
     },
     deleteButtonClicked: function(e) {
       var self = this;
+      var path = self.app.getNodePath();
+      if( path === undefined ) {
+        alert("No file selected.");
+        return;
+      }
       self.app.doAction('delete', {
         type: 'POST',
         data: {
-          path: self.app.getNodePath()
+          path: path
         },
         success: function(data) {
           self.hide();
           self.app.refreshTree()
+          self.app.closeActiveTab();
           self.app.resizeEditor();
-          // ugly, $tabs should have an API
-          $('.nav .active .remove').click();
         }
       });
       // XXX show loading
