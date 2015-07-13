@@ -42,6 +42,7 @@ define([
       this.bindTriggerEvents();
 
       this.on('render', function() {
+        this.$el.attr('role', 'tooltip').attr('aria-hidden', 'true');
         this.renderTitle();
         this.renderContent();
       }, this);
@@ -128,6 +129,7 @@ define([
       }
 
       this.uiEventTrigger('show', this);
+      this.$el.attr('aria-hidden', 'false');
     },
     applyPlacement: function(offset, placement) {
       var $el = this.$el,
@@ -186,6 +188,7 @@ define([
         this.triggerView.$el.removeClass('active');
       }
       this.uiEventTrigger('hide', this);
+      this.$el.attr('aria-hidden', 'true');
     },
     toggle: function(button, e) {
       if (this.opened) {
