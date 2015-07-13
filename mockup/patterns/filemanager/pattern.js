@@ -164,7 +164,7 @@ define([
         deleteView.triggerView
       ];
 
-      if (self.options.uploadUrl){
+      if (self.options.uploadUrl && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()){
         var uploadView = new UploadView({
           triggerView: new ButtonView({
             id: 'upload',
@@ -211,6 +211,12 @@ define([
       });
 
       self._save = function() {
+
+        var path = self.getNodePath();
+        if( path === undefined ) {
+          alert("No file selected.");
+          return;
+        }
         self.doAction('saveFile', {
           type: 'POST',
           data: {
@@ -261,7 +267,17 @@ define([
       self.$editor = self.$('.editor');
 
       self.$tree.bind('tree.select', function(e) {
-        self.handleClick(e);
+        if( e.node === null ) {
+          $('#btn-delete', this.$el).attr('disabled', 'disabled');
+          $('#btn-save', this.$el).attr('disabled', 'disabled');
+          $('#btn-rename', this.$el).attr('disabled', 'disabled');
+        }
+        else{
+          $('#btn-delete', this.$el).attr('disabled', false);
+          $('#btn-save', this.$el).attr('disabled', false);
+          $('#btn-rename', this.$el).attr('disabled', false);
+          self.handleClick(e);
+        }
       });
 
       self.$tree.bind('tree.open', function(e) {
@@ -274,6 +290,13 @@ define([
         var element = $(e.node.element).find(':first').find('.glyphicon');
         $(element).addClass('glyphicon-folder-close');
         $(element).removeClass('glyphicon-folder-open');
+      });
+
+      self.$tree.bind('tree.init', function(e) {
+        var node = self.$tree.tree('getTree').children[0];
+        if( node ) {
+          self.$tree.tree('selectNode', node);
+        }
       });
 
       $(self.$tabs).on('click', function(e) {
@@ -362,13 +385,16 @@ define([
     },
     openFile: function(event) {
       var self = this;
-      var doc = event.node.path;
+      if( event.node === null ) {
+        return true;
+      }
       if (event.node.folder){
         if( self.options.theme ) {
           self.setUploadUrl(event.node.path);
         }
         return true;
       }
+      var doc = event.node.path;
       if(self.fileData[doc]) {
         self.openEditor(doc);
       } else {

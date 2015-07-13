@@ -17,11 +17,13 @@ define([
     events: {
       'click button': 'deleteButtonClicked'
     },
-    getPath: function() {
-      return this.app.getNodePath();
-    },
     deleteButtonClicked: function(e) {
       var self = this;
+      var path = self.app.getNodePath();
+      if( path === undefined ) {
+        alert("No file selected.");
+        return;
+      }
       self.app.doAction('delete', {
         type: 'POST',
         data: {
