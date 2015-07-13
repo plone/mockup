@@ -61,7 +61,6 @@
       'mockup-fakeserver': 'tests/fakeserver',
       'mockup-i18n': 'js/i18n',
       'mockup-parser': 'bower_components/mockup-core/js/parser',
-      'mockup-patterns-accessibility': 'patterns/accessibility/pattern',
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',

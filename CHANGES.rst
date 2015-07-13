@@ -4,6 +4,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- remove accessibility pattern. see
+    https://github.com/plone/Products.CMFPlone/issues/627
+    https://github.com/plone/Products.CMFPlone/issues/348
+  [vangheem]
+
 - be able to specify not submit modal forms with ajax
   [vangheem]
 

@@ -9,7 +9,6 @@ define([
   'mockup-patterns-querystring',
   'mockup-patterns-tinymce',
 
-  'mockup-patterns-accessibility',
   'mockup-patterns-autotoc',
   'mockup-patterns-formunloadalert',
   'mockup-patterns-preventdoublesubmit',
