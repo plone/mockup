@@ -17,6 +17,9 @@ define([
     events: {
       'click button': 'deleteButtonClicked'
     },
+    getPath: function() {
+      return this.app.getNodePath();
+    },
     deleteButtonClicked: function(e) {
       var self = this;
       var path = self.app.getNodePath();
@@ -27,7 +30,7 @@ define([
       self.app.doAction('delete', {
         type: 'POST',
         data: {
-          path: self.app.getNodePath()
+          path: path
         },
         success: function(data) {
           self.hide();

@@ -268,14 +268,10 @@ define([
 
       self.$tree.bind('tree.select', function(e) {
         if( e.node === null ) {
-          $('#btn-delete', this.$el).attr('disabled', 'disabled');
-          $('#btn-save', this.$el).attr('disabled', 'disabled');
-          $('#btn-rename', this.$el).attr('disabled', 'disabled');
+          self.toggleButtons(false);
         }
         else{
-          $('#btn-delete', this.$el).attr('disabled', false);
-          $('#btn-save', this.$el).attr('disabled', false);
-          $('#btn-rename', this.$el).attr('disabled', false);
+          self.toggleButtons(true);
           self.handleClick(e);
         }
       });
@@ -313,6 +309,22 @@ define([
         self.resizeEditor();
       });
     },
+    toggleButtons: function(on) {
+      if( on === undefined ) {
+        return;
+      }
+
+      if( on ) {
+        $('#btn-delete', this.$el).attr('disabled', false);
+        $('#btn-save', this.$el).attr('disabled', false);
+        $('#btn-rename', this.$el).attr('disabled', false);
+      }
+      else{
+        $('#btn-delete', this.$el).attr('disabled', 'disabled');
+        $('#btn-save', this.$el).attr('disabled', 'disabled');
+        $('#btn-rename', this.$el).attr('disabled', 'disabled');
+      }
+    },
     handleClick: function(event) {
       var self = this;
       self.openFile(event);
@@ -332,6 +344,7 @@ define([
         $item.click();
       } else {
         $(active).parent().remove();
+        self.toggleButtons(false);
         self.openEditor();
       }
     },
