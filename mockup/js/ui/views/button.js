@@ -38,6 +38,8 @@ define([
       }, this);
 
       this.on('render', function() {
+        this.$el.attr('title', this.options.title || '');
+        this.$el.attr('aria-label', this.options.title || this.options.tooltip || '');
         if (this.context !== null) {
           this.$el.addClass('btn-' + this.context);
         }

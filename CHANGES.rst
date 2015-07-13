@@ -4,10 +4,15 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Accessibility fixes for structure:
+    - label "cog"/actions
+    - provide title attribute on buttons
+    - add aria-hidden true/false attrs and role=tooltip for popovers
+  [vangheem]
+
 - remove accessibility pattern. see
     https://github.com/plone/Products.CMFPlone/issues/627
     https://github.com/plone/Products.CMFPlone/issues/348
-  [vangheem]
 
 - be able to specify not submit modal forms with ajax
   [vangheem]

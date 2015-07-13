@@ -176,7 +176,10 @@ define([
       data.header = self.options.header || null;
       data.canMove = self.canMove;
 
-      self.$el.html(self.template($.extend({ _t: _t }, data)));
+      self.$el.html(self.template($.extend({
+        _t: _t,
+        id: utils.generateId()
+      }, data)));
 
       self.$dropdown = self.$('.dropdown-toggle');
       self.$dropdown.dropdown();
