@@ -214,12 +214,12 @@ define([
       expect(this.$el.css('overflow')).to.not.equal('hidden');
     });
 
-    it.skip('test rearrange button', function() {
+    it('test rearrange button', function() {
       /* test not working in firefox */
       registry.scan(this.$el);
       this.clock.tick(1000);
       var $popover = this.$el.find('.popover.rearrange');
-      this.$el.find('#rearrange').trigger('click');
+      this.$el.find('#btn-rearrange').trigger('click');
       expect($popover.hasClass('active')).to.equal(true);
       $popover.find('button').trigger('click');
       this.clock.tick(1000);
@@ -229,7 +229,6 @@ define([
 
     it('test select all', function() {
       registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
@@ -239,30 +238,28 @@ define([
 
     });
 
-    it.skip('test unselect all', function() {
-      /* XXX chrome test failures, blah... */
+    it('test unselect all', function() {
       registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
       var $item = this.$el.find('table th .select-all');
       $item[0].checked = true;
       $item.trigger('change');
+      this.clock.tick(1000);
       expect(this.$el.find('#btn-selected-items').html()).to.contain('16');
       $item[0].checked = false;
       $item.trigger('change');
+      this.clock.tick(1000);
       expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
     });
 
     it('test current folder buttons do not show on root', function() {
       registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
       expect(this.$el.find('.context-buttons').length).to.equal(0);
     });
 
     it('test current folder buttons do show on subfolder', function() {
       registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
       this.clock.tick(1000);
       var $item = this.$el.find('.itemRow').eq(0);
       $('.title a', $item).trigger('click');

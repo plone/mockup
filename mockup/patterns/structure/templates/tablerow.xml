@@ -2,7 +2,7 @@
 <td class="title">
   <a href="<%- getURL %>" class="manage state-<%- review_state %> contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></a>
   <div class="icon-group-right">
-    <a href="<%- getURL %>/edit" title="Edit"><span class="glyphicon glyphicon glyphicon-pencil"></span></a>
+    <a href="<%- getURL %>/edit?_authenticator=<%- _authenticator %>" title="Edit"><span class="glyphicon glyphicon glyphicon-pencil"></span></a>
     <a href="<%- getURL %>" title="View"><span class="glyphicon glyphicon-new-window"></span></a>
   </div>
 </td>

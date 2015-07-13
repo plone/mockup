@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'mockup-patterns-structure-url/js/views/actionmenu',
-  'text!mockup-patterns-structure-url/templates/tablerow.xml'
-], function($, _, Backbone, ActionMenu, TableRowTemplate) {
+  'text!mockup-patterns-structure-url/templates/tablerow.xml',
+  'mockup-utils'
+], function($, _, Backbone, ActionMenu, TableRowTemplate, utils) {
   'use strict';
 
   var TableRowView = Backbone.View.extend({
@@ -31,6 +32,7 @@ define([
       data.attributes = self.model.attributes;
       data.activeColumns = self.app.activeColumns;
       data.availableColumns = self.app.availableColumns;
+      data._authenticator = utils.getAuthenticator();
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
       self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.portal_type); // jshint ignore:line
