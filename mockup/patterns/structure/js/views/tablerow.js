@@ -13,7 +13,7 @@ define([
     template: _.template(TableRowTemplate),
     events: {
       'change input': 'itemSelected',
-      'click td.title a': 'itemClicked'
+      'click td.title a.manage': 'itemClicked'
     },
     initialize: function(options) {
       this.options = options;
