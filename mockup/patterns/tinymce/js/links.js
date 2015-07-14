@@ -13,8 +13,6 @@ define([
   'use strict';
 
   var LinkType = Base.extend({
-    name: 'linktype',
-    trigger: '.pat-linktype',
     defaults: {
       linkModal: null // required
     },
