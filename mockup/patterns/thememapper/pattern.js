@@ -342,6 +342,7 @@ define([
           $(items).each(function() {
             this.disable();
           });
+          self.lessbuilderView.triggerView.disable();
         }
       };
 
