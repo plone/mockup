@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- upgrade mockup-core to 2.1.10
+  [vangheem]
+
 - fix inserting image right after you upload it in tinymce
   [vangheem]
 

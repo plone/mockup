@@ -197,7 +197,7 @@ define([
         }
       });
       pattern.addLinkClicked();
-      pattern.linkModal.linkTypes.internal.$input.select2('data', {
+      pattern.linkModal.linkTypes.internal.getEl().select2('data', {
         UID: 'foobar',
         portal_type: 'Document',
         Title: 'Foobar',
@@ -212,14 +212,14 @@ define([
       pattern.addLinkClicked();
       var modal = pattern.linkModal;
       modal.linkType = 'external';
-      modal.linkTypes.external.$input.attr('value', 'http://foobar');
+      modal.linkTypes.external.getEl().attr('value', 'http://foobar');
       expect(pattern.linkModal.getLinkUrl()).to.equal('http://foobar');
     });
     it('test add email link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
       pattern.linkModal.linkType = 'email';
-      pattern.linkModal.linkTypes.email.$input.attr('value', 'foo@bar.com');
+      pattern.linkModal.linkTypes.email.getEl().attr('value', 'foo@bar.com');
       expect(pattern.linkModal.getLinkUrl()).to.equal('mailto:foo@bar.com');
     });
     it('test add image link', function() {
@@ -229,7 +229,7 @@ define([
         prependToScalePart: '/@@images/image/'
       });
       pattern.addImageClicked();
-      pattern.imageModal.linkTypes.image.$input.select2('data', {
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
         UID: 'foobar',
         portal_type: 'Document',
         Title: 'Foobar',
@@ -245,7 +245,7 @@ define([
       var pattern = createTinymce();
       pattern.tiny.setContent('<p>blah</p>');
       pattern.addLinkClicked();
-      pattern.linkModal.linkTypes.internal.$input.select2('data', {
+      pattern.linkModal.linkTypes.internal.getEl().select2('data', {
         UID: 'foobar',
         portal_type: 'Document',
         Title: 'Foobar',
@@ -268,7 +268,7 @@ define([
       pattern.addLinkClicked();
 
       pattern.linkModal.linkTypes.internal.set('123sdfasdf');
-      var val = pattern.linkModal.linkTypes.internal.$input.select2('data');
+      var val = pattern.linkModal.linkTypes.internal.getEl().select2('data');
       /* XXX ajax not loading quickly enough here...
       expect(val.UID).to.equal('123sdfasdf');
       */
@@ -300,7 +300,7 @@ define([
       pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
       pattern.addLinkClicked();
 
-      expect(pattern.linkModal.linkTypes.external.$input.val()).to.equal('foobar');
+      expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
     });
 
     it('test loads existing link email values', function() {
@@ -311,7 +311,7 @@ define([
       pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
       pattern.addLinkClicked();
 
-      expect(pattern.linkModal.linkTypes.email.$input.val()).to.equal('foo@bar.com');
+      expect(pattern.linkModal.linkTypes.email.getEl().val()).to.equal('foo@bar.com');
     });
 
     it('test anchor link adds existing anchors to list', function() {
@@ -373,7 +373,7 @@ define([
       pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
       pattern.addLinkClicked();
 
-      expect(pattern.linkModal.linkTypes.external.$input.val()).to.equal('foobar');
+      expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
     });
 
     it('test guess anchor when no data- attribute present', function() {
