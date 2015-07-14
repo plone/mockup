@@ -193,7 +193,7 @@ define([
         // the path uid. This event can be listened to by patterns using the
         // upload pattern, e.g. the TinyMCE pattern's link plugin.
         self.$el.trigger('uploadAllCompleted', {
-          'data': response,
+          'data': $.parseJSON(response),
           'path_uid': (self.$pathInput) ? self.$pathInput.val() : null
         });
       });

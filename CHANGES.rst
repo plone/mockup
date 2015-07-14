@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- fix inserting image right after you upload it in tinymce
+  [vangheem]
+
 - Accessibility fixes for structure:
     - label "cog"/actions
     - provide title attribute on buttons

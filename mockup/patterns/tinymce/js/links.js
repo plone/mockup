@@ -24,11 +24,14 @@ define([
       this.tinypattern = this.options.tinypattern;
       this.tiny = this.tinypattern.tiny;
       this.dom = this.tiny.dom;
-      this.$input = this.$el.find('input');
+    },
+
+    getEl: function(){
+      return this.$el.find('input');
     },
 
     value: function() {
-      return this.$input.val();
+      return this.getEl().val();
     },
 
     toUrl: function() {
@@ -36,11 +39,11 @@ define([
     },
 
     load: function(element) {
-      this.$input.attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
+      this.getEl().attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
     },
 
     set: function(val) {
-      this.$input.attr('value', val);
+      this.getEl().attr('value', val);
     },
 
     attributes: function() {
@@ -53,17 +56,21 @@ define([
   var InternalLink = LinkType.extend({
     init: function() {
       LinkType.prototype.init.call(this);
-      this.$input.addClass('pat-relateditems');
+      this.getEl().addClass('pat-relateditems');
       this.createRelatedItems();
     },
 
+    getEl: function(){
+      return this.$el.find('input:not(.select2-input)');
+    },
+
     createRelatedItems: function() {
-      this.relatedItems = new RelatedItems(this.$input,
+      this.relatedItems = new RelatedItems(this.getEl(),
         this.linkModal.options.relatedItems);
     },
 
     value: function() {
-      var val = this.$input.select2('data');
+      var val = this.getEl().select2('data');
       if (val && typeof(val) === 'object') {
         val = val[0];
       }
@@ -85,11 +92,12 @@ define([
     },
 
     set: function(val) {
+      var $el = this.getEl();
       // kill it and then reinitialize since select2 will load data then
-      this.$input.select2('destroy');
-      this.$input.attr('data-relateditems', undefined); // reset the pattern
-      this.$input.parent().replaceWith(this.$input);
-      this.$input.attr('value', val);
+      $el.select2('destroy');
+      $el.removeData('pattern-relateditems'); // reset the pattern
+      $el.parent().replaceWith($el);
+      $el.attr('value', val);
       this.createRelatedItems();
     },
 
@@ -104,11 +112,32 @@ define([
     }
   });
 
-  var UploadLink = InternalLink.extend({
-    toUrl: function() {
-      // Make a URL from the servers uuid of the uploaded file.
-      var upload_data = $('.pat-upload').data('uploaddata');
-      return 'resolveuid/' + upload_data.UID;
+  var UploadLink = LinkType.extend({
+    /* need to do it a bit differently here.
+       when a user uploads and tries to upload from
+       it, you need to delegate to the real insert
+       linke types */
+    getDelegatedLinkType: function(){
+      if(this.linkModal.linkType === 'uploadImage'){
+        return this.linkModal.linkTypes.image;
+      }else{
+        return this.linkModal.linkTypes.internal;
+      }
+    },
+    toUrl: function(){
+      return this.getDelegatedLinkType().toUrl();
+    },
+    attributes: function(){
+      return this.getDelegatedLinkType().attributes();
+    },
+    set: function(val){
+      return this.getDelegatedLinkType().set(val);
+    },
+    load: function(element){
+      return this.getDelegatedLinkType().load(element);
+    },
+    value: function(){
+      return this.getDelegatedLinkType().value();
     }
   });
 
@@ -536,11 +565,7 @@ define([
         self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {
-          // Add upload data and path_uid to the upload node's data attributes.
-          self.$upload.attr({
-            'data-uploaddata': data.data,
-            'data-path': data.path_uid
-          });
+          self.linkTypes.image.set(data.data.UID);
         });
       }
 
