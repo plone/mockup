@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- add optional setTitle option to pat-moment, put timestamp in element title
+  [braytonosg]
+
 - fix pickadate default timezone to work even if the default isn't the
   last timezone in the list
   [braytonosg]
