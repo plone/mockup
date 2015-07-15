@@ -429,7 +429,8 @@ define([
             $input = $('.pat-pickadate', self.$el)
               .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Vienna", "data": [' +
                                             '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
-                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
+                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"},' +
+                                            '{"id":"Europe/Madrid","text":"Europe/Madrid"}' +
                                           ']}}'
               );
         self.$el.appendTo('body');
