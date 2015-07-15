@@ -355,6 +355,11 @@ define([
           vstr.push(vstrlistbase + $(this).parent().find('.picker__input').val());
         });
       }
+      else if ($.isArray(self.$value.val())) { // handles multible values
+        $.each(self.$value.val(), function(i, v) {
+          vstr.push(vstrlistbase + v);
+        });
+      }
       else {
         vstr.push(vstrbase + self.$value.val());
       }
