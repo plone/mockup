@@ -120,9 +120,25 @@
 
     .buttons-container{
         position: relative;
-        top: -45px;
-        right: 10px;
+        width: 100%;
+    } 
+
+    .buttons-container .plone-btn-group, 
+    .buttons-container .btn-group {
+        padding: 5px 0;
     }
+
+     @media (min-width: 1200px) {
+        .buttons-container{
+            top: -42px;
+            width: auto;
+            padding: 0;
+        }
+        .buttons-container .plone-btn-group,
+        .buttons-container .btn-group {
+           padding: 0;
+        } 
+     }
 
     .autotabs{
         margin-bottom:0;
