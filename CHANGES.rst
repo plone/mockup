@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- remove add menu from structure as we will rely on toolbar add menu
+  for this functionality
+  [vangheem]
+
 - give stronger warning with rearrange feature, specially on root
   [vangheem]
 
