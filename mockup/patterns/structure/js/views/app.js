@@ -12,7 +12,6 @@ define([
   'mockup-patterns-structure-url/js/views/rearrange',
   'mockup-patterns-structure-url/js/views/selectionbutton',
   'mockup-patterns-structure-url/js/views/paging',
-  'mockup-patterns-structure-url/js/views/addmenu',
   'mockup-patterns-structure-url/js/views/columns',
   'mockup-patterns-structure-url/js/views/textfilter',
   'mockup-patterns-structure-url/js/views/upload',
@@ -25,7 +24,7 @@ define([
 ], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView,
             GenericPopover, RearrangeView, SelectionButtonView,
-            PagingView, AddMenu, ColumnsView, TextFilterView, UploadView,
+            PagingView, ColumnsView, TextFilterView, UploadView,
             ResultCollection, SelectedCollection, utils, _t, logger) {
   'use strict';
 
@@ -351,13 +350,6 @@ define([
           app: self
         });
         items.push(uploadButton);
-      }
-      if (self.options.contextInfoUrl) {
-        // only add menu if set
-        items.push(new AddMenu({
-          contextInfoUrl: self.options.contextInfoUrl,
-          app: self
-        }));
       }
 
       var buttons = [];
