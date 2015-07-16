@@ -83,8 +83,9 @@
 define([
   'jquery',
   'mockup-patterns-base',
-  'moment'
-], function($, Base, moment) {
+  'moment',
+  'mockup-i18n'
+], function($, Base, moment, i18n) {
   'use strict';
 
   var Moment = Base.extend({
@@ -102,6 +103,7 @@ define([
       if (!date) {
         date = $.trim($el.html());
       }
+      moment.locale((new i18n()).currentLanguage);
       date = moment(date);
       if (!date.isValid()) {
         return;
