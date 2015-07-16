@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- add optional setTitle option to pat-moment, put timestamp in element title
+  [braytonosg]
+
 - remove add menu from structure as we will rely on toolbar add menu
   for this functionality
   [vangheem]

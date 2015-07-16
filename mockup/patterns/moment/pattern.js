@@ -3,6 +3,7 @@
  * Options:
  *    selector(string): selector to use to look for dates to format (null)
  *    format(string): Format to use to render date. Also available is "relative" and "calendar" formats. (MMMM Do YYYY, h:mm:ss a)
+ *    setTitle(boolean): set the title attribute to display the full date and time on hover (false)
  *
  * Documentation:
  *
@@ -95,7 +96,8 @@ define([
       // selector of elements to format dates for
       selector: null,
       // also available options are relative, calendar
-      format: 'MMMM Do YYYY, h:mm:ss a'
+      format: 'MMMM Do YYYY, h:mm:ss a',
+      setTitle: false
     },
     convert: function($el) {
       var self = this;
@@ -107,6 +109,9 @@ define([
       date = moment(date);
       if (!date.isValid()) {
         return;
+      }
+      if (self.options.setTitle) {
+        $el.attr('title', date.format('MMMM Do YYYY, h:mm:ss a'));
       }
       if (self.options.format === 'relative') {
         date = date.fromNow();
