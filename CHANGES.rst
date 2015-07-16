@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- fix pickadate default timezone to work even if the default isn't the
+  last timezone in the list
+  [braytonosg]
+
 - upgrade mockup-core to 2.1.10
   [vangheem]
 
