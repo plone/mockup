@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- add optional setTitle option to pat-moment, put timestamp in element title
+  [braytonosg]
+
 - upgrade mockup-core to 2.1.10
   [vangheem]
 
