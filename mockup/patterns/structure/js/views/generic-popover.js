@@ -10,7 +10,8 @@ define([
 
   var PropertiesView = PopoverView.extend({
     events: {
-      'click button.applyBtn': 'applyButtonClicked'
+      'click button.applyBtn': 'applyButtonClicked',
+      'click button.closeBtn': 'toggle'
     },
     submitText: _t('Apply'),
     initialize: function(options) {
@@ -22,8 +23,12 @@ define([
       self.submitContext = options.form.submitContext || 'primary';
       self.data = {};
 
-      self.content = _.template('<form>' + options.form.template + '</form>' +
-        '<button class="btn btn-block btn-' + self.submitContext + ' applyBtn">' + self.submitText + ' </button>');
+      var html = '<form>' + options.form.template + '</form>' +
+        '<button class="btn btn-block btn-' + self.submitContext + ' applyBtn">' + self.submitText + ' </button>';
+      if(options.form.closeText){
+        html += '<button class="btn btn-block btn-default closeBtn">' + options.form.closeText + ' </button>';
+      }
+      self.content = _.template(html);
 
       PopoverView.prototype.initialize.apply(this, [options]);
     },
