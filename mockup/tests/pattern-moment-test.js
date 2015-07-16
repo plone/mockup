@@ -43,6 +43,16 @@ define([
       registry.scan($el);
       expect($el.find('div').html()).to.equal('');
     });
+    it('test setTitle true', function() {
+      var $el = $('<div class="pat-moment" data-pat-moment="format:relative;setTitle:true">2012-10-02 14:30</div>');
+      registry.scan($el);
+      expect($el.attr('title')).to.equal('October 2nd 2012, 2:30:00 pm');
+    });
+    it('test setTitle default (false)', function() {
+      var $el = $('<div class="pat-moment" data-pat-moment="format:relative">2012-10-02 14:30</div>');
+      registry.scan($el);
+      expect($el.attr('title')).to.equal(undefined);
+    });
 
   });
 });
