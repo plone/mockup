@@ -4,6 +4,10 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- fix pickadate default timezone to work even if the default isn't the
+  last timezone in the list
+  [braytonosg]
+
 - remove add menu from structure as we will rely on toolbar add menu
   for this functionality
   [vangheem]
