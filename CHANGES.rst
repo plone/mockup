@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- give stronger warning with rearrange feature, specially on root
+  [vangheem]
+
 - show quick view for items in structure row
   [vangheem]
 

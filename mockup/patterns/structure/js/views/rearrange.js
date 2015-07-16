@@ -1,8 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'mockup-ui-url/views/popover'
-], function($, _, PopoverView) {
+  'mockup-ui-url/views/popover',
+  'translate'
+], function($, _, PopoverView, _t) {
   'use strict';
 
   var RearrangeView = PopoverView.extend({
@@ -17,7 +18,7 @@ define([
           '<% }); %>' +
         '</select>' +
         '<p class="help-block">' +
-          '<%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %>' +
+          '<b><%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %></b>' +
         '</p>' +
       '</div>' +
       '<div>' + 
@@ -40,6 +41,13 @@ define([
       return this;
     },
     rearrangeButtonClicked: function() {
+      if(this.app.queryHelper.getCurrentPath() === '/'){
+        if(!window.confirm(_t('Sorting the content on the base of the site ' +
+                              'could affect your navigation order. ' +
+                              'Are you certain you want to do this?'))){
+          return;
+        }
+      }
       var data = {
         'rearrange_on': this.$rearrangeOn.val(),
         reversed: false
