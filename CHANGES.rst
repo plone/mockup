@@ -4,6 +4,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- show quick view for items in structure row
+  [vangheem]
+
 - upgrade mockup-core to 2.1.10
   [vangheem]
 
