@@ -245,8 +245,9 @@ define([
         if (defaultTimezone) {
           var isInList;
           // the timezone list contains the default value
-          self.options.timezone.data.forEach(function(obj) {
+          self.options.timezone.data.some(function(obj) {
             isInList = (obj.text === self.options.timezone.default) ? true : false;
+            return isInList;
           });
           if (isInList) {
             self.$timezone.attr('data-value', defaultTimezone);
