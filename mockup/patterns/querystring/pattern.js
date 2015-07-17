@@ -45,8 +45,9 @@ define([
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'select2',
-  'translate'
-], function($, Base, Select2, PickADate, undefined, _t) {
+  'translate',
+  'underscore'
+], function($, Base, Select2, PickADate, undefined, _t, _) {
   'use strict';
 
   var Criteria = function() { this.init.apply(this, arguments); };
@@ -138,7 +139,8 @@ define([
       self.$operator = $('<select/>');
 
       if (self.indexes[index]) {
-        $.each(self.indexes[index].operators, function(value, options) {
+        _.each(self.indexes[index].operations, function(value) {
+          var options = self.indexes[index].operators[value];
           $('<option/>')
               .attr('value', value)
               .html(options.title)
