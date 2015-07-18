@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.5 (unreleased)
+2.0.5 (2015-07-18)
 ------------------
 
 - add optional setTitle option to pat-moment, put timestamp in element title
