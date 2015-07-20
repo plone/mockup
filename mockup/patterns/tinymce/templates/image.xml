@@ -10,7 +10,7 @@
 
         <% if(_.contains(linkTypes, 'image')){ %>
       <fieldset class="linkType image" data-linkType="image">
-        <legend>Image</legend>
+        <legend id="tinylink-image">Image</legend>
         <div class="form-inline">
           <div class="form-group main">
             <input type="text" name="image" />
@@ -32,14 +32,14 @@
 
       <% if(_.contains(linkTypes, 'uploadImage')){ %>
       <fieldset class="linkType uploadImage" data-linkType="uploadImage">
-        <legend>Upload</legend>
+        <legend id="tinylink-uploadImage">Upload</legend>
         <div class="uploadify-me"></div>
       </fieldset>
       <% } %>
 
       <% if(_.contains(linkTypes, 'externalImage')){ %>
       <fieldset class="linkType externalImage" data-linkType="externalImage">
-        <legend>External image</legend>
+        <legend id="tinylink-externalImage">External image</legend>
         <div>
           <div class="form-group main">
             <label><%- externalImageText %></label>

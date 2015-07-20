@@ -51,6 +51,24 @@ define([
     }
   });
 
+  var ExternalLink = LinkType.extend({
+    init: function() {
+      LinkType.prototype.init.call(this);
+      this.getEl().on('change', function(){
+        // check here if we should automatically add in http:// to url
+        var val = $(this).val();
+        if((new RegExp("https?\:\/\/")).test(val)){
+          // already valid url
+          return;
+        }
+        var domain = $(this).val().split('/')[0];
+        if(domain.indexOf('.') !== -1){
+          $(this).val('http://' + val);
+        }
+      });
+    }
+  });
+
   var InternalLink = LinkType.extend({
     init: function() {
       LinkType.prototype.init.call(this);
@@ -382,7 +400,7 @@ define([
       linkTypeClassMapping: {
         'internal': InternalLink,
         'upload': UploadLink,
-        'external': LinkType,
+        'external': ExternalLink,
         'email': EmailLink,
         'anchor': AnchorLink,
         'image': ImageLink,
@@ -630,7 +648,10 @@ define([
             self.linkType = linkType;
             self.linkTypes[self.linkType].load(self.imgElm);
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
-            self.$scale.val(scale);
+            if(scale){
+              self.$scale.val(scale);
+            }
+            $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
           }else if (src) {
             self.guessImageLink(src);
           }
@@ -653,6 +674,7 @@ define([
         if (linkType) {
           self.linkType = linkType;
           self.linkTypes[self.linkType].load(self.anchorElm);
+          $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
         }else if (href) {
           self.guessAnchorLink(href);
         }

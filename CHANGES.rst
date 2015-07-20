@@ -4,7 +4,12 @@ Changelog
 2.0.6 (unreleased)
 ------------------
 
-- no changes yet
+- switch to tab where link/image data is loaded from on tinymce pattern
+  [vangheem]
+
+- detect valid url on tinymce external
+  [vangheem]
+
 
 2.0.5 (2015-07-18)
 ------------------
