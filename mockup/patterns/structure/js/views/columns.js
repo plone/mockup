@@ -9,7 +9,7 @@ define([
 
   var ColumnsView = PopoverView.extend({
     className: 'popover attribute-columns',
-    title: _.template('Columns'),
+    title: _.template('<%- _t("Columns") %>'),
     content: _.template(
       '<label><%- _t("Select columns to show, drag and drop to reorder") %></label>' +
       '<ul>' +
