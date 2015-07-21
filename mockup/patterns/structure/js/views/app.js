@@ -327,9 +327,9 @@ define([
       if (self.options.rearrange) {
         var rearrangeButton = new ButtonView({
           id: 'rearrange',
-          title: 'Rearrange',
+          title: _t('Rearrange'),
           icon: 'sort-by-attributes',
-          tooltip: 'Rearrange folder contents',
+          tooltip: _t('Rearrange folder contents'),
           url: self.options.rearrange.url
         });
         self.rearrangeView = new RearrangeView({
@@ -341,8 +341,8 @@ define([
       if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
         var uploadButton = new ButtonView({
           id: 'upload',
-          title: 'Upload',
-          tooltip: 'Upload files',
+          title: _t('Upload'),
+          tooltip: _t('Upload files'),
           icon: 'upload'
         });
         self.uploadView = new UploadView({
