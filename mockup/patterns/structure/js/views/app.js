@@ -308,7 +308,7 @@ define([
 
       var columnsBtn = new ButtonView({
         id: 'attribute-columns',
-        tooltip: 'Configure displayed columns',
+        tooltip: _t('Configure displayed columns'),
         icon: 'th'
       });
 
@@ -319,7 +319,7 @@ define([
       items.push(columnsBtn);
 
       items.push(new SelectionButtonView({
-        title: 'Selected',
+        title: _t('Selected'),
         id: 'selected-items',
         collection: this.selectedCollection
       }));
