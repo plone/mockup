@@ -537,7 +537,11 @@ define([
           self.options.data.resources[name] = {
             enabled: true
           };
-          self.items.resources[name].editResource();
+          if(activeResource.type === 'bundle'){
+            self.items.bundles[name].editResource();
+          }else{
+            self.items.resources[name].editResource();
+          }
         }
       });
     },
