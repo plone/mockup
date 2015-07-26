@@ -74,7 +74,7 @@ define([
     }, {
       name: 'deps',
       title: _t('Dependencies'),
-      description: _t('Coma separated values of resources for requirejs shim')
+      description: _t('Comma-separated values of resources for requirejs shim')
     }, {
       name: 'export',
       title: _t('Export'),
