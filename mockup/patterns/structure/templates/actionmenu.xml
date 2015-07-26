@@ -23,7 +23,9 @@
   <% if(attributes.is_folderish){ %>
     <li class="selectAll"><a href="#"><%- _t("Select all contained items") %></a></li>
   <% } %>
-  <li class="openItem"><a href="#"><%- _t("Open") %></a></li>
+  <% if(header) { %>
+    <li class="openItem"><a href="#"><%- _t("Open") %></a></li>
+  <% } %>
   <li class="editItem"><a href="#"><%- _t("Edit") %></a></li>
 </ul>
 
