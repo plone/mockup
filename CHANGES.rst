@@ -1,8 +1,11 @@
 Changelog
 =========
 
-2.0.6 (unreleased)
+2.1.0 (unreleased)
 ------------------
+
+- remove unused tablesorter pattern
+  [vangheem]
 
 - switch to tab where link/image data is loaded from on tinymce pattern
   [vangheem]

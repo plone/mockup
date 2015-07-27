@@ -86,7 +86,6 @@
       'mockup-patterns-sortable': 'patterns/sortable/pattern',
       'mockup-patterns-structure': 'patterns/structure/pattern',
       'mockup-patterns-structure-url': 'patterns/structure',
-      'mockup-patterns-tablesorter': 'patterns/tablesorter/pattern',
       'mockup-patterns-textareamimetypeselector': 'patterns/textareamimetypeselector/pattern',
       'mockup-patterns-texteditor': 'patterns/texteditor/pattern',
       'mockup-patterns-thememapper': 'patterns/thememapper/pattern',
