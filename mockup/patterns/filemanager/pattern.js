@@ -87,15 +87,25 @@ define([
         self.$el.html('Must specify actionUrl setting for pattern');
         return;
       }
+
       self.options.treeConfig = $.extend(true, {}, self.treeConfig, {
         dataUrl: self.options.actionUrl + '?action=dataTree',
         onCreateLi: function(node, li) {
+          var imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
+          var themeTypes = ['css', 'html', 'htm', 'txt', 'xml', 'js', 'cfg', 'less'];
+
           $('span', li).addClass('glyphicon');
           if( node.folder ) {
             $('span', li).addClass('glyphicon-folder-close')
           }
+          else if( $.inArray(node.fileType, imageTypes) >= 0) {
+            $('span', li).addClass('glyphicon-picture');
+          }
+          else if( $.inArray(node.fileType, themeTypes) >= 0) {
+            $('span', li).addClass('glyphicon-file');
+          }
           else {
-            $('span', li).addClass('glyphicon-file')
+            $('span', li).addClass('glyphicon-cog')
           }
         }
       });
@@ -243,10 +253,6 @@ define([
       if( callback === undefined ) {
         callback = function() {};
       }
-      var nodes = self.$tree.find('span');
-      $(nodes).each(function() {
-        $(this).addClass('glyphicon glyphicon-file');
-      });
       self.$tree.tree('loadDataFromUrl',
         self.options.actionUrl + '?action=dataTree',
         null,

@@ -342,6 +342,7 @@ define([
           $(items).each(function() {
             this.disable();
           });
+          self.lessbuilderView.triggerView.disable();
         }
       };
 
@@ -383,11 +384,10 @@ define([
         return false;
       }
     },
-    saveThemeCSS: function() {
+    saveThemeCSS: function(styles) {
       var self = this.env;
-      var css = self.$styleBox.html();
 
-      if( css === "" ) {
+      if( styles === "" || styles === undefined ) {
         //There was probably a problem during compilation
         return false;
       }
@@ -396,7 +396,7 @@ define([
         type: 'POST',
         data: {
           path: self.lessPaths['save'],
-          data: css,
+          data: styles,
           _authenticator: utils.getAuthenticator()
         },
         success: function(data) {

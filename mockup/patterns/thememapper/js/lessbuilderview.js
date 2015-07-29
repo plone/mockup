@@ -123,14 +123,14 @@ define([
               var $ = window.parent.$;
               var iframe = window.iframe['lessc'];
               var styles = $('style', iframe.document);
-              var styleBox = $('#styleBox');
 
-              $(styleBox).empty();
+              var css = "";
+
               $(styles).each(function() {
-                styleBox.append(this.innerHTML);
+                 css += this.innerHTML;
               });
 
-              iframe.options.callback();
+              iframe.options.callback(css);
             }
           );
         }
