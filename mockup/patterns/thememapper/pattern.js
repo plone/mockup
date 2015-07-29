@@ -386,7 +386,7 @@ define([
     saveThemeCSS: function(styles) {
       var self = this.env;
 
-      if( styles === "" ) {
+      if( styles === "" || styles === undefined ) {
         //There was probably a problem during compilation
         return false;
       }

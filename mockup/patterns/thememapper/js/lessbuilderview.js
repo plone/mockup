@@ -122,9 +122,15 @@ define([
             function() {
               var $ = window.parent.$;
               var iframe = window.iframe['lessc'];
-              var styles = $('style', iframe.document)[0].innerHTML;
+              var styles = $('style', iframe.document);
 
-              iframe.options.callback(styles);
+              var css = "";
+
+              $(styles).each(function() {
+                 css += this.innerHTML;
+              });
+
+              iframe.options.callback(css);
             }
           );
         }
