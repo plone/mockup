@@ -349,6 +349,20 @@ define([
       // initially, let's hide the panels
       self.hideInspectors();
     },
+    setSavePath: function() {
+        var self = this;
+        var filename = self.lessbuilderView.$filename.val()
+
+        if( filename == "" ) {
+            filename = self.lessbuilderView.$filename.attr('placeholder');
+        }
+
+        var s = self.lessPaths['save'];
+        var folder = s.substr(0, s.lastIndexOf('/'));
+
+        var savePath = folder + '/' + filename;
+        self.lessPaths['save'] = savePath;
+    },
     setLessPaths: function(node) {
       var self = this;
 
@@ -392,10 +406,12 @@ define([
         return false;
       }
 
+      self.setSavePath();
+
       self.fileManager.doAction('saveFile', {
         type: 'POST',
         data: {
-          path: self.lessPaths['save'],
+          path: savePath,
           data: styles,
           _authenticator: utils.getAuthenticator()
         },
