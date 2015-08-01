@@ -507,6 +507,16 @@ define([
         tooltip: _t('Compile LESS file'),
         context: 'default'
       });
+      self.refreshButton = new ButtonView({
+        id: 'refreshButton ',
+        title: _t('Refresh'),
+        icon: 'refresh',
+        tooltip: _t('Reload the current file'),
+        context: 'default'
+      });
+      self.refreshButton.on("button:click", function() {
+        self.fileManager.refreshFile();
+      });
       self.helpButton = new ButtonView({
         id: 'helpbutton',
         title: _t('Help'),
@@ -532,6 +542,7 @@ define([
           self.previewThemeButton,
           self.fullscreenButton,
           self.buildLessButton,
+          self.refreshButton,
           self.helpButton
         ],
         id: 'mapper'

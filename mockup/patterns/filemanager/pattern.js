@@ -625,6 +625,14 @@ define([
 
         view.upload.dropzone.options.url = url;
       }
+    },
+    refreshFile: function() {
+      var self = this;
+
+      var path = self.getSelectedNode().path;
+      self.closeActiveTab();
+      delete self.fileData[path];
+      self.selectItem(path);
     }
   });
 
