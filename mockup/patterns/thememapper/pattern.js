@@ -334,7 +334,7 @@ define([
       });
       self.fileManager.$tree.bind('tree.click', function(e){
       });
-      self.buildLessButton.$el.hide();
+      self.buildLessButton.disable();
 
       if( !self.editable ) {
         if( self.fileManager.toolbar ) {
@@ -367,10 +367,10 @@ define([
       var self = this;
 
       if( node.fileType == "less" ){
-        self.buildLessButton.$el.show();
+        self.buildLessButton.enable();
       }
       else{
-        self.buildLessButton.$el.hide();
+        self.buildLessButton.disable();
       }
 
       if( node.path != "" ) {
