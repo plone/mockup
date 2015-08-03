@@ -411,7 +411,7 @@ define([
       self.fileManager.doAction('saveFile', {
         type: 'POST',
         data: {
-          path: savePath,
+          path: self.lessPaths['save'],
           data: styles,
           _authenticator: utils.getAuthenticator()
         },
