@@ -523,6 +523,9 @@ define([
           $('[data-path="' + path + '"]').addClass("modified");
         }
       });
+      self.ace.editor.on('paste', function() {
+        $('[data-path="' + path + '"]').addClass("modified");
+      });
       self.ace.editor.commands.addCommand({
         name: 'saveFile',
         bindKey: {
