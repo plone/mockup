@@ -34,8 +34,21 @@ define([
         },
         success: function(data) {
           self.hide();
-          self.app.refreshTree()
-          self.app.closeActiveTab();
+          self.data = data;
+          self.app.refreshTree(function() {
+
+            var parent = self.data.path;
+            parent = parent.substr(0, parent.lastIndexOf('/'));
+
+            var node = self.app.getNodeByPath(parent);
+            if( node !== null ) {
+                self.app.$tree.tree('openNode', node);
+            }
+
+            delete self.app.fileData[self.data.path];
+            delete self.data;
+          });
+          self.app.closeTab(data.path);
           self.app.resizeEditor();
         }
       });

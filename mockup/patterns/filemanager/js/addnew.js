@@ -34,7 +34,12 @@ define([
           },
           success: function(data) {
             self.hide();
-            self.app.refreshTree();          
+            self.data = data;
+            self.app.refreshTree(function() {
+              var path = self.data.parent + '/' +  self.data.name;
+              self.app.selectItem(path);
+              delete self.data;
+            });
           }
         });
         // XXX show loading

@@ -44,9 +44,28 @@ define([
           },
           success: function(data) {
             self.hide();
-            self.app.refreshTree();
-            // ugly, $tabs should have an API
-            $('.nav .active .remove').click();
+            self.data = data;
+            self.app.refreshTree(function() {
+              if( self.data.newParent != "/" ) {
+                var path = [self.data.newParent, self.data.newName].join('/');
+                var oldPath = [self.data.oldParent, self.data.oldName].join('/');
+              }
+              else {
+                var path = '/' + self.data.newName;
+                var oldPath = '/' + self.data.oldName
+              }
+
+              if( self.app.fileData[path] !== undefined ) {
+                self.app.refreshFile(path)
+              }
+              else {
+                var node = self.app.getNodeByPath(path);
+                self.app.selectItem(path);
+              }
+
+              self.app.closeTab(oldPath);
+              delete self.data;
+            });
           }
         });
         // XXX show loading

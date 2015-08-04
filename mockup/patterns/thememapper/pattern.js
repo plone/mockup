@@ -346,17 +346,6 @@ define([
         }
       };
 
-      //If Ace isn't currently in focus, the browser
-      //will go back to the previous page.
-      //...it's pretty irritating.
-      document.onkeydown = function(e) {
-        if( e.which == 8 )
-        {
-          // 8 = backspace
-          e.preventDefault();
-        }
-      }
-
       // initially, let's hide the panels
       self.hideInspectors();
     },
