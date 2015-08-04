@@ -1,7 +1,7 @@
 <div class="upload-container upload-multiple">
     <h2 class="title"><%- _t("Upload here") %></h2>
     <p class="help">
-        <%- _t('Just drag N drop files on the area below or press the "browse" button.') %>
+        <%- _t('Drag and drop files from your computer onto the area below or click the "Browse" button.') %>
     </p>
     <div class="upload-area">
         <div class="fallback">
@@ -31,7 +31,7 @@
                 <div class="path">
                     <label><%- _t("Upload to...") %></label>
                     <p class="form-help">
-                        <%- _t("If nothing selected files we be added to current context.") %>
+                        <%- _t("Select another destination folder or leave blank to add files to the current location.") %>
                     </p>
                     <input
                         type="text"
