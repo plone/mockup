@@ -175,37 +175,25 @@ body.plone-toolbar-left-default {
             margin-right: 5px;
         }
 
-        ul.jqtree-tree li.jqtree-selected {
-            font-weight: bold;
-
-            > .jqtree_common {
-                background-color: #1C4257;
+        ul.jqtree-tree li.jqtree_common > div:hover {
+            background-color: #1C4257;
+            span {
+                color: white;
+                text-shadow: none;
             }
 
             a {
                 color: white;
-            }
-
-            span {
                 text-shadow: none;
-                color: white;
-            }
-
-            span:hover {
-                color: #1C4257;
-            }
-
-            div:hover > span{
-                color: #1C4257;
             }
         }
 
-        ul.jqtree-tree li.jqtree-selected > div > span:hover {
-            color: white;
-        }
+        ul.jqtree-tree li.jqtree-selected {
+            font-weight: bold;
 
-        ul.jqtree-tree li.jqtree-selected > div:hover > span {
-            color: white;
+            > .jqtree_common {
+                background-color: #E7E7E7;
+            }
         }
     }
 
