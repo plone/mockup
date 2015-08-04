@@ -2,7 +2,7 @@
   <div class="linkModal">
     <h1><%- insertHeading %></h1>
     <% if(upload){ %>
-    <p class="info">Drag and drop files from your desktop onto dialog to upload</p>
+    <p class="info">Specify the object to link to. It can be on this site already ("Internal"), an object you upload ("Upload"), from an external site ("External"), an email address ("Email"), or an anchor on this page ("Anchor").</p>
     <% } %>
 
     <div class="linkTypes pat-autotoc autotabs"

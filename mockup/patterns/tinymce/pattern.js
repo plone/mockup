@@ -133,15 +133,15 @@ define([
         insertHeading: _t('Insert link'),
         title: _t('Title'),
         internal: _t('Internal'),
-        external: _t('External'),
-        email: _t('Email'),
+        external: _t('External URL (can be relative within this site or absolute if it starts with http:// or https://)'),
+        email: _t('Email Address'),
         anchor: _t('Anchor'),
-        subject: _t('Subject'),
+        subject: _t('Email Subject (optional)'),
         image: _t('Image'),
         imageAlign: _t('Align'),
         scale: _t('Size'),
         alt: _t('Alternative Text'),
-        externalImage: _t('External Image URI')
+        externalImage: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)')
       },
       // URL generation options
       loadingBaseUrl: '../../../bower_components/tinymce-builded/js/tinymce/',
