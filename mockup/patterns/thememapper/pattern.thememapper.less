@@ -156,6 +156,10 @@ body.plone-toolbar-left-default {
         .jqtree-tree {
             margin-top: 0px;
 
+            .jqtree-title {
+                padding: 2px;
+            }
+
             li {
                 white-space: nowrap;
                 overflow: hidden;
@@ -171,8 +175,37 @@ body.plone-toolbar-left-default {
             margin-right: 5px;
         }
 
-        .jqtree-selected {
+        ul.jqtree-tree li.jqtree-selected {
             font-weight: bold;
+
+            > .jqtree_common {
+                background-color: #1C4257;
+            }
+
+            a {
+                color: white;
+            }
+
+            span {
+                text-shadow: none;
+                color: white;
+            }
+
+            span:hover {
+                color: #1C4257;
+            }
+
+            div:hover > span{
+                color: #1C4257;
+            }
+        }
+
+        ul.jqtree-tree li.jqtree-selected > div > span:hover {
+            color: white;
+        }
+
+        ul.jqtree-tree li.jqtree-selected > div:hover > span {
+            color: white;
         }
     }
 
@@ -340,12 +373,4 @@ body.plone-toolbar-left-default {
     #styleBox {
         display: none;
     }
-
-	#refreshFile {
-		box-shadow: 2px 2px 10px black;
-		position: absolute;
-		z-index: 1000;
-		bottom: 10px;
-		right: 20px;
-	}
 }
