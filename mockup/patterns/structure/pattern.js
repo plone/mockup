@@ -61,7 +61,6 @@ define([
       ],
       availableColumns: {
         'id': 'ID',
-        'Title': 'Title',
         'ModificationDate': 'Last modified',
         'EffectiveDate': 'Published',
         'ExpirationDate': 'Expiration',
