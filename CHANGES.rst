@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- add plone primary button styles for insert tinymce modals
+  [vangheem]
+
 - remove unused tablesorter pattern
   [vangheem]
 
