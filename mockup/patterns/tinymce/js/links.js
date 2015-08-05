@@ -300,36 +300,6 @@ define([
   });
 
   tinymce.PluginManager.add('ploneimage', function(editor) {
-      if(editor.settings.paste_data_images){
-        editor.on('paste', function(e){
-          var target = $(e.currentTarget);
-          var counter = 0;
-          function handlePaste(){
-            if($('img', target).length > 0){
-              // TODO: more options?
-              $('img', target).each(function(i,e){
-                if($(e).attr('src').indexOf('data:image') === 0){
-                  var byteString = atob($(e).attr('src').split(',')[1]);
-                  var ia = new Uint8Array(byteString.length);
-                  for (var i = 0; i < byteString.length; i++) {
-                    ia[i] = byteString.charCodeAt(i);
-                  }
-                  var blob = new Blob([ia],  {type: 'image/png'});
-                  editor.settings.addImagePasted(blob);
-                }
-              });
-              $('img', target).remove();
-            }else{
-              // wait for image to be pasted
-              if(counter < 3){
-                counter += 1;
-                setTimeout(handlePaste, 1);                
-              }
-            }
-          }
-          handlePaste();
-        });
-      }
     editor.addButton('ploneimage', {
       icon: 'image',
       tooltip: 'Insert/edit image',
