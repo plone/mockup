@@ -8,7 +8,7 @@
             <input name="file" type="file" multiple />
         </div>
         <div class="dz-message"><p><%-_t("Drop files here...")%></p></div>
-        <div class="row">
+        <div class="row browse-select">
             <div class="col-md-9">
                 <input
                     id="fakeUploadFile"
