@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- better interaction with insert uploaded image/link in tinymce
+  [vangheem]
+
 - add plone primary button styles for insert tinymce modals
   [vangheem]
 

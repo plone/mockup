@@ -581,7 +581,13 @@ define([
         self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {
-          self.linkTypes.image.set(data.data.UID);
+          if(self.linkTypes.image){
+            self.linkTypes.image.set(data.data.UID);
+            $('#tinylink-image' , self.modal.$modal).trigger('click');
+          }else{
+            self.linkTypes.internal.set(data.data.UID);
+            $('#tinylink-internal', self.modal.$modal).trigger('click');
+          }
         });
       }
 
