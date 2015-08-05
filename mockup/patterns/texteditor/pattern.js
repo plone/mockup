@@ -130,6 +130,7 @@ define([
         'html': 'html',
         'xml': 'xml',
         'less': 'less',
+        'py': 'python',
         'cfg': 'ini'
       };
 
