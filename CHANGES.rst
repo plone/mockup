@@ -19,6 +19,9 @@ Changelog
 - detect valid url on tinymce external
   [vangheem]
 
+- add Python syntax coloring in text editor
+  [ebrehault]
+
 
 2.0.5 (2015-07-18)
 ------------------
