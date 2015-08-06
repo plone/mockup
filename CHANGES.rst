@@ -3,6 +3,23 @@ Changelog
 
 2.1.0 (unreleased)
 ------------------
+- add "Save As" option in less builder
+  [obct537]
+
+- add Refresh button to filemanager
+  [obct537]
+
+- filemanager tree now remains open after add/delete/rename/upload
+  [obct537]
+
+- changed styling in thememapper/filemanager to be more consistent and user friendly
+  [obct537]
+
+- better interaction with insert uploaded image/link in tinymce
+  [vangheem]
+
+- add plone primary button styles for insert tinymce modals
+  [vangheem]
 
 - better interaction with insert uploaded image/link in tinymce
   [vangheem]

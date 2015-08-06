@@ -11,6 +11,8 @@ define([
       '<span class="message"></span>' +
       '<span style="display: none;" class="errorMessage"></span>' +
       '<div class="buttonBox">' +
+        '<label for="lessFileName">Save as:</label>' +
+        '<input id="lessFileName" type="text" placeholder="filename" />' +
         '<a id="compileBtn" class="btn btn-success" href="#">Compile</a>' +
         '<a id="errorBtn" class="btn btn-default" href="#">Clear</a>' +
       '</div>' +
@@ -32,6 +34,7 @@ define([
       self.$message = $('.message', this.$el);
       self.$error = $('.errorMessage', this.$el);
       self.$button = $('#compileBtn', this.$el);
+      self.$filename = $('#lessFileName', this.$el);
       self.$errorButton = $('#errorBtn', this.$el);
       self.$button.on('click', function() {
         self.showLessBuilder();
@@ -45,6 +48,16 @@ define([
     },
     toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
+      this.setFilename();
+    },
+    setFilename: function() {
+        var self = this;
+        if( self.app.lessPaths['save'] === undefined ) {
+            return;
+        }
+        var f = self.app.lessPaths['save'];
+        f = f.substr(f.lastIndexOf('/') + 1, f.length);
+        self.$filename.attr('placeholder', f);
     },
     start: function() {
       var self = this;

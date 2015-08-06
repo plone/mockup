@@ -354,6 +354,21 @@ define([
         self.openEditor();
       }
     },
+    closeTab: function(path) {
+      var self = this;
+      if( path === undefined ) {
+        return;
+      }
+
+      var tabs = self.$tabs.children();
+
+      $(tabs).each(function() {
+        if( $(this).data('path') == path )
+        {
+          $(this).find('a.remove').trigger('click');
+        }
+      });
+    },
     createTab: function(path) {
       var self = this;
       var $item = $(self.tabItemTemplate({path: path}));
@@ -447,7 +462,7 @@ define([
         for( var z = 0; z < children.length; z++ )
         {
           if( children[z].name == folders[i] ) {
-            if( children[z].folder == true ) {
+            if( children[z].folder == true && i != (folders.length - 1) ) {
               children = children[z].children;
               break;
             }
@@ -522,6 +537,9 @@ define([
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
           $('[data-path="' + path + '"]').addClass("modified");
         }
+      });
+      self.ace.editor.on('paste', function() {
+        $('[data-path="' + path + '"]').addClass("modified");
       });
       self.ace.editor.commands.addCommand({
         name: 'saveFile',
@@ -625,6 +643,16 @@ define([
 
         view.upload.dropzone.options.url = url;
       }
+    },
+    refreshFile: function(path) {
+      var self = this;
+
+      if( path === undefined ) {
+        path = self.getSelectedNode().path;
+      }
+      self.closeTab(path);
+      delete self.fileData[path];
+      self.selectItem(path);
     }
   });
 

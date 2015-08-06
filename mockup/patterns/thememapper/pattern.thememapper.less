@@ -156,6 +156,10 @@ body.plone-toolbar-left-default {
         .jqtree-tree {
             margin-top: 0px;
 
+            .jqtree-title {
+                padding: 2px;
+            }
+
             li {
                 white-space: nowrap;
                 overflow: hidden;
@@ -171,8 +175,25 @@ body.plone-toolbar-left-default {
             margin-right: 5px;
         }
 
-        .jqtree-selected {
+        ul.jqtree-tree li.jqtree_common > div:hover {
+            background-color: #1C4257;
+            span {
+                color: white;
+                text-shadow: none;
+            }
+
+            a {
+                color: white;
+                text-shadow: none;
+            }
+        }
+
+        ul.jqtree-tree li.jqtree-selected {
             font-weight: bold;
+
+            > .jqtree_common {
+                background-color: #E7E7E7;
+            }
         }
     }
 
@@ -304,13 +325,35 @@ body.plone-toolbar-left-default {
         }
     }
 
+    .pat-filemanager .navbar a.btn {
+        line-height: 10px;
+        padding: 5px;
+        font-size: small;
+        padding-bottom: 8px;
+        margin-bottom: -15px;
+    }
+
     .btn-group {
         margin-right: 30px;
     }
 
     #lessBuilder .buttonBox {
         margin-top: 10px;
+
+		label {
+			display: block;
+		}
+
+        a {
+            margin-bottom: 5px;
+            margin-left: 5px;
+            padding: 5px;
+        }
     }
+
+	#lessFileName {
+		margin-bottom: 15px;
+	}
     .errorMessage {
         word-wrap: break-word;
         font-size: small;

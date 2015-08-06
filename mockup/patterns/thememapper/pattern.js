@@ -334,7 +334,7 @@ define([
       });
       self.fileManager.$tree.bind('tree.click', function(e){
       });
-      self.buildLessButton.$el.hide();
+      self.buildLessButton.disable();
 
       if( !self.editable ) {
         if( self.fileManager.toolbar ) {
@@ -349,14 +349,28 @@ define([
       // initially, let's hide the panels
       self.hideInspectors();
     },
+    setSavePath: function() {
+        var self = this;
+        var filename = self.lessbuilderView.$filename.val()
+
+        if( filename == "" ) {
+            filename = self.lessbuilderView.$filename.attr('placeholder');
+        }
+
+        var s = self.lessPaths['save'];
+        var folder = s.substr(0, s.lastIndexOf('/'));
+
+        var savePath = folder + '/' + filename;
+        self.lessPaths['save'] = savePath;
+    },
     setLessPaths: function(node) {
       var self = this;
 
       if( node.fileType == "less" ){
-        self.buildLessButton.$el.show();
+        self.buildLessButton.enable();
       }
       else{
-        self.buildLessButton.$el.hide();
+        self.buildLessButton.disable();
       }
 
       if( node.path != "" ) {
@@ -391,6 +405,8 @@ define([
         //There was probably a problem during compilation
         return false;
       }
+
+      self.setSavePath();
 
       self.fileManager.doAction('saveFile', {
         type: 'POST',
@@ -491,6 +507,16 @@ define([
         tooltip: _t('Compile LESS file'),
         context: 'default'
       });
+      self.refreshButton = new ButtonView({
+        id: 'refreshButton ',
+        title: _t('Refresh'),
+        icon: 'refresh',
+        tooltip: _t('Reload the current file'),
+        context: 'default'
+      });
+      self.refreshButton.on("button:click", function() {
+        self.fileManager.refreshFile();
+      });
       self.helpButton = new ButtonView({
         id: 'helpbutton',
         title: _t('Help'),
@@ -516,6 +542,7 @@ define([
           self.previewThemeButton,
           self.fullscreenButton,
           self.buildLessButton,
+          self.refreshButton,
           self.helpButton
         ],
         id: 'mapper'
