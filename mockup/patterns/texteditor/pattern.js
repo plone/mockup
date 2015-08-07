@@ -148,7 +148,9 @@ define([
     },
     setText: function(data) {
       var self = this;
-      self.editor.setValue(data);
+      if(self.editor){
+        self.editor.setValue(data);
+      }
     }
   });
 
