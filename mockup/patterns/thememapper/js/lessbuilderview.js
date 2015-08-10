@@ -130,8 +130,8 @@ define([
           };
           iframe.styles = [];
         },
-        onLoad: function(self) {
-          less.pageLoadFinished.then(
+        onLoad: function(iframe) {
+          iframe.window.less.pageLoadFinished.then(
             function() {
               var $ = window.parent.$;
               var iframe = window.iframe['lessc'];

@@ -412,6 +412,7 @@ define([
         type: 'POST',
         data: {
           path: self.lessPaths['save'],
+          relativeUrls: true,
           data: styles,
           _authenticator: utils.getAuthenticator()
         },
