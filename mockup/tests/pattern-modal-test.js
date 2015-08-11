@@ -146,6 +146,10 @@ define([
             'ignore',
             '<html><body data-base-url="testurl3"></body></html>'
           )).to.equal('testurl3');
+          expect(modal.defaults.actionOptions.redirectToUrl(
+            'ignore',
+            '<html><body data-view-url="testurl4"></body></html>'
+          )).to.equal('testurl4');
           done();
         })
         .click();

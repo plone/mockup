@@ -156,19 +156,23 @@ define([
         onTimeout: null,
         redirectOnResponse: false,
         redirectToUrl: function($action, response, options) {
-          var baseUrl = '';
-          var reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(response);
+          var reg;
+          reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(response);
+          if (reg && reg.length > 1) {
+            // view url as data attribute on body (Plone 5)
+            return reg[1];
+          }
+          reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(response);
           if (reg && reg.length > 1) {
             // Base url as data attribute on body (Plone 5)
-            baseUrl = reg[1];
-          } else {
-            reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
-            if (reg && reg.length > 1) {
-              // base tag available (Plone 4)
-              baseUrl = reg[1];
-            }
+            return reg[1];
           }
-          return baseUrl;
+          reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
+          if (reg && reg.length > 1) {
+              // base tag available (Plone 4)
+              return reg[1];
+          }
+          return '';
         }
       },
       routerOptions: {

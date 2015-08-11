@@ -6,6 +6,9 @@ Changelog
 
 - add action value to form when using disableAjaxFormSubmit option on modal
   [vangheem]
+- Modal Pattern: If ``data-view-url`` attribute is available on the body, use
+  it. Otherwise look for ``data-base-url`` and finally for a ``<base>`` tag.
+  [ale-rt]
 
 - add "Save As" option in less builder
   [obct537]
