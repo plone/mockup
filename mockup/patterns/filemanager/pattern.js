@@ -431,13 +431,18 @@ define([
       var doc = event.node.path;
       if(self.fileData[doc]) {
         self.openEditor(doc);
+
         var resetLine = function() {
           if( self.fileData[doc].line === undefined ) {
             return;
           }
           self.ace.editor.scrollToLine(self.fileData[doc].line);
+          //We only want this to fire after the intial render,
+          //Not after rendering a "scroll" or "focus" event,
+          //So we remove it.
           self.ace.editor.renderer.off("afterRender", resetLine);
         };
+
         self.ace.editor.renderer.on("afterRender", resetLine);
       } else {
         self.doAction('getFile', {
