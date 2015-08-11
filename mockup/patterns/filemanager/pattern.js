@@ -431,6 +431,14 @@ define([
       var doc = event.node.path;
       if(self.fileData[doc]) {
         self.openEditor(doc);
+        var resetLine = function() {
+          if( self.fileData[doc].line === undefined ) {
+            return;
+          }
+          self.ace.editor.scrollToLine(self.fileData[doc].line);
+          self.ace.editor.renderer.off("afterRender", resetLine);
+        };
+        self.ace.editor.renderer.on("afterRender", resetLine);
       } else {
         self.doAction('getFile', {
           data: { path: doc },
@@ -501,6 +509,8 @@ define([
       // first we need to save the current editor content
       if(self.currentPath) {
         self.fileData[self.currentPath].contents = self.ace.editor.getValue();
+        var lineNum = self.ace.editor.getFirstVisibleRow();
+        self.fileData[self.currentPath].line = lineNum;
       }
       self.currentPath = path;
       if (self.ace !== undefined){
