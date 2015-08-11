@@ -437,6 +437,7 @@ define([
             return;
           }
           self.ace.editor.scrollToLine(self.fileData[doc].line);
+          self.ace.editor.moveCursorToPosition(self.fileData[doc].cursorPosition)
           //We only want this to fire after the intial render,
           //Not after rendering a "scroll" or "focus" event,
           //So we remove it immediately after.
@@ -516,6 +517,7 @@ define([
         self.fileData[self.currentPath].contents = self.ace.editor.getValue();
         var lineNum = self.ace.editor.getFirstVisibleRow();
         self.fileData[self.currentPath].line = lineNum;
+        self.fileData[self.currentPath].cursorPosition = self.ace.editor.getCursorPosition();
       }
       self.currentPath = path;
       if (self.ace !== undefined){
