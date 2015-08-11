@@ -439,10 +439,10 @@ define([
           self.ace.editor.scrollToLine(self.fileData[doc].line);
           //We only want this to fire after the intial render,
           //Not after rendering a "scroll" or "focus" event,
-          //So we remove it.
+          //So we remove it immediately after.
           self.ace.editor.renderer.off("afterRender", resetLine);
         };
-
+        //This sets the listener before rendering finishes
         self.ace.editor.renderer.on("afterRender", resetLine);
       } else {
         self.doAction('getFile', {
