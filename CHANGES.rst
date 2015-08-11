@@ -3,6 +3,10 @@ Changelog
 
 2.1.0 (unreleased)
 ------------------
+
+- add action value to form when using disableAjaxFormSubmit option on modal
+  [vangheem]
+
 - add "Save As" option in less builder
   [obct537]
 

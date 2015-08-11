@@ -245,6 +245,9 @@ define([
         }
 
         if(options.disableAjaxFormSubmit){
+          if($action.attr('name') && $action.attr('value')){
+            $form.append($('<input type="hidden" name="' + $action.attr('name') + '" value="' + $action.attr('value') + '" />'));
+          }
           $form.trigger('submit');
           return;
         }
