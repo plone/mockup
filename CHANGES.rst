@@ -6,9 +6,19 @@ Changelog
 
 - add action value to form when using disableAjaxFormSubmit option on modal
   [vangheem]
+  
 - Modal Pattern: If ``data-view-url`` attribute is available on the body, use
   it. Otherwise look for ``data-base-url`` and finally for a ``<base>`` tag.
   [ale-rt]
+
+- filemanager will now re-open files to the same line/position as when it was closed
+  [obct537]
+
+- Fixed "less is not defined" error while in production mode
+  [obct537]
+
+- lessbuilder will now use relative urls
+  [obct537]
 
 - add "Save As" option in less builder
   [obct537]
