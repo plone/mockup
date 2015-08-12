@@ -160,12 +160,12 @@ define([
           reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(response);
           if (reg && reg.length > 1) {
             // view url as data attribute on body (Plone 5)
-            return reg[1];
+            return reg[1].split('"')[0];
           }
           reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(response);
           if (reg && reg.length > 1) {
             // Base url as data attribute on body (Plone 5)
-            return reg[1];
+            return reg[1].split('"')[0];
           }
           reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
           if (reg && reg.length > 1) {
