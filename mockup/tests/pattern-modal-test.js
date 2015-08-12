@@ -144,11 +144,11 @@ define([
           )).to.equal('testurl2');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><body data-base-url="testurl3"></body></html>'
+            '<html><body data-base-url="testurl3" rubbish="discarded"></body></html>'
           )).to.equal('testurl3');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><body data-view-url="testurl4"></body></html>'
+            '<html><body data-view-url="testurl4" rubbish="discarded"></body></html>'
           )).to.equal('testurl4');
           done();
         })
