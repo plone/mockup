@@ -538,7 +538,9 @@ define([
       else if( typeof self.fileData[path].info !== 'undefined' )
       {
           var preview = self.fileData[path].info;
-          self.ace.editor.off();
+          if( self.ace.editor !== undefined ) {
+              self.ace.editor.off();
+          }
           $('.ace_editor').empty().append(preview);
       }
       else
