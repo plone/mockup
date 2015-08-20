@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Added button to clear the sitewide theme cache to the thememapper interface
+  [obct537]
+
 - Querystring pattern: Create date widgets with existing data, if present.
   Also subscribe to the ``updated.pickadate.patterns`` to update values when
   date widgets change.
