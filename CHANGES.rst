@@ -4,6 +4,18 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Querystring pattern: Create date widgets with existing data, if present.
+  Also subscribe to the ``updated.pickadate.patterns`` to update values when
+  date widgets change.
+  [frapell]
+
+- Pickadate pattern: Set the value using the .val() method
+  [frapell]
+
+- Pickadate pattern: Allow to choose format to be used when creating widget
+  with existing data, and use that to format the returned value.
+  [frapell]
+
 - add action value to form when using disableAjaxFormSubmit option on modal
   [vangheem]
   
