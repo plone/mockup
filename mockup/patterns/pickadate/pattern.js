@@ -302,7 +302,7 @@ define([
         }
       }
 
-      self.$el.attr('value', value);
+      self.$el.val(value);
 
       self.emit('updated');
     }

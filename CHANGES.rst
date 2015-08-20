@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Pickadate pattern: Set the value using the .val() method
+  [frapell]
+
 - Pickadate pattern: Allow to choose format to be used when creating widget
   with existing data, and use that to format the returned value.
   [frapell]
