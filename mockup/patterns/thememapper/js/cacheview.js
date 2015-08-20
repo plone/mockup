@@ -9,7 +9,7 @@ define([
   var template = _.template(
     '<div>' +
       '<span id="clearMessage">Click to clear the site\'s theme cache, forcing a reload from the source.</span>' +
-      '<span style="display: none;" id="clearSuccess">Cache cleareed successfully.</span>' +
+      '<span style="display: none;" id="clearSuccess">Cache cleared successfully.</span>' +
       '<a href="#" id="clearBtn" class="context">Clear</a>' +
     '</div>'
   );
@@ -40,10 +40,12 @@ define([
           success: function(response) {
             self.$message.hide();
             self.$success.show();
+            self.$clear.hide();
 
             setTimeout(function() {
               self.$message.show();
               self.$success.hide();
+              self.$clear.show();
               self.triggerView.el.click();
             }, 3000);
           }
