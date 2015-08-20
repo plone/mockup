@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Filemanager popovers will now close on file change
+  [obct537]
+
 - Added button to clear the sitewide theme cache to the thememapper interface
   [obct537]
 
