@@ -163,7 +163,7 @@ define([
                     }
                   }
                   if (e.hasOwnProperty('clear')) {
-                    self.$el.removeAttr('value');
+                    self.$el.val('');
                     self.$date.attr('data-value', '');
                   }
                 }
@@ -197,7 +197,7 @@ define([
                     }
                   }
                   if (e.hasOwnProperty('clear')) {
-                    self.$el.removeAttr('value');
+                    self.$el.val('');
                     self.$time.attr('data-value', '');
                   }
                 }
