@@ -37,10 +37,11 @@ define([
   'mockup-patterns-thememapper-url/js/rulebuilder',
   'mockup-patterns-thememapper-url/js/rulebuilderview',
   'mockup-patterns-thememapper-url/js/lessbuilderview',
+  'mockup-patterns-thememapper-url/js/cacheview',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup',
   'mockup-utils'
-], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, LessBuilderView, ButtonView, ButtonGroup, utils) {
+], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, LessBuilderView, CacheView, ButtonView, ButtonGroup, utils) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
@@ -518,6 +519,13 @@ define([
       self.refreshButton.on("button:click", function() {
         self.fileManager.refreshFile();
       });
+      self.cacheButton = new ButtonView({
+        id: 'cachebutton',
+        title: _t('Clear cache'),
+        icon: 'floppy-remove',
+        tooltip: _t('Clear site\'s theme cache'),
+        context: 'default'
+      });
       self.helpButton = new ButtonView({
         id: 'helpbutton',
         title: _t('Help'),
@@ -532,6 +540,10 @@ define([
         triggerView: self.buildRuleButton,
         app: self
       });
+      self.cacheView = new CacheView({
+        triggerView: self.cacheButton,
+        app: self
+      })
       self.lessbuilderView = new LessBuilderView({
         triggerView: self.buildLessButton,
         app: self
@@ -544,12 +556,14 @@ define([
           self.fullscreenButton,
           self.buildLessButton,
           self.refreshButton,
+          self.cacheButton,
           self.helpButton
         ],
         id: 'mapper'
       });
       $('#toolbar .navbar', self.$el).append(self.buttonGroup.render().el);
       $('#toolbar .navbar', self.$el).append(self.rulebuilderView.render().el);
+      $('#toolbar .navbar', self.$el).append(self.cacheView.render().el);
       $('#toolbar .navbar', self.$el).append(self.lessbuilderView.render().el);
     }
   });
