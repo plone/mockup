@@ -369,6 +369,13 @@ define([
         }
       });
     },
+    closeActivePopovers: function() {
+      var self = this;
+      var active = $('.navbar a.active');
+      $(active).each(function() {
+        $(this).click();
+      });
+    },
     createTab: function(path) {
       var self = this;
       var $item = $(self.tabItemTemplate({path: path}));
@@ -551,6 +558,7 @@ define([
       }
 
       self.resizeEditor();
+      self.closeActivePopovers();
       self.$el.trigger("fileChange");
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
