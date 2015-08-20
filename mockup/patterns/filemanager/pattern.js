@@ -333,6 +333,7 @@ define([
     },
     handleClick: function(event) {
       var self = this;
+      self.closeActivePopovers();
       self.openFile(event);
     },
     closeActiveTab: function() {
@@ -384,6 +385,7 @@ define([
       $('.remove', $item).click(function(e){
         e.preventDefault();
         e.stopPropagation();
+        self.closeActivePopovers();
         if ($(this).parent().hasClass('active'))
         {
           self.closeActiveTab();
@@ -396,6 +398,7 @@ define([
         e.preventDefault();
         $('li', self.$tabs).removeClass('active');
         var $li = $(this).parent();
+        self.closeActivePopovers();
         $li.addClass('active');
       });
     },
@@ -558,7 +561,6 @@ define([
       }
 
       self.resizeEditor();
-      self.closeActivePopovers();
       self.$el.trigger("fileChange");
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
