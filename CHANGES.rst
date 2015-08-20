@@ -4,6 +4,10 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Pickadate pattern: Allow to choose format to be used when creating widget
+  with existing data, and use that to format the returned value.
+  [frapell]
+
 - add action value to form when using disableAjaxFormSubmit option on modal
   [vangheem]
   
