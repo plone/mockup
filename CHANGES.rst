@@ -4,6 +4,11 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Querystring pattern: Create date widgets with existing data, if present.
+  Also subscribe to the ``updated.pickadate.patterns`` to update values when
+  date widgets change.
+  [frapell]
+
 - Pickadate pattern: Set the value using the .val() method
   [frapell]
 

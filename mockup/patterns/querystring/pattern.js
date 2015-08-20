@@ -194,24 +194,34 @@ define([
       } else if (widget === 'DateWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + '-' + widget)
+                .attr('data-pat-pickadate', '{"time": false, "date": {"format": "dd/mm/yyyy" }}')
+                .val(value)
                 .appendTo($wrapper)
-                .patternPickadate({
-                  time: false,
-                  date: { format: 'dd/mm/yyyy' }
-                })
-                .change(function() {
+                .patternPickadate()
+                .on('updated.pickadate.patterns', function() {
                   self.trigger('value-changed');
                 });
 
+
       } else if (widget === 'DateRangeWidget') {
         var startwrap = $('<span/>').appendTo($wrapper);
+        var val1 = "";
+        var val2 = "";
+
+        if (value) {
+          val1 = value[0]?value[0]:"";
+          val2 = value[1]?value[1]:"";
+        }
+
         var startdt = $('<input type="text"/>')
           .addClass(self.options.classValueName + '-' + widget)
           .addClass(self.options.classValueName + '-' + widget + '-start')
+          .attr('data-pat-pickadate', '{"time": false, "date": {"format": "dd/mm/yyyy" }}')
+          .val(val1)
           .appendTo(startwrap)
-          .patternPickadate({
-            time: false,
-            date: { format: 'dd/mm/yyyy' }
+          .patternPickadate()
+          .on('updated.pickadate.patterns', function() {
+            self.trigger('value-changed');
           });
         $wrapper.append(
           $('<span/>')
@@ -222,14 +232,13 @@ define([
         var enddt = $('<input type="text"/>')
                         .addClass(self.options.classValueName + '-' + widget)
                         .addClass(self.options.classValueName + '-' + widget + '-end')
+                        .attr('data-pat-pickadate', '{"time": false, "date": {"format": "dd/mm/yyyy" }}')
+                        .val(val2)
                         .appendTo(endwrap)
-                        .patternPickadate({
-                          time: false,
-                          date: { format: 'dd/mm/yyyy' }
+                        .patternPickadate()
+                        .on('updated.pickadate.patterns', function() {
+                          self.trigger('value-changed');
                         });
-        $wrapper.find('.picker__input').change(function() {
-          self.trigger('value-changed');
-        });
         self.$value = [startdt, enddt];
 
       } else if (widget === 'RelativeDateWidget') {
@@ -277,7 +286,14 @@ define([
       }
 
       if (value !== undefined && typeof self.$value !== 'undefined') {
-        self.$value.select2('val', value);
+        if ($.isArray(self.$value)) {
+          $.each(value, function( i, v ) {
+            self.$value[i].select2('val', v);
+          });
+        }
+        else {
+          self.$value.select2('val', value);
+        }
       }
 
       self.trigger('create-value');
@@ -387,7 +403,7 @@ define([
       var varr = [];
       if ($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
         $.each(self.$value, function(i, v) {
-          varr.push($(this).parent().find('.picker__input').val());
+          varr.push($(this).val());
         });
       }
       else if (typeof self.$value !== 'undefined') {
@@ -395,7 +411,7 @@ define([
       }
       var vval;
       if (varr.length > 1) {
-        vval = '[j' + varr.join('","') + '"]';
+        vval = '["' + varr.join('","') + '"]';
       }
       else if (varr.length === 1) {
         vval = JSON.stringify(varr[0]);
