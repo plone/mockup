@@ -13,8 +13,8 @@ define([
       '<div class="buttonBox">' +
         '<label for="lessFileName">Save as:</label>' +
         '<input id="lessFileName" type="text" placeholder="filename" />' +
-        '<a id="compileBtn" class="context" href="#">Compile</a>' +
-        '<a id="errorBtn" class="btn btn-default" href="#">Clear</a>' +
+        '<button id="compileBtn" class="btn btn-primary">Compile</button>' +
+        '<button id="errorBtn" class="btn btn-default">Clear</button>' +
       '</div>' +
     '</div>'
   );

@@ -54,8 +54,8 @@
         </form>
 
         <div class="formControls new-rule-actions">
-            <input type="submit" class="allowMultiSubmit context next submitting" value="Next" />
-            <input type="submit" class="allowMultiSubmit standalone close" value="Cancel" />
+            <input type="submit" class="btn btn-primary next submitting" value="Next" />
+            <input type="submit" class="btn btn-default standalone close" value="Cancel" />
         </div>
 
     </div>
@@ -64,8 +64,8 @@
             Please select an element using the <strong>HTML mockup</strong> inspector.
         </div>
         <div class="formControls new-rule-actions">
-            <input type="submit" class="allowMultiSubmit context next" value="Ok" />
-            <input type="submit" class="allowMultiSubmit standalone wizard-cancel" value="Cancel" />
+            <input type="submit" class="btn btn-primary next" value="Ok" />
+            <input type="submit" class="btn btn-default standalone wizard-cancel" value="Cancel" />
         </div>
     </div>
     <div id="new-rule-select-content" class="rule-wizard-step" style="display: none;">
@@ -73,8 +73,8 @@
             Please select an element using the <strong>Unthemed content</strong> inspector.
         </div>
         <div class="formControls new-rule-actions">
-            <input type="submit" class="allowMultiSubmit context next submitting" value="Ok" />
-            <input type="submit" class="allowMultiSubmit standalone wizard-cancel" value="Cancel" />
+            <input type="submit" class="btn btn-primary next submitting" value="Ok" />
+            <input type="submit" class="btn btn-default standalone wizard-cancel" value="Cancel" />
         </div>
     </div>
     <div id="new-rule-step-2" class="rule-wizard-step" style="display: none;">
@@ -99,9 +99,9 @@
 
         </form>
         <div class="formControls new-rule-actions">
-            <input type="submit" class="allowMultiSubmit context insert submitting" title="Insert rule into the rules.xml file" value="Insert" />
-            <input type="submit" class="allowMultiSubmit context copy" value="Copy to clipboard" style="display: none;" />
-            <input type="submit" class="allowMultiSubmit standalone close" value="Close" />
+            <input type="submit" class="btn btn-primary insert submitting" title="Insert rule into the rules.xml file" value="Insert" />
+            <input type="submit" class="btn btn-primary copy" value="Copy to clipboard" style="display: none;" />
+            <input type="submit" class="btn btn-default close" value="Close" />
         </div>
     </div>
 </div>
