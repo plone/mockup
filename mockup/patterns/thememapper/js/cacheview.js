@@ -8,8 +8,9 @@ define([
   'use strict';
   var template = _.template(
     '<div>' +
-      '<span>Click to clear the site\'s theme cache, forcing a reload from the source.</span>' +
-      '<a href="#" id="clearBtn" class="btn btn-default">Clear</a>' +
+      '<span id="clearMessage">Click to clear the site\'s theme cache, forcing a reload from the source.</span>' +
+      '<span style="display: none;" id="clearSuccess">Cache cleareed successfully.</span>' +
+      '<a href="#" id="clearBtn" class="context">Clear</a>' +
     '</div>'
   );
 
@@ -21,6 +22,8 @@ define([
       var self = this;
       PopoverView.prototype.render.call(this);
       self.$clear = $('#clearBtn', this.$el);
+      self.$message = $('#clearMessage', this.$el);
+      self.$success = $('#clearSuccess', this.$el);
 
       self.$clear.on('click', function() {
 
@@ -35,8 +38,14 @@ define([
             '_authenticator': utils.getAuthenticator()
           },
           success: function(response) {
-            self.triggerView.el.click();
-            alert("Cache cleared successfully.");
+            self.$message.hide();
+            self.$success.show();
+
+            setTimeout(function() {
+              self.$message.show();
+              self.$success.hide();
+              self.triggerView.el.click();
+            }, 3000);
           }
         });
       });
