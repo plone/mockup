@@ -52,10 +52,22 @@ define([
     },
     setFilename: function() {
         var self = this;
+
         if( self.app.lessPaths['save'] === undefined ) {
             return;
         }
-        var f = self.app.lessPaths['save'];
+
+        var filePath = self.app.lessPaths['less'];
+        var devPath = self.app.devPath[0];
+        var prodPath = self.app.prodPath[0];
+
+        if( filePath == devPath ) {
+            var f = prodPath;
+        }
+        else {
+            var f = self.app.lessPaths['save'];
+        }
+
         f = f.substr(f.lastIndexOf('/') + 1, f.length);
         self.$filename.attr('placeholder', f);
     },
