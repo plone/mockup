@@ -283,6 +283,8 @@ define([
     unthemedInspector: null,
     ruleBuilder: null,
     rulebuilderView: null,
+    devPath: null,
+    prodPath: null,
     lessUrl: null,
     lessPaths: {},
     lessVariableUrl: null,
@@ -307,6 +309,9 @@ define([
       self.editable = (self.options.editable == "True") ? true : false;
       self.lessUrl = (self.options.lessUrl !== undefined ) ? self.options.lessUrl : false;
       self.lessVariableUrl = (self.options.lessVariables !== undefined ) ? self.options.lessVariables : false;
+
+      self.devPath = [];
+      self.prodPath = [];
 
       self.options.filemanagerConfig.uploadUrl = self.options.themeUrl;
       self.options.filemanagerConfig.theme = true;
@@ -349,6 +354,18 @@ define([
 
       // initially, let's hide the panels
       self.hideInspectors();
+      self.getManifest();
+    },
+    getManifest: function() {
+      var self = this;
+
+      self.fileManager.doAction('getFile', {
+        datatype: 'json',
+        data: {
+          path: 'manifest.cfg'
+        },
+        success: function(data) { this.setDefaultPaths(data); }.bind(self)
+      })
     },
     setSavePath: function() {
         var self = this;
@@ -398,6 +415,18 @@ define([
         self.lessPaths = {};
         return false;
       }
+    },
+    setDefaultPaths: function(manifest) {
+      var self = this;
+      var dev = new RegExp("development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
+      var prod = new RegExp("production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
+
+      var devUrl = dev.exec(manifest.contents)[1];
+      var prodUrl = prod.exec(manifest.contents)[1];
+
+      //The array lets us get around scoping issues.
+      self.devPath[0] = devUrl;
+      self.prodPath[0] = prodUrl;
     },
     saveThemeCSS: function(styles) {
       var self = this.env;

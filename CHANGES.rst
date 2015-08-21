@@ -4,6 +4,12 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Lessbuilder will now guess filenames based on manifest.cfg
+  [obct537]
+
+- Filemanager popovers will now close on file change
+  [obct537]
+
 - Added button to clear the sitewide theme cache to the thememapper interface
   [obct537]
 

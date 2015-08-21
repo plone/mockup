@@ -333,6 +333,7 @@ define([
     },
     handleClick: function(event) {
       var self = this;
+      self.closeActivePopovers();
       self.openFile(event);
     },
     closeActiveTab: function() {
@@ -369,6 +370,13 @@ define([
         }
       });
     },
+    closeActivePopovers: function() {
+      var self = this;
+      var active = $('.navbar a.active');
+      $(active).each(function() {
+        $(this).click();
+      });
+    },
     createTab: function(path) {
       var self = this;
       var $item = $(self.tabItemTemplate({path: path}));
@@ -377,6 +385,7 @@ define([
       $('.remove', $item).click(function(e){
         e.preventDefault();
         e.stopPropagation();
+        self.closeActivePopovers();
         if ($(this).parent().hasClass('active'))
         {
           self.closeActiveTab();
@@ -389,6 +398,7 @@ define([
         e.preventDefault();
         $('li', self.$tabs).removeClass('active');
         var $li = $(this).parent();
+        self.closeActivePopovers();
         $li.addClass('active');
       });
     },

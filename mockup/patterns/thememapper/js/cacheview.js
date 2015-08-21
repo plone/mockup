@@ -10,7 +10,7 @@ define([
     '<div>' +
       '<span id="clearMessage">Click to clear the site\'s theme cache, forcing a reload from the source.</span>' +
       '<span style="display: none;" id="clearSuccess">Cache cleared successfully.</span>' +
-      '<a href="#" id="clearBtn" class="context">Clear</a>' +
+      '<a href="#" id="clearBtn" class="btn btn-block btn-primary">Clear</a>' +
     '</div>'
   );
 
