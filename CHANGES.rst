@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Improvements to dynamic popover content handling
+  [vangheem]
+
 - Lessbuilder will now guess filenames based on manifest.cfg
   [obct537]
 
@@ -27,7 +30,7 @@ Changelog
 
 - add action value to form when using disableAjaxFormSubmit option on modal
   [vangheem]
-  
+
 - Modal Pattern: If ``data-view-url`` attribute is available on the body, use
   it. Otherwise look for ``data-base-url`` and finally for a ``<base>`` tag.
   [ale-rt]
