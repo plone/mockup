@@ -212,7 +212,7 @@ define([
       self.dropzone.on('error', function(file, response, xmlhr) {
         if (typeof(xmlhr) !== 'undefined' && xmlhr.status !== 403){
           // If error other than 403, just print a generic message
-          $('.dz-error-message span', file.previewElement).html(_('The file transfer failed'));
+          $('.dz-error-message span', file.previewElement).html(_t('The file transfer failed'));
         }
       });
 
