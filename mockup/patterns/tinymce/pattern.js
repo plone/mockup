@@ -288,7 +288,8 @@ define([
       var self = this;
       var i18n = new I18n();
       var lang = i18n.currentLanguage;
-      if (lang !== 'en' && self.options.tiny.language !== 'en') {
+      if (lang !== 'en' && self.options.tiny.language &&
+          self.options.tiny.languageself.options.tiny.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
         // does the expected language exist?
         $.ajax({
