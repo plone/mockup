@@ -288,8 +288,7 @@ define([
       var self = this;
       var i18n = new I18n();
       var lang = i18n.currentLanguage;
-      if (lang !== 'en' && self.options.tiny.language &&
-          self.options.tiny.languageself.options.tiny.language !== 'en') {
+      if (lang !== 'en-us' && self.options.tiny.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
         // does the expected language exist?
         $.ajax({
@@ -304,7 +303,9 @@ define([
             // expected lang not available, let's fallback to closest one
             if (lang.split('_') > 1){
               lang = lang.split('_')[0];
-            } else {
+            } else if(lang.split('-') > 1){
+              lang = lang.split('-')[0];
+            }else {
               lang = lang + '_' + lang.toUpperCase();
             }
             $.ajax({
