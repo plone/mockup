@@ -22,7 +22,7 @@ define([
     if (!self.baseUrl) {
       self.baseUrl = '/plonejsi18n';
     }
-    self.currentLanguage = $('html').attr('lang') || 'en';
+    self.currentLanguage = $('html').attr('lang') || 'en-us';
     self.storage = null;
     self.catalogs = {};
     self.ttl = 24 * 3600 * 1000;
