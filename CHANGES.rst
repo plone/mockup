@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.0 (unreleased)
+2.0.6 (2015-08-23)
 ------------------
 
 - Improvements to dynamic popover content handling
