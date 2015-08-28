@@ -95,7 +95,7 @@ define([
       // set id on current element
       var id = utils.setId(self.$el);
       self.$wrapper = $('<div class="editorWrapper" />').css({
-        height: self.options.height + 25, // weird sizing issue here...
+        height: parseInt(self.options.height) + 25, // weird sizing issue here...
         width: self.options.width,
         position: 'relative'
       });
