@@ -293,12 +293,13 @@ define([
     // provide default loader
     loading: new Loading(),
     getAuthenticator: function() {
-      var $el = $('input[name="_authenticator"]').val();
+      var $el = $('input[name="_authenticator"]');
       if($el.length === 0){
         $el = $('a[href*="_authenticator"]');
         if($el.length > 0){
           return $el.attr('href').split('_authenticator=')[1];
         }
+        return '';
       }else{
         return $el.val();
       }
