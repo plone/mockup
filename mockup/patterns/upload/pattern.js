@@ -99,7 +99,7 @@ define([
         var items = oe.clipboardData.items;
         if (items) {
           for (var i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf("image") !== -1) {
+            if (items[i].type.indexOf('image') !== -1) {
               var blob = items[i].getAsFile();
               self.dropzone.addFile(blob);
             }
@@ -381,14 +381,11 @@ define([
           processing = false;
         }
 
-        if (processing){
-          var file = self.dropzone.files[0];
-
-          if (file.status === Dropzone.ERROR){
-            // Put the file back as "queued" for retrying
-            file.status = Dropzone.QUEUED;
-            processing = false;
-          }
+        var file = self.dropzone.files[0];
+        if (processing && file.status === Dropzone.ERROR){
+          // Put the file back as "queued" for retrying
+          file.status = Dropzone.QUEUED;
+          processing = false;
         }
 
         if (!processing){
