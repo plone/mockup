@@ -149,7 +149,7 @@ define([
       $('button.browse', self.$el).click(function(e) {
         e.preventDefault();
         e.stopPropagation();
-        if(self.dropzone.files.length < self.options.maxFiles){
+        if(!self.options.maxFiles || self.dropzone.files.length < self.options.maxFiles){
           self.dropzone.hiddenFileInput.click();
         }
       });
