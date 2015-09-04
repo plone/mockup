@@ -593,7 +593,9 @@ define([
       if (path !== '/'){
         path += '/';
       }
-      return path + node.name;
+
+      var name = (node.name !== undefined) ? node.name : '';
+      return path + name;
     },
     getFolderPath: function(node){
       var self = this;
