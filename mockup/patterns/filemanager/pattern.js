@@ -222,7 +222,7 @@ define([
 
       self._save = function() {
 
-        var path = self.getNodePath();
+        var path = $('.active', self.$tabs).data('path');
         if( path === undefined ) {
           alert("No file selected.");
           return;
@@ -230,12 +230,12 @@ define([
         self.doAction('saveFile', {
           type: 'POST',
           data: {
-            path: self.getNodePath(),
+            path: path,
             data: self.ace.editor.getValue(),
             _authenticator: utils.getAuthenticator()
           },
           success: function(data) {
-            $('[data-path="' + self.getNodePath() + '"]').removeClass("modified");
+            $('[data-path="' + path + '"]').removeClass("modified");
           }
         });
       };
