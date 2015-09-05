@@ -272,6 +272,25 @@ define([
       self.tree = new Tree(self.$tree, self.options.treeConfig);
       self.$editor = self.$('.editor');
 
+      /* close popovers when clicking away */
+      $(document).click(function(e){
+          var $el = $(e.target);
+          if(!$el.is(':visible')){
+              // ignore this, fake event trigger to element that is not visible
+              return;
+          }
+          if($el.is('a') || $el.parent().is('a')){
+              return;
+          }
+          var $popover = $('.popover:visible');
+          if($popover.length > 0 && !$.contains($popover[0], $el[0])){
+              var popover = $popover.data('component');
+              if(popover){
+                  popover.hide();
+              }
+          }
+      });
+
       self.$tree.bind('tree.select', function(e) {
         if( e.node === null ) {
           self.toggleButtons(false);
