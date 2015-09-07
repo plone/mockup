@@ -4,6 +4,9 @@ Changelog
 2.0.7 (Unreleased)
 ------------------
 
+- Fix structure pattern sorting
+  [vangheem]
+
 - checkout tinymce language with - in addition to _
   [vangheem]
 
