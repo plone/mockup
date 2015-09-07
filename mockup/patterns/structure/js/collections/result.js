@@ -59,7 +59,7 @@ define([
       // XXX manually set sort order here since backbone will otherwise
       // do arbitrary sorting?
       _.each(results, function(item, idx) {
-        item._sort = idx + baseSortIdx;
+        item._sort = idx;
       });
       return results;
     },
