@@ -1,13 +1,13 @@
 Changelog
 =========
 
-2.0.7 (Unreleased)
+2.0.7 (2015-09-07)
 ------------------
 
 - Fix structure pattern sorting
   [vangheem]
 
-- checkout tinymce language with - in addition to _
+- checkout tinymce language with ``-`` in addition to ``_``
   [vangheem]
 
 2.0.6 (2015-08-23)
