@@ -1,10 +1,13 @@
 Changelog
 =========
 
-2.0.7 (Unreleased)
+2.0.8 (Unreleased)
 ------------------
 
-- No changes yet.
+- Add option to use tinyMCE inline on a contenteditable div. The pattern
+  creates the contenteditable div from the textarea, copies it's content to it
+  and handles saving changed data back to the textarea on form submit.
+  [thet]
 
 
 2.0.7 (2015-09-07)
