@@ -4,6 +4,12 @@ Changelog
 2.0.8 (Unreleased)
 ------------------
 
+- Fixed issue causing folders to be overwritten in the thememapper 
+  [obct537]
+
+- Thememapper popups now close when the user clicks somewhere else 
+  [obct537]
+
 - Add option to use tinyMCE inline on a contenteditable div. The pattern
   creates the contenteditable div from the textarea, copies it's content to it
   and handles saving changed data back to the textarea on form submit.
