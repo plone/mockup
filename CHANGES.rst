@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.8 (Unreleased)
+2.0.8 (2015-09-08)
 ------------------
 
 - Fixed issue causing folders to be overwritten in the thememapper 
