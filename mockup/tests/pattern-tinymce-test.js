@@ -387,6 +387,33 @@ define([
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#foobar');
     });
 
+    it('test inline tinyMCE roundtrip', function() {
+      var $container = $(
+       '<form>' +
+       '<textarea class="pat-tinymce" data-pat-tinymce=\'{"tiny": {"inline": true}}\'>' +
+       '<h1>just testing</h1>' +
+       '</textarea>' +
+       '</form>'
+      ).appendTo('body');
+      registry.scan($container);
+
+      var $el = $container.find('textarea');
+      var id = $el.attr('id');
+
+      var $editable = $container.find('#' + id + '-editable');
+
+      // check, if everything is in place
+      expect($editable.is('div')).to.be.equal(true);
+      expect($editable.html()).to.be.equal($el.val());
+
+      // check, if changes are submitted on form submit
+      var changed_txt = 'changed contents';
+      $editable.html(changed_txt);
+      var $form = $container.find('form');
+      $container.trigger('submit');
+      expect($el.val()).to.be.equal(changed_txt);
+    });
+
   });
 
 });
