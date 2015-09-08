@@ -45,10 +45,11 @@ define([
                 self.app.$tree.tree('openNode', node);
             }
 
+            self.app.closeActiveTab();
+
             delete self.app.fileData[self.data.path];
             delete self.data;
           });
-          self.app.closeTab(data.path);
           self.app.resizeEditor();
         }
       });
