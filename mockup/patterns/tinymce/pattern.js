@@ -345,8 +345,8 @@ define([
       // tiny needs an id in order to initialize. Creat it if not set.
       var id = utils.setId(self.$el);
       var tinyOptions = self.options.tiny;
-      var tinyId = tinyOptions.inline ? id + '-editable' : id;  // when displaying tinyMCE inline, a separate div is created.
-      tinyOptions.selector = '#' + tinyId;
+      self.tinyId = tinyOptions.inline ? id + '-editable' : id;  // when displaying TinyMCE inline, a separate div is created.
+      tinyOptions.selector = '#' + self.tinyId;
       tinyOptions.addLinkClicked = function() {
         self.addLinkClicked.apply(self, []);
       };
@@ -387,14 +387,14 @@ define([
         }
 
         if (tinyOptions.inline === true) {
-          // create a div, which will be made content-editable by tinyMCE and
+          // create a div, which will be made content-editable by TinyMCE and
           // copy contents from textarea to it. Then hide textarea.
-          self.$el.after('<div id="' + tinyId + '">' + self.$el.val() + '</div>');
+          self.$el.after('<div id="' + self.tinyId + '">' + self.$el.val() + '</div>');
           self.$el.hide();
         }
 
         tinymce.init(tinyOptions);
-        self.tiny = tinymce.get(tinyId);
+        self.tiny = tinymce.get(self.tinyId);
 
         /* tiny really should be doing this by default
          * but this fixes overlays not saving data */
@@ -411,7 +411,16 @@ define([
       });
     },
     destroy: function() {
-      this.tiny.destroy();
+      if (this.tiny) {
+        if (this.options.tiny.inline === true) {
+          // destroy also inline editable
+          this.$el.val(this.tiny.getContent());
+          $('#' + this.tinyId).remove();
+          this.$el.show();
+        }
+        this.tiny.destroy();
+        this.tiny = undefined;
+      }
     }
   });
 

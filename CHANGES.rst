@@ -4,7 +4,8 @@ Changelog
 2.0.9 (Unreleased)
 ------------------
 
-- No changes yet.
+- Fix inline TinyMCE to work together with ``pat-textareamimetypeselector``.
+  [thet]
 
 
 2.0.8 (2015-09-08)
@@ -17,8 +18,9 @@ Changelog
   [obct537]
 
 - Add option to use tinyMCE inline on a contenteditable div. The pattern
-  creates the contenteditable div from the textarea, copies it's content to it
-  and handles saving changed data back to the textarea on form submit.
+  creates a contenteditable div from the textarea, copies the textarea's
+  content to it and handles copying changed text back to the textarea on form
+  submit.
   [thet]
 
 
