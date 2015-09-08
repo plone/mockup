@@ -223,7 +223,7 @@ define([
       self._save = function() {
 
         var path = $('.active', self.$tabs).data('path');
-        if( path === undefined ) {
+        if( path === undefined || path === false ) {
           alert("No file selected.");
           return;
         }
@@ -235,6 +235,9 @@ define([
             _authenticator: utils.getAuthenticator()
           },
           success: function(data) {
+            if( data['error'] !== undefined ) {
+              alert("There was a problem saving the file.");
+            }
             $('[data-path="' + path + '"]').removeClass("modified");
           }
         });
