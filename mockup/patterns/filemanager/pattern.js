@@ -222,20 +222,23 @@ define([
 
       self._save = function() {
 
-        var path = self.getNodePath();
-        if( path === undefined ) {
+        var path = $('.active', self.$tabs).data('path');
+        if( path === undefined || path === false ) {
           alert("No file selected.");
           return;
         }
         self.doAction('saveFile', {
           type: 'POST',
           data: {
-            path: self.getNodePath(),
+            path: path,
             data: self.ace.editor.getValue(),
             _authenticator: utils.getAuthenticator()
           },
           success: function(data) {
-            $('[data-path="' + self.getNodePath() + '"]').removeClass("modified");
+            if( data['error'] !== undefined ) {
+              alert("There was a problem saving the file.");
+            }
+            $('[data-path="' + path + '"]').removeClass("modified");
           }
         });
       };
@@ -271,6 +274,25 @@ define([
       self.$tabs = $('ul.nav', self.$nav);
       self.tree = new Tree(self.$tree, self.options.treeConfig);
       self.$editor = self.$('.editor');
+
+      /* close popovers when clicking away */
+      $(document).click(function(e){
+          var $el = $(e.target);
+          if(!$el.is(':visible')){
+              // ignore this, fake event trigger to element that is not visible
+              return;
+          }
+          if($el.is('a') || $el.parent().is('a')){
+              return;
+          }
+          var $popover = $('.popover:visible');
+          if($popover.length > 0 && !$.contains($popover[0], $el[0])){
+              var popover = $popover.data('component');
+              if(popover){
+                  popover.hide();
+              }
+          }
+      });
 
       self.$tree.bind('tree.select', function(e) {
         if( e.node === null ) {
@@ -593,7 +615,9 @@ define([
       if (path !== '/'){
         path += '/';
       }
-      return path + node.name;
+
+      var name = (node.name !== undefined) ? node.name : '';
+      return path + name;
     },
     getFolderPath: function(node){
       var self = this;
