@@ -4,6 +4,10 @@ Changelog
 2.0.9 (Unreleased)
 ------------------
 
+- Raise pat-modal ``z-index`` to make sure, it's displayed above anything else,
+  e.g. TinyMCE's toolbar in inline editing mode.
+  [thet]
+
 - Fix inline TinyMCE to work together with ``pat-textareamimetypeselector``.
   [thet]
 
