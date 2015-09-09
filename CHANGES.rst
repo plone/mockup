@@ -4,6 +4,9 @@ Changelog
 2.0.9 (Unreleased)
 ------------------
 
+- Use hash to keep autotoc position settings
+  [vangheem]
+
 - Raise pat-modal ``z-index`` to make sure, it's displayed above anything else,
   e.g. TinyMCE's toolbar in inline editing mode.
   [thet]
