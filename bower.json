@@ -22,7 +22,7 @@
     "pickadate": "3.5.6",
     "requirejs-text": "2.0.12",
     "select2": "3.5.1",
-    "tinymce-builded": "4.1.9"
+    "tinymce-builded": "4.2.5"
   },
   "devDependencies": {
     "expect": "0.3.1",
