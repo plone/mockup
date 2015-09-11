@@ -10,6 +10,9 @@ Changelog
 - Fix inline TinyMCE to work together with ``pat-textareamimetypeselector``.
   [thet]
 
+- Fix scrolling when closing a modal within a modal
+  [ebrehault]
+
 
 2.0.8 (2015-09-08)
 ------------------
