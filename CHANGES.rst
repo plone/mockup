@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.9 (Unreleased)
+2.0.9 (2015-09-11)
 ------------------
 
 - Use hash to keep autotoc position settings
