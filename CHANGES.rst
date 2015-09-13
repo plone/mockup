@@ -4,6 +4,9 @@ Changelog
 2.0.9 (Unreleased)
 ------------------
 
+- Pass more i18n labels to the PickADate pattern
+  [ichim-david]
+
 - Use hash to keep autotoc position settings
   [vangheem]
 
