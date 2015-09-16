@@ -92,7 +92,6 @@ define([
 
     self.MessageFactory = function (domain, language) {
       language = language || self.currentLanguage;
-
       return function translate (msgid, keywords) {
         var msgstr;
         if ((domain in self.catalogs) && (language in self.catalogs[domain]) && (msgid in self.catalogs[domain][language])) {
