@@ -187,7 +187,7 @@ define([
                  'bullist numlist outdent indent | ' +
                  'unlink plonelink ploneimage',
         //'autoresize_max_height': 900,
-        'height': 400,
+        'height': 400
       },
       inline: false
     },
