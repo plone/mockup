@@ -4,6 +4,11 @@ Changelog
 2.0.9 (Unreleased)
 ------------------
 
+- Fix inline TinyMCE to work together with mosaic. The ``inline`` option must
+  now be passed to the patterns option object instead to the patterns tiny
+  options object.
+  [thet]
+
 - Pass more i18n labels to the PickADate pattern
   [ichim-david]
 
@@ -20,10 +25,10 @@ Changelog
 2.0.8 (2015-09-08)
 ------------------
 
-- Fixed issue causing folders to be overwritten in the thememapper 
+- Fixed issue causing folders to be overwritten in the thememapper
   [obct537]
 
-- Thememapper popups now close when the user clicks somewhere else 
+- Thememapper popups now close when the user clicks somewhere else
   [obct537]
 
 - Add option to use tinyMCE inline on a contenteditable div. The pattern

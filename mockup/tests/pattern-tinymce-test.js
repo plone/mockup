@@ -390,7 +390,7 @@ define([
     it('test inline tinyMCE roundtrip', function() {
       var $container = $(
        '<form>' +
-       '<textarea class="pat-tinymce" data-pat-tinymce=\'{"tiny": {"inline": true}}\'>' +
+       '<textarea class="pat-tinymce" data-pat-tinymce=\'{"inline": true}\'>' +
        '<h1>just testing</h1>' +
        '</textarea>' +
        '</form>'

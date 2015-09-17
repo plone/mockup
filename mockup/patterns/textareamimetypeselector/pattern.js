@@ -70,11 +70,11 @@
  *            "text/html": {
  *              "pattern": "tinymce",
  *              "patternOptions": {
+ *                "inline": true,
  *                "tiny": {
  *                  "plugins": [],
  *                  "menubar": "edit format tools",
- *                  "toolbar": " ",
- *                  "inline": true
+ *                  "toolbar": " "
  *                }
  *              }
  *            }
