@@ -4,6 +4,9 @@ Changelog
 2.0.9 (Unreleased)
 ------------------
 
+- Fix buttons positions on resource registry (closes `886`).
+  [rodfersou]
+
 - Fix inline TinyMCE to work together with mosaic. The ``inline`` option must
   now be passed to the patterns option object instead to the patterns tiny
   options object.
@@ -538,3 +541,5 @@ v1.8.0 (2014-10-26)
 
 - Fix Makefile for node versions < and >= 0.11.x.
   [petschki, thet]
+
+.. _`#886`: https://github.com/plone/Products.CMFPlone/issues/886
