@@ -58,12 +58,13 @@ The first step is to go to the *js/patterns* subdirectory and create a file call
 <pre>
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function ($, Base) {
   'use strict';
 
   var HelloWorld = Base.extend({
     name: 'helloworld',
+    trigger: '.pat-helloworld',
     init: function () {
       var $label = this.$el;
       $label.text('Hello, world!');
@@ -616,7 +617,7 @@ $ mv jquery.foggy.min.js lib/
 
     define([
       'jquery',
-      'mockup-patterns-base',
+      'pat-base',
       'jquery.foggy'
     ], function ($, Base) {
       'use strict';

@@ -144,7 +144,7 @@ require that some small changes be made to newly developed Mockup patterns:
 
         define([
             'jquery'
-            'mockup-patterns-base',
+            'pat-base',
             'pat-registry'
         ], function($, Base, registry) {
 
