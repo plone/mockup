@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 
   var fs = require('fs');
 
-  var MockupGrunt = require('./bower_components/mockup-core/js/grunt'),
+  var MockupGrunt = require('./js/grunt'),
       requirejsOptions = require('./js/config'),
       mockup = new MockupGrunt(requirejsOptions),
       docsExtraIncludes = [];
