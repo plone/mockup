@@ -60,7 +60,6 @@
       'mockup-docs-view': 'bower_components/mockup-core/js/docs/view',
       'mockup-fakeserver': 'tests/fakeserver',
       'mockup-i18n': 'js/i18n',
-      'mockup-parser': 'bower_components/mockup-core/js/parser',
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-contentloader': 'patterns/contentloader/pattern',
@@ -112,13 +111,15 @@
       'text': 'bower_components/requirejs-text/text',
       'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
       'tinymce-modern-theme': 'bower_components/tinymce-builded/js/tinymce/themes/modern/theme',
-      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+      'underscore': 'bower_components/underscore/underscore',
+      'lodash': 'bower_components/lodash/dist/lodash.underscore',
 
       // Patternslib
       'pat-compat': 'bower_components/patternslib/src/core/compat',
       'pat-jquery-ext': 'bower_components/patternslib/src/core/jquery-ext',
       'pat-logger': 'bower_components/patternslib/src/core/logger',
       'pat-base': 'bower_components/patternslib/src/core/base',
+      'pat-mockup-parser': 'bower_components/patternslib/src/core/mockup-parser',
       'pat-registry': 'bower_components/patternslib/src/core/registry',
       'pat-utils': 'bower_components/patternslib/src/core/utils',
       'logging': 'bower_components/logging/src/logging'
