@@ -22,6 +22,7 @@ define([
   var FormAutoFocus = Base.extend({
     name: 'formautofocus',
     trigger: '.pat-formautofocus',
+    parser: 'mockup',
     defaults: {
       condition: 'div.error',
       target: 'div.error :input:not(.formTabs):visible:first',

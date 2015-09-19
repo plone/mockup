@@ -79,6 +79,7 @@ define([
   var EventEdit = Base.extend({
     name: 'eventedit',
     trigger: '.pat-eventedit',
+    parser: 'mockup',
     defaults: {
       errorClass: 'error'
     },

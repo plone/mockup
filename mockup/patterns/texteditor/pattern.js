@@ -65,6 +65,7 @@ define([
   var AcePattern = Base.extend({
     name: 'texteditor',
     trigger: '.pat-texteditor',
+    parser: 'mockup',
     defaults: {
       theme: null,
       mode: 'text',

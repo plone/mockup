@@ -25,6 +25,7 @@ define([
   var Backdrop = Base.extend({
     name: 'backdrop',
     trigger: '.pat-backdrop',
+    parser: 'mockup',
     defaults: {
       zIndex: null,
       opacity: 0.8,

@@ -263,6 +263,7 @@ define([
   var ThemeMapper = Base.extend({
     name: 'thememapper',
     trigger: '.pat-thememapper',
+    parser: 'mockup',
     defaults: {
       filemanagerConfig: {},
       themeUrl: null,

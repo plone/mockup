@@ -73,6 +73,7 @@ define([
   var Select2 = Base.extend({
     name: 'select2',
     trigger: '.pat-select2',
+    parser: 'mockup',
     defaults: {
       separator: ','
     },

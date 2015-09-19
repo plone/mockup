@@ -33,6 +33,7 @@ define([
   var Livesearch = Base.extend({
     name: 'livesearch',
     trigger: '.pat-livesearch',
+    parser: 'mockup',
     timeout: null,
     active: false,
     results: null,

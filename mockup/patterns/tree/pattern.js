@@ -62,6 +62,7 @@ define([
   var Tree = Base.extend({
     name: 'tree',
     trigger: '.pat-tree',
+    parser: 'mockup',
     defaults: {
       dragAndDrop: false,
       autoOpen: false,

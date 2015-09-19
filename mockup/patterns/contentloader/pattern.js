@@ -39,6 +39,7 @@ define([
   var ContentLoader = Base.extend({
     name: 'contentloader',
     trigger: '.pat-contentloader',
+    parser: 'mockup',
     defaults: {
       url: null,
       content: null,

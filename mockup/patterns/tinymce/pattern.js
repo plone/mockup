@@ -123,6 +123,7 @@ define([
   var TinyMCE = Base.extend({
     name: 'tinymce',
     trigger: '.pat-tinymce',
+    parser: 'mockup',
     defaults: {
       upload: {
         uploadMultiple: false,

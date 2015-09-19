@@ -82,6 +82,7 @@ define([
   var RelatedItems = Base.extend({
     name: 'relateditems',
     trigger: '.pat-relateditems',
+    parser: 'mockup',
     browsing: false,
     currentPath: null,
     defaults: {

@@ -82,6 +82,7 @@ define([
   var Modal = Base.extend({
     name: 'plone-modal',
     trigger: '.pat-plone-modal',
+    parser: 'mockup',
     createModal: null,
     $model: null,
     defaults: {

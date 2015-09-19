@@ -55,6 +55,7 @@ define([
   var SortablePattern = Base.extend({
     name: 'sortable',
     trigger: '.pat-sortable',
+    parser: 'mockup',
     defaults: {
       selector: 'li',
       dragClass: 'item-dragging',

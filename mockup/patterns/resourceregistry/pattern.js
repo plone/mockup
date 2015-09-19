@@ -222,6 +222,7 @@ define([
   var ResourceRegistry = Base.extend({
     name: 'resourceregistry',
     trigger: '.pat-resourceregistry',
+    parser: 'mockup',
     defaults: {
       bundles: {},
       resources: {},

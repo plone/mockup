@@ -96,6 +96,7 @@ define([
   var PickADate = Base.extend({
     name: 'pickadate',
     trigger: '.pat-pickadate',
+    parser: 'mockup',
     defaults: {
       separator: ' ',
       date: {

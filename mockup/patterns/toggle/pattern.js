@@ -128,6 +128,7 @@ define([
   var Toggle = Base.extend({
     name: 'toggle',
     trigger: '.pat-toggle',
+    parser: 'mockup',
     defaults: {
       attribute: 'class',
       event: 'click',

@@ -27,6 +27,7 @@ define([
   var InlineValidation = Base.extend({
     name: 'inlinevalidation',
     trigger: '.pat-inlinevalidation',
+    parser: 'mockup',
 
     render_error: function ($field, errmsg) {
        var $errbox = $('div.fieldErrorBox', $field);

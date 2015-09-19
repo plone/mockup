@@ -39,6 +39,7 @@ define([
   var Structure = Base.extend({
     name: 'structure',
     trigger: '.pat-structure',
+    parser: 'mockup',
     defaults: {
       // for implementing history changes
       // Example: {base: 'http://mysite.com', appended: '/folder_contents'}

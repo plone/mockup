@@ -433,6 +433,7 @@ define([
   var QueryString = Base.extend({
     name: 'querystring',
     trigger: '.pat-querystring',
+    parser: 'mockup',
     defaults: {
       indexes: [],
       classWrapperName: 'querystring-wrapper',
