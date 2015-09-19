@@ -89,7 +89,7 @@
 define([
   'jquery',
   'pat-base',
-  'underscore',
+  'lodash',
   'mockup-ui-url/views/base',
   'mockup-utils',
   'mockup-patterns-resourceregistry-url/js/less',

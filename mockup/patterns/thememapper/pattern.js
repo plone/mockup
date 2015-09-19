@@ -30,7 +30,7 @@
 define([
   'jquery',
   'pat-base',
-  'underscore',
+  'lodash',
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',

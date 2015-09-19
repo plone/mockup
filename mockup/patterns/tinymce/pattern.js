@@ -60,7 +60,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'pat-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',

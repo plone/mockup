@@ -41,7 +41,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'pat-base',
   'mockup-patterns-relateditems',
   'dropzone',

@@ -2,7 +2,7 @@
 define([
   'jquery',
   'mockup-patterns-modal',
-  'underscore',
+  'lodash',
   'mockup-utils',
   'mockup-patterns-resourceregistry-url/js/iframe',
   'translate'

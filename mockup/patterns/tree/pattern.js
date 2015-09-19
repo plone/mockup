@@ -52,7 +52,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'pat-base',
   'mockup-utils',
   'jqtree'

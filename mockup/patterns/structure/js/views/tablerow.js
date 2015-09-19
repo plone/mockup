@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
   'mockup-patterns-structure-url/js/views/actionmenu',
   'text!mockup-patterns-structure-url/templates/tablerow.xml',

@@ -46,7 +46,7 @@ define([
   'mockup-patterns-pickadate',
   'select2',
   'translate',
-  'underscore'
+  'lodash'
 ], function($, Base, Select2, PickADate, undefined, _t, _) {
   'use strict';
 

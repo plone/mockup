@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
   'mockup-ui-url/views/buttongroup',
   'mockup-ui-url/views/button',

@@ -31,7 +31,7 @@ define([
   'pat-logger',
   'pat-registry',
   'mockup-utils',
-  'underscore'
+  'lodash'
 ], function($, Base, logger, Registry, utils, _) {
   'use strict';
   var log = logger.getLogger('pat-contentloader');

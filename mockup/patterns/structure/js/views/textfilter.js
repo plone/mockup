@@ -1,7 +1,7 @@
 define([
   'jquery',
   'backbone',
-  'underscore',
+  'lodash',
   'mockup-ui-url/views/base',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/popover',

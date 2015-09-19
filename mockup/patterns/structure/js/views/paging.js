@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
   'text!mockup-patterns-structure-url/templates/paging.xml',
   'translate'

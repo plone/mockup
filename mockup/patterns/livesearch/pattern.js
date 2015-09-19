@@ -25,7 +25,7 @@
 define([
   'jquery',
   'pat-base',
-  'underscore',
+  'lodash',
   'translate'
 ], function ($, Base, _, _t){
   'use strict';

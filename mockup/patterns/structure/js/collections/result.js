@@ -1,5 +1,5 @@
 define([
-  'underscore',
+  'lodash',
   'backbone',
   'mockup-patterns-structure-url/js/models/result',
   'backbone.paginator'
