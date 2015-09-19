@@ -82,6 +82,7 @@ define([
       ).appendTo('body');
       registry.scan($el);
       expect(tinymce.get(0).getContent()).to.be.equal('<p>foobar</p>');
+      tinymce.get(0).remove();
     });
 
     it('loads buttons for plugins', function() {
@@ -93,6 +94,7 @@ define([
       ).appendTo('body');
       registry.scan($el);
       expect(tinymce.get(0).buttons).to.have.keys('plonelink', 'ploneimage');
+      tinymce.get(0).remove();
     });
 
     it('on form submit, save data to form', function() {
@@ -412,8 +414,8 @@ define([
       var $form = $container.find('form');
       $container.trigger('submit');
       expect($el.val()).to.be.equal(changed_txt);
+      tinymce.get(0).remove();
     });
 
   });
-
 });
