@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'backbone',
   'mockup-ui-url/views/popover',
   'text!mockup-patterns-structure-url/templates/selection_item.xml'

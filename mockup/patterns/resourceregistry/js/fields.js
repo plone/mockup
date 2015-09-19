@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'mockup-ui-url/views/base',
   'mockup-patterns-sortable',
   'mockup-patterns-select2',

@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'backbone',
   'mockup-ui-url/views/base',
   'mockup-patterns-structure-url/js/models/result',

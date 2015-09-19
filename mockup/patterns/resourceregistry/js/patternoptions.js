@@ -1,7 +1,7 @@
 define([
   'jquery',
   'mockup-ui-url/views/base',
-  'lodash',
+  'underscore',
   'mockup-utils',
   'mockup-patterns-resourceregistry-url/js/fields',
 ], function($, BaseView, _, utils, fields) {

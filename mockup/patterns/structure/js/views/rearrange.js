@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'mockup-ui-url/views/popover',
   'translate'
 ], function($, _, PopoverView, _t) {

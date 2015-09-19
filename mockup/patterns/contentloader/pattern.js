@@ -31,7 +31,7 @@ define([
   'pat-logger',
   'pat-registry',
   'mockup-utils',
-  'lodash'
+  'underscore'
 ], function($, Base, logger, Registry, utils, _) {
   'use strict';
   var log = logger.getLogger('pat-contentloader');
@@ -90,7 +90,7 @@ define([
               data = data[0];
             }
             try{
-              $el = $(_.template(that.options.template, data));
+              $el = $(_.template(that.options.template)(data));
             }catch(e){
               // log this
               log.warn('error rendering template. pat-contentloader will not work');

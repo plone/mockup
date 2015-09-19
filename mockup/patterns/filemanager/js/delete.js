@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'backbone',
   'mockup-patterns-filemanager-url/js/basepopover'
 ], function($, _, Backbone, PopoverView) {

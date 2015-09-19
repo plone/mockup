@@ -89,7 +89,7 @@
 define([
   'jquery',
   'pat-base',
-  'lodash',
+  'underscore',
   'mockup-ui-url/views/base',
   'mockup-utils',
   'mockup-patterns-resourceregistry-url/js/less',
@@ -100,7 +100,6 @@ define([
 ], function($, Base, _, BaseView, utils, LessVariablesView,
             OverridesView,RegistryView, PatternOptionsView, _t) {
   'use strict';
-
 
   var TabView = BaseView.extend({
     tagName: 'div',

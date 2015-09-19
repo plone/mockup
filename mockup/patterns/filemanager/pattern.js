@@ -34,7 +34,7 @@
 define([
   'jquery',
   'pat-base',
-  'lodash',
+  'underscore',
   'backbone',
   'mockup-ui-url/views/base',
   'mockup-patterns-tree',

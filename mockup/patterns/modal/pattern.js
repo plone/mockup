@@ -68,7 +68,7 @@
 
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'pat-base',
   'mockup-patterns-backdrop',
   'pat-registry',
@@ -413,7 +413,7 @@ define([
         }
 
         // Render html
-        self.$modal = $(_.template(self.options.templateOptions.template, tplObject));
+        self.$modal = $(_.template(self.options.templateOptions.template)(tplObject));
         self.$modalDialog = $('> .' + self.options.templateOptions.classDialog, self.$modal);
         self.$modalContent = $('> .' + self.options.templateOptions.classModal, self.$modalDialog);
 

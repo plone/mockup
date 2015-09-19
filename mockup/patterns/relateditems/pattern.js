@@ -70,7 +70,7 @@
 
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
@@ -170,7 +170,7 @@ define([
       // let's give all the options possible to the template generation
       var options = $.extend(true, {}, self.options, item);
       options._item = item;
-      return _.template(template, options);
+      return _.template(template)(options);
     },
     activateBrowsing: function() {
       var self = this;

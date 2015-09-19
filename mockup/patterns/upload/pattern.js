@@ -41,7 +41,7 @@
 
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'pat-base',
   'mockup-patterns-relateditems',
   'dropzone',
@@ -111,7 +111,7 @@ define([
       self.currentPath = self.options.currentPath;
       self.currentFile = 0;
 
-      template = _.template(template, {_t: _t});
+      template = _.template(template)({_t: _t});
       self.$el.addClass(self.options.className);
       self.$el.append(template);
 

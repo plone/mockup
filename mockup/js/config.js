@@ -112,7 +112,6 @@
       'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
       'tinymce-modern-theme': 'bower_components/tinymce-builded/js/tinymce/themes/modern/theme',
       'underscore': 'bower_components/underscore/underscore',
-      'lodash': 'bower_components/lodash/dist/lodash.underscore',
 
       // Patternslib
       'pat-compat': 'bower_components/patternslib/src/core/compat',

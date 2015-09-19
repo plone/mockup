@@ -114,7 +114,7 @@ So, first open the file *js/config.js* and add the following line under the *pat
     baseUrl: './',
     paths: {
       &hellip;
-      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+      'underscore': 'bower_components/underscore/underscore',
       'mockup-patterns-helloworld': 'js/patterns/hello' // <- right here!
   },
   &hellip;

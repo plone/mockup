@@ -1,6 +1,6 @@
 define([
   'jquery',
-  'lodash',
+  'underscore',
   'pat-registry',
   'pat-base',
   'mockup-patterns-relateditems',
