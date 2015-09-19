@@ -112,8 +112,7 @@ define([
         labelMonthSelect: _t('Select a month'),
         labelYearSelect: _t('Select a year')
       },
-      time: {
-      },
+      time: {},
       timezone: null,
       classWrapperName: 'pattern-pickadate-wrapper',
       classSeparatorName: 'pattern-pickadate-separator',
