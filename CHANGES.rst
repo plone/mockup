@@ -24,6 +24,9 @@ Changelog
 - Fix scrolling when closing a modal within a modal
   [ebrehault]
 
+- Remove mockup-core as a dependency.
+  [jcbrand, goibhniu]
+
 
 2.0.8 (2015-09-08)
 ------------------
