@@ -84,7 +84,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'picker',
   'picker.date',
   'picker.time',

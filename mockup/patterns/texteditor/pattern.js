@@ -56,7 +56,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-utils',
   'ace',
 ], function($, Base, utils) {

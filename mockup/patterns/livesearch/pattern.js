@@ -24,7 +24,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'translate'
 ], function ($, Base, _, _t){

@@ -63,7 +63,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'select2',
   'jquery.event.drag',
   'jquery.event.drop'

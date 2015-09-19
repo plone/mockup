@@ -1,7 +1,7 @@
 define([
   'jquery',
   'pat-registry',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-filemanager'
 ], function($, registry, Base) {
   'use strict';

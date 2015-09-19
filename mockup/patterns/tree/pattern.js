@@ -53,7 +53,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-utils',
   'jqtree'
 ], function($, _, Base, utils) {

@@ -25,7 +25,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-utils',
   'mockup-patterns-structure-url/js/views/app',
   'text!mockup-patterns-structure-url/templates/paging.xml',

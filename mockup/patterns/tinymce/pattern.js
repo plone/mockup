@@ -61,7 +61,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-relateditems',
   'mockup-patterns-modal',
   'tinymce',

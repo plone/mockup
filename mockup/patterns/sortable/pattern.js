@@ -46,7 +46,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, Base, drag, drop) {

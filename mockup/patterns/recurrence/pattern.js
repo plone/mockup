@@ -19,7 +19,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'jquery.recurrenceinput'
 ], function($, Base) {
   'use strict';

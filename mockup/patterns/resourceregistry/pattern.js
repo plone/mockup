@@ -88,7 +88,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-utils',

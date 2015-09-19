@@ -89,7 +89,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'pat-registry',
   'mockup-patterns-tinymce'
 ], function ($, Base, registry, tinymce) {

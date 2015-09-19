@@ -83,7 +83,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'moment',
   'mockup-i18n'
 ], function($, Base, moment, i18n) {

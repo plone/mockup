@@ -27,7 +27,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'pat-logger',
   'pat-registry',
   'mockup-utils',

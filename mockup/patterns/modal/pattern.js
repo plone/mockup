@@ -69,7 +69,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-backdrop',
   'pat-registry',
   'mockup-router',

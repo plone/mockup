@@ -673,7 +673,7 @@ define([
       data = {
         paths: {
           'autotoc': 'patterns/autotoc/pattern',
-          'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
+          'pat-base': 'bower_components/patternslib/src/core/base',
           'jquery': 'bower_components/jquery/dist/jquery',
           'pat-registry': 'bower_components/patternslib/src/core/registry'
         },

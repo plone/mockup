@@ -71,7 +71,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
   'mockup-patterns-tree',

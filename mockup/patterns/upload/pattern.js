@@ -42,7 +42,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-relateditems',
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',

@@ -63,7 +63,6 @@
       'mockup-parser': 'bower_components/mockup-core/js/parser',
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
-      'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
       'mockup-patterns-contentloader': 'patterns/contentloader/pattern',
       'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
       'mockup-patterns-eventedit': 'patterns/eventedit/pattern',
@@ -119,6 +118,7 @@
       'pat-compat': 'bower_components/patternslib/src/core/compat',
       'pat-jquery-ext': 'bower_components/patternslib/src/core/jquery-ext',
       'pat-logger': 'bower_components/patternslib/src/core/logger',
+      'pat-base': 'bower_components/patternslib/src/core/base',
       'pat-registry': 'bower_components/patternslib/src/core/registry',
       'pat-utils': 'bower_components/patternslib/src/core/utils',
       'logging': 'bower_components/logging/src/logging'

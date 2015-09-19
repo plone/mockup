@@ -33,7 +33,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'backbone',
   'mockup-ui-url/views/base',

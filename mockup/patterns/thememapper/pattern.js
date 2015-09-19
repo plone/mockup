@@ -29,7 +29,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',

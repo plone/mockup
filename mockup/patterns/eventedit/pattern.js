@@ -71,7 +71,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-pickadate',
 ], function ($, Base, pickadate) {
   'use strict';
