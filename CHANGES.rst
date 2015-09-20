@@ -1,10 +1,11 @@
 Changelog
 =========
 
-2.0.12 (Unreleased)
+2.0.12 (2015-09-20)
 -------------------
 
-- No changes yet.
+- Update manifest to include required files.
+  [esteele]
 
 2.0.11 (2015-09-20)
 -------------------
