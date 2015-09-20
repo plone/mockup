@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0.9 (2015-09-20)
-------------------
+2.0.10 (2015-09-20)
+-------------------
 
 - Fix buttons positions on resource registry (closes `886`).
   [rodfersou]
@@ -14,6 +14,10 @@ Changelog
 
 - Pass more i18n labels to the PickADate pattern
   [ichim-david]
+
+
+2.0.9 (2015-09-11)
+------------------
 
 - Use hash to keep autotoc position settings
   [vangheem]
