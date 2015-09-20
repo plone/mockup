@@ -1,8 +1,12 @@
 Changelog
 =========
 
-2.0.11 (Unreleased)
+2.0.11 (2015-09-20)
 -------------------
+
+- Update manifest to include required json files.
+  [esteele]
+
 
 2.0.10 (2015-09-20)
 -------------------

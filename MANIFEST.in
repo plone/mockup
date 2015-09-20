@@ -1,3 +1,4 @@
+include *.json
 recursive-include mockup/js *
 recursive-include mockup/less *
 recursive-include mockup/lib *
