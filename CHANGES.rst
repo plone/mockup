@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.9 (Unreleased)
+2.0.9 (2015-09-20)
 ------------------
 
 - Fix buttons positions on resource registry (closes `886`).
