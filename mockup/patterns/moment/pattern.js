@@ -105,7 +105,7 @@ define([
       if (!date) {
         date = $.trim($el.html());
       }
-      moment.locale((new i18n()).currentLanguage);
+      moment.locale([(new i18n()).currentLanguage, 'en']);
       date = moment(date);
       if (!date.isValid()) {
         return;
