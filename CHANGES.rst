@@ -2,7 +2,33 @@ Changelog
 =========
 
 2.1.0 (Unreleased)
-------------------
+-------------------
+
+- Remove mockup-core as a dependency.
+  [jcbrand, goibhniu]
+
+**NOTE**:
+    `mockup-patterns-base` has been deprecated.
+    Individual patterns now need to be updated to use `pat-base` instead
+    of `mockup-patterns-base` and also explicitly set `parser` to `'mockup'`
+    in the `Base.extend` call.
+    Refer to any of the core Mockup patterns for examples.
+
+2.0.12 (2015-09-20)
+-------------------
+
+- Update manifest to include required files.
+  [esteele]
+
+2.0.11 (2015-09-20)
+-------------------
+
+- Update manifest to include required json files.
+  [esteele]
+
+
+2.0.10 (2015-09-20)
+-------------------
 
 - Fix buttons positions on resource registry (closes `886`).
   [rodfersou]
@@ -15,6 +41,10 @@ Changelog
 - Pass more i18n labels to the PickADate pattern
   [ichim-david]
 
+
+2.0.9 (2015-09-11)
+------------------
+
 - Use hash to keep autotoc position settings
   [vangheem]
 
@@ -23,16 +53,6 @@ Changelog
 
 - Fix scrolling when closing a modal within a modal
   [ebrehault]
-
-- Remove mockup-core as a dependency.
-  [jcbrand, goibhniu]
-
-**NOTE**:
-    `mockup-patterns-base` has been deprecated.
-    Individual patterns now need to be updated to use `pat-base` instead
-    of `mockup-patterns-base` and also explicitly set `parser` to `'mockup'`
-    in the `Base.extend` call.
-    Refer to any of the core Mockup patterns for examples.
 
 
 2.0.8 (2015-09-08)
