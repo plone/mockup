@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.9 (Unreleased)
+2.1.0 (Unreleased)
 ------------------
 
 - Fix buttons positions on resource registry (closes `886`).
@@ -26,6 +26,13 @@ Changelog
 
 - Remove mockup-core as a dependency.
   [jcbrand, goibhniu]
+
+**NOTE**:
+    `mockup-patterns-base` has been deprecated.
+    Individual patterns now need to be updated to use `pat-base` instead
+    of `mockup-patterns-base` and also explicitly set `parser` to `'mockup'`
+    in the `Base.extend` call.
+    Refer to any of the core Mockup patterns for examples.
 
 
 2.0.8 (2015-09-08)
