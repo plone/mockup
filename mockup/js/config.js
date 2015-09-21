@@ -61,6 +61,7 @@
       'mockup-fakeserver': 'tests/fakeserver',
       'mockup-i18n': 'js/i18n',
       'mockup-patterns-autotoc': 'patterns/autotoc/pattern',
+      'mockup-patterns-base': 'patterns/base/pattern',
       'mockup-patterns-backdrop': 'patterns/backdrop/pattern',
       'mockup-patterns-contentloader': 'patterns/contentloader/pattern',
       'mockup-patterns-cookietrigger': 'patterns/cookietrigger/pattern',
