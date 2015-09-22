@@ -63,7 +63,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'select2',
   'jquery.event.drag',
   'jquery.event.drop'
@@ -73,6 +73,7 @@ define([
   var Select2 = Base.extend({
     name: 'select2',
     trigger: '.pat-select2',
+    parser: 'mockup',
     defaults: {
       separator: ','
     },

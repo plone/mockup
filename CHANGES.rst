@@ -1,10 +1,18 @@
 Changelog
 =========
 
-2.0.13 (Unreleased)
+2.1.0 (Unreleased)
 -------------------
 
-- No changes yet.
+- Remove mockup-core as a dependency.
+  [jcbrand, goibhniu]
+
+**NOTE**:
+    `mockup-patterns-base` has been deprecated.
+    Individual patterns now need to be updated to use `pat-base` instead
+    of `mockup-patterns-base` and also explicitly set `parser` to `'mockup'`
+    in the `Base.extend` call.
+    Refer to any of the core Mockup patterns for examples.
 
 2.0.12 (2015-09-20)
 -------------------

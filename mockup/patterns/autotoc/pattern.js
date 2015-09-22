@@ -68,16 +68,16 @@
  *
  */
 
-
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base) {
   'use strict';
 
   var AutoTOC = Base.extend({
     name: 'autotoc',
     trigger: '.pat-autotoc',
+    parser: 'mockup',
     defaults: {
       section: 'section',
       levels: 'h1,h2,h3',

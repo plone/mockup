@@ -58,12 +58,13 @@ The first step is to go to the *js/patterns* subdirectory and create a file call
 <pre>
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function ($, Base) {
   'use strict';
 
   var HelloWorld = Base.extend({
     name: 'helloworld',
+    trigger: '.pat-helloworld',
     init: function () {
       var $label = this.$el;
       $label.text('Hello, world!');
@@ -114,7 +115,7 @@ So, first open the file *js/config.js* and add the following line under the *pat
     baseUrl: './',
     paths: {
       &hellip;
-      'underscore': 'bower_components/lodash/dist/lodash.underscore',
+      'underscore': 'bower_components/underscore/underscore',
       'mockup-patterns-helloworld': 'js/patterns/hello' // <- right here!
   },
   &hellip;
@@ -616,7 +617,7 @@ $ mv jquery.foggy.min.js lib/
 
     define([
       'jquery',
-      'mockup-patterns-base',
+      'pat-base',
       'jquery.foggy'
     ], function ($, Base) {
       'use strict';

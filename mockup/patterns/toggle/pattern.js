@@ -121,13 +121,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base, undefined) {
   'use strict';
 
   var Toggle = Base.extend({
     name: 'toggle',
     trigger: '.pat-toggle',
+    parser: 'mockup',
     defaults: {
       attribute: 'class',
       event: 'click',

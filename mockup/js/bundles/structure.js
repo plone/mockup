@@ -8,7 +8,7 @@ if (window.jQuery) {
 define([
   'jquery',
   'pat-registry',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-modal',
   'mockup-patterns-structure'
 ], function($, registry, Base, Modal, Structure) {

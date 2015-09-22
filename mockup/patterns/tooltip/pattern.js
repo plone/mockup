@@ -37,13 +37,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base, undefined) {
   'use strict';
 
   var Tooltip = Base.extend({
     name: 'tooltip',
     trigger: '.pat-tooltip',
+    parser: 'mockup',
     defaults: {
       html: false
     },

@@ -14,13 +14,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function ($, Base) {
   'use strict';
 
   var CookieTrigger = Base.extend({
     name: 'cookietrigger',
     trigger: '.pat-cookietrigger',
+    parser: 'mockup',
 
     isCookiesEnabled: function() {
       /* Test whether cookies are enabled by attempting to set a cookie

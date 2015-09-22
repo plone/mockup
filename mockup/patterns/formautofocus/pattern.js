@@ -15,13 +15,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base, undefined) {
   'use strict';
 
   var FormAutoFocus = Base.extend({
     name: 'formautofocus',
     trigger: '.pat-formautofocus',
+    parser: 'mockup',
     defaults: {
       condition: 'div.error',
       target: 'div.error :input:not(.formTabs):visible:first',

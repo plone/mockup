@@ -2,8 +2,10 @@ define([
   'expect',
   'jquery',
   'pat-registry',
-  'mockup-patterns-toggle'
-], function(expect, $, registry, Toggle) {
+  'pat-logger',
+  'mockup-patterns-toggle',
+  'sinon',
+], function(expect, $, registry, logger, Toggle, sinon) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -273,11 +275,12 @@ define([
         '   <a href="patterns.html">Click here to go somewhere else</a>' +
         ' </div>' +
         '</div>');
-      try {
-        registry.scan($el);
-      } catch (err) {
-        expect(err.message).to.equal('No target found for "#notarget".');
-      }
+      var log = logger.getLogger("pat.toggle");
+      sinon.spy(log, 'error');
+      registry.scan($el);
+      expect(log.error.calledOnce).to.be(true);
+      expect(log.error.calledWith("Failed while initializing 'toggle' pattern.")).to.be(true);
+      log.error.restore();
     });
   });
 

@@ -29,7 +29,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
@@ -263,6 +263,7 @@ define([
   var ThemeMapper = Base.extend({
     name: 'thememapper',
     trigger: '.pat-thememapper',
+    parser: 'mockup',
     defaults: {
       filemanagerConfig: {},
       themeUrl: null,

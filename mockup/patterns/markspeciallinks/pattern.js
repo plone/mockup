@@ -79,7 +79,7 @@
  */
 
 define([
-  'mockup-patterns-base',
+  'pat-base',
   'jquery'
 ], function (Base, $) {
   'use strict';
@@ -87,6 +87,7 @@ define([
   var MarkSpecialLinks = Base.extend({
     name: 'markspeciallinks',
     trigger: '.pat-markspeciallinks',
+    parser: 'mockup',
     defaults: {
       external_links_open_new_window: false,
       mark_special_links: true

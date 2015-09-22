@@ -84,7 +84,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'picker',
   'picker.date',
   'picker.time',
@@ -96,6 +96,7 @@ define([
   var PickADate = Base.extend({
     name: 'pickadate',
     trigger: '.pat-pickadate',
+    parser: 'mockup',
     defaults: {
       separator: ' ',
       date: {
@@ -111,8 +112,7 @@ define([
         labelMonthSelect: _t('Select a month'),
         labelYearSelect: _t('Select a year')
       },
-      time: {
-      },
+      time: {},
       timezone: null,
       classWrapperName: 'pattern-pickadate-wrapper',
       classSeparatorName: 'pattern-pickadate-separator',

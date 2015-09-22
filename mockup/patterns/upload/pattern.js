@@ -42,7 +42,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-relateditems',
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',
@@ -58,6 +58,7 @@ define([
   var UploadPattern = Base.extend({
     name: 'upload',
     trigger: '.pat-upload',
+    parser: 'mockup',
     defaults: {
       showTitle: true,
       url: null, // XXX MUST provide url to submit to OR be in a form
@@ -110,7 +111,7 @@ define([
       self.currentPath = self.options.currentPath;
       self.currentFile = 0;
 
-      template = _.template(template, {_t: _t});
+      template = _.template(template)({_t: _t});
       self.$el.addClass(self.options.className);
       self.$el.append(template);
 

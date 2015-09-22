@@ -46,7 +46,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'jquery.event.drag',
   'jquery.event.drop'
 ], function($, Base, drag, drop) {
@@ -55,6 +55,7 @@ define([
   var SortablePattern = Base.extend({
     name: 'sortable',
     trigger: '.pat-sortable',
+    parser: 'mockup',
     defaults: {
       selector: 'li',
       dragClass: 'item-dragging',

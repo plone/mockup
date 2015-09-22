@@ -29,7 +29,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'translate'
 ], function ($, Base, _t) {
   'use strict';
@@ -37,6 +37,7 @@ define([
   var FormUnloadAlert = Base.extend({
     name: 'formunloadalert',
     trigger: '.pat-formunloadalert',
+    parser: 'mockup',
     _changed : false,       // Stores a listing of raised changes by their key
     _suppressed : false,     // whether or not warning should be suppressed
     defaults: {

@@ -18,13 +18,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base) {
   'use strict';
 
   var Backdrop = Base.extend({
     name: 'backdrop',
     trigger: '.pat-backdrop',
+    parser: 'mockup',
     defaults: {
       zIndex: null,
       opacity: 0.8,

@@ -24,7 +24,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'translate'
 ], function ($, Base, _, _t){
@@ -33,6 +33,7 @@ define([
   var Livesearch = Base.extend({
     name: 'livesearch',
     trigger: '.pat-livesearch',
+    parser: 'mockup',
     timeout: null,
     active: false,
     results: null,

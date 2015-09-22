@@ -83,7 +83,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'moment',
   'mockup-i18n'
 ], function($, Base, moment, i18n) {
@@ -92,6 +92,7 @@ define([
   var Moment = Base.extend({
     name: 'moment',
     trigger: '.pat-moment',
+    parser: 'mockup',
     defaults: {
       // selector of elements to format dates for
       selector: null,

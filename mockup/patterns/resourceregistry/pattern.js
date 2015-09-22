@@ -88,7 +88,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-utils',
@@ -100,7 +100,6 @@ define([
 ], function($, Base, _, BaseView, utils, LessVariablesView,
             OverridesView,RegistryView, PatternOptionsView, _t) {
   'use strict';
-
 
   var TabView = BaseView.extend({
     tagName: 'div',
@@ -222,6 +221,7 @@ define([
   var ResourceRegistry = Base.extend({
     name: 'resourceregistry',
     trigger: '.pat-resourceregistry',
+    parser: 'mockup',
     defaults: {
       bundles: {},
       resources: {},

@@ -69,7 +69,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-backdrop',
   'pat-registry',
   'mockup-router',
@@ -82,6 +82,7 @@ define([
   var Modal = Base.extend({
     name: 'plone-modal',
     trigger: '.pat-plone-modal',
+    parser: 'mockup',
     createModal: null,
     $model: null,
     defaults: {
@@ -412,7 +413,7 @@ define([
         }
 
         // Render html
-        self.$modal = $(_.template(self.options.templateOptions.template, tplObject));
+        self.$modal = $(_.template(self.options.templateOptions.template)(tplObject));
         self.$modalDialog = $('> .' + self.options.templateOptions.classDialog, self.$modal);
         self.$modalContent = $('> .' + self.options.templateOptions.classModal, self.$modalDialog);
 

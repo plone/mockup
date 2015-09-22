@@ -56,7 +56,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-utils',
   'ace',
 ], function($, Base, utils) {
@@ -65,6 +65,7 @@ define([
   var AcePattern = Base.extend({
     name: 'texteditor',
     trigger: '.pat-texteditor',
+    parser: 'mockup',
     defaults: {
       theme: null,
       mode: 'text',

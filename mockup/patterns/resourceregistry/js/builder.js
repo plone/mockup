@@ -28,7 +28,7 @@ define([
         '<ul class="list-group hidden"></ul>' +
         '<button class="plone-btn plone-btn-default cancel hidden cancel-build"><%- _t("Close") %></button>' +
         '<button class="plone-btn plone-btn-primary build"><%- _t("Build it") %></button>' +
-      '</div>', $.extend({ _t: _t }, bundleListItem.options)),
+      '</div>')($.extend({ _t: _t }, bundleListItem.options)),
       content: null,
       width: 500,
       buttons: '.plone-btn'

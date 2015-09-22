@@ -41,7 +41,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
   'select2',
@@ -433,6 +433,7 @@ define([
   var QueryString = Base.extend({
     name: 'querystring',
     trigger: '.pat-querystring',
+    parser: 'mockup',
     defaults: {
       indexes: [],
       classWrapperName: 'querystring-wrapper',

@@ -71,7 +71,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
   'mockup-patterns-tree',
@@ -82,6 +82,7 @@ define([
   var RelatedItems = Base.extend({
     name: 'relateditems',
     trigger: '.pat-relateditems',
+    parser: 'mockup',
     browsing: false,
     currentPath: null,
     defaults: {
@@ -169,7 +170,7 @@ define([
       // let's give all the options possible to the template generation
       var options = $.extend(true, {}, self.options, item);
       options._item = item;
-      return _.template(template, options);
+      return _.template(template)(options);
     },
     activateBrowsing: function() {
       var self = this;
