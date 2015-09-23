@@ -4,10 +4,10 @@
 bower_components/
 build/
 coverage/
-docs/
+mockup/docs/
 nixenv/
 node_modules/
 sauce_connect.log*
-test-results.xml
 stamp-bower
 stamp-npm
+test-results.xml
