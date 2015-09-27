@@ -82,7 +82,7 @@ bootstrap-nix: clean bootstrap-common
 	ln -s nixenv/bower_components
 
 jshint:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint jscs $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
+	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 watch:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) watch $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
