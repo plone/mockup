@@ -75,6 +75,7 @@ define([
         'last_comment_date': 'Last comment date',
         'total_comments': 'Total comments'
       },
+      momentFormat: 'relative',
       rearrange: {
         properties: {
           'id': 'ID',

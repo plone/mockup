@@ -14,6 +14,10 @@ Changelog
     in the `Base.extend` call.
     Refer to any of the core Mockup patterns for examples.
 
+- Add the ``momentFormat`` option to the ``structure`` pattern.
+  [Gagaro]
+
+
 2.0.12 (2015-09-20)
 -------------------
 

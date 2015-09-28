@@ -101,10 +101,9 @@ define([
           container.append(view.el);
         });
       }
-
       self.moment = new Moment(self.$el, {
         selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
-        format: 'relative'
+        format: self.options.app.momentFormat
       });
       self.addReordering();
       self.storeOrder();
