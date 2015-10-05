@@ -4,6 +4,10 @@ Changelog
 2.1.0 (Unreleased)
 -------------------
 
+- use window.pushState instead of setting hash for autotoc pattern
+  when tabs change
+  [vangheem]
+
 - Remove mockup-core as a dependency.
   [jcbrand, goibhniu]
 
