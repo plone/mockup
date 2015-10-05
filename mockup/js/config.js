@@ -134,6 +134,7 @@
       'bootstrap-transition': { exports: 'window.jQuery.support.transition', deps: ['jquery'] },
       'expect': { exports: 'window.expect' },
       'jqtree': { deps: ['jquery'] },
+      'select2': { deps: ["jquery"] },
       'jquery.cookie': { deps: ['jquery'] },
       'jquery.event.drag': { deps: ['jquery'] },
       'jquery.event.drop': { deps: ['jquery'], exports: '$.drop' },
