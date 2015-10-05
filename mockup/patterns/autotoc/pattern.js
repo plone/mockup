@@ -155,7 +155,9 @@ define([
             }
             $(this).trigger('clicked');
             if(!options.skipHash){
-              window.location.hash = $el.attr('id');
+              if(window.history && window.history.pushState){
+                window.history.pushState({}, '', '#' + $el.attr('id'));
+              }
             }
           });
       });
