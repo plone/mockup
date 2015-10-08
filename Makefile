@@ -1,16 +1,13 @@
 GIT = git
 NPM = npm
-GRUNT = ./node_modules/grunt-cli/bin/grunt
-BOWER = ./node_modules/bower/bin/bower
-NODE_PATH = ./node_modules
-
-# node binary might be available under nodejs (ubuntu) or node (fedora, others)
-NODE = command -v nodejs > /dev/null && echo nodejs || echo node
-# npm link has different behavior between node versions.
-NODE_VERSION = $(shell `$(NODE)` -v)
+NODE_VERSION = $(shell node -v)
 NODE_VERSION_MAJ = $(shell echo $(NODE_VERSION) | cut -f1 -d. | cut -f2 -dv )
 NODE_VERSION_MIN = $(shell echo $(NODE_VERSION) | cut -f2 -d.)
 NODE_VERSION_LT_011 = $(shell [ $(NODE_VERSION_MAJ) -eq 0 -a $(NODE_VERSION_MIN) -lt 11 ] && echo true)
+
+GRUNT = ./node_modules/grunt-cli/bin/grunt
+BOWER = ./node_modules/bower/bin/bower
+NODE_PATH = ./node_modules
 
 DEBUG =
 ifeq ($(debug), true)
