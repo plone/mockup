@@ -108,6 +108,9 @@ define([
       attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','is_folderish','review_state'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
+      treeOptions: {
+        vocabularyUrl: null, // must be set to work
+      },
       resultTemplate: '' +
         '<div class="   pattern-relateditems-result  <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
@@ -365,12 +368,13 @@ define([
       self.treeQuery = new utils.QueryHelper(
         $.extend(true, {}, self.options, {
           pattern: self,
+          vocabularyUrl: self.options.treeOptions.vocabularyUrl || self.options.vocabularyUrl,
           baseCriteria: [{
             i: 'is_folderish',
             o: 'plone.app.querystring.operation.selection.any',
             v: 'True'
           }]
-        })
+        }, self.options.treeOptions)
       );
 
       self.options.ajax = self.options.setupAjax.apply(self);
