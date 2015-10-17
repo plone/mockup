@@ -469,16 +469,6 @@ define([
 
         self.$modal
           .addClass(self.options.templateOptions.className)
-          .on('click', function(e) {
-            e.stopPropagation();
-            if ($.nodeName(e.target, 'a')) {
-              e.preventDefault();
-
-              // TODO: open links inside modal
-              // and slide modal body
-            }
-            self.$modal.trigger('modal-click');
-          })
           .on('destroy.plone-modal.patterns', function(e) {
             e.stopPropagation();
             self.hide();
@@ -489,8 +479,19 @@ define([
             self.positionModal();
           })
           .appendTo(self.$wrapperInner);
-        self.$modal.data('pattern-' + self.name, self);
 
+        if (self.options.loadLinksWithinModal) {
+          self.$modal.on('click', function(e) {
+            e.stopPropagation();
+            if ($.nodeName(e.target, 'a')) {
+              e.preventDefault();
+              // TODO: open links inside modal
+              // and slide modal body
+            }
+            self.$modal.trigger('modal-click');
+          });
+        }
+        self.$modal.data('pattern-' + self.name, self);
         self.emit('after-render');
       }
     },
