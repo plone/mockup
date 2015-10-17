@@ -74,9 +74,9 @@ define([
 
       registry.scan($el);
 
-      expect($('.plone-modal-backdrop', $el).is(':hidden')).to.be.equal(true);
+      expect($('.plone-modal-wrapper', $el).size()).to.be.equal(0);
       expect($el.hasClass('plone-backdrop-active')).to.be.equal(false);
-      expect($('.plone-modal-wrapper', $el).is(':hidden')).to.be.equal(true);
+      expect($('.plone-modal-backdrop', $el).size()).to.be.equal(0);
       expect($('.plone-modal', $el).size()).to.equal(0);
 
       $('a.pat-plone-modal', $el).click();
