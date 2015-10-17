@@ -187,10 +187,7 @@ define([
         if (self.options.automaticallyAddButtonActions) {
           actions[self.options.buttons] = {};
         }
-
-        if (self.options.loadLinksWithinModal) {
-          actions.a = {};
-        }
+        actions.a = {};
 
         $.each(actions, function(action, options) {
           var actionKeys = _.union(_.keys(self.options.actionOptions), ['templateOptions']);
@@ -527,10 +524,10 @@ define([
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            if (self.options.backdropOptions.closeOnClick) {
-              self.backdrop.hide();
+            if (this.options.backdropOptions.closeOnClick) {
+              this.backdrop.hide();
             }
-          });
+          }.bind(this));
       }
 
       // Router
