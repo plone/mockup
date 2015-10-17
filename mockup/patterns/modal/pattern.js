@@ -500,6 +500,7 @@ define([
     },
     init: function() {
       var self = this;
+      self.options.loadLinksWithinModal = $.parseJSON(self.options.loadLinksWithinModal);
 
       self.backdrop = new Backdrop(
           self.$el.parents(self.options.backdrop),
