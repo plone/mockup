@@ -522,9 +522,9 @@ define([
           .addClass(self.options.templateOptions.classWrapperName)
           .insertBefore(self.backdrop.$backdrop)
           .on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
             if (this.options.backdropOptions.closeOnClick) {
+              e.stopPropagation();
+              e.preventDefault();
               this.backdrop.hide();
             }
           }.bind(this));
