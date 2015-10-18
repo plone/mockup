@@ -31,9 +31,9 @@ define([
     init: function() {
       var self = this;
       if ($(self.options.condition, self.$el).size() !== 0) {
-        $(self.options.target, self.$el).focusin();
+        $(self.options.target, self.$el).focus();
       } else {
-        $(self.options.always, self.$el).focusin();
+        $(self.options.always, self.$el).focus();
       }
 
     }
