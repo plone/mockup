@@ -4,6 +4,11 @@ Changelog
 2.1.0 (Unreleased)
 -------------------
 
+- do not set overflow hidden on modal wrapper parent. This should already
+  be taken care of with plone-modal-open class being applied to the body.
+  This should fix issues with scrolling when this isn't properly cleared
+  [vangheem]
+
 - use window.pushState instead of setting hash for autotoc pattern
   when tabs change
   [vangheem]

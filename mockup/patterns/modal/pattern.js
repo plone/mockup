@@ -823,7 +823,6 @@ define([
       self.backdrop.show();
       self.$wrapper.show();
       self.loading.hide();
-      self.$wrapper.parent().css('overflow', 'hidden');
       self.$el.addClass(self.options.templateOptions.classActiveName);
       self.$modal.addClass(self.options.templateOptions.classActiveName);
       registry.scan(self.$modal);
