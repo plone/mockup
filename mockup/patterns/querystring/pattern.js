@@ -253,6 +253,7 @@ define([
       } else if (widget === 'ReferenceWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + '-' + widget)
+                .val(value)
                 .appendTo($wrapper)
                 .change(function() {
                   self.trigger('value-changed');
