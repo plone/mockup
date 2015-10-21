@@ -26,6 +26,9 @@ Changelog
 - Add the ``momentFormat`` option to the ``structure`` pattern.
   [Gagaro]
 
+- Set value for ``ReferenceWidget`` in querystring.
+  [Gagaro]
+
 
 2.0.12 (2015-09-20)
 -------------------
