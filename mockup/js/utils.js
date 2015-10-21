@@ -251,6 +251,7 @@ define([
     };
 
     self.hide = function(){
+      self.init();
       self.$el.hide();
     };
 
