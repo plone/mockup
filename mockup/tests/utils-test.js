@@ -161,10 +161,13 @@ define([
 
       it('creates element', function() {
         var loading = new utils.Loading();
+        loading.show();
         expect($('.' + loading.className).length).to.equal(1);
       });
       it('hidden on creation', function() {
         var loading = new utils.Loading();
+        loading.show();
+        loading.hide();
         expect(loading.$el.is(':visible')).to.equal(false);
       });
       it('shows loader', function() {
