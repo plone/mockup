@@ -97,14 +97,16 @@ define([
       var paste_count = 0;
       // chrome paste handling
       $(document).bind('paste', function(e){
-        var items = e.originalEvent.clipboardData.items;
-        if (items) {
-          for (var i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf('image') !== -1) {
-              var blob = items[i].getAsFile();
-              blob.name = 'screenshot' + paste_count + '.png';
-              self.dropzone.addFile(blob);
-              paste_count += 1;
+        if($(self.trigger).length == 1 || self.$dropzone.is(":hover")){
+          var items = e.originalEvent.clipboardData.items;
+          if (items) {
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].type.indexOf("image") !== -1) {
+                var blob = items[i].getAsFile();
+                blob.name = 'screenshot' + paste_count + '.png';
+                self.dropzone.addFile(blob);
+                paste_count += 1;
+              }
             }
           }
         }
@@ -116,7 +118,9 @@ define([
       $(this.$el).append(screenshot_input);
       $(document).keydown(function(e){
         if (e.keyCode == 86 && e.ctrlKey) {
-          screenshot_input.focus();
+          if($(self.trigger).length == 1 || self.$dropzone.is(":hover")){
+            screenshot_input.focus();
+          }
         }
       });
       screenshot_input.bind('paste', function (e){ // firefox only reacts to paste on 'editable' elements
