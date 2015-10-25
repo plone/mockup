@@ -134,6 +134,12 @@ define([
       title: _t('Compiled CSS'),
       description: _t('Automatically generated path to the compiled CSS.'),
       view: fields.ResourceDisplayFieldView
+    }, {
+      name: 'stub_js_modules',
+      title: _t('Stub JS Modules'),
+      description: _t('Define list of modules that will be not be defined empty ' +
+                      'on RequireJS build steps to prevent loading modules multiple times.'),
+      view: fields.ResourceSortableListFieldView
     }]
   });
 

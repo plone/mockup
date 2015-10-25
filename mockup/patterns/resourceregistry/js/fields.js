@@ -185,6 +185,7 @@ define([
       e.preventDefault();
       self.options.value.push('');
       self.render();
+      self.inputChanged();
     },
 
     removeItem: function(e){
@@ -193,6 +194,7 @@ define([
       var index = $el.index();
       this.options.value.splice(index, 1);
       $el.remove();
+      this.inputChanged();
     },
 
     afterRender: function(){
