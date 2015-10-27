@@ -26,7 +26,43 @@ define([
     beforeEach(function() {
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
+      this.clock = sinon.useFakeTimers();
+      //this.server.respondImmediately = true;
 
+      this.server.respondWith('POST', /upload/, function (xhr, id) {
+        xhr.respond(200, {'content-Type': 'application/json'},
+          JSON.stringify({
+            url: 'http://localhost:8000/blah.png',
+            UID: 'sldlfkjsldkjlskdjf',
+            name: 'blah.png',
+            filename: 'blah.png',
+            portal_type: 'Image',
+            size: 239292
+          })
+        );
+      });
+      this.server.respondWith(/relateditems-test\.json/, function(xhr, id) {
+        var query = xhr.url.split('?')[1];
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i += 1) {
+          var pair = vars[i].split('=');
+          if (decodeURIComponent(pair[0]) === 'query') {
+            query = $.parseJSON(decodeURIComponent(pair[1]));
+          }
+        }
+        var results = [];
+        for (var j = 0; j < query.criteria.length; j += 1) {
+          if(query.criteria[j].i === 'UID'){
+            results.push({UID: query.criteria[j].v[0], Title: 'blah.png', path: '/blah.png', portal_type: 'Image'});
+          }
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' },
+          JSON.stringify({
+            total: results.length,
+            results: results
+          })
+        );
+      });
       this.server.respondWith('GET', /data.json/, function (xhr, id) {
         var items = [
           {
@@ -241,6 +277,40 @@ define([
       pattern.imageModal.linkType = 'image';
       pattern.imageModal.$scale.find('[value="thumb"]')[0].selected = true;
       expect(pattern.imageModal.getLinkUrl()).to.equal('resolveuid/foobar/@@images/image/thumb');
+    });
+    it('test add image link upload', function() {
+      var $el = $('<textarea class="pat-tinymce" data-pat-tinymce=\'' +
+        '{' +
+        '  "relatedItems": {' +
+        '    "vocabularyUrl": "/relateditems-test.json"' +
+        '  },' +
+        '  "upload": {' +
+        '    "baseUrl": "/",' +
+        '    "relativePath": "upload"' +
+        '}' +
+      '}\'></textarea>').appendTo('body');
+      registry.scan($el);
+      this.clock.tick(1000);
+      var pattern = $el.data().patternTinymce;
+      pattern.addImageClicked();
+      $('#' + $('#tinylink-uploadImage').data().navref).click();
+      expect($('#tinylink-uploadImage').parent().hasClass('active')).to.equal(true);
+      var blob;
+      try{
+        blob = new Blob(['dummy data'],  {type: 'image/png'});
+      } catch (err) {
+        var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+        var builder = new BlobBuilder();
+        builder.append('dummy data');
+        blob = builder.getBlob();
+      }
+      blob.name = 'blah.png';
+      pattern.imageModal.$upload.data().patternUpload.dropzone.addFile(blob);
+      $('.upload-all', pattern.imageModal.$upload).click();
+      this.clock.tick(1000);
+
+      expect($('#tinylink-image').parent().hasClass('active')).to.equal(true);
+      expect(pattern.imageModal.getLinkUrl()).to.equal('/blah.png/imagescale/large');
     });
 
     it('test adds data attributes', function() {
