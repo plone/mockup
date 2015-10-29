@@ -4,6 +4,10 @@ Changelog
 2.1.0 (Unreleased)
 -------------------
 
+- Add option tho show thumbs for images in content listing and rename-popover
+  https://github.com/plone/Products.CMFPlone/issues/1074
+  [fgrcon]
+
 - do not set overflow hidden on modal wrapper parent. This should already
   be taken care of with plone-modal-open class being applied to the body.
   This should fix issues with scrolling when this isn't properly cleared

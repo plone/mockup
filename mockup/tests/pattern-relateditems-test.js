@@ -36,13 +36,13 @@ define([
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
         var root = [
-          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', portal_type: 'Image', getIcon: "image.png"},
+          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', portal_type: 'Image', getIcon: ""},
           {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', portal_type: 'Folder', getIcon: ""},
           {UID: '124asdfasasdaf34', Title: 'About', path: '/about', portal_type: 'Folder', getIcon: ""},
           {UID: 'asdf1234', Title: 'Projects', path: '/projects', portal_type: 'Folder', getIcon: ""},
-          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', portal_type: 'Document', getIcon: "document.png"},
+          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', portal_type: 'Document', getIcon: ""},
           {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', portal_type: 'Document', getIcon: ""},
-          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', portal_type: 'Folder', getIcon: "folder.png"},
+          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', portal_type: 'Folder', getIcon: ""},
           {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', portal_type: 'Document', getIcon: ""},
         ];
         var about = [
