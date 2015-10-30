@@ -4,16 +4,12 @@ Changelog
 2.1.0 (Unreleased)
 -------------------
 
-- do not set overflow hidden on modal wrapper parent. This should already
-  be taken care of with plone-modal-open class being applied to the body.
-  This should fix issues with scrolling when this isn't properly cleared
-  [vangheem]
+New:
 
-- use window.pushState instead of setting hash for autotoc pattern
-  when tabs change
-  [vangheem]
+- Added the ``momentFormat`` option to the ``structure`` pattern.
+  [Gagaro]
 
-- Remove mockup-core as a dependency.
+- Removed mockup-core as a dependency.
   [jcbrand, goibhniu]
 
 **NOTE**:
@@ -23,8 +19,16 @@ Changelog
     in the `Base.extend` call.
     Refer to any of the core Mockup patterns for examples.
 
-- Add the ``momentFormat`` option to the ``structure`` pattern.
-  [Gagaro]
+Fixes:
+
+- Do not set overflow hidden on modal wrapper parent. This should already
+  be taken care of with plone-modal-open class being applied to the body.
+  This should fix issues with scrolling when this isn't properly cleared
+  [vangheem]
+
+- Use window.pushState instead of setting hash for autotoc pattern
+  when tabs change.
+  [vangheem]
 
 - Set value for ``ReferenceWidget`` in querystring.
   [Gagaro]
