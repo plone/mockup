@@ -13,7 +13,11 @@
  *    cached. (true)
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
- *    folderTypes(array): Types which should be considered browsable. (["Folder"])
+ *  
+ * #this does not respect custom dx types which are also folderish:
+ * --> folderTypes(array): Types which should be considered browsable. (["Folder"])
+ * #   needs to be implemented with meta data field: is_folderish from vocabulary
+ * 
  *    homeText(string): Text to display in the initial breadcrumb item. (home)
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    multiple(boolean): Do not change this option. (true)
@@ -97,7 +101,7 @@ define([
       closeOnSelect: false,
       basePath: '/',
       homeText: _t('home'),
-      folderTypes: ['Folder'],
+      //folderTypes: ['Folder'],   
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','is_folderish','review_state'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
@@ -351,9 +355,9 @@ define([
         $.extend(true, {}, self.options, {
           pattern: self,
           baseCriteria: [{
-            i: 'portal_type',
-            o: 'plone.app.querystring.operation.list.contains',
-            v: self.options.folderTypes
+            i: 'is_folderish',
+            o: 'plone.app.querystring.operation.selection.is',
+            v: 'True'
           }]
         })
       );
