@@ -122,6 +122,7 @@ define([
         if(window.location.hash === '#' + id){
           activeId = id;
         }
+        $level.data('navref', id);
         $('<a/>')
           .appendTo(self.$toc)
           .text($level.text())
