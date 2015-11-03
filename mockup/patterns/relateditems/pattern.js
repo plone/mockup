@@ -248,7 +248,7 @@ define([
               label: item.Title,
               id: item.UID,
               path: item.path,
-              folder: item.is_folderish
+              portal_type: item.portal_type
             };
             nodes.push(node);
           });
