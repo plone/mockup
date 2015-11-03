@@ -553,10 +553,10 @@ define([
         self.$upload.on('uploadAllCompleted', function(evt, data) {
           if(self.linkTypes.image){
             self.linkTypes.image.set(data.data.UID);
-            $('#' + $('#tinylink-image' , self.modal.$modal).data('navref')).trigger('click');
+            $('#tinylink-image' , self.modal.$modal).trigger('click');
           }else{
             self.linkTypes.internal.set(data.data.UID);
-            $('#' + $('#tinylink-internal' , self.modal.$modal).data('navref')).trigger('click');
+            $('#tinylink-internal', self.modal.$modal).trigger('click');
           }
         });
       }
