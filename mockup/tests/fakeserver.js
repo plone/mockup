@@ -229,11 +229,7 @@ define([
       {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', portal_type: 'Document'},
       // staff
       {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document'},
-      {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document'},
-      
-      // upload file
-      {UID: 'sldlfkjsldkjlskdjf', Title: 'blah.png', path: 'blah.png', portal_type: 'Image'}
-
+      {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document'}
     ];
     searchables = searchables.concat(randomItems);
 
@@ -428,7 +424,7 @@ define([
     xhr.respond(200, {'content-Type': 'application/json'},
       JSON.stringify({
         url: 'http://localhost:8000/blah.png',
-        UID: 'sldlfkjsldkjlskdjf',
+        uid: 'sldlfkjsldkjlskdjf',
         name: 'blah.png',
         filename: 'blah.png',
         portal_type: 'Image',
