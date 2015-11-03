@@ -132,7 +132,7 @@ define([
       },
       relatedItems: {
         // UID attribute is required here since we're working with related items
-        attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','contenttype_class','is_folderish','review_state'],
+        attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','is_folderish','review_state'],
         batchSize: 20,
         basePath: '/',
         vocabularyUrl: null,

@@ -124,7 +124,7 @@ define([
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item">' +
         ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%= getURL %>/@@images/image/icon"> <% } %>' +
-        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if ( review_state !== "undefined") { %> state-<%= review_state  %> <% } %>" ><%= Title %></span>' +
+        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%= review_state  %> <% } %>" ><%= Title %></span>' +
         ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
         '</span>',
       selectionTemplateSelector: null,

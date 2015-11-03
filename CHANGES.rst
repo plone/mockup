@@ -5,9 +5,7 @@ Changelog
 -------------------
 
 New:
-- Add option tho show thumbs for images in content listing and rename-popover
-  https://github.com/plone/Products.CMFPlone/issues/1074
-  [fgrcon]
+
 
 - do not set overflow hidden on modal wrapper parent. This should already
   be taken care of with plone-modal-open class being applied to the body.
@@ -28,6 +26,11 @@ New:
     Refer to any of the core Mockup patterns for examples.
 
 Fixes:
+
+- Cleanup and rework: contenttype-icons and showing thumbnails 
+  for images/leadimages in listings ... 
+  https://github.com/plone/Products.CMFPlone/issues/1226 
+  [fgrcon]
 
 - Do not set overflow hidden on modal wrapper parent. This should already
   be taken care of with plone-modal-open class being applied to the body.
