@@ -566,7 +566,32 @@ define([
         e.stopPropagation();
         self.linkType = self.modal.$modal.find('fieldset.active').data('linktype');
 
-        var href = self.getLinkUrl();
+        if(self.linkType === 'uploadImage' || self.linkType === 'upload'){
+            var patUpload = self.$upload.data().patternUpload;
+            if(patUpload.dropzone.files.length > 0){
+                patUpload.processUpload();
+                self.$upload.on('uploadAllCompleted', function(evt, data) {
+                    var counter = 0;
+                    var checkUpload = function(){
+                        if(counter < 5 && !self.linkTypes[self.linkType].value()){
+                            counter += 1;
+                            setTimeout(checkUpload, 100);
+                            return
+                        }else{
+                            var href = self.getLinkUrl();
+                            self.updateImage(href);
+                            self.hide();
+                        }
+                    }
+                    checkUpload();
+                });
+            }
+        }
+        try{
+            var href = self.getLinkUrl();
+        }catch(e){
+            return // just cut out if no url
+        }
         if (!href) {
           return; // just cut out if no url
         }
