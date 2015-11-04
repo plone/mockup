@@ -356,7 +356,7 @@ define([
 
   var RegistryView = BaseResourcesPane.extend({
     template: _.template(
-      '<div class="buttons-container">' +
+      '<div class="row buttons-container">' +
         '<div class="plone-btn-group pull-right">' +
           '<button class="plone-btn plone-btn-primary save"><%- _t("Save") %></button>' +
           '<button class="plone-btn plone-btn-default cancel"><%- _t("Cancel") %></button>' +
