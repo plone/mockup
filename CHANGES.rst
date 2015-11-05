@@ -33,6 +33,9 @@ Fixes:
 - Set value for ``ReferenceWidget`` in querystring.
   [Gagaro]
 
+- Fix modal when leaving a modal in a modal.
+  [Gagaro]
+
 
 2.0.12 (2015-09-20)
 -------------------

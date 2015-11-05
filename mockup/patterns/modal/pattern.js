@@ -847,18 +847,18 @@ define([
           return;
         }
       }
-      if ($('.plone-modal', self.$wrapper).size() < 2) {
-        self.backdrop.hide();
-        self.$wrapper.remove();
-        $('body').removeClass('plone-modal-open');
-      }
       self.loading.hide();
       self.$el.removeClass(self.options.templateOptions.classActiveName);
       if (self.$modal !== undefined) {
         self.$modal.remove();
         self.initModal();
       }
-      $(window.parent).off('resize.plone-modal.patterns');
+      self.$wrapper.remove();
+      if ($('.plone-modal', $('body')).size() < 1) {
+        self.backdrop.hide();
+        $('body').removeClass('plone-modal-open');
+        $(window.parent).off('resize.plone-modal.patterns');
+      }
       self.emit('hidden');
     },
 
