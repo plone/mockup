@@ -34,8 +34,7 @@ Fixes:
   [Gagaro]
   
 - Correction of a mistake in css z-index related items widget. 
-  The content bar appeared behind the widget.
-  [hersonrodrigues]
+  The content bar appeared behind the widget. [hersonrodrigues]
 
 
 2.0.12 (2015-09-20)
