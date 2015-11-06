@@ -32,6 +32,9 @@ Fixes:
 
 - Set value for ``ReferenceWidget`` in querystring.
   [Gagaro]
+  
+- Correction of a mistake in css z-index related items widget. 
+  The content bar appeared behind the widget. [hersonrodrigues]
 
 - Fix modal when leaving a modal in a modal.
   [Gagaro]
