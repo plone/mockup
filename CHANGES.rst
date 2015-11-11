@@ -6,6 +6,12 @@ Changelog
 
 New:
 
+
+- do not set overflow hidden on modal wrapper parent. This should already
+  be taken care of with plone-modal-open class being applied to the body.
+  This should fix issues with scrolling when this isn't properly cleared
+  [vangheem]
+
 - Added the ``momentFormat`` option to the ``structure`` pattern.
   [Gagaro]
 
@@ -20,6 +26,11 @@ New:
     Refer to any of the core Mockup patterns for examples.
 
 Fixes:
+
+- Cleanup and rework: contenttype-icons and showing thumbnails 
+  for images/leadimages in listings ... 
+  https://github.com/plone/Products.CMFPlone/issues/1226 
+  [fgrcon]
 
 - Do not set overflow hidden on modal wrapper parent. This should already
   be taken care of with plone-modal-open class being applied to the body.
