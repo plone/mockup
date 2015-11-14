@@ -27,9 +27,9 @@ New:
 
 Fixes:
 
-- Cleanup and rework: contenttype-icons and showing thumbnails 
-  for images/leadimages in listings ... 
-  https://github.com/plone/Products.CMFPlone/issues/1226 
+- Cleanup and rework: contenttype-icons and showing thumbnails
+  for images/leadimages in listings ...
+  https://github.com/plone/Products.CMFPlone/issues/1226
   [fgrcon]
 
 - Do not set overflow hidden on modal wrapper parent. This should already
@@ -43,13 +43,16 @@ Fixes:
 
 - Set value for ``ReferenceWidget`` in querystring.
   [Gagaro]
-  
-- Correction of a mistake in css z-index related items widget. 
+
+- Correction of a mistake in css z-index related items widget.
   The content bar appeared behind the widget. [hersonrodrigues]
 
 - Fix modal when leaving a modal in a modal.
   [Gagaro]
 
+- Fix flaky behavior of Resource Registries buttons
+  https://github.com/plone/Products.CMFPlone/issues/1141
+  [davilima6]
 
 2.0.12 (2015-09-20)
 -------------------
