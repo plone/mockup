@@ -1,5 +1,5 @@
 @import (less) "@{bowerPath}/tinymce-builded/js/tinymce/skins/lightgray/skin.less";
-@import (less) "@{bowerPath}/tinymce-builded/js/tinymce/skins/lightgray/Content.less";
+@import (less) "@{bowerPath}/tinymce-builded/js/tinymce/skins/lightgray/Content.Objects.less";
 @import (inline) "@{bowerPath}/tinymce-builded/js/tinymce/plugins/visualblocks/css/visualblocks.css";
 @import "@{mockupPath}/modal/pattern.modal.less";
 @import "@{mockupPath}/autotoc/pattern.autotoc.less";
@@ -100,3 +100,6 @@ div.linkModal {
     max-width: 80px;
 }
 
+.mce-item-table td {
+	min-width: 0.6em;  // enforce a min-width while editing for tables with visual aid turned on
+}
