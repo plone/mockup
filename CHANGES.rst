@@ -27,6 +27,10 @@ New:
 
 Fixes:
 
+- Use ``selection.any`` in querystring pattern.
+  Issue https://github.com/plone/Products.CMFPlone/issues/1040
+  [maurits]
+
 - Cleanup and rework: contenttype-icons and showing thumbnails
   for images/leadimages in listings ...
   https://github.com/plone/Products.CMFPlone/issues/1226

@@ -427,13 +427,13 @@
             "sortable": true
         },
         "review_state": {
-            "operations": ["plone.app.querystring.operation.selection.is"],
+            "operations": ["plone.app.querystring.operation.selection.any"],
             "group": "Metadata",
             "description": "An item's workflow state (e.g.published)",
             "vocabulary": "plone.app.vocabularies.WorkflowStates",
             "title": "Review state",
             "operators": {
-                "plone.app.querystring.operation.selection.is": {
+                "plone.app.querystring.operation.selection.any": {
                     "widget": "MultipleSelectionWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
@@ -467,13 +467,13 @@
             "sortable": true
         },
         "Subject": {
-            "operations": ["plone.app.querystring.operation.selection.is"],
+            "operations": ["plone.app.querystring.operation.selection.any"],
             "group": "Text",
             "description": "Tags are used for organization of content",
             "vocabulary": "plone.app.vocabularies.Keywords",
             "title": "Tag",
             "operators": {
-                "plone.app.querystring.operation.selection.is": {
+                "plone.app.querystring.operation.selection.any": {
                     "widget": "MultipleSelectionWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
@@ -763,13 +763,13 @@
             "sortable": false
         },
         "portal_type": {
-            "operations": ["plone.app.querystring.operation.selection.is"],
+            "operations": ["plone.app.querystring.operation.selection.any"],
             "group": "Metadata",
             "description": "An item's type (e.g. Event)",
             "vocabulary": "plone.app.vocabularies.ReallyUserFriendlyTypes",
             "title": "Type",
             "operators": {
-                "plone.app.querystring.operation.selection.is": {
+                "plone.app.querystring.operation.selection.any": {
                     "widget": "MultipleSelectionWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
@@ -1138,13 +1138,13 @@
             "sortable": false
         },
         "review_state": {
-            "operations": ["plone.app.querystring.operation.selection.is"],
+            "operations": ["plone.app.querystring.operation.selection.any"],
             "group": "Metadata",
             "description": "An item's workflow state (e.g.published)",
             "vocabulary": "plone.app.vocabularies.WorkflowStates",
             "title": "Review state",
             "operators": {
-                "plone.app.querystring.operation.selection.is": {
+                "plone.app.querystring.operation.selection.any": {
                     "widget": "MultipleSelectionWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
@@ -1178,13 +1178,13 @@
             "sortable": true
         },
         "Subject": {
-            "operations": ["plone.app.querystring.operation.selection.is"],
+            "operations": ["plone.app.querystring.operation.selection.any"],
             "group": "Text",
             "description": "Tags are used for organization of content",
             "vocabulary": "plone.app.vocabularies.Keywords",
             "title": "Tag",
             "operators": {
-                "plone.app.querystring.operation.selection.is": {
+                "plone.app.querystring.operation.selection.any": {
                     "widget": "MultipleSelectionWidget",
                     "operation": "plone.app.querystring.queryparser._equal",
                     "description": "Tip: you can use * to autocomplete.",
