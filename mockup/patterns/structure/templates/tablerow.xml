@@ -1,7 +1,7 @@
 <td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 
 <td class="title">
-  <a href="<%- getURL %>" class="manage state-<%- review_state %> contenttype-<%- portal_type.toLowerCase() %>"
+  <a href="<%- getURL %>" class="manage state-<%- review_state %> contenttype-<%- portal_type.toLowerCase().replace(/\.| /g, '-') %>"
   title="<%- portal_type %>" >
  
    <%- Title %></a>
