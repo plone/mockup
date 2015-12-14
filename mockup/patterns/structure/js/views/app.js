@@ -199,11 +199,13 @@ define([
         self.buttons.disable();
       }
 
-      self.pasteAllowed = !!$.cookie('__cp');
-      if (self.pasteAllowed) {
-        self.buttons.get('paste').enable();
-      }else{
-        self.buttons.get('paste').disable();
+      if ('paste' in self.buttons) {
+        self.pasteAllowed = !!$.cookie('__cp');
+        if (self.pasteAllowed) {
+          self.buttons.get('paste').enable();
+        }else{
+          self.buttons.get('paste').disable();
+        }
       }
     },
     inQueryMode: function() {
@@ -467,7 +469,8 @@ define([
       );
     },
     setAllCookieSettings: function() {
-      this.activeColumns = this.getCookieSetting('activeColumns', this.activeColumns);
+      this.activeColumns = this.getCookieSetting(this['activeColumnsCookie'],
+                                                 this.activeColumns);
       var perPage = this.getCookieSetting('perPage', 15);
       if(typeof(perPage) === 'string'){
         perPage = parseInt(perPage);

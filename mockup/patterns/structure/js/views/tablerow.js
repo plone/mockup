@@ -33,6 +33,8 @@ define([
       data.attributes = self.model.attributes;
       data.activeColumns = self.app.activeColumns;
       data.availableColumns = self.app.availableColumns;
+      data.portal_type = data.portal_type ? data.portal_type : '';
+      data.contenttype = data.portal_type.toLowerCase().replace(/\.| /g, '-');
       data._authenticator = utils.getAuthenticator();
       data._t = _t;
       self.$el.html(self.template(data));

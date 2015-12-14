@@ -35,16 +35,19 @@ define([
     beforeEach(function() {
       // clear cookie setting
       $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumns');
+      $.removeCookie('_fc_activeColumnsCustom');
 
-      this.$el = $('' +
-        '<div class="pat-structure" ' +
-             'data-pat-structure="vocabularyUrl:/data.json;' +
-                                 'uploadUrl:/upload;' +
-                                 'moveUrl:/moveitem;' +
-                                 'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
-                                 'contextInfoUrl:{path}/contextInfo;' +
-                                 ' ">' +
-        '</div>').appendTo('body');
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "uploadUrl": "/upload",
+        "moveUrl": "/moveitem",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
 
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
@@ -141,6 +144,7 @@ define([
       extraDataJsonItem = null;
       this.server.restore();
       this.clock.restore();
+      $('body').html('');
     });
 
     it('initialize', function() {
@@ -321,5 +325,437 @@ define([
       expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
     });
 
+    it('test select displayed columns', function() {
+      registry.scan(this.$el);
+      this.clock.tick(500);
+      var $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(6);
+      expect($row.find('th').eq(1).text()).to.equal('Title');
+      expect($row.find('th').eq(2).text()).to.equal('Last modified');
+      expect($row.find('th').eq(3).text()).to.equal('Published');
+      expect($row.find('th').eq(4).text()).to.equal('Review state');
+      expect($row.find('th').eq(5).text()).to.equal('Actions');
+
+      expect($.cookie('_fc_activeColumns')).to.be(undefined);
+
+      this.$el.find('#btn-attribute-columns').trigger('click');
+      this.clock.tick(500);
+
+      var $checkbox = this.$el.find(
+          '.attribute-columns input[value="getObjSize"]');
+      $checkbox[0].checked = true;
+      $checkbox.trigger('change');
+      this.clock.tick(500);
+
+      var $popover = this.$el.find('.popover.attribute-columns');
+      expect($popover.find('button').text()).to.equal('Save');
+      $popover.find('button').trigger('click');
+      this.clock.tick(500);
+
+      $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(7);
+      expect($row.find('th').eq(5).text()).to.equal('Object Size');
+      expect($row.find('th').eq(6).text()).to.equal('Actions');
+      expect($.parseJSON($.cookie('_fc_activeColumns')).value).to.eql(
+          ["ModificationDate", "EffectiveDate", "review_state", "getObjSize"]);
+
+      $checkbox[0].checked = false;
+      $checkbox.trigger('change');
+      $popover.find('button').trigger('click');
+      this.clock.tick(500);
+
+      $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(6);
+      expect($.parseJSON($.cookie('_fc_activeColumns')).value).to.eql(
+          ["ModificationDate", "EffectiveDate", "review_state"]);
+
+    });
+
+    it('test main buttons count', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var buttons = this.$el.find('#btngroup-mainbuttons a');
+      expect(buttons.length).to.equal(8);
+    });
+
   });
+
+  /* ==========================
+   TEST: Structure Customized
+  ========================== */
+  describe('Structure Customized', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "buttons": [{
+          "url": "foo",
+          "title": "Foo",
+          "id": "foo",
+          "icon": ""
+        }]
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [];
+
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          total: 0,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+    });
+
+    it('initialize', function() {
+      registry.scan(this.$el);
+      expect(this.$el.find('.order-support > table').size()).to.equal(1);
+    });
+
+    it('per page', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      this.$el.find('.serverhowmany15 a').trigger('click');
+      this.clock.tick(1000);
+      expect(this.$el.find('.itemRow').length).to.equal(0);
+      this.$el.find('.serverhowmany30 a').trigger('click');
+      this.clock.tick(1000);
+      expect(this.$el.find('.itemRow').length).to.equal(0);
+    });
+
+    it('test select all', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var $item = this.$el.find('table th .select-all');
+      $item[0].checked = true;
+      $item.trigger('change');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
+
+    });
+
+    it('test unselect all', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var $item = this.$el.find('table th .select-all');
+      $item[0].checked = true;
+      $item.trigger('change');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
+      $item[0].checked = false;
+      $item.trigger('change');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
+    });
+
+    it('test select displayed columns', function() {
+      registry.scan(this.$el);
+      // manually setting a borrowed cookie from the previous test.
+      $.cookie('_fc_activeColumns',
+               '{"value":["ModificationDate","EffectiveDate","review_state",' +
+               '"getObjSize"]}');
+      this.clock.tick(500);
+      var $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(6);
+      expect($row.find('th').eq(5).text()).to.equal('Actions');
+
+      expect($.cookie('_fc_activeColumnsCustom')).to.be(undefined);
+
+      this.$el.find('#btn-attribute-columns').trigger('click');
+      this.clock.tick(500);
+
+      var $checkbox = this.$el.find(
+          '.attribute-columns input[value="portal_type"]');
+      $checkbox[0].checked = true;
+      $checkbox.trigger('change');
+      this.clock.tick(500);
+
+      var $popover = this.$el.find('.popover.attribute-columns');
+      expect($popover.find('button').text()).to.equal('Save');
+      $popover.find('button').trigger('click');
+      this.clock.tick(500);
+
+      $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(7);
+      expect($row.find('th').eq(5).text()).to.equal('Type');
+      expect($row.find('th').eq(6).text()).to.equal('Actions');
+      expect($.parseJSON($.cookie('_fc_activeColumnsCustom')).value).to.eql(
+          ["ModificationDate", "EffectiveDate", "review_state", "portal_type"]);
+      // standard cookie unchanged.
+      expect($.parseJSON($.cookie('_fc_activeColumns')).value).to.eql(
+          ["ModificationDate", "EffectiveDate", "review_state", "getObjSize"]);
+
+      $checkbox[0].checked = false;
+      $checkbox.trigger('change');
+      $popover.find('button').trigger('click');
+      this.clock.tick(500);
+
+      $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(6);
+      expect($.parseJSON($.cookie('_fc_activeColumnsCustom')).value).to.eql(
+          ["ModificationDate", "EffectiveDate", "review_state"]);
+
+    });
+
+    it('test main buttons count', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var buttons = this.$el.find('#btngroup-mainbuttons a');
+      expect(buttons.length).to.equal(1);
+    });
+
+  });
+
+
+  /* ==========================
+   TEST: Structure no buttons
+  ========================== */
+  describe('Structure no buttons', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "activeColumns": ["getObjSize"],
+        "availableColumns": {
+          "id": "ID",
+          "CreationDate": "Created",
+          "getObjSize": "Object Size"
+        },
+        "buttons": []
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [];
+
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          total: 0,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+    });
+
+    it('test main buttons count', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var buttons = this.$el.find('#btngroup-mainbuttons a');
+      expect(buttons.length).to.equal(0);
+    });
+
+    it('test select displayed columns', function() {
+      registry.scan(this.$el);
+      this.clock.tick(500);
+      var $row = this.$el.find('table thead tr').eq(1);
+      expect($row.find('th').length).to.equal(4);
+      expect($row.find('th').eq(1).text()).to.equal('Title');
+      expect($row.find('th').eq(2).text()).to.equal('Object Size');
+      expect($row.find('th').eq(3).text()).to.equal('Actions');
+    });
+
+  });
+
+
+  /* ==========================
+   TEST: Structure barebone columns
+  ========================== */
+  describe('Structure barebone columns', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "activeColumns": [],
+        "availableColumns": {
+          "getURL": "URL",
+        },
+        "buttons": [],
+        "attributes": [
+          'Title', 'getURL'
+        ]
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [];
+        items.push({
+          /*
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+          id: 'folder'
+          */
+          // 'portal_type', 'review_state', 'getURL'
+
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+        });
+        for (var i = start; i < end; i = i + 1) {
+          items.push({
+            /*
+            getURL: 'http://localhost:8081/item' + i,
+            Title: 'Document ' + i,
+            id: 'item' + i
+            */
+
+            getURL: 'http://localhost:8081/item' + i,
+            Title: 'Document ' + i,
+          });
+        }
+
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          total: 100,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+    });
+
+    it('per page', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      this.$el.find('.serverhowmany15 a').trigger('click');
+      this.clock.tick(1000);
+      expect(this.$el.find('.itemRow').length).to.equal(16);
+      this.$el.find('.serverhowmany30 a').trigger('click');
+      this.clock.tick(1000);
+      expect(this.$el.find('.itemRow').length).to.equal(31);
+    });
+
+  });
+
+
 });
