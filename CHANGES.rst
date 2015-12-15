@@ -30,16 +30,15 @@ Fixes:
 - Use ``selection.any`` in querystring pattern.
   Issue https://github.com/plone/Products.CMFPlone/issues/1040
   [maurits]
-- Import TinyMCE ``Content.less`` from the lightgray skin as less file, not
-  inline. Fixes plone/Products.CMFPlone/#755.
-- Enforce a ``min-width`` for tables while editing and visual aids turned on.
-  Fixes plone/Products.CMFPlone#920.
-  [thet]
 
 - Import TinyMCE ``Content.Objects.less`` from the lightgray skin in ``less``
   mode, not ``Content.less`` in ``inline`` mode.
   Fixes plone/Products.CMFPlone/#755 - visual aids not visible.
   ``Content.Objects.less`` also doesn't overwrite our fonts.
+  [thet]
+
+- Enforce a ``min-width`` for tables while editing and visual aids turned on.
+  Fixes plone/Products.CMFPlone#920.
   [thet]
 
 - Cleanup and rework: contenttype-icons and showing thumbnails
