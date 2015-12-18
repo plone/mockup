@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.0 (2015-11-10)
+2.1.1 (Unreleased)
 ------------------
 
 New:
@@ -11,19 +11,6 @@ New:
   be taken care of with plone-modal-open class being applied to the body.
   This should fix issues with scrolling when this isn't properly cleared
   [vangheem]
-
-- Added the ``momentFormat`` option to the ``structure`` pattern.
-  [Gagaro]
-
-- Removed mockup-core as a dependency.
-  [jcbrand, goibhniu]
-
-**NOTE**:
-    `mockup-patterns-base` has been deprecated.
-    Individual patterns now need to be updated to use `pat-base` instead
-    of `mockup-patterns-base` and also explicitly set `parser` to `'mockup'`
-    in the `Base.extend` call.
-    Refer to any of the core Mockup patterns for examples.
 
 Fixes:
 
@@ -46,6 +33,30 @@ Fixes:
   https://github.com/plone/Products.CMFPlone/issues/1226
   [fgrcon]
 
+- Fix flaky behavior of Resource Registries buttons
+  https://github.com/plone/Products.CMFPlone/issues/1141
+  [davilima6]
+
+2.1.0 (2015-11-10)
+------------------
+
+New:
+
+- Added the ``momentFormat`` option to the ``structure`` pattern.
+  [Gagaro]
+
+- Removed mockup-core as a dependency.
+  [jcbrand, goibhniu]
+
+**NOTE**:
+    `mockup-patterns-base` has been deprecated.
+    Individual patterns now need to be updated to use `pat-base` instead
+    of `mockup-patterns-base` and also explicitly set `parser` to `'mockup'`
+    in the `Base.extend` call.
+    Refer to any of the core Mockup patterns for examples.
+
+Fixes:
+
 - Do not set overflow hidden on modal wrapper parent. This should already
   be taken care of with plone-modal-open class being applied to the body.
   This should fix issues with scrolling when this isn't properly cleared
@@ -64,9 +75,6 @@ Fixes:
 - Fix modal when leaving a modal in a modal.
   [Gagaro]
 
-- Fix flaky behavior of Resource Registries buttons
-  https://github.com/plone/Products.CMFPlone/issues/1141
-  [davilima6]
 
 2.0.12 (2015-09-20)
 -------------------
