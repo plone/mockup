@@ -44,6 +44,7 @@ define([
       BaseView.prototype.initialize.apply(self, [options]);
       self.loading = new utils.Loading();
       self.loading.show();
+      self.pasteAllowed = $.cookie('__cp');
 
       /* close popovers when clicking away */
       $(document).click(function(e){

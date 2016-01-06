@@ -3,12 +3,20 @@ define([
   'jquery',
   'pat-registry',
   'mockup-patterns-structure',
+  'mockup-patterns-structure-url/js/views/actionmenu',
+  'mockup-patterns-structure-url/js/views/app',
+  'mockup-patterns-structure-url/js/models/result',
+  'mockup-utils',
   'sinon',
-], function(expect, $, registry, Structure, sinon) {
+], function(expect, $, registry, Structure, ActionMenuView, AppView, Result,
+            utils, sinon) {
   'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
+
+  var structureUrlChangedPath = '';
+  var dummyWindow = {};
 
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
@@ -29,11 +37,272 @@ define([
 
 
   /* ==========================
+   TEST: Per Item Action Buttons
+  ========================== */
+  describe('Per Item Action Buttons', function() {
+    beforeEach(function() {
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('POST', '/cut', function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'application/json' },
+                    JSON.stringify({
+          status: 'success',
+          msg: 'cut'
+        }));
+      });
+
+      this.clock = sinon.useFakeTimers();
+
+      this.$el = $('<div id="item"></div>').appendTo('body');
+
+      /*
+        queryHelper and AppView instances for now due to the tight
+        coupling that exist for the moment.  The relationship should be
+        changed so that the render method don't poke into app but should
+        be supplied the details on a need-to-use basis.
+      */
+      var queryHelper = new utils.QueryHelper({});
+      this.app = new AppView({
+        'queryHelper': queryHelper,
+
+        // XXX ActionButton need this lookup directly.
+        'buttons': [{'title': 'Cut', 'url': '/cut'}],
+
+        'activeColumns': [],
+        'availableColumns': [],
+        'indexOptionsUrl': '',
+        'setDefaultPageUrl': '',
+      });
+      this.app.render();
+    });
+
+    afterEach(function() {
+      this.clock.restore();
+      this.server.restore();
+      requirejs.undef('dummytestactions');
+      requirejs.undef('dummytestactionmenu');
+    });
+
+    it('basic action menu rendering', function() {
+      var model = new Result({
+          "Title": "Dummy Object",
+          "is_folderish": true,
+          "review_state": "published"
+      });
+
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        header: 'Menu Header'
+      });
+
+      var el = menu.render().el;
+
+      expect($('li.dropdown-header', el).text()).to.equal('Menu Header');
+      expect($('li a', el).length).to.equal(7);
+      expect($($('li a', el)[0]).text()).to.equal('Cut');
+
+      $('.cutItem a', el).click();
+      this.clock.tick(500);
+
+      expect(this.app.$('.status').text()).to.equal('Cut "Dummy Object"');
+
+    });
+
+    it('custom action menu items', function() {
+      var model = new Result({
+          "Title": "Dummy Object",
+          "is_folderish": true,
+          "review_state": "published"
+      });
+
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'cutItem': [
+            'mockup-patterns-structure-url/js/actions',
+            'cutClicked',
+            '#',
+            'Cut',
+          ],
+        },
+      });
+
+      var el = menu.render().el;
+      expect($('li a', el).length).to.equal(1);
+      expect($($('li a', el)[0]).text()).to.equal('Cut');
+
+      $('.cutItem a', el).click();
+      this.clock.tick(500);
+      expect(this.app.$('.status').text()).to.equal('Cut "Dummy Object"');
+
+    });
+
+    it('custom action menu items and actions.', function() {
+      // Define a custom dummy "module"
+      define('dummytestactions', ['backbone'], function(Backbone) {
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          },
+          foobarClicked: function(e) {
+            var self = this;
+            self.app.setStatus('Status: foobar clicked');
+          }
+        });
+        return Actions;
+      });
+      // use it to make it available synchronously.
+      require(['dummytestactions'], function(){});
+      this.clock.tick(500);
+
+      var model = new Result({
+          "is_folderish": true,
+          "review_state": "published"
+      });
+
+      // Make use if that dummy in here.
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'foobar': [
+            'dummytestactions',
+            'foobarClicked',
+            '#',
+            'Foo Bar',
+          ],
+        },
+      });
+
+      var el = menu.render().el;
+      expect($('li a', el).length).to.equal(1);
+      expect($($('li a', el)[0]).text()).to.equal('Foo Bar');
+
+      $('.foobar a', el).click();
+      this.clock.tick(500);
+      expect(this.app.$('.status').text()).to.equal('Status: foobar clicked');
+    });
+
+    it('custom action menu actions missing.', function() {
+      // Define a custom dummy "module"
+      define('dummytestactions', ['backbone'], function(Backbone) {
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          },
+          barbazClicked: function(e) {
+            var self = this;
+            self.app.setStatus('Status: barbaz clicked');
+          }
+        });
+        return Actions;
+      });
+
+      // use it to make it available synchronously.
+      require(['dummytestactions'], function(){});
+      this.clock.tick(500);
+
+      var model = new Result({
+          "is_folderish": true,
+          "review_state": "published"
+      });
+
+      // Make use if that dummy in here.
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'foobar': [
+            'dummytestactions',
+            'foobarClicked',
+            '#',
+            'Foo Bar',
+          ],
+          'barbaz': [
+            'dummytestactions',
+            'barbazClicked',
+            '#',
+            'Bar Baz',
+          ],
+        },
+      });
+
+      // Broken/missing action
+      var el = menu.render().el;
+      $('.foobar a', el).click();
+      this.clock.tick(500);
+      expect(this.app.$('.status').text().trim()).to.equal('');
+    });
+
+    it('custom action menu via generator.', function() {
+      // Define a custom dummy "module"
+      define('dummytestactions', ['backbone'], function(Backbone) {
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          },
+          barbazClicked: function(e) {
+            var self = this;
+            self.app.setStatus('Status: barbaz clicked');
+          }
+        });
+        return Actions;
+      });
+
+      define('dummytestactionmenu', ['backbone'], function(Backbone) {
+        var ActionMenu = function(menu) {
+          return {
+            'barbaz': [
+              'dummytestactions',
+              'barbazClicked',
+              '#',
+              'Bar Baz'
+            ]
+          };
+        };
+        return ActionMenu;
+      });
+      // use them both to make it available synchronously.
+      require(['dummytestactions'], function(){});
+      require(['dummytestactionmenu'], function(){});
+      this.clock.tick(500);
+
+      var model = new Result({
+          "is_folderish": true,
+          "review_state": "published"
+      });
+
+      // Make use if that dummy in here.
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuGenerator: 'dummytestactionmenu'
+      });
+
+      // Broken/missing action
+      var el = menu.render().el;
+      $('.barbaz a', el).click();
+      this.clock.tick(500);
+      expect(this.app.$('.status').text().trim()).to.equal(
+        'Status: barbaz clicked');
+    });
+
+  });
+
+
+  /* ==========================
    TEST: Structure
   ========================== */
   describe('Structure', function() {
     beforeEach(function() {
       // clear cookie setting
+      $.removeCookie('__cp');
       $.removeCookie('_fc_perPage');
       $.removeCookie('_fc_activeColumns');
       $.removeCookie('_fc_activeColumnsCustom');
@@ -44,6 +313,7 @@ define([
         "moveUrl": "/moveitem",
         "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
         "contextInfoUrl": "{path}/contextInfo",
+        "setDefaultPageUrl": "/setDefaultPage"
       };
 
       this.$el = $('<div class="pat-structure"></div>').attr(
@@ -54,6 +324,11 @@ define([
 
       this.server.respondWith('GET', /data.json/, function (xhr, id) {
         var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var query = JSON.parse(getQueryVariable(xhr.url, 'query'));
+        var path = query.criteria[0].v.split(':')[0];
+        if (path === '/') {
+          path = '';
+        }
         var start = 0;
         var end = 15;
         if (batch) {
@@ -62,9 +337,9 @@ define([
         }
         var items = [];
         items.push({
-          UID: '123sdfasdfFolder',
-          getURL: 'http://localhost:8081/folder',
-          path: '/folder',
+          UID: '123sdfasdf' + path + 'Folder',
+          getURL: 'http://localhost:8081' + path + '/folder',
+          path: path + '/folder',
           portal_type: 'Folder',
           Description: 'folder',
           Title: 'Folder',
@@ -75,9 +350,9 @@ define([
         });
         for (var i = start; i < end; i = i + 1) {
           items.push({
-            UID: '123sdfasdf' + i,
-            getURL: 'http://localhost:8081/item' + i,
-            path: '/item' + i,
+            UID: '123sdfasdf' + path + i,
+            getURL: 'http://localhost:8081' + path + '/item' + i,
+            path: path + '/item' + i,
             portal_type: 'Document ' + i,
             Description: 'document',
             Title: 'Document ' + i,
@@ -109,6 +384,18 @@ define([
           msg: 'pasted'
         }));
       });
+      this.server.respondWith('POST', '/moveitem', function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          status: 'success',
+          msg: 'moved ' + xhr.requestBody
+        }));
+      });
+      this.server.respondWith('POST', '/setDefaultPage', function (xhr, id) {
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          status: 'success',
+          msg: 'defaulted'
+        }));
+      });
       this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
         var data = {
           addButtons: [{
@@ -138,17 +425,28 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
+
+      sinon.stub(utils, 'getWindow', function() {
+        return dummyWindow;
+      });
     });
 
     afterEach(function() {
+      // XXX QueryHelper behaves like a singleton as it pins self
+      // reference to the singleton instance of Utils within the
+      // requirejs framework, so its variables such as currentPath are
+      // persisted.  Reset that here like so:
+      utils.QueryHelper({}).currentPath = '/';
       extraDataJsonItem = null;
       this.server.restore();
       this.clock.restore();
       $('body').html('');
+      utils.getWindow.restore();
     });
 
     it('initialize', function() {
       registry.scan(this.$el);
+      // moveUrl provided, can get to this via order-support.
       expect(this.$el.find('.order-support > table').size()).to.equal(1);
     });
 
@@ -279,7 +577,8 @@ define([
       $item.trigger('change');
       this.clock.tick(1000);
       expect(this.$el.find('#btn-selected-items').html()).to.contain('16');
-
+      expect($('table tbody .selection input:checked', this.$el).length
+        ).to.equal(16);
     });
 
     it('test unselect all', function() {
@@ -290,10 +589,15 @@ define([
       $item.trigger('change');
       this.clock.tick(1000);
       expect(this.$el.find('#btn-selected-items').html()).to.contain('16');
+      expect($('table tbody .selection input:checked', this.$el).length
+        ).to.equal(16);
+
       $item[0].checked = false;
       $item.trigger('change');
       this.clock.tick(1000);
       expect(this.$el.find('#btn-selected-items').html()).to.contain('0');
+      expect($('table tbody .selection input:checked', this.$el).length
+        ).to.equal(0);
     });
 
     it('test current folder buttons do not show on root', function() {
@@ -378,6 +682,109 @@ define([
       expect(buttons.length).to.equal(8);
     });
 
+    it('test itemRow default actionmenu folder', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // folder
+      var folder = this.$el.find('.itemRow').eq(0);
+      expect(folder.data().id).to.equal('folder');
+      expect($('.actionmenu ul li a', folder).length).to.equal(6);
+      // no pasting (see next test
+      expect($('.actionmenu ul li.pasteItem', folder).length).to.equal(0);
+      // no set default page
+      expect($('.actionmenu ul li.set-default-page a', folder).length
+        ).to.equal(0);
+      // can select all
+      expect($('.actionmenu ul li.selectAll', folder).text()).to.equal(
+        'Select all contained items');
+    });
+
+    it('test itemRow default actionmenu item', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+
+      var item = this.$el.find('.itemRow').eq(10);
+      expect(item.data().id).to.equal('item9');
+      expect($('.actionmenu ul li a', item).length).to.equal(6);
+      // cannot select all
+      expect($('.actionmenu ul li.selectAll a', item).length).to.equal(0);
+      // can set default page
+      expect($('.actionmenu ul li.set-default-page', item).text()).to.equal(
+        'Set as default page');
+      $('.actionmenu ul li.set-default-page a', item).click();
+      this.clock.tick(1000);
+      expect(this.$el.find('.order-support .status').html()).to.contain(
+        'defaulted');
+    });
+
+    it('test itemRow actionmenu paste click', function() {
+      // item pending to be pasted
+      $.cookie('__cp', 'dummy');
+      this.clock.tick(1000);
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // top item
+      var item0 = this.$el.find('.itemRow').eq(0);
+      expect(item0.data().id).to.equal('folder');
+      expect($('.actionmenu ul li a', item0).length).to.equal(7);
+      expect($('.actionmenu ul li.pasteItem', item0).text()).to.equal('Paste');
+      $('.actionmenu ul li.pasteItem a', item0).click();
+      this.clock.tick(1000);
+      expect(this.$el.find('.order-support .status').html()).to.contain(
+        'Pasted into "Folder"');
+    });
+
+    it('test itemRow actionmenu move-top click', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // top item
+      var item0 = this.$el.find('.itemRow').eq(0);
+      expect(item0.data().id).to.equal('folder');
+      var item10 = this.$el.find('.itemRow').eq(10);
+      expect(item10.data().id).to.equal('item9');
+
+      expect($('.actionmenu ul li.move-top', item10).text()).to.equal(
+        'Move to top of folder');
+      $('.actionmenu ul li.move-top a', item10).trigger('click');
+      this.clock.tick(1000);
+
+      expect(this.$el.find('.order-support .status').html()).to.contain(
+        'moved');
+      expect(this.$el.find('.order-support .status').html()).to.contain(
+        'delta=top');
+      expect(this.$el.find('.order-support .status').html()).to.contain(
+        'id=item9');
+      // No items actually moved, this is to be implemented server-side.
+    });
+
+    it('test itemRow actionmenu selectAll click', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+
+      var folder = this.$el.find('.itemRow').eq(0);
+      $('.actionmenu ul li.selectAll a', folder).trigger('click');
+      this.clock.tick(1000);
+      expect($('table tbody .selection input:checked', this.$el).length
+        ).to.equal(0);
+      // all items in the folder be populated within the selection well.
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('101');
+    });
+
+    it('test navigate to item', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var pattern = this.$el.data('patternStructure');
+      var item = this.$el.find('.itemRow').eq(10);
+      expect(item.data().id).to.equal('item9');
+      $('.title a.manage', item).trigger('click');
+      this.clock.tick(1000);
+      expect(dummyWindow.location).to.equal('http://localhost:8081/item9/view');
+
+      $('.actionmenu ul li.editItem a', item).trigger('click');
+      this.clock.tick(1000);
+      expect(dummyWindow.location).to.equal('http://localhost:8081/item9/edit');
+    });
+
   });
 
   /* ==========================
@@ -444,17 +851,24 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
+
+      sinon.stub(utils, 'getWindow', function() {
+        return dummyWindow;
+      });
+
     });
 
     afterEach(function() {
       this.server.restore();
       this.clock.restore();
       $('body').html('');
+      utils.getWindow.restore();
     });
 
     it('initialize', function() {
       registry.scan(this.$el);
-      expect(this.$el.find('.order-support > table').size()).to.equal(1);
+      // no order-support for this one due to lack of moveUrl
+      expect(this.$el.find('.order-support > table').size()).to.equal(0);
     });
 
     it('per page', function() {
@@ -645,7 +1059,6 @@ define([
 
   });
 
-
   /* ==========================
    TEST: Structure barebone columns
   ========================== */
@@ -695,17 +1108,22 @@ define([
 
           getURL: 'http://localhost:8081/folder',
           Title: 'Folder',
+          // Other required fields.
+          id: 'folder',
+          UID: 'folder'
         });
         for (var i = start; i < end; i = i + 1) {
           items.push({
             /*
             getURL: 'http://localhost:8081/item' + i,
             Title: 'Document ' + i,
-            id: 'item' + i
             */
 
             getURL: 'http://localhost:8081/item' + i,
             Title: 'Document ' + i,
+            // Other required fields.
+            id: 'item' + i,
+            UID: 'item' + i
           });
         }
 
@@ -755,7 +1173,632 @@ define([
       expect(this.$el.find('.itemRow').length).to.equal(31);
     });
 
+    it('test itemRow actionmenu move-top none', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // top item
+      var item = this.$el.find('.itemRow').eq(1);
+      expect(item.data().id).to.equal('item0');
+      // Since no moveUrl, no move-top or move-bottom.
+      expect(item.find('.actionmenu .move-top a').length).to.equal(0);
+      expect(item.find('.actionmenu .move-bottom a').length).to.equal(0);
+    });
+
   });
 
+  /* ==========================
+   TEST: Structure no action buttons
+  ========================== */
+  describe('Structure no action buttons', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "activeColumns": [],
+        "availableColumns": {
+          "getURL": "URL",
+        },
+        "buttons": [],
+        "menuOptions": [],
+        "attributes": [
+          'Title', 'getURL'
+        ]
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [];
+        items.push({
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+          id: 'folder',
+          UID: 'folder',
+        });
+        for (var i = start; i < end; i = i + 1) {
+          items.push({
+            getURL: 'http://localhost:8081/item' + i,
+            Title: 'Document ' + i,
+            id: 'item' + 1,
+            UID: 'item' + 1,
+          });
+        }
+
+        xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+          total: 100,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+    });
+
+    it('test itemRow actionmenu no options.', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // top item
+      var item = this.$el.find('.itemRow').eq(1);
+      expect(item.data().id).to.equal('item1');
+      // Since no moveUrl, no move-top or move-bottom.
+      expect(item.find('.actionmenu * a').length).to.equal(0);
+    });
+
+  });
+
+  /* ==========================
+   TEST: Structure alternative action buttons
+  ========================== */
+  describe('Structure alternative action buttons and links', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "activeColumns": [],
+        "availableColumns": {
+          "getURL": "URL",
+        },
+        "buttons": [],
+        "menuOptions": {
+          'action1': [
+            'dummytestaction',
+            'option1',
+            '#',
+            'Option 1',
+          ],
+          'action2': [
+            'dummytestaction',
+            'option2',
+            '#',
+            'Option 2',
+          ],
+        },
+        'tableRowItemAction': {
+          'other': ['dummytestaction', 'handleOther'],
+        },
+        "attributes": [
+          'Title', 'getURL'
+        ]
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [{
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+          'is_folderish': true,
+          path: '/folder',
+          id: 'folder'
+        }, {
+          getURL: 'http://localhost:8081/item',
+          Title: 'Item',
+          'is_folderish': false,
+          path: '/item',
+          id: 'item'
+        }];
+
+        xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+          total: 1,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      requirejs.undef('dummytestaction');
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+    });
+
+    it('test itemRow actionmenu custom options.', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var item = this.$el.find('.itemRow').eq(0);
+      // Check for complete new options
+      expect($('.actionmenu * a', item).length).to.equal(2);
+      expect($('.actionmenu .action1 a', item).text()).to.equal('Option 1');
+      expect($('.actionmenu .action2 a', item).text()).to.equal('Option 2');
+
+      define('dummytestaction', ['backbone'], function(Backbone) {
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          },
+          option1: function(e) {
+            e.preventDefault();
+            var self = this;
+            self.app.setStatus('Status: option1 selected');
+          },
+          option2: function(e) {
+            e.preventDefault();
+            var self = this;
+            self.app.setStatus('Status: option2 selected');
+          }
+        });
+        return Actions;
+      });
+      // preload the defined module to allow it be used synchronously.
+      require(['dummytestaction'], function(){});
+      this.clock.tick(1000);
+
+      $('.actionmenu .action1 a', item).trigger('click');
+      this.clock.tick(1000);
+      // status will be set as defined.
+      expect($('.status').text()).to.contain('Status: option1 selected');
+
+      $('.actionmenu .action2 a', item).trigger('click');
+      this.clock.tick(1000);
+      // status will be set as defined.
+      expect($('.status').text()).to.contain('Status: option2 selected');
+    });
+
+    it('folder link not overriden', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var item = this.$el.find('.itemRow').eq(0);
+      $('.title a.manage', item).trigger('click');
+      this.clock.tick(1000);
+      // default action will eventually trigger this.
+      expect(this.$el.find('.context-buttons').length).to.equal(1);
+    });
+
+    it('item link triggered', function() {
+      define('dummytestaction', ['backbone'], function(Backbone) {
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          },
+          handleOther: function(e) {
+            e.preventDefault();
+            var self = this;
+            self.app.setStatus('Status: not a folder');
+          }
+        });
+        return Actions;
+      });
+      // preload the defined module to allow it be used synchronously.
+      require(['dummytestaction'], function(){});
+
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var item = this.$el.find('.itemRow').eq(1);
+      $('.title a.manage', item).trigger('click');
+      this.clock.tick(1000);
+      // status will be set as defined.
+      expect($('.status').text()).to.contain('Status: not a folder');
+    });
+
+  });
+
+  /* ==========================
+   TEST: Structure action menu generator
+  ========================== */
+  describe('Structure alternative action buttons and links', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "activeColumns": [],
+        "availableColumns": {
+          "getURL": "URL",
+        },
+        "buttons": [],
+        "menuGenerator": 'dummyactionmenu',
+        'tableRowItemAction': {
+          'other': ['dummytestaction', 'handleOther'],
+        },
+        "attributes": [
+          'Title', 'getURL'
+        ],
+        "traverseView": true
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      $('body').off('structure-url-changed').on('structure-url-changed',
+        function (e, path) {
+          structureUrlChangedPath = path;
+        }
+      );
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [{
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+          'is_folderish': true,
+          path: '/folder',
+          id: 'folder'
+        }, {
+          getURL: 'http://localhost:8081/item',
+          Title: 'Item',
+          'is_folderish': false,
+          path: '/item',
+          id: 'item'
+        }];
+
+        xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+          total: 2,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+      this.sandbox = sinon.sandbox.create();
+      this.sandbox.stub(window, 'history', history);
+    });
+
+    afterEach(function() {
+      requirejs.undef('dummytestaction');
+      requirejs.undef('dummyactionmenu');
+      this.sandbox.restore();
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+      $('body').off('structure-url-changed');
+    });
+
+    it('test itemRow actionmenu generated options from model.', function() {
+      define('dummytestaction', ['backbone'], function(Backbone) {
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          },
+          folderClicker: function(e) {
+            e.preventDefault();
+            var self = this;
+            self.app.setStatus('Status: folder clicked');
+          },
+          itemClicker: function(e) {
+            e.preventDefault();
+            var self = this;
+            self.app.setStatus('Status: item clicked');
+          }
+        });
+        return Actions;
+      });
+
+      define('dummyactionmenu', [], function() {
+        var ActionMenu = function(menu) {
+          if (menu.model.attributes.id === 'item') {
+            return {
+              'itemClicker': [
+                'dummytestaction',
+                'itemClicker',
+                '#',
+                'Item Clicker'
+              ]
+            };
+          } else {
+            return {
+              'folderClicker': [
+                'dummytestaction',
+                'folderClicker',
+                '#',
+                'Folder Clicker'
+              ]
+            };
+          }
+        };
+        return ActionMenu;
+      });
+
+      // preload the defined module to allow it be used synchronously.
+      require(['dummytestaction'], function(){});
+      require(['dummyactionmenu'], function(){});
+
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+
+      var folder = this.$el.find('.itemRow').eq(0);
+
+      // Check for complete new options
+      expect($('.actionmenu * a', folder).length).to.equal(1);
+      expect($('.actionmenu .folderClicker a', folder).text()).to.equal(
+        'Folder Clicker');
+      $('.actionmenu .folderClicker a', folder).trigger('click');
+      this.clock.tick(1000);
+      // status will be set as defined.
+      expect($('.status').text()).to.contain('Status: folder clicked');
+
+      var item = this.$el.find('.itemRow').eq(1);
+      // Check for complete new options
+      expect($('.actionmenu * a', item).length).to.equal(1);
+      expect($('.actionmenu .itemClicker a', item).text()).to.equal(
+        'Item Clicker');
+      $('.actionmenu .itemClicker a', item).trigger('click');
+      this.clock.tick(1000);
+      // status will be set as defined.
+      expect($('.status').text()).to.contain('Status: item clicked');
+
+    });
+
+    it('test itemRow actionmenu malform generation.', function() {
+      // Potential failure case where user defined ActionMenu function
+      // fails to return a result, causing undefined behavior.
+      define('dummytestaction', ['backbone'], function(Backbone) {
+        // Not testing clicking here so barebone definition here.
+        var Actions = Backbone.Model.extend({
+          initialize: function(options) {
+            this.options = options;
+            this.app = options.app;
+          }
+        });
+        return Actions;
+      });
+
+      define('dummyactionmenu', [], function() {
+        var ActionMenu = function(menu) {
+          // return undefined
+        };
+        return ActionMenu;
+      });
+
+      // preload the defined module to allow it be used synchronously.
+      require(['dummytestaction'], function(){});
+      require(['dummyactionmenu'], function(){});
+
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+
+      // ensure that the items have been properly generated.
+      expect(this.$el.find('.itemRow').length).to.equal(2);
+
+    });
+
+  });
+
+  /* ==========================
+   TEST: Structure data insufficient fields
+  ========================== */
+  describe('Structure data insufficient fields', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      var structure = {
+        "vocabularyUrl": "/data.json",
+        "uploadUrl": "/upload",
+        "moveUrl": "/moveitem",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "setDefaultPageUrl": "/setDefaultPage",
+        "urlStructure": {
+          "base": "http://localhost:8081",
+          "appended": "/folder_contents"
+        }
+      };
+
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [{
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+          'is_folderish': true,
+          path: '/folder',
+          UID: 'folder',
+          id: 'folder'
+        }, {
+          getURL: 'http://localhost:8081/item',
+          Title: 'Item',
+          'is_folderish': false,
+          path: '/item',
+          // omitting id but provide UID instead for this test
+          UID: 'item'
+        }];
+
+        xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+          total: 1,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+    });
+
+    it('test unselect all', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var $item = this.$el.find('table th .select-all');
+      $item[0].checked = true;
+      $item.trigger('change');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('2');
+      expect($('table tbody .selection input:checked', this.$el).length
+        ).to.equal(2);
+
+      // XXX passing this test for now with bad data - uncheck cannot
+      // remove items without an id (but with UID specified), so this
+      // item cannot be unselected.
+      $item[0].checked = false;
+      $item.trigger('change');
+      this.clock.tick(1000);
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
+      expect($('table tbody .selection input:checked', this.$el).length
+        ).to.equal(1);
+    });
+
+  });
 
 });

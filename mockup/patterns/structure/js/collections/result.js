@@ -38,6 +38,9 @@ define([
       // how many items per page should be shown
       perPage: 15
     },
+    // server_api are query parameters passed directly (currently GET
+    // parameters).  These are currently generated using following
+    // functions.  Renamed to queryParams in Backbone.Paginator 2.0.
     server_api: {
       query: function() {
         return this.queryParser();

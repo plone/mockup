@@ -2,11 +2,12 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'mockup-patterns-structure-url/js/navigation',
   'mockup-patterns-structure-url/js/views/actionmenu',
   'text!mockup-patterns-structure-url/templates/tablerow.xml',
   'mockup-utils',
   'translate'
-], function($, _, Backbone, ActionMenu, TableRowTemplate, utils, _t) {
+], function($, _, Backbone, Nav, ActionMenuView, TableRowTemplate, utils, _t) {
   'use strict';
 
   var TableRowView = Backbone.View.extend({
@@ -51,29 +52,44 @@ define([
 
       self.el.model = this.model;
 
-      self.menu = new ActionMenu({
+      var canMove = (!(!self.app.options.moveUrl));
+
+      self.menu = new ActionMenuView({
         app: self.app,
-        model: self.model
+        model: self.model,
+        menuOptions: self.app.menuOptions,
+        menuGenerator: self.app.menuGenerator,
+        canMove: canMove
       });
 
       $('.actionmenu-container', self.$el).append(self.menu.render().el);
       return this;
     },
     itemClicked: function(e) {
-      e.preventDefault();
       /* check if this should just be opened in new window */
+      var self = this;
       var keyEvent = this.app.keyEvent;
-      if (keyEvent && keyEvent.ctrlKey) {
-        this.menu.openClicked(e);
-      } else if (this.model.attributes['is_folderish']) { // jshint ignore:line
-        // it's a folder, go down path and show in contents window.
-        this.app.queryHelper.currentPath = this.model.attributes.path;
-        // also switch to fix page in batch
-        var collection = this.app.collection;
-        collection.goTo(collection.information.firstPage);
+      var key;
+      // Resolve the correct handler based on these keys.
+      // Default handlers live in ../navigation.js (bound to Nav)
+      if (keyEvent && keyEvent.ctrlKey ||
+          !(this.model.attributes['is_folderish'])) {
+        // middle/ctrl-click or not a folder content
+        key = 'other';  // default Nav.openClicked
       } else {
-        this.menu.openClicked(e);
+        key = 'folder';  // default Nav.folderClicked
       }
+      var definition = self.app.options.tableRowItemAction[key] || [];
+      // a bit of a duplicate from actionmenu.js, but this is calling
+      // directly.
+      var libName = definition[0],
+          method = definition[1];
+      if (!((typeof libName === 'string') && (typeof key === 'string'))) {
+        return null;
+      }
+      var clsLib = require(libName);
+      var lib = new clsLib(self);
+      return lib[method] && lib[method](e);
     },
     itemSelected: function() {
       var checkbox = this.$('input')[0];
