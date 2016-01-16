@@ -8,6 +8,9 @@ New:
 
 Fixes:
 
+- Calculate z-index for modals dynamically to always be on top
+  [vangheem]
+
 
 2.1.2 (2016-01-08)
 ------------------
