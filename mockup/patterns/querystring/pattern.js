@@ -364,7 +364,6 @@ define([
         self.appendOperators(index);
         self.createValue(index);
       } else if (widget === 'RelativePathWidget') {
-
         if( self.advanced ) {
           self.$value = $('<input type="text"/>')
             .addClass(self.options.classValueName + '-' + widget)
@@ -376,14 +375,20 @@ define([
         }else{
           //These 2 hard-coded values correspond to the "Current (./)" and "Parent (../)" options
           //under the location index.
-          var val = ".::1";
-          if ( self.$operator.val().indexOf('relativePath') > 0 ) {
-            val = "..::1";
+          if(!value){
+            value = ".::1";
+            if ( self.$operator.val().indexOf('relativePath') > 0 ) {
+              value = "..::1";
+            }
+          }else{
+            if(value === '.::1'){
+              self.$operator.select2('val', 'plone.app.querystring.operation.string.path');
+            }
           }
           self.$value = $('<input type="hidden"/>')
           .addClass(self.options.classValueName + '-' + widget)
           .appendTo($wrapper)
-          .val(val);
+          .val(value);
         }
       } else if (widget === 'ReferenceWidget') {
         if( self.advanced ) {
@@ -441,7 +446,7 @@ define([
         }
         else {
           var trimmedValue = value;
-          if( typeof value === "string" ) {
+          if( typeof value === "string" && widget !== 'RelativePathWidget') {
             trimmedValue = value.replace(/::[0-9]+/, '');
           }
           self.$value.select2('val', trimmedValue);
