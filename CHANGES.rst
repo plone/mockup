@@ -8,6 +8,9 @@ New:
 
 Fixes:
 
+- be able to use multiple importcss_file_filter files
+  [vangheem]
+
 - Calculate z-index for modals dynamically to always be on top
   [vangheem]
 
