@@ -8,8 +8,14 @@ New:
 
 Fixes:
 
+- fix saving values for query string
+  [vangheem]
+
 - be able to use multiple importcss_file_filter files
   [vangheem]
+
+- Fix issue where if existing querystring path value is ".::1",
+  after edit, the wrong value will be selected
 
 - Calculate z-index for modals dynamically to always be on top
   [vangheem]
