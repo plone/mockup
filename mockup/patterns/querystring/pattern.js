@@ -591,7 +591,12 @@ define([
       }
       else if (typeof self.$value !== 'undefined') {
         var value = self.$value.val();
-        value += self.getDepthString();
+        if(typeof(value) === 'string'){
+          var depth = self.getDepthString();
+          if(depth){
+            value += depth;
+          }
+        }
         varr.push(value);
       }
       var vval;
