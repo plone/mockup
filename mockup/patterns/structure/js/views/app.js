@@ -25,7 +25,7 @@ define([
             TableView, SelectionWellView,
             GenericPopover, RearrangeView, SelectionButtonView,
             PagingView, ColumnsView, TextFilterView, UploadView,
-            ResultCollection, SelectedCollection, utils, _t, logger) {
+            _ResultCollection, SelectedCollection, utils, _t, logger) {
   'use strict';
 
   var log = logger.getLogger('pat-structure');
@@ -65,34 +65,17 @@ define([
         }
       });
 
+      var ResultCollection = require(options.collectionConstructor);
+
       self.collection = new ResultCollection([], {
+        // Due to default implementation need to poke at things in here,
+        // view is passed.
+        view: self,
         url: self.options.collectionUrl,
-        queryParser: function(options) {
-          if(options === undefined){
-            options = {};
-          }
-          var term = null;
-          if (self.toolbar) {
-            term = self.toolbar.get('filter').term;
-          }
-          var sortOn = self['sort_on']; // jshint ignore:line
-          if (!sortOn) {
-            sortOn = 'getObjPositionInParent';
-          }
-          return JSON.stringify({
-            criteria: self.queryHelper.getCriterias(term, $.extend({}, options, {
-              additionalCriterias: self.additionalCriterias
-            })),
-            sort_on: sortOn,
-            sort_order: self['sort_order'] // jshint ignore:line
-          });
-        },
-        queryHelper: self.options.queryHelper
       });
 
       self.setAllCookieSettings();
 
-      self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
       self.tableView = new TableView({app: self});
 
@@ -145,7 +128,7 @@ define([
         /* maintain history here */
         if(self.options.urlStructure && window.history && window.history.pushState){
           if (!self.doNotPushState){
-            var path = self.queryHelper.getCurrentPath();
+            var path = self.getCurrentPath();
             if(path === '/'){
               path = '';
             }
@@ -178,7 +161,7 @@ define([
           if(!path){
             path = '/';
           }
-          self.queryHelper.currentPath = path;
+          self.setCurrentPath(path);
           $('body').trigger('structure-url-changed', path);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
@@ -232,8 +215,14 @@ define([
       });
       return uids;
     },
+    getCurrentPath: function() {
+      return this.collection.getCurrentPath();
+    },
+    setCurrentPath: function(path) {
+      this.collection.setCurrentPath(path);
+    },
     getAjaxUrl: function(url) {
-      return url.replace('{path}', this.options.queryHelper.getCurrentPath());
+      return url.replace('{path}', this.getCurrentPath());
     },
     buttonClickEvent: function(button) {
       var self = this;
@@ -264,7 +253,7 @@ define([
         }
         data._authenticator = utils.getAuthenticator();
         if (data.folder === undefined) {
-          data.folder = self.options.queryHelper.getCurrentPath();
+          data.folder = self.getCurrentPath();
         }
 
         var url = self.getAjaxUrl(button.url);

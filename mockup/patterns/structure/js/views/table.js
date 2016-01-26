@@ -80,7 +80,7 @@ define([
       self.$el.html(self.template({
         _t: _t,
         pathParts: _.filter(
-          self.app.queryHelper.getCurrentPath().split('/').slice(1),
+          self.app.getCurrentPath().split('/').slice(1),
           function(val) {
             return val.length > 0;
           }
@@ -130,7 +130,7 @@ define([
         }
       });
       path += $el.attr('data-path');
-      this.app.queryHelper.currentPath = path;
+      this.app.setCurrentPath(path);
       this.collection.pager();
     },
     selectFolder: function(e) {

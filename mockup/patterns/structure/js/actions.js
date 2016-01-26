@@ -17,6 +17,10 @@ define([
       this.selectedCollection = this.app.selectedCollection;
     },
     selectAll: function(e){
+      // This implementation is very specific to the default collection
+      // with the reliance on its queryParser and queryHelper.  Custom
+      // collection (Backbone.Paginator.requestPager implementation)
+      // will have to come up with their own action for this.
       e.preventDefault();
       var self = this;
       var page = 1;
@@ -35,7 +39,8 @@ define([
               page: page,
               size: 100
             }),
-            attributes: JSON.stringify(self.app.queryHelper.options.attributes)
+            attributes: JSON.stringify(
+              self.app.collection.queryHelper.options.attributes)
           }
         }).done(function(data){
           var items = self.app.collection.parse(data, count);

@@ -2,19 +2,57 @@ define([
   'underscore',
   'backbone',
   'mockup-patterns-structure-url/js/models/result',
+  'mockup-utils',
   'backbone.paginator'
-], function(_, Backbone, Result) {
+], function(_, Backbone, Result, Utils) {
   'use strict';
 
   var ResultCollection = Backbone.Paginator.requestPager.extend({
     model: Result,
-    queryHelper: null, // need to set
     initialize: function(models, options) {
       this.options = options;
+      this.view = options.view;
       this.url = options.url;
-      this.queryParser = options.queryParser;
-      this.queryHelper = options.queryHelper;
+
+      this.queryHelper = Utils.QueryHelper(
+        $.extend(true, {}, this.view.options, {
+          attributes: this.view.options.queryHelperAttributes}));
+
+      this.queryParser = function(options) {
+        var self = this;
+        if(options === undefined){
+          options = {};
+        }
+        var term = null;
+        if (self.view.toolbar) {
+          term = self.view.toolbar.get('filter').term;
+        }
+        var sortOn = self.view.sort_on; // jshint ignore:line
+        var sortOrder = self.view.sort_order; // jshint ignore:line
+        if (!sortOn) {
+          sortOn = 'getObjPositionInParent';
+        }
+        return JSON.stringify({
+          criteria: self.queryHelper.getCriterias(term, $.extend({}, options, {
+            additionalCriterias: self.view.additionalCriterias
+          })),
+          sort_on: sortOn,
+          sort_order: sortOrder
+        });
+      }
+
+      // check and see if a hash is provided for initial path
+      if (window.location.hash.substring(0, 2) === '#/') {
+        this.queryHelper.currentPath = window.location.hash.substring(1);
+      }
+
       Backbone.Paginator.requestPager.prototype.initialize.apply(this, [models, options]);
+    },
+    getCurrentPath: function() {
+      return this.queryHelper.getCurrentPath();
+    },
+    setCurrentPath: function(path) {
+      this.queryHelper.currentPath = path;
     },
     pager: function() {
       this.trigger('pager');
