@@ -91,6 +91,7 @@ define([
       margin: 20,
       position: 'center middle', // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
       triggers: [],
+      zIndexSelector: '.plone-modal-wrapper,.plone-modal-backdrop',
       backdrop: 'body', // Element to initiate the Backdrop on.
       backdropOptions: {
         zIndex: '1040',
@@ -773,8 +774,9 @@ define([
           ),
           zIndex = 1041;
 
-      $('.plone-modal-wrapper,.plone-modal-backdrop').each(function(){
-        zIndex = Math.max(zIndex, $(this).css('zIndex') || 1041);
+      $(self.options.zIndexSelector).each(function(){
+        var other = $(this).css('zIndex');
+        zIndex = Math.max(zIndex, parseInt($(this).css('zIndex')) + 1 || 1041);
       });
 
       self.$wrapper = $('<div/>')
