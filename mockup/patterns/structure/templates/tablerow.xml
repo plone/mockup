@@ -8,7 +8,7 @@
    <%- Title %></a>
   <div class="icon-group-right">
     <% if(attributes["getIcon"] ){ %> <img class="image-icon" src="<%- getURL %>/@@images/image/icon"><span> &nbsp;</span><% } %>
-    <a href="<%- getURL %>/view" title="<%- _t('View') %>"><span class="glyphicon glyphicon-new-window"></span></a>
+    <a href="<%- viewURL %>" title="<%- _t('View') %>"><span class="glyphicon glyphicon-new-window"></span></a>
 
   </div>
    

@@ -31,6 +31,16 @@ define([
       if (this.selectedCollection.findWhere({UID: data.UID})) {
         data.selected = true;
       }
+      if (!data.viewURL) {
+        // XXX
+        // This is for the new window link.  There should also be a
+        // separate one for the default link and it shouldn't require a
+        // javascript function to append '/view' on the default click.
+        // Need actual documentation reference for this and also support
+        // from the vocabulary that generates the data for the default
+        // portal_contents view.
+        data.viewURL = data.getURL + '/view';
+      }
       data.attributes = self.model.attributes;
       data.activeColumns = self.app.activeColumns;
       data.availableColumns = self.app.availableColumns;

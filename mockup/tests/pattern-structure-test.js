@@ -1785,6 +1785,140 @@ define([
   });
 
   /* ==========================
+   TEST: Structure custom URLs
+  ========================== */
+  describe('Structure custom data URLs', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('__cp');
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumns');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      this.$el = $('' +
+        '<div class="pat-structure" ' +
+             'data-pat-structure="vocabularyUrl:/data.json;' +
+                                 'uploadUrl:/upload;' +
+                                 'moveUrl:/moveitem;' +
+                                 'indexOptionsUrl:/tests/json/queryStringCriteria.json;' +
+                                 'contextInfoUrl:{path}/contextInfo;' +
+                                 'setDefaultPageUrl:/setDefaultPage;' +
+                                 ' ">' +
+        '</div>').appendTo('body');
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [];
+        items.push({
+          UID: '123sdfasdfFolder',
+          getURL: 'http://localhost:8081/folder',
+          viewURL: 'http://localhost:8081/folder',
+          path: '/folder',
+          portal_type: 'Folder',
+          Description: 'folder',
+          Title: 'Folder',
+          'review_state': 'published',
+          'is_folderish': true,
+          Subject: [],
+          id: 'folder'
+        });
+        for (var i = start; i < end; i = i + 1) {
+          items.push({
+            UID: '123sdfasdf' + i,
+            getURL: 'http://localhost:8081/item' + i,
+            viewURL: 'http://localhost:8081/item' + i + '/item_view',
+            path: '/item' + i,
+            portal_type: 'Document ' + i,
+            Description: 'document',
+            Title: 'Document ' + i,
+            'review_state': 'published',
+            'is_folderish': false,
+            Subject: [],
+            id: 'item' + i
+          });
+        }
+
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+          total: 100,
+          results: items
+        }));
+      });
+
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: [{
+            id: 'document',
+            title: 'Document',
+            url: '/adddocument'
+          },{
+            id: 'folder',
+            title: 'Folder'
+          }],
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+
+      sinon.stub(utils, 'getWindow', function() {
+        return dummyWindow;
+      });
+
+    });
+
+    afterEach(function() {
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+      utils.getWindow.restore();
+    });
+
+    it('test displayed content', function() {
+      registry.scan(this.$el);
+      this.clock.tick(500);
+
+      var $content_row = this.$el.find('table tbody tr').eq(0);
+      expect($content_row.find('td').length).to.equal(6);
+      expect($content_row.find('td').eq(1).text().trim()).to.equal('Folder');
+      expect($content_row.find('td').eq(2).text().trim()).to.equal('');
+      expect($content_row.find('td').eq(3).text().trim()).to.equal('');
+      expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
+      expect($content_row.find('td .icon-group-right a').attr('href')
+        ).to.equal('http://localhost:8081/folder');
+
+      var $content_row1 = this.$el.find('table tbody tr').eq(1);
+      expect($content_row1.find('td').eq(1).text().trim()).to.equal(
+        'Document 0');
+      expect($content_row1.find('td .icon-group-right a').attr('href')
+        ).to.equal('http://localhost:8081/item0/item_view');
+    });
+
+  });
+
+  /* ==========================
    TEST: Structure data insufficient fields
   ========================== */
   describe('Structure data insufficient fields', function() {
