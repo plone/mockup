@@ -242,6 +242,12 @@ define([
       self.removeOperator();
       self.createPathOperators();
 
+      // We must test if we have a "simple" path or an "advanced" one and change the widgets accordingly
+      if (index === 'path' && value && value !== '.::1' && value !== '..::1' && !value.match(/^[0-9a-f]{32}::-?[0-9]+$/)) {
+        self.advanced = true;
+        self.resetPathOperators();
+      }
+
       self.appendOperators(index);
 
       if (operator === undefined) {
@@ -447,7 +453,7 @@ define([
         else {
           var trimmedValue = value;
           if( typeof value === "string" && widget !== 'RelativePathWidget') {
-            trimmedValue = value.replace(/::[0-9]+/, '');
+            trimmedValue = value.replace(/::-?[0-9]+/, '');
           }
           self.$value.select2('val', trimmedValue);
         }
