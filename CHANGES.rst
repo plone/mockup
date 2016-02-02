@@ -20,6 +20,8 @@ Fixes:
 - Calculate z-index for modals dynamically to always be on top
   [vangheem]
 
+- Fix path widgets initialization in querystring pattern.
+  [Gagaro]
 
 2.1.2 (2016-01-08)
 ------------------
