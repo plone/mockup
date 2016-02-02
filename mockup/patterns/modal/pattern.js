@@ -775,7 +775,6 @@ define([
           zIndex = 1041;
 
       $(self.options.zIndexSelector).each(function(){
-        var other = $(this).css('zIndex');
         zIndex = Math.max(zIndex, parseInt($(this).css('zIndex')) + 1 || 1041);
       });
 
