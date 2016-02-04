@@ -6,6 +6,9 @@ Changelog
 
 New:
 
+- Add rootPath suppport to relatedItems, to support navigation roots.
+  [alecm]
+
 Fixes:
 
 - fix saving values for query string
