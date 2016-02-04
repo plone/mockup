@@ -4,6 +4,7 @@
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'Type', 'path'])
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
+ *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
  *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%= path %>"><%= text %></a>')
  *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
  *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>')
@@ -96,6 +97,7 @@ define([
       mode: 'search', // possible values are search and browse
       closeOnSelect: false,
       basePath: '/',
+      rootPath: '/',
       searchText: _t('Search:'),
       searchAllText: _t('entire site'),
       homeText: _t('home'),
@@ -134,7 +136,7 @@ define([
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +
-          '<%= searchText %></span><a class="crumb" href="/"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
+          '<%= searchText %></span><a class="crumb" href="<%= rootPath %>"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
         '</span>' +
       '</span>',
       breadCrumbsTemplateSelector: null,
@@ -195,7 +197,10 @@ define([
     setBreadCrumbs: function() {
       var self = this;
       var path = self.currentPath ? self.currentPath : self.options.basePath;
+      var root = self.options.rootPath.replace(/\/$/, '');
       var html;
+      // strip site root from path
+      path = path.indexOf(root) === 0 ? path.slice(root.length) : path;
       if (path === '/') {
         var searchText = '';
         if (self.options.mode === 'search') {
@@ -203,11 +208,12 @@ define([
         }
         html = self.applyTemplate('breadCrumbs', {
           items: searchText,
-          searchText: self.options.searchText
+          searchText: self.options.searchText,
+          rootPath: self.options.rootPath
         });
       } else {
         var paths = path.split('/');
-        var itemPath = '';
+        var itemPath = root;
         var itemsHtml = '';
         _.each(paths, function(node) {
           if (node !== '') {
@@ -218,7 +224,9 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items: itemsHtml, searchText: self.options.searchText});
+        html = self.applyTemplate('breadCrumbs', {items: itemsHtml,
+                                                  searchText: self.options.searchText,
+                                                  rootPath: self.options.rootPath});
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
