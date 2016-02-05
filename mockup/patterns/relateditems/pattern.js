@@ -4,6 +4,7 @@
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
+ *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
  *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%= path %>"><%= text %></a>')
  *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
@@ -100,6 +101,7 @@ define([
       mode: 'search', // possible values are search and browse
       closeOnSelect: false,
       basePath: '/',
+      rootPath: '/',
       homeText: _t('home'),
       //folderTypes: ['Folder'],   
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -142,7 +144,7 @@ define([
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +
-          '<%= searchText %></span><a class="crumb" href="/"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
+          '<%= searchText %></span><a class="crumb" href="<%= rootPath %>"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
         '</span>' +
       '</span>',
       breadCrumbsTemplateSelector: null,
@@ -203,7 +205,10 @@ define([
     setBreadCrumbs: function() {
       var self = this;
       var path = self.currentPath ? self.currentPath : self.options.basePath;
+      var root = self.options.rootPath.replace(/\/$/, '');
       var html;
+      // strip site root from path
+      path = path.indexOf(root) === 0 ? path.slice(root.length) : path;
       if (path === '/') {
         var searchText = '';
         if (self.options.mode === 'search') {
@@ -211,11 +216,12 @@ define([
         }
         html = self.applyTemplate('breadCrumbs', {
           items: searchText,
-          searchText: _t('Search:')
+          searchText: _t('Search:'),
+          rootPath: self.options.rootPath
         });
       } else {
         var paths = path.split('/');
-        var itemPath = '';
+        var itemPath = root;
         var itemsHtml = '';
         _.each(paths, function(node) {
           if (node !== '') {
@@ -226,7 +232,9 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items: itemsHtml, searchText: _t('Search:') });
+        html = self.applyTemplate('breadCrumbs', {items: itemsHtml,
+                                                  searchText: _t('Search:'),
+                                                  rootPath: self.options.rootPath});
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
