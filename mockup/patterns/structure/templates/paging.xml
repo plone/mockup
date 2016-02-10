@@ -11,7 +11,7 @@
     </li>
     <% _.each(pages, function(p){ %>
     <li class="<% if (currentPage == p) { %>active<% } %>">
-      <a href="#" class="page"><%= p %></a>
+      <a href="#" class="page"><%- p %></a>
     </li>
     <% }); %>
     <li class="<% if (currentPage === lastPage) { %>disabled<% } %>">
@@ -42,9 +42,9 @@
   <ul class="pagination pagination-sm">
     <li class="disabled">
       <a href="#">
-        <%- _t("Page:") %> <span class="current"><%= currentPage %></span>
+        <%- _t("Page:") %> <span class="current"><%- currentPage %></span>
         <%- _t("of") %>
-        <span class="total"><%= totalPages %></span>
+        <span class="total"><%- totalPages %></span>
               <%- _t("shown") %>
       </a>
     </li>
