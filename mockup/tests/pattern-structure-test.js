@@ -25,6 +25,8 @@ define([
     return null;
   }
 
+  var extraDataJsonItem = null;
+
 
   /* ==========================
    TEST: Structure
@@ -83,6 +85,10 @@ define([
           });
         }
 
+        if (extraDataJsonItem) {
+          items.push(extraDataJsonItem);
+        }
+
         xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
           total: 100,
           results: items
@@ -132,6 +138,7 @@ define([
     });
 
     afterEach(function() {
+      extraDataJsonItem = null;
       this.server.restore();
       this.clock.restore();
     });
@@ -149,6 +156,39 @@ define([
       cb.trigger('change');
       this.clock.tick(500);
       expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
+      var selectedItems = $('.popover-content .selected-item', this.$el);
+      expect($(selectedItems[0]).text()).to.contain('Folder');
+    });
+
+    it('test selection well label', function() {
+      extraDataJsonItem = {
+        UID: 'XSS" data-xss="bobby',
+        getURL: 'http://localhost:8081/xss',
+        path: '/xss',
+        portal_type: 'Folder',
+        Description: 'XSS test item',
+        Title: "<script>alert('XSS');window.foo=1;</script>",
+        'review_state': 'published',
+        'is_folderish': true,
+        Subject: [],
+        id: 'xss'
+      };
+      registry.scan(this.$el);
+      this.clock.tick(500);
+      // it's overloaded, pattern doesn't actually enforce batch limits.
+      var cb = this.$el.find('.itemRow td.selection input').eq(16);
+      cb[0].checked = true;
+      cb.trigger('change');
+      this.clock.tick(500);
+      expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
+
+      // XSS happened.
+      expect(window.foo).not.equal(1);
+      expect($('.popover-content .selected-item a', this.$el).eq(0).data().xss
+        ).not.equal('bobby');
+      var selectedItems = $('.popover-content .selected-item', this.$el);
+      expect($(selectedItems[0]).text()).to.contain(
+        "<script>alert('XSS');window.foo=1;</script>");
     });
 
     it('remove item from selection well', function() {
