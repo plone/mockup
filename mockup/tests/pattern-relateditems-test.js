@@ -56,6 +56,17 @@ define([
           {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document', getIcon: ""},
           {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document', getIcon: ""}
         ];
+
+        var addMissingFields = function(item) {
+          item.getURL = 'http://localhost:8081' + item.path;
+          item.is_folderish = item.portal_type === 'Folder';
+          item.review_state = 'published';
+        };
+
+        _.each(root, addMissingFields);
+        _.each(about, addMissingFields);
+        _.each(staff, addMissingFields);
+
         var searchables = about.concat(root).concat(staff);
 
         var addUrls = function(list) {
@@ -91,6 +102,8 @@ define([
             var criteria = query.criteria[i];
             if (criteria.i === 'path') {
               path = criteria.v.split('::')[0];
+            } else if (criteria.i === 'is_folderish') {
+              term = criteria;
             } else {
               term = criteria.v;
             }
@@ -107,11 +120,17 @@ define([
             var q;
             var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.portal_type).toLowerCase();
             if (typeof(term) === 'object') {
-              for (var i = 0; i < term.length; i = i + 1) {
-                q = term[i].toLowerCase();
-                if (keys.indexOf(q) > -1) {
+              if (term.i === 'is_folderish') {
+                if (item.is_folderish) {
                   results.push(item);
-                  break;
+                }
+              } else {
+                for (var i = 0; i < term.length; i = i + 1) {
+                  q = term[i].toLowerCase();
+                  if (keys.indexOf(q) > -1) {
+                    results.push(item);
+                    break;
+                  }
                 }
               }
             } else {
@@ -171,7 +190,7 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    it.skip('select an item by clicking add button', function () {
+    it('select an item by clicking add button', function () {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -195,7 +214,7 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    it.skip('deselect an item from selected items using click', function () {
+    it('deselect an item from selected items using click', function () {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -230,7 +249,7 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    it.skip('deselect an item from results using click', function () {
+    it('deselect an item from results using click', function () {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -262,7 +281,7 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    it.skip('allow only a single type to be selectable', function () {
+    it('allow only a single type to be selectable', function () {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems" />' +
@@ -282,14 +301,14 @@ define([
       $('.pattern-relateditems-result-select').first().click();
       expect(pattern.$el.select2('data')).to.have.length(0);
 
-      $('.pattern-relateditems-type-Image .pattern-relateditems-result-select').first().click();
+      $('.contenttype-image:parent').first().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
 
       $el.remove();
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    it.skip('clicking folder button filters to that folder', function() {
+    it('clicking folder button filters to that folder', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -314,7 +333,7 @@ define([
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
-    it.skip('after selecting a folder, it remains in the results list', function() {
+    it('after selecting a folder, it remains in the results list', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -341,7 +360,7 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    it.skip('clicking on breadcrumbs goes back up', function() {
+    it('clicking on breadcrumbs goes back up', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -372,7 +391,7 @@ define([
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
-    it.skip('maximum number of selected items', function() {
+    it('maximum number of selected items', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -414,7 +433,7 @@ define([
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
-    it.skip('test tree initialized', function() {
+    it('test tree initialized', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -439,7 +458,7 @@ define([
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
-    it.skip('test tree select', function() {
+    it('test tree select', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
@@ -468,7 +487,7 @@ define([
       $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
-    it.skip('test tree sub select', function() {
+    it('test tree sub select', function() {
       var $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
