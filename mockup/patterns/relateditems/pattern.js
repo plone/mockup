@@ -6,9 +6,9 @@
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
  *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
  *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
- *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%= path %>"><%= text %></a>')
+ *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%- path %>"><%- text %></a>')
  *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
- *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>')
+ *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%- searchText %></span><a class="icon-home" href="/"></a><%- items %></span>')
  *    breadCrumbsTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbsTemplate. (null)
  *    cache(boolean): Whether or not results from the server should be
  *    cached. (true)
@@ -111,23 +111,23 @@ define([
       resultTemplate: '' +
         '<div class="   pattern-relateditems-result  <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
-        '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%= getURL %>/@@images/image/icon "> <% } %>' +
-        '    <span class="pattern-relateditems-result-title  <% if (typeof review_state !== "undefined") { %> state-<%= review_state %> <% } %>  " /span>' +
-        '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%= Title %></span>' +
-        '    <span class="pattern-relateditems-result-path"><%= path %></span>' +
+        '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
+        '    <span class="pattern-relateditems-result-title  <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
+        '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></span>' +
+        '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
         '  </a>' +
         '  <span class="pattern-relateditems-buttons">' +
         '  <% if (is_folderish) { %>' +
-        '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%= path %>"></a>' +
+        '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%- path %>"></a>' +
         '   <% } %>' +
         ' </span>' +
         '</div>',
       resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item">' +
-        ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%= getURL %>/@@images/image/icon"> <% } %>' +
-        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%= review_state  %> <% } %>" ><%= Title %></span>' +
-        ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
+        ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
+        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
+        ' <span class="pattern-relateditems-item-path"><%- path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
       breadCrumbsTemplate: '<span>' +
@@ -144,12 +144,15 @@ define([
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +
-          '<%= searchText %></span><a class="crumb" href="<%= rootPath %>"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
+          '<%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
+          '<span class="glyphicon glyphicon-home"></span></a>' +
+          // ``items assumed to be santized html``
+          '<%= items %>' +
         '</span>' +
       '</span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
-        '/<a href="<%= path %>" class="crumb"><%= text %></a>',
+        '/<a href="<%- path %>" class="crumb"><%- text %></a>',
       breadCrumbTemplateSelector: null,
       escapeMarkup: function(text) {
         return text;

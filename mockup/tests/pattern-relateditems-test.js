@@ -56,7 +56,8 @@ define([
 
         var staff = [
           {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document', getIcon: ""},
-          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document', getIcon: ""}
+          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document', getIcon: ""},
+          {UID: 'hax0r', Title: '<script>window.xss=1</script>', path: '/about/staff/xss', portal_type: 'Document', getIcon: ""}
         ];
 
         var addMissingFields = function(item) {
@@ -208,7 +209,7 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
-      expect($('.pattern-relateditems-result-select')).to.have.length(13);
+      expect($('.pattern-relateditems-result-select')).to.have.length(14);
       $('.pattern-relateditems-result-select').first().on('click', function() {
         expect(pattern.$el.select2('data')).to.have.length(1);
         expect(pattern.$el.select2('val')[0]).to.equal('gfn5634f');
@@ -336,7 +337,7 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
-      expect($('.pattern-relateditems-result-select')).to.have.length(13);
+      expect($('.pattern-relateditems-result-select')).to.have.length(14);
       $('.pattern-relateditems-result-path')
         .filter(function() { return $(this).text() === '/about'; })
         .click();
@@ -368,6 +369,8 @@ define([
       var $crumbs = $('.pattern-relateditems-path a.crumb');
       // /about/staff
       expect($crumbs).to.have.length(3);
+      // Staff XSS bomb
+      expect(window.xss).not.equal(1);
       // /about
       $crumbs.eq(1).on('click', function() {
       }).click();
