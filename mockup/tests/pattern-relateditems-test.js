@@ -11,6 +11,8 @@ define([
   window.mocha.setup('bdd').globals(['jQuery*']);
   $.fx.off = true;
 
+  var $el;
+
   /* ==========================
    TEST: Related Items
   ========================== */
@@ -56,6 +58,17 @@ define([
           {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document', getIcon: ""},
           {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document', getIcon: ""}
         ];
+
+        var addMissingFields = function(item) {
+          item.getURL = 'http://localhost:8081' + item.path;
+          item.is_folderish = item.portal_type === 'Folder';
+          item.review_state = 'published';
+        };
+
+        _.each(root, addMissingFields);
+        _.each(about, addMissingFields);
+        _.each(staff, addMissingFields);
+
         var searchables = about.concat(root).concat(staff);
 
         var addUrls = function(list) {
@@ -91,6 +104,8 @@ define([
             var criteria = query.criteria[i];
             if (criteria.i === 'path') {
               path = criteria.v.split('::')[0];
+            } else if (criteria.i === 'is_folderish') {
+              term = criteria;
             } else {
               term = criteria.v;
             }
@@ -107,11 +122,17 @@ define([
             var q;
             var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.portal_type).toLowerCase();
             if (typeof(term) === 'object') {
-              for (var i = 0; i < term.length; i = i + 1) {
-                q = term[i].toLowerCase();
-                if (keys.indexOf(q) > -1) {
+              if (term.i === 'is_folderish') {
+                if (item.is_folderish) {
                   results.push(item);
-                  break;
+                }
+              } else {
+                for (var i = 0; i < term.length; i = i + 1) {
+                  q = term[i].toLowerCase();
+                  if (keys.indexOf(q) > -1) {
+                    results.push(item);
+                    break;
+                  }
                 }
               }
             } else {
@@ -154,8 +175,14 @@ define([
       });
     });
 
+    afterEach(function() {
+      this.server.restore();
+      $el.remove();
+      $('.select2-sizer, .select2-drop').remove();
+    });
+
     it('test initialize', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -166,13 +193,10 @@ define([
       expect($('.select2-container-multi', $el)).to.have.length(1);
       expect($('.pattern-relateditems-container', $el)).to.have.length(1);
       expect($('.pattern-relateditems-path', $el)).to.have.length(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
-/*fgrcon
+
     it('select an item by clicking add button', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -190,14 +214,10 @@ define([
         expect(pattern.$el.select2('val')[0]).to.equal('gfn5634f');
       }).click();
       clock.tick(1000);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
-*/
-/*fgrcon 
+
     it('deselect an item from selected items using click', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -226,14 +246,10 @@ define([
       // backspaceEvent.which = 8;
       // $('.select2-search-field input').trigger( backspaceEvent );
       // expect(pattern.$el.select2('data')).to.have.length(0);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
-*/
-/*fgrcon
+
     it('deselect an item from results using click', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -259,14 +275,10 @@ define([
       expect($result.is('.pattern-relateditems-active')).to.equal(false);
       expect(pattern.$el.select2('data')).to.have.length(0);
       expect(pattern.$el.select2('val')).to.have.length(0);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
-*/
-/*fgrcon
+
     it('allow only a single type to be selectable', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems" />' +
         '</div>').appendTo('body');
@@ -285,16 +297,12 @@ define([
       $('.pattern-relateditems-result-select').first().click();
       expect(pattern.$el.select2('data')).to.have.length(0);
 
-      $('.pattern-relateditems-type-Image .pattern-relateditems-result-select').first().click();
+      $('.contenttype-image:parent').first().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
-*/
-/*fgrcon
+
     it('clicking folder button filters to that folder', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -313,14 +321,10 @@ define([
         expect(pattern.browsing).to.be.equal(true);
         expect(pattern.currentPath).to.equal($(this).attr('data-path'));
       }).click();
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-*/
-/*fgrcon
+
     it('after selecting a folder, it remains in the results list', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -341,14 +345,10 @@ define([
       var result = $('.pattern-relateditems-result-path')
         .filter(function() { return $(this).text() === '/about'; });
       expect(result.length).to.equal(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
-*/
-/*fgrcon
+
     it('clicking on breadcrumbs goes back up', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -373,13 +373,10 @@ define([
       }).click();
       clock.tick(1000);
       expect(pattern.currentPath).to.equal('/about');
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-*/
-/*fgrcon    it('maximum number of selected items', function() {
-      var $el = $('' +
+
+    it('maximum number of selected items', function() {
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -396,13 +393,10 @@ define([
       expect(pattern.$el.select2('data')).to.have.length(1);
       $('.pattern-relateditems-result-select').last().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-*/
+
     it('init selection', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
@@ -415,13 +409,10 @@ define([
       var clock = sinon.useFakeTimers();
       pattern.$el.select2('open');
       clock.tick(1000);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-/*fgrcon
+
     it('test tree initialized', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
@@ -440,13 +431,10 @@ define([
       clock.tick(1000);
 
       expect($el.find('.pat-tree ul li').length).to.equal(4);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('test tree select', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
@@ -469,13 +457,10 @@ define([
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(2);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('test tree sub select', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
@@ -501,13 +486,10 @@ define([
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(3);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-*/
+
     it('test tree cancel', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
@@ -531,12 +513,7 @@ define([
 
       expect($el.find('.crumb').length).to.equal(1);
       expect($el.find('.tree-container').is(':visible')).to.equal(false);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-
-
 
   });
 
