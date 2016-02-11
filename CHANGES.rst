@@ -26,6 +26,9 @@ Fixes:
 - Fix path widgets initialization in querystring pattern.
   [Gagaro]
 
+- Fix XSS vulnerability issues in structure and relateditem pattern.
+  [metatoaster]
+
 2.1.2 (2016-01-08)
 ------------------
 
