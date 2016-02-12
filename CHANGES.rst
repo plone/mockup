@@ -11,6 +11,9 @@ New:
 
 Fixes:
 
+- fix query string preview using date queries
+  [vangheem]
+
 - fix saving values for query string
   [vangheem]
 
