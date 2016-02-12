@@ -541,7 +541,7 @@ define([
       }
       else if ($.isArray(self.$value)) { // handles only datepickers from the 'between' operator right now
         $.each(self.$value, function(i, v) {
-          vstr.push(vstrlistbase + $(this).parent().find('.picker__input').val());
+          vstr.push(vstrlistbase + $(this).val());
         });
       }
       else if ($.isArray(self.$value.val())) { // handles multible values
