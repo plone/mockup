@@ -32,6 +32,9 @@ Fixes:
 - Fix XSS vulnerability issues in structure and relateditem pattern.
   [metatoaster]
 
+- Fix `aria-hidden` attribute control problem on folder content panel
+  [terapyon]
+
 2.1.2 (2016-01-08)
 ------------------
 
