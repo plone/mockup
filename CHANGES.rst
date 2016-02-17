@@ -32,6 +32,9 @@ Fixes:
 - Fix XSS vulnerability issues in structure and relateditem pattern.
   [metatoaster]
 
+- Trim links in tinymce before inserting them in the source.
+  [Gagaro]
+
 2.1.2 (2016-01-08)
 ------------------
 
