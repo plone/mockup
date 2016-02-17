@@ -69,7 +69,7 @@ define([
       view: fields.ResourceSortableListFieldView
     },{
       name: 'init',
-      title: _t('Init'), 
+      title: _t('Init'),
       description: _t('Init instruction for requirejs shim')
     }, {
       name: 'deps',
@@ -238,12 +238,14 @@ define([
       this.options.data.develop_javascript = !this.options.data.develop_javascript;
       this.options.registryView.dirty = true;
       this.options.registryView.render();
+      this.render();
     },
     developCSSClicked: function(e){
       e.preventDefault();
       this.options.data.develop_css = !this.options.data.develop_css;
       this.options.registryView.dirty = true;
       this.options.registryView.render();
+      this.render();
     },
     afterRender: function(){
       RegistryResourceListItem.prototype.afterRender.apply(this);
@@ -281,7 +283,7 @@ define([
         this.options.registryView.render();
       }
     },
-    
+
     buildClicked: function(e){
       e.preventDefault();
       var self = this;
@@ -469,8 +471,12 @@ define([
       };
       _.each(bundles, function(resourceName){
         var item;
-        if(self.activeResource && self.activeResource.type === 'bundle' && self.activeResource.item.options.name === resourceName){
-          item = self.activeResource.item;
+        if(self.activeResource && self.activeResource.type === 'bundle' &&
+           self.activeResource.item.options.name === resourceName){
+          item = new RegistryBundleListItem({
+            data: self.activeResource.item.data,
+            name: resourceName,
+            registryView: self});
         }else{
           item = new RegistryBundleListItem({
             data: data.bundles[resourceName],
@@ -483,8 +489,12 @@ define([
       var resources = _.sortBy(_.keys(data.resources), function(v){ return v.toLowerCase(); });
       _.each(resources, function(resourceName){
         var item;
-        if(self.activeResource && self.activeResource.type === 'resource' && self.activeResource.item.options.name === resourceName){
-          item = self.activeResource.item;
+        if(self.activeResource && self.activeResource.type === 'resource' &&
+           self.activeResource.item.options.name === resourceName){
+          item = new RegistryResourceListItem({
+            data: self.activeResource.item.data,
+            name: resourceName,
+            registryView: self});
         } else {
           item = new RegistryResourceListItem({
             data: data.resources[resourceName],
