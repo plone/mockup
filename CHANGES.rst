@@ -32,6 +32,8 @@ Fixes:
 - Fix XSS vulnerability issues in structure and relateditem pattern.
   [metatoaster]
 
+- Fix `aria-hidden` attribute control problem on folder content panel
+  [terapyon]
 - Trim links in tinymce before inserting them in the source.
   [Gagaro]
 

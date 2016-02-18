@@ -42,7 +42,7 @@ define([
       this.bindTriggerEvents();
 
       this.on('render', function() {
-        this.$el.attr('role', 'tooltip').attr('aria-hidden', 'true');
+        this.$el.attr('role', 'tooltip').attr('aria-hidden', 'false');
         this.renderTitle();
         this.renderContent();
       }, this);
@@ -186,6 +186,7 @@ define([
       this.$el.removeClass('active');
       if (this.triggerView) {
         this.triggerView.$el.removeClass('active');
+        this.triggerView.$el.attr('aria-hidden', 'true');
       }
       this.uiEventTrigger('hide', this);
       this.$el.attr('aria-hidden', 'true');
