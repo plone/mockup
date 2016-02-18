@@ -29,7 +29,7 @@ define([
     },
 
     value: function() {
-      return this.getEl().val();
+      return $.trim(this.getEl().val());
     },
 
     toUrl: function() {

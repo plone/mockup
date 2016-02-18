@@ -34,6 +34,8 @@ Fixes:
 
 - Fix `aria-hidden` attribute control problem on folder content panel
   [terapyon]
+- Trim links in tinymce before inserting them in the source.
+  [Gagaro]
 
 2.1.2 (2016-01-08)
 ------------------
