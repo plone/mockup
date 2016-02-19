@@ -6,6 +6,10 @@ Changelog
 
 New:
 
+- Fix resource registry not allowing to go into development mode when
+  bundle is selected
+  [vangheem]
+
 - Add rootPath suppport to relatedItems, to support navigation roots.
   [alecm]
 
