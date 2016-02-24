@@ -41,6 +41,9 @@ Fixes:
 - Ensure we have all content for tree query in relateditems
   [Gagaro]
 
+- Fix default value for treeVocabularyUrl in relateditems.
+  [Gagaro]
+
 2.1.2 (2016-01-08)
 ------------------
 
