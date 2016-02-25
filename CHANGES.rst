@@ -6,6 +6,11 @@ Changelog
 
 New:
 
+- Instead of the ``tinymce-bundled`` bower dependency use the official ``tinymce`` one.
+  This one is more recent and important bugfixes.
+  We still use ``tinymce-bundled`` for the language files.
+  [thet]
+
 - Fix resource registry not allowing to go into development mode when
   bundle is selected
   [vangheem]

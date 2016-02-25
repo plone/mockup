@@ -110,8 +110,8 @@
       'select2': 'bower_components/select2/select2',
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
-      'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
-      'tinymce-modern-theme': 'bower_components/tinymce-builded/js/tinymce/themes/modern/theme',
+      'tinymce': 'bower_components/tinymce/tinymce',
+      'tinymce-modern-theme': 'bower_components/tinymce/themes/modern/theme',
       'underscore': 'bower_components/underscore/underscore',
 
       // Patternslib
@@ -166,7 +166,10 @@
   };
   for(var i=0; i<tinymcePlugins.length; i=i+1){
     var plugin = tinymcePlugins[i];
-    requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce-builded/js/tinymce/plugins/' + plugin + '/plugin';
+    requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce/plugins/' + plugin + '/plugin';
+    if (plugin === 'compat3x') {
+        requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce-builded/js/tinymce/plugins/' + plugin + '/plugin';
+    }
     requirejsOptions.shim['tinymce-' + plugin] = {
       deps: ['tinymce']
     };
