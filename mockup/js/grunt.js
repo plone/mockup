@@ -91,11 +91,11 @@
               rename: function(dest, src) { return dest + name + '-bootstrap-' + src; }},
             // TINYMCE
             { expand: true, cwd: 'bower_components/tinymce-builded/js/tinymce/langs', src: '*', dest: bundleOptions.path + name + '-tinymce/langs'},
-            { expand: true, cwd: 'bower_components/tinymce-builded/js/tinymce/skins/lightgray/fonts/', src: 'tinymce*', dest: bundleOptions.path,
+            { expand: true, cwd: 'bower_components/tinymce/skins/lightgray/fonts/', src: 'tinymce*', dest: bundleOptions.path,
               rename: function(dest, src) { return dest + name + '-tinymce-font-' + src; }},
-            { expand: true, cwd: 'bower_components/tinymce-builded/js/tinymce/skins/lightgray/img/', src: '*', dest: bundleOptions.path,
+            { expand: true, cwd: 'bower_components/tinymce/skins/lightgray/img/', src: '*', dest: bundleOptions.path,
               rename: function(dest, src) { return dest + name + '-tinymce-img-' + src; }},
-            { expand: true, cwd: 'bower_components/tinymce-builded/js/tinymce/skins/lightgray/', src: 'content.min.css', dest: bundleOptions.path,
+            { expand: true, cwd: 'bower_components/tinymce/skins/lightgray/', src: 'content.min.css', dest: bundleOptions.path,
               rename: function(dest, src) { return dest + name + '-tinymce-' + src; }},
             // JQTREE
             { expand: true, cwd: 'bower_components/jqtree/', src: 'jqtree-circle.png', dest: bundleOptions.path,
@@ -155,7 +155,7 @@
             // replace default content.min.css
             path: bundleOptions.path,
             recursive: true,
-            pattern: '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
+            pattern: '../../../bower_components/tinymce/skins/lightgray/content.min.css',
             replacement: bundleOptions.url + '-tinymce-content.min.css'
           };
           this.gruntConfig.sed[name + '-tinymce-fonts2'] = {

@@ -23,6 +23,7 @@
     "requirejs-text": "2.0.12",
     "selectivizr": "1.0.2",
     "select2": "3.5.1",
+    "tinymce": "4.3.4",
     "tinymce-builded": "4.3.0"
   },
   "devDependencies": {
