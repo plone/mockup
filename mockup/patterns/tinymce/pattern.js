@@ -112,7 +112,8 @@ define([
   'tinymce-textpattern',
   'tinymce-visualblocks',
   'tinymce-visualchars',
-  'tinymce-wordcount'
+  'tinymce-wordcount',
+  'tinymce-compat3x'
 ], function($, _,
             Base, RelatedItems, Modal, tinymce,
             AutoTOC, ResultTemplate, SelectionTemplate,

@@ -13,7 +13,8 @@
     'insertdatetime', 'layer', 'legacyoutput', 'link', 'lists', 'media',
     'nonbreaking', 'noneditable', 'pagebreak', 'paste', 'preview', 'print',
     'save', 'searchreplace', 'spellchecker', 'tabfocus', 'table', 'template',
-    'textcolor', 'textpattern', 'visualblocks', 'visualchars', 'wordcount'
+    'textcolor', 'textpattern', 'visualblocks', 'visualchars', 'wordcount',
+    'compat3x'
   ];
 
   var requirejsOptions = {
@@ -166,6 +167,9 @@
   for(var i=0; i<tinymcePlugins.length; i=i+1){
     var plugin = tinymcePlugins[i];
     requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce/plugins/' + plugin + '/plugin';
+    if (plugin === 'compat3x') {
+        requirejsOptions.paths['tinymce-' + plugin] = 'bower_components/tinymce-builded/js/tinymce/plugins/' + plugin + '/plugin';
+    }
     requirejsOptions.shim['tinymce-' + plugin] = {
       deps: ['tinymce']
     };
