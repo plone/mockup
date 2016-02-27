@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.1.4 (unreleased)
+------------------
+
+Incompatibilities:
+
+- *add item here*
+
+New:
+
+- *add item here*
+
+Fixes:
+
+- *add item here*
+
+
 2.1.3 (2016-02-27)
 ------------------
 
