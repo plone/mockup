@@ -10,7 +10,8 @@ Incompatibilities:
 
 New:
 
-- *add item here*
+- set XML syntax coloring for .pt files in text editor
+  [ebrehault]
 
 Fixes:
 
