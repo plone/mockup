@@ -132,6 +132,7 @@ define([
         'xml': 'xml',
         'less': 'less',
         'py': 'python',
+        'pt': 'html',
         'cfg': 'ini'
       };
 
