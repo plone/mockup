@@ -8,6 +8,7 @@ NODE_VERSION_LT_011 = $(shell [ $(NODE_VERSION_MAJ) -eq 0 -a $(NODE_VERSION_MIN)
 GRUNT = ./node_modules/grunt-cli/bin/grunt
 BOWER = ./node_modules/bower/bin/bower
 NODE_PATH = ./node_modules
+BUILD_DIR = ./mockup/build
 
 DEBUG =
 ifeq ($(debug), true)
@@ -37,14 +38,14 @@ bundles: stamp-bower bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 
 bundle-widgets:
-	mkdir -p build
+	mkdir -p $(BUILD_DIR)
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-widgets $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 bundle-structure:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-structure $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 bundle-plone:
-	mkdir -p build
+	mkdir -p $(BUILD_DIR)
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-plone $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 bundle-filemanager:
@@ -60,7 +61,7 @@ docs:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) bundle-docs $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 bootstrap-common:
-	mkdir -p build
+	mkdir -p $(BUILD_DIR)
 
 bootstrap: bootstrap-common
 	@echo node version: $(NODE_VERSION)
@@ -106,8 +107,8 @@ test-ci:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_ci $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 clean:
-	mkdir -p build
-	rm -rf build
+	mkdir -p $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)
 	rm -rf node_modules
 	rm -rf mockup/bower_components
 	rm -f stamp-npm stamp-bower

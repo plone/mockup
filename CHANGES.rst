@@ -15,7 +15,8 @@ New:
 
 Fixes:
 
-- *add item here*
+- Fix ``Makefile`` to use ``mockup/build`` instead of ``build``.
+  [thet]
 
 
 2.1.3 (2016-02-27)
