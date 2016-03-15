@@ -125,38 +125,62 @@ define([
         self.loading.show();
         self.updateButtons();
 
-        /* maintain history here */
-        if(self.options.urlStructure && window.history && window.history.pushState){
-          if (!self.doNotPushState){
-            var path = self.getCurrentPath();
-            if(path === '/'){
-              path = '';
-            }
-            var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
-            window.history.pushState(null, null, url);
-            $('body').trigger('structure-url-changed', path);
-          }else{
-            self.doNotPushState = false;
-          }
+        // the remaining calls are related to window.pushstate.
+        // abort if feature unavailable.
+        if (!(window.history && window.history.pushState)) {
+          return
         }
+
+        // undo the flag set by popState to prevent the push state
+        // from being triggered here, and early abort out of the
+        // function to not execute the folowing pushState logic.
+        if (self.doNotPushState) {
+          self.doNotPushState = false;
+          return
+        }
+
+        var path = self.getCurrentPath();
+        if (path === '/'){
+          path = '';
+        }
+        /* maintain history here */
+        if (self.options.urlStructure) {
+          var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
+          window.history.pushState(null, null, url);
+        }
+
+        if (self.options.traverseView) {
+          // flag specifies that the context view implements a traverse
+          // view (i.e. IPublishTraverse) and the path is a virtual path
+          // of some kind - use the base object instead for that by not
+          // specifying a path.
+          path = '';
+          // TODO figure out whether the following event after this is
+          // needed at all.
+        }
+        $('body').trigger('structure-url-changed', path);
+
       });
 
       if (self.options.urlStructure && utils.featureSupport.history()){
         $(window).bind('popstate', function () {
           /* normalize this url first... */
-          var url = window.location.href;
+          var win = utils.getWindow();
+          var url = win.location.href;
+          var base, appended;
           if(url.indexOf('?') !== -1){
             url = url.split('?')[0];
           }
           if(url.indexOf('#') !== -1){
             url = url.split('#')[0];
           }
+          base = self.options.urlStructure.base;
+          appended = self.options.urlStructure.appended;
           // take off the base url
-          var path = url.substring(self.options.urlStructure.base.length);
-          if(path.substring(path.length - self.options.urlStructure.appended.length) ===
-              self.options.urlStructure.appended){
+          var path = url.substring(base.length);
+          if(path.substring(path.length - appended.length) === appended){
             /* check that it ends with appended value */
-            path = path.substring(0, path.length - self.options.urlStructure.appended.length);
+            path = path.substring(0, path.length - appended.length);
           }
           if(!path){
             path = '/';

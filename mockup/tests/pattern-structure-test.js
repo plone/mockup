@@ -17,6 +17,16 @@ define([
 
   var structureUrlChangedPath = '';
   var dummyWindow = {};
+  var history = {
+    'pushState': function(data, title, url) {
+      history.pushed = {
+        data: data,
+        title: title,
+        url: url
+      };
+    }
+  };
+  dummyWindow.history = history;
 
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
@@ -364,7 +374,11 @@ define([
         "moveUrl": "/moveitem",
         "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
         "contextInfoUrl": "{path}/contextInfo",
-        "setDefaultPageUrl": "/setDefaultPage"
+        "setDefaultPageUrl": "/setDefaultPage",
+        "urlStructure": {
+          "base": "http://localhost:8081",
+          "appended": "/folder_contents"
+        }
       };
 
       this.$el = $('<div class="pat-structure"></div>').attr(
@@ -372,6 +386,12 @@ define([
 
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
+
+      $('body').off('structure-url-changed').on('structure-url-changed',
+        function (e, path) {
+          structureUrlChangedPath = path;
+        }
+      );
 
       this.server.respondWith('GET', /data.json/, function (xhr, id) {
         var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
@@ -480,6 +500,9 @@ define([
       sinon.stub(utils, 'getWindow', function() {
         return dummyWindow;
       });
+
+      this.sandbox = sinon.sandbox.create();
+      this.sandbox.stub(window, 'history', history);
     });
 
     afterEach(function() {
@@ -491,6 +514,7 @@ define([
       extraDataJsonItem = null;
       this.server.restore();
       this.clock.restore();
+      this.sandbox.restore();
       $('body').html('');
       utils.getWindow.restore();
     });
@@ -879,6 +903,38 @@ define([
       expect(dummyWindow.location).to.equal('http://localhost:8081/item9/edit');
     });
 
+    it('test navigate to folder push states', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var pattern = this.$el.data('patternStructure');
+      var item = this.$el.find('.itemRow').eq(0);
+      expect(item.data().id).to.equal('folder');
+      $('.title a.manage', item).trigger('click');
+      this.clock.tick(1000);
+      expect(history.pushed.url).to.equal(
+        'http://localhost:8081/folder/folder_contents');
+      expect(structureUrlChangedPath).to.eql('/folder');
+
+      $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
+      this.clock.tick(1000);
+      expect(history.pushed.url).to.equal(
+        'http://localhost:8081/folder_contents');
+      expect(structureUrlChangedPath).to.eql('');
+    });
+
+    it('test navigate to folder pop states', function() {
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // Need to inject this to the mocked window location attribute the
+      // code will check against.  This url is set before the trigger.
+      dummyWindow.location = {
+          'href': 'http://localhost:8081/folder/folder/folder_contents'};
+      // then trigger off the real window.
+      $(window).trigger('popstate');
+      this.clock.tick(1000);
+      expect(structureUrlChangedPath).to.eql('/folder/folder');
+    });
+
   });
 
   /* ==========================
@@ -950,13 +1006,17 @@ define([
         return dummyWindow;
       });
 
+      this.sandbox = sinon.sandbox.create();
+      this.sandbox.stub(window, 'history', history);
     });
 
     afterEach(function() {
       this.server.restore();
       this.clock.restore();
+      this.sandbox.restore();
       $('body').html('');
       utils.getWindow.restore();
+      $('body').off('structure-url-changed');
     });
 
     it('initialize', function() {
@@ -1420,11 +1480,17 @@ define([
         },
         "attributes": [
           'Title', 'getURL'
-        ]
+        ],
       };
 
       this.$el = $('<div class="pat-structure"></div>').attr(
         'data-pat-structure', JSON.stringify(structure)).appendTo('body');
+
+      $('body').off('structure-url-changed').on('structure-url-changed',
+        function (e, path) {
+          structureUrlChangedPath = path;
+        }
+      );
 
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
@@ -1478,13 +1544,22 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
+      this.sandbox = sinon.sandbox.create();
+      this.sandbox.stub(window, 'history', history);
+
+      sinon.stub(utils, 'getWindow', function() {
+        return dummyWindow;
+      });
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
+      utils.getWindow.restore();
+      this.sandbox.restore();
       this.server.restore();
       this.clock.restore();
       $('body').html('');
+      $('body').off('structure-url-changed');
     });
 
     it('test itemRow actionmenu custom options.', function() {
@@ -1565,6 +1640,148 @@ define([
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: not a folder');
+    });
+
+  });
+
+  /* ==========================
+   TEST: Structure traverse subpath
+  ========================== */
+  describe('Structure traverse links', function() {
+    beforeEach(function() {
+      // clear cookie setting
+      $.removeCookie('_fc_perPage');
+      $.removeCookie('_fc_activeColumnsCustom');
+
+      this.structure = {
+        "vocabularyUrl": "/data.json",
+        "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
+        "contextInfoUrl": "{path}/contextInfo",
+        "activeColumnsCookie": "activeColumnsCustom",
+        "activeColumns": [],
+        "availableColumns": {
+          "getURL": "URL",
+        },
+        "buttons": [],
+        "attributes": [
+          'Title', 'getURL'
+        ],
+        "urlStructure": {
+          "base": "http://localhost:8081/traverse_view",
+          "appended": ""
+        },
+        "traverseView": true
+      };
+
+      $('body').off('structure-url-changed').on('structure-url-changed',
+        function (e, path) {
+          structureUrlChangedPath = path;
+        }
+      );
+
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+
+      this.server.respondWith('GET', /data.json/, function (xhr, id) {
+        var batch = JSON.parse(getQueryVariable(xhr.url, 'batch'));
+        var start = 0;
+        var end = 15;
+        if (batch) {
+          start = (batch.page - 1) * batch.size;
+          end = start + batch.size;
+        }
+        var items = [{
+          getURL: 'http://localhost:8081/folder',
+          Title: 'Folder',
+          'is_folderish': true,
+          path: '/folder',
+          id: 'folder'
+        }, {
+          getURL: 'http://localhost:8081/item',
+          Title: 'Item',
+          'is_folderish': false,
+          path: '/item',
+          id: 'item'
+        }];
+
+        xhr.respond(200, {'Content-Type': 'application/json'}, JSON.stringify({
+          total: 1,
+          results: items
+        }));
+      });
+      this.server.respondWith('GET', /contextInfo/, function (xhr, id) {
+        var data = {
+          addButtons: []
+        };
+        if (xhr.url.indexOf('folder') !== -1){
+          data.object = {
+            UID: '123sdfasdfFolder',
+            getURL: 'http://localhost:8081/folder',
+            path: '/folder',
+            portal_type: 'Folder',
+            Description: 'folder',
+            Title: 'Folder',
+            'review_state': 'published',
+            'is_folderish': true,
+            Subject: [],
+            id: 'folder'
+          };
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+      });
+
+      this.clock = sinon.useFakeTimers();
+      this.sandbox = sinon.sandbox.create();
+      this.sandbox.stub(window, 'history', history);
+
+      sinon.stub(utils, 'getWindow', function() {
+        return dummyWindow;
+      });
+    });
+
+    afterEach(function() {
+      requirejs.undef('dummytestaction');
+      utils.getWindow.restore();
+      this.sandbox.restore();
+      this.server.restore();
+      this.clock.restore();
+      $('body').html('');
+      $('body').off('structure-url-changed');
+    });
+
+    it('test navigate to folder push states', function() {
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(this.structure)).appendTo('body');
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var pattern = this.$el.data('patternStructure');
+      var item = this.$el.find('.itemRow').eq(0);
+      expect(item.data().id).to.equal('folder');
+      $('.title a.manage', item).trigger('click');
+      this.clock.tick(1000);
+      expect(history.pushed.url).to.equal(
+        'http://localhost:8081/traverse_view/folder');
+      expect(structureUrlChangedPath).to.eql('');
+
+      $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
+      this.clock.tick(1000);
+      expect(history.pushed.url).to.equal(
+        'http://localhost:8081/traverse_view');
+    });
+
+    it('test navigate to folder pop states', function() {
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(this.structure)).appendTo('body');
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // Need to inject this to the mocked window location attribute the
+      // code will check against.  This url is set before the trigger.
+      dummyWindow.location = {
+          'href': 'http://localhost:8081/traverse_view/folder/folder'};
+      // then trigger off the real window.
+      $(window).trigger('popstate');
+      this.clock.tick(1000);
+      expect(structureUrlChangedPath).to.eql('/folder/folder');
     });
 
   });
