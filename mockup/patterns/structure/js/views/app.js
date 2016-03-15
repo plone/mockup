@@ -144,7 +144,15 @@ define([
           path = '';
         }
         /* maintain history here */
-        if (self.options.urlStructure) {
+        if (self.options.pushStateUrl) {
+          // permit an extra slash in pattern, but strip that if there
+          // as path always will be prefixed with a `/`
+          var pushStateUrl = self.options.pushStateUrl.replace(
+            '/{path}', '{path}');
+          var url = pushStateUrl.replace('{path}', path);
+          window.history.pushState(null, null, url);
+        } else if (self.options.urlStructure) {
+          // fallback to urlStructure specification
           var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
           window.history.pushState(null, null, url);
         }
@@ -162,7 +170,8 @@ define([
 
       });
 
-      if (self.options.urlStructure && utils.featureSupport.history()){
+      if ((self.options.pushStateUrl || self.options.urlStructure)
+          && utils.featureSupport.history()){
         $(window).bind('popstate', function () {
           /* normalize this url first... */
           var win = utils.getWindow();
@@ -174,8 +183,14 @@ define([
           if(url.indexOf('#') !== -1){
             url = url.split('#')[0];
           }
-          base = self.options.urlStructure.base;
-          appended = self.options.urlStructure.appended;
+          if (self.options.pushStateUrl) {
+            var tmp = self.options.pushStateUrl.split('{path}');
+            base = tmp[0];
+            appended = tmp[1];
+          } else {
+            base = self.options.urlStructure.base;
+            appended = self.options.urlStructure.appended;
+          }
           // take off the base url
           var path = url.substring(base.length);
           if(path.substring(path.length - appended.length) === appended){

@@ -1670,6 +1670,7 @@ define([
           "base": "http://localhost:8081/traverse_view",
           "appended": ""
         },
+        "pushStateUrl": "http://localhost:8081/traverse_view{path}",
         "traverseView": true
       };
 
@@ -1749,7 +1750,8 @@ define([
       $('body').off('structure-url-changed');
     });
 
-    it('test navigate to folder push states', function() {
+    it('test navigate to folder push states - urlStructure', function() {
+      delete this.structure.pushStateUrl;
       this.$el = $('<div class="pat-structure"></div>').attr(
         'data-pat-structure', JSON.stringify(this.structure)).appendTo('body');
       registry.scan(this.$el);
@@ -1769,7 +1771,45 @@ define([
         'http://localhost:8081/traverse_view');
     });
 
-    it('test navigate to folder pop states', function() {
+    it('test navigate to folder pop states - urlStructure', function() {
+      delete this.structure.pushStateUrl;
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(this.structure)).appendTo('body');
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      // Need to inject this to the mocked window location attribute the
+      // code will check against.  This url is set before the trigger.
+      dummyWindow.location = {
+          'href': 'http://localhost:8081/traverse_view/folder/folder'};
+      // then trigger off the real window.
+      $(window).trigger('popstate');
+      this.clock.tick(1000);
+      expect(structureUrlChangedPath).to.eql('/folder/folder');
+    });
+
+    it('test navigate to folder push states - pushStateUrl', function() {
+      delete this.structure.urlStructure;
+      this.$el = $('<div class="pat-structure"></div>').attr(
+        'data-pat-structure', JSON.stringify(this.structure)).appendTo('body');
+      registry.scan(this.$el);
+      this.clock.tick(1000);
+      var pattern = this.$el.data('patternStructure');
+      var item = this.$el.find('.itemRow').eq(0);
+      expect(item.data().id).to.equal('folder');
+      $('.title a.manage', item).trigger('click');
+      this.clock.tick(1000);
+      expect(history.pushed.url).to.equal(
+        'http://localhost:8081/traverse_view/folder');
+      expect(structureUrlChangedPath).to.eql('');
+
+      $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
+      this.clock.tick(1000);
+      expect(history.pushed.url).to.equal(
+        'http://localhost:8081/traverse_view');
+    });
+
+    it('test navigate to folder pop states - pushStateUrl', function() {
+      delete this.structure.urlStructure;
       this.$el = $('<div class="pat-structure"></div>').attr(
         'data-pat-structure', JSON.stringify(this.structure)).appendTo('body');
       registry.scan(this.$el);
