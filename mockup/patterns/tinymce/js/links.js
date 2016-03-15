@@ -41,7 +41,9 @@ define([
     },
 
     set: function(val) {
-      this.getEl().attr('value', val);
+      var $el = this.getEl();
+      $el.attr('value', val);
+      $el.val(val);
     },
 
     attributes: function() {
@@ -114,6 +116,7 @@ define([
       $el.removeData('pattern-relateditems'); // reset the pattern
       $el.parent().replaceWith($el);
       $el.attr('value', val);
+      $el.val(val);
       this.createRelatedItems();
     },
 
@@ -405,6 +408,38 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
+
+      self.data = {};
+      // get selection BEFORE..
+      // This is pulled from TinyMCE link plugin
+      self.initialText = null;
+      var value;
+      self.rng = self.tiny.selection.getRng();
+      self.selectedElm = self.tiny.selection.getNode();
+      self.anchorElm = self.tiny.dom.getParent(self.selectedElm, 'a[href]');
+      self.onlyText = self.isOnlyTextSelected();
+
+      self.data.text = self.initialText = self.anchorElm ? (self.anchorElm.innerText || self.anchorElm.textContent) : self.tiny.selection.getContent({format: 'text'});
+      self.data.href = self.anchorElm ? self.tiny.dom.getAttrib(self.anchorElm, 'href') : '';
+
+      if (self.anchorElm) {
+        self.data.target = self.tiny.dom.getAttrib(self.anchorElm, 'target');
+      } else if (self.tiny.settings.default_link_target) {
+        self.data.target = self.tiny.settings.default_link_target;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'rel'))) {
+        self.data.rel = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'class'))) {
+        self.data['class'] = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'title'))) {
+        self.data.title = value;
+      }
+
       self.modal = registry.patterns['plone-modal'].init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
@@ -413,6 +448,32 @@ define([
       self.modal.on('shown', function(e) {
         self.modalShown.apply(self, [e]);
       });
+    },
+
+    isOnlyTextSelected: function() {
+      /* pulled from TinyMCE link plugin */
+      var html = this.tiny.selection.getContent();
+
+      // Partial html and not a fully selected anchor element
+      if (/</.test(html) && (!/^<a [^>]+>[^<]+<\/a>$/.test(html) || html.indexOf('href=') === -1)) {
+        return false;
+      }
+
+      if (this.anchorElm) {
+        var nodes = this.anchorElm.childNodes, i;
+
+        if (nodes.length === 0) {
+          return false;
+        }
+
+        for (var ii = nodes.length - 1; ii >= 0; ii--) {
+          if (nodes[ii].nodeType !== 3) {
+            return false;
+          }
+        }
+      }
+
+      return true;
     },
 
     generateModalHtml: function() {
@@ -483,15 +544,41 @@ define([
 
     updateAnchor: function(href) {
       var self = this;
+
+      self.tiny.focus();
+      self.tiny.selection.setRng(self.rng);
+
       var target = self.$target.val();
       var title = self.$title.val();
-      var data = $.extend(true, {}, {
+      var linkAttrs = $.extend(true, self.data, {
         title: title ? title : null,
         target: target ? target : null,
         'data-linkType': self.linkType,
         href: href
       }, self.linkTypes[self.linkType].attributes());
-      self.tiny.execCommand('mceInsertLink', false, data);
+      if (self.anchorElm) {
+
+        if (self.onlyText && linkAttrs.text !== self.initialText) {
+          if ("innerText" in self.anchorElm) {
+            self.anchorElm.innerText = self.data.text;
+          } else {
+            self.anchorElm.textContent = self.data.text;
+          }
+        }
+
+        self.tiny.dom.setAttribs(self.anchorElm, linkAttrs);
+
+        self.tiny.selection.select(self.anchorElm);
+        self.tiny.undoManager.add();
+      } else {
+        if (self.onlyText) {
+          self.tiny.insertContent(
+            self.tiny.dom.createHTML('a', linkAttrs,
+                                     self.tiny.dom.encode(self.data.text)));
+        } else {
+          self.tiny.execCommand('mceInsertLink', false, linkAttrs);
+        }
+      }
     },
 
     focusElement: function(elm) {
@@ -503,6 +590,10 @@ define([
     updateImage: function(src) {
       var self = this;
       var title = self.$title.val();
+
+      self.tiny.focus();
+      self.tiny.selection.setRng(self.rng);
+
       var data = $.extend(true, {}, {
         src: src,
         title: title ? title : null,
@@ -567,30 +658,31 @@ define([
         self.linkType = self.modal.$modal.find('fieldset.active').data('linktype');
 
         if(self.linkType === 'uploadImage' || self.linkType === 'upload'){
-            var patUpload = self.$upload.data().patternUpload;
-            if(patUpload.dropzone.files.length > 0){
-                patUpload.processUpload();
-                self.$upload.on('uploadAllCompleted', function(evt, data) {
-                    var counter = 0;
-                    var checkUpload = function(){
-                        if(counter < 5 && !self.linkTypes[self.linkType].value()){
-                            counter += 1;
-                            setTimeout(checkUpload, 100);
-                            return
-                        }else{
-                            var href = self.getLinkUrl();
-                            self.updateImage(href);
-                            self.hide();
-                        }
-                    }
-                    checkUpload();
-                });
-            }
+          var patUpload = self.$upload.data().patternUpload;
+          if(patUpload.dropzone.files.length > 0){
+            patUpload.processUpload();
+            self.$upload.on('uploadAllCompleted', function(evt, data) {
+              var counter = 0;
+              var checkUpload = function(){
+                if(counter < 5 && !self.linkTypes[self.linkType].value()){
+                  counter += 1;
+                  setTimeout(checkUpload, 100);
+                  return;
+                }else{
+                  var href = self.getLinkUrl();
+                  self.updateImage(href);
+                  self.hide();
+                }
+              };
+              checkUpload();
+            });
+          }
         }
+        var href;
         try{
-            var href = self.getLinkUrl();
-        }catch(e){
-            return // just cut out if no url
+            href = self.getLinkUrl();
+        }catch(error){
+            return;  // just cut out if no url
         }
         if (!href) {
           return; // just cut out if no url
