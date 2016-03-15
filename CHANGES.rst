@@ -20,6 +20,17 @@ Fixes:
 
 
 2.1.3 (2016-02-27)
+New:
+
+- Upgrade TinyMCE to 4.3.4
+  [vangheem]
+
+
+Fixes:
+
+
+
+2.1.3 (2016-03-10)
 ------------------
 
 New:
