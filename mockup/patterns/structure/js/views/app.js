@@ -25,7 +25,7 @@ define([
             TableView, SelectionWellView,
             GenericPopover, RearrangeView, SelectionButtonView,
             PagingView, ColumnsView, TextFilterView, UploadView,
-            ResultCollection, SelectedCollection, utils, _t, logger) {
+            _ResultCollection, SelectedCollection, utils, _t, logger) {
   'use strict';
 
   var log = logger.getLogger('pat-structure');
@@ -44,6 +44,7 @@ define([
       BaseView.prototype.initialize.apply(self, [options]);
       self.loading = new utils.Loading();
       self.loading.show();
+      self.pasteAllowed = $.cookie('__cp');
 
       /* close popovers when clicking away */
       $(document).click(function(e){
@@ -64,34 +65,17 @@ define([
         }
       });
 
+      var ResultCollection = require(options.collectionConstructor);
+
       self.collection = new ResultCollection([], {
+        // Due to default implementation need to poke at things in here,
+        // view is passed.
+        view: self,
         url: self.options.collectionUrl,
-        queryParser: function(options) {
-          if(options === undefined){
-            options = {};
-          }
-          var term = null;
-          if (self.toolbar) {
-            term = self.toolbar.get('filter').term;
-          }
-          var sortOn = self['sort_on']; // jshint ignore:line
-          if (!sortOn) {
-            sortOn = 'getObjPositionInParent';
-          }
-          return JSON.stringify({
-            criteria: self.queryHelper.getCriterias(term, $.extend({}, options, {
-              additionalCriterias: self.additionalCriterias
-            })),
-            sort_on: sortOn,
-            sort_order: self['sort_order'] // jshint ignore:line
-          });
-        },
-        queryHelper: self.options.queryHelper
       });
 
       self.setAllCookieSettings();
 
-      self.queryHelper = self.options.queryHelper;
       self.selectedCollection = new SelectedCollection();
       self.tableView = new TableView({app: self});
 
@@ -141,43 +125,82 @@ define([
         self.loading.show();
         self.updateButtons();
 
-        /* maintain history here */
-        if(self.options.urlStructure && window.history && window.history.pushState){
-          if (!self.doNotPushState){
-            var path = self.queryHelper.getCurrentPath();
-            if(path === '/'){
-              path = '';
-            }
-            var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
-            window.history.pushState(null, null, url);
-            $('body').trigger('structure-url-changed', path);
-          }else{
-            self.doNotPushState = false;
-          }
+        // the remaining calls are related to window.pushstate.
+        // abort if feature unavailable.
+        if (!(window.history && window.history.pushState)) {
+          return
         }
+
+        // undo the flag set by popState to prevent the push state
+        // from being triggered here, and early abort out of the
+        // function to not execute the folowing pushState logic.
+        if (self.doNotPushState) {
+          self.doNotPushState = false;
+          return
+        }
+
+        var path = self.getCurrentPath();
+        if (path === '/'){
+          path = '';
+        }
+        /* maintain history here */
+        if (self.options.pushStateUrl) {
+          // permit an extra slash in pattern, but strip that if there
+          // as path always will be prefixed with a `/`
+          var pushStateUrl = self.options.pushStateUrl.replace(
+            '/{path}', '{path}');
+          var url = pushStateUrl.replace('{path}', path);
+          window.history.pushState(null, null, url);
+        } else if (self.options.urlStructure) {
+          // fallback to urlStructure specification
+          var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
+          window.history.pushState(null, null, url);
+        }
+
+        if (self.options.traverseView) {
+          // flag specifies that the context view implements a traverse
+          // view (i.e. IPublishTraverse) and the path is a virtual path
+          // of some kind - use the base object instead for that by not
+          // specifying a path.
+          path = '';
+          // TODO figure out whether the following event after this is
+          // needed at all.
+        }
+        $('body').trigger('structure-url-changed', path);
+
       });
 
-      if (self.options.urlStructure && utils.featureSupport.history()){
+      if ((self.options.pushStateUrl || self.options.urlStructure)
+          && utils.featureSupport.history()){
         $(window).bind('popstate', function () {
           /* normalize this url first... */
-          var url = window.location.href;
+          var win = utils.getWindow();
+          var url = win.location.href;
+          var base, appended;
           if(url.indexOf('?') !== -1){
             url = url.split('?')[0];
           }
           if(url.indexOf('#') !== -1){
             url = url.split('#')[0];
           }
+          if (self.options.pushStateUrl) {
+            var tmp = self.options.pushStateUrl.split('{path}');
+            base = tmp[0];
+            appended = tmp[1];
+          } else {
+            base = self.options.urlStructure.base;
+            appended = self.options.urlStructure.appended;
+          }
           // take off the base url
-          var path = url.substring(self.options.urlStructure.base.length);
-          if(path.substring(path.length - self.options.urlStructure.appended.length) ===
-              self.options.urlStructure.appended){
+          var path = url.substring(base.length);
+          if(path.substring(path.length - appended.length) === appended){
             /* check that it ends with appended value */
-            path = path.substring(0, path.length - self.options.urlStructure.appended.length);
+            path = path.substring(0, path.length - appended.length);
           }
           if(!path){
             path = '/';
           }
-          self.queryHelper.currentPath = path;
+          self.setCurrentPath(path);
           $('body').trigger('structure-url-changed', path);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
@@ -199,11 +222,13 @@ define([
         self.buttons.disable();
       }
 
-      self.pasteAllowed = !!$.cookie('__cp');
-      if (self.pasteAllowed) {
-        self.buttons.get('paste').enable();
-      }else{
-        self.buttons.get('paste').disable();
+      if ('paste' in self.buttons) {
+        self.pasteAllowed = !!$.cookie('__cp');
+        if (self.pasteAllowed) {
+          self.buttons.get('paste').enable();
+        }else{
+          self.buttons.get('paste').disable();
+        }
       }
     },
     inQueryMode: function() {
@@ -229,8 +254,14 @@ define([
       });
       return uids;
     },
+    getCurrentPath: function() {
+      return this.collection.getCurrentPath();
+    },
+    setCurrentPath: function(path) {
+      this.collection.setCurrentPath(path);
+    },
     getAjaxUrl: function(url) {
-      return url.replace('{path}', this.options.queryHelper.getCurrentPath());
+      return url.replace('{path}', this.getCurrentPath());
     },
     buttonClickEvent: function(button) {
       var self = this;
@@ -261,7 +292,7 @@ define([
         }
         data._authenticator = utils.getAuthenticator();
         if (data.folder === undefined) {
-          data.folder = self.options.queryHelper.getCurrentPath();
+          data.folder = self.getCurrentPath();
         }
 
         var url = self.getAjaxUrl(button.url);
@@ -467,7 +498,8 @@ define([
       );
     },
     setAllCookieSettings: function() {
-      this.activeColumns = this.getCookieSetting('activeColumns', this.activeColumns);
+      this.activeColumns = this.getCookieSetting(this['activeColumnsCookie'],
+                                                 this.activeColumns);
       var perPage = this.getCookieSetting('perPage', 15);
       if(typeof(perPage) === 'string'){
         perPage = parseInt(perPage);

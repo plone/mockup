@@ -8,24 +8,10 @@
     <li class="dropdown-header"><%- header %></li>
     <li class="divider"></li>
   <% } %>
-  <li class="cutItem"><a href="#"><%- _t("Cut") %></a></li>
-  <li class="copyItem"><a href="#"><%- _t("Copy") %></a></li>
-  <% if(pasteAllowed && attributes.is_folderish){ %>
-    <li class="pasteItem"><a href="#"><%- _t("Paste") %></a></li>
-  <% } %>
-  <% if(!inQueryMode && canMove){ %>
-    <li class="move-top"><a href="#"><%- _t("Move to top of folder") %></a></li>
-    <li class="move-bottom"><a href="#"><%- _t("Move to bottom of folder") %></a></li>
-  <% } %>
-  <% if(!attributes.is_folderish && canSetDefaultPage){ %>
-    <li class="set-default-page"><a href="#"><%- _t("Set as default page") %></a></li>
-  <% } %>
-  <% if(attributes.is_folderish){ %>
-    <li class="selectAll"><a href="#"><%- _t("Select all contained items") %></a></li>
-  <% } %>
-  <% if(header) { %>
-    <li class="openItem"><a href="#"><%- _t("Open") %></a></li>
-  <% } %>
-  <li class="editItem"><a href="#"><%- _t("Edit") %></a></li>
+
+  <% _.each(menuOptions, function(menuOption, idx){ %>
+  <li class="<%- idx %>"><a href="<%- menuOption[2] %>"><%- _t(menuOption[3]) %></a></li>
+  <% }); %>
+
 </ul>
 

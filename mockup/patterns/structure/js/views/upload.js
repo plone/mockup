@@ -34,7 +34,7 @@ define([
       options.relatedItems = {
         vocabularyUrl: self.app.options.vocabularyUrl
       };
-      options.currentPath = self.app.options.queryHelper.getCurrentPath();
+      options.currentPath = self.app.getCurrentPath();
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), options);
       return this;
     },
@@ -46,7 +46,7 @@ define([
       if (!this.opened) {
         return;
       }
-      var currentPath = self.app.queryHelper.getCurrentPath();
+      var currentPath = self.app.getCurrentPath();
       var relatedItems = self.upload.relatedItems;
       if (self.currentPathData && relatedItems && currentPath !== self.upload.currentPath){
         if (currentPath === '/'){

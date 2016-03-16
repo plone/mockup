@@ -12,7 +12,7 @@ define([
   'translate',
   'bootstrap-alert'
 ], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
-            Moment, Result, ActionMenu, _t) {
+            Moment, Result, ActionMenuView, _t) {
   'use strict';
 
   var TableView = BaseView.extend({
@@ -62,9 +62,11 @@ define([
         if (self.selectedCollection.findWhere({UID: data.object.UID})){
           $('input[type="checkbox"]', self.$breadcrumbs)[0].checked = true;
         }
-        self.folderMenu = new ActionMenu({
+        self.folderMenu = new ActionMenuView({
           app: self.app,
           model: self.folderModel,
+          menuOptions: self.app.menuOptions,
+          menuGenerator: self.app.menuGenerator,
           header: _t('Actions on current folder'),
           canMove: false
         });
@@ -78,7 +80,7 @@ define([
       self.$el.html(self.template({
         _t: _t,
         pathParts: _.filter(
-          self.app.queryHelper.getCurrentPath().split('/').slice(1),
+          self.app.getCurrentPath().split('/').slice(1),
           function(val) {
             return val.length > 0;
           }
@@ -105,7 +107,11 @@ define([
         selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
         format: self.options.app.momentFormat
       });
-      self.addReordering();
+
+      if (self.app.options.moveUrl) {
+        self.addReordering();
+      }
+
       self.storeOrder();
       return this;
     },
@@ -124,7 +130,7 @@ define([
         }
       });
       path += $el.attr('data-path');
-      this.app.queryHelper.currentPath = path;
+      this.app.setCurrentPath(path);
       this.collection.pager();
     },
     selectFolder: function(e) {

@@ -266,6 +266,14 @@ define([
         .toString(16).substring(1));
   };
 
+  var getWindow = function() {
+    var win = window;
+    if (win.parent !== window) {
+      win = win.parent;
+    }
+    return win;
+  };
+
   return {
     generateId: generateId,
     parseBodyTag: function(txt) {
@@ -309,6 +317,7 @@ define([
         return $el.val();
       }
     },
+    getWindow: getWindow,
     featureSupport: {
       /*
         well tested feature support for things we use in mockup.

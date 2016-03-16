@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.4 (unreleased)
+2.2.0 (unreleased)
 ------------------
 
 Incompatibilities:
@@ -13,10 +13,44 @@ New:
 - set XML syntax coloring for .pt files in text editor
   [ebrehault]
 
+- Structure now accept customization options for a number of things in
+  the form of requirejs modules.  This currently includes the extended
+  menuOptions definition, the menuGenerator per result item, the click
+  handler the link for each individual item, and the collection module
+  for interaction with the server side API for item generation.
+
+  Where applicable, the default implementation are now named requirejs
+  includes with those as the defaults to the relevant parameters.
+
+  Incidentally, this also required a major cleanup/refactoring of how
+  the ResultCollection class interacts with the pattern and its support
+  classes.
+  [metatoaster]
+
+- Structure now supports IPublishTraverse style subpaths for push state.
+  [metatoaster]
+
+- Alternative parameter/syntax for specification of the pushState url to
+  be inline with the usage of ``{path}`` token in URL templates.
+  [metatoaster]
+
+- Structure can use the ``viewURL`` from a returned data item, alongside
+  with the previous default of simply appending ``/view`` to the
+  ``getURL`` attribute if this was not provided, for its view URL,
+  [metatoaster]
+
 Fixes:
 
 - Fix ``Makefile`` to use ``mockup/build`` instead of ``build``.
   [thet]
+
+- Fix structure so rendering does not fail when paste button is missing.
+  [metatoaster]
+
+- Fix structure so that different views can have its own saved visible
+  column ordering settings.  Also loosen the coupling of the columns to
+  the data to aid in view rendering.
+  [metatoaster]
 
 
 2.1.3 (2016-02-27)
