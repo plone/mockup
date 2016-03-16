@@ -401,7 +401,7 @@ define([
         if(tinyOptions.importcss_file_filter && tinyOptions.importcss_file_filter.indexOf(',') !== -1){
           // need a custom function to check now
           var files = tinyOptions.importcss_file_filter.split(',');
-          
+
           tinyOptions.importcss_file_filter = function(value) {
             for(var i=0; i<files.length; i++){
               if(value.indexOf(files[i]) !== -1){
@@ -411,6 +411,9 @@ define([
             return false;
           };
         }
+
+        tinyOptions.plugins.push('link');
+        tinyOptions.toolbar += ' link';
 
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
