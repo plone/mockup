@@ -5,7 +5,7 @@ Changelog
 
 New:
 
--Added a new pattern for mockup/patterns directory.[khanstark]
+-Added a new pattern 'shadow-outline' for mockup/patterns directory.[khanstark]
 
 
 2.1.3 (2016-02-27)
