@@ -36,11 +36,11 @@ parser.addArgument("align", "right");
             // pattern itself, just call this.$el.
             var options = parser.parse($el, opts);  
             setTimeout($.proxy(function () {
-                this.setColor($el, options);
+                this.setcss($el, options);
             }, this),100);
         },
 	
-        setColor: function patExampleSetColor($el, options) {
+        setcss: function patExampleSetCSS($el, options) {
             $el.css("margin-left", options.align);
 	    $el.css("margin-right", options.align);
 	    $el.css("background-color",'#b0c4de');
