@@ -2,21 +2,10 @@ Changelog
 =========
 
 2.1.4 (unreleased)
-------------------
-
-Incompatibilities:
-
-- *add item here*
 
 New:
 
-- set XML syntax coloring for .pt files in text editor
-  [ebrehault]
-
-Fixes:
-
-- Fix ``Makefile`` to use ``mockup/build`` instead of ``build``.
-  [thet]
+-Added a new pattern for mockup/patterns directory.[khanstark]
 
 
 2.1.3 (2016-02-27)
