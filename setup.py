@@ -1,31 +1,33 @@
 from setuptools import setup, find_packages
+import json
 
-version = '0.1'
+package_json = json.load(open('package.json'))
+version = package_json['version']
 
 setup(
     name='mockup',
     version=version,
-    description="No sure how should this package be named so please don't "
-                "judge me just, yet",
+    description="A collection of client side patterns for faster and easier "
+                "web development",
     long_description=open("README.rst").read(),
     classifiers=[
         "Framework :: Plone",
+        "Framework :: Plone :: 5.0",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords='plone mockup',
-    author='Rok Garbas',
-    author_email='rok@garbas.si',
+    author='Plone Foundation',
+    author_email='plone-developers@lists.sourceforge.net',
     url='https://github.com/plone/mockup',
-    license='GPL',
+    license='BSD',
     packages=find_packages(),
     include_package_data=True,
-    package_dir={'': 'plone'},
     zip_safe=False,
     install_requires=[],
-    entry_points={
-        'z3c.autoinclude.plugin': [
-            "target = plone"
-        ],
-    },
+    entry_points='''
+        [z3c.autoinclude.plugin]
+        target = mockup
+    ''',
 )
