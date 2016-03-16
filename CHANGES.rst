@@ -41,6 +41,9 @@ New:
 
 Fixes:
 
+- ``.jscs.json`` format fixes for newer jscs versions.
+  [thet]
+
 - Fix ``Makefile`` to use ``mockup/build`` instead of ``build``.
   [thet]
 
