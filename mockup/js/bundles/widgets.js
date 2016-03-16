@@ -2,7 +2,7 @@ define([
   'jquery',
   'pat-registry',
   'pat-base',
-
+  'mockup-patterns-shadow-outline',
   'mockup-patterns-select2',
   'mockup-patterns-passwordstrength',
   'mockup-patterns-pickadate',
