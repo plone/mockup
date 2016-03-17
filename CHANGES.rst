@@ -58,6 +58,9 @@ Fixes:
   the data to aid in view rendering.
   [metatoaster]
 
+- Fix Build CSS button in thememapper with file system-based themes to display
+  the generated CSS in the editor.
+  [ebrehault]
 
 2.1.3 (2016-02-27)
 New:

@@ -448,11 +448,19 @@ define([
           _authenticator: utils.getAuthenticator()
         },
         success: function(data) {
-          self.fileManager.refreshTree(function() {
-            //We need to make sure we open the newest version
-            delete self.fileManager.fileData['/' + self.lessPaths['save']]
-            self.fileManager.selectItem(self.lessPaths['save'])
-          });
+          if(data.success == 'tmp') {
+            self.fileManager.fileData['_generated_.css'] = {
+              contents: data.value,
+              ext: 'css'
+            }
+            self.fileManager.openEditor('_generated_.css');
+          } else {
+            self.fileManager.refreshTree(function() {
+              //We need to make sure we open the newest version
+              delete self.fileManager.fileData['/' + self.lessPaths['save']]
+              self.fileManager.selectItem(self.lessPaths['save'])
+            });
+          }
           self.lessbuilderView.end();
         }
       });
