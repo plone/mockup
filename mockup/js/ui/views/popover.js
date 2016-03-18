@@ -1,11 +1,10 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/container',
   'mockup-patterns-backdrop',
   'text!mockup-ui-url/templates/popover.xml',
-], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
+], function($, _, ContainerView, Backdrop, PopoverTemplate) {
   'use strict';
 
   var PopoverView = ContainerView.extend({

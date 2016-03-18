@@ -36,7 +36,7 @@ define([
     },
     init: function() {
       this.$el.addClass('recurrence-widget');
-      if(this.options.localization){
+      if (this.options.localization) {
         $.tools.recurrenceinput.localize(this.options.language, this.options.localization);
       }
       this.$el.recurrenceinput(this.options.configuration);

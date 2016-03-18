@@ -6,10 +6,6 @@
  *
  *  Or, it'll default to "/plonejsi18n"
  */
-
-/* global portal_url:true */
-
-
 define([
   'jquery'
 ], function($) {

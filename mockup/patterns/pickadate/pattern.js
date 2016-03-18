@@ -85,12 +85,12 @@
 define([
   'jquery',
   'pat-base',
+  'translate',
   'picker',
   'picker.date',
   'picker.time',
-  'mockup-patterns-select2',
-  'translate'
-], function($, Base, Picker, PickerDate, PickerTime, Select2, _t) {
+  'mockup-patterns-select2'
+], function($, Base, _t) {
   'use strict';
 
   var PickADate = Base.extend({

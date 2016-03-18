@@ -2,9 +2,8 @@
  */
 
 define([
-  'jquery',
   'pat-base',
-], function($, Base) {
+], function(Base) {
   'use strict';
 
   var MockupBase = function MockupBaseWrapper() {

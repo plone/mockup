@@ -47,9 +47,9 @@
 define([
   'jquery',
   'pat-base',
-  'jquery.event.drag',
-  'jquery.event.drop'
-], function($, Base, drag, drop) {
+  'jquery.event.drop',
+  'jquery.event.drag'
+], function($, Base, drop) {
   'use strict';
 
   var SortablePattern = Base.extend({

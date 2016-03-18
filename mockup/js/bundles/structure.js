@@ -7,11 +7,9 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'pat-registry',
-  'pat-base',
   'mockup-patterns-modal',
   'mockup-patterns-structure'
-], function($, registry, Base, Modal, Structure) {
+], function($) {
   'use strict';
 
   $(document).ready(function() {

@@ -27,7 +27,7 @@ define([
   'pat-base',
   'underscore',
   'translate'
-], function ($, Base, _, _t){
+], function ($, Base, _, _t) {
   'use strict';
 
   var Livesearch = Base.extend({

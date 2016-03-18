@@ -62,10 +62,7 @@ define([
   'jquery',
   'underscore',
   'pat-base',
-  'mockup-patterns-relateditems',
-  'mockup-patterns-modal',
   'tinymce',
-  'mockup-patterns-autotoc',
   'text!mockup-patterns-tinymce-url/templates/result.xml',
   'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
@@ -115,8 +112,8 @@ define([
   'tinymce-wordcount',
   'tinymce-compat3x'
 ], function($, _,
-            Base, RelatedItems, Modal, tinymce,
-            AutoTOC, ResultTemplate, SelectionTemplate,
+            Base, tinymce,
+            ResultTemplate, SelectionTemplate,
             utils, LinkModal, I18n, _t) {
   'use strict';
 

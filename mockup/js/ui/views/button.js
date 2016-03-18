@@ -1,10 +1,8 @@
 define([
-  'jquery',
-  'backbone',
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-patterns-tooltip'
-], function($, Backbone, _, BaseView, Tooltip) {
+], function(_, BaseView, Tooltip) {
   'use strict';
 
   var ButtonView = BaseView.extend({
