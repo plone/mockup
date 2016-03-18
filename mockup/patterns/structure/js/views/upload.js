@@ -1,10 +1,8 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'mockup-patterns-upload'
-], function($, _, Backbone, PopoverView, Upload) {
+], function(_, PopoverView, Upload) {
   'use strict';
 
   var UploadView = PopoverView.extend({
@@ -62,8 +60,3 @@ define([
 
   return UploadView;
 });
-
-
-
-
-

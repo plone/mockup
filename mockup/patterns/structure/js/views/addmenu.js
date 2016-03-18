@@ -1,12 +1,10 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/buttongroup',
   'mockup-ui-url/views/button',
-  'mockup-utils',
   'bootstrap-dropdown'
-], function($, _, Backbone, ButtonGroup, ButtonView, utils) {
+], function($, _, ButtonGroup, ButtonView) {
   'use strict';
 
   var AddMenu = ButtonGroup.extend({

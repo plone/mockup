@@ -1,13 +1,12 @@
 define([
   'jquery',
-  'backbone',
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/popover',
   'mockup-patterns-querystring',
   'translate'
-], function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString, _t) {
+], function($, _, BaseView, ButtonView, PopoverView, QueryString, _t) {
   'use strict';
 
   var TextFilterView = BaseView.extend({

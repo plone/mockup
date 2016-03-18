@@ -1,11 +1,10 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'translate',
   'pat-registry'
-], function($, _, Backbone, PopoverView, _t, registry) {
+], function($, _, PopoverView, _t, registry) {
   'use strict';
 
   var PropertiesView = PopoverView.extend({
