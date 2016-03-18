@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/toolbar',
   'mockup-ui-url/views/buttongroup',
   'mockup-ui-url/views/button',
@@ -21,7 +20,7 @@ define([
   'translate',
   'pat-logger',
   'jquery.cookie'
-], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
+], function($, _, Toolbar, ButtonGroup, ButtonView, BaseView,
             TableView, SelectionWellView,
             GenericPopover, RearrangeView, SelectionButtonView,
             PagingView, ColumnsView, TextFilterView, UploadView,

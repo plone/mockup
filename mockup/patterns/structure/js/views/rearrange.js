@@ -1,9 +1,8 @@
 define([
-  'jquery',
   'underscore',
   'mockup-ui-url/views/popover',
   'translate'
-], function($, _, PopoverView, _t) {
+], function(_, PopoverView, _t) {
   'use strict';
 
   var RearrangeView = PopoverView.extend({
