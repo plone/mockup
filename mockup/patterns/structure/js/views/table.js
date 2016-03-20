@@ -192,7 +192,7 @@ define([
     storeOrder: function() {
       var self = this;
       var subsetIds = [];
-      self.$('tbody tr.itemRow').each(function(idx) {
+      self.$('tbody tr.itemRow').each(function() {
         subsetIds.push($(this).attr('data-id'));
       });
       self.subsetIds = subsetIds;

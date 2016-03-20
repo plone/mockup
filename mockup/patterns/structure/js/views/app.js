@@ -21,10 +21,10 @@ define([
   'pat-logger',
   'jquery.cookie'
 ], function($, _, Toolbar, ButtonGroup, ButtonView, BaseView,
-            TableView, SelectionWellView,
-            GenericPopover, RearrangeView, SelectionButtonView,
-            PagingView, ColumnsView, TextFilterView, UploadView,
-            _ResultCollection, SelectedCollection, utils, _t, logger) {
+  TableView, SelectionWellView,
+  GenericPopover, RearrangeView, SelectionButtonView,
+  PagingView, ColumnsView, TextFilterView, UploadView,
+  _ResultCollection, SelectedCollection, utils, _t, logger) {
   'use strict';
 
   var log = logger.getLogger('pat-structure');
@@ -46,19 +46,19 @@ define([
       self.pasteAllowed = $.cookie('__cp');
 
       /* close popovers when clicking away */
-      $(document).click(function(e){
+      $(document).click(function(e) {
         var $el = $(e.target);
-        if(!$el.is(':visible')){
+        if (!$el.is(':visible')) {
           // ignore this, fake event trigger to element that is not visible
           return;
         }
-        if($el.is('a') || $el.parent().is('a')){
+        if ($el.is('a') || $el.parent().is('a')) {
           return;
         }
         var $popover = $('.popover:visible');
-        if($popover.length > 0 && !$.contains($popover[0], $el[0])){
+        if ($popover.length > 0 && !$.contains($popover[0], $el[0])) {
           var popover = $popover.data('component');
-          if(popover){
+          if (popover) {
             popover.hide();
           }
         }
@@ -77,7 +77,6 @@ define([
 
       self.selectedCollection = new SelectedCollection();
       self.tableView = new TableView({app: self});
-
       self.pagingView = new PagingView({app: self});
 
       /* initialize buttons */
@@ -93,10 +92,10 @@ define([
       self.buttons.disable();
 
       var timeout = 0;
-      self.selectedCollection.on('add remove reset', function(/*modal, collection*/) {
+      self.selectedCollection.on('add remove reset', function( /*modal, collection*/ ) {
         /* delay rendering since this can happen in batching */
         clearTimeout(timeout);
-        timeout = setTimeout(function(){
+        timeout = setTimeout(function() {
           self.updateButtons();
         }, 100);
       }, self);
@@ -127,7 +126,7 @@ define([
         // the remaining calls are related to window.pushstate.
         // abort if feature unavailable.
         if (!(window.history && window.history.pushState)) {
-          return
+          return;
         }
 
         // undo the flag set by popState to prevent the push state
@@ -135,11 +134,12 @@ define([
         // function to not execute the folowing pushState logic.
         if (self.doNotPushState) {
           self.doNotPushState = false;
-          return
+          return;
         }
 
         var path = self.getCurrentPath();
-        if (path === '/'){
+        var url;
+        if (path === '/') {
           path = '';
         }
         /* maintain history here */
@@ -148,11 +148,11 @@ define([
           // as path always will be prefixed with a `/`
           var pushStateUrl = self.options.pushStateUrl.replace(
             '/{path}', '{path}');
-          var url = pushStateUrl.replace('{path}', path);
+          url = pushStateUrl.replace('{path}', path);
           window.history.pushState(null, null, url);
         } else if (self.options.urlStructure) {
           // fallback to urlStructure specification
-          var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
+          url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
           window.history.pushState(null, null, url);
         }
 
@@ -169,17 +169,16 @@ define([
 
       });
 
-      if ((self.options.pushStateUrl || self.options.urlStructure)
-          && utils.featureSupport.history()){
-        $(window).bind('popstate', function () {
+      if ((self.options.pushStateUrl || self.options.urlStructure) && utils.featureSupport.history()) {
+        $(window).bind('popstate', function() {
           /* normalize this url first... */
           var win = utils.getWindow();
           var url = win.location.href;
           var base, appended;
-          if(url.indexOf('?') !== -1){
+          if (url.indexOf('?') !== -1) {
             url = url.split('?')[0];
           }
-          if(url.indexOf('#') !== -1){
+          if (url.indexOf('#') !== -1) {
             url = url.split('#')[0];
           }
           if (self.options.pushStateUrl) {
@@ -192,11 +191,11 @@ define([
           }
           // take off the base url
           var path = url.substring(base.length);
-          if(path.substring(path.length - appended.length) === appended){
+          if (path.substring(path.length - appended.length) === appended) {
             /* check that it ends with appended value */
             path = path.substring(0, path.length - appended.length);
           }
-          if(!path){
+          if (!path) {
             path = '/';
           }
           self.setCurrentPath(path);
@@ -211,7 +210,7 @@ define([
         });
       }
     },
-    updateButtons: function(){
+    updateButtons: function() {
       var self = this;
       if (self.selectedCollection.length) {
         self.toolbar.get('selected-items').enable();
@@ -225,7 +224,7 @@ define([
         self.pasteAllowed = !!$.cookie('__cp');
         if (self.pasteAllowed) {
           self.buttons.get('paste').enable();
-        }else{
+        } else {
           self.buttons.get('paste').disable();
         }
       }
@@ -234,10 +233,10 @@ define([
       if (this.additionalCriterias.length > 0) {
         return true;
       }
-      if (this['sort_on'] && this['sort_on'] !== 'getObjPositionInParent') { // jshint ignore:line
+      if (this.sort_on && this.sort_on !== 'getObjPositionInParent') { // jshint ignore:line
         return true;
       }
-      if (this['sort_order'] !== 'ascending') { // jshint ignore:line
+      if (this.sort_order !== 'ascending') { // jshint ignore:line
         return true;
       }
       return false;
@@ -264,7 +263,8 @@ define([
     },
     buttonClickEvent: function(button) {
       var self = this;
-      var data = null, callback = null;
+      var data = null;
+      var callback = null;
 
       if (button.url) {
         self.loading.show();
@@ -384,19 +384,19 @@ define([
 
       var buttons = [];
       _.each(self.options.buttons, function(buttonOptions) {
-        try{
+        try {
           var button = new ButtonView(buttonOptions);
           buttons.push(button);
 
-          if(button.form){
+          if (button.form) {
             buttonOptions.triggerView = button;
             buttonOptions.app = self;
             var view = new GenericPopover(buttonOptions);
             self.$el.append(view.el);
-          }else{
+          } else {
             button.on('button:click', self.buttonClickEvent, self);
           }
-        }catch(err){
+        } catch (err) {
           log.error('Error initializing button ' + buttonOptions.title + ' ' + err);
         }
       });
@@ -430,7 +430,7 @@ define([
         success: function(data) {
           if (data.msg) {
             self.setStatus(data.msg);
-          }else if (data.status !== 'success') {
+          } else if (data.status !== 'success') {
             // XXX handle error here with something?
             self.setStatus('error moving item');
           }
@@ -493,14 +493,18 @@ define([
     },
     setCookieSetting: function(name, val) {
       $.cookie(this.cookieSettingPrefix + name,
-               JSON.stringify({'value': val})
+        JSON.stringify({
+          'value': val
+        })
       );
     },
     setAllCookieSettings: function() {
-      this.activeColumns = this.getCookieSetting(this['activeColumnsCookie'],
-                                                 this.activeColumns);
+      this.activeColumns = this.getCookieSetting(
+        this.activeColumnsCookie,
+        this.activeColumns
+      );
       var perPage = this.getCookieSetting('perPage', 15);
-      if(typeof(perPage) === 'string'){
+      if (typeof(perPage) === 'string') {
         perPage = parseInt(perPage);
       }
       this.collection.howManyPer(perPage);

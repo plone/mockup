@@ -41,6 +41,9 @@ New:
 
 Fixes:
 
+- JSHint fixes and jscs formatings for structure pattern.
+  [thet]
+
 - Cleanup RequireJS dependencies.
   [thet]
 

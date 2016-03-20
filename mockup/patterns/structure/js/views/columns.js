@@ -42,13 +42,14 @@ define([
         $el.find('input')[0].checked = true;
         self.$container.append($el);
       });
-      _.each(_.omit(self.app.availableColumns, self.app.activeColumns), function(name, id) {
-        var $el = $(self.itemTemplate({
-          title: name,
-          id: id
-        }));
-        self.$container.append($el);
-      });
+      _.each(_.omit(self.app.availableColumns, self.app.activeColumns),
+        function(name, id) {
+          var $el = $(self.itemTemplate({
+            title: name,
+            id: id
+          }));
+          self.$container.append($el);
+        });
 
       var dd = new Sortable(self.$container, {
         selector: 'li'

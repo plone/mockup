@@ -16,7 +16,7 @@ define([
       this.model = options.model;
       this.selectedCollection = this.app.selectedCollection;
     },
-    selectAll: function(e){
+    selectAll: function(e) {
       // This implementation is very specific to the default collection
       // with the reliance on its queryParser and queryHelper.  Custom
       // collection (Backbone.Paginator.requestPager implementation)
@@ -25,7 +25,7 @@ define([
       var self = this;
       var page = 1;
       var count = 0;
-      var getPage = function(){
+      var getPage = function() {
         self.app.loading.show();
         $.ajax({
           url: self.app.collection.url,
@@ -42,16 +42,16 @@ define([
             attributes: JSON.stringify(
               self.app.collection.queryHelper.options.attributes)
           }
-        }).done(function(data){
+        }).done(function(data) {
           var items = self.app.collection.parse(data, count);
           count += items.length;
-          _.each(items, function(item){
+          _.each(items, function(item) {
             self.app.selectedCollection.add(new Result(item));
           });
           page += 1;
-          if(data.total > count){
+          if (data.total > count) {
             getPage();
-          }else{
+          } else {
             self.app.loading.hide();
             self.app.tableView.render();
           }
@@ -60,7 +60,7 @@ define([
       getPage();
     },
 
-    doAction: function(buttonName, successMsg, failMsg){
+    doAction: function(buttonName, successMsg, failMsg) {
       var self = this;
       $.ajax({
         url: self.app.buttons.get(buttonName).options.url,
@@ -71,12 +71,12 @@ define([
         },
         dataType: 'json',
         type: 'POST'
-      }).done(function(data){
-        if(data.status === 'success'){
+      }).done(function(data) {
+        if (data.status === 'success') {
           self.app.setStatus(_t(successMsg + ' "' + self.model.attributes.Title + '"'));
           self.app.collection.pager();
           self.app.updateButtons();
-        }else{
+        } else {
           self.app.setStatus(_t('Error ' + failMsg + ' "' + self.model.attributes.Title + '"'));
         }
       });

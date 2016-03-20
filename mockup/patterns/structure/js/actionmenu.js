@@ -1,5 +1,4 @@
-define([
-], function() {
+define([], function() {
   'use strict';
 
   var menuOptions = {
@@ -67,10 +66,10 @@ define([
     }
 
     var result = {};
-    result['cutItem'] = menuOptions['cutItem'];
-    result['copyItem'] = menuOptions['copyItem'];
+    result.cutItem = menuOptions.cutItem;
+    result.copyItem = menuOptions.copyItem;
     if (menu.app.pasteAllowed && menu.model.attributes.is_folderish) {
-      result['pasteItem'] = menuOptions['pasteItem'];
+      result.pasteItem = menuOptions.pasteItem;
     }
     if (!menu.app.inQueryMode() && menu.options.canMove !== false) {
       result['move-top'] = menuOptions['move-top'];
@@ -80,12 +79,12 @@ define([
       result['set-default-page'] = menuOptions['set-default-page'];
     }
     if (menu.model.attributes.is_folderish) {
-      result['selectAll'] = menuOptions['selectAll'];
+      result.selectAll = menuOptions.selectAll;
     }
     if (menu.options.header) {
-      result['openItem'] = menuOptions['openItem'];
+      result.openItem = menuOptions.openItem;
     }
-    result['editItem'] = menuOptions['editItem'];
+    result.editItem = menuOptions.editItem;
     return result;
   };
 

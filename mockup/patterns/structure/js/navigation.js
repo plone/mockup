@@ -17,7 +17,6 @@ define([
       return self.model.attributes.getURL;
     },
     openUrl: function(url) {
-      var self = this;
       var win = utils.getWindow();
       var keyEvent = this.app.keyEvent;
       if (keyEvent && keyEvent.ctrlKey) {

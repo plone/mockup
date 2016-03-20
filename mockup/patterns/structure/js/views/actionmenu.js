@@ -24,7 +24,7 @@ define([
     eventConstructor: function(definition) {
       var self = this;
       var libName = definition[0],
-          method = definition[1];
+        method = definition[1];
 
       if (!((typeof libName === 'string') && (typeof method === 'string'))) {
         return false;
@@ -32,7 +32,7 @@ define([
 
       var doEvent = function(e) {
         var libCls = require(libName);
-        var lib = new libCls(self)
+        var lib = new libCls(self);
         return lib[method] && lib[method](e);
       };
       return doEvent;
@@ -86,7 +86,7 @@ define([
       self.$dropdown = self.$('.dropdown-toggle');
       self.$dropdown.dropdown();
 
-      if (self.options.className){
+      if (self.options.className) {
         self.$el.addClass(self.options.className);
       }
       return this;

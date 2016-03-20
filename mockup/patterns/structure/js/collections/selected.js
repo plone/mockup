@@ -23,4 +23,3 @@ define([
 
   return SelectedCollection;
 });
-

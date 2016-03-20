@@ -10,8 +10,7 @@ define([
   var AddMenu = ButtonGroup.extend({
     title: 'Add',
     className: 'btn-group addnew',
-    events: {
-    },
+    events: {},
     initialize: function(options) {
       var self = this;
       ButtonGroup.prototype.initialize.apply(self, [options]);
@@ -101,13 +100,13 @@ define([
 
       self.$el.append(
         '<a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#">' +
-          '<span class="glyphicon glyphicon-plus"></span>' +
-          self.title +
-          '<span class="caret"></span>' +
+        '<span class="glyphicon glyphicon-plus"></span>' +
+        self.title +
+        '<span class="caret"></span>' +
         '</a>' +
         '<ul class="dropdown-menu">' +
         '</ul>' +
-      '</div>');
+        '</div>');
 
       self.$items = self.$('.dropdown-menu');
       self.$dropdown = self.$('.dropdown-toggle');

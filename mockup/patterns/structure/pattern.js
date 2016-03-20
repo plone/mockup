@@ -19,15 +19,14 @@
  *                             moveUrl:/moveitem;
  *                             indexOptionsUrl:/tests/json/queryStringCriteria.json;
  *                             contextInfoUrl:{path}/context-info;"></div>
- * 
  */
-
 
 define([
   'jquery',
+  'underscore',
   'pat-base',
   'mockup-patterns-structure-url/js/views/app'
-], function($, Base, AppView) {
+], function($, _, Base, AppView) {
   'use strict';
 
   var Structure = Base.extend({

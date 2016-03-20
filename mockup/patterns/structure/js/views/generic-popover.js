@@ -27,19 +27,19 @@ define([
 
       PopoverView.prototype.initialize.apply(this, [options]);
     },
-    setContent: function(content){
+    setContent: function(content) {
       var self = this;
       var html = '<form>' + content + '</form>';
       html += '<button class="btn btn-block btn-' + self.submitContext + ' applyBtn">' + self.submitText + ' </button>';
-      if(self.options.form.closeText){
+      if (self.options.form.closeText) {
         html += '<button class="btn btn-block btn-default closeBtn">' + self.options.form.closeText + ' </button>';
       }
       this.content = _.template(html);
     },
-    getTemplateOptions: function(){
+    getTemplateOptions: function() {
       var self = this;
       var items = [];
-      self.app.selectedCollection.each(function(item){
+      self.app.selectedCollection.each(function(item) {
         items.push(item.toJSON());
       });
       return $.extend({}, true, self.options, {
@@ -50,16 +50,16 @@ define([
     applyButtonClicked: function() {
       var self = this;
       var data = {};
-      _.each(self.$el.find('form').serializeArray(), function(param){
+      _.each(self.$el.find('form').serializeArray(), function(param) {
         data[param.name] = param.value;
       });
 
       self.app.buttonClickEvent(this.triggerView, data);
       self.hide();
     },
-    afterRender: function(){
+    afterRender: function() {
       var self = this;
-      if(self.options.form.dataUrl){
+      if (self.options.form.dataUrl) {
         self.$('.popover-content').html(_t('Loading...'));
         self.app.loading.show();
         $.ajax({
@@ -72,21 +72,21 @@ define([
             transitions: true,
             render: 'yes'
           }
-        }).done(function(result){
+        }).done(function(result) {
           self.data = result.data || result;
           self.renderContent();
           registry.scan(self.$el);
-        }).fail(function(){
+        }).fail(function() {
           /* we temporarily set original html to a value here so we can
              render the updated content and then put the original back */
           var originalContent = self.content;
           self.setContent('<p>' + _t('Error loading popover from server.') + '</p>', false);
           self.renderContent();
           self.content = originalContent;
-        }).always(function(){
+        }).always(function() {
           self.app.loading.hide();
         });
-      }else{
+      } else {
         registry.scan(self.$el);
       }
     },
@@ -95,7 +95,7 @@ define([
       var self = this;
       if (!self.opened) {
         return;
-      }else{
+      } else {
         this.$el.replaceWith(this.render().el);
       }
     }

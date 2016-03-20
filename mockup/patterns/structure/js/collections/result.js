@@ -1,10 +1,11 @@
 define([
+  'jquery',
   'underscore',
   'backbone',
   'mockup-patterns-structure-url/js/models/result',
   'mockup-utils',
   'backbone.paginator'
-], function(_, Backbone, Result, Utils) {
+], function($, _, Backbone, Result, Utils) {
   'use strict';
 
   var ResultCollection = Backbone.Paginator.requestPager.extend({
@@ -16,11 +17,12 @@ define([
 
       this.queryHelper = Utils.QueryHelper(
         $.extend(true, {}, this.view.options, {
-          attributes: this.view.options.queryHelperAttributes}));
+          attributes: this.view.options.queryHelperAttributes
+        }));
 
       this.queryParser = function(options) {
         var self = this;
-        if(options === undefined){
+        if (options === undefined) {
           options = {};
         }
         var term = null;
@@ -39,7 +41,7 @@ define([
           sort_on: sortOn,
           sort_order: sortOrder
         });
-      }
+      };
 
       // check and see if a hash is provided for initial path
       if (window.location.hash.substring(0, 2) === '#/') {
@@ -91,8 +93,8 @@ define([
         return JSON.stringify(this.queryHelper.options.attributes);
       }
     },
-    parse: function (response, baseSortIdx) {
-      if(baseSortIdx === undefined){
+    parse: function(response, baseSortIdx) {
+      if (baseSortIdx === undefined) {
         baseSortIdx = 0;
       }
       this.totalRecords = response.total;
