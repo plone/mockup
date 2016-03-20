@@ -1,10 +1,8 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
   'text!mockup-patterns-thememapper-url/templates/rulebuilder.xml',
-], function($, _, Backbone, PopoverView, RulebuilderTemplate ) {
+], function(_, PopoverView, RulebuilderTemplate ) {
   'use strict';
   var rulebuilderTemplate = _.template(RulebuilderTemplate);
 

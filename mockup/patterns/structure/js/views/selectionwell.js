@@ -1,10 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'text!mockup-patterns-structure-url/templates/selection_item.xml'
-], function($, _, Backbone, PopoverView, ItemTemplate) {
+], function($, _, PopoverView, ItemTemplate) {
   'use strict';
 
   var WellView = PopoverView.extend({

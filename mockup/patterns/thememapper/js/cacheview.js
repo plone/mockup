@@ -1,10 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
   'mockup-utils'
-], function($, _, Backbone, PopoverView, utils ) {
+], function($, _, PopoverView, utils ) {
   'use strict';
   var template = _.template(
     '<div>' +

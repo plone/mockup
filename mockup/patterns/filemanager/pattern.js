@@ -35,8 +35,6 @@ define([
   'jquery',
   'pat-base',
   'underscore',
-  'backbone',
-  'mockup-ui-url/views/base',
   'mockup-patterns-tree',
   'mockup-patterns-texteditor',
   'text!mockup-patterns-filemanager-url/templates/app.xml',
@@ -52,7 +50,7 @@ define([
   'translate',
   'mockup-utils',
   'text!mockup-ui-url/templates/popover.xml'
-], function($, Base, _, Backbone, BaseView, Tree, TextEditor, AppTemplate, Toolbar,
+], function($, Base, _, Tree, TextEditor, AppTemplate, Toolbar,
             ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
             CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';

@@ -1,10 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'mockup-patterns-sortable'
-], function($, _, Backbone, PopoverView, Sortable) {
+], function($, _, PopoverView, Sortable) {
   'use strict';
 
   var ColumnsView = PopoverView.extend({

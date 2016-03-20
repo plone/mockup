@@ -1,11 +1,10 @@
 define([
   'jquery',
-  'underscore',
   'backbone',
   'marked',
   'react',
   'mockup-docs-pattern'
-], function($, _, Backbone, marked, React, pattern) {
+], function($, Backbone, marked, React, pattern) {
   'use strict';
 
   var div = React.DOM.div,

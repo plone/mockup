@@ -1,10 +1,8 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
   'mockup-patterns-upload'
-], function($, _, Backbone, PopoverView, Upload) {
+], function(_, PopoverView, Upload) {
   'use strict';
 
   var UploadView = PopoverView.extend({

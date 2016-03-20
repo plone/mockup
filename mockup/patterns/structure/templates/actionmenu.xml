@@ -12,6 +12,4 @@
   <% _.each(menuOptions, function(menuOption, idx){ %>
   <li class="<%- idx %>"><a href="<%- menuOption[2] %>"><%- _t(menuOption[3]) %></a></li>
   <% }); %>
-
 </ul>
-

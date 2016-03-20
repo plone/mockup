@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-structure-url/js/views/tablerow',
   'text!mockup-patterns-structure-url/templates/table.xml',
   'mockup-ui-url/views/base',
@@ -11,7 +10,7 @@ define([
   'mockup-patterns-structure-url/js/views/actionmenu',
   'translate',
   'bootstrap-alert'
-], function($, _, Backbone, TableRowView, TableTemplate, BaseView, Sortable,
+], function($, _, TableRowView, TableTemplate, BaseView, Sortable,
             Moment, Result, ActionMenuView, _t) {
   'use strict';
 

@@ -3,13 +3,12 @@ define([
   'underscore',
   'pat-registry',
   'pat-base',
-  'mockup-patterns-relateditems',
-  'mockup-patterns-modal',
   'tinymce',
-  'mockup-patterns-upload',
+  'mockup-patterns-relateditems',
   'text!mockup-patterns-tinymce-url/templates/link.xml',
-  'text!mockup-patterns-tinymce-url/templates/image.xml'
-], function($, _, registry, Base, RelatedItems, Modal, tinymce, Upload, LinkTemplate, ImageTemplate) {
+  'text!mockup-patterns-tinymce-url/templates/image.xml',
+  'mockup-patterns-upload'
+], function($, _, registry, Base, tinymce, RelatedItems, LinkTemplate, ImageTemplate) {
   'use strict';
 
   var LinkType = Base.extend({

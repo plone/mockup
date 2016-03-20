@@ -1,9 +1,8 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/base'
-], function($, _, Backbone, BaseView) {
+], function($, _, BaseView) {
   'use strict';
 
   var Container = BaseView.extend({

@@ -1,10 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
   'translate'
-], function($, _, Backbone, PopoverView, _t) {
+], function($, _, PopoverView, _t) {
   'use strict';
 
   var CustomizeView = PopoverView.extend({

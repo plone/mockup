@@ -1,9 +1,7 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover'
-], function($, _, Backbone, PopoverView) {
+], function(_, PopoverView) {
   'use strict';
 
   var FileManagerPopover = PopoverView.extend({

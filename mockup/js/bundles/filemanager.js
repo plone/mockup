@@ -1,9 +1,7 @@
 define([
-  'jquery',
   'pat-registry',
-  'pat-base',
   'mockup-patterns-filemanager'
-], function($, registry, Base) {
+], function(registry) {
   'use strict';
   // initialize only if we are in top frame
   if (window.parent === window) {

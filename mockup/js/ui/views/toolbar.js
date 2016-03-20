@@ -1,8 +1,6 @@
 define([
-  'underscore',
-  'backbone',
   'mockup-ui-url/views/container'
-], function(_, Backbone, ContainerView) {
+], function(ContainerView) {
   'use strict';
 
   var Toolbar = ContainerView.extend({

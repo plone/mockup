@@ -1,9 +1,8 @@
 define([
-  'jquery',
   'react',
   'backbone',
   'mockup-docs-view'
-], function($, React, Backbone, AppView) {
+], function(React, Backbone, AppView) {
   'use strict';
 
   var App = Backbone.Router.extend({

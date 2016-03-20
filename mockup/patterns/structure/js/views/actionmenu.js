@@ -1,17 +1,15 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/base',
-  'mockup-patterns-structure-url/js/models/result',
   'mockup-utils',
+  'mockup-patterns-structure-url/js/models/result',
   'mockup-patterns-structure-url/js/actions',
   'mockup-patterns-structure-url/js/actionmenu',
   'text!mockup-patterns-structure-url/templates/actionmenu.xml',
   'translate',
   'bootstrap-dropdown'
-], function($, _, Backbone, BaseView, Result, utils, Actions, ActionMenu,
-            ActionMenuTemplate, _t) {
+], function($, _, BaseView, utils, Result, Actions, ActionMenu, ActionMenuTemplate, _t) {
   'use strict';
 
   var ActionMenuView = BaseView.extend({

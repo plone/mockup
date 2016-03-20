@@ -92,7 +92,7 @@ define([
   'pat-base',
   'pat-registry',
   'mockup-patterns-tinymce'
-], function ($, Base, registry, tinymce) {
+], function ($, Base, registry) {
   'use strict';
 
   var TextareaMimetypeSelector = Base.extend({

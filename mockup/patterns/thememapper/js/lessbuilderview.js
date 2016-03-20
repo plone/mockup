@@ -1,10 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
   'mockup-patterns-resourceregistry-url/js/iframe'
-], function($, _, Backbone, PopoverView, IFrame ) {
+], function($, _, PopoverView, IFrame) {
   'use strict';
   var lessBuilderTemplate = _.template(
     '<div id="lessBuilder">' +

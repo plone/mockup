@@ -1,9 +1,7 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover'
-], function($, _, Backbone, PopoverView) {
+], function(_, PopoverView) {
   'use strict';
 
   var RenameView = PopoverView.extend({

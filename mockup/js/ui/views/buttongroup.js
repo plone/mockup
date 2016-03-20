@@ -1,8 +1,7 @@
 define([
   'underscore',
-  'backbone',
   'mockup-ui-url/views/container'
-], function(_, Backbone, ContainerView) {
+], function(_, ContainerView) {
   'use strict';
 
   var ButtonGroup = ContainerView.extend({

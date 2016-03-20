@@ -41,11 +41,15 @@ New:
 
 Fixes:
 
-- ``.jscs.json`` format fixes for newer jscs versions.
+- Cleanup RequireJS dependencies.
   [thet]
+
 - Fix TinyMCE to work with Safari when using inline mode. This fixes bug where Safari
   would not work with mosaic
   [vangheem]
+
+- ``.jscs.json`` format fixes for newer jscs versions.
+  [thet]
 
 - Fix ``Makefile`` to use ``mockup/build`` instead of ``build``.
   [thet]

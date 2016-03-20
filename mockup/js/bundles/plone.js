@@ -24,9 +24,7 @@ define([
   // BBB: we need to hook pattern to classes which plone was using until now
   var Plone = Base.extend({
     name: 'plone',
-    init: function() {
-      var self = this;
-    }
+    init: function() {}
   });
 
   // initialize only if we are in top frame

@@ -6,7 +6,6 @@
   var fs = require('fs'),
       less = require('less'),
       extend = require('extend'),
-      path = require('path'),
       appDir = process.cwd(),
       karmaConstants = require(appDir + '/node_modules/karma/lib/constants'),
       MockupGrunt = function (requirejsOptions) { this.init(requirejsOptions); },

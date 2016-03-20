@@ -1,8 +1,7 @@
 define([
   'jquery',
-  'underscore',
-  'backbone',
-], function($, _, Backbone) {
+  'underscore'
+], function($, _) {
   'use strict';
 
   var RuleBuilder = function(thememapper){

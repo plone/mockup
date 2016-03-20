@@ -16,8 +16,8 @@ define([
   // delay the initialization of the translate catalog
   // until after the dom is available
   var _t = null;
-  return function(msgid, keywords){
-    if(_t === null){
+  return function(msgid, keywords) {
+    if (_t === null) {
       var i18n = new I18N();
       i18n.loadCatalog('widgets');
       _t = i18n.MessageFactory('widgets');
