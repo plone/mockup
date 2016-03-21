@@ -23,8 +23,8 @@ define([
 
     eventConstructor: function(definition) {
       var self = this;
-      var libName = definition[0],
-        method = definition[1];
+      var libName = definition.library,
+          method = definition.method;
 
       if (!((typeof libName === 'string') && (typeof method === 'string'))) {
         return false;
@@ -39,14 +39,33 @@ define([
     },
 
     events: function() {
+      /* Backbone.view.events
+       * Specify a set of DOM events, which will bound to methods on the view.
+       */
       var self = this;
       var result = {};
-      _.each(self.menuOptions, function(menuOption, idx) {
-        var e = self.eventConstructor(menuOption);
-        if (e) {
-          result['click .' + idx + ' a'] = e;
-        }
+      var menuOptionsCategorized = {dropdown: []};
+      _.each(self.menuOptions, function(menuOption, key) {
+          // set a unique identifier to uniquely bind the events.
+          var idx = utils.generateId();
+          menuOption.idx = idx;
+          menuOption.name = key;  // we want to add the action's key as class name to the output.
+          
+          var category = menuOption.category || 'dropdown';
+          if (menuOptionsCategorized[category] === undefined) {
+              menuOptionsCategorized[category] = [];
+          }
+          menuOptionsCategorized[category].push(menuOption);
+
+		      // Create event handler and add it to the results object.
+          var e = self.eventConstructor(menuOption);
+          if (e) {
+            result['click a.' + idx] = e;
+          }
       });
+
+      // Abusing the loop above to also initialize menuOptionsCategorized
+      self.menuOptionsCategorized = menuOptionsCategorized;
       return result;
     },
 
@@ -76,7 +95,7 @@ define([
 
       var data = this.model.toJSON();
       data.header = self.options.header || null;
-      data.menuOptions = self.menuOptions;
+      data.menuOptions = self.menuOptionsCategorized;
 
       self.$el.html(self.template($.extend({
         _t: _t,

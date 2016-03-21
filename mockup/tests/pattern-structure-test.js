@@ -149,7 +149,8 @@ define([
       var model = new Result({
           "Title": "Dummy Object",
           "is_folderish": true,
-          "review_state": "published"
+          "review_state": "published",
+          "getURL": "http://nohost/dummy_object"
       });
 
       var menu = new ActionMenuView({
@@ -161,13 +162,14 @@ define([
       var el = menu.render().el;
 
       expect($('li.dropdown-header', el).text()).to.equal('Menu Header');
-      expect($('li a', el).length).to.equal(7);
-      expect($($('li a', el)[0]).text()).to.equal('Cut');
+      expect($('a.action', el).length).to.equal(7);
+      expect($($('li a', el)[0]).text().trim()).to.equal('Cut');
+      expect($('a.openItem', el).attr('href')).to.equal('http://nohost/dummy_object');
 
-      $('.cutItem a', el).click();
+      $('a.cutItem', el).click();
       this.clock.tick(500);
 
-      expect(this.app.$('.status').text()).to.equal('Cut "Dummy Object"');
+      expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
 
     });
 
@@ -182,22 +184,23 @@ define([
         app: this.app,
         model: model,
         menuOptions: {
-          'cutItem': [
-            'mockup-patterns-structure-url/js/actions',
-            'cutClicked',
-            '#',
-            'Cut',
-          ],
+          'cutItem': {
+            'library': 'mockup-patterns-structure-url/js/actions',
+            'method': 'cutClicked',
+            'url': '#',
+            'title': 'Cut',
+            'category': 'dropdown',
+          },
         },
       });
 
       var el = menu.render().el;
       expect($('li a', el).length).to.equal(1);
-      expect($($('li a', el)[0]).text()).to.equal('Cut');
+      expect($($('li a', el)[0]).text().trim()).to.equal('Cut');
 
-      $('.cutItem a', el).click();
+      $('a.cutItem', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text()).to.equal('Cut "Dummy Object"');
+      expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
 
     });
 
@@ -221,8 +224,8 @@ define([
       this.clock.tick(500);
 
       var model = new Result({
-          "is_folderish": true,
-          "review_state": "published"
+        'is_folderish': true,
+        'review_state': 'published'
       });
 
       // Make use if that dummy in here.
@@ -230,22 +233,23 @@ define([
         app: this.app,
         model: model,
         menuOptions: {
-          'foobar': [
-            'dummytestactions',
-            'foobarClicked',
-            '#',
-            'Foo Bar',
-          ],
+          'foobar': {
+            'library': 'dummytestactions',
+            'method': 'foobarClicked',
+            'url': '#',
+            'title': 'Foo Bar',
+            'category': 'dropdown',
+          },
         },
       });
 
       var el = menu.render().el;
       expect($('li a', el).length).to.equal(1);
-      expect($($('li a', el)[0]).text()).to.equal('Foo Bar');
+      expect($($('li a', el)[0]).text().trim()).to.equal('Foo Bar');
 
-      $('.foobar a', el).click();
+      $('a.foobar', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text()).to.equal('Status: foobar clicked');
+      expect(this.app.$('.status').text().trim()).to.equal('Status: foobar clicked');
     });
 
     it('custom action menu actions missing.', function() {
@@ -269,8 +273,8 @@ define([
       this.clock.tick(500);
 
       var model = new Result({
-          "is_folderish": true,
-          "review_state": "published"
+        'is_folderish': true,
+        'review_state': 'published'
       });
 
       // Make use if that dummy in here.
@@ -278,24 +282,26 @@ define([
         app: this.app,
         model: model,
         menuOptions: {
-          'foobar': [
-            'dummytestactions',
-            'foobarClicked',
-            '#',
-            'Foo Bar',
-          ],
-          'barbaz': [
-            'dummytestactions',
-            'barbazClicked',
-            '#',
-            'Bar Baz',
-          ],
+          'foobar': {
+            'library':    'dummytestactions',
+            'method':     'foobarClicked',
+            'url':        '#',
+            'title':      'Foo Bar',
+            'category': 'dropdown',
+          },
+          'barbaz': {
+            'library':    'dummytestactions',
+            'method':     'barbazClicked',
+            'url':        '#',
+            'title':      'Bar Baz',
+            'category': 'dropdown',
+          },
         },
       });
 
       // Broken/missing action
       var el = menu.render().el;
-      $('.foobar a', el).click();
+      $('a.foobar', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('');
     });
@@ -319,24 +325,25 @@ define([
       define('dummytestactionmenu', ['backbone'], function(Backbone) {
         var ActionMenu = function(menu) {
           return {
-            'barbaz': [
-              'dummytestactions',
-              'barbazClicked',
-              '#',
-              'Bar Baz'
-            ]
+            'barbaz': {
+              'library':    'dummytestactions',
+              'method':     'barbazClicked',
+              'url':        '#',
+              'title':      'Bar Baz',
+              'category':   'dropdown'
+            }
           };
         };
         return ActionMenu;
       });
       // use them both to make it available synchronously.
-      require(['dummytestactions'], function(){});
-      require(['dummytestactionmenu'], function(){});
+      require(['dummytestactions'], function() {});
+      require(['dummytestactionmenu'], function() {});
       this.clock.tick(500);
 
       var model = new Result({
-          "is_folderish": true,
-          "review_state": "published"
+        'is_folderish': true,
+        'review_state': 'published'
       });
 
       // Make use if that dummy in here.
@@ -348,10 +355,9 @@ define([
 
       // Broken/missing action
       var el = menu.render().el;
-      $('.barbaz a', el).click();
+      $('a.barbaz', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text().trim()).to.equal(
-        'Status: barbaz clicked');
+      expect(this.app.$('.status').text().trim()).to.equal('Status: barbaz clicked');
     });
 
   });
@@ -714,14 +720,11 @@ define([
       expect($content_row.find('td').eq(2).text().trim()).to.equal('');
       expect($content_row.find('td').eq(3).text().trim()).to.equal('');
       expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
-      expect($content_row.find('td .icon-group-right a').attr('href')
-        ).to.equal('http://localhost:8081/folder/view');
+      expect($content_row.find('a.openItem').attr('href')).to.equal('http://localhost:8081/folder');
 
       var $content_row1 = this.$el.find('table tbody tr').eq(1);
-      expect($content_row1.find('td').eq(1).text().trim()).to.equal(
-        'Document 0');
-      expect($content_row1.find('td .icon-group-right a').attr('href')
-        ).to.equal('http://localhost:8081/item0/view');
+      expect($content_row1.find('td').eq(1).text().trim()).to.equal('Document 0');
+      expect($content_row1.find('a.openItem').attr('href')).to.equal('http://localhost:8081/item0');
     });
 
     it('test select all contained item action', function() {
@@ -735,11 +738,11 @@ define([
       this.clock.tick(1000);
 
       var menu = $('.fc-breadcrumbs-container .actionmenu', this.$el);
-      var options = $('ul li a', menu);
+      var options = $('a.action', menu);
       expect(options.length).to.equal(5);
 
-      var selectAll = $('.selectAll a', menu);
-      expect(selectAll.text()).to.eql('Select all contained items');
+      var selectAll = $('a.selectAll', menu);
+      expect(selectAll.text().trim()).to.eql('Select all contained items');
       selectAll.trigger('click');
       this.clock.tick(1000);
       expect($('table tbody .selection input:checked', this.$el).length
@@ -752,11 +755,11 @@ define([
       this.clock.tick(500);
       var $row = this.$el.find('table thead tr').eq(1);
       expect($row.find('th').length).to.equal(6);
-      expect($row.find('th').eq(1).text()).to.equal('Title');
-      expect($row.find('th').eq(2).text()).to.equal('Last modified');
-      expect($row.find('th').eq(3).text()).to.equal('Published');
-      expect($row.find('th').eq(4).text()).to.equal('Review state');
-      expect($row.find('th').eq(5).text()).to.equal('Actions');
+      expect($row.find('th').eq(1).text().trim()).to.equal('Title');
+      expect($row.find('th').eq(2).text().trim()).to.equal('Last modified');
+      expect($row.find('th').eq(3).text().trim()).to.equal('Published');
+      expect($row.find('th').eq(4).text().trim()).to.equal('Review state');
+      expect($row.find('th').eq(5).text().trim()).to.equal('Actions');
 
       expect($.cookie('_fc_activeColumns')).to.be(undefined);
 
@@ -770,14 +773,14 @@ define([
       this.clock.tick(500);
 
       var $popover = this.$el.find('.popover.attribute-columns');
-      expect($popover.find('button').text()).to.equal('Save');
+      expect($popover.find('button').text().trim()).to.equal('Save');
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
       $row = this.$el.find('table thead tr').eq(1);
       expect($row.find('th').length).to.equal(7);
-      expect($row.find('th').eq(5).text()).to.equal('Object Size');
-      expect($row.find('th').eq(6).text()).to.equal('Actions');
+      expect($row.find('th').eq(5).text().trim()).to.equal('Object Size');
+      expect($row.find('th').eq(6).text().trim()).to.equal('Actions');
       expect($.parseJSON($.cookie('_fc_activeColumns')).value).to.eql(
           ["ModificationDate", "EffectiveDate", "review_state", "getObjSize"]);
 
@@ -806,15 +809,13 @@ define([
       // folder
       var folder = this.$el.find('.itemRow').eq(0);
       expect(folder.data().id).to.equal('folder');
-      expect($('.actionmenu ul li a', folder).length).to.equal(6);
+      expect($('.actionmenu a.action', folder).length).to.equal(7);
       // no pasting (see next test
-      expect($('.actionmenu ul li.pasteItem', folder).length).to.equal(0);
+      expect($('.actionmenu a.pasteItem', folder).length).to.equal(0);
       // no set default page
-      expect($('.actionmenu ul li.set-default-page a', folder).length
-        ).to.equal(0);
+      expect($('.actionmenu a.set-default-page', folder).length).to.equal(0);
       // can select all
-      expect($('.actionmenu ul li.selectAll', folder).text()).to.equal(
-        'Select all contained items');
+      expect($('.actionmenu a.selectAll', folder).text().trim()).to.equal('Select all contained items');
     });
 
     it('test itemRow default actionmenu item', function() {
@@ -823,13 +824,13 @@ define([
 
       var item = this.$el.find('.itemRow').eq(10);
       expect(item.data().id).to.equal('item9');
-      expect($('.actionmenu ul li a', item).length).to.equal(6);
+      expect($('.actionmenu a.action', item).length).to.equal(7);
       // cannot select all
-      expect($('.actionmenu ul li.selectAll a', item).length).to.equal(0);
+      expect($('a.selectAll', item).length).to.equal(0);
       // can set default page
-      expect($('.actionmenu ul li.set-default-page', item).text()).to.equal(
+      expect($('a.set-default-page', item).text().trim()).to.equal(
         'Set as default page');
-      $('.actionmenu ul li.set-default-page a', item).click();
+      $('a.set-default-page', item).click();
       this.clock.tick(1000);
       expect(this.$el.find('.order-support .status').html()).to.contain(
         'defaulted');
@@ -844,9 +845,9 @@ define([
       // top item
       var item0 = this.$el.find('.itemRow').eq(0);
       expect(item0.data().id).to.equal('folder');
-      expect($('.actionmenu ul li a', item0).length).to.equal(7);
-      expect($('.actionmenu ul li.pasteItem', item0).text()).to.equal('Paste');
-      $('.actionmenu ul li.pasteItem a', item0).click();
+      expect($('.actionmenu a.action', item0).length).to.equal(8);
+      expect($('a.pasteItem', item0).text().trim()).to.equal('Paste');
+      $('a.pasteItem', item0).click();
       this.clock.tick(1000);
       expect(this.$el.find('.order-support .status').html()).to.contain(
         'Pasted into "Folder"');
@@ -861,9 +862,8 @@ define([
       var item10 = this.$el.find('.itemRow').eq(10);
       expect(item10.data().id).to.equal('item9');
 
-      expect($('.actionmenu ul li.move-top', item10).text()).to.equal(
-        'Move to top of folder');
-      $('.actionmenu ul li.move-top a', item10).trigger('click');
+      expect($('.actionmenu a.move-top', item10).text().trim()).to.equal('Move to top of folder');
+      $('.actionmenu a.move-top', item10).trigger('click');
       this.clock.tick(1000);
 
       expect(this.$el.find('.order-support .status').html()).to.contain(
@@ -880,10 +880,9 @@ define([
       this.clock.tick(1000);
 
       var folder = this.$el.find('.itemRow').eq(0);
-      $('.actionmenu ul li.selectAll a', folder).trigger('click');
+      $('.actionmenu a.selectAll', folder).trigger('click');
       this.clock.tick(1000);
-      expect($('table tbody .selection input:checked', this.$el).length
-        ).to.equal(0);
+      expect($('table tbody .selection input:checked', this.$el).length).to.equal(0);
       // all items in the folder be populated within the selection well.
       expect(this.$el.find('#btn-selected-items').html()).to.contain('101');
     });
@@ -896,11 +895,11 @@ define([
       expect(item.data().id).to.equal('item9');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(dummyWindow.location).to.equal('http://localhost:8081/item9/view');
+      expect(dummyWindow.location).to.equal('http://localhost:8081/item9');
 
-      $('.actionmenu ul li.editItem a', item).trigger('click');
+      $('.actionmenu a.editItem', item).trigger('click');
       this.clock.tick(1000);
-      expect(dummyWindow.location).to.equal('http://localhost:8081/item9/edit');
+      expect(dummyWindow.location).to.equal('http://localhost:8081/item9/@@edit');
     });
 
     it('test navigate to folder push states', function() {
@@ -1070,7 +1069,7 @@ define([
       this.clock.tick(500);
       var $row = this.$el.find('table thead tr').eq(1);
       expect($row.find('th').length).to.equal(6);
-      expect($row.find('th').eq(5).text()).to.equal('Actions');
+      expect($row.find('th').eq(5).text().trim()).to.equal('Actions');
 
       expect($.cookie('_fc_activeColumnsCustom')).to.be(undefined);
 
@@ -1084,14 +1083,14 @@ define([
       this.clock.tick(500);
 
       var $popover = this.$el.find('.popover.attribute-columns');
-      expect($popover.find('button').text()).to.equal('Save');
+      expect($popover.find('button').text().trim()).to.equal('Save');
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
       $row = this.$el.find('table thead tr').eq(1);
       expect($row.find('th').length).to.equal(7);
-      expect($row.find('th').eq(5).text()).to.equal('Type');
-      expect($row.find('th').eq(6).text()).to.equal('Actions');
+      expect($row.find('th').eq(5).text().trim()).to.equal('Type');
+      expect($row.find('th').eq(6).text().trim()).to.equal('Actions');
       expect($.parseJSON($.cookie('_fc_activeColumnsCustom')).value).to.eql(
           ["ModificationDate", "EffectiveDate", "review_state", "portal_type"]);
       // standard cookie unchanged.
@@ -1206,9 +1205,9 @@ define([
       this.clock.tick(500);
       var $row = this.$el.find('table thead tr').eq(1);
       expect($row.find('th').length).to.equal(4);
-      expect($row.find('th').eq(1).text()).to.equal('Title');
-      expect($row.find('th').eq(2).text()).to.equal('Object Size');
-      expect($row.find('th').eq(3).text()).to.equal('Actions');
+      expect($row.find('th').eq(1).text().trim()).to.equal('Title');
+      expect($row.find('th').eq(2).text().trim()).to.equal('Object Size');
+      expect($row.find('th').eq(3).text().trim()).to.equal('Actions');
     });
 
   });
@@ -1462,18 +1461,20 @@ define([
         },
         "buttons": [],
         "menuOptions": {
-          'action1': [
-            'dummytestaction',
-            'option1',
-            '#',
-            'Option 1',
-          ],
-          'action2': [
-            'dummytestaction',
-            'option2',
-            '#',
-            'Option 2',
-          ],
+          'action1': {
+            'library':  'dummytestaction',
+            'method':   'option1',
+            'url':      '#',
+            'title':    'Option 1',
+            'category': 'dropdown',
+          },
+          'action2': {
+            'library':  'dummytestaction',
+            'method':   'option2',
+            'url':      '#',
+            'title':    'Option 2',
+            'category': 'dropdown',
+          },
         },
         'tableRowItemAction': {
           'other': ['dummytestaction', 'handleOther'],
@@ -1568,8 +1569,8 @@ define([
       var item = this.$el.find('.itemRow').eq(0);
       // Check for complete new options
       expect($('.actionmenu * a', item).length).to.equal(2);
-      expect($('.actionmenu .action1 a', item).text()).to.equal('Option 1');
-      expect($('.actionmenu .action2 a', item).text()).to.equal('Option 2');
+      expect($('.actionmenu a.action1', item).text().trim()).to.equal('Option 1');
+      expect($('.actionmenu a.action2', item).text().trim()).to.equal('Option 2');
 
       define('dummytestaction', ['backbone'], function(Backbone) {
         var Actions = Backbone.Model.extend({
@@ -1594,12 +1595,12 @@ define([
       require(['dummytestaction'], function(){});
       this.clock.tick(1000);
 
-      $('.actionmenu .action1 a', item).trigger('click');
+      $('.actionmenu a.action1', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: option1 selected');
 
-      $('.actionmenu .action2 a', item).trigger('click');
+      $('.actionmenu a.action2', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: option2 selected');
@@ -1955,21 +1956,21 @@ define([
         var ActionMenu = function(menu) {
           if (menu.model.attributes.id === 'item') {
             return {
-              'itemClicker': [
-                'dummytestaction',
-                'itemClicker',
-                '#',
-                'Item Clicker'
-              ]
+              'itemClicker': {
+                'library':  'dummytestaction',
+                'method':   'itemClicker',
+                'url':      '#',
+                'title':    'Item Clicker'
+              }
             };
           } else {
             return {
-              'folderClicker': [
-                'dummytestaction',
-                'folderClicker',
-                '#',
-                'Folder Clicker'
-              ]
+              'folderClicker': {
+                'library':  'dummytestaction',
+                'method':   'folderClicker',
+                'url':      '#',
+                'title':    'Folder Clicker'
+              }
             };
           }
         };
@@ -1987,9 +1988,8 @@ define([
 
       // Check for complete new options
       expect($('.actionmenu * a', folder).length).to.equal(1);
-      expect($('.actionmenu .folderClicker a', folder).text()).to.equal(
-        'Folder Clicker');
-      $('.actionmenu .folderClicker a', folder).trigger('click');
+      expect($('.actionmenu a.folderClicker', folder).text().trim()).to.equal('Folder Clicker');
+      $('.actionmenu a.folderClicker', folder).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: folder clicked');
@@ -1997,9 +1997,9 @@ define([
       var item = this.$el.find('.itemRow').eq(1);
       // Check for complete new options
       expect($('.actionmenu * a', item).length).to.equal(1);
-      expect($('.actionmenu .itemClicker a', item).text()).to.equal(
+      expect($('.actionmenu a.itemClicker', item).text().trim()).to.equal(
         'Item Clicker');
-      $('.actionmenu .itemClicker a', item).trigger('click');
+      $('.actionmenu a.itemClicker', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: item clicked');
@@ -2078,7 +2078,6 @@ define([
         items.push({
           UID: '123sdfasdfFolder',
           getURL: 'http://localhost:8081/folder',
-          viewURL: 'http://localhost:8081/folder',
           path: '/folder',
           portal_type: 'Folder',
           Description: 'folder',
@@ -2092,7 +2091,6 @@ define([
           items.push({
             UID: '123sdfasdf' + i,
             getURL: 'http://localhost:8081/item' + i,
-            viewURL: 'http://localhost:8081/item' + i + '/item_view',
             path: '/item' + i,
             portal_type: 'Document ' + i,
             Description: 'document',
@@ -2163,14 +2161,14 @@ define([
       expect($content_row.find('td').eq(2).text().trim()).to.equal('');
       expect($content_row.find('td').eq(3).text().trim()).to.equal('');
       expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
-      expect($content_row.find('td .icon-group-right a').attr('href')
+      expect($content_row.find('.actionmenu a.openItem').attr('href')
         ).to.equal('http://localhost:8081/folder');
 
       var $content_row1 = this.$el.find('table tbody tr').eq(1);
       expect($content_row1.find('td').eq(1).text().trim()).to.equal(
         'Document 0');
-      expect($content_row1.find('td .icon-group-right a').attr('href')
-        ).to.equal('http://localhost:8081/item0/item_view');
+      expect($content_row1.find('.actionmenu a.openItem').attr('href')
+        ).to.equal('http://localhost:8081/item0');
     });
 
   });

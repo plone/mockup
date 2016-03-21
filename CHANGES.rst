@@ -20,6 +20,14 @@ Fixes:
 
 New:
 
+- Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
+  This resolves a moment deprecation warning in structure examples.
+- Structure pattern: Allow definition of action menu items not only as dropdowns but also as buttons.
+  Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
+  Open ``openItem`` links directly, omitting ``/view``.
+  Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+  [thet]
+
 - set XML syntax coloring for .pt files in text editor
   [ebrehault]
 
@@ -42,11 +50,6 @@ New:
 
 - Alternative parameter/syntax for specification of the pushState url to
   be inline with the usage of ``{path}`` token in URL templates.
-  [metatoaster]
-
-- Structure can use the ``viewURL`` from a returned data item, alongside
-  with the previous default of simply appending ``/view`` to the
-  ``getURL`` attribute if this was not provided, for its view URL,
   [metatoaster]
 
 Fixes:

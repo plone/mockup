@@ -1,6 +1,4 @@
-<div class="alert alert-<%- statusType %> status">
-  <%- status %>
-</div>
+<div class="alert alert-<%- statusType %> status"><%- status %></div>
 
 <table class="table table-striped table-bordered">
   <thead>
