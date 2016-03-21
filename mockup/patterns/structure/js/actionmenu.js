@@ -1,61 +1,79 @@
-define([], function() {
+define(['underscore'], function(_) {
   'use strict';
 
   var menuOptions = {
-    'cutItem': [
-      'mockup-patterns-structure-url/js/actions',
-      'cutClicked',
-      '#',
-      'Cut',
-    ],
-    'copyItem': [
-      'mockup-patterns-structure-url/js/actions',
-      'copyClicked',
-      '#',
-      'Copy'
-    ],
-    'pasteItem': [
-      'mockup-patterns-structure-url/js/actions',
-      'pasteClicked',
-      '#',
-      'Paste'
-    ],
-    'move-top': [
-      'mockup-patterns-structure-url/js/actions',
-      'moveTopClicked',
-      '#',
-      'Move to top of folder'
-    ],
-    'move-bottom': [
-      'mockup-patterns-structure-url/js/actions',
-      'moveBottomClicked',
-      '#',
-      'Move to bottom of folder'
-    ],
-    'set-default-page': [
-      'mockup-patterns-structure-url/js/actions',
-      'setDefaultPageClicked',
-      '#',
-      'Set as default page'
-    ],
-    'selectAll': [
-      'mockup-patterns-structure-url/js/actions',
-      'selectAll',
-      '#',
-      'Select all contained items'
-    ],
-    'openItem': [
-      'mockup-patterns-structure-url/js/navigation',
-      'openClicked',
-      '#',
-      'Open'
-    ],
-    'editItem': [
-      'mockup-patterns-structure-url/js/navigation',
-      'editClicked',
-      '#',
-      'Edit'
-    ],
+    'openItem': {
+      'library':  'mockup-patterns-structure-url/js/navigation',
+      'method':   'openClicked',
+      'url':      '#',
+      'title':    'Open',
+      'category': 'button',
+      'iconCSS':  'glyphicon glyphicon-eye-open'
+    },
+    'editItem': {
+      'library':  'mockup-patterns-structure-url/js/navigation',
+      'method':   'editClicked',
+      'url':      '#',
+      'title':    'Edit',
+      'category': 'button',
+      'iconCSS':  'glyphicon glyphicon-pencil'
+    },
+    'cutItem': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'cutClicked',
+      'url':      '#',
+      'title':    'Cut',
+      'category': 'dropdown',
+      'iconCSS':  '',
+    },
+    'copyItem': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'copyClicked',
+      'url':      '#',
+      'title':    'Copy',
+      'category': 'dropdown',
+      'iconCSS':  ''
+    },
+    'pasteItem': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'pasteClicked',
+      'url':      '#',
+      'title':    'Paste',
+      'category': 'dropdown',
+      'iconCSS':  ''
+    },
+    'move-top': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'moveTopClicked',
+      'url':      '#',
+      'title':    'Move to top of folder',
+      'category': 'dropdown',
+      'iconCSS':  ''
+    },
+    'move-bottom': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'moveBottomClicked',
+      'url':      '#',
+      'title':    'Move to bottom of folder',
+      'category': 'dropdown',
+      'iconCSS':  ''
+    },
+    'set-default-page': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'setDefaultPageClicked',
+      'url':      '#',
+      'title':    'Set as default page',
+      'category': 'dropdown',
+      'iconCSS':  ''
+    },
+    'selectAll': {
+      'library':  'mockup-patterns-structure-url/js/actions',
+      'method':   'selectAll',
+      'url':      '#',
+      'title':    'Select all contained items',
+      'category': 'dropdown',
+      'iconCSS':  ''
+    }
   };
 
   var ActionMenu = function(menu) {
@@ -65,26 +83,25 @@ define([], function() {
       return menu.menuOptions;
     }
 
-    var result = {};
-    result.cutItem = menuOptions.cutItem;
-    result.copyItem = menuOptions.copyItem;
-    if (menu.app.pasteAllowed && menu.model.attributes.is_folderish) {
-      result.pasteItem = menuOptions.pasteItem;
+    var result = _.clone(menuOptions);
+    if ( !(menu.app.pasteAllowed && menu.model.attributes.is_folderish)) {
+      delete result.pasteItem;
     }
-    if (!menu.app.inQueryMode() && menu.options.canMove !== false) {
-      result['move-top'] = menuOptions['move-top'];
-      result['move-bottom'] = menuOptions['move-bottom'];
+    if (menu.app.inQueryMode() || menu.options.canMove === false) {
+      delete result['move-top'];
+      delete result['move-bottom'];
     }
-    if (!menu.model.attributes.is_folderish && menu.app.setDefaultPageUrl) {
-      result['set-default-page'] = menuOptions['set-default-page'];
+    if (menu.model.attributes.is_folderish || !menu.app.setDefaultPageUrl) {
+      delete result['set-default-page'];
     }
-    if (menu.model.attributes.is_folderish) {
-      result.selectAll = menuOptions.selectAll;
+
+    if (!menu.model.attributes.is_folderish) {
+      delete result.selectAll;
     }
-    if (menu.options.header) {
-      result.openItem = menuOptions.openItem;
-    }
-    result.editItem = menuOptions.editItem;
+
+    result.openItem.url = menu.model.attributes.getURL;
+    result.editItem.url = menu.model.attributes.getURL + '/@@edit';
+
     return result;
   };
 

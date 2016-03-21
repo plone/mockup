@@ -55,7 +55,7 @@ define([
           $crumbs.eq(idx).html(crumb.title);
         });
       }
-      if (data.object){
+      if (data.object) {
         self.folderModel = new Result(data.object);
         $('.context-buttons', self.$el).show();
         if (self.selectedCollection.findWhere({UID: data.object.UID})){
@@ -70,7 +70,7 @@ define([
           canMove: false
         });
         $('.input-group-btn', self.$breadcrumbs).empty().append(self.folderMenu.render().el);
-      }else {
+      } else {
         self.folderModel = null;
       }
     },

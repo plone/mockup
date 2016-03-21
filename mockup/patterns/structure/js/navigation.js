@@ -28,12 +28,12 @@ define([
     openClicked: function(e) {
       e.preventDefault();
       var self = this;
-      self.openUrl(self.getSelectedBaseUrl() + '/view');
+      self.openUrl(self.getSelectedBaseUrl());
     },
     editClicked: function(e) {
       e.preventDefault();
       var self = this;
-      self.openUrl(self.getSelectedBaseUrl() + '/edit');
+      self.openUrl(self.getSelectedBaseUrl() + '/@@edit');
     },
     folderClicked: function(e) {
       e.preventDefault();
