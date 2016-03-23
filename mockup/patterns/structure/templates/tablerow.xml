@@ -2,14 +2,16 @@
 
 <td class="title">
 
-  <a href="<%- getURL %>"
+  <a href="<%- viewURL %>"
       class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
       title="<%- portal_type %>">
     <%- Title %>
   </a>
+  <% if(attributes["getIcon"] ){ %>
   <div class="icon-group-right">
-    <% if(attributes["getIcon"] ){ %> <img class="image-icon" src="<%- getURL %>/@@images/image/icon"><span> &nbsp;</span><% } %>
+    <img class="image-icon" src="<%- getURL %>/@@images/image/icon"><span> &nbsp;</span>
   </div>
+  <% } %>
 
   <% _.each(activeColumns, function(column){ %>
     <% if(_.has(availableColumns, column)) { %>

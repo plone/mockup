@@ -21,7 +21,7 @@ New:
   This resolves a moment deprecation warning in structure examples.
 - Structure pattern: Allow definition of action menu items not only as dropdowns but also as buttons.
   Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
-  Open ``openItem`` links directly, omitting ``/view``.
+  Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
   Open ``editItem`` under ``/@@edit`` instead ``/edit``.
   [thet]
 

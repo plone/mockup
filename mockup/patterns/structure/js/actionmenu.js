@@ -83,24 +83,29 @@ define(['underscore'], function(_) {
       return menu.menuOptions;
     }
 
+    var model = menu.model.attributes;
+    var app = menu.app;
+
     var result = _.clone(menuOptions);
-    if ( !(menu.app.pasteAllowed && menu.model.attributes.is_folderish)) {
+    if ( !(app.pasteAllowed && model.is_folderish)) {
       delete result.pasteItem;
     }
-    if (menu.app.inQueryMode() || menu.options.canMove === false) {
+    if (app.inQueryMode() || menu.options.canMove === false) {
       delete result['move-top'];
       delete result['move-bottom'];
     }
-    if (menu.model.attributes.is_folderish || !menu.app.setDefaultPageUrl) {
+    if (model.is_folderish || !app.setDefaultPageUrl) {
       delete result['set-default-page'];
     }
 
-    if (!menu.model.attributes.is_folderish) {
+    if (!model.is_folderish) {
       delete result.selectAll;
     }
 
-    result.openItem.url = menu.model.attributes.getURL;
-    result.editItem.url = menu.model.attributes.getURL + '/@@edit';
+    var typeToViewAction = app.options.typeToViewAction;
+    var viewAction = typeToViewAction && typeToViewAction[model.portal_type] || '';
+    result.openItem.url = model.getURL + viewAction;
+    result.editItem.url = model.getURL + '/@@edit';
 
     return result;
   };
