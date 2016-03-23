@@ -6,10 +6,10 @@ define([
   'mockup-patterns-structure-url/js/views/actionmenu',
   'mockup-patterns-structure-url/js/views/app',
   'mockup-patterns-structure-url/js/models/result',
+  'mockup-patterns-structure-url/js/views/tablerow',
   'mockup-utils',
   'sinon',
-], function(expect, $, registry, Structure, ActionMenuView, AppView, Result,
-            utils, sinon) {
+], function(expect, $, registry, Structure, ActionMenuView, AppView, Result, TableRowView, utils, sinon) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -132,8 +132,12 @@ define([
         'availableColumns': [],
         'indexOptionsUrl': '',
         'setDefaultPageUrl': '',
-        'collectionConstructor':
-          'mockup-patterns-structure-url/js/collections/result',
+        'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
+        'typeToViewAction': {
+          'File': '/view',
+          'Image': '/view',
+          'Blob': '/view'
+        },
       });
       this.app.render();
     });
@@ -358,6 +362,67 @@ define([
       $('a.barbaz', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('Status: barbaz clicked');
+    });
+
+    it('use special view action for special types', function() {
+      // Test if special view actions for types are used in action .openItem
+      // and title link.
+
+      var items = [
+        {
+          model: {
+            'Title': "Dummy Image",
+            'is_folderish': false,
+            'portal_type': "Image",
+            'getURL': 'http://nohost/dummy_image'
+          },
+          expect: '/view'
+        }, {
+          model: {
+            Title: "Dummy File",
+            is_folderish: false,
+            portal_type: "File",
+            getURL: 'http://nohost/dummy_file'
+          },
+          expect: '/view'
+        }, {
+          model: {
+            Title: "Dummy Blob",
+            is_folderish: false,
+            portal_type: "Blob",
+            getURL: 'http://nohost/dummy_blob'
+          },
+          expect: '/view'
+        }, {
+          model: {
+            Title: "Dummy Document",
+            is_folderish: false,
+            portal_type: "Document",
+            getURL: 'http://nohost/dummy_document'
+          },
+          expect: ''
+        },
+      ];
+
+      for (var i = 0, len = items.length; i < len; i = i + 1) {
+        var item = items[i];
+        var model = new Result(item.model);
+        var menu = new ActionMenuView({
+          app: this.app,
+          model: model,
+          header: 'Menu Header'
+        });
+        var el = menu.render().el;
+        expect($('a.openItem', el).attr('href')).to.equal(item.model.getURL + item.expect);
+
+        var row = new TableRowView({
+          model: model,
+          app: this.app
+        });
+        el = row.render().el;
+        expect($('.title a', el).attr('href')).to.equal(item.model.getURL + item.expect);
+      }
+
     });
 
   });

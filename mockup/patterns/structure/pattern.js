@@ -100,6 +100,13 @@ define([
           'mockup-patterns-structure-url/js/navigation', 'openClicked']
       },
 
+      typeToViewAction: null,
+      _default_typeToViewAction: {
+          'File': '/view',
+          'Image': '/view',
+          'Blob': '/view'
+      },
+
       collectionConstructor:
         'mockup-patterns-structure-url/js/collections/result',
 
@@ -159,8 +166,7 @@ define([
         May want to consider moving the _default_* values out of the
         options object.
       */
-      var replaceDefaults = [
-          'attributes', 'activeColumns', 'availableColumns', 'buttons'];
+      var replaceDefaults = ['attributes', 'activeColumns', 'availableColumns', 'buttons', 'typeToViewAction'];
       _.each(replaceDefaults, function(idx) {
         if (self.options[idx] === null) {
           self.options[idx] = self.options['_default_' + idx];
