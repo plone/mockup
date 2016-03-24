@@ -9,11 +9,11 @@
   </a>
   <% if(attributes["getIcon"] ){ %>
   <div class="icon-group-right">
-    <img class="image-icon" src="<%- getURL %>/@@images/image/icon"><span> &nbsp;</span>
+    <img class="image-<%- iconSize %>" src="<%- getURL %>/@@images/image/<%- iconSize %>">
   </div>
   <% } %>
 
-  <% _.each(activeColumns, function(column){ %>
+  <% _.each(activeColumns, function(column) { %>
     <% if(_.has(availableColumns, column)) { %>
       <td class="<%- column %>"><%- attributes[column] %></td>
     <% } %>
