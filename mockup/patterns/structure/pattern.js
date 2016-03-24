@@ -94,10 +94,8 @@ define([
       // action triggered for the primary link for each table row.
       tableRowItemAction: null,
       _default_tableRowItemAction: {
-        folder: [
-          'mockup-patterns-structure-url/js/navigation', 'folderClicked'],
-        other: [
-          'mockup-patterns-structure-url/js/navigation', 'openClicked']
+        folder: ['mockup-patterns-structure-url/js/navigation', 'folderClicked'],
+        other: []
       },
 
       typeToViewAction: null,

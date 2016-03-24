@@ -3,16 +3,12 @@ define(['underscore'], function(_) {
 
   var menuOptions = {
     'openItem': {
-      'library':  'mockup-patterns-structure-url/js/navigation',
-      'method':   'openClicked',
       'url':      '#',
       'title':    'Open',
       'category': 'button',
       'iconCSS':  'glyphicon glyphicon-eye-open'
     },
     'editItem': {
-      'library':  'mockup-patterns-structure-url/js/navigation',
-      'method':   'editClicked',
       'url':      '#',
       'title':    'Edit',
       'category': 'button',

@@ -23,6 +23,7 @@ New:
   Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
   Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
   Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+  Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
   [thet]
 
 - set XML syntax coloring for .pt files in text editor

@@ -958,13 +958,9 @@ define([
       var pattern = this.$el.data('patternStructure');
       var item = this.$el.find('.itemRow').eq(10);
       expect(item.data().id).to.equal('item9');
-      $('.title a.manage', item).trigger('click');
-      this.clock.tick(1000);
-      expect(dummyWindow.location).to.equal('http://localhost:8081/item9');
-
-      $('.actionmenu a.editItem', item).trigger('click');
-      this.clock.tick(1000);
-      expect(dummyWindow.location).to.equal('http://localhost:8081/item9/@@edit');
+      expect($('.title a.manage', item).attr('href')).to.equal('http://localhost:8081/item9');
+      expect($('.actionmenu a.openItem', item).attr('href')).to.equal('http://localhost:8081/item9');
+      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:8081/item9/@@edit');
     });
 
     it('test navigate to folder push states', function() {
