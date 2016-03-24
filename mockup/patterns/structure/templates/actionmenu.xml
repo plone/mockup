@@ -2,7 +2,11 @@
 <a class="action <%- menuOption.name %> <%- menuOption.idx %>"
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>">
+  <% if (menuOption.iconCSS) { %>
   <span class="<%- menuOption.iconCSS %>"></span>
+  <% } else { %>
+  <%- _t(menuOption.title) %> 
+  <% } %>
 </a>&nbsp;
 <% }); %>
 
