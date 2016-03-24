@@ -526,6 +526,50 @@ define([
       expect($('a.action', el).length).to.equal(2);
     });
 
+    it('should display an icon for contents with images', function() {
+
+      this.app.iconSize = 'largest_possible';
+
+      var model = new Result({
+          'Title': "Dummy Document",
+          'is_folderish': false,
+          'portal_type': "Document",
+          'getURL': 'http://nohost/dummy_image',
+          'getIcon': true
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title img', el).length).to.equal(1);
+      expect($('.title img', el).attr('class')).to.have.string('image-largest_possible');
+    });
+
+    it('should display no icon for contents without images', function() {
+
+      this.app.iconSize = 'largest_possible';
+
+      var model = new Result({
+          'Title': "Dummy Document",
+          'is_folderish': false,
+          'portal_type': "Document",
+          'getURL': 'http://nohost/dummy_image',
+          'getIcon': false
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title img', el).length).to.equal(0);
+      expect($('.title .icon-group-right', el).length).to.have.equal(0);
+    });
+
   });
 
 

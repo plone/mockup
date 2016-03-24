@@ -48,6 +48,8 @@ define([
 
       activeColumnsCookie: 'activeColumns',
 
+      iconSize: 'icon',
+
       /*
         As the options operate on a merging basis per new attribute
         (key/value pairs) on the option Object in a recursive fashion,
@@ -64,7 +66,7 @@ define([
         'UID', 'Title', 'portal_type', 'path', 'review_state',
         'ModificationDate', 'EffectiveDate', 'CreationDate',
         'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
-        'getObjSize', 'last_comment_date', 'total_comments','getIcon'
+        'getObjSize', 'last_comment_date', 'total_comments', 'getIcon'
       ],
 
       activeColumns: null,
