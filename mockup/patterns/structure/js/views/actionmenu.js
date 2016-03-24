@@ -44,7 +44,7 @@ define([
        */
       var self = this;
       var result = {};
-      var menuOptionsCategorized = {dropdown: []};
+      var menuOptionsCategorized = {};
       _.each(self.menuOptions, function(menuOption, key) {
           // set a unique identifier to uniquely bind the events.
           var idx = utils.generateId();
@@ -102,8 +102,10 @@ define([
         id: utils.generateId()
       }, data)));
 
-      self.$dropdown = self.$('.dropdown-toggle');
-      self.$dropdown.dropdown();
+      if (data.menuOptions.dropdown) {
+        self.$dropdown = self.$('.dropdown-toggle');
+        self.$dropdown.dropdown();
+      }
 
       if (self.options.className) {
         self.$el.addClass(self.options.className);

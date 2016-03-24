@@ -205,7 +205,6 @@ define([
       $('a.cutItem', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
-
     });
 
     it('custom action menu items and actions.', function() {
@@ -423,6 +422,108 @@ define([
         expect($('.title a', el).attr('href')).to.equal(item.model.getURL + item.expect);
       }
 
+    });
+
+    it('custom action menu items in dropdown only', function() {
+      var model = new Result({});
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'item1': {
+            'url': '#',
+            'title': 'Item 1',
+            'category': 'dropdown',
+          },
+          'item2': {
+            'url': '#',
+            'title': 'Item 2',
+            'category': 'dropdown',
+          },
+        },
+      });
+
+      var el = menu.render().el;
+      expect($('ul.dropdown-menu a.action', el).length).to.equal(2);
+      expect($('a.action', el).length).to.equal(2);
+    });
+
+    it('custom action menu items as buttons only /wout icons', function() {
+      var model = new Result({});
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'item1': {
+            'url': '#',
+            'title': 'Item 1',
+            'category': 'button',
+          },
+          'item2': {
+            'url': '#',
+            'title': 'Item 2',
+            'category': 'button',
+          },
+        },
+      });
+
+      var el = menu.render().el;
+      expect($('ul.dropdown-menu', el).length).to.equal(0);
+      expect($('a.action', el).length).to.equal(2);
+      expect($($('a.action', el)[0]).text().trim()).to.equal('Item 1');
+      expect($($('a.action', el)[0]).find('span').length).to.equal(0);
+    });
+
+    it('custom action menu items as buttons only /w icons', function() {
+      var model = new Result({});
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'item1': {
+            'url': '#',
+            'title': 'Item 1',
+            'category': 'button',
+            'iconCSS': 'supericon'
+          },
+          'item2': {
+            'url': '#',
+            'title': 'Item 2',
+            'category': 'button',
+            'iconCSS': 'supericon'
+          },
+        },
+      });
+
+      var el = menu.render().el;
+      expect($('ul.dropdown-menu', el).length).to.equal(0);
+      expect($('a.action', el).length).to.equal(2);
+      expect($($('a.action', el)[0]).text().trim()).to.equal('');
+      expect($($('a.action', el)[0]).find('span').length).to.equal(1);
+    });
+
+    it('custom action menu items as buttons and dropdown mixed', function() {
+      var model = new Result({});
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'item1': {
+            'url': '#',
+            'title': 'Item 1',
+            'category': 'button',
+          },
+          'item2': {
+            'url': '#',
+            'title': 'Item 2',
+            'category': 'dropdown',
+          },
+        },
+      });
+
+      var el = menu.render().el;
+      expect($('ul.dropdown-menu a.action', el).length).to.equal(1);
+      expect($('a.action', el).length).to.equal(2);
     });
 
   });
