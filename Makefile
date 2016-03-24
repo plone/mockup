@@ -100,6 +100,9 @@ test-jenkins: stamp-bower
 test-dev:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
+test-dev-ff:
+	NODE_PATH=$(NODE_PATH) $(GRUNT) test_dev_ff $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
+
 test-serve:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_serve $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
@@ -123,6 +126,6 @@ publish-docs:
 	# echo -e "Publishing 'docs' bundle!\n"; cd mockup/docs; git add -fA .; git commit -m "Travis build $(TRAVIS_BUILD_NUMBER) pushed to 'docs'."; git push -fq https://$(GH_TOKEN)@github.com/plone/mockup.git gh-pages > /dev/null; cd ..;
 
 i18n-dump:
-	NODE_PATH=$(NODE_PATH) $(GRUNT) i18n-dump --gruntfile=mockup/Gruntfile.js 
+	NODE_PATH=$(NODE_PATH) $(GRUNT) i18n-dump --gruntfile=mockup/Gruntfile.js
 
-.PHONY: bundle bundle-widgets bundle-structure bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-ci publish-docs clean clean-deep
+.PHONY: bundle bundle-widgets bundle-structure bundle-plone docs bootstrap bootstrap-nix jshint test test-once test-dev test-dev-ff test-ci publish-docs clean clean-deep
