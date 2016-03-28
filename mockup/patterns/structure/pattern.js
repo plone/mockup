@@ -63,10 +63,23 @@ define([
 
       attributes: null,
       _default_attributes: [
-        'UID', 'Title', 'portal_type', 'path', 'review_state',
-        'ModificationDate', 'EffectiveDate', 'CreationDate',
-        'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
-        'getObjSize', 'last_comment_date', 'total_comments', 'getIcon'
+        'CreationDate',
+        'EffectiveDate',
+        'exclude_from_nav',
+        'getIcon',
+        'getObjSize',
+        'getURL',
+        'id',
+        'is_folderish',
+        'last_comment_date',
+        'ModificationDate',
+        'path',
+        'portal_type',
+        'review_state',
+        'Subject',
+        'Title',
+        'total_comments',
+        'UID'
       ],
 
       activeColumns: null,
