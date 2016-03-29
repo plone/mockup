@@ -1,5 +1,5 @@
 <% _.each(menuOptions.button, function(menuOption){ %>
-<a class="action <%- menuOption.name %> <%- menuOption.idx %>"
+<a class="action <%- menuOption.name %> <%- menuOption.idx %> <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>">
   <% if (menuOption.iconCSS) { %>
@@ -29,7 +29,7 @@
 
   <% _.each(menuOptions.dropdown, function(menuOption){ %>
   <li>
-    <a class="action <%- menuOption.name %> <%- menuOption.idx %>"
+    <a class="action <%- menuOption.name %> <%- menuOption.idx %> <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
         href="<%- menuOption.url %>">
       <%- _t(menuOption.title) %>
       <% if (menuOption.iconCSS) { %>

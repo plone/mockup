@@ -6,13 +6,15 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Open',
       'category': 'button',
-      'iconCSS':  'glyphicon glyphicon-eye-open'
+      'iconCSS':  'glyphicon glyphicon-eye-open',
+      'modal':    false
     },
     'editItem': {
       'url':      '#',
       'title':    'Edit',
       'category': 'button',
-      'iconCSS':  'glyphicon glyphicon-pencil'
+      'iconCSS':  'glyphicon glyphicon-pencil',
+      'modal':    false
     },
     'cutItem': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -21,6 +23,7 @@ define(['underscore'], function(_) {
       'title':    'Cut',
       'category': 'dropdown',
       'iconCSS':  '',
+      'modal':    false
     },
     'copyItem': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -28,7 +31,8 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Copy',
       'category': 'dropdown',
-      'iconCSS':  ''
+      'iconCSS':  '',
+      'modal':    false
     },
     'pasteItem': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -36,7 +40,8 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Paste',
       'category': 'dropdown',
-      'iconCSS':  ''
+      'iconCSS':  '',
+      'modal':    false
     },
     'move-top': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -44,7 +49,8 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Move to top of folder',
       'category': 'dropdown',
-      'iconCSS':  ''
+      'iconCSS':  '',
+      'modal':    false
     },
     'move-bottom': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -52,7 +58,8 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Move to bottom of folder',
       'category': 'dropdown',
-      'iconCSS':  ''
+      'iconCSS':  '',
+      'modal':    false
     },
     'set-default-page': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -60,7 +67,8 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Set as default page',
       'category': 'dropdown',
-      'iconCSS':  ''
+      'iconCSS':  '',
+      'modal':    false
     },
     'selectAll': {
       'library':  'mockup-patterns-structure-url/js/actions',
@@ -68,7 +76,8 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Select all contained items',
       'category': 'dropdown',
-      'iconCSS':  ''
+      'iconCSS':  '',
+      'modal':    false
     }
   };
 
