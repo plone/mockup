@@ -31,8 +31,9 @@ New:
   Open ``editItem`` under ``/@@edit`` instead ``/edit``.
   Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
   Add ``iconCSS`` option for action menus items to add icons.
-  Add ``linkCSS`` option for action menus items to allow additional CSS classes, e.g. to add a pattern like ``pat-modal``.
+  Add ``modal`` option for action menus items to allow links open in a modal.
   Add ``iconSize`` option to set the icon size if a item has an image.
+
   [thet]
 
 - set XML syntax coloring for .pt files in text editor

@@ -7,9 +7,11 @@ define([
   'mockup-patterns-structure-url/js/actions',
   'mockup-patterns-structure-url/js/actionmenu',
   'text!mockup-patterns-structure-url/templates/actionmenu.xml',
+  'pat-registry',
   'translate',
+  'mockup-patterns-modal',
   'bootstrap-dropdown'
-], function($, _, BaseView, utils, Result, Actions, ActionMenu, ActionMenuTemplate, _t) {
+], function($, _, BaseView, utils, Result, Actions, ActionMenu, ActionMenuTemplate, registry, _t) {
   'use strict';
 
   var ActionMenuView = BaseView.extend({
@@ -20,6 +22,7 @@ define([
     menuOptions: null,
     // Dynamic menu options
     menuGenerator: 'mockup-patterns-structure-url/js/actionmenu',
+    needsRescan: false,
 
     eventConstructor: function(definition) {
       var self = this;
@@ -56,6 +59,9 @@ define([
               menuOptionsCategorized[category] = [];
           }
           menuOptionsCategorized[category].push(menuOption);
+          if (menuOption.modal) {
+            self.needsRescan = true;
+          }
 
 		      // Create event handler and add it to the results object.
           var e = self.eventConstructor(menuOption);
@@ -110,6 +116,11 @@ define([
       if (self.options.className) {
         self.$el.addClass(self.options.className);
       }
+
+      if (this.needsRescan) {
+        registry.scan(this.$el);
+      }
+
       return this;
     }
   });

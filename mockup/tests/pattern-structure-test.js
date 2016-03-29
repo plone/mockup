@@ -145,6 +145,8 @@ define([
     afterEach(function() {
       this.clock.restore();
       this.server.restore();
+      $('body').removeAttr('class');
+      $('body').html('');
       requirejs.undef('dummytestactions');
       requirejs.undef('dummytestactionmenu');
     });
@@ -568,6 +570,51 @@ define([
 
       expect($('.title img', el).length).to.equal(0);
       expect($('.title .icon-group-right', el).length).to.have.equal(0);
+    });
+
+    // MODAL ACTIONS
+
+    it('modal button true opens in modal', function() {
+      var model = new Result({});
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'button': {
+            'title': 'Modal',
+            'category': 'button',
+            'modal': true
+          }
+        }
+      });
+
+      var $el = $(menu.render().el).appendTo('body');
+      var $body = $('body');
+      expect($('.plone-modal-wrapper', $body).size()).to.equal(0);
+      $('a.button', $el).trigger('click');
+      expect($('.plone-modal-wrapper', $body).size()).to.equal(1);
+    });
+
+    it('modal dropdown true opens in modal', function() {
+
+      var model = new Result({});
+      var menu = new ActionMenuView({
+        app: this.app,
+        model: model,
+        menuOptions: {
+          'button': {
+            'title': 'Modal',
+            'category': 'dropdown',
+            'modal': true
+          }
+        }
+      });
+
+      var $el = $(menu.render().el).appendTo('body');
+      var $body = $('body');
+      expect($('.plone-modal-wrapper', $body).size()).to.equal(0);
+      $('a.button', $el).trigger('click');
+      expect($('.plone-modal-wrapper', $body).size()).to.equal(1);
     });
 
   });
