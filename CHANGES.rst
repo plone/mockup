@@ -68,6 +68,8 @@ Fixes:
 - Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
   This resolves a moment deprecation warning in structure examples.
   [thet]
+- Fix tests and mocks on real browsers for structure pattern test, which threw CSRF errors.
+  [metatoaster]
 
 - JSHint fixes and jscs formatings for structure pattern.
   [thet]
