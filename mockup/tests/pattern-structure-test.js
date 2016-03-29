@@ -82,7 +82,7 @@ define([
         'availableColumns': [],
         'indexOptionsUrl': '',
         'setDefaultPageUrl': '',
-        'url': 'http://localhost:8081/vocab',
+        'url': 'http://localhost:9876/vocab',
         'collectionConstructor':
           'mockup-patterns-structure-url/js/collections/result'
       });
@@ -639,7 +639,7 @@ define([
         "contextInfoUrl": "{path}/contextInfo",
         "setDefaultPageUrl": "/setDefaultPage",
         "urlStructure": {
-          "base": "http://localhost:8081",
+          "base": "http://localhost:9876",
           "appended": "/folder_contents"
         }
       };
@@ -672,7 +672,7 @@ define([
         var items = [];
         items.push({
           UID: '123sdfasdf' + path + 'Folder',
-          getURL: 'http://localhost:8081' + path + '/folder',
+          getURL: 'http://localhost:9876' + path + '/folder',
           path: path + '/folder',
           portal_type: 'Folder',
           Description: 'folder',
@@ -685,7 +685,7 @@ define([
         for (var i = start; i < end; i = i + 1) {
           items.push({
             UID: '123sdfasdf' + path + i,
-            getURL: 'http://localhost:8081' + path + '/item' + i,
+            getURL: 'http://localhost:9876' + path + '/item' + i,
             path: path + '/item' + i,
             portal_type: 'Document ' + i,
             Description: 'document',
@@ -744,7 +744,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -766,6 +766,7 @@ define([
 
       this.sandbox = sinon.sandbox.create();
       this.sandbox.stub(window, 'history', history);
+      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
@@ -803,7 +804,7 @@ define([
     it('test selection well label', function() {
       extraDataJsonItem = {
         UID: 'XSS" data-xss="bobby',
-        getURL: 'http://localhost:8081/xss',
+        getURL: 'http://localhost:9876/xss',
         path: '/xss',
         portal_type: 'Folder',
         Description: 'XSS test item',
@@ -977,11 +978,11 @@ define([
       expect($content_row.find('td').eq(2).text().trim()).to.equal('');
       expect($content_row.find('td').eq(3).text().trim()).to.equal('');
       expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
-      expect($content_row.find('a.openItem').attr('href')).to.equal('http://localhost:8081/folder');
+      expect($content_row.find('a.openItem').attr('href')).to.equal('http://localhost:9876/folder');
 
       var $content_row1 = this.$el.find('table tbody tr').eq(1);
       expect($content_row1.find('td').eq(1).text().trim()).to.equal('Document 0');
-      expect($content_row1.find('a.openItem').attr('href')).to.equal('http://localhost:8081/item0');
+      expect($content_row1.find('a.openItem').attr('href')).to.equal('http://localhost:9876/item0');
     });
 
     it('test select all contained item action', function() {
@@ -1150,9 +1151,9 @@ define([
       var pattern = this.$el.data('patternStructure');
       var item = this.$el.find('.itemRow').eq(10);
       expect(item.data().id).to.equal('item9');
-      expect($('.title a.manage', item).attr('href')).to.equal('http://localhost:8081/item9');
-      expect($('.actionmenu a.openItem', item).attr('href')).to.equal('http://localhost:8081/item9');
-      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:8081/item9/@@edit');
+      expect($('.title a.manage', item).attr('href')).to.equal('http://localhost:9876/item9');
+      expect($('.actionmenu a.openItem', item).attr('href')).to.equal('http://localhost:9876/item9');
+      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:9876/item9/@@edit');
     });
 
     it('test navigate to folder push states', function() {
@@ -1164,13 +1165,13 @@ define([
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
       expect(history.pushed.url).to.equal(
-        'http://localhost:8081/folder/folder_contents');
+        'http://localhost:9876/folder/folder_contents');
       expect(structureUrlChangedPath).to.eql('/folder');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
       expect(history.pushed.url).to.equal(
-        'http://localhost:8081/folder_contents');
+        'http://localhost:9876/folder_contents');
       expect(structureUrlChangedPath).to.eql('');
     });
 
@@ -1181,7 +1182,7 @@ define([
       // Need to inject this to the mocked window location attribute the
       // code will check against.  This url is set before the trigger.
       dummyWindow.location = {
-          'href': 'http://localhost:8081/folder/folder/folder_contents'};
+          'href': 'http://localhost:9876/folder/folder/folder_contents'};
       // then trigger off the real window.
       $(window).trigger('popstate');
       this.clock.tick(1000);
@@ -1239,7 +1240,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -1424,7 +1425,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -1507,13 +1508,13 @@ define([
         var items = [];
         items.push({
           /*
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           id: 'folder'
           */
           // 'portal_type', 'review_state', 'getURL'
 
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           // Other required fields.
           id: 'folder',
@@ -1522,11 +1523,11 @@ define([
         for (var i = start; i < end; i = i + 1) {
           items.push({
             /*
-            getURL: 'http://localhost:8081/item' + i,
+            getURL: 'http://localhost:9876/item' + i,
             Title: 'Document ' + i,
             */
 
-            getURL: 'http://localhost:8081/item' + i,
+            getURL: 'http://localhost:9876/item' + i,
             Title: 'Document ' + i,
             // Other required fields.
             id: 'item' + i,
@@ -1546,7 +1547,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -1634,14 +1635,14 @@ define([
         }
         var items = [];
         items.push({
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           id: 'folder',
           UID: 'folder',
         });
         for (var i = start; i < end; i = i + 1) {
           items.push({
-            getURL: 'http://localhost:8081/item' + i,
+            getURL: 'http://localhost:9876/item' + i,
             Title: 'Document ' + i,
             id: 'item' + 1,
             UID: 'item' + 1,
@@ -1660,7 +1661,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -1759,13 +1760,13 @@ define([
           end = start + batch.size;
         }
         var items = [{
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           'is_folderish': true,
           path: '/folder',
           id: 'folder'
         }, {
-          getURL: 'http://localhost:8081/item',
+          getURL: 'http://localhost:9876/item',
           Title: 'Item',
           'is_folderish': false,
           path: '/item',
@@ -1784,7 +1785,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -1922,10 +1923,10 @@ define([
           'Title', 'getURL'
         ],
         "urlStructure": {
-          "base": "http://localhost:8081/traverse_view",
+          "base": "http://localhost:9876/traverse_view",
           "appended": ""
         },
-        "pushStateUrl": "http://localhost:8081/traverse_view{path}",
+        "pushStateUrl": "http://localhost:9876/traverse_view{path}",
         "traverseView": true
       };
 
@@ -1947,13 +1948,13 @@ define([
           end = start + batch.size;
         }
         var items = [{
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           'is_folderish': true,
           path: '/folder',
           id: 'folder'
         }, {
-          getURL: 'http://localhost:8081/item',
+          getURL: 'http://localhost:9876/item',
           Title: 'Item',
           'is_folderish': false,
           path: '/item',
@@ -1972,7 +1973,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -1989,6 +1990,7 @@ define([
       this.clock = sinon.useFakeTimers();
       this.sandbox = sinon.sandbox.create();
       this.sandbox.stub(window, 'history', history);
+      this.sandbox.stub(window.history, 'pushState', history.pushState);
 
       sinon.stub(utils, 'getWindow', function() {
         return dummyWindow;
@@ -2017,13 +2019,13 @@ define([
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
       expect(history.pushed.url).to.equal(
-        'http://localhost:8081/traverse_view/folder');
+        'http://localhost:9876/traverse_view/folder');
       expect(structureUrlChangedPath).to.eql('');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
       expect(history.pushed.url).to.equal(
-        'http://localhost:8081/traverse_view');
+        'http://localhost:9876/traverse_view');
     });
 
     it('test navigate to folder pop states - urlStructure', function() {
@@ -2035,7 +2037,7 @@ define([
       // Need to inject this to the mocked window location attribute the
       // code will check against.  This url is set before the trigger.
       dummyWindow.location = {
-          'href': 'http://localhost:8081/traverse_view/folder/folder'};
+          'href': 'http://localhost:9876/traverse_view/folder/folder'};
       // then trigger off the real window.
       $(window).trigger('popstate');
       this.clock.tick(1000);
@@ -2054,13 +2056,13 @@ define([
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
       expect(history.pushed.url).to.equal(
-        'http://localhost:8081/traverse_view/folder');
+        'http://localhost:9876/traverse_view/folder');
       expect(structureUrlChangedPath).to.eql('');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
       expect(history.pushed.url).to.equal(
-        'http://localhost:8081/traverse_view');
+        'http://localhost:9876/traverse_view');
     });
 
     it('test navigate to folder pop states - pushStateUrl', function() {
@@ -2072,7 +2074,7 @@ define([
       // Need to inject this to the mocked window location attribute the
       // code will check against.  This url is set before the trigger.
       dummyWindow.location = {
-          'href': 'http://localhost:8081/traverse_view/folder/folder'};
+          'href': 'http://localhost:9876/traverse_view/folder/folder'};
       // then trigger off the real window.
       $(window).trigger('popstate');
       this.clock.tick(1000);
@@ -2131,13 +2133,13 @@ define([
           end = start + batch.size;
         }
         var items = [{
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           'is_folderish': true,
           path: '/folder',
           id: 'folder'
         }, {
-          getURL: 'http://localhost:8081/item',
+          getURL: 'http://localhost:9876/item',
           Title: 'Item',
           'is_folderish': false,
           path: '/item',
@@ -2156,7 +2158,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -2331,7 +2333,7 @@ define([
         var items = [];
         items.push({
           UID: '123sdfasdfFolder',
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           path: '/folder',
           portal_type: 'Folder',
           Description: 'folder',
@@ -2344,7 +2346,7 @@ define([
         for (var i = start; i < end; i = i + 1) {
           items.push({
             UID: '123sdfasdf' + i,
-            getURL: 'http://localhost:8081/item' + i,
+            getURL: 'http://localhost:9876/item' + i,
             path: '/item' + i,
             portal_type: 'Document ' + i,
             Description: 'document',
@@ -2376,7 +2378,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',
@@ -2416,13 +2418,13 @@ define([
       expect($content_row.find('td').eq(3).text().trim()).to.equal('');
       expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
       expect($content_row.find('.actionmenu a.openItem').attr('href')
-        ).to.equal('http://localhost:8081/folder');
+        ).to.equal('http://localhost:9876/folder');
 
       var $content_row1 = this.$el.find('table tbody tr').eq(1);
       expect($content_row1.find('td').eq(1).text().trim()).to.equal(
         'Document 0');
       expect($content_row1.find('.actionmenu a.openItem').attr('href')
-        ).to.equal('http://localhost:8081/item0');
+        ).to.equal('http://localhost:9876/item0');
     });
 
   });
@@ -2444,7 +2446,7 @@ define([
         "contextInfoUrl": "{path}/contextInfo",
         "setDefaultPageUrl": "/setDefaultPage",
         "urlStructure": {
-          "base": "http://localhost:8081",
+          "base": "http://localhost:9876",
           "appended": "/folder_contents"
         }
       };
@@ -2464,14 +2466,14 @@ define([
           end = start + batch.size;
         }
         var items = [{
-          getURL: 'http://localhost:8081/folder',
+          getURL: 'http://localhost:9876/folder',
           Title: 'Folder',
           'is_folderish': true,
           path: '/folder',
           UID: 'folder',
           id: 'folder'
         }, {
-          getURL: 'http://localhost:8081/item',
+          getURL: 'http://localhost:9876/item',
           Title: 'Item',
           'is_folderish': false,
           path: '/item',
@@ -2491,7 +2493,7 @@ define([
         if (xhr.url.indexOf('folder') !== -1){
           data.object = {
             UID: '123sdfasdfFolder',
-            getURL: 'http://localhost:8081/folder',
+            getURL: 'http://localhost:9876/folder',
             path: '/folder',
             portal_type: 'Folder',
             Description: 'folder',

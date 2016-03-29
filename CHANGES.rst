@@ -62,6 +62,9 @@ New:
 
 Fixes:
 
+- Fix tests and mocks on real browsers for structure pattern test, which threw CSRF errors.
+  [metatoaster]
+
 - JSHint fixes and jscs formatings for structure pattern.
   [thet]
 
