@@ -19,6 +19,9 @@ New:
 
 - Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
   This resolves a moment deprecation warning in structure examples.
+- Add ``ajaxLoad`` boolean parameter to modal pattern to add ``?ajax_load=1`` to ajax urls.
+  [thet]
+
 - Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
   [thet]
 

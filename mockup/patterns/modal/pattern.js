@@ -16,6 +16,7 @@
  *    automaticallyAddButtonActions(boolean): Automatically create actions for elements matched with the buttons selector. They will use the options provided in actionOptions. (true)
  *    loadLinksWithinModal(boolean): Automatically load links inside of the modal using AJAX. (true)
  *    actionOptions(object): A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. ({})
+ *    ajaxLoad(Boolean): True, if ``ajax_load=1`` is appended to the url before ajax loading. In Plone, this reduces the template output and rendering time.
  *
  *
  * Documentation:
@@ -145,6 +146,7 @@ define([
         disableAjaxFormSubmit: false,
         target: null,
         ajaxUrl: null, // string, or function($el, options) that returns a string
+        ajaxLoad: false,
         modalFunction: null, // String, function name on self to call
         isForm: false,
         timeout: 5000,
@@ -261,6 +263,10 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+        if (options.ajaxLoad === true && url.substring('ajax_load') > -1) {
+          url = url + '?ajax_load=1';
+        }
+
         if (options.disableAjaxFormSubmit) {
           if ($action.attr('name') && $action.attr('value')) {
             $form.append($('<input type="hidden" name="' + $action.attr(
@@ -354,6 +360,10 @@ define([
         if (options.displayInModal === false) {
           window.parent.location.href = url;
           return;
+        }
+
+        if (options.ajaxLoad === true && url.substring('ajax_load') > -1) {
+          url = url + '?ajax_load=1';
         }
 
         // ajax version
@@ -588,8 +598,14 @@ define([
       var self = this;
       self.emit('before-ajax');
       self.loading.show();
+
+      var url = self.options.ajaxUrl;
+      if (self.options.ajaxLoad === true && url.substring('ajax_load') > -1) {
+        url = url + '?ajax_load=1';
+      }
+
       self.ajaxXHR = $.ajax({
-        url: self.options.ajaxUrl,
+        url: url,
         type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
