@@ -243,7 +243,9 @@ define([
         // pass action that was clicked when submiting form
         var extraData = {};
         extraData[$action.attr('name')] = $action.attr('value');
-
+        if (options.ajaxLoad === true) {
+          extraData['ajax_load'] = 1;
+        }
         var $form;
 
         if ($.nodeName($action[0], 'form')) {
@@ -261,10 +263,6 @@ define([
           }
         } else {
           url = $action.parents('form').attr('action');
-        }
-
-        if (options.ajaxLoad === true && url.substring('ajax_load') > -1) {
-          url = url + '?ajax_load=1';
         }
 
         if (options.disableAjaxFormSubmit) {
@@ -362,13 +360,15 @@ define([
           return;
         }
 
-        if (options.ajaxLoad === true && url.substring('ajax_load') > -1) {
-          url = url + '?ajax_load=1';
+        var extraData = {};
+        if (options.ajaxLoad === true) {
+          extraData['ajax_load'] = 1;
         }
 
         // ajax version
         $.ajax({
-          url: url
+          url: url,
+          data: extraData
         }).fail(function(xhr, textStatus, errorStatus) {
           if (textStatus === 'timeout' && options.onTimeout) {
             options.onTimeout(self.$modal, xhr, errorStatus);
@@ -599,13 +599,14 @@ define([
       self.emit('before-ajax');
       self.loading.show();
 
-      var url = self.options.ajaxUrl;
-      if (self.options.ajaxLoad === true && url.substring('ajax_load') > -1) {
-        url = url + '?ajax_load=1';
+      var extraData = {};
+      if (self.options.ajaxLoad === true) {
+        extraData['ajax_load'] = 1;
       }
 
       self.ajaxXHR = $.ajax({
-        url: url,
+        url: self.options.ajaxUrl,
+        data: extraData,
         type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
