@@ -1,33 +1,21 @@
 Changelog
 =========
 
-2.1.4 (unreleased)
+2.1.4 (2016-03-31)
 ------------------
-
-Incompatibilities:
-
-- *add item here*
 
 New:
 
 - set XML syntax coloring for .pt files in text editor
   [ebrehault]
 
+- Upgrade TinyMCE to 4.3.4
+  [vangheem]
+
 Fixes:
 
 - Fix ``Makefile`` to use ``mockup/build`` instead of ``build``.
   [thet]
-
-
-2.1.3 (2016-02-27)
-New:
-
-- Upgrade TinyMCE to 4.3.4
-  [vangheem]
-
-
-Fixes:
-
 
 
 2.1.3 (2016-03-10)
