@@ -1,22 +1,22 @@
 <td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 
 <td class="title">
-
-  <a href="<%- viewURL %>"
-      class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
-      title="<%- portal_type %>">
-    <%- Title %>
-  </a>
-  <% if(attributes["getIcon"] ){ %>
-  <div class="icon-group-right">
-    <img class="image-<%- iconSize %>" src="<%- getURL %>/@@images/image/<%- iconSize %>">
+  <div class="pull-left">
+    <a href="<%- viewURL %>"
+        class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
+        title="<%- portal_type %>">
+      <%- Title %>
+    </a>
   </div>
+  <% if(attributes["getIcon"] ){ %>
+  <img class="image-<%- iconSize %> pull-right" src="<%- getURL %>/@@images/image/<%- iconSize %>">
   <% } %>
+</td>
 
-  <% _.each(activeColumns, function(column) { %>
-    <% if(_.has(availableColumns, column)) { %>
-      <td class="<%- column %>"><%- attributes[column] %></td>
-    <% } %>
-  <% }); %>
+<% _.each(activeColumns, function(column) { %>
+  <% if(_.has(availableColumns, column)) { %>
+    <td class="<%- column %>"><%- attributes[column] %></td>
+  <% } %>
+<% }); %>
 
 <td class="actionmenu-container"></td>
