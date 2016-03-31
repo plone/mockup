@@ -1175,6 +1175,7 @@ define([
     });
 
     it('test navigate to folder pop states', function() {
+      this.timeout(15000);  // need more than standard 2000ms here... :(
       registry.scan(this.$el);
       this.clock.tick(1000);
       // Need to inject this to the mocked window location attribute the
