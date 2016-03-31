@@ -31,10 +31,10 @@
   <li>
     <a class="action <%- menuOption.name %> <%- menuOption.idx %> <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
         href="<%- menuOption.url %>">
-      <%- _t(menuOption.title) %>
       <% if (menuOption.iconCSS) { %>
       <span class="<%- menuOption.iconCSS %>"></span>
       <% } %>
+      <%- _t(menuOption.title) %>
     </a>
   </li>
   <% }); %>
