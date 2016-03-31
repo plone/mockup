@@ -1,5 +1,5 @@
 <% _.each(menuOptions.button, function(menuOption){ %>
-<a class="action <%- menuOption.name %> <%- menuOption.idx %> <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
+<a class="action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>">
   <% if (menuOption.iconCSS) { %>

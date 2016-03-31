@@ -10,6 +10,7 @@ define([
   'pat-registry',
   'translate',
   'mockup-patterns-modal',
+  'mockup-patterns-tooltip',
   'bootstrap-dropdown'
 ], function($, _, BaseView, utils, Result, Actions, ActionMenu, ActionMenuTemplate, registry, _t) {
   'use strict';
@@ -59,7 +60,7 @@ define([
               menuOptionsCategorized[category] = [];
           }
           menuOptionsCategorized[category].push(menuOption);
-          if (menuOption.modal) {
+          if (menuOption.modal || menuOption.category === 'button') {
             self.needsRescan = true;
           }
 

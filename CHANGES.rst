@@ -22,15 +22,17 @@ New:
 - Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
   [thet]
 
-- Structure pattern: Allow definition of action menu items not only as dropdowns but also as buttons.
-  Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
-  Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
-  Open ``editItem`` under ``/@@edit`` instead ``/edit``.
-  Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
-  Add ``iconCSS`` option for action menus items to add icons.
-  Use icons for all actionmenu entries.
-  Add ``modal`` option for action menus items to allow links open in a modal.
-  Add ``iconSize`` option to set the icon size if a item has an image.
+- Structure pattern:
+  - Allow definition of action menu items not only as dropdowns but also as buttons.
+  - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
+  - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
+  - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+  - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
+  - Add ``iconCSS`` option for action menus items to add icons.
+  - Add ``modal`` option for action menus items to allow links open in a modal.
+  - Add ``iconSize`` option to set the icon size if a item has an image.
+  - Use icons for all actionmenu entries.
+  - Use the tooltip pattern for all actionmenu buttons.
 
   [thet]
 
