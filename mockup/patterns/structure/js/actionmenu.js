@@ -22,7 +22,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Cut',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-scissors',
       'modal':    false
     },
     'copyItem': {
@@ -31,7 +31,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Copy',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-duplicate',
       'modal':    false
     },
     'pasteItem': {
@@ -40,7 +40,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Paste',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-open-file',
       'modal':    false
     },
     'move-top': {
@@ -49,7 +49,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Move to top of folder',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-step-backward rright',
       'modal':    false
     },
     'move-bottom': {
@@ -58,7 +58,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Move to bottom of folder',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-step-backward rleft',
       'modal':    false
     },
     'set-default-page': {
@@ -67,7 +67,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Set as default page',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-ok-circle',
       'modal':    false
     },
     'selectAll': {
@@ -76,7 +76,7 @@ define(['underscore'], function(_) {
       'url':      '#',
       'title':    'Select all contained items',
       'category': 'dropdown',
-      'iconCSS':  '',
+      'iconCSS':  'glyphicon glyphicon-check',
       'modal':    false
     }
   };

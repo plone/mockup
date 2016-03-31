@@ -31,6 +31,7 @@ New:
   Open ``editItem`` under ``/@@edit`` instead ``/edit``.
   Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
   Add ``iconCSS`` option for action menus items to add icons.
+  Use icons for all actionmenu entries.
   Add ``modal`` option for action menus items to allow links open in a modal.
   Add ``iconSize`` option to set the icon size if a item has an image.
 
