@@ -1,27 +1,13 @@
 Changelog
 =========
 
-2.2.1 (Unreleased)
+2.3.0 (Unreleased)
 ------------------
 
 Incompatibilities:
 
 New:
 
-Fixes:
-
-- Moment pattern: Don't try to parse obvious invalid dates ("None", "").
-  Avoids Moment.js deprecation warnings.
-  [thet]
-
-
-2.2.0 (2016-03-31)
-------------------
-
-New:
-
-- Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
-  This resolves a moment deprecation warning in structure examples.
 - Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
   [thet]
 
@@ -38,6 +24,21 @@ New:
   - Use the tooltip pattern for all actionmenu buttons.
 
   [thet]
+
+Fixes:
+
+- Fix tests and mocks on real browsers for structure pattern test, which threw CSRF errors.
+  [metatoaster]
+
+- Moment pattern: Don't try to parse obvious invalid dates ("None", "").
+  Avoids Moment.js deprecation warnings.
+  [thet]
+
+
+2.2.0 (2016-03-31)
+------------------
+
+New:
 
 - set XML syntax coloring for .pt files in text editor
   [ebrehault]
@@ -68,8 +69,6 @@ Fixes:
 - Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
   This resolves a moment deprecation warning in structure examples.
   [thet]
-- Fix tests and mocks on real browsers for structure pattern test, which threw CSRF errors.
-  [metatoaster]
 
 - JSHint fixes and jscs formatings for structure pattern.
   [thet]
