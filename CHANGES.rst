@@ -10,16 +10,15 @@ New:
 
 Fixes:
 
+- Moment pattern: Don't try to parse obvious invalid dates ("None", "").
+  Avoids Moment.js deprecation warnings.
+  [thet]
 
 
 2.2.0 (2016-03-31)
 ------------------
 
 New:
-
-- Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
-  This resolves a moment deprecation warning in structure examples.
-  [thet]
 
 - set XML syntax coloring for .pt files in text editor
   [ebrehault]
@@ -51,6 +50,10 @@ New:
   [metatoaster]
 
 Fixes:
+
+- Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
+  This resolves a moment deprecation warning in structure examples.
+  [thet]
 
 - JSHint fixes and jscs formatings for structure pattern.
   [thet]

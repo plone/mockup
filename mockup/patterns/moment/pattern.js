@@ -106,6 +106,9 @@ define([
       if (!date) {
         date = $.trim($el.html());
       }
+      if (!date || date === 'None') {
+        return;
+      }
       moment.locale([(new i18n()).currentLanguage, 'en']);
       date = moment(date);
       if (!date.isValid()) {
