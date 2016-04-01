@@ -17,6 +17,10 @@ Fixes:
 
 New:
 
+- Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
+  This resolves a moment deprecation warning in structure examples.
+  [thet]
+
 - set XML syntax coloring for .pt files in text editor
   [ebrehault]
 
