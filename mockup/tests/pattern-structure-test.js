@@ -1,15 +1,18 @@
 define([
   'expect',
   'jquery',
+  'underscore',
   'pat-registry',
   'mockup-patterns-structure',
   'mockup-patterns-structure-url/js/views/actionmenu',
   'mockup-patterns-structure-url/js/views/app',
   'mockup-patterns-structure-url/js/models/result',
+  'mockup-patterns-structure-url/js/views/table',
   'mockup-patterns-structure-url/js/views/tablerow',
+  'mockup-patterns-structure-url/js/collections/result',
   'mockup-utils',
   'sinon',
-], function(expect, $, registry, Structure, ActionMenuView, AppView, Result, TableRowView, utils, sinon) {
+], function(expect, $, _, registry, Structure, ActionMenuView, AppView, Result, TableView, TableRowView, ResultCollection, utils, sinon) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -122,8 +125,6 @@ define([
 
       this.clock = sinon.useFakeTimers();
 
-      this.$el = $('<div id="item"></div>').appendTo('body');
-
       this.app = new AppView({
         // XXX ActionButton need this lookup directly.
         'buttons': [{'title': 'Cut', 'url': '/cut'}],
@@ -133,11 +134,6 @@ define([
         'indexOptionsUrl': '',
         'setDefaultPageUrl': '',
         'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
-        'typeToViewAction': {
-          'File': '/view',
-          'Image': '/view',
-          'Blob': '/view'
-        },
       });
       this.app.render();
     });
@@ -176,7 +172,6 @@ define([
       this.clock.tick(500);
 
       expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
-
     });
 
     it('custom action menu items', function() {
@@ -365,67 +360,6 @@ define([
       expect(this.app.$('.status').text().trim()).to.equal('Status: barbaz clicked');
     });
 
-    it('use special view action for special types', function() {
-      // Test if special view actions for types are used in action .openItem
-      // and title link.
-
-      var items = [
-        {
-          model: {
-            'Title': "Dummy Image",
-            'is_folderish': false,
-            'portal_type': "Image",
-            'getURL': 'http://nohost/dummy_image'
-          },
-          expect: '/view'
-        }, {
-          model: {
-            Title: "Dummy File",
-            is_folderish: false,
-            portal_type: "File",
-            getURL: 'http://nohost/dummy_file'
-          },
-          expect: '/view'
-        }, {
-          model: {
-            Title: "Dummy Blob",
-            is_folderish: false,
-            portal_type: "Blob",
-            getURL: 'http://nohost/dummy_blob'
-          },
-          expect: '/view'
-        }, {
-          model: {
-            Title: "Dummy Document",
-            is_folderish: false,
-            portal_type: "Document",
-            getURL: 'http://nohost/dummy_document'
-          },
-          expect: ''
-        },
-      ];
-
-      for (var i = 0, len = items.length; i < len; i = i + 1) {
-        var item = items[i];
-        var model = new Result(item.model);
-        var menu = new ActionMenuView({
-          app: this.app,
-          model: model,
-          header: 'Menu Header'
-        });
-        var el = menu.render().el;
-        expect($('a.openItem', el).attr('href')).to.equal(item.model.getURL + item.expect);
-
-        var row = new TableRowView({
-          model: model,
-          app: this.app
-        });
-        el = row.render().el;
-        expect($('.title a', el).attr('href')).to.equal(item.model.getURL + item.expect);
-      }
-
-    });
-
     it('custom action menu items in dropdown only', function() {
       var model = new Result({});
       var menu = new ActionMenuView({
@@ -528,50 +462,6 @@ define([
       expect($('a.action', el).length).to.equal(2);
     });
 
-    it('should display an icon for contents with images', function() {
-
-      this.app.iconSize = 'largest_possible';
-
-      var model = new Result({
-          'Title': "Dummy Document",
-          'is_folderish': false,
-          'portal_type': "Document",
-          'getURL': 'http://nohost/dummy_image',
-          'getIcon': true
-      });
-
-      var row = new TableRowView({
-        model: model,
-        app: this.app
-      });
-      var el = row.render().el;
-
-      expect($('.title img', el).length).to.equal(1);
-      expect($('.title img', el).attr('class')).to.have.string('image-largest_possible');
-    });
-
-    it('should display no icon for contents without images', function() {
-
-      this.app.iconSize = 'largest_possible';
-
-      var model = new Result({
-          'Title': "Dummy Document",
-          'is_folderish': false,
-          'portal_type': "Document",
-          'getURL': 'http://nohost/dummy_image',
-          'getIcon': false
-      });
-
-      var row = new TableRowView({
-        model: model,
-        app: this.app
-      });
-      var el = row.render().el;
-
-      expect($('.title img', el).length).to.equal(0);
-      expect($('.title .icon-group-right', el).length).to.have.equal(0);
-    });
-
     // MODAL ACTIONS
 
     it('modal button true opens in modal', function() {
@@ -596,7 +486,6 @@ define([
     });
 
     it('modal dropdown true opens in modal', function() {
-
       var model = new Result({});
       var menu = new ActionMenuView({
         app: this.app,
@@ -619,6 +508,185 @@ define([
 
   });
 
+
+  /* ===================
+   TEST: Table Row Tests
+  ====================== */
+  describe('Table Row Tests', function() {
+    beforeEach(function() {
+      this.server = sinon.fakeServer.create();
+      this.server.autoRespond = true;
+      this.clock = sinon.useFakeTimers();
+      this.app = new AppView({
+        'indexOptionsUrl': '',
+        'activeColumns': [],
+        'availableColumns': [],
+        'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
+        'typeToViewAction': {
+          'File': '/view',
+          'Image': '/view',
+          'Blob': '/view'
+        }
+      });
+      this.app.render();
+    });
+
+    afterEach(function() {
+      this.clock.restore();
+      this.server.restore();
+      $('body').removeAttr('class');
+      $('body').html('');
+    });
+
+    it('use special view action for special types', function() {
+      // Test if special view actions for types are used in action .openItem
+      // and title link.
+      var items = [
+        {
+          model: {
+            'Title': "Dummy Image",
+            'is_folderish': false,
+            'portal_type': "Image",
+            'getURL': 'http://nohost/dummy_image'
+          },
+          expect: '/view'
+        }, {
+          model: {
+            Title: "Dummy File",
+            is_folderish: false,
+            portal_type: "File",
+            getURL: 'http://nohost/dummy_file'
+          },
+          expect: '/view'
+        }, {
+          model: {
+            Title: "Dummy Blob",
+            is_folderish: false,
+            portal_type: "Blob",
+            getURL: 'http://nohost/dummy_blob'
+          },
+          expect: '/view'
+        }, {
+          model: {
+            Title: "Dummy Document",
+            is_folderish: false,
+            portal_type: "Document",
+            getURL: 'http://nohost/dummy_document'
+          },
+          expect: ''
+        },
+      ];
+
+      for (var i = 0, len = items.length; i < len; i = i + 1) {
+        var item = items[i];
+        var model = new Result(item.model);
+        var menu = new ActionMenuView({
+          app: this.app,
+          model: model,
+          header: 'Menu Header'
+        });
+        var el = menu.render().el;
+        expect($('a.openItem', el).attr('href')).to.equal(item.model.getURL + item.expect);
+
+        var row = new TableRowView({
+          model: model,
+          app: this.app
+        });
+        el = row.render().el;
+        expect($('.title a', el).attr('href')).to.equal(item.model.getURL + item.expect);
+      }
+    });
+
+    it('should display an icon for contents with images', function() {
+      this.app.iconSize = 'largest_possible';
+
+      var model = new Result({
+          'Title': "Dummy Document",
+          'is_folderish': false,
+          'portal_type': "Document",
+          'getURL': 'http://nohost/dummy_image',
+          'getIcon': true
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title img', el).length).to.equal(1);
+      expect($('.title img', el).attr('class')).to.have.string('image-largest_possible');
+    });
+
+    it('should display no icon for contents without images', function() {
+      this.app.iconSize = 'largest_possible';
+
+      var model = new Result({
+          'Title': "Dummy Document",
+          'is_folderish': false,
+          'portal_type': "Document",
+          'getURL': 'http://nohost/dummy_image',
+          'getIcon': false
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title img', el).length).to.equal(0);
+      expect($('.title .icon-group-right', el).length).to.have.equal(0);
+    });
+
+    it('Should display empty columns for "None" dates', function() {
+      this.app.activeColumns = [
+        'ModificationDate',
+        'EffectiveDate',
+        'CreationDate',
+        'ExpirationDate',
+        'start',
+        'end',
+        'last_comment_date'
+      ];
+
+      this.app.availableColumns = {
+        'ModificationDate': 'ModificationDate',
+        'EffectiveDate': 'EffectiveDate',
+        'CreationDate': 'CreationDate',
+        'ExpirationDate': 'ExpirationDate',
+        'start': 'start',
+        'end': 'end',
+        'last_comment_date': 'last_comment_date'
+      };
+
+			var collection = new ResultCollection([{
+        'Title': 'Date Columns Test Document',
+        'is_folderish': false,
+        'portal_type': 'Document',
+        'getURL': 'http://nohost/doc',
+        // invalid dates
+        'ModificationDate': 'None',
+        'EffectiveDate': '',
+        'CreationDate': 'None',
+        'ExpirationDate': '',
+        'start': 'None',
+        'end': '',
+        // Excluding next intentionally, since no data should also display and empty column
+        // 'last_comment_date'
+      }], {view: this.app});
+
+      var table = new TableView({app: this.app});
+			table.collection = collection;
+      var el = table.render().el;
+
+      _.each(this.app.activeColumns, function (item) {
+        expect($('td.' + item, el).html()).to.equal('');
+      });
+
+    });
+
+  });
 
   /* ==========================
    TEST: Structure

@@ -34,6 +34,16 @@ define([
         /* set default page info */
         self.setContextInfo();
       });
+
+      self.dateColumns = [
+        'ModificationDate',
+        'EffectiveDate',
+        'CreationDate',
+        'ExpirationDate',
+        'start',
+        'end',
+        'last_comment_date'
+      ];
     },
     events: {
       'click .fc-breadcrumbs a': 'breadcrumbClicked',
@@ -94,6 +104,13 @@ define([
       if (self.collection.length) {
         var container = self.$('tbody');
         self.collection.each(function(result) {
+          self.dateColumns.map(function (col) {
+            // empty column instead of displaying "None".
+            if (result.attributes.hasOwnProperty(col) && (result.attributes[col] === 'None' || !result.attributes[col] )) {
+              result.attributes[col] = '';
+            }
+          });
+
           var view = (new TableRowView({
             model: result,
             app: self.app,
@@ -103,7 +120,7 @@ define([
         });
       }
       self.moment = new Moment(self.$el, {
-        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate,.start,.end,.last_comment_date',
+        selector: '.' + self.dateColumns.join(',.'),
         format: self.options.app.momentFormat
       });
 
@@ -170,7 +187,7 @@ define([
       self.$el.addClass('order-support');
       var dd = new Sortable(self.$('tbody'), {
         selector: 'tr',
-        createDragItem: function(pattern, $el){
+        createDragItem: function(pattern, $el) {
           var $tr = $el.clone();
           var $table = $('<table><tbody></tbody></table>');
           $('tbody', $table).append($tr);

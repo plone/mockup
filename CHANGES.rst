@@ -23,6 +23,7 @@ New:
   - Use icons for all actionmenu entries.
   - Use the tooltip pattern for all actionmenu buttons.
   - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
+  - For columns with date fields, show an empty column if the date value is 'None'.
 
   [thet]
 
