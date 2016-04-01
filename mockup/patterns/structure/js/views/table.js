@@ -103,7 +103,7 @@ define([
         });
       }
       self.moment = new Moment(self.$el, {
-        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
+        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate,.start,.end,.last_comment_date',
         format: self.options.app.momentFormat
       });
 

@@ -22,6 +22,7 @@ New:
   - Add ``iconSize`` option to set the icon size if a item has an image.
   - Use icons for all actionmenu entries.
   - Use the tooltip pattern for all actionmenu buttons.
+  - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
 
   [thet]
 
