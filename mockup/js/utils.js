@@ -274,6 +274,19 @@ define([
     return win;
   };
 
+  var maxZ = function(selector) {
+    // all credits to: http://stackoverflow.com/a/1118216/1337474
+    if (selector === undefined) {
+      selector = 'body *';  // search whole dom tree
+    }
+    return Math.max.apply(null,
+      $.map($(selector), function(el,n) {
+        if ($(el).css('position') !== 'static') {
+          return parseInt($(el).css('z-index')) || 1;
+        }
+      }));
+  };
+
   return {
     generateId: generateId,
     parseBodyTag: function(txt) {
@@ -333,6 +346,7 @@ define([
       history: function(){
         return !!(window.history && window.history.pushState);
       }
-    }
+    },
+    maxZ: maxZ
   };
 });
