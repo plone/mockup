@@ -27,7 +27,7 @@ define([
       self.listenTo(self.selectedCollection, 'reset', self.render);
       self.collection.pager();
       self.subsetIds = [];
-      self.contextInfo = self.folderModel = self.folderMenu = null;
+      self.contextInfo = null;
 
       self.app.on('context-info-loaded', function(data) {
         self.contextInfo = data;
@@ -48,7 +48,6 @@ define([
     events: {
       'click .fc-breadcrumbs a': 'breadcrumbClicked',
       'change .select-all': 'selectAll',
-      'change .fc-breadcrumbs-container input[type="checkbox"]': 'selectFolder'
     },
     setContextInfo: function() {
       var self = this;
@@ -64,24 +63,6 @@ define([
         _.each(crumbs, function(crumb, idx) {
           $crumbs.eq(idx).html(crumb.title);
         });
-      }
-      if (data.object) {
-        self.folderModel = new Result(data.object);
-        $('.context-buttons', self.$el).show();
-        if (self.selectedCollection.findWhere({UID: data.object.UID})){
-          $('input[type="checkbox"]', self.$breadcrumbs)[0].checked = true;
-        }
-        self.folderMenu = new ActionMenuView({
-          app: self.app,
-          model: self.folderModel,
-          menuOptions: self.app.menuOptions,
-          menuGenerator: self.app.menuGenerator,
-          header: _t('Actions on current folder'),
-          canMove: false
-        });
-        $('.input-group-btn', self.$breadcrumbs).empty().append(self.folderMenu.render().el);
-      } else {
-        self.folderModel = null;
       }
     },
     render: function() {
@@ -99,7 +80,6 @@ define([
         activeColumns: self.app.activeColumns,
         availableColumns: self.app.availableColumns
       }));
-      self.$breadcrumbs = $('.fc-breadcrumbs-container', self.$el);
 
       if (self.collection.length) {
         var container = self.$('tbody');
@@ -148,17 +128,6 @@ define([
       path += $el.attr('data-path');
       this.app.setCurrentPath(path);
       this.collection.pager();
-    },
-    selectFolder: function(e) {
-      var self = this;
-      if (self.folderModel){
-        if ($(e.target).is(':checked')) {
-          self.selectedCollection.add(self.folderModel.clone());
-        } else {
-          this.selectedCollection.removeByUID(self.folderModel.attributes.UID);
-        }
-        self.setContextInfo();
-      }
     },
     selectAll: function(e) {
       if ($(e.target).is(':checked')) {

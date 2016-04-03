@@ -24,6 +24,8 @@ New:
   - Use the tooltip pattern for all actionmenu buttons.
   - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
   - For columns with date fields, show an empty column if the date value is 'None'.
+  - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
+    The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
 
   [thet]
 

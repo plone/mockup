@@ -1007,35 +1007,6 @@ define([
         ).to.equal(0);
     });
 
-    it('test current folder buttons do not show on root', function() {
-      registry.scan(this.$el);
-      this.clock.tick(1000);
-      expect(this.$el.find('.context-buttons').length).to.equal(0);
-    });
-
-    it('test current folder buttons do show on subfolder', function() {
-      registry.scan(this.$el);
-      this.clock.tick(1000);
-      var $item = this.$el.find('.itemRow').eq(0);
-      $('.title a', $item).trigger('click');
-      this.clock.tick(1000);
-      expect(this.$el.find('.context-buttons').length).to.equal(1);
-    });
-
-    it('test select current folder', function() {
-      registry.scan(this.$el);
-      var pattern = this.$el.data('patternStructure');
-      this.clock.tick(1000);
-      var $item = this.$el.find('.itemRow').eq(0);
-      $('.title a', $item).trigger('click');
-      this.clock.tick(1000);
-      var $checkbox = $('.fc-breadcrumbs-container input[type="checkbox"]', this.$el);
-      $checkbox[0].checked = true;
-      $checkbox.trigger('change');
-      this.clock.tick(1000);
-      expect(this.$el.find('#btn-selected-items').html()).to.contain('1');
-    });
-
     it('test displayed content', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
@@ -1051,29 +1022,6 @@ define([
       var $content_row1 = this.$el.find('table tbody tr').eq(1);
       expect($content_row1.find('td').eq(1).text().trim()).to.equal('Document 0');
       expect($content_row1.find('a.openItem').attr('href')).to.equal('http://localhost:9876/item0');
-    });
-
-    it('test select all contained item action', function() {
-      registry.scan(this.$el);
-      this.clock.tick(1000);
-
-      // Since the top level view doesn't currently provide 'Actions
-      // on current folder' action menu, go down one level.
-      var $item = this.$el.find('.itemRow').eq(0);
-      $('.title a', $item).trigger('click');
-      this.clock.tick(1000);
-
-      var menu = $('.fc-breadcrumbs-container .actionmenu', this.$el);
-      var options = $('a.action', menu);
-      expect(options.length).to.equal(5);
-
-      var selectAll = $('a.selectAll', menu);
-      expect(selectAll.text().trim()).to.eql('Select all contained items');
-      selectAll.trigger('click');
-      this.clock.tick(1000);
-      expect($('table tbody .selection input:checked', this.$el).length
-        ).to.equal(16);
-      expect(this.$el.find('#btn-selected-items').html()).to.contain('101');
     });
 
     it('test select displayed columns', function() {
@@ -1927,16 +1875,6 @@ define([
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: option2 selected');
-    });
-
-    it('folder link not overriden', function() {
-      registry.scan(this.$el);
-      this.clock.tick(1000);
-      var item = this.$el.find('.itemRow').eq(0);
-      $('.title a.manage', item).trigger('click');
-      this.clock.tick(1000);
-      // default action will eventually trigger this.
-      expect(this.$el.find('.context-buttons').length).to.equal(1);
     });
 
     it('item link triggered', function() {
