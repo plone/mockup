@@ -89,18 +89,6 @@
             }
         }
         .fc-breadcrumbs-container{
-            .input-group{
-                .input-group-addon{
-                    padding: 2px 5px;
-                }
-                .btn{
-                    padding: 2px 4px;
-                }
-
-                display: inline-block;
-                float: left;
-                padding-right: 5px;
-            }
             .fc-breadcrumbs{
                 font-size: 15px;
                 padding-top: 2px;
@@ -215,9 +203,6 @@
             }
         }
     }
-    .icon-group-right{
-        float: right;
-    }
 }
 
 .pat-structure {
@@ -259,7 +244,7 @@
     .itemRow.folder .title a{
         color: #005580;
     }
-    .itemRow.default-page .title:before{
+    .itemRow.default-page .title > *:first-child:before{
         content: '*';
         color: red;
     }

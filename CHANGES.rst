@@ -1,14 +1,38 @@
 Changelog
 =========
 
-2.2.1 (Unreleased)
+2.3.0 (Unreleased)
 ------------------
 
 Incompatibilities:
 
 New:
 
+- Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
+  [thet]
+
+- Structure pattern:
+  - Allow definition of action menu items not only as dropdowns but also as buttons.
+  - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
+  - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
+  - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+  - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
+  - Add ``iconCSS`` option for action menus items to add icons.
+  - Add ``modal`` option for action menus items to allow links open in a modal.
+  - Add ``iconSize`` option to set the icon size if a item has an image.
+  - Use icons for all actionmenu entries.
+  - Use the tooltip pattern for all actionmenu buttons.
+  - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
+  - For columns with date fields, show an empty column if the date value is 'None'.
+  - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
+    The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
+
+  [thet]
+
 Fixes:
+
+- Fix tests and mocks on real browsers for structure pattern test, which threw CSRF errors.
+  [metatoaster]
 
 - Moment pattern: Don't try to parse obvious invalid dates ("None", "").
   Avoids Moment.js deprecation warnings.
@@ -42,11 +66,6 @@ New:
 
 - Alternative parameter/syntax for specification of the pushState url to
   be inline with the usage of ``{path}`` token in URL templates.
-  [metatoaster]
-
-- Structure can use the ``viewURL`` from a returned data item, alongside
-  with the previous default of simply appending ``/view`` to the
-  ``getURL`` attribute if this was not provided, for its view URL,
   [metatoaster]
 
 Fixes:

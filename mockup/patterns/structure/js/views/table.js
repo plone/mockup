@@ -27,18 +27,27 @@ define([
       self.listenTo(self.selectedCollection, 'reset', self.render);
       self.collection.pager();
       self.subsetIds = [];
-      self.contextInfo = self.folderModel = self.folderMenu = null;
+      self.contextInfo = null;
 
       self.app.on('context-info-loaded', function(data) {
         self.contextInfo = data;
         /* set default page info */
         self.setContextInfo();
       });
+
+      self.dateColumns = [
+        'ModificationDate',
+        'EffectiveDate',
+        'CreationDate',
+        'ExpirationDate',
+        'start',
+        'end',
+        'last_comment_date'
+      ];
     },
     events: {
       'click .fc-breadcrumbs a': 'breadcrumbClicked',
       'change .select-all': 'selectAll',
-      'change .fc-breadcrumbs-container input[type="checkbox"]': 'selectFolder'
     },
     setContextInfo: function() {
       var self = this;
@@ -54,24 +63,6 @@ define([
         _.each(crumbs, function(crumb, idx) {
           $crumbs.eq(idx).html(crumb.title);
         });
-      }
-      if (data.object){
-        self.folderModel = new Result(data.object);
-        $('.context-buttons', self.$el).show();
-        if (self.selectedCollection.findWhere({UID: data.object.UID})){
-          $('input[type="checkbox"]', self.$breadcrumbs)[0].checked = true;
-        }
-        self.folderMenu = new ActionMenuView({
-          app: self.app,
-          model: self.folderModel,
-          menuOptions: self.app.menuOptions,
-          menuGenerator: self.app.menuGenerator,
-          header: _t('Actions on current folder'),
-          canMove: false
-        });
-        $('.input-group-btn', self.$breadcrumbs).empty().append(self.folderMenu.render().el);
-      }else {
-        self.folderModel = null;
       }
     },
     render: function() {
@@ -89,11 +80,17 @@ define([
         activeColumns: self.app.activeColumns,
         availableColumns: self.app.availableColumns
       }));
-      self.$breadcrumbs = $('.fc-breadcrumbs-container', self.$el);
 
       if (self.collection.length) {
         var container = self.$('tbody');
         self.collection.each(function(result) {
+          self.dateColumns.map(function (col) {
+            // empty column instead of displaying "None".
+            if (result.attributes.hasOwnProperty(col) && (result.attributes[col] === 'None' || !result.attributes[col] )) {
+              result.attributes[col] = '';
+            }
+          });
+
           var view = (new TableRowView({
             model: result,
             app: self.app,
@@ -103,7 +100,7 @@ define([
         });
       }
       self.moment = new Moment(self.$el, {
-        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
+        selector: '.' + self.dateColumns.join(',.'),
         format: self.options.app.momentFormat
       });
 
@@ -132,17 +129,6 @@ define([
       this.app.setCurrentPath(path);
       this.collection.pager();
     },
-    selectFolder: function(e) {
-      var self = this;
-      if (self.folderModel){
-        if ($(e.target).is(':checked')) {
-          self.selectedCollection.add(self.folderModel.clone());
-        } else {
-          this.selectedCollection.removeByUID(self.folderModel.attributes.UID);
-        }
-        self.setContextInfo();
-      }
-    },
     selectAll: function(e) {
       if ($(e.target).is(':checked')) {
         $('input[type="checkbox"]', this.$('tbody')).prop('checked', true).change();
@@ -170,7 +156,7 @@ define([
       self.$el.addClass('order-support');
       var dd = new Sortable(self.$('tbody'), {
         selector: 'tr',
-        createDragItem: function(pattern, $el){
+        createDragItem: function(pattern, $el) {
           var $tr = $el.clone();
           var $table = $('<table><tbody></tbody></table>');
           $('tbody', $table).append($tr);

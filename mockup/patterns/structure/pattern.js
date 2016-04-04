@@ -48,6 +48,8 @@ define([
 
       activeColumnsCookie: 'activeColumns',
 
+      iconSize: 'icon',
+
       /*
         As the options operate on a merging basis per new attribute
         (key/value pairs) on the option Object in a recursive fashion,
@@ -61,10 +63,23 @@ define([
 
       attributes: null,
       _default_attributes: [
-        'UID', 'Title', 'portal_type', 'path', 'review_state',
-        'ModificationDate', 'EffectiveDate', 'CreationDate',
-        'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
-        'getObjSize', 'last_comment_date', 'total_comments','getIcon'
+        'CreationDate',
+        'EffectiveDate',
+        'exclude_from_nav',
+        'getIcon',
+        'getObjSize',
+        'getURL',
+        'id',
+        'is_folderish',
+        'last_comment_date',
+        'ModificationDate',
+        'path',
+        'portal_type',
+        'review_state',
+        'Subject',
+        'Title',
+        'total_comments',
+        'UID'
       ],
 
       activeColumns: null,
@@ -94,10 +109,15 @@ define([
       // action triggered for the primary link for each table row.
       tableRowItemAction: null,
       _default_tableRowItemAction: {
-        folder: [
-          'mockup-patterns-structure-url/js/navigation', 'folderClicked'],
-        other: [
-          'mockup-patterns-structure-url/js/navigation', 'openClicked']
+        folder: ['mockup-patterns-structure-url/js/navigation', 'folderClicked'],
+        other: []
+      },
+
+      typeToViewAction: null,
+      _default_typeToViewAction: {
+          'File': '/view',
+          'Image': '/view',
+          'Blob': '/view'
       },
 
       collectionConstructor:
@@ -159,8 +179,7 @@ define([
         May want to consider moving the _default_* values out of the
         options object.
       */
-      var replaceDefaults = [
-          'attributes', 'activeColumns', 'availableColumns', 'buttons'];
+      var replaceDefaults = ['attributes', 'activeColumns', 'availableColumns', 'buttons', 'typeToViewAction'];
       _.each(replaceDefaults, function(idx) {
         if (self.options[idx] === null) {
           self.options[idx] = self.options['_default_' + idx];

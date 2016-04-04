@@ -245,6 +245,11 @@ define([
         '2013-03-12T10:10:10+02:00',
         '2012-04-01T10:10:10+02:00',
         '2013-03-20T10:10:10+02:00',
+        'None',
+        'None',
+        'None',
+        'None',
+        'None',
       ];
       for (var i = 0; i < list.length; i = i + 1) {
         var data = list[i];

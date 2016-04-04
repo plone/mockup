@@ -11,30 +11,6 @@ define([
       this.app = options.app;
       this.model = options.model;
     },
-
-    getSelectedBaseUrl: function() {
-      var self = this;
-      return self.model.attributes.getURL;
-    },
-    openUrl: function(url) {
-      var win = utils.getWindow();
-      var keyEvent = this.app.keyEvent;
-      if (keyEvent && keyEvent.ctrlKey) {
-        win.open(url);
-      } else {
-        win.location = url;
-      }
-    },
-    openClicked: function(e) {
-      e.preventDefault();
-      var self = this;
-      self.openUrl(self.getSelectedBaseUrl() + '/view');
-    },
-    editClicked: function(e) {
-      e.preventDefault();
-      var self = this;
-      self.openUrl(self.getSelectedBaseUrl() + '/edit');
-    },
     folderClicked: function(e) {
       e.preventDefault();
       // handler for folder, go down path and show in contents window.

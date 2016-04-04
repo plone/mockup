@@ -307,6 +307,7 @@
       grunt.registerTask('test_once', [ 'jshint', 'karma:testOnce' ]);
       grunt.registerTask('test_jenkins', [ 'jshint', 'karma:testJenkins' ]);
       grunt.registerTask('test_dev', [ 'karma:testDev' ]);
+      grunt.registerTask('test_dev_ff', [ 'karma:testDevFF' ]);
       grunt.registerTask('test_serve', [ 'karma:testServe' ]);
       grunt.registerTask('test_ci', [ 'jshint', 'karma:testCI'].concat(bundles));
 
@@ -365,6 +366,17 @@
               'karma-chai',
               'karma-requirejs',
               'karma-chrome-launcher'
+            ]
+          },
+          testDevFF: {
+            browsers: ['Firefox'],
+            preprocessors: {},
+            reporters: ['dots', 'progress'],
+            plugins: [
+              'karma-mocha',
+              'karma-chai',
+              'karma-requirejs',
+              'karma-firefox-launcher'
             ]
           },
           testServe: {
