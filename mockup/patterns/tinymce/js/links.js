@@ -4,11 +4,13 @@ define([
   'pat-registry',
   'pat-base',
   'tinymce',
-  'mockup-patterns-relateditems',
   'text!mockup-patterns-tinymce-url/templates/link.xml',
   'text!mockup-patterns-tinymce-url/templates/image.xml',
+  'mockup-patterns-relateditems',
+  'mockup-patterns-autotoc',
+  'mockup-patterns-modal',
   'mockup-patterns-upload'
-], function($, _, registry, Base, tinymce, RelatedItems, LinkTemplate, ImageTemplate) {
+], function($, _, registry, Base, tinymce, LinkTemplate, ImageTemplate, RelatedItems) {
   'use strict';
 
   var LinkType = Base.extend({
