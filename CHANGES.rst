@@ -31,6 +31,9 @@ New:
 
 Fixes:
 
+- Re-add missing ``mockup-patterns-autotoc`` and ``mockup-patterns-modal`` dependencies to TinyMCE link modal.
+  [thet]
+
 - Fix tests and mocks on real browsers for structure pattern test, which threw CSRF errors.
   [metatoaster]
 
