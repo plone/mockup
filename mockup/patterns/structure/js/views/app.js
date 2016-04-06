@@ -43,7 +43,7 @@ define([
       BaseView.prototype.initialize.apply(self, [options]);
       self.loading = new utils.Loading();
       self.loading.show();
-      self.pasteAllowed = $.cookie('__cp');
+      self.pasteAllowed = !!$.cookie('__cp');
 
       /* close popovers when clicking away */
       $(document).click(function(e) {
@@ -209,6 +209,8 @@ define([
           self.keyEvent = e;
         });
       }
+
+      self.togglePasteBtn();
     },
     updateButtons: function() {
       var self = this;
@@ -220,7 +222,11 @@ define([
         self.buttons.disable();
       }
 
-      if ('paste' in self.buttons) {
+      self.togglePasteBtn();
+    },
+    togglePasteBtn: function(){
+      var self = this;
+      if (_.find(self.buttons.items, function(btn){ return btn.id === 'paste'; })) {
         self.pasteAllowed = !!$.cookie('__cp');
         if (self.pasteAllowed) {
           self.buttons.get('paste').enable();

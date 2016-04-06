@@ -31,6 +31,9 @@ New:
 
 Fixes:
 
+- Fix paste button not working
+  [vangheem]
+
 - Re-add missing ``mockup-patterns-autotoc`` and ``mockup-patterns-modal`` dependencies to TinyMCE link modal.
   [thet]
 
