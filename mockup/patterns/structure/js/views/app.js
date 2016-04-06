@@ -31,9 +31,12 @@ define([
 
   var AppView = BaseView.extend({
     tagName: 'div',
-    status: '',
+    status: {
+      type: 'warning',
+      text: '',
+      label: ''
+    },
     pasteAllowed: !!$.cookie('__cp'),
-    statusType: 'warning',
     sort_on: 'getObjPositionInParent',
     sort_order: 'ascending',
     additionalCriterias: [],
@@ -447,13 +450,30 @@ define([
         }
       });
     },
-    setStatus: function(txt, type) {
-      this.status = txt;
-      if (type === undefined) {
-        type = 'warning';
+    setStatus: function(msg, type) {
+      if(!msg){
+        // clear it
+        this.status.text = '';
+        this.status.label = '';
+        this.status.type = 'warning';
+      } else if(typeof(msg) === 'string'){
+        this.status.text = msg;
+        this.status.label = '';
+        this.status.type = 'warning';
+      }else{
+        // support setting portal status messages here
+        this.status.label = msg.label || '';
+        this.status.text = msg.text;
+        this.status.type = msg.type || 'warning';
       }
-      this.statusType = type;
-      this.$('.status').addClass(type).html(txt);
+      // still need to manually set in case rendering isn't done(especially true for tests)
+      var $status = this.$('.status');
+      $status[0].className = 'alert alert-' + this.status.type + ' status';
+      var $text = $('<span></span>');
+      $text.text(this.status.text);
+      var $label = $('<b></b>');
+      $label.text(this.status.label);
+      $status.empty().append($label).append($text);
     },
     render: function() {
       var self = this;

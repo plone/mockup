@@ -230,7 +230,7 @@ define([
       // staff
       {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document'},
       {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document'},
-      
+
       // upload file
       {UID: 'sldlfkjsldkjlskdjf', Title: 'blah.png', path: 'blah.png', portal_type: 'Image'}
 

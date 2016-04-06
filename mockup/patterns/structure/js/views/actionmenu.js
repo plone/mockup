@@ -54,7 +54,7 @@ define([
           var idx = utils.generateId();
           menuOption.idx = idx;
           menuOption.name = key;  // we want to add the action's key as class name to the output.
-          
+
           var category = menuOption.category || 'dropdown';
           if (menuOptionsCategorized[category] === undefined) {
               menuOptionsCategorized[category] = [];

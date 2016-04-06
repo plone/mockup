@@ -253,6 +253,7 @@ define([
     });
 
     it('custom action menu actions missing.', function() {
+      this.app.setStatus(null); // reset
       // Define a custom dummy "module"
       define('dummytestactions', ['backbone'], function(Backbone) {
         var Actions = Backbone.Model.extend({
@@ -301,6 +302,7 @@ define([
 
       // Broken/missing action
       var el = menu.render().el;
+      this.app.setStatus(null); // reset
       $('a.foobar', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('');
@@ -1874,6 +1876,7 @@ define([
       $('.actionmenu a.action2', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
+
       expect($('.status').text()).to.contain('Status: option2 selected');
     });
 
