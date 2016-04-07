@@ -172,6 +172,7 @@ define([
       this.clock.tick(500);
 
       expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
+      expect(this.app.$('.status').hasClass('alert-successss'));
     });
 
     it('custom action menu items', function() {
@@ -202,6 +203,7 @@ define([
       $('a.cutItem', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
+      expect(this.app.$('.status').hasClass('alert-success'));
     });
 
     it('custom action menu items and actions.', function() {
@@ -220,7 +222,7 @@ define([
         return Actions;
       });
       // use it to make it available synchronously.
-      require(['dummytestactions'], function(){});
+      require(['dummytestactions'], function() {});
       this.clock.tick(500);
 
       var model = new Result({
@@ -250,6 +252,7 @@ define([
       $('a.foobar', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('Status: foobar clicked');
+      expect(this.app.$('.status').hasClass('alert-warning'));  // default status type
     });
 
     it('custom action menu actions missing.', function() {
@@ -318,7 +321,7 @@ define([
           },
           barbazClicked: function(e) {
             var self = this;
-            self.app.setStatus('Status: barbaz clicked');
+            self.app.setStatus({text: 'Status: barbaz clicked', type: 'success'});
           }
         });
         return Actions;
@@ -360,6 +363,7 @@ define([
       $('a.barbaz', el).click();
       this.clock.tick(500);
       expect(this.app.$('.status').text().trim()).to.equal('Status: barbaz clicked');
+      expect(this.app.$('.status').hasClass('alert-success'));
     });
 
     it('custom action menu items in dropdown only', function() {
@@ -976,6 +980,7 @@ define([
       this.clock.tick(1000);
       expect($popover.hasClass('active')).to.equal(false);
       expect(this.$el.find('.order-support .status').html()).to.contain('rearrange');
+      expect(this.app.$('.status').hasClass('alert-successss'));
     });
 
     it('test select all', function() {
@@ -1108,8 +1113,7 @@ define([
         'Set as default page');
       $('a.set-default-page', item).click();
       this.clock.tick(1000);
-      expect(this.$el.find('.order-support .status').html()).to.contain(
-        'defaulted');
+      expect(this.$el.find('.order-support .status').html()).to.contain('defaulted');
     });
 
     it('test itemRow actionmenu paste click', function() {
@@ -1125,8 +1129,7 @@ define([
       expect($('a.pasteItem', item0).text().trim()).to.equal('Paste');
       $('a.pasteItem', item0).click();
       this.clock.tick(1000);
-      expect(this.$el.find('.order-support .status').html()).to.contain(
-        'Pasted into "Folder"');
+      expect(this.$el.find('.order-support .status').html()).to.contain('Pasted into "Folder"');
     });
 
     it('test itemRow actionmenu move-top click', function() {
@@ -1142,12 +1145,9 @@ define([
       $('.actionmenu a.move-top', item10).trigger('click');
       this.clock.tick(1000);
 
-      expect(this.$el.find('.order-support .status').html()).to.contain(
-        'moved');
-      expect(this.$el.find('.order-support .status').html()).to.contain(
-        'delta=top');
-      expect(this.$el.find('.order-support .status').html()).to.contain(
-        'id=item9');
+      expect(this.$el.find('.order-support .status').html()).to.contain('moved');
+      expect(this.$el.find('.order-support .status').html()).to.contain('delta=top');
+      expect(this.$el.find('.order-support .status').html()).to.contain('id=item9');
       // No items actually moved, this is to be implemented server-side.
     });
 
@@ -1854,12 +1854,12 @@ define([
           option1: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus('Status: option1 selected');
+            self.app.setStatus({text: 'Status: option1 selected', type: 'success'});
           },
           option2: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus('Status: option2 selected');
+            self.app.setStatus({text: 'Status: option2 selected', type: 'info'});
           }
         });
         return Actions;
@@ -1872,12 +1872,13 @@ define([
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: option1 selected');
+      expect($('.status').hasClass('alert-success'));
 
       $('.actionmenu a.action2', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
-
       expect($('.status').text()).to.contain('Status: option2 selected');
+      expect($('.status').hasClass('alert-info'));
     });
 
     it('item link triggered', function() {
@@ -1890,7 +1891,7 @@ define([
           handleOther: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus('Status: not a folder');
+            self.app.setStatus({text: 'Status: not a folder', type: 'error'});
           }
         });
         return Actions;
@@ -1905,6 +1906,7 @@ define([
       this.clock.tick(1000);
       // status will be set as defined.
       expect($('.status').text()).to.contain('Status: not a folder');
+      expect($('.status').hasClass('alert-error'));
     });
 
   });

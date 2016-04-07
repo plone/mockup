@@ -327,7 +327,7 @@ define([
       }
       if (data.msg) {
         // give status message somewhere...
-        self.setStatus(data.msg);
+        self.setStatus({text: data.msg, type: data.status || 'warning'});
       }
       if (callback !== null && callback !== undefined) {
         callback(data);
@@ -441,26 +441,26 @@ define([
             self.setStatus(data.msg);
           } else if (data.status !== 'success') {
             // XXX handle error here with something?
-            self.setStatus('error moving item');
+            self.setStatus({text: 'error moving item', type: 'error'});
           }
           self.collection.pager(); // reload it all
         },
         error: function() {
-          self.setStatus('error moving item');
+          self.setStatus({text: 'error moving item', type: 'error'});
         }
       });
     },
-    setStatus: function(msg, type) {
-      if(!msg){
+    setStatus: function(msg) {
+      if (!msg) {
         // clear it
         this.status.text = '';
         this.status.label = '';
         this.status.type = 'warning';
-      } else if(typeof(msg) === 'string'){
+      } else if (typeof(msg) === 'string') {
         this.status.text = msg;
         this.status.label = '';
         this.status.type = 'warning';
-      }else{
+      } else {
         // support setting portal status messages here
         this.status.label = msg.label || '';
         this.status.text = msg.text;
