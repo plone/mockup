@@ -373,7 +373,7 @@ define([
       self.initLanguage(function() {
         if(typeof(self.options.scales) === 'string'){
           self.options.scales = _.map(self.options.scales.split(','), function(scale){
-            var scale = scale.split(':');
+            scale = scale.split(':');
             return {
               part: scale[1],
               name: scale[1],
@@ -408,9 +408,6 @@ define([
             return false;
           };
         }
-
-        tinyOptions.plugins.push('link');
-        tinyOptions.toolbar += ' link';
 
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
