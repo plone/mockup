@@ -128,7 +128,7 @@ define([
           self.trigger('index-changed');
         });
 
-      if (index !== undefined) {
+      if (typeof index !== 'undefined') {
         self.$index.select2('val', index);
         self.createOperator(index, operator, value);
         self.createClear();
