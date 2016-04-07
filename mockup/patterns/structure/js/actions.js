@@ -72,13 +72,15 @@ define([
         dataType: 'json',
         type: 'POST'
       }).done(function(data) {
+        var msg;
         if (data.status === 'success') {
-          self.app.setStatus(_t(successMsg + ' "' + self.model.attributes.Title + '"'));
+          msg = _t(successMsg + ' "' + self.model.attributes.Title + '"');
           self.app.collection.pager();
           self.app.updateButtons();
         } else {
-          self.app.setStatus(_t('Error ' + failMsg + ' "' + self.model.attributes.Title + '"'));
+          msg = _t('Error ' + failMsg + ' "' + self.model.attributes.Title + '"');
         }
+        self.app.setStatus({text: msg, type: data.status || 'warning'});
       });
     },
 

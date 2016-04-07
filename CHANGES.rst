@@ -8,6 +8,10 @@ Incompatibilities:
 
 New:
 
+- Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
+  so you can customize the status message from ajax handlers.
+  [vangheem]
+
 - Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
   [thet]
 
