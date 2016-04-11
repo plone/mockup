@@ -30,6 +30,9 @@ New:
   - For columns with date fields, show an empty column if the date value is 'None'.
   - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
     The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
+  - Don't show empty alerts with ``alert-warning`` CSS class.
+    Show them transparent but in the same height as if they were not empty.
+    Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
 
   [thet]
 

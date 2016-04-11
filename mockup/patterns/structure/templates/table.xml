@@ -1,6 +1,6 @@
 <div class="alert alert-<%- status.type %> status">
-  <b><%- status.label %></b>
-  <%- status.text %>
+  <strong><%- status.label %></strong>
+  <span><%- status.text %></span>&nbsp;<% // &nbsp; to get correct height for empty alerts %>
 </div>
 
 <table class="table table-striped table-bordered">
