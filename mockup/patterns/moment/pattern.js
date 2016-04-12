@@ -109,7 +109,12 @@ define([
       if (!date || date === 'None') {
         return;
       }
-      moment.locale([(new i18n()).currentLanguage, 'en']);
+      MOMENT_i18n_MAP = {'no', 'nb'};
+      currentLanguage = (new i18n()).currentLanguage;
+      if (currentLanguage in MOMENT_i18n_MAP){
+        currentLanguage = MOMENT_i18n_MAP[currentLanguage];
+      }
+      moment.locale([currentLanguage, 'en']);
       date = moment(date);
       if (!date.isValid()) {
         return;
