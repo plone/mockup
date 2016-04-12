@@ -32,7 +32,7 @@ define([
   var AppView = BaseView.extend({
     tagName: 'div',
     status: {
-      type: 'warning',
+      type: 'none',
       text: '',
       label: ''
     },
@@ -455,7 +455,7 @@ define([
         // clear it
         this.status.text = '';
         this.status.label = '';
-        this.status.type = 'warning';
+        this.status.type = 'none';
       } else if (typeof(msg) === 'string') {
         this.status.text = msg;
         this.status.label = '';
@@ -471,7 +471,7 @@ define([
       $status[0].className = 'alert alert-' + this.status.type + ' status';
       var $text = $('<span></span>');
       $text.text(this.status.text);
-      var $label = $('<b></b>');
+      var $label = $('<strong></strong>');
       $label.text(this.status.label);
       $status.empty().append($label).append($text);
     },
