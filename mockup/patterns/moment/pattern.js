@@ -109,7 +109,7 @@ define([
       if (!date || date === 'None') {
         return;
       }
-      MOMENT_i18n_MAP = {'no', 'nb'};
+      MOMENT_i18n_MAP = {'no': 'nb'};
       currentLanguage = (new i18n()).currentLanguage;
       if (currentLanguage in MOMENT_i18n_MAP){
         currentLanguage = MOMENT_i18n_MAP[currentLanguage];
