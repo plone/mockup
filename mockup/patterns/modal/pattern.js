@@ -457,9 +457,6 @@ define([
             $(e.target).trigger('destroy.plone-modal.patterns');
           });
 
-        // cleanup html
-        $('.row', self.$modal).removeClass('row');
-
         // form
         if (options.form) {
           options.form.apply(self, [options.actions]);
