@@ -38,6 +38,9 @@ New:
 
 Fixes:
 
+- Fix possible grid markup in modal
+  [petschki]
+
 - Fix paste button not working
   [vangheem]
 
