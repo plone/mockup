@@ -89,6 +89,24 @@ define([
         }
       });
 
+      this.position();
+
+      this.setBackdrop();
+      if (this.useBackdrop === true) {
+        this.backdrop.show();
+      }
+
+      this.opened = true;
+
+      if (this.triggerView) {
+        this.triggerView.$el.addClass('active');
+      }
+
+      this.uiEventTrigger('show', this);
+      this.$el.attr('aria-hidden', 'false');
+    },
+
+    position: function(){
       var pos = this.getPosition();
       var $tip = this.$el, tp, placement, actualWidth, actualHeight;
 
@@ -115,21 +133,8 @@ define([
       }
 
       this.applyPlacement(tp, placement);
-
-      this.setBackdrop();
-      if (this.useBackdrop === true) {
-        this.backdrop.show();
-      }
-
-      this.opened = true;
-
-      if (this.triggerView) {
-        this.triggerView.$el.addClass('active');
-      }
-
-      this.uiEventTrigger('show', this);
-      this.$el.attr('aria-hidden', 'false');
     },
+
     applyPlacement: function(offset, placement) {
       var $el = this.$el,
         $tip = this.$el,
@@ -223,4 +228,3 @@ define([
 
   return PopoverView;
 });
-

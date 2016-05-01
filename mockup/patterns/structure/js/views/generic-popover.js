@@ -85,9 +85,11 @@ define([
           self.content = originalContent;
         }).always(function() {
           self.app.loading.hide();
+          self.position();
         });
       } else {
         registry.scan(self.$el);
+        self.position();
       }
     },
     toggle: function(button, e) {
@@ -97,6 +99,7 @@ define([
         return;
       } else {
         this.$el.replaceWith(this.render().el);
+        this.position();
       }
     }
   });
