@@ -38,6 +38,9 @@ New:
 
 Fixes:
 
+- Fix positioning of popovers in structure
+  [vangheem]
+
 - Fix structure to always default to page 1 of results when moving between breadcrumbs
   [vangheem]
 
