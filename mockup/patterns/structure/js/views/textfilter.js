@@ -42,6 +42,7 @@ define([
       });
       this.popover = new PopoverView({
         triggerView: this.button,
+        id: 'structure-query',
         title: _.template(_t('Query')),
         content: this.popoverContent,
         placement: 'left'

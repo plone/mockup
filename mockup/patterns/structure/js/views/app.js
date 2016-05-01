@@ -88,7 +88,8 @@ define([
       self.wellView = new SelectionWellView({
         collection: self.selectedCollection,
         triggerView: self.toolbar.get('selected-items'),
-        app: self
+        app: self,
+        id: 'structure-well'
       });
 
       self.toolbar.get('selected-items').disable();
@@ -353,7 +354,8 @@ define([
 
       self.columnsView = new ColumnsView({
         app: self,
-        triggerView: columnsBtn
+        triggerView: columnsBtn,
+        id: 'structure-columns'
       });
       items.push(columnsBtn);
 
@@ -373,7 +375,8 @@ define([
         });
         self.rearrangeView = new RearrangeView({
           triggerView: rearrangeButton,
-          app: self
+          app: self,
+          id: 'structure-rearrange'
         });
         items.push(rearrangeButton);
       }
