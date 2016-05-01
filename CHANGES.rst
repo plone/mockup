@@ -38,6 +38,9 @@ New:
 
 Fixes:
 
+- Only show alert if there is an alert available for structure pattern
+  [vangheem]
+
 - Fix possible grid markup in modal
   [petschki]
 

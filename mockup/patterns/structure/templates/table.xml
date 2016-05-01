@@ -1,7 +1,9 @@
+<% if(status.text) { %>
 <div class="alert alert-<%- status.type %> status">
   <strong><%- status.label %></strong>
-  <span><%- status.text %></span>&nbsp;<% // &nbsp; to get correct height for empty alerts %>
+  <span><%- status.text %></span>
 </div>
+<% } %>
 
 <table class="table table-striped table-bordered">
   <thead>

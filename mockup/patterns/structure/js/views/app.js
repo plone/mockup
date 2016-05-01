@@ -468,12 +468,14 @@ define([
       }
       // still need to manually set in case rendering isn't done(especially true for tests)
       var $status = this.$('.status');
-      $status[0].className = 'alert alert-' + this.status.type + ' status';
-      var $text = $('<span></span>');
-      $text.text(this.status.text);
-      var $label = $('<strong></strong>');
-      $label.text(this.status.label);
-      $status.empty().append($label).append($text);
+      if($status.length > 0){
+        $status[0].className = 'alert alert-' + this.status.type + ' status';
+        var $text = $('<span></span>');
+        $text.text(this.status.text);
+        var $label = $('<strong></strong>');
+        $label.text(this.status.label);
+        $status.empty().append($label).append($text);
+      }
     },
     render: function() {
       var self = this;
