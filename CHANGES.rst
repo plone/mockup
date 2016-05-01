@@ -38,6 +38,9 @@ New:
 
 Fixes:
 
+- Fix structure to always default to page 1 of results when moving between breadcrumbs
+  [vangheem]
+
 - Fix possible grid markup in modal
   [petschki]
 

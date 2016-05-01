@@ -126,6 +126,7 @@ define([
       });
       path += $el.attr('data-path');
       this.app.setCurrentPath(path);
+      this.collection.currentPage = 1;
       this.collection.pager();
     },
     selectAll: function(e) {
