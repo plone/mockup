@@ -73,6 +73,7 @@ define([
         }, this);
       }
     },
+
     getPosition: function() {
       var $el = this.triggerView.$el;
       return $.extend({}, {
@@ -80,6 +81,16 @@ define([
         height: $el[0].offsetHeight
       }, $el.offset());
     },
+
+    getBodyClassName: function(){
+      var name = 'popover-';
+      if(this.options.id){
+        name += this.options.id + '-';
+      }
+      name += 'active';
+      return name;
+    },
+
     show: function() {
       /* hide existing */
       $('.popover:visible').each(function(){
@@ -104,6 +115,7 @@ define([
 
       this.uiEventTrigger('show', this);
       this.$el.attr('aria-hidden', 'false');
+      $('body').addClass(this.getBodyClassName());
     },
 
     position: function(){
@@ -194,6 +206,7 @@ define([
       }
       this.uiEventTrigger('hide', this);
       this.$el.attr('aria-hidden', 'true');
+      $('body').removeClass(this.getBodyClassName());
     },
     toggle: function(button, e) {
       if (this.opened) {

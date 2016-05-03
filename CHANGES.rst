@@ -8,6 +8,9 @@ Incompatibilities:
 
 New:
 
+- add body class for active popover
+  [vangheem]
+
 - Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
   so you can customize the status message from ajax handlers.
   [vangheem]
