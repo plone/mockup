@@ -328,7 +328,7 @@ define([
       }
       if (data.msg) {
         // give status message somewhere...
-        self.setStatus({text: data.msg, type: data.status || 'warning'});
+        self.setStatus(data.msg, data.status || 'warning');
       }
       if (callback !== null && callback !== undefined) {
         callback(data);
@@ -453,7 +453,7 @@ define([
         }
       });
     },
-    setStatus: function(msg) {
+    setStatus: function(msg, type) {
       if (!msg) {
         // clear it
         this.status.text = '';
@@ -462,7 +462,7 @@ define([
       } else if (typeof(msg) === 'string') {
         this.status.text = msg;
         this.status.label = '';
-        this.status.type = 'warning';
+        this.status.type = type || 'warning';
       } else {
         // support setting portal status messages here
         this.status.label = msg.label || '';
