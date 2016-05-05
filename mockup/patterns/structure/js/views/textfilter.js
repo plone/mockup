@@ -64,12 +64,14 @@ define([
         self.timeoutId = setTimeout(function() {
           var criterias = $.parseJSON(self.$queryString.val());
           self.app.additionalCriterias = criterias;
+          self.app.collection.currentPage = 1;
           self.app.collection.pager();
         }, this.keyupDelay);
       });
       self.queryString.$el.on('initialized', function() {
         self.queryString.$sortOn.on('change', function() {
           self.app['sort_on'] = self.queryString.$sortOn.val(); // jshint ignore:line
+          self.app.collection.currentPage = 1;
           self.app.collection.pager();
         });
         self.queryString.$sortOrder.change(function() {
@@ -78,6 +80,7 @@ define([
           } else {
             self.app['sort_order'] = 'ascending'; // jshint ignore:line
           }
+          self.app.collection.currentPage = 1;
           self.app.collection.pager();
         });
       });
@@ -91,6 +94,7 @@ define([
       }
       self.timeoutId = setTimeout(function() {
         self.term = $(event.currentTarget).val();
+        self.app.collection.currentPage = 1;
         self.app.collection.pager();
       }, this.keyupDelay);
     }

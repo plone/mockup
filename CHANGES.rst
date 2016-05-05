@@ -41,6 +41,9 @@ New:
 
 Fixes:
 
+- Fix issue where using filter when paging would not work in the structure pattern
+  [vangheem]
+
 - Fix positioning of popovers in structure
   [vangheem]
 
