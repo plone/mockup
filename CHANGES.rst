@@ -8,6 +8,9 @@ Incompatibilities:
 
 New:
 
+- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
+  [thet]
+
 - add body class for active popover
   [vangheem]
 
