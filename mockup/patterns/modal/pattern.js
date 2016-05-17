@@ -608,8 +608,9 @@ define([
       var self = this;
       self.$wrapper.addClass('image-modal');
       var src = self.$el.attr('href');
+      var srcset = self.$el.attr('data-modal-srcset') || '';
       // XXX aria?
-      self.$raw = $('<div><h1>Image</h1><div id="content"><div class="modal-image"><img src="' + src + '" /></div></div></div>');
+      self.$raw = $('<div><h1>Image</h1><div id="content"><div class="modal-image"><img src="' + src + '" srcset="' + srcset + '" /></div></div></div>');
       self._show();
     },
 
