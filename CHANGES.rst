@@ -6,7 +6,13 @@ Changelog
 
 Incompatibilities:
 
+- Remove support for node version < ``0.11`` and update travis dependencies.
+  [thet]
+
 New:
+
+- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
+  [thet]
 
 - add body class for active popover
   [vangheem]
