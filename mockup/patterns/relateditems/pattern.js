@@ -81,9 +81,8 @@ define([
   'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
-  'mockup-patterns-tree',
   'translate'
-], function($, _, Base, Select2, utils, Tree, _t) {
+], function($, _, Base, Select2, utils, _t) {
   'use strict';
 
   var RelatedItems = Base.extend({
@@ -117,18 +116,6 @@ define([
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
         '<span>' +
-        '  <span class="pattern-relateditems-tree">' +
-        '    <a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
-        '    <div class="tree-container">' +
-        '      <div class="title-container">' +
-        '        <a href="#" class="btn close pattern-relateditems-tree-cancel">' +
-        '          <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>' +
-        '        </a>' +
-        '        <span class="select-folder-label">Select folder</span>' +
-        '      </div>' +
-        '      <div class="pat-tree" />' +
-        '    </div>' +
-        '  </span>' +
         '  <span class="pattern-relateditems-path-label">' +
         '    <%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
         '    <span class="glyphicon glyphicon-home"></span></a>' +
@@ -258,83 +245,6 @@ define([
         return false;
       });
 
-      var $treeSelect = $('.pattern-relateditems-tree-select', $crumbs);
-      var $container = $treeSelect.parent();
-      var $treeContainer = $('.tree-container', $container);
-      var $tree = $('.pat-tree', $container);
-      var selectedNode = null;
-      var treePattern = new Tree($tree, {
-        data: [],
-        dataFilter: function(data) {
-          var nodes = [];
-          _.each(data.results, function(item) {
-            var node = {
-              label: item.Title,
-              id: item.UID,
-              path: item.path,
-              folder: item.is_folderish
-            };
-            nodes.push(node);
-          });
-          return nodes;
-        },
-        onCreateLi: function(node, $li) {
-          if (node._loaded) {
-            if (node.children.length === 0) {
-              $li.find('.jqtree-title').append('<span class="tree-node-empty">' + _t('(empty)') + '</span>');
-            }
-          }
-          $li.append('<span class="pattern-relateditems-buttons"><a class="pattern-relateditems-result-browse" href="#"></a></span>');
-          $li.find('.pattern-relateditems-result-browse').click(function(e) {
-            e.preventDefault();
-            self.currentPath = node.path;
-            self.browseTo(self.currentPath);
-            $treeContainer.fadeOut();
-          });
-        }
-      });
-      treePattern.$el.bind('tree.select', function(e) {
-        var node = e.node;
-        if (node && !node._loaded) {
-          self.currentPath = node.path;
-          selectedNode = node;
-          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function() {
-            treePattern.$el.tree('openNode', node);
-          });
-          node._loaded = true;
-        }
-      });
-      treePattern.$el.bind('tree.dblclick', function(e) {
-        if (e.node) {
-          self.currentPath = e.node.path;
-          self.browseTo(self.currentPath);
-          $treeContainer.fadeOut();
-        }
-      });
-      treePattern.$el.bind('tree.refresh', function() {
-        /* the purpose of this is that when new data is loaded, the selected
-         * node is cleared. This re-selects it as a user browses structure of site */
-        if (selectedNode) {
-          treePattern.$el.tree('selectNode', selectedNode);
-        }
-      });
-      $('a.pattern-relateditems-tree-cancel', $treeContainer).click(function(e) {
-        e.preventDefault();
-        $treeContainer.fadeOut();
-        return false;
-      });
-      $treeSelect.on('click', function(e) {
-        e.preventDefault();
-        self.browsing = true;
-        self.currentPath = '/';
-        self.$el.select2('close');
-        $treeContainer.fadeIn();
-        treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl());
-        return false;
-      });
-      self.$el.on('select2-opening', function() {
-        $treeContainer.fadeOut();
-      });
       self.$browsePath.html($crumbs);
     },
 
@@ -377,18 +287,6 @@ define([
       self.query = new utils.QueryHelper(
         $.extend(true, {}, self.options, {
           pattern: self
-        })
-      );
-
-      self.treeQuery = new utils.QueryHelper(
-        $.extend(true, {}, self.options, {
-          pattern: self,
-          vocabularyUrl: self.options.vocabularyUrl,
-          baseCriteria: [{
-            i: 'is_folderish',
-            o: 'plone.app.querystring.operation.selection.any',
-            v: 'True'
-          }]
         })
       );
 
