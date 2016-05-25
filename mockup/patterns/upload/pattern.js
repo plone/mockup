@@ -485,6 +485,7 @@ define([
     setupRelatedItems: function($input) {
       var self = this;
       var options = self.options.relatedItems;
+      options.upload = false;  // ensure that related items upload is off.
       if (self.options.initialFolder){
         $input.attr('value', self.options.initialFolder);
       }

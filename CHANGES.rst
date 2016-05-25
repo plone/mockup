@@ -22,6 +22,8 @@ Incompatibilities:
 - Remove support for node version < ``0.11`` and update travis dependencies.
   [thet]
 
+- Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+
 New:
 
 - Fix urls in modals not opening in new window
@@ -50,7 +52,7 @@ New:
 - Related items pattern refactoring:
   - [x] Make "search" and "browse" mode user-selectable via buttons.
   - [x] Remove obsolete tree widget, use "browse" mode instead.
-  - [x] Let "search" mode search in currentPath recursively. The current path can be selected in "browse" mode.
+    [x] Let "browse" mode start from current path.
   - [x] Show only selectable items in "search" mode, if defined.
   - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
   - [ ] Allow optional image and file upload (especially useful for image and file reference widgets).
@@ -59,10 +61,13 @@ New:
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  - [x] Show "Open folder" arrow only when in browse mode.
+  - [x] Allow optional image and file upload (especially useful for image and file reference widgets).
   - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  - [x] Seperate templates from JavaScript into xml files.
   [thet]
 
 
@@ -124,6 +129,9 @@ Fixes:
 - Fix issues where querystring widget was broke due to issues with
   checks for undefined
   [datakurre]
+- Adapt TinyMCE to relateditems changes and remove the selection and result templates.
+  [thet]
+
 - Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with ``visibility: hidden`` or ``opacity: 0``).
   That in addition to elements, which are not visible at all and do not use screen space (``display: none``).
   Prevents upload form in structure pattern to be closed when opening the file selection tool.
