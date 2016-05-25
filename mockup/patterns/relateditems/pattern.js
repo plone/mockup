@@ -7,6 +7,7 @@
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
+ *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
  *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
@@ -101,6 +102,7 @@ define([
       closeOnSelect: false,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
+      minimumInputLength: 0,
       mode: 'search', // possible values are search and browse
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
