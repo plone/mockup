@@ -15,8 +15,8 @@ New:
   Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
   [thet]
 - Related items pattern:
-  - Remove obsolete tree widget
-  - Make Search/Browse mode user-selectable via buttons
+  OK - Remove obsolete tree widget
+  OK - Make Search/Browse mode user-selectable via buttons
   - Let search search recursively
   - Let search mode use last browse mode's path
   - Show only selectable items in search mode, if defined.
