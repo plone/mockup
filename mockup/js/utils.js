@@ -75,17 +75,17 @@ define([
       return path;
     };
 
-    self.getCriterias = function(term, options) {
-      if (options === undefined) {
-        options = {};
+    self.getCriterias = function(term, searchOptions) {
+      if (searchOptions === undefined) {
+        searchOptions = {};
       }
-      options = $.extend({}, {
+      searchOptions = $.extend({}, {
         useBaseCriteria: true,
         additionalCriterias: []
-      }, options);
+      }, searchOptions);
 
       var criterias = [];
-      if (options.useBaseCriteria) {
+      if (searchOptions.useBaseCriteria) {
         criterias = self.options.baseCriteria.slice(0);
       }
       if (term) {
@@ -96,11 +96,11 @@ define([
           v: term
         });
       }
-      if (options.searchPath) {
+      if (searchOptions.searchPath) {
         criterias.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
-          v: options.searchPath + '::' + self.options.pathDepth
+          v: searchOptions.searchPath + '::' + self.options.pathDepth
         });
       } else if (self.pattern.browsing) {
         criterias.push({
@@ -109,7 +109,7 @@ define([
           v: self.getCurrentPath() + '::' + self.options.pathDepth
         });
       }
-      criterias = criterias.concat(options.additionalCriterias);
+      criterias = criterias.concat(searchOptions.additionalCriterias);
       return criterias;
     };
 
