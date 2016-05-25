@@ -4,34 +4,25 @@
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
- *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
+ *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
+ *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
+ *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
+ *    multiple(boolean): Allow referencing single or multiple items. (true)
+ *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
+ *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
+ *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
+ *    separator(string): Select2 option. String which separates multiple items. (',')
+ *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
+ *    width(string): Specify a width for the widget. ('100%')
  *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%- path %>"><%- text %></a>')
  *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
  *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%- searchText %></span><a class="icon-home" href="/"></a><%- items %></span>')
  *    breadCrumbsTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbsTemplate. (null)
- *    cache(boolean): Whether or not results from the server should be
- *    cached. (true)
- *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
- *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
- *  
- * #this does not respect custom dx types which are also folderish:
- * --> folderTypes(array): Types which should be considered browsable. (["Folder"])
- * #   needs to be implemented with meta data field: is_folderish from vocabulary
- * 
- *    homeText(string): Text to display in the initial breadcrumb item. (home)
- *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
- *    multiple(boolean): Do not change this option. (true)
- *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    resultTemplate(string): Template for an item in the in the list of results. Refer to source for default. (Refer to source)
  *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
- *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
  *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
- *    separator(string): Select2 option. String which separates multiple items. (',')
- *    tokenSeparators(array): Select2 option, refer to select2 documentation.
- *    ([",", " "])
- *    width(string): Specify a width for the widget. ('100%')
  *
  * Documentation:
  *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
@@ -64,11 +55,11 @@
  *
  * Example: example-3
  *    <input type="text" class="pat-relateditems"
-             data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
+ *           data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
  *
  * Example: example-4
  *    <input type="text" class="pat-relateditems"
-             data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json", "maximumSelectionSize": 1}' />
+ *           data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json", "maximumSelectionSize": 1}' />
  *
  */
 
@@ -91,29 +82,54 @@ define([
     browsing: false,
     currentPath: null,
     defaults: {
-      vocabularyUrl: null, // must be set to work
-      width: '100%',
-      multiple: true,
-      tokenSeparators: [',', ' '],
-      separator: ',',
-      orderable: true,
-      cache: true,
-      mode: 'search', // possible values are search and browse
-      closeOnSelect: false,
+      // main option
+      vocabularyUrl: null,  // must be set to work
+
+      // more options
+      attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
       basePath: '/',
-      rootPath: '/',
-      homeText: _t('home'),
-      //folderTypes: ['Folder'],   
-      selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','is_folderish','review_state'],
+      closeOnSelect: false,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
-      treeVocabularyUrl: null,
+      mode: 'search', // possible values are search and browse
+      multiple: true,  // mockup-patterns-select2
+      orderable: true,  // mockup-patterns-select2
+      rootPath: '/',
+      selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
+      separator: ',',
+      tokenSeparators: [',', ' '],
+      width: '100%',
+
+      // templates
+      breadCrumbTemplate: '' +
+        '/<a href="<%- path %>" class="crumb"><%- text %></a>',
+      breadCrumbTemplateSelector: null,
+      breadCrumbsTemplate: '' +
+        '<span>' +
+        '  <span class="pattern-relateditems-tree">' +
+        '    <a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
+        '    <div class="tree-container">' +
+        '      <div class="title-container">' +
+        '        <a href="#" class="btn close pattern-relateditems-tree-cancel">' +
+        '          <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>' +
+        '        </a>' +
+        '        <span class="select-folder-label">Select folder</span>' +
+        '      </div>' +
+        '      <div class="pat-tree" />' +
+        '    </div>' +
+        '  </span>' +
+        '  <span class="pattern-relateditems-path-label">' +
+        '    <%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
+        '    <span class="glyphicon glyphicon-home"></span></a>' +
+        '    <%= items %>' +
+        '  </span>' +
+        '</span>',
+      breadCrumbsTemplateSelector: null,
       resultTemplate: '' +
-        '<div class="   pattern-relateditems-result  <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '<div class="pattern-relateditems-result <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
         '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
-        '    <span class="pattern-relateditems-result-title  <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
+        '    <span class="pattern-relateditems-result-title <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
         '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></span>' +
         '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
         '  </a>' +
@@ -126,38 +142,13 @@ define([
       resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item">' +
-        ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
-        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
-        ' <span class="pattern-relateditems-item-path"><%- path %></span>' +
+        '  <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
+        '  <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
+        '  <span class="pattern-relateditems-item-path"><%- path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
-      breadCrumbsTemplate: '<span>' +
-        '<span class="pattern-relateditems-tree">' +
-          '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
-          '<div class="tree-container">' +
-            '<div class="title-container">' +
-              '<a href="#" class="btn close pattern-relateditems-tree-cancel">' +
-                '<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>' +
-              '</a>' +
-              '<span class="select-folder-label">Select folder</span>' +
-            '</div>' +
-            '<div class="pat-tree" />' +
-          '</div>' +
-        '</span>' +
-        '<span class="pattern-relateditems-path-label">' +
-          '<%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
-          '<span class="glyphicon glyphicon-home"></span></a>' +
-          // ``items assumed to be santized html``
-          '<%= items %>' +
-        '</span>' +
-      '</span>',
-      breadCrumbsTemplateSelector: null,
-      breadCrumbTemplate: '' +
-        '/<a href="<%- path %>" class="crumb"><%- text %></a>',
-      breadCrumbTemplateSelector: null,
-      escapeMarkup: function(text) {
-        return text;
-      },
+
+      // functions
       setupAjax: function() {
         // Setup the ajax object to use during requests
         var self = this;
@@ -167,6 +158,7 @@ define([
         return {};
       }
     },
+
     applyTemplate: function(tpl, item) {
       var self = this;
       var template;
@@ -183,16 +175,19 @@ define([
       options._item = item;
       return _.template(template)(options);
     },
+
     activateBrowsing: function() {
       var self = this;
       self.browsing = true;
       self.setBreadCrumbs();
     },
+
     deactivateBrowsing: function() {
       var self = this;
       self.browsing = false;
       self.setBreadCrumbs();
     },
+
     browseTo: function(path) {
       var self = this;
       self.emit('before-browse');
@@ -206,6 +201,7 @@ define([
       self.$el.select2('open');
       self.emit('after-browse');
     },
+
     setBreadCrumbs: function() {
       var self = this;
       var path = self.currentPath ? self.currentPath : self.options.basePath;
@@ -236,9 +232,11 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items: itemsHtml,
-                                                  searchText: _t('Search:'),
-                                                  rootPath: self.options.rootPath});
+        html = self.applyTemplate('breadCrumbs', {
+          items: itemsHtml,
+          searchText: _t('Search:'),
+          rootPath: self.options.rootPath
+        });
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -246,6 +244,7 @@ define([
         self.browseTo($(this).attr('href'));
         return false;
       });
+
       var $treeSelect = $('.pattern-relateditems-tree-select', $crumbs);
       var $container = $treeSelect.parent();
       var $treeContainer = $('.tree-container', $container);
@@ -267,13 +266,13 @@ define([
           return nodes;
         },
         onCreateLi: function(node, $li) {
-          if(node._loaded){
-            if(node.children.length === 0){
+          if (node._loaded) {
+            if (node.children.length === 0) {
               $li.find('.jqtree-title').append('<span class="tree-node-empty">' + _t('(empty)') + '</span>');
             }
           }
           $li.append('<span class="pattern-relateditems-buttons"><a class="pattern-relateditems-result-browse" href="#"></a></span>');
-          $li.find('.pattern-relateditems-result-browse').click(function(e){
+          $li.find('.pattern-relateditems-result-browse').click(function(e) {
             e.preventDefault();
             self.currentPath = node.path;
             self.browseTo(self.currentPath);
@@ -286,14 +285,14 @@ define([
         if (node && !node._loaded) {
           self.currentPath = node.path;
           selectedNode = node;
-          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function(){
+          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function() {
             treePattern.$el.tree('openNode', node);
           });
           node._loaded = true;
         }
       });
-      treePattern.$el.bind('tree.dblclick', function(e){
-        if(e.node){
+      treePattern.$el.bind('tree.dblclick', function(e) {
+        if (e.node) {
           self.currentPath = e.node.path;
           self.browseTo(self.currentPath);
           $treeContainer.fadeOut();
@@ -311,7 +310,6 @@ define([
         $treeContainer.fadeOut();
         return false;
       });
-
       $treeSelect.on('click', function(e) {
         e.preventDefault();
         self.browsing = true;
@@ -321,13 +319,12 @@ define([
         treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl());
         return false;
       });
-
-      self.$el.on('select2-opening', function(){
+      self.$el.on('select2-opening', function() {
         $treeContainer.fadeOut();
       });
-
       self.$browsePath.html($crumbs);
     },
+
     selectItem: function(item) {
       var self = this;
       self.emit('selecting');
@@ -337,6 +334,7 @@ define([
       item.selected = true;
       self.emit('selected');
     },
+
     deselectItem: function(item) {
       var self = this;
       self.emit('deselecting');
@@ -350,6 +348,7 @@ define([
       item.selected = false;
       self.emit('deselected');
     },
+
     isSelectable: function(item) {
       var self = this;
       if (self.options.selectableTypes === null) {
@@ -358,15 +357,20 @@ define([
         return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
       }
     },
+
     init: function() {
       var self = this;
+
       self.query = new utils.QueryHelper(
-        $.extend(true, {}, self.options, {pattern: self})
+        $.extend(true, {}, self.options, {
+          pattern: self
+        })
       );
+
       self.treeQuery = new utils.QueryHelper(
         $.extend(true, {}, self.options, {
           pattern: self,
-          vocabularyUrl: self.options.treeVocabularyUrl || self.options.vocabularyUrl,
+          vocabularyUrl: self.options.vocabularyUrl,
           baseCriteria: [{
             i: 'is_folderish',
             o: 'plone.app.querystring.operation.selection.any',
@@ -389,15 +393,13 @@ define([
       };
 
       Select2.prototype.initializeOrdering.call(self);
-      self.options.formatResult = function(item) {
-        if (item.is_folderish){
-            item.folderish = true;
-           }
-         else {
-               item.folderish = false;
-           }
-      
 
+      self.options.formatResult = function(item) {
+        if (item.is_folderish) {
+          item.folderish = true;
+        } else {
+          item.folderish = false;
+        }
         item.selectable = self.isSelectable(item);
 
         if (item.selected === undefined) {
@@ -441,6 +443,7 @@ define([
 
         return $(result);
       };
+
       self.options.initSelection = function(element, callback) {
         var data = [];
         var value = $(element).val();
@@ -455,8 +458,12 @@ define([
               }, {});
               callback(
                 ids
-                  .map(function(uid) { return results[uid]; })
-                  .filter(function(item) { return item !== undefined; })
+                .map(function(uid) {
+                  return results[uid];
+                })
+                .filter(function(item) {
+                  return item !== undefined;
+                })
               );
             },
             false
