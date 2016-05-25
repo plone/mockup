@@ -300,13 +300,7 @@ define([
       Select2.prototype.initializeOrdering.call(self);
 
       self.options.formatResult = function(item) {
-        if (item.is_folderish) {
-          item.folderish = true;
-        } else {
-          item.folderish = false;
-        }
         item.selectable = self.isSelectable(item);
-
         if (item.selected === undefined) {
           var data = self.$el.select2('data');
           item.selected = false;
