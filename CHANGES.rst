@@ -14,8 +14,8 @@ New:
 - Update safe bower.json dependencies except backbone which tests would fail.
   [thet]
 - Related items pattern:
-  - Remove obsolete tree widget
-  - Make Search/Browse mode user-selectable via buttons
+  OK - Remove obsolete tree widget
+  OK - Make Search/Browse mode user-selectable via buttons
   - Let search search recursively
   - Let search mode use last browse mode's path
   - Show only selectable items in search mode, if defined.
