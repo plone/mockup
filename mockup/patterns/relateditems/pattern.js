@@ -10,15 +10,9 @@
  *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
  *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%- searchText %></span><a class="icon-home" href="/"></a><%- items %></span>')
  *    breadCrumbsTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbsTemplate. (null)
- *    cache(boolean): Whether or not results from the server should be
- *    cached. (true)
+ *    cache(boolean): Whether or not results from the server should be cached. (true)
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
- *  
- * #this does not respect custom dx types which are also folderish:
- * --> folderTypes(array): Types which should be considered browsable. (["Folder"])
- * #   needs to be implemented with meta data field: is_folderish from vocabulary
- * 
  *    homeText(string): Text to display in the initial breadcrumb item. (home)
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    multiple(boolean): Do not change this option. (true)
@@ -29,8 +23,7 @@
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
  *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
- *    tokenSeparators(array): Select2 option, refer to select2 documentation.
- *    ([",", " "])
+ *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
  *    width(string): Specify a width for the widget. ('100%')
  *
  * Documentation:
@@ -103,17 +96,16 @@ define([
       basePath: '/',
       rootPath: '/',
       homeText: _t('home'),
-      //folderTypes: ['Folder'],   
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','is_folderish','review_state'],
+      attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       treeVocabularyUrl: null,
       resultTemplate: '' +
-        '<div class="   pattern-relateditems-result  <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '<div class="pattern-relateditems-result <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
         '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
-        '    <span class="pattern-relateditems-result-title  <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
+        '    <span class="pattern-relateditems-result-title <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
         '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></span>' +
         '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
         '  </a>' +
@@ -126,31 +118,31 @@ define([
       resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item">' +
-        ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
-        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
-        ' <span class="pattern-relateditems-item-path"><%- path %></span>' +
+        '  <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
+        '  <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
+        '  <span class="pattern-relateditems-item-path"><%- path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
-      breadCrumbsTemplate: '<span>' +
-        '<span class="pattern-relateditems-tree">' +
-          '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
-          '<div class="tree-container">' +
-            '<div class="title-container">' +
-              '<a href="#" class="btn close pattern-relateditems-tree-cancel">' +
-                '<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>' +
-              '</a>' +
-              '<span class="select-folder-label">Select folder</span>' +
-            '</div>' +
-            '<div class="pat-tree" />' +
-          '</div>' +
-        '</span>' +
-        '<span class="pattern-relateditems-path-label">' +
-          '<%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
-          '<span class="glyphicon glyphicon-home"></span></a>' +
-          // ``items assumed to be santized html``
-          '<%= items %>' +
-        '</span>' +
-      '</span>',
+      breadCrumbsTemplate: '' +
+        '<span>' +
+        '  <span class="pattern-relateditems-tree">' +
+        '    <a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
+        '    <div class="tree-container">' +
+        '      <div class="title-container">' +
+        '        <a href="#" class="btn close pattern-relateditems-tree-cancel">' +
+        '          <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>' +
+        '        </a>' +
+        '        <span class="select-folder-label">Select folder</span>' +
+        '      </div>' +
+        '      <div class="pat-tree" />' +
+        '    </div>' +
+        '  </span>' +
+        '  <span class="pattern-relateditems-path-label">' +
+        '    <%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
+        '    <span class="glyphicon glyphicon-home"></span></a>' +
+        '    <%= items %>' +
+        '  </span>' +
+        '</span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
         '/<a href="<%- path %>" class="crumb"><%- text %></a>',
@@ -236,9 +228,11 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items: itemsHtml,
-                                                  searchText: _t('Search:'),
-                                                  rootPath: self.options.rootPath});
+        html = self.applyTemplate('breadCrumbs', {
+          items: itemsHtml,
+          searchText: _t('Search:'),
+          rootPath: self.options.rootPath
+        });
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -267,13 +261,13 @@ define([
           return nodes;
         },
         onCreateLi: function(node, $li) {
-          if(node._loaded){
-            if(node.children.length === 0){
+          if (node._loaded) {
+            if (node.children.length === 0) {
               $li.find('.jqtree-title').append('<span class="tree-node-empty">' + _t('(empty)') + '</span>');
             }
           }
           $li.append('<span class="pattern-relateditems-buttons"><a class="pattern-relateditems-result-browse" href="#"></a></span>');
-          $li.find('.pattern-relateditems-result-browse').click(function(e){
+          $li.find('.pattern-relateditems-result-browse').click(function(e) {
             e.preventDefault();
             self.currentPath = node.path;
             self.browseTo(self.currentPath);
@@ -286,14 +280,14 @@ define([
         if (node && !node._loaded) {
           self.currentPath = node.path;
           selectedNode = node;
-          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function(){
+          treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl(), node, function() {
             treePattern.$el.tree('openNode', node);
           });
           node._loaded = true;
         }
       });
-      treePattern.$el.bind('tree.dblclick', function(e){
-        if(e.node){
+      treePattern.$el.bind('tree.dblclick', function(e) {
+        if (e.node) {
           self.currentPath = e.node.path;
           self.browseTo(self.currentPath);
           $treeContainer.fadeOut();
@@ -322,7 +316,7 @@ define([
         return false;
       });
 
-      self.$el.on('select2-opening', function(){
+      self.$el.on('select2-opening', function() {
         $treeContainer.fadeOut();
       });
 
@@ -361,7 +355,9 @@ define([
     init: function() {
       var self = this;
       self.query = new utils.QueryHelper(
-        $.extend(true, {}, self.options, {pattern: self})
+        $.extend(true, {}, self.options, {
+          pattern: self
+        })
       );
       self.treeQuery = new utils.QueryHelper(
         $.extend(true, {}, self.options, {
@@ -390,13 +386,12 @@ define([
 
       Select2.prototype.initializeOrdering.call(self);
       self.options.formatResult = function(item) {
-        if (item.is_folderish){
-            item.folderish = true;
-           }
-         else {
-               item.folderish = false;
-           }
-      
+        if (item.is_folderish) {
+          item.folderish = true;
+        } else {
+          item.folderish = false;
+        }
+
 
         item.selectable = self.isSelectable(item);
 
@@ -455,8 +450,12 @@ define([
               }, {});
               callback(
                 ids
-                  .map(function(uid) { return results[uid]; })
-                  .filter(function(item) { return item !== undefined; })
+                .map(function(uid) {
+                  return results[uid];
+                })
+                .filter(function(item) {
+                  return item !== undefined;
+                })
               );
             },
             false
