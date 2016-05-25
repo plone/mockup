@@ -6,9 +6,9 @@
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
+ *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'browse'.
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
- *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
@@ -89,8 +89,8 @@ define([
     name: 'relateditems',
     trigger: '.pat-relateditems',
     parser: 'mockup',
-    browsing: false,
     currentPath: null,
+    browsing: undefined,
     defaults: {
       // main option
       vocabularyUrl: null,  // must be set to work
@@ -102,7 +102,7 @@ define([
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       minimumInputLength: 0,
-      mode: 'search', // possible values are search and browse
+      mode: 'browse', // possible values are search and browse
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -116,11 +116,11 @@ define([
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
         '<span>' +
-        '  <span class="pattern-relateditems-path-label">' +
-        '    <%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
-        '    <span class="glyphicon glyphicon-home"></span></a>' +
-        '    <%= items %>' +
-        '  </span>' +
+        '  <button class="mode browse <% if (mode=="browse") { %>active<% } %>"><%- browseModeText %></button>' +
+        '  <button class="mode search <% if (mode=="search") { %>active<% } %>"><%- searchModeText %></button>' +
+        '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
+        '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
+        '  <%= items %>' +
         '</span>',
       breadCrumbsTemplateSelector: null,
       resultTemplate: '' +
@@ -146,7 +146,8 @@ define([
         '</span>',
       selectionTemplateSelector: null,
 
-      multiple: true,  // needed
+      // needed
+      multiple: true,
 
       // functions
       setupAjax: function() {
@@ -176,30 +177,14 @@ define([
       return _.template(template)(options);
     },
 
-    activateBrowsing: function() {
-      var self = this;
-      self.browsing = true;
-      self.setBreadCrumbs();
-    },
-
-    deactivateBrowsing: function() {
-      var self = this;
-      self.browsing = false;
-      self.setBreadCrumbs();
-    },
-
     browseTo: function(path) {
       var self = this;
       self.emit('before-browse');
       self.currentPath = path;
-      if (path === '/' && self.options.mode === 'search') {
-        self.deactivateBrowsing();
-      } else {
-        self.activateBrowsing();
-      }
       self.$el.select2('close');
       self.$el.select2('open');
       self.emit('after-browse');
+      self.setBreadCrumbs();
     },
 
     setBreadCrumbs: function() {
@@ -207,42 +192,49 @@ define([
       var path = self.currentPath ? self.currentPath : self.options.basePath;
       var root = self.options.rootPath.replace(/\/$/, '');
       var html;
+
       // strip site root from path
       path = path.indexOf(root) === 0 ? path.slice(root.length) : path;
-      if (path === '/') {
-        var searchText = '';
-        if (self.options.mode === 'search') {
-          searchText = '<em>' + _t('entire site') + '</em>';
+
+      var paths = path.split('/');
+      var itemPath = root;
+      var itemsHtml = '';
+      _.each(paths, function(node) {
+        if (node !== '') {
+          var item = {};
+          itemPath = itemPath + '/' + node;
+          item.text = node;
+          item.path = itemPath;
+          itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
         }
-        html = self.applyTemplate('breadCrumbs', {
-          items: searchText,
-          searchText: _t('Search:'),
-          rootPath: self.options.rootPath
-        });
-      } else {
-        var paths = path.split('/');
-        var itemPath = root;
-        var itemsHtml = '';
-        _.each(paths, function(node) {
-          if (node !== '') {
-            var item = {};
-            itemPath = itemPath + '/' + node;
-            item.text = node;
-            item.path = itemPath;
-            itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
-          }
-        });
-        html = self.applyTemplate('breadCrumbs', {
-          items: itemsHtml,
-          searchText: _t('Search:'),
-          rootPath: self.options.rootPath
-        });
-      }
+      });
+      html = self.applyTemplate('breadCrumbs', {
+        items: itemsHtml,
+        searchText: _t('Search in path:'),
+        searchModeText: _t('Search'),
+        browseModeText: _t('Browse'),
+        rootPath: self.options.rootPath
+      });
+
       var $crumbs = $(html);
+
+      $('button.mode.search', $crumbs).on('click', function(e) {
+        e.preventDefault();
+        $('button.mode.search', $crumbs).addClass('active');
+        $('button.mode.browse', $crumbs).removeClass('active');
+        self.browsing = false;
+      });
+
+      $('button.mode.browse', $crumbs).on('click', function(e) {
+        e.preventDefault();
+        $('button.mode.browse', $crumbs).addClass('active');
+        $('button.mode.search', $crumbs).removeClass('active');
+        self.browsing = true;
+      });
+
       $('a.crumb', $crumbs).on('click', function(e) {
         e.preventDefault();
         self.browseTo($(this).attr('href'));
-        return false;
       });
 
       self.$browsePath.html($crumbs);
@@ -289,6 +281,8 @@ define([
           pattern: self
         })
       );
+
+      self.browsing = self.options.mode === 'browse';
 
       self.options.ajax = self.options.setupAjax.apply(self);
 
@@ -391,17 +385,11 @@ define([
       self.$browsePath = $('<span class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);
 
-      if (self.options.mode === 'search') {
-        self.deactivateBrowsing();
-        self.browsing = false;
-      } else {
-        self.activateBrowsing();
-        self.browsing = true;
-      }
-
       self.$el.on('select2-selecting', function(event) {
         event.preventDefault();
       });
+
+      self.setBreadCrumbs();
 
     }
   });
