@@ -8,7 +8,6 @@
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
- *    multiple(boolean): Allow referencing single or multiple items. (true)
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
@@ -27,37 +26,48 @@
  * Documentation:
  *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
  *
- *    # Default
+ *    # Default, mode "search"
  *
  *    {{ example-1 }}
  *
- *    # Existing values, some bad
+ *    # Default, mode "browse"
  *
  *    {{ example-2 }}
  *
- *    # Selectable Types
+ *    # Existing values, some bad
  *
  *    {{ example-3 }}
  *
- *    # Select a single item
+ *    # Selectable Types
  *
  *    {{ example-4 }}
+ *
+ *    # Select a single item
+ *
+ *    {{ example-5 }}
  *
  * Example: example-1
  *    <input type="text" class="pat-relateditems"
  *           data-pat-relateditems="width:30em;
+ *                                  mode:search;
  *                                  vocabularyUrl:/relateditems-test.json" />
  *
  * Example: example-2
  *    <input type="text" class="pat-relateditems"
- *           value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
- *           data-pat-relateditems="width:30em; vocabularyUrl:/relateditems-test.json" />
+ *           data-pat-relateditems="width:30em;
+ *                                  mode:browse;
+ *                                  vocabularyUrl:/relateditems-test.json" />
  *
  * Example: example-3
  *    <input type="text" class="pat-relateditems"
- *           data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
+ *           value="asdf1234gsad,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"
+ *           data-pat-relateditems="width:30em; vocabularyUrl:/relateditems-test.json" />
  *
  * Example: example-4
+ *    <input type="text" class="pat-relateditems"
+ *           data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json"}' />
+ *
+ * Example: example-5
  *    <input type="text" class="pat-relateditems"
  *           data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json", "maximumSelectionSize": 1}' />
  *
@@ -92,7 +102,6 @@ define([
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
       mode: 'search', // possible values are search and browse
-      multiple: true,  // mockup-patterns-select2
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -147,6 +156,8 @@ define([
         '  <span class="pattern-relateditems-item-path"><%- path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
+
+      multiple: true,  // needed
 
       // functions
       setupAjax: function() {
