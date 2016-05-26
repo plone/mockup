@@ -168,16 +168,6 @@ define([
       return _.template(template)(options);
     },
 
-    browseTo: function (path) {
-      var self = this;
-      self.emit('before-browse');
-      self.currentPath = path;
-      self.$el.select2('close');
-      self.$el.select2('open');
-      self.emit('after-browse');
-      self.setBreadCrumbs();
-    },
-
     setQuery: function () {
 
       var baseCriteria = [];
@@ -272,6 +262,16 @@ define([
       });
 
       self.$browsePath.html($crumbs);
+    },
+
+    browseTo: function (path) {
+      var self = this;
+      self.emit('before-browse');
+      self.currentPath = path;
+      self.$el.select2('close');
+      self.$el.select2('open');
+      self.emit('after-browse');
+      self.setBreadCrumbs();
     },
 
     selectItem: function(item) {
