@@ -3,14 +3,14 @@
  * Options:
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
- *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
+ *    basePath(string): Start browse/search in this path. Default: set to rootPath.
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'browse'.
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
- *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
+ *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
@@ -97,7 +97,7 @@ define([
 
       // more options
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
-      basePath: '/',
+      basePath: undefined,
       closeOnSelect: false,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
@@ -281,9 +281,7 @@ define([
           pattern: self
         })
       );
-
       self.browsing = self.options.mode === 'browse';
-
       self.options.ajax = self.options.setupAjax.apply(self);
 
       self.$el.wrap('<div class="pattern-relateditems-container" />');
