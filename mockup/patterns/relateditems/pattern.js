@@ -89,7 +89,7 @@ define([
     name: 'relateditems',
     trigger: '.pat-relateditems',
     parser: 'mockup',
-    currentPath: null,
+    currentPath: undefined,
     browsing: undefined,
     defaults: {
       // main option
@@ -149,15 +149,6 @@ define([
       // needed
       multiple: true,
 
-      // functions
-      setupAjax: function() {
-        // Setup the ajax object to use during requests
-        var self = this;
-        if (self.query.valid) {
-          return self.query.selectAjax();
-        }
-        return {};
-      }
     },
 
     applyTemplate: function(tpl, item) {
@@ -177,7 +168,7 @@ define([
       return _.template(template)(options);
     },
 
-    browseTo: function(path) {
+    browseTo: function (path) {
       var self = this;
       self.emit('before-browse');
       self.currentPath = path;
@@ -187,9 +178,50 @@ define([
       self.setBreadCrumbs();
     },
 
-    setBreadCrumbs: function() {
+    setQuery: function () {
+
+      var baseCriteria = [];
+
+      if (!this.browsing) {
+        // MODE SEARCH
+
+        // restrict to given types
+        if (this.options.selectableTypes) {
+          baseCriteria.push({
+            i: 'portal_type',
+            o: 'plone.app.querystring.operation.selection.any',
+            v: this.options.selectableTypes
+          });
+        }
+
+        // search recursively in current path
+        baseCriteria.push({
+          i: 'path',
+          o: 'plone.app.querystring.operation.string.path',
+          v: this.currentPath
+        });
+
+      }
+
+      // set query object
+      this.query = new utils.QueryHelper(
+        $.extend(true, {}, this.options, {
+          pattern: this,
+          baseCriteria: baseCriteria
+        })
+      );
+
+      var ajax = {};
+      if (this.query.valid) {
+        ajax = this.query.selectAjax();
+      }
+      this.options.ajax = ajax;
+      this.$el.select2(this.options);
+    },
+
+    setBreadCrumbs: function () {
       var self = this;
-      var path = self.currentPath ? self.currentPath : self.options.basePath;
+      var path = self.currentPath;
       var root = self.options.rootPath.replace(/\/$/, '');
       var html;
 
@@ -223,6 +255,7 @@ define([
         $('button.mode.search', $crumbs).addClass('active');
         $('button.mode.browse', $crumbs).removeClass('active');
         self.browsing = false;
+        self.setQuery();
       });
 
       $('button.mode.browse', $crumbs).on('click', function(e) {
@@ -230,6 +263,7 @@ define([
         $('button.mode.browse', $crumbs).addClass('active');
         $('button.mode.search', $crumbs).removeClass('active');
         self.browsing = true;
+        self.setQuery();
       });
 
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -276,13 +310,10 @@ define([
     init: function() {
       var self = this;
 
-      self.query = new utils.QueryHelper(
-        $.extend(true, {}, self.options, {
-          pattern: self
-        })
-      );
       self.browsing = self.options.mode === 'browse';
-      self.options.ajax = self.options.setupAjax.apply(self);
+      self.currentPath = self.options.basePath || self.options.rootPath;
+
+      self.setQuery();
 
       self.$el.wrap('<div class="pattern-relateditems-container" />');
       self.$container = self.$el.parents('.pattern-relateditems-container');
@@ -346,7 +377,12 @@ define([
         var value = $(element).val();
         if (value !== '') {
           var ids = value.split(self.options.separator);
-          self.query.search(
+          var query = new utils.QueryHelper(
+            $.extend(true, {}, self.options, {
+              pattern: self
+            })
+          );
+          query.search(
             'UID', 'plone.app.querystring.operation.list.contains', ids,
             function(data) {
               var results = data.results.reduce(function(prev, item) {

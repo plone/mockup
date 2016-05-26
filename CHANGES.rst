@@ -16,13 +16,13 @@ New:
 - Related items pattern:
   OK - Remove obsolete tree widget
   OK - Make Search/Browse mode user-selectable via buttons
-  - Let search search recursively
-  - Let search mode use last browse mode's path
-  - Show only selectable items in search mode, if defined.
+  OK - Let search search recursively
+  OK - Let search mode use last browse mode's path
+  OK - Show only selectable items in search mode, if defined.
+  OK - Search only in current path in browse mode.
   - Show only selectable and folderish items in browse mode, if selctable items are defined.
-  - Search only in current path in browse mode.
-
-
+  - Optional Image Upload
+  - Favorites based on registry path entries
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
