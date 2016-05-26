@@ -27,6 +27,7 @@ define([
       pathDepth: 1
     };
     self.options = $.extend({}, defaults, options);
+
     self.pattern = self.options.pattern;
     if (self.pattern === undefined || self.pattern === null) {
       self.pattern = {
@@ -40,12 +41,17 @@ define([
     } else if (self.pattern.vocabularyUrl) {
       self.options.vocabularyUrl = self.pattern.vocabularyUrl;
     }
-    if (self.options.vocabularyUrl !== undefined &&
-      self.options.vocabularyUrl !== null) {
-      self.valid = true;
-    } else {
-      self.valid = false;
-    }
+    self.valid = Boolean(self.options.vocabularyUrl);
+
+    self.getBatch = function(page) {
+      if (!page) {
+        page = 1;
+      }
+      return {
+        page: page,
+        size: self.options.batchSize
+      };
+    };
 
     self.getCurrentPath = function() {
       var pattern = self.pattern;
@@ -113,14 +119,29 @@ define([
       return criterias;
     };
 
-    self.getBatch = function(page) {
-      if (!page) {
-        page = 1;
-      }
-      return {
-        page: page,
-        size: self.options.batchSize
+    self.getQueryData = function(term, page) {
+      var data = {
+        query: JSON.stringify({
+          criteria: self.getCriterias(term),
+          sort_on: self.options.sort_on,
+          sort_order: self.options.sort_order
+        }),
+        attributes: JSON.stringify(self.options.attributes)
       };
+      if (page) {
+        data.batch = JSON.stringify(self.getBatch(page));
+      }
+      return data;
+    };
+
+    self.getUrl = function() {
+      var url = self.options.vocabularyUrl;
+      if (url.indexOf('?') === -1) {
+        url += '?';
+      } else {
+        url += '&';
+      }
+      return url + $.param(self.getQueryData());
     };
 
     self.selectAjax = function() {
@@ -140,31 +161,6 @@ define([
           };
         }
       };
-    };
-
-    self.getUrl = function() {
-      var url = self.options.vocabularyUrl;
-      if (url.indexOf('?') === -1) {
-        url += '?';
-      } else {
-        url += '&';
-      }
-      return url + $.param(self.getQueryData());
-    };
-
-    self.getQueryData = function(term, page) {
-      var data = {
-        query: JSON.stringify({
-          criteria: self.getCriterias(term),
-          sort_on: self.options.sort_on,
-          sort_order: self.options.sort_order
-        }),
-        attributes: JSON.stringify(self.options.attributes)
-      };
-      if (page) {
-        data.batch = JSON.stringify(self.getBatch(page));
-      }
-      return data;
     };
 
     self.search = function(term, operation, value, callback, useBaseCriteria, type) {
