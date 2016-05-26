@@ -24,6 +24,16 @@ New:
   - Show only selectable and folderish items in browse mode, if selctable items are defined.
   - Optional Image Upload
   - Favorites based on registry path entries
+- Related items pattern refactoring:
+  - [x] Make "search" and "browse" mode user-selectable via buttons.
+  - [x] Remove obsolete tree widget, use "browse" mode instead.
+  - [x] Let "search" mode search in currentPath recursively. The current path can be selected in "browse" mode.
+  - [x] Show only selectable items in "search" mode, if defined.
+  - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
+  - [ ] Allow optional image and file upload (especially useful for image and file reference widgets).
+  - [ ] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
+  [thet]
+
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
