@@ -44,11 +44,8 @@ define([
     self.valid = Boolean(self.options.vocabularyUrl);
 
     self.getBatch = function(page) {
-      if (!page) {
-        page = 1;
-      }
       return {
-        page: page,
+        page: page ? page : 1,
         size: self.options.batchSize
       };
     };
