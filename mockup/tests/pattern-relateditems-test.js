@@ -179,19 +179,19 @@ define([
     });
 
     // test cases
-    // 1) initialize pattern
-    // click on browse opens result list
-    // click on search opens result list
-    // click on browse with already selected result items opens result list
-    // click on search with already selected result items opens result list
-    // 4) browse to item and select it
-    // - selected item is removed from result list
-    // - don't allow to select items which are not selectable
-    // - don't show non-selectable and non folderish items
-    // - only search in current path
-    // 5) search item and select it
-    // 3) deselect an item from result list
-    // selection from favorites opens path
+    // - [x] initialize pattern
+    // - [x] click on browse opens result list
+    // - [x] click on search opens result list
+    // - [x] click on browse with already selected result items opens result list
+    // - [x] click on search with already selected result items opens result list
+    // - [ ] browse to item and select it
+    // - [x] selected item is removed from result list
+    // - [ ] don't allow to select items which are not selectable
+    // - [ ] don't show non-selectable and non folderish items
+    // - [x] only search in current path
+    // - [x] search item and select it
+    // - [x] deselect an item from result list
+    // - [x] selection from favorites opens path
 
     var initializePattern = function (options) {
       options = options || {};
