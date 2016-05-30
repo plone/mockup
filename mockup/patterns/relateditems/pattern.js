@@ -142,7 +142,7 @@ define([
         '<li><a href="<%- path %>" class="fav" aria-labelledby="blip"><%- title %></a></li>',
       favoriteTemplateSelector: null,
       resultTemplate: '' +
-        '<div class="pattern-relateditems-result <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '<div class="pattern-relateditems-result">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
         '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
         '    <span class="pattern-relateditems-result-title <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
@@ -314,7 +314,6 @@ define([
       var data = self.$el.select2('data');
       data.push(item);
       self.$el.select2('data', data, true);
-      item.selected = true;
       self.emit('selected');
     },
 
@@ -328,7 +327,6 @@ define([
         }
       });
       self.$el.select2('data', data, true);
-      item.selected = false;
       self.emit('deselected');
     },
 
@@ -364,14 +362,13 @@ define([
 
       self.options.formatResult = function(item) {
         item.selectable = self.isSelectable(item);
-        if (item.selected === undefined) {
-          var data = self.$el.select2('data');
-          item.selected = false;
-          _.each(data, function(obj) {
-            if (obj.UID === item.UID) {
-              item.selected = true;
-            }
-          });
+        var data = self.$el.select2('data');
+
+        for (var i = 0; i < data.length; i = i + 1) {
+          if (data[i].UID === item.UID) {
+            // Exclude already selected items in result list.
+            return;
+          }
         }
 
         var result = $(self.applyTemplate('result', item));
