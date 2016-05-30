@@ -33,6 +33,7 @@ New:
   - [ ] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
+  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
   [thet]
 
 

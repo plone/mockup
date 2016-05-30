@@ -92,6 +92,7 @@ define([
     parser: 'mockup',
     currentPath: undefined,
     browsing: undefined,
+    openAfterInit: undefined,
     defaults: {
       // main option
       vocabularyUrl: null,  // must be set to work
@@ -274,7 +275,15 @@ define([
         $('button.mode.search', $crumbs).addClass('active');
         $('button.mode.browse', $crumbs).removeClass('active');
         self.browsing = false;
+        if (self.$el.select2('data').length > 0) {
+          // Have to call after initialization
+          self.openAfterInit = true;
+        }
         self.setQuery();
+        if (!self.openAfterInit) {
+          self.$el.select2('close');
+          self.$el.select2('open');
+        }
       });
 
       $('button.mode.browse', $crumbs).on('click', function(e) {
@@ -282,7 +291,15 @@ define([
         $('button.mode.browse', $crumbs).addClass('active');
         $('button.mode.search', $crumbs).removeClass('active');
         self.browsing = true;
+        if (self.$el.select2('data').length > 0) {
+          // Have to call after initialization
+          self.openAfterInit = true;
+        }
         self.setQuery();
+        if (!self.openAfterInit) {
+          self.$el.select2('close');
+          self.$el.select2('open');
+        }
       });
 
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -432,10 +449,18 @@ define([
                   return item !== undefined;
                 })
               );
+
+              if (self.openAfterInit) {
+                // open after initialization
+                self.$el.select2('open');
+                self.openAfterInit = undefined;
+              }
+
             },
             false
           );
         }
+
       };
 
       self.options.id = function(item) {
