@@ -141,7 +141,8 @@ define([
 
         function browse(items, q, p) {
           results = [];
-          var path = p.substring(0, p.length - 1);
+          var path = p;
+          // var path = p.substring(0, p.length - 1);
           // var splitPath = path.split('/');
           var fromPath = [];
           _.each(items, function(item) {
@@ -338,9 +339,28 @@ define([
       $('a.pattern-relateditems-result-select')[0].click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID15');
 
-
     });
 
+    it('use favorites', function () {
+      var pattern = initializePattern({'favorites': [{'title': 'root', 'path': '/'}, {'title': 'folder1', 'path': '/folder1'}]});
+      var clock = sinon.useFakeTimers();
+      var $input;
+
+      // open up result list by clicking on "browse"
+      $('button.favorites', $container).click();
+      clock.tick(1000);
+
+      // click "folder1"
+      $($('.favorites li a')[1]).click();
+      clock.tick(1000);
+
+      expect($('.pattern-relateditems-path .pattern-relateditems-path-label').text()).to.be.equal('Search in path:');
+      expect($($('.pattern-relateditems-path .crumb')[1]).text()).to.be.equal('folder1');
+
+      // search restricted to path "folder1"
+      expect($('.pattern-relateditems-result-select')).to.have.length(4);
+
+    });
 
   });
 
