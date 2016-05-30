@@ -11,7 +11,6 @@ define([
   window.mocha.setup('bdd').globals(['jQuery*']);
   $.fx.off = true;
 
-  var $container;
 
   /* ==========================
    TEST: Related Items
@@ -32,16 +31,17 @@ define([
       {UID:  'UID10',  Title:  'Image     3',  path:  '/image3',     portal_type:  'Image',   getIcon:  "image.png",     is_folderish:  false,  review_state:  'published',  getURL: ''},
     ];
     var folder1 = [
-      {UID:  'UID11',   Title:  'Document  11',  path:  '/document11',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
-      {UID:  'UID12',   Title:  'Document  12',  path:  '/document12',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
-      {UID:  'UID13',   Title:  'Document  13',  path:  '/document13',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID11',   Title:  'Document  11',  path:  '/folder1/document11',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID12',   Title:  'Document  12',  path:  '/folder1/document12',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID13',   Title:  'Document  13',  path:  '/folder1/document13',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
     ];
     var folder2 = [
-      {UID:  'UID14',   Title:  'Document  14',  path:  '/document14',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
-      {UID:  'UID15',   Title:  'Document  15',  path:  '/document15',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
-      {UID:  'UID16',   Title:  'Document  16',  path:  '/document16',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID14',   Title:  'Document  14',  path:  '/folder2/document14',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID15',   Title:  'Document  15',  path:  '/folder2/document15',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID16',   Title:  'Document  16',  path:  '/folder2/document16',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
     ];
     var searchables;
+    var $container;
 
     beforeEach(function() {
       this.server = sinon.fakeServer.create();
@@ -142,11 +142,12 @@ define([
         function browse(items, q, p) {
           results = [];
           var path = p.substring(0, p.length - 1);
-          var splitPath = path.split('/');
+          // var splitPath = path.split('/');
           var fromPath = [];
           _.each(items, function(item) {
             var itemSplit = item.path.split('/');
-            if (item.path.indexOf(path) === 0 && itemSplit.length - 1 === splitPath.length) {
+            // if (item.path.indexOf(path) === 0 && itemSplit.length - 1 === splitPath.length) {  // search recursively
+            if (item.path.indexOf(path) === 0) {
               fromPath.push(item);
             }
           });
@@ -192,7 +193,8 @@ define([
     // selection from favorites opens path
 
     var initializePattern = function (options) {
-      options = options || {'vocabularyUrl': '/relateditems-test.json'};
+      options = options || {};
+      options.vocabularyUrl = '/relateditems-test.json';
       options = JSON.stringify(options);
       $container = $('<div><input class="pat-relateditems" /></div>');
       $container.appendTo('body');
@@ -201,6 +203,7 @@ define([
         .patternRelateditems()
         .data('patternRelateditems');
       return pattern;
+
     };
 
     it('test initialize', function() {
@@ -212,7 +215,8 @@ define([
       expect($('.pattern-relateditems-path'), $container).to.have.length(1);
     });
 
-    it('test browse roundtrip', function () {
+    /*
+    it('browse roundtrip', function () {
       var pattern = initializePattern();
       var clock = sinon.useFakeTimers();
       var $input;
@@ -255,7 +259,6 @@ define([
       $('a.pattern-relateditems-result-select')[0].click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID1,UID2');
 
-
       // remove first one
       $($('a.select2-search-choice-close')[0]).click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID2');
@@ -266,11 +269,78 @@ define([
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
       clock.tick(1000);
-
       expect($('.pattern-relateditems-result-select')).to.have.length(3);
 
-    });
+      // add first from result
+      $('a.pattern-relateditems-result-select')[0].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID8');
 
+    }); */
+
+    it('search roundtrip', function () {
+      var pattern = initializePattern({'selectableTypes': ['Page']});
+      var clock = sinon.useFakeTimers();
+      var $input;
+
+      // open up result list by clicking on "browse"
+      $('.mode.search', $container).click();
+      clock.tick(1000);
+
+      // result list must have expected length
+      expect($('.pattern-relateditems-result-select')).to.have.length(11);
+
+      // compare result list with test data
+      var stringtext = $('a.pattern-relateditems-result-select').map(function (index, el) {
+        return $(el).text().trim();
+      });
+      stringtext = _.sortBy(stringtext);
+
+      // ... compare the whole list, sorted
+      var mySearchables = searchables.filter(function (item) {
+        return item.portal_type === 'Page';
+      });
+      expect(stringtext.length).to.be.equal(mySearchables.length);
+      _.sortBy(mySearchables, 'Title').map(function (el, index) {
+        expect(stringtext[index].indexOf(el.Title)).not.equal(-1);
+      });
+
+      // PT 2
+
+      // select one element
+      $('a.pattern-relateditems-result-select')[0].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID1');
+
+      // PT 3
+
+      // click again on browse, should open up result list again, this time without 'UID1'
+      $('.mode.search', $container).click();
+      clock.tick(1000);
+
+      // result list must have expected length
+      expect($('.pattern-relateditems-result-select')).to.have.length(10);
+
+      // add another one
+      $('a.pattern-relateditems-result-select')[0].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID1,UID2');
+
+      // remove first one
+      $($('a.select2-search-choice-close')[0]).click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID2');
+
+      // search for...
+      $input = $('.select2-search-field input.select2-input');
+      $input.click().val('document15');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      clock.tick(1000);
+      expect($('.pattern-relateditems-result-select')).to.have.length(1);
+
+      // add first from result
+      $('a.pattern-relateditems-result-select')[0].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID15');
+
+
+    });
 
 
   });
