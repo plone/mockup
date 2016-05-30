@@ -215,7 +215,6 @@ define([
       expect($('.pattern-relateditems-path'), $container).to.have.length(1);
     });
 
-    /*
     it('browse roundtrip', function () {
       var pattern = initializePattern();
       var clock = sinon.useFakeTimers();
@@ -275,7 +274,7 @@ define([
       $('a.pattern-relateditems-result-select')[0].click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID8');
 
-    }); */
+    });
 
     it('search roundtrip', function () {
       var pattern = initializePattern({'selectableTypes': ['Page']});
