@@ -131,7 +131,7 @@ define([
                 }
               }
             } else {
-              q = term.toLowerCase();
+              q = term.toLowerCase().slice(0, -1);  // "*" removed
               if (keys.indexOf(q) > -1) {
                 results.push(item);
               }
@@ -215,29 +215,59 @@ define([
     it('test browse roundtrip', function () {
       var pattern = initializePattern();
       var clock = sinon.useFakeTimers();
+      var $input;
 
       // open up result list by clicking on "browse"
       $('.mode.browse', $container).click();
       clock.tick(1000);
 
+      // result list must have expected length
       expect($('.pattern-relateditems-result-select')).to.have.length(16);
 
+      // compare result list with test data
       var stringtext = $('a.pattern-relateditems-result-select').map(function (index, el) {
         return $(el).text().trim();
       });
       stringtext = _.sortBy(stringtext);
 
-      debugger;
+      // ... compare the whole list, sorted
       expect(stringtext.length).to.be.equal(searchables.length);
-
-      console.log(searchables);
       _.sortBy(searchables, 'Title').map(function (el, index) {
-        console.log(stringtext[index]);
-        console.log(el.Title);
         expect(stringtext[index].indexOf(el.Title)).not.equal(-1);
-
       });
 
+      // PT 2
+
+      // select one element
+      $('a.pattern-relateditems-result-select')[0].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID1');
+
+      // PT 3
+
+      // click again on browse, should open up result list again, this time without 'UID1'
+      $('.mode.browse', $container).click();
+      clock.tick(1000);
+
+      // result list must have expected length
+      expect($('.pattern-relateditems-result-select')).to.have.length(15);
+
+      // add another one
+      $('a.pattern-relateditems-result-select')[0].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID1,UID2');
+
+
+      // remove first one
+      $($('a.select2-search-choice-close')[0]).click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID2');
+
+      // search for...
+      $input = $('.select2-search-field input.select2-input');
+      $input.click().val('Ima');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      clock.tick(1000);
+
+      expect($('.pattern-relateditems-result-select')).to.have.length(3);
 
     });
 
