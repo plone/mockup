@@ -82,7 +82,8 @@ define([
   'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
-  'translate'
+  'translate',
+  'bootstrap-dropdown'
 ], function($, _, Base, Select2, utils, _t) {
   'use strict';
 
