@@ -4,7 +4,7 @@
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): Start browse/search in this path. Default: set to rootPath.
- *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
+ *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (true)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
  *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'browse'.
@@ -99,7 +99,7 @@ define([
       // more options
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
       basePath: undefined,
-      closeOnSelect: false,
+      closeOnSelect: true,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       favorites: [],
       maximumSelectionSize: -1,
@@ -387,10 +387,13 @@ define([
               self.selectItem(item);
               $parent.addClass('pattern-relateditems-active');
               if (self.options.maximumSelectionSize > 0) {
-                var items = self.$select2.select2('data');
+                var items = self.$el.select2('data');
                 if (items.length >= self.options.maximumSelectionSize) {
-                  self.$select2.select2('close');
+                  self.$el.select2('close');
                 }
+              }
+              if (self.options.closeOnSelect) {
+                self.$el.select2('close');
               }
             }
           }
