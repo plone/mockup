@@ -40,7 +40,7 @@ define([
       return this;
     },
     rearrangeButtonClicked: function() {
-      if (this.app.queryHelper.getCurrentPath() === '/') {
+      if (this.app.collection.queryHelper.getCurrentPath() === '/') {
         if (!window.confirm(_t(
           'Sorting the content on the base of the site ' +
           'could affect your navigation order. ' +

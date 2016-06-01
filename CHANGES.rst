@@ -42,6 +42,7 @@ New:
   - Don't show empty alerts with ``alert-warning`` CSS class.
     Show them transparent but in the same height as if they were not empty.
     Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
+  - Fix rearrange button
 
   [thet]
 
