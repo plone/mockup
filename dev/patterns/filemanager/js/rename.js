@@ -1,22 +1,20 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover'
-], function($, _, Backbone, PopoverView) {
+], function(_, PopoverView) {
   'use strict';
 
   var RenameView = PopoverView.extend({
     className: 'popover addnew',
-    title: _.template('<%= translations.rename %>'),
+    title: _.template('<%= _t("Rename") %>'),
     content: _.template(
       '<span class="current-path"></span>' +
       '<div class="form-group">' +
-        '<label for="filename-field"><%= translations.filename %></label>' +
+        '<label for="filename-field"><%= _t("Filename") %></label>' +
         '<input type="text" class="form-control" ' +
                 'id="filename-field">' +
       '</div>' +
-      '<button class="btn btn-block btn-primary"><%= translations.rename %></button>'
+      '<button class="btn btn-block btn-primary"><%= _t("Rename") %></button>'
     ),
     events: {
       'click button': 'renameButtonClicked'
@@ -44,12 +42,28 @@ define([
           },
           success: function(data) {
             self.hide();
-            self.app.$tree.tree(
-              'loadDataFromUrl',
-              self.app.options.actionUrl + '?action=dataTree'
-            );
-            // ugly, $tabs should have an API
-            $('.nav .active .remove').click();
+            self.data = data;
+            self.app.refreshTree(function() {
+              if( self.data.newParent != "/" ) {
+                var path = [self.data.newParent, self.data.newName].join('/');
+                var oldPath = [self.data.oldParent, self.data.oldName].join('/');
+              }
+              else {
+                var path = '/' + self.data.newName;
+                var oldPath = '/' + self.data.oldName
+              }
+
+              if( self.app.fileData[path] !== undefined ) {
+                self.app.refreshFile(path)
+              }
+              else {
+                var node = self.app.getNodeByPath(path);
+                self.app.selectItem(path);
+              }
+
+              self.app.closeTab(oldPath);
+              delete self.data;
+            });
           }
         });
         // XXX show loading

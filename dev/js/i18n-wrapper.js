@@ -9,8 +9,19 @@
 
 define([
   'mockup-i18n'
-], function(i18n) {
+], function(I18N) {
   'use strict';
-  i18n.loadCatalog('widgets');
-  return i18n.MessageFactory('widgets');
+
+  // we're creating a singleton here so we can potentially
+  // delay the initialization of the translate catalog
+  // until after the dom is available
+  var _t = null;
+  return function(msgid, keywords) {
+    if (_t === null) {
+      var i18n = new I18N();
+      i18n.loadCatalog('widgets');
+      _t = i18n.MessageFactory('widgets');
+    }
+    return _t(msgid, keywords);
+  };
 });

@@ -1,15 +1,13 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'mockup-patterns-upload'
-], function($, _, Backbone, PopoverView, Upload) {
+], function(_, PopoverView, Upload) {
   'use strict';
 
   var UploadView = PopoverView.extend({
     className: 'popover upload',
-    title: _.template('Upload files'),
+    title: _.template('<%- _t("Upload files") %>'),
     content: _.template(
       '<input type="text" name="upload" style="display:none" />' +
       '<div class="uploadify-me"></div>'),
@@ -34,7 +32,7 @@ define([
       options.relatedItems = {
         vocabularyUrl: self.app.options.vocabularyUrl
       };
-      options.currentPath = self.app.options.queryHelper.getCurrentPath();
+      options.currentPath = self.app.getCurrentPath();
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), options);
       return this;
     },
@@ -46,7 +44,7 @@ define([
       if (!this.opened) {
         return;
       }
-      var currentPath = self.app.queryHelper.getCurrentPath();
+      var currentPath = self.app.getCurrentPath();
       var relatedItems = self.upload.relatedItems;
       if (self.currentPathData && relatedItems && currentPath !== self.upload.currentPath){
         if (currentPath === '/'){
@@ -62,8 +60,3 @@ define([
 
   return UploadView;
 });
-
-
-
-
-

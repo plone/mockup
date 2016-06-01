@@ -71,14 +71,15 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-pickadate',
-], function ($, Base, pickadate) {
+], function ($, Base) {
   'use strict';
 
   var EventEdit = Base.extend({
     name: 'eventedit',
     trigger: '.pat-eventedit',
+    parser: 'mockup',
     defaults: {
       errorClass: 'error'
     },

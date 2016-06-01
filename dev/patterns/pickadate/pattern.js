@@ -84,26 +84,35 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
+  'translate',
   'picker',
   'picker.date',
   'picker.time',
-  'mockup-patterns-select2',
-  'translate'
-], function($, Base, Picker, PickerDate, PickerTime, Select2, _t) {
+  'mockup-patterns-select2'
+], function($, Base, _t) {
   'use strict';
 
   var PickADate = Base.extend({
     name: 'pickadate',
     trigger: '.pat-pickadate',
+    parser: 'mockup',
     defaults: {
       separator: ' ',
       date: {
         selectYears: true,
-        selectMonths: true
+        selectMonths: true,
+        formatSubmit: 'yyyy-mm-dd',
+        format: 'yyyy-mm-dd',
+        clear: _t('Clear'),
+        close: _t('Close'),
+        today: _t('Today'),
+        labelMonthNext: _t('Next month'),
+        labelMonthPrev: _t('Previous month'),
+        labelMonthSelect: _t('Select a month'),
+        labelYearSelect: _t('Select a year')
       },
-      time: {
-      },
+      time: {},
       timezone: null,
       classWrapperName: 'pattern-pickadate-wrapper',
       classSeparatorName: 'pattern-pickadate-separator',
@@ -144,7 +153,6 @@ define([
             .insertAfter(self.$el);
 
       if (self.options.date !== false) {
-        self.options.date.formatSubmit = 'yyyy-mm-dd';
         self.$date = $('<input type="text"/>')
               .attr('placeholder', self.options.placeholderDate)
               .attr('data-value', dateValue)
@@ -162,7 +170,7 @@ define([
                     }
                   }
                   if (e.hasOwnProperty('clear')) {
-                    self.$el.removeAttr('value');
+                    self.$el.val('');
                     self.$date.attr('data-value', '');
                   }
                 }
@@ -196,7 +204,7 @@ define([
                     }
                   }
                   if (e.hasOwnProperty('clear')) {
-                    self.$el.removeAttr('value');
+                    self.$el.val('');
                     self.$time.attr('data-value', '');
                   }
                 }
@@ -245,8 +253,9 @@ define([
         if (defaultTimezone) {
           var isInList;
           // the timezone list contains the default value
-          self.options.timezone.data.forEach(function(obj) {
+          self.options.timezone.data.some(function(obj) {
             isInList = (obj.text === self.options.timezone.default) ? true : false;
+            return isInList;
           });
           if (isInList) {
             self.$timezone.attr('data-value', defaultTimezone);
@@ -276,7 +285,7 @@ define([
             dateValue = self.$date.data('pickadate').get('select'),
             formatDate = date.formats.toString;
         if (dateValue) {
-          value += formatDate.apply(date, ['yyyy-mm-dd', dateValue]);
+          value += formatDate.apply(date, [self.options.date.formatSubmit, dateValue]);
         }
       }
 
@@ -300,7 +309,7 @@ define([
         }
       }
 
-      self.$el.attr('value', value);
+      self.$el.val(value);
 
       self.emit('updated');
     }

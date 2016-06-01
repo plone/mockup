@@ -1,164 +1,110 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/toolbar',
   'mockup-ui-url/views/buttongroup',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/base',
   'mockup-patterns-structure-url/js/views/table',
   'mockup-patterns-structure-url/js/views/selectionwell',
-  'mockup-patterns-structure-url/js/views/tags',
-  'mockup-patterns-structure-url/js/views/properties',
-  'mockup-patterns-structure-url/js/views/workflow',
-  'mockup-patterns-structure-url/js/views/delete',
-  'mockup-patterns-structure-url/js/views/rename',
+  'mockup-patterns-structure-url/js/views/generic-popover',
   'mockup-patterns-structure-url/js/views/rearrange',
   'mockup-patterns-structure-url/js/views/selectionbutton',
   'mockup-patterns-structure-url/js/views/paging',
-  'mockup-patterns-structure-url/js/views/addmenu',
   'mockup-patterns-structure-url/js/views/columns',
   'mockup-patterns-structure-url/js/views/textfilter',
   'mockup-patterns-structure-url/js/views/upload',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-patterns-structure-url/js/collections/selected',
   'mockup-utils',
+  'translate',
+  'pat-logger',
   'jquery.cookie'
-], function($, _, Backbone, Toolbar, ButtonGroup, ButtonView, BaseView,
-            TableView, SelectionWellView, TagsView, PropertiesView,
-            WorkflowView, DeleteView, RenameView, RearrangeView, SelectionButtonView,
-            PagingView, AddMenu, ColumnsView, TextFilterView, UploadView,
-            ResultCollection, SelectedCollection, utils) {
+], function($, _, Toolbar, ButtonGroup, ButtonView, BaseView,
+  TableView, SelectionWellView,
+  GenericPopover, RearrangeView, SelectionButtonView,
+  PagingView, ColumnsView, TextFilterView, UploadView,
+  _ResultCollection, SelectedCollection, utils, _t, logger) {
   'use strict';
 
-  var DISABLE_EVENT = 'DISABLE';
+  var log = logger.getLogger('pat-structure');
 
   var AppView = BaseView.extend({
     tagName: 'div',
-    /* we setup binding here and specifically for every button so there is a
-     * way to override default click event behavior.
-     * Otherwise, if we bound all buttons to the same event, there is no way
-     * to override the event or stop bubbling it. */
-    buttonClickEvents: {
-      'cut': 'cutCopyClickEvent',
-      'copy': 'cutCopyClickEvent',
-      'paste': 'pasteEvent',
-      'tags': DISABLE_EVENT, //disable
-      'properties': DISABLE_EVENT,
-      'workflow': DISABLE_EVENT,
-      'delete': DISABLE_EVENT,
-      'rename': DISABLE_EVENT,
-      'rearrange': DISABLE_EVENT
+    status: {
+      type: 'none',
+      text: '',
+      label: ''
     },
-    buttonViewMapping: {
-      'secondary.tags': TagsView,
-      'secondary.properties': PropertiesView,
-      'secondary.workflow': WorkflowView,
-      'primary.delete': DeleteView,
-      'secondary.rename': RenameView
-    },
-    status: '',
-    statusType: 'warning',
-    pasteOperation: null,
-    'sort_on': 'getObjPositionInParent',
-    'sort_order': 'ascending',
+    pasteAllowed: !!$.cookie('__cp'),
+    sort_on: 'getObjPositionInParent',
+    sort_order: 'ascending',
     additionalCriterias: [],
-    pasteSelection: null,
     cookieSettingPrefix: '_fc_',
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
-      self.setAllCookieSettings();
       self.loading = new utils.Loading();
       self.loading.show();
+      self.pasteAllowed = !!$.cookie('__cp');
+
+      /* close popovers when clicking away */
+      $(document).click(function(e) {
+        var $el = $(e.target);
+        if (!$el.is(':visible')) {
+          // ignore this, fake event trigger to element that is not visible
+          return;
+        }
+        if ($el.is('a') || $el.parent().is('a')) {
+          return;
+        }
+        var $popover = $('.popover:visible');
+        if ($popover.length > 0 && !$.contains($popover[0], $el[0])) {
+          var popover = $popover.data('component');
+          if (popover) {
+            popover.hide();
+          }
+        }
+      });
+
+      var ResultCollection = require(options.collectionConstructor);
 
       self.collection = new ResultCollection([], {
+        // Due to default implementation need to poke at things in here,
+        // view is passed.
+        view: self,
         url: self.options.collectionUrl,
-        queryParser: function() {
-          var term = null;
-          if (self.toolbar) {
-            term = self.toolbar.get('filter').term;
-          }
-          var sortOn = self['sort_on']; // jshint ignore:line
-          if (!sortOn) {
-            sortOn = 'getObjPositionInParent';
-          }
-          return JSON.stringify({
-            criteria: self.queryHelper.getCriterias(term, {
-              additionalCriterias: self.additionalCriterias
-            }),
-            'sort_on': sortOn,
-            'sort_order': self['sort_order'] // jshint ignore:line
-          });
-        },
-        queryHelper: self.options.queryHelper
       });
-      self.queryHelper = self.options.queryHelper;
+
+      self.setAllCookieSettings();
+
       self.selectedCollection = new SelectedCollection();
       self.tableView = new TableView({app: self});
       self.pagingView = new PagingView({app: self});
-      self.pasteAllowed = self.options.pasteAllowed;
 
       /* initialize buttons */
       self.setupButtons();
 
       self.wellView = new SelectionWellView({
         collection: self.selectedCollection,
-        triggerView: self.toolbar.get('selected'),
-        app: self
+        triggerView: self.toolbar.get('selected-items'),
+        app: self,
+        id: 'structure-well'
       });
 
-      self.buttonViews = {};
-      _.map(self.buttonViewMapping, function(ViewClass, key, list) {
-        var name = key.split('.');
-        var group = name[0];
-        var buttonName = name[1];
-        self.buttonViews[key] = new ViewClass({
-          triggerView: self.buttons[group].get(buttonName),
-          app: self
-        });
-      });
+      self.toolbar.get('selected-items').disable();
+      self.buttons.disable();
 
-      self.toolbar.get('selected').disable();
-      self.buttons.primary.disable();
-      self.buttons.secondary.disable();
-
-      self.selectedCollection.on('add remove reset', function(modal, collection) {
-        if (collection.length) {
-          self.toolbar.get('selected').enable();
-          self.buttons.primary.enable();
-          self.buttons.secondary.enable();
-          if (!self.pasteAllowed) {
-            self.buttons.primary.get('paste').disable();
-          }
-        } else {
-          this.toolbar.get('selected').disable();
-          self.buttons.primary.disable();
-          self.buttons.secondary.disable();
-        }
+      var timeout = 0;
+      self.selectedCollection.on('add remove reset', function( /*modal, collection*/ ) {
+        /* delay rendering since this can happen in batching */
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          self.updateButtons();
+        }, 100);
       }, self);
 
       self.collection.on('sync', function() {
-        // need to reload models inside selectedCollection so they get any
-        // updated metadata
-        if (self.selectedCollection.models.length > 0) {
-          var uids = [];
-          self.selectedCollection.each(function(item) {
-            uids.push(item.attributes.UID);
-          });
-          self.queryHelper.search(
-            'UID', 'plone.app.querystring.operation.list.contains',
-            uids,
-            function(data) {
-              _.each(data.results, function(attributes) {
-                var item = self.selectedCollection.getByUID(attributes.UID);
-                item.attributes = attributes;
-              });
-            },
-            false
-          );
-        }
-
         if (self.contextInfoUrl) {
           $.ajax({
             url: self.getAjaxUrl(self.contextInfoUrl),
@@ -169,7 +115,7 @@ define([
             error: function(response) {
               // XXX handle error?
               if (response.status === 404) {
-                console.log('context info url not found');
+                log.info('context info url not found');
               }
             }
           });
@@ -179,44 +125,84 @@ define([
 
       self.collection.on('pager', function() {
         self.loading.show();
+        self.updateButtons();
 
-        /* maintain history here */
-        if(self.options.urlStructure && window.history && window.history.pushState){
-          if (!self.doNotPushState){
-            var path = self.queryHelper.getCurrentPath();
-            if(path === '/'){
-              path = '';
-            }
-            var url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
-            window.history.pushState(null, null, url);
-            $('body').trigger('structure-url-changed', path);
-          }else{
-            self.doNotPushState = false;
-          }
+        // the remaining calls are related to window.pushstate.
+        // abort if feature unavailable.
+        if (!(window.history && window.history.pushState)) {
+          return;
         }
+
+        // undo the flag set by popState to prevent the push state
+        // from being triggered here, and early abort out of the
+        // function to not execute the folowing pushState logic.
+        if (self.doNotPushState) {
+          self.doNotPushState = false;
+          return;
+        }
+
+        var path = self.getCurrentPath();
+        var url;
+        if (path === '/') {
+          path = '';
+        }
+        /* maintain history here */
+        if (self.options.pushStateUrl) {
+          // permit an extra slash in pattern, but strip that if there
+          // as path always will be prefixed with a `/`
+          var pushStateUrl = self.options.pushStateUrl.replace(
+            '/{path}', '{path}');
+          url = pushStateUrl.replace('{path}', path);
+          window.history.pushState(null, null, url);
+        } else if (self.options.urlStructure) {
+          // fallback to urlStructure specification
+          url = self.options.urlStructure.base + path + self.options.urlStructure.appended;
+          window.history.pushState(null, null, url);
+        }
+
+        if (self.options.traverseView) {
+          // flag specifies that the context view implements a traverse
+          // view (i.e. IPublishTraverse) and the path is a virtual path
+          // of some kind - use the base object instead for that by not
+          // specifying a path.
+          path = '';
+          // TODO figure out whether the following event after this is
+          // needed at all.
+        }
+        $('body').trigger('structure-url-changed', path);
+
       });
 
-      if (self.options.urlStructure && window.history && window.history.pushState){
-        $(window).bind('popstate', function () {
+      if ((self.options.pushStateUrl || self.options.urlStructure) && utils.featureSupport.history()) {
+        $(window).bind('popstate', function() {
           /* normalize this url first... */
-          var url = window.location.href;
-          if(url.indexOf('?') !== -1){
+          var win = utils.getWindow();
+          var url = win.location.href;
+          var base, appended;
+          if (url.indexOf('?') !== -1) {
             url = url.split('?')[0];
           }
-          if(url.indexOf('#') !== -1){
+          if (url.indexOf('#') !== -1) {
             url = url.split('#')[0];
           }
-          // take off the base url
-          var path = url.substring(self.options.urlStructure.base.length);
-          if(path.substring(path.length - self.options.urlStructure.appended.length) ===
-              self.options.urlStructure.appended){
-            /* check that it ends with appended value */
-            path = path.substring(0, path.length - self.options.urlStructure.appended.length);
+          if (self.options.pushStateUrl) {
+            var tmp = self.options.pushStateUrl.split('{path}');
+            base = tmp[0];
+            appended = tmp[1];
+          } else {
+            base = self.options.urlStructure.base;
+            appended = self.options.urlStructure.appended;
           }
-          if(!path){
+          // take off the base url
+          var path = url.substring(base.length);
+          if (path.substring(path.length - appended.length) === appended) {
+            /* check that it ends with appended value */
+            path = path.substring(0, path.length - appended.length);
+          }
+          if (!path) {
             path = '/';
           }
-          self.queryHelper.currentPath = path;
+          self.setCurrentPath(path);
           $('body').trigger('structure-url-changed', path);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
@@ -227,15 +213,40 @@ define([
           self.keyEvent = e;
         });
       }
+
+      self.togglePasteBtn();
+    },
+    updateButtons: function() {
+      var self = this;
+      if (self.selectedCollection.length) {
+        self.toolbar.get('selected-items').enable();
+        self.buttons.enable();
+      } else {
+        this.toolbar.get('selected-items').disable();
+        self.buttons.disable();
+      }
+
+      self.togglePasteBtn();
+    },
+    togglePasteBtn: function(){
+      var self = this;
+      if (_.find(self.buttons.items, function(btn){ return btn.id === 'paste'; })) {
+        self.pasteAllowed = !!$.cookie('__cp');
+        if (self.pasteAllowed) {
+          self.buttons.get('paste').enable();
+        } else {
+          self.buttons.get('paste').disable();
+        }
+      }
     },
     inQueryMode: function() {
       if (this.additionalCriterias.length > 0) {
         return true;
       }
-      if (this['sort_on'] && this['sort_on'] !== 'getObjPositionInParent') { // jshint ignore:line
+      if (this.sort_on && this.sort_on !== 'getObjPositionInParent') { // jshint ignore:line
         return true;
       }
-      if (this['sort_order'] !== 'ascending') { // jshint ignore:line
+      if (this.sort_order !== 'ascending') { // jshint ignore:line
         return true;
       }
       return false;
@@ -251,12 +262,19 @@ define([
       });
       return uids;
     },
-    getAjaxUrl: function(url) {
-      return url.replace('{path}', this.options.queryHelper.getCurrentPath());
+    getCurrentPath: function() {
+      return this.collection.getCurrentPath();
     },
-    defaultButtonClickEvent: function(button) {
+    setCurrentPath: function(path) {
+      this.collection.setCurrentPath(path);
+    },
+    getAjaxUrl: function(url) {
+      return url.replace('{path}', this.getCurrentPath());
+    },
+    buttonClickEvent: function(button) {
       var self = this;
-      var data = null, callback = null;
+      var data = null;
+      var callback = null;
 
       if (button.url) {
         self.loading.show();
@@ -283,7 +301,7 @@ define([
         }
         data._authenticator = utils.getAuthenticator();
         if (data.folder === undefined) {
-          data.folder = self.options.queryHelper.getCurrentPath();
+          data.folder = self.getCurrentPath();
         }
 
         var url = self.getAjaxUrl(button.url);
@@ -304,12 +322,13 @@ define([
     },
     ajaxSuccessResponse: function(data, callback) {
       var self = this;
+      self.selectedCollection.reset();
       if (data.status === 'success') {
         self.collection.reset();
       }
       if (data.msg) {
         // give status message somewhere...
-        self.setStatus(data.msg);
+        self.setStatus(data.msg, data.status || 'warning');
       }
       if (callback !== null && callback !== undefined) {
         callback(data);
@@ -317,117 +336,56 @@ define([
       self.collection.pager();
     },
     ajaxErrorResponse: function(response, url) {
-      var self = this;
       if (response.status === 404) {
-        window.alert('operation url "' + url + '" is not valid');
+        window.alert(_t('operation url ${url} is not valid', {url: url}));
       } else {
-        window.alert('there was an error performing action');
+        window.alert(_t('there was an error performing action'));
       }
-    },
-    pasteEvent: function(button, e, data) {
-      var self = this;
-      if (data === undefined) {
-        data = {};
-      }
-      data = $.extend(true, {}, {
-        selection: JSON.stringify(self.getSelectedUids(self.pasteSelection)),
-        pasteOperation: self.pasteOperation
-      }, data);
-      self.defaultButtonClickEvent(button, data);
-    },
-    cutCopyClickEvent: function(button) {
-      var self = this;
-      var txt;
-      if (button.id === 'cut') {
-        txt = 'cut ';
-        self.pasteOperation = 'cut';
-      } else {
-        txt = 'copied ';
-        self.pasteOperation = 'copy';
-      }
-
-      // clone selected items
-      self.pasteSelection = new Backbone.Collection();
-      self.selectedCollection.each(function(item) {
-        self.pasteSelection.add(item);
-      });
-      txt += 'selection';
-      self.setStatus(txt);
-      self.pasteAllowed = true;
-      self.buttons.primary.get('paste').enable();
     },
     setupButtons: function() {
       var self = this;
-      self.buttons = {};
       var items = [];
 
       var columnsBtn = new ButtonView({
-        id: 'columns',
-        tooltip: 'Configure displayed columns',
+        id: 'attribute-columns',
+        tooltip: _t('Configure displayed columns'),
         icon: 'th'
       });
 
       self.columnsView = new ColumnsView({
         app: self,
-        triggerView: columnsBtn
+        triggerView: columnsBtn,
+        id: 'structure-columns'
       });
       items.push(columnsBtn);
 
       items.push(new SelectionButtonView({
-        title: 'Selected',
-        id: 'selected',
+        title: _t('Selected'),
+        id: 'selected-items',
         collection: this.selectedCollection
       }));
 
-      if (self.options.contextInfoUrl) {
-        // only add menu if set
-        items.push(new AddMenu({
-          contextInfoUrl: self.options.contextInfoUrl,
-          app: self
-        }));
-      }
       if (self.options.rearrange) {
         var rearrangeButton = new ButtonView({
           id: 'rearrange',
-          title: 'Rearrange',
-          tooltip: 'Rearrange folder contents',
+          title: _t('Rearrange'),
+          icon: 'sort-by-attributes',
+          tooltip: _t('Rearrange folder contents'),
           url: self.options.rearrange.url
         });
         self.rearrangeView = new RearrangeView({
           triggerView: rearrangeButton,
-          app: self
+          app: self,
+          id: 'structure-rearrange'
         });
         items.push(rearrangeButton);
       }
-
-      _.each(_.pairs(this.options.buttonGroups), function(group) {
-        var buttons = [];
-        _.each(group[1], function(button) {
-          button = new ButtonView(button);
-          buttons.push(button);
-          // bind click events now...
-          var ev = self.buttonClickEvents[button.id];
-          if (ev !== DISABLE_EVENT) {
-            if (ev === undefined) {
-              ev = 'defaultButtonClickEvent'; // default click event
-            }
-            button.on('button:click', self[ev], self);
-          }
-        });
-        self.buttons[group[0]] = new ButtonGroup({
-          items: buttons,
-          id: group[0],
-          app: self
-        });
-        items.push(self.buttons[group[0]]);
-      });
-      if (self.options.upload) {
+      if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
         var uploadButton = new ButtonView({
           id: 'upload',
-          title: 'Upload',
-          tooltip: 'Upload files',
-          icon: 'upload',
-          context: 'success'
+          title: _t('Upload'),
+          tooltip: _t('Upload files'),
+          icon: 'upload'
         });
         self.uploadView = new UploadView({
           triggerView: uploadButton,
@@ -435,6 +393,32 @@ define([
         });
         items.push(uploadButton);
       }
+
+      var buttons = [];
+      _.each(self.options.buttons, function(buttonOptions) {
+        try {
+          var button = new ButtonView(buttonOptions);
+          buttons.push(button);
+
+          if (button.form) {
+            buttonOptions.triggerView = button;
+            buttonOptions.app = self;
+            var view = new GenericPopover(buttonOptions);
+            self.$el.append(view.el);
+          } else {
+            button.on('button:click', self.buttonClickEvent, self);
+          }
+        } catch (err) {
+          log.error('Error initializing button ' + buttonOptions.title + ' ' + err);
+        }
+      });
+      self.buttons = new ButtonGroup({
+        items: buttons,
+        id: 'mainbuttons',
+        app: self
+      });
+      items.push(self.buttons);
+
       items.push(new TextFilterView({
         id: 'filter',
         app: this
@@ -458,24 +442,41 @@ define([
         success: function(data) {
           if (data.msg) {
             self.setStatus(data.msg);
-          }else if (data.status !== 'success') {
+          } else if (data.status !== 'success') {
             // XXX handle error here with something?
-            self.setStatus('error moving item');
+            self.setStatus({text: 'error moving item', type: 'error'});
           }
           self.collection.pager(); // reload it all
         },
-        error: function(data) {
-          self.setStatus('error moving item');
+        error: function() {
+          self.setStatus({text: 'error moving item', type: 'error'});
         }
       });
     },
-    setStatus: function(txt, type) {
-      this.status = txt;
-      if (type === undefined) {
-        type = 'warning';
+    setStatus: function(msg, type) {
+      if (!msg) {
+        // clear it
+        this.status.text = '';
+        this.status.label = '';
+        this.status.type = 'none';
+      } else if (typeof(msg) === 'string') {
+        this.status.text = msg;
+        this.status.label = '';
+        this.status.type = type || 'warning';
+      } else {
+        // support setting portal status messages here
+        this.status.label = msg.label || '';
+        this.status.text = msg.text;
+        this.status.type = msg.type || 'warning';
       }
-      this.statusType = type;
-      this.$('.status').addClass(type).html(txt);
+      // still need to manually set in case rendering isn't done(especially true for tests)
+      var $status = this.$('.status');
+      $status[0].className = 'alert alert-' + this.status.type + ' status';
+      var $text = $('<span></span>');
+      $text.text(this.status.text);
+      var $label = $('<strong></strong>');
+      $label.text(this.status.label);
+      $status.empty().append($label).append($text);
     },
     render: function() {
       var self = this;
@@ -489,10 +490,6 @@ define([
       if (self.uploadView) {
         self.$el.append(self.uploadView.render().el);
       }
-
-      _.each(self.buttonViews, function(view) {
-        self.$el.append(view.render().el);
-      });
 
       self.$el.append(self.tableView.render().el);
       self.$el.append(self.pagingView.render().el);
@@ -525,11 +522,21 @@ define([
     },
     setCookieSetting: function(name, val) {
       $.cookie(this.cookieSettingPrefix + name,
-               JSON.stringify({'value': val})
+        JSON.stringify({
+          'value': val
+        })
       );
     },
     setAllCookieSettings: function() {
-      this.activeColumns = this.getCookieSetting('activeColumns', this.activeColumns);
+      this.activeColumns = this.getCookieSetting(
+        this.activeColumnsCookie,
+        this.activeColumns
+      );
+      var perPage = this.getCookieSetting('perPage', 15);
+      if (typeof(perPage) === 'string') {
+        perPage = parseInt(perPage);
+      }
+      this.collection.howManyPer(perPage);
     }
   });
 

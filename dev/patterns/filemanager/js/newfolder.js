@@ -1,22 +1,20 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover'
-], function($, _, Backbone, PopoverView) {
+], function(_, PopoverView) {
   'use strict';
 
   var AddNewView = PopoverView.extend({
     className: 'popover addfolder',
-    title: _.template('<%= translations.new_folder %>'),
+    title: _.template('<%= _t("New folder") %>'),
     content: _.template(
       '<span class="current-path"></span>' +
       '<div class="form-group">' +
-        '<label for="filename-field"><%= translations.folder_name %></label>' +
+        '<label for="filename-field"><%= _t("Add new folder to current directory") %></label>' +
         '<input type="email" class="form-control" ' +
-                'id="filename-field" placeholder="<%= translations.enter_folder_name %>">' +
+                'id="filename-field" placeholder="<%= _t("Enter folder name") %>">' +
       '</div>' +
-      '<button class="btn btn-block btn-primary"><%= translations.add %></button>'
+      '<button class="btn btn-block btn-primary"><%= _t("Add") %></button>'
     ),
     events: {
       'click button': 'addButtonClicked'
@@ -34,10 +32,12 @@ define([
           },
           success: function(data) {
             self.hide();
-            self.app.$tree.tree(
-              'loadDataFromUrl',
-              self.app.options.actionUrl + '?action=dataTree'
-            );
+            self.data = data;
+            self.app.refreshTree(function() {
+              var node = self.app.getNodeByPath(self.data.parent);
+              self.app.$tree.tree('openNode', node);
+              delete self.data;
+            });
           }
         });
         // XXX show loading

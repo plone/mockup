@@ -56,19 +56,16 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-utils',
   'ace',
-  'ace-theme-monokai',
-  'ace-mode-text',
-  'ace-mode-javascript',
-  'ace-mode-css'
 ], function($, Base, utils) {
   'use strict';
 
   var AcePattern = Base.extend({
     name: 'texteditor',
     trigger: '.pat-texteditor',
+    parser: 'mockup',
     defaults: {
       theme: null,
       mode: 'text',
@@ -93,14 +90,19 @@ define([
       }
       var ace = window.ace;
 
+      ace.config.set("packaged", true);
+      ace.config.set("basePath", "++plone++static/components/ace-builds/src/");
+
       // set id on current element
       var id = utils.setId(self.$el);
-      self.$wrapper = $('<div/>').css({
-        height: self.options.height + 25, // weird sizing issue here...
+      self.$wrapper = $('<div class="editorWrapper" />').css({
+        height: parseInt(self.options.height) + 25, // weird sizing issue here...
         width: self.options.width,
         position: 'relative'
       });
-      self.$el.wrap(self.$wrapper);
+      if( !self.$el.parent().hasClass('editorWrapper') ) {
+          self.$el.wrap(self.$wrapper);
+      }
       self.$el.css({
         width: self.options.width,
         height: self.options.height,
@@ -127,7 +129,11 @@ define([
         'txt': 'text',
         'css': 'css',
         'html': 'html',
-        'xml': 'xml'
+        'xml': 'xml',
+        'less': 'less',
+        'py': 'python',
+        'pt': 'xml',
+        'cfg': 'ini'
       };
 
       var extension = name.substr(name.lastIndexOf('.') + 1);
@@ -144,7 +150,9 @@ define([
     },
     setText: function(data) {
       var self = this;
-      self.editor.setValue(data);
+      if(self.editor){
+        self.editor.setValue(data);
+      }
     }
   });
 

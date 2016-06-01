@@ -11,7 +11,7 @@
     </li>
     <% _.each(pages, function(p){ %>
     <li class="<% if (currentPage == p) { %>active<% } %>">
-      <a href="#" class="page"><%= p %></a>
+      <a href="#" class="page"><%- p %></a>
     </li>
     <% }); %>
     <li class="<% if (currentPage === lastPage) { %>disabled<% } %>">
@@ -27,7 +27,7 @@
   </ul>
 
   <ul class="pagination pagination-sm">
-    <li class="disabled"><a href="#">Show:</a></li>
+    <li class="disabled"><a href="#"><%- _t("Show:") %></a></li>
     <li class="serverhowmany serverhowmany15 <% if(perPage == 15){ %>disabled<% } %>">
       <a href="#" class="">15</a>
     </li>
@@ -42,10 +42,10 @@
   <ul class="pagination pagination-sm">
     <li class="disabled">
       <a href="#">
-        Page: <span class="current"><%= currentPage %></span>
-        of
-        <span class="total"><%= totalPages %></span>
-              shown
+        <%- _t("Page:") %> <span class="current"><%- currentPage %></span>
+        <%- _t("of") %>
+        <span class="total"><%- totalPages %></span>
+              <%- _t("shown") %>
       </a>
     </li>
   </ul>

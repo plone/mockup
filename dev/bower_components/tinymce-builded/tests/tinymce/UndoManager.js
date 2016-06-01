@@ -86,15 +86,28 @@ test('One undo levels and one redo', function() {
 });
 
 test('Typing state', function() {
+	var selectAllFlags;
+
 	editor.undoManager.clear();
 	editor.setContent('test');
 
-	expect(2);
+	ok(!editor.undoManager.typing);
 
 	editor.dom.fire(editor.getBody(), 'keydown', {keyCode: 65});
 	ok(editor.undoManager.typing);
 
 	editor.dom.fire(editor.getBody(), 'keyup', {keyCode: 13});
+	ok(!editor.undoManager.typing);
+
+	selectAllFlags = {keyCode: 65, ctrlKey: false, altKey: false, shiftKey: false};
+
+	if (tinymce.Env.mac) {
+		selectAllFlags.metaKey = true;
+	} else {
+		selectAllFlags.ctrlKey = true;
+	}
+
+	editor.dom.fire(editor.getBody(), 'keydown', selectAllFlags);
 	ok(!editor.undoManager.typing);
 });
 
@@ -147,6 +160,36 @@ test('Events', function() {
 	editor.undoManager.redo();
 	ok(redo.content);
 	ok(redo.bookmark);
+});
+
+test('No undo/redo cmds on Undo/Redo shortcut', function() {
+	var evt, commands = [], added = false;
+
+	editor.undoManager.clear();
+	editor.setContent('test');
+
+	editor.on('BeforeExecCommand', function(e) {
+		commands.push(e.command);
+	});
+
+	editor.on('BeforeAddUndo', function() {
+		added = true;
+	});
+
+	evt = {
+		keyCode: 90,
+		metaKey: tinymce.Env.mac,
+		ctrlKey: !tinymce.Env.mac,
+		shiftKey: false,
+		altKey: false
+	};
+
+	editor.dom.fire(editor.getBody(), 'keydown', evt);
+	editor.dom.fire(editor.getBody(), 'keypress', evt);
+	editor.dom.fire(editor.getBody(), 'keyup', evt);
+
+	strictEqual(added, false);
+	deepEqual(commands, ["Undo"]);
 });
 
 test('Transact', function() {
@@ -284,6 +327,10 @@ test('Undo added when typing and losing focus', function() {
 test('BeforeAddUndo event', function() {
 	var lastEvt, addUndoEvt;
 
+	function blockEvent(e) {
+		e.preventDefault();
+	}
+
 	editor.on('BeforeAddUndo', function(e) {
 		lastEvt = e;
 	});
@@ -301,9 +348,7 @@ test('BeforeAddUndo event', function() {
 	equal(Utils.cleanHtml(lastEvt.lastLevel.content), "<p>a</p>");
 	equal(Utils.cleanHtml(lastEvt.level.content), "<p>b</p>");
 
-	editor.on('BeforeAddUndo', function(e) {
-		e.preventDefault();
-	});
+	editor.on('BeforeAddUndo', blockEvent);
 
 	editor.on('AddUndo', function(e) {
 		addUndoEvt = e;
@@ -316,4 +361,42 @@ test('BeforeAddUndo event', function() {
 	equal(Utils.cleanHtml(lastEvt.level.content), "<p>c</p>");
 	equal(lastEvt.originalEvent.data, 1);
 	ok(!addUndoEvt, "Event level produced when it should be blocked");
+
+	editor.off('BeforeAddUndo', blockEvent);
+});
+
+test('Dirty state type letter', function() {
+	editor.undoManager.clear();
+	editor.setDirty(false);
+	editor.setContent("<p>a</p>");
+	Utils.setSelection('p', 1);
+
+	ok(!editor.isDirty(), "Dirty state should be false");
+	Utils.type('b');
+	equal(editor.getContent(), "<p>ab</p>");
+	ok(editor.isDirty(), "Dirty state should be true");
+});
+
+test('Dirty state type shift+letter', function() {
+	editor.undoManager.clear();
+	editor.setDirty(false);
+	editor.setContent("<p>a</p>");
+	Utils.setSelection('p', 1);
+
+	ok(!editor.isDirty(), "Dirty state should be false");
+	Utils.type({keyCode: 65, charCode: 66, shiftKey: true});
+	equal(editor.getContent(), "<p>aB</p>");
+	ok(editor.isDirty(), "Dirty state should be true");
+});
+
+test('Dirty state type AltGr+letter', function() {
+	editor.undoManager.clear();
+	editor.setDirty(false);
+	editor.setContent("<p>a</p>");
+	Utils.setSelection('p', 1);
+
+	ok(!editor.isDirty(), "Dirty state should be false");
+	Utils.type({keyCode: 65, charCode: 66, ctrlKey: true, altKey: true});
+	equal(editor.getContent(), "<p>aB</p>");
+	ok(editor.isDirty(), "Dirty state should be true");
 });

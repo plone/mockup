@@ -1,17 +1,18 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'text!mockup-patterns-structure-url/templates/selection_item.xml'
-], function($, _, Backbone, PopoverView, ItemTemplate) {
+], function($, _, PopoverView, ItemTemplate) {
   'use strict';
 
   var WellView = PopoverView.extend({
-    className: 'popover selected',
-    title: _.template('<input type="text" class="filter" placeholder="Filter" />' +
-                      '<a href="#" class=" remove-all">' +
-                        '<span class="glyphicon glyphicon-remove-circle"></span> remove all</a>'),
+    className: 'popover selected-items',
+    title: _.template(
+      '<input type="text" class="filter" placeholder="Filter" />' +
+      '<a href="#" class=" remove-all">' +
+      '<span class="glyphicon glyphicon-remove-circle"></span> <%- _t("remove all") %></a>'
+    ),
     content: _.template(
       '<% collection.each(function(item) { %>' +
       '<%= item_template(item.toJSON()) %>' +
@@ -24,10 +25,17 @@ define([
     },
     initialize: function(options) {
       PopoverView.prototype.initialize.apply(this, [options]);
-      this.listenTo(this.collection, 'reset all add remove', this.render);
+      var self = this;
+      var timeout = 0;
+      this.listenTo(this.collection, 'reset all add remove', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          self.render();
+        }, 50);
+      });
       this.options['item_template'] = _.template(ItemTemplate); // jshint ignore:line
     },
-    render: function () {
+    render: function() {
       PopoverView.prototype.render.call(this);
       if (this.collection.length === 0) {
         this.$el.removeClass('active');

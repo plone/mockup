@@ -1,6 +1,7 @@
 ﻿#Parsley.js
 
 [![Build Status](https://travis-ci.org/guillaumepotier/Parsley.js.png?branch=master)](https://travis-ci.org/guillaumepotier/Parsley.js)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/guillaumepotier/parsley.js/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 Javascript form validation, without actually writing a single line of javascript!
 
@@ -10,18 +11,18 @@ See TODO.md
 
 #Curent Stable Version
 
-1.1.18
+1.2.4
 
 # Browser compatibility
 
-  - IE 7/8 (with jQuery < 2.x.x, parsley.min, not parsley.standalone)
+  - IE 7/8 (used with jQuery 1.x)
   - IE 9+ (latest jQuery and Zepto)
   - FF 14+
   - Chrome
 
-# Requirements
+# Min requirements
 
-jQuery 1.6+
+jQuery 1.7+
 
 #Install dependencies for documentation and tests
 
@@ -51,12 +52,12 @@ Add new validators in `parsley.extend.js` and minify it. No validators will be a
 
 ##Localization
 
-If file does not exist, create it into `ì18n/` directory with same syntax as others.  
+If file does not exist, create it into `ì18n/` directory with same syntax as others.
 Reference file is _messages.en.js
 
 ##Integrations
 
-Create integration with other framework as a separate Github repo and send a pull request for including here.  
+Create integration with other framework as a separate Github repo and send a pull request for including here.
 Some integrations are
 
 * [Django](https://github.com/agiliq/django-parsley)
@@ -64,6 +65,12 @@ Some integrations are
 * [Wicket](https://github.com/code-troopers/wicket-jsr303-parsley)
 * [WTForms](https://github.com/johannes-gehrs/wtforms-parsleyjs)
 * [Cascade Framework](https://github.com/jslegers/cascadeframework/)
+
+##Conditional Logic
+
+If you want to show and hide form elements based on answers to certain fields, the library below extends parsely.js adding conditional logic.
+
+* [Parsely-conditions](http://themonk.github.io/parsely-conditions/)
 
 ## Global
 

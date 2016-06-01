@@ -24,15 +24,16 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'translate'
-], function ($, Base, _, _t){
+], function ($, Base, _, _t) {
   'use strict';
 
   var Livesearch = Base.extend({
     name: 'livesearch',
     trigger: '.pat-livesearch',
+    parser: 'mockup',
     timeout: null,
     active: false,
     results: null,
@@ -156,7 +157,7 @@ define([
 
       self.$el.addClass('livesearch-active');
       var pos = self.$input.position();
-      self.$results.width(self.$input.outerWidth());
+      self.$results.width(self.$el.outerWidth());
       self.$results.css({
         top: pos.top + self.$input.outerHeight(),
         left: pos.left
@@ -169,6 +170,7 @@ define([
     },
     init: function(){
       var self = this;
+
       self.$input = self.$el.find(self.options.inputSelector);
       self.$input.off('focusout').on('focusout', function(){
         /* we put this in a timer so click events still

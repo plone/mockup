@@ -26,8 +26,11 @@
  *
  *   {{ example-1 }}
  *
- * Example: example-1
+ *   # Mimetype selection on textarea with inline TinyMCE editor.
  *
+ *   {{ example-2 }}
+ *
+  * Example: example-1
  *    <textarea name="text">
  *      <h1>hello world</h1>
  *    </textarea>
@@ -54,19 +57,48 @@
  *      <option value="text/plain" selected="selected">text/plain</option>
  *    </select>
  *
+ * Example: example-2
+ *    <textarea name="text2">
+ *      <h1>hello world</h1>
+ *    </textarea>
+ *    <select
+ *        name="text.mimeType"
+ *        class="pat-textareamimetypeselector"
+ *        data-pat-textareamimetypeselector='{
+ *          "textareaName": "text2",
+ *          "widgets": {
+ *            "text/html": {
+ *              "pattern": "tinymce",
+ *              "patternOptions": {
+ *                "inline": true,
+ *                "tiny": {
+ *                  "plugins": [],
+ *                  "menubar": "edit format tools",
+ *                  "toolbar": " "
+ *                }
+ *              }
+ *            }
+ *          }
+ *        }'
+ *      >
+ *      <option value="text/html">text/html</option>
+ *      <option value="text/plain" selected="selected">text/plain</option>
+ *    </select>
+ *
  */
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'pat-registry',
   'mockup-patterns-tinymce'
-], function ($, Base, registry, tinymce) {
+], function ($, Base, registry) {
   'use strict';
 
   var TextareaMimetypeSelector = Base.extend({
     name: 'textareamimetypeselector',
     trigger: '.pat-textareamimetypeselector',
+    parser: 'mockup',
     textarea: undefined,
     currentWidget: undefined,
     defaults: {

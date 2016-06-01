@@ -22,7 +22,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'translate'
 ], function($, Base, _t) {
   'use strict';
@@ -30,6 +30,7 @@ define([
   var PreventDoubleSubmit = Base.extend({
     name: 'preventdoublesubmit',
     trigger: '.pat-preventdoublesubmit',
+    parser: 'mockup',
     defaults: {
       message : _t('You already clicked the submit button. ' +
                 'Do you really want to submit this form again?'),

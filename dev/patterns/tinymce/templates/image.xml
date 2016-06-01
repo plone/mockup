@@ -1,15 +1,16 @@
 <div>
   <div class="linkModal">
     <h1><%- insertHeading %></h1>
-    <% if(upload){ %>
-    <p class="info">Drag and drop files from your desktop onto dialog to upload</p>
+    <% if(_.contains(linkTypes, 'uploadImage')){ %>
+    <p class="info">Specify an image. It can be on this site already ("Internal Image"), an image you upload ("Upload"), or from an external site ("External Image").</p>
     <% } %>
 
     <div class="linkTypes pat-autotoc autotabs"
-         data-pat-autotoc="section:fieldset;levels:legend;">
+         data-pat-autotoc="section:fieldset;levels:legend;IDPrefix:tinymce-autotoc-">
 
+        <% if(_.contains(linkTypes, 'image')){ %>
       <fieldset class="linkType image" data-linkType="image">
-        <legend>Image</legend>
+        <legend id="tinylink-image">Internal Image</legend>
         <div class="form-inline">
           <div class="form-group main">
             <input type="text" name="image" />
@@ -19,7 +20,7 @@
             <select name="scale">
               <option value="">Original</option>
                 <% _.each(scales, function(scale){ %>
-                  <option value="<%- scale.part %>">
+                  <option value="<%- scale.part %>" <% if(scale.name === options.defaultScale){ %>selected<% } %> >
                     <%- scale.label %>
                   </option>
                 <% }); %>
@@ -27,16 +28,18 @@
           </div>
         </div>
       </fieldset>
+        <% } %>
 
-      <% if(upload){ %>
+      <% if(_.contains(linkTypes, 'uploadImage')){ %>
       <fieldset class="linkType uploadImage" data-linkType="uploadImage">
-        <legend>Upload</legend>
+        <legend id="tinylink-uploadImage">Upload</legend>
         <div class="uploadify-me"></div>
       </fieldset>
       <% } %>
 
+      <% if(_.contains(linkTypes, 'externalImage')){ %>
       <fieldset class="linkType externalImage" data-linkType="externalImage">
-        <legend>External image</legend>
+        <legend id="tinylink-externalImage">External Image</legend>
         <div>
           <div class="form-group main">
             <label><%- externalImageText %></label>
@@ -44,6 +47,7 @@
           </div>
         </div>
       </fieldset>
+      <% } %>
 
     </div><!-- / tabs -->
 
@@ -69,7 +73,7 @@
     </div>
 
     <input type="submit" class="plone-btn" name="cancel" value="<%- cancelBtn %>" />
-    <input type="submit" class="plone-btn plone-btn-primary" name="insert" value="<%- insertBtn %>" />
+    <input type="submit" class="plone-btn plone-btn-primary context" name="insert" value="<%- insertBtn %>" />
 
   </div>
 </div>

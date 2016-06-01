@@ -2,26 +2,29 @@
  *
  * Options:
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
- *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'Type', 'path'])
+ *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): If this is set the widget will start in "Browse" mode and will pass the path to the server to filter the results. ('/')
- *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%= path %>"><%= text %></a>')
+ *    rootPath(string): If this is set the widget will only display breadcrumb path elements deeprt than this path.
+ *    mode(string): Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
+ *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%- path %>"><%- text %></a>')
  *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
- *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%= searchText %></span><a class="icon-home" href="/"></a><%= items %></span>')
+ *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%- searchText %></span><a class="icon-home" href="/"></a><%- items %></span>')
  *    breadCrumbsTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbsTemplate. (null)
  *    cache(boolean): Whether or not results from the server should be
  *    cached. (true)
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
- *    folderTypes(array): Types which should be considered browsable. (["Folder"])
+ *  
+ * #this does not respect custom dx types which are also folderish:
+ * --> folderTypes(array): Types which should be considered browsable. (["Folder"])
+ * #   needs to be implemented with meta data field: is_folderish from vocabulary
+ * 
  *    homeText(string): Text to display in the initial breadcrumb item. (home)
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    multiple(boolean): Do not change this option. (true)
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    resultTemplate(string): Template for an item in the in the list of results. Refer to source for default. (Refer to source)
  *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
- *    searchText(string): Text which will be inserted to the left of the
- *    path. (Search)
- *    searchAllText(string): Displays next to the path when the path is set to the root. (All)
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
  *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
@@ -73,7 +76,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
   'mockup-patterns-tree',
@@ -84,6 +87,7 @@ define([
   var RelatedItems = Base.extend({
     name: 'relateditems',
     trigger: '.pat-relateditems',
+    parser: 'mockup',
     browsing: false,
     currentPath: null,
     defaults: {
@@ -97,52 +101,59 @@ define([
       mode: 'search', // possible values are search and browse
       closeOnSelect: false,
       basePath: '/',
-      searchText: _t('Search:'),
-      searchAllText: _t('entire site'),
+      rootPath: '/',
       homeText: _t('home'),
-      folderTypes: ['Folder'],
+      //folderTypes: ['Folder'],   
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-      attributes: ['UID', 'Title', 'Type', 'path', 'getIcon'],
+      attributes: ['UID', 'Title', 'portal_type', 'path','getURL', 'getIcon','is_folderish','review_state'],
       dropdownCssClass: 'pattern-relateditems-dropdown',
       maximumSelectionSize: -1,
+      treeVocabularyUrl: null,
       resultTemplate: '' +
-        '<div class="pattern-relateditems-result pattern-relateditems-type-<%= Type %> <% if (selected) { %>pattern-relateditems-active<% } %>">' +
-        '  <a href="#" class="pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %> contenttype-<%= Type.toLowerCase() %>">' +
-        '    <% if (getIcon) { %><span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span><% } %>' +
-        '    <span class="pattern-relateditems-result-title"><%= Title %></span>' +
-        '    <span class="pattern-relateditems-result-path"><%= path %></span>' +
+        '<div class="   pattern-relateditems-result  <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
+        '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
+        '    <span class="pattern-relateditems-result-title  <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
+        '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></span>' +
+        '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
         '  </a>' +
         '  <span class="pattern-relateditems-buttons">' +
-        '  <% if (folderish) { %>' +
-        '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%= path %>"></a>' +
+        '  <% if (is_folderish) { %>' +
+        '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%- path %>"></a>' +
         '   <% } %>' +
         ' </span>' +
         '</div>',
       resultTemplateSelector: null,
       selectionTemplate: '' +
-        '<span class="pattern-relateditems-item pattern-relateditems-type-<%= Type %>">' +
-        ' <% if (getIcon) { %><span class="pattern-relateditems-result-icon"><img src="<%= getIcon %>" /></span><% } %>' +
-        ' <span class="pattern-relateditems-item-title"><%= Title %></span>' +
-        ' <span class="pattern-relateditems-item-path"><%= path %></span>' +
+        '<span class="pattern-relateditems-item">' +
+        ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
+        ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
+        ' <span class="pattern-relateditems-item-path"><%- path %></span>' +
         '</span>',
       selectionTemplateSelector: null,
       breadCrumbsTemplate: '<span>' +
         '<span class="pattern-relateditems-tree">' +
           '<a href="#" class="pattern-relateditems-tree-select"><span class="glyphicon glyphicon-indent-left"></span></a> ' +
           '<div class="tree-container">' +
-            '<span class="select-folder-label">Select folder</span>' +
-            '<a href="#" class="btn close pattern-relateditems-tree-cancel">X</a>' +
+            '<div class="title-container">' +
+              '<a href="#" class="btn close pattern-relateditems-tree-cancel">' +
+                '<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>' +
+              '</a>' +
+              '<span class="select-folder-label">Select folder</span>' +
+            '</div>' +
             '<div class="pat-tree" />' +
-            '<a href="#" class="btn btn-default pattern-relateditems-tree-itemselect">Select</a>' +
           '</div>' +
         '</span>' +
         '<span class="pattern-relateditems-path-label">' +
-          '<%= searchText %></span><a class="crumb" href="/"><span class="glyphicon glyphicon-home"></span></a><%= items %>' +
+          '<%- searchText %></span><a class="crumb" href="<%- rootPath %>">' +
+          '<span class="glyphicon glyphicon-home"></span></a>' +
+          // ``items assumed to be santized html``
+          '<%= items %>' +
         '</span>' +
       '</span>',
       breadCrumbsTemplateSelector: null,
       breadCrumbTemplate: '' +
-        '/<a href="<%= path %>" class="crumb"><%= text %></a>',
+        '/<a href="<%- path %>" class="crumb"><%- text %></a>',
       breadCrumbTemplateSelector: null,
       escapeMarkup: function(text) {
         return text;
@@ -170,7 +181,7 @@ define([
       // let's give all the options possible to the template generation
       var options = $.extend(true, {}, self.options, item);
       options._item = item;
-      return _.template(template, options);
+      return _.template(template)(options);
     },
     activateBrowsing: function() {
       var self = this;
@@ -198,19 +209,23 @@ define([
     setBreadCrumbs: function() {
       var self = this;
       var path = self.currentPath ? self.currentPath : self.options.basePath;
+      var root = self.options.rootPath.replace(/\/$/, '');
       var html;
+      // strip site root from path
+      path = path.indexOf(root) === 0 ? path.slice(root.length) : path;
       if (path === '/') {
         var searchText = '';
         if (self.options.mode === 'search') {
-          searchText = '<em>' + self.options.searchAllText + '</em>';
+          searchText = '<em>' + _t('entire site') + '</em>';
         }
         html = self.applyTemplate('breadCrumbs', {
           items: searchText,
-          searchText: self.options.searchText
+          searchText: _t('Search:'),
+          rootPath: self.options.rootPath
         });
       } else {
         var paths = path.split('/');
-        var itemPath = '';
+        var itemPath = root;
         var itemsHtml = '';
         _.each(paths, function(node) {
           if (node !== '') {
@@ -221,7 +236,9 @@ define([
             itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
           }
         });
-        html = self.applyTemplate('breadCrumbs', {items: itemsHtml, searchText: self.options.searchText});
+        html = self.applyTemplate('breadCrumbs', {items: itemsHtml,
+                                                  searchText: _t('Search:'),
+                                                  rootPath: self.options.rootPath});
       }
       var $crumbs = $(html);
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -243,11 +260,25 @@ define([
               label: item.Title,
               id: item.UID,
               path: item.path,
-              folder: self.options.folderTypes.indexOf(item.Type) !== -1
+              folder: item.is_folderish
             };
             nodes.push(node);
           });
           return nodes;
+        },
+        onCreateLi: function(node, $li) {
+          if(node._loaded){
+            if(node.children.length === 0){
+              $li.find('.jqtree-title').append('<span class="tree-node-empty">' + _t('(empty)') + '</span>');
+            }
+          }
+          $li.append('<span class="pattern-relateditems-buttons"><a class="pattern-relateditems-result-browse" href="#"></a></span>');
+          $li.find('.pattern-relateditems-result-browse').click(function(e){
+            e.preventDefault();
+            self.currentPath = node.path;
+            self.browseTo(self.currentPath);
+            $treeContainer.fadeOut();
+          });
         }
       });
       treePattern.$el.bind('tree.select', function(e) {
@@ -281,21 +312,20 @@ define([
         return false;
       });
 
-      $('a.pattern-relateditems-tree-itemselect', $treeContainer).click(function(e) {
-        e.preventDefault();
-        self.browseTo(self.currentPath); // just browse to current path since it's set elsewhere
-        $treeContainer.fadeOut();
-        return false;
-      });
-
       $treeSelect.on('click', function(e) {
         e.preventDefault();
         self.browsing = true;
         self.currentPath = '/';
+        self.$el.select2('close');
         $treeContainer.fadeIn();
         treePattern.$el.tree('loadDataFromUrl', self.treeQuery.getUrl());
         return false;
       });
+
+      self.$el.on('select2-opening', function(){
+        $treeContainer.fadeOut();
+      });
+
       self.$browsePath.html($crumbs);
     },
     selectItem: function(item) {
@@ -303,7 +333,7 @@ define([
       self.emit('selecting');
       var data = self.$el.select2('data');
       data.push(item);
-      self.$el.select2('data', data);
+      self.$el.select2('data', data, true);
       item.selected = true;
       self.emit('selected');
     },
@@ -316,7 +346,7 @@ define([
           data.splice(i, 1);
         }
       });
-      self.$el.select2('data', data);
+      self.$el.select2('data', data, true);
       item.selected = false;
       self.emit('deselected');
     },
@@ -325,22 +355,22 @@ define([
       if (self.options.selectableTypes === null) {
         return true;
       } else {
-        return _.indexOf(self.options.selectableTypes, item.Type) > -1;
+        return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
       }
     },
     init: function() {
       var self = this;
-
       self.query = new utils.QueryHelper(
         $.extend(true, {}, self.options, {pattern: self})
       );
       self.treeQuery = new utils.QueryHelper(
         $.extend(true, {}, self.options, {
           pattern: self,
+          vocabularyUrl: self.options.treeVocabularyUrl || self.options.vocabularyUrl,
           baseCriteria: [{
-            i: 'Type',
-            o: 'plone.app.querystring.operation.list.contains',
-            v: self.options.folderTypes
+            i: 'is_folderish',
+            o: 'plone.app.querystring.operation.selection.any',
+            v: 'True'
           }]
         })
       );
@@ -359,13 +389,14 @@ define([
       };
 
       Select2.prototype.initializeOrdering.call(self);
-
       self.options.formatResult = function(item) {
-        if (!item.Type || _.indexOf(self.options.folderTypes, item.Type) === -1) {
-          item.folderish = false;
-        } else {
-          item.folderish = true;
-        }
+        if (item.is_folderish){
+            item.folderish = true;
+           }
+         else {
+               item.folderish = false;
+           }
+      
 
         item.selectable = self.isSelectable(item);
 
@@ -438,12 +469,6 @@ define([
       };
 
       Select2.prototype.initializeSelect2.call(self);
-
-      // Browsing functionality
-      var browseOpts = {
-        browseText: self.options.browseText,
-        searchText: self.options.searchText
-      };
 
       self.$browsePath = $('<span class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);

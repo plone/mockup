@@ -1,8 +1,8 @@
 /**
  * FloatPanel.js
  *
- * Copyright, Moxiecode Systems AB
  * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
  *
  * License: http://www.tinymce.com/license
  * Contributing: http://www.tinymce.com/contributing
@@ -21,23 +21,49 @@ define("tinymce/ui/FloatPanel", [
 	"tinymce/ui/Panel",
 	"tinymce/ui/Movable",
 	"tinymce/ui/Resizable",
-	"tinymce/ui/DomUtils"
-], function(Panel, Movable, Resizable, DomUtils) {
+	"tinymce/ui/DomUtils",
+	"tinymce/dom/DomQuery",
+	"tinymce/util/Delay"
+], function(Panel, Movable, Resizable, DomUtils, $, Delay) {
 	"use strict";
 
 	var documentClickHandler, documentScrollHandler, windowResizeHandler, visiblePanels = [];
 	var zOrder = [], hasModal;
 
-	function bindDocumentClickHandler() {
-		function isChildOf(ctrl, parent) {
-			while (ctrl) {
-				if (ctrl == parent) {
-					return true;
+	function isChildOf(ctrl, parent) {
+		while (ctrl) {
+			if (ctrl == parent) {
+				return true;
+			}
+
+			ctrl = ctrl.parent();
+		}
+	}
+
+	function skipOrHidePanels(e) {
+		// Hide any float panel when a click/focus out is out side that float panel and the
+		// float panels direct parent for example a click on a menu button
+		var i = visiblePanels.length;
+
+		while (i--) {
+			var panel = visiblePanels[i], clickCtrl = panel.getParentCtrl(e.target);
+
+			if (panel.settings.autohide) {
+				if (clickCtrl) {
+					if (isChildOf(clickCtrl, panel) || panel.parent() === clickCtrl) {
+						continue;
+					}
 				}
 
-				ctrl = ctrl.parent();
+				e = panel.fire('autohide', {target: e.target});
+				if (!e.isDefaultPrevented()) {
+					panel.hide();
+				}
 			}
 		}
+	}
+
+	function bindDocumentClickHandler() {
 
 		if (!documentClickHandler) {
 			documentClickHandler = function(e) {
@@ -46,28 +72,10 @@ define("tinymce/ui/FloatPanel", [
 					return;
 				}
 
-				// Hide any float panel when a click is out side that float panel and the
-				// float panels direct parent for example a click on a menu button
-				var i = visiblePanels.length;
-				while (i--) {
-					var panel = visiblePanels[i], clickCtrl = panel.getParentCtrl(e.target);
-
-					if (panel.settings.autohide) {
-						if (clickCtrl) {
-							if (isChildOf(clickCtrl, panel) || panel.parent() === clickCtrl) {
-								continue;
-							}
-						}
-
-						e = panel.fire('autohide', {target: e.target});
-						if (!e.isDefaultPrevented()) {
-							panel.hide();
-						}
-					}
-				}
+				skipOrHidePanels(e);
 			};
 
-			DomUtils.on(document, 'click', documentClickHandler);
+			$(document).on('click touchstart', documentClickHandler);
 		}
 	}
 
@@ -82,7 +90,7 @@ define("tinymce/ui/FloatPanel", [
 				}
 			};
 
-			DomUtils.on(window, 'scroll', documentScrollHandler);
+			$(window).on('scroll', documentScrollHandler);
 		}
 	}
 
@@ -99,7 +107,7 @@ define("tinymce/ui/FloatPanel", [
 				}
 			};
 
-			DomUtils.on(window, 'resize', windowResizeHandler);
+			$(window).on('resize', windowResizeHandler);
 		}
 	}
 
@@ -127,7 +135,7 @@ define("tinymce/ui/FloatPanel", [
 		}
 
 		if (panel.settings.autofix) {
-			if (!panel._fixed) {
+			if (!panel.state.get('fixed')) {
 				panel._autoFixY = panel.layoutRect().y;
 
 				if (panel._autoFixY < scrollY) {
@@ -171,10 +179,10 @@ define("tinymce/ui/FloatPanel", [
 			}
 		}
 
-		var modalBlockEl = document.getElementById(ctrl.classPrefix + 'modal-block');
+		var modalBlockEl = $('#' + ctrl.classPrefix + 'modal-block', ctrl.getContainerElm())[0];
 
 		if (topModal) {
-			DomUtils.css(modalBlockEl, 'z-index', topModal.zIndex - 1);
+			$(modalBlockEl).css('z-index', topModal.zIndex - 1);
 		} else if (modalBlockEl) {
 			modalBlockEl.parentNode.removeChild(modalBlockEl);
 			hasModal = false;
@@ -199,7 +207,7 @@ define("tinymce/ui/FloatPanel", [
 			self._super(settings);
 			self._eventsRoot = self;
 
-			self.addClass('floatpanel');
+			self.classes.add('floatpanel');
 
 			// Hide floatpanes on click out side the root button
 			if (settings.autohide) {
@@ -218,19 +226,20 @@ define("tinymce/ui/FloatPanel", [
 
 			self.on('postrender show', function(e) {
 				if (e.control == self) {
-					var modalBlockEl, prefix = self.classPrefix;
+					var $modalBlockEl, prefix = self.classPrefix;
 
 					if (self.modal && !hasModal) {
-						modalBlockEl = DomUtils.createFragment('<div id="' + prefix + 'modal-block" class="' +
-							prefix + 'reset ' + prefix + 'fade"></div>');
-						modalBlockEl = modalBlockEl.firstChild;
+						$modalBlockEl = $('#' + prefix + 'modal-block', self.getContainerElm());
+						if (!$modalBlockEl[0]) {
+							$modalBlockEl = $(
+								'<div id="' + prefix + 'modal-block" class="' + prefix + 'reset ' + prefix + 'fade"></div>'
+							).appendTo(self.getContainerElm());
+						}
 
-						self.getContainerElm().appendChild(modalBlockEl);
-
-						setTimeout(function() {
-							DomUtils.addClass(modalBlockEl, prefix + 'in');
-							DomUtils.addClass(self.getEl(), prefix + 'in');
-						}, 0);
+						Delay.setTimeout(function() {
+							$modalBlockEl.addClass(prefix + 'in');
+							$(self.getEl()).addClass(prefix + 'in');
+						});
 
 						hasModal = true;
 					}
@@ -241,7 +250,7 @@ define("tinymce/ui/FloatPanel", [
 
 			self.on('show', function() {
 				self.parents().each(function(ctrl) {
-					if (ctrl._fixed) {
+					if (ctrl.state.get('fixed')) {
 						self.fixed(true);
 						return false;
 					}
@@ -250,15 +259,15 @@ define("tinymce/ui/FloatPanel", [
 
 			if (settings.popover) {
 				self._preBodyHtml = '<div class="' + self.classPrefix + 'arrow"></div>';
-				self.addClass('popover').addClass('bottom').addClass(self.isRtl() ? 'end' : 'start');
+				self.classes.add('popover').add('bottom').add(self.isRtl() ? 'end' : 'start');
 			}
 		},
 
 		fixed: function(state) {
 			var self = this;
 
-			if (self._fixed != state) {
-				if (self._rendered) {
+			if (self.state.get('fixed') != state) {
+				if (self.state.get('rendered')) {
 					var viewport = DomUtils.getViewPort();
 
 					if (state) {
@@ -268,8 +277,8 @@ define("tinymce/ui/FloatPanel", [
 					}
 				}
 
-				self.toggleClass('fixed', state);
-				self._fixed = state;
+				self.classes.toggle('fixed', state);
+				self.state.set('fixed', state);
 			}
 
 			return self;

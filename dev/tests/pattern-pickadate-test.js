@@ -19,13 +19,15 @@ define([
 
     beforeEach(function() {
       this.$el = $('<div><input class="pat-pickadate" /></div>');
+      this.clock = sinon.useFakeTimers();
     });
 
     afterEach(function() {
       $('body').empty();
+      this.clock.restore();
     });
 
-    it('date and time element', function() {
+    it('date and time element initialized', function() {
       var self = this;
 
       // pickadate is not initialized
@@ -53,15 +55,32 @@ define([
       // no picker is open
       expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
       expect(timeWrapper.find('.picker--opened').size()).to.be.equal(0);
+    });
+
+    it('open date picker', function(){
+      var self = this;
+      registry.scan(self.$el);
+      var dateWrapper = $('.pattern-pickadate-date', self.$el).parent(),
+          timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
 
       // we open date picker (calendar)
       $('.pattern-pickadate-date', self.$el).click();
 
+      this.clock.tick(1000);
       // date picker should be opened but not time picker
       expect(dateWrapper.find('.picker--opened').size()).to.be.equal(1);
       expect(timeWrapper.find('.picker--opened').size()).to.be.equal(0);
 
+    });
+
+    it('select date from picker', function(){
+      var self = this;
+      registry.scan(self.$el);
+      var dateWrapper = $('.pattern-pickadate-date', self.$el).parent(),
+          timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
+
       // select some date
+      $('.pattern-pickadate-date', self.$el).click();
       var $selectedDate = dateWrapper.find('td > div').first().click();
 
       // selected date should be saved on date picker element
@@ -75,6 +94,7 @@ define([
       $('.pattern-pickadate-time', self.$el).click();
 
       // time picker should be opened but not date picker
+      this.clock.tick(1000);
       expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
       expect(timeWrapper.find('.picker--opened').size()).to.be.equal(1);
 
@@ -88,6 +108,8 @@ define([
       expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
       // clearing time ...
+      $('.pattern-pickadate-time', self.$el).click();
+      this.clock.tick(1000);
       $('.picker__button--clear', timeWrapper).click();
 
       // ... should remove value from main element
@@ -190,6 +212,7 @@ define([
       $('.pattern-pickadate-date', self.$el).click();
 
       // date picker should be opened
+      this.clock.tick(1000);
       expect(dateWrapper.find('.picker--opened').size()).to.be.equal(1);
 
       // select some date
@@ -204,6 +227,7 @@ define([
       // clearing date ...
       $('.pattern-pickadate-date', self.$el).click();
       $('.pattern-pickadate-date', self.$el).click();
+      this.clock.tick(1000);
       $('.picker__button--clear', dateWrapper).click();
 
       // ... should also remove value from main element
@@ -244,6 +268,7 @@ define([
       $('.pattern-pickadate-time', self.$el).click();
 
       // time picker should be opened
+      this.clock.tick(1000);
       expect(timeWrapper.find('.picker--opened').size()).to.be.equal(1);
 
       // select some time
@@ -256,6 +281,8 @@ define([
       expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
       // clearing date ...
+      $('.pattern-pickadate-time', self.$el).click();
+      this.clock.tick(1000);
       $('.picker__button--clear', timeWrapper).click();
 
       // ... should also remove value from main element
@@ -402,7 +429,8 @@ define([
             $input = $('.pat-pickadate', self.$el)
               .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Vienna", "data": [' +
                                             '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
-                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
+                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"},' +
+                                            '{"id":"Europe/Madrid","text":"Europe/Madrid"}' +
                                           ']}}'
               );
         self.$el.appendTo('body');

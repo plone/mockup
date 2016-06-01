@@ -1,7 +1,7 @@
 define([
   'jquery',
   'pat-registry',
-  'mockup-patterns-base',
+  'pat-base',
 
   'mockup-patterns-select2',
   'mockup-patterns-passwordstrength',
@@ -16,9 +16,7 @@ define([
 
   var PloneWidgets = Base.extend({
     name: 'plone-widgets',
-    init: function() {
-      var self = this;
-    }
+    init: function() {}
   });
 
   // initialize only if we are in top frame

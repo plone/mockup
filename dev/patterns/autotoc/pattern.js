@@ -68,16 +68,16 @@
  *
  */
 
-
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base) {
   'use strict';
 
   var AutoTOC = Base.extend({
     name: 'autotoc',
     trigger: '.pat-autotoc',
+    parser: 'mockup',
     defaults: {
       section: 'section',
       levels: 'h1,h2,h3',
@@ -110,27 +110,40 @@ define([
 
       var asTabs = self.$el.hasClass('autotabs');
 
+      var activeId = null;
+
       $(self.options.levels, self.$el).each(function(i) {
         var $level = $(this),
-            id = $level.prop('id') ? '#' + $level.prop('id') :
+            id = $level.prop('id') ? $level.prop('id') :
                  $level.parents(self.options.section).prop('id');
-        if (!id) {
+        if (!id || $('#' + id).length > 0) {
           id = self.options.IDPrefix + self.name + '-' + i;
-          $level.prop('id', id);
         }
+        if(window.location.hash === '#' + id){
+          activeId = id;
+        }
+        $level.data('navref', id);
         $('<a/>')
           .appendTo(self.$toc)
           .text($level.text())
-          .prop('href', id)
+          .attr('id', id)
+          .attr('href', '#' + id)
           .addClass(self.options.classLevelPrefixName + self.getLevel($level))
-          .on('click', function(e, doScroll) {
+          .on('click', function(e, options) {
             e.stopPropagation();
             e.preventDefault();
+            if(!options){
+              options = {
+                doScroll: true,
+                skipHash: false
+              };
+            }
+            var $el = $(this);
             self.$toc.children('.' + self.options.classActiveName).removeClass(self.options.classActiveName);
             self.$el.children('.' + self.options.classActiveName).removeClass(self.options.classActiveName);
             $(e.target).addClass(self.options.classActiveName);
             $level.parents(self.options.section).addClass(self.options.classActiveName);
-            if (doScroll !== false &&
+            if (options.doScroll !== false &&
                 self.options.scrollDuration &&
                 $level &&
                 !asTabs) {
@@ -139,14 +152,27 @@ define([
               }, self.options.scrollDuration, self.options.scrollEasing);
             }
             if (self.$el.parents('.plone-modal').size() !== 0) {
-              self.$el.trigger('resize.modal.patterns');
+              self.$el.trigger('resize.plone-modal.patterns');
             }
             $(this).trigger('clicked');
+            if(!options.skipHash){
+              if(window.history && window.history.pushState){
+                window.history.pushState({}, '', '#' + $el.attr('id'));
+              }
+            }
           });
       });
 
-      self.$toc.find('a').first().trigger('click', false);
-
+      if(activeId){
+        $('a#' + activeId).trigger('click', {
+          doScroll: true,
+          skipHash: true
+        });
+      }else{
+        self.$toc.find('a').first().trigger('click', {
+          doScroll: false,
+          skipHash: true});
+      }
     },
     getLevel: function($el) {
       var elementLevel = 0;

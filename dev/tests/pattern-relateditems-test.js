@@ -11,6 +11,8 @@ define([
   window.mocha.setup('bdd').globals(['jQuery*']);
   $.fx.off = true;
 
+  var $el;
+
   /* ==========================
    TEST: Related Items
   ========================== */
@@ -36,26 +38,38 @@ define([
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
         var root = [
-          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image', getIcon: "image.png"},
-          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder', getIcon: ""},
-          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder', getIcon: ""},
-          {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder', getIcon: ""},
-          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document', getIcon: "document.png"},
-          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document', getIcon: ""},
-          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder', getIcon: "folder.png"},
-          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document', getIcon: ""},
+          {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', portal_type: 'Image', getIcon: "image.png"},
+          {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', portal_type: 'Folder', getIcon: ""},
+          {UID: '124asdfasasdaf34', Title: 'About', path: '/about', portal_type: 'Folder', getIcon: ""},
+          {UID: 'asdf1234', Title: 'Projects', path: '/projects', portal_type: 'Folder', getIcon: ""},
+          {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', portal_type: 'Document', getIcon: "document.png"},
+          {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', portal_type: 'Document', getIcon: ""},
+          {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', portal_type: 'Folder', getIcon: "folder.png"},
+          {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', portal_type: 'Document', getIcon: ""},
         ];
         var about = [
-          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', Type: 'Document', getIcon: ""},
-          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', Type: 'Document', getIcon: ""},
-          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', Type: 'Folder', getIcon: ""},
-          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', Type: 'Document', getIcon: ""}
+          {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', portal_type: 'Document', getIcon: ""},
+          {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', portal_type: 'Document', getIcon: ""},
+          {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', portal_type: 'Folder', getIcon: ""},
+          {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', portal_type: 'Document', getIcon: ""}
         ];
 
         var staff = [
-          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', Type: 'Document', getIcon: ""},
-          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', Type: 'Document', getIcon: ""}
+          {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document', getIcon: ""},
+          {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document', getIcon: ""},
+          {UID: 'hax0r', Title: '<script>window.xss=1</script>', path: '/about/staff/xss', portal_type: 'Document', getIcon: ""}
         ];
+
+        var addMissingFields = function(item) {
+          item.getURL = 'http://localhost:8081' + item.path;
+          item.is_folderish = item.portal_type === 'Folder';
+          item.review_state = 'published';
+        };
+
+        _.each(root, addMissingFields);
+        _.each(about, addMissingFields);
+        _.each(staff, addMissingFields);
+
         var searchables = about.concat(root).concat(staff);
 
         var addUrls = function(list) {
@@ -91,6 +105,8 @@ define([
             var criteria = query.criteria[i];
             if (criteria.i === 'path') {
               path = criteria.v.split('::')[0];
+            } else if (criteria.i === 'is_folderish') {
+              term = criteria;
             } else {
               term = criteria.v;
             }
@@ -105,13 +121,19 @@ define([
           }
           _.each(items, function(item) {
             var q;
-            var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
+            var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.portal_type).toLowerCase();
             if (typeof(term) === 'object') {
-              for (var i = 0; i < term.length; i = i + 1) {
-                q = term[i].toLowerCase();
-                if (keys.indexOf(q) > -1) {
+              if (term.i === 'is_folderish') {
+                if (item.is_folderish) {
                   results.push(item);
-                  break;
+                }
+              } else {
+                for (var i = 0; i < term.length; i = i + 1) {
+                  q = term[i].toLowerCase();
+                  if (keys.indexOf(q) > -1) {
+                    results.push(item);
+                    break;
+                  }
                 }
               }
             } else {
@@ -154,8 +176,14 @@ define([
       });
     });
 
+    afterEach(function() {
+      this.server.restore();
+      $el.remove();
+      $('.select2-sizer, .select2-drop').remove();
+    });
+
     it('test initialize', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -166,13 +194,10 @@ define([
       expect($('.select2-container-multi', $el)).to.have.length(1);
       expect($('.pattern-relateditems-container', $el)).to.have.length(1);
       expect($('.pattern-relateditems-path', $el)).to.have.length(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('select an item by clicking add button', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -184,19 +209,16 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
-      expect($('.pattern-relateditems-result-select')).to.have.length(13);
+      expect($('.pattern-relateditems-result-select')).to.have.length(14);
       $('.pattern-relateditems-result-select').first().on('click', function() {
         expect(pattern.$el.select2('data')).to.have.length(1);
         expect(pattern.$el.select2('val')[0]).to.equal('gfn5634f');
       }).click();
       clock.tick(1000);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('deselect an item from selected items using click', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -225,13 +247,10 @@ define([
       // backspaceEvent.which = 8;
       // $('.select2-search-field input').trigger( backspaceEvent );
       // expect(pattern.$el.select2('data')).to.have.length(0);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('deselect an item from results using click', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
@@ -257,13 +276,10 @@ define([
       expect($result.is('.pattern-relateditems-active')).to.equal(false);
       expect(pattern.$el.select2('data')).to.have.length(0);
       expect(pattern.$el.select2('val')).to.have.length(0);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('allow only a single type to be selectable', function () {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems" />' +
         '</div>').appendTo('body');
@@ -282,19 +298,17 @@ define([
       $('.pattern-relateditems-result-select').first().click();
       expect(pattern.$el.select2('data')).to.have.length(0);
 
-      $('.pattern-relateditems-type-Image .pattern-relateditems-result-select').first().click();
+      $('.contenttype-image:parent').first().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('clicking folder button filters to that folder', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
@@ -309,17 +323,15 @@ define([
         expect(pattern.browsing).to.be.equal(true);
         expect(pattern.currentPath).to.equal($(this).attr('data-path'));
       }).click();
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('after selecting a folder, it remains in the results list', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
@@ -327,7 +339,7 @@ define([
       pattern.$el.select2('open');
       clock.tick(1000);
       expect(pattern.$el.select2('data')).to.have.length(0);
-      expect($('.pattern-relateditems-result-select')).to.have.length(13);
+      expect($('.pattern-relateditems-result-select')).to.have.length(14);
       $('.pattern-relateditems-result-path')
         .filter(function() { return $(this).text() === '/about'; })
         .click();
@@ -336,17 +348,15 @@ define([
       var result = $('.pattern-relateditems-result-path')
         .filter(function() { return $(this).text() === '/about'; });
       expect(result.length).to.equal(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop').remove();
     });
 
     it('clicking on breadcrumbs goes back up', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
@@ -362,23 +372,23 @@ define([
       var $crumbs = $('.pattern-relateditems-path a.crumb');
       // /about/staff
       expect($crumbs).to.have.length(3);
+      // Staff XSS bomb
+      expect(window.xss).not.equal(1);
       // /about
       $crumbs.eq(1).on('click', function() {
       }).click();
       clock.tick(1000);
       expect(pattern.currentPath).to.equal('/about');
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('maximum number of selected items', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
@@ -390,38 +400,34 @@ define([
       expect(pattern.$el.select2('data')).to.have.length(1);
       $('.pattern-relateditems-result-select').last().click();
       expect(pattern.$el.select2('data')).to.have.length(1);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('init selection', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
       var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       var clock = sinon.useFakeTimers();
       pattern.$el.select2('open');
       clock.tick(1000);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('test tree initialized', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
@@ -434,23 +440,21 @@ define([
       clock.tick(1000);
 
       expect($el.find('.pat-tree ul li').length).to.equal(4);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('test tree select', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
-      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+      $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       clock.tick(1000);
 
@@ -459,30 +463,25 @@ define([
       $el.find('.pattern-relateditems-tree-select').trigger('click');
       clock.tick(1000);
 
-      $el.find('.pat-tree ul li div').eq(2).trigger('click');
-      clock.tick(1000);
-
-      $el.find('.pattern-relateditems-tree-itemselect').trigger('click');
+      $el.find('.pat-tree ul li .pattern-relateditems-buttons a').eq(2).trigger('click');
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(2);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('test tree sub select', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
-      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+      $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       clock.tick(1000);
 
@@ -494,30 +493,25 @@ define([
       $el.find('.pat-tree ul li div').eq(1).trigger('click');
       clock.tick(1000);
 
-      $el.find('.pat-tree ul li div').eq(2).trigger('click');
-      clock.tick(1000);
-
-      $el.find('.pattern-relateditems-tree-itemselect').trigger('click');
+      $el.find('.pat-tree ul li .pattern-relateditems-buttons a').eq(2).trigger('click');
       clock.tick(1000);
 
       expect($el.find('.crumb').length).to.equal(3);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
 
     it('test tree cancel', function() {
-      var $el = $('' +
+      $el = $('' +
         '<div>' +
         ' <input class="pat-relateditems"' +
         '        value="asdf1234,sdfbsfdh345,asdlfkjasdlfkjasdf,kokpoius98"' +
         '        data-pat-relateditems="width: 300px;' +
         '                          maximumSelectionSize: 1;' +
-        '                          vocabularyUrl: /relateditems-test.json" />' +
+        '                          vocabularyUrl: /relateditems-test.json;' +
+        '                          treeOptions: {vocabularyUrl: /relateditems-test.json}" />' +
         '</div>').appendTo('body');
 
       var clock = sinon.useFakeTimers();
-      var pattern = $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
+      $('.pat-relateditems', $el).patternRelateditems().data('patternRelateditems');
 
       clock.tick(1000);
 
@@ -531,12 +525,7 @@ define([
 
       expect($el.find('.crumb').length).to.equal(1);
       expect($el.find('.tree-container').is(':visible')).to.equal(false);
-
-      $el.remove();
-      $('.select2-sizer, .select2-drop, .select2-drop-mask').remove();
     });
-
-
 
   });
 

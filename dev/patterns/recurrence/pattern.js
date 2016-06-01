@@ -19,7 +19,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'jquery.recurrenceinput'
 ], function($, Base) {
   'use strict';
@@ -27,6 +27,7 @@ define([
   var Recurrence = Base.extend({
     name: 'recurrence',
     trigger: '.pat-recurrence',
+    parser: 'mockup',
     defaults: {
       // just passed onto the widget
       language: 'en',
@@ -35,7 +36,7 @@ define([
     },
     init: function() {
       this.$el.addClass('recurrence-widget');
-      if(this.options.localization){
+      if (this.options.localization) {
         $.tools.recurrenceinput.localize(this.options.language, this.options.localization);
       }
       this.$el.recurrenceinput(this.options.configuration);

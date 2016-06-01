@@ -180,7 +180,7 @@ test('getBlockElements', function() {
 	schema = new tinymce.html.Schema();
 	deepEqual(schema.getBlockElements(), {
 		ASIDE: {}, HGROUP: {}, SECTION: {}, ARTICLE: {}, FOOTER: {}, HEADER: {},
-		ISINDEX: {}, MENU: {}, NOSCRIPT: {}, FIELDSET: {}, DIR: {}, DD: {}, DT: {},
+		ISINDEX: {}, MENU: {}, NOSCRIPT: {}, FIELDSET: {}, FIGCAPTION: {}, DIR: {}, DD: {}, DT: {},
 		DL: {}, CENTER: {}, BLOCKQUOTE: {}, CAPTION: {}, UL: {}, OL: {}, LI: {},
 		TD: {}, TR: {}, TH: {}, TFOOT: {}, THEAD: {}, TBODY: {}, TABLE: {}, FORM: {},
 		PRE: {}, ADDRESS: {}, DIV: {}, P: {}, HR: {}, H6: {}, H5: {}, H4: {}, H3: {},
@@ -189,7 +189,7 @@ test('getBlockElements', function() {
 		isindex: {}, menu: {}, noscript: {}, fieldset: {}, dir: {}, dd: {}, dt: {}, dl: {}, center: {},
 		blockquote: {}, caption: {}, ul: {}, ol: {}, li: {}, td: {}, tr: {}, th: {}, tfoot: {}, thead: {},
 		tbody: {}, table: {}, form: {}, pre: {}, address: {}, div: {}, p: {}, hr: {}, h6: {},
-		h5: {}, h4: {}, h3: {}, h2: {}, h1: {}, nav: {}, figure: {}, datalist: {}, optgroup: {},
+		h5: {}, h4: {}, h3: {}, h2: {}, h1: {}, nav: {}, figure: {}, figcaption: {}, datalist: {}, optgroup: {},
 		option: {}, select: {}
 	});
 });
@@ -455,6 +455,11 @@ test('validStyles', function() {
 		"a": [
 			"background",
 			"font-family"
+		],
+
+		"A": [
+			"background",
+			"font-family"
 		]
 	});
 });
@@ -493,6 +498,11 @@ test('invalidStyles', function() {
 		'a': {
 			'background': {},
 			'font-family': {}
+		},
+
+		'A': {
+			'background': {},
+			'font-family': {}
 		}
 	});
 });
@@ -529,6 +539,11 @@ test('validClasses', function() {
 		},
 
 		'a': {
+			'classC': {},
+			'classD': {}
+		},
+
+		'A': {
 			'classC': {},
 			'classD': {}
 		}

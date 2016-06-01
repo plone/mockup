@@ -47,6 +47,11 @@ define([
       expect($('> nav > a.autotoc-level-3', this.$el).size()).to.equal(1);
       expect($('> nav > a.autotoc-level-4', this.$el).size()).to.equal(0);
     });
+    it('sets href and id', function() {
+      Registry.scan(this.$el);
+      expect($('> nav > a:first', this.$el).attr('id')).to.equal('autotoc-item-autotoc-0');
+      expect($('> nav > a:first', this.$el).attr('href')).to.equal('#autotoc-item-autotoc-0');
+    });
     it('can be used as jQuery plugin as well', function () {
       expect($('> nav', this.$el).size()).to.equal(0);
       this.$el.patternAutotoc();

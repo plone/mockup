@@ -3,7 +3,7 @@ define([
   'jquery',
   'pat-registry',
   'mockup-patterns-tooltip'
-], function(expect, $, registry, ToolTip) {
+], function(expect, $, registry, Tooltip) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -17,30 +17,31 @@ define([
 
     beforeEach(function() {
       this.$el = $('' +
-        '<div><p href=".example-class" class="pat-tooltip">' +
+        '<div><a href="#" class="pat-tooltip" data-toggle="tooltip" title="data">' +
         '  Hover over this line to see a tooltip' +
-        '</p>' +
-        '<p class="tooltips example-class">' +
-        '  Setting the .example-class in the href makes this show up' +
-        '</p></div>');
+        '</a></div>');
+      $('body').append(this.$el);
     });
 
     afterEach(function() {
       this.$el.remove();
     });
 
-    it('tooltip appears and disappears', function() {
+
+    it.skip('tooltip appears and disappears', function() {
       registry.scan(this.$el);
 
       var trs;
 
-      $('.pat-tooltip', this.$el).trigger('mouseenter.tooltip.patterns');
-      trs = this.$el.find('.example-class');
-      expect(trs.eq(0).hasClass('active')).to.be.equal(true);
+      var $el = this.$el.find('a');
+      $el.data('suppress.mouseenter', (new Date().getTime()) + 10000);
+      $el.trigger('mouseenter');
+      trs = this.$el.find('.tooltip');
+      expect(trs.eq(0).length).to.equal(1);
 
-      $('.pat-tooltip', this.$el).trigger('mouseleave.tooltip.patterns');
-      trs = this.$el.find('.example-class');
-      expect(trs.eq(0).hasClass('active')).to.be.equal(false);
+      this.$el.trigger('mouseleave');
+      trs = this.$el.find('.tooltip');
+      expect(trs.eq(0).length).to.equal(0);
     });
 
   });

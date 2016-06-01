@@ -24,11 +24,9 @@
  *
  */
 
-/* global alert:true */
-
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base) {
   'use strict';
   function loadScript(src) {
@@ -57,6 +55,7 @@ define([
   var PasswordStrength = Base.extend({
     name: 'passwordstrength',
     trigger: '.pat-passwordstrength',
+    parser: 'mockup',
     defaults: {
         zxcvbn: '//cdnjs.cloudflare.com/ajax/libs/zxcvbn/1.0/zxcvbn.js'
     },

@@ -1,5 +1,3 @@
-/* global alert:true, confirm:true */
-
 define([
   'jquery',
   'underscore',
@@ -27,6 +25,7 @@ define([
     afterRender: function(){
       var self = this;
       var $body = self.$('.panel-body');
+      self.$el.addClass(self.name + '-resource-entry');
       _.each(self.fields, function(field){
         var options = $.extend({}, field, {
           value: self.options.data[field.name],
@@ -34,7 +33,8 @@ define([
           containerData: self.options.containerData,
           resourceName: self.options.name,
           registryView: self.options.registryView,
-          parent: self.options.parent
+          parent: self.options.parent,
+          form: self
         });
         if(!options.value){
           options.value = '';
@@ -69,12 +69,12 @@ define([
       view: fields.ResourceSortableListFieldView
     },{
       name: 'init',
-      title: _t('Init'), 
+      title: _t('Init'),
       description: _t('Init instruction for requirejs shim')
     }, {
       name: 'deps',
       title: _t('Dependencies'),
-      description: _t('Coma separated values of resources for requirejs shim')
+      description: _t('Comma-separated values of resources for requirejs shim')
     }, {
       name: 'export',
       title: _t('Export'),
@@ -114,7 +114,7 @@ define([
     }, {
       name: 'conditionalcomment',
       title: _t('Conditional comment'),
-      description: _t('For Internet Exploder hacks...')
+      description: _t('Internet Explorer conditional comment')
     }, {
       name: 'compile',
       title: _t('Does your bundle contain any RequireJS or LESS files?'),
@@ -134,6 +134,12 @@ define([
       title: _t('Compiled CSS'),
       description: _t('Automatically generated path to the compiled CSS.'),
       view: fields.ResourceDisplayFieldView
+    }, {
+      name: 'stub_js_modules',
+      title: _t('Stub JS Modules'),
+      description: _t('Define list of modules that will be not be defined empty ' +
+                      'on RequireJS build steps to prevent loading modules multiple times.'),
+      view: fields.ResourceSortableListFieldView
     }]
   });
 
@@ -183,9 +189,13 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' resource?'))){
+      if(window.confirm(_t('Are you sure you want to delete the ${name} resource?', {name: this.options.name}))){
         delete this.options.registryView.options.data.resources[this.options.name];
         this.options.registryView.dirty = true;
+        if(this.options.registryView.activeResource &&
+           this.options.registryView.activeResource.resource.name === this.options.name){
+          this.options.registryView.activeResource = null;
+        }
         this.options.registryView.render();
       }
     }
@@ -228,12 +238,14 @@ define([
       this.options.data.develop_javascript = !this.options.data.develop_javascript;
       this.options.registryView.dirty = true;
       this.options.registryView.render();
+      this.render();
     },
     developCSSClicked: function(e){
       e.preventDefault();
       this.options.data.develop_css = !this.options.data.develop_css;
       this.options.registryView.dirty = true;
       this.options.registryView.render();
+      this.render();
     },
     afterRender: function(){
       RegistryResourceListItem.prototype.afterRender.apply(this);
@@ -246,8 +258,7 @@ define([
         e.preventDefault();
       }
       var options = $.extend({}, this.options, {
-        containerData: this.options.registryView.options.data.bundles,
-        parent: this
+        containerData: this.options.registryView.options.data.bundles
       });
       var resource = new BundleEntryView(options);
       this.registryView.showResourceEditor(resource, this, 'bundle');
@@ -262,18 +273,22 @@ define([
     },
     deleteClicked: function(e){
       e.preventDefault();
-      if(confirm(_t('Are you sure you want to delete the ' + this.options.name + ' bundle?'))){
+      if(window.confirm(_t('Are you sure you want to delete the ${name} bundle?', {name: this.options.name}))){
         delete this.options.registryView.options.data.bundles[this.options.name];
         this.options.registryView.dirty = true;
+        if(this.options.registryView.activeResource &&
+           this.options.registryView.activeResource.resource.name === this.options.name){
+          this.options.registryView.activeResource = null;
+        }
         this.options.registryView.render();
       }
     },
-    
+
     buildClicked: function(e){
       e.preventDefault();
       var self = this;
       if(this.options.registryView.dirty){
-        alert(_t('You have unsaved changes. Save or discard before building.'));
+        window.alert(_t('You have unsaved changes. Save or discard before building.'));
       }else{
         var builder = new Builder(self.options.name, self);
         builder.run();
@@ -328,8 +343,9 @@ define([
       if(e){
         e.preventDefault();
       }
-      if(confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
+      if(window.confirm(_t('Are you sure you want to cancel? You will lose all changes.'))){
         this._revertData(this.previousData);
+        this.activeResource = null;
         this.render();
       }
     },
@@ -342,9 +358,9 @@ define([
 
   var RegistryView = BaseResourcesPane.extend({
     template: _.template(
-      '<div class="clearfix">' +
+      '<div class="row buttons-container">' +
         '<div class="plone-btn-group pull-right">' +
-          '<button class="plone-btn plone-btn-success save"><%- _t("Save") %></button>' +
+          '<button class="plone-btn plone-btn-primary save"><%- _t("Save") %></button>' +
           '<button class="plone-btn plone-btn-default cancel"><%- _t("Cancel") %></button>' +
         '</div>' +
         '<div class="plone-btn-group pull-right">' +
@@ -455,8 +471,12 @@ define([
       };
       _.each(bundles, function(resourceName){
         var item;
-        if(self.activeResource && self.activeResource.type === 'bundle' && self.activeResource.item.options.name === resourceName){
-          item = self.activeResource.item;
+        if(self.activeResource && self.activeResource.type === 'bundle' &&
+           self.activeResource.item.options.name === resourceName){
+          item = new RegistryBundleListItem({
+            data: self.activeResource.item.data,
+            name: resourceName,
+            registryView: self});
         }else{
           item = new RegistryBundleListItem({
             data: data.bundles[resourceName],
@@ -469,8 +489,12 @@ define([
       var resources = _.sortBy(_.keys(data.resources), function(v){ return v.toLowerCase(); });
       _.each(resources, function(resourceName){
         var item;
-        if(self.activeResource && self.activeResource.type === 'resource' && self.activeResource.item.options.name === resourceName){
-          item = self.activeResource.item;
+        if(self.activeResource && self.activeResource.type === 'resource' &&
+           self.activeResource.item.options.name === resourceName){
+          item = new RegistryResourceListItem({
+            data: self.activeResource.item.data,
+            name: resourceName,
+            registryView: self});
         } else {
           item = new RegistryResourceListItem({
             data: data.resources[resourceName],
@@ -502,7 +526,7 @@ define([
 
     addBundleClicked: function(e){
       e.preventDefault();
-      var name = utils.generateId('new-resource-');
+      var name = utils.generateId('new-bundle-');
       this.options.data.bundles[name] = {
         enabled: true
       };
@@ -516,25 +540,37 @@ define([
       e.preventDefault();
       self.options.tabView.saveData('save-registry', {
         resources: JSON.stringify(self.options.data.resources),
-        bundles: JSON.stringify(self.options.data.bundles)
+        bundles: JSON.stringify(self.options.data.bundles),
+        development: self.options.data.development && 'true' || 'false'
       }, function(){
         self.dirty = false;
+        var activeResource = self.activeResource;
+        self.activeResource = null;
         self.previousData = self._copyData();
+        self.render();
+        if(activeResource){
+          var name = activeResource.resource.name;
+          self.options.data.resources[name] = {
+            enabled: true
+          };
+          if(activeResource.type === 'bundle'){
+            self.items.bundles[name].editResource();
+          }else{
+            self.items.resources[name].editResource();
+          }
+        }
       });
     },
 
     developmentModeChanged: function(){
       var self = this;
-      var value = 'false';
       if(self.$('.development-mode input')[0].checked){
-        value = 'true';
+        this.options.data.development = true;
+      }else{
+        this.options.data.development = false;
       }
-      self.options.tabView.saveData('save-development-mode', {
-        value: value
-      }, function(){
-        self.options.data.development = self.$('.development-mode input')[0].checked;
-        self.render();
-      });
+      this.dirty = true;
+      this.render();
     }
   });
 

@@ -1,21 +1,16 @@
-/* global alert:true */
-
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/buttongroup',
   'mockup-ui-url/views/button',
-  'mockup-utils',
   'bootstrap-dropdown'
-], function($, _, Backbone, ButtonGroup, ButtonView, utils) {
+], function($, _, ButtonGroup, ButtonView) {
   'use strict';
 
   var AddMenu = ButtonGroup.extend({
     title: 'Add',
     className: 'btn-group addnew',
-    events: {
-    },
+    events: {},
     initialize: function(options) {
       var self = this;
       ButtonGroup.prototype.initialize.apply(self, [options]);
@@ -82,7 +77,7 @@ define([
                   modal.hide();
                 },
                 onError: function() {
-                  alert('error on form');
+                  window.alert('error on form');
                 }
               },
               'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
@@ -104,13 +99,14 @@ define([
       self.$el.empty();
 
       self.$el.append(
-        '<a class="btn dropdown-toggle btn-success" data-toggle="dropdown" href="#">' +
-          self.title +
-          '<span class="caret"></span>' +
+        '<a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#">' +
+        '<span class="glyphicon glyphicon-plus"></span>' +
+        self.title +
+        '<span class="caret"></span>' +
         '</a>' +
         '<ul class="dropdown-menu">' +
         '</ul>' +
-      '</div>');
+        '</div>');
 
       self.$items = self.$('.dropdown-menu');
       self.$dropdown = self.$('.dropdown-toggle');

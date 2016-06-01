@@ -10,12 +10,14 @@ define([
     isUIView: true,
     eventPrefix: 'ui',
     template: null,
+    idPrefix: 'base-',
     appendInContainer: true,
     initialize: function(options) {
       this.options = options;
       for (var key in this.options) {
         this[key] = this.options[key];
       }
+      this.options._t = _t;
     },
     render: function() {
       this.applyTemplate();
@@ -23,9 +25,9 @@ define([
       this.trigger('render', this);
       this.afterRender();
 
-      if (!this.$el.attr('id') && this.options.id) {
+      if (this.options.id) {
         // apply id to element
-        this.$el.attr('id', 'gen-' + this.options.id);
+        this.$el.attr('id', this.idPrefix + this.options.id);
       }
       return this;
     },

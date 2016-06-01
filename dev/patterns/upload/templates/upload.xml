@@ -1,19 +1,18 @@
 <div class="upload-container upload-multiple">
-    <h2 class="title">Upload stuff here</h2>
+    <h2 class="title"><%- _t("Upload here") %></h2>
     <p class="help">
-        Just drag N drop stuff on the area below
-        or press "upload" button.
+        <%- _t('Drag and drop files from your computer onto the area below or click the "Browse" button.') %>
     </p>
     <div class="upload-area">
         <div class="fallback">
             <input name="file" type="file" multiple />
         </div>
         <div class="dz-message"><p><%-_t("Drop files here...")%></p></div>
-        <div class="row">
+        <div class="row browse-select">
             <div class="col-md-9">
                 <input
                     id="fakeUploadFile"
-                    placeholder="Choose File"
+                    placeholder="<%- _t("Choose File") %>"
                     disabled="disabled"
                     />
             </div>
@@ -30,9 +29,9 @@
             </div>
             <div class="controls">
                 <div class="path">
-                    <label>Upload to...</label>
+                    <label><%- _t("Upload to...") %></label>
                     <p class="form-help">
-                        If nothing selected files we be added to current context.
+                        <%- _t("Select another destination folder or leave blank to add files to the current location.") %>
                     </p>
                     <input
                         type="text"
@@ -56,7 +55,7 @@
                         <button
                             type="button"
                             class="btn btn-primary upload-all">
-                            Upload
+                            <%- _t("Upload") %>
                         </button>
                     </div>
                 </div>

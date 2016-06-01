@@ -32,11 +32,6 @@ require([
         description: 'All the patterns you\'ll ever need',
         autotoc: false,
         patterns: [
-          { id: 'accessibility',
-            title: 'Accessibility',
-            description: 'Easily change text size on a page',
-            url: 'patterns/accessibility/pattern.js'
-          },
           { id: 'autotoc',
             title: 'Autotoc',
             description: 'Automatically generate a table of contents',
@@ -116,11 +111,6 @@ require([
             title: 'Structure',
             description: 'Managing a folder of items',
             url: 'patterns/structure/pattern.js'
-          },
-          { id: 'tablesorter',
-            title: 'Table Sorter',
-            description: 'A pattern you can apply to a table so it can have its items rearranged when clicking the header',
-            url: 'patterns/tablesorter/pattern.js'
           },
           { id: 'textareamimetypeselector',
             title: 'Textarea MimeType Selector',

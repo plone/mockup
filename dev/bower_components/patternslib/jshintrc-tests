@@ -9,7 +9,7 @@
     "undef": true,
     "unused": true,
     "white": false,
-    "quotmark": "double",
+    "quotmark": false,
     "predef": [
         "Markdown",
         "Modernizr",
@@ -18,19 +18,20 @@
         "require",
         "requirejs",
         "tinyMCE",
-
-	"describe",
-	"it",
-	"xdescribe",
-	"xit",
-	"beforeEach",
-	"afterEach",
-	"expect",
-	"spyOn",
-	"runs",
-	"waits",
-	"jasmine",
-	"$"
+        "runs",
+        "waits",
+        "describe",
+        "it",
+        "xdescribe",
+        "xit",
+        "beforeEach",
+        "afterEach",
+        "expect",
+        "spyOn",
+        "runs",
+        "waits",
+        "jasmine",
+        "$"
     ]
 }
 

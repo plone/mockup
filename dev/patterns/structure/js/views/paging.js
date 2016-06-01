@@ -2,10 +2,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!mockup-patterns-structure-url/templates/paging.xml'
-], function($, _, Backbone, PagingTemplate) {
+  'text!mockup-patterns-structure-url/templates/paging.xml',
+  'translate'
+], function($, _, Backbone, PagingTemplate, _t) {
   'use strict';
-
 
   var PagingView = Backbone.View.extend({
     events: {
@@ -21,7 +21,7 @@ define([
     tagName: 'aside',
     template: _.template(PagingTemplate),
     maxPages: 7,
-    initialize: function (options) {
+    initialize: function(options) {
       this.options = options;
       this.app = this.options.app;
       this.collection = this.app.collection;
@@ -29,17 +29,19 @@ define([
       this.collection.on('sync', this.render, this);
 
       this.$el.appendTo('#pagination');
-
     },
-    render: function () {
+
+    render: function() {
       var data = this.collection.info();
       data.pages = this.getPages(data);
-      var html = this.template(data);
+      var html = this.template($.extend({
+        _t: _t
+      }, data));
       this.$el.html(html);
       return this;
     },
+
     getPages: function(data) {
-      var perPage = data.perPage;
       var totalPages = data.totalPages;
       if (!totalPages) {
         return [];
@@ -74,31 +76,32 @@ define([
       }
       return pages;
     },
-    nextResultPage: function (e) {
+    nextResultPage: function(e) {
       e.preventDefault();
       this.collection.requestNextPage();
     },
-    previousResultPage: function (e) {
+    previousResultPage: function(e) {
       e.preventDefault();
       this.collection.requestPreviousPage();
     },
-    gotoFirst: function (e) {
+    gotoFirst: function(e) {
       e.preventDefault();
       this.collection.goTo(this.collection.information.firstPage);
     },
-    gotoLast: function (e) {
+    gotoLast: function(e) {
       e.preventDefault();
       this.collection.goTo(this.collection.information.totalPages);
     },
-    gotoPage: function (e) {
+    gotoPage: function(e) {
       e.preventDefault();
       var page = $(e.target).text();
       this.collection.goTo(page);
     },
-    changeCount: function (e) {
+    changeCount: function(e) {
       e.preventDefault();
       var per = $(e.target).text();
       this.collection.howManyPer(per);
+      this.app.setCookieSetting('perPage', per);
     }
   });
 

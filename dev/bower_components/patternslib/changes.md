@@ -1,12 +1,41 @@
 # Changelog
 
+## 2.0.11 - Sept. 30, 2015
+
+- Bugfix. Specifying combined pattern properties (with &&) not working on IE10.
+- Add an alternative parser, from the Mockup project.
+- Updated documentation.
+- Clone pattern has a new argument: remove-behaviour.
+
+## 2.0.10 - Sept. 18, 2015
+
+- Add new argument "hooks" to pat-inject.
+- Add new parser method addAlias for adding aliases of parser arguments.
+- Add the addJSONArgument method to the argument parser, which provides support for JSON as argument values.
+- Added Sass files for all patterns.
+- Bugfix in pat-masonry. Wait until images are loaded.
+- Bugfixes and improvements to pat-clone.
+- Fixed a bug where the page reloads when the image viewer from pat-gallery is closed.
+- In pat-autosuggest, new option allow-new-words, for explicitly allowing or denying custom tags.
+- Make pat-bumper also bump against the bottom edge.
+- New layout. All files relevant to individual patterns (except for tests) are now in ./src/pat
+- pat-gallery now uses Photoswipe 4.1.0 and is based on pat-base.
+- New pattern pat-validation which replaces pat-validate.
+
+## 2.0.9 - Mar 30, 2015
+
+- Fixed IE bug in pat-equalizer
+- #389 Add support in pat-inject for the HTML5 formaction attribute
+- New pattern: pat-clone.
+- Upgrade to jQuery 1.11.1
+
 ## 2.0.8 - Feb. 5, 2015
 
 - #395 add body class after patterns loaded from registry
- 
+
 ## 2.0.7 - Feb. 4, 2015
 
-- #381 Checked class not set on checklist 
+- #381 Checked class not set on checklist
 - Add stub module i18n.js. Provides compatibility with Mockup patterns.
 - Add support for Mockup patterns.
 - Add support for parsing JSON as pattern configuration
@@ -18,7 +47,7 @@
 ## 2.0.6 - Dec. 10, 2014
 
 - New core module pluggable.js which allows the creation of Pluggable patterns.
- 
+
 ## 2.0.5 - Dec. 4, 2014
 
 - #383 pat-equaliser sets the height to early
@@ -30,11 +59,11 @@
 
 ## 2.0.3 - Sept. 22, 2014
 
-- when another tooltip trigger is clicked, only close the previous tooltip if 
+- when another tooltip trigger is clicked, only close the previous tooltip if
   it does not contain the trigger. slc ref #9801
 - moved utils.debounce() call to fix removal of event handler
   slc ref #10695
- 
+
 ## 2.0.2 - Sept. 8, 2014
 
 - #377 Local inject doesn't work for IE10 and 11
@@ -81,7 +110,7 @@
 
 - Inject pattern: do not try to rebase ``mailto:`` URLs.
 
-- Modal pattern: 
+- Modal pattern:
 
   - Add a new ``closing`` option. This allows configuring how a modal can be
     closed.
@@ -93,7 +122,7 @@
 
 - Switch pattern: prevent default action when a link is clicked.
 
-- Tooltip pattern: 
+- Tooltip pattern:
 
   - Correctly handle a button with ``close-panel`` class in AJAX-loaded tooltip
     content. This fixes fixes [ticket
@@ -119,7 +148,7 @@
   classes are updated correctly when changing the radio button selection. This
   fixes [ticket 348](https://github.com/Patternslib/Patterns/issues/348).
 
-- [Bumper pattern](demo/bumper/index.html): 
+- [Bumper pattern](demo/bumper/index.html):
   - add new `selector` option to allow overriding which elements must be
     updated.
   - Add new options to specify which classes much be added/removed when
@@ -157,11 +186,11 @@
 ## 1.4.1 - July 13, 2013
 
 - Validate pattern: always validate form elements when they are changed instead
-  of waiting for a first form submit. This fixes 
+  of waiting for a first form submit. This fixes
   [ticket 324](https://github.com/Patternslib/Patterns/issues/324).
 
 - Update to a new version of [shower](http://shwr.me/) which does not hijack
-  key events when not in presentation mode. This fixes 
+  key events when not in presentation mode. This fixes
   [ticket 315](https://github.com/Patternslib/Patterns/issues/315).
 
 - Handle security errors when checking if a browser supports sessions storage.
@@ -223,7 +252,7 @@
   - Send a new ``pat-inject-content-laoded`` event when all images in injected
     markup have finished loading.
 
-- Modal pattern: 
+- Modal pattern:
 
   - Reposition the modal after its images have finished loading.
   - Improve browser compatibility.
@@ -276,7 +305,7 @@
     now use a copy we can update as needed.
 
   - Rewrite top level makefile:
-  
+
     - Update the bungles if `packages.json` has changed.
     - Move jshint out to a new `jshint` target. This is automatically invoked
       when running `make check`, but is skipped when you only want to run
@@ -360,7 +389,7 @@
 - Form-State pattern: add `form-state-saved` signal.
   (Marko Đurković)
 
-- Modal pattern: 
+- Modal pattern:
 
   - Automatically position modals using javascript to fix problems with IE9 and
     make sure they always fit in the viewport.
@@ -373,7 +402,7 @@
 - Check-list pattern: send *change* event when a checkbox is toggled. This fixes
   interaction with other patterns such as the checked-flag pattern.
 
-- Collapsible pattern: 
+- Collapsible pattern:
 
   - Add new option to specify an (external) triggering element.
     [Ticket 274](https://github.com/Patternslib/Patterns/issues/274)
@@ -418,7 +447,7 @@
 
   - Registry: Add option to registry.scan to let init exceptions
     through. (Rok Garbas)
-    
+
   - Registry: rescans the DOM for patterns registered after the initial
     DOM scan. (Florian Friesdorf)
 
@@ -426,7 +455,7 @@
     debug problems. (Wichert Akkerman)
 
   - HTML parser:
-  
+
     - Correctly handle tag and attribute names containing a colon.
       (Wichert Akkerman)
 

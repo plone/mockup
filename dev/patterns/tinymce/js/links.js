@@ -2,19 +2,18 @@ define([
   'jquery',
   'underscore',
   'pat-registry',
-  'mockup-patterns-base',
-  'mockup-patterns-relateditems',
-  'mockup-patterns-modal',
+  'pat-base',
   'tinymce',
-  'mockup-patterns-upload',
   'text!mockup-patterns-tinymce-url/templates/link.xml',
-  'text!mockup-patterns-tinymce-url/templates/image.xml'
-], function($, _, registry, Base, RelatedItems, Modal, tinymce, Upload, LinkTemplate, ImageTemplate) {
+  'text!mockup-patterns-tinymce-url/templates/image.xml',
+  'mockup-patterns-relateditems',
+  'mockup-patterns-autotoc',
+  'mockup-patterns-modal',
+  'mockup-patterns-upload'
+], function($, _, registry, Base, tinymce, LinkTemplate, ImageTemplate, RelatedItems) {
   'use strict';
 
   var LinkType = Base.extend({
-    name: 'linktype',
-    trigger: '.pat-linktype',
     defaults: {
       linkModal: null // required
     },
@@ -24,11 +23,14 @@ define([
       this.tinypattern = this.options.tinypattern;
       this.tiny = this.tinypattern.tiny;
       this.dom = this.tiny.dom;
-      this.$input = this.$el.find('input');
+    },
+
+    getEl: function(){
+      return this.$el.find('input');
     },
 
     value: function() {
-      return this.$input.val();
+      return $.trim(this.getEl().val());
     },
 
     toUrl: function() {
@@ -36,11 +38,13 @@ define([
     },
 
     load: function(element) {
-      this.$input.attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
+      this.getEl().attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
     },
 
     set: function(val) {
-      this.$input.attr('value', val);
+      var $el = this.getEl();
+      $el.attr('value', val);
+      $el.val(val);
     },
 
     attributes: function() {
@@ -50,20 +54,42 @@ define([
     }
   });
 
+  var ExternalLink = LinkType.extend({
+    init: function() {
+      LinkType.prototype.init.call(this);
+      this.getEl().on('change', function(){
+        // check here if we should automatically add in http:// to url
+        var val = $(this).val();
+        if((new RegExp("https?\:\/\/")).test(val)){
+          // already valid url
+          return;
+        }
+        var domain = $(this).val().split('/')[0];
+        if(domain.indexOf('.') !== -1){
+          $(this).val('http://' + val);
+        }
+      });
+    }
+  });
+
   var InternalLink = LinkType.extend({
     init: function() {
       LinkType.prototype.init.call(this);
-      this.$input.addClass('pat-relateditems');
+      this.getEl().addClass('pat-relateditems');
       this.createRelatedItems();
     },
 
+    getEl: function(){
+      return this.$el.find('input:not(.select2-input)');
+    },
+
     createRelatedItems: function() {
-      this.relatedItems = new RelatedItems(this.$input,
+      this.relatedItems = new RelatedItems(this.getEl(),
         this.linkModal.options.relatedItems);
     },
 
     value: function() {
-      var val = this.$input.select2('data');
+      var val = this.getEl().select2('data');
       if (val && typeof(val) === 'object') {
         val = val[0];
       }
@@ -85,11 +111,13 @@ define([
     },
 
     set: function(val) {
+      var $el = this.getEl();
       // kill it and then reinitialize since select2 will load data then
-      this.$input.select2('destroy');
-      this.$input.attr('data-relateditems', undefined); // reset the pattern
-      this.$input.parent().replaceWith(this.$input);
-      this.$input.attr('value', val);
+      $el.select2('destroy');
+      $el.removeData('pattern-relateditems'); // reset the pattern
+      $el.parent().replaceWith($el);
+      $el.attr('value', val);
+      $el.val(val);
       this.createRelatedItems();
     },
 
@@ -104,15 +132,32 @@ define([
     }
   });
 
-  var UploadLink = InternalLink.extend({
-    toUrl: function() {
-      var filename = $('.pat-upload').data('filename');
-      var path = $('.pat-upload').data('path');
-      var paths = [path, filename];
-      if (path){
-        paths.unshift(''); // add root node
+  var UploadLink = LinkType.extend({
+    /* need to do it a bit differently here.
+       when a user uploads and tries to upload from
+       it, you need to delegate to the real insert
+       linke types */
+    getDelegatedLinkType: function(){
+      if(this.linkModal.linkType === 'uploadImage'){
+        return this.linkModal.linkTypes.image;
+      }else{
+        return this.linkModal.linkTypes.internal;
       }
-      return paths.join('/');
+    },
+    toUrl: function(){
+      return this.getDelegatedLinkType().toUrl();
+    },
+    attributes: function(){
+      return this.getDelegatedLinkType().attributes();
+    },
+    set: function(val){
+      return this.getDelegatedLinkType().set(val);
+    },
+    load: function(element){
+      return this.getDelegatedLinkType().load(element);
+    },
+    value: function(){
+      return this.getDelegatedLinkType().value();
     }
   });
 
@@ -329,7 +374,7 @@ define([
       linkTypeClassMapping: {
         'internal': InternalLink,
         'upload': UploadLink,
-        'external': LinkType,
+        'external': ExternalLink,
         'email': EmailLink,
         'anchor': AnchorLink,
         'image': ImageLink,
@@ -364,7 +409,39 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-      self.modal = registry.patterns.modal.init(self.$el, {
+
+      self.data = {};
+      // get selection BEFORE..
+      // This is pulled from TinyMCE link plugin
+      self.initialText = null;
+      var value;
+      self.rng = self.tiny.selection.getRng();
+      self.selectedElm = self.tiny.selection.getNode();
+      self.anchorElm = self.tiny.dom.getParent(self.selectedElm, 'a[href]');
+      self.onlyText = self.isOnlyTextSelected();
+
+      self.data.text = self.initialText = self.anchorElm ? (self.anchorElm.innerText || self.anchorElm.textContent) : self.tiny.selection.getContent({format: 'text'});
+      self.data.href = self.anchorElm ? self.tiny.dom.getAttrib(self.anchorElm, 'href') : '';
+
+      if (self.anchorElm) {
+        self.data.target = self.tiny.dom.getAttrib(self.anchorElm, 'target');
+      } else if (self.tiny.settings.default_link_target) {
+        self.data.target = self.tiny.settings.default_link_target;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'rel'))) {
+        self.data.rel = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'class'))) {
+        self.data['class'] = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'title'))) {
+        self.data.title = value;
+      }
+
+      self.modal = registry.patterns['plone-modal'].init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
         buttons: '.plone-btn'
@@ -374,8 +451,35 @@ define([
       });
     },
 
+    isOnlyTextSelected: function() {
+      /* pulled from TinyMCE link plugin */
+      var html = this.tiny.selection.getContent();
+
+      // Partial html and not a fully selected anchor element
+      if (/</.test(html) && (!/^<a [^>]+>[^<]+<\/a>$/.test(html) || html.indexOf('href=') === -1)) {
+        return false;
+      }
+
+      if (this.anchorElm) {
+        var nodes = this.anchorElm.childNodes, i;
+
+        if (nodes.length === 0) {
+          return false;
+        }
+
+        for (var ii = nodes.length - 1; ii >= 0; ii--) {
+          if (nodes[ii].nodeType !== 3) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    },
+
     generateModalHtml: function() {
       return this.template({
+        options: this.options,
         upload: this.options.upload,
         text: this.options.text,
         insertHeading: this.options.text.insertHeading,
@@ -441,15 +545,41 @@ define([
 
     updateAnchor: function(href) {
       var self = this;
+
+      self.tiny.focus();
+      self.tiny.selection.setRng(self.rng);
+
       var target = self.$target.val();
       var title = self.$title.val();
-      var data = $.extend(true, {}, {
+      var linkAttrs = $.extend(true, self.data, {
         title: title ? title : null,
         target: target ? target : null,
         'data-linkType': self.linkType,
         href: href
       }, self.linkTypes[self.linkType].attributes());
-      self.tiny.execCommand('mceInsertLink', false, data);
+      if (self.anchorElm) {
+
+        if (self.onlyText && linkAttrs.text !== self.initialText) {
+          if ("innerText" in self.anchorElm) {
+            self.anchorElm.innerText = self.data.text;
+          } else {
+            self.anchorElm.textContent = self.data.text;
+          }
+        }
+
+        self.tiny.dom.setAttribs(self.anchorElm, linkAttrs);
+
+        self.tiny.selection.select(self.anchorElm);
+        self.tiny.undoManager.add();
+      } else {
+        if (self.onlyText) {
+          self.tiny.insertContent(
+            self.tiny.dom.createHTML('a', linkAttrs,
+                                     self.tiny.dom.encode(self.data.text)));
+        } else {
+          self.tiny.execCommand('mceInsertLink', false, linkAttrs);
+        }
+      }
     },
 
     focusElement: function(elm) {
@@ -460,8 +590,14 @@ define([
 
     updateImage: function(src) {
       var self = this;
+      var title = self.$title.val();
+
+      self.tiny.focus();
+      self.tiny.selection.setRng(self.rng);
+
       var data = $.extend(true, {}, {
         src: src,
+        title: title ? title : null,
         alt: self.$alt.val(),
         'class': 'image-' + self.$align.val(),
         'data-linkType': self.linkType,
@@ -503,13 +639,17 @@ define([
       // upload init
       if(self.options.upload){
         self.$upload = $('.uploadify-me', self.modal.$modal);
-        self.options.upload.relatedItems = self.options.relatedItems;
+        self.options.upload.relatedItems = $.extend(true, {}, self.options.relatedItems);
+        self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {
-          self.$upload.attr({
-            'data-filename': data.files ? data.files[0].name : '',
-            'data-path': data.path
-          });
+          if(self.linkTypes.image){
+            self.linkTypes.image.set(data.data.UID);
+            $('#' + $('#tinylink-image' , self.modal.$modal).data('navref')).trigger('click');
+          }else{
+            self.linkTypes.internal.set(data.data.UID);
+            $('#' + $('#tinylink-internal' , self.modal.$modal).data('navref')).trigger('click');
+          }
         });
       }
 
@@ -518,7 +658,33 @@ define([
         e.stopPropagation();
         self.linkType = self.modal.$modal.find('fieldset.active').data('linktype');
 
-        var href = self.getLinkUrl();
+        if(self.linkType === 'uploadImage' || self.linkType === 'upload'){
+          var patUpload = self.$upload.data().patternUpload;
+          if(patUpload.dropzone.files.length > 0){
+            patUpload.processUpload();
+            self.$upload.on('uploadAllCompleted', function(evt, data) {
+              var counter = 0;
+              var checkUpload = function(){
+                if(counter < 5 && !self.linkTypes[self.linkType].value()){
+                  counter += 1;
+                  setTimeout(checkUpload, 100);
+                  return;
+                }else{
+                  var href = self.getLinkUrl();
+                  self.updateImage(href);
+                  self.hide();
+                }
+              };
+              checkUpload();
+            });
+          }
+        }
+        var href;
+        try{
+            href = self.getLinkUrl();
+        }catch(error){
+            return;  // just cut out if no url
+        }
         if (!href) {
           return; // just cut out if no url
         }
@@ -569,13 +735,17 @@ define([
         }
         if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
+          self.$title.val(self.dom.getAttrib(self.imgElm, 'title'));
           self.$alt.val(self.dom.getAttrib(self.imgElm, 'alt'));
           linkType = self.dom.getAttrib(self.imgElm, 'data-linktype');
           if (linkType) {
             self.linkType = linkType;
             self.linkTypes[self.linkType].load(self.imgElm);
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
-            self.$scale.val(scale);
+            if(scale){
+              self.$scale.val(scale);
+            }
+            $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
           }else if (src) {
             self.guessImageLink(src);
           }
@@ -598,6 +768,7 @@ define([
         if (linkType) {
           self.linkType = linkType;
           self.linkTypes[self.linkType].load(self.anchorElm);
+          $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
         }else if (href) {
           self.guessAnchorLink(href);
         }
@@ -632,10 +803,10 @@ define([
         }
       } else if (href[0] === '#') {
         this.linkType = 'anchor';
-        this.linkTypes.anchor.setRaw(href.substring(1));
+        this.linkTypes.anchor.set(href.substring(1));
       } else {
         this.linkType = 'external';
-        this.linkTypes.external.setRaw(href);
+        this.linkTypes.external.set(href);
       }
     },
 

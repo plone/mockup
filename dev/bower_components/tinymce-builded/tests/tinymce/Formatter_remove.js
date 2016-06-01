@@ -337,7 +337,7 @@ test('contentEditable: false on start and contentEditable: true on end', functio
 	rng.setEnd(editor.dom.select('b')[1].firstChild, 3);
 	editor.selection.setRng(rng);
 	editor.formatter.remove('format');
-	equal(editor.getContent(), '<p>abc</p><p><b>def</b></p><p>ghj</p>', 'Text in last paragraph is not bold');
+	equal(editor.getContent(), '<p>abc</p><p contenteditable="false"><b>def</b></p><p>ghj</p>', 'Text in last paragraph is not bold');
 });
 
 test('contentEditable: true on start and contentEditable: false on end', function() {
@@ -345,7 +345,7 @@ test('contentEditable: true on start and contentEditable: false on end', functio
 	editor.setContent('<p>abc</p><p><b>def</b></p><p contenteditable="false"><b>ghj</b></p>');
 	Utils.setSelection('p:nth-child(2) b', 0, 'p:last b', 3);
 	editor.formatter.remove('format');
-	equal(editor.getContent(), '<p>abc</p><p>def</p><p><b>ghj</b></p>', 'Text in first paragraph is not bold');
+	equal(editor.getContent(), '<p>abc</p><p>def</p><p contenteditable="false"><b>ghj</b></p>', 'Text in first paragraph is not bold');
 });
 
 test('contentEditable: true inside contentEditable: false', function() {
@@ -353,7 +353,7 @@ test('contentEditable: true inside contentEditable: false', function() {
 	editor.setContent('<p>abc</p><p contenteditable="false"><span contenteditable="true"><b>def</b></span></p>');
 	Utils.setSelection('b', 0, 'b', 3);
 	editor.formatter.remove('format');
-	equal(editor.getContent(), '<p>abc</p><p><span>def</span></p>', 'Text is not bold');
+	equal(editor.getContent(), '<p>abc</p><p contenteditable="false"><span contenteditable="true">def</span></p>', 'Text is not bold');
 });
 
 test('remove format block on contentEditable: false block', function() {
@@ -361,15 +361,50 @@ test('remove format block on contentEditable: false block', function() {
 	editor.setContent('<p>abc</p><h1 contenteditable="false">def</h1>');
 	Utils.setSelection('h1:nth-child(2)', 0, 'h1:nth-child(2)', 3);
 	editor.formatter.remove('format');
-	equal(editor.getContent(), '<p>abc</p><h1>def</h1>', 'H1 is still not h1');
+	equal(editor.getContent(), '<p>abc</p><h1 contenteditable="false">def</h1>', 'H1 is still not h1');
 });
 
-/*
-test('Remove format bug 1', function() {
-	editor.setContent('<p><b>ab<em>cde</em>fgh</b></p>');
-	editor.formatter.register('format', {inline: 'b'});
-	Utils.setSelection('em', 0, 'em', 2);
-	editor.formatter.remove('format');
-	equal(editor.getContent(), '<p><b>ab</b><em>cd</em><b><em>e</em>fgh</b></p>');
+test('remove format on del using removeformat format', function() {
+	editor.getBody().innerHTML = '<p><del>abc</del></p>';
+	Utils.setSelection('del', 0, 'del', 3);
+	editor.formatter.remove('removeformat');
+	equal(Utils.cleanHtml(editor.getBody().innerHTML), '<p>abc</p>');
 });
-*/
+
+test('remove format on span with class using removeformat format', function() {
+	editor.getBody().innerHTML = '<p><span class="x">abc</span></p>';
+	Utils.setSelection('span', 0, 'span', 3);
+	editor.formatter.remove('removeformat');
+	equal(Utils.cleanHtml(editor.getBody().innerHTML), '<p>abc</p>');
+});
+
+test('remove format on span with internal class using removeformat format', function() {
+	editor.getBody().innerHTML = '<p><span class="mce-item-internal">abc</span></p>';
+	Utils.setSelection('span', 0, 'span', 3);
+	editor.formatter.remove('removeformat');
+	equal(Utils.normalizeHtml(Utils.cleanHtml(editor.getBody().innerHTML)), '<p><span class="mce-item-internal">abc</span></p>');
+});
+
+test('Remove format bug 1', function() {
+	editor.setContent('<p><b><i>ab</i>c</b></p>');
+	editor.formatter.register('format', {inline: 'b'});
+	Utils.setSelection('i', 1, 'i', 2);
+	editor.formatter.remove('format');
+	equal(editor.getContent(), '<p><b><i>a</i></b><i>b</i><b>c</b></p>');
+});
+
+test('Remove format bug 2', function() {
+	editor.setContent('<p>ab<b>c</b></p>');
+	editor.formatter.register('format', {inline: 'b'});
+	Utils.setSelection('b', 0, 'b', 1);
+	editor.formatter.remove('format');
+	equal(editor.getContent(), '<p>abc</p>');
+});
+
+test('Remove format bug 3', function() {
+	editor.setContent('<p><b><i>ab</i></b></p>');
+	editor.formatter.register('format', {inline: 'b'});
+	Utils.setSelection('i', 1, 'i', 2);
+	editor.formatter.remove('format');
+	equal(editor.getContent(), '<p><b><i>a</i></b><i>b</i></p>');
+});

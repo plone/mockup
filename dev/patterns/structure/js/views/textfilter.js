@@ -1,12 +1,12 @@
 define([
   'jquery',
-  'backbone',
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/popover',
-  'mockup-patterns-querystring'
-], function($, Backbone, _, BaseView, ButtonView, PopoverView, QueryString) {
+  'mockup-patterns-querystring',
+  'translate'
+], function($, _, BaseView, ButtonView, PopoverView, QueryString, _t) {
   'use strict';
 
   var TextFilterView = BaseView.extend({
@@ -14,7 +14,7 @@ define([
     className: 'navbar-search form-search ui-offset-parent',
     template: _.template(
       '<div class="input-group">' +
-      '<input type="text" class="form-control search-query" placeholder="Filter">' +
+      '<input type="text" class="form-control search-query" placeholder="<%- _t("Filter") %>">' +
       '<span class="input-group-btn">' +
       '</span>' +
       '</div>'
@@ -28,18 +28,22 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
+
     initialize: function(options) {
       BaseView.prototype.initialize.apply(this, [options]);
       this.app = this.options.app;
     },
+
     render: function() {
-      this.$el.html(this.template({}));
+      this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
-        title: 'Query'
+        title: _t('Query'),
+        icon: 'search'
       });
       this.popover = new PopoverView({
         triggerView: this.button,
-        title: _.template('Query'),
+        id: 'structure-query',
+        title: _.template(_t('Query')),
         content: this.popoverContent,
         placement: 'left'
       });
@@ -60,12 +64,14 @@ define([
         self.timeoutId = setTimeout(function() {
           var criterias = $.parseJSON(self.$queryString.val());
           self.app.additionalCriterias = criterias;
+          self.app.collection.currentPage = 1;
           self.app.collection.pager();
         }, this.keyupDelay);
       });
       self.queryString.$el.on('initialized', function() {
         self.queryString.$sortOn.on('change', function() {
           self.app['sort_on'] = self.queryString.$sortOn.val(); // jshint ignore:line
+          self.app.collection.currentPage = 1;
           self.app.collection.pager();
         });
         self.queryString.$sortOrder.change(function() {
@@ -74,11 +80,13 @@ define([
           } else {
             self.app['sort_order'] = 'ascending'; // jshint ignore:line
           }
+          self.app.collection.currentPage = 1;
           self.app.collection.pager();
         });
       });
       return this;
     },
+
     filter: function(event) {
       var self = this;
       if (self.timeoutId) {
@@ -86,6 +94,7 @@ define([
       }
       self.timeoutId = setTimeout(function() {
         self.term = $(event.currentTarget).val();
+        self.app.collection.currentPage = 1;
         self.app.collection.pager();
       }, this.keyupDelay);
     }

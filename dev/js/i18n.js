@@ -6,10 +6,6 @@
  *
  *  Or, it'll default to "/plonejsi18n"
  */
-
-/* global portal_url:true */
-
-
 define([
   'jquery'
 ], function($) {
@@ -17,12 +13,12 @@ define([
 
   var I18N = function() {
     var self = this;
-
     self.baseUrl = $('body').attr('data-i18ncatalogurl');
+
     if (!self.baseUrl) {
       self.baseUrl = '/plonejsi18n';
     }
-    self.currentLanguage = $('html').attr('lang') || 'en';
+    self.currentLanguage = $('html').attr('lang') || 'en-us';
     self.storage = null;
     self.catalogs = {};
     self.ttl = 24 * 3600 * 1000;
@@ -92,7 +88,6 @@ define([
 
     self.MessageFactory = function (domain, language) {
       language = language || self.currentLanguage;
-
       return function translate (msgid, keywords) {
         var msgstr;
         if ((domain in self.catalogs) && (language in self.catalogs[domain]) && (msgid in self.catalogs[domain][language])) {
@@ -114,5 +109,5 @@ define([
     };
   };
 
-  return new I18N();
+  return I18N;
 });

@@ -58,84 +58,84 @@ define([
       {
         UID: '123sdfasdf',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'News'
       },
       {
         UID: 'fooasdfasdf1123asZ',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'Another Item'
       },
       {
         UID: 'fooasdfasdf1231as',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'News'
       },
       {
         UID: 'fooasdfasdf12231451',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'Another Item'
       },
       {
         UID: 'fooasdfasdf1235dsd',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'News'
       },
       {
         UID: 'fooasdfasd345345f',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'Another Item'
       },
       {
         UID: 'fooasdfasdf465',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'News'
       },
       {
         UID: 'fooaewrwsdfasdf',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'Another Item'
       },
       {
         UID: 'fooasdfasd123f',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'News'
       },
       {
         UID: 'fooasdfasdas123f',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'Another Item'
       },
       {
         UID: 'fooasdfasdfsdf',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'News'
       },
       {
         UID: 'fooasdfasdf',
         getURL: 'http://localhost:8081/news/aggregator',
-        Type: 'Collection',
+        portal_type: 'Collection',
         Description: 'Site News',
         Title: 'Another Item'
       }
@@ -185,7 +185,7 @@ define([
   // these are all random items on the root of the site
   var randomItems = [];
   var basePaths = ['/', '/news/', '/projects/', '/about/'];
-  var possibleNames = ['Page', 'News Item', 'Info', 'Blog Item'];
+  var possibleNames = ['Document', 'News Item', 'Info', 'Blog Item'];
   var possibleTags = ['one', 'two', 'three', 'four'];
 
   function generateUID(size) {
@@ -207,40 +207,49 @@ define([
         UID: generateUID(),
         Title: possibleNames[Math.floor(Math.random() * possibleNames.length)] + ' ' + j,
         path: basePath + generateUID(8),
-        Type: 'Document'
+        portal_type: 'Document'
       });
     }
   }
 
   server.respondWith(/relateditems-test\.json/, function(xhr, id) {
     var searchables = [
-      {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', Type: 'Image'},
-      {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder'},
-      {UID: '124asdfasasdaf34', Title: 'About', path: '/about', Type: 'Folder'},
-      {UID: 'asdf1234', Title: 'Projects', path: '/projects', Type: 'Folder'},
-      {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', Type: 'Document'},
-      {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', Type: 'Document'},
-      {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', Type: 'Folder'},
-      {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', Type: 'Document'},
+      {UID: 'jasdlfdlkdkjasdf', Title: 'Some Image', path: '/test.png', portal_type: 'Image'},
+      {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', portal_type: 'Folder'},
+      {UID: '124asdfasasdaf34', Title: 'About', path: '/about', portal_type: 'Folder'},
+      {UID: 'asdf1234', Title: 'Projects', path: '/projects', portal_type: 'Folder'},
+      {UID: 'asdf1234gsad', Title: 'Contact', path: '/contact', portal_type: 'Document'},
+      {UID: 'asdv34sdfs', Title: 'Privacy Policy', path: '/policy', portal_type: 'Document'},
+      {UID: 'asdfasdf234sdf', Title: 'Our Process', path: '/our-process', portal_type: 'Folder'},
+      {UID: 'asdhsfghyt45', Title: 'Donate', path: '/donate-now', portal_type: 'Document'},
       // about
-      {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', Type: 'Document'},
-      {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', Type: 'Document'},
-      {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', Type: 'Folder'},
-      {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', Type: 'Document'},
+      {UID: 'gfn5634f', Title: 'About Us', path: '/about/about-us', portal_type: 'Document'},
+      {UID: '45dsfgsdcd', Title: 'Philosophy', path: '/about/philosophy', portal_type: 'Document'},
+      {UID: 'dfgsdfgj675', Title: 'Staff', path: '/about/staff', portal_type: 'Folder'},
+      {UID: 'sdfbsfdh345', Title: 'Board of Directors', path: '/about/board-of-directors', portal_type: 'Document'},
       // staff
-      {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', Type: 'Document'},
-      {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', Type: 'Document'}
+      {UID: 'asdfasdf9sdf', Title: 'Mike', path: '/about/staff/mike', portal_type: 'Document'},
+      {UID: 'cvbcvb82345', Title: 'Joe', path: '/about/staff/joe', portal_type: 'Document'},
+
+      // upload file
+      {UID: 'sldlfkjsldkjlskdjf', Title: 'blah.png', path: 'blah.png', portal_type: 'Image'}
+
     ];
     searchables = searchables.concat(randomItems);
 
     var addSomeData = function(list) {
       /* add getURL value, review_state, modification, creation */
       var dates = [
-        'January 1, 2011',
-        'February 10, 2012',
-        'March 12, 2013',
-        'April 1, 2012',
-        'May 20, 2013'
+        '2011-01-01T10:10:10+02:00',
+        '2012-02-10T10:10:10+02:00',
+        '2013-03-12T10:10:10+02:00',
+        '2012-04-01T10:10:10+02:00',
+        '2013-03-20T10:10:10+02:00',
+        'None',
+        'None',
+        'None',
+        'None',
+        'None',
       ];
       for (var i = 0; i < list.length; i = i + 1) {
         var data = list[i];
@@ -254,7 +263,7 @@ define([
           possibleTags[Math.floor(Math.random() * possibleTags.length)]
         ];
         data.id = data.Title.replace(' ', '-').toLowerCase();
-        if (data.Type === 'Folder') {
+        if (data.portal_type === 'Folder') {
           data['is_folderish'] = true;  // jshint ignore:line
         } else {
           data['is_folderish'] = false;  // jshint ignore:line
@@ -300,7 +309,7 @@ define([
       }
       _.each(items, function(item) {
         var q;
-        var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.Type).toLowerCase();
+        var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.portal_type).toLowerCase();
         if (typeof(term) === 'object') {
           for (var i = 0; i < term.length; i = i + 1) {
             q = term[i].toLowerCase();
@@ -424,10 +433,10 @@ define([
     xhr.respond(200, {'content-Type': 'application/json'},
       JSON.stringify({
         url: 'http://localhost:8000/blah.png',
-        uid: 'sldlfkjsldkjlskdjf',
+        UID: 'sldlfkjsldkjlskdjf',
         name: 'blah.png',
         filename: 'blah.png',
-        type: 'Image',
+        portal_type: 'Image',
         size: 239292
       })
     );
@@ -570,7 +579,7 @@ define([
           });
         }
       });
-      data.object = {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', Type: 'Folder'};
+      data.object = {UID: 'asdlfkjasdlfkjasdf', Title: 'News', path: '/news', portal_type: 'Folder'};
     }
     xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
   });
@@ -673,7 +682,7 @@ define([
       data = {
         paths: {
           'autotoc': 'patterns/autotoc/pattern',
-          'mockup-patterns-base': 'bower_components/mockup-core/js/pattern',
+          'pat-base': 'bower_components/patternslib/src/core/base',
           'jquery': 'bower_components/jquery/dist/jquery',
           'pat-registry': 'bower_components/patternslib/src/core/registry'
         },

@@ -86,12 +86,9 @@
  *
  */
 
-/* global alert:true */
-
-
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'underscore',
   'mockup-ui-url/views/base',
   'mockup-utils',
@@ -104,16 +101,17 @@ define([
             OverridesView,RegistryView, PatternOptionsView, _t) {
   'use strict';
 
-
   var TabView = BaseView.extend({
     tagName: 'div',
     activeTab: 'registry',
     template: _.template('' +
-      '<ul class="main-tabs nav nav-tabs" role="tablist">' +
-        '<li class="registry-btn"><a href="#"><%- _t("Registry") %></a></li>' +
-        '<li class="overrides-btn"><a href="#"><%- _t("Overrides") %></a></li>' +
-        '<li class="lessvariables-btn"><a href="#"><%- _t("Less Variables") %></a></li>' +
-        '<li class="patternoptions-btn"><a href="#"><%- _t("Pattern Options") %></a></li>' +
+      '<div class="autotabs">' +
+        '<ul class="main-tabs autotoc-nav" role="tablist">' +
+          '<li class="registry-btn"><a href="#"><%- _t("Registry") %></a></li>' +
+          '<li class="overrides-btn"><a href="#"><%- _t("Overrides") %></a></li>' +
+          '<li class="lessvariables-btn"><a href="#"><%- _t("Less Variables") %></a></li>' +
+          '<li class="patternoptions-btn"><a href="#"><%- _t("Pattern Options") %></a></li>' +
+        '</ul>' +
       '</div>' +
       '<div class="tab-content" />'
     ),
@@ -129,13 +127,14 @@ define([
         e.preventDefault();
         self.activeTab = $(e.target).parent()[0].className.replace('-btn', '');
       }
-      self.$('.main-tabs > li').removeClass('active');
+      self.$('.main-tabs > li a').removeClass('active');
       self.$content.find('.tab-pane').removeClass('active');
-      self.tabs[self.activeTab].btn.addClass('active');
+      self.tabs[self.activeTab].btn.find('a').addClass('active');
       self.tabs[self.activeTab].content.addClass('active');
     },
     initialize: function(options) {
       var self = this;
+
       BaseView.prototype.initialize.apply(self, [options]);
       self.registryView = new RegistryView({
         data: options,
@@ -204,7 +203,7 @@ define([
           onSave(resp);
         }
         if(resp.success !== undefined && !resp.success && resp.msg){
-          alert(resp.msg);
+          window.alert(resp.msg);
         }
       }).always(function(){
         self.loading.hide();
@@ -212,7 +211,7 @@ define([
         if(onError){
           onError(resp);
         }else{
-          alert(_t('Error processing ajax request for action: ') + action);
+          window.alert(_t('Error processing ajax request for action: ') + action);
         }
       });
     }
@@ -222,6 +221,7 @@ define([
   var ResourceRegistry = Base.extend({
     name: 'resourceregistry',
     trigger: '.pat-resourceregistry',
+    parser: 'mockup',
     defaults: {
       bundles: {},
       resources: {},
@@ -236,6 +236,7 @@ define([
     },
     init: function() {
       var self = this;
+      self.$el.empty();
       self.tabs = new TabView(self.options);
       self.$el.append(self.tabs.render().el);
     }

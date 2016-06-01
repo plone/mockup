@@ -112,7 +112,7 @@ ace.define("ace/mode/coffee_highlight_rules",["require","exports","module","ace/
                         }
                         if (val == "}" && stack.length) {
                             stack.shift();
-                            this.next = stack.shift();
+                            this.next = stack.shift() || "";
                             if (this.next.indexOf("string") != -1)
                                 return "paren.string";
                         }
@@ -393,11 +393,11 @@ oop.inherits(Mode, TextMode);
         var worker = new WorkerClient(["ace"], "ace/mode/coffee_worker", "Worker");
         worker.attachToDocument(session.getDocument());
         
-        worker.on("error", function(e) {
-            session.setAnnotations([e.data]);
+        worker.on("annotate", function(e) {
+            session.setAnnotations(e.data);
         });
         
-        worker.on("ok", function(e) {
+        worker.on("terminate", function() {
             session.clearAnnotations();
         });
         

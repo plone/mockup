@@ -2,8 +2,6 @@
  *
  * Options:
  *    vocabularyUrl(string): Url to return query results (null)
- *    tagsVocabularyUrl(string): Url to return tags query results (null)
- *    usersVocabularyUrl(string): Url to query users (null)
  *    indexOptionsUrl(string): Url to configure querystring widget with (null)
  *    upload(string): upload configuration settings(null)
  *    moveUrl(string): For supporting drag drop reordering (null)
@@ -19,132 +17,192 @@
  *         data-pat-structure="vocabularyUrl:/relateditems-test.json;
  *                             uploadUrl:/upload;
  *                             moveUrl:/moveitem;
- *                             tagsVocabularyUrl:/select2-test.json;
- *                             usersVocabularyUrl:/tests/json/users.json;
  *                             indexOptionsUrl:/tests/json/queryStringCriteria.json;
  *                             contextInfoUrl:{path}/context-info;"></div>
- *
  */
-
 
 define([
   'jquery',
-  'mockup-patterns-base',
-  'mockup-utils',
-  'mockup-patterns-structure-url/js/views/app',
-  'translate',
-  'text!mockup-patterns-structure-url/templates/paging.xml',
-  'text!mockup-patterns-structure-url/templates/selection_item.xml',
-  'text!mockup-patterns-structure-url/templates/tablerow.xml',
-  'text!mockup-patterns-structure-url/templates/table.xml',
-  'text!mockup-ui-url/templates/popover.xml',
-], function($, Base, utils, AppView, _t) {
+  'underscore',
+  'pat-base',
+  'mockup-patterns-structure-url/js/views/app'
+], function($, _, Base, AppView) {
   'use strict';
 
   var Structure = Base.extend({
     name: 'structure',
     trigger: '.pat-structure',
+    parser: 'mockup',
     defaults: {
       // for implementing history changes
       // Example: {base: 'http://mysite.com', appended: '/folder_contents'}
       urlStructure: null,
       vocabularyUrl: null,
-      tagsVocabularyUrl: null,
-      usersVocabularyUrl: null,
       indexOptionsUrl: null, // for querystring widget
       contextInfoUrl: null, // for add new dropdown and other info
       setDefaultPageUrl: null,
+      menuOptions: null, // default action menu options per item.
+      // default menu generator
+      menuGenerator: 'mockup-patterns-structure-url/js/actionmenu',
       backdropSelector: '.plone-modal', // Element upon which to apply backdrops used for popovers
-      attributes: [
-        'UID', 'Title', 'Type', 'path', 'review_state',
-        'ModificationDate', 'EffectiveDate', 'CreationDate',
-        'is_folderish', 'Subject', 'getURL', 'id', 'exclude_from_nav',
-        'getObjSize', 'last_comment_date', 'total_comments'
+
+      activeColumnsCookie: 'activeColumns',
+
+      iconSize: 'icon',
+
+      /*
+        As the options operate on a merging basis per new attribute
+        (key/value pairs) on the option Object in a recursive fashion,
+        array items are also treated as Objects so that custom options
+        are replaced starting from index 0 up to the length of the
+        array.  In the case of buttons, custom buttons are simply
+        replaced starting from the first one.  The following defines the
+        customized attributes that should be replaced wholesale, with
+        the default version prefixed with `_default_`.
+      */
+
+      attributes: null,
+      _default_attributes: [
+        'CreationDate',
+        'EffectiveDate',
+        'exclude_from_nav',
+        'getIcon',
+        'getObjSize',
+        'getURL',
+        'id',
+        'is_folderish',
+        'last_comment_date',
+        'ModificationDate',
+        'path',
+        'portal_type',
+        'review_state',
+        'Subject',
+        'Title',
+        'total_comments',
+        'UID'
       ],
-      activeColumns: [
+
+      activeColumns: null,
+      _default_activeColumns: [
         'ModificationDate',
         'EffectiveDate',
         'review_state'
       ],
-      availableColumns: {
-        'id': _t('ID'),
-        'Title': _t('Title'),
-        'ModificationDate': _t('Last modified'),
-        'EffectiveDate': _t('Published'),
-        'ExpirationDate': _t('Expiration'),
-        'CreationDate': _t('Created'),
-        'review_state': _t('Review state'),
-        'Subject': _t('Tags'),
-        'Type': _t('Type'),
-        'is_folderish': _t('Folder'),
-        'exclude_from_nav': _t('Excluded from nav'),
-        'getObjSize': _t('Object Size'),
-        'last_comment_date': _t('Last comment date'),
-        'total_comments': _t('Total comments')
+
+      availableColumns: null,
+      _default_availableColumns: {
+        'id': 'ID',
+        'ModificationDate': 'Last modified',
+        'EffectiveDate': 'Published',
+        'ExpirationDate': 'Expiration',
+        'CreationDate': 'Created',
+        'review_state': 'Review state',
+        'Subject': 'Tags',
+        'portal_type': 'Type',
+        'is_folderish': 'Folder',
+        'exclude_from_nav': 'Excluded from navigation',
+        'getObjSize': 'Object Size',
+        'last_comment_date': 'Last comment date',
+        'total_comments': 'Total comments'
       },
+
+      // action triggered for the primary link for each table row.
+      tableRowItemAction: null,
+      _default_tableRowItemAction: {
+        folder: ['mockup-patterns-structure-url/js/navigation', 'folderClicked'],
+        other: []
+      },
+
+      typeToViewAction: null,
+      _default_typeToViewAction: {
+          'File': '/view',
+          'Image': '/view',
+          'Blob': '/view'
+      },
+
+      collectionConstructor:
+        'mockup-patterns-structure-url/js/collections/result',
+
+      momentFormat: 'relative',
       rearrange: {
         properties: {
-          'id': _t('ID'),
-          'sortable_title': _t('Title'),
-          'modified': _t('Last Modified'),
-          'created': _t('Created on'),
-          'effective': _t('Publication Date'),
-          'Type': _t('Type')
+          'id': 'ID',
+          'sortable_title': 'Title'
         },
         url: '/rearrange'
       },
       basePath: '/',
       moveUrl: null,
-      /*
-       * all these base buttons are required
-       */
-      buttonGroups: {
-        primary: [{
-          title: _t('Cut'),
-          url: '/cut'
-        },{
-          title: _t('Copy'),
-          url: '/copy'
-        },{
-          title: _t('Paste'),
-          url: '/paste'
-        },{
-          title: _t('Delete'),
-          url: '/delete',
-          context: 'danger',
-          icon: 'trash'
-        }],
-        secondary: [{
-          title: _t('Workflow'),
-          url: '/workflow'
-        },{
-          title: _t('Tags'),
-          url: '/tags'
-        },{
-          title: _t('Properties'),
-          url: '/properties'
-        },{
-          title: _t('Rename'),
-          url: '/rename'
-        }]
-      },
+
+      buttons: null,
+      _default_buttons: [{
+        title: 'Cut',
+        url: '/cut'
+      },{
+        title: 'Copy',
+        url: '/copy'
+      },{
+        title: 'Paste',
+        url: '/paste'
+      },{
+        title: 'Delete',
+        url: '/delete',
+        context: 'danger',
+        icon: 'trash'
+      },{
+        title: 'Workflow',
+        url: '/workflow'
+      },{
+        title: 'Tags',
+        url: '/tags'
+      },{
+        title: 'Properties',
+        url: '/properties'
+      },{
+        title: 'Rename',
+        url: '/rename'
+      }],
+
       upload: {
         uploadMultiple: true,
         showTitle: true
       }
+
     },
     init: function() {
       var self = this;
+
+      /*
+        This part replaces the undefined (null) values in the user
+        modifiable attributes with the default values.
+
+        May want to consider moving the _default_* values out of the
+        options object.
+      */
+      var replaceDefaults = ['attributes', 'activeColumns', 'availableColumns', 'buttons', 'typeToViewAction'];
+      _.each(replaceDefaults, function(idx) {
+        if (self.options[idx] === null) {
+          self.options[idx] = self.options['_default_' + idx];
+        }
+      });
+
+      var mergeDefaults = ['tableRowItemAction'];
+      _.each(mergeDefaults, function(idx) {
+        var old = self.options[idx];
+        self.options[idx] = $.extend(
+          false, self.options['_default_' + idx], old
+        );
+      });
+
       self.browsing = true; // so all queries will be correct with QueryHelper
       self.options.collectionUrl = self.options.vocabularyUrl;
-      self.options.queryHelper = new utils.QueryHelper(
-        $.extend(true, {}, self.options, {pattern: self}));
+      self.options.pattern = self;
 
-      // check and see if a hash is provided for initial path
-      if(window.location.hash.substring(0, 2) === '#/'){
-        self.options.queryHelper.currentPath = window.location.hash.substring(1);
-      }
-      delete self.options.attributes; // not compatible with backbone
+      // the ``attributes`` options key is not compatible with backbone,
+      // but queryHelper that will be constructed by the default
+      // ResultCollection will expect this to be passed into it.
+      self.options.queryHelperAttributes = self.options.attributes;
+      delete self.options.attributes;
 
       self.view = new AppView(self.options);
       self.$el.append(self.view.render().$el);

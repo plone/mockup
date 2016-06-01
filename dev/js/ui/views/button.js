@@ -1,10 +1,8 @@
 define([
-  'jquery',
-  'backbone',
   'underscore',
   'mockup-ui-url/views/base',
-  'bootstrap-tooltip'
-], function($, Backbone, _, BaseView) {
+  'mockup-patterns-tooltip'
+], function(_, BaseView, Tooltip) {
   'use strict';
 
   var ButtonView = BaseView.extend({
@@ -12,6 +10,7 @@ define([
     className: 'btn',
     eventPrefix: 'button',
     context: 'default',
+    idPrefix: 'btn-',
     attributes: {
       'href': '#'
     },
@@ -37,6 +36,8 @@ define([
       }, this);
 
       this.on('render', function() {
+        this.$el.attr('title', this.options.title || '');
+        this.$el.attr('aria-label', this.options.title || this.options.tooltip || '');
         if (this.context !== null) {
           this.$el.addClass('btn-' + this.context);
         }
@@ -45,9 +46,9 @@ define([
         });
 
         if (this.tooltip !== null) {
-          this.$el.tooltip({
-            title: this.tooltip
-          });
+
+          this.$el.attr('title', this.tooltip);
+          var tooltipPattern = new Tooltip(this.$el);
           // XXX since tooltip triggers hidden
           // suppress so it plays nice with modals, backdrops, etc
           this.$el.on('hidden', function(e) {

@@ -46,19 +46,25 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
-  'jquery.event.drag',
-  'jquery.event.drop'
-], function($, Base, drag, drop) {
+  'pat-base',
+  'jquery.event.drop',
+  'jquery.event.drag'
+], function($, Base, drop) {
   'use strict';
 
   var SortablePattern = Base.extend({
     name: 'sortable',
     trigger: '.pat-sortable',
+    parser: 'mockup',
     defaults: {
       selector: 'li',
       dragClass: 'item-dragging',
       cloneClass: 'dragging',
+      createDragItem: function(pattern, $el){
+        return $el.clone().
+          addClass(pattern.options.cloneClass).
+          css({opacity: 0.75, position: 'absolute'}).appendTo(document.body);
+      },
       drop: null // function to handle drop event
     },
     init: function() {
@@ -67,6 +73,7 @@ define([
 
       self.$el.find(self.options.selector).drag('start', function(e, dd) {
         var dragged = this;
+        var $el = $(this);
         $(dragged).addClass(self.options.dragClass);
         drop({
           tolerance: function(event, proxy, target) {
@@ -79,11 +86,8 @@ define([
             return this.contains(target, [event.pageX, event.pageY]);
           }
         });
-        start = $(this).index();
-        return $( this ).clone().
-          addClass(self.options.cloneClass).
-          css({opacity: 0.75, position: 'absolute'}).
-          appendTo(document.body);
+        start = $el.index();
+        return self.options.createDragItem(self, $el);
       })
       .drag(function(e, dd) {
         /*jshint eqeqeq:false */

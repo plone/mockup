@@ -1,7 +1,7 @@
 define([
   'jquery',
   'pat-registry',
-  'mockup-patterns-base',
+  'pat-base',
 
   'mockup-patterns-select2',
   'mockup-patterns-pickadate',
@@ -9,7 +9,6 @@ define([
   'mockup-patterns-querystring',
   'mockup-patterns-tinymce',
 
-  'mockup-patterns-accessibility',
   'mockup-patterns-autotoc',
   'mockup-patterns-formunloadalert',
   'mockup-patterns-preventdoublesubmit',
@@ -18,17 +17,14 @@ define([
   'mockup-patterns-structure',
   'mockup-patterns-textareamimetypeselector',
   'bootstrap-dropdown',
-  'bootstrap-collapse',
-  'bootstrap-tooltip'
+  'bootstrap-collapse'
 ], function($, registry, Base) {
   'use strict';
 
   // BBB: we need to hook pattern to classes which plone was using until now
   var Plone = Base.extend({
     name: 'plone',
-    init: function() {
-      var self = this;
-    }
+    init: function() {}
   });
 
   // initialize only if we are in top frame

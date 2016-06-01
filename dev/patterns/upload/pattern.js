@@ -7,7 +7,6 @@
  *    relativePath(string): again, to be used with baseUrl to create upload url (null)
  *    initialFolder(string): UID of initial folder related items widget should have selected (null)
  *    currentPath(string): Current path related items is starting with (null)
- *    clickable(boolean): If you can click on container to also upload (false)
  *    className(string): value for class attribute in the form element ('upload')
  *    paramName(string): value for name attribute in the file input element ('file')
  *    ajaxUpload(boolean): true or false for letting the widget upload the files via ajax. If false the form will act like a normal form. (true)
@@ -17,7 +16,7 @@
  *    autoCleanResults(boolean): condition value for the file preview in div element to fadeout after file upload is completed. (true)
  *    previewsContainer(selector): JavaScript selector for file preview in div element. (.upload-previews)
  *    container(selector): JavaScript selector for where to put upload stuff into in case of form. If not provided it will be place before the first submit button. ('')
- *    relatedItems(object): Related items pattern options. Will only use only if relativePath is used to use correct upload destination ({ attributes: ["UID", "Title", "Description", "getURL", "Type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
+ *    relatedItems(object): Related items pattern options. Will only use only if relativePath is used to use correct upload destination ({ attributes: ["UID", "Title", "Description", "getURL", "portal_type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
  *
  * Documentation:
  *
@@ -43,7 +42,7 @@
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-relateditems',
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',
@@ -59,6 +58,7 @@ define([
   var UploadPattern = Base.extend({
     name: 'upload',
     trigger: '.pat-upload',
+    parser: 'mockup',
     defaults: {
       showTitle: true,
       url: null, // XXX MUST provide url to submit to OR be in a form
@@ -71,7 +71,6 @@ define([
       ajaxUpload: true,
 
       paramName: 'file',
-      clickable: true,
       addRemoveLinks: false,
       autoCleanResults: true,
       previewsContainer: '.previews',
@@ -81,27 +80,38 @@ define([
 
       relatedItems: {
         // UID attribute is required here since we're working with related items
-        attributes: ['UID', 'Title', 'Description', 'getURL', 'Type', 'path', 'ModificationDate'],
+        attributes: ['UID', 'Title', 'Description', 'getURL', 'portal_type', 'path', 'ModificationDate'],
         batchSize: 20,
         basePath: '/',
         vocabularyUrl: null,
         width: 500,
         maximumSelectionSize: 1,
-        placeholder: _t('Search for item on site...')
+        selectableTypes: ['Folder']
       }
     },
 
-    //placeholder: 'Search for item on site...'
     init: function() {
       var self = this,
           template = UploadTemplate;
 
+      // TODO: find a way to make this work in firefox (and IE)
+      $(document).bind('paste', function(e){
+        var oe = e.originalEvent;
+        var items = oe.clipboardData.items;
+        if (items) {
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+              var blob = items[i].getAsFile();
+              self.dropzone.addFile(blob);
+            }
+          }
+        }
+      });
       // values that will change current processing
       self.currentPath = self.options.currentPath;
-      self.numFiles = 0;
       self.currentFile = 0;
 
-      template = _.template(template, {_t: _t});
+      template = _.template(template)({_t: _t});
       self.$el.addClass(self.options.className);
       self.$el.append(template);
 
@@ -140,8 +150,9 @@ define([
       $('button.browse', self.$el).click(function(e) {
         e.preventDefault();
         e.stopPropagation();
-        // we trigger the dropzone dialog!
-        self.dropzone.hiddenFileInput.click();
+        if(!self.options.maxFiles || self.dropzone.files.length < self.options.maxFiles){
+          self.dropzone.hiddenFileInput.click();
+        }
       });
 
       var dzoneOptions = this.getDzoneOptions();
@@ -161,34 +172,61 @@ define([
         throw e;
       }
 
-      self.dropzone.on('addedfile', function(file) {
-        self.showControls();
+      self.dropzone.on('maxfilesreached', function(){
+        self.showHideControls();
+      });
+
+      self.dropzone.on('addedfile', function(/* file */) {
+        self.showHideControls();
       });
 
       self.dropzone.on('removedfile', function() {
-        if (self.dropzone.files.length < 1) {
-          self.hideControls();
+        self.showHideControls();
+      });
+
+      self.dropzone.on('success', function(e, response){
+        // Trigger event 'uploadAllCompleted' and pass the server's reponse and
+        // the path uid. This event can be listened to by patterns using the
+        // upload pattern, e.g. the TinyMCE pattern's link plugin.
+        var data;
+        try{
+          data = $.parseJSON(response);
+        }catch(ex){
+          data = response;
         }
+        self.$el.trigger('uploadAllCompleted', {
+          'data': data,
+          'path_uid': (self.$pathInput) ? self.$pathInput.val() : null
+        });
       });
 
       if (self.options.autoCleanResults) {
         self.dropzone.on('complete', function(file) {
-          setTimeout(function() {
-            $(file.previewElement).fadeOut();
-          }, 3000);
+          if (file.status === Dropzone.SUCCESS){
+            setTimeout(function() {
+              $(file.previewElement).fadeOut();
+            }, 3000);
+          }
         });
       }
 
       self.dropzone.on('complete', function(file) {
-        if (self.dropzone.files.length < 1) {
-          self.hideControls();
+        if (file.status === Dropzone.SUCCESS && self.dropzone.files.length === 1) {
+          self.showHideControls();
+        }
+      });
+
+      self.dropzone.on('error', function(file, response, xmlhr) {
+        if (typeof(xmlhr) !== 'undefined' && xmlhr.status !== 403){
+          // If error other than 403, just print a generic message
+          $('.dz-error-message span', file.previewElement).html(_t('The file transfer failed'));
         }
       });
 
       self.dropzone.on('totaluploadprogress', function(pct) {
         // need to caclulate total pct here in reality since we're manually
         // processing each file one at a time.
-        pct = ((((self.currentFile - 1) * 100) + pct) / (self.numFiles * 100)) * 100;
+        pct = ((((self.currentFile - 1) * 100) + pct) / (self.dropzone.files.length * 100)) * 100;
         self.$progress.attr('aria-valuenow', pct).css('width', pct + '%');
       });
 
@@ -201,16 +239,47 @@ define([
           }
         });
       });
+      if(self.options.clipboardfile){
+        self.dropzone.addFile(self.options.clipboardfile);
+      }
     },
 
-    showControls: function() {
+    showHideControls: function(){
+      /* we do this delayed because this can be called multiple times
+         AND we need to do this hide/show AFTER dropzone is done with
+         all it's own events. This is NASTY but the only way we can
+         enforce some numFiles with dropzone! */
       var self = this;
-      $('.controls', self.$el).fadeIn('slow');
+      if(self._showHideTimeout){
+        clearTimeout(self._showHideTimeout);
+      }
+      self._showHideTimeout = setTimeout(function(){
+        self._showHideControls();
+      }, 50);
     },
 
-    hideControls: function() {
+    _showHideControls: function(){
       var self = this;
-      $('.controls', self.$el).fadeOut('slow');
+      var $controls = $('.controls', self.$el);
+      var $browse = $('.browse-select', self.$el);
+      var $input = $('.dz-hidden-input');
+
+      if(self.options.maxFiles){
+        if(self.dropzone.files.length < self.options.maxFiles){
+          $browse.show();
+          $input.prop('disabled', false);
+        }else{
+          $browse.hide();
+          $input.prop('disabled', true);
+        }
+      }
+      if(self.dropzone.files.length > 0){
+        $controls.fadeIn('slow');
+        var file = self.dropzone.files[0];
+        $('.dz-error-message span', file.previewElement).html('');
+      }else{
+        $controls.fadeOut('slow');
+      }
     },
 
     pathJoin: function() {
@@ -256,18 +325,13 @@ define([
     getDzoneOptions: function() {
       var self = this;
 
-      // clickable option
-      if (typeof(self.options.clickable) === 'string') {
-        if (self.options.clickable === 'true') {
-          self.options.clickable = true;
-        } else {
-          self.options.clickable = false;
-        }
-      }
+      // This pattern REQUIRE dropzone to be clickable
+      self.options.clickable = true;
 
       var options = $.extend({}, self.options);
       options.url = self.getUrl();
-      // XXX force to only upload one at a time,
+
+      // XXX force to only upload one to the server at a time,
       // right now we don't support multiple for backends
       options.uploadMultiple = false;
 
@@ -310,21 +374,30 @@ define([
           fileaddedClassName = self.options.fileaddedClassName,
           finished = options.finished;
 
-      self.numFiles = self.dropzone.files.length;
       self.currentFile = 0;
 
       function process() {
         processing = true;
         if (self.dropzone.files.length === 0) {
           processing = false;
+        }
+
+        var file = self.dropzone.files[0];
+        if (processing && file.status === Dropzone.ERROR){
+          // Put the file back as "queued" for retrying
+          file.status = Dropzone.QUEUED;
+          processing = false;
+        }
+
+        if (!processing){
           self.$el.removeClass(fileaddedClassName);
           if (finished !== undefined && typeof(finished) === 'function'){
             finished();
           }
           return;
         }
-        var file = self.dropzone.files[0];
-        if ([Dropzone.SUCCESS, Dropzone.ERROR, Dropzone.CANCELED]
+
+        if ([Dropzone.SUCCESS, Dropzone.CANCELED]
             .indexOf(file.status) !== -1) {
           // remove it
           self.dropzone.removeFile(file);
@@ -364,13 +437,13 @@ define([
         chunkSize: chunkSize
       }).fail(function() {
         if(window.DEBUG){
-          console.alert('Error uploading with TUS resumable uploads');
+          console.alert(_t('Error uploading with TUS resumable uploads'));
         }
         file.status = Dropzone.ERROR;
       }).progress(function(e, bytesUploaded, bytesTotal) {
         var percentage = (bytesUploaded / bytesTotal * 100);
         self.$progress.attr('aria-valuenow', percentage).css('width', percentage + '%');
-        self.$progress.html(_t('uploading...<br />') +
+        self.$progress.html(_t('uploading...') + '<br />' +
                             self.formatBytes(bytesUploaded) +
                             ' / ' + self.formatBytes(bytesTotal));
       }).done(function(url, file) {
@@ -395,6 +468,7 @@ define([
     setPath: function(path){
       var self = this;
       self.currentPath = path;
+      self.options.url = null;
       self.options.url = self.dropzone.options.url = self.getUrl();
     },
 

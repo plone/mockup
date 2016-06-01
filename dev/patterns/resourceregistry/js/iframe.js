@@ -15,6 +15,7 @@ define([
       title: '',
       name: '',
       resources: [],
+      callback: function(){},
       configure: function(){},
       onLoad: function(){}
     },

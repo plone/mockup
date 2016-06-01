@@ -28,7 +28,7 @@ define([
         '<ul class="list-group hidden"></ul>' +
         '<button class="plone-btn plone-btn-default cancel hidden cancel-build"><%- _t("Close") %></button>' +
         '<button class="plone-btn plone-btn-primary build"><%- _t("Build it") %></button>' +
-      '</div>', $.extend({ _t: _t }, bundleListItem.options)),
+      '</div>')($.extend({ _t: _t }, bundleListItem.options)),
       content: null,
       width: 500,
       buttons: '.plone-btn'
@@ -120,7 +120,7 @@ define([
       var checkFinished = function(){
         var $styles =  $('style[type="text/css"][id]', iframe.document);
         for(var i=0; i<$styles.length; i=i+1){
-          var $style = $styles.eq(i); 
+          var $style = $styles.eq(i);
           if($style.attr('id') === 'less:error-message'){
             self.addResult(_t('Error compiling less'));
             return self.finished(true);
@@ -156,7 +156,7 @@ define([
           });
         }else if($styles.length === config.less.length){
           $styles.each(function(){$(this).remove();});
-
+          /* XXX is this dead code? */
           script = document.createElement('script');
           script.setAttribute('type', 'text/javascript');
           script.setAttribute('src', self.rview.options.data.lessModifyUrl);

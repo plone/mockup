@@ -96,7 +96,7 @@
         word-wrap: break-word;
         font-size: 0.8em;
         margin-top: 2.5em;
-        ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
+        ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li > .jqtree-element:hover {
         background: #E7E7E7;
         }
         ul.jqtree-tree {
@@ -107,6 +107,11 @@
             .jqtree-title {
                 margin-left: 0em;
             }
+        }
+    }
+    .navbar {
+        a.btn {
+            text-decoration: none;
         }
     }
     .navbar-default {
@@ -127,7 +132,6 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         margin-right: 5px;
-        margin-top: 9px;
         border-top: 1px solid #CCC;
         border-right: 1px solid #CCC;
         border-left: 1px solid #CCC;
@@ -143,6 +147,8 @@
         > a {
             float: left;
             padding: 8px 0px;
+            text-decoration: none;
+            color: @gray-dark;
             +a {
                 padding-left: 4px;
             }
@@ -150,7 +156,10 @@
                 outline: none;
             }
         }
+        &.modified > a {
+            color: @brand-warning;
+        }
     }
-    
+
 
 }

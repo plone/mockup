@@ -7,11 +7,9 @@ if (window.jQuery) {
 
 define([
   'jquery',
-  'pat-registry',
-  'mockup-patterns-base',
   'mockup-patterns-modal',
   'mockup-patterns-structure'
-], function($, registry, Base, Modal, Structure) {
+], function($) {
   'use strict';
 
   $(document).ready(function() {
@@ -22,7 +20,7 @@ define([
         // uh oh, no content id, let's go up a few levels and use that as parent
         $container = $structure.parent().parent();
       }
-      var $modal = $container.patternModal({
+      var $modal = $container.patPloneModal({
         position: 'middle top',
         width: '95%',
         title: 'Folder Contents',
@@ -31,9 +29,9 @@ define([
           closeOnClick: false
         }
       });
-      var modal = $modal.data('pattern-modal');
+      var modal = $modal.data('pattern-plone-modal');
       modal.show();
-      modal.$modal.find('a.close').on('destroy.modal.patterns', function() {
+      modal.$modal.find('a.close').on('destroy.plone-modal.patterns', function() {
         var $base = $('base');
         var url;
         if ($base.length === 0) {

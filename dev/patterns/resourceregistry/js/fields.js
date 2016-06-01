@@ -185,6 +185,7 @@ define([
       e.preventDefault();
       self.options.value.push('');
       self.render();
+      self.inputChanged();
     },
 
     removeItem: function(e){
@@ -193,6 +194,7 @@ define([
       var index = $el.index();
       this.options.value.splice(index, 1);
       $el.remove();
+      this.inputChanged();
     },
 
     afterRender: function(){
@@ -339,13 +341,19 @@ define([
       // move data
       var data = this.options.containerData[this.resourceName];
       this.options.containerData[value] = data;
-      // and now delete old
-      delete this.options.containerData[this.resourceName];
-      this.resourceName = value;
+
+      if(this.resourceName !== value){
+        // and now delete old
+        delete this.options.containerData[this.resourceName];
+      }
+      this.resourceName = this.options.value = this.options.form.options.name = this.options.form.name = value;
 
       if(this.options.parent){
         this.options.parent.options.name = value;
         this.options.parent.render();
+      }
+      if(this.options.form){
+        this.options.form.$('h3').html(value);
       }
       return this.handleError(false);
     },

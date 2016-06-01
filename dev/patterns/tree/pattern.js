@@ -52,16 +52,16 @@
 
 define([
   'jquery',
-  'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-utils',
   'jqtree'
-], function($, _, Base, utils) {
+], function($, Base, utils) {
   'use strict';
 
   var Tree = Base.extend({
     name: 'tree',
     trigger: '.pat-tree',
+    parser: 'mockup',
     defaults: {
       dragAndDrop: false,
       autoOpen: false,

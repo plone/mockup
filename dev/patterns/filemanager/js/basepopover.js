@@ -1,9 +1,7 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover'
-], function($, _, Backbone, PopoverView) {
+], function(_, PopoverView) {
   'use strict';
 
   var FileManagerPopover = PopoverView.extend({
@@ -12,7 +10,6 @@ define([
     content: _.template('<div/>'),
     initialize: function(options) {
       this.app = options.app;
-      options.translations = this.app.options.translations;
       PopoverView.prototype.initialize.apply(this, [options]);
     },
     render: function() {

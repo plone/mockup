@@ -237,10 +237,10 @@ define([
       this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(0);
+      expect($results.size()).to.equal(3);
 
       var $noResults = $('li.select2-no-results');
-      expect($noResults.size()).to.equal(1);
+      expect($noResults.size()).to.equal(0);
     });
 
     it('HTML multiple select widget converted to hidden inuput, before applying select2', function() {

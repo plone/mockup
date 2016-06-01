@@ -20,13 +20,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function ($, Base) {
   'use strict';
 
   var InlineValidation = Base.extend({
     name: 'inlinevalidation',
     trigger: '.pat-inlinevalidation',
+    parser: 'mockup',
 
     render_error: function ($field, errmsg) {
        var $errbox = $('div.fieldErrorBox', $field);

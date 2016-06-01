@@ -1,67 +1,31 @@
 /**
  * UndoManager.js
  *
- * Copyright, Moxiecode Systems AB
  * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
  *
  * License: http://www.tinymce.com/license
  * Contributing: http://www.tinymce.com/contributing
  */
 
 /**
- * This class handles the undo/redo history levels for the editor. Since the build in undo/redo has major drawbacks a custom one was needed.
+ * This class handles the undo/redo history levels for the editor. Since the built-in undo/redo has major drawbacks a custom one was needed.
  *
  * @class tinymce.UndoManager
  */
 define("tinymce/UndoManager", [
-	"tinymce/Env",
-	"tinymce/util/Tools",
-	"tinymce/html/SaxParser"
-], function(Env, Tools, SaxParser) {
-	var trim = Tools.trim, trimContentRegExp;
-
-	trimContentRegExp = new RegExp([
-		'<span[^>]+data-mce-bogus[^>]+>[\u200B\uFEFF]+<\\/span>', // Trim bogus spans like caret containers
-		'\\s?data-mce-selected="[^"]+"' // Trim temporaty data-mce prefixed attributes like data-mce-selected
-	].join('|'), 'gi');
-
+	"tinymce/util/VK",
+	"tinymce/Env"
+], function(VK, Env) {
 	return function(editor) {
 		var self = this, index = 0, data = [], beforeBookmark, isFirstTypedCharacter, locks = 0;
 
-		/**
-		 * Returns a trimmed version of the editor contents to be used for the undo level. This
-		 * will remove any data-mce-bogus="all" marked elements since these are used for UI it will also
-		 * remove the data-mce-selected attributes used for selection of objects and caret containers.
-		 * It will keep all data-mce-bogus="1" elements since these can be used to place the caret etc and will
-		 * be removed by the serialization logic when you save.
-		 *
-		 * @private
-		 * @return {String} HTML contents of the editor excluding some internal bogus elements.
-		 */
 		function getContent() {
-			var content = editor.getContent({format: 'raw', no_events: 1});
-			var bogusAllRegExp = /<(\w+) [^>]*data-mce-bogus="all"[^>]*>/g;
-			var endTagIndex, index, matchLength, matches, shortEndedElements, schema = editor.schema;
+			return editor.serializer.getTrimmedContent();
+		}
 
-			content = content.replace(trimContentRegExp, '');
-			shortEndedElements = schema.getShortEndedElements();
-
-			// Remove all bogus elements marked with "all"
-			while ((matches = bogusAllRegExp.exec(content))) {
-				index = bogusAllRegExp.lastIndex;
-				matchLength = matches[0].length;
-
-				if (shortEndedElements[matches[1]]) {
-					endTagIndex = index;
-				} else {
-					endTagIndex = SaxParser.findEndTag(schema, content, index);
-				}
-
-				content = content.substring(0, index - matchLength) + content.substring(endTagIndex);
-				bogusAllRegExp.lastIndex = index - matchLength;
-			}
-
-			return trim(content);
+		function setDirty(state) {
+			editor.setDirty(state);
 		}
 
 		function addNonTypingUndoLevel(e) {
@@ -92,7 +56,7 @@ define("tinymce/UndoManager", [
 			}
 		});
 
-		editor.on('ObjectResizeStart', function() {
+		editor.on('ObjectResizeStart Cut', function() {
 			self.beforeChange();
 		});
 
@@ -101,6 +65,12 @@ define("tinymce/UndoManager", [
 
 		editor.on('KeyUp', function(e) {
 			var keyCode = e.keyCode;
+
+			// If key is prevented then don't add undo level
+			// This would happen on keyboard shortcuts for example
+			if (e.isDefaultPrevented()) {
+				return;
+			}
 
 			if ((keyCode >= 33 && keyCode <= 36) || (keyCode >= 37 && keyCode <= 40) || keyCode == 45 || keyCode == 13 || e.ctrlKey) {
 				addNonTypingUndoLevel();
@@ -113,12 +83,12 @@ define("tinymce/UndoManager", [
 
 			// Fire a TypingUndo event on the first character entered
 			if (isFirstTypedCharacter && self.typing) {
-				// Make the it dirty if the content was changed after typing the first character
+				// Make it dirty if the content was changed after typing the first character
 				if (!editor.isDirty()) {
-					editor.isNotDirty = !data[0] || getContent() == data[0].content;
+					setDirty(data[0] && getContent() != data[0].content);
 
 					// Fire initial change event
-					if (!editor.isNotDirty) {
+					if (editor.isDirty()) {
 						editor.fire('change', {level: data[0], lastLevel: null});
 					}
 				}
@@ -132,7 +102,13 @@ define("tinymce/UndoManager", [
 		editor.on('KeyDown', function(e) {
 			var keyCode = e.keyCode;
 
-			// Is caracter positon keys left,right,up,down,home,end,pgdown,pgup,enter
+			// If key is prevented then don't add undo level
+			// This would happen on keyboard shortcuts for example
+			if (e.isDefaultPrevented()) {
+				return;
+			}
+
+			// Is character position keys left,right,up,down,home,end,pgdown,pgup,enter
 			if ((keyCode >= 33 && keyCode <= 36) || (keyCode >= 37 && keyCode <= 40) || keyCode == 45) {
 				if (self.typing) {
 					addNonTypingUndoLevel(e);
@@ -141,8 +117,9 @@ define("tinymce/UndoManager", [
 				return;
 			}
 
-			// If key isn't shift,ctrl,alt,capslock,metakey
-			if ((keyCode < 16 || keyCode > 20) && keyCode != 224 && keyCode != 91 && !self.typing) {
+			// If key isn't Ctrl+Alt/AltGr
+			var modKey = (e.ctrlKey && !e.altKey) || e.metaKey;
+			if ((keyCode < 16 || keyCode > 20) && keyCode != 224 && keyCode != 91 && !self.typing && !modKey) {
 				self.beforeChange();
 				self.typing = true;
 				self.add({}, e);
@@ -157,8 +134,8 @@ define("tinymce/UndoManager", [
 		});
 
 		// Add keyboard shortcuts for undo/redo keys
-		editor.addShortcut('ctrl+z', '', 'Undo');
-		editor.addShortcut('ctrl+y,ctrl+shift+z', '', 'Redo');
+		editor.addShortcut('meta+z', '', 'Undo');
+		editor.addShortcut('meta+y,meta+shift+z', '', 'Redo');
 
 		editor.on('AddUndo Undo Redo ClearUndos', function(e) {
 			if (!e.isDefaultPrevented()) {
@@ -166,8 +143,9 @@ define("tinymce/UndoManager", [
 			}
 		});
 
+		/*eslint consistent-this:0 */
 		self = {
-			// Explose for debugging reasons
+			// Explode for debugging reasons
 			data: data,
 
 			/**
@@ -195,7 +173,7 @@ define("tinymce/UndoManager", [
 			 *
 			 * @method add
 			 * @param {Object} level Optional undo level object to add.
-			 * @param {DOMEvent} Event Optional event responsible for the creation of the undo level.
+			 * @param {DOMEvent} event Optional event responsible for the creation of the undo level.
 			 * @return {Object} Undo level that got added or null it a level wasn't needed.
 			 */
 			add: function(level, event) {
@@ -251,7 +229,7 @@ define("tinymce/UndoManager", [
 				editor.fire('AddUndo', args);
 
 				if (index > 0) {
-					editor.isNotDirty = false;
+					setDirty(true);
 					editor.fire('change', args);
 				}
 
@@ -275,13 +253,9 @@ define("tinymce/UndoManager", [
 				if (index > 0) {
 					level = data[--index];
 
-					// Undo to first index then set dirty state to false
-					if (index === 0) {
-						editor.isNotDirty = true;
-					}
-
 					editor.setContent(level.content, {format: 'raw'});
 					editor.selection.moveToBookmark(level.beforeBookmark);
+					setDirty(true);
 
 					editor.fire('undo', {level: level});
 				}
@@ -303,6 +277,7 @@ define("tinymce/UndoManager", [
 
 					editor.setContent(level.content, {format: 'raw'});
 					editor.selection.moveToBookmark(level.bookmark);
+					setDirty(true);
 
 					editor.fire('redo', {level: level});
 				}
@@ -344,10 +319,10 @@ define("tinymce/UndoManager", [
 			},
 
 			/**
-			 * Executes the specified function in an undo transation. The selection
+			 * Executes the specified function in an undo translation. The selection
 			 * before the modification will be stored to the undo stack and if the DOM changes
-			 * it will add a new undo level. Any methods within the transation that adds undo levels will
-			 * be ignored. So a transation can include calls to execCommand or editor.insertContent.
+			 * it will add a new undo level. Any methods within the translation that adds undo levels will
+			 * be ignored. So a translation can include calls to execCommand or editor.insertContent.
 			 *
 			 * @method transact
 			 * @param {function} callback Function to execute dom manipulation logic in.

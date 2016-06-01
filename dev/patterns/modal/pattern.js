@@ -15,7 +15,7 @@
  *    buttons(string): Selector for matching elements, usually buttons, inputs or links, from the modal content to place in the modal footer. The original elements in the content will be hidden. ('.formControls > input[type="submit"]')
  *    automaticallyAddButtonActions(boolean): Automatically create actions for elements matched with the buttons selector. They will use the options provided in actionOptions. (true)
  *    loadLinksWithinModal(boolean): Automatically load links inside of the modal using AJAX. (true)
- *    actions(object): A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. ({})
+ *    actionOptions(object): A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. ({})
  *
  *
  * Documentation:
@@ -29,16 +29,16 @@
  *
  *
  * Example: example-basic
- *    <a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-modal"
- *                      data-pat-modal="width: 400">Modal basic</a>
+ *    <a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+ *                      data-pat-plone-modal="width: 400">Modal basic</a>
  *    <div id="modal1" style="display: none">
  *      <h1>Basic modal!</h1>
  *      <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
  *    </div>
  *
  * Example: example-long
- *    <a href="#modal2" class="plone-btn plone-btn-lg plone-btn-primary pat-modal"
- *                      data-pat-modal="width: 500">Modal long scrolling</a>
+ *    <a href="#modal2" class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal"
+ *                      data-pat-plone-modal="width: 500">Modal long scrolling</a>
  *    <div id="modal2" style="display: none">
  *      <h1>Basic with scrolling</h1>
  *      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
@@ -56,8 +56,8 @@
  *
  *
  * Example: example-tinymce
- *    <a href="#modaltinymce" class="btn btn-lg btn-primary pat-modal"
- *       data-pat-modal="height: 600px;
+ *    <a href="#modaltinymce" class="btn btn-lg btn-primary pat-plone-modal"
+ *       data-pat-plone-modal="height: 600px;
  *                       width: 80%">
  *       Modal with TinyMCE</a>
  *    <div id="modaltinymce" style="display:none">
@@ -66,24 +66,23 @@
  *
  */
 
- /* global confirm:true */
-
-
 define([
   'jquery',
   'underscore',
-  'mockup-patterns-base',
+  'pat-base',
   'mockup-patterns-backdrop',
   'pat-registry',
   'mockup-router',
   'mockup-utils',
+  'translate',
   'jquery.form'
-], function($, _, Base, Backdrop, registry, Router, utils) {
+], function($, _, Base, Backdrop, registry, Router, utils, _t) {
   'use strict';
 
   var Modal = Base.extend({
-    name: 'modal',
-    trigger: '.pat-modal',
+    name: 'plone-modal',
+    trigger: '.pat-plone-modal',
+    parser: 'mockup',
     createModal: null,
     $model: null,
     defaults: {
@@ -92,6 +91,7 @@ define([
       margin: 20,
       position: 'center middle', // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
       triggers: [],
+      zIndexSelector: '.plone-modal-wrapper,.plone-modal-backdrop',
       backdrop: 'body', // Element to initiate the Backdrop on.
       backdropOptions: {
         zIndex: '1040',
@@ -142,6 +142,7 @@ define([
       actions: {},
       actionOptions: {
         eventType: 'click',
+        disableAjaxFormSubmit: false,
         target: null,
         ajaxUrl: null, // string, or function($el, options) that returns a string
         modalFunction: null, // String, function name on self to call
@@ -157,19 +158,23 @@ define([
         onTimeout: null,
         redirectOnResponse: false,
         redirectToUrl: function($action, response, options) {
-          var baseUrl = '';
-          var reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(response);
+          var reg;
+          reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(response);
+          if (reg && reg.length > 1) {
+            // view url as data attribute on body (Plone 5)
+            return reg[1].split('"')[0];
+          }
+          reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(response);
           if (reg && reg.length > 1) {
             // Base url as data attribute on body (Plone 5)
-            baseUrl = reg[1];
-          } else {
-            reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
-            if (reg && reg.length > 1) {
-              // base tag available (Plone 4)
-              baseUrl = reg[1];
-            }
+            return reg[1].split('"')[0];
           }
-          return baseUrl;
+          reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
+          if (reg && reg.length > 1) {
+              // base tag available (Plone 4)
+              return reg[1];
+          }
+          return '';
         }
       },
       routerOptions: {
@@ -183,10 +188,7 @@ define([
         if (self.options.automaticallyAddButtonActions) {
           actions[self.options.buttons] = {};
         }
-
-        if (self.options.loadLinksWithinModal) {
-          actions.a = {};
-        }
+        actions.a = {};
 
         $.each(actions, function(action, options) {
           var actionKeys = _.union(_.keys(self.options.actionOptions), ['templateOptions']);
@@ -221,6 +223,7 @@ define([
       },
       handleFormAction: function($action, options, patternOptions) {
         var self = this;
+
         // pass action that was clicked when submiting form
         var extraData = {};
         extraData[$action.attr('name')] = $action.attr('value');
@@ -244,6 +247,13 @@ define([
           url = $action.parents('form').attr('action');
         }
 
+        if(options.disableAjaxFormSubmit){
+          if($action.attr('name') && $action.attr('value')){
+            $form.append($('<input type="hidden" name="' + $action.attr('name') + '" value="' + $action.attr('value') + '" />'));
+          }
+          $form.trigger('submit');
+          return;
+        }
         // We want to trigger the form submit event but NOT use the default
         $form.on('submit', function(e) {
           e.preventDefault();
@@ -263,6 +273,7 @@ define([
             } else if (options.onError) {
               options.onError(xhr, textStatus, errorStatus);
             } else {
+              window.alert(_t('There was an error submitting the form.'));
               console.log('error happened do something');
             }
             self.emit('formActionError', [xhr, textStatus, errorStatus]);
@@ -297,7 +308,7 @@ define([
             if (options.displayInModal === true) {
               self.redraw(response, patternOptions);
             } else {
-              $action.trigger('destroy.modal.patterns');
+              $action.trigger('destroy.plone-modal.patterns');
               // also calls hide
               if (options.reloadWindowOnClose) {
                 self.reloadWindow();
@@ -330,28 +341,26 @@ define([
 
         // ajax version
         $.ajax({
-          url: url,
-          error: function(xhr, textStatus, errorStatus) {
-            if (textStatus === 'timeout' && options.onTimeout) {
-              options.onTimeout(self.$modal, xhr, errorStatus);
+          url: url
+        }).fail(function(xhr, textStatus, errorStatus) {
+          if (textStatus === 'timeout' && options.onTimeout) {
+            options.onTimeout(self.$modal, xhr, errorStatus);
 
-            // on "error", "abort", and "parsererror"
-            } else if (options.onError) {
-              options.onError(xhr, textStatus, errorStatus);
-            } else {
-              console.log('error happened do something');
-            }
-            self.loading.hide();
-            self.emit('linkActionError', [xhr, textStatus, errorStatus]);
-          },
-          success: function(response, state, xhr) {
-            self.redraw(response, patternOptions);
-            if (options.onSuccess) {
-              options.onSuccess(self, response, state, xhr);
-            }
-            self.loading.hide();
-            self.emit('linkActionSuccess', [response, state, xhr]);
+          // on "error", "abort", and "parsererror"
+          } else if (options.onError) {
+            options.onError(xhr, textStatus, errorStatus);
+          } else {
+            window.alert(_t('There was an error loading modal.'));
           }
+          self.emit('linkActionError', [xhr, textStatus, errorStatus]);
+        }).done(function(response, state, xhr) {
+          self.redraw(response, patternOptions);
+          if (options.onSuccess) {
+            options.onSuccess(self, response, state, xhr);
+          }
+          self.emit('linkActionSuccess', [response, state, xhr]);
+        }).always(function(){
+          self.loading.hide();
         });
       },
       render: function(options) {
@@ -402,7 +411,7 @@ define([
         }
 
         // Render html
-        self.$modal = $(_.template(self.options.templateOptions.template, tplObject));
+        self.$modal = $(_.template(self.options.templateOptions.template)(tplObject));
         self.$modalDialog = $('> .' + self.options.templateOptions.classDialog, self.$modal);
         self.$modalContent = $('> .' + self.options.templateOptions.classModal, self.$modalDialog);
 
@@ -445,11 +454,8 @@ define([
           .on('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            $(e.target).trigger('destroy.modal.patterns');
+            $(e.target).trigger('destroy.plone-modal.patterns');
           });
-
-        // cleanup html
-        $('.row', self.$modal).removeClass('row');
 
         // form
         if (options.form) {
@@ -458,28 +464,29 @@ define([
 
         self.$modal
           .addClass(self.options.templateOptions.className)
-          .on('click', function(e) {
-            e.stopPropagation();
-            if ($.nodeName(e.target, 'a')) {
-              e.preventDefault();
-
-              // TODO: open links inside modal
-              // and slide modal body
-            }
-            self.$modal.trigger('modal-click');
-          })
-          .on('destroy.modal.patterns', function(e) {
+          .on('destroy.plone-modal.patterns', function(e) {
             e.stopPropagation();
             self.hide();
           })
-          .on('resize.modal.patterns', function(e) {
+          .on('resize.plone-modal.patterns', function(e) {
             e.stopPropagation();
             e.preventDefault();
             self.positionModal();
           })
           .appendTo(self.$wrapperInner);
-        self.$modal.data('pattern-' + self.name, self);
 
+        if (self.options.loadLinksWithinModal) {
+          self.$modal.on('click', function(e) {
+            e.stopPropagation();
+            if ($.nodeName(e.target, 'a')) {
+              e.preventDefault();
+              // TODO: open links inside modal
+              // and slide modal body
+            }
+            self.$modal.trigger('modal-click');
+          });
+        }
+        self.$modal.data('pattern-' + self.name, self);
         self.emit('after-render');
       }
     },
@@ -488,37 +495,7 @@ define([
     },
     init: function() {
       var self = this;
-
-      self.backdrop = new Backdrop(
-          self.$el.parents(self.options.backdrop),
-          self.options.backdropOptions);
-
-      self.$wrapper = $('> .' + self.options.templateOptions.classWrapperName, self.backdrop.$el);
-      if (self.$wrapper.size() === 0) {
-        var zIndex = self.options.backdropOptions.zIndex !== null ? parseInt(self.options.backdropOptions.zIndex, 10) + 1 : 1041;
-        self.$wrapper = $('<div/>')
-          .hide()
-          .css({
-            'z-index': zIndex,
-            'overflow-y': 'auto',
-            'position': 'fixed',
-            'height': '100%',
-            'width': '100%',
-            'bottom': '0',
-            'left': '0',
-            'right': '0',
-            'top': '0'
-          })
-          .addClass(self.options.templateOptions.classWrapperName)
-          .insertBefore(self.backdrop.$backdrop)
-          .on('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            if (self.options.backdropOptions.closeOnClick) {
-              self.backdrop.hide();
-            }
-          });
-      }
+      self.options.loadLinksWithinModal = $.parseJSON(self.options.loadLinksWithinModal);
 
       // Router
       if (self.options.routerOptions.id !== null) {
@@ -526,12 +503,6 @@ define([
           this.show();
         }, self, self.options.routerOptions.pathExp, self.options.routerOptions.expReplace);
       }
-
-      self.backdrop.on('hidden', function(e) {
-        if (self.$modal !== undefined && self.$modal.hasClass(self.options.templateOptions.classActiveName)) {
-          self.hide();
-        }
-      });
 
       if (self.options.backdropOptions.closeOnEsc === true) {
         $(document).on('keydown', function(e, data) {
@@ -543,33 +514,8 @@ define([
         });
       }
 
-      self.$wrapperInner = $('> .' + self.options.templateOptions.classWrapperInnerName, self.$wrapper);
-      if (self.$wrapperInner.size() === 0) {
-        self.$wrapperInner = $('<div/>')
-          .addClass(self.options.classWrapperInnerName)
-          .css({
-            'position': 'absolute',
-            'bottom': '0',
-            'left': '0',
-            'right': '0',
-            'top': '0'
-          })
-          .appendTo(self.$wrapper);
-      }
 
-      self.loading = new utils.Loading({
-        backdrop: self.backdrop,
-        zIndex: function() {
-          if (self.modalInitialized()) {
-            var zIndex = self.$modal.css('zIndex');
-            if (zIndex) {
-              return parseInt(zIndex, 10) + 1;
-            }
-          } else {
-            return 10005;
-          }
-        }
-      });
+
 
       $(window.parent).resize(function() {
         self.positionModal();
@@ -588,7 +534,7 @@ define([
       }
 
       if (self.$el.is('a')) {
-        if (self.$el.attr('href')) {
+        if (self.$el.attr('href') && !self.options.image) {
           if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
             self.options.target = self.$el.attr('href');
             self.options.content = '';
@@ -615,10 +561,22 @@ define([
         type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
-        self.loading.hide();
         self.$raw = $('<div />').append($(utils.parseBodyTag(response)));
         self.emit('after-ajax', self, textStatus, xhr);
         self._show();
+      }).fail(function(xhr, textStatus, errorStatus){
+        var options = self.options.actionOptions;
+        if (textStatus === 'timeout' && options.onTimeout) {
+          options.onTimeout(self.$modal, xhr, errorStatus);
+        } else if (options.onError) {
+          options.onError(xhr, textStatus, errorStatus);
+        } else {
+          window.alert(_t('There was an error loading modal.'));
+          self.hide();
+        }
+        self.emit('linkActionError', [xhr, textStatus, errorStatus]);
+      }).always(function(){
+        self.loading.hide();
       });
     },
 
@@ -641,6 +599,15 @@ define([
       self._show();
     },
 
+    createImageModal: function(){
+      var self = this;
+      self.$wrapper.addClass('image-modal');
+      var src = self.$el.attr('href');
+      // XXX aria?
+      self.$raw = $('<div><h1>Image</h1><div id="content"><div class="modal-image"><img src="' + src + '" /></div></div></div>');
+      self._show();
+    },
+
     initModal: function() {
       var self = this;
       if (self.options.ajaxUrl) {
@@ -649,10 +616,13 @@ define([
         self.createModal = self.createTargetModal;
       } else if (self.options.html) {
         self.createModal = self.createHtmlModal;
+      } else if (self.options.image){
+        self.createModal = self.createImageModal;
       } else {
         self.createModal = self.createBasicModal;
       }
     },
+
     findPosition: function(horpos, vertpos, margin, modalWidth, modalHeight,
                            wrapperInnerWidth, wrapperInnerHeight) {
       var returnpos = {};
@@ -720,31 +690,28 @@ define([
         }
         returnpos.top = absTop;
       }
-
       return returnpos;
     },
+
     modalInitialized: function() {
       var self = this;
       return self.$modal !== null && self.$modal !== undefined;
     },
-    // re-position modal at any point.
-    //
-    // Uses:
-    //  options.margin
-    //  options.width
-    //  options.height
-    //  options.position
-    positionModal: function() {
-      var self = this;
 
+    positionModal: function() {
+      /* re-position modal at any point.
+       *
+       * Uses:
+       *  options.margin
+       *  options.width
+       *  options.height
+       *  options.position
+       */
+      var self = this;
       // modal isn't initialized
       if (!self.modalInitialized()) { return; }
-
       // clear out any previously set styling
       self.$modal.removeAttr('style');
-
-      // make sure the (inner) wrapper fills it's container
-      //self.$wrapperInner.css({height:'100%', width:'100%'});
 
       // if backdrop wrapper is set on body, then wrapper should have height of
       // the window, so we can do scrolling of inner wrapper
@@ -774,7 +741,6 @@ define([
       var modalHeight = self.$modalDialog.outerHeight(true);
       var wrapperInnerWidth = self.$wrapperInner.width();
       var wrapperInnerHeight = self.$wrapperInner.height();
-
       var pos = self.findPosition(
         horpos, vertpos, margin, modalWidth, modalHeight,
         wrapperInnerWidth, wrapperInnerHeight
@@ -783,16 +749,75 @@ define([
         self.$modalDialog.css(key, pos[key]);
       }
     },
+
     render: function(options) {
       var self = this;
       self.emit('render');
       self.options.render.apply(self, [options]);
       self.emit('rendered');
     },
+
     show: function() {
       var self = this;
+      self.backdrop = self.createBackdrop();
       self.createModal();
     },
+
+    createBackdrop: function() {
+      var self = this,
+          backdrop = new Backdrop(
+            self.$el.parents(self.options.backdrop),
+            self.options.backdropOptions
+          ),
+          zIndex = 1041;
+
+      $(self.options.zIndexSelector).each(function(){
+        zIndex = Math.max(zIndex, parseInt($(this).css('zIndex')) + 1 || 1041);
+      });
+
+      self.$wrapper = $('<div/>')
+        .hide()
+        .css({
+          'z-index': zIndex,
+          'overflow-y': 'auto',
+          'position': 'fixed',
+          'height': '100%',
+          'width': '100%',
+          'bottom': '0',
+          'left': '0',
+          'right': '0',
+          'top': '0'
+        })
+        .addClass(self.options.templateOptions.classWrapperName)
+        .insertBefore(backdrop.$backdrop)
+        .on('click', function(e) {
+          if (self.options.backdropOptions.closeOnClick) {
+            e.stopPropagation();
+            e.preventDefault();
+            backdrop.hide();
+          }
+        });
+      backdrop.on('hidden', function(e) {
+        if (self.$modal !== undefined && self.$modal.hasClass(self.options.templateOptions.classActiveName)) {
+          self.hide();
+        }
+      });
+      self.loading = new utils.Loading({
+        'backdrop': backdrop
+      });
+      self.$wrapperInner = $('<div/>')
+        .addClass(self.options.classWrapperInnerName)
+        .css({
+          'position': 'absolute',
+          'bottom': '0',
+          'left': '0',
+          'right': '0',
+          'top': '0'
+        })
+        .appendTo(self.$wrapper);
+      return backdrop;
+    },
+
     _show: function() {
       var self = this;
       self.render.apply(self, [ self.options ]);
@@ -800,7 +825,6 @@ define([
       self.backdrop.show();
       self.$wrapper.show();
       self.loading.hide();
-      self.$wrapper.parent().css('overflow', 'hidden');
       self.$el.addClass(self.options.templateOptions.classActiveName);
       self.$modal.addClass(self.options.templateOptions.classActiveName);
       registry.scan(self.$modal);
@@ -808,11 +832,11 @@ define([
       $('img', self.$modal).load(function() {
         self.positionModal();
       });
-      $(window.parent).on('resize.modal.patterns', function() {
+      $(window.parent).on('resize.plone-modal.patterns', function() {
         self.positionModal();
       });
-      self.emit('shown');
       $('body').addClass('plone-modal-open');
+      self.emit('shown');
     },
     hide: function() {
       var self = this;
@@ -821,14 +845,9 @@ define([
       }
       self.emit('hide');
       if (self._suppressHide) {
-        if (!confirm(self._suppressHide)) {
+        if (!window.confirm(self._suppressHide)) {
           return;
         }
-      }
-      if ($('.plone-modal', self.$wrapper).size() < 2) {
-        self.backdrop.hide();
-        self.$wrapper.hide();
-        self.$wrapper.parent().css('overflow', 'visible');
       }
       self.loading.hide();
       self.$el.removeClass(self.options.templateOptions.classActiveName);
@@ -836,10 +855,15 @@ define([
         self.$modal.remove();
         self.initModal();
       }
-      $(window.parent).off('resize.modal.patterns');
+      self.$wrapper.remove();
+      if ($('.plone-modal', $('body')).size() < 1) {
+        self.backdrop.hide();
+        $('body').removeClass('plone-modal-open');
+        $(window.parent).off('resize.plone-modal.patterns');
+      }
       self.emit('hidden');
-      $('body').removeClass('plone-modal-open');
     },
+
     redraw: function(response, options) {
       var self = this;
       self.emit('beforeDraw');
@@ -854,5 +878,4 @@ define([
   });
 
   return Modal;
-
 });

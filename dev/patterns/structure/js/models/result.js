@@ -5,7 +5,8 @@ define(['backbone'], function(Backbone) {
     defaults: function() {
       return {
         'is_folderish': false,
-        'review_state': ''
+        'review_state': '',
+        'getURL': ''
       };
     },
     uid: function() {

@@ -26,14 +26,50 @@ define([
     beforeEach(function() {
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
+      this.clock = sinon.useFakeTimers();
+      //this.server.respondImmediately = true;
 
+      this.server.respondWith('POST', /upload/, function (xhr, id) {
+        xhr.respond(200, {'content-Type': 'application/json'},
+          JSON.stringify({
+            url: 'http://localhost:8000/blah.png',
+            UID: 'sldlfkjsldkjlskdjf',
+            name: 'blah.png',
+            filename: 'blah.png',
+            portal_type: 'Image',
+            size: 239292
+          })
+        );
+      });
+      this.server.respondWith(/relateditems-test\.json/, function(xhr, id) {
+        var query = xhr.url.split('?')[1];
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i += 1) {
+          var pair = vars[i].split('=');
+          if (decodeURIComponent(pair[0]) === 'query') {
+            query = $.parseJSON(decodeURIComponent(pair[1]));
+          }
+        }
+        var results = [];
+        for (var j = 0; j < query.criteria.length; j += 1) {
+          if(query.criteria[j].i === 'UID'){
+            results.push({UID: query.criteria[j].v[0], Title: 'blah.png', path: '/blah.png', portal_type: 'Image'});
+          }
+        }
+        xhr.respond(200, { 'Content-Type': 'application/json' },
+          JSON.stringify({
+            total: results.length,
+            results: results
+          })
+        );
+      });
       this.server.respondWith('GET', /data.json/, function (xhr, id) {
         var items = [
           {
             UID: '123sdfasdf',
             getURL: 'http://localhost:8081/news/aggregator',
             path: '/news/aggregator',
-            Type: 'Collection',
+            portal_type: 'Collection',
             Description: 'Site News',
             Title: 'News',
             getIcon: ''
@@ -42,7 +78,7 @@ define([
             UID: 'fooasdfasdf1123asZ',
             path: '/about',
             getURL: 'http://localhost:8081/about',
-            Type: 'Page',
+            portal_type: 'Document',
             Description: 'About',
             Title: 'About',
             getIcon: 'document.png'
@@ -82,6 +118,7 @@ define([
       ).appendTo('body');
       registry.scan($el);
       expect(tinymce.get(0).getContent()).to.be.equal('<p>foobar</p>');
+      tinymce.get(0).remove();
     });
 
     it('loads buttons for plugins', function() {
@@ -93,6 +130,7 @@ define([
       ).appendTo('body');
       registry.scan($el);
       expect(tinymce.get(0).buttons).to.have.keys('plonelink', 'ploneimage');
+      tinymce.get(0).remove();
     });
 
     it('on form submit, save data to form', function() {
@@ -197,9 +235,9 @@ define([
         }
       });
       pattern.addLinkClicked();
-      pattern.linkModal.linkTypes.internal.$input.select2('data', {
+      pattern.linkModal.linkTypes.internal.getEl().select2('data', {
         UID: 'foobar',
-        Type: 'Page',
+        portal_type: 'Document',
         Title: 'Foobar',
         path: '/foobar',
         getIcon: ''
@@ -212,14 +250,14 @@ define([
       pattern.addLinkClicked();
       var modal = pattern.linkModal;
       modal.linkType = 'external';
-      modal.linkTypes.external.$input.attr('value', 'http://foobar');
+      modal.linkTypes.external.getEl().attr('value', 'http://foobar');
       expect(pattern.linkModal.getLinkUrl()).to.equal('http://foobar');
     });
     it('test add email link', function() {
       var pattern = createTinymce();
       pattern.addLinkClicked();
       pattern.linkModal.linkType = 'email';
-      pattern.linkModal.linkTypes.email.$input.attr('value', 'foo@bar.com');
+      pattern.linkModal.linkTypes.email.getEl().attr('value', 'foo@bar.com');
       expect(pattern.linkModal.getLinkUrl()).to.equal('mailto:foo@bar.com');
     });
     it('test add image link', function() {
@@ -229,9 +267,9 @@ define([
         prependToScalePart: '/@@images/image/'
       });
       pattern.addImageClicked();
-      pattern.imageModal.linkTypes.image.$input.select2('data', {
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
         UID: 'foobar',
-        Type: 'Page',
+        portal_type: 'Document',
         Title: 'Foobar',
         path: '/foobar'
       });
@@ -240,19 +278,54 @@ define([
       pattern.imageModal.$scale.find('[value="thumb"]')[0].selected = true;
       expect(pattern.imageModal.getLinkUrl()).to.equal('resolveuid/foobar/@@images/image/thumb');
     });
+    it('test add image link upload', function() {
+      var $el = $('<textarea class="pat-tinymce" data-pat-tinymce=\'' +
+        '{' +
+        '  "relatedItems": {' +
+        '    "vocabularyUrl": "/relateditems-test.json"' +
+        '  },' +
+        '  "upload": {' +
+        '    "baseUrl": "/",' +
+        '    "relativePath": "upload"' +
+        '}' +
+      '}\'></textarea>').appendTo('body');
+      registry.scan($el);
+      this.clock.tick(1000);
+      var pattern = $el.data().patternTinymce;
+      pattern.addImageClicked();
+      $('#' + $('#tinylink-uploadImage').data().navref).click();
+      expect($('#tinylink-uploadImage').parent().hasClass('active')).to.equal(true);
+      var blob;
+      try{
+        blob = new Blob(['dummy data'],  {type: 'image/png'});
+      } catch (err) {
+        var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+        var builder = new BlobBuilder();
+        builder.append('dummy data');
+        blob = builder.getBlob();
+      }
+      blob.name = 'blah.png';
+      pattern.imageModal.$upload.data().patternUpload.dropzone.addFile(blob);
+      $('.upload-all', pattern.imageModal.$upload).click();
+      this.clock.tick(1000);
+
+      expect($('#tinylink-image').parent().hasClass('active')).to.equal(true);
+      expect(pattern.imageModal.getLinkUrl()).to.equal('/blah.png/imagescale/large');
+    });
 
     it('test adds data attributes', function() {
       var pattern = createTinymce();
       pattern.tiny.setContent('<p>blah</p>');
+      pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
       pattern.addLinkClicked();
-      pattern.linkModal.linkTypes.internal.$input.select2('data', {
+
+      pattern.linkModal.linkTypes.internal.getEl().select2('data', {
         UID: 'foobar',
-        Type: 'Page',
+        portal_type: 'Document',
         Title: 'Foobar',
         path: '/foobar',
         getIcon: ''
       });
-      pattern.linkModal.focusElement(pattern.tiny.dom.getRoot().getElementsByTagName('p')[0]);
       pattern.linkModal.$button.trigger('click');
       expect(pattern.tiny.getContent()).to.contain('data-val="foobar"');
       expect(pattern.tiny.getContent()).to.contain('data-linktype="internal"');
@@ -268,7 +341,7 @@ define([
       pattern.addLinkClicked();
 
       pattern.linkModal.linkTypes.internal.set('123sdfasdf');
-      var val = pattern.linkModal.linkTypes.internal.$input.select2('data');
+      var val = pattern.linkModal.linkTypes.internal.getEl().select2('data');
       /* XXX ajax not loading quickly enough here...
       expect(val.UID).to.equal('123sdfasdf');
       */
@@ -300,7 +373,7 @@ define([
       pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
       pattern.addLinkClicked();
 
-      expect(pattern.linkModal.linkTypes.external.$input.val()).to.equal('foobar');
+      expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
     });
 
     it('test loads existing link email values', function() {
@@ -311,7 +384,7 @@ define([
       pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
       pattern.addLinkClicked();
 
-      expect(pattern.linkModal.linkTypes.email.$input.val()).to.equal('foo@bar.com');
+      expect(pattern.linkModal.linkTypes.email.getEl().val()).to.equal('foo@bar.com');
     });
 
     it('test anchor link adds existing anchors to list', function() {
@@ -365,7 +438,55 @@ define([
       expect(pattern.linkModal.linkType).to.equal('upload');
     });
 
+    it('test guess link when no data- attribute present', function() {
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent('<a href="foobar">foobar</a>');
+
+      pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
+    });
+
+    it('test guess anchor when no data- attribute present', function() {
+      var pattern = createTinymce();
+
+      pattern.tiny.setContent('<a href="#foobar">foobar</a><a class="mceItemAnchor" name="foobar"></a>');
+
+      pattern.tiny.selection.select(pattern.tiny.dom.getRoot().getElementsByTagName('a')[0]);
+      pattern.addLinkClicked();
+
+      expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#foobar');
+    });
+
+    it('test inline tinyMCE roundtrip', function() {
+      var $container = $(
+       '<form>' +
+       '<textarea class="pat-tinymce" data-pat-tinymce=\'{"inline": true}\'>' +
+       '<h1>just testing</h1>' +
+       '</textarea>' +
+       '</form>'
+      ).appendTo('body');
+      registry.scan($container);
+
+      var $el = $container.find('textarea');
+      var id = $el.attr('id');
+
+      var $editable = $container.find('#' + id + '-editable');
+
+      // check, if everything is in place
+      expect($editable.is('div')).to.be.equal(true);
+      expect($editable.html()).to.be.equal($el.val());
+
+      // check, if changes are submitted on form submit
+      var changed_txt = 'changed contents';
+      $editable.html(changed_txt);
+      var $form = $container.find('form');
+      $container.trigger('submit');
+      expect($el.val()).to.be.equal(changed_txt);
+      tinymce.get(0).remove();
+    });
 
   });
-
 });

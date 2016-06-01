@@ -1,10 +1,7 @@
 define([
-  'jquery',
-  'backbone',
-  'underscore',
   'mockup-ui-url/views/button',
   'text!mockup-patterns-structure-url/templates/selection_button.xml'
-], function($, Backbone, _, ButtonView, tplButton) {
+], function(ButtonView, tplButton) {
   'use strict';
 
   var SelectionButton = ButtonView.extend({
@@ -12,18 +9,27 @@ define([
     template: tplButton,
     initialize: function(options) {
       ButtonView.prototype.initialize.apply(this, [options]);
-
+      var self = this;
+      self.timeout = 0;
       if (this.collection !== null) {
         this.collection.on('add remove reset', function() {
-          this.render();
-          if (this.collection.length === 0) {
-            this.$el.removeClass('active');
-          }
+          /* delay it */
+          clearTimeout(self.timeout);
+          self.timeout = setTimeout(function() {
+            self.render();
+            if (self.collection.length === 0) {
+              self.$el.removeClass('active');
+            }
+          }, 50);
         }, this);
       }
     },
     serializedModel: function() {
-      var obj = {icon: '', title: this.options.title, length: 0};
+      var obj = {
+        icon: '',
+        title: this.options.title,
+        length: 0
+      };
       if (this.collection !== null) {
         obj.length = this.collection.length;
       }

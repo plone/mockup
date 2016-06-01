@@ -1,0 +1,17 @@
+/* @group Bumper */
+
+.pat-bumper {
+  z-index: 99;
+
+  &.success {
+    background-color: $colour-success;
+    color: white;
+  }
+  &.warning {
+    background-color: $colour-warning;
+    color: black;
+  }
+}
+
+
+/* @end */

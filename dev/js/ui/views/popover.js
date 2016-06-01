@@ -1,11 +1,10 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/container',
   'mockup-patterns-backdrop',
   'text!mockup-ui-url/templates/popover.xml',
-], function($, _, Backbone, ContainerView, Backdrop, PopoverTemplate) {
+], function($, _, ContainerView, Backdrop, PopoverTemplate) {
   'use strict';
 
   var PopoverView = ContainerView.extend({
@@ -16,6 +15,7 @@ define([
     content: null,
     title: null,
     triggerView: null,
+    idPrefix: 'popover-',
     triggerEvents: {
       'button:click': 'toggle'
     },
@@ -38,20 +38,28 @@ define([
     },
     initialize: function(options) {
       ContainerView.prototype.initialize.apply(this, [options]);
+      this.bindTriggerEvents();
 
       this.on('render', function() {
-        this.bindTriggerEvents();
+        this.$el.attr('role', 'tooltip').attr('aria-hidden', 'false');
         this.renderTitle();
         this.renderContent();
       }, this);
     },
     afterRender: function () {
     },
+    getTemplateOptions: function(){
+      return this.options;
+    },
     renderTitle: function() {
-      this.$('.popover-title').append(this.title(this.options));
+      var title = this.title;
+      if(typeof(title) === 'function'){
+        title = title(this.getTemplateOptions());
+      }
+      this.$('.popover-title').empty().append(title);
     },
     renderContent: function() {
-      this.$('.popover-content').append(this.content(this.options));
+      this.$('.popover-content').empty().append(this.content(this.getTemplateOptions()));
     },
     bindTriggerEvents: function() {
       if (this.triggerView) {
@@ -65,6 +73,7 @@ define([
         }, this);
       }
     },
+
     getPosition: function() {
       var $el = this.triggerView.$el;
       return $.extend({}, {
@@ -72,14 +81,50 @@ define([
         height: $el[0].offsetHeight
       }, $el.offset());
     },
+
+    getBodyClassName: function(){
+      var name = 'popover-';
+      if(this.options.id){
+        name += this.options.id + '-';
+      }
+      name += 'active';
+      return name;
+    },
+
     show: function() {
+      /* hide existing */
+      $('.popover:visible').each(function(){
+        var popover = $(this).data('component');
+        if(popover){
+          popover.hide();
+        }
+      });
+
+      this.position();
+
+      this.setBackdrop();
+      if (this.useBackdrop === true) {
+        this.backdrop.show();
+      }
+
+      this.opened = true;
+
+      if (this.triggerView) {
+        this.triggerView.$el.addClass('active');
+      }
+
+      this.uiEventTrigger('show', this);
+      this.$el.attr('aria-hidden', 'false');
+      $('body').addClass(this.getBodyClassName());
+    },
+
+    position: function(){
       var pos = this.getPosition();
       var $tip = this.$el, tp, placement, actualWidth, actualHeight;
 
       placement = this.placement;
 
       $tip.css({ top: 0, left: 0 }).addClass('active');
-
 
       actualWidth = $tip[0].offsetWidth;
       actualHeight = $tip[0].offsetHeight;
@@ -100,20 +145,8 @@ define([
       }
 
       this.applyPlacement(tp, placement);
-
-      this.setBackdrop();
-      if (this.useBackdrop === true) {
-        this.backdrop.show();
-      }
-
-      this.opened = true;
-
-      if (this.triggerView) {
-        this.triggerView.$el.addClass('active');
-      }
-
-      this.uiEventTrigger('show', this);
     },
+
     applyPlacement: function(offset, placement) {
       var $el = this.$el,
         $tip = this.$el,
@@ -169,8 +202,11 @@ define([
       this.$el.removeClass('active');
       if (this.triggerView) {
         this.triggerView.$el.removeClass('active');
+        this.triggerView.$el.attr('aria-hidden', 'true');
       }
       this.uiEventTrigger('hide', this);
+      this.$el.attr('aria-hidden', 'true');
+      $('body').removeClass(this.getBodyClassName());
     },
     toggle: function(button, e) {
       if (this.opened) {
@@ -205,4 +241,3 @@ define([
 
   return PopoverView;
 });
-

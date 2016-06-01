@@ -1,11 +1,22 @@
 <td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+
 <td class="title">
-  <a href="<%- getURL %>" class="state-<%- review_state %> contenttype-<%- Type.toLowerCase() %>"><%- Title %></a>
+  <div class="pull-left">
+    <a href="<%- viewURL %>"
+        class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
+        title="<%- portal_type %>">
+      <%- Title %>
+    </a>
+  </div>
+  <% if(attributes["getIcon"] ){ %>
+  <img class="image-<%- iconSize %> pull-right" src="<%- getURL %>/@@images/image/<%- iconSize %>">
+  <% } %>
 </td>
-<% _.each(activeColumns, function(column){ %>
+
+<% _.each(activeColumns, function(column) { %>
   <% if(_.has(availableColumns, column)) { %>
     <td class="<%- column %>"><%- attributes[column] %></td>
   <% } %>
 <% }); %>
-<td class="actionmenu-container">
-</td>
+
+<td class="actionmenu-container"></td>

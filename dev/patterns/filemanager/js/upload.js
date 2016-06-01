@@ -1,17 +1,15 @@
 define([
-  'jquery',
   'underscore',
-  'backbone',
   'mockup-patterns-filemanager-url/js/basepopover',
   'mockup-patterns-upload'
-], function($, _, Backbone, PopoverView, Upload) {
+], function(_, PopoverView, Upload) {
   'use strict';
 
   var UploadView = PopoverView.extend({
     className: 'popover upload',
-    title: _.template('<%= translations.upload %>'),
+    title: _.template('<%= _t("Upload") %>'),
     content: _.template(
-      '<span class="current-path"></span>' +
+      '<span>Location: <span class="current-path"></span></span>' +
       '<input type="text" name="upload" style="display:none" />' +
       '<div class="uploadify-me"></div>'),
     render: function() {
@@ -19,7 +17,16 @@ define([
       PopoverView.prototype.render.call(this);
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), {
         url: self.app.options.uploadUrl,
-        success: function() {
+        success: function(response) {
+          if( self.callback ) {
+            if( response.status == "success" ) {  
+              self.callback.apply(self.app, [response]);
+            }
+            else
+            {
+                alert("There was a problem during the upload process");
+            }
+          }
         }
       });
       return this;

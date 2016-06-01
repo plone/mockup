@@ -1,6 +1,56 @@
 #Changelog
 
-**1.1.18 (current stable)**
+**1.2.4**
+
+  - fixed priorityEnabled with triggered events (#510)
+
+**1.2.3**
+
+  - added useHtml5Constraint option (#459)
+  - update error message if has changed (#459)
+  - fixed IE7 `undefined` attribute in `domApi` (#439)
+  - fixed dynamic excluded fields in `addItem` method (#473)
+  - removed bootstrap dep in bower, versionned localy
+  - changed jquery requirement in bower, started test suite
+
+**1.2.2 (current stable)**
+
+  - added `data-parsley-validate` W3C compliant support
+  - removeConstraint does not destroy anymore ParsleyField instance on last
+    error removal. It just reset UI (#259)
+  - fixed IE9 `null` attribute in `domApi` (#439)
+  - fixed IE `prop()` for checking required attribute (#447)
+  - allow to call public API methods with multiple parameters (#450)
+  - added some translations
+
+**1.2.1**
+
+  - fix `display:block` added to error elements (#230) (PR #413)
+  - added some more translations
+  - added `data-parsley-namespace` feature to allow W3C compliant DOM-API (#424)
+  - fixed options.error.container element (#425)
+  - fixed priority validator error (#426)
+  - added HTML5 tel support (#334)
+  - fixed custom validators error message if priority is not set. (#432)
+
+**1.2.0**
+
+  - [BC Break] Added `priorityEnabled` option (default true). Only show highest
+    priority failing validator error message. Validator structure altered in order
+    to manage priority. (#189)
+  - [BC Break] added custom DOM-API `parsley-`. Previous data-API is dropped. (#143)
+      - Now to validate a form, use `parsley-validate`
+      - Now to add a validator, use `parsley-<validator>`
+  - [BC Break] `onFormSubmit` is now called `onFormValidate`
+  - Dynamic excluded fields management (#410)
+
+**1.1.19**
+
+  - added scrollTo feature when going to focus field
+  - `onFieldSuccess` and onFieldError` are now called once by validation
+    and not on each validator check
+
+**1.1.18**
 
   - `onFormSubmit` now prevent form submission if returns (bool) false.
     It allows adding another custom check on top of Parsley.

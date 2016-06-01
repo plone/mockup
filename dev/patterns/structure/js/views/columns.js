@@ -1,20 +1,19 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
   'mockup-ui-url/views/popover',
   'mockup-patterns-sortable'
-], function($, _, Backbone, PopoverView, Sortable) {
+], function($, _, PopoverView, Sortable) {
   'use strict';
 
   var ColumnsView = PopoverView.extend({
-    className: 'popover columns',
-    title: _.template('Columns'),
+    className: 'popover attribute-columns',
+    title: _.template('<%- _t("Columns") %>'),
     content: _.template(
-      '<label>Select columns to show, drag and drop to reorder</label>' +
+      '<label><%- _t("Select columns to show, drag and drop to reorder") %></label>' +
       '<ul>' +
       '</ul>' +
-      '<button class="btn btn-block btn-success">Save</button>'
+      '<button class="btn btn-block btn-success"><%- _t("Save") %></button>'
     ),
     itemTemplate: _.template(
       '<li>' +
@@ -43,13 +42,14 @@ define([
         $el.find('input')[0].checked = true;
         self.$container.append($el);
       });
-      _.each(_.omit(self.app.availableColumns, self.app.activeColumns), function(name, id) {
-        var $el = $(self.itemTemplate({
-          title: name,
-          id: id
-        }));
-        self.$container.append($el);
-      });
+      _.each(_.omit(self.app.availableColumns, self.app.activeColumns),
+        function(name, id) {
+          var $el = $(self.itemTemplate({
+            title: name,
+            id: id
+          }));
+          self.$container.append($el);
+        });
 
       var dd = new Sortable(self.$container, {
         selector: 'li'
@@ -63,7 +63,7 @@ define([
       self.$('input:checked').each(function() {
         self.app.activeColumns.push($(this).val());
       });
-      self.app.setCookieSetting('activeColumns', this.app.activeColumns);
+      self.app.setCookieSetting(self.app.activeColumnsCookie, this.app.activeColumns);
       self.app.tableView.render();
     }
   });

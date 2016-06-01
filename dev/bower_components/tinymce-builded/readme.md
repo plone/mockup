@@ -1,41 +1,22 @@
-TinyMCE - The JavaScript Rich Text editor
-==========================================
+tinymce-builded
+===============
 
-Building TinyMCE
------------------
-1. Install Node.js
-2. Open a console and go to the project directory
-3. Write "npm i -g grunt-cli" to install the grunt command line tool globally.
-4. Write "npm i" to install all package dependencies.
-4. Build TinyMCE by writing "grunt"
+>Biulded version of [TinyMCE](https://github.com/tinymce/tinymce) editor.
 
-Build tasks
-------------
-`grunt`
-Lints, minified, unit tests and creates release packages for TinyMCE.
+Also available as a Bower package `tinymce-builded`. You can install it by `bower install tinymce-builded`
 
-`grunt minify`
-Minifies all JS and CSS files.
+### TinyMCE version update process
 
-`grunt test`
-Runs all qunit tests on PhantomJS.
+1. Create new branch from latest `master` and give it a name `update-X.X.X` where `X.X.X` is the version number of TinyMCE that you are updating to
+2. Download latest Dev package of TinyMCE from [official download page](https://www.tinymce.com/download/) and extract it to any folder
+3. Navigate to the extracted `tinymce` directory and copy `tinymce/js` folder to `tinymce_builded/` root folder rewriting existing files
+4. Download latest language files from [Language Packages page](https://www.tinymce.com/download/language-packages/) and extract it to any folder
+5. Copy the extracted `langs` folder to `tinymce_builded/js/tinymce/` replacing existing files
+6. Update version field in `bower.json` according to TinyMCE version (it should be the same)
+7. Stage all files in git: `git add --all .`
+8. Commit changes: `git commit -m "Update to X.X.X"`
+9. Tag the commit with a new version: `git tag X.X.X`
+10. Push the branch to github including tags: `git push origin update-X.X.X --tags`
+11. Create a pull-request against `master` branch and merge it
 
-`grunt lint`
-Runs all source files though various JS linters.
-
-`grunt sc-test`
-Runs all qunit tests on Saucelabs.
-
-`grunt --help`
-Displays the various build tasks.
-
-Bundle themes and plugins into a single file
----------------------------------------------
-`grunt bundle --themes modern --plugins table,paste`
-Minifies the core, adds the modern theme and adds the table and paste plugin into tinymce.min.js.
-
-Contributing to the TinyMCE project
-------------------------------------
-You can read more about how to contribute to this project at [http://www.tinymce.com/develop/contributing.php](http://www.tinymce.com/develop/contributing.php)
-
-[![Build Status](https://travis-ci.org/tinymce/tinymce.png?branch=master)](https://travis-ci.org/tinymce/tinymce)
+That's it!

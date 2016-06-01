@@ -27,7 +27,7 @@
 
 define([
   'jquery',
-  'mockup-patterns-base',
+  'pat-base',
   'pat-logger',
   'pat-registry',
   'mockup-utils',
@@ -39,6 +39,7 @@ define([
   var ContentLoader = Base.extend({
     name: 'contentloader',
     trigger: '.pat-contentloader',
+    parser: 'mockup',
     defaults: {
       url: null,
       content: null,
@@ -89,7 +90,7 @@ define([
               data = data[0];
             }
             try{
-              $el = $(_.template(that.options.template, data));
+              $el = $(_.template(that.options.template)(data));
             }catch(e){
               // log this
               log.warn('error rendering template. pat-contentloader will not work');

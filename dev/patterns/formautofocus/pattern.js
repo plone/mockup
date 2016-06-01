@@ -15,13 +15,14 @@
 
 define([
   'jquery',
-  'mockup-patterns-base'
+  'pat-base'
 ], function($, Base, undefined) {
   'use strict';
 
   var FormAutoFocus = Base.extend({
     name: 'formautofocus',
     trigger: '.pat-formautofocus',
+    parser: 'mockup',
     defaults: {
       condition: 'div.error',
       target: 'div.error :input:not(.formTabs):visible:first',
@@ -30,9 +31,9 @@ define([
     init: function() {
       var self = this;
       if ($(self.options.condition, self.$el).size() !== 0) {
-        $(self.options.target, self.$el).focusin();
+        $(self.options.target, self.$el).focus();
       } else {
-        $(self.options.always, self.$el).focusin();
+        $(self.options.always, self.$el).focus();
       }
 
     }

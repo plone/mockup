@@ -67,19 +67,19 @@ define([
     it('default behaviour', function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal="backdrop: #body">Open</a>' +
+        ' <a class="pat-plone-modal" href="#target"' +
+        '    data-pat-plone-modal="backdrop: #body">Open</a>' +
         ' <div id="target" style="display:none;">Target</div>' +
         '</div>').appendTo('body');
 
       registry.scan($el);
 
-      expect($('.plone-modal-backdrop', $el).is(':hidden')).to.be.equal(true);
+      expect($('.plone-modal-wrapper', $el).size()).to.be.equal(0);
       expect($el.hasClass('plone-backdrop-active')).to.be.equal(false);
-      expect($('.plone-modal-wrapper', $el).is(':hidden')).to.be.equal(true);
+      expect($('.plone-modal-backdrop', $el).size()).to.be.equal(0);
       expect($('.plone-modal', $el).size()).to.equal(0);
 
-      $('a.pat-modal', $el).click();
+      $('a.pat-plone-modal', $el).click();
 
       expect($('.plone-modal-backdrop', $el).is(':visible')).to.be.equal(true);
       expect($el.hasClass('plone-backdrop-active')).to.be.equal(true);
@@ -102,15 +102,15 @@ define([
     it('customize modal on show event', function() {
       var $el = $('' +
         '<div id="body">' +
-        ' <a class="pat-modal" href="#target"' +
-        '    data-pat-modal="backdrop: #body">Open</a>' +
+        ' <a class="pat-plone-modal" href="#target"' +
+        '    data-pat-plone-modal="backdrop: #body">Open</a>' +
         ' <div id="target">Target</div>' +
         '</div>').appendTo('body');
 
       $('a', $el)
-        .patternModal()
-        .on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        .patPloneModal()
+        .on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           $('.plone-modal-header', modal.$modal).prepend($('<h3>New Title</h3>'));
         })
         .click();
@@ -120,9 +120,9 @@ define([
     });
 
     it('load modal content via ajax', function(done) {
-      $('<a class="pat-modal" />')
-        .patternModal()
-        .on('show.modal.patterns', function(e) {
+      $('<a class="pat-plone-modal" />')
+        .patPloneModal()
+        .on('show.plone-modal.patterns', function(e) {
           expect(true).to.be.equal(true);
           done();
         })
@@ -130,10 +130,10 @@ define([
     });
 
     it('redirects to base urls', function(done) {
-      $('<a class="pat-modal" />')
-        .patternModal()
-        .on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+      $('<a class="pat-plone-modal" />')
+        .patPloneModal()
+        .on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
             '<html><head><base href="testurl1"></base></head></html>'
@@ -144,8 +144,12 @@ define([
           )).to.equal('testurl2');
           expect(modal.defaults.actionOptions.redirectToUrl(
             'ignore',
-            '<html><body data-base-url="testurl3"></body></html>'
+            '<html><body data-base-url="testurl3" rubbish="discarded"></body></html>'
           )).to.equal('testurl3');
+          expect(modal.defaults.actionOptions.redirectToUrl(
+            'ignore',
+            '<html><body data-view-url="testurl4" rubbish="discarded"></body></html>'
+          )).to.equal('testurl4');
           done();
         })
         .click();
@@ -153,16 +157,16 @@ define([
 
     it('handles forms and form submits', function(done) {
       var server = this.server;
-      $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
+      $('<a href="modal-form.html" class="pat-plone-modal" >Foo</a>')
         .appendTo('body')
-        .patternModal()
-        .on('show.modal.patterns', function(e) {
+        .patPloneModal()
+        .on('show.plone-modal.patterns', function(e) {
           var $input = $('.pattern-modal-buttons').find('input');
           expect($input.size()).to.equal(1);
           $input.click();
           server.respond(); // XXX could not get autorespond to work
         })
-        .on('formActionSuccess.modal.patterns', function() {
+        .on('formActionSuccess.plone-modal.patterns', function() {
           expect($('.plone-modal').hasClass('in')).to.be.equal(true);
           var title = $('.plone-modal-header').find('h2').text();
           expect(title).to.equal('Form submitted');
@@ -175,16 +179,16 @@ define([
 
     it('handles form submits with enter key', function(done) {
       var server = this.server;
-      $('<a href="modal-form.html" class="pat-modal" >Foo</a>')
+      $('<a href="modal-form.html" class="pat-plone-modal" >Foo</a>')
         .appendTo('body')
-        .patternModal()
-        .on('show.modal.patterns', function(e) {
+        .patPloneModal()
+        .on('show.plone-modal.patterns', function(e) {
           var event = $.Event ('keydown');
           event.which = event.keyCode = 13;
           $('.plone-modal form').trigger (event);
           server.respond();
         })
-        .on('formActionSuccess.modal.patterns', function() {
+        .on('formActionSuccess.plone-modal.patterns', function() {
           var title = $('.plone-modal-header').find('h2').text();
           expect(title).to.equal('Form submitted');
           done();
@@ -198,8 +202,8 @@ define([
       // -- CHANGE POSITION ONLY ----------------------------------------------
       //
       it('position: center middle, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'middle', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -216,8 +220,8 @@ define([
         }).click();
       });
       it('position: left middle, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'middle', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -232,8 +236,8 @@ define([
         }).click();
       });
       it('position: right middle, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'middle', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -249,8 +253,8 @@ define([
         }).click();
       });
       it('position: center top, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'top', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -265,8 +269,8 @@ define([
         }).click();
       });
       it('position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'bottom', 0, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -282,8 +286,8 @@ define([
         }).click();
       });
       it('position: left top, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'top', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -296,8 +300,8 @@ define([
         }).click();
       });
       it('position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'bottom', 0, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -311,8 +315,8 @@ define([
         }).click();
       });
       it('position: right top, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'top', 0, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -326,8 +330,8 @@ define([
         }).click();
       });
       it('position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'bottom', 0, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -346,8 +350,8 @@ define([
       // -- NON-ZERO MARGIN ---------------------------------------------------
       //
       it('position: center middle, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'middle', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -364,8 +368,8 @@ define([
         }).click();
       });
       it('position: left middle, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'middle', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -380,8 +384,8 @@ define([
         }).click();
       });
       it('position: right middle, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'middle', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -397,8 +401,8 @@ define([
         }).click();
       });
       it('position: center top, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'top', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -413,8 +417,8 @@ define([
         }).click();
       });
       it('position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'bottom', 5, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -430,8 +434,8 @@ define([
         }).click();
       });
       it('position: left top, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'top', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -444,8 +448,8 @@ define([
         }).click();
       });
       it('position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'bottom', 5, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -459,8 +463,8 @@ define([
         }).click();
       });
       it('position: right top, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'top', 5, 340, 280, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -474,8 +478,8 @@ define([
         }).click();
       });
       it('position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'bottom', 5, 340, 280, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -494,8 +498,8 @@ define([
       // -- WRAPPER SMALLER THAN MODAL ----------------------------------------
       //
       it('position: center middle, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'middle', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -508,8 +512,8 @@ define([
         }).click();
       });
       it('position: left middle, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'middle', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -522,8 +526,8 @@ define([
         }).click();
       });
       it('position: right middle, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'middle', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -537,8 +541,8 @@ define([
         }).click();
       });
       it('position: center top, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'top', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -551,8 +555,8 @@ define([
         }).click();
       });
       it('position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('center', 'bottom', 0, 450, 350, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -566,8 +570,8 @@ define([
         }).click();
       });
       it('position: left top, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'top', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -580,8 +584,8 @@ define([
         }).click();
       });
       it('position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('left', 'bottom', 0, 450, 350, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -595,8 +599,8 @@ define([
         }).click();
       });
       it('position: right top, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'top', 0, 450, 350, 400, 300);
           expect(pos).not.to.have.property('bottom');
           expect(pos).to.have.property('top');
@@ -610,8 +614,8 @@ define([
         }).click();
       });
       it('position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300', function(done) {
-        $('<a href="#"/>').patternModal().on('show.modal.patterns', function(e) {
-          var modal = $(this).data('pattern-modal');
+        $('<a href="#"/>').patPloneModal().on('show.plone-modal.patterns', function(e) {
+          var modal = $(this).data('pattern-plone-modal');
           var pos = modal.findPosition('right', 'bottom', 0, 450, 350, 400, 300);
           expect(pos).to.have.property('bottom');
           expect(pos).to.have.property('top');

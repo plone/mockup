@@ -14,7 +14,7 @@ module("tinymce.Editor", {
 				'*': 'color,font-size,font-family,background-color,font-weight,font-style,text-decoration,float,margin,margin-top,margin-right,margin-bottom,margin-left,display'
 			},
 			custom_elements: 'custom1,~custom2',
-			extended_valid_elements: 'custom1,custom2',
+			extended_valid_elements: 'custom1,custom2,script[*]',
 			init_instance_callback: function(ed) {
 				window.editor = ed;
 
@@ -356,4 +356,130 @@ test('execCommand return values for native commands', function() {
 
 	strictEqual(editor.execCommand("ExistingCommand"), true, "Return value for an editor handled command");
 	strictEqual(lastCmd, "ExistingCommand");
+});
+
+test('addCommand', function() {
+	var scope = {}, lastScope, lastArgs;
+
+	function callback() {
+		lastScope = this;
+		lastArgs = arguments;
+	}
+
+	editor.addCommand("CustomCommand1", callback, scope);
+	editor.addCommand("CustomCommand2", callback);
+
+	editor.execCommand("CustomCommand1", false, "value", {extra: true});
+	strictEqual(lastArgs[0], false);
+	strictEqual(lastArgs[1], "value");
+	ok(lastScope === scope);
+
+	editor.execCommand("CustomCommand2");
+	equal(typeof lastArgs[0], "undefined");
+	equal(typeof lastArgs[1], "undefined");
+	ok(lastScope === editor);
+});
+
+test('addQueryStateHandler', function() {
+	var scope = {}, lastScope, currentState;
+
+	function callback() {
+		lastScope = this;
+		return currentState;
+	}
+
+	editor.addQueryStateHandler("CustomCommand1", callback, scope);
+	editor.addQueryStateHandler("CustomCommand2", callback);
+
+	currentState = false;
+	ok(!editor.queryCommandState("CustomCommand1"));
+	ok(lastScope === scope, "Scope is not custom scope");
+
+	currentState = true;
+	ok(editor.queryCommandState("CustomCommand2"));
+	ok(lastScope === editor, "Scope is not editor");
+});
+
+test('Block script execution', function() {
+	editor.setContent('<script></script><script type="x"></script><script type="mce-x"></script><p>x</p>');
+	equal(
+		Utils.cleanHtml(editor.getBody().innerHTML),
+		'<script type="mce-no/type"></script>' +
+		'<script type="mce-x"></script>' +
+		'<script type="mce-x"></script>' +
+		'<p>x</p>'
+	);
+	equal(
+		editor.getContent(),
+		'<script></script>' +
+		'<script type="x"></script>' +
+		'<script type="x"></script>' +
+		'<p>x</p>'
+	);
+});
+
+test('addQueryValueHandler', function() {
+	var scope = {}, lastScope, currentValue;
+
+	function callback() {
+		lastScope = this;
+		return currentValue;
+	}
+
+	editor.addQueryValueHandler("CustomCommand1", callback, scope);
+	editor.addQueryValueHandler("CustomCommand2", callback);
+
+	currentValue = "a";
+	equal(editor.queryCommandValue("CustomCommand1"), "a");
+	ok(lastScope === scope, "Scope is not custom scope");
+
+	currentValue = "b";
+	ok(editor.queryCommandValue("CustomCommand2"), "b");
+	ok(lastScope === editor, "Scope is not editor");
+});
+
+test('setDirty/isDirty', function() {
+	var lastArgs = null;
+
+	editor.on('dirty', function(e) {
+		lastArgs = e;
+	});
+
+	editor.setDirty(false);
+	strictEqual(lastArgs, null);
+	strictEqual(editor.isDirty(), false);
+
+	editor.setDirty(true);
+	strictEqual(lastArgs.type, 'dirty');
+	strictEqual(editor.isDirty(), true);
+
+	lastArgs = null;
+	editor.setDirty(true);
+	strictEqual(lastArgs, null);
+	strictEqual(editor.isDirty(), true);
+
+	editor.setDirty(false);
+	strictEqual(lastArgs, null);
+	strictEqual(editor.isDirty(), false);
+});
+
+test('setMode', function() {
+	var clickCount = 0;
+
+	editor.on('click', function() {
+		clickCount++;
+	});
+
+	editor.dom.fire(editor.getBody(), 'click');
+	equal(clickCount, 1);
+
+	editor.setMode('readonly');
+	equal(editor.theme.panel.find('button:last')[2].disabled(), true);
+	editor.dom.fire(editor.getBody(), 'click');
+	equal(clickCount, 1);
+
+	editor.setMode('design');
+	editor.dom.fire(editor.getBody(), 'click');
+	equal(editor.theme.panel.find('button:last')[2].disabled(), false);
+	equal(clickCount, 2);
 });
