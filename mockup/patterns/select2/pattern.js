@@ -64,10 +64,11 @@
 define([
   'jquery',
   'pat-base',
+  'mockup-utils',
   'select2',
   'jquery.event.drag',
   'jquery.event.drop'
-], function($, Base) {
+], function($, Base, utils) {
   'use strict';
 
   var Select2 = Base.extend({
@@ -115,7 +116,7 @@ define([
             if (seldefaults[this]) {
               text = seldefaults[this];
             }
-            data.push({id: this, text: text});
+            data.push({id: utils.escapeHTML(this), text: utils.escapeHTML(text)});
           });
           callback(data);
         };
@@ -221,7 +222,8 @@ define([
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
             $(value.split(self.options.separator)).each(function () {
-              data.push({id: this, text: this});
+              var val = utils.escapeHTML(this);
+              data.push({id: val, text: val});
             });
             callback(data);
           };
@@ -249,6 +251,7 @@ define([
 
               var haveResult = queryTerm === '' || $.inArray(queryTerm, dataIds) >= 0;
               if (self.options.allowNewItems && !haveResult) {
+                queryTerm = utils.escapeHTML(queryTerm);
                 results.push({id: queryTerm, text: queryTerm});
               }
 

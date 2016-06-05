@@ -333,6 +333,9 @@ define([
       history: function(){
         return !!(window.history && window.history.pushState);
       }
+    },
+    escapeHTML: function(val){
+      return $("<div/>").text(val).html();
     }
   };
 });

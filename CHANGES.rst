@@ -48,6 +48,9 @@ New:
 
 Fixes:
 
+- Escape input into select2 widget
+  [vangheem]
+
 - Fix issue where using filter when paging would not work in the structure pattern
   [vangheem]
 
