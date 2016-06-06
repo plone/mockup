@@ -125,7 +125,7 @@ define([
         '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
         '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
         '  <%= items %>' +
-        '  <% if (favorites) { %>' +
+        '  <% if (favorites.length > 0) { %>' +
         '  <div class="favorites dropdown pull-right">' +
         '    <button class="favorites dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '      <span class="glyphicon glyphicon-star"/>' +

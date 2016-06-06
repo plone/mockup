@@ -341,6 +341,11 @@ define([
 
     });
 
+    it('empty favorites not shown', function () {
+      var pattern = initializePattern();
+      expect($('button.favorites', $container).length).to.be.equal(0);
+    });
+
     it('use favorites', function () {
       var pattern = initializePattern({'favorites': [{'title': 'root', 'path': '/'}, {'title': 'folder1', 'path': '/folder1'}]});
       var clock = sinon.useFakeTimers();
