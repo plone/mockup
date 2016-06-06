@@ -259,7 +259,7 @@ define([
       registry.scan($el);
       expect($('#test-select2', $el).is('input')).to.equal(true);
       expect($('#test-select2', $el).attr('type')).to.equal('hidden');
-      expect($('#test-select2', $el).attr('class')).to.equal('pat-select2 select2-offscreen');
+      expect($('#test-select2', $el).attr('class')).to.equal('pat-select2');
       expect($('#test-select2', $el).attr('name')).to.equal('test-name');
       expect($('#test-select2', $el).val()).to.equal('1;3');
       var $results = $('li.select2-search-choice', $el);
