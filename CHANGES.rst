@@ -12,6 +12,7 @@ Incompatibilities:
 New:
 
 - Update safe bower.json dependencies except backbone which tests would fail.
+  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
   [thet]
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
