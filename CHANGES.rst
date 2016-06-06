@@ -11,6 +11,9 @@ Incompatibilities:
 
 New:
 
+- Update safe bower.json dependencies except backbone which tests would fail.
+  [thet]
+
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
 
