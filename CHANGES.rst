@@ -9,6 +9,9 @@ New:
 
 Fixes:
 
+- Escape input into select2 widget
+  [vangheem]
+
 
 2.1.4 (2016-03-31)
 ------------------
