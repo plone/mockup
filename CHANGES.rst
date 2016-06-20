@@ -12,6 +12,7 @@ Incompatibilities:
 New:
 
 - Update safe bower.json dependencies except backbone which tests would fail.
+  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
   [thet]
 - Related items pattern:
   OK - Remove obsolete tree widget
@@ -35,6 +36,29 @@ New:
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
   [thet]
+- Related items pattern:
+  OK - Remove obsolete tree widget
+  OK - Make Search/Browse mode user-selectable via buttons
+  OK - Let search search recursively
+  OK - Let search mode use last browse mode's path
+  OK - Show only selectable items in search mode, if defined.
+  OK - Search only in current path in browse mode.
+  - Show only selectable and folderish items in browse mode, if selctable items are defined.
+  - Optional Image Upload
+  - Favorites based on registry path entries
+- Related items pattern refactoring:
+  - [x] Make "search" and "browse" mode user-selectable via buttons.
+  - [x] Remove obsolete tree widget, use "browse" mode instead.
+  - [x] Let "search" mode search in currentPath recursively. The current path can be selected in "browse" mode.
+  - [x] Show only selectable items in "search" mode, if defined.
+  - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
+  - [ ] Allow optional image and file upload (especially useful for image and file reference widgets).
+  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
+  - [x] Default ``closeOnSelect`` to ``true``.
+  - [x] Exclude already selected items in result list.
+  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  [thet]
+
 
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
