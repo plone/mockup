@@ -409,38 +409,6 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-
-      self.data = {};
-      // get selection BEFORE..
-      // This is pulled from TinyMCE link plugin
-      self.initialText = null;
-      var value;
-      self.rng = self.tiny.selection.getRng();
-      self.selectedElm = self.tiny.selection.getNode();
-      self.anchorElm = self.tiny.dom.getParent(self.selectedElm, 'a[href]');
-      self.onlyText = self.isOnlyTextSelected();
-
-      self.data.text = self.initialText = self.anchorElm ? (self.anchorElm.innerText || self.anchorElm.textContent) : self.tiny.selection.getContent({format: 'text'});
-      self.data.href = self.anchorElm ? self.tiny.dom.getAttrib(self.anchorElm, 'href') : '';
-
-      if (self.anchorElm) {
-        self.data.target = self.tiny.dom.getAttrib(self.anchorElm, 'target');
-      } else if (self.tiny.settings.default_link_target) {
-        self.data.target = self.tiny.settings.default_link_target;
-      }
-
-      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'rel'))) {
-        self.data.rel = value;
-      }
-
-      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'class'))) {
-        self.data['class'] = value;
-      }
-
-      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'title'))) {
-        self.data.title = value;
-      }
-
       self.modal = registry.patterns['plone-modal'].init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
@@ -712,6 +680,38 @@ define([
 
     initData: function() {
       var self = this;
+
+      self.data = {};
+      // get selection BEFORE..
+      // This is pulled from TinyMCE link plugin
+      self.initialText = null;
+      var value;
+      self.rng = self.tiny.selection.getRng();
+      self.selectedElm = self.tiny.selection.getNode();
+      self.anchorElm = self.tiny.dom.getParent(self.selectedElm, 'a[href]');
+      self.onlyText = self.isOnlyTextSelected();
+
+      self.data.text = self.initialText = self.anchorElm ? (self.anchorElm.innerText || self.anchorElm.textContent) : self.tiny.selection.getContent({format: 'text'});
+      self.data.href = self.anchorElm ? self.tiny.dom.getAttrib(self.anchorElm, 'href') : '';
+
+      if (self.anchorElm) {
+        self.data.target = self.tiny.dom.getAttrib(self.anchorElm, 'target');
+      } else if (self.tiny.settings.default_link_target) {
+        self.data.target = self.tiny.settings.default_link_target;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'rel'))) {
+        self.data.rel = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'class'))) {
+        self.data['class'] = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'title'))) {
+        self.data.title = value;
+      }
+
       self.selection = self.tiny.selection;
       self.tiny.focus();
       var selectedElm = self.imgElm = self.selection.getNode();
