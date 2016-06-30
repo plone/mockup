@@ -120,14 +120,18 @@ define([
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
         '<div>' +
-        '  <button class="mode search <% if (mode=="search") { %>active<% } %>"><%- searchModeText %></button>' +
-        '  <button class="mode browse <% if (mode=="browse") { %>active<% } %>"><%- browseModeText %></button>' +
-        '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
-        '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
-        '  <%= items %>' +
+        '  <div class="btn-group" role="group">' +
+        '    <button type="button" class="mode search btn btn-xs <% if (mode=="search") { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>' +
+        '    <button type="button" class="mode browse btn btn-xs <% if (mode=="browse") { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>' +
+        '  </div>' +
+        '  <div class="pattern-relateditems-path-wrapper">' +
+        '    <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
+        '    <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
+        '    <%= items %>' +
+        '  </div>' +
         '  <% if (favorites.length > 0) { %>' +
         '  <div class="favorites dropdown pull-right">' +
-        '    <button class="favorites dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '    <button class="favorites dropdown-toggle btn btn-primary btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '      <span class="glyphicon glyphicon-star"/>' +
         '      <%- favText %>' +
         '      <span class="caret"/>' +
@@ -273,8 +277,8 @@ define([
 
       $('button.mode.search', $crumbs).on('click', function(e) {
         e.preventDefault();
-        $('button.mode.search', $crumbs).addClass('active');
-        $('button.mode.browse', $crumbs).removeClass('active');
+        $('button.mode.search', $crumbs).toggleClass('btn-primary btn-default');
+        $('button.mode.browse', $crumbs).toggleClass('btn-primary btn-default');
         self.browsing = false;
         if (self.$el.select2('data').length > 0) {
           // Have to call after initialization
@@ -289,8 +293,8 @@ define([
 
       $('button.mode.browse', $crumbs).on('click', function(e) {
         e.preventDefault();
-        $('button.mode.browse', $crumbs).addClass('active');
-        $('button.mode.search', $crumbs).removeClass('active');
+        $('button.mode.search', $crumbs).toggleClass('btn-primary btn-default');
+        $('button.mode.browse', $crumbs).toggleClass('btn-primary btn-default');
         self.browsing = true;
         if (self.$el.select2('data').length > 0) {
           // Have to call after initialization

@@ -3,6 +3,7 @@
 @import '@{bowerPath}/bootstrap/less/glyphicons.less';
 @import '@{mockupPath}/select2/pattern.select2.less';
 @import '@{bowerPath}/bootstrap/less/buttons.less';
+@import '@{bowerPath}/bootstrap/less/button-groups.less';
 
 .pattern-relateditems-dropdown {
   .select2-results {
@@ -27,6 +28,11 @@
   display: inline-block;
 }
 
+.pattern-relateditems-path-wrapper {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    display: inline-block;
+}
 .pattern-relateditems-path {
   font-size: 12px;
   line-height: 20px;
@@ -45,18 +51,14 @@
   em {
     color: #666;
   }
-
-  button.mode {
-    .btn;
-    .btn-xs;
-    .btn-info;
+  .btn-group {
+    margin-top: 2px;
+    margin-bottom: 2px;
   }
+}
 
-  button.favorites {
-    .btn;
-    .btn-xs;
-    .btn-success;
-  }
+.pattern-relateditems-path-label {
+    margin-top: 2px;
 }
 
 .pattern-relateditems-buttons {
