@@ -78,6 +78,7 @@ New:
   [thet]
 
 - Structure pattern:
+  - Remove ``pat-relateditems`` path selection widget but make sure, the path can still be set via navigation within the structure pattern.
   - Allow definition of action menu items not only as dropdowns but also as buttons.
   - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
   - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
