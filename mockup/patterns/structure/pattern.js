@@ -48,7 +48,7 @@ define([
 
       activeColumnsCookie: 'activeColumns',
 
-      iconSize: 'icon',
+      iconSize: 'thumb',
 
       /*
         As the options operate on a merging basis per new attribute
@@ -131,7 +131,6 @@ define([
         },
         url: '/rearrange'
       },
-      basePath: '/',
       moveUrl: null,
 
       buttons: null,

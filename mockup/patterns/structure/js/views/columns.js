@@ -33,7 +33,21 @@ define([
     afterRender: function() {
       var self = this;
 
+      var objKeySortCmp = function (a, b) {
+        // object key sort compare function
+        var ca = self.app.availableColumns[a];
+        var cb = self.app.availableColumns[b];
+        if (ca < cb) {
+          return -1;
+        } else if (ca == cb) {
+          return 0;
+        } else {
+          return 1;
+        }
+      }
+
       self.$container = self.$('ul');
+
       _.each(self.app.activeColumns, function(id) {
         var $el = $(self.itemTemplate({
           title: self.app.availableColumns[id],
@@ -42,10 +56,11 @@ define([
         $el.find('input')[0].checked = true;
         self.$container.append($el);
       });
-      _.each(_.omit(self.app.availableColumns, self.app.activeColumns),
-        function(name, id) {
+
+      var availableKeys = _.keys(_.omit(self.app.availableColumns, self.app.activeColumns)).sort(objKeySortCmp);
+      _.each(availableKeys, function(id) {
           var $el = $(self.itemTemplate({
-            title: name,
+            title: self.app.availableColumns[id],
             id: id
           }));
           self.$container.append($el);
