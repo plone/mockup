@@ -28,6 +28,7 @@
             <div class="previews">
             </div>
             <div class="controls">
+                <% if (allowPathSelection) { %>
                 <div class="path">
                     <label><%- _t("Upload to...") %></label>
                     <p class="form-help">
@@ -38,6 +39,7 @@
                         name="location"
                         />
                 </div>
+                <% } %>
                 <div class="actions row">
                     <div class="col-md-9">
                         <div class="progress progress-striped active">
