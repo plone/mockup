@@ -9,7 +9,6 @@ define([
   'text!mockup-patterns-structure-url/templates/actionmenu.xml',
   'pat-registry',
   'translate',
-  'mockup-patterns-modal',
   'mockup-patterns-tooltip',
   'bootstrap-dropdown'
 ], function($, _, BaseView, utils, Result, Actions, ActionMenu, ActionMenuTemplate, registry, _t) {
@@ -60,11 +59,20 @@ define([
               menuOptionsCategorized[category] = [];
           }
           menuOptionsCategorized[category].push(menuOption);
-          if (menuOption.modal || menuOption.category === 'button') {
+          if (!menuOption.patternClasses) {
+            // set default to empty string
+            menuOption.patternClasses = '';
+          }
+          if (menuOption.modal === true) {
+            // add standard pat-plone-modal.
+            // If you want another modal implementation, don't use modal=true but only set patternClasses.
+            menuOption.patternClasses += ' pat-plone-modal';
+          }
+          if (menuOption.patternClasses || menuOption.category === 'button') {
             self.needsRescan = true;
           }
 
-		      // Create event handler and add it to the results object.
+          // Create event handler and add it to the results object.
           var e = self.eventConstructor(menuOption);
           if (e) {
             result['click a.' + idx] = e;
@@ -103,7 +111,6 @@ define([
       var data = this.model.toJSON();
       data.header = self.options.header || null;
       data.menuOptions = self.menuOptionsCategorized;
-
       self.$el.html(self.template($.extend({
         _t: _t,
         id: utils.generateId()

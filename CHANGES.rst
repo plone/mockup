@@ -11,8 +11,24 @@ Incompatibilities:
 
 New:
 
+- Add option ``allowPathSelection`` to the upload widget to explicitly disable the pat-relateditems path selection.
+  [thet]
+
 - Update safe bower.json dependencies except backbone which tests would fail.
   Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
+  [thet]
+
+- Related items pattern refactoring:
+  - [x] Make "search" and "browse" mode user-selectable via buttons.
+  - [x] Remove obsolete tree widget, use "browse" mode instead.
+  - [x] Let "search" mode search in currentPath recursively. The current path can be selected in "browse" mode.
+  - [x] Show only selectable items in "search" mode, if defined.
+  - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
+  - [ ] Allow optional image and file upload (especially useful for image and file reference widgets).
+  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
+  - [x] Default ``closeOnSelect`` to ``true``.
+  - [x] Exclude already selected items in result list.
+  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
   [thet]
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
@@ -29,12 +45,15 @@ New:
   [thet]
 
 - Structure pattern:
+  - Sort Available Columns dialog entries.
+  - Remove ``pat-relateditems`` path selection widget but make sure, the path can still be set via navigation within the structure pattern.
   - Allow definition of action menu items not only as dropdowns but also as buttons.
   - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
   - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
   - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
   - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
   - Add ``iconCSS`` option for action menus items to add icons.
+  - Add ``patternClasses`` option for action menu items to be able to set abitrary patterns (or classes) on the anchor tag of the menu item.
   - Add ``modal`` option for action menus items to allow links open in a modal.
   - Add ``iconSize`` option to set the icon size if a item has an image.
   - Use icons for all actionmenu entries.
@@ -51,6 +70,11 @@ New:
   [thet]
 
 Fixes:
+
+- Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with ``visibility: hidden`` or ``opacity: 0``).
+  That in addition to elements, which are not visible at all and do not use screen space (``display: none``).
+  Prevents upload form in structure pattern to be closed when opening the file selection tool.
+  [thet]
 
 - Escape input into select2 widget
   [vangheem]

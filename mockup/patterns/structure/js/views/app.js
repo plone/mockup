@@ -51,7 +51,7 @@ define([
       /* close popovers when clicking away */
       $(document).click(function(e) {
         var $el = $(e.target);
-        if (!$el.is(':visible')) {
+        if (!$el.is(':visible') || $el.css('visibility') === 'hidden' || $el.css('opacity') === '0') {
           // ignore this, fake event trigger to element that is not visible
           return;
         }
