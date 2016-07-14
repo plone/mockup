@@ -45,6 +45,7 @@ New:
   [thet]
 
 - Structure pattern:
+  - Sort Available Columns dialog entries.
   - Remove ``pat-relateditems`` path selection widget but make sure, the path can still be set via navigation within the structure pattern.
   - Allow definition of action menu items not only as dropdowns but also as buttons.
   - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
