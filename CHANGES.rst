@@ -11,6 +11,9 @@ Incompatibilities:
 
 New:
 
+- Fix urls in modals not opening in new window
+  [vangheem]
+
 - Update safe bower.json dependencies except backbone which tests would fail.
   Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
   [thet]
