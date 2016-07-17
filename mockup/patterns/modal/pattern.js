@@ -335,7 +335,12 @@ define([
 
         // Non-ajax link (I know it says "ajaxUrl" ...)
         if (options.displayInModal === false) {
-          window.parent.location.href = url;
+          if($action.attr('target') === '_blank'){
+            window.open(url, '_blank');
+            self.loading.hide();
+          }else{
+            window.location = url;
+          }
           return;
         }
 
