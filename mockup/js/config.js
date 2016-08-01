@@ -79,6 +79,7 @@
       'mockup-patterns-preventdoublesubmit': 'patterns/preventdoublesubmit/pattern',
       'mockup-patterns-querystring': 'patterns/querystring/pattern',
       'mockup-patterns-relateditems': 'patterns/relateditems/pattern',
+      'mockup-patterns-relateditems-upload': 'patterns/relateditems/upload',
       'mockup-patterns-recurrence': 'patterns/recurrence/pattern',
       'mockup-patterns-resourceregistry': 'patterns/resourceregistry/pattern',
       'mockup-patterns-resourceregistry-url': 'patterns/resourceregistry',

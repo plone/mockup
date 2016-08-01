@@ -48,6 +48,10 @@
  *
  *    {{ example-5 }}
  *
+ *    # Mode "browse", Upload
+ *
+ *    {{ example-6 }}
+ *
  * Example: example-1
  *    <input type="text" class="pat-relateditems"
  *           data-pat-relateditems="width:30em;
@@ -73,6 +77,10 @@
  *    <input type="text" class="pat-relateditems"
  *           data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "/relateditems-test.json", "maximumSelectionSize": 1}' />
  *
+ * Example: example-6
+ *    <input type="text" class="pat-relateditems"
+ *           data-pat-relateditems='{"selectableTypes": ["Image", "File"], "vocabularyUrl": "/relateditems-test.json", "upload": true}' />
+ *
  */
 
 
@@ -81,10 +89,12 @@ define([
   'underscore',
   'pat-base',
   'mockup-patterns-select2',
+  'mockup-patterns-relateditems-upload',
+  'mockup-ui-url/views/button',
   'mockup-utils',
   'translate',
   'bootstrap-dropdown'
-], function($, _, Base, Select2, utils, _t) {
+], function($, _, Base, Select2, UploadView, ButtonView, utils, _t) {
   'use strict';
 
   var RelatedItems = Base.extend({
@@ -99,6 +109,7 @@ define([
       vocabularyUrl: null,  // must be set to work
 
       // more options
+      upload: false,
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
       basePath: undefined,
       closeOnSelect: true,
@@ -119,7 +130,7 @@ define([
         '/<a href="<%- path %>" class="crumb"><%- text %></a>',
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<div>' +
+        '<div class="ui-offset-parent">' +
         '  <div class="btn-group" role="group">' +
         '    <button type="button" class="mode search btn btn-xs <% if (mode=="search") { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>' +
         '    <button type="button" class="mode browse btn btn-xs <% if (mode=="browse") { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>' +
@@ -129,19 +140,20 @@ define([
         '    <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
         '    <%= items %>' +
         '  </div>' +
-        '  <% if (favorites.length > 0) { %>' +
-        '  <div class="favorites dropdown pull-right">' +
-        '    <button class="favorites dropdown-toggle btn btn-primary btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-        '      <span class="glyphicon glyphicon-star"/>' +
-        '      <%- favText %>' +
-        '      <span class="caret"/>' +
-        '    </button>' +
-        '    <ul class="dropdown-menu">' +
-        '      <%= favItems %>' +
-        '    </ul>' +
+        '  <div class="pattern-relateditems-controls pull-right">' +
+        '    <% if (favorites.length > 0) { %>' +
+        '    <div class="favorites dropdown pull-right">' +
+        '      <button class="favorites dropdown-toggle btn btn-primary btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '        <span class="glyphicon glyphicon-star"/>' +
+        '        <%- favText %>' +
+        '        <span class="caret"/>' +
+        '      </button>' +
+        '      <ul class="dropdown-menu">' +
+        '        <%= favItems %>' +
+        '      </ul>' +
+        '    </div>' +
+        '    <% } %>' +
         '  </div>' +
-        '  <% } %>' +
-
         '</div>',
       breadCrumbsTemplateSelector: null,
       favoriteTemplate: '' +
@@ -273,7 +285,7 @@ define([
 
       var $crumbs = $(html);
 
-			$('.dropdown-toggle', $crumbs).dropdown();
+      $('.dropdown-toggle', $crumbs).dropdown();
 
       $('button.mode.search', $crumbs).on('click', function(e) {
         e.preventDefault();
@@ -316,6 +328,23 @@ define([
         e.preventDefault();
         self.browseTo($(this).attr('href'));
       });
+
+      // upload
+      if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
+        var uploadButtonId = 'upload-' + utils.generateId();
+        var uploadButton = new ButtonView({
+          id:  uploadButtonId,
+          title: _t('Upload'),
+          tooltip: _t('Upload files'),
+          icon: 'upload',
+        });
+        $('.pattern-relateditems-controls', $crumbs).prepend(uploadButton.render().el);
+        self.uploadView = new UploadView({
+          triggerView: uploadButton,
+          app: self
+        });
+        $('#btn-' +  uploadButtonId, $crumbs).append(self.uploadView.render().el);
+      }
 
       self.$browsePath.html($crumbs);
     },

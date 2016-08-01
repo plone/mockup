@@ -1,9 +1,71 @@
 @import '@{bowerPath}/bootstrap/less/variables.less'; // Modify this for custom colors, font-sizes, etc
 @icon-font-path: '@{bowerPath}/bootstrap/dist/fonts/';
 @import '@{bowerPath}/bootstrap/less/glyphicons.less';
+@import '@{mockuplessPath}/ui.less';
+
+@import (reference) '@{bowerPath}/bootstrap/less/mixins.less';
+@import (reference) '@{bowerPath}/bootstrap/less/utilities.less';
+@import (reference) '@{bowerPath}/bootstrap/less/buttons.less';
+@import (reference) '@{bowerPath}/bootstrap/less/button-groups.less';
+@import (reference) '@{bowerPath}/bootstrap/less/popovers.less';
+@import (reference) '@{bowerPath}/bootstrap/less/tooltip.less';
+@import (reference) '@{mockuplessPath}/popover.less';
+
 @import '@{mockupPath}/select2/pattern.select2.less';
-@import '@{bowerPath}/bootstrap/less/buttons.less';
-@import '@{bowerPath}/bootstrap/less/button-groups.less';
+
+
+.pattern-relateditems-container {
+
+    .fade:extend(.fade all){}
+    .collapse:extend(.collapse all){}
+    .collapsing:extend(.collapsing all){}
+
+    .popover:extend(.popover all){}
+    .popover-title:extend(.popover-title all){}
+    .popover-content:extend(.popover-content all){}
+    .arrow:extend(.arrow all){}
+    .tooltip:extend(.tooltip all){}
+    .tooltip-arrow:extend(.tooltip-arrow all){}
+    .tooltip-inner:extend(.tooltip-inner all){}
+
+    .table:extend(.table all){}
+    .pagination:extend(.pagination all){}
+
+    .btn:extend(.btn all){}
+    .btn-default:extend(.btn-default all){}
+    .btn-danger:extend(.btn-danger all){}
+    .btn-primary:extend(.btn-primary all){}
+    .btn-group:extend(.btn-group all){}
+    .btn-success:extend(.btn-success all){}
+    .input-group:extend(.input-group all){}
+    .input-group-addon:extend(.input-group-addon all){}
+    .input-group-btn:extend(.input-group-btn all){}
+    .dropdown-menu:extend(.dropdown-menu all){}
+    .dropdown-toggle:extend(.dropdown-toggle all){}
+    .dropdown-header:extend(.dropdown-header all){}
+    .divider:extend(.divider all){}
+
+    .table-striped:extend(.table-striped all){}
+    .table-bordered:extend(.table-bordered all){}
+
+    .navbar:extend(.navbar all){}
+    .navbar-search:extend(.navbar-search all){}
+    .form-search:extend(.form-search all){}
+    .ui-offset-parent:extend(.ui-offset-parent all){}
+
+    .form-group:extend(.form-group all){}
+    .help-block:extend(.help-block all){}
+    .checkbox:extend(.checkbox all){}
+
+    .open:extend(.open all){}
+
+    position: relative;
+    display: inline-block;
+
+    .btn-group .btn {
+        vertical-align: top;
+    }
+}
 
 .pattern-relateditems-dropdown {
     .select2-results {
@@ -23,12 +85,8 @@
     background-color: #ddd;
 }
 
-.pattern-relateditems-container {
-    position: relative;
-    display: inline-block;
-}
-
 .pattern-relateditems-path-wrapper {
+    max-width: 55%;
     margin-top: 2px;
     margin-bottom: 2px;
     display: inline-block;
