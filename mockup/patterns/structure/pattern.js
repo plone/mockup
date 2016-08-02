@@ -131,7 +131,6 @@ define([
         },
         url: '/rearrange'
       },
-      basePath: '/',
       moveUrl: null,
 
       buttons: null,
