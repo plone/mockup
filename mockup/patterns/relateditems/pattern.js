@@ -167,7 +167,7 @@ define([
         '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
         '  </a>' +
         '  <span class="pattern-relateditems-buttons">' +
-        '  <% if (is_folderish) { %>' +
+        '  <% if (mode !== "search" && is_folderish) { %>' +
         '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%- path %>"></a>' +
         '   <% } %>' +
         ' </span>' +

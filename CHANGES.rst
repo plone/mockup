@@ -29,6 +29,7 @@ New:
     [x] Let "browse" mode start from current path.
   - [x] Show only selectable items in "search" mode, if defined.
   - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
+  - [x] Show "Open folder" arrow only when in browse mode.
   - [x] Allow optional image and file upload (especially useful for image and file reference widgets).
   - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
   - [x] Default ``closeOnSelect`` to ``true``.
