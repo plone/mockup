@@ -220,12 +220,13 @@ define([
           });
         }
 
+        // TODO: Remove, if search-everywhere turns out useful.
         // search recursively in current path
-        baseCriteria.push({
-          i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
-          v: this.currentPath
-        });
+        // baseCriteria.push({
+        //   i: 'path',
+        //   o: 'plone.app.querystring.operation.string.path',
+        //   v: this.currentPath
+        // });
 
       }
 
@@ -289,18 +290,21 @@ define([
 
       $('button.mode.search', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        if ($('button.mode.search', self.$toolbar).hasClass('btn-primary')) {
-          return;
-        }
-        $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
-        $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-        self.browsing = false;
-        if (self.$el.select2('data').length > 0) {
-          // Have to call after initialization
-          self.openAfterInit = true;
-        }
-        self.setQuery();
-        if (!self.openAfterInit) {
+        if (self.browsing) {
+          $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
+          $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
+          self.browsing = false;
+          if (self.$el.select2('data').length > 0) {
+            // Have to call after initialization
+            self.openAfterInit = true;
+          }
+          self.setQuery();
+          if (!self.openAfterInit) {
+            self.$el.select2('close');
+            self.$el.select2('open');
+          }
+        } else {
+          // just open result list
           self.$el.select2('close');
           self.$el.select2('open');
         }
@@ -308,18 +312,21 @@ define([
 
       $('button.mode.browse', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        if ($('button.mode.browse', self.$toolbar).hasClass('btn-primary')) {
-          return;
-        }
-        $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
-        $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-        self.browsing = true;
-        if (self.$el.select2('data').length > 0) {
-          // Have to call after initialization
-          self.openAfterInit = true;
-        }
-        self.setQuery();
-        if (!self.openAfterInit) {
+        if (!self.browsing) {
+          $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
+          $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
+          self.browsing = true;
+          if (self.$el.select2('data').length > 0) {
+            // Have to call after initialization
+            self.openAfterInit = true;
+          }
+          self.setQuery();
+          if (!self.openAfterInit) {
+            self.$el.select2('close');
+            self.$el.select2('open');
+          }
+        } else {
+          // just open result list
           self.$el.select2('close');
           self.$el.select2('open');
         }
