@@ -26,13 +26,7 @@ define([
       self.popover = PopoverView.prototype.render.call(this);
       var options = {};
       options.success = function(e, response) {
-        var uid;
-        try {
-          var resp = JSON.parse(response);
-          uid = resp.UID;
-        } catch (e) {
-          uid = undefined;  // cannot parse JSON response
-        }
+        var uid = response.UID;
         if (uid) {
           var query = new utils.QueryHelper({
             vocabularyUrl: self.app.options.vocabularyUrl,
