@@ -62,8 +62,33 @@
     position: relative;
     display: inline-block;
 
-    .btn-group .btn {
-        vertical-align: top;
+    .toolbar {
+        display: table;
+        width: 100%;
+        background-color: #d8d8d8;
+
+        .btn {
+            &:extend(.btn-sm);
+        }
+
+        .mode-selector {
+            display: table-cell;
+            width: 140px;
+            vertical-align: middle;
+        }
+
+        .path-wrapper {
+            display: table-cell;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            vertical-align: middle;
+        }
+
+        .controls {
+            display: table-cell;
+            width: 210px;
+            vertical-align: middle;
+        }
     }
 }
 
@@ -83,36 +108,6 @@
 .pattern-relateditems-active {
     padding: 5px;
     background-color: #ddd;
-}
-
-.pattern-relateditems-path-wrapper {
-    max-width: 55%;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    display: inline-block;
-}
-.pattern-relateditems-path {
-    font-size: 12px;
-    line-height: 20px;
-    position: relative;
-    display: block;
-    padding: 0 6px;
-    color: #333;
-    border: 1px solid #aaa;
-    border-bottom-style: none;
-    background-color: #f1f1f1;
-
-    a {
-        padding: 0 6px;
-    }
-
-    em {
-        color: #666;
-    }
-    .btn-group {
-        margin-top: 2px;
-        margin-bottom: 2px;
-    }
 }
 
 .pattern-relateditems-path-label {

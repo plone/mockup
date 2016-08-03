@@ -132,30 +132,28 @@ define([
         '/<a href="<%- path %>" class="crumb"><%- text %></a>',
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<div class="ui-offset-parent">' +
-        '  <div class="btn-group" role="group">' +
-        '    <button type="button" class="mode search btn btn-xs <% if (mode=="search") { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>' +
-        '    <button type="button" class="mode browse btn btn-xs <% if (mode=="browse") { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>' +
+        '<div class="btn-group mode-selector" role="group">' +
+        '  <button type="button" class="mode search btn <% if (mode=="search") { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>' +
+        '  <button type="button" class="mode browse btn <% if (mode=="browse") { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>' +
+        '</div>' +
+        '<div class="path-wrapper">' +
+        '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
+        '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
+        '  <%= items %>' +
+        '</div>' +
+        '<div class="controls pull-right">' +
+        '  <% if (favorites.length > 0) { %>' +
+        '  <div class="favorites dropdown pull-right">' +
+        '    <button class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '      <span class="glyphicon glyphicon-star"/>' +
+        '      <%- favText %>' +
+        '      <span class="caret"/>' +
+        '    </button>' +
+        '    <ul class="dropdown-menu">' +
+        '      <%= favItems %>' +
+        '    </ul>' +
         '  </div>' +
-        '  <div class="pattern-relateditems-path-wrapper">' +
-        '    <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
-        '    <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
-        '    <%= items %>' +
-        '  </div>' +
-        '  <div class="pattern-relateditems-controls pull-right">' +
-        '    <% if (favorites.length > 0) { %>' +
-        '    <div class="favorites dropdown pull-right">' +
-        '      <button class="favorites dropdown-toggle btn btn-primary btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-        '        <span class="glyphicon glyphicon-star"/>' +
-        '        <%- favText %>' +
-        '        <span class="caret"/>' +
-        '      </button>' +
-        '      <ul class="dropdown-menu">' +
-        '        <%= favItems %>' +
-        '      </ul>' +
-        '    </div>' +
-        '    <% } %>' +
-        '  </div>' +
+        '  <% } %>' +
         '</div>',
       breadCrumbsTemplateSelector: null,
       favoriteTemplate: '' +
@@ -285,14 +283,17 @@ define([
         rootPath: self.options.rootPath
       });
 
-      var $crumbs = $(html);
+      self.$toolbar.html(html);
 
-      $('.dropdown-toggle', $crumbs).dropdown();
+      $('.dropdown-toggle', self.$toolbar).dropdown();
 
-      $('button.mode.search', $crumbs).on('click', function(e) {
+      $('button.mode.search', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        $('button.mode.search', $crumbs).toggleClass('btn-primary btn-default');
-        $('button.mode.browse', $crumbs).toggleClass('btn-primary btn-default');
+        if ($('button.mode.search', self.$toolbar).hasClass('btn-primary')) {
+          return;
+        }
+        $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
+        $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
         self.browsing = false;
         if (self.$el.select2('data').length > 0) {
           // Have to call after initialization
@@ -305,10 +306,13 @@ define([
         }
       });
 
-      $('button.mode.browse', $crumbs).on('click', function(e) {
+      $('button.mode.browse', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        $('button.mode.search', $crumbs).toggleClass('btn-primary btn-default');
-        $('button.mode.browse', $crumbs).toggleClass('btn-primary btn-default');
+        if ($('button.mode.browse', self.$toolbar).hasClass('btn-primary')) {
+          return;
+        }
+        $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
+        $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
         self.browsing = true;
         if (self.$el.select2('data').length > 0) {
           // Have to call after initialization
@@ -321,12 +325,12 @@ define([
         }
       });
 
-      $('a.crumb', $crumbs).on('click', function(e) {
+      $('a.crumb', self.$toolbar).on('click', function(e) {
         e.preventDefault();
         self.browseTo($(this).attr('href'));
       });
 
-      $('a.fav', $crumbs).on('click', function(e) {
+      $('a.fav', self.$toolbar).on('click', function(e) {
         e.preventDefault();
         self.browseTo($(this).attr('href'));
       });
@@ -345,12 +349,12 @@ define([
           if (disabled) {
             uploadButton.disable();
           }
-          $('.pattern-relateditems-controls', $crumbs).prepend(uploadButton.render().el);
+          $('.controls', self.$toolbar).prepend(uploadButton.render().el);
           self.uploadView = new UploadView({
             triggerView: uploadButton,
             app: self
           });
-          $('#btn-' +  uploadButtonId, $crumbs).append(self.uploadView.render().el);
+          $('#btn-' +  uploadButtonId, self.$toolbar).append(self.uploadView.render().el);
         }
 
         if (self.options.uploadAllowView) {
@@ -374,7 +378,6 @@ define([
 
       }
 
-      self.$browsePath.html($crumbs);
     },
 
     browseTo: function (path) {
@@ -531,8 +534,8 @@ define([
 
       Select2.prototype.initializeSelect2.call(self);
 
-      self.$browsePath = $('<div class="pattern-relateditems-path" />');
-      self.$container.prepend(self.$browsePath);
+      self.$toolbar = $('<div class="toolbar ui-offset-parent" />');
+      self.$container.prepend(self.$toolbar);
 
       self.$el.on('select2-selecting', function(event) {
         event.preventDefault();
