@@ -104,7 +104,6 @@ define([
     trigger: '.pat-relateditems',
     parser: 'mockup',
     currentPath: undefined,
-    browsing: undefined,
     openAfterInit: undefined,
     defaults: {
       // main option
@@ -208,7 +207,7 @@ define([
 
       var baseCriteria = [];
 
-      if (!this.browsing) {
+      if (this.options.mode == 'search') {
         // MODE SEARCH
 
         // restrict to given types
@@ -290,10 +289,10 @@ define([
 
       $('button.mode.search', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        if (self.browsing) {
+        if (self.options.mode === 'browse') {
           $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
           $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-          self.browsing = false;
+          self.options.mode = 'search';
           if (self.$el.select2('data').length > 0) {
             // Have to call after initialization
             self.openAfterInit = true;
@@ -312,10 +311,10 @@ define([
 
       $('button.mode.browse', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        if (!self.browsing) {
+        if (self.options.mode == 'search') {
           $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
           $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-          self.browsing = true;
+          self.options.mode = 'browse';
           if (self.$el.select2('data').length > 0) {
             // Have to call after initialization
             self.openAfterInit = true;
@@ -431,7 +430,7 @@ define([
     init: function() {
       var self = this;
 
-      self.browsing = self.options.mode === 'browse';
+      self.options.mode === 'browse';
       self.currentPath = self.options.basePath || self.options.rootPath;
 
       self.setQuery();
