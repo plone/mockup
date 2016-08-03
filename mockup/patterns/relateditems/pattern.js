@@ -12,6 +12,7 @@
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
+ *    rootUrl(string): Url of the rootPath.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
@@ -122,6 +123,7 @@ define([
       mode: 'search', // possible values are search and browse
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
+      rootUrl: '',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
       tokenSeparators: [',', ' '],
@@ -357,6 +359,7 @@ define([
           // Check, if uploads are allowed in current context
           $.ajax({
             url: '' + self.options.uploadAllowView,
+            // url: self.currentUrl() + self.options.uploadAllowView,  // not working yet
             dataType: 'JSON',
             type: 'GET',
             success: function (result) {
@@ -411,6 +414,14 @@ define([
         return true;
       } else {
         return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
+      }
+    },
+
+    currentUrl: function() {
+      // return the url of the current path
+      // current path must already be set and rootUrl defined.
+      if (this.options.rootUrl && this.currentPath) {
+        return this.options.rootUrl + this.currentPath;
       }
     },
 
