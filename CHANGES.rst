@@ -25,7 +25,6 @@ New:
 - Related items pattern refactoring:
   - [x] Make "search" and "browse" mode user-selectable via buttons.
   - [x] Remove obsolete tree widget, use "browse" mode instead.
-  - [x] Let "search" mode search in whole site.
     [x] Let "browse" mode start from current path.
   - [x] Show only selectable items in "search" mode, if defined.
   - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
