@@ -24,6 +24,8 @@
  *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
  *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
+ *    upload(boolen): Allow file and image uploads from within the related items widget.
+ *    uploadAllowView(string): View, which returns a JSON response in the form of {allowUpload: true}, if upload is allowed in the current context.
  *
  * Documentation:
  *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
@@ -331,19 +333,41 @@ define([
 
       // upload
       if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
-        var uploadButtonId = 'upload-' + utils.generateId();
-        var uploadButton = new ButtonView({
-          id:  uploadButtonId,
-          title: _t('Upload'),
-          tooltip: _t('Upload files'),
-          icon: 'upload',
-        });
-        $('.pattern-relateditems-controls', $crumbs).prepend(uploadButton.render().el);
-        self.uploadView = new UploadView({
-          triggerView: uploadButton,
-          app: self
-        });
-        $('#btn-' +  uploadButtonId, $crumbs).append(self.uploadView.render().el);
+
+        function initUploadView(disabled) {
+          var uploadButtonId = 'upload-' + utils.generateId();
+          var uploadButton = new ButtonView({
+            id:  uploadButtonId,
+            title: _t('Upload'),
+            tooltip: _t('Upload files'),
+            icon: 'upload',
+          });
+          if (disabled) {
+            uploadButton.disable();
+          }
+          $('.pattern-relateditems-controls', $crumbs).prepend(uploadButton.render().el);
+          self.uploadView = new UploadView({
+            triggerView: uploadButton,
+            app: self
+          });
+          $('#btn-' +  uploadButtonId, $crumbs).append(self.uploadView.render().el);
+        }
+
+        if (self.options.uploadAllowView) {
+          // Check, if uploads are allowed in current context
+          $.ajax({
+            url: '' + self.options.uploadAllowView,
+            dataType: 'JSON',
+            type: 'GET',
+            success: function (result) {
+              initUploadView(!result.allowUpload);
+            }
+          });
+        } else {
+          // just initialize upload view without checking, if uploads are allowed.
+          initUploadView();
+        }
+
       }
 
       self.$browsePath.html($crumbs);
