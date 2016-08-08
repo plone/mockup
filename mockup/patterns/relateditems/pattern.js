@@ -91,12 +91,11 @@ define([
   'underscore',
   'pat-base',
   'mockup-patterns-select2',
-  'mockup-patterns-relateditems-upload',
   'mockup-ui-url/views/button',
   'mockup-utils',
   'translate',
   'bootstrap-dropdown'
-], function($, _, Base, Select2, UploadView, ButtonView, utils, _t) {
+], function($, _, Base, Select2, ButtonView, utils, _t) {
   'use strict';
 
   var RelatedItems = Base.extend({
@@ -344,6 +343,8 @@ define([
 
       // upload
       if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
+
+        var UploadView = require('mockup-patterns-relateditems-upload');
 
         function initUploadView(disabled) {
           var uploadButtonId = 'upload-' + utils.generateId();
