@@ -63,8 +63,6 @@ define([
   'underscore',
   'pat-base',
   'tinymce',
-  'text!mockup-patterns-tinymce-url/templates/result.xml',
-  'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
   'mockup-patterns-tinymce-url/js/links',
   'mockup-i18n',
@@ -111,10 +109,7 @@ define([
   'tinymce-visualchars',
   'tinymce-wordcount',
   'tinymce-compat3x'
-], function($, _,
-            Base, tinymce,
-            ResultTemplate, SelectionTemplate,
-            utils, LinkModal, I18n, _t) {
+], function($, _, Base, tinymce, utils, LinkModal, I18n, _t) {
   'use strict';
 
   var TinyMCE = Base.extend({
@@ -229,9 +224,7 @@ define([
               o: 'plone.app.querystring.operation.list.contains',
               v: self.options.imageTypes.concat(self.options.folderTypes)
             }],
-            selectableTypes: self.options.imageTypes,
-            resultTemplate: ResultTemplate,
-            selectionTemplate: SelectionTemplate
+            selectableTypes: self.options.imageTypes
           }
         });
         var $el = $('<div/>').insertAfter(self.$el);
@@ -358,11 +351,6 @@ define([
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
       tinyOptions.skin = false;
-      self.options.relatedItems.generateImageUrl = function(data, scale) {
-        // this is so, in our result and selection template, we can
-        // access getting actual urls from related items
-        return self.generateImageUrl.apply(self, [data, scale]);
-      };
 
       tinyOptions.init_instance_callback = function(editor) {
         if (self.tiny === undefined || self.tiny === null) {

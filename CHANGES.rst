@@ -76,6 +76,9 @@ New:
 
 Fixes:
 
+- Adapt TinyMCE to relateditems changes and remove the selection and result templates.
+  [thet]
+
 - Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with ``visibility: hidden`` or ``opacity: 0``).
   That in addition to elements, which are not visible at all and do not use screen space (``display: none``).
   Prevents upload form in structure pattern to be closed when opening the file selection tool.
