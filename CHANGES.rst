@@ -9,6 +9,8 @@ Incompatibilities:
 - Remove support for node version < ``0.11`` and update travis dependencies.
   [thet]
 
+- Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+
 New:
 
 - Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
@@ -34,6 +36,7 @@ New:
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  - [x] Seperate templates from JavaScript into xml files.
   [thet]
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).

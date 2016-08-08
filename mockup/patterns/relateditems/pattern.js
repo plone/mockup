@@ -16,10 +16,10 @@
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
  *    width(string): Specify a width for the widget. ('100%')
- *    breadCrumbTemplate(string): Template to use for a single item in the breadcrumbs. ('/<a href="<%- path %>"><%- text %></a>')
- *    breadCrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbTemplate. (null)
- *    breadCrumbsTemplate(string): Template for element to which breadCrumbs will be appended. ('<span><span class="pattern-relateditems-path-label"><%- searchText %></span><a class="icon-home" href="/"></a><%- items %></span>')
- *    breadCrumbsTemplateSelector(string): Select an element from the DOM from which to grab the breadCrumbsTemplate. (null)
+ *    breadcrumbTemplate(string): Template to use for a single item in the breadcrumbs.
+ *    breadcrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadcrumbTemplate. (null)
+ *    toolbarTemplate(string): Template for element to which toolbar items will be appended.
+ *    toolbarTemplateSelector(string): Select an element from the DOM from which to grab the toolbarTemplate. (null)
  *    resultTemplate(string): Template for an item in the in the list of results. Refer to source for default. (Refer to source)
  *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
@@ -94,8 +94,19 @@ define([
   'mockup-ui-url/views/button',
   'mockup-utils',
   'translate',
+  'text!mockup-patterns-relateditems-url/templates/breadcrumb.xml',
+  'text!mockup-patterns-relateditems-url/templates/favorite.xml',
+  'text!mockup-patterns-relateditems-url/templates/result.xml',
+  'text!mockup-patterns-relateditems-url/templates/selection.xml',
+  'text!mockup-patterns-relateditems-url/templates/toolbar.xml',
   'bootstrap-dropdown'
-], function($, _, Base, Select2, ButtonView, utils, _t) {
+], function($, _, Base, Select2, ButtonView, utils, _t,
+            BreadcrumbTemplate,
+            FavoriteTemplate,
+            ResultTemplate,
+            SelectionTemplate,
+            ToolbarTemplate
+) {
   'use strict';
 
   var RelatedItems = Base.extend({
@@ -127,59 +138,16 @@ define([
       width: '100%',
 
       // templates
-      breadCrumbTemplate: '' +
-        '/<a href="<%- path %>" class="crumb"><%- text %></a>',
-      breadCrumbTemplateSelector: null,
-      breadCrumbsTemplate: '' +
-        '<div class="btn-group mode-selector" role="group">' +
-        '  <button type="button" class="mode search btn <% if (mode=="search") { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>' +
-        '  <button type="button" class="mode browse btn <% if (mode=="browse") { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>' +
-        '</div>' +
-        '<div class="path-wrapper">' +
-        '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
-        '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
-        '  <%= items %>' +
-        '</div>' +
-        '<div class="controls pull-right">' +
-        '  <% if (favorites.length > 0) { %>' +
-        '  <div class="favorites dropdown pull-right">' +
-        '    <button class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-        '      <span class="glyphicon glyphicon-star"/>' +
-        '      <%- favText %>' +
-        '      <span class="caret"/>' +
-        '    </button>' +
-        '    <ul class="dropdown-menu">' +
-        '      <%= favItems %>' +
-        '    </ul>' +
-        '  </div>' +
-        '  <% } %>' +
-        '</div>',
-      breadCrumbsTemplateSelector: null,
-      favoriteTemplate: '' +
-        '<li><a href="<%- path %>" class="fav" aria-labelledby="blip"><%- title %></a></li>',
+      breadcrumbTemplate: BreadcrumbTemplate,
+      breadcrumbTemplateSelector: null,
+      favoriteTemplate: FavoriteTemplate,
       favoriteTemplateSelector: null,
-      resultTemplate: '' +
-        '<div class="pattern-relateditems-result">' +
-        '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
-        '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
-        '    <span class="pattern-relateditems-result-title <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
-        '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></span>' +
-        '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
-        '  </a>' +
-        '  <span class="pattern-relateditems-buttons">' +
-        '  <% if (mode !== "search" && is_folderish) { %>' +
-        '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%- path %>"></a>' +
-        '   <% } %>' +
-        ' </span>' +
-        '</div>',
+      resultTemplate: ResultTemplate,
       resultTemplateSelector: null,
-      selectionTemplate: '' +
-        '<span class="pattern-relateditems-item">' +
-        '  <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
-        '  <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
-        '  <span class="pattern-relateditems-item-path"><%- path %></span>' +
-        '</span>',
+      selectionTemplate: SelectionTemplate,
       selectionTemplateSelector: null,
+      toolbarTemplate: ToolbarTemplate,
+      toolbarTemplateSelector: null,
 
       // needed
       multiple: true,
@@ -261,7 +229,7 @@ define([
           itemPath = itemPath + '/' + node;
           item.text = node;
           item.path = itemPath;
-          itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
+          itemsHtml = itemsHtml + self.applyTemplate('breadcrumb', item);
         }
       });
 
@@ -271,7 +239,7 @@ define([
         favoritesHtml = favoritesHtml + self.applyTemplate('favorite', item);
       });
 
-      html = self.applyTemplate('breadCrumbs', {
+      html = self.applyTemplate('toolbar', {
         items: itemsHtml,
         favItems: favoritesHtml,
         favText: _t('Favorites'),
@@ -341,29 +309,29 @@ define([
         self.browseTo($(this).attr('href'));
       });
 
+      function initUploadView(UploadView, disabled) {
+        var uploadButtonId = 'upload-' + utils.generateId();
+        var uploadButton = new ButtonView({
+          id:  uploadButtonId,
+          title: _t('Upload'),
+          tooltip: _t('Upload files'),
+          icon: 'upload',
+        });
+        if (disabled) {
+          uploadButton.disable();
+        }
+        $('.controls', self.$toolbar).prepend(uploadButton.render().el);
+        self.uploadView = new UploadView({
+          triggerView: uploadButton,
+          app: self
+        });
+        $('#btn-' +  uploadButtonId, self.$toolbar).append(self.uploadView.render().el);
+      }
+
       // upload
       if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
 
         var UploadView = require('mockup-patterns-relateditems-upload');
-
-        function initUploadView(disabled) {
-          var uploadButtonId = 'upload-' + utils.generateId();
-          var uploadButton = new ButtonView({
-            id:  uploadButtonId,
-            title: _t('Upload'),
-            tooltip: _t('Upload files'),
-            icon: 'upload',
-          });
-          if (disabled) {
-            uploadButton.disable();
-          }
-          $('.controls', self.$toolbar).prepend(uploadButton.render().el);
-          self.uploadView = new UploadView({
-            triggerView: uploadButton,
-            app: self
-          });
-          $('#btn-' +  uploadButtonId, self.$toolbar).append(self.uploadView.render().el);
-        }
 
         if (self.options.uploadAllowView) {
           // Check, if uploads are allowed in current context
@@ -376,12 +344,12 @@ define([
             },
             type: 'GET',
             success: function (result) {
-              initUploadView(!result.allowUpload);
+              initUploadView(UploadView, !result.allowUpload);
             }
           });
         } else {
           // just initialize upload view without checking, if uploads are allowed.
-          initUploadView();
+          initUploadView(UploadView);
         }
 
       }
