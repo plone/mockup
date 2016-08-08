@@ -1,12 +1,76 @@
 Changelog
 =========
 
-2.3.1 (unreleased)
+2.4.0 (unreleased)
 ------------------
 
 Incompatibilities:
 
+- The related items and structure patterns have changed quite a lot.
+  Customizations might break due to these changes.
+  See below.
+
+
 New:
+
+- Related Items refactorings:
+
+    - Make "search" and "browse" mode user-selectable via buttons.
+
+    - Remove obsolete tree widget, use "browse" mode instead.
+
+    - Let "search" mode search recursively.
+
+    - Let "browse" mode start from current path.
+
+    - Immediately open select2 results when clicking on "Browse" or "Search".
+
+    - Show only selectable items in "search" mode, if defined.
+
+    - Show only selectable and folderish items in "browse" mode, if selctable items are defined.
+
+    - Exclude already selected items in result list.
+
+    - Default closeOnSelect to true.
+
+    - Show "Open folder" arrow only when in "browse" mode.
+
+    - Seperate templates from JavaScript into xml files.
+
+    - Allow optional image and file upload (especially useful for image and file reference widgets).
+
+    - Allow configuration of "favorites" to quickly switch the current path via a dropdown menu.
+
+    - Adapt TinyMCE pattern to related item changes and remove now obsolete selection and result templates.
+
+  [thet]
+
+
+- Structure pattern refactorings:
+
+    - Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with visibility: hidden or opacity: 0). That in addition to elements, which are not visible at all and do not use screen space (display: none). Prevents upload form in structure pattern to be closed when opening the file selection tool.
+
+    - Use thumb scale for image preview in rename dialog and optimize the rename dialog layout.
+
+    - Remove ``pat-relateditems`` path selection widget but make sure, the path can still be set via navigation within the structure pattern.
+
+    - Add ``css`` action menu item option and always do a pattern scan on action menu items. This allows to set patterns on them, e.g. to open a modal or use tooltips.
+
+    - Sort Available Columns dialog entries.
+
+  [thet]
+
+
+- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
+  jQuery starts to search at it's first child element.
+  [thet]
+
+- TinyMCE: Simplify definition of custom imageScales by passing a JSON string.
+  [thet]
+
+- Upload pattern: Add option ``allowPathSelection`` to disable the related items path selection.
+  [thet]
+
 
 Fixes:
 
@@ -23,99 +87,70 @@ Incompatibilities:
   [thet]
 
 - Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+  [thet]
+
 
 New:
 
-- Fix urls in modals not opening in new window
-  [vangheem]
-- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
-  jQuery starts to search at it's first child element.
+- Related items pattern: Result button style allow for more room for scrollbar, and have subltle color change on hover to deliniate user-expected behavior of browsing vs. selecting item.
+  [seanupton]
+
+ - Related items pattern: Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
+  [seanupton]
+
+- Structure pattern refactorings:
+
+    - Allow definition of action menu items not only as dropdowns but also as buttons.
+
+    - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
+
+    - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
+
+    - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+
+    - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
+
+    - Add ``iconCSS`` option for action menus items to add icons.
+
+    - Add ``modal`` option for action menus items to allow links open in a modal.
+
+    - Add ``iconSize`` option to set the icon size if a item has an image.
+
+    - Use icons for all actionmenu entries.
+
+    - Use the tooltip pattern for all actionmenu buttons.
+
+    - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
+
+    - For columns with date fields, show an empty column if the date value is 'None'.
+
+    - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
+      The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
+
+    - Don't show empty alerts with ``alert-warning`` CSS class.
+      Show them transparent but in the same height as if they were not empty.
+      Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
+
+    - Fix rearrange button
+
   [thet]
-
-- Add option ``allowPathSelection`` to the upload widget to explicitly disable the pat-relateditems path selection.
-  [thet]
-
-- Update safe bower.json dependencies except backbone which tests would fail.
-  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
-  [thet]
-- Related items pattern:
-  OK - Remove obsolete tree widget
-  OK - Make Search/Browse mode user-selectable via buttons
-  OK - Let search search recursively
-  OK - Let search mode use last browse mode's path
-  OK - Show only selectable items in search mode, if defined.
-  OK - Search only in current path in browse mode.
-  - Show only selectable and folderish items in browse mode, if selctable items are defined.
-  - Optional Image Upload
-  - Favorites based on registry path entries
-
-- Related items pattern refactoring:
-  - [x] Make "search" and "browse" mode user-selectable via buttons.
-  - [x] Remove obsolete tree widget, use "browse" mode instead.
-    [x] Let "browse" mode start from current path.
-  - [x] Show only selectable items in "search" mode, if defined.
-  - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
-  - [ ] Allow optional image and file upload (especially useful for image and file reference widgets).
-  - [ ] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
-  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
-  - [x] Default ``closeOnSelect`` to ``true``.
-  - [x] Exclude already selected items in result list.
-  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
-  - [x] Show "Open folder" arrow only when in browse mode.
-  - [x] Allow optional image and file upload (especially useful for image and file reference widgets).
-  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
-  - [x] Default ``closeOnSelect`` to ``true``.
-  - [x] Exclude already selected items in result list.
-  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
-  - [x] Seperate templates from JavaScript into xml files.
-  [thet]
-
-
-- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
-  [thet]
-
-- add body class for active popover
-  [vangheem]
 
 - Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
   so you can customize the status message from ajax handlers.
   [vangheem]
 
+- Add body class for active popover.
+  [vangheem]
+
 - Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
   [thet]
 
-- Structure pattern:
-  - Sort Available Columns dialog entries.
-  - Remove ``pat-relateditems`` path selection widget but make sure, the path can still be set via navigation within the structure pattern.
-  - Allow definition of action menu items not only as dropdowns but also as buttons.
-  - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
-  - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
-  - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
-  - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
-  - Add ``iconCSS`` option for action menus items to add icons.
-  - Add ``patternClasses`` option for action menu items to be able to set abitrary patterns (or classes) on the anchor tag of the menu item.
-  - Add ``modal`` option for action menus items to allow links open in a modal.
-  - Add ``iconSize`` option to set the icon size if a item has an image.
-  - Use icons for all actionmenu entries.
-  - Use the tooltip pattern for all actionmenu buttons.
-  - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
-  - For columns with date fields, show an empty column if the date value is 'None'.
-  - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
-    The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
-  - Don't show empty alerts with ``alert-warning`` CSS class.
-    Show them transparent but in the same height as if they were not empty.
-    Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
-  - Fix rearrange button
-  - Use thumb scale for image preview in rename dialog and optimize the rename dialog layout.
+- Update bower.json dependencies except backbone which tests would fail.
+  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
   [thet]
 
-- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
-  jQuery starts to search at it's first child element.
+- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
-
-  [thet]
-
-- TinyMCE pattern: simplify image scale options to a JSON string.
 
 
 Fixes:
@@ -132,21 +167,17 @@ Fixes:
 - Fix issues where querystring widget was broke due to issues with
   checks for undefined
   [datakurre]
-- Adapt TinyMCE to relateditems changes and remove the selection and result templates.
-  [thet]
 
-- Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with ``visibility: hidden`` or ``opacity: 0``).
-  That in addition to elements, which are not visible at all and do not use screen space (``display: none``).
-  Prevents upload form in structure pattern to be closed when opening the file selection tool.
-  [thet]
+- Fix urls in modals not opening in new window
+  [vangheem]
+
+- Fix positioning of popovers in structure
+  [vangheem]
 
 - Escape input into select2 widget
   [vangheem]
 
 - Fix issue where using filter when paging would not work in the structure pattern
-  [vangheem]
-
-- Fix positioning of popovers in structure
   [vangheem]
 
 - Fix structure to always default to page 1 of results when moving between breadcrumbs
