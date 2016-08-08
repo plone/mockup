@@ -243,7 +243,7 @@ define([
         items: itemsHtml,
         favItems: favoritesHtml,
         favText: _t('Favorites'),
-        searchText: _t('Search in path:'),
+        searchText: _t('Current path:'),
         searchModeText: _t('Search'),
         browseModeText: _t('Browse'),
         rootPath: self.options.rootPath

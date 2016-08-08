@@ -213,7 +213,7 @@ define([
 
       expect($('.select2-container-multi'), $container).to.have.length(1);
       expect($('.pattern-relateditems-container'), $container).to.have.length(1);
-      expect($('.pattern-relateditems-path'), $container).to.have.length(1);
+      expect($('.pattern-relateditems-container .toolbar .path-wrapper'), $container).to.have.length(1);
     });
 
     it('browse roundtrip', function () {
@@ -359,11 +359,11 @@ define([
       $($('.favorites li a')[1]).click();
       clock.tick(1000);
 
-      expect($('.pattern-relateditems-path .pattern-relateditems-path-label').text()).to.be.equal('Search in path:');
-      expect($($('.pattern-relateditems-path .crumb')[1]).text()).to.be.equal('folder1');
+      expect($('.path-wrapper .pattern-relateditems-path-label', $container).text()).to.be.equal('Current path:');
+      expect($($('.path-wrapper .crumb')[1], $container).text()).to.be.equal('folder1');
 
-      // search restricted to path "folder1"
-      expect($('.pattern-relateditems-result-select')).to.have.length(4);
+      // search NOT restricted to path "folder1"
+      expect($('.pattern-relateditems-result-select').length).to.be.greaterThan(4);
 
     });
 
