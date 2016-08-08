@@ -22,7 +22,6 @@ define([
     menuOptions: null,
     // Dynamic menu options
     menuGenerator: 'mockup-patterns-structure-url/js/actionmenu',
-    needsRescan: false,
 
     eventConstructor: function(definition) {
       var self = this;
@@ -67,9 +66,6 @@ define([
             // add standard pat-plone-modal.
             // If you want another modal implementation, don't use modal=true but only set patternClasses.
             menuOption.patternClasses += ' pat-plone-modal';
-          }
-          if (menuOption.patternClasses || menuOption.category === 'button') {
-            self.needsRescan = true;
           }
 
           // Create event handler and add it to the results object.
@@ -125,9 +121,7 @@ define([
         self.$el.addClass(self.options.className);
       }
 
-      if (this.needsRescan) {
-        registry.scan(this.$el);
-      }
+      registry.scan(this.$el);
 
       return this;
     }
