@@ -29,7 +29,7 @@
 
   <% _.each(menuOptions.dropdown, function(menuOption){ %>
   <li>
-    <a class="action <%- menuOption.name %> <%- menuOption.idx %>"
+    <a class="action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.patternClasses %>"
         href="<%- menuOption.url %>">
       <% if (menuOption.iconCSS) { %>
       <span class="<%- menuOption.iconCSS %>"></span>
