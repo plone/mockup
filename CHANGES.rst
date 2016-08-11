@@ -115,6 +115,9 @@ New:
 
   [thet]
 
+- TinyMCE pattern: simplify image scale options to a JSON string.
+
+
 Fixes:
 
 - Upload pattern LESS: included omitted styles for progress bar

@@ -462,7 +462,7 @@ define([
         altText: this.options.text.alt,
         imageAlignText: this.options.text.imageAlign,
         scaleText: this.options.text.scale,
-        scales: this.options.scales,
+        imageScales: this.options.imageScales,
         cancelBtn: this.options.text.cancelBtn,
         insertBtn: this.options.text.insertBtn
       });
