@@ -188,7 +188,7 @@ define([
       }
       var newOperator = "plone.app.querystring.operation.string.advanced";
 
-      if( self.indexes.path.operators[newOperator] === undefined ) {
+      if( typeof self.indexes.path.operators[newOperator] === 'undefined' ) {
         self.indexes.path.operations.push(newOperator);
         self.indexes.path.operators[newOperator] = {
           title: 'Advanced',
@@ -250,7 +250,7 @@ define([
 
       self.appendOperators(index);
 
-      if (operator === undefined) {
+      if (typeof operator === 'undefined') {
         operator = self.$operator.select2('val');
       }
 
@@ -407,7 +407,7 @@ define([
             });
         }else{
           var pathAndDepth = ['', -1];
-          if( value !== undefined ) {
+          if( typeof value !== 'undefined' ) {
               pathAndDepth = value.split('::');
           }
           self.$value = $('<input type="text"/>')
@@ -444,7 +444,7 @@ define([
         self.$value.patternSelect2({ width: '250px' });
       }
 
-      if (value !== undefined && typeof self.$value !== 'undefined') {
+      if (typeof value !== 'undefined' && typeof self.$value !== 'undefined') {
         if ($.isArray(self.$value)) {
           $.each(value, function( i, v ) {
             self.$value[i].select2('val', v);
@@ -554,7 +554,7 @@ define([
         if( ival === "path" && self.$value.val() !== '') {
           str += self.getDepthString();
         }
-        else if( self.initial !== undefined ) {
+        else if( typeof self.initial !== 'undefined' ) {
           str = vstrbase + self.initial;
           //Sometimes the RelatedItemsWidget won't be loaded by this point.
           //This only should happen on the initial page load.
@@ -616,7 +616,7 @@ define([
         vval = '""';
       }
 
-      if( self.indexes[ival].operators[oval] === undefined ) {
+      if( typeof self.indexes[ival].operators[oval] === 'undefined' ) {
         return;
       }
 
@@ -627,7 +627,7 @@ define([
           out = "",
           depth = $('.'+self.options.classDepthName).val();
 
-      if( depth !== "" && depth !== undefined ) {
+      if( depth !== "" && typeof depth !== 'undefined' ) {
         out += '::' + depth;
       }
       return out;

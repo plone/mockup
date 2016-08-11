@@ -55,6 +55,10 @@ New:
 
 Fixes:
 
+- Fix issues where querystring widget was broke due to issues with
+  checks for undefined
+  [datakurre]
+
 - Escape input into select2 widget
   [vangheem]
 
