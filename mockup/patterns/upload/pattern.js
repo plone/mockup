@@ -94,19 +94,78 @@ define([
       var self = this,
           template = UploadTemplate;
 
-      // TODO: find a way to make this work in firefox (and IE)
+      var paste_count = 0;
+      // chrome paste handling
       $(document).bind('paste', function(e){
-        var oe = e.originalEvent;
-        var items = oe.clipboardData.items;
-        if (items) {
-          for (var i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf('image') !== -1) {
-              var blob = items[i].getAsFile();
-              self.dropzone.addFile(blob);
+        if($(self.trigger).length == 1 || self.$dropzone.is(":hover")){
+          var items = e.originalEvent.clipboardData.items;
+          if (items) {
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].type.indexOf("image") !== -1) {
+                var blob = items[i].getAsFile();
+                blob.name = 'screenshot' + paste_count + '.png';
+                self.dropzone.addFile(blob);
+                paste_count += 1;
+              }
             }
           }
         }
       });
+
+      // firefox paste handling
+      // focus on screenshot-input element if ctrl-v is pressed
+      var screenshot_input = $('<div id="screenshot-input" style="width: 0;height: 0;" contentEditable="true"/>');
+      $(this.$el).append(screenshot_input);
+      $(document).keydown(function(e){
+        if (e.keyCode == 86 && e.ctrlKey) {
+          if($(self.trigger).length == 1 || self.$dropzone.is(":hover")){
+            screenshot_input.focus();
+          }
+        }
+      });
+      screenshot_input.bind('paste', function (e){ // firefox only reacts to paste on 'editable' elements
+        // do nothing if text is pasted
+        if(e.originalEvent.clipboardData.types.length > 0 && e.originalEvent.clipboardData.types[0].startsWith('text')){
+          return false;
+        }
+        var target = $(e.currentTarget);
+        var counter = 0;
+        function handlePaste(){
+          if($('img', target).length === 0){
+            // wait for image to be pasted
+            if(counter < 3){
+              counter += 1;
+              setTimeout(handlePaste, 1);
+            }
+          }else{
+            var data_image = false;
+            $('img', target).each(function(i,e){
+              if($(e).attr('src') != undefined && $(e).attr('src').indexOf('data:image') === 0){
+                var byteString = atob($(e).attr('src').split(',')[1]);
+                var ia = new Uint8Array(byteString.length);
+                for (var i = 0; i < byteString.length; i++) {
+                  ia[i] = byteString.charCodeAt(i);
+                }
+                var blob = new Blob([ia],  {type: 'image/png'});
+                blob.name = 'screenshot' + paste_count + '.png';
+                self.dropzone.addFile(blob);
+                paste_count += 1;
+                $(e).remove();
+                data_image = true;
+              }
+            });
+            if(!data_image){
+              // wait for image to be pasted
+              if(counter < 3){
+                counter += 1;
+                setTimeout(handlePaste, 1);
+              }
+            }
+          }
+        }
+        handlePaste();
+      });
+
       // values that will change current processing
       self.currentPath = self.options.currentPath;
       self.currentFile = 0;
