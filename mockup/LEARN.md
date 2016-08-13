@@ -212,7 +212,7 @@ allow us to change the label's font color and its background color.
 
 We first need to update the pattern definition in
 
-**patterns//hello.js:**
+**patterns/hello/pattern.js:**
 <pre>
 var HelloWorld = Base.extend({
   name: 'helloworld',
