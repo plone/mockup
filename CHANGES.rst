@@ -55,6 +55,9 @@ New:
 
 Fixes:
 
+- Updated the documentation in LEARN.md
+  [janga1997]
+
 - Fix issues where querystring widget was broke due to issues with
   checks for undefined
   [datakurre]
