@@ -4,14 +4,6 @@ Changelog
 2.3.0 (Unreleased)
 ------------------
 
-Fixes:
-
-- Updated the documentation in LEARN.md
-  [janga1997]
-
-2.3.0 (Unreleased)
-------------------
-
 Incompatibilities:
 
 - Remove support for node version < ``0.11`` and update travis dependencies.
@@ -62,6 +54,9 @@ New:
   [thet]
 
 Fixes:
+
+- Updated the documentation in LEARN.md
+  [janga1997]
 
 - Fix issues where querystring widget was broke due to issues with
   checks for undefined
