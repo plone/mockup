@@ -55,6 +55,12 @@ New:
 
 Fixes:
 
+- Upload pattern LESS: included omitted styles for progress bar
+  in upload patttern by importing seletected styles from Bootstrap LESS.
+  Fixes incorrect/omitted display of progress bar in plone.app.widgets 1.x.
+  Built widgets.min.css is only 64 bytes larger, when gzipped.
+  [seanupton]
+
 - Updated the documentation in LEARN.md
   [janga1997]
 
