@@ -11,6 +11,11 @@ Incompatibilities:
 
 New:
 
+- Related items pattern: result button style allow for more room
+  for scrollbar, and have subltle color change on hover to deliniate
+  user-expected behavior of browsing vs. selecting item.
+  [seanupton]
+
 - Fix urls in modals not opening in new window
   [vangheem]
 
@@ -54,6 +59,14 @@ New:
   [thet]
 
 Fixes:
+
+- Related Items pattern: content icon cross-compatibility with Plone
+  5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned
+  from brain is a boolean, in Plone 4, it is a string -- use this to
+  show content icons in Plone 5 as previous, but also show image scale
+  in Plone 4, but only for images.  This is the most reasonable
+  solution to avoid requesting many broken image scales (404) in Plone 4.
+  [seanupton]
 
 - Upload pattern LESS: included omitted styles for progress bar
   in upload patttern by importing seletected styles from Bootstrap LESS.
