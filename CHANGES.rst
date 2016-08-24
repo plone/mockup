@@ -1,6 +1,19 @@
 Changelog
 =========
 
+2.3.1 (unreleased)
+------------------
+
+Incompatibilities:
+
+New:
+
+Fixes:
+
+- Update outdated links in Learn.md  
+  [staeff]
+
+
 2.3.0 (2016-08-19)
 ------------------
 
