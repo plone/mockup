@@ -428,7 +428,7 @@ for a couple of good reasons:
 
 #### The *describe()* Function
 
-We define a group of test cases by using the [describe()](http://visionmedia.github.io/mocha/#interfaces) function found in the aforementioned Mocha test framework.
+We define a group of test cases by using the [describe()](https://mochajs.org/#interfaces) function found in the aforementioned Mocha test framework.
 The first parameter is the name for the test case group,
 which could be anything,
 really (and not necessarily *"HelloWorld"*).
@@ -458,7 +458,7 @@ Note that regarding the tests,
 we have only scratched the surface here.
 Describing all the options the test framework provides is beyond the scope of this tutorial.  
 To learn more about how to write tests,
-please consult Mocha's [documentation](http://visionmedia.github.io/mocha/).
+please consult Mocha's [documentation](https://mochajs.org/).
 
 
 ### Running the Tests
