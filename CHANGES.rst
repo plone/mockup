@@ -46,6 +46,15 @@ New:
   [thet]
 
 
+- More Related items pattern:
+
+    - Result button style allow for more room for scrollbar, and have subltle color change on hover to deliniate user-expected behavior of browsing vs. selecting item.
+
+    - Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
+
+  [seanupton]
+
+
 - Structure pattern refactorings:
 
     - Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with visibility: hidden or opacity: 0). That in addition to elements, which are not visible at all and do not use screen space (display: none). Prevents upload form in structure pattern to be closed when opening the file selection tool.
@@ -74,7 +83,7 @@ New:
 
 Fixes:
 
-- Update outdated links in Learn.md  
+- Update outdated links in Learn.md
   [staeff]
 
 
