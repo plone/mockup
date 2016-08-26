@@ -13,6 +13,8 @@ Fixes:
 - Update outdated links in Learn.md  
   [staeff]
 
+- Use github fork of grunt-sed and remove unused task.
+  [gforcada]
 
 2.3.0 (2016-08-19)
 ------------------
