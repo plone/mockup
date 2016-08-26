@@ -24,11 +24,6 @@ Incompatibilities:
 
 New:
 
-- Related items pattern: result button style allow for more room
-  for scrollbar, and have subltle color change on hover to deliniate
-  user-expected behavior of browsing vs. selecting item.
-  [seanupton]
-
 - Fix urls in modals not opening in new window
   [vangheem]
 
