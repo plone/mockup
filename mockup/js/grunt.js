@@ -421,13 +421,6 @@
             ieCompat: true,
             paths: ['less']
           }
-        },
-        sed: {
-          'bootstrap': {
-            path: 'node_modules/lcov-result-merger/index.js',
-            pattern: 'throw new Error\\(\'Unknown Prefix ',
-            replacement: '//throw// new Error(\'Unknown Prefix '
-          }
         }
       }, this.gruntConfig));
 
