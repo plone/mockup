@@ -112,7 +112,7 @@ define([
       resultTemplate: '' +
         '<div class="   pattern-relateditems-result  <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
-        '    <% if (getIcon === true || portal_type === "Image") { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
+        '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
         '    <span class="pattern-relateditems-result-title  <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
         '    <span class="pattern-relateditems contenttype-<%- portal_type.toLowerCase() %>"><%- Title %></span>' +
         '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
@@ -126,7 +126,7 @@ define([
       resultTemplateSelector: null,
       selectionTemplate: '' +
         '<span class="pattern-relateditems-item">' +
-        ' <% if (getIcon === true || portal_type === "Image") { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
+        ' <% if (typeof getIcon !== "undefined" && getIcon) { %> <img src="<%- getURL %>/@@images/image/icon"> <% } %>' +
         ' <span class="pattern-relateditems-item-title contenttype-<%- portal_type.toLowerCase() %> <% if (typeof review_state !== "undefined") { %> state-<%- review_state  %> <% } %>" ><%- Title %></span>' +
         ' <span class="pattern-relateditems-item-path"><%- path %></span>' +
         '</span>',
