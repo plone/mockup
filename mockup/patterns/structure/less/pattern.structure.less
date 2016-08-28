@@ -287,7 +287,6 @@
 }
 
 #popover-rename {
-    width: 400px;
 
     .popover-content{
         max-height: 500px;
@@ -303,6 +302,20 @@
         border-bottom: 1px solid #0E6EB0;
         margin-bottom: 5px;
         padding-bottom: 10px;
+
+        /* clearfix */
+        display: table;
+        clear: both;
+        content: '';
+
+        div.form-group {
+            float: left;
+        }
+        img {
+            float: left;
+            margin-left: 1em;
+        }
+
     }
 }
 
@@ -338,7 +351,7 @@ table.structure-dragging{
     .itemRow{
         .actionmenu-container{
             display: none;
-        } 
+        }
         td{
             padding: 5px;
         }

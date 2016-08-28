@@ -296,7 +296,7 @@ define([
       $('#' + $('#tinylink-uploadImage').data().navref).click();
       expect($('#tinylink-uploadImage').parent().hasClass('active')).to.equal(true);
       var blob;
-      try{
+      try {
         blob = new Blob(['dummy data'],  {type: 'image/png'});
       } catch (err) {
         var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
@@ -311,6 +311,25 @@ define([
 
       expect($('#tinylink-image').parent().hasClass('active')).to.equal(true);
       expect(pattern.imageModal.getLinkUrl()).to.equal('/blah.png/imagescale/large');
+    });
+    it('test add image with custom scale', function() {
+      var pattern = createTinymce({
+        prependToUrl: 'resolveuid/',
+        linkAttribute: 'UID',
+        prependToScalePart: '/@@images/image/',
+        imageScales: '[{"title": "Custom Scale", "value": "customscale"}]'
+      });
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.linkType = 'image';
+      expect(pattern.imageModal.$scale.html().indexOf('Custom Scale')).to.be.greaterThan(-1);
+      pattern.imageModal.$scale.find('[value="customscale"]')[0].selected = true;
+      expect(pattern.imageModal.getLinkUrl()).to.equal('resolveuid/foobar/@@images/image/customscale');
     });
 
     it('test adds data attributes', function() {

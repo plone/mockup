@@ -7,6 +7,7 @@ define(['underscore'], function(_) {
       'title':    'Open',
       'category': 'button',
       'iconCSS':  'glyphicon glyphicon-eye-open',
+      'css': '',
       'modal':    false
     },
     'editItem': {
@@ -14,6 +15,7 @@ define(['underscore'], function(_) {
       'title':    'Edit',
       'category': 'button',
       'iconCSS':  'glyphicon glyphicon-pencil',
+      'css': '',
       'modal':    false
     },
     'cutItem': {
@@ -23,6 +25,7 @@ define(['underscore'], function(_) {
       'title':    'Cut',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-scissors',
+      'css': '',
       'modal':    false
     },
     'copyItem': {
@@ -32,6 +35,7 @@ define(['underscore'], function(_) {
       'title':    'Copy',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-duplicate',
+      'css': '',
       'modal':    false
     },
     'pasteItem': {
@@ -41,6 +45,7 @@ define(['underscore'], function(_) {
       'title':    'Paste',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-open-file',
+      'css': '',
       'modal':    false
     },
     'move-top': {
@@ -50,6 +55,7 @@ define(['underscore'], function(_) {
       'title':    'Move to top of folder',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-step-backward rright',
+      'css': '',
       'modal':    false
     },
     'move-bottom': {
@@ -59,6 +65,7 @@ define(['underscore'], function(_) {
       'title':    'Move to bottom of folder',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-step-backward rleft',
+      'css': '',
       'modal':    false
     },
     'set-default-page': {
@@ -68,6 +75,7 @@ define(['underscore'], function(_) {
       'title':    'Set as default page',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-ok-circle',
+      'css': '',
       'modal':    false
     },
     'selectAll': {
@@ -77,6 +85,7 @@ define(['underscore'], function(_) {
       'title':    'Select all contained items',
       'category': 'dropdown',
       'iconCSS':  'glyphicon glyphicon-check',
+      'css': '',
       'modal':    false
     }
   };

@@ -82,7 +82,7 @@ define([
             if(data.indexOf('<html') !== -1){
               data = utils.parseBodyTag(data);
             }
-            $el = $(data);
+            $el = $('<div>' + data + '</div>');  // jQuery starts to search at the first child element.
           }else if(that.options.dataType.indexOf('json') !== -1){
             // must have template defined with json
             if(data.constructor === Array && data.length === 1){

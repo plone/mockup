@@ -1,16 +1,89 @@
 Changelog
 =========
 
-2.3.1 (unreleased)
+2.4.0 (unreleased)
 ------------------
 
 Incompatibilities:
 
+- The related items and structure patterns have changed quite a lot.
+  Customizations might break due to these changes.
+  See below.
+
+
 New:
+
+- Related Items refactorings:
+
+    - Make "search" and "browse" mode user-selectable via buttons.
+
+    - Remove obsolete tree widget, use "browse" mode instead.
+
+    - Let "search" mode search recursively.
+
+    - Let "browse" mode start from current path.
+
+    - Immediately open select2 results when clicking on "Browse" or "Search".
+
+    - Show only selectable items in "search" mode, if defined.
+
+    - Show only selectable and folderish items in "browse" mode, if selctable items are defined.
+
+    - Exclude already selected items in result list.
+
+    - Default closeOnSelect to true.
+
+    - Show "Open folder" arrow only when in "browse" mode.
+
+    - Seperate templates from JavaScript into xml files.
+
+    - Allow optional image and file upload (especially useful for image and file reference widgets).
+
+    - Allow configuration of "favorites" to quickly switch the current path via a dropdown menu.
+
+    - Adapt TinyMCE pattern to related item changes and remove now obsolete selection and result templates.
+
+  [thet]
+
+
+- More Related items pattern:
+
+    - Result button style allow for more room for scrollbar, and have subltle color change on hover to deliniate user-expected behavior of browsing vs. selecting item.
+
+    - Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
+
+  [seanupton]
+
+
+- Structure pattern refactorings:
+
+    - Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with visibility: hidden or opacity: 0). That in addition to elements, which are not visible at all and do not use screen space (display: none). Prevents upload form in structure pattern to be closed when opening the file selection tool.
+
+    - Use thumb scale for image preview in rename dialog and optimize the rename dialog layout.
+
+    - Remove ``pat-relateditems`` path selection widget but make sure, the path can still be set via navigation within the structure pattern.
+
+    - Add ``css`` action menu item option and always do a pattern scan on action menu items. This allows to set patterns on them, e.g. to open a modal or use tooltips.
+
+    - Sort Available Columns dialog entries.
+
+  [thet]
+
+
+- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
+  jQuery starts to search at it's first child element.
+  [thet]
+
+- TinyMCE: Simplify definition of custom imageScales by passing a JSON string.
+  [thet]
+
+- Upload pattern: Add option ``allowPathSelection`` to disable the related items path selection.
+  [thet]
+
 
 Fixes:
 
-- Update outdated links in Learn.md  
+- Update outdated links in Learn.md
   [staeff]
 
 
@@ -22,64 +95,74 @@ Incompatibilities:
 - Remove support for node version < ``0.11`` and update travis dependencies.
   [thet]
 
+- Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+  [thet]
+
+
 New:
 
-- Related items pattern: result button style allow for more room
-  for scrollbar, and have subltle color change on hover to deliniate
-  user-expected behavior of browsing vs. selecting item.
+- Related items pattern: Result button style allow for more room for scrollbar, and have subltle color change on hover to deliniate user-expected behavior of browsing vs. selecting item.
   [seanupton]
 
-- Fix urls in modals not opening in new window
+ - Related items pattern: Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
+  [seanupton]
+
+- Structure pattern refactorings:
+
+    - Allow definition of action menu items not only as dropdowns but also as buttons.
+
+    - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
+
+    - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
+
+    - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+
+    - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
+
+    - Add ``iconCSS`` option for action menus items to add icons.
+
+    - Add ``modal`` option for action menus items to allow links open in a modal.
+
+    - Add ``iconSize`` option to set the icon size if a item has an image.
+
+    - Use icons for all actionmenu entries.
+
+    - Use the tooltip pattern for all actionmenu buttons.
+
+    - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
+
+    - For columns with date fields, show an empty column if the date value is 'None'.
+
+    - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
+      The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
+
+    - Don't show empty alerts with ``alert-warning`` CSS class.
+      Show them transparent but in the same height as if they were not empty.
+      Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
+
+    - Fix rearrange button
+
+  [thet]
+
+- Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
+  so you can customize the status message from ajax handlers.
   [vangheem]
 
-- Update safe bower.json dependencies except backbone which tests would fail.
+- Add body class for active popover.
+  [vangheem]
+
+- Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
+  [thet]
+
+- Update bower.json dependencies except backbone which tests would fail.
   Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
   [thet]
 
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
 
-- add body class for active popover
-  [vangheem]
-
-- Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
-  so you can customize the status message from ajax handlers.
-  [vangheem]
-
-- Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
-  [thet]
-
-- Structure pattern:
-  - Allow definition of action menu items not only as dropdowns but also as buttons.
-  - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
-  - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
-  - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
-  - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
-  - Add ``iconCSS`` option for action menus items to add icons.
-  - Add ``modal`` option for action menus items to allow links open in a modal.
-  - Add ``iconSize`` option to set the icon size if a item has an image.
-  - Use icons for all actionmenu entries.
-  - Use the tooltip pattern for all actionmenu buttons.
-  - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
-  - For columns with date fields, show an empty column if the date value is 'None'.
-  - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
-    The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
-  - Don't show empty alerts with ``alert-warning`` CSS class.
-    Show them transparent but in the same height as if they were not empty.
-    Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
-  - Fix rearrange button
-
-  [thet]
 
 Fixes:
-
-- Related Items pattern: content icon cross-compatibility with Plone
-  5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned
-  from brain is a boolean, in Plone 4, it is a string -- use this to
-  show content icons in Plone 5 as previous, but also show image scale
-  in Plone 4, but only for images.  This is the most reasonable
-  solution to avoid requesting many broken image scales (404) in Plone 4.
-  [seanupton]
 
 - Upload pattern LESS: included omitted styles for progress bar
   in upload patttern by importing seletected styles from Bootstrap LESS.
@@ -94,13 +177,16 @@ Fixes:
   checks for undefined
   [datakurre]
 
+- Fix urls in modals not opening in new window
+  [vangheem]
+
+- Fix positioning of popovers in structure
+  [vangheem]
+
 - Escape input into select2 widget
   [vangheem]
 
 - Fix issue where using filter when paging would not work in the structure pattern
-  [vangheem]
-
-- Fix positioning of popovers in structure
   [vangheem]
 
 - Fix structure to always default to page 1 of results when moving between breadcrumbs

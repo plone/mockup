@@ -19,9 +19,9 @@
             <label><%- scaleText %></label>
             <select name="scale">
               <option value="">Original</option>
-                <% _.each(scales, function(scale){ %>
-                  <option value="<%- scale.part %>" <% if(scale.name === options.defaultScale){ %>selected<% } %> >
-                    <%- scale.label %>
+                <% _.each(imageScales, function(scale){ %>
+                  <option value="<%- scale.value %>" <% if(scale.value === options.defaultScale){ %>selected<% } %> >
+                    <%- scale.title %>
                   </option>
                 <% }); %>
             </select>

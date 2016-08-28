@@ -84,8 +84,9 @@ define([
     },
 
     createRelatedItems: function() {
-      this.relatedItems = new RelatedItems(this.getEl(),
-        this.linkModal.options.relatedItems);
+      var options = this.tinypattern.options.relatedItems;
+      options.upload = false;  // ensure that related items upload is off.
+      this.relatedItems = new RelatedItems(this.getEl(), options);
     },
 
     value: function() {
@@ -461,7 +462,7 @@ define([
         altText: this.options.text.alt,
         imageAlignText: this.options.text.imageAlign,
         scaleText: this.options.text.scale,
-        scales: this.options.scales,
+        imageScales: this.options.imageScales,
         cancelBtn: this.options.text.cancelBtn,
         insertBtn: this.options.text.insertBtn
       });
