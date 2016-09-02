@@ -7,6 +7,9 @@
         title="<%- portal_type %>">
       <%- Title %>
     </a>
+    <% if(expired){ %>
+      <span class="plone-item-expired"><%- _t('Expired') %></span>
+    <% } %>
   </div>
   <% if(attributes["getIcon"] ){ %>
   <img class="image-<%- iconSize %> pull-right" src="<%- getURL %>/@@images/image/<%- iconSize %>">

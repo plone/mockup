@@ -65,6 +65,7 @@ define([
       _default_attributes: [
         'CreationDate',
         'EffectiveDate',
+        'ExpirationDate',
         'exclude_from_nav',
         'getIcon',
         'getObjSize',
@@ -211,5 +212,3 @@ define([
   return Structure;
 
 });
-
-

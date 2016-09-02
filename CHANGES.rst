@@ -13,6 +13,9 @@ Incompatibilities:
 
 New:
 
+- Show expired label in folder contents for expired attributes
+  [vangheem]
+
 - Related Items refactorings:
 
     - Make "search" and "browse" mode user-selectable via buttons.
