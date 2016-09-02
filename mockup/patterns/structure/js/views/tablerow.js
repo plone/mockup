@@ -6,8 +6,10 @@ define([
   'mockup-patterns-structure-url/js/views/actionmenu',
   'text!mockup-patterns-structure-url/templates/tablerow.xml',
   'mockup-utils',
-  'translate'
-], function($, _, Backbone, Nav, ActionMenuView, TableRowTemplate, utils, _t) {
+  'translate',
+  'moment'
+], function($, _, Backbone, Nav, ActionMenuView, TableRowTemplate, utils, _t,
+            moment) {
   'use strict';
 
   var TableRowView = Backbone.View.extend({
@@ -23,7 +25,17 @@ define([
       this.app = options.app;
       this.selectedCollection = this.app.selectedCollection;
       this.table = this.options.table;
+      this.now = moment();
     },
+
+    expired: function(data){
+      if(!data.attributes.ExpirationDate){
+        return false;
+      }
+      var dt = moment(data.attributes.ExpirationDate);
+      return dt.diff(this.now, 'seconds') < 0;
+    },
+
     render: function() {
       var self = this;
       var data = this.model.toJSON();
@@ -43,6 +55,7 @@ define([
       data.viewURL = data.attributes.getURL + viewAction;
 
       data._t = _t;
+      data.expired = this.expired(data);
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
       self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.portal_type); // jshint ignore:line
@@ -54,6 +67,11 @@ define([
       self.$el.attr('data-id', data.id);
       self.$el.attr('data-type', data.portal_type);
       self.$el.attr('data-folderish', data['is_folderish']); // jshint ignore:line
+      self.$el.removeClass('expired');
+
+      if(data.expired){
+        self.$el.addClass('expired');
+      }
 
       self.el.model = this.model;
 
@@ -92,8 +110,8 @@ define([
       if (!((typeof libName === 'string') && (typeof key === 'string'))) {
         return null;
       }
-      var clsLib = require(libName);
-      var lib = new clsLib(self);
+      var ClsLib = require(libName);
+      var lib = new ClsLib(self);
       return lib[method] && lib[method](e);
     },
     itemSelected: function() {

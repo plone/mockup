@@ -12,7 +12,9 @@ define([
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-utils',
   'sinon',
-], function(expect, $, _, registry, Structure, ActionMenuView, AppView, Result, TableView, TableRowView, ResultCollection, utils, sinon) {
+  'moment'
+], function(expect, $, _, registry, Structure, ActionMenuView, AppView, Result,
+            TableView, TableRowView, ResultCollection, utils, sinon, moment) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -754,7 +756,8 @@ define([
           'review_state': 'published',
           'is_folderish': true,
           Subject: [],
-          id: 'folder'
+          id: 'folder',
+          ExpirationDate: moment().add(-2, 'days').format()
         });
         for (var i = start; i < end; i = i + 1) {
           items.push({
@@ -767,7 +770,8 @@ define([
             'review_state': 'published',
             'is_folderish': false,
             Subject: [],
-            id: 'item' + i
+            id: 'item' + i,
+            ExpirationDate: moment().add(2, 'days').format()
           });
         }
 
@@ -1014,13 +1018,21 @@ define([
         ).to.equal(0);
     });
 
+    it('test expired shows', function() {
+      registry.scan(this.$el);
+      this.clock.tick(500);
+
+      var $content_row = this.$el.find('table tbody tr').eq(0);
+      expect($content_row.find('td').eq(1).text().trim()).to.contain('Expired');
+    });
+
     it('test displayed content', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
 
       var $content_row = this.$el.find('table tbody tr').eq(0);
       expect($content_row.find('td').length).to.equal(6);
-      expect($content_row.find('td').eq(1).text().trim()).to.equal('Folder');
+      expect($content_row.find('td').eq(1).text().trim()).to.contain('Folder');
       expect($content_row.find('td').eq(2).text().trim()).to.equal('');
       expect($content_row.find('td').eq(3).text().trim()).to.equal('');
       expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
