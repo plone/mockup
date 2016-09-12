@@ -83,6 +83,8 @@ New:
 - Upload pattern: Add option ``allowPathSelection`` to disable the related items path selection.
   [thet]
 
+- Upgrade TinyMCE to 4.4.3
+  [ebrehault]
 
 Fixes:
 
