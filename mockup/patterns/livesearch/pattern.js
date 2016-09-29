@@ -59,10 +59,31 @@ define([
       if(page === undefined){
         page = 1;
       }
+      var sort_on = function(){
+        var parameters = location.search,
+            sorton_position = parameters.indexOf('sort_on');
+        if(sorton_position === -1){
+          // return default sort
+          var $searchResults = $('#search-results');
+          if($searchResults.length > 0){
+            return $searchResults.attr('data-default-sort');
+          }
+          return '';
+        }
+        // cut string before sort_on parameter
+        var sort_on = parameters.substring(sorton_position);
+        // cut other parameters
+        sort_on = sort_on.split('&')[0];
+        // get just the value
+        sort_on = sort_on.split('=')[1];
+        return sort_on;
+      }();
+
       $.ajax({
         url: self.options.ajaxUrl + '?' + query +
              '&page=' + page +
-             '&perPage=' + self.options.perPage,
+             '&perPage=' + self.options.perPage +
+             '&sort_on=' + sort_on,
         dataType: 'json'
       }).done(function(data){
         self.results = data;
@@ -240,6 +261,10 @@ define([
           self.results = null;
           self.render();
         }
+      });
+      $('#sorting-options a').click(function(e){
+        e.preventDefault();
+        self.onceFocused = false;
       });
 
       /* create result dom */
