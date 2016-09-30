@@ -14,6 +14,9 @@ Fixes and enhancements:
   attributes, use set instead of setRaw. Add tests.
   [frapell]
 
+- switch to tab where link/image data is loaded from on tinymce pattern
+  [vangheem]
+
 
 1.8.3 (2015-01-26)
 ------------------

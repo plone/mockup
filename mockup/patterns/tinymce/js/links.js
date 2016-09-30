@@ -581,6 +581,7 @@ define([
           self.guessAnchorLink(href);
         }
       }
+      $('[href="#tinylink-' + self.linkType + '"]', self.modal.$modal).trigger('click');
     },
     guessImageLink: function(src) {
       var self = this;
@@ -610,11 +611,11 @@ define([
           self.$subject.val(decodeURIComponent(split[1]));
         }
       } else if (href[0] === '#') {
-        this.linkType = 'anchor';
-        this.linkTypes.anchor.set(href.substring(1));
+        self.linkType = 'anchor';
+        self.linkTypes.anchor.set(href.substring(1));
       } else {
-        this.linkType = 'external';
-        this.linkTypes.external.set(href);
+        self.linkType = 'external';
+        self.linkTypes.external.set(href);
       }
     },
     setSelectElement: function($el, val) {
