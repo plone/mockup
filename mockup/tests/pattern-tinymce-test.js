@@ -376,6 +376,23 @@ define([
       expect(content).to.contain('<img');
       expect(content).to.contain('image-richtext'); // new image-richtext class.
 
+      // Use image captions from the image description.
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.$captionFromDescription.prop('checked', true);
+      pattern.imageModal.$button.click();
+      content = pattern.tiny.getContent();
+
+      expect(content).to.not.contain('<figure>');
+      expect(content).to.not.contain('<figcaption>');
+      expect(content).to.contain('<img');
+      expect(content).to.contain('image-richtext'); // new image-richtext class.
+      expect(content).to.contain('captioned'); // new image-richtext class.
     });
 
     it('test adds data attributes', function() {
