@@ -60,7 +60,13 @@
         <label><%- altText %></label>
         <input type="text" name="alt" />
       </div>
-      <div class="form-group text">
+      <div class="form-group captionFromDescription">
+        <label>
+          <input type="checkbox" name="captionFromDescription" />
+          <%- captionFromDescriptionText %>
+        </label>
+      </div>
+      <div class="form-group caption">
         <label><%- captionText %></label>
         <textarea name="caption" />
       </div>
