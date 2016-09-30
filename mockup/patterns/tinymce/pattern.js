@@ -108,6 +108,7 @@ define([
         imageAlign: _t('Align'),
         scale: _t('Size'),
         alt: _t('Alternative Text'),
+        caption: _t('Show Caption'),
         externalImage: _t('External Image URI')
       },
       // URL generation options
