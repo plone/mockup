@@ -88,6 +88,9 @@ New:
 
 Fixes:
 
+- Isolate the ``plone-modal-*`` classes using less class nesting.
+  [thet]
+
 - Update outdated links in Learn.md
   [staeff]
 
