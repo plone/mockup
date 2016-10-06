@@ -10,7 +10,7 @@
 <div class="controls pull-right">
   <% if (favorites.length > 0) { %>
   <div class="favorites dropdown pull-right">
-    <button class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <span class="glyphicon glyphicon-star"/>
       <%- favText %>
       <span class="caret"/>
