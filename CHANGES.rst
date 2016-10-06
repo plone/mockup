@@ -88,6 +88,10 @@ New:
 
 Fixes:
 
+- Make ``pat-tooltip`` useable by it's own by including the necessary less files and reuse that one in other patterns.
+  Allow configuration of ``placement`` parameter.
+  [thet]
+
 - Update outdated links in Learn.md
   [staeff]
 
