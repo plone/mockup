@@ -358,10 +358,10 @@ define([
       self.emit('before-browse');
       self.currentPath = path;
       self.$el.select2('close');
-      self.$el.select2('open');
-      self.emit('after-browse');
       self.setBreadCrumbs();
       self.setQuery();
+      self.$el.select2('open');
+      self.emit('after-browse');
     },
 
     selectItem: function(item) {

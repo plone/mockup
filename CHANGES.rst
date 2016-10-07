@@ -26,7 +26,7 @@ New:
 
     - Let "browse" mode start from current path.
 
-    - Immediately open select2 results when clicking on "Browse" or "Search".
+    - Immediately open select2 results when clicking on "Browse" or "Search" or browsing somewhere.
 
     - Show only selectable items in "search" mode, if defined.
 
