@@ -63,7 +63,6 @@ define([
       }
       this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
 
-
         var addUrls = function(list) {
           /* add getURL value */
           for (var i = 0; i < list.length; i = i + 1) {
@@ -349,7 +348,6 @@ define([
     it('use favorites', function () {
       var pattern = initializePattern({'favorites': [{'title': 'root', 'path': '/'}, {'title': 'folder1', 'path': '/folder1'}]});
       var clock = sinon.useFakeTimers();
-      var $input;
 
       // open up result list by clicking on "browse"
       $('button.favorites', $container).click();

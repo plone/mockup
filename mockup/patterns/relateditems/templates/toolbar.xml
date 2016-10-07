@@ -4,7 +4,7 @@
 </div>
 <div class="path-wrapper">
   <span class="pattern-relateditems-path-label"><%- searchText %></span>
-  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>
+  <a class="crumb" href="/"><span class="glyphicon glyphicon-home"/></a>
   <%= items %>
 </div>
 <div class="controls pull-right">

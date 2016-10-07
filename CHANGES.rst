@@ -46,6 +46,7 @@ New:
 
     - Adapt TinyMCE pattern to related item changes and remove now obsolete selection and result templates.
 
+    - Calculate all paths relative to the ``rootPath``, so that breadcrumbs navigation and favorites do not show paths outside the rootPath.
   [thet]
 
 

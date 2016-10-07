@@ -122,7 +122,7 @@ define([
       // more options
       upload: false,
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
-      basePath: undefined,
+      basePath: '',
       closeOnSelect: true,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       favorites: [],
@@ -190,7 +190,7 @@ define([
         baseCriteria.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
-          v: this.currentPath
+          v: this.options.rootPath + this.currentPath
         });
 
       }
@@ -214,14 +214,10 @@ define([
     setBreadCrumbs: function () {
       var self = this;
       var path = self.currentPath;
-      var root = self.options.rootPath.replace(/\/$/, '');
       var html;
 
-      // strip site root from path
-      path = path.indexOf(root) === 0 ? path.slice(root.length) : path;
-
       var paths = path.split('/');
-      var itemPath = root;
+      var itemPath = '';
       var itemsHtml = '';
       _.each(paths, function(node) {
         if (node !== '') {
@@ -236,7 +232,9 @@ define([
       // favorites
       var favoritesHtml = '';
       _.each(self.options.favorites, function (item) {
-        favoritesHtml = favoritesHtml + self.applyTemplate('favorite', item);
+        var item_copy = _.clone(item)
+        item_copy.path = item_copy.path.substr(self.options.rootPath.length) || '/';
+        favoritesHtml = favoritesHtml + self.applyTemplate('favorite', item_copy);
       });
 
       html = self.applyTemplate('toolbar', {
@@ -246,7 +244,6 @@ define([
         searchText: _t('Current path:'),
         searchModeText: _t('Search'),
         browseModeText: _t('Browse'),
-        rootPath: self.options.rootPath
       });
 
       self.$toolbar.html(html);
@@ -339,7 +336,7 @@ define([
               // url: self.currentUrl() + self.options.uploadAllowView,  // not working yet
               dataType: 'JSON',
               data: {
-                path: self.currentPath
+                path: self.options.rootPath + self.currentPath
               },
               type: 'GET',
               success: function (result) {
@@ -402,7 +399,11 @@ define([
       var self = this;
 
       self.browsing = self.options.mode === 'browse';
-      self.currentPath = self.options.basePath || self.options.rootPath;
+
+      // Remove trailing slash
+      self.options.rootPath = self.options.rootPath.replace(/\/$/, '');
+      // Substract rootPath from basePath with is the relative currentPath. Has a leading slash. Or use '/'
+      self.currentPath = self.options.basePath.substr(self.options.rootPath.length) || '/';
 
       self.setQuery();
 
