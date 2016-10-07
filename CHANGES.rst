@@ -13,6 +13,9 @@ Incompatibilities:
 
 New:
 
+- Change default sort option in livesearch pattern.
+  [rodfersou]
+
 - Show expired label in folder contents for expired attributes
   [vangheem]
 
