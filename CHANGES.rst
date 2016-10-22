@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- provide selector option to markspeciallinks pattern
+  [vangheem]
 
 Bug fixes:
 
