@@ -15,8 +15,6 @@ New:
 
 - Change default sort option in livesearch pattern.
   [rodfersou]
-- provide selector option to markspeciallinks pattern
-  [vangheem]
 
 - Show expired label in folder contents for expired attributes
   [vangheem]
