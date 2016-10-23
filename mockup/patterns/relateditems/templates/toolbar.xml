@@ -4,13 +4,13 @@
 </div>
 <div class="path-wrapper">
   <span class="pattern-relateditems-path-label"><%- searchText %></span>
-  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>
+  <a class="crumb" href="/"><span class="glyphicon glyphicon-home"/></a>
   <%= items %>
 </div>
 <div class="controls pull-right">
   <% if (favorites.length > 0) { %>
   <div class="favorites dropdown pull-right">
-    <button class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <span class="glyphicon glyphicon-star"/>
       <%- favText %>
       <span class="caret"/>

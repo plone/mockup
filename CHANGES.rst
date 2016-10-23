@@ -31,7 +31,7 @@ New:
 
     - Let "browse" mode start from current path.
 
-    - Immediately open select2 results when clicking on "Browse" or "Search".
+    - Immediately open select2 results when clicking on "Browse" or "Search" or browsing somewhere.
 
     - Show only selectable items in "search" mode, if defined.
 
@@ -51,6 +51,7 @@ New:
 
     - Adapt TinyMCE pattern to related item changes and remove now obsolete selection and result templates.
 
+    - Calculate all paths relative to the ``rootPath``, so that breadcrumbs navigation and favorites do not show paths outside the rootPath.
   [thet]
 
 

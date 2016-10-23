@@ -8,7 +8,6 @@
  *    targetList(array): TODO ([ {text: "Open in this window / frame", value: ""}, {text: "Open in new window", value: "_blank"}, {text: "Open in parent window / frame", value: "_parent"}, {text: "Open in top frame (replaces all frames)", value: "_top"}])
  *    imageTypes(string): TODO ('Image')
  *    folderTypes(string): TODO ('Folder,Plone Site')
- *    linkableTypes(string): TODO ('Document,Event,File,Folder,Image,News Item,Topic')
  *    tiny(object): TODO ({ plugins: [ "advlist autolink lists charmap print preview anchor", "usearchreplace visualblocks code fullscreen autoresize", "insertdatetime media table contextmenu paste plonelink ploneimage" ], menubar: "edit table format tools view insert",
  toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage", autoresize_max_height: 1500 })
  *    prependToUrl(string): Text to prepend to generated internal urls. ('')
