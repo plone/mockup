@@ -12,6 +12,7 @@
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
+ *    rootUrl(string): Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
@@ -132,6 +133,7 @@ define([
       browsing: undefined,
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
+      rootUrl: '',  // default to be relative.
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
       tokenSeparators: [',', ' '],
