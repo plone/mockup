@@ -200,6 +200,11 @@ define([
     },
     initializeSelect2: function() {
       var self = this;
+      self.options.formatResultCssClass = function(ob){
+        if(ob.id){
+          return 'select2-option-' + ob.id.toLowerCase().replace(/[ \:\)\(\[\]\{\}\_\+\=\&\*\%\#]/g, '-');
+        }
+      };
       self.$el.select2(self.options);
       self.$select2 = self.$el.parent().find('.select2-container');
       self.$el.parent().off('close.plone-modal.patterns');

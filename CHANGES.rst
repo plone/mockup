@@ -90,6 +90,9 @@ New:
 - Upgrade TinyMCE to 4.4.3
   [ebrehault]
 
+- Add select2 result class based on value of option so it can be styled
+  [vangheem]
+
 Fixes:
 
 - Make ``pat-tooltip`` useable by it's own by including the necessary less files and reuse that one in other patterns.
