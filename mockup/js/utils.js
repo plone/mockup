@@ -266,7 +266,12 @@ define([
         .toString(16).substring(1));
   };
 
+  var removeHTML = function(val) {
+    return val.replace(/<[^>]+>/ig, "");
+  };
+
   return {
+    removeHTML: removeHTML,
     generateId: generateId,
     parseBodyTag: function(txt) {
       return $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(txt)[0]

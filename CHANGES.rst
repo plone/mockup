@@ -9,6 +9,116 @@ New:
 
 Fixes:
 
+- Make ``pat-tooltip`` useable by it's own by including the necessary less files and reuse that one in other patterns.
+  Allow configuration of ``placement`` parameter.
+  [thet]
+
+- Update outdated links in Learn.md
+  [staeff]
+
+- Use github fork of grunt-sed and remove unused task.
+  [gforcada]
+
+- Fixes issue when HTML escaping select2 values. Now removing HTML completely and leave the input unescaped.
+  [petschki]
+
+
+2.3.0 (2016-08-19)
+------------------
+
+Incompatibilities:
+
+- Remove support for node version < ``0.11`` and update travis dependencies.
+  [thet]
+
+- Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+  [thet]
+
+
+New:
+
+- Related items pattern: Result button style allow for more room for scrollbar, and have subltle color change on hover to deliniate user-expected behavior of browsing vs. selecting item.
+  [seanupton]
+
+ - Related items pattern: Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
+  [seanupton]
+
+- Structure pattern refactorings:
+
+    - Allow definition of action menu items not only as dropdowns but also as buttons.
+
+    - Add ``openItem`` and ``editItem`` actions as buttons and remove the open icon from the title column.
+
+    - Open ``openItem`` links according to ``typeToViewAction`` instead of default with the ``/view`` postfix.
+
+    - Open ``editItem`` under ``/@@edit`` instead ``/edit``.
+
+    - Remove JS event handlers for externally opening simple URLs and use the href attribute instead.
+
+    - Add ``iconCSS`` option for action menus items to add icons.
+
+    - Add ``modal`` option for action menus items to allow links open in a modal.
+
+    - Add ``iconSize`` option to set the icon size if a item has an image.
+
+    - Use icons for all actionmenu entries.
+
+    - Use the tooltip pattern for all actionmenu buttons.
+
+    - Use pat-moment also for ``start``, ``end`` and ``last_comment_date`` columns.
+
+    - For columns with date fields, show an empty column if the date value is 'None'.
+
+    - Remove the checkbox and the actionmenu from the breadcrumbs bar for the current active folder to simplify the structure pattern.
+      The actionmenu contained redundant actions (cut, copy, paste) and selecting the current folder is possible one level up.
+
+    - Don't show empty alerts with ``alert-warning`` CSS class.
+      Show them transparent but in the same height as if they were not empty.
+      Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
+
+    - Fix rearrange button
+
+  [thet]
+
+- Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
+  so you can customize the status message from ajax handlers.
+  [vangheem]
+
+- Add body class for active popover.
+  [vangheem]
+
+- Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
+  [thet]
+
+- Update bower.json dependencies except backbone which tests would fail.
+  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
+  [thet]
+
+- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
+  [thet]
+
+
+Fixes:
+
+- Upload pattern LESS: included omitted styles for progress bar
+  in upload patttern by importing seletected styles from Bootstrap LESS.
+  Fixes incorrect/omitted display of progress bar in plone.app.widgets 1.x.
+  Built widgets.min.css is only 64 bytes larger, when gzipped.
+  [seanupton]
+
+- Updated the documentation in LEARN.md
+  [janga1997]
+
+- Fix issues where querystring widget was broke due to issues with
+  checks for undefined
+  [datakurre]
+
+- Fix urls in modals not opening in new window
+  [vangheem]
+
+- Fix positioning of popovers in structure
+  [vangheem]
+
 - Escape input into select2 widget
   [vangheem]
 
