@@ -336,6 +336,9 @@ define([
     },
     escapeHTML: function(val){
       return $("<div/>").text(val).html();
+    },
+    removeHTML: function(val) {
+      return val.replace(/<[^>]+>/ig, "");
     }
   };
 });

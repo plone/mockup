@@ -116,7 +116,7 @@ define([
             if (seldefaults[this]) {
               text = seldefaults[this];
             }
-            data.push({id: utils.escapeHTML(this), text: utils.escapeHTML(text)});
+            data.push({id: utils.removeHTML(this), text: utils.removeHTML(text)});
           });
           callback(data);
         };
@@ -222,7 +222,7 @@ define([
           self.options.initSelection = function ($el, callback) {
             var data = [], value = $el.val();
             $(value.split(self.options.separator)).each(function () {
-              var val = utils.escapeHTML(this);
+              var val = utils.removeHTML(this);
               data.push({id: val, text: val});
             });
             callback(data);
@@ -251,7 +251,7 @@ define([
 
               var haveResult = queryTerm === '' || $.inArray(queryTerm, dataIds) >= 0;
               if (self.options.allowNewItems && !haveResult) {
-                queryTerm = utils.escapeHTML(queryTerm);
+                queryTerm = utils.removeHTML(queryTerm);
                 results.push({id: queryTerm, text: queryTerm});
               }
 
