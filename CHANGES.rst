@@ -105,6 +105,10 @@ Fixes:
 - Use github fork of grunt-sed and remove unused task.
   [gforcada]
 
+- Fixes issue when HTML escaping select2 values. Now removing HTML completely and leave the input unescaped.
+  [petschki]
+
+
 2.3.0 (2016-08-19)
 ------------------
 

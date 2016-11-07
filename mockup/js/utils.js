@@ -333,9 +333,14 @@ define([
     return $('<div/>').text(val).html();
   };
 
+  var removeHTML = function(val) {
+    return val.replace(/<[^>]+>/ig, "");
+  };
+
   return {
     bool: bool,
     escapeHTML: escapeHTML,
+    removeHTML: removeHTML,
     featureSupport: featureSupport,
     generateId: generateId,
     getAuthenticator: getAuthenticator,

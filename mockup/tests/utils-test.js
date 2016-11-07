@@ -176,7 +176,7 @@ define([
         expect(loading.$el.is(':visible')).to.equal(true);
       });
       it('hide loader', function() {
-        var loading = new utils.Loading(); 
+        var loading = new utils.Loading();
         loading.show();
         loading.hide();
         expect(loading.$el.is(':visible')).to.equal(false);
@@ -211,6 +211,19 @@ define([
 
     });
 
+    describe('HTML manupulation', function() {
+
+      it('escaping', function() {
+        var escaped = utils.escapeHTML('<img src="logo.png" />');
+        expect(escaped).to.equal('&lt;img src="logo.png" /&gt;');
+      });
+
+      it('removing', function() {
+        var clean = utils.removeHTML('<p>Paragraph</p>');
+        expect(clean).to.equal('Paragraph');
+      });
+
+    });
 
   });
 

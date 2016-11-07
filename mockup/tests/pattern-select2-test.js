@@ -145,6 +145,46 @@ define([
       expect($results.first().text()).to.be.equal('AAA');
     });
 
+    it('remove html input', function() {
+      $('<input type="hidden" class="pat-select2"' +
+        '    data-pat-select2="placeholder:Search for a Value;' +
+        '                     vocabularyUrl: /select2-ajax.json;' +
+        '                     width:20em" />'
+      ).appendTo('body');
+      var pattern = $('.pat-select2').patternSelect2();
+
+      var $input = $('.select2-input');
+      $input.click().val('<img src="logo.png" />Evil logo');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      this.clock.tick(1000);
+
+      var $results = $('li.select2-result-selectable');
+      expect($results.size()).to.equal(4);
+      expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
+      expect($results.first().text()).to.be.equal('Evil logo');
+    });
+
+    it('do not html-escape input', function() {
+      $('<input type="hidden" class="pat-select2"' +
+        '    data-pat-select2="placeholder:Search for a Value;' +
+        '                     vocabularyUrl: /select2-ajax.json;' +
+        '                     width:20em" />'
+      ).appendTo('body');
+      var pattern = $('.pat-select2').patternSelect2();
+
+      var $input = $('.select2-input');
+      $input.click().val('this < that & those');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      this.clock.tick(1000);
+
+      var $results = $('li.select2-result-selectable');
+      expect($results.size()).to.equal(4);
+      expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
+      expect($results.first().text()).to.be.equal('this < that & those');
+    });
+
     it('sets up orderable tags', function() {
       var $el = $(
         '<div>' +
