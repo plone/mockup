@@ -10,7 +10,16 @@ Breaking changes:
 
 New features:
 
+- PickADate pattern: Add option to automatically set the time when changing the date.
+  It defaults to set the time to the current time.
+  [thet]
+
 - provide selector option to markspeciallinks pattern
+
+- Change default sort option in livesearch pattern.
+  [rodfersou]
+
+- Show expired label in folder contents for expired attributes
   [vangheem]
 
 Bug fixes:
