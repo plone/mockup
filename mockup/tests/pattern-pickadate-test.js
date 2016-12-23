@@ -1,3 +1,4 @@
+/* global define, describe, beforeEach, afterEach, it */
 define([
   'expect',
   'jquery',
@@ -5,7 +6,7 @@ define([
   'pat-registry',
   'mockup-patterns-pickadate',
   'mockup-patterns-select2'
-], function(expect, $, sinon, registry, PickADate, Select2) {
+], function(expect, $, sinon, registry, PickADate) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -18,8 +19,8 @@ define([
   describe('PickADate', function() {
 
     beforeEach(function() {
-      this.$el = $('<div><input class="pat-pickadate" /></div>');
-      this.clock = sinon.useFakeTimers();
+      this.$el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'{"autoSetTimeOnDateChange": "false"}\'/></div>');
+      this.clock = sinon.useFakeTimers(new Date(2016,12,23,15,30).getTime());
     });
 
     afterEach(function() {
@@ -40,7 +41,7 @@ define([
       expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(1);
 
       var dateWrapper = $('.pattern-pickadate-date', self.$el).parent(),
-          timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
+        timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
 
       // main element is hidden
       expect(self.$el.is(':hidden')).to.be.equal(true);
@@ -61,7 +62,7 @@ define([
       var self = this;
       registry.scan(self.$el);
       var dateWrapper = $('.pattern-pickadate-date', self.$el).parent(),
-          timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
+        timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
 
       // we open date picker (calendar)
       $('.pattern-pickadate-date', self.$el).click();
@@ -77,7 +78,7 @@ define([
       var self = this;
       registry.scan(self.$el);
       var dateWrapper = $('.pattern-pickadate-date', self.$el).parent(),
-          timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
+        timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
 
       // select some date
       $('.pattern-pickadate-date', self.$el).click();
@@ -375,18 +376,18 @@ define([
     describe('PickADate with timezone', function() {
       it('has date, time and timezone', function() {
         var self = this,
-            $input = $('.pat-pickadate', self.$el)
-              .attr('data-pat-pickadate', '{"timezone": {"data": [' +
-                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
-                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
-                                          ']}}'
+          $input = $('.pat-pickadate', self.$el)
+            .attr('data-pat-pickadate', '{"timezone": {"data": [' +
+                                          '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
+                                          '{"id":"Europe/Vienna","text":"Europe/Vienna"}]},' +
+                                          '"autoSetTimeOnDateChange": "false"}'
               );
         self.$el.appendTo('body');
         registry.scan($input);
 
         // date and time should exist by default
         var $timeWrapper = $('.pattern-pickadate-time-wrapper', self.$el),
-            $dateWrapper = $('.pattern-pickadate-date-wrapper', self.$el);
+          $dateWrapper = $('.pattern-pickadate-date-wrapper', self.$el);
         expect($timeWrapper.size()).to.equal(1);
         expect($dateWrapper.size()).to.equal(1);
 
@@ -412,10 +413,10 @@ define([
 
         // set date and time and check if value of main element gets timezone
         $('.pattern-pickadate-date', self.$el).click();
-        var $selectedDate = $dateWrapper.find('td > div').first().click();
+        $dateWrapper.find('td > div').first().click();
         expect($input.val()).to.equal('');
         $('.pattern-pickadate-time', self.$el).click();
-        var $selectedTime = $timeWrapper.find('li').first().next().click();
+        $timeWrapper.find('li').first().next().click();
         expect($input.val()).to.equal($('input:last', $dateWrapper).val() + ' ' + $('input:last', $timeWrapper).val() + ' ' + 'Europe/Berlin');
 
         // change timezone to second value and check if value of main element changes
@@ -426,12 +427,12 @@ define([
 
       it('should take the default timezone when it is set', function() {
         var self = this,
-            $input = $('.pat-pickadate', self.$el)
-              .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Vienna", "data": [' +
-                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
-                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"},' +
-                                            '{"id":"Europe/Madrid","text":"Europe/Madrid"}' +
-                                          ']}}'
+          $input = $('.pat-pickadate', self.$el)
+            .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Vienna", "data": [' +
+                                          '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
+                                          '{"id":"Europe/Vienna","text":"Europe/Vienna"},' +
+                                           '{"id":"Europe/Madrid","text":"Europe/Madrid"}' +
+                                        ']}}'
               );
         self.$el.appendTo('body');
         registry.scan($input);
@@ -444,11 +445,11 @@ define([
 
       it('should only set the default value when it exists in the list', function() {
         var self = this,
-            $input = $('.pat-pickadate', self.$el)
-              .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Madrid", "data": [' +
-                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
-                                            '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
-                                          ']}}'
+          $input = $('.pat-pickadate', self.$el)
+            .attr('data-pat-pickadate', '{"timezone": {"default": "Europe/Madrid", "data": [' +
+                                          '{"id":"Europe/Berlin","text":"Europe/Berlin"},' +
+                                          '{"id":"Europe/Vienna","text":"Europe/Vienna"}' +
+                                        ']}}'
               );
         self.$el.appendTo('body');
         registry.scan($input, ['pickadate']);
@@ -461,10 +462,10 @@ define([
 
       it('should write to default and disable the dropdown field if only one value exists', function() {
         var self = this,
-            $input = $('.pat-pickadate', self.$el)
-              .attr('data-pat-pickadate', '{"timezone": {"data": [' +
-                                            '{"id":"Europe/Berlin","text":"Europe/Berlin"}' +
-                                          ']}}'
+          $input = $('.pat-pickadate', self.$el)
+            .attr('data-pat-pickadate', '{"timezone": {"data": [' +
+                                          '{"id":"Europe/Berlin","text":"Europe/Berlin"}' +
+                                        ']}}'
               );
         self.$el.appendTo('body');
         registry.scan($input, ['pickadate']);
@@ -477,6 +478,121 @@ define([
 
         expect($('.pattern-pickadate-timezone').data('select2')._enabled).to.equal(false);
         expect($('.select2-container-disabled').size()).to.equal(1);
+      });
+    
+    });
+
+    describe('automatically set the time on changing the date', function() {
+
+      it('parseTimeOffset works as expected', function() {
+       
+        var pickadate = new PickADate(this.$el, {});
+
+        // test false/true
+        expect(pickadate.parseTimeOffset('false')).to.be.equal(false);
+        expect(pickadate.parseTimeOffset('true')).to.eql([0,0]);
+
+        // test setting straight to time
+        expect(pickadate.parseTimeOffset('[12, 34]')).to.eql([12,34]);
+        
+        // test adding / substracting
+        expect(pickadate.parseTimeOffset('+[1, 10]')).to.eql([16,40]);
+        expect(pickadate.parseTimeOffset('-[1, 10]')).to.eql([14,20]);
+
+        // Test not exceeding dat/hour boundaries
+        expect(pickadate.parseTimeOffset('+[10, 10]')).to.eql([23,40]);
+        expect(pickadate.parseTimeOffset('-[16, 10]')).to.eql([0,20]);
+        expect(pickadate.parseTimeOffset('+[1, 40]')).to.eql([16,59]);
+        expect(pickadate.parseTimeOffset('-[1, 40]')).to.eql([14,0]);
+        expect(pickadate.parseTimeOffset('+[1000, 1000]')).to.eql([23,59]);
+        expect(pickadate.parseTimeOffset('-[1000, 1000]')).to.eql([0,0]);
+
+        // test complete/partly nonsense
+        expect(pickadate.parseTimeOffset('blabla')).to.eql([0,0]);
+        expect(pickadate.parseTimeOffset('[10,20]')).to.eql([10,20]);
+        expect(pickadate.parseTimeOffset('[10,"aha"]')).to.eql([10,0]);
+        expect(pickadate.parseTimeOffset('["who", 20]')).to.eql([0,20]);
+              
+      });
+
+      it('sets the time when date is changed per default', function() {
+        var $el = $('<div><input class="pat-pickadate" />');
+        registry.scan($el);
+
+        var $dateWrapper = $('.pattern-pickadate-date', $el).parent();
+
+        // set date and time and check if time is also set
+        $('.pattern-pickadate-date', $el).click();
+        var $selectedDate = $dateWrapper.find('td > div').first().click();
+
+        // selected date should be saved on date picker element
+        expect($('.pattern-pickadate-date', $el).attr('data-value')).to.be.equal($selectedDate.attr('data-pick'));
+
+        // default time should be available on time picker element.
+        expect($('.pattern-pickadate-time', $el).attr('data-value')).to.be.equal('15,30');
+
+        // pickadate should be have this value set.
+        expect($('.pat-pickadate', $el).val()).to.contain('15:30');
+      });
+
+      it('sets the time to a specific value when date is changed', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'{"autoSetTimeOnDateChange": "[12,30]"}\'/>');
+        registry.scan($el);
+
+        var $dateWrapper = $('.pattern-pickadate-date', $el).parent();
+
+        // set date and time and check if time is also set
+        $('.pattern-pickadate-date', $el).click();
+        var $selectedDate = $dateWrapper.find('td > div').first().click();
+
+        // selected date should be saved on date picker element
+        expect($('.pattern-pickadate-date', $el).attr('data-value')).to.be.equal($selectedDate.attr('data-pick'));
+
+        // default time should be available on time picker element.
+        expect($('.pattern-pickadate-time', $el).attr('data-value')).to.be.equal('12,30');
+
+        // pickadate should be have this value set.
+        expect($('.pat-pickadate', $el).val()).to.contain('12:30');
+      });
+
+      it('sets the time to a positive offset of the current time when date is changed', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'{"autoSetTimeOnDateChange": "+[1,0]"}\'/>');
+        registry.scan($el);
+
+        var $dateWrapper = $('.pattern-pickadate-date', $el).parent();
+
+        // set date and time and check if time is also set
+        $('.pattern-pickadate-date', $el).click();
+        var $selectedDate = $dateWrapper.find('td > div').first().click();
+
+        // selected date should be saved on date picker element
+        expect($('.pattern-pickadate-date', $el).attr('data-value')).to.be.equal($selectedDate.attr('data-pick'));
+
+        // default time should be available on time picker element.
+        expect($('.pattern-pickadate-time', $el).attr('data-value')).to.be.equal('16,30');
+
+        // pickadate should be have this value set.
+        expect($('.pat-pickadate', $el).val()).to.contain('16:30');
+      });
+
+      it('sets the time to a negative offset of the current time when date is changed', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'{"autoSetTimeOnDateChange": "-[1,0]"}\'/>');
+        registry.scan($el);
+
+        var $dateWrapper = $('.pattern-pickadate-date', $el).parent();
+
+        // set date and time and check if time is also set
+        $('.pattern-pickadate-date', $el).click();
+        var $selectedDate = $dateWrapper.find('td > div').first().click();
+
+        // selected date should be saved on date picker element
+        expect($('.pattern-pickadate-date', $el).attr('data-value')).to.be.equal($selectedDate.attr('data-pick'));
+
+        // default time should be available on time picker element.
+        expect($('.pattern-pickadate-time', $el).attr('data-value')).to.be.equal('14,30');
+
+        // pickadate should be have this value set.
+        expect($('.pat-pickadate', $el).val()).to.contain('14:30');
       });
 
     });

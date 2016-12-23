@@ -13,6 +13,10 @@ Incompatibilities:
 
 New:
 
+- PickADate pattern: Add option to automatically set the time when changing the date.
+  It defaults to set the time to the current time.
+  [thet]
+
 - Change default sort option in livesearch pattern.
   [rodfersou]
 
