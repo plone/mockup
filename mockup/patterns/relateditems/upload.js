@@ -44,7 +44,7 @@ define([
                 self.popover.hide();
               },
               false
-          )
+          );
         }
         // getIcon, getURL, portal_type, review_state, Title, path
         // var itemHtml = self.applyTemplate('selection', item);
