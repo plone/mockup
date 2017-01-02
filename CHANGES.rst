@@ -99,6 +99,11 @@ New:
 - Add select2 result class based on value of option so it can be styled
   [vangheem]
 
+- Add to interpret TinyMCE ``importcss_selector_filter`` and ``filter`` value
+  of each ``importcss_groups`` configuration value as RegExp value instead
+  of plain string to make importcss-plugin more configurable through pattern
+  [datakurre]
+
 Fixes:
 
 - Make ``pat-tooltip`` useable by it's own by including the necessary less files and reuse that one in other patterns.
