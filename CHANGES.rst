@@ -101,6 +101,10 @@ New:
 
 Fixes:
 
+- Move tooltip pattern definition after bootstrapTooltip function definition.
+  This should fix `bootstrapTooltip is not a constructor errors`.
+  [vangheem]
+
 - Make ``pat-tooltip`` useable by it's own by including the necessary less files and reuse that one in other patterns.
   Allow configuration of ``placement`` parameter.
   [thet]

@@ -41,25 +41,6 @@ define([
 ], function($, Base, undefined) {
   'use strict';
 
-  var Tooltip = Base.extend({
-    name: 'tooltip',
-    trigger: '.pat-tooltip',
-    parser: 'mockup',
-    defaults: {
-      html: false,
-      placement: 'top'
-    },
-    init: function() {
-        if (this.options.html === 'true') {
-          // TODO: fix the parser!
-          this.options.html = true;
-        } else {
-          this.options.html = false;
-        }
-        this.data = new bootstrapTooltip(this.$el[0], this.options);
-      },
-  });
-
   //This is pulled almost directly from the Bootstrap Tooltip
   //extension. We rename it just to differentiate from the pattern.
   var bootstrapTooltip = function (element, options) {
@@ -471,6 +452,25 @@ define([
     clearTimeout(this.timeout)
     this.hide().$element.off('.' + this.type).removeData('bs.' + this.type)
   }
+
+  var Tooltip = Base.extend({
+    name: 'tooltip',
+    trigger: '.pat-tooltip',
+    parser: 'mockup',
+    defaults: {
+      html: false,
+      placement: 'top'
+    },
+    init: function() {
+        if (this.options.html === 'true') {
+          // TODO: fix the parser!
+          this.options.html = true;
+        } else {
+          this.options.html = false;
+        }
+        this.data = new bootstrapTooltip(this.$el[0], this.options);
+      },
+  });
 
   return Tooltip;
 
