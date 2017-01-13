@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Move tooltip pattern definition after bootstrapTooltip function definition.
+  This should fix `bootstrapTooltip is not a constructor errors`.
+  [vangheem]
 
 
 2.1.6 (2017-01-02)
