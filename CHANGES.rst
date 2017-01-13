@@ -193,6 +193,9 @@ New:
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
 
+- Livesearch pattern: clear search term and hide results when Esc is pressed
+  [datakurre]
+
 
 Fixes:
 
