@@ -219,9 +219,15 @@ define([
           self.render();
         }
       }).attr('autocomplete', 'off').off('keyup').on('keyup', function(e){
-        // first off, we're capturing up, down and enter key presses
+        var code = e.keyCode || e.which;
+        // first off, we're capturing esc presses
+        if(code === 27){
+          self.$input.val('');
+          self.hide();
+          return;
+        }
+        // then, we're capturing up, down and enter key presses
         if(self.results && self.results.items && self.results.items.length > 0){
-          var code = e.keyCode || e.which;
           if(code === 13){
             /* enter key, check to see if there is a selected item */
             if(self.selectedItem !== -1){
