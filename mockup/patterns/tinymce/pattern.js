@@ -391,6 +391,23 @@ define([
           };
         }
 
+        if (tinyOptions.importcss_selector_filter &&
+            tinyOptions.importcss_selector_filter.length) {
+          tinyOptions.importcss_selector_filter =
+            new RegExp(tinyOptions.importcss_selector_filter);
+        }
+
+        if (tinyOptions.importcss_groups &&
+            tinyOptions.importcss_groups.length) {
+          for(var i=0; i<tinyOptions.importcss_groups.length; i++){
+            if (tinyOptions.importcss_groups[i].filter &&
+                tinyOptions.importcss_groups[i].filter.length) {
+              tinyOptions.importcss_groups[i].filter =
+                new RegExp(tinyOptions.importcss_groups[i].filter);
+            }
+          }
+        }
+
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
 
