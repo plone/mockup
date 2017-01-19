@@ -218,14 +218,14 @@ define([
                 onSet: function(e) {
                   if (e.select !== undefined) {
                     self.$date.attr('data-value', e.select);
-                    if (self.options.time === false ||
-                        self.$time.attr('data-value') !== '') {
-                      self.updateValue.call(self);
-                    }
                     if (self.options.autoSetTimeOnDateChange !== false && self.$time) {
                       if (! self.$time.pickatime('picker').get('select')) {
                         self.$time.pickatime('picker').set('select', self.options.autoSetTimeOnDateChange);
                       }
+                    }
+                    if (self.options.time === false ||
+                        self.$time.attr('data-value') !== '') {
+                      self.updateValue.call(self);
                     }
                   }
                   if (e.hasOwnProperty('clear')) {
