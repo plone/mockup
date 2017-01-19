@@ -93,6 +93,7 @@
       'mockup-patterns-thememapper': 'patterns/thememapper/pattern',
       'mockup-patterns-thememapper-url': 'patterns/thememapper',
       'mockup-patterns-tinymce': 'patterns/tinymce/pattern',
+      'mockup-patterns-tinymce-links': 'patterns/tinymce/js/links',
       'mockup-patterns-tinymce-url': 'patterns/tinymce',
       'mockup-patterns-toggle': 'patterns/toggle/pattern',
       'mockup-patterns-tooltip': 'patterns/tooltip/pattern',

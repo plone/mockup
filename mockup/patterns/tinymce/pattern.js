@@ -63,7 +63,7 @@ define([
   'pat-base',
   'tinymce',
   'mockup-utils',
-  'mockup-patterns-tinymce-url/js/links',
+  'mockup-patterns-tinymce-links',
   'mockup-i18n',
   'translate',
   'tinymce-modern-theme',
