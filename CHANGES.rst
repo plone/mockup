@@ -13,6 +13,10 @@ Incompatibilities:
 
 New:
 
+- PickADate pattern: Add a button to set the date or time to now and another to clear all inputs.
+  Remove the clear buttons from the date and time picker itself, as they allowed incomplete input submission (e.g. date only when date and time were required).
+  [thet]
+
 - PickADate pattern: Add option to automatically set the time when changing the date.
   It defaults to set the time to the current time.
   [thet]
