@@ -110,6 +110,9 @@ New:
 
 Fixes:
 
+- Fix jquery.event.drag to work with HTML5 drag
+  [vangheem]
+
 - Move tooltip pattern definition after bootstrapTooltip function definition.
   This should fix `bootstrapTooltip is not a constructor errors`.
   [vangheem]
