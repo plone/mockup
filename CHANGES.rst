@@ -130,6 +130,9 @@ Fixes:
 - Fixes issue when HTML escaping select2 values. Now removing HTML completely and leave the input unescaped.
   [petschki]
 
+- Fix conflict between upload and relateditem browse button.
+  [Gagaro]
+
 
 2.3.0 (2016-08-19)
 ------------------

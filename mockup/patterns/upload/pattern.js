@@ -157,7 +157,7 @@ define([
 
       self.$dropzone = $('.upload-area', self.$el);
 
-      $('button.browse', self.$el).click(function(e) {
+      $('div.browse-select button.browse', self.$el).click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         if(!self.options.maxFiles || self.dropzone.files.length < self.options.maxFiles){
