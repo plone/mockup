@@ -191,7 +191,7 @@ define([
 
         baseCriteria.push({
           i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
+          o: 'plone.app.querystring.operation.string.absolutePath',
           v: this.options.rootPath + this.currentPath
         });
 

@@ -133,6 +133,9 @@ Fixes:
 - Fix conflict between upload and relateditem browse button.
   [Gagaro]
 
+- Query from portal path rather than from navigation root.
+  [Gagaro]
+
 
 2.3.0 (2016-08-19)
 ------------------
