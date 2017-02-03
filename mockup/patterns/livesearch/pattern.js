@@ -41,6 +41,7 @@ define([
     resultsClass: 'livesearch-results',
     defaults: {
       ajaxUrl: null,
+      defaultSortOn: '',
       perPage: 7,
       quietMillis: 350,
       minimumInputLength: 4,
@@ -68,7 +69,7 @@ define([
           if($searchResults.length > 0){
             return $searchResults.attr('data-default-sort');
           }
-          return '';
+          return self.options.defaultSortOn;
         }
         // cut string before sort_on parameter
         var sort_on = parameters.substring(sorton_position);
