@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Fix the tests for 2.1.x by aligning package.json to master and reverting commit 3f1b741 as it was reverted in master also.
+  [thet]
+
 - Move tooltip pattern definition after bootstrapTooltip function definition.
   This should fix `bootstrapTooltip is not a constructor errors`.
   [vangheem]
