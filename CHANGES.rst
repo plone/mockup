@@ -108,6 +108,9 @@ New:
   of plain string to make importcss-plugin more configurable through pattern
   [datakurre]
 
+- Add ``defaultSortOn`` option in ``livesearch`` pattern.
+  [Gagaro]
+
 Fixes:
 
 - Fix jquery.event.drag to work with HTML5 drag
