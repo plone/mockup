@@ -108,35 +108,6 @@ define([
       // main element should now have value
       expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
-      // clearing time ...
-      $('.pattern-pickadate-time', self.$el).click();
-      this.clock.tick(1000);
-      $('.picker__button--clear', timeWrapper).click();
-
-      // ... should remove value from main element
-      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
-
-      // select time again
-      $selectedTime = timeWrapper.find('li').first().next().click();
-
-      // main element should now have again value
-      expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
-
-      // clearing date ...
-      $('.pattern-pickadate-date', self.$el).click();
-      $('.pattern-pickadate-date', self.$el).click();
-      $('.picker__button--clear', dateWrapper).click();
-
-      // ... should also remove value from main element
-      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
-
-      // selecting time again ...
-      $selectedTime = timeWrapper.find('li').first().next().click();
-
-      // ... should still keep main element value empty since date picker is
-      // cleared
-      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
-
     });
 
     it('date and time element have custom separator', function() {
@@ -174,9 +145,9 @@ define([
       expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--year').size()).to.be.equal(0);
       expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--month').size()).to.be.equal(0);
 
-      // there should be 25 items in time picker list. 24 for each hour and one
-      // to for clear button
-      expect($('.pattern-pickadate-time', self.$el).parent().find('li').size()).to.be.equal(25);
+      // there should be 24 items for each hour in time picker list.
+      // The clear button is not shown in favor of a date + time clear button.
+      expect($('.pattern-pickadate-time', self.$el).parent().find('li').size()).to.be.equal(24);
     });
 
     it('only date element', function() {
@@ -225,14 +196,6 @@ define([
       // and also on main element since time element is disabled
       expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
-      // clearing date ...
-      $('.pattern-pickadate-date', self.$el).click();
-      $('.pattern-pickadate-date', self.$el).click();
-      this.clock.tick(1000);
-      $('.picker__button--clear', dateWrapper).click();
-
-      // ... should also remove value from main element
-      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
     });
 
     it('only time element', function() {
@@ -281,13 +244,6 @@ define([
       // and also on main element since time element is disabled
       expect($('.pat-pickadate', self.$el).val()).to.not.equal('');
 
-      // clearing date ...
-      $('.pattern-pickadate-time', self.$el).click();
-      this.clock.tick(1000);
-      $('.picker__button--clear', timeWrapper).click();
-
-      // ... should also remove value from main element
-      expect($('.pat-pickadate', self.$el).val()).to.be.equal('');
     });
 
     it('populating date and time picker', function() {
@@ -593,6 +549,58 @@ define([
 
         // pickadate should be have this value set.
         expect($('.pat-pickadate', $el).val()).to.contain('14:30');
+      });
+
+    });
+
+    describe('set / clear date and time with buttons', function() {
+
+      it('set and clear date and time', function() {
+        var $el = $('<div><input class="pat-pickadate"/>');
+        registry.scan($el);
+
+        // first, it's unset
+        expect($('.pat-pickadate', $el).val()).to.be.equal("");
+        
+        // now set it to now.
+        $('.pattern-pickadate-now', $el).click();
+        expect($('.pat-pickadate', $el).val()).to.be.equal("2017-01-23 15:30");
+ 
+        // now clear it.
+        $('.pattern-pickadate-clear', $el).click();
+        expect($('.pat-pickadate', $el).val()).to.be.equal("");
+      });
+
+      it('set and clear date', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'date:false\'/>');
+        registry.scan($el);
+
+        // first, it's unset
+        expect($('.pat-pickadate', $el).val()).to.be.equal("");
+        
+        // now set it to now.
+        $('.pattern-pickadate-now', $el).click();
+        expect($('.pat-pickadate', $el).val()).to.be.equal("15:30");
+ 
+        // now clear it.
+        $('.pattern-pickadate-clear', $el).click();
+        expect($('.pat-pickadate', $el).val()).to.be.equal("");
+      });
+
+      it('set and clear time', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'time:false\'/>');
+        registry.scan($el);
+
+        // first, it's unset
+        expect($('.pat-pickadate', $el).val()).to.be.equal("");
+        
+        // now set it to now.
+        $('.pattern-pickadate-now', $el).click();
+        expect($('.pat-pickadate', $el).val()).to.be.equal("2017-01-23");
+ 
+        // now clear it.
+        $('.pattern-pickadate-clear', $el).click();
+        expect($('.pat-pickadate', $el).val()).to.be.equal("");
       });
 
     });
