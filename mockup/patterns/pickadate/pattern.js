@@ -135,12 +135,6 @@ define([
       placeholderTime: _t('Enter time...'),
       placeholderTimezone: _t('Enter timezone...')
     },
-    isFalse: function(value) {
-      if (typeof(value) === 'string' && value === 'false') {
-        return false;
-      }
-      return value;
-    },
     parseTimeOffset: function(timeOffset) {
       var op = undefined;
       if (timeOffset.indexOf('+') === 0) {
@@ -198,8 +192,12 @@ define([
         dateValue = value[0] || '',
         timeValue = value[1] || '';
 
-      self.options.date = self.isFalse(self.options.date);
-      self.options.time = self.isFalse(self.options.time);
+      if (utils.bool(self.options.date) === false) {
+        self.options.date = false;
+      }
+      if (utils.bool(self.options.time) === false) {
+        self.options.time = false;
+      }
       self.options.autoSetTimeOnDateChange = self.parseTimeOffset(self.options.autoSetTimeOnDateChange);
 
       if (self.options.date === false) {
