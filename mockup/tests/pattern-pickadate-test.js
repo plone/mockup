@@ -603,6 +603,14 @@ define([
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
       });
 
+      it('hide today and clear buttons', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'today:false;clear:false\'/>');
+        registry.scan($el);
+        // today and clear buttons are missing
+        expect($('.pattern-pickadate-now', $el).length).to.be.equal(0);
+        expect($('.pattern-pickadate-clear', $el).length).to.be.equal(0);
+      });
+
     });
 
   });
