@@ -326,7 +326,7 @@ define([
     if (typeof val === 'string') {
       val = $.trim(val).toLowerCase();
     }
-    return ['true', true, 1].indexOf(val) !== -1;
+    return ['false', false, '0', 0, '', undefined, null].indexOf(val) === -1;
   };
 
   var escapeHTML = function(val) {

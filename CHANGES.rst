@@ -113,6 +113,9 @@ New:
 
 Fixes:
 
+- Change ``bool`` function in mockup-utils to allow for truthy values and match on falsy values.
+  [thet]
+
 - Fix jquery.event.drag to work with HTML5 drag
   [vangheem]
 
