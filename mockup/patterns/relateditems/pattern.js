@@ -134,6 +134,7 @@ define([
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
       rootUrl: '',  // default to be relative.
+      pathOperator: 'plone.app.querystring.operation.string.path',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
       tokenSeparators: [',', ' '],
@@ -191,7 +192,7 @@ define([
 
         baseCriteria.push({
           i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
+          o: this.options.pathOperator,
           v: this.options.rootPath + this.currentPath
         });
 

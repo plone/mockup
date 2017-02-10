@@ -19,6 +19,7 @@ define([
       pattern: null, // must be passed in
       vocabularyUrl: null,
       searchParam: 'SearchableText', // query string param to pass to search url
+      pathOperator: 'plone.app.querystring.operation.string.path',
       attributes: ['UID', 'Title', 'Description', 'getURL', 'portal_type'],
       batchSize: 10, // number of results to retrive
       baseCriteria: [],
@@ -102,13 +103,13 @@ define([
       if (searchOptions.searchPath) {
         criterias.push({
           i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
+          o: self.options.pathOperator,
           v: searchOptions.searchPath + '::' + self.options.pathDepth
         });
       } else if (self.pattern.browsing) {
         criterias.push({
           i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
+          o: self.options.pathOperator,
           v: self.getCurrentPath() + '::' + self.options.pathDepth
         });
       }
