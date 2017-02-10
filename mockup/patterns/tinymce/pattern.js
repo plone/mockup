@@ -193,7 +193,14 @@ define([
       var self = this;
       if (self.linkModal === null) {
         var $el = $('<div/>').insertAfter(self.$el);
-        var linkTypes = ['internal', 'upload', 'external', 'email', 'anchor'];
+
+        var linkTypes = [
+          'mockup-tinymce-linktype-internal',
+          'mockup-tinymce-linktype-upload',
+          'mockup-tinymce-linktype-external',
+          'mockup-tinymce-linktype-email',
+          'mockup-tinymce-linktype-anchor'
+        ];
         if(!self.options.upload){
           linkTypes.splice(1, 1);
         }
@@ -212,7 +219,11 @@ define([
     addImageClicked: function() {
       var self = this;
       if (self.imageModal === null) {
-        var linkTypes = ['image', 'uploadImage', 'externalImage'];
+        var linkTypes = [
+          'mockup-tinymce-linktype-image',
+          'mockup-tinymce-linktype-uploadImage',
+          'mockup-tinymce-linktype-externalImage'
+        ];
         if(!self.options.upload){
           linkTypes.splice(1, 1);
         }

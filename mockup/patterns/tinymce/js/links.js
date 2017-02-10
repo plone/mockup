@@ -4,305 +4,21 @@ define([
   'pat-registry',
   'pat-base',
   'tinymce',
-  'text!mockup-patterns-tinymce-url/templates/link.xml',
-  'text!mockup-patterns-tinymce-url/templates/image.xml',
   'mockup-patterns-relateditems',
   'mockup-patterns-autotoc',
   'mockup-patterns-modal',
-  'mockup-patterns-upload'
-], function($, _, registry, Base, tinymce, LinkTemplate, ImageTemplate, RelatedItems) {
+  'mockup-patterns-upload',
+  // default link types
+  'mockup-tinymce-linktype-anchor',
+  'mockup-tinymce-linktype-email',
+  'mockup-tinymce-linktype-external',
+  'mockup-tinymce-linktype-externalImage',
+  'mockup-tinymce-linktype-image',
+  'mockup-tinymce-linktype-internal',
+  'mockup-tinymce-linktype-upload',
+  'mockup-tinymce-linktype-uploadImage'
+], function($, _, registry, Base, tinymce, RelatedItems) {
   'use strict';
-
-  var LinkType = Base.extend({
-    defaults: {
-      linkModal: null // required
-    },
-
-    init: function() {
-      this.linkModal = this.options.linkModal;
-      this.tinypattern = this.options.tinypattern;
-      this.tiny = this.tinypattern.tiny;
-      this.dom = this.tiny.dom;
-    },
-
-    getEl: function(){
-      return this.$el.find('input');
-    },
-
-    value: function() {
-      return $.trim(this.getEl().val());
-    },
-
-    toUrl: function() {
-      return this.value();
-    },
-
-    load: function(element) {
-      this.getEl().attr('value', this.tiny.dom.getAttrib(element, 'data-val'));
-    },
-
-    set: function(val) {
-      var $el = this.getEl();
-      $el.attr('value', val);
-      $el.val(val);
-    },
-
-    attributes: function() {
-      return {
-        'data-val': this.value()
-      };
-    }
-  });
-
-  var ExternalLink = LinkType.extend({
-    init: function() {
-      LinkType.prototype.init.call(this);
-      this.getEl().on('change', function(){
-        // check here if we should automatically add in http:// to url
-        var val = $(this).val();
-        if((new RegExp("https?\:\/\/")).test(val)){
-          // already valid url
-          return;
-        }
-        var domain = $(this).val().split('/')[0];
-        if(domain.indexOf('.') !== -1){
-          $(this).val('http://' + val);
-        }
-      });
-    }
-  });
-
-  var InternalLink = LinkType.extend({
-    init: function() {
-      LinkType.prototype.init.call(this);
-      this.getEl().addClass('pat-relateditems');
-      this.createRelatedItems();
-    },
-
-    getEl: function(){
-      return this.$el.find('input:not(.select2-input)');
-    },
-
-    createRelatedItems: function() {
-      var options = this.tinypattern.options.relatedItems;
-      options.upload = false;  // ensure that related items upload is off.
-      this.relatedItems = new RelatedItems(this.getEl(), options);
-    },
-
-    value: function() {
-      var val = this.getEl().select2('data');
-      if (val && typeof(val) === 'object') {
-        val = val[0];
-      }
-      return val;
-    },
-
-    toUrl: function() {
-      var value = this.value();
-      if (value) {
-        return this.tinypattern.generateUrl(value);
-      }
-      return null;
-    },
-    load: function(element) {
-      var val = this.tiny.dom.getAttrib(element, 'data-val');
-      if (val) {
-        this.set(val);
-      }
-    },
-
-    set: function(val) {
-      var $el = this.getEl();
-      // kill it and then reinitialize since select2 will load data then
-      $el.select2('destroy');
-      $el.removeData('pattern-relateditems'); // reset the pattern
-      $el.parent().replaceWith($el);
-      $el.attr('value', val);
-      $el.val(val);
-      this.createRelatedItems();
-    },
-
-    attributes: function() {
-      var val = this.value();
-      if (val) {
-        return {
-          'data-val': val.UID
-        };
-      }
-      return {};
-    }
-  });
-
-  var UploadLink = LinkType.extend({
-    /* need to do it a bit differently here.
-       when a user uploads and tries to upload from
-       it, you need to delegate to the real insert
-       linke types */
-    getDelegatedLinkType: function(){
-      if(this.linkModal.linkType === 'uploadImage'){
-        return this.linkModal.linkTypes.image;
-      }else{
-        return this.linkModal.linkTypes.internal;
-      }
-    },
-    toUrl: function(){
-      return this.getDelegatedLinkType().toUrl();
-    },
-    attributes: function(){
-      return this.getDelegatedLinkType().attributes();
-    },
-    set: function(val){
-      return this.getDelegatedLinkType().set(val);
-    },
-    load: function(element){
-      return this.getDelegatedLinkType().load(element);
-    },
-    value: function(){
-      return this.getDelegatedLinkType().value();
-    }
-  });
-
-  var ImageLink = InternalLink.extend({
-    toUrl: function() {
-      var value = this.value();
-      return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
-    }
-  });
-
-  var EmailLink = LinkType.extend({
-    toUrl: function() {
-      var self = this;
-      var val = self.value();
-      if (val) {
-        var subject = self.getSubject();
-        var href = 'mailto:' + val;
-        if (subject) {
-          href += '?subject=' + subject;
-        }
-        return href;
-      }
-      return null;
-    },
-
-    load: function(element) {
-      LinkType.prototype.load.apply(this, [element]);
-      this.linkModal.$subject.val(this.tiny.dom.getAttrib(element, 'data-subject'));
-    },
-
-    getSubject: function() {
-      return this.linkModal.$subject.val();
-    },
-
-    attributes: function() {
-      var attribs = LinkType.prototype.attributes.call(this);
-      attribs['data-subject'] = this.getSubject();
-      return attribs;
-    }
-  });
-
-  var AnchorLink = LinkType.extend({
-    init: function() {
-      LinkType.prototype.init.call(this);
-      this.$select = this.$el.find('select');
-      this.anchorNodes = [];
-      this.anchorData = [];
-      this.populate();
-    },
-
-    value: function() {
-      var val = this.$select.select2('data');
-      if (val && typeof(val) === 'object') {
-        val = val.id;
-      }
-      return val;
-    },
-
-    populate: function() {
-      var self = this;
-      self.$select.find('option').remove();
-      self.anchorNodes = [];
-      self.anchorData = [];
-      var node, i, j, name, title;
-
-      var nodes = self.tiny.dom.select('a.mceItemAnchor,img.mceItemAnchor,a.mce-item-anchor,img.mce-item-anchor');
-      for (i = 0; i < nodes.length; i = i + 1) {
-        node = nodes[i];
-        name = self.tiny.dom.getAttrib(node, 'name');
-        if (!name) {
-          name = self.tiny.dom.getAttrib(node, 'id');
-        }
-        if (name !== '') {
-          self.anchorNodes.push(node);
-          self.anchorData.push({name: name, title: name});
-        }
-      }
-
-      nodes = self.tiny.dom.select(self.linkModal.options.anchorSelector);
-      if (nodes.length > 0) {
-        for (i = 0; i < nodes.length; i = i + 1) {
-          node = nodes[i];
-          title = $(node).text().replace(/^\s+|\s+$/g, '');
-          if (title === '') {
-            continue;
-          }
-          name = title.toLowerCase().substring(0,1024);
-          name = name.replace(/[^a-z0-9]/g, '-');
-          /* okay, ugly, but we need to first check that this anchor isn't already available */
-          var found = false;
-          for (j = 0; j < self.anchorNodes.length; j = j + 1) {
-            var anode = self.anchorData[j];
-            if (anode.name === name) {
-              found = true;
-              // so it's also found, let's update the title to be more presentable
-              anode.title = title;
-              break;
-            }
-          }
-          if (!found) {
-            self.anchorData.push({name: name, title: title, newAnchor: true});
-            self.anchorNodes.push(node);
-          }
-        }
-      }
-      if (self.anchorNodes.length > 0) {
-        for (i = 0; i < self.anchorData.length; i = i + 1) {
-          var data = self.anchorData[i];
-          self.$select.append('<option value="' + i + '">' + data.title + '</option>');
-        }
-      } else {
-        self.$select.append('<option>No anchors found..</option>');
-      }
-    },
-
-    getIndex: function(name) {
-      for (var i = 0; i < this.anchorData.length; i = i + 1) {
-        var data = this.anchorData[i];
-        if (data.name === name) {
-          return i;
-        }
-      }
-      return 0;
-    },
-
-    toUrl: function() {
-      var val = this.value();
-      if (val) {
-        var index = parseInt(val, 10);
-        var node = this.anchorNodes[index];
-        var data = this.anchorData[index];
-        if (data.newAnchor) {
-          node.innerHTML = '<a name="' + data.name + '" class="mce-item-anchor"></a>' + node.innerHTML;
-        }
-        return '#' + data.name;
-      }
-      return null;
-    },
-
-    set: function(val) {
-      var anchor = this.getIndex(val);
-      this.$select.select2('data', '' + anchor);
-    }
-  });
 
   tinymce.PluginManager.add('ploneimage', function(editor) {
     editor.addButton('ploneimage', {
@@ -357,59 +73,34 @@ define([
     trigger: '.pat-linkmodal',
     defaults: {
       anchorSelector: 'h1,h2,h3',
-      linkTypes: [
-        /* available, none activate by default because these options
-         * only get merged, not set.
-        'internal',
-        'upload',
-        'external',
-        'email',
-        'anchor',
-        'image'
-        'externalImage'*/
-      ],
+      linkTypes: [],  // this is set by the tinymce pattern. 
       initialLinkType: 'internal',
       text: {
         insertHeading: 'Insert Link'
       },
-      linkTypeClassMapping: {
-        'internal': InternalLink,
-        'upload': UploadLink,
-        'external': ExternalLink,
-        'email': EmailLink,
-        'anchor': AnchorLink,
-        'image': ImageLink,
-        'uploadImage': UploadLink,
-        'externalImage': LinkType
-      }
     },
-    // XXX: this is a temporary work around for having separated templates.
-    // Image modal is going to have its own modal class, funcs and template.
-    linkTypeTemplateMapping: {
-      'internal': LinkTemplate,
-      'upload': LinkTemplate,
-      'external': LinkTemplate,
-      'email': LinkTemplate,
-      'anchor': LinkTemplate,
-      'image': ImageTemplate,
-      'uploadImage': ImageTemplate,
-      'externalImage': ImageTemplate
-    },
+    linkType: undefined,
+    linkTypes: {},
 
     template: function(data) {
-      return _.template(this.linkTypeTemplateMapping[this.linkType])(data);
+      return _.template(this.linkType.template)(data);
     },
 
     init: function() {
       var self = this;
+
+      _.each(self.options.linkTypes, function(requirejsname) {
+        // later in ``initElements`` all linkTypes are initialized.
+        var linktype = require(requirejsname);
+        this.linkTypes[linktype.name] = linktype;
+      });
+
       self.tinypattern = self.options.tinypattern;
       if (self.tinypattern.options.anchorSelector) {
         self.options.anchorSelector = self.tinypattern.options.anchorSelector;
       }
       self.tiny = self.tinypattern.tiny;
       self.dom = self.tiny.dom;
-      self.linkType = self.options.initialLinkType;
-      self.linkTypes = {};
       self.modal = registry.patterns['plone-modal'].init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
@@ -452,7 +143,7 @@ define([
         upload: this.options.upload,
         text: this.options.text,
         insertHeading: this.options.text.insertHeading,
-        linkTypes: this.options.linkTypes,
+        linkTypes: _.keys(this.linkTypes),
         externalText: this.options.text.external,
         emailText: this.options.text.email,
         subjectText: this.options.text.subject,
@@ -468,10 +159,6 @@ define([
       });
     },
 
-    isImageMode: function() {
-      return ['image', 'uploadImage', 'externalImage'].indexOf(this.linkType) !== -1;
-    },
-
     initElements: function() {
       var self = this;
       self.$target = $('select[name="target"]', self.modal.$modal);
@@ -484,9 +171,9 @@ define([
       self.$scale = $('select[name="scale"]', self.modal.$modal);
 
       /* load up all the link types */
-      _.each(self.options.linkTypes, function(type) {
-        var $container = $('.linkType.' + type + ' .main', self.modal.$modal);
-        self.linkTypes[type] = new self.options.linkTypeClassMapping[type]($container, {
+      _.each(this.linkTypes, function(linktype) {
+        var $container = $('.linkType.' + linktype.name + ' .main', self.modal.$modal);
+        self.linkTypes[linktype.name] = new linktype($container, {
           linkModal: self,
           tinypattern: self.tinypattern
         });
@@ -496,8 +183,8 @@ define([
         var $fieldset = $('fieldset.linkType', self.modal.$modal).eq($(this).index());
         var classes = $fieldset[0].className.split(/\s+/);
         _.each(classes, function(val) {
-          if (_.indexOf(self.options.linkTypes, val) !== -1){
-            self.linkType = val;
+          if (_.indexOf(_.keys(this.linkTypes), val) !== -1){
+            self.linkType = this.linkTypes[val];
           }
         });
       });
@@ -505,11 +192,11 @@ define([
 
     getLinkUrl: function() {
       // get the url, only get one uid
-      return this.linkTypes[this.linkType].toUrl();
+      return this.linkType.toUrl();
     },
 
     getValue: function() {
-      return this.linkTypes[this.linkType].value();
+      return this.linkType.value();
     },
 
     updateAnchor: function(href) {
@@ -523,9 +210,9 @@ define([
       var linkAttrs = $.extend(true, self.data, {
         title: title ? title : null,
         target: target ? target : null,
-        'data-linkType': self.linkType,
+        'data-linkType': self.linkType.name,
         href: href
-      }, self.linkTypes[self.linkType].attributes());
+      }, self.linkType.attributes());
       if (self.anchorElm) {
 
         if (self.onlyText && linkAttrs.text !== self.initialText) {
@@ -569,9 +256,9 @@ define([
         title: title ? title : null,
         alt: self.$alt.val(),
         'class': 'image-' + self.$align.val(),
-        'data-linkType': self.linkType,
+        'data-linkType': self.linkType.name,
         'data-scale': self.$scale.val()
-      }, self.linkTypes[self.linkType].attributes());
+      }, self.linkType.attributes());
       if (self.imgElm && !self.imgElm.getAttribute('data-mce-object')) {
         data.width = self.dom.getAttrib(self.imgElm, 'width');
         data.height = self.dom.getAttrib(self.imgElm, 'height');
@@ -606,17 +293,17 @@ define([
       self.initElements();
       self.initData();
       // upload init
-      if(self.options.upload){
+      if (self.options.upload) {
         self.$upload = $('.uploadify-me', self.modal.$modal);
         self.options.upload.relatedItems = $.extend(true, {}, self.options.relatedItems);
         self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
         self.$upload.addClass('pat-upload').patternUpload(self.options.upload);
         self.$upload.on('uploadAllCompleted', function(evt, data) {
-          if(self.linkTypes.image){
-            self.linkTypes.image.set(data.data.UID);
+          if (self.linkType.name === 'image'){
+            self.linkType.set(data.data.UID);
             $('#' + $('#tinylink-image' , self.modal.$modal).data('navref')).trigger('click');
-          }else{
-            self.linkTypes.internal.set(data.data.UID);
+          } else {
+            self.linkTypes['internal'].set(data.data.UID);
             $('#' + $('#tinylink-internal' , self.modal.$modal).data('navref')).trigger('click');
           }
         });
@@ -625,16 +312,16 @@ define([
       self.$button.off('click').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        self.linkType = self.modal.$modal.find('fieldset.active').data('linktype');
+        self.linkType = self.linkTypes[self.modal.$modal.find('fieldset.active').data('linktype')];
 
-        if(self.linkType === 'uploadImage' || self.linkType === 'upload'){
+        if(self.linkType.name === 'uploadImage' || self.linkType.name === 'upload'){
           var patUpload = self.$upload.data().patternUpload;
           if(patUpload.dropzone.files.length > 0){
             patUpload.processUpload();
             self.$upload.on('uploadAllCompleted', function(evt, data) {
               var counter = 0;
               var checkUpload = function(){
-                if(counter < 5 && !self.linkTypes[self.linkType].value()){
+                if(counter < 5 && !self.linkType.value()){
                   counter += 1;
                   setTimeout(checkUpload, 100);
                   return;
@@ -657,7 +344,7 @@ define([
         if (!href) {
           return; // just cut out if no url
         }
-        if (self.isImageMode()) {
+        if (this.linkType.imagemode) {
           self.updateImage(href);
         } else {
           /* regular anchor */
@@ -719,7 +406,7 @@ define([
       self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
 
       var linkType;
-      if (self.isImageMode()) {
+      if (this.linkType.imagemode) {
         if (self.imgElm.nodeName !== 'IMG') {
           // try finding elsewhere
           if (self.anchorElm) {
@@ -740,13 +427,13 @@ define([
           self.$alt.val(self.dom.getAttrib(self.imgElm, 'alt'));
           linkType = self.dom.getAttrib(self.imgElm, 'data-linktype');
           if (linkType) {
-            self.linkType = linkType;
-            self.linkTypes[self.linkType].load(self.imgElm);
+            self.linkType = thislinkTypes[linkType];
+            self.linkType.load(self.imgElm);
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
             if(scale){
               self.$scale.val(scale);
             }
-            $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
+            $('#tinylink-' + self.linkType.name, self.modal.$modal).trigger('click');
           }else if (src) {
             self.guessImageLink(src);
           }
@@ -767,9 +454,9 @@ define([
         self.$title.val(self.dom.getAttrib(self.anchorElm, 'title'));
         linkType = self.dom.getAttrib(self.anchorElm, 'data-linktype');
         if (linkType) {
-          self.linkType = linkType;
-          self.linkTypes[self.linkType].load(self.anchorElm);
-          $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
+          self.linkType = self.linkTypes[linkType];
+          self.linkType.load(self.anchorElm);
+          $('#tinylink-' + self.linkType.name, self.modal.$modal).trigger('click');
         }else if (href) {
           self.guessAnchorLink(href);
         }
@@ -778,12 +465,12 @@ define([
 
     guessImageLink: function(src) {
       if (src.indexOf(this.options.prependToScalePart) !== -1) {
-        this.linkType = 'image';
+        this.linkType = this.linkTypes['image'];
         this.$scale.val(this.tinypattern.getScaleFromUrl(src));
-        this.linkTypes.image.set(this.tinypattern.stripGeneratedUrl(src));
+        this.linkType.image.set(this.tinypattern.stripGeneratedUrl(src));
       } else {
-        this.linkType = 'externalImage';
-        this.linkTypes.externalImage.set(src);
+        this.linkType = this.linkTypes['externalImage'];
+        this.linkType.externalImage.set(src);
       }
     },
 
@@ -792,22 +479,22 @@ define([
           href.indexOf(this.options.prependToUrl) !== -1) {
         // XXX if using default configuration, it gets more difficult
         // here to detect internal urls so this might need to change...
-        this.linkType = 'internal';
-        this.linkTypes.internal.set(this.tinypattern.stripGeneratedUrl(href));
+        this.linkType = this.linkTypes['internal'];
+        this.linkType.internal.set(this.tinypattern.stripGeneratedUrl(href));
       } else if (href.indexOf('mailto:') !== -1) {
-        this.linkType = 'email';
+        this.linkType = this.linkTypes['email'];
         var email = href.substring('mailto:'.length, href.length);
         var split = email.split('?subject=');
-        this.linkTypes.email.set(split[0]);
+        this.linkType.email.set(split[0]);
         if (split.length > 1) {
           this.$subject.val(decodeURIComponent(split[1]));
         }
       } else if (href[0] === '#') {
-        this.linkType = 'anchor';
-        this.linkTypes.anchor.set(href.substring(1));
+        this.linkType = this.linkTypes['anchor'];
+        this.linkType.anchor.set(href.substring(1));
       } else {
-        this.linkType = 'external';
-        this.linkTypes.external.set(href);
+        this.linkType = this.linkTypes['external'];
+        this.linkType.external.set(href);
       }
     },
 
