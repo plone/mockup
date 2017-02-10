@@ -149,7 +149,7 @@ define([
       it('browsing adds path criteria', function() {
         var qh = new utils.QueryHelper({vocabularyUrl: 'http://foobar.com/?foo=bar'});
         qh.pattern.browsing = true;
-        expect(qh.getQueryData('foobar').query).to.contain('plone.app.querystring.operation.string.path');
+        expect(qh.getQueryData('foobar').query).to.contain('plone.app.querystring.operation.string.absolutePath');
       });
 
 

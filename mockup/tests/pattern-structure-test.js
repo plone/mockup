@@ -98,7 +98,7 @@ define([
       expect(JSON.parse(app.collection.queryParser())).to.eql({
         "criteria": [{
           "i":"path",
-          "o":"plone.app.querystring.operation.string.path",
+          "o":"plone.app.querystring.operation.string.absolutePath",
           "v":"/::1"
         }],
         "sort_on":"getObjPositionInParent",

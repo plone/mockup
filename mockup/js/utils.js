@@ -102,13 +102,13 @@ define([
       if (searchOptions.searchPath) {
         criterias.push({
           i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
+          o: 'plone.app.querystring.operation.string.absolutePath',
           v: searchOptions.searchPath + '::' + self.options.pathDepth
         });
       } else if (self.pattern.browsing) {
         criterias.push({
           i: 'path',
-          o: 'plone.app.querystring.operation.string.path',
+          o: 'plone.app.querystring.operation.string.absolutePath',
           v: self.getCurrentPath() + '::' + self.options.pathDepth
         });
       }
