@@ -15,6 +15,10 @@ New:
 
 - PickADate pattern: Add a button to set the date or time to now and another to clear all inputs.
   Remove the clear buttons from the date and time picker itself, as they allowed incomplete input submission (e.g. date only when date and time were required).
+  Also remove the now obsolete footer buttons as a whole from the date picker.
+  Add options ``today`` and  ``clear`` to hide those buttons when set to ``false``.
+  Use ``display: inline-block`` instead of problematic ``float:left``.
+  Refs: PR #740, Fixes #732.
   [thet]
 
 - PickADate pattern: Add option to automatically set the time when changing the date.
@@ -112,6 +116,9 @@ New:
   [Gagaro]
 
 Fixes:
+
+- Change ``bool`` function in mockup-utils to allow for truthy values and match on falsy values.
+  [thet]
 
 - Fix jquery.event.drag to work with HTML5 drag
   [vangheem]

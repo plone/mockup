@@ -74,33 +74,31 @@ define([
 
     describe('bool', function() {
 
-      it('returns true for "true"', function() {
+      it('returns true for truthy values', function() {
+        expect(utils.bool(true)).to.be.equal(true);
+        expect(utils.bool(1)).to.be.equal(true);
+        expect(utils.bool('1')).to.be.equal(true);
         expect(utils.bool('true')).to.be.equal(true);
         expect(utils.bool(' true ')).to.be.equal(true);
         expect(utils.bool('TRUE')).to.be.equal(true);
         expect(utils.bool('True')).to.be.equal(true);
+        expect(utils.bool(13)).to.be.equal(true);
+        expect(utils.bool('foo')).to.be.equal(true);
       });
-
-      it('returns true for true', function() {
-        var val = utils.bool(true);
-        expect(val).to.be.equal(true);
-      });
-
-      it('returns true for true', function() {
-        var val = utils.bool(1);
-        expect(val).to.be.equal(true);
-      });
-
-      it('returns false for strings != "true"', function() {
-        expect(utils.bool('1')).to.be.equal(false);
-        expect(utils.bool('')).to.be.equal(false);
+        
+      it('returns false for falsy values', function() {
         expect(utils.bool('false')).to.be.equal(false);
-      });
-
-      it('returns false for undefined/null', function() {
+        expect(utils.bool(' false ')).to.be.equal(false);
+        expect(utils.bool('FALSE')).to.be.equal(false);
+        expect(utils.bool('False')).to.be.equal(false);
+        expect(utils.bool(false)).to.be.equal(false);
+        expect(utils.bool('0')).to.be.equal(false);
+        expect(utils.bool(0)).to.be.equal(false);
+        expect(utils.bool('')).to.be.equal(false);
         expect(utils.bool(undefined)).to.be.equal(false);
         expect(utils.bool(null)).to.be.equal(false);
       });
+
     });
 
 
