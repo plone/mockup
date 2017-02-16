@@ -1,12 +1,11 @@
 define([
   'jquery',
   'mockup-tinymce-linktype-base',
-], function($, BaseLinkType) {
+  'text!mockup-patterns-tinymce-url/templates/link.xml',
+], function($, BaseLinkType, LinkTemplate) {
   'use strict';
 
   var ExternalLink = BaseLinkType.extend({
-
-    name: 'external',
 
     init: function() {
       BaseLinkType.prototype.init.call(this);
@@ -26,6 +25,10 @@ define([
 
   });
 
-  return ExternalLink;
+  return {
+    plugin: ExternalLink,
+    name: 'external',
+    template: LinkTemplate
+  };
 
 });

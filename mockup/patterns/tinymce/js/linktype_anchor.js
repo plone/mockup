@@ -1,12 +1,11 @@
 define([
   'jquery',
   'mockup-tinymce-linktype-base',
-], function($, BaseLinkType) {
+  'text!mockup-patterns-tinymce-url/templates/link.xml',
+], function($, BaseLinkType, LinkTemplate) {
   'use strict';
 
   var AnchorLink = BaseLinkType.extend({
-
-    name: 'anchor',
 
     init: function() {
       BaseLinkType.prototype.init.call(this);
@@ -113,6 +112,10 @@ define([
   });
 
 
-  return AnchorLink;
+  return {
+    plugin: AnchorLink,
+    name: 'anchor',
+    template: LinkTemplate
+  };
 
 });

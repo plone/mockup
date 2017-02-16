@@ -1,12 +1,11 @@
 define([
   'jquery',
   'mockup-tinymce-linktype-base',
-], function($, BaseLinkType) {
+  'text!mockup-patterns-tinymce-url/templates/link.xml',
+], function($, BaseLinkType, LinkTemplate) {
   'use strict';
 
   var EmailLink = BaseLinkType.extend({
-
-    name: 'email',
 
     toUrl: function() {
       var self = this;
@@ -40,6 +39,10 @@ define([
   });
 
 
-  return EmailLink;
+  return {
+    plugin: EmailLink,
+    name: 'email',
+    template: LinkTemplate
+  };
 
 });

@@ -7,8 +7,6 @@ define([
 
   var UploadImage = UploadLink.extend({
 
-    name: 'uploadImage',
-    template: ImageTemplate,
     imagemode: true,
     
     getDelegatedLinkType: function(){
@@ -17,6 +15,10 @@ define([
 
   });
 
-  return UploadLink;
+  return {
+    plugin: UploadImage,
+    name: 'uploadImage',
+    template: ImageTemplate
+  };
 
 });

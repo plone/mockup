@@ -1,12 +1,11 @@
 define([
   'jquery',
   'mockup-tinymce-linktype-base',
-], function($, BaseLinkType) {
+  'text!mockup-patterns-tinymce-url/templates/link.xml',
+], function($, BaseLinkType, LinkTemplate) {
   'use strict';
 
   var UploadLink = BaseLinkType.extend({
-
-    name: 'upload',
 
     /* need to do it a bit differently here.
        when a user uploads and tries to upload from
@@ -38,6 +37,10 @@ define([
 
   });
 
-  return UploadLink;
+  return {
+    plugin: UploadLink,
+    name: 'upload',
+    template: LinkTemplate
+  };
 
 });

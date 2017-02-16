@@ -7,8 +7,6 @@ define([
 
   var BaseLinkType = Base.extend({
 
-    name: 'base',
-    template: LinkTemplate,
     imagemode: false,
 
     defaults: {
@@ -51,6 +49,10 @@ define([
     }
   });
 
-  return BaseLinkType;
+  return {
+    plugin: BaseLinkType,
+    template: LinkTemplate,
+    name: 'base'
+  };
 
 });

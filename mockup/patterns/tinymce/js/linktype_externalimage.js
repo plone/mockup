@@ -1,18 +1,14 @@
 define([
-  'jquery',
   'mockup-tinymce-linktype-external',
   'text!mockup-patterns-tinymce-url/templates/image.xml',
-], function($, ExternalLink, ImageTemplate) {
+], function(ExternalLink, ImageTemplate) {
   'use strict';
 
-  var ExternalImage = ExternalLink.extend({
-
+  return {
+    plugin: ExternalLink,
     name: 'externalImage',
     template: ImageTemplate
-
-  });
-
-  return ExternalImage;
+  };
 
 });
 

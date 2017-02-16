@@ -7,8 +7,6 @@ define([
 
   var ImageLink = InternalLink.extend({
 
-    name: 'image',
-    template: ImageTemplate,
     imagemode: true,
 
     toUrl: function() {
@@ -18,6 +16,10 @@ define([
 
   });
 
-  return ImageLink;
+  return {
+    plugin: ImageLink,
+    name: 'image',
+    template: ImageTemplate
+  };
 
 });

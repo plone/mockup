@@ -2,12 +2,11 @@ define([
   'jquery',
   'mockup-tinymce-linktype-base',
   'mockup-patterns-relateditems',
-], function($, BaseLinkType, RelatedItems) {
+  'text!mockup-patterns-tinymce-url/templates/link.xml',
+], function($, BaseLinkType, RelatedItems, LinkTemplate) {
   'use strict';
 
   var InternalLink = BaseLinkType.extend({
-
-    name: 'internal',
 
     init: function() {
       BaseLinkType.prototype.init.call(this);
@@ -70,6 +69,10 @@ define([
 
   });
 
-  return InternalLink;
+  return {
+    plugin: InternalLink,
+    name: 'internal',
+    template: LinkTemplate
+  };
 
 });

@@ -81,9 +81,10 @@ define([
     },
     linkType: undefined,
     linkTypes: {},
+    linkTypeTemplateMapping: {},
 
     template: function(data) {
-      return _.template(this.linkType.template)(data);
+      return _.template(this.linkTypeTemplateMapping[this.linkType])(data);
     },
 
     init: function() {
@@ -91,9 +92,11 @@ define([
 
       _.each(self.options.linkTypes, function(requirejsname) {
         // later in ``initElements`` all linkTypes are initialized.
+        debugger;
         var linktype = require(requirejsname);
-        this.linkTypes[linktype.name] = linktype;
+        this.linkTypes[linktype.name] = linktype.plugin;
       });
+      self.linkType = self.options.initialLinkType;
 
       self.tinypattern = self.options.tinypattern;
       if (self.tinypattern.options.anchorSelector) {
@@ -171,6 +174,7 @@ define([
       self.$scale = $('select[name="scale"]', self.modal.$modal);
 
       /* load up all the link types */
+      // XXX
       _.each(this.linkTypes, function(linktype) {
         var $container = $('.linkType.' + linktype.name + ' .main', self.modal.$modal);
         self.linkTypes[linktype.name] = new linktype($container, {
