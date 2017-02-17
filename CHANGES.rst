@@ -115,7 +115,7 @@ New:
 - Add ``defaultSortOn`` option in ``livesearch`` pattern.
   [Gagaro]
 
-- Add an option to set the path operator in QueryHelp and tinymce pattern.
+- Add an option to set the path operator in QueryHelp and relateditem pattern.
   [Gagaro]
 
 Fixes:
