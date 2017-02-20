@@ -4,10 +4,6 @@ Changelog
 2.1.7 (Unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - PickADate pattern: Add a button to set the date or time to now and another to clear all inputs.
