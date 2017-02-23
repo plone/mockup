@@ -134,6 +134,9 @@ New:
 - Add an option to set the path operator in QueryHelp and relateditem pattern.
   [Gagaro]
 
+- Add srcset attribute to image modal
+  [didrix]
+
 Fixes:
 
 - Change ``bool`` function in mockup-utils to allow for truthy values and match on falsy values.
