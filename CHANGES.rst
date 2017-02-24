@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- fix datepicker markup, see plone/Products.CMFPlone#1953 - removes also ugly separator and uses CSS to add space.
+  [jensens]
 
 
 2.4.0 (2017-02-20)

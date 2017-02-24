@@ -6,7 +6,10 @@
 
 .pattern-pickadate-wrapper {
 
-  .btn:extend(.btn all){}
+  .btn:extend(.btn all){
+    vertical-align: top;
+    margin: 0.2em
+  }
   .btn-info:extend(.btn-info all){}
   .btn-danger:extend(.btn-danger all){}
 
@@ -25,7 +28,7 @@
     vertical-align: middle;
     .picker__input {
       width: 300px;
-      margin-bottom: 0.2em;
+      margin: 0.2em;
       text-align: center;
       cursor: context-menu;
     }
@@ -48,7 +51,7 @@
     vertical-align: middle;
     .picker__input {
       width: 180px;
-      margin-bottom: 0.2em;
+      margin: 0.2em;
       text-align: center;
       cursor: context-menu;
     }
@@ -70,20 +73,16 @@
 
   .pattern-pickadate-now {
     display: inline-block;
-    vertical-align: middle;
-    margin-left: 1em;
   }
 
   .pattern-pickadate-clear {
     display: inline-block;
-    vertical-align: middle;
-    margin-left: 0.5em;
   }
 
   .picker__select--month, .picker__select--year {
     height: 3em;
   }
-  
+
   .picker__footer {
     display: none;
   }
