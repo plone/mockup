@@ -244,14 +244,6 @@ define([
               }));
       }
 
-      if (self.options.date !== false && self.options.time !== false) {
-        self.$separator = $('<span/>')
-              .addClass(self.options.classSeparatorName)
-              .html(self.options.separator === ' ' ? '&nbsp;'
-                                                   : self.options.separator)
-              .appendTo(self.$wrapper);
-      }
-
       if (self.options.time !== false) {
         self.options.time.formatSubmit = 'HH:i';
         self.$time = $('<input type="text"/>')

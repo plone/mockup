@@ -110,17 +110,6 @@ define([
 
     });
 
-    it('date and time element have custom separator', function() {
-      var self = this;
-
-      $('.pat-pickadate', self.$el).attr('data-pat-pickadate', 'separator:===');
-
-      // scan dom for patterns
-      registry.scan(self.$el);
-
-      expect($('.pattern-pickadate-separator', self.$el).text()).to.be.equal('===');
-    });
-
     it('date and time picker except custom settings', function() {
       var self = this;
 
@@ -435,13 +424,13 @@ define([
         expect($('.pattern-pickadate-timezone').data('select2')._enabled).to.equal(false);
         expect($('.select2-container-disabled').size()).to.equal(1);
       });
-    
+
     });
 
     describe('automatically set the time on changing the date', function() {
 
       it('parseTimeOffset works as expected', function() {
-       
+
         var pickadate = new PickADate(this.$el, {});
 
         // test false/true
@@ -450,7 +439,7 @@ define([
 
         // test setting straight to time
         expect(pickadate.parseTimeOffset('[12, 34]')).to.eql([12,34]);
-        
+
         // test adding / substracting
         expect(pickadate.parseTimeOffset('+[1, 10]')).to.eql([16,40]);
         expect(pickadate.parseTimeOffset('-[1, 10]')).to.eql([14,20]);
@@ -468,7 +457,7 @@ define([
         expect(pickadate.parseTimeOffset('[10,20]')).to.eql([10,20]);
         expect(pickadate.parseTimeOffset('[10,"aha"]')).to.eql([10,0]);
         expect(pickadate.parseTimeOffset('["who", 20]')).to.eql([0,20]);
-              
+
       });
 
       it('sets the time when date is changed per default', function() {
@@ -561,11 +550,11 @@ define([
 
         // first, it's unset
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
-        
+
         // now set it to now.
         $('.pattern-pickadate-now', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("2017-01-23 15:30");
- 
+
         // now clear it.
         $('.pattern-pickadate-clear', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
@@ -577,11 +566,11 @@ define([
 
         // first, it's unset
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
-        
+
         // now set it to now.
         $('.pattern-pickadate-now', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("15:30");
- 
+
         // now clear it.
         $('.pattern-pickadate-clear', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
@@ -593,11 +582,11 @@ define([
 
         // first, it's unset
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
-        
+
         // now set it to now.
         $('.pattern-pickadate-now', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("2017-01-23");
- 
+
         // now clear it.
         $('.pattern-pickadate-clear', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
