@@ -116,6 +116,7 @@ define([
       }
       if (self.options.setTitle) {
         $el.attr('title', date.format('LLLL'));
+
       }
       if (self.options.format === 'relative') {
         date = date.fromNow();
