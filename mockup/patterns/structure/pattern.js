@@ -124,7 +124,7 @@ define([
       collectionConstructor:
         'mockup-patterns-structure-url/js/collections/result',
 
-      momentFormat: 'relative',
+      momentFormat: 'L LT',
       rearrange: {
         properties: {
           'id': 'ID',

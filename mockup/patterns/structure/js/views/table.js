@@ -11,7 +11,7 @@ define([
   'translate',
   'bootstrap-alert'
 ], function($, _, TableRowView, TableTemplate, BaseView, Sortable,
-            Moment, Result, ActionMenuView, _t) {
+            patMoment, Result, ActionMenuView, _t) {
   'use strict';
 
   var TableView = BaseView.extend({
@@ -98,7 +98,7 @@ define([
           container.append(view.el);
         });
       }
-      self.moment = new Moment(self.$el, {
+      self.moment = new patMoment(self.$el, {
         selector: '.' + self.dateColumns.join(',.'),
         format: self.options.app.momentFormat
       });

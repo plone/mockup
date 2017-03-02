@@ -22,6 +22,10 @@ Bug fixes:
   but works in any language.
   [jensens]
 
+- fix structure pattern: do not use a relative date in structure pattern, editors are complaining and it indeed is bad UX.
+  format with date and time in localized format 'L LT'
+  [jensens]
+
 
 2.4.0 (2017-02-20)
 ------------------
