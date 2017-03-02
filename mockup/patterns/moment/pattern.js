@@ -97,7 +97,7 @@ define([
       // selector of elements to format dates for
       selector: null,
       // also available options are relative, calendar
-      format: 'MMMM Do YYYY, h:mm:ss a',
+      format: 'LLL',
       setTitle: false
     },
     convert: function($el) {
@@ -115,7 +115,7 @@ define([
         return;
       }
       if (self.options.setTitle) {
-        $el.attr('title', date.format('MMMM Do YYYY, h:mm:ss a'));
+        $el.attr('title', date.format('LLLL'));
       }
       if (self.options.format === 'relative') {
         date = date.fromNow();

@@ -17,6 +17,11 @@ Bug fixes:
 - fix datepicker markup, see plone/Products.CMFPlone#1953 - removes also ugly separator and uses CSS to add space.
   [jensens]
 
+- fix pat-moment: localization of default date display.
+  This was american english only, now it uses the configured locale format LLL (see momentjs docs) which is almost the same,
+  but works in any language.
+  [jensens]
+
 
 2.4.0 (2017-02-20)
 ------------------
