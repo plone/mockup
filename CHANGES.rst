@@ -26,7 +26,7 @@ Bug fixes:
   format with date and time in localized format 'L LT'
   [jensens]
 
-- fix structure pattern: if title is empty then show items ID. Also always show ID on mouseover.
+- fix structure pattern: if title is empty then show items ID.
   [jensens]
 
 

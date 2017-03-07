@@ -4,7 +4,7 @@
   <div class="pull-left">
     <a href="<%- viewURL %>"
         class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
-        title="<%- id %> (<%- portal_type %>)">
+        title="<%- portal_type %>">
       <% if(Title){ %>
         <%- Title %>
       <% } else { %>
