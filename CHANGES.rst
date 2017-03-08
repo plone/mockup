@@ -26,6 +26,9 @@ Bug fixes:
   format with date and time in localized format 'L LT'
   [jensens]
 
+- fix structure pattern: if title is empty then show items ID.
+  [jensens]
+
 
 2.4.0 (2017-02-20)
 ------------------
