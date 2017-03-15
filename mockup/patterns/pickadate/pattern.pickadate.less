@@ -13,10 +13,6 @@
   position: relative;
   margin-bottom: 0.5em;
 
-  &:after {
-    clear: both;
-  }
-
   .picker{
     display: none;
     &.picker--opened{
@@ -25,7 +21,7 @@
   }
 
   .pattern-pickadate-date-wrapper {
-    float: left;
+    display: inline-block;
     .picker__input {
       width: 300px;
       margin-bottom: 0.2em;
@@ -41,13 +37,12 @@
   }
 
   .pattern-pickadate-separator {
-    float: left;
-    display: block;
+    display: inline-block;
     margin: 0 0.2em;
   }
 
   .pattern-pickadate-time-wrapper {
-    float: left;
+    display: inline-block;
     .picker__input {
       width: 180px;
       margin-bottom: 0.2em;
@@ -66,7 +61,7 @@
   }
 
   .pattern-pickadate-timezone-wrapper {
-      float: left;
+    display: inline-block;
   }
 
   .pattern-pickadate-now {
@@ -74,10 +69,14 @@
   }
 
   .pattern-pickadate-clear {
-      margin-left: 0.5em;
+    margin-left: 0.5em;
   }
 
   .picker__select--month, .picker__select--year {
     height: 3em;
+  }
+  
+  .picker__footer {
+    display: none;
   }
 }

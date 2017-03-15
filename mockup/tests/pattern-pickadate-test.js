@@ -351,7 +351,7 @@ define([
         var $results = $('li.select2-result-selectable');
         expect($results.size()).to.equal(0);
 
-        var $pattern = $('input.pattern-pickadate-timezone.select2-offscreen');
+        var $pattern = $('input.pattern-pickadate-timezone');
         $pattern.on('select2-open', function() {
           // timezone elements should be available
           $results = $('li.select2-result-selectable');
@@ -395,7 +395,7 @@ define([
 
         // check if data values are set to default
         expect($('.pattern-pickadate-timezone .select2-chosen').text()).to.equal('Europe/Vienna');
-        expect($('input.pattern-pickadate-timezone.select2-offscreen').attr('data-value')).to.equal('Europe/Vienna');
+        expect($('input.pattern-pickadate-timezone').attr('data-value')).to.equal('Europe/Vienna');
 
       });
 
@@ -412,7 +412,7 @@ define([
 
         // check if visible and data value are set to default
         expect($('.pattern-pickadate-timezone .select2-chosen').text()).to.equal('Enter timezone...');
-        expect($('input.pattern-pickadate-timezone.select2-offscreen').attr('data-value')).to.equal(undefined);
+        expect($('input.pattern-pickadate-timezone').attr('data-value')).to.equal(undefined);
 
       });
 
@@ -430,7 +430,7 @@ define([
 
         // check if data values are set to default
         expect($('.select2-chosen', $time).text()).to.equal('Europe/Berlin');
-        expect($('input.pattern-pickadate-timezone.select2-offscreen').attr('data-value')).to.equal('Europe/Berlin');
+        expect($('input.pattern-pickadate-timezone').attr('data-value')).to.equal('Europe/Berlin');
 
         expect($('.pattern-pickadate-timezone').data('select2')._enabled).to.equal(false);
         expect($('.select2-container-disabled').size()).to.equal(1);
@@ -601,6 +601,14 @@ define([
         // now clear it.
         $('.pattern-pickadate-clear', $el).click();
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
+      });
+
+      it('hide today and clear buttons', function() {
+        var $el = $('<div><input class="pat-pickadate" data-pat-pickadate=\'today:false;clear:false\'/>');
+        registry.scan($el);
+        // today and clear buttons are missing
+        expect($('.pattern-pickadate-now', $el).length).to.be.equal(0);
+        expect($('.pattern-pickadate-clear', $el).length).to.be.equal(0);
       });
 
     });

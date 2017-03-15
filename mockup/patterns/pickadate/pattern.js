@@ -3,6 +3,8 @@
  * Options:
  *    date(object): Date widget options described here. If false is selected date picker wont be shown. ({{selectYears: true, selectMonths: true })
  *    time(object): Time widget options described here. If false is selected time picker wont be shown. ({})
+ *    today(Boolean): Show the today button. (true)
+ *    clear(Boolean): Show the clear button. (true)
  *    autoSetTimeOnDateChange(string): Automatically set the time when a date is set. You can specify an offset with a special syntax - a stringified JSON Array in the form of "[H,M]" will set it to hour:minute. If you prepend an "+" or "-", this will added or subscracted to the current time. It does not go beyond 12:00am. ("+[0,0]").
  *    separator(string): Separator between date and time if both are enabled.
  *    (' ')
@@ -50,7 +52,7 @@
  *
  *    {{ example-8 }}
  *
- *    # Date and time with one timezone
+ *    # Date and time with one timezone and no today and clear buttons
  *
  *    {{ example-9 }}
  *
@@ -79,7 +81,7 @@
  *    <input class="pat-pickadate" data-pat-pickadate='{"timezone": {"default": "Europe/Vienna", "data": [{"id":"Europe/Berlin","text":"Europe/Berlin"},{"id":"Europe/Vienna","text":"Europe/Vienna"}]}}'/>
  *
  * Example: example-9
- *    <input class="pat-pickadate" data-pat-pickadate='{"timezone": {"data": [{"id":"Europe/Berlin","text":"Europe/Berlin"}]}}'/>
+ *    <input class="pat-pickadate" data-pat-pickadate='{"timezone": {"data": [{"id":"Europe/Berlin","text":"Europe/Berlin"}]}, "today": false, "clear": false}'/>
  *
  */
 
@@ -87,12 +89,13 @@
 define([
   'jquery',
   'pat-base',
+  'mockup-utils',
+  'translate',
   'picker',
   'picker.date',
   'picker.time',
-  'mockup-patterns-select2',
-  'translate'
-], function($, Base, Picker, PickerDate, PickerTime, Select2, _t) {
+  'mockup-patterns-select2'
+], function($, Base, utils, _t) {
   'use strict';
 
   var PickADate = Base.extend({
@@ -106,17 +109,20 @@ define([
         selectMonths: true,
         formatSubmit: 'yyyy-mm-dd',
         format: 'yyyy-mm-dd',
-        clear: false,
-        close: _t('Close'),
-        today: _t('Today'),
         labelMonthNext: _t('Next month'),
         labelMonthPrev: _t('Previous month'),
         labelMonthSelect: _t('Select a month'),
-        labelYearSelect: _t('Select a year')
+        labelYearSelect: _t('Select a year'),
+        // hide buttons
+        clear: false,
+        close: false,
+        today: false
       },
       time: {
-        clear: false
+        clear: false  // hide button
       },
+      today: true,  // show today button
+      clear: true,  // show clear button
       timezone: null,
       titleClear: _t('Clear'),
       titleNow: _t('Today'),
@@ -336,25 +342,28 @@ define([
         }
       }
 
-      self.$now = $('<button class="btn btn-xs btn-info" title="' + self.options.titleNow + '"><span class="glyphicon glyphicon-time"></span></button>')
-        .addClass(self.options.classNowName)
-        .on('click', function (e) {
-            e.preventDefault();
-            var now = new Date();
-            if (self.$date) { self.$date.data('pickadate').set('select', now); }
-            if (self.$time) { self.$time.data('pickatime').set('select', now); }
-        })
-        .appendTo(self.$wrapper);
+      if (utils.bool(self.options.today)) {
+        self.$now = $('<button class="btn btn-xs btn-info" title="' + self.options.titleNow + '"><span class="glyphicon glyphicon-time"></span></button>')
+          .addClass(self.options.classNowName)
+          .on('click', function (e) {
+              e.preventDefault();
+              var now = new Date();
+              if (self.$date) { self.$date.data('pickadate').set('select', now); }
+              if (self.$time) { self.$time.data('pickatime').set('select', now); }
+          })
+          .appendTo(self.$wrapper);
+      }
 
-      self.$clear = $('<button class="btn btn-xs btn-danger" title="' + self.options.titleClear + '"><span class="glyphicon glyphicon-trash"></span></button>')
-        .addClass(self.options.classClearName)
-        .on('click', function (e) {
-            e.preventDefault();
-            if (self.$date) { self.$date.data('pickadate').clear(); }
-            if (self.$time) { self.$time.data('pickatime').clear(); }
-        })
-        .appendTo(self.$wrapper);
-
+      if (utils.bool(self.options.clear)) {
+        self.$clear = $('<button class="btn btn-xs btn-danger" title="' + self.options.titleClear + '"><span class="glyphicon glyphicon-trash"></span></button>')
+          .addClass(self.options.classClearName)
+          .on('click', function (e) {
+              e.preventDefault();
+              if (self.$date) { self.$date.data('pickadate').clear(); }
+              if (self.$time) { self.$time.data('pickatime').clear(); }
+          })
+          .appendTo(self.$wrapper);
+      }
     },
     updateValue: function() {
       var self = this,
