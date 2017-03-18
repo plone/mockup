@@ -14,6 +14,11 @@ New features:
 
 Bug fixes:
 
+- Do not use relative paths for imports in less files.
+  Use the less variables for paths instead.
+  Fixes a case, where less files couldn't be found in Plone development mode.
+  [thet]
+
 - fix datepicker markup, see plone/Products.CMFPlone#1953 - removes also ugly separator and uses CSS to add space.
   [jensens]
 
