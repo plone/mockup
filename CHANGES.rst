@@ -13,6 +13,7 @@ New features:
 - Related Items widget:
     - Show a "One level up" button in the result set in browse mode.
     - Show folder icons in in the result set front of items instead a arrow behind the items.
+    - Filter out non-selectable and non-folderish items in the result set when in browse mode.
 
 Bug fixes:
 

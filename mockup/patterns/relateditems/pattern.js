@@ -211,6 +211,20 @@ define([
         ajax = this.query.selectAjax();
         ajax.results = function (data, page) {
           var more = (page * 10) < data.total;
+
+          // Filter out non-selectable and non-folderish in "browse" mode.
+          // For "search" mode, this isn't necessary, because we have already
+          // filtered for selectable types
+          if (this.options.mode === 'browse') {
+            var res = data.results.filter(
+              function (item) {
+                if (!item.is_folderish && !this.isSelectable(item)) {
+                  return false;
+                }
+                return true;
+            }
+          );
+
           // Extend ``data`` with a ``oneLevelUp`` item if mode == "browse"
           var path = this.currentPath.split('/');
           if (page === 1 &&                                // Show level up only on top.
