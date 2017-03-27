@@ -4,6 +4,7 @@
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): Start browse/search in this path. Default: set to rootPath.
+ *    contextPath(string): Path of the object, which is currently edited. If this path is given, this object will not be selectable.
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (true)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
@@ -127,6 +128,7 @@ define([
       basePath: '',
       browsing: undefined,
       closeOnSelect: true,
+      contextPath: undefined,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       favorites: [],
       maximumSelectionSize: -1,
@@ -235,8 +237,7 @@ define([
           if (page === 1 &&                                // Show level up only on top.
             this.options.mode === 'browse'  &&             // only level up in "browse" mode
             path.length > 1 &&                             // do not try to level up one level under root.
-            this.options.rootPath !== this.currentPath &&  // do not try to level up beyond root
-            this.currentPath !== '/'
+            this.currentPath !== '/'  // do not try to level up beyond root
           ) {
             results = [{
               'oneLevelUp': true,
@@ -436,7 +437,11 @@ define([
       var self = this;
       if (item.selectable === false) {
         return false;
-      } if (self.options.selectableTypes === null) {
+      }
+      if (self.options.contextPath === this.options.rootPath + item.path) {
+        return false;
+      }
+      if (self.options.selectableTypes === null) {
         return true;
       } else {
         return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
