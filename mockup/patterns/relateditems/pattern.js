@@ -214,19 +214,20 @@ define([
         ajax = this.query.selectAjax();
         ajax.results = function (data, page) {
           var more = (page * 10) < data.total;
-
+          var results = data.results;
           // Filter out non-selectable and non-folderish in "browse" mode.
           // For "search" mode, this isn't necessary, because we have already
           // filtered for selectable types
           if (this.options.mode === 'browse') {
-            var res = data.results.filter(
+            results = results.filter(
               function (item) {
                 if (!item.is_folderish && !this.isSelectable(item)) {
                   return false;
                 }
                 return true;
-            }
-          );
+              }.bind(this)
+            );
+          }
 
           // Extend ``data`` with a ``oneLevelUp`` item if mode == "browse"
           var path = this.currentPath.split('/');
@@ -236,18 +237,17 @@ define([
             this.options.rootPath !== this.currentPath &&  // do not try to level up beyond root
             this.currentPath !== '/'
           ) {
-            var res = [{
+            results = [{
               'oneLevelUp': true,
               'Title': _('One level up'),
               'path': path.slice(0, path.length - 1).join('/') || '/',
               'portal_type': 'Folder',
               'is_folderish': true,
               'selectable': false
-            }].concat(data.results);
-            data.results = res;
+            }].concat(results);
           }
           return {
-            results: data.results,
+            results: results,
             more: more
           };
         }.bind(this);
@@ -461,10 +461,10 @@ define([
       Select2.prototype.initializeValues.call(self);
       Select2.prototype.initializeTags.call(self);
 
-      self.options.formatSelection = function(item, $container) {
+      self.options.formatSelection = function(item) {
         // activate petterns on the result set.
-        var $selection = $(self.applyTemplate('selection', item))
-        if (scanSelection) {
+        var $selection = $(self.applyTemplate('selection', item));
+        if (self.options.scanSelection) {
           registry.scan($selection);
         }
         return $selection;
