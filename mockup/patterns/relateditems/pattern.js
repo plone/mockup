@@ -7,16 +7,18 @@
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (true)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
- *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
+ *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
  *    rootUrl(string): Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.
- *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    scanSelection(boolean): Scan the list of selected elements for other patterns.
+ *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
+ *    upload(boolen): Allow file and image uploads from within the related items widget.
+ *    uploadAllowView(string): View, which returns a JSON response in the form of {allowUpload: true}, if upload is allowed in the current context.
  *    width(string): Specify a width for the widget. ('100%')
  *    breadcrumbTemplate(string): Template to use for a single item in the breadcrumbs.
  *    breadcrumbTemplateSelector(string): Select an element from the DOM from which to grab the breadcrumbTemplate. (null)
@@ -26,8 +28,6 @@
  *    resultTemplateSelector(string): Select an element from the DOM from which to grab the resultTemplate. (null)
  *    selectionTemplate(string): Template for element that will be used to construct a selected item. (Refer to source)
  *    selectionTemplateSelector(string): Select an element from the DOM from which to grab the selectionTemplate. (null)
- *    upload(boolen): Allow file and image uploads from within the related items widget.
- *    uploadAllowView(string): View, which returns a JSON response in the form of {allowUpload: true}, if upload is allowed in the current context.
  *
  * Documentation:
  *    The Related Items pattern is based on Select2 so many of the same options will work here as well.
@@ -123,24 +123,25 @@ define([
       vocabularyUrl: null,  // must be set to work
 
       // more options
-      upload: false,
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
       basePath: '',
+      browsing: undefined,
       closeOnSelect: true,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       favorites: [],
       maximumSelectionSize: -1,
       minimumInputLength: 0,
       mode: 'search', // possible values are search and browse
-      browsing: undefined,
       orderable: true,  // mockup-patterns-select2
+      pathOperator: 'plone.app.querystring.operation.string.path',
       rootPath: '/',
       rootUrl: '',  // default to be relative.
-      pathOperator: 'plone.app.querystring.operation.string.path',
-      selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       scanSelection: false,  // False, to no unnecessarily use CPU time on this.
+      selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
       tokenSeparators: [',', ' '],
+      upload: false,
+      uploadAllowView: undefined,
       width: '100%',
 
       // templates
