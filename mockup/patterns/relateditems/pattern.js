@@ -209,6 +209,31 @@ define([
       var ajax = {};
       if (this.query.valid) {
         ajax = this.query.selectAjax();
+        ajax.results = function (data, page) {
+          var more = (page * 10) < data.total;
+          // Extend ``data`` with a ``oneLevelUp`` item if mode == "browse"
+          var path = this.currentPath.split('/');
+          if (page === 1 &&                                // Show level up only on top.
+            this.options.mode === 'browse'  &&             // only level up in "browse" mode
+            path.length > 1 &&                             // do not try to level up one level under root.
+            this.options.rootPath !== this.currentPath &&  // do not try to level up beyond root
+            this.currentPath !== '/'
+          ) {
+            var res = [{
+              'oneLevelUp': true,
+              'Title': _('One level up'),
+              'path': path.slice(0, path.length - 1).join('/') || '/',
+              'portal_type': 'Folder',
+              'is_folderish': true,
+              'selectable': false
+            }].concat(data.results);
+            data.results = res;
+          }
+          return {
+            results: data.results,
+            more: more
+          };
+        }.bind(this);
       }
       this.options.ajax = ajax;
       this.$el.select2(this.options);
@@ -235,7 +260,7 @@ define([
       // favorites
       var favoritesHtml = '';
       _.each(self.options.favorites, function (item) {
-        var item_copy = _.clone(item)
+        var item_copy = _.clone(item);
         item_copy.path = item_copy.path.substr(self.options.rootPath.length) || '/';
         favoritesHtml = favoritesHtml + self.applyTemplate('favorite', item_copy);
       });
@@ -391,7 +416,9 @@ define([
 
     isSelectable: function(item) {
       var self = this;
-      if (self.options.selectableTypes === null) {
+      if (item.selectable === false) {
+        return false;
+      } if (self.options.selectableTypes === null) {
         return true;
       } else {
         return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
@@ -433,7 +460,6 @@ define([
             return;
           }
         }
-
         var result = $(self.applyTemplate('result', item));
 
         $('.pattern-relateditems-result-select', result).on('click', function(event) {

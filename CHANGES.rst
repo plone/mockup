@@ -10,7 +10,9 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Related Items widget:
+    - Show a "One level up" button in the result set in browse mode.
+    - Show folder icons in in the result set front of items instead a arrow behind the items.
 
 Bug fixes:
 
