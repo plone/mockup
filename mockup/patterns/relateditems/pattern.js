@@ -14,6 +14,7 @@
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
  *    rootUrl(string): Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
+ *    scanSelection(boolean): Scan the list of selected elements for other patterns.
  *    separator(string): Select2 option. String which separates multiple items. (',')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
  *    width(string): Specify a width for the widget. ('100%')
@@ -94,6 +95,7 @@ define([
   'mockup-patterns-select2',
   'mockup-ui-url/views/button',
   'mockup-utils',
+  'pat-registry',
   'translate',
   'text!mockup-patterns-relateditems-url/templates/breadcrumb.xml',
   'text!mockup-patterns-relateditems-url/templates/favorite.xml',
@@ -101,7 +103,7 @@ define([
   'text!mockup-patterns-relateditems-url/templates/selection.xml',
   'text!mockup-patterns-relateditems-url/templates/toolbar.xml',
   'bootstrap-dropdown'
-], function($, _, Base, Select2, ButtonView, utils, _t,
+], function($, _, Base, Select2, ButtonView, utils, registry, _t,
             BreadcrumbTemplate,
             FavoriteTemplate,
             ResultTemplate,
@@ -136,6 +138,7 @@ define([
       rootUrl: '',  // default to be relative.
       pathOperator: 'plone.app.querystring.operation.string.path',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
+      scanSelection: false,  // False, to no unnecessarily use CPU time on this.
       separator: ',',
       tokenSeparators: [',', ' '],
       width: '100%',
@@ -459,7 +462,12 @@ define([
       Select2.prototype.initializeTags.call(self);
 
       self.options.formatSelection = function(item, $container) {
-        return self.applyTemplate('selection', item);
+        // activate petterns on the result set.
+        var $selection = $(self.applyTemplate('selection', item))
+        if (scanSelection) {
+          registry.scan($selection);
+        }
+        return $selection;
       };
 
       Select2.prototype.initializeOrdering.call(self);
