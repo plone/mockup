@@ -286,9 +286,8 @@ define([
       _.each(paths, function(node) {
         if (node !== '') {
           var item = {};
-          itemPath = itemPath + '/' + node;
+          item.path = itemPath = itemPath + '/' + node;
           item.text = node;
-          item.path = itemPath;
           itemsHtml = itemsHtml + self.applyTemplate('breadcrumb', item);
         }
       });
