@@ -88,7 +88,6 @@
  *
  */
 
-
 define([
   'jquery',
   'underscore',
@@ -133,7 +132,7 @@ define([
       favorites: [],
       maximumSelectionSize: -1,
       minimumInputLength: 0,
-      mode: 'search', // possible values are search and browse
+      mode: 'auto', // possible values are search and browse
       orderable: true,  // mockup-patterns-select2
       pathOperator: 'plone.app.querystring.operation.string.path',
       rootPath: '/',
@@ -175,53 +174,68 @@ define([
         template = self.options[tpl + 'Template'];
       }
       // let's give all the options possible to the template generation
-      var options = $.extend(true, {}, self.options, item);
+      var options = $.extend(true, {}, self.options, item, {'browsing': self.browsing});
       options._item = item;
       return _.template(template)(options);
     },
 
-    setQuery: function () {
+    setAjax: function () {
 
-      var baseCriteria = [];
+      var ajax = {
 
-      if (this.options.mode == 'search') {
-        // MODE SEARCH
+        url: this.options.vocabularyUrl,
+        dataType: 'JSON',
+        quietMillis: 100,
 
-        // restrict to given types
-        if (this.options.selectableTypes) {
-          baseCriteria.push({
-            i: 'portal_type',
-            o: 'plone.app.querystring.operation.selection.any',
-            v: this.options.selectableTypes
+        data: function (term, page) {
+
+          var criterias = [];
+          if (term) {
+            term = '*' + term + '*';
+            criterias.push({
+              i: 'SearchableText',
+              o: 'plone.app.querystring.operation.string.contains',
+              v: term
+            });
+          }
+
+          // We don't restrict for selectable types while browsing...
+          if (!this.browsing && this.options.selectableTypes) {
+            criterias.push({
+              i: 'portal_type',
+              o: 'plone.app.querystring.operation.selection.any',
+              v: this.options.selectableTypes
+            });
+          }
+
+          criterias.push({
+            i: 'path',
+            o: this.options.pathOperator,
+            v: this.options.rootPath + this.currentPath + (this.browsing ? '::1' : '')
           });
-        }
 
-        baseCriteria.push({
-          i: 'path',
-          o: this.options.pathOperator,
-          v: this.options.rootPath + this.currentPath
-        });
+          var data = {
+            query: JSON.stringify({
+              criteria: criterias,
+              sort_on: 'path',
+              sort_order: 'ascending'
+            }),
+            attributes: JSON.stringify(this.options.attributes),
+            batch: {
+              page: page ? page : 1,
+              size: 10
+            }
+          };
+          return data;
+        }.bind(this),
 
-      }
+        results: function (data, page) {
 
-      // set query object
-      this.query = new utils.QueryHelper(
-        $.extend(true, {}, this.options, {
-          pattern: this,
-          baseCriteria: baseCriteria
-        })
-      );
-
-      var ajax = {};
-      if (this.query.valid) {
-        ajax = this.query.selectAjax();
-        ajax.results = function (data, page) {
           var more = (page * 10) < data.total;
           var results = data.results;
-          // Filter out non-selectable and non-folderish in "browse" mode.
-          // For "search" mode, this isn't necessary, because we have already
-          // filtered for selectable types
-          if (this.options.mode === 'browse') {
+
+          // Filter out non-selectable and non-folderish while browsing.
+          if (this.browsing) {
             results = results.filter(
               function (item) {
                 if (!item.is_folderish && !this.isSelectable(item)) {
@@ -232,11 +246,11 @@ define([
             );
           }
 
-          // Extend ``data`` with a ``oneLevelUp`` item if mode == "browse"
+          // Extend ``data`` with a ``oneLevelUp`` item when browsing
           var path = this.currentPath.split('/');
-          if (page === 1 &&                                // Show level up only on top.
-            this.options.mode === 'browse'  &&             // only level up in "browse" mode
-            path.length > 1 &&                             // do not try to level up one level under root.
+          if (page === 1 &&           // Show level up only on top.
+            this.browsing  &&         // only level up when browsing
+            path.length > 1 &&        // do not try to level up one level under root.
             this.currentPath !== '/'  // do not try to level up beyond root
           ) {
             results = [{
@@ -252,10 +266,13 @@ define([
             results: results,
             more: more
           };
-        }.bind(this);
-      }
+        }.bind(this)
+
+      };
+
       this.options.ajax = ajax;
       this.$el.select2(this.options);
+
     },
 
     setBreadCrumbs: function () {
@@ -302,13 +319,11 @@ define([
         if (self.browsing) {
           $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
           $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-          self.options.mode = 'search';
           self.browsing = false;
           if (self.$el.select2('data').length > 0) {
             // Have to call after initialization
             self.openAfterInit = true;
           }
-          self.setQuery();
           if (!self.openAfterInit) {
             self.$el.select2('close');
             self.$el.select2('open');
@@ -325,13 +340,11 @@ define([
         if (!self.browsing) {
           $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
           $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-          self.options.mode = 'browse';
           self.browsing = true;
           if (self.$el.select2('data').length > 0) {
             // Have to call after initialization
             self.openAfterInit = true;
           }
-          self.setQuery();
           if (!self.openAfterInit) {
             self.$el.select2('close');
             self.$el.select2('open');
@@ -406,7 +419,6 @@ define([
       self.currentPath = path;
       self.$el.select2('close');
       self.setBreadCrumbs();
-      self.setQuery();
       self.$el.select2('open');
       self.emit('after-browse');
     },
@@ -451,14 +463,14 @@ define([
     init: function() {
       var self = this;
 
-      self.browsing = self.options.mode === 'browse';
+      self.browsing = self.options.mode !== 'search';
 
       // Remove trailing slash
       self.options.rootPath = self.options.rootPath.replace(/\/$/, '');
       // Substract rootPath from basePath with is the relative currentPath. Has a leading slash. Or use '/'
       self.currentPath = self.options.basePath.substr(self.options.rootPath.length) || '/';
 
-      self.setQuery();
+      self.setAjax();
 
       self.$el.wrap('<div class="pattern-relateditems-container" />');
       self.$container = self.$el.parents('.pattern-relateditems-container');
@@ -524,7 +536,6 @@ define([
       };
 
       self.options.initSelection = function(element, callback) {
-        var data = [];
         var value = $(element).val();
         if (value !== '') {
           var ids = value.split(self.options.separator);
@@ -562,6 +573,16 @@ define([
         }
 
       };
+
+      self.options.tokenizer = function (input) {
+        if (this.options.mode === 'auto') {
+          if (input) {
+            this.browsing = false;
+          } else {
+            this.browsing = true;
+          }
+        }
+      }.bind(this);
 
       self.options.id = function(item) {
         return item.UID;

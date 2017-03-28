@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.4.1 (Unreleased)
-------------------
+2.5 (Unreleased)
+----------------
 
 Breaking changes:
 
@@ -11,6 +11,8 @@ Breaking changes:
 New features:
 
 - Related Items widget:
+    - Add new mode "auto", which automatically sets ``search`` mode when a searchterm is present, otherwise ``browse`` mode.
+    - Use searchterm as substring, which matches also within words by wrapping searchterm with the "*" wildcard.
     - Show a "One level up" button in the result set in browse mode.
     - Show folder icons in in the result set front of items instead a arrow behind the items.
     - Filter out non-selectable and non-folderish items in the result set when in browse mode.
