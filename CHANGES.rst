@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Fix i18n in upload pattern.
+  [cedricmessiant]
+
 - Do not use relative paths for imports in less files.
   Use the less variables for paths instead.
   Fixes a case, where less files couldn't be found in Plone development mode.

@@ -1,7 +1,7 @@
 <div class="upload-container upload-multiple">
     <h2 class="title"><%- _t("Upload here") %></h2>
     <p class="help">
-        <%- _t('Drag and drop files from your computer onto the area below or click the "Browse" button.') %>
+        <%- _t('Drag and drop files from your computer onto the area below or click the Browse button.') %>
     </p>
     <div class="upload-area">
         <div class="fallback">
@@ -20,7 +20,7 @@
                 <button
                     type="button"
                     class="btn btn-primary browse">
-                    Browse
+                    <%- _t("Browse") %>
                 </button>
             </div>
         </div>
