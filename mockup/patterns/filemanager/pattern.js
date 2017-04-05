@@ -338,13 +338,13 @@ define([
       }
 
       if (on) {
-        $('#btn-delete', this.$el).attr('disabled', false);
-        $('#btn-save', this.$el).attr('disabled', false);
-        $('#btn-rename', this.$el).attr('disabled', false);
+        $('#btn-delete', this.$el).prop('disabled', false);
+        $('#btn-save', this.$el).prop('disabled', false);
+        $('#btn-rename', this.$el).prop('disabled', false);
       } else {
-        $('#btn-delete', this.$el).attr('disabled', 'disabled');
-        $('#btn-save', this.$el).attr('disabled', 'disabled');
-        $('#btn-rename', this.$el).attr('disabled', 'disabled');
+        $('#btn-delete', this.$el).prop('disabled', true);
+        $('#btn-save', this.$el).prop('disabled', true);
+        $('#btn-rename', this.$el).prop('disabled', true);
       }
     },
     handleClick: function(event) {

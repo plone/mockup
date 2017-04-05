@@ -14,6 +14,10 @@ New features:
 
 Bug fixes:
 
+- Unify disabling of buttons by using setting the ``disabled`` DOM property instead using classes.
+  Fixes thememapper button staying disabled all the time.
+  [thet]
+
 - Autoformat + eslint fixes for thememapper and filemanager patterns.
   [thet]
 

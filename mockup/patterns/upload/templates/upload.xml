@@ -13,7 +13,7 @@
                 <input
                     id="fakeUploadFile"
                     placeholder="<%- _t("Choose File") %>"
-                    disabled="disabled"
+                    disabled
                     />
             </div>
             <div class="col-md-3">
