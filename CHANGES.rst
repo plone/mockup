@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Fix setting empty ace editor instance by passing an empty text.
+  [thet]
+
 - Unify disabling of buttons by using setting the ``disabled`` DOM property instead using classes.
   Fixes thememapper button staying disabled all the time.
   [thet]

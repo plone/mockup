@@ -550,7 +550,7 @@ define([
       self.ace = new TextEditor(self.$editor);
 
       if (self.currentPath === undefined) {
-        self.ace.setText();
+        self.ace.setText('');
         self.ace.setSyntax('text');
         self.ace.editor.clearSelection();
         self.$tree.tree('selectNode', null);
