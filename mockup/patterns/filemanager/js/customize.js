@@ -27,20 +27,20 @@ define([
       PopoverView.prototype.render.call(this);
       self.$form = self.$('form');
       self.$results = self.$('.results');
-      self.$form.submit(function(e){
+      self.$form.submit(function(e) {
         e.preventDefault();
         $.ajax({
           url: self.app.options.resourceSearchUrl,
           dataType: 'json',
-          success: function(data){
+          success: function(data) {
             self.$results.empty();
-            _.each(data, function(item){
+            _.each(data, function(item) {
               var $item = $(
                 '<li class="list-group-item" data-id="' + item.id + '">' +
                   '<span class="badge"><a href=#">' + _t('Customize') + '</a></span>' +
                   item.id +
                 '</li>');
-              $('a', $item).click(function(e){
+              $('a', $item).click(function(e) {
                 e.preventDefault();
                 self.customize($(this).parents('li').eq(0).attr('data-id'));
               });

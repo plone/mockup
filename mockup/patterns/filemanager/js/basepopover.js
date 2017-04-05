@@ -24,7 +24,7 @@ define([
         return;
       }
       var $path = self.$('.current-path');
-      if ($path.length !== 0){
+      if ($path.length !== 0) {
         $path.html(self.getPath());
       }
     },

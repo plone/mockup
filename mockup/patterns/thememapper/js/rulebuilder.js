@@ -4,14 +4,14 @@ define([
 ], function($, _) {
   'use strict';
 
-  var RuleBuilder = function(thememapper){
+  var RuleBuilder = function(thememapper) {
     /**
-      * Rule builder
-      *
-      * Contains functions to build CSS and XPath selectors as well as a Diazo rule
-      * from a given node, and acts as a state machine for the rules wizard.
-      *
-      */
+     * Rule builder
+     *
+     * Contains functions to build CSS and XPath selectors as well as a Diazo rule
+     * from a given node, and acts as a state machine for the rules wizard.
+     *
+     */
 
     var self = this;
     self.thememapper = thememapper;
@@ -35,22 +35,19 @@ define([
       el: self.thememapper.rulebuilderView.el,
       button: self.thememapper.rulebuilderView.triggerView.el,
       isOpened: function() {
-        return $(this.el).is(":visible");
+        return $(this.el).is(':visible');
       },
       close: function() {
-        if( this.isOpened() ) {
-          if( self.active && $els.step2.is(":visible") )
-          {
+        if (this.isOpened()) {
+          if (self.active && $els.step2.is(':visible')) {
             self.end();
-          }
-          else
-          {
+          } else {
             $(this.button).click();
           }
         }
       },
       load: function() {
-        if( !this.isOpened() ) {
+        if (!this.isOpened()) {
           $(this.button).click();
         }
       }
@@ -58,17 +55,17 @@ define([
 
     var $els = {
       reusePanel: $('#new-rule-reuse-panel'),
-      reuseSelectors: $("#new-rule-reuse-selectors"),
-      selectTheme: $("#new-rule-select-theme"),
-      selectThemeNext: $("#new-rule-select-theme .next"),
-      selectContentNext: $("#new-rule-select-content .next"),
-      wizardSteps: $(".rule-wizard-step"),
-      selectContent: $("#new-rule-select-content"),
-      step1: $("#new-rule-step-1"),
-      step1Next: $("#new-rule-step-1 .next"),
-      step2: $("#new-rule-step-2"),
-      step2Insert: $("#new-rule-step-2 .insert"),
-      step2Copy: $("#new-rule-step-2 .copy"),
+      reuseSelectors: $('#new-rule-reuse-selectors'),
+      selectTheme: $('#new-rule-select-theme'),
+      selectThemeNext: $('#new-rule-select-theme .next'),
+      selectContentNext: $('#new-rule-select-content .next'),
+      wizardSteps: $('.rule-wizard-step'),
+      selectContent: $('#new-rule-select-content'),
+      step1: $('#new-rule-step-1'),
+      step1Next: $('#new-rule-step-1 .next'),
+      step2: $('#new-rule-step-2'),
+      step2Insert: $('#new-rule-step-2 .insert'),
+      step2Copy: $('#new-rule-step-2 .copy'),
       inspectors: self.thememapper.$inspectorContainer,
       ruleOutput: $('#new-rule-output'),
       themePanel: $('#inspectors .mockup-inspector'),
@@ -95,7 +92,7 @@ define([
     $els.selectThemeNext.click(function() {
       self.themeInspector.on();
 
-      if(!$els.inspectors.is(":visible")) {
+      if (!$els.inspectors.is(':visible')) {
         self.thememapper.showInspectors();
       }
 
@@ -103,7 +100,7 @@ define([
       self.ruleBuilderPopover.close();
 
       $els.themePanel.expose({
-        color: "#fff",
+        color: '#fff',
         closeOnClick: false,
         closeOnEsc: false,
         closeSpeed: 0,
@@ -132,21 +129,20 @@ define([
 
       function indent(string, amount) {
         var padding = '';
-        for(var i = 0; i < amount; ++i) {
+        for (var i = 0; i < amount; ++i) {
           padding += ' ';
         }
         return '\n' + padding + string.replace(/\n/g, '\n' + padding) + '\n';
       }
 
       //If we're already starting at the very end, go back to the beginning
-      if( session.getDocument().$lines.length == aceEditor.getSelectionRange().end.row + 1)
-      {
+      if (session.getDocument().$lines.length == aceEditor.getSelectionRange().end.row + 1) {
         aceEditor.navigateFileStart();
       }
 
       // Go to the next opening tag - we want to insert before this
       findStartTag(false);
-      if(aceEditor.getCursorPosition().row <= 1) {
+      if (aceEditor.getCursorPosition().row <= 1) {
         // Probably the opening rules tag
         findStartTag(false);
       }
@@ -154,16 +150,16 @@ define([
       var selectionText = aceEditor.getSelectedText();
 
       // If we didn't find anything, look for the end of the current tag
-      if(selectionText == "") {
-        aceEditor.find("(/>|</)", {
+      if (selectionText === '') {
+        aceEditor.find('(/>|</)', {
           backwards: false,
           wrap: false,
           wholeWord: false,
           regExp: true
         });
 
-        var selectionText = aceEditor.getSelectedText();
-        if(selectionText == "") {
+        selectionText = aceEditor.getSelectedText();
+        if (selectionText === '') {
           // Still nothing? Go to the end
           aceEditor.navigateFileEnd();
         } else {
@@ -176,7 +172,7 @@ define([
       var cursorPosition = aceEditor.getCursorPosition();
       var newlines = rule.match(/\n/g);
       var rows = 0;
-      if(newlines != null) {
+      if (newlines != null) {
         rows = newlines.length;
       }
 
@@ -197,7 +193,7 @@ define([
 
     $els.selectContentNext.click(function() {
       self.unthemedInspector.on();
-      if(!$els.inspectors.is(":visible")) {
+      if (!$els.inspectors.is(':visible')) {
         self.thememapper.showInspectors();
       }
 
@@ -205,7 +201,7 @@ define([
       self.ruleBuilderPopover.close();
 
       $els.unthemedPanel.expose({
-        color: "#fff",
+        color: '#fff',
         closeOnClick: false,
         closeOnEsc: false,
         closeSpeed: 0,
@@ -232,8 +228,7 @@ define([
     self.start = function(ruleType) {
       var self = this;
 
-      if( ruleType === undefined )
-      {
+      if (ruleType === undefined) {
         ruleType = self.getSelectedType();
       }
 
@@ -242,18 +237,18 @@ define([
 
       self._contentElement = null;
       self._themeElement = null;
-      self.currentScope = "theme";
+      self.currentScope = 'theme';
 
       // Drop rules get e.g. drop:content or drop:theme,
       // which predetermines the scope
       var ruleSplit = ruleType.split(':');
-      if(ruleSplit.length >= 2) {
-          self.ruleType = ruleSplit[0];
-          self.subtype = ruleSplit[1];
-          self.currentScope = self.subtype;
-      } else{
-          self.ruleType = ruleType;
-          self.subtype = null;
+      if (ruleSplit.length >= 2) {
+        self.ruleType = ruleSplit[0];
+        self.subtype = ruleSplit[1];
+        self.currentScope = self.subtype;
+      } else {
+        self.ruleType = ruleType;
+        self.subtype = null;
       }
 
       self.active = true;
@@ -262,9 +257,9 @@ define([
     };
 
     /**
-    * Build a diazo rule. 'themeChildren' and 'contentChildren' should be true or
-    * false to indicate whether a -children selector is to be used.
-    */
+     * Build a diazo rule. 'themeChildren' and 'contentChildren' should be true or
+     * false to indicate whether a -children selector is to be used.
+     */
     self.buildRule = function(themeChildren, contentChildren) {
       if (self.ruleType === null) {
         return '';
@@ -293,9 +288,9 @@ define([
     };
 
     /**
-    * Return a valid (but not necessarily unique) CSS selector for the given
-    * element.
-    */
+     * Return a valid (but not necessarily unique) CSS selector for the given
+     * element.
+     */
     self.calculateCSSSelector = function(element) {
       var selector = element.tagName.toLowerCase();
 
@@ -303,10 +298,10 @@ define([
         selector += '#' + element.id;
       } else {
         var classes = $(element).attr('class');
-        if(classes !== undefined) {
+        if (classes !== undefined) {
           var splitClasses = classes.split(/\s+/);
-          for(var i = 0; i < splitClasses.length; i=i+1) {
-            if(splitClasses[i] !== '' && splitClasses[i].indexOf('_theming') === -1) {
+          for (var i = 0; i < splitClasses.length; i = i + 1) {
+            if (splitClasses[i] !== '' && splitClasses[i].indexOf('_theming') === -1) {
               selector += '.' + splitClasses[i];
               break;
             }
@@ -318,9 +313,9 @@ define([
     };
 
     /**
-    * Return a valid, unqiue CSS selector for the given element. Returns null if
-    * no reasoanble unique selector can be built.
-    */
+     * Return a valid, unqiue CSS selector for the given element. Returns null if
+     * no reasoanble unique selector can be built.
+     */
     self.calculateUniqueCSSSelector = function(element) {
       var paths = [];
       var path = null;
@@ -330,12 +325,12 @@ define([
 
       while (element && element.nodeType === 1) {
         var selector = this.calculateCSSSelector(element);
-            paths.splice(0, 0, selector);
-            path = paths.join(' ');
+        paths.splice(0, 0, selector);
+        path = paths.join(' ');
 
         // The ultimateParent constraint is necessary since
         // this may be inside an iframe
-        if($(path, ultimateParent).length === 1) {
+        if ($(path, ultimateParent).length === 1) {
           return path;
         }
 
@@ -346,14 +341,14 @@ define([
     };
 
     /**
-    * Return a valid, unique XPath selector for the given element.
-    */
+     * Return a valid, unique XPath selector for the given element.
+     */
     self.calculateUniqueXPathExpression = function(element) {
       var parents = $(element).parents();
 
       function elementIndex(e) {
         var siblings = $(e).siblings(e.tagName.toLowerCase());
-        if(siblings.length > 0) {
+        if (siblings.length > 0) {
           return '[' + ($(e).index() + 1) + ']';
         } else {
           return '';
@@ -361,17 +356,17 @@ define([
       }
 
       var xpathString = '/' + element.tagName.toLowerCase();
-      if(element.id) {
+      if (element.id) {
         return '/' + xpathString + '[@id=\'' + element.id + '\']';
       } else {
         xpathString += elementIndex(element);
       }
 
-      for(var i = 0; i < parents.length; i=i+1) {
+      for (var i = 0; i < parents.length; i = i + 1) {
         var p = parents[i];
         var pString = '/' + p.tagName.toLowerCase();
 
-        if(p.id) {
+        if (p.id) {
           return '/' + pString + '[@id=\'' + p.id + '\']' + xpathString;
         } else {
           xpathString = pString + elementIndex(p) + xpathString;
@@ -382,27 +377,28 @@ define([
     };
 
     /**
-    * Return a unique CSS or XPath selector, preferring a CSS one.
-    */
+     * Return a unique CSS or XPath selector, preferring a CSS one.
+     */
     self.bestSelector = function(element) {
       return self.calculateUniqueCSSSelector(element) ||
-             self.calculateUniqueXPathExpression(element);
+        self.calculateUniqueXPathExpression(element);
     };
 
     self.openRuleFile = function() {
 
       var fileManager = self.thememapper.fileManager;
 
-      var treeNodes = fileManager.$tree.tree('getTree')
-      var opened = false
+      var treeNodes = fileManager.$tree.tree('getTree');
+      var opened = false;
 
       _.each(treeNodes.children, function(node) {
-        if( node.name == self.rulesFilename )
-        {
+        if (node.name == self.rulesFilename) {
           //if it's open already, don't reopen it.
           //That will move the cursors location
-          if( fileManager.$tabs.find('.active').data('path') != '/' + self.rulesFilename ) {
-            self.thememapper.fileManager.openFile({node: node});
+          if (fileManager.$tabs.find('.active').data('path') != '/' + self.rulesFilename) {
+            self.thememapper.fileManager.openFile({
+              node: node
+            });
           }
           opened = true;
         }
@@ -411,16 +407,16 @@ define([
     };
 
     /**
-    * Build a Diazo selector element with the appropriate namespace.
-    */
+     * Build a Diazo selector element with the appropriate namespace.
+     */
     self.calculateDiazoSelector = function(element, scope, children) {
       var selectorType = scope;
-      if(children) {
+      if (children) {
         selectorType += '-children';
       }
 
       var cssSelector = self.calculateUniqueCSSSelector(element);
-      if(cssSelector) {
+      if (cssSelector) {
         return 'css:' + selectorType + '="' + cssSelector + '"';
       } else {
         var xpathSelector = self.calculateUniqueXPathExpression(element);
@@ -430,66 +426,68 @@ define([
     };
 
     self.select = function(element) {
-      if(this.currentScope == "theme") {
+      if (this.currentScope == 'theme') {
         this._themeElement = element;
-      } else if(this.currentScope == "content") {
+      } else if (this.currentScope == 'content') {
         this._contentElement = element;
       }
     };
 
     self.getSelectedType = function() {
-      var type = $("input[name='new-rule-type']:checked").val();
+      var type = $('input[name=\'new-rule-type\']:checked').val();
       return type;
     };
 
     self.next = function() {
-        var self = this;
-        if(self.subtype !== null) {
-            // Drop rules have only one scope
-            self.currentScope = null;
-        } else {
-            // Other rules have content and theme
-            if(self.currentScope == "theme") {
-                self.currentScope = "content";
-            } else if (self.currentScope == "content") {
-                self.currentScope = null;
-            }
+      var self = this;
+      if (self.subtype !== null) {
+        // Drop rules have only one scope
+        self.currentScope = null;
+      } else {
+        // Other rules have content and theme
+        if (self.currentScope == 'theme') {
+          self.currentScope = 'content';
+        } else if (self.currentScope == 'content') {
+          self.currentScope = null;
         }
-        this.callback(this);
+      }
+      this.callback(this);
     };
 
     self.updateRule = function() {
-        $els.ruleOutput.val(
-            self.buildRule(
-                $els.newRuleThemeChildren.is(':checked'),
-                $els.newRuleUnthemedChildren.is(':checked')
-            )
-        );
+      $els.ruleOutput.val(
+        self.buildRule(
+          $els.newRuleThemeChildren.is(':checked'),
+          $els.newRuleUnthemedChildren.is(':checked')
+        )
+      );
     };
 
     self.scrollTo = function(selector) {
-      if( $(selector).length == 0 ) {
+      if ($(selector).length == 0) {
         return;
       }
 
-      $('html,body').animate({scrollTop: $(selector).offset().top}, 600);
+      $('html,body').animate({
+        scrollTop: $(selector).offset().top
+      }, 600);
     };
 
     /**
-    *   Called by the rulebuilderView. If there are selected
-    *   elements in the inspectors, we want to give the user the
-    *   option to use those.
-    */
+     *   Called by the rulebuilderView. If there are selected
+     *   elements in the inspectors, we want to give the user the
+     *   option to use those.
+     */
     self.checkSelectors = function() {
       var selected = false;
       $('.selector-info').each(function() {
-        if( $(this).text() != "" ) {
+        if ($(this).text() != '') {
           //Theres an item selected, so show the option to use it
           $els.reusePanel.show();
           selected = true;
         }
       });
-      if( !selected ) {
+      if (!selected) {
         //if we opened the panel previously, close it now
         $els.reusePanel.hide();
       }
@@ -501,13 +499,13 @@ define([
       var themeFrameHighlighter = this.thememapper.mockupInspector;
       var unthemedFrameHighlighter = this.thememapper.unthemedInspector;
 
-      if($.mask.isLoaded(true) && !self.ruleBuilderPopover.isOpened()) {
+      if ($.mask.isLoaded(true) && !self.ruleBuilderPopover.isOpened()) {
         self.scrollTo(self.thememapper.fileManager.$el);
         $.mask.close();
       }
 
-      if(ruleBuilder.currentScope == 'theme') {
-        if(themeFrameHighlighter.saved != null && $els.reuseSelectors.is(":checked")) {
+      if (ruleBuilder.currentScope == 'theme') {
+        if (themeFrameHighlighter.saved != null && $els.reuseSelectors.is(':checked')) {
           self.ruleBuilderPopover.close();
 
           // Use saved rule
@@ -516,13 +514,13 @@ define([
         } else {
           // Let the frame highlighter perform a selection
           $els.selectTheme.show();
-          if(!self.ruleBuilderPopover.isOpened()) {
+          if (!self.ruleBuilderPopover.isOpened()) {
             self.ruleBuilderPopover.load();
           }
         }
 
-      } else if(ruleBuilder.currentScope == 'content') {
-        if(unthemedFrameHighlighter.saved != null && $els.reuseSelectors.is(":checked")) {
+      } else if (ruleBuilder.currentScope == 'content') {
+        if (unthemedFrameHighlighter.saved != null && $els.reuseSelectors.is(':checked')) {
           self.ruleBuilderPopover.close();
 
           // Use saved rule
@@ -531,37 +529,37 @@ define([
         } else {
           // Let the frame highlighter perform a selection
           $els.selectContent.show();
-          if(!self.ruleBuilderPopover.isOpened()) {
+          if (!self.ruleBuilderPopover.isOpened()) {
             self.ruleBuilderPopover.load();
           }
         }
 
-      } else if(ruleBuilder.ruleType != null && ruleBuilder.currentScope == null) {
+      } else if (ruleBuilder.ruleType != null && ruleBuilder.currentScope == null) {
 
         $els.wizardSteps.hide();
         $els.step2.show();
         self.updateRule(ruleBuilder);
 
-        if( self.openRuleFile() ) {
+        if (self.openRuleFile()) {
           $els.step2Insert.show();
         } else {
           $els.step2Insert.hide();
         }
 
-        if(!self.ruleBuilderPopover.isOpened()) {
+        if (!self.ruleBuilderPopover.isOpened()) {
           self.ruleBuilderPopover.load();
         }
 
       } else { // end
 
-        if(self.ruleBuilderPopover.isOpened()) {
+        if (self.ruleBuilderPopover.isOpened()) {
           self.ruleBuilderPopover.close();
         }
 
         $els.wizardSteps.hide();
         $els.step1.show();
       }
-    }
+    };
   };
 
   return RuleBuilder;

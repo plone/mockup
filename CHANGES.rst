@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Autoformat + eslint fixes for thememapper and filemanager patterns.
+  [thet]
+
 - Update ``ace-builds`` to 1.2.6, which fixes IME handling in new Chrome.
   [thet]
 
