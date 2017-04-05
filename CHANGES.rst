@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Style filemanager toolbar to better fix small screens.
+  [thet]
+
 - Fix pattern options initialization according to change in plone.app.theming.
   See: https://github.com/plone/plone.app.theming/pull/124
   [thet]
