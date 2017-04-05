@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Update ``ace-builds`` to 1.2.6, which fixes IME handling in new Chrome.
+  [thet]
+
 - Fix i18n in upload pattern.
   [cedricmessiant]
 
