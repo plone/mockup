@@ -14,6 +14,10 @@ New features:
 
 Bug fixes:
 
+- Fix pattern options initialization according to change in plone.app.theming.
+  See: https://github.com/plone/plone.app.theming/pull/124
+  [thet]
+
 - Fix setting empty ace editor instance by passing an empty text.
   [thet]
 

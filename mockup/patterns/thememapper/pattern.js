@@ -306,7 +306,6 @@ define([
       self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(self.$inspectorContainer);
 
       // initialize patterns now
-      self.editable = (self.options.editable == 'True') ? true : false;
       self.lessUrl = (self.options.lessUrl !== undefined ) ? self.options.lessUrl : false;
       self.lessVariableUrl = (self.options.lessVariables !== undefined ) ? self.options.lessVariables : false;
 
@@ -340,8 +339,8 @@ define([
       });
       self.buildLessButton.disable();
 
-      if( !self.editable ) {
-        if( self.fileManager.toolbar ) {
+      if(!self.options.editable) {
+        if(self.fileManager.toolbar) {
           var items = self.fileManager.toolbar.items;
           $(items).each(function() {
             this.disable();
