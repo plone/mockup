@@ -14,6 +14,10 @@
     <% if(expired){ %>
       <span class="plone-item-expired"><%- _t('Expired') %></span>
     <% } %>
+    <% if(ineffective){ %>
+      <span class="plone-item-ineffective"><%- _t('Before publishing date') %></span>
+    <% } %>
+
   </div>
   <% if(attributes["getIcon"] ){ %>
   <img class="image-<%- iconSize %> pull-right" src="<%- getURL %>/@@images/image/<%- iconSize %>">

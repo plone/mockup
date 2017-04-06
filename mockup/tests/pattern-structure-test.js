@@ -701,6 +701,52 @@ define([
 
     });
 
+    it('should display an expired label for expired contend', function() {
+
+      var expired = new Date();
+      expired.setDate(expired.getDate() - 10);
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document",
+        'ExpirationDate': expired.toJSON()
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .plone-item-expired', el).length).to.equal(1);
+      expect($('.title .plone-item-ineffective', el).length).to.equal(0);
+    });
+
+    it('should display an before publication date label for content which has an effective date in the future', function() {
+
+      var effective = new Date();
+      effective.setDate(effective.getDate() + 10);
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document",
+        'EffectiveDate': effective.toJSON()
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .plone-item-expired', el).length).to.equal(0);
+      expect($('.title .plone-item-ineffective', el).length).to.equal(1);
+    });
+
   });
 
   /* ==========================

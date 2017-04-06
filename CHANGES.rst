@@ -10,6 +10,10 @@ Breaking changes:
 
 New features:
 
+- Show ineffective label in folder contents for not yet effective and published content, likewise it's done with expires.
+  Show effective and ineffective label styled as bootstrap badges.
+  [thet]
+
 - Related Items widget:
     - Add new mode "auto", which automatically sets ``search`` mode when a searchterm is present, otherwise ``browse`` mode.
     - Use searchterm as substring, which matches also within words by wrapping searchterm with the "*" wildcard.
@@ -18,6 +22,7 @@ New features:
     - Filter out non-selectable and non-folderish items in the result set when in browse mode.
     - Add option to scan the selected list of items for other patterns.
     - Add option for contextPath - objects with this path will not be selectable. This prevents the object where the relation is set on to from being selected and self-referenced.
+  [thet]
 
 Bug fixes:
 
