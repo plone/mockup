@@ -10,12 +10,12 @@ define([
     idPrefix: 'btngroup-',
     disable: function() {
       _.each(this.items, function(button) {
-        button.trigger('disable');
+        button.disable();
       });
     },
     enable: function() {
       _.each(this.items, function(button) {
-        button.trigger('enable');
+        button.enable();
       });
     }
   });

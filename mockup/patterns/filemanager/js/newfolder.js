@@ -23,7 +23,7 @@ define([
       var self = this;
       var $input = self.$('input');
       var name = $input.val();
-      if (name){
+      if (name) {
         self.app.doAction('addFolder', {
           type: 'POST',
           data: {

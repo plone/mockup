@@ -14,6 +14,26 @@ New features:
 
 Bug fixes:
 
+- Style filemanager toolbar to better fix small screens.
+  [thet]
+
+- Fix pattern options initialization according to change in plone.app.theming.
+  See: https://github.com/plone/plone.app.theming/pull/124
+  [thet]
+
+- Fix setting empty ace editor instance by passing an empty text.
+  [thet]
+
+- Unify disabling of buttons by using setting the ``disabled`` DOM property instead using classes.
+  Fixes thememapper button staying disabled all the time.
+  [thet]
+
+- Autoformat + eslint fixes for thememapper and filemanager patterns.
+  [thet]
+
+- Update ``ace-builds`` to 1.2.6, which fixes IME handling in new Chrome.
+  [thet]
+
 - Fix i18n in upload pattern.
   [cedricmessiant]
 

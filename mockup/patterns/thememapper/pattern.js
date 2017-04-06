@@ -26,7 +26,6 @@
  *
  */
 
-
 define([
   'jquery',
   'pat-base',
@@ -227,7 +226,7 @@ define([
       var originalBg = self.$frameInfo.css('background-color');
 
       if (!originalBg || originalBg === highlightBg){
-          originalBg = '#FFFFFF'; // default to white
+        originalBg = '#FFFFFF'; // default to white
       }
 
       self.$frameInfo
@@ -245,7 +244,7 @@ define([
       }
 
       self.animateSelector(self.$el.find('.frame-info'));
-      self.$el.find('.selector-info').text(node == null? "" : self.ruleBuilder.bestSelector(node));
+      self.$el.find('.selector-info').text(node == null? '': self.ruleBuilder.bestSelector(node));
 
       if(self.ruleBuilder.active) {
         self.ruleBuilder.select(node);
@@ -255,7 +254,7 @@ define([
     },
     onselect: function(highlighter, node) {
       var self = this;
-      self.$currentSelector.text(node == null? "" : self.ruleBuilder.bestSelector(node));
+      self.$currentSelector.text(node == null? '': self.ruleBuilder.bestSelector(node));
     }
   });
 
@@ -307,7 +306,6 @@ define([
       self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(self.$inspectorContainer);
 
       // initialize patterns now
-      self.editable = (self.options.editable == "True") ? true : false;
       self.lessUrl = (self.options.lessUrl !== undefined ) ? self.options.lessUrl : false;
       self.lessVariableUrl = (self.options.lessVariables !== undefined ) ? self.options.lessVariables : false;
 
@@ -323,7 +321,7 @@ define([
 
       self.ruleBuilder = new RuleBuilder(self, self.ruleBuilderCallback);
 
-      self.fileManager.on("fileChange", function() {
+      self.fileManager.on('fileChange', function() {
         var node = self.fileManager.getSelectedNode();
         self.setLessPaths(node);
       });
@@ -339,19 +337,17 @@ define([
         ruleBuilder: self.ruleBuilder,
         url: self.options.unthemedUrl,
       });
-      self.fileManager.$tree.bind('tree.click', function(e){
-      });
       self.buildLessButton.disable();
 
-      if( !self.editable ) {
-        if( self.fileManager.toolbar ) {
+      if(!self.options.editable) {
+        if(self.fileManager.toolbar) {
           var items = self.fileManager.toolbar.items;
           $(items).each(function() {
             this.disable();
           });
           self.lessbuilderView.triggerView.disable();
         }
-      };
+      }
 
       // initially, let's hide the panels
       self.hideInspectors();
@@ -366,42 +362,42 @@ define([
           path: 'manifest.cfg'
         },
         success: function(data) { this.setDefaultPaths(data); }.bind(self)
-      })
+      });
     },
     setSavePath: function() {
-        var self = this;
-        var filename = self.lessbuilderView.$filename.val()
+      var self = this;
+      var filename = self.lessbuilderView.$filename.val();
 
-        if( filename == "" ) {
-            filename = self.lessbuilderView.$filename.attr('placeholder');
-        }
+      if(filename === '') {
+        filename = self.lessbuilderView.$filename.attr('placeholder');
+      }
 
-        var s = self.lessPaths['save'];
-        var folder = s.substr(0, s.lastIndexOf('/'));
+      var s = self.lessPaths['save'];
+      var folder = s.substr(0, s.lastIndexOf('/'));
 
-        var savePath = folder + '/' + filename;
-        self.lessPaths['save'] = savePath;
+      var savePath = folder + '/' + filename;
+      self.lessPaths['save'] = savePath;
     },
     setLessPaths: function(node) {
       var self = this;
 
-      if( node.fileType == "less" ){
+      if(node.fileType === 'less'){
         self.buildLessButton.enable();
       }
-      else{
+      else {
         self.buildLessButton.disable();
       }
 
-      if( node.path != "" ) {
-        var reg = new RegExp("/(.*\\.)less$", "m");
+      if (node.path !== '') {
+        var reg = new RegExp('/(.*\\.)less$', 'm');
         var path = reg.exec(node.path);
 
         if( path === null ) {
           self.lessPaths = {};
           return false;
         }
-        var lessPath = path[1] + "less";
-        var cssPath = path[1] + "css";
+        var lessPath = path[1] + 'less';
+        var cssPath = path[1] + 'css';
 
         //file paths should be in the form of:
         // "[directory/]filename.less"
@@ -419,8 +415,8 @@ define([
     },
     setDefaultPaths: function(manifest) {
       var self = this;
-      var dev = new RegExp("development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
-      var prod = new RegExp("production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
+      var dev = new RegExp('development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)');
+      var prod = new RegExp('production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)');
 
       var devUrl = dev.exec(manifest.contents)[1];
       var prodUrl = prod.exec(manifest.contents)[1];
@@ -432,7 +428,7 @@ define([
     saveThemeCSS: function(styles) {
       var self = this.env;
 
-      if( styles === "" || styles === undefined ) {
+      if(styles === '' || styles === undefined) {
         //There was probably a problem during compilation
         return false;
       }
@@ -448,17 +444,17 @@ define([
           _authenticator: utils.getAuthenticator()
         },
         success: function(data) {
-          if(data.success == 'tmp') {
+          if (data.success === 'tmp') {
             self.fileManager.fileData['_generated_.css'] = {
               contents: data.value,
               ext: 'css'
-            }
+            };
             self.fileManager.openEditor('_generated_.css');
           } else {
             self.fileManager.refreshTree(function() {
               //We need to make sure we open the newest version
-              delete self.fileManager.fileData['/' + self.lessPaths['save']]
-              self.fileManager.selectItem(self.lessPaths['save'])
+              delete self.fileManager.fileData['/' + self.lessPaths['save']];
+              self.fileManager.selectItem(self.lessPaths['save']);
             });
           }
           self.lessbuilderView.end();
@@ -520,7 +516,7 @@ define([
       });
       self.fullscreenButton.on('button:click', function() {
         var btn = $('<a href="#">'+
-            '<span class="btn btn-danger closeeditor">' + _t("Close Fullscreen") + '</span>'+
+            '<span class="btn btn-danger closeeditor">' + _t('Close Fullscreen') + '</span>'+
             '</a>').prependTo($('.tree'));
 
         $(btn).click(function() {
@@ -554,7 +550,7 @@ define([
         tooltip: _t('Reload the current file'),
         context: 'default'
       });
-      self.refreshButton.on("button:click", function() {
+      self.refreshButton.on('button:click', function() {
         self.fileManager.refreshFile();
       });
       self.cacheButton = new ButtonView({
@@ -581,7 +577,7 @@ define([
       self.cacheView = new CacheView({
         triggerView: self.cacheButton,
         app: self
-      })
+      });
       self.lessbuilderView = new LessBuilderView({
         triggerView: self.buildLessButton,
         app: self

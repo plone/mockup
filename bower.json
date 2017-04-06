@@ -2,7 +2,7 @@
   "name": "mockup",
   "description": "A collection of client side patterns for faster and easier web development",
   "dependencies": {
-    "ace-builds": "1.2.3",
+    "ace-builds": "1.2.6",
     "backbone": "1.1.2",
     "backbone.paginator": "0.8.1",
     "bootstrap": "3.3.6",

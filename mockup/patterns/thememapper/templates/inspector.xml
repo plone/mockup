@@ -25,7 +25,7 @@
 
   <div class="panel-footer">
     <div class="btn-group">
-      <button class="btn btn-default turnon" disabled="disabled" i18n:translate="">Inspector on</button>
+      <button class="btn btn-default turnon" disabled i18n:translate="">Inspector on</button>
       <button class="btn btn-default turnoff" i18n:translate="">Inspector off</button>
     </div>
   </div>
