@@ -12,6 +12,7 @@
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
  *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
+ *    pageSize(int): Batch size to break down big result sets into multiple pages. (10).
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
  *    rootUrl(string): Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.
  *    scanSelection(boolean): Scan the list of selected elements for other patterns.
@@ -125,6 +126,7 @@ define([
       // more options
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
       basePath: '',
+      pageSize: 10,
       browsing: undefined,
       closeOnSelect: true,
       contextPath: undefined,
@@ -221,17 +223,17 @@ define([
               sort_order: 'ascending'
             }),
             attributes: JSON.stringify(this.options.attributes),
-            batch: {
+            batch: JSON.stringify({
               page: page ? page : 1,
-              size: 10
-            }
+              size: this.options.pageSize
+            })
           };
           return data;
         }.bind(this),
 
         results: function (data, page) {
 
-          var more = (page * 10) < data.total;
+          var more = (page * this.options.pageSize) < data.total;
           var results = data.results;
 
           // Filter out non-selectable and non-folderish while browsing.

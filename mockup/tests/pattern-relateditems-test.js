@@ -24,8 +24,8 @@ define([
       {UID:  'UID3',   Title:  'Document  3',  path:  '/document3',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
       {UID:  'UID4',   Title:  'Document  4',  path:  '/document4',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
       {UID:  'UID5',   Title:  'Document  5',  path:  '/document5',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
-      {UID:  'UID6',   Title:  'Folder    1',  path:  '/folder1',    portal_type:  'Folder',  getIcon:  "folder.png",    is_folderish:  false,  review_state:  'published',  getURL: ''},
-      {UID:  'UID7',   Title:  'Folder    2',  path:  '/folder2',    portal_type:  'Folder',  getIcon:  "folder.png",    is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID6',   Title:  'Folder    1',  path:  '/folder1',    portal_type:  'Folder',  getIcon:  "folder.png",    is_folderish:  true,   review_state:  'published',  getURL: ''},
+      {UID:  'UID7',   Title:  'Folder    2',  path:  '/folder2',    portal_type:  'Folder',  getIcon:  "folder.png",    is_folderish:  true,   review_state:  'published',  getURL: ''},
       {UID:  'UID8',   Title:  'Image     1',  path:  '/image1',     portal_type:  'Image',   getIcon:  "image.png",     is_folderish:  false,  review_state:  'published',  getURL: ''},
       {UID:  'UID9',   Title:  'Image     2',  path:  '/image2',     portal_type:  'Image',   getIcon:  "image.png",     is_folderish:  false,  review_state:  'published',  getURL: ''},
       {UID:  'UID10',  Title:  'Image     3',  path:  '/image3',     portal_type:  'Image',   getIcon:  "image.png",     is_folderish:  false,  review_state:  'published',  getURL: ''},
@@ -39,15 +39,65 @@ define([
       {UID:  'UID14',   Title:  'Document  14',  path:  '/folder2/document14',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
       {UID:  'UID15',   Title:  'Document  15',  path:  '/folder2/document15',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
       {UID:  'UID16',   Title:  'Document  16',  path:  '/folder2/document16',  portal_type:  'Page',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID17',   Title:  'Image     17',  path:  '/folder2/image17',     portal_type:  'Image',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
+      {UID:  'UID18',   Title:  'Image     18',  path:  '/folder2/image18',     portal_type:  'Image',    getIcon:  "document.png",  is_folderish:  false,  review_state:  'published',  getURL: ''},
     ];
-    var searchables;
     var $container;
+
+    var search = function (catalog, query) {
+      var results_ = [];
+      catalog.forEach(function (item) {
+        var add = true;
+        query.forEach(function (criteria) {
+          var val = criteria.v;
+          if (criteria.i === 'SearchableText') {
+            val = val.split('*')[1];  // searchText is wildcarded with "*text*"
+            if (
+              item.Title.indexOf(val) === -1 &&
+              item.path.indexOf(val) === -1
+            ) {
+              add = false;
+            }
+          }
+          if (
+            criteria.i === 'portal_type' &&
+            val.indexOf(item.portal_type) === -1
+          ) {
+            add = false;
+          }
+          if (criteria.i === 'path') {
+            var parts = val.split('::1');
+            var searchpath = parts[0];
+            var browsing = parts.length === 2;
+            if (item.path.indexOf(searchpath) === -1) {
+              // search path not part of item path
+              add = false;
+            }
+            if (browsing) {
+              // flat search
+              searchpath = searchpath.slice(-1) !== '/' ? searchpath + '/' : searchpath;
+              if (item.path.split('/').length !== searchpath.split('/').length) {
+                // not same number of path parts, so not same hirarchy
+                add = false;
+              }
+            }
+          }
+        });
+        if (add) {
+          results_.push(item);
+        }
+
+      });
+
+      return results_;
+    };
 
     beforeEach(function() {
       this.server = sinon.fakeServer.create();
       this.server.autoRespond = true;
 
       function getQueryVariable(url, variable) {
+        url = decodeURIComponent(url);
         var query = url.split('?')[1];
         if (query === undefined) {
           return null;
@@ -55,13 +105,18 @@ define([
         var vars = query.split('&');
         for (var i = 0; i < vars.length; i += 1) {
           var pair = vars[i].split('=');
-          if (decodeURIComponent(pair[0]) === variable) {
-            return decodeURIComponent(pair[1]);
+          if (pair[0] === variable) {
+            try {
+              return JSON.parse(pair[1]);
+            } catch (e) {
+              return pair[1];
+            }
           }
         }
-        return null;
+        return undefined;
       }
-      this.server.respondWith(/relateditems-test.json/, function(xhr, id) {
+
+      this.server.respondWith(/relateditems-test.json/, function(xhr) {
 
         var addUrls = function(list) {
           /* add getURL value */
@@ -75,92 +130,22 @@ define([
         addUrls(folder1);
         addUrls(folder2);
 
-        searchables = root.concat(folder1).concat(folder2);
-
         // grab the page number and number of items per page -- note, page is 1-based from Select2
         var batch = getQueryVariable(xhr.url, 'batch');
         var page = 1;
-        var pageSize = 10;
+        var pageSize = 100;
         if (batch) {
-          batch = $.parseJSON(batch);
           page = batch.page;
           pageSize = batch.size;
         }
         page = page - 1;
 
         var query = getQueryVariable(xhr.url, 'query');
-        var path = null;
-        var term = '';
-        if (query) {
-          query = $.parseJSON(query);
-          for (var i = 0; i < query.criteria.length; i = i + 1) {
-            var criteria = query.criteria[i];
-            if (criteria.i === 'path') {
-              path = criteria.v.split('::')[0];
-            } else if (criteria.i === 'is_folderish') {
-              term = criteria;
-            } else {
-              term = criteria.v;
-            }
-          }
-        }
 
-        var results = [];
-
-        function search(items, term) {
-          results = [];
-          if (term === undefined) {
-            return searchables;
-          }
-          _.each(items, function(item) {
-            var q;
-            var keys = (item.UID + ' ' + item.Title + ' ' + item.path + ' ' + item.portal_type).toLowerCase();
-            if (typeof(term) === 'object') {
-              if (term.i === 'is_folderish') {
-                if (item.is_folderish) {
-                  results.push(item);
-                }
-              } else {
-                for (var i = 0; i < term.length; i = i + 1) {
-                  q = term[i].toLowerCase();
-                  if (keys.indexOf(q) > -1) {
-                    results.push(item);
-                    break;
-                  }
-                }
-              }
-            } else {
-              q = term.toLowerCase().slice(0, -1);  // "*" removed
-              if (keys.indexOf(q) > -1) {
-                results.push(item);
-              }
-            }
-          });
-        }
-
-        function browse(items, q, p) {
-          results = [];
-          var path = p;
-          // var path = p.substring(0, p.length - 1);
-          // var splitPath = path.split('/');
-          var fromPath = [];
-          _.each(items, function(item) {
-            var itemSplit = item.path.split('/');
-            // if (item.path.indexOf(path) === 0 && itemSplit.length - 1 === splitPath.length) {  // search recursively
-            if (item.path.indexOf(path) === 0) {
-              fromPath.push(item);
-            }
-          });
-          if (q === undefined) {
-            return fromPath;
-          }
-          search(fromPath, q);
-        }
-        if (path) {
-          browse(searchables, term, path);
-        } else {
-          search(searchables, term);
-        }
+        var results = search(
+            root.concat(folder1).concat(folder2),
+            query.criteria
+        );
 
         xhr.respond(200, { 'Content-Type': 'application/json' },
           JSON.stringify({
@@ -177,21 +162,6 @@ define([
       $('.select2-sizer, .select2-drop').remove();
     });
 
-    // test cases
-    // - [x] initialize pattern
-    // - [x] click on browse opens result list
-    // - [x] click on search opens result list
-    // - [x] click on browse with already selected result items opens result list
-    // - [x] click on search with already selected result items opens result list
-    // - [ ] browse to item and select it
-    // - [x] selected item is removed from result list
-    // - [ ] don't allow to select items which are not selectable
-    // - [ ] don't show non-selectable and non folderish items
-    // - [x] only search in current path
-    // - [x] search item and select it
-    // - [x] deselect an item from result list
-    // - [x] selection from favorites opens path
-
     var initializePattern = function (options) {
       options = options || {};
       options.vocabularyUrl = '/relateditems-test.json';
@@ -206,6 +176,7 @@ define([
 
     };
 
+
     it('test initialize', function() {
 
       initializePattern();
@@ -215,35 +186,86 @@ define([
       expect($('.pattern-relateditems-container .toolbar .path-wrapper'), $container).to.have.length(1);
     });
 
-    it('browse roundtrip', function () {
-      var pattern = initializePattern();
+
+    it('auto roundtrip', function () {
+      initializePattern({'selectableTypes': ['Image', 'Folder'], 'pageSize': 100});
       var clock = sinon.useFakeTimers();
       var $input;
+
+      // open up result list by clicking into search field
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+
+      // Only Images and Folders should be shown.
+      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+
+      // Browse into second folder which contains images
+      $('.pattern-relateditems-result-browse')[1].click();
+      clock.tick(1000);
+
+      // 1 "One level up" and 2 images
+      expect($('.pattern-relateditems-result-select')).to.have.length(3);
+      expect($('.pattern-relateditems-result-select')[0].text).to.contain('One level up');
+
+      // Select first image
+      $('a.pattern-relateditems-result-select')[1].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID17');
+
+      // Browse one level up
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select')[0].click();
+      clock.tick(1000);
+
+      // Again, 5 items on root.
+      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+
+      // Input a search term and enter search mode
+      $input = $('.select2-search-field input.select2-input');
+      $input.click().val('folder2');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      clock.tick(1000);
+
+      // Searching for folder 2 brings up 2 items: folder2 itself and the not-yet-selected image.
+      expect($('.pattern-relateditems-result-select')).to.have.length(2);
+
+      // We can even browse into folders in search mode
+      $('.pattern-relateditems-result-browse')[0].click();
+      clock.tick(1000);
+
+      // Being in folder 2, we see again two items...
+      expect($('.pattern-relateditems-result-select')).to.have.length(2);
+      expect($('.pattern-relateditems-result-select')[0].text).to.contain('One level up');
+
+      // Selecting the image will add it to the selected items.
+      $('a.pattern-relateditems-result-select')[1].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID17,UID18');
+
+    });
+
+
+    it('browse roundtrip', function () {
+      initializePattern({'mode': 'browse', 'selectableTypes': ['Image'], 'pageSize': 100});
+      var clock = sinon.useFakeTimers();
+      var $input;
+
 
       // open up result list by clicking on "browse"
       $('.mode.browse', $container).click();
       clock.tick(1000);
 
       // result list must have expected length
-      expect($('.pattern-relateditems-result-select')).to.have.length(16);
+      // Only Images and Folders.
+      expect($('.pattern-relateditems-result-select')).to.have.length(5);
 
-      // compare result list with test data
-      var stringtext = $('a.pattern-relateditems-result-select').map(function (index, el) {
-        return $(el).text().trim();
-      });
-      stringtext = _.sortBy(stringtext);
-
-      // ... compare the whole list, sorted
-      expect(stringtext.length).to.be.equal(searchables.length);
-      _.sortBy(searchables, 'Title').map(function (el, index) {
-        expect(stringtext[index].indexOf(el.Title)).not.equal(-1);
-      });
 
       // PT 2
 
       // select one element
-      $('a.pattern-relateditems-result-select')[0].click();
-      expect($('input.pat-relateditems').val()).to.be.equal('UID1');
+      $('a.pattern-relateditems-result-select')[2].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID8');
+
 
       // PT 3
 
@@ -252,15 +274,15 @@ define([
       clock.tick(1000);
 
       // result list must have expected length
-      expect($('.pattern-relateditems-result-select')).to.have.length(15);
+      expect($('.pattern-relateditems-result-select')).to.have.length(4);
 
       // add another one
-      $('a.pattern-relateditems-result-select')[0].click();
-      expect($('input.pat-relateditems').val()).to.be.equal('UID1,UID2');
+      $('a.pattern-relateditems-result-select')[2].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID8,UID9');
 
       // remove first one
       $($('a.select2-search-choice-close')[0]).click();
-      expect($('input.pat-relateditems').val()).to.be.equal('UID2');
+      expect($('input.pat-relateditems').val()).to.be.equal('UID9');
 
       // search for...
       $input = $('.select2-search-field input.select2-input');
@@ -268,16 +290,17 @@ define([
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
       clock.tick(1000);
-      expect($('.pattern-relateditems-result-select')).to.have.length(3);
+      expect($('.pattern-relateditems-result-select')).to.have.length(2);
 
       // add first from result
-      $('a.pattern-relateditems-result-select')[0].click();
-      expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID8');
+      $('a.pattern-relateditems-result-select')[1].click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID9,UID10');
 
     });
 
+
     it('search roundtrip', function () {
-      var pattern = initializePattern({'selectableTypes': ['Page']});
+      initializePattern({'mode': 'search', 'selectableTypes': ['Page'], 'pageSize': 100});
       var clock = sinon.useFakeTimers();
       var $input;
 
@@ -288,45 +311,32 @@ define([
       // result list must have expected length
       expect($('.pattern-relateditems-result-select')).to.have.length(11);
 
-      // compare result list with test data
-      var stringtext = $('a.pattern-relateditems-result-select').map(function (index, el) {
-        return $(el).text().trim();
-      });
-      stringtext = _.sortBy(stringtext);
 
-      // ... compare the whole list, sorted
-      var mySearchables = searchables.filter(function (item) {
-        return item.portal_type === 'Page';
-      });
-      expect(stringtext.length).to.be.equal(mySearchables.length);
-      _.sortBy(mySearchables, 'Title').map(function (el, index) {
-        expect(stringtext[index].indexOf(el.Title)).not.equal(-1);
-      });
+      //  // PT 2
 
-      // PT 2
-
-      // select one element
+      //  // select one element
       $('a.pattern-relateditems-result-select')[0].click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID1');
 
-      // PT 3
 
-      // click again on browse, should open up result list again, this time without 'UID1'
+      //  // PT 3
+
+      //  // click again on browse, should open up result list again, this time without 'UID1'
       $('.mode.search', $container).click();
       clock.tick(1000);
 
-      // result list must have expected length
+      //  // result list must have expected length
       expect($('.pattern-relateditems-result-select')).to.have.length(10);
 
-      // add another one
+      //  // add another one
       $('a.pattern-relateditems-result-select')[0].click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID1,UID2');
 
-      // remove first one
+      //  // remove first one
       $($('a.select2-search-choice-close')[0]).click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID2');
 
-      // search for...
+      //  // search for...
       $input = $('.select2-search-field input.select2-input');
       $input.click().val('document15');
       var keyup = $.Event('keyup-change');
@@ -334,7 +344,7 @@ define([
       clock.tick(1000);
       expect($('.pattern-relateditems-result-select')).to.have.length(1);
 
-      // add first from result
+      //  // add first from result
       $('a.pattern-relateditems-result-select')[0].click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID15');
 
