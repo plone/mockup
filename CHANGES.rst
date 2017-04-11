@@ -21,6 +21,11 @@ New features:
 
 Bug fixes:
 
+- Fixed path to tooltip less files.
+  This gave an ugly site in develoment mode when editing the loggedin bundle css.
+  Fixes `issue 1843 <https://github.com/plone/Products.CMFPlone/issues/1843>`_.
+  [maurits]
+
 - Style filemanager toolbar to better fix small screens.
   [thet]
 
