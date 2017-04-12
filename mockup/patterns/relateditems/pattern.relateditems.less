@@ -72,8 +72,7 @@
 
         .path-wrapper {
             display: inline-block;
-            margin-top: 2px;
-            margin-bottom: 2px;
+            margin: 0.5em;
             vertical-align: middle;
         }
 
@@ -106,33 +105,10 @@
     margin-top: 2px;
 }
 
-.pattern-relateditems-buttons {
-    font-size: 18px;
-    position: absolute;
-    top: 50%;
-    right: 0;
-    display: inline-block;
-    margin-top: -16px;
-    margin-right: 8px;
-    text-align: right;
 
-    a {
-        .glyphicon();
-        .glyphicon-chevron-right();
-        line-height: 36px;
-        display: block;
-        height: 36px;
-
-        &:hover:before {
-            color:purple;
-        }
-    }
-
-}
 
 .pattern-relateditems-result {
-    position: relative;
-    padding-right: 30px;
+    padding: 0.2em;
 
     a {
         &:hover {
@@ -140,23 +116,35 @@
         }
     }
 
-    .pattern-relateditems-result-select {
-        line-height: 15px;
-        display: block;
-        padding-top: 5px;
+    .pattern-relateditems-buttons {
+        display: inline-block;
+        width: 1.5em;
+        font-size: 1.5em;
+        vertical-align: top;
+        a {
+            .glyphicon;
+            .glyphicon-folder-close;
+            &:hover {
+                .glyphicon-folder-open;
+            }
+            &:hover:before {
+                color:purple;
+            }
+        }
     }
 
-    .pattern-relateditems-result-path {
-        font-size: 11px;
-        display: block;
-        color: #444;
+    .pattern-relateditems-result-select {
+        display: inline-block;
+        &:not(.selectable):not(.one-level-up) {
+            opacity: 0.6;
+        }
     }
+
 }
 
-.pattern-relateditems-item {
-    .pattern-relateditems-item-path {
-        font-size: 11px;
-        display: block;
-        color: #444;
-    }
+.pattern-relateditems-item-path,
+.pattern-relateditems-result-path {
+    font-size: 0.8em;
+    display: block;
+    color: #444;
 }
