@@ -18,7 +18,7 @@ New features:
   - Show ineffective label in folder contents for not yet effective and published content, likewise it's done with expires.
     Show effective and ineffective label styled as bootstrap badges.
   - Show "Description" below title, if it's set in ``availableColumns`` and ``activeColumns`` to save some screen space.
-  - Don't underline actionmenu links.
+  - Do not break whitespace within actionmenu links and don't underline them when hovering.
   [thet]
 
 - Related Items widget:
