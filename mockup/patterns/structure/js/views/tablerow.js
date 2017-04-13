@@ -28,12 +28,20 @@ define([
       this.now = moment();
     },
 
-    expired: function(data){
-      if(!data.attributes.ExpirationDate){
+    expired: function(data) {
+      if (!data.attributes.ExpirationDate) {
         return false;
       }
       var dt = moment(data.attributes.ExpirationDate);
       return dt.diff(this.now, 'seconds') < 0;
+    },
+
+    ineffective: function(data) {
+      if (!data.attributes.EffectiveDate) {
+        return false;
+      }
+      var dt = moment(data.attributes.EffectiveDate);
+      return dt.diff(this.now, 'seconds') > 0;
     },
 
     render: function() {
@@ -56,6 +64,7 @@ define([
 
       data._t = _t;
       data.expired = this.expired(data);
+      data.ineffective = this.ineffective(data);
       self.$el.html(self.template(data));
       var attrs = self.model.attributes;
       self.$el.addClass('state-' + attrs['review_state']).addClass('type-' + attrs.portal_type); // jshint ignore:line
@@ -68,9 +77,14 @@ define([
       self.$el.attr('data-type', data.portal_type);
       self.$el.attr('data-folderish', data['is_folderish']); // jshint ignore:line
       self.$el.removeClass('expired');
+      self.$el.removeClass('ineffective');
 
-      if(data.expired){
+      if (data.expired) {
         self.$el.addClass('expired');
+      }
+
+      if (data.ineffective) {
+        self.$el.addClass('ineffective');
       }
 
       self.el.model = this.model;

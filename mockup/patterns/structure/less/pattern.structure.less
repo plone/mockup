@@ -79,6 +79,13 @@
                 .btn{
                     padding: 2px 4px;
                 }
+                a {
+                    white-space: nowrap;
+                    &,
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
             }
         }
         .fc-breadcrumbs-container{
@@ -87,9 +94,17 @@
                 padding-top: 2px;
             }
         }
-        .plone-item-expired {
+        .plone-item-expired,
+        .plone-item-ineffective {
+          .badge();
           font-size: 12px;
-          color: #d00202;
+          color: white;
+        }
+        .plone-item-expired {
+          background-color: @plone-toolbar-private-color;
+        }
+        .plone-item-ineffective {
+          background-color: @plone-toolbar-internal-color;
         }
     }
     .navbar {

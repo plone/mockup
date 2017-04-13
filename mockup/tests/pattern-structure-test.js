@@ -701,6 +701,106 @@ define([
 
     });
 
+    it('should display an expired label for expired contend', function() {
+
+      var expired = new Date();
+      expired.setDate(expired.getDate() - 10);
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document",
+        'ExpirationDate': expired.toJSON()
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .plone-item-expired', el).length).to.equal(1);
+      expect($('.title .plone-item-ineffective', el).length).to.equal(0);
+    });
+
+    it('should display an before publication date label for content which has an effective date in the future', function() {
+
+      var effective = new Date();
+      effective.setDate(effective.getDate() + 10);
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document",
+        'EffectiveDate': effective.toJSON()
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .plone-item-expired', el).length).to.equal(0);
+      expect($('.title .plone-item-ineffective', el).length).to.equal(1);
+    });
+
+    it('should show Description below title, if available', function() {
+
+      // Ensure, Description is set.
+      this.app.activeColumns = [
+        'Description'
+      ];
+      this.app.availableColumns = {
+        'Description': 'Description'
+      };
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'Description': "Oh, this is a description of this content!",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document"
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .Description', el).length).to.equal(1);
+      // Description should be shown below title, but not in a column.
+      expect($('td.Description', el).length).to.equal(0);
+    });
+
+    it('should not show Description, if not set', function() {
+
+      // Ensure, Description is not set.
+      this.app.activeColumns = [];
+      this.app.availableColumns = {};
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'Description': "Oh, this is a description of this content!",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document"
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .Description', el).length).to.equal(0);
+      expect($('td.Description', el).length).to.equal(0);
+    });
+
+
   });
 
   /* ==========================
