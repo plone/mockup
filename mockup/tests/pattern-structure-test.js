@@ -747,6 +747,60 @@ define([
       expect($('.title .plone-item-ineffective', el).length).to.equal(1);
     });
 
+    it('should show Description below title, if available', function() {
+
+      // Ensure, Description is set.
+      this.app.activeColumns = [
+        'Description'
+      ];
+      this.app.availableColumns = {
+        'Description': 'Description'
+      };
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'Description': "Oh, this is a description of this content!",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document"
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .Description', el).length).to.equal(1);
+      // Description should be shown below title, but not in a column.
+      expect($('td.Description', el).length).to.equal(0);
+    });
+
+    it('should not show Description, if not set', function() {
+
+      // Ensure, Description is not set.
+      this.app.activeColumns = [];
+      this.app.availableColumns = {};
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'Description': "Oh, this is a description of this content!",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document"
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .Description', el).length).to.equal(0);
+      expect($('td.Description', el).length).to.equal(0);
+    });
+
+
   });
 
   /* ==========================
