@@ -10,6 +10,10 @@ Breaking changes:
 
 New features:
 
+- Add default plone color less variables for a more consistent design.
+  They will be overwritten by values set by Plone or integration projects.
+  [thet]
+
 - Structure widget:
   - Show ineffective label in folder contents for not yet effective and published content, likewise it's done with expires.
     Show effective and ineffective label styled as bootstrap badges.
