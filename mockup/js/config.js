@@ -29,6 +29,7 @@
       'bootstrap-collapse': 'bower_components/bootstrap/js/collapse',
       'bootstrap-dropdown': 'bower_components/bootstrap/js/dropdown',
       'bootstrap-transition': 'bower_components/bootstrap/js/transition',
+      'bootstrap-tooltip': 'bower_components/bootstrap/js/tooltip',
       'docs-contribute': 'CONTRIBUTE.md',
       'docs-getting-started': 'GETTING_STARTED.md',
       'docs-learn': 'LEARN.md',
