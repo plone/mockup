@@ -1,7 +1,7 @@
 <div class="pattern-relateditems-result">
   <span class="pattern-relateditems-buttons">
   <% if (is_folderish) { %>
-    <a class="pattern-relateditems-result-browse" data-path="<%- path %>" title="Open folder"></a>
+    <a class="pattern-relateditems-result-browse" data-path="<%- path %>" title="<%- open_folder %>"></a>
   <% } %>
   </span>
   <a class="pattern-relateditems-result-select<% if (selectable) { %> selectable<% } else if (browsing && is_folderish) { %> pattern-relateditems-result-browse<% } %><% if (typeof oneLevelUp !== 'undefined' && oneLevelUp) { %> one-level-up<% } %>" data-path="<%- path %>">
