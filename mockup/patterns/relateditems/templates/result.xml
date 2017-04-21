@@ -1,4 +1,4 @@
-<div class="pattern-relateditems-result">
+<div class="pattern-relateditems-result<% if (typeof oneLevelUp !== 'undefined' && oneLevelUp) { %> one-level-up<% } %>">
   <span class="pattern-relateditems-buttons">
   <% if (is_folderish) { %>
     <a class="pattern-relateditems-result-browse" data-path="<%- path %>" title="<%- open_folder %>"></a>
