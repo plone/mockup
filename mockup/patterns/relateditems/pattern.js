@@ -257,7 +257,7 @@ define([
           ) {
             results = [{
               'oneLevelUp': true,
-              'Title': _('One level up'),
+              'Title': _t('One level up'),
               'path': path.slice(0, path.length - 1).join('/') || '/',
               'portal_type': 'Folder',
               'is_folderish': true,
