@@ -81,6 +81,9 @@ Bug fixes:
 - fix structure pattern: if title is empty then show items ID.
   [jensens]
 
+- fix localization of "Open folder" link title in related items pattern
+  [datakurre]
+
 
 2.4.0 (2017-02-20)
 ------------------
