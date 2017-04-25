@@ -176,7 +176,10 @@ define([
         template = self.options[tpl + 'Template'];
       }
       // let's give all the options possible to the template generation
-      var options = $.extend(true, {}, self.options, item, {'browsing': self.browsing});
+      var options = $.extend(true, {}, self.options, item, {
+        'browsing': self.browsing,
+        'open_folder': _t('Open folder')
+      });
       options._item = item;
       return _.template(template)(options);
     },
@@ -257,7 +260,7 @@ define([
           ) {
             results = [{
               'oneLevelUp': true,
-              'Title': _('One level up'),
+              'Title': _t('One level up'),
               'path': path.slice(0, path.length - 1).join('/') || '/',
               'portal_type': 'Folder',
               'is_folderish': true,
