@@ -88,6 +88,9 @@ Bug fixes:
 - fix localization of "Open folder" link title in related items pattern
   [datakurre]
 
+- Fix issue where formunloadalert pattern raised initialization error for modals.
+  [datakurre]
+
 
 2.4.0 (2017-02-20)
 ------------------
