@@ -14,7 +14,7 @@ define([
     initialize: function(options) {
       var self = this;
       ButtonGroup.prototype.initialize.apply(self, [options]);
-      self.app.on('context-info-loaded', function(data) {
+      $('body').on('context-info-loaded', function(data) {
         self.$items.empty();
         _.each(data.addButtons, function(item) {
           var view = new ButtonView({

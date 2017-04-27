@@ -29,7 +29,7 @@ define([
       self.subsetIds = [];
       self.contextInfo = null;
 
-      self.app.on('context-info-loaded', function(data) {
+      $('body').on('context-info-loaded', function(data) {
         self.contextInfo = data;
         /* set default page info */
         self.setContextInfo();

@@ -19,6 +19,7 @@ New features:
     Show effective and ineffective label styled as bootstrap badges.
   - Show "Description" below title, if it's set in ``availableColumns`` and ``activeColumns`` to save some screen space.
   - Do not break whitespace within actionmenu links and don't underline them when hovering.
+  - Trigger ``context-info-loaded`` on body to be able to listen to the event outside the pattern.
   [thet]
 
 - Related Items widget:

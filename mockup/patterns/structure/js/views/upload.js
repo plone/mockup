@@ -17,7 +17,7 @@ define([
       self.app = options.app;
       PopoverView.prototype.initialize.apply(self, [options]);
       self.currentPathData = null;
-      self.app.on('context-info-loaded', function(data) {
+      $('body').on('context-info-loaded', function(data) {
         self.currentPathData = data;
       });
     },
