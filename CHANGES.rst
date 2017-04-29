@@ -10,6 +10,9 @@ Breaking changes:
 
 New features:
 
+- New pattern ``mockup-patterns-structureupdater`` to update title and description depending on the current context on Plone's folder contents page.
+  [thet]
+
 - Add default plone color less variables for a more consistent design.
   They will be overwritten by values set by Plone or integration projects.
   [thet]
@@ -19,6 +22,7 @@ New features:
     Show effective and ineffective label styled as bootstrap badges.
   - Show "Description" below title, if it's set in ``availableColumns`` and ``activeColumns`` to save some screen space.
   - Do not break whitespace within actionmenu links and don't underline them when hovering.
+  - Trigger ``context-info-loaded`` on body to be able to listen to the event outside the pattern.
   [thet]
 
 - Related Items widget:
