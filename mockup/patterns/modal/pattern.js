@@ -545,7 +545,10 @@ define([
             self.options.content = '';
           }
           if (!self.options.ajaxUrl && self.$el.attr('href').substr(0, 1) !== '#') {
-            self.options.ajaxUrl = self.$el.attr('href');
+            self.options.ajaxUrl = function () {
+              // Resolve ``href`` attribute later, when modal is shown.
+              return self.$el.attr('href');
+            };
           }
         }
         self.$el.on('click', function(e) {
@@ -561,8 +564,14 @@ define([
       var self = this;
       self.emit('before-ajax');
       self.loading.show();
+
+      var ajaxUrl = self.options.ajaxUrl;
+      if (typeof ajaxUrl === 'function') {
+        ajaxUrl = ajaxUrl.apply(self, [self.options]);
+      }
+
       self.ajaxXHR = $.ajax({
-        url: self.options.ajaxUrl,
+        url: ajaxUrl,
         type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
