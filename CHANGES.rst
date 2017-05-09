@@ -10,6 +10,10 @@ Breaking changes:
 
 New features:
 
+- For ``pat-modal``, let the ajax modal variant acquire it's ajax url when the modal is shown instead when the pattern is initialized.
+  This makes the modal respect a dynamically changed href attribute on a anchor tag, after it was initialized.
+  [thet]
+
 - New pattern ``mockup-patterns-structureupdater`` to update title and description depending on the current context on Plone's folder contents page.
   [thet]
 
