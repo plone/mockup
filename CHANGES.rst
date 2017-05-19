@@ -39,6 +39,9 @@ New features:
     - Add option for contextPath - objects with this path will not be selectable. This prevents the object where the relation is set on to from being selected and self-referenced.
   [thet]
 
+- Bring in TinyMCE 4.6.1
+  [frapell]
+
 Bug fixes:
 
 - Fixed path to tooltip less files.
