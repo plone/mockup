@@ -85,7 +85,6 @@ define([
   'tinymce-image',
   'tinymce-importcss',
   'tinymce-insertdatetime',
-  'tinymce-layer',
   'tinymce-legacyoutput',
   'tinymce-link',
   'tinymce-lists',
