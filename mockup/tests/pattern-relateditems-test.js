@@ -199,8 +199,17 @@ define([
       // Only Images and Folders should be shown.
       expect($('.pattern-relateditems-result-select')).to.have.length(5);
 
+      // Select first folder
+      $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID6');
+
+      // Still, this folder should be shown in the result list - only not selectable.
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+
       // Browse into second folder which contains images
-      $('.pattern-relateditems-result-browse')[1].click();
+      $('.pattern-relateditems-result-browse[data-path="/folder2"]').click();
       clock.tick(1000);
 
       // 1 "One level up" and 2 images
@@ -208,8 +217,8 @@ define([
       expect($('.pattern-relateditems-result-select')[0].text).to.contain('One level up');
 
       // Select first image
-      $('a.pattern-relateditems-result-select')[1].click();
-      expect($('input.pat-relateditems').val()).to.be.equal('UID17');
+      $('a.pattern-relateditems-result-select[data-path="/folder2/image17"]').click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID6,UID17');
 
       // Browse one level up
       $('.select2-search-field input.select2-input').click();
@@ -231,7 +240,7 @@ define([
       expect($('.pattern-relateditems-result-select')).to.have.length(2);
 
       // We can even browse into folders in search mode
-      $('.pattern-relateditems-result-browse')[0].click();
+      $('.pattern-relateditems-result-browse[data-path="/folder2"]').click();
       clock.tick(1000);
 
       // Being in folder 2, we see again two items...
@@ -239,8 +248,8 @@ define([
       expect($('.pattern-relateditems-result-select')[0].text).to.contain('One level up');
 
       // Selecting the image will add it to the selected items.
-      $('a.pattern-relateditems-result-select')[1].click();
-      expect($('input.pat-relateditems').val()).to.be.equal('UID17,UID18');
+      $('a.pattern-relateditems-result-select[data-path="/folder2/image18"]').click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID6,UID17,UID18');
 
     });
 
