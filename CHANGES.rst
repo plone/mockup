@@ -37,6 +37,7 @@ New features:
     - Filter out non-selectable and non-folderish items in the result set when in browse mode.
     - Add option to scan the selected list of items for other patterns.
     - Add option for contextPath - objects with this path will not be selectable. This prevents the object where the relation is set on to from being selected and self-referenced.
+    - Make favorites container positon relative, so that the absolute positioned dropdown appears correctly.
   [thet]
 
 - Include TinyMCE 4.5.6
