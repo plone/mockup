@@ -57,7 +57,7 @@ define([
       data.portal_type = data.portal_type ? data.portal_type : '';
       data.contenttype = data.portal_type.toLowerCase().replace(/\.| /g, '-');
       data._authenticator = utils.getAuthenticator();
-      data.iconSize = self.app.iconSize;
+      data.thumbSize = self.app.thumbSize;
 
       var viewAction = self.app.typeToViewAction && self.app.typeToViewAction[data.attributes.portal_type] || '';
       data.viewURL = data.attributes.getURL + viewAction;

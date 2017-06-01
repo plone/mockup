@@ -10,6 +10,12 @@ Breaking changes:
 
 New features:
 
+ - make thumb size in folder contents listing adjustable/supressable 
+   replace meaningless paper clip icon (fontello) with mime type icons
+   from mimetype registry
+   https://github.com/plone/Products.CMFPlone/issues/1734
+   [fgrcon]
+ 
 - For ``pat-modal``, let the ajax modal variant acquire it's ajax url when the modal is shown instead when the pattern is initialized.
   This makes the modal respect a dynamically changed href attribute on a anchor tag, after it was initialized.
   [thet]

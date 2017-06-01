@@ -610,7 +610,7 @@ define([
     });
 
     it('should display an icon for contents with images', function() {
-      this.app.iconSize = 'largest_possible';
+      this.app.thumbSize = 'tile';
 
       var model = new Result({
           'Title': "Dummy Document",
@@ -628,7 +628,7 @@ define([
       var el = row.render().el;
 
       expect($('.title img', el).length).to.equal(1);
-      expect($('.title img', el).attr('class')).to.have.string('image-largest_possible');
+      expect($('.title img', el).attr('class')).to.have.string('image-tile');
     });
 
     it('should display no icon for contents without images', function() {

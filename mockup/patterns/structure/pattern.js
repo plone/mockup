@@ -48,8 +48,6 @@ define([
 
       activeColumnsCookie: 'activeColumns',
 
-      iconSize: 'thumb',
-
       /*
         As the options operate on a merging basis per new attribute
         (key/value pairs) on the option Object in a recursive fashion,
@@ -68,6 +66,7 @@ define([
         'ExpirationDate',
         'exclude_from_nav',
         'getIcon',
+        'getMimeIcon',
         'getObjSize',
         'getURL',
         'id',
