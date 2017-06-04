@@ -780,6 +780,11 @@ define([
         this.linkType = 'image';
         this.$scale.val(this.tinypattern.getScaleFromUrl(src));
         this.linkTypes.image.set(this.tinypattern.stripGeneratedUrl(src));
+      } else if (src.match(/^resolveuid\/[^\/]+$/)) {
+        var uid = src.split('/')[1];
+        this.linkType = 'image';
+        this.$scale.val('');
+        this.linkTypes.image.set(uid);
       } else {
         this.linkType = 'externalImage';
         this.linkTypes.externalImage.set(src);
