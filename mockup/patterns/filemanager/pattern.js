@@ -42,6 +42,7 @@ define([
   'mockup-ui-url/views/buttongroup',
   'mockup-patterns-filemanager-url/js/addnew',
   'mockup-patterns-filemanager-url/js/newfolder',
+  'mockup-patterns-filemanager-url/js/filesearch',
   'mockup-patterns-filemanager-url/js/delete',
   'mockup-patterns-filemanager-url/js/customize',
   'mockup-patterns-filemanager-url/js/rename',
@@ -51,6 +52,7 @@ define([
   'text!mockup-ui-url/templates/popover.xml'
 ], function($, Base, _, Tree, TextEditor, AppTemplate, Toolbar,
   ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
+  FileSearchView,
   CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';
 
@@ -135,6 +137,16 @@ define([
         }),
         app: self
       });
+      var fileSearchView = new FileSearchView({
+        triggerView: new ButtonView({
+          id: 'filesarch',
+          title: _t('File Search'),
+          tooltip: _t('Find theme resource in plone'),
+          icon: 'file',
+          context: 'default'
+        }),
+        app: self
+      });
       var renameView = new RenameView({
         triggerView: new ButtonView({
           id: 'rename',
@@ -159,12 +171,14 @@ define([
       self.views = [
         newFolderView,
         addNewView,
+        fileSearchView,
         renameView,
         deleteView
       ];
       var mainButtons = [
         self.saveBtn,
         newFolderView.triggerView,
+        fileSearchView.triggerView,
         addNewView.triggerView,
         renameView.triggerView,
         deleteView.triggerView
