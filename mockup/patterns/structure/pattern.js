@@ -56,8 +56,9 @@ define([
         'getObjSize', 'last_comment_date', 'total_comments','getIcon'
       ],
       activeColumns: [
-        'ModificationDate',
-        'EffectiveDate',
+        'effective',
+        'expiration',
+        'Type',
         'review_state'
       ],
       availableColumns: {
