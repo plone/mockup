@@ -105,6 +105,12 @@ define([
       if (self.collection.length) {
         var container = self.$('tbody');
         self.collection.each(function(result) {
+          self.dateColumns.map(function (col) {
+            // empty column instead of displaying "None".
+            if (result.attributes.hasOwnProperty(col) && (result.attributes[col] === 'None' || !result.attributes[col] )) {
+              result.attributes[col] = '';
+            }
+          });
           var view = (new TableRowView({
             model: result,
             app: self.app,
