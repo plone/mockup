@@ -35,6 +35,18 @@ define([
         /* set default page info */
         self.setContextInfo();
       });
+      self.dateColumns = [
+        'ModificationDate',
+        'EffectiveDate',
+        'CreationDate',
+        'modified',
+        'effective',
+        'expires',
+        'ExpirationDate',
+        'start',
+        'end',
+        'last_comment_date'
+      ];
     },
     events: {
       'click .fc-breadcrumbs a': 'breadcrumbClicked',
@@ -102,7 +114,7 @@ define([
         });
       }
       self.moment = new Moment(self.$el, {
-        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
+        selector: '.' + self.dateColumns.join(',.'),
         format: self.options.app.momentFormat
       });
       self.addReordering();
