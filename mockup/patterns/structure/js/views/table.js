@@ -35,6 +35,18 @@ define([
         /* set default page info */
         self.setContextInfo();
       });
+      self.dateColumns = [
+        'ModificationDate',
+        'EffectiveDate',
+        'CreationDate',
+        'modified',
+        'effective',
+        'expires',
+        'ExpirationDate',
+        'start',
+        'end',
+        'last_comment_date'
+      ];
     },
     events: {
       'click .fc-breadcrumbs a': 'breadcrumbClicked',
@@ -93,6 +105,12 @@ define([
       if (self.collection.length) {
         var container = self.$('tbody');
         self.collection.each(function(result) {
+          self.dateColumns.map(function (col) {
+            // empty column instead of displaying "None".
+            if (result.attributes.hasOwnProperty(col) && (result.attributes[col] === 'None' || !result.attributes[col] )) {
+              result.attributes[col] = '';
+            }
+          });
           var view = (new TableRowView({
             model: result,
             app: self.app,
@@ -102,7 +120,7 @@ define([
         });
       }
       self.moment = new Moment(self.$el, {
-        selector: '.ModificationDate,.EffectiveDate,.CreationDate,.ExpirationDate',
+        selector: '.' + self.dateColumns.join(',.'),
         format: self.options.app.momentFormat
       });
       self.addReordering();
