@@ -40,19 +40,23 @@ define([
   'mockup-ui-url/views/toolbar',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup',
+  'mockup-ui-url/views/anchor',
+  'mockup-ui-url/views/dropdown',
   'mockup-patterns-filemanager-url/js/addnew',
   'mockup-patterns-filemanager-url/js/newfolder',
-  'mockup-patterns-filemanager-url/js/filesearch',
+  'mockup-patterns-filemanager-url/js/findfile',
+  'mockup-patterns-filemanager-url/js/findinfiles',
   'mockup-patterns-filemanager-url/js/delete',
   'mockup-patterns-filemanager-url/js/customize',
   'mockup-patterns-filemanager-url/js/rename',
   'mockup-patterns-filemanager-url/js/upload',
   'translate',
   'mockup-utils',
-  'text!mockup-ui-url/templates/popover.xml'
+  'text!mockup-ui-url/templates/popover.xml',
+  'text!mockup-ui-url/templates/dropdown.xml'
 ], function($, Base, _, Tree, TextEditor, AppTemplate, Toolbar,
-  ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
-  FileSearchView,
+  ButtonView, ButtonGroup, AnchorView, DropdownView,
+  AddNewView, NewFolderView, FindFileView, FindInFilesView, DeleteView,
   CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';
 
@@ -137,11 +141,21 @@ define([
         }),
         app: self
       });
-      var fileSearchView = new FileSearchView({
-        triggerView: new ButtonView({
-          id: 'filesarch',
-          title: _t('File Search'),
+      var findFileView = new FindFileView({
+        triggerView: new AnchorView({
+          id: 'findfile',
+          title: _t('Find File'),
           tooltip: _t('Find theme resource in plone'),
+          icon: 'file',
+          context: 'default'
+        }),
+        app: self
+      });
+      var findinFilesView = new FindInFilesView({
+        triggerView: new AnchorView({
+          id: 'findinfiles',
+          title: _t('Find in Files'),
+          tooltip: _t('Find text within theme resource in plone'),
           icon: 'file',
           context: 'default'
         }),
@@ -168,18 +182,29 @@ define([
         app: self
       });
 
+      var find_menu = new DropdownView({
+        title: _t('Find'),
+        items: [
+          findFileView.triggerView,
+          findinFilesView.triggerView
+        ],
+        id: 'find',
+        app: self
+      })
+
       self.views = [
         newFolderView,
         addNewView,
-        fileSearchView,
+        findFileView,
+        findinFilesView,
         renameView,
         deleteView
       ];
       var mainButtons = [
         self.saveBtn,
         newFolderView.triggerView,
-        fileSearchView.triggerView,
         addNewView.triggerView,
+        find_menu,
         renameView.triggerView,
         deleteView.triggerView
       ];
@@ -303,6 +328,7 @@ define([
           }
         }
       });
+
 
       self.$tree.bind('tree.select', function(e) {
         if (e.node === null) {

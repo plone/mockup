@@ -12,6 +12,14 @@ New features:
 
  - Make thumb scale in folder contents listing adjustable/supressable.
    Replace meaningless paper clip icon (fontello) with mime type icons from mimetype registry.
+ - Search for files and opening the file upon click
+ - Search for text within files and opening the file upon click
+ - Added Bootstrap Dropdown menu to the UI views
+ - Added Anchor (a) tag to the UI views
+
+ - make thumb size in folder contents listing adjustable/supressable
+   replace meaningless paper clip icon (fontello) with mime type icons
+   from mimetype registry
    https://github.com/plone/Products.CMFPlone/issues/1734
    [fgrcon]
 
