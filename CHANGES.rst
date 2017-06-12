@@ -32,6 +32,11 @@ New features:
  - Added Bootstrap Dropdown menu to the UI views
  - Added Anchor (a) tag to the UI views
 
+ - Search for files and opening the file upon click.
+ - Search for text within files and opening the file upon click.
+ - Added Bootstrap Dropdown menu to the UI views.
+ - Added Anchor (a) tag to the UI views.
+ 
  - make thumb size in folder contents listing adjustable/supressable
    replace meaningless paper clip icon (fontello) with mime type icons
    from mimetype registry
