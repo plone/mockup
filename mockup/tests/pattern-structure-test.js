@@ -610,7 +610,7 @@ define([
     });
 
     it('should display an icon for contents with images', function() {
-      this.app.thumbSize = 'tile';
+      this.app.thumb_scale = 'tile';
 
       var model = new Result({
           'Title': "Dummy Document",
