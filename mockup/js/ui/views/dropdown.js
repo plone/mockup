@@ -21,9 +21,9 @@ define([
 
     renderTitle: function() {
       var title = this.options.title;
-      if(this.options.title == undefined){
+      if(this.options.title === undefined){
         title = this.title;
-        if(this.title == null){
+        if(this.title === null){
           title = "Menu Option";
         }
       }
@@ -34,7 +34,7 @@ define([
       var $container;
 
       if (this.itemContainer !== null) {
-        $container = $(this.itemContainer, this.$el);
+        $container = this.$(this.itemContainer, this.$el);
         if ($container.length === 0) {
           throw 'Item Container element not found.';
         }
@@ -44,7 +44,7 @@ define([
 
       var $item = null;
       _.each(this.items, function(view) {
-        $item = $("<li></li>");
+        $item = this.$("<li></li>");
         $item.append(view.render().$el.removeClass("btn"));
         $container.append($item);
       }, this);

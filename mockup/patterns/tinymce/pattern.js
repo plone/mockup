@@ -223,11 +223,6 @@ define([
             insertHeading: _t('Insert Image')
           },
           relatedItems: {
-            baseCriteria: [{
-              i: 'portal_type',
-              o: 'plone.app.querystring.operation.list.contains',
-              v: self.options.imageTypes.concat(self.options.folderTypes)
-            }],
             selectableTypes: self.options.imageTypes
           }
         });

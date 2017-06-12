@@ -14,7 +14,6 @@ New features:
  - Search for text within files and opening the file upon click
  - Added Bootstrap Dropdown menu to the UI views
  - Added Anchor (a) tag to the UI views
-
  - make thumb size in folder contents listing adjustable/supressable
    replace meaningless paper clip icon (fontello) with mime type icons
    from mimetype registry
@@ -55,6 +54,9 @@ New features:
   [frapell]
 
 Bug fixes:
+
+- In the insert link/image modal, pass use the correct related items widget options from the ``linkModal`` attribute.
+  [thet]
 
 - Fixed path to tooltip less files.
   This gave an ugly site in develoment mode when editing the loggedin bundle css.

@@ -84,7 +84,7 @@ define([
     },
 
     createRelatedItems: function() {
-      var options = this.tinypattern.options.relatedItems;
+      var options = this.linkModal.options.relatedItems;
       options.upload = false;  // ensure that related items upload is off.
       this.relatedItems = new RelatedItems(this.getEl(), options);
     },
