@@ -10,12 +10,17 @@ Breaking changes:
 
 New features:
 
- - make thumb size in folder contents listing adjustable/supressable 
+ - Search for files and opening the file upon click
+ - Search for text within files and opening the file upon click
+ - Added Bootstrap Dropdown menu to the UI views
+ - Added Anchor (a) tag to the UI views
+
+ - make thumb size in folder contents listing adjustable/supressable
    replace meaningless paper clip icon (fontello) with mime type icons
    from mimetype registry
    https://github.com/plone/Products.CMFPlone/issues/1734
    [fgrcon]
- 
+
 - For ``pat-modal``, let the ajax modal variant acquire it's ajax url when the modal is shown instead when the pattern is initialized.
   This makes the modal respect a dynamically changed href attribute on a anchor tag, after it was initialized.
   [thet]
