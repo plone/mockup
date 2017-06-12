@@ -1,8 +1,9 @@
 define([
+  'jquery',
   'underscore',
   'mockup-ui-url/views/buttongroup',
   'text!mockup-ui-url/templates/dropdown.xml',
-], function(_, ButtonGroup, DropdownTemplate) {
+], function($, _, ButtonGroup, DropdownTemplate) {
   'use strict';
 
   var DropdownView = ButtonGroup.extend({
@@ -31,6 +32,7 @@ define([
     },
 
     renderItems: function() {
+      var self = this;
       var $container;
 
       if (this.itemContainer !== null) {
