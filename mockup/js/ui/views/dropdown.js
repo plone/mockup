@@ -1,8 +1,9 @@
 define([
+  'jquery',
   'underscore',
   'mockup-ui-url/views/buttongroup',
   'text!mockup-ui-url/templates/dropdown.xml',
-], function(_, ButtonGroup, DropdownTemplate) {
+], function($, _, ButtonGroup, DropdownTemplate) {
   'use strict';
 
   var DropdownView = ButtonGroup.extend({
@@ -31,10 +32,11 @@ define([
     },
 
     renderItems: function() {
+      var self = this;
       var $container;
 
       if (this.itemContainer !== null) {
-        $container = this.$(this.itemContainer, this.$el);
+        $container = $(this.itemContainer, this.$el);
         if ($container.length === 0) {
           throw 'Item Container element not found.';
         }
@@ -44,7 +46,7 @@ define([
 
       var $item = null;
       _.each(this.items, function(view) {
-        $item = this.$("<li></li>");
+        $item = $("<li></li>");
         $item.append(view.render().$el.removeClass("btn"));
         $container.append($item);
       }, this);
