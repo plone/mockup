@@ -30,7 +30,7 @@ define([
       this.on('render', function() {
         this.$el.attr('title', this.options.title || '');
         this.$el.attr('aria-label', this.options.title || this.options.tooltip || '');
-        _.each(this.extraClasses, function(klass){
+        _.each(this.extraClasses, function(klass) {
           this.$el.addClass(klass);
         });
       }, this);

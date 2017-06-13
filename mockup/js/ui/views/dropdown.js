@@ -22,9 +22,9 @@ define([
 
     renderTitle: function() {
       var title = this.options.title;
-      if(this.options.title === undefined){
+      if(this.options.title === undefined) {
         title = this.title;
-        if(this.title === null){
+        if(this.title === null) {
           title = "Menu Option";
         }
       }
