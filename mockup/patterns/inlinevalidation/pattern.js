@@ -52,6 +52,14 @@ define([
         return ret;
     },
 
+    queue: function (queueName, callback) {
+        if (typeof callback === 'undefined') {
+          callback = queueName;
+          queueName = 'fx';  // 'fx' autoexecutes by default
+        }
+        $(window).queue(queueName, callback);
+    },
+
     validate_archetypes_field: function (input) {
         var $input = $(input),
             $field = $input.closest('.field'),
@@ -70,9 +78,19 @@ define([
         var traditional;
         var params = $.param({uid: uid, fname: fname, value: value}, traditional = true);
         if ($field && uid && fname) {
-            $.post($('base').attr('href') + '/at_validate_field', params, function (data) {
-                this.render_error($field, data.errmsg);
-            });
+            this.queue($.proxy(function(next) {
+                $.ajax({
+                    type: 'POST',
+                    url: $('base').attr('href') + '/at_validate_field?' + params,
+                    iframe: false,
+                    success: $.proxy(function (data) {
+                      this.render_error($field, data.errmsg);
+                      next();
+                    }, this),
+                    error: function () { next(); },
+                    dataType: 'json'
+                });
+            }, this));
         }
     },
 
@@ -82,15 +100,19 @@ define([
             $form = $field.closest('form'),
             fname = $field.attr('data-fieldname');
 
-        $form.ajaxSubmit({
-            url: this.append_url_path($form.attr('action'), '@@formlib_validate_field'),
-            data: {fname: fname},
-            iframe: false,
-            success: $.proxy(function (data) {
-                this.render_error($field, data.errmsg);
-            }, this),
-            dataType: 'json'
-        });
+        this.queue($.proxy(function(next) {
+            $form.ajaxSubmit({
+                url: this.append_url_path($form.attr('action'), '@@formlib_validate_field'),
+                data: {fname: fname},
+                iframe: false,
+                success: $.proxy(function (data) {
+                    this.render_error($field, data.errmsg);
+                    next();
+                }, this),
+                error: function () { next(); },
+                dataType: 'json'
+            });
+        }, this));
     },
 
     validate_z3cform_field: function (input) {
@@ -101,15 +123,19 @@ define([
             fname = $field.attr('data-fieldname');
 
         if (fname) {
-            $form.ajaxSubmit({
-                url: this.append_url_path($form.attr('action'), '@@z3cform_validate_field'),
-                data: {fname: fname, fset: fset},
-                iframe: false,
-                success: $.proxy(function (data) {
-                    this.render_error($field, data.errmsg);
-                }, this),
-                dataType: 'json'
-            });
+          this.queue($.proxy(function(next) {
+              $form.ajaxSubmit({
+                  url: this.append_url_path($form.attr('action'), '@@z3cform_validate_field'),
+                  data: {fname: fname, fset: fset},
+                  iframe: false,
+                  success: $.proxy(function (data) {
+                      this.render_error($field, data.errmsg);
+                      next();
+                  }, this),
+                  error: function () { next(); },
+                  dataType: 'json'
+              });
+          }, this));
         }
     },
 
@@ -120,7 +146,7 @@ define([
           'input[type="password"], ' +
           'input[type="checkbox"], ' +
           'select, ' +
-          'textarea').on('blur', 
+          'textarea').on('blur',
 
           $.proxy(function (ev) {
             if (this.options.type === 'archetypes') {
