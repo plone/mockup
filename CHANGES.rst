@@ -10,9 +10,8 @@ Breaking changes:
 
 New features:
 
- - make thumb size in folder contents listing adjustable/supressable
-   replace meaningless paper clip icon (fontello) with mime type icons
-   from mimetype registry
+ - Make thumb scale in folder contents listing adjustable/supressable.
+   Replace meaningless paper clip icon (fontello) with mime type icons from mimetype registry.
    https://github.com/plone/Products.CMFPlone/issues/1734
    [fgrcon]
 

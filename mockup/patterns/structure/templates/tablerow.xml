@@ -27,7 +27,7 @@
     </p>
     <% } %>
   </div>
-  <% if(attributes["getIcon"] && ( thumb_scale != 'none') ){ %>
+  <% if(attributes["getIcon"] && thumb_scale) { %>
     <img class="image-<%- thumb_scale %> pull-right" src="<%- getURL %>/@@images/image/<%- thumb_scale %>">
   <% } %>
 </td>
