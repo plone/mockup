@@ -628,7 +628,7 @@ define([
       var el = row.render().el;
 
       expect($('.title img', el).length).to.equal(1);
-      expect($('.title img', el).attr('class')).to.have.string('image-tile');
+      expect($('.title img', el).attr('class')).to.have.string('thumb-tile');
     });
 
     it('should display no icon for contents without images', function() {
