@@ -50,6 +50,9 @@ New features:
 
 Bug fixes:
 
+- Upload pattern: Fix missing plone.protect authenticator token which led to broken uploads.
+  [thet]
+
 - In the insert link/image modal, pass use the correct related items widget options from the ``linkModal`` attribute.
   [thet]
 
