@@ -65,7 +65,7 @@ define([
         $modal.data('patternPloneModal').on('hide', function(e) {
           var modal = $modal.data('patternPloneModal');
           if (modal) {
-            modal._suppressHide = self._handleUnload.apply(self, e);
+            modal._suppressHide = self._handleUnload.call(self, e);
           }
         });
       } else {
