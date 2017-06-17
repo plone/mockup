@@ -50,6 +50,11 @@ New features:
 
 Bug fixes:
 
+- fixed css-classes for thumb scales ...
+  https://github.com/plone/Products.CMFPlone/issues/2077
+  [fgrcon]
+
+
 - modal: Fixed duplicate window.confirm on form unload.
   Fixes `issue 777 <https://github.com/plone/mockup/issues/777>`_.
   [seanupton]
