@@ -53,6 +53,19 @@ Bug fixes:
 - Upload pattern: Fix missing plone.protect authenticator token which led to broken uploads.
   [thet]
 
+- fixed css-classes for thumb scales ...
+  https://github.com/plone/Products.CMFPlone/issues/2077
+  [fgrcon]
+
+- modal: Fixed duplicate window.confirm on form unload.
+  Fixes `issue 777 <https://github.com/plone/mockup/issues/777>`_.
+  [seanupton]
+
+- formunloadalert: Fixed incorrect use of Function.prototype.apply,
+  when call() was seemingly intended; fixes case where modal close leads to
+  exception.  Fixes `issue 776 <https://github.com/plone/mockup/issues/776>`_.
+  [seanupton]
+
 - In the insert link/image modal, pass use the correct related items widget options from the ``linkModal`` attribute.
   [thet]
 
