@@ -48,9 +48,9 @@ define([
   'dropzone',
   'text!mockup-patterns-upload-url/templates/upload.xml',
   'text!mockup-patterns-upload-url/templates/preview.xml',
+  'mockup-utils',
   'translate'
-], function($, _, Base, RelatedItems, Dropzone,
-            UploadTemplate, PreviewTemplate, _t) {
+], function($, _, Base, RelatedItems, Dropzone, UploadTemplate, PreviewTemplate, utils, _t) {
   'use strict';
 
   /* we do not want this plugin to auto discover */
@@ -341,6 +341,10 @@ define([
       var options = $.extend({}, self.options);
       options.url = self.getUrl();
 
+      options.headers = {
+        'X-CSRF-TOKEN': utils.getAuthenticator()
+      };
+
       // XXX force to only upload one to the server at a time,
       // right now we don't support multiple for backends
       options.uploadMultiple = false;
@@ -442,7 +446,8 @@ define([
       window.tus.upload(file, {
         endpoint: self.dropzone.options.url,
         headers: {
-          'FILENAME': file.name
+          'FILENAME': file.name,
+          'X-CSRF-TOKEN': utils.getAuthenticator()
         },
         chunkSize: chunkSize
       }).fail(function() {
