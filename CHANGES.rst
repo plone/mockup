@@ -50,10 +50,12 @@ New features:
 
 Bug fixes:
 
+- Upload pattern: Fix missing plone.protect authenticator token which led to broken uploads.
+  [thet]
+
 - fixed css-classes for thumb scales ...
   https://github.com/plone/Products.CMFPlone/issues/2077
   [fgrcon]
-
 
 - modal: Fixed duplicate window.confirm on form unload.
   Fixes `issue 777 <https://github.com/plone/mockup/issues/777>`_.
