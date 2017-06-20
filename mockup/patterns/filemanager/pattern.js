@@ -95,13 +95,13 @@ define([
 
       self.options.treeConfig = $.extend(true, {}, self.treeConfig, {
         dataUrl: self.options.actionUrl + '?action=dataTree',
+        dragAndDrop: true,
         onCreateLi: function(node, li) {
           var imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
           var themeTypes = ['css', 'html', 'htm', 'txt', 'xml', 'js', 'cfg', 'less'];
-
           $('span', li).addClass('glyphicon');
           if (node.folder) {
-            $('span', li).addClass('glyphicon-folder-close');
+            $('span', li).addClass('glyphicon-folder-close').addClass("droptarget");
           } else if ($.inArray(node.fileType, imageTypes) >= 0) {
             $('span', li).addClass('glyphicon-picture');
           } else if ($.inArray(node.fileType, themeTypes) >= 0) {
@@ -337,6 +337,23 @@ define([
           self.toggleButtons(true);
           self.handleClick(e);
         }
+      });
+
+      self.$tree.bind('tree.move', function(event) {
+        self.doAction('move', {
+          data: {
+            source: event.move_info.moved_node.path,
+            destination: event.move_info.target_node.path
+          },
+          dataType: 'json',
+          success: function(data) {
+            console.log(data);
+            var jdata = JSON.parse(data);
+            if(jdata.error != ''){
+              alert(jdata.error);
+            }
+          }
+        });
       });
 
       self.$tree.bind('tree.open', function(e) {
