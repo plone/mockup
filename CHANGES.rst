@@ -123,6 +123,9 @@ Bug fixes:
 - Fix issue where formunloadalert pattern raised initialization error for modals.
   [datakurre]
 
+- Update jqtree to version 1.4.1
+  [datakurre]
+
 
 2.4.0 (2017-02-20)
 ------------------
