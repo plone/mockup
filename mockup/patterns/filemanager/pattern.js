@@ -189,7 +189,8 @@ define([
           findinFilesView.triggerView
         ],
         id: 'find',
-        app: self
+        app: self,
+        disable: function() {}
       })
 
       self.views = [
