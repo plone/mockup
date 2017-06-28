@@ -179,7 +179,7 @@ define([
         app: self
       });
       var findinFilesView = new FindInFilesView({
-        triggerView: self.btns["findfile"],
+        triggerView: self.btns["findtextinfile"],
         app: self
       });
       var renameView = new RenameView({
