@@ -32,21 +32,7 @@ New features:
   - Add Anchor (a) tag to the UI views.
   - Upgrade JQTree to 1.4.1
   - Enable Drag and Drop inside of the theme editor file tree.
- - Search for files and text within files and opening the file upon click.
-  [b4oshany]
- - Add contextual menu to theme files in the file tree.
-  [b4oshany]
- - Search for files and text within files and opening the file upon click.
-  [b4oshany]
- - Added Bootstrap Dropdown menu to the UI views.
-  [b4oshany]
- - Enable Drag and Drop inside of the theme editor file tree.
-  [b4oshany]
- - Added Anchor (a) tag to the UI views.
-  [b4oshany]
- - Upgrade JQTree to 1.4.1
-  [b4oshany]
- - Enable Drag and Drop inside of the theme editor file tree.
+  - Add contextual menu to theme files in the file tree.
   [b4oshany]
 
  - Make thumb scale in folder contents listing adjustable/supressable.

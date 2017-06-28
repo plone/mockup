@@ -40,6 +40,7 @@ define([
       registry.scan(this.$el);
       this.clock.tick(1000);
       expect(this.$el.find('.tree ul').length).to.be.equal(2);
+      expect($('#contextual-menu li').length).to.be.equal(4);
     });
   });
 
