@@ -17,3 +17,9 @@
             </div>
         </nav>
 </div>
+<div id="contextual-menu" class="dropdown-menu">
+    <li data-item="newfile"><a>New File</a></li>
+    <li data-item="newfolder"><a>New Folder</a></li>
+    <li data-item="rename"><a>Rename</a></li>
+    <li data-item="delete"><a>Delete</a></li>
+</div>

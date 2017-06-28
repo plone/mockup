@@ -34,6 +34,7 @@ define([
   'jquery',
   'pat-base',
   'underscore',
+  'jqtree-contextmenu',
   'mockup-patterns-tree',
   'mockup-patterns-texteditor',
   'text!mockup-patterns-filemanager-url/templates/app.xml',
@@ -54,7 +55,7 @@ define([
   'mockup-utils',
   'text!mockup-ui-url/templates/popover.xml',
   'text!mockup-ui-url/templates/dropdown.xml'
-], function($, Base, _, Tree, TextEditor, AppTemplate, Toolbar,
+], function($, Base, _, ContextMenu, Tree, TextEditor, AppTemplate, Toolbar,
   ButtonView, ButtonGroup, AnchorView, DropdownView,
   AddNewView, NewFolderView, FindFileView, FindInFilesView, DeleteView,
   CustomizeView, RenameView, UploadView, _t, utils) {
@@ -344,6 +345,19 @@ define([
             popover.hide();
           }
         }
+      });
+
+      // bind 'tree.contextmenu' event
+      self.$tree.jqTreeContextMenu({
+          menu: '#contextual-menu',
+          onContextMenuItem: function(e, node, $el) {
+            var action = $el.data("item");
+            try {
+              self.btns[action].el.click();
+            } catch($err) {
+              console.log("Command does not exist: " + action);
+            }
+          }
       });
 
       self.$tree.bind('tree.select', function(e) {
