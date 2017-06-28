@@ -48,7 +48,10 @@ define([
       var $item = $(file_item);
       $('a', $item).click(function(e) {
         e.preventDefault();
-        self.findinfiles($(this).attr("data-target"));
+        self.findinfiles(
+          $(this).attr("data-target"),
+          parseInt($(this).attr("target-line"))
+        );
       });
       self.$results.append($item);
     },
@@ -115,7 +118,7 @@ define([
       });
       return self;
     },
-    findinfiles: function(resource) {
+    findinfiles: function(resource, line) {
       var self = this;
       self.app.doAction('getFile', {
         data: {
@@ -124,7 +127,7 @@ define([
         dataType: 'json',
         success: function(data) {
           self.app.fileData[resource] = data;
-          self.app.openEditor(resource);
+          self.app.openEditor(resource, {goToLine: line});
         }
       });
     }

@@ -96,6 +96,7 @@ define([
       self.options.treeConfig = $.extend(true, {}, self.treeConfig, {
         dataUrl: self.options.actionUrl + '?action=dataTree',
         dragAndDrop: true,
+        useContextMenu: true,
         onCreateLi: function(node, li) {
           var imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
           var themeTypes = ['css', 'html', 'htm', 'txt', 'xml', 'js', 'cfg', 'less'];
@@ -120,65 +121,73 @@ define([
         icon: 'floppy-disk',
         context: 'primary'
       });
-
-      var newFolderView = new NewFolderView({
-        triggerView: new ButtonView({
+      self.btns = {
+        "newfolder": new ButtonView({
           id: 'newfolder',
           title: _t('New folder'),
           tooltip: _t('Add new folder to current directory'),
           icon: 'folder-open',
           context: 'default'
         }),
-        app: self
-      });
-      var addNewView = new AddNewView({
-        triggerView: new ButtonView({
+        "newfile": new ButtonView({
           id: 'addnew',
           title: _t('Add new file'),
           tooltip: _t('Add new file to current folder'),
           icon: 'file',
           context: 'default'
         }),
-        app: self
-      });
-      var findFileView = new FindFileView({
-        triggerView: new AnchorView({
+        "findfile": new AnchorView({
           id: 'findfile',
           title: _t('Find File'),
           tooltip: _t('Find theme resource in plone'),
           icon: 'file',
           context: 'default'
         }),
-        app: self
-      });
-      var findinFilesView = new FindInFilesView({
-        triggerView: new AnchorView({
+        "findtextinfile": new AnchorView({
           id: 'findinfiles',
           title: _t('Find in Files'),
           tooltip: _t('Find text within theme resource in plone'),
           icon: 'file',
           context: 'default'
         }),
-        app: self
-      });
-      var renameView = new RenameView({
-        triggerView: new ButtonView({
+        "rename": new ButtonView({
           id: 'rename',
           title: _t('Rename'),
           tooltip: _t('Rename currently selected resource'),
           icon: 'random',
           context: 'default'
         }),
-        app: self
-      });
-      var deleteView = new DeleteView({
-        triggerView: new ButtonView({
+        "delete": new ButtonView({
           id: 'delete',
           title: _t('Delete'),
           tooltip: _t('Delete currently selected resource'),
           icon: 'trash',
           context: 'danger'
-        }),
+        })
+      };
+
+      var newFolderView = new NewFolderView({
+        triggerView: self.btns["newfolder"],
+        app: self
+      });
+      var addNewView = new AddNewView({
+        triggerView: self.btns["newfile"],
+        app: self
+      });
+      var findFileView = new FindFileView({
+        triggerView: self.btns["findfile"],
+        app: self
+      });
+      var findinFilesView = new FindInFilesView({
+        triggerView: self.btns["findfile"],
+        app: self
+      });
+      var renameView = new RenameView({
+        triggerView: self.btns["rename"],
+        app: self
+      });
+      var deleteView = new DeleteView({
+        triggerView: self.btns["delete"],
         app: self
       });
 
@@ -582,11 +591,14 @@ define([
         failure: options.failure || function() {}
       });
     },
-    openEditor: function(path) {
+    openEditor: function(path, options) {
       var self = this;
 
       if (path !== undefined) {
         self.updateTabs(path);
+      }
+      if (options === undefined) {
+        options = {};
       }
 
       // first we need to save the current editor content
@@ -624,6 +636,10 @@ define([
       }
 
       self.resizeEditor();
+      if(options.goToLine != undefined){
+        self.ace.editor.gotoLine(options.goToLine, 0, true);
+      }
+
       self.$el.trigger('fileChange');
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {

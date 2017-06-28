@@ -9,6 +9,7 @@ define([
   var DropdownView = ButtonGroup.extend({
     idPrefix: 'btngroup-dropdown-',
     template: DropdownTemplate,
+    className: 'btn-group-dropdown',
     itemContainer: "ul.dropdown-content",
     title: null,
 

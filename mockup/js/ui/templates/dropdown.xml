@@ -1,5 +1,6 @@
 
-<a style="padding-top: 8px" href="#" class="btn btn-default dropdown-toggle" type="button" id="dropdown-menu-" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+<a href="#" class="btn btn-default dropdown-toggle" type="button" id="dropdown-menu-" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <span class="glyphicon glyphicon-search"></span>
   <span class="dropdown-title">
 
   </span>
