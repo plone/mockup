@@ -189,7 +189,8 @@ define([
           findinFilesView.triggerView
         ],
         id: 'find',
-        app: self
+        app: self,
+        disable: function() {}
       })
 
       self.views = [
@@ -328,7 +329,6 @@ define([
           }
         }
       });
-
 
       self.$tree.bind('tree.select', function(e) {
         if (e.node === null) {
