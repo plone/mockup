@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Align bower.json versions fixes to Products.CMFPlone 5.0.x.
+  [thet]
 
 Bug Fixes:
 
