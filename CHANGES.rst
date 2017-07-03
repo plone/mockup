@@ -4,10 +4,6 @@ Changelog
 2.5 (Unreleased)
 ----------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
  - Make thumb scale in folder contents listing adjustable/supressable.
