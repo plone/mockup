@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.5.1 (Unreleased)
+------------------
+
+New features:
+
+- * Add item here *
+
+Incompatibile changes:
+
+- * Add item here *
+
+Bug fixes:
+
+- * Add item here *
+
+
 2.5.0 (2017-07-03)
 ------------------
 
