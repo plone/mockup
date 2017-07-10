@@ -171,6 +171,13 @@ define([
           tooltip: _t('Delete currently selected resource'),
           icon: 'trash',
           context: 'danger'
+        }),
+        "upload": new ButtonView({
+            id: 'upload',
+            title: _t('Upload'),
+            tooltip: _t('Upload file to current directory'),
+            icon: 'upload',
+            context: 'default'
         })
       };
 
@@ -208,7 +215,7 @@ define([
         id: 'find',
         app: self,
         disable: function() {}
-      })
+      });
 
       self.views = [
         newFolderView,
@@ -229,13 +236,7 @@ define([
 
       if (self.options.uploadUrl && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
         var uploadView = new UploadView({
-          triggerView: new ButtonView({
-            id: 'upload',
-            title: _t('Upload'),
-            tooltip: _t('Upload file to current directory'),
-            icon: 'upload',
-            context: 'default'
-          }),
+          triggerView: self.btns["upload"],
           app: self,
           callback: function(data) {
             var path = self.uploadFolder + '/' + data.name;
