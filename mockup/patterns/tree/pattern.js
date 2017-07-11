@@ -79,11 +79,14 @@ define([
         }
       }
 
-      if (self.options.dragAndDrop && self.options.onCanMoveTo === undefined) {
+      if (self.options.onCanMoveTo === undefined) {
         self.options.onCanMoveTo = function(moved, target, position) {
           /* if not using folder option, just allow, otherwise, only allow if folder */
-          return target.folder === undefined || target.folder === true;
-        };
+          if (position === "inside") {
+            return target.folder === undefined || target.folder === true;
+          }
+          return true;
+        }
       }
 
       if (self.options.data && typeof(self.options.data) === 'string') {

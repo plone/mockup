@@ -97,6 +97,13 @@ define([
         dataUrl: self.options.actionUrl + '?action=dataTree',
         dragAndDrop: true,
         useContextMenu: true,
+        onCanMoveTo: function(moved, target, position) {
+          /* if not using folder option, just allow, otherwise, only allow if folder */
+          if (position === "inside") {
+            return target.folder === undefined || target.folder === true;
+          }
+          return true;
+        },
         onCreateLi: function(node, li) {
           var imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
           var themeTypes = ['css', 'html', 'htm', 'txt', 'xml', 'js', 'cfg', 'less'];
@@ -349,10 +356,17 @@ define([
       });
 
       self.$tree.bind('tree.move', function(event) {
+        
+        var srcpath = event.move_info.moved_node.path;
+        var newpath = event.move_info.target_node.path;
+        if (event.move_info.position !== "inside" ){
+          newpath = newpath.substring(newpath.indexOf('/'), newpath.lastIndexOf('/'));
+        }
+        
         self.doAction('move', {
           data: {
-            source: event.move_info.moved_node.path,
-            destination: event.move_info.target_node.path
+            source: srcpath,
+            destination: newpath
           },
           dataType: 'json',
           success: function(data) {
