@@ -6,7 +6,8 @@ Changelog
 
 New features:
 
-- * Add item here *
+- Added docs for the structureupdater pattern.
+  [thet]
 
 Incompatibile changes:
 

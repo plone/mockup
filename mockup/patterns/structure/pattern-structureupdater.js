@@ -27,8 +27,12 @@ define([
     init: function() {
 
       $('body').on('context-info-loaded', function (e, data) {
-        $(this.options.titleSelector, this.$el).html(data.object && data.object.Title || '&nbsp;');
-        $(this.options.descriptionSelector, this.$el).html(data.object && data.object.Description || '&nbsp;');
+        if (this.options.titleSelector) {
+            $(this.options.titleSelector, this.$el).html(data.object && data.object.Title || '&nbsp;');
+        }
+        if (this.options.descriptionSelector) {
+            $(this.options.descriptionSelector, this.$el).html(data.object && data.object.Description || '&nbsp;');
+        }
       }.bind(this));
 
     }
