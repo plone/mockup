@@ -40,17 +40,23 @@ define([
   'mockup-ui-url/views/toolbar',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup',
+  'mockup-ui-url/views/anchor',
+  'mockup-ui-url/views/dropdown',
   'mockup-patterns-filemanager-url/js/addnew',
   'mockup-patterns-filemanager-url/js/newfolder',
+  'mockup-patterns-filemanager-url/js/findfile',
+  'mockup-patterns-filemanager-url/js/findinfiles',
   'mockup-patterns-filemanager-url/js/delete',
   'mockup-patterns-filemanager-url/js/customize',
   'mockup-patterns-filemanager-url/js/rename',
   'mockup-patterns-filemanager-url/js/upload',
   'translate',
   'mockup-utils',
-  'text!mockup-ui-url/templates/popover.xml'
+  'text!mockup-ui-url/templates/popover.xml',
+  'text!mockup-ui-url/templates/dropdown.xml'
 ], function($, Base, _, Tree, TextEditor, AppTemplate, Toolbar,
-  ButtonView, ButtonGroup, AddNewView, NewFolderView, DeleteView,
+  ButtonView, ButtonGroup, AnchorView, DropdownView,
+  AddNewView, NewFolderView, FindFileView, FindInFilesView, DeleteView,
   CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';
 
@@ -89,13 +95,21 @@ define([
 
       self.options.treeConfig = $.extend(true, {}, self.treeConfig, {
         dataUrl: self.options.actionUrl + '?action=dataTree',
+        dragAndDrop: true,
+        useContextMenu: true,
+        onCanMoveTo: function(moved, target, position) {
+          /* if not using folder option, just allow, otherwise, only allow if folder */
+          if (position === "inside") {
+            return target.folder === undefined || target.folder === true;
+          }
+          return true;
+        },
         onCreateLi: function(node, li) {
           var imageTypes = ['png', 'jpg', 'jpeg', 'gif', 'ico'];
           var themeTypes = ['css', 'html', 'htm', 'txt', 'xml', 'js', 'cfg', 'less'];
-
           $('span', li).addClass('glyphicon');
           if (node.folder) {
-            $('span', li).addClass('glyphicon-folder-close');
+            $('span', li).addClass('glyphicon-folder-close').addClass("droptarget");
           } else if ($.inArray(node.fileType, imageTypes) >= 0) {
             $('span', li).addClass('glyphicon-picture');
           } else if ($.inArray(node.fileType, themeTypes) >= 0) {
@@ -114,51 +128,92 @@ define([
         icon: 'floppy-disk',
         context: 'primary'
       });
-
-      var newFolderView = new NewFolderView({
-        triggerView: new ButtonView({
+      self.btns = {
+        "newfolder": new ButtonView({
           id: 'newfolder',
           title: _t('New folder'),
           tooltip: _t('Add new folder to current directory'),
           icon: 'folder-open',
           context: 'default'
         }),
-        app: self
-      });
-      var addNewView = new AddNewView({
-        triggerView: new ButtonView({
+        "newfile": new ButtonView({
           id: 'addnew',
           title: _t('Add new file'),
           tooltip: _t('Add new file to current folder'),
           icon: 'file',
           context: 'default'
         }),
-        app: self
-      });
-      var renameView = new RenameView({
-        triggerView: new ButtonView({
+        "findfile": new AnchorView({
+          id: 'findfile',
+          title: _t('Find File'),
+          tooltip: _t('Find theme resource in plone'),
+          icon: 'file',
+          context: 'default'
+        }),
+        "findtextinfile": new AnchorView({
+          id: 'findinfiles',
+          title: _t('Find in Files'),
+          tooltip: _t('Find text within theme resource in plone'),
+          icon: 'file',
+          context: 'default'
+        }),
+        "rename": new ButtonView({
           id: 'rename',
           title: _t('Rename'),
           tooltip: _t('Rename currently selected resource'),
           icon: 'random',
           context: 'default'
         }),
-        app: self
-      });
-      var deleteView = new DeleteView({
-        triggerView: new ButtonView({
+        "delete": new ButtonView({
           id: 'delete',
           title: _t('Delete'),
           tooltip: _t('Delete currently selected resource'),
           icon: 'trash',
           context: 'danger'
-        }),
+        })
+      };
+
+      var newFolderView = new NewFolderView({
+        triggerView: self.btns["newfolder"],
         app: self
       });
+      var addNewView = new AddNewView({
+        triggerView: self.btns["newfile"],
+        app: self
+      });
+      var findFileView = new FindFileView({
+        triggerView: self.btns["findfile"],
+        app: self
+      });
+      var findinFilesView = new FindInFilesView({
+        triggerView: self.btns["findtextinfile"],
+        app: self
+      });
+      var renameView = new RenameView({
+        triggerView: self.btns["rename"],
+        app: self
+      });
+      var deleteView = new DeleteView({
+        triggerView: self.btns["delete"],
+        app: self
+      });
+
+      var find_menu = new DropdownView({
+        title: _t('Find'),
+        items: [
+          findFileView.triggerView,
+          findinFilesView.triggerView
+        ],
+        id: 'find',
+        app: self,
+        disable: function() {}
+      })
 
       self.views = [
         newFolderView,
         addNewView,
+        findFileView,
+        findinFilesView,
         renameView,
         deleteView
       ];
@@ -166,6 +221,7 @@ define([
         self.saveBtn,
         newFolderView.triggerView,
         addNewView.triggerView,
+        find_menu,
         renameView.triggerView,
         deleteView.triggerView
       ];
@@ -297,6 +353,30 @@ define([
           self.toggleButtons(true);
           self.handleClick(e);
         }
+      });
+
+      self.$tree.bind('tree.move', function(event) {
+        
+        var srcpath = event.move_info.moved_node.path;
+        var newpath = event.move_info.target_node.path;
+        if (event.move_info.position !== "inside" ){
+          newpath = newpath.substring(newpath.indexOf('/'), newpath.lastIndexOf('/'));
+        }
+        
+        self.doAction('move', {
+          data: {
+            source: srcpath,
+            destination: newpath
+          },
+          dataType: 'json',
+          success: function(data) {
+            console.log(data);
+            var jdata = JSON.parse(data);
+            if(jdata.error != ''){
+              alert(jdata.error);
+            }
+          }
+        });
       });
 
       self.$tree.bind('tree.open', function(e) {
@@ -525,11 +605,14 @@ define([
         failure: options.failure || function() {}
       });
     },
-    openEditor: function(path) {
+    openEditor: function(path, options) {
       var self = this;
 
       if (path !== undefined) {
         self.updateTabs(path);
+      }
+      if (options === undefined) {
+        options = {};
       }
 
       // first we need to save the current editor content
@@ -567,6 +650,10 @@ define([
       }
 
       self.resizeEditor();
+      if(options.goToLine != undefined){
+        self.ace.editor.gotoLine(options.goToLine, 0, true);
+      }
+
       self.$el.trigger('fileChange');
       self.ace.editor.on('change', function() {
         if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {

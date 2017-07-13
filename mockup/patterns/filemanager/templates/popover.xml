@@ -1,0 +1,12 @@
+<div class="arrow"></div>
+<div class="popover-label">
+<div style="position: relative;" class="popover-title">
+</div>
+<a style="position: absolute; top: 5px; right: 3px; font-size: 16px; color: #999;"
+   href="#" class="popover-close">
+  <span class="glyphicon glyphicon-remove"></span>
+</a>
+</div>
+<div class="items popover-content">
+</div>
+
