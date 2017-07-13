@@ -1,8 +1,9 @@
 define([
+  'jquery',
   'underscore',
   'mockup-ui-url/views/popover',
   'text!mockup-patterns-filemanager-url/templates/popover.xml',
-], function(_, PopoverView, PopoverTemplate) {
+], function($, _, PopoverView, PopoverTemplate) {
   'use strict';
 
   var FileManagerPopover = PopoverView.extend({
