@@ -11,12 +11,13 @@ define([
     eventPrefix: 'button',
     context: 'default',
     idPrefix: 'alink-',
+    shortcut: '',
     attributes: {
       'href': '#'
     },
     extraClasses: [],
     tooltip: null,
-    template: '<% if (icon) { %><span class="glyphicon glyphicon-<%= icon %>"></span><% } %> <%= title %>',
+    template: '<% if (icon) { %><span class="glyphicon glyphicon-<%= icon %>"></span><% } %> <%= title %> <span class="shortcut"><%= shortcut %></span>',
     events: {
       'click': 'handleClick'
     },
@@ -28,7 +29,7 @@ define([
       BaseView.prototype.initialize.apply(this, [options]);
 
       this.on('render', function() {
-        this.$el.attr('title', this.options.title || '');
+        this.$el.attr('title', this.options.tooltip || this.options.title || '');
         this.$el.attr('aria-label', this.options.title || this.options.tooltip || '');
         _.each(this.extraClasses, function(klass) {
           this.$el.addClass(klass);
@@ -42,7 +43,7 @@ define([
       }
     },
     serializedModel: function() {
-      return _.extend({'icon': '', 'title': ''}, this.options);
+      return _.extend({'icon': '', 'title': '', 'shortcut': ''}, this.options);
     },
     disable: function() {
       this.$el.prop('disabled', true);
