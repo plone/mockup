@@ -24,8 +24,8 @@
     "select2": "3.5.4",
     "selectivizr": "1.0.2",
     "tinymce-builded": "4.5.6",
-    "js-shortcuts": "^1.0.1"
-    "cs-jqtree-contextmenu": "^0.1.0",
+    "js-shortcuts": "^1.0.1",
+    "cs-jqtree-contextmenu": "^0.1.0"
   },
   "devDependencies": {
     "expect": "0.3.1",
