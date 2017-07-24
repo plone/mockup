@@ -46,7 +46,7 @@
       'jquery.tools.dateinput': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.dateinput',
       'jquery.tools.overlay': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.overlay',
       'jquery.tmpl': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tmpl',
-      'js-shortcuts': 'bower_components/js-shortcuts/js-shortcuts.js',
+      'js-shortcuts': 'bower_components/js-shortcuts/js-shortcuts',
       'translate': 'js/i18n-wrapper',
       'marked': 'bower_components/marked/lib/marked',
       'mockup-bundles-docs': 'js/bundles/docs',
