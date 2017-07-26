@@ -34,6 +34,7 @@ define([
   'jquery',
   'pat-base',
   'underscore',
+  'jqtree-contextmenu',
   'mockup-patterns-tree',
   'mockup-patterns-texteditor',
   'text!mockup-patterns-filemanager-url/templates/app.xml',
@@ -52,12 +53,13 @@ define([
   'mockup-patterns-filemanager-url/js/upload',
   'translate',
   'mockup-utils',
+  'js-shortcuts',
   'text!mockup-ui-url/templates/popover.xml',
   'text!mockup-ui-url/templates/dropdown.xml'
-], function($, Base, _, Tree, TextEditor, AppTemplate, Toolbar,
+], function($, Base, _, ContextMenu, Tree, TextEditor, AppTemplate, Toolbar,
   ButtonView, ButtonGroup, AnchorView, DropdownView,
   AddNewView, NewFolderView, FindFileView, FindInFilesView, DeleteView,
-  CustomizeView, RenameView, UploadView, _t, utils) {
+  CustomizeView, RenameView, UploadView, _t, utils, jsShortcuts) {
   'use strict';
 
   var FileManager = Base.extend({
@@ -126,51 +128,56 @@ define([
         id: 'save',
         title: _t('Save'),
         icon: 'floppy-disk',
-        context: 'primary'
+        context: 'primary',
+        shortcut: 'Ctrl-S'
       });
       self.btns = {
-        "newfolder": new ButtonView({
+        "newfolder": new AnchorView({
           id: 'newfolder',
           title: _t('New folder'),
           tooltip: _t('Add new folder to current directory'),
           icon: 'folder-open',
-          context: 'default'
+          context: 'default',
+          shortcut: 'Alt-Shift-N'
         }),
-        "newfile": new ButtonView({
+        "newfile": new AnchorView({
           id: 'addnew',
-          title: _t('Add new file'),
+          title: _t('New file'),
           tooltip: _t('Add new file to current folder'),
           icon: 'file',
-          context: 'default'
+          context: 'default',
+          shortcut: 'Alt-N'
         }),
         "findfile": new AnchorView({
           id: 'findfile',
           title: _t('Find File'),
           tooltip: _t('Find theme resource in plone'),
-          icon: 'file',
-          context: 'default'
+          icon: 'search',
+          context: 'default',
+          shortcut: 'Ctrl-F'
         }),
         "findtextinfile": new AnchorView({
           id: 'findinfiles',
           title: _t('Find in Files'),
           tooltip: _t('Find text within theme resource in plone'),
-          icon: 'file',
-          context: 'default'
+          icon: 'search',
+          context: 'default',
+          shortcut: 'Ctrl-E'
         }),
-        "rename": new ButtonView({
+        "rename": new AnchorView({
           id: 'rename',
           title: _t('Rename'),
           tooltip: _t('Rename currently selected resource'),
           icon: 'random',
           context: 'default'
         }),
-        "delete": new ButtonView({
+        "delete": new AnchorView({
           id: 'delete',
           title: _t('Delete'),
           tooltip: _t('Delete currently selected resource'),
           icon: 'trash',
           context: 'danger'
-        })
+        }),
       };
 
       var newFolderView = new NewFolderView({
@@ -198,43 +205,73 @@ define([
         app: self
       });
 
+      var file_menu = new DropdownView({
+        title: _t('File'),
+        items: [
+          addNewView.triggerView,
+          newFolderView.triggerView
+        ],
+        id: 'file_menu',
+        app: self,
+        icon: 'file',
+        disable: function() {}
+      });
+
+      var edit_menu = new DropdownView({
+        title: _t('Edit'),
+        items: [
+          renameView.triggerView,
+          deleteView.triggerView
+        ],
+        id: 'edit_menu',
+        app: self,
+        icon: 'file',
+        disable: function() {}
+      });
+
       var find_menu = new DropdownView({
         title: _t('Find'),
         items: [
           findFileView.triggerView,
           findinFilesView.triggerView
         ],
-        id: 'find',
+        id: 'find_menu',
+        icon: 'search',
         app: self,
         disable: function() {}
-      })
+      });
 
-      self.views = [
-        newFolderView,
-        addNewView,
-        findFileView,
-        findinFilesView,
-        renameView,
-        deleteView
-      ];
+      var views = {
+        "file_menu": [
+          newFolderView,
+          addNewView
+        ],
+        "edit_menu": [
+          renameView,
+          deleteView,
+        ],
+        "find_menu": [
+          findFileView,
+          findinFilesView
+        ],
+      };
       var mainButtons = [
         self.saveBtn,
-        newFolderView.triggerView,
-        addNewView.triggerView,
+        file_menu,
+        edit_menu,
         find_menu,
-        renameView.triggerView,
-        deleteView.triggerView
       ];
 
       if (self.options.uploadUrl && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
-        var uploadView = new UploadView({
-          triggerView: new ButtonView({
+        self.btns["upload"] = new AnchorView({
             id: 'upload',
-            title: _t('Upload'),
+            title: _t('Upload Local Files...'),
             tooltip: _t('Upload file to current directory'),
             icon: 'upload',
             context: 'default'
-          }),
+        });
+        var uploadView = new UploadView({
+          triggerView: self.btns["upload"],
           app: self,
           callback: function(data) {
             var path = self.uploadFolder + '/' + data.name;
@@ -245,22 +282,26 @@ define([
 
           }
         });
-        self.views.push(uploadView);
-        mainButtons.push(uploadView.triggerView);
+        
+        views.file_menu.push(uploadView);
+        file_menu.items.push(uploadView.triggerView);
       }
       if (self.options.resourceSearchUrl) {
+        self.btns["customize"] = new AnchorView({
+          id: 'customize',
+          title: _t('Add new override'),
+          tooltip: _t('Find resource in plone to override'),
+          context: 'default'
+        });
         var customizeView = new CustomizeView({
-          triggerView: new ButtonView({
-            id: 'customize',
-            title: _t('Add new override'),
-            tooltip: _t('Find resource in plone to override'),
-            context: 'default'
-          }),
+          triggerView: self.btns["customize"],
           app: self
         });
-        self.views.push(customizeView);
-        mainButtons.push(customizeView.triggerView);
+        views["edit_menu"].push(customizeView);
+        edit_menu.items.push(customizeView.triggerView);
       }
+      self.views = [];
+      self.views = self.views.concat(views.file_menu).concat(views.edit_menu).concat(views.find_menu);
 
       self.toolbar = new Toolbar({
         items: [
@@ -299,7 +340,29 @@ define([
         self._save();
       });
       self.render();
+      self.shortcuts();
+      
     },
+    
+    shortcuts: function(){
+      var self = this;
+      shortcut.add("Alt+N", function () {
+        self.btns.newfile.$el.click();
+      });
+      shortcut.add("Alt+Shift+N", function () {
+        self.btns.newfolder.$el.click();
+      });
+      shortcut.add("Ctrl+S", function () {
+        self.saveBtn.$el.click();
+      });
+      shortcut.add("Ctrl+F", function () {
+        self.btns.findfile.$el.click();
+      });
+      shortcut.add("Ctrl+E", function () {
+        self.btns.findtextinfile.$el.click();
+      });
+    },
+    
     $: function(selector) {
       return this.$el.find(selector);
     },
@@ -346,6 +409,19 @@ define([
         }
       });
 
+      // bind 'tree.contextmenu' event
+      self.$tree.jqTreeContextMenu({
+          menu: '#contextual-menu',
+          onContextMenuItem: function(e, node, $el) {
+            var action = $el.data("item");
+            try {
+              self.btns[action].el.click();
+            } catch($err) {
+              console.log("Command does not exist: " + action);
+            }
+          }
+      });
+
       self.$tree.bind('tree.select', function(e) {
         if (e.node === null) {
           self.toggleButtons(false);
@@ -357,8 +433,9 @@ define([
 
       self.$tree.bind('tree.move', function(event) {
         
+        var target_node = event.move_info.target_node;
         var srcpath = event.move_info.moved_node.path;
-        var newpath = event.move_info.target_node.path;
+        var newpath = target_node.path;
         if (event.move_info.position !== "inside" ){
           newpath = newpath.substring(newpath.indexOf('/'), newpath.lastIndexOf('/'));
         }
@@ -371,6 +448,9 @@ define([
           dataType: 'json',
           success: function(data) {
             console.log(data);
+            self.$tree.tree('reload', function() {
+              self.$tree.tree('selectNode', target_node);
+            });
             var jdata = JSON.parse(data);
             if(jdata.error != ''){
               alert(jdata.error);

@@ -32,6 +32,7 @@ New features:
   - Add Anchor (a) tag to the UI views.
   - Upgrade JQTree to 1.4.1
   - Enable Drag and Drop inside of the theme editor file tree.
+  - Add contextual menu to theme files in the file tree.
   [b4oshany]
 
  - Make thumb scale in folder contents listing adjustable/supressable.
