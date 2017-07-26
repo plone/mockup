@@ -300,8 +300,6 @@ define([
         views["edit_menu"].push(customizeView);
         edit_menu.items.push(customizeView.triggerView);
       }
-      console.log(mainButtons);
-      console.log(views);
       self.views = [];
       self.views = self.views.concat(views.file_menu).concat(views.edit_menu).concat(views.find_menu);
 
