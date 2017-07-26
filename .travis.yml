@@ -37,6 +37,6 @@ matrix:
     - env: BROWSERS="SL_IPhone"
     - env: BROWSERS="SL_IPad"
     - env: BROWSERS="SL_Android"
-branches:
-  only:
-    - master
+#branches:
+#  only:
+#    - master
