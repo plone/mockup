@@ -40,7 +40,8 @@ define([
       registry.scan(this.$el);
       this.clock.tick(1000);
       expect(this.$el.find('.tree ul').length).to.be.equal(2);
-      expect($('#contextual-menu li').length).to.be.equal(4);
+      // New File, New Folder, Rename, Delete, Upload Here
+      expect($('#contextual-menu li').length).to.be.equal(5);
     });
   });
 
