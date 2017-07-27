@@ -272,7 +272,7 @@ define([
       // PT 2
 
       // select one element
-      $('a.pattern-relateditems-result-select')[2].click();
+      $('a.pattern-relateditems-result-select[data-path="/image1"]').click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID8');
 
 
@@ -283,10 +283,10 @@ define([
       clock.tick(1000);
 
       // result list must have expected length
-      expect($('.pattern-relateditems-result-select')).to.have.length(4);
+      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(2);
 
       // add another one
-      $('a.pattern-relateditems-result-select')[2].click();
+      $('a.pattern-relateditems-result-select[data-path="/image2"]').click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID8,UID9');
 
       // remove first one
@@ -299,10 +299,10 @@ define([
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
       clock.tick(1000);
-      expect($('.pattern-relateditems-result-select')).to.have.length(2);
+      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(2);
 
       // add first from result
-      $('a.pattern-relateditems-result-select')[1].click();
+      $('a.pattern-relateditems-result-select[data-path="/image3"]').click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID9,UID10');
 
     });
@@ -324,7 +324,7 @@ define([
       //  // PT 2
 
       //  // select one element
-      $('a.pattern-relateditems-result-select')[0].click();
+      $('a.pattern-relateditems-result-select[data-path="/document1"]').click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID1');
 
 
@@ -335,10 +335,10 @@ define([
       clock.tick(1000);
 
       //  // result list must have expected length
-      expect($('.pattern-relateditems-result-select')).to.have.length(10);
+      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(10);
 
       //  // add another one
-      $('a.pattern-relateditems-result-select')[0].click();
+      $('a.pattern-relateditems-result-select[data-path="/document2"]').click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID1,UID2');
 
       //  // remove first one
@@ -351,10 +351,10 @@ define([
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
       clock.tick(1000);
-      expect($('.pattern-relateditems-result-select')).to.have.length(1);
+      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(1);
 
       //  // add first from result
-      $('a.pattern-relateditems-result-select')[0].click();
+      $('a.pattern-relateditems-result-select[data-path="/folder2/document15"]').click();
       expect($('input.pat-relateditems').val()).to.be.equal('UID2,UID15');
 
     });
