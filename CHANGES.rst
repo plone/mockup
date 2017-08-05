@@ -1,17 +1,13 @@
 Changelog
 =========
 
-2.1.8 (Unreleased):
--------------------
+2.1.8 (2017-08-05)
+------------------
 
 New features:
 
 - Align bower.json versions fixes to Products.CMFPlone 5.0.x.
   [thet]
-
-Bug Fixes:
-
-- *add item here*
 
 
 2.1.7 (2017-02-20)
