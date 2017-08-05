@@ -4,10 +4,6 @@ Changelog
 2.1.8 (Unreleased):
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Align bower.json versions fixes to Products.CMFPlone 5.0.x.
