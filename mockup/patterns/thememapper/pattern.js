@@ -33,6 +33,7 @@ define([
   'translate',
   'text!mockup-patterns-thememapper-url/templates/inspector.xml',
   'mockup-patterns-filemanager',
+  'mockup-patterns-thememapper-url/js/rapidostore',
   'mockup-patterns-thememapper-url/js/rulebuilder',
   'mockup-patterns-thememapper-url/js/rulebuilderview',
   'mockup-patterns-thememapper-url/js/lessbuilderview',
@@ -42,7 +43,7 @@ define([
   'mockup-ui-url/views/anchor',
   'mockup-ui-url/views/dropdown',
   'mockup-utils'
-], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView,
+], function($, Base, _, _t, InspectorTemplate, FileManager, RapidoStore, RuleBuilder, RuleBuilderView,
             LessBuilderView, CacheView, ButtonView, ButtonGroup,
             AnchorView, DropdownView, utils) {
   'use strict';
@@ -326,6 +327,7 @@ define([
       self.setupButtons();
 
       self.ruleBuilder = new RuleBuilder(self, self.ruleBuilderCallback);
+      self.rapidoStore = new RapidoStore(self);
 
       self.fileManager.on('fileChange', function() {
         var node = self.fileManager.getSelectedNode();
@@ -490,7 +492,7 @@ define([
       self.btns.showInspectorsButton.applyTemplate();
     },
     setupButtons: function(){
-      var self = this;
+      var _self = self = this;
       self.btns.showInspectorsButton = new ButtonView({
         id: 'showinspectors',
         title: _t('Show inspectors'),
@@ -504,6 +506,17 @@ define([
         } else {
           self.hideInspectors();
         }
+      });
+      
+      self.btns.rapidoStoreButton = new ButtonView({
+        id: 'rapidostore',
+        title: _t('Rapido Store'),
+        icon: 'inbox',
+        tooltip: _t('Install external Rapido apps in this theme'),
+        context: 'default'
+      });
+      self.btns.rapidoStoreButton.on('button:click', function(){
+        _self.rapidoStore.open();
       });
       
       self.btns.buildRuleButton = new AnchorView({
@@ -610,6 +623,7 @@ define([
           self.btns.fullscreenButton,
           self.btns.refreshButton,
           self.btns.cacheButton,
+          self.btns.rapidoStoreButton,
           self.btns.helpButton
         ],
         id: 'mapper'
