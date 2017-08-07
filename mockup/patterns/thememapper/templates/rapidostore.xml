@@ -1,0 +1,5 @@
+<div id="content">
+    <h1>Rapido Local Store</h1>
+    <div id='local-app-listing' class='row'></div>
+    <button class="plone-btn plone-btn-default close-store"><%- _t("Close") %></button>
+</div>

@@ -8,6 +8,9 @@ New features:
 
 - Added docs for the structureupdater pattern.
   [thet]
+- Added Rapido Store to thememapper pattern.
+  - Allow users to install rapido apps from other themes to the cotexted theme.
+  [b4oshany]
 
 - Related Items: Simplify templates a bit.
   [thet]

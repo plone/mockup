@@ -19,6 +19,16 @@ define([
     events: {
       'click button': 'addButtonClicked'
     },
+    show: function () {
+      // Override the PopoverView.show method
+      var self = this;
+      // Call the parent method, PopoverView.show
+      PopoverView.prototype.show.call(self);
+      // Foxus the keyboard to the input field.
+      var $input = self.$('input');
+      $input.val("");
+      $input.focus();
+    },
     addButtonClicked: function(e) {
       var self = this;
       var $input = self.$('input');
