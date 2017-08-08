@@ -4,7 +4,7 @@
  *    selector(string): Selector to use to draggable items in pattern ('li')
  *    dragClass(string): Class to apply to original item that is being dragged. ('item-dragging')
  *    cloneClass(string): Class to apply to cloned item that is dragged. ('dragging')
- *    drop(function): callback function for when item is dropped (null)
+ *    drop(string): Name of callback function in global namespace to be called when item is dropped ('')
  *
  * Documentation:
  *    # Default
@@ -65,7 +65,7 @@ define([
           addClass(pattern.options.cloneClass).
           css({opacity: 0.75, position: 'absolute'}).appendTo(document.body);
       },
-      drop: null // function to handle drop event
+      drop: ''  // name of global function to handle drop event.
     },
     init: function() {
       var self = this;
@@ -110,7 +110,7 @@ define([
         $el.removeClass(self.options.dragClass);
         $(dd.proxy).remove();
         if (self.options.drop) {
-          self.options.drop($el, $el.index() - start);
+          window[self.options.drop]($el, $el.index() - start);
         }
       })
       .drop('init', function(e, dd ) {
