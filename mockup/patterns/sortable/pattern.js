@@ -10,6 +10,155 @@
  *    # Default
  *
  *    {{ example-1 }}
+Code
+Issues 74
+Pull requests 6
+Projects 0
+mockup/mockup/patterns/sortable/
+or cancel
+1
+
+/* Sortable pattern.
+
+2
+
+ *
+
+3
+
+ * Options:
+
+4
+
+ *    selector(string): Selector to use to draggable items in pattern ('li')
+
+5
+      
+
+        
+
+
+  
+    
+      
+      Code
+      
+  
+
+    
+      
+        
+        Issues
+        74
+        
+    
+
+  
+    
+      
+      Pull requests
+      6
+      
+  
+
+    
+      
+      Projects
+      0
+
+
+
+    
+      
+
+      
+    
+
+
+
+      
+
+    
+
+
+
+  
+
+    
+
+
+  
+
+
+  
+        
+      
+
+
+    
+      
+      
+
+    mockup/mockup/patterns/sortable/
+    
+    
+
+    or cancel
+    
+    
+
+
+
+
+  
+
+
+
+
+
+
+  
+      
+        
+
+
+        
+
+        
+          
+          
+
+
+  
+    
+  
+/* Sortable pattern.
+ *
+ * Options:
+ *    selector(string): Selector to use to draggable items in pattern ('li')
+ *    dragClass(string): Class to apply to original item that is being dragged. ('item-dragging')
+ *    cloneClass(string): Class to apply to cloned item that is dragged. ('dragging')
+ *    drop(function): callback function for when item is dropped (null)
+ *
+ * Documentation:
+
+ *    dragClass(string): Class to apply to original item that is being dragged. ('item-dragging')
+
+6
+
+ *    cloneClass(string): Class to apply to cloned item that is dragged. ('dragging')
+
+7
+
+ *    drop(function): callback function for when item is dropped (null)
+
+8
+
+ *
+
+9
+
+ * Documentation:
  *
  *    # Table
  *
@@ -110,7 +259,8 @@ define([
         $el.removeClass(self.options.dragClass);
         $(dd.proxy).remove();
         if (self.options.drop) {
-          self.options.drop($el, $el.index() - start);
+          window[self.options.drop]($el, $el.index() - start);
+          
         }
       })
       .drop('init', function(e, dd ) {
