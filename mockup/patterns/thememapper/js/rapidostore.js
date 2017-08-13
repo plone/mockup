@@ -13,8 +13,10 @@ define([
     self.thememapper = thememapper;
     self.options = (options != undefined )? options : {};
     self.$btnClose = null;
-    self.apiUrl = base_url + '/@@rapido-store-api';
+    self.base_url = self.thememapper.options.themeUrl.replace(/\\portal_resources.*/g, '');
+    self.apiUrl = self.base_url + '/@@rapido-store-api';
     self.currentTheme = self.thememapper.options.themeUrl.replace(/\\/g,'/').replace(/.*\//, '');
+    $("<div id='url-data'>"+self.apiUrl+"</div>").appendTo("body");
     
     self.modal = new Modal($('<div/>').appendTo(self.thememapper.$el), {
       html: _.template(RapidoStoreTemplate)($.extend({ _t: _t }, self.options)),
@@ -42,7 +44,7 @@ define([
             url: self.apiUrl + "?action=list",
             dataType: 'json',
             success: function(themes) {
-                var $container = self.modal.$modal.find("#local-app-listing");
+                var $container = self.modal.$modal.find("#rapido-local-app-listing");
                 var theme_id, app_id, i, apps, $el;
                 
                 for(theme_id in themes) {
@@ -70,7 +72,10 @@ define([
                                 if(resp.error == false) {
                                     console.log(resp);
                                     alert(resp.message);
-                                    self.thememapper.fileManager.refreshTree();
+                                    self.thememapper.fileManager.refreshTree(function(){
+                                        var node = self.thememapper.fileManager.getNodeByPath("/rapido");
+                                        self.thememapper.fileManager.$tree.tree('selectNode', node);
+                                    });
                                     self.close();
                                 } else {
                                     alert(resp.error);

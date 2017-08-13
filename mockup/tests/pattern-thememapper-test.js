@@ -45,6 +45,7 @@ define([
       expect($('#btn-previewtheme', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-fullscreenEditor', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-helpbutton', this.$el).length > 0).to.be.equal(true);
+      expect($('#btn-rapidostore', this.$el).length > 0).to.be.equal(true);
       expect($('#inspectors', this.$el).length > 0).to.be.equal(true);
       expect($('.container', this.$el).length > 0).to.be.equal(true);
 

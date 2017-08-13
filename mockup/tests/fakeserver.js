@@ -52,7 +52,17 @@ define([
       results: items
     }));
   });
-
+  
+  server.respondWith('GET', /@@rapido-store-api/, function (xhr, id) {
+    var data = {
+      "gsoc": ["frontlinks"],
+      "gloss": [],
+      "gsoc.site": ["app"],
+      "link-rapido": []
+    };
+    xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(data));
+  });
+      
   server.respondWith('GET', /search\.json/, function (xhr, id) {
     var items = [
       {
