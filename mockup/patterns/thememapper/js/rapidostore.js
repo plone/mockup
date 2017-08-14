@@ -16,7 +16,6 @@ define([
     self.base_url = self.thememapper.options.themeUrl.replace(/\\portal_resources.*/g, '');
     self.apiUrl = self.base_url + '/@@rapido-store-api';
     self.currentTheme = self.thememapper.options.themeUrl.replace(/\\/g,'/').replace(/.*\//, '');
-    $("<div id='url-data'>"+self.apiUrl+"</div>").appendTo("body");
     
     self.modal = new Modal($('<div/>').appendTo(self.thememapper.$el), {
       html: _.template(RapidoStoreTemplate)($.extend({ _t: _t }, self.options)),
