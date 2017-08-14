@@ -23,4 +23,5 @@
     <li data-item="rename"><a>Rename</a></li>
     <li data-item="delete"><a>Delete</a></li>
     <li data-item="upload"><a>Upload Here</a></li>
+    <li data-item="refreshTree"><a>Refresh Tree</a></li>
 </ul>
