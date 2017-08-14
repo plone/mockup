@@ -178,6 +178,13 @@ define([
           icon: 'trash',
           context: 'danger'
         }),
+        "refreshTree": new ButtonView({
+          id: 'refreshTree',
+          title: _t('Refresh File Tree'),
+          tooltip: _t('Refresh file tree'),
+          icon: 'refres',
+          context: 'default'
+        }),
       };
 
       var newFolderView = new NewFolderView({
@@ -339,6 +346,11 @@ define([
       self.saveBtn.on('button:click', function() {
         self._save();
       });
+      
+      self.btns.refreshTree.on('button:click', function() {
+        self.refreshTree();
+      })
+      
       self.render();
       self.shortcuts();
       
@@ -348,6 +360,9 @@ define([
       var self = this;
       shortcut.add("Alt+N", function () {
         self.btns.newfile.$el.click();
+      });
+      shortcut.add("Alt+R", function () {
+        self.refreshTree();
       });
       shortcut.add("Alt+Shift+N", function () {
         self.btns.newfolder.$el.click();

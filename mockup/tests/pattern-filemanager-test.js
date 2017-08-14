@@ -41,7 +41,7 @@ define([
       this.clock.tick(1000);
       expect(this.$el.find('.tree ul').length).to.be.equal(2);
       // New File, New Folder, Rename, Delete, Upload Here
-      expect($('#contextual-menu li').length).to.be.equal(5);
+      expect($('#contextual-menu li').length).to.be.equal(6);
     });
   });
 
