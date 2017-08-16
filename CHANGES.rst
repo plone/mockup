@@ -15,6 +15,9 @@ Incompatibile changes:
 
 Bug fixes:
 
+- Fix callback of sortable pattern
+  [tomgross]
+
 - Related Items: Fix filtering of non-selectable and non-browsable items, so that no empty list elements are contained.
   Filtering behavior is: When browsing, show only folderish or non-selected, selectable items (but non-selectable, folderish items are greyed out).
   When searching, show only selectable items, which were not already selected.
