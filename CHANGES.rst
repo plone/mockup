@@ -9,6 +9,9 @@ New features:
 - Added docs for the structureupdater pattern.
   [thet]
 
+- Related Items: Simplify templates a bit.
+  [thet]
+
 Incompatibile changes:
 
 - * Add item here *
