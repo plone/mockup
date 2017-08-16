@@ -15,7 +15,11 @@ Incompatibile changes:
 
 Bug fixes:
 
-- * Add item here *
+- Related Items: Fix filtering of non-selectable and non-browsable items, so that no empty list elements are contained.
+  Filtering behavior is: When browsing, show only folderish or non-selected, selectable items (but non-selectable, folderish items are greyed out).
+  When searching, show only selectable items, which were not already selected.
+  This fixes an issue where it was impossible to select items when many items were filtered out.
+  [thet]
 
 
 2.5.0 (2017-07-03)

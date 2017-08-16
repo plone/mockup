@@ -118,6 +118,7 @@ define([
     trigger: '.pat-relateditems',
     parser: 'mockup',
     currentPath: undefined,
+    selectedUIDs: [],
     openAfterInit: undefined,
     defaults: {
       // main option
@@ -238,6 +239,26 @@ define([
 
           var more = (page * this.options.pageSize) < data.total;
           var results = data.results;
+
+          this.selectedUIDs = (this.$el.select2('data') || []).map(function (el) {
+            // populate current selection. Reuse in formatResult
+            return el.UID;
+          });
+
+          // Filter out items:
+          // While browsing: always include folderish items
+          // Browsing and searching: Only include selectable items, which are not already selected.
+          results = results.filter(
+            function (item) {
+              if (
+                (this.browsing && item.is_folderish) ||
+                (this.isSelectable(item) && this.selectedUIDs.indexOf(item.UID) == -1)
+              ) {
+                return true;
+              }
+              return false;
+            }.bind(this)
+          );
 
           // Extend ``data`` with a ``oneLevelUp`` item when browsing
           var path = this.currentPath.split('/');
@@ -485,25 +506,12 @@ define([
 
       self.options.formatResult = function(item) {
         item.selectable = self.isSelectable(item);
-        var data = self.$el.select2('data');
 
-        for (var i = 0; i < data.length; i = i + 1) {
-          if (data[i].UID === item.UID) {
+        if (self.selectedUIDs.indexOf(item.UID) != -1) {
             // do not allow already selected items to be selected again.
             item.selectable = false;
-          }
         }
-        if (
-          !item.selectable && (
-            !self.browsing ||
-            self.browsing && !item.is_folderish
-          )
-        ) {
-          // Filter out non-selectable and non-folderish while browsing.
-          // or
-          // Exclude already selected items while searching.
-          return;
-        }
+
         var result = $(self.applyTemplate('result', item));
 
         $('.pattern-relateditems-result-select', result).on('click', function(event) {
