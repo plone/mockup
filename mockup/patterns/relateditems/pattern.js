@@ -271,7 +271,6 @@ define([
               'oneLevelUp': true,
               'Title': _t('One level up'),
               'path': path.slice(0, path.length - 1).join('/') || '/',
-              'portal_type': 'Folder',
               'is_folderish': true,
               'selectable': false
             }].concat(results);
@@ -494,6 +493,16 @@ define([
       Select2.prototype.initializeTags.call(self);
 
       self.options.formatSelection = function(item) {
+
+        item = $.extend(true, {
+            'Title': '',
+            'getIcon': '',
+            'getURL': '',
+            'path': '',
+            'portal_type': '',
+            'review_state': ''
+        }, item);
+
         // activate petterns on the result set.
         var $selection = $(self.applyTemplate('selection', item));
         if (self.options.scanSelection) {
@@ -506,6 +515,18 @@ define([
 
       self.options.formatResult = function(item) {
         item.selectable = self.isSelectable(item);
+
+        item = $.extend(true, {
+            'Title': '',
+            'getIcon': '',
+            'getURL': '',
+            'is_folderish': false,
+            'oneLevelUp': false,
+            'path': '',
+            'portal_type': '',
+            'review_state': '',
+            'selectable': false,
+        }, item);
 
         if (self.selectedUIDs.indexOf(item.UID) != -1) {
             // do not allow already selected items to be selected again.
