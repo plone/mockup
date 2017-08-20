@@ -27,6 +27,10 @@ Bug fixes:
   This fixes an issue where it was impossible to select items when many items were filtered out.
   [thet]
 
+- TinyMCE: Fix seen issue where pattern failed, because importcss_file_filter
+  was already a function
+  [datakurre]
+
 
 2.5.0 (2017-07-03)
 ------------------
