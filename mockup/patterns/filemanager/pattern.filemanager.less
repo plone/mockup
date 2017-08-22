@@ -169,6 +169,11 @@
     .nav-and-editor {
         float: left;
         width: 75%;
+
+        .navbar .navbar-collapse.collapse {
+            // force editor tabs to be displayed
+            height: 37px !important;
+        }
     }
     .navbar-nav > li {
         padding-left: 15px;
@@ -194,7 +199,7 @@
             }
         }
         > a {
-            float: left;
+            display: inline-block;
             padding: 8px 0px;
             text-decoration: none;
             color: @gray-dark;

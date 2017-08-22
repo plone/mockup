@@ -113,17 +113,14 @@ define([
           var themeTypes = ['css', 'html', 'htm', 'txt', 'xml', 'js', 'cfg', 'less'];
 
           $('span', li).addClass('glyphicon');
-          if( node.folder ) {
-            $('span', li).addClass('glyphicon-folder-close')
-          }
-          else if( $.inArray(node.fileType, imageTypes) >= 0) {
+          if (node.folder) {
+            $('span', li).addClass('glyphicon-folder-close').addClass("droptarget");
+          } else if ($.inArray(node.fileType, imageTypes) >= 0) {
             $('span', li).addClass('glyphicon-picture');
-          }
-          else if( $.inArray(node.fileType, themeTypes) >= 0) {
+          } else if ($.inArray(node.fileType, themeTypes) >= 0) {
             $('span', li).addClass('glyphicon-file');
-          }
-          else {
-            $('span', li).addClass('glyphicon-cog')
+          } else {
+            $('span', li).addClass('glyphicon-cog');
           }
         }
       });
