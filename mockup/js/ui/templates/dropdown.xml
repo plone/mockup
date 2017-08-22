@@ -1,0 +1,10 @@
+
+<a href="#" class="btn btn-default dropdown-toggle" type="button" id="dropdown-menu-" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <span class="glyphicon glyphicon-<%= icon %>"></span>
+  <span class="dropdown-title">
+
+  </span>
+  <span class="caret"></span>
+</a>
+<ul class="dropdown-menu items dropdown-content" aria-labelledby="dropdown-menu-">
+</ul>

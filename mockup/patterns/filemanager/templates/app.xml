@@ -1,5 +1,7 @@
 <div id="toolbar">
 </div>
+<div id="toolbar-action">
+</div>
 <div class="container">
     <div class="tree">
     </div>
@@ -15,3 +17,10 @@
             </div>
         </nav>
 </div>
+<ul id="contextual-menu" class="dropdown-menu">
+    <li data-item="newfile"><a>New File</a></li>
+    <li data-item="newfolder"><a>New Folder</a></li>
+    <li data-item="rename"><a>Rename</a></li>
+    <li data-item="delete"><a>Delete</a></li>
+    <li data-item="upload"><a>Upload Here</a></li>
+</ul>
