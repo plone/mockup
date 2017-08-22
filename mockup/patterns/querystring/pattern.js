@@ -5,6 +5,9 @@
  *    indexOptionsUrl(string): URL to grab index option data from. Must contain "sortable_indexes" and "indexes" data in JSON object. (null)
  *    previewURL(string): URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML list of results ('portal_factory/@@querybuilder_html_results')
  *    previewCountURL(string): URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML string of the total number of records found with the query ('portal_factory/@@querybuildernumberofresults')
+ *    patternDateOptions: Options for the Date/Time select widget ({})
+ *    patternAjaxSelectOptions: Options for the AJAX select widget ({})
+ *    patternRelateditemsOptions: Options for the related items widget ({})
  *    classWrapperName(string): CSS class to apply to the wrapper element ('querystring-wrapper')
  *    classSortLabelName(string): CSS class to apply to the sort on label ('querystring-sort-label')
  *    classSortReverseName(string): CSS class to apply to the sort order label and checkbox container ('querystring-sortreverse')
@@ -66,7 +69,7 @@ define([
       classClearName: 'querystring-criteria-clear',
       classDepthName: 'querystring-criteria-depth'
     },
-    init: function($el, options, indexes, index, operator, value, baseUrl) {
+    init: function($el, options, indexes, index, operator, value, baseUrl, patternDateOptions, patternAjaxSelectOptions, patternRelateditemsOptions) {
       var self = this;
 
       self.options = $.extend(true, {}, self.defaults, options);
@@ -79,6 +82,19 @@ define([
       self.$wrapper = $('<div/>')
               .addClass(self.options.classWrapperName)
               .appendTo($el);
+
+      // Sub widgets options
+      self.patternDateOptions = patternDateOptions || {};
+      self.patternAjaxSelectOptions = patternAjaxSelectOptions || {};
+      self.patternRelateditemsOptions = patternRelateditemsOptions || {};
+      // Defaults
+      self.patternAjaxSelectOptions = $.extend({'width': '250px'}, self.patternAjaxSelectOptions);
+      self.patternRelateditemsOptions = $.extend({
+        'vocabularyUrl': self.baseUrl + '@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems',
+        'width': '400px'
+      }, self.patternRelateditemsOptions);
+      // Force set
+      self.patternRelateditemsOptions['maximumSelectionSize'] = 1;
 
       // Remove button
       self.$remove = $('<div>' + self.options.remove + '</div>')
@@ -302,7 +318,7 @@ define([
       } else if (widget === 'DateWidget') {
         self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + '-' + widget)
-                .attr('data-pat-pickadate', '{"time": false, "date": {"format": "dd/mm/yyyy" }}')
+                .attr('data-pat-pickadate', JSON.stringify(self.patternDateOptions))  // have to pass as attributes otherwise time bool will overwritten to an object by the mockupParser
                 .val(value)
                 .appendTo($wrapper)
                 .patternPickadate()
@@ -324,7 +340,7 @@ define([
         var startdt = $('<input type="text"/>')
           .addClass(self.options.classValueName + '-' + widget)
           .addClass(self.options.classValueName + '-' + widget + '-start')
-          .attr('data-pat-pickadate', '{"time": false, "date": {"format": "dd/mm/yyyy" }}')
+          .attr('data-pat-pickadate', JSON.stringify(self.patternDateOptions))
           .val(val1)
           .appendTo(startwrap)
           .patternPickadate()
@@ -340,7 +356,7 @@ define([
         var enddt = $('<input type="text"/>')
                         .addClass(self.options.classValueName + '-' + widget)
                         .addClass(self.options.classValueName + '-' + widget + '-end')
-                        .attr('data-pat-pickadate', '{"time": false, "date": {"format": "dd/mm/yyyy" }}')
+                        .attr('data-pat-pickadate', JSON.stringify(self.patternDateOptions))
                         .val(val2)
                         .appendTo(endwrap)
                         .patternPickadate()
@@ -414,12 +430,7 @@ define([
           .addClass(self.options.classValueName + '-' + widget)
           .appendTo($wrapper)
           .val(pathAndDepth[0])
-          .patternRelateditems({
-            "vocabularyUrl": self.baseUrl + "@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems",
-            "folderTypes": ["Folder"],
-            "maximumSelectionSize": 1,
-            "width": "400px"
-          })
+          .patternRelateditems(self.patternRelateditemsOptions)
           .change(function() {
             self.trigger('value-changed');
           });
@@ -441,7 +452,7 @@ define([
                 .appendTo(self.$value);
           });
         }
-        self.$value.patternSelect2({ width: '250px' });
+        self.$value.patternSelect2(self.patternAjaxSelectOptions);
       }
 
       if (typeof value !== 'undefined' && typeof self.$value !== 'undefined') {
@@ -651,6 +662,9 @@ define([
       indexOptionsUrl: null,
       previewURL: 'portal_factory/@@querybuilder_html_results', // base url to use to request preview information from
       previewCountURL: 'portal_factory/@@querybuildernumberofresults',
+      patternDateOptions: {},
+      patternAjaxSelectOptions: {},
+      patternRelateditemsOptions: {},
       classSortLabelName: 'querystring-sort-label',
       classSortReverseName: 'querystring-sortreverse',
       classSortReverseLabelName: 'querystring-sortreverse-label',
@@ -747,7 +761,9 @@ define([
       var self = this,
           baseUrl = self.options.indexOptionsUrl.replace(/(@@.*)/g, ''),
           criteria = new Criteria(self.$criteriaWrapper, self.options.criteria,
-            self.options.indexes, index, operator, value, baseUrl);
+            self.options.indexes, index, operator, value, baseUrl,
+            self.options.patternDateOptions, self.options.patternAjaxSelectOptions, self.options.patternRelateditemsOptions
+          );
 
       criteria.on('remove', function(e) {
         if (self.criterias[self.criterias.length - 1] === criteria) {
@@ -820,7 +836,7 @@ define([
             .html(self.options.indexes[key].title)
         );
       }
-      self.$sortOn.patternSelect2({width: 150});
+      self.$sortOn.patternSelect2({width: '150px'});
 
       self.$sortOrder = $('<input type="checkbox" />')
         .attr('name', 'sort_reversed:boolean')
