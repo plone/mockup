@@ -1,3 +1,4 @@
+*.orig
 *.egg-info
 *.py?
 .idea

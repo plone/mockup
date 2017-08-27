@@ -6,7 +6,17 @@ Changelog
 
 New features:
 
-- * Add item here *
+ - Improve the user experience for the theme editor
+  - Search for files and text within files and opening the file upon click.
+  - Add Bootstrap Dropdown menu to the UI views.
+  - Enable Drag and Drop inside of the theme editor file tree.
+  - Fixed the Drag and Drop files to root of the file tree.
+  - Fixed the autoscrolling issue when dragging a file in the file tree.
+  - Add Anchor (a) tag to the UI views.
+  - Upgrade JQTree to 1.4.1
+  - Enable Drag and Drop inside of the theme editor file tree.
+  - Add contextual menu to theme files in the file tree.
+  [b4oshany]
 
 Bug fixes:
 

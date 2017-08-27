@@ -63,7 +63,7 @@ define([
     },
     handleClick: function(e) {
       e.preventDefault();
-      if (!this.$el.is('.disabled')) {
+      if (!this.$el.prop('disabled')) {
         this.uiEventTrigger('click', this, e);
       }
     },
@@ -71,12 +71,10 @@ define([
       return _.extend({'icon': '', 'title': ''}, this.options);
     },
     disable: function() {
-      this.options.disabled = true;
-      this.$el.addClass('disabled');
+      this.$el.prop('disabled', true);
     },
     enable: function() {
-      this.options.disabled = false;
-      this.$el.removeClass('disabled');
+      this.$el.prop('disabled', false);
     }
   });
 
