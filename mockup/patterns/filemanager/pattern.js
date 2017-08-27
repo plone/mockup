@@ -447,7 +447,6 @@ define([
           },
           dataType: 'json',
           success: function(data) {
-            console.log(data);
             self.$tree.tree('reload', function() {
               self.$tree.tree('selectNode', target_node);
             });
