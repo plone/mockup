@@ -27,6 +27,9 @@ Bug fixes:
   This fixes an issue where it was impossible to select items when many items were filtered out.
   [thet]
 
+- Translate "Title" for the table template
+  [cillianderoiste]
+
 
 2.5.0 (2017-07-03)
 ------------------
