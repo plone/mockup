@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.5.1 (Unreleased)
+2.5.1 (2017-09-03)
 ------------------
 
 New features:
@@ -11,10 +11,6 @@ New features:
 
 - Related Items: Simplify templates a bit.
   [thet]
-
-Incompatibile changes:
-
-- * Add item here *
 
 Bug fixes:
 
