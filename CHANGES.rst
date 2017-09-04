@@ -1,12 +1,15 @@
 Changelog
 =========
 
-2.5.2 (Unreleased)
+2.6.0 (Unreleased)
 ------------------
 
 New features:
 
-- * Add items here *
+- Queue validation calls in inlinevalidation pattern using jQuery default queue
+  to ensure validations are called in order and allow custom custom code to be
+  queued after validation has completed
+  [datakurre]
 
 Bug fixes: 
 
