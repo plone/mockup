@@ -338,6 +338,7 @@ define([
               var now = new Date();
               if (self.$date) { self.$date.data('pickadate').set('select', now); }
               if (self.$time) { self.$time.data('pickatime').set('select', now); }
+              self.emit('updated');
           })
           .appendTo(self.$wrapper);
       }
@@ -349,6 +350,7 @@ define([
               e.preventDefault();
               if (self.$date) { self.$date.data('pickadate').clear(); }
               if (self.$time) { self.$time.data('pickatime').clear(); }
+              self.emit('updated');
           })
           .appendTo(self.$wrapper);
       }
