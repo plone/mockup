@@ -39,7 +39,9 @@ define([
       expect($('.pat-filemanager', this.$el).length > 0).to.be.equal(true);
       expect($('#btngroup-mapper', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-showinspectors', this.$el).length > 0).to.be.equal(true);
-      expect($('#btn-buildrule', this.$el).length > 0).to.be.equal(true);
+      expect($('#dropdown-menu-', this.$el).length > 0).to.be.equal(true);
+      expect($('.btn-group-dropdown #alink-buildrule', this.$el).length > 0).to.be.equal(true);
+      expect($('.btn-group-dropdown #alink-buildless', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-previewtheme', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-fullscreenEditor', this.$el).length > 0).to.be.equal(true);
       expect($('#btn-helpbutton', this.$el).length > 0).to.be.equal(true);

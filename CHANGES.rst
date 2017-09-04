@@ -1,20 +1,40 @@
 Changelog
 =========
 
-2.5.1 (Unreleased)
+2.5.2 (Unreleased)
 ------------------
 
 New features:
+
+- * Add items here *
+
+Bug fixes: 
+
+- TinyMCE: Fix seen issue where pattern failed, because importcss_file_filter
+  was already a function
+  [datakurre]
+
+- Translate "Title" for the table template
+  [cillianderoiste]
+
+Incompatibilies:
+
+- * Add items here *
+
+
+2.5.1 (2017-09-03)
+------------------
+
+New features:
+
+- Query String Widget: Allow configuration of subwidgets.
+  [thet]
 
 - Added docs for the structureupdater pattern.
   [thet]
 
 - Related Items: Simplify templates a bit.
   [thet]
-
-Incompatibile changes:
-
-- * Add item here *
 
 Bug fixes:
 
@@ -26,11 +46,6 @@ Bug fixes:
   When searching, show only selectable items, which were not already selected.
   This fixes an issue where it was impossible to select items when many items were filtered out.
   [thet]
-
-- TinyMCE: Fix seen issue where pattern failed, because importcss_file_filter
-  was already a function
-  [datakurre]
-
 
 2.5.0 (2017-07-03)
 ------------------
@@ -46,6 +61,7 @@ New features:
   - Add Anchor (a) tag to the UI views.
   - Upgrade JQTree to 1.4.1
   - Enable Drag and Drop inside of the theme editor file tree.
+  - Add contextual menu to theme files in the file tree.
   [b4oshany]
 
  - Make thumb scale in folder contents listing adjustable/supressable.

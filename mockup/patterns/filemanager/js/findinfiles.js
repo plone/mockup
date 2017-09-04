@@ -17,7 +17,7 @@ define([
       closeOnEsc: false,
       closeOnClick: false
     },
-    title: _.template('<%= _t("File in File") %>'),
+    title: _.template('<%= _t("Find in File") %>'),
     content: _.template(
       '<form>' +
         '<div class="input-group">' +
