@@ -371,7 +371,9 @@ define([
           self.$el.hide();
         }
 
-        if(tinyOptions.importcss_file_filter && tinyOptions.importcss_file_filter.indexOf(',') !== -1){
+        if(tinyOptions.importcss_file_filter &&
+           typeof tinyOptions.importcss_file_filter.indexOf === 'function' &&
+           tinyOptions.importcss_file_filter.indexOf(',') !== -1){
           // need a custom function to check now
           var files = tinyOptions.importcss_file_filter.split(',');
 
