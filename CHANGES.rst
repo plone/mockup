@@ -22,6 +22,9 @@ Incompatibilies:
 
 New features:
 
+- Query String Widget: Allow configuration of subwidgets.
+  [thet]
+
 - Added docs for the structureupdater pattern.
   [thet]
 
