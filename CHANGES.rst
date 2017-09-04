@@ -11,6 +11,9 @@ New features:
   queued after validation has completed
   [datakurre]
 
+- pattern-pickadate: Emit the ``updated.pickadate.patterns`` event when clicking the "clear" and "now" buttons.
+  [thet]
+
 Bug fixes: 
 
 - TinyMCE: Fix seen issue where pattern failed, because importcss_file_filter

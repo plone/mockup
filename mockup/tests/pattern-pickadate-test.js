@@ -553,10 +553,12 @@ define([
 
         // now set it to now.
         $('.pattern-pickadate-now', $el).click();
+        // TODO: should test for emitting ``updated.pickadate.patterns``, but our expect framework doesn't support that.
         expect($('.pat-pickadate', $el).val()).to.be.equal("2017-01-23 15:30");
 
         // now clear it.
         $('.pattern-pickadate-clear', $el).click();
+        // TODO: should test for emitting ``updated.pickadate.patterns``, but our expect framework doesn't support that.
         expect($('.pat-pickadate', $el).val()).to.be.equal("");
       });
 
