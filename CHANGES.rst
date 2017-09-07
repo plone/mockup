@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.6.0 (Unreleased)
+2.6.0 (2017-09-06)
 ------------------
 
 New features:
@@ -22,10 +22,6 @@ Bug fixes:
 
 - Translate "Title" for the table template
   [cillianderoiste]
-
-Incompatibilies:
-
-- * Add items here *
 
 
 2.5.1 (2017-09-03)
