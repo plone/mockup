@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- pat-querystring: Use ``pat-date-picker`` from Patterns library instead ``mockup-patterns-pickadate`` (PLIP 2150).
+  [thet]
 
 Bug fixes:
 

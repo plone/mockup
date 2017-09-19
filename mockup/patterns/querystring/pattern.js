@@ -46,12 +46,12 @@ define([
   'jquery',
   'pat-base',
   'mockup-patterns-select2',
-  'mockup-patterns-pickadate',
   'mockup-patterns-relateditems',
+  'pat-date-picker',
   'select2',
   'translate',
   'underscore'
-], function($, Base, Select2, PickADate, relatedItems, undefined, _t, _) {
+], function($, Base, Select2, DatePicker, relatedItems, undefined, _t, _) {
   'use strict';
 
   var Criteria = function() { this.init.apply(this, arguments); };
@@ -316,15 +316,15 @@ define([
                 });
 
       } else if (widget === 'DateWidget') {
-        self.$value = $('<input type="text"/>')
+        self.$value = $('<input type="date"/>')
                 .addClass(self.options.classValueName + '-' + widget)
-                .attr('data-pat-pickadate', JSON.stringify(self.patternDateOptions))  // have to pass as attributes otherwise time bool will overwritten to an object by the mockupParser
+                .attr('data-pat-date-picker', JSON.stringify(self.patternDateOptions))  // have to pass as attributes otherwise time bool will overwritten to an object by the mockupParser
                 .val(value)
-                .appendTo($wrapper)
-                .patternPickadate()
-                .on('updated.pickadate.patterns', function() {
+                .on('change', function() {
                   self.trigger('value-changed');
-                });
+                })
+                .patternDatePicker()
+                .appendTo($wrapper);
 
 
       } else if (widget === 'DateRangeWidget') {
@@ -337,32 +337,32 @@ define([
           val2 = value[1]?value[1]:"";
         }
 
-        var startdt = $('<input type="text"/>')
+        var startdt = $('<input type="date"/>')
           .addClass(self.options.classValueName + '-' + widget)
           .addClass(self.options.classValueName + '-' + widget + '-start')
-          .attr('data-pat-pickadate', JSON.stringify(self.patternDateOptions))
+          .attr('data-pat-date-picker', JSON.stringify(self.patternDateOptions))
           .val(val1)
-          .appendTo(startwrap)
-          .patternPickadate()
-          .on('updated.pickadate.patterns', function() {
+          .on('change', function() {
             self.trigger('value-changed');
-          });
+          })
+          .patternDatePicker()
+          .appendTo(startwrap);
         $wrapper.append(
           $('<span/>')
             .html(_t('to'))
             .addClass(self.options.classBetweenDtName)
         );
         var endwrap = $('<span/>').appendTo($wrapper);
-        var enddt = $('<input type="text"/>')
+        var enddt = $('<input type="date"/>')
                         .addClass(self.options.classValueName + '-' + widget)
                         .addClass(self.options.classValueName + '-' + widget + '-end')
-                        .attr('data-pat-pickadate', JSON.stringify(self.patternDateOptions))
+                        .attr('data-pat-date-picker', JSON.stringify(self.patternDateOptions))
                         .val(val2)
-                        .appendTo(endwrap)
-                        .patternPickadate()
-                        .on('updated.pickadate.patterns', function() {
+                        .on('change', function() {
                           self.trigger('value-changed');
-                        });
+                        })
+                        .patternDatePicker()
+                        .appendTo(endwrap);
         self.$value = [startdt, enddt];
 
       } else if (widget === 'RelativeDateWidget') {
