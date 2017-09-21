@@ -11,7 +11,11 @@ New features:
 
 Bug fixes:
 
-- * Add items here *
+- Restore ability from < 2.5.1 to let the ``drop`` callback be a function.
+  It can still be the name of the function in the global namespace.
+  Fixes #808.
+  [thet]
+
 
 2.6.0 (2017-09-06)
 ------------------
@@ -52,7 +56,7 @@ New features:
 
 Bug fixes:
 
-- Fix callback of sortable pattern
+- Fix callback of sortable pattern.
   [tomgross]
 
 - Related Items: Fix filtering of non-selectable and non-browsable items, so that no empty list elements are contained.
