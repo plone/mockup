@@ -16,6 +16,9 @@ Bug fixes:
   Fixes #808.
   [thet]
 
+- Concatenate value for select multiple input in generic popover in the structure pattern.
+  [Gagaro]
+
 
 2.6.0 (2017-09-06)
 ------------------

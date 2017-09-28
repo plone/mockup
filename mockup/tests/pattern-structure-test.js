@@ -3,18 +3,20 @@ define([
   'jquery',
   'underscore',
   'pat-registry',
+  'mockup-ui-url/views/button',
   'mockup-patterns-structure',
   'mockup-patterns-structure-url/js/views/actionmenu',
   'mockup-patterns-structure-url/js/views/app',
   'mockup-patterns-structure-url/js/models/result',
   'mockup-patterns-structure-url/js/views/table',
   'mockup-patterns-structure-url/js/views/tablerow',
+  'mockup-patterns-structure-url/js/views/generic-popover',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-utils',
   'sinon',
   'moment'
-], function(expect, $, _, registry, Structure, ActionMenuView, AppView, Result,
-            TableView, TableRowView, ResultCollection, utils, sinon, moment) {
+], function(expect, $, _, registry, ButtonView, Structure, ActionMenuView, AppView, Result,
+            TableView, TableRowView, PropertiesView, ResultCollection, utils, sinon, moment) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -2669,5 +2671,43 @@ define([
     });
 
   });
+
+  /* ==========================
+   TEST: PropertiesView concatenate duplicated values
+  ========================== */
+  describe('PropertiesView concatenate duplicated values', function() {
+    beforeEach(function() {
+        this.app = {
+            "buttonClickEvent": function(triggerView, data) {
+                this.data = data;
+            },
+            "selectedCollection": $()
+        };
+        var triggerView = new ButtonView({
+            "id": "foobar"
+        });
+        triggerView.$el.appendTo('body');
+        var options = {
+            "app": this.app,
+            "triggerView": triggerView,
+            "form": {
+                "template": '<select multiple name="foo"><option selected value="1">1</option>' +
+                '<option selected value="2">2</option><option value="3">3</option></select>'
+            }
+        };
+        this.popover = new PropertiesView(options);
+    });
+
+    afterEach(function() {
+        $('body').html('');
+    });
+
+    it('test applyButtonClicked', function() {
+        this.popover.toggle();
+        this.popover.applyButtonClicked();
+        expect(this.app.data.foo).to.equal('1,2');
+    });
+  });
+
 
 });

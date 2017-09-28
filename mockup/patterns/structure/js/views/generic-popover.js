@@ -51,7 +51,11 @@ define([
       var self = this;
       var data = {};
       _.each(self.$el.find('form').serializeArray(), function(param) {
-        data[param.name] = param.value;
+        if (param.name in data) {
+            data[param.name] += ',' + param.value;
+        } else {
+            data[param.name] = param.value;
+        }
       });
 
       self.app.buttonClickEvent(this.triggerView, data);
