@@ -10,6 +10,9 @@ Breaking changes:
 
 New features:
 
+- pat-structure: Use more tooltips in the actions menu.
+  [thet]
+
 - pat-structure: Use the datatables pattern for sorting columns 
   [frapell]
 
