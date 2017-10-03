@@ -7,7 +7,11 @@ Changelog
 
 New features:
 
-- * Add items here *
+- Structure pattern:
+  - Make action menu bar sticky.
+  - Make action menu more compact, so that it doesn't break into a newline early.
+  - Use more tooltips in the action menu.
+  [thet]
 
 Bug fixes:
 

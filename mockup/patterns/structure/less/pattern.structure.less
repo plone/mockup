@@ -63,11 +63,31 @@
 
     .open:extend(.open all){}
 
-    .btn{
+    .btn {
         .btn-sm();
-        padding: 5px 5px;
-        font-size: 13px;
     }
+
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #fafafa;
+        border-bottom: 1px solid #ccc;
+        border-radius: 0;
+
+        &>a.btn:last-of-type,
+        .btn-group {
+            margin-right: 1em;
+        }
+        #filter {
+            width: 200px;
+            float: right;
+        }
+        &>a.btn, .btn-group, #filter {
+            margin-bottom: 0.5em;
+        }
+    }
+
     table{
         margin-bottom: 0;
 
@@ -76,9 +96,6 @@
                 width: 15px;
             }
             td.actionmenu-container{
-                .btn{
-                    padding: 2px 4px;
-                }
                 a {
                     white-space: nowrap;
                     &,
@@ -105,14 +122,6 @@
         }
         .plone-item-ineffective {
           background-color: @plone-toolbar-internal-color;
-        }
-    }
-    .navbar {
-        min-height: inherit;
-        margin-bottom: 5px;
-
-        .btn-group{
-            margin-left: 5px;
         }
     }
     .table th, .table td {
@@ -145,11 +154,6 @@
         color: @plone-link-color;
     }
 
-    #filter{
-        width: 200px;
-        float: right;
-    }
-
     .popover.upload{
         max-width: 650px;
     }
@@ -175,19 +179,11 @@
         border-bottom-left-radius: 0;
     }
 
-    @media all and (max-width: 1200px) {
-        #filter{
-            margin-top: 5px;
-            float: left;
-        }
-        #btngroup-mainbuttons{
-            float: left;
+    @media all and (max-width: 522px) {
+        .navbar #filter{
+            float: none;
             width: 100%;
-            margin-left: 0;
-            margin-top: 5px;
         }
-    }
-    @media all and (max-width: 620px) {
         #btn-attribute-columns{
             display:none;
         }
@@ -215,9 +211,6 @@
             }
         }
     }
-}
-
-.pat-structure {
 
     .popover {
         .popover-title {
@@ -260,6 +253,7 @@
         content: '*';
         color: red;
     }
+
 }
 
 .popover.selected-items {
@@ -357,7 +351,7 @@
     cursor: move;
 }
 
-table.structure-dragging{
+table.structure-dragging {
     outline: 1px dashed black;
     background-color: white;
     .itemRow{

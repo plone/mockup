@@ -37,7 +37,7 @@ define([
     render: function() {
       this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
-        title: _t('Query'),
+        tooltip: _t('Query'),
         icon: 'search'
       });
       this.popover = new PopoverView({

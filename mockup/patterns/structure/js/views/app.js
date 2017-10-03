@@ -362,6 +362,7 @@ define([
       items.push(new SelectionButtonView({
         title: _t('Selected'),
         id: 'selected-items',
+        tooltip: _t('Manage selection'),
         collection: this.selectedCollection
       }));
 
