@@ -42,8 +42,7 @@ define([
       contextInfoUrl: null, // for add new dropdown and other info
       setDefaultPageUrl: null,
       menuOptions: null, // default action menu options per item.
-      // default menu generator
-      menuGenerator: 'mockup-patterns-structure-url/js/actionmenu',
+      menuGenerator: 'mockup-patterns-structure-url/js/actionmenu',  // default menu generator
       backdropSelector: '.plone-modal', // Element upon which to apply backdrops used for popovers
 
       activeColumnsCookie: 'activeColumns',
@@ -135,30 +134,30 @@ define([
 
       buttons: null,
       _default_buttons: [{
-        title: 'Cut',
+        tooltip: 'Cut',
         url: '/cut'
       },{
-        title: 'Copy',
+        tooltip: 'Copy',
         url: '/copy'
       },{
-        title: 'Paste',
+        tooltip: 'Paste',
         url: '/paste'
       },{
-        title: 'Delete',
+        tooltip: 'Delete',
         url: '/delete',
         context: 'danger',
         icon: 'trash'
       },{
-        title: 'Workflow',
+        tooltip: 'Workflow',
         url: '/workflow'
       },{
-        title: 'Tags',
+        tooltip: 'Tags',
         url: '/tags'
       },{
-        title: 'Properties',
+        tooltip: 'Properties',
         url: '/properties'
       },{
-        title: 'Rename',
+        tooltip: 'Rename',
         url: '/rename'
       }],
 
