@@ -349,6 +349,7 @@ define([
       var columnsBtn = new ButtonView({
         id: 'attribute-columns',
         tooltip: _t('Configure displayed columns'),
+        tooltipOptions: {placement: 'bottom'},
         icon: 'th'
       });
 
@@ -363,6 +364,7 @@ define([
         title: _t('Selected'),
         id: 'selected-items',
         tooltip: _t('Manage selection'),
+        tooltipOptions: {placement: 'bottom'},
         collection: this.selectedCollection
       }));
 
@@ -372,6 +374,7 @@ define([
           title: _t('Rearrange'),
           icon: 'sort-by-attributes',
           tooltip: _t('Rearrange folder contents'),
+          tooltipOptions: {placement: 'bottom'},
           url: self.options.rearrange.url
         });
         self.rearrangeView = new RearrangeView({
@@ -386,6 +389,7 @@ define([
           id: 'upload',
           title: _t('Upload'),
           tooltip: _t('Upload files'),
+          tooltipOptions: {placement: 'bottom'},
           icon: 'upload'
         });
         self.uploadView = new UploadView({

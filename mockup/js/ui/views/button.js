@@ -16,6 +16,7 @@ define([
     },
     extraClasses: [],
     tooltip: null,
+    tooltipOptions: {},
     template: '<% if (icon) { %><span class="glyphicon glyphicon-<%= icon %>"></span><% } %> <%= title %>',
     events: {
       'click': 'handleClick'
@@ -40,7 +41,7 @@ define([
         if (this.tooltip !== null) {
 
           this.$el.attr('title', this.tooltip);
-          var tooltipPattern = new Tooltip(this.$el);
+          var tooltipPattern = new Tooltip(this.$el, this.options.tooltipOptions);
           // XXX since tooltip triggers hidden
           // suppress so it plays nice with modals, backdrops, etc
           this.$el.on('hidden', function(e) {

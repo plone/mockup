@@ -38,6 +38,7 @@ define([
       this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
         tooltip: _t('Query'),
+        tooltipOptions: {placement: 'bottom'},
         icon: 'search'
       });
       this.popover = new PopoverView({
