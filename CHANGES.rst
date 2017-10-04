@@ -2,12 +2,8 @@ Changelog
 =========
 
 
-2.6.1 (Unreleased)
+2.6.1 (2017-10-03)
 ------------------
-
-New features:
-
-- * Add items here *
 
 Bug fixes:
 
