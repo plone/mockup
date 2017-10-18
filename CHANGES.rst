@@ -7,14 +7,20 @@ Changelog
 New features:
 
 - Structure pattern:
+
   - Make action menu bar sticky.
   - Make action menu more compact, so that it doesn't break into a newline early.
   - Use more tooltips in the action menu.
   [thet]
 
-Bug fixes: 
+Bug fixes:
 
-- * Add items here *
+- Structure pattern:
+
+  - Set default page icon on item row. Fixes: https://github.com/plone/Products.CMFPlone/issues/2131
+  - Pass event data for the ``structure-url-changed`` event correctly.
+
+  [jensens, thet]
 
 
 2.6.1 (2017-10-03)
@@ -44,7 +50,7 @@ New features:
 - pattern-pickadate: Emit the ``updated.pickadate.patterns`` event when clicking the "clear" and "now" buttons.
   [thet]
 
-Bug fixes: 
+Bug fixes:
 
 - TinyMCE: Fix seen issue where pattern failed, because importcss_file_filter
   was already a function
