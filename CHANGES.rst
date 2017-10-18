@@ -14,7 +14,8 @@ New features:
 
 Bug fixes: 
 
-- * Add items here *
+- Fixed resource registry override tab's Save button being disabled
+  [obct537]
 
 
 2.6.1 (2017-10-03)

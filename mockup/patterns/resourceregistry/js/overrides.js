@@ -33,8 +33,8 @@ define([
           '<% if(view.editing){ %>' +
             '<p class="resource-name text-primary"><%- view.editing %></p> ' +
             '<div class="plone-btn-group">' +
-              '<button class="plone-btn plone-btn-primary plone-btn-xs disabled"><%- _t("Save") %></button> ' +
-              '<button class="plone-btn plone-btn-default plone-btn-xs disabled"><%- _t("Cancel") %></button>' +
+              '<button class="plone-btn plone-btn-primary plone-btn-xs" disabled><%- _t("Save") %></button> ' +
+              '<button class="plone-btn plone-btn-default plone-btn-xs" disabled><%- _t("Cancel") %></button>' +
               '<button class="plone-btn plone-btn-danger plone-btn-xs"><%- _t("Delete customizations") %></button>' +
             '</div>' +
           '<% } %>' +
