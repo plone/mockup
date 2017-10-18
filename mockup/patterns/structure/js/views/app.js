@@ -110,7 +110,7 @@ define([
             url: self.getAjaxUrl(self.contextInfoUrl),
             dataType: 'json',
             success: function(data) {
-              $('body').trigger('context-info-loaded', data);
+              $('body').trigger('context-info-loaded', [data]);
             },
             error: function(response) {
               // XXX handle error?
@@ -169,7 +169,7 @@ define([
           // TODO figure out whether the following event after this is
           // needed at all.
         }
-        $('body').trigger('structure-url-changed', path);
+        $('body').trigger('structure-url-changed', [path]);
 
       });
 
@@ -203,7 +203,7 @@ define([
             path = '/';
           }
           self.setCurrentPath(path);
-          $('body').trigger('structure-url-changed', path);
+          $('body').trigger('structure-url-changed', [path]);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
           self.collection.goTo(self.collection.information.firstPage);
