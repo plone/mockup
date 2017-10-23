@@ -13,6 +13,11 @@ New features:
   - Use more tooltips in the action menu.
   [thet]
 
+- Related items pattern:
+
+  - Added options to change sorting.
+  [Gagaro]
+
 Bug fixes:
 
 - Structure pattern:
