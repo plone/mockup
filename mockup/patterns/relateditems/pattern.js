@@ -18,6 +18,8 @@
  *    scanSelection(boolean): Scan the list of selected elements for other patterns.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
+ *    sortOn(string): Index on which to sort on. ('path')
+ *    sortOrder(string): Sort ordering. ('ascending')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
  *    upload(boolen): Allow file and image uploads from within the related items widget.
  *    uploadAllowView(string): View, which returns a JSON response in the form of {allowUpload: true}, if upload is allowed in the current context.
@@ -143,6 +145,8 @@ define([
       scanSelection: false,  // False, to no unnecessarily use CPU time on this.
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
+      sortOn: 'path',
+      sortOrder: 'ascending',
       tokenSeparators: [',', ' '],
       upload: false,
       uploadAllowView: undefined,
@@ -223,8 +227,8 @@ define([
           var data = {
             query: JSON.stringify({
               criteria: criterias,
-              sort_on: 'path',
-              sort_order: 'ascending'
+              sort_on: this.options.sortOn,
+              sort_order: this.options.sortOrder
             }),
             attributes: JSON.stringify(this.options.attributes),
             batch: JSON.stringify({
