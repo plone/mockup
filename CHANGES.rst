@@ -18,6 +18,11 @@ New features:
   - Added options to change sorting.
   [Gagaro]
 
+- TinyMCE pattern:
+
+  - Make anchor handling more flexible
+  [tomgross]
+
 Bug fixes:
 
 - Structure pattern:
