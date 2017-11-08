@@ -20,6 +20,9 @@ New features:
 
 Bug fixes:
 
+- Querystring pattern: Fix #716, where the path-depth was added to string values like the title when a path criteria was present.
+  [thet]
+
 - Structure pattern:
 
   - Set default page icon on item row. Fixes: https://github.com/plone/Products.CMFPlone/issues/2131
