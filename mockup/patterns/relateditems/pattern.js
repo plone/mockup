@@ -588,15 +588,23 @@ define([
                 prev[item.UID] = item;
                 return prev;
               }, {});
-              callback(
-                ids
-                .map(function(uid) {
-                  return results[uid];
-                })
-                .filter(function(item) {
-                  return item !== undefined;
-                })
-              );
+
+              try {
+                callback(
+                  ids
+                  .map(function(uid) {
+                    return results[uid];
+                  })
+                  .filter(function(item) {
+                    return item !== undefined;
+                  })
+                );
+              } catch (e) {
+                // Select2 3.5.4 throws an error in some cases in
+                // updateSelection, ``this.selection.find(".select2-search-choice").remove();``
+                // No idea why, hard to track.
+                console.log(data);
+              }
 
               if (self.openAfterInit) {
                 // open after initialization
