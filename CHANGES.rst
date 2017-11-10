@@ -25,6 +25,9 @@ New features:
 
 Bug fixes:
 
+- Related items widget: Fix case, where ``initSelection`` broke on an error in Select2.
+  [thet]
+
 - Querystring pattern: Fix #716, where the path-depth was added to string values like the title when a path criteria was present.
   [thet]
 
