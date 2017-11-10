@@ -18,6 +18,11 @@ New features:
   - Added options to change sorting.
   [Gagaro]
 
+- Mark special links
+
+  - Do not mark anchors as special links
+  [frapell]
+
 Bug fixes:
 
 - Querystring pattern: Fix #716, where the path-depth was added to string values like the title when a path criteria was present.
