@@ -18,9 +18,13 @@ New features:
   - Add contextual menu to theme files in the file tree.
   [b4oshany]
 
+- Mark special links pattern: Do not mark anchors as special links
+  [frapell]
+
 Bug fixes:
 
 - * Add item here *
+
 
 2.1.8 (2017-08-05)
 ------------------

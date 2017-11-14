@@ -135,11 +135,11 @@ define([
         // All links without an http href (without the link-plain class), not within this site,
         // and no img children should be wrapped in a link-[protocol] span
         contentarea.find(
-            'a[href]:not([href^="http:"]):not(.link-plain):not([href^="' + url + '"]):not(:has(img))')
+            'a[href]:not([href^="http:"]):not(.link-plain):not([href^="' + url + '"]):not(:has(img)):not([href^="#"])')
             .each(function() {
                 // those without a http link may have another interesting protocol
                 // wrap these in a link-[protocol] span
-                res = protocols.exec(this.href);
+                res = protocols.exec($(this).attr('href'));
                 if (res) {
                     var iconclass = 'glyphicon link-' + res[0];
                     $(this).before('<i class="' + iconclass + '"></i>');
