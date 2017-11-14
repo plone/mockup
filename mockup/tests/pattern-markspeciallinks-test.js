@@ -45,6 +45,11 @@ define([
         '      <li><a href="feed://www.plone.org">feed</a></li>' +
         '      <li><a href="webcal://www.plone.org">webcal</a></li>' +
         '    </ul>' +
+        '</div>' +
+        '<div class="anchors pat-markspeciallinks">' +
+        '  <p>Find out What&#39s new in <a href="#anchor">Plone</a>.<br>' +
+        '     Plone is written in <a class="link-plain" href="http://www.python.org">Python</a>.' +
+        '  </p>' +
         '</div>');
 
 
@@ -75,6 +80,11 @@ define([
       expect(listel.eq(8).find('i').hasClass('link-callto')).to.be.equal(true);
       expect(listel.eq(9).find('i').hasClass('link-feed')).to.be.equal(true);
       expect(listel.eq(10).find('i').hasClass('link-webcal')).to.be.equal(true);
+    });
+    it('do not show the lock icon for anchor links', function() {
+      registry.scan(this.$el);
+      var link = this.$el.next('.anchors').find('p').find('a');
+      expect(link.eq(0).prev().length).to.be.equal(0);
     });
   });
 });

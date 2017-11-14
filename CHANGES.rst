@@ -22,8 +22,18 @@ New features:
 
   - Make anchor handling more flexible
   [tomgross]
+  
+  - Mark special links
+  - Do not mark anchors as special links
+  [frapell]
 
 Bug fixes:
+
+- Related items widget: Fix case, where ``initSelection`` broke on an error in Select2.
+  [thet]
+
+- Querystring pattern: Fix #716, where the path-depth was added to string values like the title when a path criteria was present.
+  [thet]
 
 - Structure pattern:
 
