@@ -286,10 +286,7 @@ define([
         }.bind(this)
 
       };
-
       this.options.ajax = ajax;
-      this.$el.select2(this.options);
-
     },
 
     setBreadCrumbs: function () {

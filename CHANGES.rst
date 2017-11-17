@@ -15,6 +15,9 @@ New features:
 
 - Related items pattern:
 
+  - Avoid double initialization of Select2.
+  [thet]
+
   - Added options to change sorting.
   [Gagaro]
 
