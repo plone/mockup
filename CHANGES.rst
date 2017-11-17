@@ -21,8 +21,12 @@ New features:
   - Added options to change sorting.
   [Gagaro]
 
-- Mark special links
+- TinyMCE pattern:
 
+  - Make anchor handling more flexible
+  [tomgross]
+  
+  - Mark special links
   - Do not mark anchors as special links
   [frapell]
 
