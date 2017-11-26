@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.6.2 (Unreleased)
+2.6.2 (2017-11-26)
 ------------------
 
 New features:
