@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- add items here
+- Modal performance: don't reposition after loading each img
+  [cillianderoiste]
 
 
 2.7.0 (2018-01-27)
