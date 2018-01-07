@@ -36,17 +36,20 @@ define([
       text: '',
       label: ''
     },
-    pasteAllowed: !!$.cookie('__cp'),
     sort_on: 'getObjPositionInParent',
     sort_order: 'ascending',
     additionalCriterias: [],
     cookieSettingPrefix: '_fc_',
+
+    pasteAllowed: function () {
+        return !!$.cookie('__cp');
+    },
+
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.loading = new utils.Loading();
       self.loading.show();
-      self.pasteAllowed = !!$.cookie('__cp');
 
       /* close popovers when clicking away */
       $(document).click(function(e) {
@@ -231,8 +234,7 @@ define([
     togglePasteBtn: function(){
       var self = this;
       if (_.find(self.buttons.items, function(btn){ return btn.id === 'paste'; })) {
-        self.pasteAllowed = !!$.cookie('__cp');
-        if (self.pasteAllowed) {
+        if (self.pasteAllowed()) {
           self.buttons.get('paste').enable();
         } else {
           self.buttons.get('paste').disable();

@@ -101,7 +101,7 @@ define(['underscore'], function(_) {
     var app = menu.app;
 
     var result = _.clone(menuOptions);
-    if ( !(app.pasteAllowed && model.is_folderish)) {
+    if ( !(app.pasteAllowed() && model.is_folderish)) {
       delete result.pasteItem;
     }
     if (app.inQueryMode() || menu.options.canMove === false) {
