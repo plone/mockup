@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-* add items here
+- Related Items: Add dropdown with recently added items.
+  [thet]
 
 Bug fixes:
 
@@ -42,7 +43,7 @@ New features:
 
   - Make anchor handling more flexible
   [tomgross]
-  
+
   - Mark special links
   - Do not mark anchors as special links
   [frapell]

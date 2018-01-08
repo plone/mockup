@@ -82,9 +82,30 @@
         }
     }
 
-    .favorites {
+    .favorites
+    .recentlyUsed {
         position: relative;  // make dropdown appear on right, as the dropdown is positioned absolute / left-0.
     }
+
+    .dropdown-menu {
+        padding: 1em 0;
+        a {
+            cursor: pointer;
+            display: block;
+            padding: 0.5em 1em;
+            &, &:hover {
+                text-decoration: none;
+                border-bottom: none !important;
+            }
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
 }
 
 .pattern-relateditems-dropdown {
@@ -146,6 +167,7 @@
 
 }
 
+.pattern-relateditems-recentlyused-path,
 .pattern-relateditems-item-path,
 .pattern-relateditems-result-path {
     font-size: 0.8em;

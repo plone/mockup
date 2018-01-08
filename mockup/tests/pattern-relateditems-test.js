@@ -154,6 +154,7 @@ define([
           })
         );
       });
+
     });
 
     afterEach(function() {
@@ -379,6 +380,163 @@ define([
       expect($('.path-wrapper .pattern-relateditems-path-label', $container).text()).to.be.equal('Current path:');
       expect($($('.path-wrapper .crumb')[1], $container).text()).to.be.equal('folder1');
 
+    });
+
+    it('use recently used', function () {
+      // Test if adding items add to the recently used list.
+
+      // Clear local storage at first.
+      delete localStorage.relateditems_recentlyused;
+
+      initializePattern({'selectableTypes': ['Folder'], 'recentlyUsed': true});
+      var clock = sinon.useFakeTimers();
+      var $input;
+
+      // initially - without having previously select something - the recently used button is not shown.
+      expect($('button.recentlyUsed', $container).length).to.be.equal(0);
+
+      // Select some items
+      // folder 1
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
+      // folder 2
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
+
+      // check, if items are selected
+      expect($('input.pat-relateditems').val()).to.be.equal('UID6,UID7');
+
+      // destroy relateditems widget and reload it
+      $('.pattern-relateditems-container').remove();
+
+      initializePattern({'selectableTypes': ['Folder'], 'recentlyUsed': true});
+
+      // after re-initialization (or page reload. no dynamic re-rendering based
+      // on the data model yet, sorry), the recently used button should be there.
+      expect($('button.recentlyUsed', $container).length).to.be.equal(1);
+
+      // last selected should be first in list.
+      expect($($('.pattern-relateditems-recentlyused-select')[0]).data('uid')).to.be.equal('UID7');
+      expect($($('.pattern-relateditems-recentlyused-select')[1]).data('uid')).to.be.equal('UID6');
+
+      // Klicking on last used item should add it to the selection.
+      $($('.pattern-relateditems-recentlyused-select')[0]).click();
+      expect($('input.pat-relateditems').val()).to.be.equal('UID7');
+
+      // done.
+    });
+
+    it('recently used deactivated', function () {
+      // Test if deactivating recently used really deactivates it.
+
+      // Clear local storage at first.
+      delete localStorage.relateditems_recentlyused;
+
+      initializePattern({'selectableTypes': ['Folder']});  // per default recently used isn't activated.
+      var clock = sinon.useFakeTimers();
+      var $input;
+
+      // initially - without having previously select something - the recently used button is not shown.
+      expect($('button.recentlyUsed', $container).length).to.be.equal(0);
+
+      // Select some items
+      // folder 1
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
+      // folder 2
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
+
+      // check, if items are selected
+      expect($('input.pat-relateditems').val()).to.be.equal('UID6,UID7');
+
+      // destroy relateditems widget and reload it
+      $('.pattern-relateditems-container').remove();
+
+      initializePattern({'selectableTypes': ['Folder']});
+
+      // recently used button should still not be visible
+      expect($('button.recentlyUsed', $container).length).to.be.equal(0);
+
+      // done.
+    });
+
+    it('limit recently used', function () {
+      // Test if limiting recently used items really limits the list.
+
+      // Clear local storage at first.
+      delete localStorage.relateditems_recentlyused;
+
+      // initialize without a max items setting - recently items isn't shown yet anyways.
+      initializePattern({'selectableTypes': ['Folder', 'Image'], 'recentlyUsed': true});
+      var clock = sinon.useFakeTimers();
+      var $input;
+
+      // Select some items
+      // folder 1
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
+      // folder 2
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
+      // image 1
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/image1"]').click();
+      // image 2
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/image2"]').click();
+
+      // check, if items are selected
+      expect($('input.pat-relateditems').val()).to.be.equal('UID6,UID7,UID8,UID9');
+
+      // destroy relateditems widget and reload it
+      $('.pattern-relateditems-container').remove();
+
+      initializePattern({'selectableTypes': ['Folder', 'Image'], 'recentlyUsed': true, 'recentlyUsedMaxItems': '2'});
+
+      // only two should be visible, last selected should be first in list.
+      expect($('.pattern-relateditems-recentlyused-select').length).to.be.equal(2);
+      expect($($('.pattern-relateditems-recentlyused-select')[0]).data('uid')).to.be.equal('UID9');
+      expect($($('.pattern-relateditems-recentlyused-select')[1]).data('uid')).to.be.equal('UID8');
+
+      // done.
+    });
+
+    it('recently used custom key', function () {
+      // Test if configuring a custom storage key for recently used has any effect.
+
+      var key = 'recently_used_cusom_key@ümläüte';
+
+      // Clear local storage at first.
+      delete localStorage[key];
+
+      // initialize without a max items setting - recently items isn't shown yet anyways.
+      initializePattern({'selectableTypes': ['Folder', 'Image'], 'recentlyUsed': true, 'recentlyUsedKey': key});
+      var clock = sinon.useFakeTimers();
+      var $input;
+
+      // Select some items
+      // folder 1
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
+      // folder 2
+      $('.select2-search-field input.select2-input').click();
+      clock.tick(1000);
+      $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
+
+      var items = JSON.parse(localStorage[key]);
+      expect(items.length).to.be.equal(2);
+
+      // done.
     });
 
   });
