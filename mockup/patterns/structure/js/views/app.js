@@ -339,7 +339,7 @@ define([
       if (response.status === 404) {
         window.alert(_t('operation url ${url} is not valid', {url: url}));
       } else {
-        window.alert(_t('there was an error performing action'));
+        window.alert(_t('there was an error performing the action'));
       }
     },
     setupButtons: function() {
