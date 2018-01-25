@@ -273,7 +273,7 @@ define([
             } else if (options.onError) {
               options.onError(xhr, textStatus, errorStatus);
             } else {
-              window.alert(_t('There was an error submitting the form.'));
+              // window.alert(_t('There was an error submitting the form.'));
               console.log('error happened do something');
             }
             self.emit('formActionError', [xhr, textStatus, errorStatus]);
@@ -618,8 +618,9 @@ define([
       self.$wrapper.addClass('image-modal');
       var src = self.$el.attr('href');
       var srcset = self.$el.attr('data-modal-srcset') || '';
+      var title = $.trim(self.$el.context.innerText) || 'Image';
       // XXX aria?
-      self.$raw = $('<div><h1>Image</h1><div id="content"><div class="modal-image"><img src="' + src + '" srcset="' + srcset + '" /></div></div></div>');
+      self.$raw = $('<div><h1>' + title + '</h1><div id="content"><div class="modal-image"><img src="' + src + '" srcset="' + srcset + '" /></div></div></div>');
       self._show();
     },
 

@@ -224,7 +224,7 @@ define([
       self.anchorData = [];
       var node, i, j, name, title;
 
-      var nodes = self.tiny.dom.select('a.mceItemAnchor,img.mceItemAnchor,a.mce-item-anchor,img.mce-item-anchor');
+      var nodes = self.tiny.dom.select('.mceItemAnchor,.mce-item-anchor');
       for (i = 0; i < nodes.length; i = i + 1) {
         node = nodes[i];
         name = self.tiny.dom.getAttrib(node, 'name');

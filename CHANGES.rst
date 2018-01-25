@@ -1,21 +1,73 @@
 Changelog
 =========
 
-2.6.2 (Unreleased)
+2.6.3 (Unreleased)
+------------------
+
+Breaking changes:
+
+* add items here
+
+New features:
+
+- Related Items: Add dropdown with recently added items.
+  [thet]
+
+Bug fixes:
+
+- Fixed resource registry override tab's Save button being disabled
+  [obct537]
+
+- Add type="button" to pickadate buttons to avoid form submit problems.
+  [cekk]
+
+- image modal: use image description for modal title
+  [ksuess]
+
+
+2.6.2 (2017-11-26)
 ------------------
 
 New features:
 
 - Structure pattern:
+
   - Make action menu bar sticky.
   - Make action menu more compact, so that it doesn't break into a newline early.
   - Use more tooltips in the action menu.
   [thet]
 
-Bug fixes: 
+- Related items pattern:
 
-- Fixed resource registry override tab's Save button being disabled
-  [obct537]
+- Avoid double initialization of Select2.
+  [thet]
+
+  - Added options to change sorting.
+  [Gagaro]
+
+- TinyMCE pattern:
+
+  - Make anchor handling more flexible
+  [tomgross]
+
+  - Mark special links
+  - Do not mark anchors as special links
+  [frapell]
+
+Bug fixes:
+
+- Related items widget: Fix case, where ``initSelection`` broke on an error in Select2.
+  [thet]
+
+- Querystring pattern: Fix #716, where the path-depth was added to string values like the title when a path criteria was present.
+  [thet]
+
+- Structure pattern:
+
+  - Set default page icon on item row. Fixes: https://github.com/plone/Products.CMFPlone/issues/2131
+  - Pass event data for the ``structure-url-changed`` event correctly.
+
+  [jensens, thet]
 
 
 2.6.1 (2017-10-03)
@@ -45,7 +97,7 @@ New features:
 - pattern-pickadate: Emit the ``updated.pickadate.patterns`` event when clicking the "clear" and "now" buttons.
   [thet]
 
-Bug fixes: 
+Bug fixes:
 
 - TinyMCE: Fix seen issue where pattern failed, because importcss_file_filter
   was already a function

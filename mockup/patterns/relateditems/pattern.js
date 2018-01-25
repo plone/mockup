@@ -13,11 +13,15 @@
  *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    pageSize(int): Batch size to break down big result sets into multiple pages. (10).
+ *    recentlyUsed(boolen): Show the recently used items dropdown (false).
+ *    recentlyUsedMaxItems(integer): Maximum items to keep in recently used list. 0: no restriction. (20).
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
  *    rootUrl(string): Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.
  *    scanSelection(boolean): Scan the list of selected elements for other patterns.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
+ *    sortOn(string): Index on which to sort on. ('path')
+ *    sortOrder(string): Sort ordering. ('ascending')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
  *    upload(boolen): Allow file and image uploads from within the related items widget.
  *    uploadAllowView(string): View, which returns a JSON response in the form of {allowUpload: true}, if upload is allowed in the current context.
@@ -100,6 +104,7 @@ define([
   'translate',
   'text!mockup-patterns-relateditems-url/templates/breadcrumb.xml',
   'text!mockup-patterns-relateditems-url/templates/favorite.xml',
+  'text!mockup-patterns-relateditems-url/templates/recentlyused.xml',
   'text!mockup-patterns-relateditems-url/templates/result.xml',
   'text!mockup-patterns-relateditems-url/templates/selection.xml',
   'text!mockup-patterns-relateditems-url/templates/toolbar.xml',
@@ -107,6 +112,7 @@ define([
 ], function($, _, Base, Select2, ButtonView, utils, registry, _t,
             BreadcrumbTemplate,
             FavoriteTemplate,
+            RecentlyUsedTemplate,
             ResultTemplate,
             SelectionTemplate,
             ToolbarTemplate
@@ -133,6 +139,9 @@ define([
       contextPath: undefined,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       favorites: [],
+      recentlyUsed: false,
+      recentlyUsedMaxItems: 20,
+      recentlyUsedKey: 'relateditems_recentlyused',
       maximumSelectionSize: -1,
       minimumInputLength: 0,
       mode: 'auto', // possible values are 'auto', 'search' and 'browse'.
@@ -143,6 +152,8 @@ define([
       scanSelection: false,  // False, to no unnecessarily use CPU time on this.
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
+      sortOn: 'path',
+      sortOrder: 'ascending',
       tokenSeparators: [',', ' '],
       upload: false,
       uploadAllowView: undefined,
@@ -153,6 +164,8 @@ define([
       breadcrumbTemplateSelector: null,
       favoriteTemplate: FavoriteTemplate,
       favoriteTemplateSelector: null,
+      recentlyusedTemplate: RecentlyUsedTemplate,
+      recentlyusedTemplateSelector: null,
       resultTemplate: ResultTemplate,
       resultTemplateSelector: null,
       selectionTemplate: SelectionTemplate,
@@ -163,6 +176,26 @@ define([
       // needed
       multiple: true,
 
+    },
+
+    recentlyUsed: function (filterSelectable) {
+      var ret = utils.storage.get(this.options.recentlyUsedKey) || [];
+      // hard-limit to 1000 entries
+      ret = ret.slice(ret.length-1000, ret.length);
+      if (filterSelectable) {
+        // Filter out only selectable items.
+        // This is used only to create the list of items to be displayed.
+        // the list to be stored is unfiltered and can be reused among
+        // different instances of this widget with different settings.
+        ret.filter(this.isSelectable.bind(this));
+      }
+      // max is applied AFTER filtering selectable items.
+      var max = parseInt(this.options.recentlyUsedMaxItems, 10);
+      if (max) {
+        // return the slice from the end, as we want to display newest items first.
+        ret = ret.slice(ret.length-max, ret.length);
+      }
+      return ret;
     },
 
     applyTemplate: function(tpl, item) {
@@ -186,7 +219,6 @@ define([
     },
 
     setAjax: function () {
-
       var ajax = {
 
         url: this.options.vocabularyUrl,
@@ -223,8 +255,8 @@ define([
           var data = {
             query: JSON.stringify({
               criteria: criterias,
-              sort_on: 'path',
-              sort_order: 'ascending'
+              sort_on: this.options.sortOn,
+              sort_order: this.options.sortOrder
             }),
             attributes: JSON.stringify(this.options.attributes),
             batch: JSON.stringify({
@@ -282,13 +314,10 @@ define([
         }.bind(this)
 
       };
-
       this.options.ajax = ajax;
-      this.$el.select2(this.options);
-
     },
 
-    setBreadCrumbs: function () {
+    renderToolbar: function () {
       var self = this;
       var path = self.currentPath;
       var html;
@@ -313,6 +342,14 @@ define([
         favoritesHtml = favoritesHtml + self.applyTemplate('favorite', item_copy);
       });
 
+      var recentlyUsedHtml = '';
+      if (self.options.recentlyUsed) {
+        var recentlyUsed = self.recentlyUsed(true);  // filter out only those items which can actually be selected
+        _.each(recentlyUsed.reverse(), function (item) {  // reverse to get newest first.
+          recentlyUsedHtml = recentlyUsedHtml + self.applyTemplate('recentlyused', item);
+        });
+      }
+
       html = self.applyTemplate('toolbar', {
         items: itemsHtml,
         favItems: favoritesHtml,
@@ -320,6 +357,8 @@ define([
         searchText: _t('Current path:'),
         searchModeText: _t('Search'),
         browseModeText: _t('Browse'),
+        recentlyUsedItems: recentlyUsedHtml,
+        recentlyUsedText: _t('Recently Used'),
       });
 
       self.$toolbar.html(html);
@@ -378,6 +417,26 @@ define([
         self.browseTo($(this).attr('href'));
       });
 
+      if (self.options.recentlyUsed) {
+        $('.pattern-relateditems-recentlyused-select', self.$toolbar).on('click', function(event) {
+          event.preventDefault();
+          var uid = $(this).data('uid');
+          var item = self.recentlyUsed().filter(function (it) { return it.UID === uid; });
+          if (item.length > 0) {
+            item = item[0];
+          } else {
+            return;
+          }
+          self.selectItem(item);
+          if (self.options.maximumSelectionSize > 0) {
+            var items = self.$el.select2('data');
+            if (items.length >= self.options.maximumSelectionSize) {
+              return;
+            }
+          }
+        });
+      }
+
       function initUploadView(UploadView, disabled) {
         var uploadButtonId = 'upload-' + utils.generateId();
         var uploadButton = new ButtonView({
@@ -430,7 +489,7 @@ define([
       self.emit('before-browse');
       self.currentPath = path;
       self.$el.select2('close');
-      self.setBreadCrumbs();
+      self.renderToolbar();
       self.$el.select2('open');
       self.emit('after-browse');
     },
@@ -441,6 +500,18 @@ define([
       var data = self.$el.select2('data');
       data.push(item);
       self.$el.select2('data', data, true);
+
+      if (self.options.recentlyUsed) {
+        // add to recently added items
+        var recentlyUsed = self.recentlyUsed();  // do not filter for selectable but get all. append to that list the new item.
+        var alreadyPresent = recentlyUsed.filter(function (it) { return it.UID === item.UID; });
+        if (alreadyPresent.length > 0) {
+          recentlyUsed.splice(recentlyUsed.indexOf(alreadyPresent[0]), 1);
+        }
+        recentlyUsed.push(item);
+        utils.storage.set(self.options.recentlyUsedKey, recentlyUsed);
+      }
+
       self.emit('selected');
     },
 
@@ -543,14 +614,14 @@ define([
               $parent.removeClass('pattern-relateditems-active');
               self.deselectItem(item);
             } else {
-              self.selectItem(item);
-              $parent.addClass('pattern-relateditems-active');
               if (self.options.maximumSelectionSize > 0) {
                 var items = self.$el.select2('data');
                 if (items.length >= self.options.maximumSelectionSize) {
                   self.$el.select2('close');
                 }
               }
+              self.selectItem(item);
+              $parent.addClass('pattern-relateditems-active');
               if (self.options.closeOnSelect) {
                 self.$el.select2('close');
               }
@@ -584,15 +655,23 @@ define([
                 prev[item.UID] = item;
                 return prev;
               }, {});
-              callback(
-                ids
-                .map(function(uid) {
-                  return results[uid];
-                })
-                .filter(function(item) {
-                  return item !== undefined;
-                })
-              );
+
+              try {
+                callback(
+                  ids
+                  .map(function(uid) {
+                    return results[uid];
+                  })
+                  .filter(function(item) {
+                    return item !== undefined;
+                  })
+                );
+              } catch (e) {
+                // Select2 3.5.4 throws an error in some cases in
+                // updateSelection, ``this.selection.find(".select2-search-choice").remove();``
+                // No idea why, hard to track.
+                console.log(data);
+              }
 
               if (self.openAfterInit) {
                 // open after initialization
@@ -630,7 +709,7 @@ define([
         event.preventDefault();
       });
 
-      self.setBreadCrumbs();
+      self.renderToolbar();
 
     }
   });

@@ -36,17 +36,20 @@ define([
       text: '',
       label: ''
     },
-    pasteAllowed: !!$.cookie('__cp'),
     sort_on: 'getObjPositionInParent',
     sort_order: 'ascending',
     additionalCriterias: [],
     cookieSettingPrefix: '_fc_',
+
+    pasteAllowed: function () {
+        return !!$.cookie('__cp');
+    },
+
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.loading = new utils.Loading();
       self.loading.show();
-      self.pasteAllowed = !!$.cookie('__cp');
 
       /* close popovers when clicking away */
       $(document).click(function(e) {
@@ -110,7 +113,7 @@ define([
             url: self.getAjaxUrl(self.contextInfoUrl),
             dataType: 'json',
             success: function(data) {
-              $('body').trigger('context-info-loaded', data);
+              $('body').trigger('context-info-loaded', [data]);
             },
             error: function(response) {
               // XXX handle error?
@@ -169,7 +172,7 @@ define([
           // TODO figure out whether the following event after this is
           // needed at all.
         }
-        $('body').trigger('structure-url-changed', path);
+        $('body').trigger('structure-url-changed', [path]);
 
       });
 
@@ -203,7 +206,7 @@ define([
             path = '/';
           }
           self.setCurrentPath(path);
-          $('body').trigger('structure-url-changed', path);
+          $('body').trigger('structure-url-changed', [path]);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
           self.collection.goTo(self.collection.information.firstPage);
@@ -231,8 +234,7 @@ define([
     togglePasteBtn: function(){
       var self = this;
       if (_.find(self.buttons.items, function(btn){ return btn.id === 'paste'; })) {
-        self.pasteAllowed = !!$.cookie('__cp');
-        if (self.pasteAllowed) {
+        if (self.pasteAllowed()) {
           self.buttons.get('paste').enable();
         } else {
           self.buttons.get('paste').disable();
@@ -339,7 +341,7 @@ define([
       if (response.status === 404) {
         window.alert(_t('operation url ${url} is not valid', {url: url}));
       } else {
-        window.alert(_t('there was an error performing action'));
+        window.alert(_t('there was an error performing the action'));
       }
     },
     setupButtons: function() {

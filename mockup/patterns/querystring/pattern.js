@@ -608,7 +608,7 @@ define([
       }
       else if (typeof self.$value !== 'undefined') {
         var value = self.$value.val();
-        if(typeof(value) === 'string'){
+        if(ival === 'path' && value) {
           var depth = self.getDepthString();
           if(depth){
             value += depth;
