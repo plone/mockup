@@ -17,7 +17,8 @@ Bug fixes:
 
 - image modal: use image description for modal title
   [ksuess]
-
+- Add type="button" to pickadate buttons to avoid form submit problems.
+  [cekk]
 
 2.6.2 (2017-11-26)
 ------------------
