@@ -15,6 +15,9 @@ New features:
 
 Bug fixes:
 
+- Fixing problems with wrong relative date translations for norwegian sites.
+  [martior]
+
 - Fixed resource registry override tab's Save button being disabled
   [obct537]
 

@@ -87,12 +87,12 @@ define([
   'moment',
   'mockup-i18n'
 ], function($, Base, moment, i18n) {
-  'use strict';
 
   var Moment = Base.extend({
     name: 'moment',
     trigger: '.pat-moment',
     parser: 'mockup',
+    moment_i18n_map: {'no': 'nb'},  // convert Plone language codes to moment codes.
     defaults: {
       // selector of elements to format dates for
       selector: null,
@@ -109,7 +109,11 @@ define([
       if (!date || date === 'None') {
         return;
       }
-      moment.locale([(new i18n()).currentLanguage, 'en']);
+      var currentLanguage = (new i18n()).currentLanguage;
+      if (currentLanguage in self.moment_i18n_map) {
+        currentLanguage = self.moment_i18n_map[currentLanguage];
+      }
+      moment.locale([currentLanguage, 'en']);
       date = moment(date);
       if (!date.isValid()) {
         return;
