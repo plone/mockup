@@ -15,10 +15,15 @@ New features:
 
 Bug fixes:
 
-- image modal: use image description for modal title
-  [ksuess]
+- Fixed resource registry override tab's Save button being disabled
+  [obct537]
+
 - Add type="button" to pickadate buttons to avoid form submit problems.
   [cekk]
+
+- image modal: use image description for modal title
+  [ksuess]
+
 
 2.6.2 (2017-11-26)
 ------------------
@@ -34,7 +39,7 @@ New features:
 
 - Related items pattern:
 
-  - Avoid double initialization of Select2.
+- Avoid double initialization of Select2.
   [thet]
 
   - Added options to change sorting.
