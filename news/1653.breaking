@@ -1,0 +1,23 @@
+- Refactor for usage with ``npm`` instead of ``bower``.
+  [thet]
+
+- Remove obsolete dependencies:
+    - console-polyfill
+    - es5-shim
+    - selectivizr
+    - js-shortcuts    
+    - marked
+    - react
+    - JSXTransformer
+  [thet]
+
+- Remove support for IE < 9.
+  [thet]
+
+TODO:
+
+- Refactor docs like in Patterns to get rid of react.
+
+- Refactor jquery.recurrenceinput.js dependencies
+
+

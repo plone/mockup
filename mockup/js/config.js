@@ -21,7 +21,6 @@
     baseUrl: './',
     optimize: 'none',
     paths: {
-      'JSXTransformer': 'bower_components/react/JSXTransformer',
       'ace': 'bower_components/ace-builds/src/ace',
       'backbone': 'bower_components/backbone/backbone',
       'backbone.paginator': 'bower_components/backbone.paginator/lib/backbone.paginator',
@@ -65,9 +64,7 @@
       'jquery.tools.dateinput': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.dateinput',
       'jquery.tools.overlay': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tools.overlay',
       'jquery.tmpl': 'bower_components/jquery.recurrenceinput.js/lib/jquery.tmpl',
-      'js-shortcuts': 'bower_components/js-shortcuts/js-shortcuts',
       'translate': 'js/i18n-wrapper',
-      'marked': 'bower_components/marked/lib/marked',
       'mockup-bundles-docs': 'js/bundles/docs',
       'mockup-bundles-filemanager': 'js/bundles/filemanager',
       'mockup-bundles-plone': 'js/bundles/plone',
@@ -132,7 +129,6 @@
       'picker': 'bower_components/pickadate/lib/picker',
       'picker.date': 'bower_components/pickadate/lib/picker.date',
       'picker.time': 'bower_components/pickadate/lib/picker.time',
-      'react': 'bower_components/react/react',
       'select2': 'bower_components/select2/select2',
       'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
@@ -151,7 +147,6 @@
       'logging': 'bower_components/logging/src/logging'
     },
     shim: {
-      'JSXTransformer': { exports: 'window.JSXTransformer' },
       'backbone': { exports: 'window.Backbone', deps: ['underscore', 'jquery'] },
       'backbone.paginator': { exports: 'window.Backbone.Paginator', deps: ['backbone'] },
       'bootstrap-alert': {  exports: 'window.jQuery.fn.alert.Constructor', deps: ['jquery'] },
@@ -161,8 +156,7 @@
       'expect': { exports: 'window.expect' },
       'jqtree': { deps: ['jquery'] },
       'jqtree-contextmenu': { deps: ['jqtree'] },
-      'js-shortcuts': { deps: ['jquery'] },
-      'select2': { deps: ["jquery"] },
+      'select2': { deps: ['jquery'] },
       'jquery.cookie': { deps: ['jquery'] },
       'jquery.event.drag': { deps: ['jquery'] },
       'jquery.event.drop': { deps: ['jquery'], exports: '$.drop' },
