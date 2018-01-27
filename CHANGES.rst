@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.7.1 (unreleased)
+------------------
+
+Breaking changes:
+
+- add items here
+
+New features:
+
+- add items here
+
+Bug fixes:
+
+- add items here
+
+
 2.7.0 (2018-01-27)
 ------------------
 
