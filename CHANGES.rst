@@ -15,6 +15,10 @@ New features:
 
 Bug fixes:
 
+- Marked as compatible with Python 2.7, 3.5, 3.6.
+  Easy because we basically have no Python code.
+  Compatible with Plone 5.1 and 5.2.  [maurits]
+
 - Fixing problems with wrong relative date translations for norwegian sites.
   [martior]
 
