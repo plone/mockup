@@ -4,10 +4,6 @@ Changelog
 2.6.3 (Unreleased)
 ------------------
 
-Breaking changes:
-
-* add items here
-
 New features:
 
 - Related Items: Add dropdown with recently added items.
