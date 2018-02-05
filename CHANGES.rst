@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- add items here
+- Fixing problem with parseBodyTag when txt contains
+  non ASCII chars.
+  [mamico]
 
 
 2.7.0 (2018-01-27)

@@ -70,6 +70,18 @@ define([
         expect(fn).to.throwException(TypeError);
       });
 
+      it('parses the body tag\'s content from a response with multiple lines', function() {
+        var response = '<body><h1>foo</h1>\n\t<p>bar\n</p></body>',
+            html = utils.parseBodyTag(response);
+        expect(html).to.equal('<h1>foo</h1>\n\t<p>bar\n</p>');
+      });
+
+      it('parses the body tag\'s content from a response with not ASCII chars (e.g. line separator)', function() {
+        var response = '<body><p>foo ' + String.fromCharCode(8232) + ' bar</p></body>',
+            html = utils.parseBodyTag(response);
+        expect(html).to.equal('<p>foo ' + String.fromCharCode(8232) + ' bar</p>');
+      });
+
     });
 
     describe('bool', function() {
