@@ -303,7 +303,7 @@ define([
   };
 
   var parseBodyTag = function(txt) {
-    return $((/<body[^>]*>((.|[\n\r])*)<\/body>/im).exec(txt)[0]
+    return $((/<body[^>]*>[^]*<\/body>/im).exec(txt)[0]
       .replace('<body', '<div').replace('</body>', '</div>')).eq(0).html();
   };
 
