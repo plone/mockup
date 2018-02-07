@@ -17,6 +17,10 @@ Bug fixes:
 - Modal performance: don't reposition after loading each img
   [cillianderoiste]
 
+- Fixing problem with parseBodyTag when txt contains
+  non ASCII chars.
+  [mamico]
+
 
 2.7.0 (2018-01-27)
 ------------------
