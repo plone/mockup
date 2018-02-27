@@ -164,6 +164,11 @@ define([
         {title: 'Icon', value: 'icon'},
         {title: 'Large', value: 'large'}
       ],
+      imageClasses: {
+        'image-inline': 'Inline',
+        'image-right': 'Right',
+        'image-left': 'Left'
+      },
       targetList: [
         {text: _t('Open in this window / frame'), value: ''},
         {text: _t('Open in new window'), value: '_blank'},
