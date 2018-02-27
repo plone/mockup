@@ -10,7 +10,9 @@ Breaking changes:
 
 New features:
 
-- add items here
+- Add `imageClasses` option to the tinymce pattern
+  to allow overriding the list of alignment classes.
+  [davisagli]
 
 Bug fixes:
 

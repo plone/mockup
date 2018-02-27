@@ -63,9 +63,9 @@
       <div class="form-group align">
         <label><%- imageAlignText %></label>
         <select name="align">
-          <% _.each(['inline', 'right', 'left'], function(align){ %>
+          <% _.each(Object.keys(options.imageClasses), function(align){ %>
               <option value="<%- align %>">
-              <%- align.charAt(0).toUpperCase() + align.slice(1) %>
+              <%- options.imageClasses[align] %>
               </option>
           <% }); %>
         <select>

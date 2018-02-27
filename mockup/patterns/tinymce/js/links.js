@@ -568,7 +568,7 @@ define([
         src: src,
         title: title ? title : null,
         alt: self.$alt.val(),
-        'class': 'image-' + self.$align.val(),
+        'class': self.$align.val(),
         'data-linkType': self.linkType,
         'data-scale': self.$scale.val()
       }, self.linkTypes[self.linkType].attributes());
@@ -754,8 +754,8 @@ define([
           var klasses = className.split(' ');
           for (var i = 0; i < klasses.length; i = i + 1) {
             var klass = klasses[i];
-            if (klass.indexOf('image-') !== -1) {
-              self.$align.val(klass.replace('image-', ''));
+            if (self.options.imageClasses.indexOf(klass) !== -1) {
+              self.$align.val(klass);
             }
           }
         }
