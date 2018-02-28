@@ -14,6 +14,10 @@ New features:
   to allow overriding the list of alignment classes.
   [davisagli]
 
+- Include TinyMCE 4.7.6
+  [frapell]
+
+
 Bug fixes:
 
 - add items here

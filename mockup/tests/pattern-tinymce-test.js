@@ -143,6 +143,9 @@ define([
 
       var $el = $container.find('textarea');
       var tinymce = new TinyMCE($el);
+      // XXX: Mark editor as initialized so .save() would work
+      tinymce.tiny.initialized = true;
+
       tinymce.tiny.setContent('<p>foobar</p>');
       $container.submit(function(e) {
         e.preventDefault();
