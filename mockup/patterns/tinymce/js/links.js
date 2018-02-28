@@ -754,8 +754,10 @@ define([
           var klasses = className.split(' ');
           for (var i = 0; i < klasses.length; i = i + 1) {
             var klass = klasses[i];
-            if (self.options.imageClasses.indexOf(klass) !== -1) {
-              self.$align.val(klass);
+            for (var availClass in self.options.imageClasses) {
+              if (availClass.indexOf(klass) !== -1) {
+                self.$align.val(klass);
+              }
             }
           }
         }
