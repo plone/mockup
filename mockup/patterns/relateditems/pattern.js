@@ -579,6 +579,16 @@ define([
         if (self.options.scanSelection) {
           registry.scan($selection);
         }
+        if (self.options.maximumSelectionSize == 1){
+          // If this related field accepts only 1 item, the breadcrumbs should
+          // reflect the location for this particular item
+          var itemPath = item.path;
+          var path_split = itemPath.split('/');
+          path_split = path_split.slice(0,-1);  // Remove last part of path, we always want the parent path
+          itemPath = path_split.join('/');
+          self.currentPath = itemPath;
+          self.renderToolbar();
+        }
         return $selection;
       };
 
