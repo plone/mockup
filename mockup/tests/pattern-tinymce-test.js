@@ -143,6 +143,7 @@ define([
 
       var $el = $container.find('textarea');
       var tinymce = new TinyMCE($el);
+
       tinymce.tiny.setContent('<p>foobar</p>');
       $container.submit(function(e) {
         e.preventDefault();
