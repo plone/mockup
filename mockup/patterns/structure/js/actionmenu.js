@@ -119,7 +119,7 @@ define(['underscore'], function(_) {
     var typeToViewAction = app.options.typeToViewAction;
     var viewAction = typeToViewAction && typeToViewAction[model.portal_type] || '';
     result.openItem.url = model.getURL + viewAction;
-    result.editItem.url = model.getURL + '/@@edit';
+    result.editItem.url = model.getURL + '/edit';
 
     return result;
   };
