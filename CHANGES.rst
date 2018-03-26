@@ -17,8 +17,11 @@ New features:
 - Include TinyMCE 4.7.6
   [frapell]
 
-
 Bug fixes:
+
+- Link to /edit rather than /@@edit from structure pattern actions.
+  This fixes the link for Archetypes content items.
+  [davisagli]
 
 - add items here
 

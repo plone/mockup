@@ -1292,7 +1292,7 @@ define([
       expect(item.data().id).to.equal('item9');
       expect($('.title a.manage', item).attr('href')).to.equal('http://localhost:9876/item9');
       expect($('.actionmenu a.openItem', item).attr('href')).to.equal('http://localhost:9876/item9');
-      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:9876/item9/@@edit');
+      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:9876/item9/edit');
     });
 
     it('test navigate to folder push states', function() {
