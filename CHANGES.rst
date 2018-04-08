@@ -1,12 +1,8 @@
 Changelog
 =========
 
-2.7.2 (Unrelesed)
------------------
-
-Breaking changes:
-
-- add items here
+2.7.2 (2018-04-08)
+------------------
 
 New features:
 
@@ -23,19 +19,9 @@ Bug fixes:
   This fixes the link for Archetypes content items.
   [davisagli]
 
-- add items here
-
 
 2.7.1 (2018-02-11)
 ------------------
-
-Breaking changes:
-
-- add items here
-
-New features:
-
-- add items here
 
 Bug fixes:
 
