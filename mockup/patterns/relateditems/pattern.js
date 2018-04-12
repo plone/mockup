@@ -20,7 +20,7 @@
  *    scanSelection(boolean): Scan the list of selected elements for other patterns.
  *    selectableTypes(array): If the value is null all types are selectable. Otherwise, provide a list of strings to match item types that are selectable. (null)
  *    separator(string): Select2 option. String which separates multiple items. (',')
- *    sortOn(string): Index on which to sort on. ('path')
+ *    sortOn(string): Index on which to sort on. If null, will default to term relevance (no sort) when searching and folder order (getObjPositionInParent) when browsing. (null)
  *    sortOrder(string): Sort ordering. ('ascending')
  *    tokenSeparators(array): Select2 option, refer to select2 documentation. ([",", " "])
  *    upload(boolen): Allow file and image uploads from within the related items widget.
@@ -152,7 +152,7 @@ define([
       scanSelection: false,  // False, to no unnecessarily use CPU time on this.
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
       separator: ',',
-      sortOn: 'path',
+      sortOn: null,
       sortOrder: 'ascending',
       tokenSeparators: [',', ' '],
       upload: false,
@@ -252,11 +252,18 @@ define([
             v: this.options.rootPath + this.currentPath + (this.browsing ? '::1' : '')
           });
 
+          var sort_on = this.options.sortOn;
+          var sort_order = sort_on ? this.options.sortOrder : null;
+          if (this.browsing && sort_on === null) {
+            sort_on = 'getObjPositionInPath';
+            sort_order = 'ascending';
+          }
+
           var data = {
             query: JSON.stringify({
               criteria: criterias,
-              sort_on: this.options.sortOn,
-              sort_order: this.options.sortOrder
+              sort_on: sort_on,
+              sort_order: sort_order
             }),
             attributes: JSON.stringify(this.options.attributes),
             batch: JSON.stringify({

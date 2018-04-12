@@ -14,6 +14,11 @@ New features:
 
 Bug fixes:
 
+- Improved default relateditems pattern sort.
+  It now defaults to search term ranking when searching
+  and folder position (getObjPositionInParent) when browsing.
+  [davisagli]
+
 - *add item here*
 
 
