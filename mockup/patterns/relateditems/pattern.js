@@ -223,7 +223,7 @@ define([
 
         url: this.options.vocabularyUrl,
         dataType: 'JSON',
-        quietMillis: 100,
+        quietMillis: 500,
 
         data: function (term, page) {
 

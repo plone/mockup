@@ -14,12 +14,13 @@ New features:
 
 Bug fixes:
 
+- Relateditems: Raise the timeout when typing searchterms from 100 milliseconds to 500 milliseconds to prevent a too high server load.
+  [thet]
+
 - Improved default relateditems pattern sort.
   It now defaults to search term ranking when searching
   and folder position (getObjPositionInParent) when browsing.
   [davisagli]
-
-- *add item here*
 
 
 2.7.2 (2018-04-08)
