@@ -14,6 +14,10 @@ New features:
 
 Bug fixes:
 
+- Relateditems: Do not filter out current context.
+  Filtering out the current context makes sense for the related items field but it can be problematic for other use cases.
+  [thet]
+
 - Relateditems: Raise the timeout when typing searchterms from 100 milliseconds to 500 milliseconds to prevent a too high server load.
   [thet]
 

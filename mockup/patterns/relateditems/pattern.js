@@ -540,10 +540,6 @@ define([
       if (item.selectable === false) {
         return false;
       }
-      if (self.options.contextPath === this.options.rootPath + item.path) {
-        // filter out current item
-        return false;
-      }
       if (self.options.selectableTypes === null) {
         return true;
       } else {
