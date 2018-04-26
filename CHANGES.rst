@@ -41,6 +41,9 @@ Bug fixes:
 
 Bug fixes:
 
+- Modal performance: don't reposition after loading each img
+  [cillianderoiste]
+
 - Fixing problem with parseBodyTag when txt contains
   non ASCII chars.
   [mamico]
