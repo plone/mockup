@@ -255,7 +255,7 @@ define([
           var sort_on = this.options.sortOn;
           var sort_order = sort_on ? this.options.sortOrder : null;
           if (this.browsing && sort_on === null) {
-            sort_on = 'getObjPositionInPath';
+            sort_on = 'getObjPositionInParent';
             sort_order = 'ascending';
           }
 
