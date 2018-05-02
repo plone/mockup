@@ -223,7 +223,7 @@ define([
 
         url: this.options.vocabularyUrl,
         dataType: 'JSON',
-        quietMillis: 100,
+        quietMillis: 500,
 
         data: function (term, page) {
 
@@ -538,10 +538,6 @@ define([
     isSelectable: function(item) {
       var self = this;
       if (item.selectable === false) {
-        return false;
-      }
-      if (self.options.contextPath === this.options.rootPath + item.path) {
-        // filter out current item
         return false;
       }
       if (self.options.selectableTypes === null) {
