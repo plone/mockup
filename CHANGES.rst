@@ -10,7 +10,9 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Mark special links: Mark external link with rel="noopener"
+  https://developers.google.com/web/tools/lighthouse/audits/noopener
+  [mamico]
 
 Bug fixes:
 

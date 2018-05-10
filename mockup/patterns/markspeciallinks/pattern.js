@@ -123,7 +123,8 @@ define([
       if (elonw) {
           // all http links (without the link-plain class), not within this site
           contentarea.find('a[href^="http"]:not(.link-plain):not([href^="' + url + '"])')
-                     .attr('target', '_blank');
+                     .attr('target', '_blank')
+                     .attr('rel', 'noopener');
       }
 
       if (msl) {
