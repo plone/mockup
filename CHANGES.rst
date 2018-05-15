@@ -28,6 +28,10 @@ Bug fixes:
   and folder position (getObjPositionInParent) when browsing.
   [davisagli]
 
+- Tinymce: When editing an image, and it had the 'Original' scale selected,
+  make sure that 'Original' is prefilled in the scale drop down
+  [frapell]
+
 
 2.7.2 (2018-04-08)
 ------------------

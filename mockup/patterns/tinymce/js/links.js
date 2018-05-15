@@ -743,9 +743,7 @@ define([
             self.linkType = linkType;
             self.linkTypes[self.linkType].load(self.imgElm);
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
-            if(scale){
-              self.$scale.val(scale);
-            }
+            self.$scale.val(scale);
             $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
           }else if (src) {
             self.guessImageLink(src);
