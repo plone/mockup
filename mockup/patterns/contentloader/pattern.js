@@ -126,9 +126,16 @@ define([
       if(!$content){
         $content = $(that.options.content).clone();
       }
-      $content.show();
-      $target.replaceWith($content);
-      Registry.scan($content);
+      if ($content.length) {
+        $content.show();
+        $target.replaceWith($content);
+        Registry.scan($content);
+      } else {
+        // empty target node instead of removing it.
+        // allows for subsequent content loader calls to work sucessfully.
+        $target.empty();
+      }
+
       that.$el.removeClass('loading-content');
     }
   });

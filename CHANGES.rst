@@ -16,6 +16,10 @@ New features:
 
 Bug fixes:
 
+- pat-contentloader: When the content which replaces the target is empty, empty the target instead of removing it.
+  This fixes a problem, where an empty result didn't did remove the ability to successfully replace the target for subsequent content loads.
+  [thet]
+
 - Relateditems: Do not filter out current context.
   Filtering out the current context makes sense for the related items field but it can be problematic for other use cases.
   [thet]
