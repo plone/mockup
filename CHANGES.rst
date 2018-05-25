@@ -36,7 +36,8 @@ Bug fixes:
   make sure that 'Original' is prefilled in the scale drop down
   [frapell]
 
-- Fix for loading country specific language codes [lyralemos]
+- Fix for loading country specific language codes
+  [lyralemos]
 
 
 2.7.2 (2018-04-08)
