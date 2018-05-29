@@ -20,6 +20,9 @@ New features:
 
 Bug fixes:
 
+- pat-structure: When a button is disabled, avoid firing events when clicked
+  [frapell]
+
 - pat-structure: When doing a search to filter items, disable reordering
   [frapell]
 

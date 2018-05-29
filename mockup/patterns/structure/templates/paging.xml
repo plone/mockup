@@ -10,16 +10,16 @@
       </a>
     </li>
     <% _.each(pages, function(p){ %>
-    <li class="<% if (currentPage == p) { %>active<% } %>">
+    <li class="<% if (currentPage == p) { %>active<% } else if ( p == '...' ) { %>disabled<% }%>">
       <a href="#" class="page"><%- p %></a>
     </li>
     <% }); %>
-    <li class="<% if (currentPage === lastPage) { %>disabled<% } %>">
+    <li class="<% if (currentPage === totalPages) { %>disabled<% } %>">
       <a href="#" class="servernext">
         &gt;
       </a>
     </li>
-    <li class="<% if (currentPage === lastPage) { %>disabled<% } %>">
+    <li class="<% if (currentPage === totalPages) { %>disabled<% } %>">
       <a href="#" class="serverlast">
         &raquo;
       </a>
