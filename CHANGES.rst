@@ -10,6 +10,10 @@ Breaking changes:
 
 New features:
 
+- Add a new pattern, to provide the DataTables functionality
+  https://datatables.net/
+  [frapell]
+
 - Mark special links: Mark external link with rel="noopener"
   https://developers.google.com/web/tools/lighthouse/audits/noopener
   [mamico]
