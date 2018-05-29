@@ -16,6 +16,9 @@ New features:
 
 Bug fixes:
 
+- pat-structure: When doing a search to filter items, disable reordering
+  [frapell]
+
 - pat-contentloader: When the content which replaces the target is empty, empty the target instead of removing it.
   This fixes a problem, where an empty result didn't did remove the ability to successfully replace the target for subsequent content loads.
   [thet]
