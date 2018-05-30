@@ -13,7 +13,7 @@ New features:
 - pat-structure: Use the datatables pattern for sorting columns 
   [frapell]
 
-- pat-structure: Add an 'All' option for the pagination
+- pat-structure: Add a '250' option for the pagination
   [frapell]
 
 - Add a new pattern, to provide the DataTables functionality

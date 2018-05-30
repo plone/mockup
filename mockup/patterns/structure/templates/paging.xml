@@ -37,6 +37,9 @@
     <li class="serverhowmany serverhowmany50 <% if(perPage == 50){ %>disabled<% } %>">
       <a href="#" class="">50</a>
     </li>
+    <li class="serverhowmany serverhowmany250 <% if(perPage == 250){ %>disabled<% } %>">
+      <a href="#" class="">250</a>
+    </li>
   </ul>
 
   <ul class="pagination pagination-sm">
