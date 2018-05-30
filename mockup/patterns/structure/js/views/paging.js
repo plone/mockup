@@ -99,7 +99,7 @@ define([
     },
     changeCount: function(e) {
       e.preventDefault();
-      var per = $(e.target).data('perpage');
+      var per = $(e.target).text();
       this.collection.howManyPer(per);
       this.app.setCookieSetting('perPage', per);
     }
