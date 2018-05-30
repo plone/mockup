@@ -3,7 +3,8 @@
   <span><%- status.text %></span>&nbsp;<% // &nbsp; to get correct height for empty alerts %>
 </div>
 
-<table class="table table-striped table-bordered">
+<table class="pat-datatables table table-striped table-bordered"
+       data-pat-datatables="<%- datatables_options %>">
   <thead>
     <tr class="fc-breadcrumbs-container">
       <td class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
