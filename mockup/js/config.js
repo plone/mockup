@@ -32,7 +32,7 @@
       'datatables.net': 'bower_components/datatables.net/js/jquery.dataTables.min',
       'datatables.net-bs': 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min',
       'datatables.net-autofill': 'bower_components/datatables.net-autofill/js/dataTables.autoFill.min',
-      'datatables.net-autofill-bs': 'bower_components/datatables.net-autofill-bs/js/dataTables.autoFill.min',
+      'datatables.net-autofill-bs': 'bower_components/datatables.net-autofill-bs/js/autoFill.bootstrap.min',
       'datatables.net-buttons': 'bower_components/datatables.net-buttons/js/dataTables.buttons.min',
       'datatables.net-buttons-flash': 'bower_components/datatables.net-buttons/js/buttons.flash.min',
       'datatables.net-buttons-html5': 'bower_components/datatables.net-buttons/js/buttons.html5.min',
