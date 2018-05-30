@@ -10,6 +10,9 @@ Breaking changes:
 
 New features:
 
+- pat-structure: Add an 'All' option for the pagination
+  [frapell]
+
 - Add a new pattern, to provide the DataTables functionality
   https://datatables.net/
   [frapell]
