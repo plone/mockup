@@ -22,7 +22,7 @@ define([
       '<form>' +
         '<div class="input-group">' +
           '<input type="text" class="search form-control" ' +
-                  'id="file-search-field" placeholder="<%= _t("Find text witin theme resource in plone") %>">' +
+                  'id="file-search-field" placeholder="<%= _t("Find text within theme resource in plone") %>">' +
         '</div>' +
         '<div class="input-group">' +
           '<input type="submit" class="btn btn-primary" value="<%= _t("Search") %>"/>' +

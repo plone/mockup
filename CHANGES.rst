@@ -36,6 +36,9 @@ Bug fixes:
   make sure that 'Original' is prefilled in the scale drop down
   [frapell]
 
+- Tinymce: Fix issue where Webpack less-loader was unable to load TinyMCE bundle styles
+  [datakurre]
+
 - Fix for loading country specific language codes
   [lyralemos]
 
