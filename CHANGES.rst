@@ -18,6 +18,7 @@ Bug fixes:
 
 - pat-contentloader: When the content which replaces the target is empty, empty the target instead of removing it.
   This fixes a problem, where an empty result didn't did remove the ability to successfully replace the target for subsequent content loads.
+- pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
   [thet]
 
 - Relateditems: Do not filter out current context.
