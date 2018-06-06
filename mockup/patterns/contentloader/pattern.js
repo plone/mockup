@@ -144,6 +144,7 @@ define([
       }
 
       that.$el.removeClass('loading-content');
+      that.emit('loading-done');
     }
   });
 
