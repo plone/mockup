@@ -39,6 +39,10 @@ Bug fixes:
 - Tinymce: Fix issue where Webpack less-loader was unable to load TinyMCE bundle styles
   [datakurre]
 
+- Fix for loading country specific language codes
+  [lyralemos]
+
+
 2.7.2 (2018-04-08)
 ------------------
 
