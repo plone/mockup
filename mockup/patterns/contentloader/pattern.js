@@ -53,6 +53,8 @@ define([
       if(that.options.url === 'el' && that.$el[0].tagName === 'A'){
         that.options.url = that.$el.attr('href');
       }
+      that.$el.removeClass('loading-content');
+      that.$el.removeClass('content-load-error');
       if(that.options.trigger === 'immediate'){
         that._load();
       }else{
@@ -92,7 +94,8 @@ define([
             try{
               $el = $(_.template(that.options.template)(data));
             }catch(e){
-              // log this
+              that.$el.removeClass('loading-content');
+              that.$el.addClass('content-load-error');
               log.warn('error rendering template. pat-contentloader will not work');
               return;
             }
@@ -101,9 +104,9 @@ define([
             $el = $el.find(that.options.content);
           }
           that.loadLocal($el);
-          that.$el.removeClass('loading-content');
         },
         error: function(){
+          that.$el.removeClass('loading-content');
           that.$el.addClass('content-load-error');
         }
       });
@@ -111,6 +114,8 @@ define([
     loadLocal: function($content){
       var that = this;
       if(!$content && that.options.content === null){
+        that.$el.removeClass('loading-content');
+        that.$el.addClass('content-load-error');
         log.warn('No selector configured');
         return;
       }
@@ -118,6 +123,8 @@ define([
       if(that.options.target !== null){
         $target = $(that.options.target);
         if($target.size() === 0){
+          that.$el.removeClass('loading-content');
+          that.$el.addClass('content-load-error');
           log.warn('No target nodes found');
           return;
         }
@@ -137,6 +144,7 @@ define([
       }
 
       that.$el.removeClass('loading-content');
+      that.emit('loading-done');
     }
   });
 
