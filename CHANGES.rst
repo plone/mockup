@@ -19,6 +19,9 @@ New features:
 
 Bug fixes:
 
+- tinymce: Do not include content.min.css as part of the bundle
+  [frapell]
+
 - pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
   [thet]
 
