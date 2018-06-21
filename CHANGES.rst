@@ -1,6 +1,23 @@
 Changelog
 =========
 
+2.7.4 (unreleased)
+------------------
+
+New features:
+
+- pat-contentloader: Add ``loading-done`` event.
+  [agitator, thet]
+
+Bug fixes:
+
+- pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
+  [thet]
+
+- Fix for loading country specific language codes
+  [lyralemos]
+
+
 2.7.3 (2018-06-21)
 ------------------
 
