@@ -18,7 +18,7 @@ define([
     if (!self.baseUrl) {
       self.baseUrl = '/plonejsi18n';
     }
-    self.currentLanguage = $('html').attr('lang') || 'en-us';
+    self.currentLanguage = $('html').attr('lang') || 'en';
 
     // Fix for country specific languages
     if (self.currentLanguage.split('-').length > 1) {
