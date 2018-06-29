@@ -80,6 +80,9 @@ Bug fixes:
 - Fix for loading country specific language codes
   [lyralemos]
 
+- Fix for tinymce tests
+  [lyralemos]
+
 
 2.7.2 (2018-04-08)
 ------------------
