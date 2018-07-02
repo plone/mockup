@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.7.3 (unreleased)
+2.7.5 (unreleased)
 ------------------
 
 Breaking changes:
@@ -19,10 +19,41 @@ New features:
 - Add a new pattern, to provide the DataTables functionality
   https://datatables.net/
   [frapell]
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
+2.7.4 (2018-06-21)
+------------------
+
+New features:
+
+- pat-contentloader: Add ``loading-done`` event.
+  [agitator, thet]
+
+Bug fixes:
+
+- pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
+  [thet]
+
+- Fix for loading country specific language codes
+  [lyralemos]
+
+
+2.7.3 (2018-06-21)
+------------------
+
+New features:
 
 - Mark special links: Mark external link with rel="noopener"
   https://developers.google.com/web/tools/lighthouse/audits/noopener
   [mamico]
+
+- pat-contentloader: Add ``loading-done`` event.
+  [agitator, thet]
 
 Bug fixes:
 
@@ -31,6 +62,11 @@ Bug fixes:
 
 - pat-structure: When doing a search to filter items, disable reordering
   [frapell]
+- tinymce: Do not include content.min.css as part of the bundle
+  [frapell]
+
+- pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
+  [thet]
 
 - pat-contentloader: When the content which replaces the target is empty, empty the target instead of removing it.
   This fixes a problem, where an empty result didn't did remove the ability to successfully replace the target for subsequent content loads.
@@ -54,6 +90,10 @@ Bug fixes:
 
 - Tinymce: Fix issue where Webpack less-loader was unable to load TinyMCE bundle styles
   [datakurre]
+
+- Fix for loading country specific language codes
+  [lyralemos]
+
 
 2.7.2 (2018-04-08)
 ------------------
