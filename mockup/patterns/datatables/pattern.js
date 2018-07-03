@@ -516,6 +516,7 @@ define([
     name: 'datatables',
     trigger: '.pat-datatables',
     parser: 'mockup',
+    table: null,
 
     defaults: {
       // Default values for attributes
@@ -525,7 +526,7 @@ define([
       // The init code for your pattern goes here
       var self = this;
       // self.$el contains the html element
-      var table = self.$el.DataTable(self.options);
+      self.table = self.$el.DataTable(self.options);
 
     }
   });

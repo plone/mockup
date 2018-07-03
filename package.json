@@ -4,7 +4,7 @@
   "description": "A collection of client side patterns for faster and easier web development",
   "homepage": "http://plone.github.io/mockup",
   "devDependencies": {
-    "bower": "~1.7.9",
+    "bower": "1.8.4",
     "chai": "^3.5.0",
     "coveralls": "~2.11.9",
     "extend": "~3.0.0",

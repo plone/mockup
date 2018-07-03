@@ -462,7 +462,7 @@ define([
         }
       });
     },
-    setStatus: function(msg, type) {
+    setStatus: function(msg, type, btn) {
       if (!msg) {
         // clear it
         this.status.text = '';
@@ -487,6 +487,7 @@ define([
           var $label = $('<strong></strong>');
           $label.text(this.status.label);
           $status.empty().append($label).append($text);
+          if (btn) { $status.append(btn) }
       }
     },
     render: function() {

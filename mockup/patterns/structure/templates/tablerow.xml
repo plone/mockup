@@ -1,4 +1,4 @@
-<td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+<td class="selection" data-order="<%- attributes['_sort'] %>"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 
 <td class="title">
   <div class="pull-left">
