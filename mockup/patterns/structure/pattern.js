@@ -162,6 +162,8 @@ define([
         url: '/rename'
       }],
 
+      datatables_options: {},
+
       upload: {
         uploadMultiple: true,
         showTitle: true

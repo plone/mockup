@@ -7,6 +7,7 @@ if (window.jQuery) {
 
 define([
   'jquery',
+  'mockup-patterns-datatables',
   'mockup-patterns-modal',
   'mockup-patterns-structure'
 ], function($) {

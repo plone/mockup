@@ -3,6 +3,7 @@
 @import "@{bowerPath}/bootstrap/less/glyphicons.less";
 @import "@{mockuplessPath}/ui.less";
 @import "@{mockupPath}/tooltip/pattern.tooltip.less";
+@import "@{mockupPath}/datatables/pattern.datatables.less";
 
 @import "@{bowerPath}/bootstrap/less/mixins.less";
 @import "@{bowerPath}/bootstrap/less/utilities.less";
@@ -22,7 +23,6 @@
 
 
 .pat-structure {
-
     .fade:extend(.fade all){}
     .collapse:extend(.collapse all){}
     .collapsing:extend(.collapsing all){}
@@ -152,6 +152,11 @@
         margin-bottom: 5px;
         padding: 5px;
         color: @plone-link-color;
+
+        .btn {
+            margin-left: 10px;
+        }
+
     }
 
     .popover.upload{
@@ -161,6 +166,8 @@
     .upload-container .upload-area{
         width: 500px;
     }
+
+    li.disabled a {pointer-events: none;}
 
     /* button overrides to make it look
        more streamlined */

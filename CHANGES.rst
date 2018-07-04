@@ -10,6 +10,15 @@ Breaking changes:
 
 New features:
 
+- pat-structure: Use the datatables pattern for sorting columns 
+  [frapell]
+
+- pat-structure: Add a '250' option for the pagination
+  [frapell]
+
+- Add a new pattern, to provide the DataTables functionality
+  https://datatables.net/
+  [frapell]
 - *add item here*
 
 Bug fixes:
@@ -48,6 +57,11 @@ New features:
 
 Bug fixes:
 
+- pat-structure: When a button is disabled, avoid firing events when clicked
+  [frapell]
+
+- pat-structure: When doing a search to filter items, disable reordering
+  [frapell]
 - tinymce: Do not include content.min.css as part of the bundle
   [frapell]
 

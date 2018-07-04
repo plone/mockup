@@ -973,7 +973,7 @@ define([
     it('initialize', function() {
       registry.scan(this.$el);
       // moveUrl provided, can get to this via order-support.
-      expect(this.$el.find('.order-support > table').size()).to.equal(1);
+      expect(this.$el.find('table').size()).to.equal(1);
     });
 
     it('select item populates selection well', function() {

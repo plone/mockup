@@ -1,4 +1,4 @@
-<td class="selection"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+<td class="selection" data-order="<%- attributes['_sort'] %>"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
 
 <td class="title">
   <div class="pull-left">
@@ -34,7 +34,7 @@
 
 <% _.each(activeColumns, function(column) { %>
   <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
-    <td class="<%- column %>"><%- attributes[column] %></td>
+    <td class="<%- column %>" data-order="<%- attributes[column] %>"><%- attributes[column] %></td>
   <% } %>
 <% }); %>
 

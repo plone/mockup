@@ -242,6 +242,12 @@ define([
       }
     },
     inQueryMode: function() {
+      if (this.toolbar) {
+          var term = this.toolbar.get('filter').term;
+          if (term){
+            return true;
+          }
+      }
       if (this.additionalCriterias.length > 0) {
         return true;
       }
@@ -456,7 +462,7 @@ define([
         }
       });
     },
-    setStatus: function(msg, type) {
+    setStatus: function(msg, type, btn) {
       if (!msg) {
         // clear it
         this.status.text = '';
@@ -474,12 +480,15 @@ define([
       }
       // still need to manually set in case rendering isn't done(especially true for tests)
       var $status = this.$('.status');
-      $status[0].className = 'alert alert-' + this.status.type + ' status';
-      var $text = $('<span></span>');
-      $text.text(this.status.text);
-      var $label = $('<strong></strong>');
-      $label.text(this.status.label);
-      $status.empty().append($label).append($text);
+      if ($status.length > 0){
+          $status[0].className = 'alert alert-' + this.status.type + ' status';
+          var $text = $('<span></span>');
+          $text.text(this.status.text);
+          var $label = $('<strong></strong>');
+          $label.text(this.status.label);
+          $status.empty().append($label).append($text);
+          if (btn) { $status.append(btn) }
+      }
     },
     render: function() {
       var self = this;

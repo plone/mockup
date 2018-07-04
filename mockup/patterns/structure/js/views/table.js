@@ -4,14 +4,16 @@ define([
   'mockup-patterns-structure-url/js/views/tablerow',
   'text!mockup-patterns-structure-url/templates/table.xml',
   'mockup-ui-url/views/base',
+  'mockup-patterns-datatables',
   'mockup-patterns-sortable',
   'mockup-patterns-moment',
   'mockup-patterns-structure-url/js/models/result',
   'mockup-patterns-structure-url/js/views/actionmenu',
   'translate',
+  'pat-registry',
   'bootstrap-alert'
-], function($, _, TableRowView, TableTemplate, BaseView, Sortable,
-            patMoment, Result, ActionMenuView, _t) {
+], function($, _, TableRowView, TableTemplate, BaseView, patDataTables,
+            Sortable, patMoment, Result, ActionMenuView, _t, registry) {
   'use strict';
 
   var TableView = BaseView.extend({
@@ -67,6 +69,25 @@ define([
     },
     render: function() {
       var self = this;
+
+      // By default do not start sorted by any column
+      // Ignore first column and the last one (activeColumns.length + 2)
+      // Do not show paginator, search or information, we only want column sorting
+      var datatables_options = {
+        "aaSorting": [],
+        "aoColumnDefs": [
+          { "bSortable": false, "aTargets": [ 0, self.app.activeColumns.length + 2 ] }
+        ],
+        "paging": false,
+        "searching": false,
+        "info": false
+      };
+
+      // If options were passed from the pattern, override these ones
+      $.extend(
+        datatables_options, self.app.options.datatables_options
+      );
+
       self.$el.html(self.template({
         _t: _t,
         pathParts: _.filter(
@@ -77,7 +98,8 @@ define([
         ),
         status: self.app.status,
         activeColumns: self.app.activeColumns,
-        availableColumns: self.app.availableColumns
+        availableColumns: self.app.availableColumns,
+        datatables_options: JSON.stringify(datatables_options)
       }));
 
       if (self.collection.length) {
@@ -108,6 +130,28 @@ define([
       }
 
       self.storeOrder();
+
+      registry.scan(self.$el);
+
+      self.$el.find("table").on( 'order.dt', function (e, settings, details) {
+        var btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+                  .text(_t('Reset column sorting'))
+                  .on('click', function(e) {
+                    // Use column 0 to restore ordering and then empty list so it doesn't
+                    // show the icon in the column header
+                    self.$el.find("table.pat-datatables").data('patternDatatables').table
+                        .order([ 0, "asc" ]).draw()
+                        .order([]).draw();
+                    // Restore reordering by drag and drop
+                    self.addReordering();
+                    // Clear the status message
+                    self.app.setStatus();
+                  });
+        self.app.setStatus(_t('Can not drag and drop items to reorder while manually sorting a column'), 'warning', btn = btn);
+        $(".pat-datatables tbody").find('tr').off("drag")
+        self.$el.removeClass('order-support');
+      } );
+
       return this;
     },
     breadcrumbClicked: function(e) {
