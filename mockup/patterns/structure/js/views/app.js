@@ -228,7 +228,15 @@ define([
         this.toolbar.get('selected-items').disable();
         self.buttons.disable();
       }
-
+      var path = this.getCurrentPath();
+      if (path === '/') {
+        path = '';
+      }
+      var newUrl = path;
+      if (self.options.urlStructure) {
+        newUrl = self.options.urlStructure.base + path;
+      }
+      self.buttons.updateUrls(newUrl);
       self.togglePasteBtn();
     },
     togglePasteBtn: function(){

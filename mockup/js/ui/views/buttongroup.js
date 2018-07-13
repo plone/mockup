@@ -17,6 +17,11 @@ define([
       _.each(this.items, function(button) {
         button.enable();
       });
+    },
+    updateUrls: function (newUrl) {
+      _.each(this.items, function (button) {
+        button.updateUrl(newUrl);
+      });
     }
   });
 
