@@ -23,7 +23,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- fix small message typos
+  [tkimnguyen]
 
 
 2.7.4 (2018-06-21)
