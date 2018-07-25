@@ -147,7 +147,7 @@ define([
                     // Clear the status message
                     self.app.setStatus();
                   });
-        self.app.setStatus(_t('Can not drag and drop items to reorder while manually sorting a column'), 'warning', btn = btn);
+        self.app.setStatus(_t('Cannot drag and drop items to reorder while manually sorting a column'), 'warning', btn = btn);
         $(".pat-datatables tbody").find('tr').off("drag")
         self.$el.removeClass('order-support');
       } );
@@ -193,7 +193,7 @@ define([
       var self = this;
       // if we have a custom query going on, we do not allow sorting.
       if (self.app.inQueryMode()) {
-        self.app.setStatus({text: _t('Can not order items while querying'), type: 'warning'});
+        self.app.setStatus({text: _t('Cannot order items while querying'), type: 'warning'});
         self.$el.removeClass('order-support');
         return;
       }
