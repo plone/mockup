@@ -23,6 +23,9 @@ New features:
 
 Bug fixes:
 
+- Get rid of obsolete ``X-UA-Compatible`` header.
+  [hvelarde]
+
 - fix small message typos
   [tkimnguyen]
 
