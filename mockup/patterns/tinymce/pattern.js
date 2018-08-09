@@ -412,10 +412,6 @@ define([
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
 
-        if (self.tiny !== null){
-          self.tiny.initialized = true;
-        }
-
         /* tiny really should be doing this by default
          * but this fixes overlays not saving data */
         var $form = self.$el.parents('form');

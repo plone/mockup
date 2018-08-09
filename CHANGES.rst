@@ -23,6 +23,10 @@ New features:
 
 Bug fixes:
 
+- TinyMCE: Do not fail if initializing with another language or external script
+  https://github.com/plone/Products.CMFPlone/issues/2425
+  [frapell]
+
 - Get rid of obsolete ``X-UA-Compatible`` header.
   [hvelarde]
 
