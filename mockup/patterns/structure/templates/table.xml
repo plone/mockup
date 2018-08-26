@@ -3,24 +3,25 @@
   <span><%- status.text %></span>&nbsp;<% // &nbsp; to get correct height for empty alerts %>
 </div>
 
+<div class="fc-breadcrumbs-container">
+  <div class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
+    <a href="#" data-path="/">
+      <span class="glyphicon glyphicon-home"></span> /
+    </a>
+    <% _.each(pathParts, function(part, idx, list){
+      if(part){
+        if(idx > 0){ %>
+          /
+        <% } %>
+        <a href="#" class="crumb" data-path="<%- part %>"><%- part %></a>
+      <% }
+    }); %>
+  </div>
+</div>
+
 <table class="pat-datatables table table-striped table-bordered"
        data-pat-datatables="<%- datatables_options %>">
   <thead>
-    <tr class="fc-breadcrumbs-container">
-      <td class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
-        <a href="#" data-path="/">
-          <span class="glyphicon glyphicon-home"></span> /
-        </a>
-        <% _.each(pathParts, function(part, idx, list){
-          if(part){
-            if(idx > 0){ %>
-              /
-            <% } %>
-            <a href="#" class="crumb" data-path="<%- part %>"><%- part %></a>
-          <% }
-        }); %>
-      </td>
-    </tr>
     <tr>
       <th class="selection"><input type="checkbox" class="select-all" /></th>
       <th class="title"><%- _t('Title') %></th>
