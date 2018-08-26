@@ -71,12 +71,12 @@ define([
       var self = this;
 
       // By default do not start sorted by any column
-      // Ignore first column and the last one (activeColumns.length + 2)
+      // Ignore first column and the last one (activeColumns.length + 1)
       // Do not show paginator, search or information, we only want column sorting
       var datatables_options = {
         "aaSorting": [],
         "aoColumnDefs": [
-          { "bSortable": false, "aTargets": [ 0, self.app.activeColumns.length + 2 ] }
+          { "bSortable": false, "aTargets": [ 0, self.app.activeColumns.length + 1 ] }
         ],
         "paging": false,
         "searching": false,
