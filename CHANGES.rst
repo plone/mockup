@@ -16,23 +16,22 @@ New features:
 - pat-structure: Move breadcrumbs out of folder contents table.
   [thet]
 
-- pat-structure: Use the datatables pattern for sorting columns 
+- pat-structure: Use the datatables pattern for sorting columns.
   [frapell]
 
-- pat-structure: Add a '250' option for the pagination
+- pat-structure: Add a '250' option for the pagination.
   [frapell]
 
-- Add a new pattern, to provide the DataTables functionality
+- Add a new pattern, to provide the DataTables functionality.
   https://datatables.net/
   [frapell]
-- *add item here*
 
 Bug fixes:
 
 - Get rid of obsolete ``X-UA-Compatible`` header.
   [hvelarde]
 
-- fix small message typos
+- Fix small message typos.
   [tkimnguyen]
 
 
