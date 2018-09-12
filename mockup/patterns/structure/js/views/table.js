@@ -76,7 +76,7 @@ define([
       var datatables_options = {
         "aaSorting": [],
         "aoColumnDefs": [
-          { "bSortable": false, "aTargets": [ 0, self.app.activeColumns.length + 1 ] }
+          { "bSortable": false, "aTargets": [ 0, self.app.activeColumns.length + 2 ] }
         ],
         "paging": false,
         "searching": false,
