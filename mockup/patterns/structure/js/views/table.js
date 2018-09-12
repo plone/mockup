@@ -147,7 +147,7 @@ define([
                     // Clear the status message
                     self.app.setStatus();
                   });
-        self.app.setStatus(_t('Drag and drop not possible while non-permanent column sorting active.'), 'warning', btn = btn);
+        self.app.setStatus(_t('Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column.'), 'warning', btn = btn);
         $(".pat-datatables tbody").find('tr').off("drag")
         self.$el.removeClass('order-support');
       } );
