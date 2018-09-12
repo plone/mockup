@@ -1155,7 +1155,7 @@ define([
     it('test select displayed columns', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
-      var $row = this.$el.find('table thead tr').eq(1);
+      var $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($row.find('th').eq(1).text().trim()).to.equal('Title');
       expect($row.find('th').eq(2).text().trim()).to.equal('Last modified');
@@ -1179,7 +1179,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(7);
       expect($row.find('th').eq(5).text().trim()).to.equal('Object Size');
       expect($row.find('th').eq(6).text().trim()).to.equal('Actions');
@@ -1191,7 +1191,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($.parseJSON($.cookie('_fc_activeColumns')).value).to.eql(
           ["ModificationDate", "EffectiveDate", "review_state"]);
@@ -1461,7 +1461,7 @@ define([
                '{"value":["ModificationDate","EffectiveDate","review_state",' +
                '"getObjSize"]}');
       this.clock.tick(500);
-      var $row = this.$el.find('table thead tr').eq(1);
+      var $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($row.find('th').eq(5).text().trim()).to.equal('Actions');
 
@@ -1481,7 +1481,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(7);
       expect($row.find('th').eq(5).text().trim()).to.equal('Type');
       expect($row.find('th').eq(6).text().trim()).to.equal('Actions');
@@ -1496,7 +1496,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($.parseJSON($.cookie('_fc_activeColumnsCustom')).value).to.eql(
           ["ModificationDate", "EffectiveDate", "review_state"]);
@@ -1597,7 +1597,7 @@ define([
     it('test select displayed columns', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
-      var $row = this.$el.find('table thead tr').eq(1);
+      var $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(4);
       expect($row.find('th').eq(1).text().trim()).to.equal('Title');
       expect($row.find('th').eq(2).text().trim()).to.equal('Object Size');
