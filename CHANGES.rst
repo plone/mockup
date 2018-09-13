@@ -19,7 +19,9 @@ New features:
 - Add a new pattern, to provide the DataTables functionality
   https://datatables.net/
   [frapell]
-- *add item here*
+
+- Add package-lock.json to git. 
+  See https://github.com/npm/npm/blob/v5.0.0/doc/files/package-lock.json.md
 
 Bug fixes:
 
