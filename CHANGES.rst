@@ -26,6 +26,10 @@ New features:
   https://datatables.net/
   [frapell]
 
+- Add package-lock.json to git. 
+  See https://github.com/npm/npm/blob/v5.0.0/doc/files/package-lock.json.md
+  [sunew]
+
 Bug fixes:
 
 - Get rid of obsolete ``X-UA-Compatible`` header.
