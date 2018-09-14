@@ -17,6 +17,10 @@ New features:
   [thet]
 
 - pat-structure: Use the datatables pattern for sorting columns.
+- Include TinyMCE 4.7.13
+  [erral]
+
+- pat-structure: Use the datatables pattern for sorting columns 
   [frapell]
 
 - pat-structure: Add a '250' option for the pagination.
