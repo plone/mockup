@@ -143,6 +143,10 @@ define([
 
       var $el = $container.find('textarea');
       var tinymce = new TinyMCE($el);
+      // TODO: This needs to be properly addressed. Manually setting tinymce
+      //       as initialized is not correct, but it will have to do for now
+      //       https://github.com/plone/mockup/pull/832#issuecomment-369113718
+      tinymce.tiny.initialized = true;
 
       tinymce.tiny.setContent('<p>foobar</p>');
       $container.submit(function(e) {
