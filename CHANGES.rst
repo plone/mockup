@@ -34,6 +34,10 @@ Bug fixes:
 - fix small message typos
   [tkimnguyen]
 
+- Remove patternslib "This pattern without a name attribute will not be
+  registered!" warnings by setting dummy name and trigger properties.
+  [sunew]
+
 
 2.7.4 (2018-06-21)
 ------------------
