@@ -14,6 +14,8 @@ define([
   'use strict';
 
   var LinkType = Base.extend({
+    name: 'linktype',
+    trigger: '.pat-linktype-dummy',
     defaults: {
       linkModal: null // required
     },
@@ -55,6 +57,8 @@ define([
   });
 
   var ExternalLink = LinkType.extend({
+    name: 'externallinktype',
+    trigger: '.pat-externallinktype-dummy',
     init: function() {
       LinkType.prototype.init.call(this);
       this.getEl().on('change', function(){
@@ -73,6 +77,8 @@ define([
   });
 
   var InternalLink = LinkType.extend({
+    name: 'internallinktype',
+    trigger: '.pat-internallinktype-dummy',
     init: function() {
       LinkType.prototype.init.call(this);
       this.getEl().addClass('pat-relateditems');
@@ -134,6 +140,8 @@ define([
   });
 
   var UploadLink = LinkType.extend({
+    name: 'uploadlinktype',
+    trigger: '.pat-uploadlinktype-dummy',
     /* need to do it a bit differently here.
        when a user uploads and tries to upload from
        it, you need to delegate to the real insert
@@ -163,6 +171,8 @@ define([
   });
 
   var ImageLink = InternalLink.extend({
+    name: 'imagelinktype',
+    trigger: '.pat-imagelinktype-dummy',
     toUrl: function() {
       var value = this.value();
       return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
@@ -170,6 +180,8 @@ define([
   });
 
   var EmailLink = LinkType.extend({
+    name: 'emaillinktype',
+    trigger: '.pat-emaillinktype-dummy',
     toUrl: function() {
       var self = this;
       var val = self.value();
@@ -201,6 +213,8 @@ define([
   });
 
   var AnchorLink = LinkType.extend({
+    name: 'anchorlinktype',
+    trigger: '.pat-anchorlinktype-dummy',
     init: function() {
       LinkType.prototype.init.call(this);
       this.$select = this.$el.find('select');

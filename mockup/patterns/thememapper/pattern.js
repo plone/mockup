@@ -50,6 +50,8 @@ define([
   var inspectorTemplate = _.template(InspectorTemplate);
 
   var Inspector = Base.extend({
+    name: 'thememapper-inspector',
+    trigger: '.pat-thememapper-inspector-dummy',
     defaults: {
       name: 'name',
       ruleBuilder: null,
@@ -505,7 +507,7 @@ define([
           self.hideInspectors();
         }
       });
-      
+
       self.btns.buildRuleButton = new AnchorView({
         id: 'buildrule',
         title: _t('Build rule'),
@@ -588,7 +590,7 @@ define([
         triggerView: self.btns.buildLessButton,
         app: self
       });
-      
+
 
       self.menus.tools = new DropdownView({
         title: _t('Tools'),
@@ -601,7 +603,7 @@ define([
         icon: 'file',
         disable: function() {}
       });
-      
+
       self.buttonGroup = new ButtonGroup({
         items: [
           self.menus.tools,
