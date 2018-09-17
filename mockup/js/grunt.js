@@ -325,34 +325,40 @@
             files: this.files.concat([
                 {pattern: 'bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css', watched: false, included: true, served: true, nocache: true}
             ]),
-            preprocessors: { 'js/**/*.js': 'coverage' },
-            reporters: ['dots', 'progress', 'coverage', 'spec'],
-            coverageReporter: { type : 'lcov', dir : 'coverage/' },
             port: 9876,
             colors: true,
             // logLevel: karmaConstants.LOG_DEBUG,
             logLevel: karmaConstants.LOG_INFO,
             browserNoActivityTimeout: 200000,
             autoWatch: true,
-            captureTimeout: 60000,
+            captureTimeout: 60000
+          },
+          test: {
+            reporters: ['dots', 'progress', 'spec'],
+            browsers: ['PhantomJS'],
+            plugins: [
+              'karma-mocha',
+              'karma-sinon',
+              'karma-requirejs',
+              'karma-phantomjs-launcher',
+              'karma-spec-reporter'
+            ]
+          },
+          testOnce: {
+            singleRun: true,
+            preprocessors: { 'js/**/*.js': 'coverage' },
+            reporters: ['dots', 'progress', 'coverage', 'spec'],
+            coverageReporter: { type : 'lcov', dir : 'coverage/' },
+            browsers: ['PhantomJS'],
             plugins: [
               'karma-mocha',
               'karma-sinon',
               'karma-coverage',
               'karma-requirejs',
-              'karma-sauce-launcher',
-              'karma-chrome-launcher',
               'karma-phantomjs-launcher',
               'karma-junit-reporter',
               'karma-spec-reporter'
             ]
-          },
-          test: {
-            browsers: ['PhantomJS']
-          },
-          testOnce: {
-            singleRun: true,
-            browsers: ['PhantomJS']
           },
           testJenkins: {
             autoWatch: false,
@@ -363,31 +369,38 @@
             junitReporter: {
               outputFile: 'test-results.xml'
             },
-          },
-          testDev: {
-            browsers: ['Chrome'],
-            preprocessors: {},
-            reporters: ['dots', 'progress'],
             plugins: [
               'karma-mocha',
               'karma-sinon',
               'karma-requirejs',
-              'karma-chrome-launcher'
+              'karma-phantomjs-launcher',
+              'karma-junit-reporter',
+              'karma-spec-reporter'
+            ]
+          },
+          testDev: {
+            browsers: ['Chrome'],
+            reporters: ['dots', 'progress', 'spec'],
+            plugins: [
+              'karma-mocha',
+              'karma-sinon',
+              'karma-requirejs',
+              'karma-chrome-launcher',
+              'karma-spec-reporter'
             ]
           },
           testDevFF: {
             browsers: ['Firefox'],
-            preprocessors: {},
-            reporters: ['dots', 'progress'],
+            reporters: ['dots', 'progress', 'spec'],
             plugins: [
               'karma-mocha',
               'karma-sinon',
               'karma-requirejs',
-              'karma-firefox-launcher'
+              'karma-firefox-launcher',
+              'karma-spec-reporter'
             ]
           },
           testServe: {
-            preprocessors: {},
             reporters: ['dots', 'progress'],
             plugins: [
               'karma-mocha',
@@ -399,10 +412,21 @@
             singleRun: true,
             port: 8080,
             recordVideo: true,
+            preprocessors: { 'js/**/*.js': 'coverage' },
             reporters: ['junit', 'coverage', 'saucelabs'],
             junitReporter: { outputFile: 'test-results.xml' },
+            coverageReporter: { type : 'lcov', dir : 'coverage/' },
             sauceLabs: { testName: 'Mockup', startConnect: true },
             browsers: BROWSERS,
+            plugins: [
+              'karma-mocha',
+              'karma-sinon',
+              'karma-coverage',
+              'karma-requirejs',
+              'karma-sauce-launcher',
+              'karma-junit-reporter',
+              'karma-spec-reporter'
+            ],
             customLaunchers: {
               'SL_Chrome': { base: 'SauceLabs', browserName: 'chrome', platform: 'Windows 8.1', version: '38' },
               'SL_Firefox': { base: 'SauceLabs', browserName: 'firefox', platform: 'Windows 8.1', version: '33' },

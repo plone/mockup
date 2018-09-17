@@ -10,6 +10,7 @@ module.exports = function(grunt) {
       mockup = new MockupGrunt(requirejsOptions),
       docsExtraIncludes = [];
 
+  // TODO: move to docs bundle
   for (var i = 0; i < mockup.patterns.length; i = i + 1) {
     if (mockup.patterns[i].indexOf('-url') === -1) {
       docsExtraIncludes.push(mockup.patterns[i]);
