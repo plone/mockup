@@ -233,7 +233,12 @@
       var path;
       for (var key in this.requirejsOptions.paths) {
         path = this.requirejsOptions.paths[key];
-        if (path.indexOf('.md') !== path.length - 3) {
+        // Exclude .md files.
+        // Exclude all requirements ending with '-url', since they point
+        // to a folder and not to a .js file, to avoid warnings:
+        // WARN [watcher]: Pattern "..../patterns/filemanager.js" does not match any file.
+        // - we include 'patterns/**/*' below.
+        if (path.indexOf('.md') !== path.length - 3 && key.indexOf('-url') === -1) {
           this.files.push({ pattern: path + '.js', included: false });
         }
         if (key.indexOf('mockup-patterns-') === 0) {
