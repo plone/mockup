@@ -1,8 +1,7 @@
 define([
-  'sinon',
   'jquery',
   'underscore'
-], function(sinon, $, _) {
+], function($, _) {
   'use strict';
 
   function getQueryVariable(url, variable) {

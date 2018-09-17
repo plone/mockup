@@ -1,17 +1,16 @@
 define([
   'expect',
   'jquery',
-  'sinon',
   'pat-registry',
   'mockup-patterns-contentloader'
-], function(expect, $, sinon, registry, ContentLoader) {
+], function(expect, $, registry, ContentLoader) {
   'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
 
    /* ==========================
-   TEST: Livesearch 
+   TEST: Livesearch
   ========================== */
 
   describe('Livesearch', function() {

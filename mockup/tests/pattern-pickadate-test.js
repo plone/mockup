@@ -2,11 +2,10 @@
 define([
   'expect',
   'jquery',
-  'sinon',
   'pat-registry',
   'mockup-patterns-pickadate',
   'mockup-patterns-select2'
-], function(expect, $, sinon, registry, PickADate) {
+], function(expect, $, registry, PickADate) {
   'use strict';
 
   window.mocha.setup('bdd');

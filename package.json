@@ -30,11 +30,13 @@
     "karma-sauce-launcher": "~1.0.0",
     "karma-script-launcher": "~1.0.0",
     "karma-spec-reporter": "0.0.26",
+    "karma-sinon": "^1.0.5",
     "lcov-result-merger": "~1.2.0",
     "less": "~1.7.0",
     "mocha": "~2.5.3",
     "phantomjs-prebuilt": "^2.1.7",
-    "requirejs": "~2.2.0"
+    "requirejs": "~2.2.0",
+    "sinon": "1.17.1"
   },
   "maintainers": [
     {

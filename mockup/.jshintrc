@@ -26,6 +26,7 @@
         "require": false,
         "requirejs": true,
         "tinymce": true,
-        "window": false
+        "window": false,
+        "sinon": true
     }
 }

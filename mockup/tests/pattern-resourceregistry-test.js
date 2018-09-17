@@ -1,10 +1,9 @@
 define([
-  'sinon',
   'expect',
   'jquery',
   'pat-registry',
   'mockup-patterns-resourceregistry'
-], function(sinon, expect, $, registry, ResourceRegistry) {
+], function(expect, $, registry, ResourceRegistry) {
   'use strict';
 
   window.mocha.setup('bdd');

@@ -134,7 +134,6 @@
       'picker.time': 'bower_components/pickadate/lib/picker.time',
       'react': 'bower_components/react/react',
       'select2': 'bower_components/select2/select2',
-      'sinon': 'bower_components/sinonjs/sinon',
       'text': 'bower_components/requirejs-text/text',
       'tinymce': 'bower_components/tinymce-builded/js/tinymce/tinymce',
       'tinymce-modern-theme': 'bower_components/tinymce-builded/js/tinymce/themes/modern/theme',
@@ -168,7 +167,6 @@
       'jquery.event.drop': { deps: ['jquery'], exports: '$.drop' },
       'picker.date': { deps: [ 'picker' ] },
       'picker.time': { deps: [ 'picker' ] },
-      'sinon': { exports: 'window.sinon' },
       'tinymce': {
         exports: 'window.tinyMCE',
         init: function () {

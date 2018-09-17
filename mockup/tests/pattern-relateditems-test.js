@@ -2,10 +2,9 @@ define([
   'expect',
   'jquery',
   'underscore',
-  'sinon',
   'pat-registry',
   'mockup-patterns-relateditems'
-], function(expect, $, _, sinon, registry, RelatedItems) {
+], function(expect, $, _, registry, RelatedItems) {
   'use strict';
 
   window.mocha.setup('bdd').globals(['jQuery*']);

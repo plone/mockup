@@ -1,10 +1,9 @@
 define([
   'expect',
   'jquery',
-  'sinon',
   'pat-registry',
   'mockup-patterns-select2'
-], function(expect, $, sinon, registry, Select2) {
+], function(expect, $, registry, Select2) {
   'use strict';
 
   window.mocha.setup('bdd');
