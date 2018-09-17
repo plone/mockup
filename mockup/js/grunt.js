@@ -321,7 +321,7 @@
         karma: {
           options: {
             basePath: './',
-            frameworks: ['mocha', 'chai', 'sinon'],
+            frameworks: ['mocha', 'sinon'],
             files: this.files.concat([
                 {pattern: 'bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css', watched: false, included: true, served: true, nocache: true}
             ]),
@@ -337,7 +337,6 @@
             captureTimeout: 60000,
             plugins: [
               'karma-mocha',
-              'karma-chai',
               'karma-sinon',
               'karma-coverage',
               'karma-requirejs',
@@ -371,7 +370,6 @@
             reporters: ['dots', 'progress'],
             plugins: [
               'karma-mocha',
-              'karma-chai',
               'karma-sinon',
               'karma-requirejs',
               'karma-chrome-launcher'
@@ -383,7 +381,6 @@
             reporters: ['dots', 'progress'],
             plugins: [
               'karma-mocha',
-              'karma-chai',
               'karma-sinon',
               'karma-requirejs',
               'karma-firefox-launcher'
@@ -394,7 +391,6 @@
             reporters: ['dots', 'progress'],
             plugins: [
               'karma-mocha',
-              'karma-chai',
               'karma-sinon',
               'karma-requirejs'
             ]
