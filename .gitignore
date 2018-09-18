@@ -12,3 +12,4 @@ sauce_connect.log*
 stamp-bower
 stamp-npm
 test-results.xml
+.vscode
