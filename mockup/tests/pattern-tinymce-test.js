@@ -503,6 +503,10 @@ define([
       var changed_txt = 'changed contents';
       $editable.html(changed_txt);
       var $form = $container.find('form');
+      // Avoid error when running tests: "Some of your tests did a full page reload!"
+      $container.submit(function(e) {
+        e.preventDefault();
+      });
       $container.trigger('submit');
       expect($el.val()).to.be.equal(changed_txt);
       tinymce.get(0).remove();

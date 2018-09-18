@@ -38,6 +38,9 @@ Bug fixes:
   registered!" warnings by setting dummy name and trigger properties.
   [sunew]
 
+- Fix error when running tests: "Some of your tests did a full page reload!", due to a form submit with no preventDefault.
+  [sunew]
+
 
 2.7.4 (2018-06-21)
 ------------------
