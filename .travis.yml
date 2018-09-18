@@ -27,7 +27,7 @@ script:
   - make bundles
 #  - if [ "$TRAVIS_BRANCH" == "master" ]; then make test-ci; fi
 after_success:
-  - if [ "$BROWSERS" == "SL_Chrome" ]; then ./node_modules/.bin/lcov-result-merger "coverage/**/lcov.info" | ./node_modules/.bin/coveralls; fi
+  - if [ "$BROWSERS" == "SL_Chrome" ]; then ./node_modules/.bin/lcov-result-merger "mockup/coverage/**/lcov.info" | ./node_modules/.bin/coveralls; fi
 matrix:
   fast_finish: true
   allow_failures:
