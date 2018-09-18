@@ -484,9 +484,13 @@
               },
               testOnce: {
                 singleRun: true,
-                preprocessors: { 'js/**/*.js': 'coverage' },
+                preprocessors: {
+                  'js/**/*.js': 'coverage',
+                  'patterns/**/*.js': 'coverage'
+                },
                 reporters: ['dots', 'progress', 'coverage', 'spec'],
                 coverageReporter: { type: 'lcov', dir: 'coverage/' },
+                // coverageReporter: { type : 'html', dir : 'coverage-html/' },
                 browsers: ['PhantomJS'],
                 plugins: [
                   'karma-mocha',
