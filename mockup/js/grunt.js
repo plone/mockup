@@ -519,6 +519,13 @@
               testDev: {
                 browsers: ['Chrome'],
                 reporters: ['dots', 'progress', 'spec'],
+                // Good for running the debugger in the browser window:
+                // browserNoActivityTimeout: 200000000,
+                // client: {
+                //   mocha: {
+                //     timeout: 20000000
+                //   }
+                // },
                 plugins: [
                   'karma-mocha',
                   'karma-sinon',
@@ -530,6 +537,13 @@
               testDevFF: {
                 browsers: ['Firefox'],
                 reporters: ['dots', 'progress', 'spec'],
+                // Good for running the debugger in the browser window:
+                // browserNoActivityTimeout: 200000000,
+                // client: {
+                //   mocha: {
+                //     timeout: 20000000
+                //   }
+                // },
                 plugins: [
                   'karma-mocha',
                   'karma-sinon',
