@@ -178,7 +178,7 @@ define([
       imageTypes: ['Image'],
       folderTypes: ['Folder', 'Plone Site'],
       tiny: {
-        'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
+        'content_css': '/base/bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
         theme: 'modern',
         plugins: ['advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'anchor', 'searchreplace',
                   'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'contextmenu',
@@ -411,10 +411,6 @@ define([
 
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
-
-        if (self.tiny !== null){
-          self.tiny.initialized = true;
-        }
 
         /* tiny really should be doing this by default
          * but this fixes overlays not saving data */

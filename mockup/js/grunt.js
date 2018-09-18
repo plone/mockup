@@ -317,7 +317,9 @@
           options: {
             basePath: './',
             frameworks: ['mocha', 'chai'],
-            files: this.files,
+            files: this.files.concat([
+                {pattern: 'bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css', watched: false, included: true, served: true, nocache: true}
+            ]),
             preprocessors: { 'js/**/*.js': 'coverage' },
             reporters: ['dots', 'progress', 'coverage', 'spec'],
             coverageReporter: { type : 'lcov', dir : 'coverage/' },
