@@ -106,15 +106,7 @@ module.exports = function(grunt) {
     { path: 'build/', url: '++resource++plone.app.widgets' }
   );
 
-  mockup.initGrunt(grunt, {
-    sed: {
-      bootstrap: {
-        path: '../node_modules/lcov-result-merger/index.js',
-        pattern: "throw new Error\\('Unknown Prefix ",
-        replacement: "//throw// new Error('Unknown Prefix "
-      }
-    }
-  });
+  mockup.initGrunt(grunt, {});
 
   grunt.registerTask('i18n-dump', 'Dump i18n file for widgets', function() {
     var output =

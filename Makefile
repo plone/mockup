@@ -62,7 +62,6 @@ bootstrap-common:
 bootstrap: bootstrap-common
 	$(NPM) link
 	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
-	NODE_PATH=$(NODE_PATH) $(GRUNT) sed:bootstrap $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
 bootstrap-nix: clean bootstrap-common
 	nix-build default.nix -A build -o nixenv
