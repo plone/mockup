@@ -28,9 +28,9 @@ stamp-bower: stamp-npm bower.json
 
 bundles: stamp-bower bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
-	# cp build/widgets* path/to/plone.app.widgets/plone/app/widgets/static
-	# cp build/structure* path/to/wildcard.foldercontents/wildcard/foldercontents/static
-	# cp build/plone* path/to/Products.CMFPlone/Products/CMFPlone/static
+	# For plone 5, build the bundles on the plone side, as described in:
+	# Products.CMFPlone/DEVELOPING_BUNDLES.rst
+	# Do not copy the bundles from mockup to plone.
 	# ----------------------------------------------------------------------- #
 
 bundle-widgets:
