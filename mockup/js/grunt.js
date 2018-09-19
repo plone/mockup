@@ -583,12 +583,6 @@
                     platform: 'Mac 10.9',
                     version: '7.1'
                   },
-                  SL_IE_8: {
-                    base: 'SauceLabs',
-                    browserName: 'internet explorer',
-                    platform: 'Windows 7',
-                    version: '8'
-                  },
                   SL_IE_9: {
                     base: 'SauceLabs',
                     browserName: 'internet explorer',
