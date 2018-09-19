@@ -30,7 +30,7 @@
     "karma-sinon": "^1.0.5",
     "karma-spec-reporter": "0.0.32",
     "lcov-result-merger": "~3.1.0",
-    "less": "~1.7.0",
+    "less": "~2.7.3",
     "minimatch": "^3.0.4",
     "mocha": "~3.5.3",
     "phantomjs-prebuilt": "~2.1.16",

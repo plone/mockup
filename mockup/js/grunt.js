@@ -89,24 +89,9 @@
           gruntConfig.watch['less-' + name] = gruntConfig.watch[
             'less-' + name
           ] || {
-            files: ['less/' + name + '.less'],
+            files: ['less/' + name + '.less', 'patterns/**/*.less'],
             tasks: ['less:' + name]
           };
-
-          var parser = new less.Parser({
-              syncImport: true,
-              paths: ['less'],
-              filename: name + '.less'
-            }),
-            bundleFile = fs.readFileSync('less/' + name + '.less', {
-              encoding: 'utf-8'
-            });
-
-          parser.parse(bundleFile, function() {
-            for (var file in parser.imports.files) {
-              gruntConfig.watch['less-' + name].files.push(file);
-            }
-          });
         }
       },
       copy: {
