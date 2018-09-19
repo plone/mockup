@@ -10,21 +10,29 @@ Breaking changes:
 
 New features:
 
+- pat-structure: Use more tooltips in the actions menu.
+  [thet]
+
+- pat-structure: Move breadcrumbs out of folder contents table.
+  [thet]
+
+- pat-structure: Use the datatables pattern for sorting columns.
 - Include TinyMCE 4.7.13
   [erral]
 
 - pat-structure: Use the datatables pattern for sorting columns 
   [frapell]
 
-- pat-structure: Add a '250' option for the pagination
+- pat-structure: Add a '250' option for the pagination.
   [frapell]
 
-- Add a new pattern, to provide the DataTables functionality
+- Add a new pattern, to provide the DataTables functionality.
   https://datatables.net/
   [frapell]
 
 - Add package-lock.json to git. 
   See https://github.com/npm/npm/blob/v5.0.0/doc/files/package-lock.json.md
+  [sunew]
 
 Bug fixes:
 
@@ -35,7 +43,7 @@ Bug fixes:
 - Get rid of obsolete ``X-UA-Compatible`` header.
   [hvelarde]
 
-- fix small message typos
+- Fix small message typos.
   [tkimnguyen]
 
 - Remove patternslib "This pattern without a name attribute will not be

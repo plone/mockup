@@ -58,7 +58,7 @@ define([
 
   bootstrapTooltip.DEFAULTS = {
     animation: true,
-    placement: 'top',
+    placement: 'auto',
     selector: false,
     template: '<div class="tooltip mockup-tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
     trigger: 'hover focus',

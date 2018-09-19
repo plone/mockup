@@ -71,7 +71,7 @@ define([
       var self = this;
 
       // By default do not start sorted by any column
-      // Ignore first column and the last one (activeColumns.length + 2)
+      // Ignore first column and the last one (activeColumns.length + 1)
       // Do not show paginator, search or information, we only want column sorting
       var datatables_options = {
         "aaSorting": [],
@@ -147,7 +147,7 @@ define([
                     // Clear the status message
                     self.app.setStatus();
                   });
-        self.app.setStatus(_t('Cannot drag and drop items to reorder while manually sorting a column'), 'warning', btn = btn);
+        self.app.setStatus(_t('Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column.'), 'warning', btn = btn);
         $(".pat-datatables tbody").find('tr').off("drag")
         self.$el.removeClass('order-support');
       } );
