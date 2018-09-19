@@ -437,7 +437,7 @@
             karma: {
               options: {
                 basePath: './',
-                frameworks: ['mocha', 'sinon'],
+                frameworks: ['mocha'],
                 files: this.files.concat([
                   {
                     pattern:
@@ -461,7 +461,6 @@
                 browsers: ['PhantomJS'],
                 plugins: [
                   'karma-mocha',
-                  'karma-sinon',
                   'karma-requirejs',
                   'karma-phantomjs-launcher',
                   'karma-spec-reporter'
@@ -479,7 +478,6 @@
                 browsers: ['PhantomJS'],
                 plugins: [
                   'karma-mocha',
-                  'karma-sinon',
                   'karma-coverage',
                   'karma-requirejs',
                   'karma-phantomjs-launcher',
@@ -498,7 +496,6 @@
                 },
                 plugins: [
                   'karma-mocha',
-                  'karma-sinon',
                   'karma-requirejs',
                   'karma-phantomjs-launcher',
                   'karma-junit-reporter',
@@ -517,7 +514,6 @@
                 // },
                 plugins: [
                   'karma-mocha',
-                  'karma-sinon',
                   'karma-requirejs',
                   'karma-chrome-launcher',
                   'karma-spec-reporter'
@@ -535,7 +531,6 @@
                 // },
                 plugins: [
                   'karma-mocha',
-                  'karma-sinon',
                   'karma-requirejs',
                   'karma-firefox-launcher',
                   'karma-spec-reporter'
@@ -543,7 +538,7 @@
               },
               testServe: {
                 reporters: ['dots', 'progress'],
-                plugins: ['karma-mocha', 'karma-sinon', 'karma-requirejs']
+                plugins: ['karma-mocha', 'karma-requirejs']
               },
               testCI: {
                 singleRun: true,
@@ -557,7 +552,6 @@
                 browsers: BROWSERS,
                 plugins: [
                   'karma-mocha',
-                  'karma-sinon',
                   'karma-coverage',
                   'karma-requirejs',
                   'karma-sauce-launcher',

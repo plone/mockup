@@ -13,9 +13,10 @@ define([
   'mockup-patterns-structure-url/js/views/generic-popover',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-utils',
+  'sinon',
   'moment'
 ], function(expect, $, _, registry, ButtonView, Structure, ActionMenuView, AppView, Result,
-            TableView, TableRowView, PropertiesView, ResultCollection, utils, moment) {
+            TableView, TableRowView, PropertiesView, ResultCollection, utils, sinon, moment) {
   'use strict';
 
   window.mocha.setup('bdd');

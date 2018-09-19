@@ -34,8 +34,7 @@
     "minimatch": "^3.0.4",
     "mocha": "~3.5.3",
     "phantomjs-prebuilt": "~2.1.16",
-    "requirejs": "~2.2.0",
-    "sinon": "1.17.1"
+    "requirejs": "~2.2.0"
   },
   "maintainers": [
     {

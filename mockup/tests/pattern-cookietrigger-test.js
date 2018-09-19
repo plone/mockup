@@ -1,16 +1,17 @@
 define([
   'expect',
   'jquery',
+  'sinon',
   'pat-registry',
   'mockup-patterns-cookietrigger'
-], function(expect, $, registry, Pattern) {
+], function(expect, $, sinon, registry, Pattern) {
   'use strict';
 
   window.mocha.setup('bdd');
   $.fx.off = true;
 
 /* ====================
-   TEST: Cookie Trigger
+   TEST: Cookie Trigger 
    ==================== */
 
   describe('Cookie Trigger', function () {
@@ -19,7 +20,7 @@ define([
     });
 
     it('The .pat-cookietrigger DOM element is shown if cookies are disabled', function() {
-      var widget =
+      var widget = 
         '<div class="portalMessage error pat-cookietrigger">' +
         '  Cookies are not enabled. You must enable cookies before you can log in.' +
         '</div>';
@@ -32,7 +33,7 @@ define([
     });
 
     it('The .pat-cookietrigger DOM element is hidden if cookies are enabled', function() {
-      var widget =
+      var widget = 
         '<div class="portalMessage error pat-cookietrigger">' +
         '  Cookies are not enabled. You must enable cookies before you can log in.' +
         '</div>';

@@ -1,9 +1,10 @@
 define([
   'expect',
   'jquery',
+  'sinon',
   'pat-registry',
   'mockup-patterns-inlinevalidation'
-], function(expect, $, registry, Pattern) {
+], function(expect, $, sinon, registry, Pattern) {
   'use strict';
 
   window.mocha.setup('bdd');

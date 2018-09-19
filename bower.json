@@ -50,7 +50,8 @@
     "cs-jqtree-contextmenu": "^0.1.0"
   },
   "devDependencies": {
-    "expect": "0.3.1"
+    "expect": "0.3.1",
+    "sinonjs": "1.17.1"
   },
   "resolutions": {
     "bootstrap": "3.3.6",

@@ -3,8 +3,9 @@ define([
   'jquery',
   'pat-registry',
   'pat-logger',
-  'mockup-patterns-toggle'
-], function(expect, $, registry, logger, Toggle) {
+  'mockup-patterns-toggle',
+  'sinon',
+], function(expect, $, registry, logger, Toggle, sinon) {
   'use strict';
 
   window.mocha.setup('bdd');

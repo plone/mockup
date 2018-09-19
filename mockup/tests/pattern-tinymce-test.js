@@ -1,10 +1,11 @@
 define([
   'expect',
   'jquery',
+  'sinon',
   'pat-registry',
   'tinymce',
   'mockup-patterns-tinymce'
-], function(expect, $, registry, tinymce, TinyMCE) {
+], function(expect, $, sinon, registry, tinymce, TinyMCE) {
   'use strict';
 
   window.mocha.setup('bdd');

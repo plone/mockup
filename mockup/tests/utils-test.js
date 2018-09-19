@@ -97,7 +97,7 @@ define([
         expect(utils.bool(13)).to.be.equal(true);
         expect(utils.bool('foo')).to.be.equal(true);
       });
-
+        
       it('returns false for falsy values', function() {
         expect(utils.bool('false')).to.be.equal(false);
         expect(utils.bool(' false ')).to.be.equal(false);
