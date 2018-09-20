@@ -5,6 +5,7 @@
 bower_components/
 build/
 coverage/
+coverage-html/
 mockup/docs/
 nixenv/
 node_modules/
@@ -12,3 +13,4 @@ sauce_connect.log*
 stamp-bower
 stamp-npm
 test-results.xml
+.vscode

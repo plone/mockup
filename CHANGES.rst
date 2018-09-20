@@ -53,6 +53,21 @@ Bug fixes:
 - Fix error when running tests: "Some of your tests did a full page reload!", due to a form submit with no preventDefault.
   [sunew]
 
+- Fix WARN [watcher]: Pattern "..../patterns/foo.js" does not match any file, 
+  by excluding all requirements ending with '-url', 
+  since they point to a folder and not to a .js file. 
+  The folder contents are already included by 'patterns/**/*'.
+  [sunew]
+
+- Move installation and config of sinon from bower+requirejs to karma-sinon.
+  [sunew]
+
+- Remove chai - it is unused. The assertions being used are from 'expect', installed via bower.json
+  [sunew]
+
+- Upgrade some build and testing tools: grunt, karma, mocha, their plugins, coveralls, and browser launchers.
+  [sunew]
+
 
 2.7.4 (2018-06-21)
 ------------------
