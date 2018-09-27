@@ -91,7 +91,6 @@ define([
   'tinymce-image',
   'tinymce-importcss',
   'tinymce-insertdatetime',
-  'tinymce-layer',
   'tinymce-legacyoutput',
   'tinymce-link',
   'tinymce-lists',
@@ -178,7 +177,7 @@ define([
       folderTypes: ['Folder', 'Plone Site'],
       tiny: {
         'content_css': '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
-        theme: '-modern',
+        theme: 'modern',
         plugins: ['advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'anchor', 'searchreplace',
                   'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'contextmenu',
                   'paste', 'plonelink', 'ploneimage'],
