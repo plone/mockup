@@ -10,7 +10,7 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Updated to tinymce 4.7.13 compatible
 
 Bug fixes:
 
