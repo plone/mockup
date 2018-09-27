@@ -10,7 +10,7 @@
     'advlist', 'anchor', 'autolink', 'autoresize', 'autosave', 'bbcode',
     'charmap', 'code', 'colorpicker', 'contextmenu', 'directionality',
     'emoticons', 'fullpage', 'fullscreen', 'hr', 'image', 'importcss',
-    'insertdatetime', 'layer', 'legacyoutput', 'link', 'lists', 'media',
+    'insertdatetime', 'legacyoutput', 'link', 'lists', 'media',
     'nonbreaking', 'noneditable', 'pagebreak', 'paste', 'preview', 'print',
     'save', 'searchreplace', 'spellchecker', 'tabfocus', 'table', 'template',
     'textcolor', 'textpattern', 'visualblocks', 'visualchars', 'wordcount',
