@@ -4,10 +4,6 @@ Changelog
 2.7.5 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - pat-structure: Use more tooltips in the actions menu.
