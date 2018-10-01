@@ -335,7 +335,7 @@
 .popover.attribute-columns{
     ul{
         list-style: none;
-        margin: 0;
+        margin: 0 0 1ex 0;
         padding: 0;
 
         li{
@@ -345,8 +345,16 @@
             border-bottom: none;
             padding: 3px 7px;
 
+            &:last-child {
+                border-bottom: 1px solid #DDD;
+            }
+
             label{
                 margin-bottom: 0;
+
+                input[type="checkbox"] {
+                    margin-right: 1ex;
+                }
             }
         }
 

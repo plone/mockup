@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Structure pattern: Fix spacing for attribute-columns popover.
+  [tmassman]
 
 
 2.7.5 (2018-09-28)
@@ -32,7 +33,7 @@ New features:
 - Include TinyMCE 4.7.13
   [erral]
 
-- pat-structure: Use the datatables pattern for sorting columns 
+- pat-structure: Use the datatables pattern for sorting columns
   [frapell]
 
 - pat-structure: Add a '250' option for the pagination.
@@ -42,7 +43,7 @@ New features:
   https://datatables.net/
   [frapell]
 
-- Add package-lock.json to git. 
+- Add package-lock.json to git.
   See https://github.com/npm/npm/blob/v5.0.0/doc/files/package-lock.json.md
   [sunew]
 
@@ -65,9 +66,9 @@ Bug fixes:
 - Fix error when running tests: "Some of your tests did a full page reload!", due to a form submit with no preventDefault.
   [sunew]
 
-- Fix WARN [watcher]: Pattern "..../patterns/foo.js" does not match any file, 
-  by excluding all requirements ending with '-url', 
-  since they point to a folder and not to a .js file. 
+- Fix WARN [watcher]: Pattern "..../patterns/foo.js" does not match any file,
+  by excluding all requirements ending with '-url',
+  since they point to a folder and not to a .js file.
   The folder contents are already included by 'patterns/**/*'.
   [sunew]
 
