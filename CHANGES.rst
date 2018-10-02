@@ -16,7 +16,6 @@ New features:
 - pat-resourceregistry:
   - Add input fiels for ``merge_with``, ``last_compilation``, ``jscompilation`` and ``csscompilation``.
   - Add ``load_async`` and ``load_defer`` options.
-  [thet]
 
 Bug fixes:
 

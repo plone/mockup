@@ -122,6 +122,7 @@
       'mockup-patterns-passwordstrength': 'patterns/passwordstrength/pattern',
       'mockup-patterns-passwordstrength-url': 'patterns/passwordstrength',
       'mockup-patterns-livesearch': 'patterns/livesearch/pattern',
+      'plone-patterns-toolbar': 'patterns/toolbar/pattern',
       'mockup-router': 'js/router',
       'mockup-ui-url': 'js/ui',
       'mockup-utils': 'js/utils',

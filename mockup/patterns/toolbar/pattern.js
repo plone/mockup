@@ -1,3 +1,27 @@
+/* Plone Toolbar
+ *
+ * Options:
+ *    containerSelector: selector for the toolbar container.
+ *    classNames: Dictionary of classnames for the toolbar. See code.
+ *    cookieName: Name of the cookie for custom toolbar settings.
+ *    toolbar_width: Width of the toolbar as CSS value.
+ *    submenu_width: Width of submenus as CSS value.
+ *    desktop_width: Breakpoint for mobile/desktop toolbars.
+ *
+ * Documentation:
+ *   # General
+ *
+ *   # Default
+ *
+ *   {{ example-1 }}
+ *
+ * Example: example-1
+ *    <div id="edit-zone">
+ *      <div class="pat-toolbar"/>
+ *    </div>
+ *
+ */
+
 define([
   'jquery',
   'pat-base',
