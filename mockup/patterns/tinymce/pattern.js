@@ -147,7 +147,7 @@ define([
         externalImage: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)')
       },
       // URL generation options
-      loadingBaseUrl: '../../../bower_components/tinymce-builded/js/tinymce/',
+      loadingBaseUrl: '../../../node_modules/tinymce-builded/js/tinymce/',
       prependToUrl: '',
       appendToUrl: '',
       linkAttribute: 'path', // attribute to get link value from data
@@ -178,7 +178,7 @@ define([
       imageTypes: ['Image'],
       folderTypes: ['Folder', 'Plone Site'],
       tiny: {
-        'content_css': '/base/bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
+        'content_css': '/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
         theme: 'modern',
         plugins: ['advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'anchor', 'searchreplace',
                   'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'contextmenu',

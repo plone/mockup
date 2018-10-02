@@ -111,7 +111,7 @@
             // BOOTSTRAP
             {
               expand: true,
-              cwd: 'bower_components/bootstrap/dist/fonts/',
+              cwd: 'node_modules/bootstrap/dist/fonts/',
               src: 'glyphicons-halflings-regular.*',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -121,14 +121,14 @@
             // TINYMCE
             {
               expand: true,
-              cwd: 'bower_components/tinymce-builded/js/tinymce/langs',
+              cwd: 'node_modules/tinymce-builded/js/tinymce/langs',
               src: '*',
               dest: bundleOptions.path + name + '-tinymce/langs'
             },
             {
               expand: true,
               cwd:
-                'bower_components/tinymce-builded/js/tinymce/skins/lightgray/fonts/',
+                'node_modules/tinymce-builded/js/tinymce/skins/lightgray/fonts/',
               src: 'tinymce*',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -138,7 +138,7 @@
             {
               expand: true,
               cwd:
-                'bower_components/tinymce-builded/js/tinymce/skins/lightgray/img/',
+                'node_modules/tinymce-builded/js/tinymce/skins/lightgray/img/',
               src: '*',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -148,7 +148,7 @@
             {
               expand: true,
               cwd:
-                'bower_components/tinymce-builded/js/tinymce/skins/lightgray/',
+                'node_modules/tinymce-builded/js/tinymce/skins/lightgray/',
               src: 'content.min.css',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -158,7 +158,7 @@
             // JQTREE
             {
               expand: true,
-              cwd: 'bower_components/jqtree/',
+              cwd: 'node_modules/jqtree/',
               src: 'jqtree-circle.png',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -168,7 +168,7 @@
             // SELECT2
             {
               expand: true,
-              cwd: 'bower_components/select2/',
+              cwd: 'node_modules/select2/',
               src: 'select2*.png',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -177,7 +177,7 @@
             },
             {
               expand: true,
-              cwd: 'bower_components/select2/',
+              cwd: 'node_modules/select2/',
               src: 'select2*.gif',
               dest: bundleOptions.path,
               rename: function(dest, src) {
@@ -213,7 +213,7 @@
           this.gruntConfig.sed[name + '-bootstrap-glyphicons'] = {
             path: bundleOptions.path + name + '.min.css',
             pattern:
-              "url\\('../bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular",
+              "url\\('../node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular",
             replacement:
               "url('" +
               bundleOptions.url +
@@ -249,7 +249,7 @@
             path: bundleOptions.path,
             recursive: true,
             pattern:
-              '../../../bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
+              '../../../node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
             replacement: bundleOptions.url + '-tinymce-content.min.css'
           };
           this.gruntConfig.sed[name + '-tinymce-fonts2'] = {
@@ -437,7 +437,7 @@
                 files: this.files.concat([
                   {
                     pattern:
-                      'bower_components/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
+                      'node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
                     watched: false,
                     included: true,
                     served: true,

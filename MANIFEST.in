@@ -13,7 +13,7 @@ recursive-include mockup/patterns *
 recursive-include mockup/tests *
 prune .nix
 prune dist
-prune mockup/bower_components
+prune mockup/node_modules
 prune mockup/build
 prune mockup/coverage
 prune mockup/docs

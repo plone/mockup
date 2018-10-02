@@ -12,7 +12,7 @@ window.less = {
       isPlone: 'false',
       isMockup: 'true',
       'mockuplessPath': '"../../less"',
-      'bowerPath': '"../../bower_components"',
+      'bowerPath': '"../../node_modules"',
       'mockupPath': '"../../patterns"'
     },
   };

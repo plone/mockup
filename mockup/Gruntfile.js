@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         options: {
           paths: ['../../../'],
           modifyVars: {
-            bowerPath: '"bower_components/"',
+            bowerPath: '"node_modules/"',
             mockupPath: '"patterns/"',
             mockuplessPath: '"less/"'
           }
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
         docs: {
           files: [
             { expand: true, src: '*.md', dest: 'docs/dev/' },
-            { expand: true, src: 'bower_components/**', dest: 'docs/dev/' },
+            { expand: true, src: 'node_modules/**', dest: 'docs/dev/' },
             { expand: true, src: 'index.html', dest: 'docs/dev/' },
             { expand: true, src: 'js/**', dest: 'docs/dev/' },
             { expand: true, src: 'less/**', dest: 'docs/dev/' },
@@ -158,7 +158,7 @@ module.exports = function(grunt) {
       console.log('read folder: ' + path);
       var files = fs.readdirSync(path);
       files.forEach(function(filename) {
-        if (filename === 'bower_components' || filename === 'node_modules') {
+        if (filename === 'node_modules' || filename === 'node_modules') {
           return;
         }
         var stats = fs.statSync(path + filename);
