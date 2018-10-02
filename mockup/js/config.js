@@ -97,6 +97,7 @@
       'mockup-patterns-markspeciallinks': 'patterns/markspeciallinks/pattern',
       'mockup-patterns-modal': 'patterns/modal/pattern',
       'mockup-patterns-moment': 'patterns/moment/pattern',
+      'mockup-patterns-navigationmarker': 'patterns/navigationmarker/pattern',
       'mockup-patterns-pickadate': 'patterns/pickadate/pattern',
       'mockup-patterns-preventdoublesubmit': 'patterns/preventdoublesubmit/pattern',
       'mockup-patterns-querystring': 'patterns/querystring/pattern',
