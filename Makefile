@@ -1,9 +1,7 @@
 GIT = git
-NPM = npm
 
-GRUNT = ./node_modules/grunt-cli/bin/grunt
-BOWER = ./node_modules/bower/bin/bower
-NODE_PATH = ./node_modules
+NODE_PATH = ./mockup/node_modules
+GRUNT = $(NODE_PATH)/grunt-cli/bin/grunt
 BUILD_DIR = ./mockup/build
 
 DEBUG =
@@ -19,14 +17,10 @@ endif
 all: test-once bundles docs
 
 stamp-npm: package.json
-	npm install
+	yarn install
 	touch stamp-npm
 
-stamp-bower: stamp-npm bower.json
-	$(BOWER) install
-	touch stamp-bower
-
-bundles: stamp-bower bundle-widgets bundle-structure bundle-plone
+bundles: stamp-npm bundle-widgets bundle-structure bundle-plone
 	# ----------------------------------------------------------------------- #
 	# For plone 5, build the bundles on the plone side, as described in:
 	# Products.CMFPlone/DEVELOPING_BUNDLES.rst
@@ -60,13 +54,12 @@ bootstrap-common:
 	mkdir -p $(BUILD_DIR)
 
 bootstrap: bootstrap-common
-	$(NPM) link
-	NODE_PATH=$(NODE_PATH) $(BOWER) install --config.interactive=0
+	NODE_PATH=$(NODE_PATH) yarn install
 
 bootstrap-nix: clean bootstrap-common
 	nix-build default.nix -A build -o nixenv
 	ln -s nixenv/lib/node_modules/mockup/node_modules
-	ln -s nixenv/bower_components
+	ln -s nixenv/node_modules
 
 jshint:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) jshint $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
@@ -74,13 +67,13 @@ jshint:
 watch:
 	NODE_PATH=$(NODE_PATH) $(GRUNT) watch $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js
 
-test: stamp-bower
+test: stamp-npm
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
-test-once: stamp-bower
+test-once: stamp-npm
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_once $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
-test-jenkins: stamp-bower
+test-jenkins: stamp-npm
 	NODE_PATH=$(NODE_PATH) $(GRUNT) test_jenkins $(DEBUG) $(VERBOSE) --gruntfile=mockup/Gruntfile.js --pattern=$(pattern)
 
 test-dev:
@@ -98,14 +91,11 @@ test-ci:
 clean:
 	mkdir -p $(BUILD_DIR)
 	rm -rf $(BUILD_DIR)
-	rm -rf node_modules
-	rm -rf mockup/bower_components
-	rm -f stamp-npm stamp-bower
-	rm -rf node_modules src/bower_components
+	rm -rf mockup/node_modules
+	rm -f stamp-npm
 
 clean-deep: clean
-	if test -f $(BOWER); then $(BOWER) cache clean; fi
-	if test -f $(NPM); then $(NPM) cache clean; fi
+	 yarn cache clean
 
 publish-docs:
 	echo -e "Publishing 'docs' bundle!\n"; cd mockup/docs; git add -fA .; git commit -m "Publishing docs"; git push -f git@github.com:plone/mockup.git gh-pages; cd ../..;

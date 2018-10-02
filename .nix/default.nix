@@ -46,9 +46,9 @@ in rec {
       requirejs
     ];
     postInstall = ''
-      mkdir -p $out/bower_components
+      mkdir -p $out/node_modules
       ${pkgs.lib.concatStrings (map (p: ''
-        ln -s ${pkgs.fetchbower p.name p.version p.target p.outputHash}/packages/*/${p.version} $out/bower_components/${p.name}
+        ln -s ${pkgs.fetchbower p.name p.version p.target p.outputHash}/packages/*/${p.version} $out/node_modules/${p.name}
       '') bowerPackages )}
     '';
 
