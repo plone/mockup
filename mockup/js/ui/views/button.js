@@ -65,6 +65,9 @@ define([
     },
     enable: function() {
       this.$el.prop('disabled', false);
+    },
+    updateUrl: function (newUrl) {
+      this.url = newUrl + '/@@fc-' + this.id;
     }
   });
 
