@@ -14,6 +14,10 @@ New features:
 
 Bug fixes:
 
+- Structure pattern: Fix URL for current path for popovers.
+  Refs: https://github.com/plone/mockup/issues/857
+  [thet]
+
 - Structure pattern: Fix spacing for attribute-columns popover.
   [tmassman]
 
