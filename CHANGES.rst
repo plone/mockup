@@ -4,14 +4,6 @@ Changelog
 2.7.6 (Unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Structure pattern: Fix URL for current path for popovers.
