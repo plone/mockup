@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.4.2 (2018-10-11)
+------------------
+
+New:
+  
+-  Updated mockup to use TinyMCE 4.7.13
+  [obct537]
+
 2.4.1 (2017-04-02)
 ------------------
 
@@ -18,7 +26,6 @@ Bug fixes:
   This was american english only, now it uses the configured locale format LLL (see momentjs docs) which is almost the same,
   but works in any language.
   [jensens]
-- Updated to tinymce 4.7.13 compatible
 
 - fix structure pattern: do not use a relative date in structure pattern, editors are complaining and it indeed is bad UX.
   format with date and time in localized format 'L LT'
