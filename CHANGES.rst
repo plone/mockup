@@ -4,6 +4,11 @@ Changelog
 2.4.2 (2018-10-11)
 ------------------
 
+Bug fixes:
+
+- Fix tooltip less reference
+  [vangheem]
+
 New:
   
 -  Updated mockup to use TinyMCE 4.7.13
