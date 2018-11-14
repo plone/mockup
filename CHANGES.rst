@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Improve docs styles
+  [ale-rt]
 
 
 2.7.6 (2018-10-08)
