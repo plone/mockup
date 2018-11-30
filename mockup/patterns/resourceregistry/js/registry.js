@@ -116,6 +116,14 @@ define([
       title: _t('Conditional comment'),
       description: _t('Internet Explorer conditional comment')
     }, {
+      name: 'load_async',
+      title: _t('Load JavaScript asynchronously?'),
+      view: fields.ResourceBoolFieldView
+    }, {
+      name: 'load_defer',
+      title: _t('Load JavaScript deferred?'),
+      view: fields.ResourceBoolFieldView
+    }, {
       name: 'compile',
       title: _t('Does your bundle contain any RequireJS or LESS files?'),
       view: fields.ResourceBoolFieldView

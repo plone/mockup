@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- pat-resourceregistry: Add ``load_async`` and ``load_defer`` options.
+  [thet]
 
 Bug fixes:
 
