@@ -116,24 +116,34 @@ define([
       title: _t('Conditional comment'),
       description: _t('Internet Explorer conditional comment')
     }, {
+      name: 'load_async',
+      title: _t('Load JavaScript asynchronously?'),
+      view: fields.ResourceBoolFieldView
+    }, {
+      name: 'load_defer',
+      title: _t('Load JavaScript deferred?'),
+      view: fields.ResourceBoolFieldView
+    }, {
       name: 'compile',
       title: _t('Does your bundle contain any RequireJS or LESS files?'),
       view: fields.ResourceBoolFieldView
     }, {
+      name: 'merge_with',
+      title: _t('Merge with'),
+      description: _t('In production, the bundle is merged together with others. Select which one here.'),
+      view: fields.MergeWithFieldView
+    }, {
       name: 'last_compilation',
       title: _t('Last compilation'),
-      description: _t('Date/Time when your bundle was last compiled. Empty, if it was never compiled.'),
-      view: fields.ResourceDisplayFieldView
+      description: _t('Date/Time when your bundle was last compiled. Empty, if it was never compiled.')
     }, {
       name: 'jscompilation',
       title: _t('Compiled JavaScript'),
-      description: _t('Automatically generated path to the compiled JavaScript.'),
-      view: fields.ResourceDisplayFieldView
+      description: _t('Automatically generated path to the compiled JavaScript.')
     }, {
       name: 'csscompilation',
       title: _t('Compiled CSS'),
-      description: _t('Automatically generated path to the compiled CSS.'),
-      view: fields.ResourceDisplayFieldView
+      description: _t('Automatically generated path to the compiled CSS.')
     }, {
       name: 'stub_js_modules',
       title: _t('Stub JS Modules'),
