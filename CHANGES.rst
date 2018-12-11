@@ -4,10 +4,6 @@ Changelog
 2.7.7 (Unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - pat-resourceregistry:
