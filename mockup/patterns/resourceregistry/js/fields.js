@@ -366,6 +366,16 @@ define([
     }
   });
 
+
+  var MergeWithFieldView = ResourceSelectFieldView.extend({
+    multiple: false,
+    getSelectOptions: function() {
+      var self = this;
+      return ['', 'default', 'logged-in'];
+    }
+  });
+
+
   return {
     ResourceDisplayFieldView: ResourceDisplayFieldView,
     VariableFieldView: VariableFieldView,
@@ -376,6 +386,7 @@ define([
     BundleResourcesFieldView: BundleResourcesFieldView,
     BundleDependsFieldView: BundleDependsFieldView,
     ResourceBoolFieldView: ResourceBoolFieldView,
-    PatternFieldView: PatternFieldView
+    PatternFieldView: PatternFieldView,
+    MergeWithFieldView: MergeWithFieldView
   };
 });

@@ -73,7 +73,7 @@ define([
       expect($textarea.is(":visible")).to.be.ok();
       expect($(".mce-tinymce").length).to.be(0);
       // Unfortunately, TinyMCE changes the value just by loading TinyMCE.
-      expect($textarea.val()).to.be.equal("<p>hello world</p>");
+      expect($textarea.val()).to.be.equal("hello world");
 
     });
 

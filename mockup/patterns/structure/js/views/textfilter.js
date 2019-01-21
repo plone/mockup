@@ -96,6 +96,11 @@ define([
         self.term = $(event.currentTarget).val();
         self.app.collection.currentPage = 1;
         self.app.collection.pager();
+
+        if (!self.term){
+            self.app.setStatus();
+        }
+
       }, this.keyupDelay);
     }
   });

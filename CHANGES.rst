@@ -1,12 +1,134 @@
 Changelog
 =========
 
-2.7.3 (unreleased)
+2.7.8 (Unreleased)
 ------------------
 
-Breaking changes:
+Breaking Changes:
 
-- *add item here*
+* Add items here
+
+New features:
+
+* Add items here
+
+Bug fixes:
+
+* Add items here
+
+
+2.7.7 (2018-12-10)
+------------------
+
+New features:
+
+- pat-resourceregistry:
+  - Add input fiels for ``merge_with``, ``last_compilation``, ``jscompilation`` and ``csscompilation``.
+  - Add ``load_async`` and ``load_defer`` options.
+  [thet]
+
+Bug fixes:
+
+- Improve docs styles
+  [ale-rt]
+
+
+2.7.6 (2018-10-08)
+------------------
+
+Bug fixes:
+
+- Structure pattern: Fix URL for current path for popovers.
+  Refs: https://github.com/plone/mockup/issues/857
+  [thet]
+
+- Structure pattern: Fix spacing for attribute-columns popover.
+  [tmassman]
+
+
+2.7.5 (2018-09-28)
+------------------
+
+New features:
+
+- pat-structure: Use more tooltips in the actions menu.
+  [thet]
+
+- pat-structure: Move breadcrumbs out of folder contents table.
+  [thet]
+
+- pat-structure: Use the datatables pattern for sorting columns.
+- Include TinyMCE 4.7.13
+  [erral]
+
+- pat-structure: Use the datatables pattern for sorting columns
+  [frapell]
+
+- pat-structure: Add a '250' option for the pagination.
+  [frapell]
+
+- Add a new pattern, to provide the DataTables functionality.
+  https://datatables.net/
+  [frapell]
+
+- Add package-lock.json to git.
+  See https://github.com/npm/npm/blob/v5.0.0/doc/files/package-lock.json.md
+  [sunew]
+
+Bug fixes:
+
+- TinyMCE: Do not fail if initializing with another language or external script
+  https://github.com/plone/Products.CMFPlone/issues/2425
+  [frapell]
+
+- Get rid of obsolete ``X-UA-Compatible`` header.
+  [hvelarde]
+
+- Fix small message typos.
+  [tkimnguyen]
+
+- Remove patternslib "This pattern without a name attribute will not be
+  registered!" warnings by setting dummy name and trigger properties.
+  [sunew]
+
+- Fix error when running tests: "Some of your tests did a full page reload!", due to a form submit with no preventDefault.
+  [sunew]
+
+- Fix WARN [watcher]: Pattern "..../patterns/foo.js" does not match any file,
+  by excluding all requirements ending with '-url',
+  since they point to a folder and not to a .js file.
+  The folder contents are already included by 'patterns/**/*'.
+  [sunew]
+
+- Move installation and config of sinon from bower+requirejs to karma-sinon.
+  [sunew]
+
+- Remove chai - it is unused. The assertions being used are from 'expect', installed via bower.json
+  [sunew]
+
+- Upgrade some build and testing tools: grunt, karma, mocha, their plugins, coveralls, and browser launchers.
+  [sunew]
+
+
+2.7.4 (2018-06-21)
+------------------
+
+New features:
+
+- pat-contentloader: Add ``loading-done`` event.
+  [agitator, thet]
+
+Bug fixes:
+
+- pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
+  [thet]
+
+- Fix for loading country specific language codes
+  [lyralemos]
+
+
+2.7.3 (2018-06-21)
+------------------
 
 New features:
 
@@ -14,7 +136,21 @@ New features:
   https://developers.google.com/web/tools/lighthouse/audits/noopener
   [mamico]
 
+- pat-contentloader: Add ``loading-done`` event.
+  [agitator, thet]
+
 Bug fixes:
+
+- pat-structure: When a button is disabled, avoid firing events when clicked
+  [frapell]
+
+- pat-structure: When doing a search to filter items, disable reordering
+  [frapell]
+- tinymce: Do not include content.min.css as part of the bundle
+  [frapell]
+
+- pat-contentloader: Add 'content-load-error' to other exit-cases too. Clean up classes on initialization.
+  [thet]
 
 - pat-contentloader: When the content which replaces the target is empty, empty the target instead of removing it.
   This fixes a problem, where an empty result didn't did remove the ability to successfully replace the target for subsequent content loads.
@@ -38,6 +174,10 @@ Bug fixes:
 
 - Tinymce: Fix issue where Webpack less-loader was unable to load TinyMCE bundle styles
   [datakurre]
+
+- Fix for loading country specific language codes
+  [lyralemos]
+
 
 2.7.2 (2018-04-08)
 ------------------

@@ -143,6 +143,10 @@ define([
 
       var $el = $container.find('textarea');
       var tinymce = new TinyMCE($el);
+      // TODO: This needs to be properly addressed. Manually setting tinymce
+      //       as initialized is not correct, but it will have to do for now
+      //       https://github.com/plone/mockup/pull/832#issuecomment-369113718
+      tinymce.tiny.initialized = true;
 
       tinymce.tiny.setContent('<p>foobar</p>');
       $container.submit(function(e) {
@@ -503,6 +507,10 @@ define([
       var changed_txt = 'changed contents';
       $editable.html(changed_txt);
       var $form = $container.find('form');
+      // Avoid error when running tests: "Some of your tests did a full page reload!"
+      $container.submit(function(e) {
+        e.preventDefault();
+      });
       $container.trigger('submit');
       expect($el.val()).to.be.equal(changed_txt);
       tinymce.get(0).remove();
