@@ -23,4 +23,6 @@ exclude .travis.yml
 exclude Makefile
 exclude *.sh
 exclude Vagrantfile
-global-exclude *.pyc
+global-exclude *.pycinclude pyproject.toml
+recursive-exclude news *
+exclude news
