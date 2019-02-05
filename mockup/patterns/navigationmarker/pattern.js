@@ -4,7 +4,7 @@ define([
 ], function($, Base) {
 
     var Navigation = Base.extend({
-        name: 'collective.navigation',
+        name: 'navigationmarker',
         trigger: '.pat-navigationmarker',
         parser: 'mockup',
 
