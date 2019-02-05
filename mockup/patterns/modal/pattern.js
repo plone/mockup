@@ -337,6 +337,10 @@ define([
       handleLinkAction: function($action, options, patternOptions) {
         var self = this;
         var url;
+        if ($action.hasClass('pat-plone-modal')) {
+          // if link is a modal pattern, do not reload the page
+          return ;
+        }
 
         // Figure out URL
         if (options.ajaxUrl) {
