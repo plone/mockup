@@ -683,7 +683,6 @@ define([
                 // Select2 3.5.4 throws an error in some cases in
                 // updateSelection, ``this.selection.find(".select2-search-choice").remove();``
                 // No idea why, hard to track.
-                console.log(data);
               }
 
               if (self.openAfterInit) {
@@ -718,8 +717,21 @@ define([
       self.$toolbar = $('<div class="toolbar ui-offset-parent" />');
       self.$container.prepend(self.$toolbar);
 
-      self.$el.on('select2-selecting', function(event) {
-        event.preventDefault();
+      $(document).on('keyup', self.$el, function(event) {
+        var path;
+        // Number 39 is the "arrow right" key on the keyboard
+        if (event.which === 39) {
+          event.stopPropagation();
+          path = $('.select2-highlighted .pattern-relateditems-result-browse').data('path');
+          self.browseTo(path);
+        }
+
+        // Number 37 is the "arrow left" key on the keyboard
+        if (event.which === 37) {
+          event.stopPropagation();
+          path = $('.pattern-relateditems-result.one-level-up .pattern-relateditems-result-browse').data('path');
+          self.browseTo(path);
+        }
       });
 
       self.renderToolbar();
