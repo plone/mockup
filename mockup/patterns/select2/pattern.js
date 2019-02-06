@@ -5,6 +5,10 @@
  *    initialValues(string): This can be a json encoded string, or a list of id:text values. Ex: Red:The Color Red,Orange:The Color Orange  This is used inside the initSelection method, if AJAX options are NOT set. (null)
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    allowNewItems(string): All new items to be entered into the widget(true)
+ *    onSelecting(string|function): Name of global function or function to call when value is selecting (null)
+ *    onSelected(string|function): Name of global function or function to call when value has been selected (null)
+ *    onDeselecting(string|function): Name of global function or function to call when value is deselecting (null)
+ *    onDeselected(string|function): Name of global function or function to call when value has been deselected (null)
  *    OTHER OPTIONS(): For more options on select2 go to http://ivaynberg.github.io/select2/#documentation ()
  *
  * Documentation:
@@ -205,7 +209,34 @@ define([
           return 'select2-option-' + ob.id.toLowerCase().replace(/[ \:\)\(\[\]\{\}\_\+\=\&\*\%\#]/g, '-');
         }
       };
+
+      function callback(action, e) {
+        if (!!action) {
+          if (self.options.debug) {
+            console.debug('callback', action, e)
+          }
+          if (typeof action === 'string') {
+            action = window[action];
+          }
+          return action(e);
+        } else {
+          return action;
+        }
+      }
+
       self.$el.select2(self.options);
+      self.$el.on('select2-selected', function(e) {
+          callback(self.options.onSelected, e);
+      });
+      self.$el.on('select2-selecting', function(e) {
+          callback(self.options.onSelecting, e);
+      });
+      self.$el.on('select2-deselecting', function(e) {
+          callback(self.options.onDeselecting, e);
+      });
+      self.$el.on('select2-deselected', function(e) {
+          callback(self.options.onDeselected, e);
+      });
       self.$select2 = self.$el.parent().find('.select2-container');
       self.$el.parent().off('close.plone-modal.patterns');
       if (self.options.orderable) {
