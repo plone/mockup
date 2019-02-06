@@ -15,6 +15,7 @@ define([
   'mockup-patterns-preventdoublesubmit',
   'mockup-patterns-formautofocus',
   'mockup-patterns-modal',
+  'mockup-patterns-navigationmarker',
   'mockup-patterns-structure',
   'mockup-patterns-textareamimetypeselector',
   'bootstrap-dropdown',

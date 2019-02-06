@@ -1,0 +1,2 @@
+- Added navigationmarker pattern
+  [agitator]
