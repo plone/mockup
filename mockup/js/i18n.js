@@ -79,7 +79,7 @@ define([
           }
         }
       }
-      if (!self.baseURL) {
+      if (!self.baseUrl) {
         return;
       }
       $.getJSON(self.getUrl(domain, language), function (catalog) {
