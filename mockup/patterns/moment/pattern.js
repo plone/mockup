@@ -81,12 +81,15 @@
  */
 
 
+var lang = document.querySelector('html').lang;
+
 define([
   'jquery',
   'pat-base',
   'moment',
+  'moment-url/' + lang,
   'mockup-i18n'
-], function($, Base, moment, i18n) {
+], function($, Base, moment, locale, i18n) {
 
   var Moment = Base.extend({
     name: 'moment',
