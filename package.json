@@ -4,6 +4,10 @@
   "description": "A collection of client side patterns for faster and easier web development",
   "homepage": "http://plone.github.io/mockup",
   "license": "BSD-3-Clause",
+  "engines": {
+    "node": ">=8.0.0",
+    "yarn": "^1.13.0"
+  },
   "dependencies": {
     "ace-builds": "https://github.com/ajaxorg/ace-builds.git#v1.2.6",
     "backbone": "https://github.com/jashkenas/backbone.git#1.1.2",
