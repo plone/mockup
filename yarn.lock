@@ -2764,9 +2764,9 @@ jqtree@>=0.16:
   version "1.4.1"
   resolved "https://github.com/carhartl/jquery-cookie.git#7f88a4e631aba8a8c688fd8999ce6b9bcfd50718"
 
-"jquery.recurrenceinput.js@https://github.com/collective/jquery.recurrenceinput.js.git#thet-npm":
+"jquery.recurrenceinput.js@https://github.com/collective/jquery.recurrenceinput.js.git#master":
   version "1.6.0"
-  resolved "https://github.com/collective/jquery.recurrenceinput.js.git#84af75b92770dff10767cb2ade40c134ca1e8047"
+  resolved "https://github.com/collective/jquery.recurrenceinput.js.git#deaec1116575d81698778f87d8c08f02487aadf9"
   dependencies:
     jquery ""
 
@@ -3191,7 +3191,7 @@ log4js@^3.0.0:
     rfdc "^1.1.2"
     streamroller "0.7.0"
 
-"logging@https://github.com/Patternslib/logging.git#v1.0.2":
+"logging@https://github.com/Patternslib/logging.git#1.0.2":
   version "1.0.2"
   resolved "https://github.com/Patternslib/logging.git#a31a550c2083089de2c677c169d7e0b0fb7a7967"
 
@@ -3400,9 +3400,10 @@ mocha@~3.5.3:
     mkdirp "0.5.1"
     supports-color "3.1.2"
 
-"moment@https://github.com/moment/moment.git#2.10.6":
-  version "2.10.6"
-  resolved "https://github.com/moment/moment.git#f3fbef9d9875bbff340b527dbe3f1c447a942f69"
+moment@2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 ms@2.0.0:
   version "2.0.0"
