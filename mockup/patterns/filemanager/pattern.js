@@ -53,13 +53,12 @@ define([
   'mockup-patterns-filemanager-url/js/upload',
   'translate',
   'mockup-utils',
-  'js-shortcuts',
   'text!mockup-ui-url/templates/popover.xml',
   'text!mockup-ui-url/templates/dropdown.xml'
 ], function($, Base, _, ContextMenu, Tree, TextEditor, AppTemplate, Toolbar,
   ButtonView, ButtonGroup, AnchorView, DropdownView,
   AddNewView, NewFolderView, FindFileView, FindInFilesView, DeleteView,
-  CustomizeView, RenameView, UploadView, _t, utils, jsShortcuts) {
+  CustomizeView, RenameView, UploadView, _t, utils) {
   'use strict';
 
   var FileManager = Base.extend({
@@ -282,7 +281,7 @@ define([
 
           }
         });
-        
+
         views.file_menu.push(uploadView);
         file_menu.items.push(uploadView.triggerView);
       }
@@ -341,28 +340,48 @@ define([
       });
       self.render();
       self.shortcuts();
-      
+
     },
-    
+
     shortcuts: function(){
-      var self = this;
-      shortcut.add("Alt+N", function () {
-        self.btns.newfile.$el.click();
-      });
-      shortcut.add("Alt+Shift+N", function () {
-        self.btns.newfolder.$el.click();
-      });
-      shortcut.add("Ctrl+S", function () {
-        self.saveBtn.$el.click();
-      });
-      shortcut.add("Ctrl+F", function () {
-        self.btns.findfile.$el.click();
-      });
-      shortcut.add("Ctrl+E", function () {
-        self.btns.findtextinfile.$el.click();
-      });
+
+      this.$el[0].addEventListener('keyup', function (e) {
+        // "Alt+N"
+        if (e.altKey && e.keyCode === 78) {
+          this.btns.newfile.$el.click();
+        }
+      }.bind(this));
+
+      this.$el[0].addEventListener('keyup', function (e) {
+        // "Alt+Shift+N"
+        if (e.altKey && e.shiftKey && e.keyCode === 78) {
+          this.btns.newfolder.$el.click();
+        }
+      }.bind(this));
+
+      this.$el[0].addEventListener('keyup', function (e) {
+        // "Ctrl+S"
+        if (e.ctrlKey && e.keyCode === 83) {
+          this.saveBtn.$el.click();
+        }
+      }.bind(this));
+
+      this.$el[0].addEventListener('keyup', function (e) {
+        // "Ctrl+F"
+        if (e.ctrlKey && e.keyCode === 70) {
+          this.btns.findfile.$el.click();
+        }
+      }.bind(this));
+
+      this.$el[0].addEventListener('keyup', function (e) {
+        // "Ctrl+E
+        if (e.ctrlKey && e.keyCode === 69) {
+          this.btns.findtextinfile.$el.click();
+        }
+      }.bind(this));
+
     },
-    
+
     $: function(selector) {
       return this.$el.find(selector);
     },
@@ -432,14 +451,14 @@ define([
       });
 
       self.$tree.bind('tree.move', function(event) {
-        
+
         var target_node = event.move_info.target_node;
         var srcpath = event.move_info.moved_node.path;
         var newpath = target_node.path;
         if (event.move_info.position !== "inside" ){
           newpath = newpath.substring(newpath.indexOf('/'), newpath.lastIndexOf('/'));
         }
-        
+
         self.doAction('move', {
           data: {
             source: srcpath,

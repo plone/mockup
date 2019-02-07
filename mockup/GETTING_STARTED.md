@@ -47,7 +47,7 @@ and then you open index.html with your browser!
 
  * `less/` : Contains all the [Less](http://lesscss.org/) code for all the patterns and bundles
 
- * `lib/` : Contains external libraries not necessarily found in the bower repositories
+ * `lib/` : Contains external libraries not necessarily found in ``mockup/node_modules``.
 
  * `tests/` : Contains all tests for patterns and bundles, including general setup and configuration code
 

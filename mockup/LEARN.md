@@ -18,7 +18,6 @@ You might also want to review the *Mockup Project Structure* section of *Getting
 
 <pre>
 mockup/
-	bower.json
   CHANGES.rst
   CONTRIBUTING.rst
   LICENSE.rst
@@ -47,6 +46,7 @@ mockup/
     node_modules/
     patterns/
     tests/
+  package.json
   &hellip;
 </pre>
 
@@ -123,7 +123,7 @@ So, first open the file *js/config.js* and add the following line under the *pat
     baseUrl: './',
     paths: {
       &hellip;
-      'underscore': 'bower_components/underscore/underscore',
+      'underscore': 'node_modules/underscore/underscore',
       'mockup-patterns-helloworld': 'patterns/hello/pattern' // <- right here!
   },
   &hellip;
