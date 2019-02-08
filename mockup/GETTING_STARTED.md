@@ -13,6 +13,9 @@ so with a little effort, it should work!
     $ cd mockup
     $ make bootstrap
 
+A note on yarn: We require the use of yarn, because yarn supports installing the packages in a cursom directory, which npm doesn't.
+Our package directory is located at: ``mockup/node_modules``.
+
 Now you have the complete source code for all Patterns from Mockup.
 From here on you generate bundles of common functionality and minify them.
 
