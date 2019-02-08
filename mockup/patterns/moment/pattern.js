@@ -81,7 +81,7 @@
  */
 
 
-var lang = document.querySelector('html').lang;
+var lang = document.querySelector('html').lang || 'en';
 
 define([
   'jquery',
