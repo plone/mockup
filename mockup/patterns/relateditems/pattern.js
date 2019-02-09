@@ -10,7 +10,7 @@
  *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
- *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
+ *    mode(string): Initial widget mode. Possible values: are 'auto', 'search' and 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'auto'.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    pageSize(int): Batch size to break down big result sets into multiple pages. (10).
  *    recentlyUsed(boolen): Show the recently used items dropdown (false).
@@ -286,7 +286,7 @@ define([
 
           // Filter out items:
           // While browsing: always include folderish items
-          // Browsing and searching: Only include selectable items, which are not already selected.
+          // Browsing and searching: Only include folders and selectable items which are not already selected.
           results = results.filter(
             function (item) {
               if (
@@ -718,18 +718,26 @@ define([
       self.$container.prepend(self.$toolbar);
 
       $(document).on('keyup', self.$el, function(event) {
-        var path;
+        var path, browsableItem;
         // Number 39 is the "arrow right" key on the keyboard
-        if (event.which === 39) {
+        if (event.which === 39 && Select2.prototype.opened.call(self)) {
           event.stopPropagation();
-          path = $('.select2-highlighted .pattern-relateditems-result-browse').data('path');
+          browsableItem = $('.select2-highlighted .pattern-relateditems-result-browse');
+          if (browsableItem.length !== 1) {
+            return
+          }
+          path = browsableItem.data('path');
           self.browseTo(path);
         }
 
         // Number 37 is the "arrow left" key on the keyboard
-        if (event.which === 37) {
+        if (event.which === 37 && Select2.prototype.opened.call(self)) {
           event.stopPropagation();
-          path = $('.pattern-relateditems-result.one-level-up .pattern-relateditems-result-browse').data('path');
+          browsableItem = $('.pattern-relateditems-result.one-level-up .pattern-relateditems-result-browse');
+          if (browsableItem.length !== 1) {
+            return
+          }
+          path = browsableItem.data('path');
           self.browseTo(path);
         }
       });
