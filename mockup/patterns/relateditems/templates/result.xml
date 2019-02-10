@@ -1,18 +1,29 @@
-<div class="pattern-relateditems-result<% if (oneLevelUp) { %> one-level-up<% } %>">
+<div class="pattern-relateditems-result <%- oneLevelUp ? 'one-level-up' : '' %>">
   <div class="pattern-relateditems-result-browse-wrapper">
-    <a class="pattern-relateditems-result-select<% if (selectable) { %> selectable<% } %><% if (oneLevelUp) { %> one-level-up<% } %>" data-path="<%- path %>">
+    <a
+      class="pattern-relateditems-result-select <%- selectable ? 'selectable' : '' %> <%- oneLevelUp ? 'one-level-up' : '' %>"
+      data-path="<%- path %>">
       <div class="pattern-relateditems-result-info">
-        <span class="pattern-relateditems-result-title<%- portal_type ? ' contenttype-' + portal_type.toLowerCase() : '' %><%- review_state ? ' state-' + review_state : '' %>" title="<%- portal_type %>"><%- Title %></span>
+        <span
+          class="pattern-relateditems-result-title <%- portal_type ? 'contenttype-' + portal_type.toLowerCase() : '' %> <%- review_state ? 'state-' + review_state : '' %>"
+          title="<%- portal_type %>">
+          <%- Title %>
+        </span>
         <span class="pattern-relateditems-result-path"><%- path %></span>
       </div>
-    <% if (is_folderish) { %>
-      <a class="pattern-relateditems-result-browse" data-path="<%- path %>" title="<%- open_folder %>"><span class="<% if (oneLevelUp) { %>icon-left-circle<% } else { %>icon-right-circle<% } %>"></span></a>
-    <% } %>
+      <% if (is_folderish) { %>
+        <a
+          class="pattern-relateditems-result-browse"
+          data-path="<%- path %>"
+          title="<%- open_folder %>">
+          <span class="<%- oneLevelUp ? 'icon-left-circle' : 'icon-right-circle' %>"></span>
+        </a>
+      <% } %>
     </a>
   </div>
   <% if (getURL && (getIcon || portal_type === "Image")) { %>
-  <div class="pattern-relateditems-result-image">
-    <img src="<%- getURL %>/@@images/image/thumb">
-  </div>
+    <div class="pattern-relateditems-result-image">
+      <img src="<%- getURL %>/@@images/image/thumb" />
+    </div>
   <% } %>
 </div>
