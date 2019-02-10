@@ -2764,9 +2764,9 @@ jqtree@>=0.16:
   version "1.4.1"
   resolved "https://github.com/carhartl/jquery-cookie.git#7f88a4e631aba8a8c688fd8999ce6b9bcfd50718"
 
-"jquery.recurrenceinput.js@https://github.com/collective/jquery.recurrenceinput.js.git#thet-npm":
+"jquery.recurrenceinput.js@https://github.com/collective/jquery.recurrenceinput.js.git#master":
   version "1.6.0"
-  resolved "https://github.com/collective/jquery.recurrenceinput.js.git#84af75b92770dff10767cb2ade40c134ca1e8047"
+  resolved "https://github.com/collective/jquery.recurrenceinput.js.git#deaec1116575d81698778f87d8c08f02487aadf9"
   dependencies:
     jquery ""
 
