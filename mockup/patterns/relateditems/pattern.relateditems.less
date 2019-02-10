@@ -207,6 +207,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.3em;
+
     a {
         &:hover {
             text-decoration: none;
@@ -223,7 +224,6 @@
         justify-content: flex-start;
 
         .pattern-relateditems-result-select {
-
             &:not(.selectable):not(.one-level-up) {
                 opacity: 0.6;
             }
@@ -235,6 +235,7 @@
             padding: 0 0.15em;
             display: inline;
             line-height: 1.2em;
+
             &:hover {
                 background-color: lighten(#d8d8d8, 5%) ;
             }
@@ -242,17 +243,15 @@
                 vertical-align: middle;
             }
         }
-
     }
-
-
-
 }
 
-.pattern-relateditems-recentlyused-path,
-.pattern-relateditems-item-path,
-.pattern-relateditems-result-path {
-    font-size: 0.8em;
-    display: block;
-    color: #444;
+.pattern-relateditems {
+    &-recentlyused-path,
+    &-item-path,
+    &-result-path {
+        font-size: 0.8em;
+        display: block;
+        color: #444;
+    }
 }

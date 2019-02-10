@@ -10,10 +10,10 @@
  *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
- *    mode(string): Initial widget mode. Possible values: are 'auto', 'search' and 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'auto'.
+ *    mode(string): Initial widget mode. Possible values: are 'auto', 'search' and 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'auto', which means the combination of both.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
  *    pageSize(int): Batch size to break down big result sets into multiple pages. (10).
- *    recentlyUsed(boolen): Show the recently used items dropdown (false).
+ *    recentlyUsed(boolean): Show the recently used items dropdown (false).
  *    recentlyUsedMaxItems(integer): Maximum items to keep in recently used list. 0: no restriction. (20).
  *    rootPath(string): Only display breadcrumb path elements deeper than this path. Default: "/"
  *    rootUrl(string): Visible URL up to the rootPath. This is prepended to the currentPath to generate submission URLs.
@@ -118,6 +118,11 @@ define([
             ToolbarTemplate
 ) {
   'use strict';
+
+  var KEY = {
+    LEFT: 37,
+    RIGHT: 39
+  };
 
   var RelatedItems = Base.extend({
     name: 'relateditems',
@@ -286,12 +291,13 @@ define([
 
           // Filter out items:
           // While browsing: always include folderish items
-          // Browsing and searching: Only include folders and selectable items which are not already selected.
+          // Browsing and searching: Only include selectable items which are not already selected, and all folders
+          // even if they're selected, as we need them available for browsing/selecting their children
           results = results.filter(
             function (item) {
               if (
                 (this.browsing && item.is_folderish) ||
-                (this.isSelectable(item) && this.selectedUIDs.indexOf(item.UID) == -1)
+                (this.isSelectable(item) && !this.selectedUIDs.includes(item.UID))
               ) {
                 return true;
               }
@@ -543,7 +549,7 @@ define([
       if (self.options.selectableTypes === null) {
         return true;
       } else {
-        return _.indexOf(self.options.selectableTypes, item.portal_type) > -1;
+        return self.options.selectableTypes.includes(item.portal_type);
       }
     },
 
@@ -612,7 +618,7 @@ define([
             'selectable': false,
         }, item);
 
-        if (self.selectedUIDs.indexOf(item.UID) != -1) {
+        if (self.selectedUIDs.includes(item.UID)) {
             // do not allow already selected items to be selected again.
             item.selectable = false;
         }
@@ -695,16 +701,11 @@ define([
             false
           );
         }
-
       };
 
       self.options.tokenizer = function (input) {
         if (this.options.mode === 'auto') {
-          if (input) {
-            this.browsing = false;
-          } else {
-            this.browsing = true;
-          }
+          this.browsing = input ? false : true;
         }
       }.bind(this);
 
@@ -716,34 +717,35 @@ define([
 
       self.$toolbar = $('<div class="toolbar ui-offset-parent" />');
       self.$container.prepend(self.$toolbar);
+      self.renderToolbar();
 
       $(document).on('keyup', self.$el, function(event) {
-        var path, browsableItem;
-        // Number 39 is the "arrow right" key on the keyboard
-        if (event.which === 39 && Select2.prototype.opened.call(self)) {
-          event.stopPropagation();
-          browsableItem = $('.select2-highlighted .pattern-relateditems-result-browse');
-          if (browsableItem.length !== 1) {
-            return
-          }
-          path = browsableItem.data('path');
-          self.browseTo(path);
+        var isOpen = Select2.prototype.opened.call(self);
+
+        if (!isOpen) {
+          return;
         }
 
-        // Number 37 is the "arrow left" key on the keyboard
-        if (event.which === 37 && Select2.prototype.opened.call(self)) {
+        if ((event.which === KEY.LEFT) || (event.which === KEY.RIGHT)) {
           event.stopPropagation();
-          browsableItem = $('.pattern-relateditems-result.one-level-up .pattern-relateditems-result-browse');
+
+          var selectorContext =
+            event.which === KEY.LEFT
+              ? '.pattern-relateditems-result.one-level-up'
+              : '.select2-highlighted';
+
+          var browsableItemSelector = '.pattern-relateditems-result-browse';
+          var browsableItem = $(browsableItemSelector, selectorContext);
+
           if (browsableItem.length !== 1) {
-            return
+            return;
           }
-          path = browsableItem.data('path');
+
+          var path = browsableItem.data('path');
+
           self.browseTo(path);
         }
       });
-
-      self.renderToolbar();
-
     }
   });
 

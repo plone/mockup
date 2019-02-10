@@ -213,10 +213,9 @@ define([
       }
     },
     opened: function () {
-      var self = this,
-        state;
-      state = self.$el.parent().find('.select2-dropdown-open').length === 1;
-      return state;
+      var self = this;
+      var isOpen = $('.select2-dropdown-open', self.$el.parent()).length === 1;
+      return isOpen;
     },
     init: function() {
       var self = this;
