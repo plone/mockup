@@ -5,8 +5,8 @@
   "homepage": "http://plone.github.io/mockup",
   "license": "BSD-3-Clause",
   "engines": {
-    "node": ">=8.0.0",
-    "yarn": "^1.13.0"
+    "node": ">=8.12.0",
+    "yarn": "^1.3.2"
   },
   "dependencies": {
     "ace-builds": "https://github.com/ajaxorg/ace-builds.git#v1.2.6",
