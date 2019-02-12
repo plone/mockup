@@ -80,13 +80,14 @@
  *
  */
 
-
 define([
   'jquery',
   'pat-base',
-  'moment',
-  'mockup-i18n'
-], function($, Base, moment, i18n) {
+  'mockup-i18n',
+  'moment'
+], function($, Base, i18n, moment) {
+
+  lazyLoadMomentLocale();
 
   var Moment = Base.extend({
     name: 'moment',
@@ -146,5 +147,15 @@ define([
   });
 
   return Moment;
-
 });
+
+function lazyLoadMomentLocale() {
+  var lang = document.querySelector('html').lang || 'en';
+
+  if (lang === 'en') {
+    // English locale is built-in, no need to load
+    return;
+  }
+
+  require(['moment-url/' + lang]);
+}

@@ -128,6 +128,7 @@
       'mockup-ui-url': 'js/ui',
       'mockup-utils': 'js/utils',
       'moment': 'node_modules/moment/moment',
+      'moment-url': 'node_modules/moment/locale',
       'picker': 'node_modules/pickadate/lib/picker',
       'picker.date': 'node_modules/pickadate/lib/picker.date',
       'picker.time': 'node_modules/pickadate/lib/picker.time',
