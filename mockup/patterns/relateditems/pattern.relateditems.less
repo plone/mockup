@@ -226,7 +226,6 @@
         justify-content: flex-start;
 
         .pattern-relateditems-result-select {
-
             &:not(.selectable):not(.one-level-up) {
                 opacity: 0.6;
             }
@@ -274,11 +273,13 @@
     }
 }
 
-.pattern-relateditems-recentlyused-path,
-.pattern-relateditems-item-path,
-.pattern-relateditems-result-path {
-    font-size: 0.8em;
-    display: block;
-    color: #444;
-    padding-left: 0.2em;
+.pattern-relateditems {
+    &-recentlyused-path,
+    &-item-path,
+    &-result-path {
+        font-size: 0.8em;
+        display: block;
+        color: #444;
+        padding-left: 0.2em;
+    }
 }
