@@ -157,6 +157,7 @@ function lazyLoadMomentLocale() {
     return;
   }
 
+  // Taken from https://github.com/moment/moment/blob/3147fbc486209f0b479dc0b29672d4c2ef39cf43/src/test/moment/format.js#L463-L468
   var MOMENT_LOCALES =
     'ar-sa ar-tn ar az be bg bn bo br bs ca cs cv cy da de-at de dv el ' +
     'en-au en-ca en-gb en-ie en-nz eo es et eu fa fi fo fr-ca fr-ch fr fy ' +
