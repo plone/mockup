@@ -217,7 +217,9 @@ define([
       // let's give all the options possible to the template generation
       var options = $.extend(true, {}, self.options, item, {
         'browsing': self.browsing,
-        'open_folder': _t('Open folder')
+        'open_folder': _t('Open folder'),
+        'urrent_directory': _t('current directory:'),
+        'one_level_up': _t('Go one level up')
       });
       options._item = item;
       return _.template(template)(options);
@@ -316,6 +318,7 @@ define([
               'oneLevelUp': true,
               'Title': _t('One level up'),
               'path': path.slice(0, path.length - 1).join('/') || '/',
+              'currentPath': this.currentPath,
               'is_folderish': true,
               'selectable': false
             }].concat(results);
@@ -377,6 +380,12 @@ define([
       self.$toolbar.html(html);
 
       $('.dropdown-toggle', self.$toolbar).dropdown();
+
+      // unbind mouseup event from select2 to override the behavior:
+      $(".pattern-relateditems-dropdown").unbind("mouseup");
+      $(".pattern-relateditems-dropdown").bind("mouseup", function(e) {
+          e.stopPropagation();
+      });
 
       $('button.mode.search', self.$toolbar).on('click', function(e) {
         e.preventDefault();
@@ -603,6 +612,8 @@ define([
 
       Select2.prototype.initializeOrdering.call(self);
 
+
+
       self.options.formatResult = function(item) {
         item.selectable = self.isSelectable(item);
 
@@ -627,6 +638,7 @@ define([
 
         $('.pattern-relateditems-result-select', result).on('click', function(event) {
           event.preventDefault();
+          // event.stopPropagation();
           if ($(this).is('.selectable')) {
             var $parent = $(this).parents('.pattern-relateditems-result');
             if ($parent.is('.pattern-relateditems-active')) {
@@ -717,6 +729,11 @@ define([
 
       self.$toolbar = $('<div class="toolbar ui-offset-parent" />');
       self.$container.prepend(self.$toolbar);
+      self.$el.on('select2-selecting', function(event) {
+        if (!self.isSelectable(event.choice)) {
+          event.preventDefault();
+        }
+      });
       self.renderToolbar();
 
       $(document).on('keyup', self.$el, function(event) {

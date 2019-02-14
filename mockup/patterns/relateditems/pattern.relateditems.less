@@ -151,9 +151,8 @@
     }
 
     .select2-result.select2-highlighted {
-        //color: auto;
-        //background: auto;
-        border-left: 0.5em solid #007bb3 !important;
+        border-left: 0.3em solid #007bb3 !important;
+        border-right: 0.3em solid #007bb3 !important;
     }
 
     .select2-selected {
@@ -232,7 +231,7 @@
         }
 
         .pattern-relateditems-result-browse {
-            font-size:170%;
+            font-size: 2.1rem;
             margin:0 0.1em 0 0;
             padding:0 0.15em 0 0.1em;
             line-height:1.8em;
@@ -244,19 +243,27 @@
             }
         }
     }
+    &.one-level-up{
+        background-color: #ddd;
+        .pattern-relateditems-result-browse-wrapper {
+            flex-direction: row-reverse;
+        }
+    }
 }
 
+.pattern-relateditems-item-title,
 .pattern-relateditems-result-title {
-    font-size: 124%;
+    font-size: 1.6rem;
     line-height: 1.2;
     padding: 0;
     &[class*="contenttype-"]::before {
-        font-size:92%;
-        width:15px;
+        font-size:1.46rem;
+        width:14px;
         height:25px;
         vertical-align:middle;
     }
 }
+
 .pattern-relateditems-result-path {
     margin-top: -5px;
 }
@@ -270,6 +277,15 @@
             max-width: 128px;
             max-height: 128px;
         }
+    }
+}
+// modal is not inside content-core
+.pattern-relateditems-result-image,
+.pattern-relateditems-recentlyused-image,
+.pattern-relateditems-item-image {
+    img {
+        max-width: 128px;
+        max-height: 128px;
     }
 }
 
