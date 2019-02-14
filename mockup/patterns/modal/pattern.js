@@ -111,6 +111,7 @@ define([
       automaticallyAddButtonActions: true,
       loadLinksWithinModal: true,
       prependContent: '.portalMessage',
+      onRender: null,
       templateOptions: {
         className: 'plone-modal fade',
         classDialog: 'plone-modal-dialog',
@@ -513,6 +514,14 @@ define([
         }
         self.$modal.data('pattern-' + self.name, self);
         self.emit('after-render');
+        if (options.onRender) {
+          if (typeof options.onRender === 'string') {
+            window[options.onRender](self);
+          } else {
+              options.onRender(self);
+          }
+        }
+
       }
     },
     reloadWindow: function() {
