@@ -299,7 +299,7 @@ define([
             function (item) {
               if (
                 (this.browsing && item.is_folderish) ||
-                (this.isSelectable(item) && !this.selectedUIDs.includes(item.UID))
+                (this.isSelectable(item) && this.selectedUIDs.indexOf(item.UID) === -1)
               ) {
                 return true;
               }
@@ -558,7 +558,7 @@ define([
       if (self.options.selectableTypes === null) {
         return true;
       } else {
-        return self.options.selectableTypes.includes(item.portal_type);
+        return self.options.selectableTypes.indexOf(item.portal_type) !== -1;
       }
     },
 
@@ -629,7 +629,7 @@ define([
             'selectable': false,
         }, item);
 
-        if (self.selectedUIDs.includes(item.UID)) {
+        if (self.selectedUIDs.indexOf(item.UID) !== -1) {
             // do not allow already selected items to be selected again.
             item.selectable = false;
         }
