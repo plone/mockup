@@ -86,7 +86,42 @@ define([
   'mockup-i18n',
   'moment'
 ], function($, Base, i18n, moment) {
-  lazyLoadMomentLocale();
+  var currentLanguage = (new i18n()).currentLanguage;
+
+  // From https://github.com/moment/moment/blob/3147fbc/src/test/moment/format.js#L463-L468
+  var MOMENT_LOCALES =
+    'ar-sa ar-tn ar az be bg bn bo br bs ca cs cv cy da de-at de dv el ' +
+    'en-au en-ca en-gb en-ie en-nz eo es et eu fa fi fo fr-ca fr-ch fr fy ' +
+    'gd gl he hi hr hu hy-am id is it ja jv ka kk km ko lb lo lt lv me mk ml ' +
+    'mr ms-my ms my nb ne nl nn pl pt-br pt ro ru se si sk sl sq sr-cyrl ' +
+    'sr sv sw ta te th tl-ph tlh tr tzl tzm-latn tzm uk uz vi zh-cn zh-tw';
+
+  lazyLoadMomentLocale(currentLanguage);
+
+  function isLangSupported(lang) {
+    return MOMENT_LOCALES.split(' ').indexOf(lang) !== -1;
+  }
+
+  function lazyLoadMomentLocale(lang) {
+    var LANG_FALLBACK = 'en';
+
+    if (lang === LANG_FALLBACK) {
+      // English locale is built-in, no need to load
+      return;
+    }
+
+    // Format language as expect by Moment.js, neither POSIX (like TinyMCE) nor IETF
+    lang = lang.replace('_', '-').toLowerCase();
+
+    // Use language code as fallback, otherwise built-in English locale
+    lang = isLangSupported(lang) ? lang : lang.split('-')[0];
+    lang = isLangSupported(lang) ? lang : LANG_FALLBACK;
+    if (lang === LANG_FALLBACK) {
+      return;
+    }
+
+    require(['moment-url/' + lang]);
+  }
 
   var Moment = Base.extend({
     name: 'moment',
@@ -109,7 +144,6 @@ define([
       if (!date || date === 'None') {
         return;
       }
-      var currentLanguage = (new i18n()).currentLanguage;
       if (currentLanguage in self.moment_i18n_map) {
         currentLanguage = self.moment_i18n_map[currentLanguage];
       }
@@ -147,31 +181,3 @@ define([
 
   return Moment;
 });
-
-function lazyLoadMomentLocale() {
-  var BUILTIN_FALLBACK = 'en';
-  var lang = document.querySelector('html').lang || BUILTIN_FALLBACK;
-
-  if (lang === 'en') {
-    // English locale is built-in, no need to load
-    return;
-  }
-
-  // Taken from https://github.com/moment/moment/blob/3147fbc486209f0b479dc0b29672d4c2ef39cf43/src/test/moment/format.js#L463-L468
-  var MOMENT_LOCALES =
-    'ar-sa ar-tn ar az be bg bn bo br bs ca cs cv cy da de-at de dv el ' +
-    'en-au en-ca en-gb en-ie en-nz eo es et eu fa fi fo fr-ca fr-ch fr fy ' +
-    'gd gl he hi hr hu hy-am id is it ja jv ka kk km ko lb lo lt lv me mk ml ' +
-    'mr ms-my ms my nb ne nl nn pl pt-br pt ro ru se si sk sl sq sr-cyrl ' +
-    'sr sv sw ta te th tl-ph tlh tr tzl tzm-latn tzm uk uz vi zh-cn zh-tw';
-
-  lang = MOMENT_LOCALES.split(' ').includes(lang) ? lang : lang.split('-')[0];
-  lang = MOMENT_LOCALES.split(' ').includes(lang) ? lang : BUILTIN_FALLBACK;
-
-  if (lang === BUILTIN_FALLBACK) {
-    // English locale is built-in, no need to load
-    return;
-  }
-
-  require(['moment-url/' + lang]);
-}
