@@ -96,22 +96,20 @@ define([
     'mr ms-my ms my nb ne nl nn pl pt-br pt ro ru se si sk sl sq sr-cyrl ' +
     'sr sv sw ta te th tl-ph tlh tr tzl tzm-latn tzm uk uz vi zh-cn zh-tw';
 
-  lazyLoadMomentLocale(currentLanguage);
-
   function isLangSupported(lang) {
     return MOMENT_LOCALES.split(' ').indexOf(lang) !== -1;
   }
 
-  function lazyLoadMomentLocale(lang) {
+  function lazyLoadMomentLocale() {
     var LANG_FALLBACK = 'en';
 
-    if (lang === LANG_FALLBACK) {
+    if (currentLanguage === LANG_FALLBACK) {
       // English locale is built-in, no need to load
       return;
     }
 
     // Format language as expect by Moment.js, neither POSIX (like TinyMCE) nor IETF
-    lang = lang.replace('_', '-').toLowerCase();
+    var lang = currentLanguage.replace('_', '-').toLowerCase();
 
     // Use language code as fallback, otherwise built-in English locale
     lang = isLangSupported(lang) ? lang : lang.split('-')[0];
@@ -122,6 +120,8 @@ define([
 
     require(['moment-url/' + lang]);
   }
+
+  lazyLoadMomentLocale();
 
   var Moment = Base.extend({
     name: 'moment',
