@@ -212,6 +212,11 @@ define([
         self.$select2.addClass('select2-orderable');
       }
     },
+    opened: function () {
+      var self = this;
+      var isOpen = $('.select2-dropdown-open', self.$el.parent()).length === 1;
+      return isOpen;
+    },
     init: function() {
       var self = this;
 
