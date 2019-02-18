@@ -187,7 +187,6 @@ define([
       expect($('.pattern-relateditems-container .toolbar .path-wrapper'), $container).to.have.length(1);
     });
 
-
     it('auto roundtrip', function () {
       initializePattern({'selectableTypes': ['Image', 'Folder'], 'pageSize': 100});
       var clock = sinon.useFakeTimers();
@@ -198,7 +197,7 @@ define([
       clock.tick(1000);
 
       // Only Images and Folders should be shown.
-      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(5);
 
       // Select first folder
       $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
@@ -207,15 +206,15 @@ define([
       // Still, this folder should be shown in the result list - only not selectable.
       $('.select2-search-field input.select2-input').click();
       clock.tick(1000);
-      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(5);
 
       // Browse into second folder which contains images
       $('.pattern-relateditems-result-browse[data-path="/folder2"]').click();
       clock.tick(1000);
 
       // 1 "One level up" and 2 images
-      expect($('.pattern-relateditems-result-select')).to.have.length(3);
-      expect($('.pattern-relateditems-result-select')[0].text).to.contain('One level up');
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(2);
+      expect($('.pattern-relateditems-result')[0].textContent).to.contain('One level up');
 
       // Select first image
       $('a.pattern-relateditems-result-select[data-path="/folder2/image17"]').click();
@@ -224,11 +223,11 @@ define([
       // Browse one level up
       $('.select2-search-field input.select2-input').click();
       clock.tick(1000);
-      $('a.pattern-relateditems-result-select')[0].click();
+      $('.pattern-relateditems-result.one-level-up a.pattern-relateditems-result-browse')[0].click();
       clock.tick(1000);
 
       // Again, 5 items on root.
-      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(5);
 
       // Input a search term and enter search mode
       $input = $('.select2-search-field input.select2-input');
@@ -238,15 +237,15 @@ define([
       clock.tick(1000);
 
       // Searching for folder 2 brings up 2 items: folder2 itself and the not-yet-selected image.
-      expect($('.pattern-relateditems-result-select')).to.have.length(2);
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(2);
 
       // We can even browse into folders in search mode
       $('.pattern-relateditems-result-browse[data-path="/folder2"]').click();
       clock.tick(1000);
 
-      // Being in folder 2, we see again two items...
-      expect($('.pattern-relateditems-result-select')).to.have.length(2);
-      expect($('.pattern-relateditems-result-select')[0].text).to.contain('One level up');
+      // Being in folder 2, we see again one item...
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(1);
+      expect($('.pattern-relateditems-result')[0].textContent).to.contain('One level up');
 
       // Selecting the image will add it to the selected items.
       $('a.pattern-relateditems-result-select[data-path="/folder2/image18"]').click();
@@ -267,7 +266,7 @@ define([
 
       // result list must have expected length
       // Only Images and Folders.
-      expect($('.pattern-relateditems-result-select')).to.have.length(5);
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(5);
 
 
       // PT 2
@@ -284,7 +283,7 @@ define([
       clock.tick(1000);
 
       // result list must have expected length
-      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(2);
+      expect($('.pattern-relateditems-result-select.selectable .pattern-relateditems-result-info')).to.have.length(2);
 
       // add another one
       $('a.pattern-relateditems-result-select[data-path="/image2"]').click();
@@ -300,7 +299,7 @@ define([
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
       clock.tick(1000);
-      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(2);
+      expect($('.pattern-relateditems-result-select.selectable .pattern-relateditems-result-info')).to.have.length(2);
 
       // add first from result
       $('a.pattern-relateditems-result-select[data-path="/image3"]').click();
@@ -319,7 +318,7 @@ define([
       clock.tick(1000);
 
       // result list must have expected length
-      expect($('.pattern-relateditems-result-select')).to.have.length(11);
+      expect($('.pattern-relateditems-result-select .pattern-relateditems-result-info')).to.have.length(11);
 
 
       //  // PT 2
@@ -336,7 +335,7 @@ define([
       clock.tick(1000);
 
       //  // result list must have expected length
-      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(10);
+      expect($('.pattern-relateditems-result-select.selectable .pattern-relateditems-result-info')).to.have.length(10);
 
       //  // add another one
       $('a.pattern-relateditems-result-select[data-path="/document2"]').click();
@@ -352,7 +351,7 @@ define([
       var keyup = $.Event('keyup-change');
       $input.trigger(keyup);
       clock.tick(1000);
-      expect($('.pattern-relateditems-result-select.selectable')).to.have.length(1);
+      expect($('.pattern-relateditems-result-select.selectable .pattern-relateditems-result-info')).to.have.length(1);
 
       //  // add first from result
       $('a.pattern-relateditems-result-select[data-path="/folder2/document15"]').click();
