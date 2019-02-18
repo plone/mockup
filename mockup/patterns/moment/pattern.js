@@ -104,7 +104,8 @@ define([
     var LANG_FALLBACK = 'en';
 
     if (currentLanguage === LANG_FALLBACK) {
-      // English locale is built-in, no need to load
+      // English locale is built-in, no need to load, so let's exit early
+      // to avoid computing fallback, which happens at every loaded page
       return;
     }
 
