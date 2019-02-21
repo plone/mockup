@@ -7,6 +7,9 @@
  * data-pat-tooltip Configuration
  *    ajaxUrl(string): the ajax source of tooltip content (null). if null, tooltip displays content of title
  *    contentSelector(string): selects a subset of content (null)
+ *    class(string): add one or several (white space separated) class to tooltip, at the .tooltip.mockup-tooltip level
+ *    style(object): add css styles to tooltip, at the .tooltip.mockup-tooltip level
+ *    innerStyle(object): add css styles to tooltip, at the .tooltip-inner level
  *
  * Documentation:
  *    # Directions
@@ -443,7 +446,24 @@ define([
   }
 
   bootstrapTooltip.prototype.tip = function () {
-    return (this.$tip = this.$tip || $(this.options.template))
+    if (!!this.$tip) {
+      return this.$tip;
+    }
+    var $tip = this.$tip || $(this.options.template);
+    if (this.options.patTooltip) {
+
+    if (this.options.patTooltip.style) {
+      $tip.css(this.options.patTooltip.style)
+    }
+    if (this.options.patTooltip['class']) {
+      $tip.addClass(this.options.patTooltip['class'])
+    }
+    if (this.options.patTooltip.innerStyle) {
+      $tip.find('.tooltip-inner').css(this.options.patTooltip.innerStyle)
+    }
+    }
+    this.$tip = $tip;
+    return $tip;
   }
 
   bootstrapTooltip.prototype.arrow = function () {
