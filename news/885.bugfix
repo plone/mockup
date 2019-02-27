@@ -1,2 +1,2 @@
-Removed condition for mobile devices, solved via css and not needed anymore.
+Fix highlight of current item in nav for image and file.
 [agitator]

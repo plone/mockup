@@ -18,12 +18,13 @@ define([
         name: 'navigationmarker',
         trigger: '.pat-navigationmarker',
         parser: 'mockup',
-
         init: function() {
+            var self = this;
             var href = document.querySelector('head link[rel="canonical"]').href || window.location.href;
 
             $('a', this.$el).each(function () {
-                if (href.indexOf(this.href) !== -1) {
+                var navlink = this.href.replace('/view','')
+                if (href.indexOf(navlink) !== -1) {
                     var parent = $(this).parent();
 
                     // check the input-openers within the path
@@ -34,14 +35,12 @@ define([
 
                     // set "inPath" to all nav items which are within the current path
                     parent.addClass('inPath');
-
                     // set "current" to the current selected nav item, if it is in the navigation structure.
-                    if (href === this.href) {
+                    if (href === navlink) {
                         parent.addClass('current');
                     }
                 }
             });
-
         }
     });
 
