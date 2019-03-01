@@ -50,7 +50,7 @@
     "react": "https://github.com/facebook/react.git#v0.10.0",
     "requirejs-text": "https://github.com/requirejs/text.git#2.0.15",
     "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
-    "tinymce-builded": "https://github.com/artursmirnov/tinymce_builded.git#4.7.13"
+    "tinymce-builded": "https://github.com/artursmirnov/tinymce_builded.git#5.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",

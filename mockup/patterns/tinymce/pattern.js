@@ -66,7 +66,7 @@ define([
   'mockup-patterns-tinymce-url/js/links',
   'mockup-i18n',
   'translate',
-  'tinymce-modern-theme',
+  'tinymce-theme',
   'tinymce-advlist',
   'tinymce-anchor',
   'tinymce-autolink',
@@ -105,8 +105,7 @@ define([
   'tinymce-textpattern',
   'tinymce-visualblocks',
   'tinymce-visualchars',
-  'tinymce-wordcount',
-  'tinymce-compat3x'
+  'tinymce-wordcount'
 ], function($, _, Base, tinymce, utils, LinkModal, I18n, _t) {
   'use strict';
 
@@ -178,11 +177,13 @@ define([
       imageTypes: ['Image'],
       folderTypes: ['Folder', 'Plone Site'],
       tiny: {
-        'content_css': '/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
-        theme: 'modern',
-        plugins: ['advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'anchor', 'searchreplace',
-                  'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'contextmenu',
-                  'paste', 'plonelink', 'ploneimage'],
+        'content_css': '/base/node_modules/tinymce-builded/js/tinymce/skins/content/default/content.min.css',
+        theme: 'silver',
+        plugins: ['advlist', 'anchor', 'autolink', 'autosave', 'charmap',
+                  'code', 'contextmenu', 'fullscreen', 'insertdatetime',
+                  'help', 'lists', 'media', 'paste', 'plonelink',
+                  'ploneimage', 'print', 'preview', 'searchreplace',
+                  'table', 'visualblocks', 'wordcount'],
         menubar: 'edit table format tools view insert',
         toolbar: 'undo redo | styleselect | bold italic | ' +
                  'alignleft aligncenter alignright alignjustify | ' +

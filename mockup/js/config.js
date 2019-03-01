@@ -13,8 +13,7 @@
     'insertdatetime', 'legacyoutput', 'link', 'lists', 'media',
     'nonbreaking', 'noneditable', 'pagebreak', 'paste', 'preview', 'print',
     'save', 'searchreplace', 'spellchecker', 'tabfocus', 'table', 'template',
-    'textcolor', 'textpattern', 'visualblocks', 'visualchars', 'wordcount',
-    'compat3x'
+    'textcolor', 'textpattern', 'visualblocks', 'visualchars', 'wordcount'
   ];
 
   var requirejsOptions = {
@@ -136,7 +135,7 @@
       'sinon': 'node_modules/sinonjs/sinon',
       'text': 'node_modules/requirejs-text/text',
       'tinymce': 'node_modules/tinymce-builded/js/tinymce/tinymce',
-      'tinymce-modern-theme': 'node_modules/tinymce-builded/js/tinymce/themes/modern/theme',
+      'tinymce-theme': 'node_modules/tinymce-builded/js/tinymce/themes/silver/theme',
       'underscore': 'node_modules/underscore/underscore',
 
       // Patternslib
