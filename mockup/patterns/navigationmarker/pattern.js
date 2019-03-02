@@ -41,6 +41,21 @@ define([
                     }
                 }
             });
+
+            var $el = $('#portal-globalnav > li.has_subtree', self.$el);
+            var observer = new IntersectionObserver(function(change) {
+                if (change[0].intersectionRatio < 1) {
+                    $el.addClass('inverted');
+                    console.log('invert ' + change[0].intersectionRatio)
+                } else {
+                    $el.removeClass('inverted');
+                    console.log('invert removed' + change[0].intersectionRatio)
+                }
+            console.log(change[0].intersectionRatio);
+            } );
+            $el.each(function () {
+                observer.observe(this);
+            })
         }
     });
 
