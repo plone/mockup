@@ -1,0 +1,2 @@
+* Fix misalignment in regular Select2-based widgets (e.g. tags) after Related Items improvements (#889)
+  [davilima6]
