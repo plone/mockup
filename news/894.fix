@@ -1,2 +1,0 @@
-* Fix bugs in Moment.js lazy locales, affecting: language variant fallbacks, variable leak to global namespace, IE11 widget support
-  [davilima6]
