@@ -8,6 +8,29 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.1 (2019-03-21)
+------------------
+
+New features:
+
+
+- * Add ``plone-patterns-toolbar`` pattern from CMFPlone.
+    [thet] (#874)
+
+
+Bug fixes:
+
+
+- * Improve fallback mechanism for Moment.js locale selection 
+    [davilima6] (#890)
+- * Fix bugs in Moment.js lazy locales, affecting: language variant fallbacks, variable leak to global namespace, IE11 widget support
+    [davilima6] (#894)
+- Fix alignment of the default page objects in the structure pattern (#895)
+- Fix the scrollbar always present in the toolbar (#897)
+- * Fix misalignment in regular Select2-based widgets (e.g. tags) after Related Items improvements (#889)
+    [davilima6] (#902)
+
+
 3.0.0 (2019-03-04)
 ------------------
 
