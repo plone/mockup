@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2.7.8 (2019-05-21)
+------------------
+
+New features:
+
+
+- Added navigationmarker pattern.
+  [agitator] (#885)
+
 
 2.7.7 (2018-12-10)
 ------------------
