@@ -37,22 +37,23 @@ Bug fixes:
 Breaking changes:
 
 
-- - Uses now ``yarn`` instead of ``bower``. ``bower.json`` is dropped,
+- Now uses ``yarn`` instead of ``bower``. ``bower.json`` is dropped,
   ``package.json`` is extended and all packages go into
   ``mockup/node_modules``. Note: you have to use ``yarn`` for that to work, as
   with npm there is no way to customize the modules directory. All references
   in LESS files to ``bowerPath`` are kept for a frictionless upgrade. [thet] -
   Remove obsolete dependencies: - console-polyfill - es5-shim - selectivizr -
-  js-shortcuts - marked - react - JSXTransformer [thet] - Remove support for IE
-  < 9. [thet] TODO: - Refactor docs like in Patterns to get rid of react. -
-  Refactor jquery.recurrenceinput.js dependencies (#874)
+  js-shortcuts - marked - react - JSXTransformer [thet]
+- Remove support for IE < 9. [thet]  (#874)  TODO:
+    - Refactor docs like in Patterns to get rid of react. 
+    - Refactor jquery.recurrenceinput.js dependencies
 
 
 New features:
 
 
-- - Added navigationmarker pattern [agitator] (#885)
-- * Lazy load Moment.js locale based on user's current portal language.
+- Added navigationmarker pattern [agitator] (#885)
+- Lazy load Moment.js locale based on user's current portal language.
   [davilima6] * Upgrade moment.js from version 2.10.6 to 2.24.0 [davilima6]
   (#887)
 
@@ -62,7 +63,7 @@ Bug fixes:
 
 - Removed condition for mobile devices, solved via css and not needed anymore.
   [agitator] (#885)
-- - Improve relateditems pattern UX [MrTango] (#889)
+- Improve relateditems pattern UX [MrTango] (#889)
 
 
 2.7.7 (2018-12-10)
@@ -144,7 +145,7 @@ Bug fixes:
 - Fix WARN [watcher]: Pattern "..../patterns/foo.js" does not match any file,
   by excluding all requirements ending with '-url',
   since they point to a folder and not to a .js file.
-  The folder contents are already included by 'patterns/**/*'.
+  The folder contents are already included by ``patterns/**/*``.
   [sunew]
 
 - Move installation and config of sinon from bower+requirejs to karma-sinon.
@@ -295,6 +296,7 @@ New features:
   - Make action menu bar sticky.
   - Make action menu more compact, so that it doesn't break into a newline early.
   - Use more tooltips in the action menu.
+
   [thet]
 
 - Related items pattern:
@@ -302,17 +304,14 @@ New features:
 - Avoid double initialization of Select2.
   [thet]
 
-  - Added options to change sorting.
+- Added options to change sorting.
   [Gagaro]
 
 - TinyMCE pattern:
 
-  - Make anchor handling more flexible
-  [tomgross]
-
-  - Mark special links
-  - Do not mark anchors as special links
-  [frapell]
+  - Make anchor handling more flexible  [tomgross]
+  - Mark special links  [frapell]
+  - Do not mark anchors as special links  [frapell]
 
 Bug fixes:
 
@@ -397,7 +396,8 @@ Bug fixes:
 
 New features:
 
- - Improve the user experience for the theme editor
+ - Improve the user experience for the theme editor:
+
   - Search for files and text within files and opening the file upon click.
   - Add Bootstrap Dropdown menu to the UI views.
   - Enable Drag and Drop inside of the theme editor file tree.
@@ -407,6 +407,7 @@ New features:
   - Upgrade JQTree to 1.4.1
   - Enable Drag and Drop inside of the theme editor file tree.
   - Add contextual menu to theme files in the file tree.
+
   [b4oshany]
 
  - Make thumb scale in folder contents listing adjustable/supressable.
@@ -426,14 +427,17 @@ New features:
   [thet]
 
 - Structure widget:
+
   - Show ineffective label in folder contents for not yet effective and published content, likewise it's done with expires.
     Show effective and ineffective label styled as bootstrap badges.
   - Show "Description" below title, if it's set in ``availableColumns`` and ``activeColumns`` to save some screen space.
   - Do not break whitespace within actionmenu links and don't underline them when hovering.
   - Trigger ``context-info-loaded`` on body to be able to listen to the event outside the pattern.
+
   [thet]
 
 - Related Items widget:
+
     - Add new mode "auto", which automatically sets ``search`` mode when a searchterm is present, otherwise ``browse`` mode.
     - Use searchterm as substring, which matches also within words by wrapping searchterm with the "*" wildcard.
     - Show a "One level up" button in the result set in browse mode.
@@ -442,6 +446,7 @@ New features:
     - Add option to scan the selected list of items for other patterns.
     - Add option for contextPath - objects with this path will not be selectable. This prevents the object where the relation is set on to from being selected and self-referenced.
     - Make favorites container positon relative, so that the absolute positioned dropdown appears correctly.
+
   [thet]
 
 - Include TinyMCE 4.5.6
@@ -589,6 +594,7 @@ New:
     - Calculate all paths relative to the ``rootPath``, so that breadcrumbs navigation and favorites do not show paths outside the rootPath.
 
     - For results and selected items with images, add a line break after the image.
+
   [thet]
 
 
@@ -692,7 +698,7 @@ New:
 - Related items pattern: Result button style allow for more room for scrollbar, and have subltle color change on hover to deliniate user-expected behavior of browsing vs. selecting item.
   [seanupton]
 
- - Related items pattern: Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
+- Related items pattern: Related Items pattern: content icon cross-compatibility with Plone 5.x and 4.x (via plone.app.widgets 1.x); in Plone 5 getIcon returned from brain is a boolean, in Plone 4, it is a string -- use this to show content icons in Plone 5 as previous, but also show image scale in Plone 4, but only for images.  This is the most reasonable solution to avoid requesting many broken image scales (404) in Plone 4.
   [seanupton]
 
 - Structure pattern refactorings:
@@ -975,6 +981,7 @@ Fixes:
 ------------------
 
 New:
+
 - Fixed issue causing the querystring pattern to query multiple times per change
   [obct537]
 
@@ -1185,9 +1192,11 @@ Fixes:
   [vangheem]
 
 - Accessibility fixes for structure:
+
     - label "cog"/actions
     - provide title attribute on buttons
     - add aria-hidden true/false attrs and role=tooltip for popovers
+
   [vangheem]
 
 - remove accessibility pattern. see
