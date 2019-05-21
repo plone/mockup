@@ -835,6 +835,9 @@ New:
   be inline with the usage of ``{path}`` token in URL templates.
   [metatoaster]
 
+- Upgrade TinyMCE to 4.3.4
+  [vangheem]
+
 Fixes:
 
 - Fix fakeserver ``relateditems-test.json`` response to return ISO dates for ``CreationDate``, ``ModificationDate`` and ``EffectiveDate``, as they really do in Plone.
@@ -869,18 +872,8 @@ Fixes:
   the generated CSS in the editor.
   [ebrehault]
 
+
 2.1.3 (2016-02-27)
-New:
-
-- Upgrade TinyMCE to 4.3.4
-  [vangheem]
-
-
-Fixes:
-
-
-
-2.1.3 (2016-03-10)
 ------------------
 
 New:
