@@ -1,2 +1,2 @@
-- Added navigationmarker pattern
-  [agitator]
+Added navigationmarker pattern.
+[agitator]
