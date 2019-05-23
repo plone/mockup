@@ -98,11 +98,14 @@ define([
         var $input = $(input),
             $field = $input.closest('.field'),
             $form = $field.closest('form'),
+            $cloned_form = $form.clone(),
             fname = $field.attr('data-fieldname');
 
+        // XXX: Remove binary files so they are not uploaded to server
+        $cloned_form.find("input[type=file]").remove();
         this.queue($.proxy(function(next) {
-            $form.ajaxSubmit({
-                url: this.append_url_path($form.attr('action'), '@@formlib_validate_field'),
+            $cloned_form.ajaxSubmit({
+                url: this.append_url_path($cloned_form.attr('action'), '@@formlib_validate_field'),
                 data: {fname: fname},
                 iframe: false,
                 success: $.proxy(function (data) {
@@ -119,13 +122,16 @@ define([
         var $input = $(input),
             $field = $input.closest('.field'),
             $form = $field.closest('form'),
+            $cloned_form = $form.clone(),
             fset = $input.closest('fieldset').attr('data-fieldset'),
             fname = $field.attr('data-fieldname');
 
+        // XXX: Remove binary files so they are not uploaded to server
+        $cloned_form.find("input[type=file]").remove();
         if (fname) {
           this.queue($.proxy(function(next) {
-              $form.ajaxSubmit({
-                  url: this.append_url_path($form.attr('action'), '@@z3cform_validate_field'),
+              $cloned_form.ajaxSubmit({
+                  url: this.append_url_path($cloned_form.attr('action'), '@@z3cform_validate_field'),
                   data: {fname: fname, fset: fset},
                   iframe: false,
                   success: $.proxy(function (data) {
