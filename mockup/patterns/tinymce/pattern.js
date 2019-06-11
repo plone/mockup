@@ -3,7 +3,7 @@
  * Options:
  *    relatedItems(object): Related items pattern options. ({ attributes: ["UID", "Title", "Description", "getURL", "portal_type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
  *    upload(object): Upload pattern options. ({ attributes: look at upload pattern for getting the options list })
- *    text(object): Translation strings ({ insertBtn: "Insert", cancelBtn: "Cancel", insertHeading: "Insert link", title: "Title", internal: "Internal", external: "External", email: "Email", anchor: "Anchor", subject: "Subject" image: "Image", imageAlign: "Align", scale: "Size", alt: "Alternative Text", externalImage: "External Image URI"})
+ *    text(object): Translation strings ({ insertBtn: "Insert", cancelBtn: "Cancel", insertHeading: "Insert link", title: "Title", internal: "Internal", external: "External", email: "Email", anchor: "Anchor", subject: "Subject" image: "Image", imageAlign: "Align", scale: "Size", alt: "Alternative Text", caption: "Image Caption", externalImage: "External Image URI"})
  *    imageScales(string): Image scale name/value object-array or JSON string for use in the image dialog.
  *    targetList(array): TODO ([ {text: "Open in this window / frame", value: ""}, {text: "Open in new window", value: "_blank"}, {text: "Open in parent window / frame", value: "_parent"}, {text: "Open in top frame (replaces all frames)", value: "_top"}])
  *    imageTypes(string): TODO ('Image')
@@ -151,6 +151,7 @@ define([
         externalImageText: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)'),
         upload: _t('Upload'),
         insertLinkHelp: _t('Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor).'),
+        caption: _t('Image Caption'),
       },
       // URL generation options
       loadingBaseUrl: '../../../node_modules/tinymce-builded/js/tinymce/',

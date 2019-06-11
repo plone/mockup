@@ -482,6 +482,7 @@ define([
         externalImage: this.options.text.externalImage,
         externalImageText: this.options.text.externalImageText,
         altText: this.options.text.alt,
+        captionText: this.options.text.caption,
         imageAlignText: this.options.text.imageAlign,
         scaleText: this.options.text.scale,
         imageScales: this.options.imageScales,
@@ -502,6 +503,7 @@ define([
       self.$subject = $('input[name="subject"]', self.modal.$modal);
 
       self.$alt = $('input[name="alt"]', self.modal.$modal);
+      self.$caption = $('input[name="caption"]', self.modal.$modal);
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
 
@@ -608,14 +610,26 @@ define([
         };
       }
 
-      if (!self.imgElm) {
-        data.id = '__mcenew';
-        self.tiny.insertContent(self.dom.createHTML('img', data));
-        self.imgElm = self.dom.get('__mcenew');
-        self.dom.setAttrib(self.imgElm, 'id', null);
-      } else {
-        self.dom.setAttribs(self.imgElm, data);
+      if (self.figureElm) {
+        self.dom.remove(self.figureElm);
       }
+      if (self.imgElm) {
+        self.dom.remove(self.imgElm);
+      }
+      if (self.captionElm) {
+        self.dom.remove(self.captionElm);
+      }
+
+      data.id = '__mcenew';
+      var html_inner = self.dom.createHTML('img', data);
+      var caption = self.$caption.val();
+      if (caption) {
+        html_inner += '\n' + self.dom.createHTML('figcaption', {}, caption);
+      }
+      var html_string = self.dom.createHTML('figure', {}, html_inner);
+      self.tiny.insertContent(html_string);
+      self.imgElm = self.dom.get('__mcenew');
+      self.dom.setAttrib(self.imgElm, 'id', null);
 
       waitLoad(self.imgElm);
       if (self.imgElm.complete) {
@@ -737,25 +751,37 @@ define([
 
       self.selection = self.tiny.selection;
       self.tiny.focus();
-      var selectedElm = self.imgElm = self.selection.getNode();
+      var selectedElm = self.selection.getNode();
       self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
 
-      var linkType;
+      var linkType
       if (self.isImageMode()) {
-        if (self.imgElm.nodeName !== 'IMG') {
-          // try finding elsewhere
-          if (self.anchorElm) {
-            var imgs = self.anchorElm.getElementsByTagName('img');
-            if (imgs.length > 0) {
-              self.imgElm = imgs[0];
-              self.focusElement(self.imgElm);
-            }
-          }
+
+        var figure;
+        var img;
+        var caption;
+        if (selectedElm.nodeName === 'FIGURE') {
+          figure = selectedElm;
+          img = figure.querySelector('img');
+          caption = figure.querySelector('figcaption');
+        } else if (selectedElm.nodeName === 'IMG') {
+          figure = selectedElm.closest('figure');
+          img = selectedElm;
+          caption = figure.querySelector('figcaption');
+        } else if (selectedElm.nodeName === 'FIGCAPTION') {
+          figure = selectedElm.closest('figure');
+          img = figure.querySelector('img');
+          caption = selectedElm;
         }
-        if (self.imgElm.nodeName !== 'IMG') {
-          // okay, still no image, unset
-          self.imgElm = null;
+
+        self.imgElm = img;
+        self.figureElm = figure;
+        self.captionElm = caption;
+
+        if (self.captionElm) {
+          self.$caption.val(self.captionElm.innerText);
         }
+
         if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
           self.$title.val(self.dom.getAttrib(self.imgElm, 'title'));
@@ -767,7 +793,7 @@ define([
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
             self.$scale.val(scale);
             $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
-          }else if (src) {
+          } else if (src) {
             self.guessImageLink(src);
           }
           var className = self.dom.getAttrib(self.imgElm, 'class');
@@ -781,7 +807,8 @@ define([
             }
           }
         }
-      }else if (self.anchorElm) {
+
+      } else if (self.anchorElm) {
         self.focusElement(self.anchorElm);
         var href = '';
         href = self.dom.getAttrib(self.anchorElm, 'href');
