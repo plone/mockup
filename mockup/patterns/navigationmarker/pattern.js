@@ -34,19 +34,17 @@ define([
                     }
 
                     // set "inPath" to all nav items which are within the current path
-                    if (href.includes(navlink)) {
-                        // check if parts of navlink are in canonical url parts
-                        var hrefParts = href.split('/')
-                        var navParts = navlink.split('/')
-                        for (var i = 0, size = navParts.length; i < size; i++) {
-                            var inPath = false
-                            if (navParts[i] === hrefParts[i]) {
-                                inPath = true;
-                            }
+                    // check if parts of navlink are in canonical url parts
+                    var hrefParts = href.split('/')
+                    var navParts = navlink.split('/')
+                    for (var i = 0, size = navParts.length; i < size; i++) {
+                        var inPath = false
+                        if (navParts[i] === hrefParts[i]) {
+                            inPath = true;
                         }
-                        if (inPath) {
-                            parent.addClass('inPath');
-                        }
+                    }
+                    if (inPath) {
+                        parent.addClass('inPath');
                     }
 
                     // set "current" to the current selected nav item, if it is in the navigation structure.
