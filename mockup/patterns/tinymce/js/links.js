@@ -482,8 +482,9 @@ define([
         externalImage: this.options.text.externalImage,
         externalImageText: this.options.text.externalImageText,
         altText: this.options.text.alt,
-        captionText: this.options.text.caption,
         imageAlignText: this.options.text.imageAlign,
+        captionText: this.options.text.caption,
+        imageCaption: this.options.imageCaption,
         scaleText: this.options.text.scale,
         imageScales: this.options.imageScales,
         cancelBtn: this.options.text.cancelBtn,
@@ -503,7 +504,9 @@ define([
       self.$subject = $('input[name="subject"]', self.modal.$modal);
 
       self.$alt = $('input[name="alt"]', self.modal.$modal);
-      self.$caption = $('textarea[name="caption"]', self.modal.$modal);
+      if (this.options.imageCaption) {
+        self.$caption = $('textarea[name="caption"]', self.modal.$modal);
+      }
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
 
@@ -610,24 +613,27 @@ define([
         };
       }
 
-      if (self.figureElm) {
-        self.dom.remove(self.figureElm);
-      }
       if (self.imgElm) {
         self.dom.remove(self.imgElm);
       }
-      if (self.captionElm) {
+      if (this.options.imageCaption && self.captionElm) {
         self.dom.remove(self.captionElm);
+      }
+      if (this.options.imageCaption && self.figureElm) {
+        self.dom.remove(self.figureElm);
       }
 
       data.id = '__mcenew';
       var html_inner = self.dom.createHTML('img', data);
-      var caption = self.$caption.val();
+      var caption = this.options.imageCaption ? self.$caption.val() : false;
+      var html_string;
       if (caption) {
         html_inner += '\n' + self.dom.createHTML('figcaption', {}, caption);
         //html_inner += '\n' + self.dom.createHTML('figcaption', { class: 'mceNonEditable' }, caption);
+        html_string = self.dom.createHTML('figure', {}, html_inner);
+      } else {
+        html_string = html_inner;
       }
-      var html_string = self.dom.createHTML('figure', {}, html_inner);
       self.tiny.insertContent(html_string);
       self.imgElm = self.dom.get('__mcenew');
       self.dom.setAttrib(self.imgElm, 'id', null);
@@ -775,13 +781,15 @@ define([
           caption = selectedElm;
         }
 
+        if (this.options.imageCaption) {
+          self.captionElm = caption;
+          if (self.captionElm) {
+            self.$caption.val(self.captionElm.innerHTML);
+          }
+        }
+
         self.imgElm = img;
         self.figureElm = figure;
-        self.captionElm = caption;
-
-        if (self.captionElm) {
-          self.$caption.val(self.captionElm.innerHTML);
-        }
 
         if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
