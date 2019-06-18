@@ -23,7 +23,7 @@ define([
             var href = document.querySelector('head link[rel="canonical"]').href || window.location.href;
 
             $('a', this.$el).each(function () {
-                var navlink = this.href.replace('/view', '')
+                var navlink = this.href.replace('/view', '');
                 if (href.indexOf(navlink) !== -1) {
                     var parent = $(this).parent();
 
@@ -35,10 +35,12 @@ define([
 
                     // set "inPath" to all nav items which are within the current path
                     // check if parts of navlink are in canonical url parts
-                    var hrefParts = href.split('/')
-                    var navParts = navlink.split('/')
+                    var hrefParts = href.split('/');
+                    var navParts = navlink.split('/');
+                    var inPath = false;
                     for (var i = 0, size = navParts.length; i < size; i++) {
-                        var inPath = false
+                        // The last path-part must match.
+                        inPath = false;
                         if (navParts[i] === hrefParts[i]) {
                             inPath = true;
                         }
