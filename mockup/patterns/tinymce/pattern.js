@@ -16,7 +16,6 @@
  *    appendToScalePart(string): Text to append to generated image scale url part. ('')
  *    linkAttribute(string): Ajax response data attribute to use for url. ('path')
  *    defaultScale(string): Scale name to default to. ('Original')
- *    imageCaption(boolean): Activate image caption support in image modal overlays
  *    inline(boolean): Show tinyMCE editor inline instead in an iframe. Use this on textarea inputs. If you want to use this pattern directly on a contenteditable, pass "inline: true" to the "tiny" options object. (false)
  *
  * Documentation:
@@ -200,7 +199,6 @@ define([
         //'autoresize_max_height': 900,
         'height': 400
       },
-      imageCaption: true,
       inline: false
     },
     addLinkClicked: function() {
