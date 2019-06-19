@@ -484,7 +484,6 @@ define([
         altText: this.options.text.alt,
         imageAlignText: this.options.text.imageAlign,
         captionText: this.options.text.caption,
-        imageCaption: this.options.imageCaption,
         scaleText: this.options.text.scale,
         imageScales: this.options.imageScales,
         cancelBtn: this.options.text.cancelBtn,
@@ -504,9 +503,7 @@ define([
       self.$subject = $('input[name="subject"]', self.modal.$modal);
 
       self.$alt = $('input[name="alt"]', self.modal.$modal);
-      if (this.options.imageCaption) {
-        self.$caption = $('textarea[name="caption"]', self.modal.$modal);
-      }
+      self.$caption = $('textarea[name="caption"]', self.modal.$modal);
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
 
@@ -616,16 +613,16 @@ define([
       if (self.imgElm) {
         self.dom.remove(self.imgElm);
       }
-      if (this.options.imageCaption && self.captionElm) {
+      if (self.captionElm) {
         self.dom.remove(self.captionElm);
       }
-      if (this.options.imageCaption && self.figureElm) {
+      if (self.figureElm) {
         self.dom.remove(self.figureElm);
       }
 
       data.id = '__mcenew';
       var html_inner = self.dom.createHTML('img', data);
-      var caption = this.options.imageCaption ? self.$caption.val() : false;
+      var caption = self.$caption.val();
       var html_string;
       if (caption) {
         html_inner += '\n' + self.dom.createHTML('figcaption', {}, caption);
@@ -781,11 +778,9 @@ define([
           caption = self.selectedElm;
         }
 
-        if (this.options.imageCaption) {
-          self.captionElm = caption;
-          if (self.captionElm) {
-            self.$caption.val(self.captionElm.innerHTML);
-          }
+        self.captionElm = caption;
+        if (self.captionElm) {
+          self.$caption.val(self.captionElm.innerHTML);
         }
 
         self.imgElm = img;
