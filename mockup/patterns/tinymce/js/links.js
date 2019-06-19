@@ -173,9 +173,6 @@ define([
   var ImageLink = InternalLink.extend({
     name: 'imagelinktype',
     trigger: '.pat-imagelinktype-dummy',
-    originalSrc: function() {
-      return this.tinypattern.generateImageUrl(this.value());
-    },
     toUrl: function() {
       var value = this.value();
       return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
@@ -601,7 +598,6 @@ define([
         'class': self.$align.val() + ' image-richtext',
         'data-linkType': self.linkType,
         'data-scale': self.$scale.val(),
-        'data-src': this.linkTypes[this.linkType].originalSrc ? this.linkTypes[this.linkType].originalSrc() : src,
       }, self.linkTypes[self.linkType].attributes());
       if (self.imgElm && !self.imgElm.getAttribute('data-mce-object')) {
         data.width = self.dom.getAttrib(self.imgElm, 'width');
