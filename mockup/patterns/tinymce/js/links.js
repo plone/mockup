@@ -595,7 +595,7 @@ define([
         src: src,
         title: title ? title : null,
         alt: self.$alt.val(),
-        'class': self.$align.val(),
+        'class': self.$align.val() + ' image-richtext',
         'data-linkType': self.linkType,
         'data-scale': self.$scale.val()
       }, self.linkTypes[self.linkType].attributes());
