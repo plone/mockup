@@ -336,6 +336,47 @@ define([
       pattern.imageModal.$scale.find('[value="customscale"]')[0].selected = true;
       expect(pattern.imageModal.getLinkUrl()).to.equal('resolveuid/foobar/@@images/image/customscale');
     });
+    it('test add image with and without caption', function() {
+      var pattern = createTinymce({
+        prependToUrl: 'resolveuid/',
+        linkAttribute: 'UID',
+        prependToScalePart: '/@@images/image/'
+      });
+
+      // Add an image caption.
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.$caption.val('hello.');
+      pattern.imageModal.$button.click();
+      var content = pattern.tiny.getContent();
+
+      expect(content).to.contain('<figure><img');
+      expect(content).to.contain('<figcaption>hello.</figcaption>');
+      expect(content).to.contain('image-richtext');// new image-richtext class.
+
+      // Remove the image caption. The <img> isn't wrapped then in a <figure> tag.
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.$caption.val('');
+      pattern.imageModal.$button.click();
+      content = pattern.tiny.getContent();
+
+      expect(content).to.not.contain('<figure>');
+      expect(content).to.not.contain('<figcaption>');
+      expect(content).to.contain('<img');
+      expect(content).to.contain('image-richtext'); // new image-richtext class.
+
+    });
 
     it('test adds data attributes', function() {
       var pattern = createTinymce();
