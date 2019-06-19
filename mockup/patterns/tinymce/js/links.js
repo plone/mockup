@@ -756,10 +756,8 @@ define([
         self.data.title = value;
       }
 
-      self.selection = self.tiny.selection;
       self.tiny.focus();
-      var selectedElm = self.selection.getNode();
-      self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
+      self.anchorElm = self.dom.getParent(self.selectedElm, 'a[href]');
 
       var linkType
       if (self.isImageMode()) {
@@ -767,18 +765,20 @@ define([
         var figure;
         var img;
         var caption;
-        if (selectedElm.nodeName === 'FIGURE') {
-          figure = selectedElm;
+        if (self.selectedElm.nodeName === 'FIGURE') {
+          figure = self.selectedElm;
           img = figure.querySelector('img');
           caption = figure.querySelector('figcaption');
-        } else if (selectedElm.nodeName === 'IMG') {
-          figure = selectedElm.closest('figure');
-          img = selectedElm;
-          caption = figure.querySelector('figcaption');
-        } else if (selectedElm.nodeName === 'FIGCAPTION') {
-          figure = selectedElm.closest('figure');
-          img = figure.querySelector('img');
-          caption = selectedElm;
+        } else if (self.selectedElm.nodeName === 'IMG') {
+          figure = $(self.selectedElm).closest('figure');
+          figure = figure.length ? figure[0] : undefined;
+          img = self.selectedElm;
+          caption = figure ? figure.querySelector('figcaption') : undefined;
+        } else if (self.selectedElm.nodeName === 'FIGCAPTION') {
+          figure = $(self.selectedElm).closest('figure');
+          figure = figure.length ? figure[0] : undefined;
+          img = figure ? figure.querySelector('img') : undefined;
+          caption = self.selectedElm;
         }
 
         if (this.options.imageCaption) {
