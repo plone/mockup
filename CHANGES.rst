@@ -8,6 +8,21 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.2 (2019-06-20)
+------------------
+
+Bug fixes:
+
+
+- pat-inlinevalidation: Avoid submitting files 
+  [frapell] (#903)
+- Fix marking of navigation parents as inPath
+  [agitator] (#906)
+- Absolute positioning of default page objects in the structure pattern (take 2 on issue #895) (#908)
+- Move toolbar to be above structure pattern, by increasing its z-index from 3 to 20 (fixes Products.CMFPlone#2490)
+  [fulv] (#909)
+
+
 3.0.1 (2019-03-21)
 ------------------
 
