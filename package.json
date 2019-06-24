@@ -67,7 +67,7 @@
     "grunt-contrib-watch": "~1.1.0",
     "grunt-karma": "~3.0.0",
     "grunt-sed": "collective/grunt-sed#e625902539f5c29f1246228270a0330c1097b1e4",
-    "karma": "~3.0.0",
+    "karma": "~4.1.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage": "~1.1.2",
     "karma-firefox-launcher": "~1.1.0",
@@ -82,7 +82,7 @@
     "lcov-result-merger": "~3.1.0",
     "less": "~2.7.3",
     "minimatch": "^3.0.4",
-    "mocha": "~3.5.3",
+    "mocha": "~6.1.4",
     "phantomjs-prebuilt": "~2.1.16",
     "requirejs": "~2.2.0",
     "sinonjs": "https://github.com/blittle/sinon.js.git#v1.17.1"
