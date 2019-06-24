@@ -24,16 +24,16 @@ define([
 
   var structureUrlChangedPath = '';
   var dummyWindow = {};
-  var history = {
+  var stub_history = {
     'pushState': function(data, title, url) {
-      history.pushed = {
+      stub_history.pushed = {
         data: data,
         title: title,
         url: url
       };
     }
   };
-  dummyWindow.history = history;
+  dummyWindow.history = stub_history;
 
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
@@ -946,13 +946,10 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(window, 'history').value(stub_history);
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
-
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
@@ -964,9 +961,8 @@ define([
       extraDataJsonItem = null;
       this.server.restore();
       this.clock.restore();
-      this.sandbox.restore();
+      sinon.restore();
       $('body').html('');
-      utils.getWindow.restore();
     });
 
     it('initialize', function() {
@@ -1302,13 +1298,13 @@ define([
       expect(item.data().id).to.equal('folder');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/folder/folder_contents');
       expect(structureUrlChangedPath).to.eql('/folder');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/folder_contents');
       expect(structureUrlChangedPath).to.eql('');
     });
@@ -1394,20 +1390,17 @@ define([
 
       this.clock = sinon.useFakeTimers();
 
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
 
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
       this.server.restore();
       this.clock.restore();
-      this.sandbox.restore();
       $('body').html('');
-      utils.getWindow.restore();
+      sinon.restore();
       $('body').off('structure-url-changed');
     });
 
@@ -1938,18 +1931,15 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
 
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
-      utils.getWindow.restore();
-      this.sandbox.restore();
+      sinon.restore();
       this.server.restore();
       this.clock.restore();
       $('body').html('');
@@ -2119,20 +2109,17 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
-
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(window, 'history').value(stub_history);
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
-      utils.getWindow.restore();
-      this.sandbox.restore();
       this.server.restore();
       this.clock.restore();
+      sinon.restore();
       $('body').html('');
       $('body').off('structure-url-changed');
     });
@@ -2148,13 +2135,13 @@ define([
       expect(item.data().id).to.equal('folder');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view/folder');
       expect(structureUrlChangedPath).to.eql('');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view');
     });
 
@@ -2185,13 +2172,13 @@ define([
       expect(item.data().id).to.equal('folder');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view/folder');
       expect(structureUrlChangedPath).to.eql('');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view');
     });
 
@@ -2303,14 +2290,11 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
       requirejs.undef('dummyactionmenu');
-      this.sandbox.restore();
       this.server.restore();
       this.clock.restore();
       $('body').html('');
@@ -2524,7 +2508,7 @@ define([
 
       this.clock = sinon.useFakeTimers();
 
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
 
@@ -2534,7 +2518,7 @@ define([
       this.server.restore();
       this.clock.restore();
       $('body').html('');
-      utils.getWindow.restore();
+      sinon.restore();
     });
 
     it('test displayed content', function() {
