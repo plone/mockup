@@ -85,7 +85,7 @@
     "mocha": "~6.1.4",
     "phantomjs-prebuilt": "~2.1.16",
     "requirejs": "~2.2.0",
-    "sinonjs": "https://github.com/blittle/sinon.js.git#v1.17.1"
+    "sinon": "7.5.0"
   },
   "maintainers": [
     {

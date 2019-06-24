@@ -3,7 +3,7 @@
 
 /* global module:true */
 
-(function() {
+(function () {
   'use strict';
 
   var tinymcePlugins = [
@@ -133,7 +133,7 @@
       'picker.date': 'node_modules/pickadate/lib/picker.date',
       'picker.time': 'node_modules/pickadate/lib/picker.time',
       'select2': 'node_modules/select2/select2',
-      'sinon': 'node_modules/sinonjs/sinon',
+      'sinon': 'node_modules/sinon/pkg/sinon',
       'text': 'node_modules/requirejs-text/text',
       'tinymce': 'node_modules/tinymce-builded/js/tinymce/tinymce',
       'tinymce-modern-theme': 'node_modules/tinymce-builded/js/tinymce/themes/modern/theme',
@@ -152,7 +152,7 @@
     shim: {
       'backbone': { exports: 'window.Backbone', deps: ['underscore', 'jquery'] },
       'backbone.paginator': { exports: 'window.Backbone.Paginator', deps: ['backbone'] },
-      'bootstrap-alert': {  exports: 'window.jQuery.fn.alert.Constructor', deps: ['jquery'] },
+      'bootstrap-alert': { exports: 'window.jQuery.fn.alert.Constructor', deps: ['jquery'] },
       'bootstrap-collapse': { exports: 'window.jQuery.fn.collapse.Constructor', deps: ['jquery'] },
       'bootstrap-dropdown': { exports: 'window.jQuery.fn.dropdown.Constructor', deps: ['jquery'] },
       'bootstrap-transition': { exports: 'window.jQuery.support.transition', deps: ['jquery'] },
@@ -163,8 +163,8 @@
       'jquery.cookie': { deps: ['jquery'] },
       'jquery.event.drag': { deps: ['jquery'] },
       'jquery.event.drop': { deps: ['jquery'], exports: '$.drop' },
-      'picker.date': { deps: [ 'picker' ] },
-      'picker.time': { deps: [ 'picker' ] },
+      'picker.date': { deps: ['picker'] },
+      'picker.time': { deps: ['picker'] },
       'sinon': { exports: 'window.sinon' },
       'tinymce': {
         exports: 'window.tinyMCE',
@@ -189,7 +189,7 @@
     },
     wrapShim: true
   };
-  for(var i=0; i<tinymcePlugins.length; i=i+1){
+  for (var i = 0; i < tinymcePlugins.length; i = i + 1) {
     var plugin = tinymcePlugins[i];
     requirejsOptions.paths['tinymce-' + plugin] = 'node_modules/tinymce-builded/js/tinymce/plugins/' + plugin + '/plugin';
     requirejsOptions.shim['tinymce-' + plugin] = {
