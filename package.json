@@ -38,7 +38,7 @@
     "datatables.net-select-bs": "https://github.com/DataTables/Dist-DataTables-Select-Bootstrap.git#1.2.3",
     "dropzone": "https://github.com/enyo/dropzone.git#v4.3.0",
     "jqtree": "https://github.com/mbraak/jqTree.git#1.4.1",
-    "jquery": "https://github.com/jquery/jquery-dist.git#1.11.3",
+    "jquery": "https://github.com/jquery/jquery-dist.git#1.12.4",
     "jquery-form": "https://github.com/jquery-form/form.git#3.51",
     "jquery.browser": "https://github.com/gabceb/jquery-browser-plugin.git#v0.1.0",
     "jquery.cookie": "https://github.com/carhartl/jquery-cookie.git#v1.4.1",
