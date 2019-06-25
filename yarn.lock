@@ -423,9 +423,9 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-"bootstrap@https://github.com/twbs/bootstrap.git#v3.3.6":
-  version "3.3.6"
-  resolved "https://github.com/twbs/bootstrap.git#81df608a40bf0629a1dc08e584849bb1e43e0b7a"
+"bootstrap@https://github.com/twbs/bootstrap.git#v3.4.1":
+  version "3.4.1"
+  resolved "https://github.com/twbs/bootstrap.git#68b0d231a13201eb14acd3dc84e51543d16e5f7e"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3911,9 +3911,9 @@ phantomjs-prebuilt@^2.1.7, phantomjs-prebuilt@~2.1.16:
     request-progress "^2.0.1"
     which "^1.2.10"
 
-"pickadate@https://github.com/amsul/pickadate.js.git#3.5.6":
-  version "3.5.6"
-  resolved "https://github.com/amsul/pickadate.js.git#b704a8a8a19df24481f8291dd3e6c008501f04f1"
+"pickadate@https://github.com/amsul/pickadate.js.git#3.6.4":
+  version "3.6.4"
+  resolved "https://github.com/amsul/pickadate.js.git#c5233dcd40e0ae115b1205ad2dc5ed29b7783035"
   dependencies:
     jquery ">=1.7"
 
