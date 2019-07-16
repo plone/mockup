@@ -13,13 +13,15 @@ Changelog
 
 Bug fixes:
 
-
-- pat-inlinevalidation: Avoid submitting files 
+- pat-inlinevalidation: Avoid submitting files
   [frapell] (#903)
 - Fix marking of navigation parents as inPath
   [agitator] (#906)
-- Absolute positioning of default page objects in the structure pattern (take 2 on issue #895) (#908)
-- Move toolbar to be above structure pattern, by increasing its z-index from 3 to 20 (fixes Products.CMFPlone#2490)
+- Absolute positioning of default page objects in the structure pattern
+  (take 2 on issue #895)
+  [fulv] (#908)
+- Move toolbar to be above structure pattern, by increasing its z-index from 3
+  to 20 (fixes Products.CMFPlone#2490)
   [fulv] (#909)
 
 
@@ -28,22 +30,23 @@ Bug fixes:
 
 New features:
 
-
-- * Add ``plone-patterns-toolbar`` pattern from CMFPlone.
-    [thet] (#874)
-
+- Add ``plone-patterns-toolbar`` pattern from CMFPlone.
+  [thet] (#874)
 
 Bug fixes:
 
-
-- * Improve fallback mechanism for Moment.js locale selection 
-    [davilima6] (#890)
-- * Fix bugs in Moment.js lazy locales, affecting: language variant fallbacks, variable leak to global namespace, IE11 widget support
-    [davilima6] (#894)
-- Fix alignment of the default page objects in the structure pattern (#895)
-- Fix the scrollbar always present in the toolbar (#897)
-- * Fix misalignment in regular Select2-based widgets (e.g. tags) after Related Items improvements (#889)
-    [davilima6] (#902)
+- Improve fallback mechanism for Moment.js locale selection
+  [davilima6] (#890)
+- Fix bugs in Moment.js lazy locales, affecting: language variant fallbacks,
+  variable leak to global namespace, IE11 widget support
+  [davilima6] (#894)
+- Fix alignment of the default page objects in the structure pattern
+  (#895)
+- Fix the scrollbar always present in the toolbar
+  (#897)
+- Fix misalignment in regular Select2-based widgets (e.g. tags) after Related
+  Items improvements (#889)
+  [davilima6] (#902)
 
 
 3.0.0 (2019-03-04)
@@ -51,34 +54,45 @@ Bug fixes:
 
 Breaking changes:
 
-
 - Now uses ``yarn`` instead of ``bower``. ``bower.json`` is dropped,
   ``package.json`` is extended and all packages go into
   ``mockup/node_modules``. Note: you have to use ``yarn`` for that to work, as
   with npm there is no way to customize the modules directory. All references
-  in LESS files to ``bowerPath`` are kept for a frictionless upgrade. [thet] -
-  Remove obsolete dependencies: - console-polyfill - es5-shim - selectivizr -
-  js-shortcuts - marked - react - JSXTransformer [thet]
-- Remove support for IE < 9. [thet]  (#874)  TODO:
-    - Refactor docs like in Patterns to get rid of react. 
-    - Refactor jquery.recurrenceinput.js dependencies
+  in LESS files to ``bowerPath`` are kept for a frictionless upgrade.
+  [thet]
+- Remove obsolete dependencies:
+    - console-polyfill
+    - es5-shim
+    - selectivizr
+    - js-shortcuts
+    - marked
+    - react
+    - JSXTransformer
 
+  [thet]
+
+- Remove support for IE < 9.
+  [thet] (#874)
+
+  TODO:
+    - Refactor docs like in Patterns to get rid of react.
+    - Refactor jquery.recurrenceinput.js dependencies
 
 New features:
 
-
-- Added navigationmarker pattern [agitator] (#885)
+- Added navigationmarker pattern
+  [agitator] (#885)
 - Lazy load Moment.js locale based on user's current portal language.
-  [davilima6] * Upgrade moment.js from version 2.10.6 to 2.24.0 [davilima6]
-  (#887)
-
+  [davilima6]
+- Upgrade moment.js from version 2.10.6 to 2.24.0
+  [davilima6] (#887)
 
 Bug fixes:
 
-
 - Removed condition for mobile devices, solved via css and not needed anymore.
   [agitator] (#885)
-- Improve relateditems pattern UX [MrTango] (#889)
+- Improve relateditems pattern UX
+  [MrTango] (#889)
 
 
 2.7.7 (2018-12-10)
@@ -311,7 +325,6 @@ New features:
   - Make action menu bar sticky.
   - Make action menu more compact, so that it doesn't break into a newline early.
   - Use more tooltips in the action menu.
-
   [thet]
 
 - Related items pattern:
