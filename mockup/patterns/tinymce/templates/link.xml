@@ -20,7 +20,7 @@
 
       <% if(upload){ %>
       <fieldset class="linkType upload" data-linkType="upload">
-        <legend id="tinylink-upload"><%- Upload %></legend>
+        <legend id="tinylink-upload"><%- upload %></legend>
         <div class="uploadify-me"></div>
       </fieldset>
       <% } %>
