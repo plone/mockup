@@ -398,6 +398,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('external');
+      }, 100);
     });
 
     it('test loads existing link email values', function() {
@@ -409,6 +413,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.email.getEl().val()).to.equal('foo@bar.com');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('email');
+      }, 100);
     });
 
     it('test anchor link adds existing anchors to list', function() {
@@ -419,6 +427,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('anchor');
+      }, 100);
     });
 
     it('test anchor link adds anchors from option', function() {
@@ -471,6 +483,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('external');
+      }, 100);
     });
 
     it('test guess anchor when no data- attribute present', function() {
@@ -482,6 +498,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#foobar');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('anchor');
+      }, 100);
     });
 
     it('test inline tinyMCE roundtrip', function() {
