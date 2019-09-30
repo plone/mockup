@@ -122,6 +122,9 @@ define([
         if(window.location.hash === '#' + id){
           activeId = id;
         }
+        if(activeId===null && $level.hasClass(self.options.classActiveName)){
+          activeId = id;
+        }
         $level.data('navref', id);
         $('<a/>')
           .appendTo(self.$toc)
@@ -161,6 +164,7 @@ define([
               }
             }
           });
+        $level.data('autotoc-trigger-id', id);
       });
 
       if(activeId){

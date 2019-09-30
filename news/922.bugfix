@@ -1,0 +1,4 @@
+Fix Tinymce pattern: Link popup looses tab selection on active linktype
+[mamico]
+Fix autotoc pattern: activate the element link with active class during initialization
+[mamico]

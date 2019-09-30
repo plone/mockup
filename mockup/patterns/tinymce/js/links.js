@@ -790,7 +790,11 @@ define([
         if (linkType) {
           self.linkType = linkType;
           self.linkTypes[self.linkType].load(self.anchorElm);
-          $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
+          var $panel = $('#tinylink-' + self.linkType, self.modal.$modal);
+          // $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
+          if ($panel.length === 1) {
+            $('#'+$panel.data('autotoc-trigger-id')).trigger('click');
+          }
         }else if (href) {
           self.guessAnchorLink(href);
         }

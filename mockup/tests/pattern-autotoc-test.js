@@ -85,6 +85,17 @@ define([
       expect($('div.placeholder', this.$el).children().eq(0).attr('class')).to.equal('autotoc-nav');
       expect($('div.placeholder', this.$el).children().eq(1).attr('id')).to.equal('first-elem');
     });
+    it('by default the first element is the active one', function() {
+      Registry.scan(this.$el);
+      expect($('> nav > a.active', this.$el).text()).to.equal('Title 1');
+    });
+    it('the first element with `classActiveName` will be the active', function() {
+      $('h1:eq(1)', this.$el).addClass('active');
+      // the second element with `classActiveName` will be ignored as active
+      $('h1:eq(2)', this.$el).addClass('active');
+      Registry.scan(this.$el);
+      expect($('> nav > a.active', this.$el).text()).to.equal('Title 2');
+    });
     it('custom className', function() {
       this.$el.attr('data-pat-autotoc', 'className:SOMETHING');
       Registry.scan(this.$el);
