@@ -423,9 +423,9 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-"bootstrap@https://github.com/twbs/bootstrap.git#v3.3.6":
-  version "3.3.6"
-  resolved "https://github.com/twbs/bootstrap.git#81df608a40bf0629a1dc08e584849bb1e43e0b7a"
+"bootstrap@https://github.com/twbs/bootstrap.git#v3.4.1":
+  version "3.4.1"
+  resolved "https://github.com/twbs/bootstrap.git#68b0d231a13201eb14acd3dc84e51543d16e5f7e"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -2764,17 +2764,17 @@ jqtree@>=0.16:
   dependencies:
     jquery ">=1.9"
 
-"jqtree@https://github.com/mbraak/jqTree.git#1.4.1":
-  version "1.4.1"
-  resolved "https://github.com/mbraak/jqTree.git#c564b2fa265d74c41d8cdd32ba887a9e7722a20a"
+"jqtree@https://github.com/mbraak/jqTree.git#1.4.10":
+  version "1.4.10"
+  resolved "https://github.com/mbraak/jqTree.git#8e656e2a93ffa5d47e862d89853dc7544cb3a13c"
   dependencies:
     jquery ">=1.9"
 
-"jquery-form@https://github.com/jquery-form/form.git#3.51":
-  version "3.51.0"
-  resolved "https://github.com/jquery-form/form.git#6bf24a5f6d8be65f4e5491863180c09356d9dadd"
+"jquery-form@https://github.com/jquery-form/form.git#4.2.2":
+  version "4.2.2"
+  resolved "https://github.com/jquery-form/form.git#4beae57bc92402e2d03ca66b5ae2942d0c94c695"
   dependencies:
-    jquery ">=1.5"
+    jquery ">=1.7.2"
 
 "jquery.browser@https://github.com/gabceb/jquery-browser-plugin.git#v0.1.0":
   version "0.1.0"
@@ -2790,7 +2790,7 @@ jqtree@>=0.16:
   dependencies:
     jquery ""
 
-jquery@, jquery@>=1.5, jquery@>=1.7, jquery@>=1.9:
+jquery@, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.9:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -3911,9 +3911,9 @@ phantomjs-prebuilt@^2.1.7, phantomjs-prebuilt@~2.1.16:
     request-progress "^2.0.1"
     which "^1.2.10"
 
-"pickadate@https://github.com/amsul/pickadate.js.git#3.5.6":
-  version "3.5.6"
-  resolved "https://github.com/amsul/pickadate.js.git#b704a8a8a19df24481f8291dd3e6c008501f04f1"
+"pickadate@https://github.com/amsul/pickadate.js.git#3.6.4":
+  version "3.6.4"
+  resolved "https://github.com/amsul/pickadate.js.git#c5233dcd40e0ae115b1205ad2dc5ed29b7783035"
   dependencies:
     jquery ">=1.7"
 

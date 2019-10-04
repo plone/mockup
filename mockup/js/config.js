@@ -59,7 +59,7 @@
       'jquery.cookie': 'node_modules/jquery.cookie/jquery.cookie',
       'jquery.event.drag': 'lib/jquery.event.drag',
       'jquery.event.drop': 'lib/jquery.event.drop',
-      'jquery.form': 'node_modules/jquery-form/jquery.form',
+      'jquery.form': 'node_modules/jquery-form/src/jquery.form',
       'jquery.recurrenceinput': 'node_modules/jquery.recurrenceinput.js/src/jquery.recurrenceinput',
       'jquery.tools.dateinput': 'node_modules/jquery.recurrenceinput.js/lib/jquery.tools.dateinput',
       'jquery.tools.overlay': 'node_modules/jquery.recurrenceinput.js/lib/jquery.tools.overlay',
