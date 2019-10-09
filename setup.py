@@ -11,6 +11,7 @@ setup(
                 "web development",
     long_description=open("README.rst").read(),
     classifiers=[
+        "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
         "Framework :: Plone :: 5.1",
         "Framework :: Plone :: 5.2",
