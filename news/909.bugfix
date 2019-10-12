@@ -1,2 +1,0 @@
-Move toolbar to be above structure pattern, by increasing its z-index from 3 to 20 (fixes Products.CMFPlone#2490)
-[fulv]

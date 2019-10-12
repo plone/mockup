@@ -8,6 +8,44 @@ Changelog
 
 .. towncrier release notes start
 
+3.1.0 (2019-10-12)
+------------------
+
+New features:
+
+
+- Upgrade testing dependencies: Karma (from ~3.0.0 to ~4.1.0) and Mocha (from ~3.5.3 to ~6.1.4) (#913)
+- Upgrade jQuery from version 1.11.3 to 1.12.4
+  [davilima6] (#915)
+- Upgrade jQuery-related dependencies:
+    - jqtree: from version 1.4.1 to 1.4.10
+    - jquery-form: from 3.5.1 to 4.2.2
+    - bootstrap: from 3.3.6 to 3.4.1
+    - pickadate: from 3.5.6 to 3.6.4 (#916)
+
+
+Bug fixes:
+
+
+- pat-inlinevalidation: Avoid submitting files 
+  [frapell] (#903)
+- Fix marking of navigation parents as inPath
+  [agitator] (#906)
+- Absolute positioning of default page objects in the structure pattern (take 2 on issue #895) (#908)
+- Move toolbar to be above structure pattern, by increasing its z-index from 3 to 20 (fixes Products.CMFPlone#2490)
+  [fulv] (#909)
+- tinymce pattern: Add some lost i18n translations.
+  [adam139] (#910)
+- Fix SyntaxError caused by duplicate translation keys
+  [davilima6] (#918)
+- Fixed drag problem on click on sortable items in folder contents.
+  [giuliaghisini] (#919)
+- Fix Tinymce pattern: Link popup looses tab selection on active linktype
+  [mamico]
+  Fix autotoc pattern: activate the element link with active class during initialization
+  [mamico] (#922)
+
+
 3.0.2 (2019-06-20)
 ------------------
 
