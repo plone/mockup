@@ -1,5 +1,6 @@
 include *.json
 include *.rst
+include .yarnrc
 recursive-include mockup *.html
 recursive-include mockup *.js
 recursive-include mockup *.jshintrc
@@ -26,3 +27,4 @@ exclude Vagrantfile
 global-exclude *.pycinclude pyproject.toml
 recursive-exclude news *
 exclude news
+exclude yarn.lock
