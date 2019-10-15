@@ -39,7 +39,7 @@
 
       <% if(_.contains(linkTypes, 'externalImage')){ %>
       <fieldset class="linkType externalImage" data-linkType="externalImage">
-        <legend id="tinylink-externalImage"><%- externalImageText %></legend>
+        <legend id="tinylink-externalImage"><%- externalImage %></legend>
         <div>
           <div class="form-group main">
             <label><%- externalImageText %></label>
