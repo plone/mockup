@@ -126,11 +126,11 @@ define([
         classContentName: '',  // String, class name to be applied to the content of the modal, useful for modal specific styling
         template: '' +
           '<div class="<%= options.className %>">' +
-          '  <div class="<%= options.classDialog %>">' +
+          '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="plone-modal-title" <% } %> tabindex="-1">' +
           '    <div class="<%= options.classModal %>">' +
           '      <div class="<%= options.classHeaderName %>">' +
-          '        <a class="plone-modal-close">&times;</a>' +
-          '        <% if (title) { %><h2 class="plone-modal-title"><%= title %></h2><% } %>' +
+          '        <a class="plone-modal-close" aria-label="Close modal" title="Close modal" href="#">&times;</a>' +
+          '        <% if (title) { %><h2 class="plone-modal-title" id="plone-modal-title" tabindex="0"><%= title %></h2><% } %>' +
           '      </div>' +
           '      <div class="<%= options.classBodyName %>">' +
           '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
@@ -552,8 +552,13 @@ define([
         });
       }
 
-
-
+      if (self.options.backdropOptions.closeOnClick === true) {
+        $(document).on('click', function(e) {
+          if (!$(e.target).closest('.' + self.options.templateOptions.classModal).length) {
+            self.hide();
+          }
+        });
+      }
 
       $(window.parent).resize(function() {
         self.positionModal();
@@ -747,6 +752,46 @@ define([
       return self.$modal !== null && self.$modal !== undefined;
     },
 
+    activateFocusTrap: function() {
+      var self = this;
+      var inputs = self.$modal.find('.' + self.options.templateOptions.classBodyName).first().find(
+        'select, input, textarea, button, a'
+      );
+
+      if (inputs.length === 0) {
+        inputs = self.$modal.find('.plone-modal-title');
+      }
+
+      var firstInput = inputs.first();
+      var lastInput = inputs.last();
+      var closeInput = self.$modal.find('.plone-modal-close').first();
+
+      $(document).on('keydown', '.' + self.options.templateOptions.classDialog, function(e) {
+        if (e.which === 9) {
+          e.preventDefault();
+
+          var $target = $(e.target)
+          var currentIndex = inputs.index($target);
+
+          if (currentIndex >= 0 && currentIndex < inputs.length) {
+            var nextIndex = currentIndex + (e.shiftKey ? -1 : 1);
+
+            if (nextIndex < 0 || nextIndex >= inputs.length) {
+              closeInput.focus();
+            } else {
+              inputs.get(nextIndex).focus();
+            }
+          } else if (e.shiftKey) {
+            lastInput.focus();
+          } else {
+            firstInput.focus();
+          }
+        }
+      });
+
+      self.$modal.find('.plone-modal-title').focus();
+    },
+
     positionModal: function() {
       /* re-position modal at any point.
        *
@@ -883,6 +928,7 @@ define([
       });
       $('body').addClass('plone-modal-open');
       self.emit('shown');
+      self.activateFocusTrap();
     },
     hide: function() {
       var self = this;
@@ -909,6 +955,7 @@ define([
         $(window.parent).off('resize.plone-modal.patterns');
       }
       self.emit('hidden');
+      self.$el.focus();
     },
 
     redraw: function(response, options) {
