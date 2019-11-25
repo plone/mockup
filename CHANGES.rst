@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.1.1 (2019-11-25)
+------------------
+
+Bug fixes:
+
+
+- tinymce: Fix tab labels for insert links and images
+  [frapell] (#923)
+- tinymce link popup external translation (#926)
+- tinyimce link popup upload tab shows up even if upload is false in pat data (#927)
+
+
 3.1.0 (2019-10-12)
 ------------------
 
