@@ -93,7 +93,7 @@ define([
         clearTimeout(self.timeoutId);
       }
       self.timeoutId = setTimeout(function() {
-        self.term = $(event.currentTarget).val();
+        self.term = encodeURIComponent($(event.currentTarget).val());
         self.app.collection.currentPage = 1;
         self.app.collection.pager();
 
