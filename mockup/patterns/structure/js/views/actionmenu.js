@@ -9,6 +9,7 @@ define([
   'text!mockup-patterns-structure-url/templates/actionmenu.xml',
   'pat-registry',
   'translate',
+  'mockup-patterns-modal',
   'mockup-patterns-tooltip',
   'bootstrap-dropdown'
 ], function($, _, BaseView, utils, Result, Actions, ActionMenu, ActionMenuTemplate, registry, _t) {
