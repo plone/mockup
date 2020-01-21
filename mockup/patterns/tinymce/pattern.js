@@ -416,6 +416,17 @@ define([
           }
         }
 
+        /* If TinyMCE is rendered inside of a modal, set an ID on
+         * .plone-modal-dialog and use that as the ui_container
+         * setting for TinyMCE to anchor it there. This ensures that
+         * sub-menus are displayed relative to the modal rather than
+         * the document body. */
+        var modal_container = self.$el.parents(".plone-modal-dialog")
+
+        if (modal_container.length > 0) {
+            modal_container.attr("id", "tiny-ui-container");
+            tinyOptions["ui_container"] = "#tiny-ui-container";
+        }
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
 
