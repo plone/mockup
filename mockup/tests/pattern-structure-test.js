@@ -952,7 +952,6 @@ define([
       });
 
       this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
       this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
@@ -1400,7 +1399,7 @@ define([
       });
 
       this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
+      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
@@ -1940,7 +1939,7 @@ define([
 
       this.clock = sinon.useFakeTimers();
       this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
+      this.sandbox.stub(window.history, 'pushState', history.pushState);
 
       sinon.stub(utils, 'getWindow', function() {
         return dummyWindow;
@@ -2121,7 +2120,6 @@ define([
 
       this.clock = sinon.useFakeTimers();
       this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
       this.sandbox.stub(window.history, 'pushState', history.pushState);
 
       sinon.stub(utils, 'getWindow', function() {
@@ -2306,7 +2304,7 @@ define([
 
       this.clock = sinon.useFakeTimers();
       this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
+      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
