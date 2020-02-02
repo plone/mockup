@@ -34,6 +34,22 @@ define([
       this.app = this.options.app;
     },
 
+    setTerm: function(term) {
+      this.term = term;
+      this.$el[0].querySelector('.search-query').value = term;
+    },
+
+    setQuery: function(query) {
+      this.$queryString.val(JSON.stringify(query));
+      this.app.additionalCriterias = query;
+      this.app.collection.currentPage = 1;
+    },
+
+    clearFilter: function() {
+      this.setTerm('');
+      this.setQuery([]);
+    },
+
     render: function() {
       this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({

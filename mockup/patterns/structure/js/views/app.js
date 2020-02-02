@@ -274,6 +274,7 @@ define([
       return this.collection.getCurrentPath();
     },
     setCurrentPath: function(path) {
+      this.toolbar.get('filter').clearFilter();
       this.collection.setCurrentPath(path);
     },
     getAjaxUrl: function(url) {
