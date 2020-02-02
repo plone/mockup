@@ -155,13 +155,17 @@
             height: 31px;
         }
     }
-    .alert.status{
-        margin-bottom: 5px;
-        padding: 5px;
+    .fc-status {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+        padding: 0.5em;
         color: @plone-link-color;
-
+        .fc-status-text {
+            flex-grow: 1;
+        }
         .btn {
-            margin-left: 10px;
+            margin-left: 1em;
         }
 
     }

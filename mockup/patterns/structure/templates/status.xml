@@ -1,0 +1,4 @@
+<div class="alert alert-<%- type %> status fc-status">
+  <strong class="fc-status-label"><%- label %></strong>
+  <span class="fc-status-text"><%- text %></span>&nbsp;<% // &nbsp; to get correct height for empty alerts %>
+</div>

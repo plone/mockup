@@ -354,6 +354,13 @@ define([
     }
   };
 
+  var createElementFromHTML = function(htmlString) {
+    // From: https://stackoverflow.com/a/494348/1337474
+    var div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+    return div.firstChild;
+  };
+
   return {
     bool: bool,
     escapeHTML: escapeHTML,
@@ -367,6 +374,7 @@ define([
     parseBodyTag: parseBodyTag,
     QueryHelper: QueryHelper,
     setId: setId,
-    storage: storage
+    storage: storage,
+    createElementFromHTML: createElementFromHTML
   };
 });
