@@ -35,14 +35,25 @@ define([
     },
 
     setTerm: function(term) {
+      var term_el = this.$el[0].querySelector('.search-query');
       this.term = term;
-      this.$el[0].querySelector('.search-query').value = term;
+      term_el.value = term;
+      if (term) {
+        term_el.classList.add('has-filter');
+      } else {
+        term_el.classList.remove('has-filter');
+      }
     },
 
     setQuery: function(query) {
       this.$queryString.val(JSON.stringify(query));
       this.app.additionalCriterias = query;
       this.app.collection.currentPage = 1;
+      if (query.length) {
+        this.button.$el[0].classList.add('has-filter');
+      } else {
+        this.button.$el[0].classList.remove('has-filter');
+      }
     },
 
     clearFilter: function() {
@@ -79,6 +90,11 @@ define([
         }
         self.timeoutId = setTimeout(function() {
           var criterias = $.parseJSON(self.$queryString.val());
+          if (criterias.length > 0) {
+            self.button.$el[0].classList.add('has-filter');
+          } else {
+            self.button.$el[0].classList.remove('has-filter');
+          }
           self.app.additionalCriterias = criterias;
           self.app.collection.currentPage = 1;
           self.app.collection.pager();
@@ -109,12 +125,16 @@ define([
         clearTimeout(self.timeoutId);
       }
       self.timeoutId = setTimeout(function() {
-        self.term = encodeURIComponent($(event.currentTarget).val());
+        var term_el = $(event.currentTarget);
+        self.term = encodeURIComponent(term_el.val());
         self.app.collection.currentPage = 1;
         self.app.collection.pager();
 
-        if (!self.term){
+        if (!self.term) {
+            term_el[0].classList.remove('has-filter');
             self.app.setStatus();
+        } else {
+          term_el[0].classList.add('has-filter');
         }
 
       }, this.keyupDelay);
