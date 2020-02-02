@@ -78,33 +78,33 @@ define([
     },
     nextResultPage: function(e) {
       e.preventDefault();
-      this.app.setStatus();
+      this.app.clearStatus();
       this.collection.requestNextPage();
     },
     previousResultPage: function(e) {
       e.preventDefault();
-      this.app.setStatus();
+      this.app.clearStatus();
       this.collection.requestPreviousPage();
     },
     gotoFirst: function(e) {
       e.preventDefault();
-      this.app.setStatus();
+      this.app.clearStatus();
       this.collection.goTo(this.collection.information.firstPage);
     },
     gotoLast: function(e) {
       e.preventDefault();
-      this.app.setStatus();
+      this.app.clearStatus();
       this.collection.goTo(this.collection.information.totalPages);
     },
     gotoPage: function(e) {
       e.preventDefault();
-      this.app.setStatus();
+      this.app.clearStatus();
       var page = $(e.target).text();
       this.collection.goTo(page);
     },
     changeCount: function(e) {
       e.preventDefault();
-      this.app.setStatus();
+      this.app.clearStatus();
       var per = $(e.target).text();
       this.collection.howManyPer(per);
       this.app.setCookieSetting('perPage', per);

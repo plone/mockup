@@ -132,7 +132,7 @@ define([
 
         if (!self.term) {
             term_el[0].classList.remove('has-filter');
-            self.app.setStatus();
+            self.app.clearStatus();
         } else {
           term_el[0].classList.add('has-filter');
         }
