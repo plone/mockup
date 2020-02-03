@@ -96,8 +96,8 @@ define([
     render: function() {
       this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
-        tooltip: _t('Query'),
-        icon: 'search'
+        tooltip: _t('Filter'),
+        icon: 'filter'
       });
       this.popover = new PopoverView({
         triggerView: this.button,
