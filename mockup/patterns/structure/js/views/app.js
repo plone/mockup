@@ -273,7 +273,6 @@ define([
     },
     setCurrentPath: function(path) {
       this.clearStatus();
-      this.toolbar.get('filter').clearFilter();
       this.collection.setCurrentPath(path);
     },
     getAjaxUrl: function(url) {

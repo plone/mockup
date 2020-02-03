@@ -28,18 +28,46 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
+    filterStatusMessage: null,
 
     initialize: function(options) {
       BaseView.prototype.initialize.apply(this, [options]);
       this.app = this.options.app;
     },
 
+    setFilterStatusMessage: function() {
+      if (!this.filterStatusMessage) {
+
+        var clear_btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+          .text(_t('Clear filter'))
+          .on('click', function() {
+            this.clearFilter();
+          }.bind(this));
+
+        this.filterStatusMessage = this.app.setStatus({
+          label: _t('Some filters applied'),
+          text: _t('This listing has filters applied. Not all items are shown.'),
+          type: 'warning'
+        }, clear_btn, true);
+      }
+    },
+
+    clearFilterStatusMessage: function() {
+      if (this.filterStatusMessage && !this.term && !this.app.additionalCriterias.length) {
+        this.app.clearStatus(this.filterStatusMessage);
+        this.filterStatusMessage = null;
+      }
+    },
+
     setTerm: function(term) {
       var term_el = this.$el[0].querySelector('.search-query');
       this.term = term;
       term_el.value = term;
+      this.app.collection.currentPage = 1;
+      this.app.collection.pager();
       if (term) {
         term_el.classList.add('has-filter');
+        this.setFilterStatusMessage();
       } else {
         term_el.classList.remove('has-filter');
       }
@@ -49,8 +77,10 @@ define([
       this.$queryString.val(JSON.stringify(query));
       this.app.additionalCriterias = query;
       this.app.collection.currentPage = 1;
+      this.app.collection.pager();
       if (query.length) {
         this.button.$el[0].classList.add('has-filter');
+        this.setFilterStatusMessage();
       } else {
         this.button.$el[0].classList.remove('has-filter');
       }
@@ -59,6 +89,8 @@ define([
     clearFilter: function() {
       this.setTerm('');
       this.setQuery([]);
+      this.clearFilterStatusMessage();
+      this.app.clearStatus();
     },
 
     render: function() {
@@ -92,8 +124,10 @@ define([
           var criterias = $.parseJSON(self.$queryString.val());
           if (criterias.length > 0) {
             self.button.$el[0].classList.add('has-filter');
+            self.setFilterStatusMessage();
           } else {
             self.button.$el[0].classList.remove('has-filter');
+            self.clearFilterStatusMessage();
           }
           self.app.additionalCriterias = criterias;
           self.app.collection.currentPage = 1;
@@ -132,9 +166,10 @@ define([
 
         if (!self.term) {
             term_el[0].classList.remove('has-filter');
-            self.app.clearStatus();
+            self.clearFilterStatusMessage();
         } else {
           term_el[0].classList.add('has-filter');
+          self.setFilterStatusMessage();
         }
 
       }, this.keyupDelay);
