@@ -28,7 +28,7 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
-    filterStatusMessage: null,
+    statusKey: 'filter_status_message',
 
     initialize: function(options) {
       BaseView.prototype.initialize.apply(this, [options]);
@@ -36,26 +36,22 @@ define([
     },
 
     setFilterStatusMessage: function() {
-      if (!this.filterStatusMessage) {
+      var clear_btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+        .text(_t('Clear filter'))
+        .on('click', function() {
+          this.clearFilter();
+        }.bind(this));
 
-        var clear_btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
-          .text(_t('Clear filter'))
-          .on('click', function() {
-            this.clearFilter();
-          }.bind(this));
-
-        this.filterStatusMessage = this.app.setStatus({
-          label: _t('Some filters applied'),
-          text: _t('This listing has filters applied. Not all items are shown.'),
-          type: 'warning'
-        }, clear_btn, true);
-      }
+      this.app.setStatus({
+        label: _t('Some filters applied'),
+        text: _t('This listing has filters applied. Not all items are shown.'),
+        type: 'warning'
+      }, clear_btn, true, this.statusKey);
     },
 
     clearFilterStatusMessage: function() {
-      if (this.filterStatusMessage && !this.term && !this.app.additionalCriterias.length) {
-        this.app.clearStatus(this.filterStatusMessage);
-        this.filterStatusMessage = null;
+      if (!this.term && !this.app.additionalCriterias.length) {
+        this.app.clearStatus(this.statusKey);
       }
     },
 
