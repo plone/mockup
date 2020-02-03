@@ -149,10 +149,10 @@ define([
         self.app.setStatus({
           text: _t('Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column.'),
           type: 'warning'
-        }, btn = btn);
-        $(".pat-datatables tbody").find('tr').off("drag")
+        }, btn, false, 'sorting_dndreordering_disabled');
+        $(".pat-datatables tbody").find('tr').off("drag");
         self.$el.removeClass('order-support');
-      } );
+      });
 
       return this;
     },
@@ -195,7 +195,10 @@ define([
       var self = this;
       // if we have a custom query going on, we do not allow sorting.
       if (self.app.inQueryMode()) {
-        self.app.setStatus({text: _t('Drag and drop reordering is disabled while filters are applied.'), type: 'warning'});
+        self.app.setStatus({
+          text: _t('Drag and drop reordering is disabled while filters are applied.'),
+          type: 'warning'
+        }, null, false, 'filter_dndreordering_disabled');
         self.$el.removeClass('order-support');
         return;
       }
