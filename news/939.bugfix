@@ -1,0 +1,2 @@
+pat-querystring: Fix path widget for old dashed UIDs (plone.uuid < 1.0.2)
+[laulaz]
