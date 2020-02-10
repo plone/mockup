@@ -39,6 +39,9 @@ define([
     additionalCriterias: [],
     cookieSettingPrefix: '_fc_',
 
+    buttons: null,
+    textfilter: null,
+
     pasteAllowed: function () {
         return !!$.cookie('__cp');
     },
@@ -272,8 +275,9 @@ define([
       return this.collection.getCurrentPath();
     },
     setCurrentPath: function(path) {
-      this.clearStatus();
       this.collection.setCurrentPath(path);
+      this.textfilter.clearTerm();
+      this.clearStatus();
     },
     getAjaxUrl: function(url) {
       return url.replace('{path}', this.getCurrentPath());
@@ -427,10 +431,12 @@ define([
       });
       items.push(self.buttons);
 
-      items.push(new TextFilterView({
+      self.textfilter = new TextFilterView({
         id: 'filter',
         app: this
-      }));
+      });
+      items.push(self.textfilter);
+
       this.toolbar = new Toolbar({
         items: items
       });
@@ -467,32 +473,31 @@ define([
     clearStatus: function(key) {
       var statusContainer = this.$el[0].querySelector('.fc-status-container');
       var statusItem;
-
+      var toBeRemoved = [];
       if (key) {
         // remove specific status, even if marked with ``fixed``.
-        var toBeRemoved = this.statusMessages.filter(function (item) { return item.key === key; });
-        for (var i = 0, len = toBeRemoved.length; i < len; i++) {
-          statusItem = toBeRemoved[i];
+        toBeRemoved = this.statusMessages.filter(function (item) { return item.key === key; });
+        toBeRemoved.forEach(function (statusItem) {
           try {
             statusContainer.removeChild(statusItem.el);
           } catch(e) {
             // just ignore.
           }
-        }
+        });
         this.statusMessages = this.statusMessages.filter(function (item) { return item.key !== key; });
       } else {
         // remove all status messages except those marked with ``fixed``.
-        for (var i = 0, len = this.statusMessages.length; i < len; i++) {
-          statusItem = this.statusMessages[i];
-          if (! statusItem.fixed) {
+        this.statusMessages.forEach(function (statusItem) {
+          if (!statusItem.fixed) {
             try {
               statusContainer.removeChild(statusItem.el);
+              toBeRemoved.push(statusItem);
             } catch(e) {
               // just ignore.
             }
           }
-        }
-        this.statusMessages = [];
+        }.bind(this));
+        this.statusMessages = this.statusMessages.filter(function (item) { return toBeRemoved.indexOf(item) === -1; });
       }
     },
 
