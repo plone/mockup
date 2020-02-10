@@ -14,7 +14,7 @@ define([
     className: 'navbar-search form-search ui-offset-parent',
     template: _.template(
       '<div class="input-group">' +
-      '<input type="text" class="form-control search-query" placeholder="<%- _t("Filter") %>">' +
+      '<input type="text" class="form-control search-query" placeholder="<%- _t("Search") %>">' +
       '<span class="input-group-btn">' +
       '</span>' +
       '</div>'
@@ -55,50 +55,85 @@ define([
       }
     },
 
-    setTerm: function(term) {
+    setTerm: function(term, set_input) {
       var term_el = this.$el[0].querySelector('.search-query');
-      this.term = term;
-      term_el.value = term;
+      this.term = encodeURIComponent(term);
+      if (set_input) {
+        term_el.value = term;
+      }
       this.app.collection.currentPage = 1;
       this.app.collection.pager();
+
       if (term) {
         term_el.classList.add('has-filter');
         this.setFilterStatusMessage();
       } else {
-        term_el.classList.remove('has-filter');
+        var hasquery = false;
+        try {
+          var qu =this.$queryString.val();
+          if (qu && JSON.parse(qu).length > 0) {
+            hasquery = true;
+          }
+        } finally {
+          if (! hasquery) {
+            term_el.classList.remove('has-filter');
+            this.clearFilterStatusMessage();
+          }
+        }
       }
     },
 
-    setQuery: function(query) {
-      this.$queryString.val(JSON.stringify(query));
-      this.app.additionalCriterias = query;
+    setQuery: function(query, set_input) {
+      var query_string = null;
+      var query_obj = null;
+      try {
+        if (typeof query === 'string') {
+          query_obj = JSON.parse(query);
+          query_string = query;
+        } else {
+          query_string = JSON.stringify(query);
+          query_obj = query;
+        }
+      } catch (e) {
+        query_obj = [];
+        query_string = '[]';
+      }
+
+      if (set_input) {
+        this.$queryString.val(query_string);
+      }
+      this.app.additionalCriterias = query_obj;
       this.app.collection.currentPage = 1;
       this.app.collection.pager();
-      if (query.length) {
+      if (query_obj.length) {
         this.button.$el[0].classList.add('has-filter');
         this.setFilterStatusMessage();
-      } else {
+      } else if (! this.term) {
         this.button.$el[0].classList.remove('has-filter');
+        this.clearFilterStatusMessage();
       }
+    },
+
+    clearTerm: function() {
+      this.setTerm('', true);
     },
 
     clearFilter: function() {
-      this.setTerm('');
-      this.setQuery([]);
-      this.clearFilterStatusMessage();
-      this.app.clearStatus();
+      this.setTerm('', true);
+      this.setQuery([], true);
     },
 
     render: function() {
       this.$el.html(this.template({_t: _t}));
       this.button = new ButtonView({
-        tooltip: _t('Filter'),
-        icon: 'filter'
+        title: _t('Filter'),
+        icon: 'filter',
+        extraClasses: ['btn-queryfilter', ],
       });
       this.popover = new PopoverView({
         triggerView: this.button,
         id: 'structure-query',
-        title: _.template(_t('Query')),
+        title: _.template(_t('Filter')),
         content: this.popoverContent,
         placement: 'left'
       });
@@ -117,17 +152,7 @@ define([
           clearTimeout(self.timeoutId);
         }
         self.timeoutId = setTimeout(function() {
-          var criterias = $.parseJSON(self.$queryString.val());
-          if (criterias.length > 0) {
-            self.button.$el[0].classList.add('has-filter');
-            self.setFilterStatusMessage();
-          } else {
-            self.button.$el[0].classList.remove('has-filter');
-            self.clearFilterStatusMessage();
-          }
-          self.app.additionalCriterias = criterias;
-          self.app.collection.currentPage = 1;
-          self.app.collection.pager();
+          self.setQuery(self.$queryString.val(), false);
         }, this.keyupDelay);
       });
       self.queryString.$el.on('initialized', function() {
@@ -156,18 +181,7 @@ define([
       }
       self.timeoutId = setTimeout(function() {
         var term_el = $(event.currentTarget);
-        self.term = encodeURIComponent(term_el.val());
-        self.app.collection.currentPage = 1;
-        self.app.collection.pager();
-
-        if (!self.term) {
-            term_el[0].classList.remove('has-filter');
-            self.clearFilterStatusMessage();
-        } else {
-          term_el[0].classList.add('has-filter');
-          self.setFilterStatusMessage();
-        }
-
+        self.setTerm(term_el.val(), false);
       }, this.keyupDelay);
     }
   });

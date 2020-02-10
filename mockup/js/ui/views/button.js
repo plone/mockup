@@ -35,7 +35,7 @@ define([
         }
         _.each(this.extraClasses, function(klass){
           this.$el.addClass(klass);
-        });
+        }.bind(this));
 
         if (this.tooltip !== null) {
 
