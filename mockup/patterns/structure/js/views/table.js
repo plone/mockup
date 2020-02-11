@@ -195,10 +195,6 @@ define([
       var self = this;
       // if we have a custom query going on, we do not allow sorting.
       if (self.app.inQueryMode()) {
-        self.app.setStatus({
-          text: _t('Drag and drop reordering is disabled while filters are applied.'),
-          type: 'warning'
-        }, null, false, 'filter_dndreordering_disabled');
         self.$el.removeClass('order-support');
         return;
       }
