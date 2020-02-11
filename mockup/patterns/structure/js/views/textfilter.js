@@ -28,7 +28,8 @@ define([
     term: null,
     timeoutId: null,
     keyupDelay: 300,
-    statusKey: 'filter_status_message',
+    statusKeyFilter: 'textfilter_status_message_filter',
+    statusKeySorting: 'textfilter_status_message_sorting',
 
     initialize: function(options) {
       BaseView.prototype.initialize.apply(this, [options]);
@@ -36,22 +37,30 @@ define([
     },
 
     setFilterStatusMessage: function() {
-      var clear_btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+      var clear_btn = $('<button type="button" class="btn btn-primary btn-xs"></button>')
         .text(_t('Clear filter'))
         .on('click', function() {
           this.clearFilter();
         }.bind(this));
 
+      var statusTextFilter = _t('This listing has filters applied. Not all items are shown.');
       this.app.setStatus({
-        label: _t('Some filters applied'),
-        text: _t('This listing has filters applied. Not all items are shown.'),
+        text: statusTextFilter,
+        type: 'info'
+      }, clear_btn, true, this.statusKeyFilter);
+
+      var statusTextSorting = _t('Drag and drop reordering is disabled while filters are applied.');
+      this.app.setStatus({
+        text: statusTextSorting,
         type: 'warning'
-      }, clear_btn, true, this.statusKey);
+      }, null, true, this.statusKeySorting);
+
     },
 
     clearFilterStatusMessage: function() {
       if (!this.term && !this.app.additionalCriterias.length) {
-        this.app.clearStatus(this.statusKey);
+        this.app.clearStatus(this.statusKeyFilter);
+        this.app.clearStatus(this.statusKeySorting);
       }
     },
 
