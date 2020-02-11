@@ -110,6 +110,8 @@ define([
 
       if (set_input) {
         this.$queryString.val(query_string);
+        // TODO clear query string form
+        // this.queryString._init();
       }
       this.app.additionalCriterias = query_obj;
       this.app.collection.currentPage = 1;
