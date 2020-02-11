@@ -158,7 +158,14 @@ module.exports = function(grunt) {
       console.log('read folder: ' + path);
       var files = fs.readdirSync(path);
       files.forEach(function(filename) {
-        if (filename === 'node_modules' || filename === 'node_modules') {
+        if (
+          filename === '__pycache__' ||
+          filename === 'build' ||
+          filename === 'coverage' ||
+          filename === 'less' ||
+          filename === 'node_modules' ||
+          filename === 'tests'
+        ) {
           return;
         }
         var stats = fs.statSync(path + filename);
