@@ -38,7 +38,7 @@ define([
 
     setFilterStatusMessage: function() {
       var clear_btn = $('<button type="button" class="btn btn-primary btn-xs"></button>')
-        .text(_t('Clear filter'))
+        .text(_t('Clear'))
         .on('click', function() {
           this.clearFilter();
         }.bind(this));
@@ -46,7 +46,7 @@ define([
       var statusTextFilter = _t('This listing has filters applied. Not all items are shown.');
       this.app.setStatus({
         text: statusTextFilter,
-        type: 'info'
+        type: 'success',
       }, clear_btn, true, this.statusKeyFilter);
 
       var statusTextSorting = _t('Drag and drop reordering is disabled while filters are applied.');
