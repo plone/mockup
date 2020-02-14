@@ -13,7 +13,6 @@ define([
     tagName: 'div',
     className: 'resource-entry',
     template: _.template(
-      '<h3><%- name %></h3>' +
       '<div class="panel-body form-horizontal">' +
       '</div>'
     ),
@@ -191,11 +190,6 @@ define([
       });
       var resource = new ResourceEntryView(options);
       this.registryView.showResourceEditor(resource, this, 'resource');
-
-      // and scroll to resource since huge list makes this hard to notice
-      $('html, body').animate({
-        scrollTop: resource.$el.offset().top
-      }, 1000);
     },
     deleteClicked: function(e){
       e.preventDefault();
@@ -234,7 +228,7 @@ define([
           '<% if(compile){ %>' +
             '<button class="plone-btn plone-btn-default build plone-btn-xs"><%- _t("Build") %></button>' +
           '<% } %>' +
-          '<button class="plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
+          '&nbsp;<button class="pull-right plone-btn plone-btn-danger delete plone-btn-xs"><%- _t("Delete") %></button>' +
         '</div>' +
       '</div>'
     ),
@@ -278,8 +272,6 @@ define([
         bundleItem.active = false;
       });
       this.active = true;
-      this.$el.parent().find('.list-group-item').removeClass('active');
-      this.$el.addClass('active');
     },
     deleteClicked: function(e){
       e.preventDefault();
@@ -338,7 +330,11 @@ define([
         item: view,
         type: type
       };
+      this.activeResource.item.$el.append(this.$form.detach());
       this.$form.empty().append(resource.render().el);
+      this.activeResource.item.$el.parent().find('.list-group-item').removeClass('active');
+      this.activeResource.item.$el.addClass('active');
+      this.activeResource.item.$el.focus();
     },
 
     _copyData: function(){
@@ -388,7 +384,7 @@ define([
         '</div>' +
       '</div>' +
       '<div class="row">' +
-        '<div class="items col-md-5">' +
+        '<div class="items">' +
           '<ul class="bundles list-group">' +
             '<li class="list-group-item list-group-item-warning"><%- _t("Bundles") %></li>' +
           '</ul>' +
@@ -401,7 +397,7 @@ define([
           '<ul class="resources list-group">' +
           '</ul>' +
         '</div>' +
-        '<div class="form col-md-7"></div>' +
+        '<div class="form"></div>' +
       '</div>'),
     events: {
       'click button.save': 'saveClicked',

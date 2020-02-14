@@ -13,8 +13,8 @@ define([
     tagName: 'div',
     className: 'form-group',
     template: _.template(
-      '<label class="col-sm-3 control-label"><%- title %></label>' +
-      '<div class="col-sm-9">' +
+      '<label class="control-label"><%- title %></label>' +
+      '<div class="">' +
         '<strong><%- value %></strong><br/>' +
         '<%= description %>' +
       '</div>'),
@@ -43,8 +43,8 @@ define([
       'keyup input': 'textChanged'
     },
     template: _.template(
-      '<label class="col-sm-3 control-label"><%- title %></label>' +
-      '<div class="col-sm-9">' +
+      '<label class="control-label"><%- title %></label>' +
+      '<div>' +
         '<input class="form-control input-sm" name="name" value="<%- value %>" />' +
         '<%= description %>' +
       '</div>'),
@@ -127,7 +127,7 @@ define([
 
 
   var ResourceBoolFieldView = ResourceInputFieldView.extend({
-    className: 'col-sm-offset-3 col-sm-9',
+    className: '',
     template: _.template(
       '<div class="checkbox">' +
         '<label>' +
@@ -153,8 +153,8 @@ define([
   var ResourceListFieldView = ResourceInputFieldView.extend({
     sortable: false,
     template: _.template(
-      '<label class="col-sm-3 control-label"><%- title %></label>' +
-      '<ul class="col-sm-9 fields list-group" />' +
+      '<label class="control-label"><%- title %></label>' +
+      '<ul class="fields list-group" />' +
       '<button class="plone-btn plone-btn-default add pull-right"><%- _t("Add") %></button>'),
     events: {
       'click button.add': 'addRowClicked',
@@ -234,8 +234,8 @@ define([
       this.options.registryData[this.options.name] = this.options.value = this.$('textarea').val();
     },
     template: _.template(
-      '<label class="col-sm-3 control-label"><%- title %></label>' +
-      '<div class="col-sm-9">' +
+      '<label class="control-label"><%- title %></label>' +
+      '<div class="">' +
         '<textarea class="form-control input-sm" name="name"><%- value %></textarea>' +
       '</div>')
   });
@@ -281,8 +281,8 @@ define([
     },
 
     template: _.template(
-      '<label class="col-sm-3 control-label"><%- title %></label>' +
-      '<div class="col-sm-9">' +
+      '<label class="control-label"><%- title %></label>' +
+      '<div>' +
         '<input name="name" class="select" type="hidden" style="width: 100%" />' +
         '<%= description %>' +
       '</div>')
