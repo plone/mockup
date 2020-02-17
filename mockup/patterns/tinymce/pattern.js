@@ -140,6 +140,8 @@ define([
         externalText: _t('External URL (can be relative within this site or absolute if it starts with http:// or https://)'),
         email: _t('Email Address'),
         anchor: _t('Anchor'),
+        anchorLabel: _t('Select an anchor'),
+        target: _t('Target'),
         subject: _t('Email Subject (optional)'),
         image: _t('Image'),
         imageAlign: _t('Align'),

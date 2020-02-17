@@ -51,7 +51,7 @@
         <legend id="tinylink-anchor"><%- anchor %></legend>
         <div>
           <div class="form-group main">
-            <label>Select an anchor</label>
+            <label><%- anchorLabel %></label>
             <div class="input-wrapper">
               <select name="anchor" class="pat-select2" data-pat-select2="width:500px" />
             </div>
@@ -63,7 +63,7 @@
 
     <div class="common-controls">
       <div class="form-group">
-        <label>Target</label>
+        <label><%- target %></label>
         <select name="target">
           <% _.each(targetList, function(target){ %>
             <option value="<%- target.value %>"><%- target.text %></option>
