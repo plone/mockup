@@ -1,0 +1,4 @@
+tinymce pattern: Add missing translations by...
+    - copying generateModalHtml function from master branch,
+    - adding some backported xml changes from 71ddf6f387
+[djowett-ftw]
