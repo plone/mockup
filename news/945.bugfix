@@ -1,0 +1,2 @@
+TinyMCE pattern: add a random id to the passed in container_id: there might be more than one TinyMCE active in the DOM. Improves #920 which was a fix for positioning of sub-menus in a modal.
+[fredvd]
