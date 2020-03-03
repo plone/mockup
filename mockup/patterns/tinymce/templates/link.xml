@@ -1,13 +1,14 @@
 <div>
   <div class="linkModal">
     <h1><%- insertHeading %></h1>
-    <% if(upload){ %>
+    <% if(_.contains(linkTypes, 'upload')){ %>
     <p class="info"><%- insertLinkHelp %></p>
     <% } %>
 
     <div class="linkTypes pat-autotoc autotabs"
          data-pat-autotoc="section:fieldset;levels:legend;IDPrefix:tinymce-autotoc-">
 
+      <% if(_.contains(linkTypes, 'internal')){ %>
       <fieldset class="linkType internal" data-linkType="internal">
         <legend id="tinylink-internal"><%- internal %></legend>
         <div>
@@ -17,14 +18,16 @@
           </div>
         </div>
       </fieldset>
+      <% } %>
 
-      <% if(upload){ %>
+      <% if(_.contains(linkTypes, 'upload')){ %>
       <fieldset class="linkType upload" data-linkType="upload">
         <legend id="tinylink-upload"><%- uploadText %></legend>
         <div class="uploadify-me"></div>
       </fieldset>
       <% } %>
 
+      <% if(_.contains(linkTypes, 'external')){ %>
       <fieldset class="linkType external" data-linkType="external">
         <legend id="tinylink-external"><%- external %></legend>
         <div class="form-group main">
@@ -32,7 +35,9 @@
           <input type="text" name="external" />
         </div>
       </fieldset>
+      <% } %>
 
+      <% if(_.contains(linkTypes, 'email')){ %>
       <fieldset class="linkType email" data-linkType="email">
         <legend id="tinylink-email">Email</legend>
         <div class="form-inline">
@@ -46,7 +51,9 @@
           </div>
         </div>
       </fieldset>
+      <% } %>
 
+      <% if(_.contains(linkTypes, 'anchor')){ %>
       <fieldset class="linkType anchor" data-linkType="anchor">
         <legend id="tinylink-anchor"><%- anchor %></legend>
         <div>
@@ -58,6 +65,7 @@
           </div>
         </div>
       </fieldset>
+      <% } %>
 
     </div><!-- / tabs -->
 
