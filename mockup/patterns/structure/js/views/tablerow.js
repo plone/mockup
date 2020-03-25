@@ -135,8 +135,29 @@ define([
       } else {
         this.app.selectedCollection.removeResult(this.model);
       }
-
       var selectedCollection = this.selectedCollection;
+      if (this.selectedCollection.length == 0) {
+        // hide buttons that make no action with nothing selected
+        $(".navbar #btn-selected-items").hide()
+        $("#btngroup-mainbuttons #btn-cut").hide()
+        $("#btngroup-mainbuttons #btn-copy").hide()
+        $("#btngroup-mainbuttons #btn-delete").hide()
+        $("#btngroup-mainbuttons #btn-rename").hide()
+        $("#btngroup-mainbuttons #btn-tags").hide()
+        $("#btngroup-mainbuttons #btn-workflow").hide()
+        $("#btngroup-mainbuttons #btn-properties").hide()
+      // check if they are not visible
+      } else if (!$("#btngroup-mainbuttons #btn-cut").is(':visible')) {
+        // show buttons that make something when an item is selected
+        $(".navbar #btn-selected-items").show()
+        $("#btngroup-mainbuttons #btn-cut").show()
+        $("#btngroup-mainbuttons #btn-copy").show()
+        $("#btngroup-mainbuttons #btn-delete").show()
+        $("#btngroup-mainbuttons #btn-rename").show()
+        $("#btngroup-mainbuttons #btn-tags").show()
+        $("#btngroup-mainbuttons #btn-workflow").show()
+        $("#btngroup-mainbuttons #btn-properties").show()
+      }
 
       /* check for shift click now */
       var keyEvent = this.app.keyEvent;

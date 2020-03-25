@@ -154,6 +154,24 @@ define([
         self.$el.removeClass('order-support');
       });
 
+      // check if something has been copied to show the paste action
+      if (!$.cookie('__cp')) {
+        $("#btngroup-mainbuttons #btn-paste").hide()
+      } else {
+        $("#btngroup-mainbuttons #btn-paste").show()
+      }
+      if (this.selectedCollection.length == 0) {
+        // hide buttons that make no action with is nothing selected
+        $(".navbar #btn-selected-items").hide()
+        $("#btngroup-mainbuttons #btn-cut").hide()
+        $("#btngroup-mainbuttons #btn-copy").hide()
+        $("#btngroup-mainbuttons #btn-delete").hide()
+        $("#btngroup-mainbuttons #btn-rename").hide()
+        $("#btngroup-mainbuttons #btn-tags").hide()
+        $("#btngroup-mainbuttons #btn-workflow").hide()
+        $("#btngroup-mainbuttons #btn-properties").hide()
+      }
+
       return this;
     },
     breadcrumbClicked: function(e) {
@@ -182,6 +200,16 @@ define([
         /* delaying the re-rendering is much faster in this case */
         this.selectedCollection.remove(this.collection.models, { silent: true });
         this.selectedCollection.trigger('remove');
+      }
+      if (this.selectedCollection.length == 0) {
+        // hide buttons that make no action with nothing is selected
+        $("#btngroup-mainbuttons #btn-cut").hide()
+        $("#btngroup-mainbuttons #btn-copy").hide()
+        $("#btngroup-mainbuttons #btn-delete").hide()
+        $("#btngroup-mainbuttons #btn-rename").hide()
+        $("#btngroup-mainbuttons #btn-tags").hide()
+        $("#btngroup-mainbuttons #btn-workflow").hide()
+        $("#btngroup-mainbuttons #btn-properties").hide()
       }
       this.setContextInfo();
     },

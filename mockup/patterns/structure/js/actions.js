@@ -94,6 +94,14 @@ define([
       var self = this;
       e.preventDefault();
       self.doAction('copy', _t('Copied'), _t('copying'));
+      //check if something has been copied
+      if (!$.cookie('__cp')) {
+        //if there is nothing copied don't show paste button
+        $("#btngroup-mainbuttons #btn-paste").hide()
+      }else{
+        //if there something copied show paste button
+        $("#btngroup-mainbuttons #btn-paste").show()
+      }
     },
     pasteClicked: function(e) {
       var self = this;
