@@ -306,18 +306,35 @@ define([
       if (height < natualHeight) {
         /* add scroll buttons */
         var $scrollUp = $(
-          '<li class="scroll-btn up"><a href="#"><span class="icon-up"></span><span>&nbsp;</span></a></li>'
+          '<li class="scroll-btn up" aria-hidden="true"><a title="' + _t('scroll up') + '" href="#"><span class="icon-up"></span><span>&nbsp;</span></a></li>'
         );
         var $scrollDown = $(
-          '<li class="scroll-btn down"><a href="#"><span class="icon-down"></span><span>&nbsp;</span></a></li>'
+          '<li class="scroll-btn down" aria-hidden="true"><a title="' + _t('scroll down') + '" href="#"><span class="icon-down"></span><span>&nbsp;</span></a></li>'
         );
         $items.prepend($scrollUp);
         $items.append($scrollDown);
-        height = height - $scrollDown.height();
         $items.height(height);
-        $items.css({
-          'padding-top': $scrollUp.height(),
-        });
+        //set an scroll event listerner to know where we are inside the container
+        $items.scroll(function(){
+          if($items.scrollTop()==0){
+            //if we are in the top we hide the arrow to go up
+            $scrollUp.css('display', 'none')
+          }else{
+            //else we display it
+            $scrollUp.css('display', 'list-item')
+          }
+          if($items.scrollTop()+$items.height()==natualHeight){
+            //if we are in the bottom we hide the arrow to go down
+            $scrollDown.css('display', 'none')
+          }else{
+            //else we display it
+            $scrollDown.css('display', 'list-item')
+          }
+        })
+        //at the beginning we check if we are in the top to hide the arrow to go up
+        if($items.scrollTop()==0){
+          $scrollUp.css('display', 'none')
+        }
         $scrollUp.click(function(e) {
           e.preventDefault();
           $items.scrollTop($items.scrollTop() - 50);
