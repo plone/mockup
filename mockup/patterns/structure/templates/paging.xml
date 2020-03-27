@@ -42,13 +42,9 @@
     </li>
   </ul>
 
-  <ul class="pagination pagination-sm">
-    <li class="disabled">
-      <a href="#">
-        <%- _t("Page:") %> <span class="current"><%- currentPage %></span>
-        <%- _t("of") %>
-        <span class="total"><%- totalPages %></span>
-              <%- _t("shown") %>
-      </a>
-    </li>
-  </ul>
+  <p class="pagination pagination-sm">
+    <%- _t("Page:") %> <span class="current"><%- currentPage %></span>
+    <%- _t("of") %>
+    <span class="total"><%- totalPages %></span>
+          <%- _t("shown") %>
+  </p>
