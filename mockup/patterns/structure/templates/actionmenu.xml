@@ -1,11 +1,12 @@
 <% _.each(menuOptions.button, function(menuOption){ %>
 <a class="action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <%- menuOption.css %>"
     href="<%- menuOption.url %>"
-    title="<%- _t(menuOption.title) %>">
+    title="<%- _t(menuOption.title) %>"
+    aria-label="<%- _t(menuOption.title) %>">
   <% if (menuOption.iconCSS) { %>
   <span class="<%- menuOption.iconCSS %>"></span>
   <% } else { %>
-  <%- _t(menuOption.title) %> 
+  <%- _t(menuOption.title) %>
   <% } %>
 </a>&nbsp;
 <% }); %>
