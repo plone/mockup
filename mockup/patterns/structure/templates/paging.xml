@@ -26,8 +26,8 @@
     </li>
   </ul>
 
+  <div class="pagination pagination-sm"><%- _t("Show:") %></div>
   <ul class="pagination pagination-sm">
-    <li class="disabled"><a href="#"><%- _t("Show:") %></a></li>
     <li class="serverhowmany serverhowmany15 <% if(perPage == 15){ %>disabled<% } %>">
       <a href="#" class="">15</a>
     </li>
@@ -42,9 +42,9 @@
     </li>
   </ul>
 
-  <p class="pagination pagination-sm">
+  <div class="pagination pagination-sm">
     <%- _t("Page:") %> <span class="current"><%- currentPage %></span>
     <%- _t("of") %>
     <span class="total"><%- totalPages %></span>
           <%- _t("shown") %>
-  </p>
+  </div>
