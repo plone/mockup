@@ -129,7 +129,7 @@ define([
         // XXX: When cloning a form, values from 'select' elements are not kept
         //      so we copy them from the original form here.
         $.each( $("select", $form), function ( k, v ) {
-          $('[name="'+v.name+'"]', $cloned_form).val($(v).val());
+          $('select[name="'+v.name+'"]', $cloned_form).val($(v).val());
         } );
 
         // XXX: Remove binary files so they are not uploaded to server
