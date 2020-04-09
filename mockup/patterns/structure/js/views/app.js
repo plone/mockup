@@ -41,6 +41,7 @@ define([
 
     buttons: null,
     textfilter: null,
+    forms: [],
 
     pasteAllowed: function () {
         return !!$.cookie('__cp');
@@ -93,7 +94,7 @@ define([
         collection: self.selectedCollection,
         triggerView: self.toolbar.get('selected-items'),
         app: self,
-        id: 'structure-well'
+        id: 'selected-items'
       });
 
       self.toolbar.get('selected-items').disable();
@@ -358,7 +359,7 @@ define([
       var items = [];
 
       var columnsBtn = new ButtonView({
-        id: 'attribute-columns',
+        id: 'structure-columns',
         tooltip: _t('Configure displayed columns'),
         icon: 'th'
       });
@@ -379,7 +380,7 @@ define([
 
       if (self.options.rearrange) {
         var rearrangeButton = new ButtonView({
-          id: 'rearrange',
+          id: 'structure-rearrange',
           title: _t('Rearrange'),
           icon: 'sort-by-attributes',
           tooltip: _t('Rearrange folder contents'),
@@ -401,7 +402,8 @@ define([
         });
         self.uploadView = new UploadView({
           triggerView: uploadButton,
-          app: self
+          app: self,
+          id: 'upload'
         });
         items.push(uploadButton);
       }
@@ -416,7 +418,7 @@ define([
             buttonOptions.triggerView = button;
             buttonOptions.app = self;
             var view = new GenericPopover(buttonOptions);
-            self.$el.append(view.el);
+            self.forms.push(view.el);
           } else {
             button.on('button:click', self.buttonClickEvent, self);
           }
@@ -541,14 +543,23 @@ define([
       var self = this;
 
       self.$el.append(self.toolbar.render().el);
-      self.$el.append(self.wellView.render().el);
+      if (self.wellView) {
+        self.$el.find('#btn-' + self.wellView.id).after(self.wellView.render().el)
+      }
+      self.forms.forEach(function(element) {
+        var id = $(element).attr('id')
+        self.$el.find('#btn-'+id).after(element)
+      });
+
       self.$el.append(utils.createElementFromHTML('<div class="fc-status-container"></div>'));
-      self.$el.append(self.columnsView.render().el);
+      if (self.columnsView) {
+        self.$el.find('#btn-' + self.columnsView.id).after(self.columnsView.render().el)
+      }
       if (self.rearrangeView) {
-        self.$el.append(self.rearrangeView.render().el);
+        self.$el.find('#btn-' + self.rearrangeView.id).after(self.rearrangeView.render().el)
       }
       if (self.uploadView) {
-        self.$el.append(self.uploadView.render().el);
+        self.$el.find('#btn-' + self.uploadView.id).after(self.uploadView.render().el)
       }
 
       self.$el.append(self.tableView.render().el);
