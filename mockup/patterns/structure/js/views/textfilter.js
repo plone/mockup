@@ -14,7 +14,9 @@ define([
     className: 'navbar-search form-search ui-offset-parent',
     template: _.template(
       '<div class="input-group">' +
-      '<input type="text" class="form-control search-query" placeholder="<%- _t("Search") %>">' +
+      '<label class="hiddenStructure" for="textFilterInput" aria-label="<%- _t("Search") %>"><%- _t("Search") %>"</label>' +
+      '<input id="textFilterInput" type="text" class="form-control search-query" placeholder="<%- _t("Search") %>">' +
+
       '<span class="input-group-btn">' +
       '</span>' +
       '</div>'
