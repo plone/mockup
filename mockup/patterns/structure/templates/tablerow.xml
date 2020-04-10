@@ -1,4 +1,4 @@
-<td class="selection" data-order="<%- attributes['_sort'] %>"><input type="checkbox" <% if(selected){ %> checked="checked" <% } %>/></td>
+<td class="selection" data-order="<%- attributes['_sort'] %>"><label for="select<%- attributes['_sort'] %>InputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select') %>"><%- _t('Select') %></label><input id="select<%- attributes['_sort'] %>InputCheckbox" <% if(selected){ %> checked="checked" <% } %> type="checkbox"/></td>
 
 <td class="title">
   <div class="pull-left">
