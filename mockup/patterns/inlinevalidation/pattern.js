@@ -40,6 +40,23 @@ define([
        }
     },
 
+    render_error_bootstrap: function ($field, errmsg) {
+        var $input = $('input', $field), $errbox = $('.invalid-feedback', $field);
+        if (errmsg !== '') {
+            $input.addClass('is-invalid');
+            if($errbox.length) {
+                $errbox.html(errmsg);
+            } else {
+                $('<div class="invalid-feedback">' + errmsg + '</div>').insertAfter($input);
+            }
+        } else {
+            $input.removeClass('is-invalid');
+            if($errbox.length) {
+                $errbox.remove();
+            }
+        }
+    },
+
     append_url_path: function (url, extra) {
         // Add '/extra' on to the end of the URL, respecting querystring
         var i, ret, urlParts = url.split(/\?/);
@@ -126,12 +143,6 @@ define([
             fset = $input.closest('fieldset').attr('data-fieldset'),
             fname = $field.attr('data-fieldname');
 
-        // XXX: When cloning a form, values from 'select' elements are not kept
-        //      so we copy them from the original form here.
-        $.each( $("select", $form), function ( k, v ) {
-          $('select[name="'+v.name+'"]', $cloned_form).val($(v).val());
-        } );
-
         // XXX: Remove binary files so they are not uploaded to server
         $cloned_form.find("input[type=file]").remove();
         if (fname) {
@@ -141,7 +152,11 @@ define([
                   data: {fname: fname, fset: fset},
                   iframe: false,
                   success: $.proxy(function (data) {
-                      this.render_error($field, data.errmsg);
+                      if($field.hasClass('form-group')) {
+                          this.render_error_bootstrap($field, data.errmsg);
+                      } else {
+                          this.render_error($field, data.errmsg);
+                      }
                       next();
                   }, this),
                   error: function () { next(); },
