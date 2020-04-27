@@ -143,6 +143,12 @@ define([
             fset = $input.closest('fieldset').attr('data-fieldset'),
             fname = $field.attr('data-fieldname');
 
+        // XXX: When cloning a form, values from 'select' elements are not kept
+        //      so we copy them from the original form here.
+        $.each( $("select", $form), function ( k, v ) {
+          $('select[name="'+v.name+'"]', $cloned_form).val($(v).val());
+        } );
+
         // XXX: Remove binary files so they are not uploaded to server
         $cloned_form.find("input[type=file]").remove();
         if (fname) {
