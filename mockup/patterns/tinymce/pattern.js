@@ -136,15 +136,23 @@ define([
         insertHeading: _t('Insert link'),
         title: _t('Title'),
         internal: _t('Internal'),
-        external: _t('External URL (can be relative within this site or absolute if it starts with http:// or https://)'),
+        external: _t('External'),
+        externalText: _t('External URL (can be relative within this site or absolute if it starts with http:// or https://)'),
         email: _t('Email Address'),
         anchor: _t('Anchor'),
+        anchorLabel: _t('Select an anchor'),
+        target: _t('Target'),
         subject: _t('Email Subject (optional)'),
         image: _t('Image'),
         imageAlign: _t('Align'),
         scale: _t('Size'),
         alt: _t('Alternative Text'),
-        externalImage: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)')
+        insertImageHelp: _t('Specify an image. It can be on this site already (Internal Image), an image you upload (Upload), or from an external site (External Image).'),
+        internalImage: _t('Internal Image'),
+        externalImage: _t('External Image'),
+        externalImageText: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)'),
+        upload: _t('Upload'),
+        insertLinkHelp: _t('Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor).'),
       },
       // URL generation options
       loadingBaseUrl: '../../../bower_components/tinymce-builded/js/tinymce/',
@@ -165,9 +173,10 @@ define([
         {title: 'Large', value: 'large'}
       ],
       imageClasses: {
-        'image-inline': 'Inline',
-        'image-right': 'Right',
-        'image-left': 'Left'
+        'image-inline': _t('Inline'),
+        'image-right': _t('Right'),
+        'image-left': _t('Left'),
+        'image-responsive': _t('Responsive')
       },
       targetList: [
         {text: _t('Open in this window / frame'), value: ''},

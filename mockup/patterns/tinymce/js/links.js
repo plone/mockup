@@ -347,7 +347,7 @@ define([
 
     editor.addButton('unlink', {
       icon: 'unlink',
-      tooltip: 'Remove link(s)',
+      tooltip: 'Remove link',
       cmd: 'unlink',
       stateSelector: 'a[href]'
     });
@@ -466,13 +466,23 @@ define([
         upload: this.options.upload,
         text: this.options.text,
         insertHeading: this.options.text.insertHeading,
+        insertImageHelp: this.options.text.insertImageHelp,
+        uploadText: this.options.text.upload,
+        insertLinkHelp: this.options.text.insertLinkHelp,
+        internal: this.options.text.internal,
+        external: this.options.text.external,
+        anchor: this.options.text.anchor,
+        anchorLabel: this.options.text.anchorLabel,
+        target: this.options.text.target,
         linkTypes: this.options.linkTypes,
         externalText: this.options.text.external,
         emailText: this.options.text.email,
         subjectText: this.options.text.subject,
         targetList: this.options.targetList,
         titleText: this.options.text.title,
-        externalImageText: this.options.text.externalImage,
+        internalImageText: this.options.text.internalImage,
+        externalImage: this.options.text.externalImage,
+        externalImageText: this.options.text.externalImageText,
         altText: this.options.text.alt,
         imageAlignText: this.options.text.imageAlign,
         scaleText: this.options.text.scale,
