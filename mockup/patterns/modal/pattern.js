@@ -455,7 +455,7 @@ define([
             return;
           }
           event.preventDefault();
-          $(options.buttons, this).eq(0).trigger('click');
+          $('input[type=submit], button[type=submit], button:not(type)', this).eq(0).trigger('click');
         });
 
         // Setup buttons
