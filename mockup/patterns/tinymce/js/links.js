@@ -485,6 +485,8 @@ define([
         externalImageText: this.options.text.externalImageText,
         altText: this.options.text.alt,
         imageAlignText: this.options.text.imageAlign,
+        captionFromDescriptionText: this.options.text.captionFromDescription,
+        captionText: this.options.text.caption,        
         scaleText: this.options.text.scale,
         imageScales: this.options.imageScales,
         cancelBtn: this.options.text.cancelBtn,
@@ -506,7 +508,9 @@ define([
       self.$alt = $('input[name="alt"]', self.modal.$modal);
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
-
+      self.$captionFromDescription = $('input[name="captionFromDescription"]', self.modal.$modal);
+      self.$caption = $('textarea[name="caption"]', self.modal.$modal);
+      
       /* load up all the link types */
       _.each(self.options.linkTypes, function(type) {
         var $container = $('.linkType.' + type + ' .main', self.modal.$modal);
@@ -525,6 +529,15 @@ define([
           }
         });
       });
+
+      self.$captionFromDescription.change(function () {
+        if (this.checked) {
+          self.$caption.prop('disabled', true);
+        } else {
+          self.$caption.prop('disabled', false);
+        }
+      });
+
     },
 
     getLinkUrl: function() {
@@ -584,17 +597,23 @@ define([
     updateImage: function(src) {
       var self = this;
       var title = self.$title.val();
+      var captionFromDescription = self.$captionFromDescription.prop('checked')
 
       self.tiny.focus();
       self.tiny.selection.setRng(self.rng);
+
+      var cssclasses = ['image-richtext', self.$align.val()];
+      if (captionFromDescription) {
+        cssclasses.push('captioned');
+      }
 
       var data = $.extend(true, {}, {
         src: src,
         title: title ? title : null,
         alt: self.$alt.val(),
-        'class': self.$align.val(),
+        'class': cssclasses.join(' '),
         'data-linkType': self.linkType,
-        'data-scale': self.$scale.val()
+        'data-scale': self.$scale.val(),
       }, self.linkTypes[self.linkType].attributes());
       if (self.imgElm && !self.imgElm.getAttribute('data-mce-object')) {
         data.width = self.dom.getAttrib(self.imgElm, 'width');
@@ -610,14 +629,29 @@ define([
         };
       }
 
-      if (!self.imgElm) {
-        data.id = '__mcenew';
-        self.tiny.insertContent(self.dom.createHTML('img', data));
-        self.imgElm = self.dom.get('__mcenew');
-        self.dom.setAttrib(self.imgElm, 'id', null);
-      } else {
-        self.dom.setAttribs(self.imgElm, data);
+      if (self.imgElm) {
+        self.dom.remove(self.imgElm);
       }
+      if (self.captionElm) {
+        self.dom.remove(self.captionElm);
+      }
+      if (self.figureElm) {
+        self.dom.remove(self.figureElm);
+      }
+
+      data.id = '__mcenew';
+      var html_inner = self.dom.createHTML('img', data);
+      var caption = self.$caption.val();
+      var html_string;
+      if (caption && ! captionFromDescription) {
+        html_inner += '\n' + self.dom.createHTML('figcaption', {}, caption);
+        html_string = self.dom.createHTML('figure', {}, html_inner);
+      } else {
+        html_string = html_inner;
+      }
+      self.tiny.insertContent(html_string);
+      self.imgElm = self.dom.get('__mcenew');
+      self.dom.setAttrib(self.imgElm, 'id', null);
 
       waitLoad(self.imgElm);
       if (self.imgElm.complete) {
@@ -737,31 +771,47 @@ define([
         self.data.title = value;
       }
 
-      self.selection = self.tiny.selection;
       self.tiny.focus();
-      var selectedElm = self.imgElm = self.selection.getNode();
-      self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
+      self.anchorElm = self.dom.getParent(self.selectedElm, 'a[href]');
 
-      var linkType;
+      var linkType
       if (self.isImageMode()) {
-        if (self.imgElm.nodeName !== 'IMG') {
-          // try finding elsewhere
-          if (self.anchorElm) {
-            var imgs = self.anchorElm.getElementsByTagName('img');
-            if (imgs.length > 0) {
-              self.imgElm = imgs[0];
-              self.focusElement(self.imgElm);
-            }
-          }
+        var figure;
+        var img;
+        var caption;
+        if (self.selectedElm.nodeName === 'FIGURE') {
+          figure = self.selectedElm;
+          img = figure.querySelector('img');
+          caption = figure.querySelector('figcaption');
+        } else if (self.selectedElm.nodeName === 'IMG') {
+          figure = $(self.selectedElm).closest('figure');
+          figure = figure.length ? figure[0] : undefined;
+          img = self.selectedElm;
+          caption = figure ? figure.querySelector('figcaption') : undefined;
+        } else if (self.selectedElm.nodeName === 'FIGCAPTION') {
+          figure = $(self.selectedElm).closest('figure');
+          figure = figure.length ? figure[0] : undefined;
+          img = figure ? figure.querySelector('img') : undefined;
+          caption = self.selectedElm;        
         }
-        if (self.imgElm.nodeName !== 'IMG') {
-          // okay, still no image, unset
-          self.imgElm = null;
-        }
+
+        self.imgElm = img;
+        self.figureElm = figure;
+        self.captionElm = caption;
+
         if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
           self.$title.val(self.dom.getAttrib(self.imgElm, 'title'));
           self.$alt.val(self.dom.getAttrib(self.imgElm, 'alt'));
+        
+          if ($(self.imgElm).hasClass('captioned')) {
+            self.$captionFromDescription.prop('checked', true);
+            self.$caption.prop('disabled', true);
+          }
+          if (self.captionElm) {
+            self.$caption.val(self.captionElm.innerHTML);
+          }
+        
           linkType = self.dom.getAttrib(self.imgElm, 'data-linktype');
           if (linkType) {
             self.linkType = linkType;
