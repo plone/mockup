@@ -8,22 +8,6 @@ Changelog
 
 .. towncrier release notes start
 
-X (2020-05-21)
---------------
-
-Bug fixes:
-
-
-- - TinyMCE: Add support for image captions.
-  - If an image caption is given, the ``<img>`` tag is wrapped within a ``<figure>`` tag and a ``<figcaption>`` tag is added. (#977)
-
-
-X (2020-05-21)
---------------
-
-No significant changes.
-
-
 2.7.8 (2019-05-21)
 ------------------
 
