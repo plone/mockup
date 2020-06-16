@@ -110,7 +110,7 @@ define([
       content: '#content',
       automaticallyAddButtonActions: true,
       loadLinksWithinModal: true,
-      prependContent: '.portalMessage',
+      prependContent: '.portalMessage, #global_statusmessage',
       onRender: null,
       templateOptions: {
         className: 'plone-modal fade',
@@ -154,7 +154,7 @@ define([
         timeout: 5000,
         displayInModal: true,
         reloadWindowOnClose: true,
-        error: '.portalMessage.error',
+        error: '.portalMessage.error, .alert-danger',
         formFieldError: '.field.error',
         onSuccess: null,
         onError: null,
