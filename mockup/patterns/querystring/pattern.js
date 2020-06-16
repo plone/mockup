@@ -369,6 +369,7 @@ define([
         self.$value = $('<input type="text"/>')
                 .after($('<span/>').html(_t('days')))
                 .addClass(self.options.classValueName + '-' + widget)
+                .val(value)
                 .appendTo($wrapper)
                 .change(function() {
                   self.trigger('value-changed');
