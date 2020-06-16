@@ -1,0 +1,6 @@
+Upgrade handlebars from 4.1.2 to 4.5.3 to avoid its vulnerabilies
+
+see:
+
+- https://www.npmjs.com/advisories/1300
+- https://www.npmjs.com/advisories/1184
