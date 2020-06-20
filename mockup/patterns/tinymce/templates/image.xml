@@ -32,7 +32,7 @@
 
       <% if(_.contains(linkTypes, 'uploadImage')){ %>
       <fieldset class="linkType uploadImage" data-linkType="uploadImage">
-        <legend id="tinylink-uploadImage"><%- upload %></legend>
+        <legend id="tinylink-uploadImage"><%- uploadText %></legend>
         <div class="uploadify-me"></div>
       </fieldset>
       <% } %>
