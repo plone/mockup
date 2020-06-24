@@ -83,10 +83,13 @@
 define([
   'jquery',
   'pat-base',
+  'pat-registry',
   'mockup-i18n',
   'moment'
-], function($, Base, i18n, moment) {
+], function($, Base, Registry, i18n, moment) {
   var currentLanguage = (new i18n()).currentLanguage;
+  var localeLoaded = false;
+  var elementsToRender = [];
 
   // From https://github.com/moment/moment/blob/3147fbc/src/test/moment/format.js#L463-L468
   var MOMENT_LOCALES =
@@ -106,6 +109,7 @@ define([
     if (currentLanguage === LANG_FALLBACK) {
       // English locale is built-in, no need to load, so let's exit early
       // to avoid computing fallback, which happens at every loaded page
+      localeLoaded = true;
       return;
     }
 
@@ -116,10 +120,21 @@ define([
     lang = isLangSupported(lang) ? lang : lang.split('-')[0];
     lang = isLangSupported(lang) ? lang : LANG_FALLBACK;
     if (lang === LANG_FALLBACK) {
+      localeLoaded = true;
       return;
     }
 
-    require(['moment-url/' + lang]);
+    require(['moment-url/' + lang], function() {
+      localeLoaded = true;
+      for (var i = 0; i < elementsToRender.length; i++) {
+        var $el = elementsToRender[i];
+        // $el.data("pattern-moment") needs to be undefined for initBasePattern
+        // to run again the init (see patternslib/src/core/base.js)
+        $el.removeData("pattern-moment");
+        Registry.scan($el, ['moment']);
+      }
+      elementsToRender = [];
+    });
   }
 
   lazyLoadMomentLocale();
@@ -170,6 +185,12 @@ define([
     },
     init: function() {
       var self = this;
+      if (!localeLoaded) {
+        // The locale has not finished to load yet, we will execute the init
+        // again once the locale is loaded.
+        elementsToRender.push(self.$el);
+        return;
+      }
       if (self.options.selector) {
         self.$el.find(self.options.selector).each(function() {
           self.convert($(this));
