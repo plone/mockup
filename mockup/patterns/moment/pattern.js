@@ -89,7 +89,7 @@ define([
 ], function($, Base, Registry, i18n, moment) {
   var currentLanguage = (new i18n()).currentLanguage;
   var localeLoaded = false;
-  var elementsToRender = [];
+  var patMomentInstances = [];
 
   // From https://github.com/moment/moment/blob/3147fbc/src/test/moment/format.js#L463-L468
   var MOMENT_LOCALES =
@@ -126,14 +126,11 @@ define([
 
     require(['moment-url/' + lang], function() {
       localeLoaded = true;
-      for (var i = 0; i < elementsToRender.length; i++) {
-        var $el = elementsToRender[i];
-        // $el.data("pattern-moment") needs to be undefined for initBasePattern
-        // to run again the init (see patternslib/src/core/base.js)
-        $el.removeData("pattern-moment");
-        Registry.scan($el, ['moment']);
+      for (var i = 0; i < patMomentInstances.length; i++) {
+        var patMoment = patMomentInstances[i];
+        patMoment.init();
       }
-      elementsToRender = [];
+      patMomentInstances = [];
     });
   }
 
@@ -188,7 +185,7 @@ define([
       if (!localeLoaded) {
         // The locale has not finished to load yet, we will execute the init
         // again once the locale is loaded.
-        elementsToRender.push(self.$el);
+        patMomentInstances.push(self);
         return;
       }
       if (self.options.selector) {
