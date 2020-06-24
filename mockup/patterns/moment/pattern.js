@@ -153,6 +153,9 @@ define([
       var date = $el.attr('data-date');
       if (!date) {
         date = $.trim($el.html());
+        if (date && date !== 'None') {
+          $el.attr('data-date', date);
+        }
       }
       if (!date || date === 'None') {
         return;
