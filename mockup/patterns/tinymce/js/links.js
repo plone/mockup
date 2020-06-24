@@ -347,7 +347,7 @@ define([
 
     editor.addButton('unlink', {
       icon: 'unlink',
-      tooltip: 'Remove link(s)',
+      tooltip: 'Remove link',
       cmd: 'unlink',
       stateSelector: 'a[href]'
     });
@@ -472,6 +472,8 @@ define([
         internal: this.options.text.internal,
         external: this.options.text.external,
         anchor: this.options.text.anchor,
+        anchorLabel: this.options.text.anchorLabel,
+        target: this.options.text.target,
         linkTypes: this.options.linkTypes,
         externalText: this.options.text.external,
         emailText: this.options.text.email,

@@ -1,0 +1,5 @@
+Fix Upload tab in TinyMCE Image showing [object Object].
+https://github.com/plone/Products.CMFPlone/issues/3120
+Fix folder contents "Configure display column" dialog going under toolbar.
+https://github.com/plone/Products.CMFPlone/issues/3124
+[vincentfretin]
