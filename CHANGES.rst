@@ -8,6 +8,110 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.0 (2020-06-28)
+------------------
+
+New features:
+
+
+- pat-plone-modal: We can set a string for onSuccess, onError and onFormError
+  which is the name of a global function to call, on the model of sortable pattern.
+  This fixes https://github.com/plone/mockup/issues/825
+  [thomasdesvenain] (#825)
+- pat-select2: we can set actions on events: selecting, select, deselecting, deselect (#886)
+- pat-plone-modal: Added an onRender option to set a callback that is called when modal is rendered.
+  This fixes https://github.com/plone/mockup/issues/891
+  [thomasdesvenain] (#891)
+- pat-tooltip: allow ajax content
+    data-pat-tooltip can get two values:
+    - "ajaxUrl": the url of tooltip ajax content
+    - "contentSelector" a js selector of content to display from source content (#892)
+- pat-tooltip: we can add classes and style into tooltip (#893)
+- TinyMCE: Add support for image captions.
+  If an image caption is given, the ``<img>`` tag is wrapped within a ``<figure>`` tag and a ``<figcaption>`` tag is added.
+  The image has an additional class ``image-richtext`` for further reuse.
+  [thet] (#911)
+- Upgrade Sinon from version 1.17.1 to 7.5.0.
+  [davilima6] (#914)
+- Structure pattern:
+  Filter now reads "Search" and is cleared when changing directories.
+  Querystring popover button: filter instead of search icon, "Extra Filter" title.
+  Show statusmessage with "Clear" button when filters are applied.
+  Show visually if a filter is set.
+  Allow multiple status messages.
+  Change message from misleading "Cannot order items while querying" to "Drag and drop reordering is disabled while filters are applied.". Fixes: https://github.com/collective/plone.app.locales/issues/173
+  Display toolbar a bit compacter.
+  [thet] (#937)
+- Upgrade node version for testing on travis.
+  [thet] (#938)
+- Upgrade patternslib to 2.1.3.
+  [thet] (#944)
+- Do not use HTML lists where items are not lists [a11y]
+  [erral] (#948)
+- Barceloneta-LTS support for ``mockup-patterns-inlinevalidation`` and ``mockup-patterns-modal``
+  [petschki] (#975)
+
+
+Bug fixes:
+
+
+- TinyMCE: fix the position of menu dropdowns when in a modal (#867)
+- pat-plone-modal: If we click on a pat-plone-modal link into a mockup modal, the page is not reloaded.
+  This fixes https://github.com/plone/mockup/issues/884
+  [thomasdesvenain] (#884)
+- tinymce pattern: Add missing translations by...
+      - copying generateModalHtml function from master branch,
+      - adding some backported xml changes from 71ddf6f387
+      - adding 2 further translations (not yet in master)
+  [djowett-ftw] (#910)
+- Upgrade handlebars from 4.1.2 to 4.5.3 to avoid its vulnerabilies
+
+  see:
+
+  - https://www.npmjs.com/advisories/1300
+  - https://www.npmjs.com/advisories/1184 (#931)
+- Structure pattern: Escape special characters when filtering
+  [frapell] (#932)
+- pat-querystring: Fix path widget for old dashed UIDs (plone.uuid < 1.0.2)
+  [laulaz] (#939)
+- For the ``i18n-dump`` Grunt task, do not read files in directories except ``mockup`` and ``js``.
+  [thet] (#943)
+- TinyMCE pattern: add a random id to the passed in container_id: there might be more than one TinyMCE active in the DOM. Improves #920 which was a fix for positioning of sub-menus in a modal.
+  [fredvd] (#945)
+- Tinymce pattern: add tests for the tabs in template link.xml
+  [batlock666] (#946)
+- Make toolbar tab-navigable effectively hiding submenus
+  [erral & ionlizarazu] (#950)
+- Add a label to the structure pattern serchbox
+  [erral & ionlizarazu] (#952)
+- Structure pattern: add a title to the root item in the breadcrumb
+  [erral & ionlizarazu] (#955)
+- add a label to the select all checkbox and to each of the items in the table to make the table more accessible
+  [erral & ionlizarazu] (#957)
+- toolbar pattern: improve accessibility of up and down arrows
+  [erral & ionlizarazu] (#959)
+- Reorder items to show popover just after their corresponding button to be able to tab-navigate to them
+  [erral & ionlizarazu] (#963)
+- add missing title and aria-label attributes
+  [erral & ionlizarazu] (#965)
+- Remove text from the pagination listing and fix styling
+  [erral & ionlizarazu] (#967)
+- Close popovers when ESC is pushed
+  [erral & ionlizarazu] (#968)
+- pat-inlinevalidation: Fix bug where drop downs would not get validated
+  [frapell] (#971)
+- Set value for RelativeDateWidget on edit
+  [petschki] (#982)
+- Fix Upload tab in TinyMCE Image showing [object Object].
+  https://github.com/plone/Products.CMFPlone/issues/3120
+  Fix folder contents "Configure display column" dialog going under toolbar.
+  https://github.com/plone/Products.CMFPlone/issues/3124
+  [vincentfretin] (#986)
+- Fix regression with moment date not localized. This closes
+  https://github.com/plone/Products.CMFPlone/issues/2953
+  [vincentfretin] (#987)
+
+
 3.1.1 (2019-11-25)
 ------------------
 

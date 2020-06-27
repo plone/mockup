@@ -1,3 +1,0 @@
-Fix regression with moment date not localized. This closes
-https://github.com/plone/Products.CMFPlone/issues/2953
-[vincentfretin]
