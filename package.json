@@ -8,6 +8,10 @@
     "node": ">=8.12.0",
     "yarn": "^1.3.2"
   },
+  "resolutions": {
+    "backbone.paginator/backbone": "https://github.com/jashkenas/backbone.git#1.1.2",
+    "underscore": "1.9.1"
+  },
   "dependencies": {
     "ace-builds": "https://github.com/ajaxorg/ace-builds.git#v1.2.6",
     "backbone": "https://github.com/jashkenas/backbone.git#1.1.2",
