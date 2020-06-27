@@ -2729,16 +2729,10 @@ istanbul@^0.4.0:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-jqtree@>=0.16:
-  version "1.4.12"
-  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.4.12.tgz#f93e366e46b68b893d3e4eb43ea53f73bb7e502e"
-  integrity sha512-zNdnVFFNWAmPbtVFZaAhIjhFVoYpRF/NWeVGU1THRdefjKhXFwLeVILW1R4Frr/qiGg4TTbXWAxk7V7E+Wu3ZQ==
-  dependencies:
-    jquery ">=1.9"
-
-"jqtree@https://github.com/mbraak/jqTree.git#1.4.10":
+jqtree@1.4.10, jqtree@>=0.16:
   version "1.4.10"
-  resolved "https://github.com/mbraak/jqTree.git#8e656e2a93ffa5d47e862d89853dc7544cb3a13c"
+  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.4.10.tgz#ef3a348773f820e0844f05e9cd905da989ea1f4d"
+  integrity sha512-SKefhiz4tPW8jal608GVcX2FgYKa1RC8b3bpOp6xd2Br26UeuunaNCZABWk9QGzKDMoZyNwbfVf9N3xDVjy5XQ==
   dependencies:
     jquery ">=1.9"
 
