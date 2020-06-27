@@ -11,7 +11,9 @@
   "resolutions": {
     "backbone.paginator/backbone": "https://github.com/jashkenas/backbone.git#1.1.2",
     "underscore": "1.9.1",
-    "jquery": "1.12.4"
+    "jquery": "1.12.4",
+    "datatables.net": "https://github.com/DataTables/Dist-DataTables.git#1.10.16",
+    "datatables.net-bs": "https://github.com/DataTables/Dist-DataTables-Bootstrap.git#1.10.16"
   },
   "dependencies": {
     "ace-builds": "https://github.com/ajaxorg/ace-builds.git#v1.2.6",

@@ -952,15 +952,7 @@ datatables.net-autofill@2.2.2, "datatables.net-autofill@https://github.com/DataT
     datatables.net "^1.10.15"
     jquery ">=1.7"
 
-datatables.net-bs@^1.10.15:
-  version "1.10.21"
-  resolved "https://registry.yarnpkg.com/datatables.net-bs/-/datatables.net-bs-1.10.21.tgz#c80e655033787512423ad78a45e8164f25417dc5"
-  integrity sha512-4mpesFXNEkLlQET3IDLclLz95Xit4Kp/jHcOM2X0nc/ijDfO3qJk3ehZ+NSEAkXZDge6ZtY5Zxq2O90ISiIjwQ==
-  dependencies:
-    datatables.net "1.10.21"
-    jquery ">=1.7"
-
-"datatables.net-bs@https://github.com/DataTables/Dist-DataTables-Bootstrap.git#1.10.16":
+datatables.net-bs@^1.10.15, "datatables.net-bs@https://github.com/DataTables/Dist-DataTables-Bootstrap.git#1.10.16":
   version "1.10.16"
   resolved "https://github.com/DataTables/Dist-DataTables-Bootstrap.git#f52ec6fb22ed55e455f1ffed1d2a3f2ea7df7bc1"
   dependencies:
@@ -1102,16 +1094,9 @@ datatables.net-select@1.2.3, "datatables.net-select@https://github.com/DataTable
     datatables.net "^1.10.15"
     jquery ">=1.7"
 
-datatables.net@1.10.16, "datatables.net@https://github.com/DataTables/Dist-DataTables.git#1.10.16":
+datatables.net@1.10.16, datatables.net@^1.10.15, "datatables.net@https://github.com/DataTables/Dist-DataTables.git#1.10.16":
   version "1.10.16"
   resolved "https://github.com/DataTables/Dist-DataTables.git#795d3f39b73da5bc3656c8ef5425931a55e6ed2e"
-  dependencies:
-    jquery ">=1.7"
-
-datatables.net@1.10.21, datatables.net@^1.10.15:
-  version "1.10.21"
-  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.21.tgz#f1d35c8e5c3eb7f5caef39e80cd5b836a8c77103"
-  integrity sha512-/bSZtxmf3GTpYcvEmwZ8q26I1yhSx8qklR2B+s1K8+/51UW/zc2zTYwJMqr/Z+iCYixAc00ildj4g2x0Qamolw==
   dependencies:
     jquery ">=1.7"
 
