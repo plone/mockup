@@ -469,7 +469,7 @@ define([
       }
       // check if the personal toolbar is not offseted if there isn't enough space
       // and we already have the plone-toolbar-more-options added to the page.
-      if ($pers_bar_container[0].offsetTop !== 0) {
+      if ($pers_bar_container[0] && $pers_bar_container[0].offsetTop !== 0) {
         that.cloneViewsIntoSubset(
           $pers_bar_container,
           $content_views,
