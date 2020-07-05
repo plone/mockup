@@ -33,7 +33,7 @@ define([
         this.$el.attr('aria-label', this.options.title || this.options.tooltip || '');
         _.each(this.extraClasses, function(klass) {
           this.$el.addClass(klass);
-        });
+        }.bind(this));
       }, this);
     },
     handleClick: function(e) {
