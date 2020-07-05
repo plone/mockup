@@ -1,0 +1,3 @@
+Fix regression for disabled state of action buttons in folder contents
+This fixes https://github.com/plone/Products.CMFPlone/issues/2296
+[vincentfretin]
