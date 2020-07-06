@@ -75,6 +75,7 @@ define([
         'path',
         'portal_type',
         'review_state',
+        'translated_review_state',
         'Subject',
         'Title',
         'total_comments',
@@ -85,7 +86,7 @@ define([
       _default_activeColumns: [
         'ModificationDate',
         'EffectiveDate',
-        'review_state'
+        'translated_review_state'
       ],
 
       availableColumns: null,
@@ -95,7 +96,7 @@ define([
         'EffectiveDate': 'Published',
         'ExpirationDate': 'Expiration',
         'CreationDate': 'Created',
-        'review_state': 'Review state',
+        'translated_review_state': 'Review state',
         'Subject': 'Tags',
         'portal_type': 'Type',
         'is_folderish': 'Folder',
