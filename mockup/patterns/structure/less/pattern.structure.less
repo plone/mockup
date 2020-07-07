@@ -133,11 +133,15 @@
                 padding-top: 2px;
             }
         }
+        .plone-item-hidden,
         .plone-item-expired,
         .plone-item-ineffective {
           .badge();
           font-size: 12px;
           color: white;
+        }
+        .plone-item-hidden {
+          background-color: #808080;
         }
         .plone-item-expired {
           background-color: @plone-toolbar-private-color;
