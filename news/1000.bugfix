@@ -1,0 +1,4 @@
+Fix filename overlapping the remove button in the Upload dialog.
+This fixes https://github.com/plone/Products.CMFPlone/issues/2533 and
+https://github.com/plone/plonetheme.barceloneta/issues/204
+[vincentfretin]

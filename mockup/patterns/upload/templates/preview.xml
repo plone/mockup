@@ -1,5 +1,5 @@
 <div class="row item form-inline">
-    <div class="col-md-1 action">
+    <div class="col-xs-2 action">
         <button
             type="button"
             class="btn btn-danger btn-xs remove-item"
@@ -8,7 +8,7 @@
             <span class="glyphicon glyphicon-remove"></span>
         </button>
     </div>
-    <div class="col-md-8 title">
+    <div class="col-xs-7 title">
         <div class="dz-preview">
           <div class="dz-details">
             <div class="dz-filename"><span data-dz-name></span></div>
@@ -19,7 +19,7 @@
             <span class="dz-upload" data-dz-uploadprogress></span>
         </div>
     </div>
-    <div class="col-md-3 info">
+    <div class="col-xs-3 info">
         <div class="dz-size" data-dz-size></div>
         <img data-dz-thumbnail />
     </div>
