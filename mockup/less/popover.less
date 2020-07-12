@@ -12,6 +12,23 @@
     &.active {
         display: block;
     }
+    // Offset the popover to account for the popover arrow
+    &.bottom-right { margin-top: @popover-arrow-width; }
+    &.bottom-right > .arrow {
+        top: -@popover-arrow-outer-width;
+        left: 20px;
+        margin-left: -@popover-arrow-outer-width;
+        border-top-width: 0;
+        border-bottom-color: @popover-arrow-outer-fallback-color; // IE8 fallback
+        border-bottom-color: @popover-arrow-outer-color;
+        &:after {
+          top: 1px;
+          margin-left: -@popover-arrow-width;
+          content: " ";
+          border-top-width: 0;
+          border-bottom-color: @popover-arrow-color;
+        }
+    }
 }
 .backdrop-popover {
     background-color: #fff;

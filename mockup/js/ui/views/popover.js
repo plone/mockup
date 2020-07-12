@@ -137,6 +137,9 @@ define([
       actualHeight = $tip[0].offsetHeight;
 
       switch (placement) {
+        case 'bottom-right':
+          tp = {top: pos.top + pos.height, left: pos.left + pos.width - 40};
+          break;
         case 'bottom':
           tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
           break;
@@ -192,7 +195,8 @@ define([
 
         this.positionArrow(delta - width + actualWidth, actualWidth, 'left');
 
-      } else {
+      } else if (placement !== 'bottom-right') {
+        // If placement is bottom-right, don't override left position for the arrow that is defined in css to 20px.
         this.positionArrow(actualHeight - height, actualHeight, 'top');
       }
 

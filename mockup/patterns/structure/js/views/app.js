@@ -367,7 +367,8 @@ define([
       self.columnsView = new ColumnsView({
         app: self,
         triggerView: columnsBtn,
-        id: 'structure-columns'
+        id: 'structure-columns',
+        placement: 'bottom-right'
       });
       items.push(columnsBtn);
 
