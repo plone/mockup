@@ -1,0 +1,4 @@
+In mockup 3.2.0, the fix for 'folder contents "Configure display columns" dialog going under toolbar'
+introduced regression for Plone toolbar submenu and portal tabs subtrees.
+Revert the previous fix and use a new popover placement mode "bottom-right" for the "Configure display columns" popover.
+[vincentfretin]
