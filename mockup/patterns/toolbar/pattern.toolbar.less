@@ -358,10 +358,16 @@
         }
 
         &.plonetoolbar-display-view.actionSeparator {
-            margin: 0;
+          margin: 0;
+          > :before {
+            content: '';
+          }
+          > span {
+            padding: 5px 15px;
+          }
         }
 
-        &:not(.plone-toolbar-submenu-header, .plonetoolbar-display-view.actionSeparator) {
+        &:not(.plone-toolbar-submenu-header) {
           > :before {
             position: absolute;
             left: 15px;
