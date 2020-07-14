@@ -1,0 +1,3 @@
+Fix toolbar menus missing checkmark on some browsers
+This fixes https://github.com/plone/Products.CMFPlone/issues/1972
+[vincentfretin]
