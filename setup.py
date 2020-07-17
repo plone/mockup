@@ -13,7 +13,6 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
-        "Framework :: Plone :: 5.1",
         "Framework :: Plone :: 5.2",
         "Framework :: Plone :: Core",
         "License :: OSI Approved :: BSD License",
