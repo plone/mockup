@@ -1,2 +1,0 @@
-Fix some internationalization issues in structure pattern (folder_contents view): "Open", "Edit" and "Actions" tooltips are translated; all actions under "Actions" are translated; In filter menu the "No sorting" option of the sorting dropdown is translated.
-[erral]

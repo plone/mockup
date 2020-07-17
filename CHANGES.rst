@@ -8,6 +8,36 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.1 (2020-07-17)
+------------------
+
+Bug fixes:
+
+
+- Fix CSS issue on "Pattern options" tab in Resource Registries (padding-top of the tab content).
+  This fixes https://github.com/plone/Products.CMFPlone/issues/1111
+  [vincentfretin] (#990)
+- Fix some internationalization issues in structure pattern (folder_contents view): "Open", "Edit" and "Actions" tooltips are translated; all actions under "Actions" are translated; In filter menu the "No sorting" option of the sorting dropdown is translated.
+  [erral] (#991)
+- Fix regression for the disabled state of action buttons in folder contents
+  and the Tools/Build CSS button in thememapper.
+  This fixes https://github.com/plone/Products.CMFPlone/issues/2296
+  [vincentfretin] (#996)
+- Fix internationalization of "Filter" placeholder in selected items dialog.
+  [vincentfretin] (#997)
+- Fix filename overlapping the remove button in the Upload dialog.
+  This fixes https://github.com/plone/Products.CMFPlone/issues/2533 and
+  https://github.com/plone/plonetheme.barceloneta/issues/204
+  [vincentfretin] (#1000)
+- In mockup 3.2.0, the fix for 'folder contents "Configure display columns" dialog going under toolbar'
+  introduced regression for Plone toolbar submenu and portal tabs subtrees.
+  Revert the previous fix and use a new popover placement mode "bottom-right" for the "Configure display columns" popover.
+  [vincentfretin] (#1002)
+- Fix toolbar menus missing checkmark on some browsers
+  This fixes https://github.com/plone/Products.CMFPlone/issues/1972
+  [vincentfretin] (#1003)
+
+
 3.2.0 (2020-06-28)
 ------------------
 
