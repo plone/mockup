@@ -108,7 +108,7 @@ define(['underscore', 'translate'], function(_, _t) {
       delete result['move-top'];
       delete result['move-bottom'];
     }
-    if (model.is_folderish || !app.setDefaultPageUrl) {
+    if (app.defaultPageTypes.indexOf(model.portal_type) == -1 || !app.setDefaultPageUrl) {
       delete result['set-default-page'];
     }
 
