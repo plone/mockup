@@ -828,7 +828,7 @@ define([
           $('[id$="sort_on"]', existingSortOn).val($(this).val());
         });
 
-      self.$sortOn.append($('<option value="">No sorting</option>')); // default no sorting
+      self.$sortOn.append($('<option value="">' + _t('No sorting') + '</option>')); // default no sorting
       for (var key in self.options['sortable_indexes']) { // jshint ignore:line
         self.$sortOn.append(
           $('<option/>')

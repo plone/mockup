@@ -1,0 +1,3 @@
+Fix CSS issue on "Pattern options" tab in Resource Registries (padding-top of the tab content).
+This fixes https://github.com/plone/Products.CMFPlone/issues/1111
+[vincentfretin]
