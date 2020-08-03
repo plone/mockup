@@ -119,6 +119,14 @@ define([
           'Blob': '/view'
       },
 
+      defaultPageTypes: null,
+      _default_defaultPageTypes: [
+          'Document',
+          'Event',
+          'News Item',
+          'Collection'
+      ],
+
       collectionConstructor:
         'mockup-patterns-structure-url/js/collections/result',
 
@@ -187,7 +195,7 @@ define([
         May want to consider moving the _default_* values out of the
         options object.
       */
-      var replaceDefaults = ['attributes', 'activeColumns', 'availableColumns', 'buttons', 'typeToViewAction'];
+      var replaceDefaults = ['attributes', 'activeColumns', 'availableColumns', 'buttons', 'typeToViewAction', 'defaultPageTypes'];
       _.each(replaceDefaults, function(idx) {
         if (self.options[idx] === null) {
           self.options[idx] = self.options['_default_' + idx];

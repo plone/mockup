@@ -1,0 +1,2 @@
+Respect default_page_types in actionmenu if folder_contents. Fixes https://github.com/plone/Products.CMFPlone/issues/2700
+[pbauer]
