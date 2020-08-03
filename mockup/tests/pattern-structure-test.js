@@ -135,6 +135,12 @@ define([
 
         'activeColumns': [],
         'availableColumns': [],
+        'defaultPageTypes': [
+          'Document',
+          'Event',
+          'News Item',
+          'Collection'
+        ],
         'indexOptionsUrl': '',
         'setDefaultPageUrl': '',
         'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
@@ -530,6 +536,12 @@ define([
         'activeColumns': [],
         'availableColumns': [],
         'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
+        'defaultPageTypes': [
+          'Document',
+          'Event',
+          'News Item',
+          'Collection'
+        ],
         'typeToViewAction': {
           'File': '/view',
           'Image': '/view',
