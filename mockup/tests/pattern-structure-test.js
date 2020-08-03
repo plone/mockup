@@ -833,6 +833,12 @@ define([
         "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
         "contextInfoUrl": "{path}/contextInfo",
         "setDefaultPageUrl": "/setDefaultPage",
+        "defaultPageTypes": [
+          "Document",
+          "Event",
+          "News Item",
+          "Collection"
+        ],
         "urlStructure": {
           "base": "http://localhost:9876",
           "appended": "/folder_contents"
@@ -883,7 +889,7 @@ define([
             UID: '123sdfasdf' + path + i,
             getURL: 'http://localhost:9876' + path + '/item' + i,
             path: path + '/item' + i,
-            portal_type: 'Document ' + i,
+            portal_type: 'Document',
             Description: 'document',
             Title: 'Document ' + i,
             'review_state': 'published',
@@ -1235,6 +1241,7 @@ define([
       // cannot select all
       expect($('a.selectAll', item).length).to.equal(0);
       // can set default page
+      expect($('a.set-default-page', item).length).to.equal(1);
       expect($('a.set-default-page', item).text().trim()).to.equal(
         'Set as default page');
       $('a.set-default-page', item).click();

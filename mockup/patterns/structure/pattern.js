@@ -124,7 +124,7 @@ define([
           'Document',
           'Event',
           'News Item',
-          'Collection',
+          'Collection'
       ],
 
       collectionConstructor:
