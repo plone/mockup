@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.2 (2020-08-14)
+------------------
+
+Bug fixes:
+
+
+- Respect default_page_types in actionmenu if folder_contents. Fixes https://github.com/plone/Products.CMFPlone/issues/2700
+  [pbauer] (#1005)
+- Put back content type icons in the Add new... menu. This fixes https://github.com/plone/Products.CMFPlone/issues/3163
+  [vincentfretin] (#1009)
+
+
 3.2.1 (2020-07-17)
 ------------------
 
