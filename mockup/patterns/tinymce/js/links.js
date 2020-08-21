@@ -475,7 +475,7 @@ define([
         anchorLabel: this.options.text.anchorLabel,
         target: this.options.text.target,
         linkTypes: this.options.linkTypes,
-        externalText: this.options.text.external,
+        externalText: this.options.text.externalText,
         emailText: this.options.text.email,
         subjectText: this.options.text.subject,
         targetList: this.options.targetList,
