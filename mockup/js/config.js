@@ -147,7 +147,12 @@
       'pat-mockup-parser': 'node_modules/patternslib/src/core/mockup-parser',
       'pat-registry': 'node_modules/patternslib/src/core/registry',
       'pat-utils': 'node_modules/patternslib/src/core/utils',
-      'logging': 'node_modules/logging/src/logging'
+      'logging': 'node_modules/logging/src/logging',
+
+      // Docs
+      'JSXTransformer': 'node_modules/react/JSXTransformer',
+      'marked': 'node_modules/marked/lib/marked',
+      'react': 'node_modules/react/react',
     },
     shim: {
       'backbone': { exports: 'window.Backbone', deps: ['underscore', 'jquery'] },
@@ -185,7 +190,10 @@
       },
       'jquery.tools.dateinput': { deps: ['jquery'] },
       'jquery.tools.overlay': { deps: ['jquery'] },
-      'jquery.tmpl': { deps: ['jquery'] }
+      'jquery.tmpl': { deps: ['jquery'] },
+
+      // Docs
+      'JSXTransformer': { exports: 'window.JSXTransformer' },
     },
     wrapShim: true
   };
