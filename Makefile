@@ -55,6 +55,8 @@ bootstrap-common:
 
 bootstrap: bootstrap-common
 	NODE_PATH=$(NODE_PATH) yarn install
+	# needed for building docs, otherwise expect/support/mocha.css links are broken
+	cd mockup/node_modules/expect; test -x node_modules || ln -s ../../node_modules .
 
 bootstrap-nix: clean bootstrap-common
 	nix-build default.nix -A build -o nixenv
