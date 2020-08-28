@@ -12,7 +12,7 @@
     "backbone": "https://github.com/jashkenas/backbone.git#1.1.2",
     "underscore": "1.9.1",
     "jqtree": "1.4.10",
-    "jquery": "1.12.4",
+    "jquery": "3.5.0",
     "datatables.net": "https://github.com/DataTables/Dist-DataTables.git#1.10.16",
     "datatables.net-bs": "https://github.com/DataTables/Dist-DataTables-Bootstrap.git#1.10.16"
   },
@@ -46,7 +46,7 @@
     "datatables.net-select-bs": "https://github.com/DataTables/Dist-DataTables-Select-Bootstrap.git#1.2.3",
     "dropzone": "https://github.com/enyo/dropzone.git#v4.3.0",
     "jqtree": "1.4.10",
-    "jquery": "1.12.4",
+    "jquery": "3.5.0",
     "jquery-form": "https://github.com/jquery-form/form.git#4.2.2",
     "jquery.browser": "https://github.com/gabceb/jquery-browser-plugin.git#v0.1.0",
     "jquery.cookie": "https://github.com/carhartl/jquery-cookie.git#v1.4.1",
