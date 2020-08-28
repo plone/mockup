@@ -1,6 +1,7 @@
 define([
   'pat-registry',
-  'mockup-patterns-filemanager'
+  'mockup-patterns-filemanager',
+  'jqtree-contextmenu'
 ], function(registry) {
   'use strict';
   // initialize only if we are in top frame

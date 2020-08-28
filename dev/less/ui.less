@@ -1,12 +1,13 @@
 /* ui helper less rules */
 @import "@{mockuplessPath}/base.less";
+@import "@{mockupPath}/tooltip/pattern.tooltip.less";
 
 /* loading icon animation */
 .plone-loader{
   display:none;
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: ~"calc(50% - 2.5em)";
 
   div {
     margin: -6em auto;

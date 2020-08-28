@@ -51,7 +51,11 @@ define([
       var self = this;
       var data = {};
       _.each(self.$el.find('form').serializeArray(), function(param) {
-        data[param.name] = param.value;
+        if (param.name in data) {
+            data[param.name] += ',' + param.value;
+        } else {
+            data[param.name] = param.value;
+        }
       });
 
       self.app.buttonClickEvent(this.triggerView, data);
@@ -62,8 +66,9 @@ define([
       if (self.options.form.dataUrl) {
         self.$('.popover-content').html(_t('Loading...'));
         self.app.loading.show();
+        var url = self.app.getAjaxUrl(self.options.form.dataUrl);
         $.ajax({
-          url: self.options.form.dataUrl,
+          url: url,
           dataType: 'json',
           type: 'POST',
           cache: false,

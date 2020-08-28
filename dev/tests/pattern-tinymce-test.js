@@ -143,6 +143,11 @@ define([
 
       var $el = $container.find('textarea');
       var tinymce = new TinyMCE($el);
+      // TODO: This needs to be properly addressed. Manually setting tinymce
+      //       as initialized is not correct, but it will have to do for now
+      //       https://github.com/plone/mockup/pull/832#issuecomment-369113718
+      tinymce.tiny.initialized = true;
+
       tinymce.tiny.setContent('<p>foobar</p>');
       $container.submit(function(e) {
         e.preventDefault();
@@ -296,7 +301,7 @@ define([
       $('#' + $('#tinylink-uploadImage').data().navref).click();
       expect($('#tinylink-uploadImage').parent().hasClass('active')).to.equal(true);
       var blob;
-      try{
+      try {
         blob = new Blob(['dummy data'],  {type: 'image/png'});
       } catch (err) {
         var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
@@ -311,6 +316,83 @@ define([
 
       expect($('#tinylink-image').parent().hasClass('active')).to.equal(true);
       expect(pattern.imageModal.getLinkUrl()).to.equal('/blah.png/imagescale/large');
+    });
+    it('test add image with custom scale', function() {
+      var pattern = createTinymce({
+        prependToUrl: 'resolveuid/',
+        linkAttribute: 'UID',
+        prependToScalePart: '/@@images/image/',
+        imageScales: '[{"title": "Custom Scale", "value": "customscale"}]'
+      });
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.linkType = 'image';
+      expect(pattern.imageModal.$scale.html().indexOf('Custom Scale')).to.be.greaterThan(-1);
+      pattern.imageModal.$scale.find('[value="customscale"]')[0].selected = true;
+      expect(pattern.imageModal.getLinkUrl()).to.equal('resolveuid/foobar/@@images/image/customscale');
+    });
+    it('test add image with and without caption', function() {
+      var pattern = createTinymce({
+        prependToUrl: 'resolveuid/',
+        linkAttribute: 'UID',
+        prependToScalePart: '/@@images/image/'
+      });
+
+      // Add an image caption.
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.$caption.val('hello.');
+      pattern.imageModal.$button.click();
+      var content = pattern.tiny.getContent();
+
+      expect(content).to.contain('<figure><img');
+      expect(content).to.contain('<figcaption>hello.</figcaption>');
+      expect(content).to.contain('image-richtext');// new image-richtext class.
+
+      // Remove the image caption. The <img> isn't wrapped then in a <figure> tag.
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.$caption.val('');
+      pattern.imageModal.$button.click();
+      content = pattern.tiny.getContent();
+
+      expect(content).to.not.contain('<figure>');
+      expect(content).to.not.contain('<figcaption>');
+      expect(content).to.contain('<img');
+      expect(content).to.contain('image-richtext'); // new image-richtext class.
+
+      // Use image captions from the image description.
+      pattern.addImageClicked();
+      pattern.imageModal.linkTypes.image.getEl().select2('data', {
+        UID: 'foobar',
+        portal_type: 'Document',
+        Title: 'Foobar',
+        path: '/foobar'
+      });
+      pattern.imageModal.$captionFromDescription.prop('checked', true);
+      pattern.imageModal.$button.click();
+      content = pattern.tiny.getContent();
+
+      expect(content).to.not.contain('<figure>');
+      expect(content).to.not.contain('<figcaption>');
+      expect(content).to.contain('<img');
+      expect(content).to.contain('image-richtext'); // new image-richtext class.
+      expect(content).to.contain('captioned'); // new image-richtext class.
     });
 
     it('test adds data attributes', function() {
@@ -374,6 +456,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('external');
+      }, 100);
     });
 
     it('test loads existing link email values', function() {
@@ -385,6 +471,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.email.getEl().val()).to.equal('foo@bar.com');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('email');
+      }, 100);
     });
 
     it('test anchor link adds existing anchors to list', function() {
@@ -395,6 +485,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('anchor');
+      }, 100);
     });
 
     it('test anchor link adds anchors from option', function() {
@@ -447,6 +541,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('external');
+      }, 100);
     });
 
     it('test guess anchor when no data- attribute present', function() {
@@ -458,6 +556,10 @@ define([
       pattern.addLinkClicked();
 
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#foobar');
+      setTimeout(function() {
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('anchor');
+      }, 100);
     });
 
     it('test inline tinyMCE roundtrip', function() {
@@ -483,6 +585,10 @@ define([
       var changed_txt = 'changed contents';
       $editable.html(changed_txt);
       var $form = $container.find('form');
+      // Avoid error when running tests: "Some of your tests did a full page reload!"
+      $container.submit(function(e) {
+        e.preventDefault();
+      });
       $container.trigger('submit');
       expect($el.val()).to.be.equal(changed_txt);
       tinymce.get(0).remove();

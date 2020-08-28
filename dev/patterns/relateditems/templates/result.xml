@@ -1,0 +1,41 @@
+<div class="pattern-relateditems-result <%- oneLevelUp ? 'one-level-up' : '' %>">
+  <div class="pattern-relateditems-result-browse-wrapper">
+  <% if (!oneLevelUp) { %>
+    <a
+      class="pattern-relateditems-result-select<%- selectable ? ' selectable' : '' %><%- oneLevelUp ? ' one-level-up' : '' %>"
+      data-path="<%- path %>">
+  <% } %>
+      <div class="pattern-relateditems-result-info">
+        <span
+          class="pattern-relateditems-result-title <%- portal_type ? 'contenttype-' + portal_type.toLowerCase() : '' %> <%- review_state ? 'state-' + review_state : '' %>"
+          title="<%- portal_type %>">
+          <%- Title %>
+        </span>
+        <span class="pattern-relateditems-result-path"><%- oneLevelUp ? currentPath : path %></span>
+      </div>
+      <% if (is_folderish) { %>
+        <a
+          class="pattern-relateditems-result-browse"
+          data-path="<%- path %>"
+          title="<%- oneLevelUp ? one_level_up : open_folder %>">
+          <span class="<%- oneLevelUp ? 'icon-left-circle' : 'icon-right-circle' %>"></span>
+        </a>
+      <% } %>
+  <% if (!oneLevelUp) { %>
+    </a>
+  <% } %>
+  </div>
+  <% if (getURL && (getIcon || portal_type === "Image")) { %>
+    <% if (!oneLevelUp) { %>
+    <a
+      class="pattern-relateditems-result-select<%- selectable ? ' selectable' : '' %><%- oneLevelUp ? ' one-level-up' : '' %>"
+      data-path="<%- path %>">
+    <% } %>
+    <div class="pattern-relateditems-result-image">
+      <img src="<%- getURL %>/@@images/image/thumb" />
+    </div>
+    <% if (!oneLevelUp) { %>
+    </a>
+    <% } %>
+  <% } %>
+</div>

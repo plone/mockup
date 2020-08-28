@@ -26,7 +26,6 @@
  *
  */
 
-
 define([
   'jquery',
   'pat-base',
@@ -40,13 +39,19 @@ define([
   'mockup-patterns-thememapper-url/js/cacheview',
   'mockup-ui-url/views/button',
   'mockup-ui-url/views/buttongroup',
+  'mockup-ui-url/views/anchor',
+  'mockup-ui-url/views/dropdown',
   'mockup-utils'
-], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView, LessBuilderView, CacheView, ButtonView, ButtonGroup, utils) {
+], function($, Base, _, _t, InspectorTemplate, FileManager, RuleBuilder, RuleBuilderView,
+            LessBuilderView, CacheView, ButtonView, ButtonGroup,
+            AnchorView, DropdownView, utils) {
   'use strict';
 
   var inspectorTemplate = _.template(InspectorTemplate);
 
   var Inspector = Base.extend({
+    name: 'thememapper-inspector',
+    trigger: '.pat-thememapper-inspector-dummy',
     defaults: {
       name: 'name',
       ruleBuilder: null,
@@ -227,7 +232,7 @@ define([
       var originalBg = self.$frameInfo.css('background-color');
 
       if (!originalBg || originalBg === highlightBg){
-          originalBg = '#FFFFFF'; // default to white
+        originalBg = '#FFFFFF'; // default to white
       }
 
       self.$frameInfo
@@ -245,7 +250,7 @@ define([
       }
 
       self.animateSelector(self.$el.find('.frame-info'));
-      self.$el.find('.selector-info').text(node == null? "" : self.ruleBuilder.bestSelector(node));
+      self.$el.find('.selector-info').text(node == null? '': self.ruleBuilder.bestSelector(node));
 
       if(self.ruleBuilder.active) {
         self.ruleBuilder.select(node);
@@ -255,7 +260,7 @@ define([
     },
     onselect: function(highlighter, node) {
       var self = this;
-      self.$currentSelector.text(node == null? "" : self.ruleBuilder.bestSelector(node));
+      self.$currentSelector.text(node == null? '': self.ruleBuilder.bestSelector(node));
     }
   });
 
@@ -307,7 +312,6 @@ define([
       self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(self.$inspectorContainer);
 
       // initialize patterns now
-      self.editable = (self.options.editable == "True") ? true : false;
       self.lessUrl = (self.options.lessUrl !== undefined ) ? self.options.lessUrl : false;
       self.lessVariableUrl = (self.options.lessVariables !== undefined ) ? self.options.lessVariables : false;
 
@@ -319,11 +323,13 @@ define([
       self.fileManager = new FileManager(self.$fileManager, self.options.filemanagerConfig);
       self.fileManager.setUploadUrl();
 
+      self.btns = {};
+      self.menus = {};
       self.setupButtons();
 
       self.ruleBuilder = new RuleBuilder(self, self.ruleBuilderCallback);
 
-      self.fileManager.on("fileChange", function() {
+      self.fileManager.on('fileChange', function() {
         var node = self.fileManager.getSelectedNode();
         self.setLessPaths(node);
       });
@@ -339,19 +345,17 @@ define([
         ruleBuilder: self.ruleBuilder,
         url: self.options.unthemedUrl,
       });
-      self.fileManager.$tree.bind('tree.click', function(e){
-      });
-      self.buildLessButton.disable();
+      self.btns.buildLessButton.disable();
 
-      if( !self.editable ) {
-        if( self.fileManager.toolbar ) {
+      if(!self.options.editable) {
+        if(self.fileManager.toolbar) {
           var items = self.fileManager.toolbar.items;
           $(items).each(function() {
             this.disable();
           });
           self.lessbuilderView.triggerView.disable();
         }
-      };
+      }
 
       // initially, let's hide the panels
       self.hideInspectors();
@@ -366,42 +370,42 @@ define([
           path: 'manifest.cfg'
         },
         success: function(data) { this.setDefaultPaths(data); }.bind(self)
-      })
+      });
     },
     setSavePath: function() {
-        var self = this;
-        var filename = self.lessbuilderView.$filename.val()
+      var self = this;
+      var filename = self.lessbuilderView.$filename.val();
 
-        if( filename == "" ) {
-            filename = self.lessbuilderView.$filename.attr('placeholder');
-        }
+      if(filename === '') {
+        filename = self.lessbuilderView.$filename.attr('placeholder');
+      }
 
-        var s = self.lessPaths['save'];
-        var folder = s.substr(0, s.lastIndexOf('/'));
+      var s = self.lessPaths['save'];
+      var folder = s.substr(0, s.lastIndexOf('/'));
 
-        var savePath = folder + '/' + filename;
-        self.lessPaths['save'] = savePath;
+      var savePath = folder + '/' + filename;
+      self.lessPaths['save'] = savePath;
     },
     setLessPaths: function(node) {
       var self = this;
 
-      if( node.fileType == "less" ){
-        self.buildLessButton.enable();
+      if(node.fileType === 'less'){
+        self.btns.buildLessButton.enable();
       }
-      else{
-        self.buildLessButton.disable();
+      else {
+        self.btns.buildLessButton.disable();
       }
 
-      if( node.path != "" ) {
-        var reg = new RegExp("/(.*\\.)less$", "m");
+      if (node.path !== '') {
+        var reg = new RegExp('/(.*\\.)less$', 'm');
         var path = reg.exec(node.path);
 
         if( path === null ) {
           self.lessPaths = {};
           return false;
         }
-        var lessPath = path[1] + "less";
-        var cssPath = path[1] + "css";
+        var lessPath = path[1] + 'less';
+        var cssPath = path[1] + 'css';
 
         //file paths should be in the form of:
         // "[directory/]filename.less"
@@ -419,8 +423,8 @@ define([
     },
     setDefaultPaths: function(manifest) {
       var self = this;
-      var dev = new RegExp("development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
-      var prod = new RegExp("production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
+      var dev = new RegExp('development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)');
+      var prod = new RegExp('production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)');
 
       var devUrl = dev.exec(manifest.contents)[1];
       var prodUrl = prod.exec(manifest.contents)[1];
@@ -432,7 +436,7 @@ define([
     saveThemeCSS: function(styles) {
       var self = this.env;
 
-      if( styles === "" || styles === undefined ) {
+      if(styles === '' || styles === undefined) {
         //There was probably a problem during compilation
         return false;
       }
@@ -448,17 +452,17 @@ define([
           _authenticator: utils.getAuthenticator()
         },
         success: function(data) {
-          if(data.success == 'tmp') {
+          if (data.success === 'tmp') {
             self.fileManager.fileData['_generated_.css'] = {
               contents: data.value,
               ext: 'css'
-            }
+            };
             self.fileManager.openEditor('_generated_.css');
           } else {
             self.fileManager.refreshTree(function() {
               //We need to make sure we open the newest version
-              delete self.fileManager.fileData['/' + self.lessPaths['save']]
-              self.fileManager.selectItem(self.lessPaths['save'])
+              delete self.fileManager.fileData['/' + self.lessPaths['save']];
+              self.fileManager.selectItem(self.lessPaths['save']);
             });
           }
           self.lessbuilderView.end();
@@ -473,8 +477,8 @@ define([
       var $parent = self.$mockupInspector.parent();
       $parent.slideDown();
       self.hidden = false;
-      self.showInspectorsButton.options.title = 'Hide inspectors';
-      self.showInspectorsButton.applyTemplate();
+      self.btns.showInspectorsButton.options.title = 'Hide inspectors';
+      self.btns.showInspectorsButton.applyTemplate();
       $('html, body').animate({
         scrollTop: $parent.offset().top - 50
       }, 500);
@@ -484,19 +488,19 @@ define([
       var $parent = self.$mockupInspector.parent();
       $parent.slideUp();
       self.hidden = true;
-      self.showInspectorsButton.options.title = 'Show inspectors';
-      self.showInspectorsButton.applyTemplate();
+      self.btns.showInspectorsButton.options.title = 'Show inspectors';
+      self.btns.showInspectorsButton.applyTemplate();
     },
     setupButtons: function(){
       var self = this;
-      self.showInspectorsButton = new ButtonView({
+      self.btns.showInspectorsButton = new ButtonView({
         id: 'showinspectors',
         title: _t('Show inspectors'),
         icon: 'search',
         tooltip: _t('Show inspector panels'),
         context: 'default'
       });
-      self.showInspectorsButton.on('button:click', function(){
+      self.btns.showInspectorsButton.on('button:click', function(){
         if (self.hidden) {
           self.showInspectors();
         } else {
@@ -504,23 +508,23 @@ define([
         }
       });
 
-      self.buildRuleButton = new ButtonView({
+      self.btns.buildRuleButton = new AnchorView({
         id: 'buildrule',
         title: _t('Build rule'),
         icon: 'wrench',
         tooltip: _t('rule building wizard'),
         context: 'default'
       });
-      self.fullscreenButton = new ButtonView({
+      self.btns.fullscreenButton = new ButtonView({
         id: 'fullscreenEditor',
         title: _t('Fullscreen'),
         icon: 'fullscreen',
         tooltip: _t('view the editor in fullscreen'),
         context: 'default'
       });
-      self.fullscreenButton.on('button:click', function() {
+      self.btns.fullscreenButton.on('button:click', function() {
         var btn = $('<a href="#">'+
-            '<span class="btn btn-danger closeeditor">' + _t("Close Fullscreen") + '</span>'+
+            '<span class="btn btn-danger closeeditor">' + _t('Close Fullscreen') + '</span>'+
             '</a>').prependTo($('.tree'));
 
         $(btn).click(function() {
@@ -540,62 +544,75 @@ define([
       self.previewThemeButton.on('button:click', function(){
         window.open(self.options.previewUrl);
       });
-      self.buildLessButton = new ButtonView({
+      self.btns.buildLessButton = new AnchorView({
         id: 'buildless',
         title: _t('Build CSS'),
         icon: 'cog',
         tooltip: _t('Compile LESS file'),
         context: 'default'
       });
-      self.refreshButton = new ButtonView({
+      self.btns.refreshButton = new ButtonView({
         id: 'refreshButton ',
         title: _t('Refresh'),
         icon: 'refresh',
         tooltip: _t('Reload the current file'),
         context: 'default'
       });
-      self.refreshButton.on("button:click", function() {
+      self.btns.refreshButton.on('button:click', function() {
         self.fileManager.refreshFile();
       });
-      self.cacheButton = new ButtonView({
+      self.btns.cacheButton = new ButtonView({
         id: 'cachebutton',
         title: _t('Clear cache'),
         icon: 'floppy-remove',
         tooltip: _t('Clear site\'s theme cache'),
         context: 'default'
       });
-      self.helpButton = new ButtonView({
+      self.btns.helpButton = new ButtonView({
         id: 'helpbutton',
         title: _t('Help'),
         icon: 'question-sign',
         tooltip: _t('Show help'),
         context: 'default'
       });
-      self.helpButton.on('button:click', function(){
+      self.btns.helpButton.on('button:click', function(){
         window.open(self.options.helpUrl);
       });
       self.rulebuilderView = new RuleBuilderView({
-        triggerView: self.buildRuleButton,
+        triggerView: self.btns.buildRuleButton,
         app: self
       });
       self.cacheView = new CacheView({
-        triggerView: self.cacheButton,
-        app: self
-      })
-      self.lessbuilderView = new LessBuilderView({
-        triggerView: self.buildLessButton,
+        triggerView: self.btns.cacheButton,
         app: self
       });
+      self.lessbuilderView = new LessBuilderView({
+        triggerView: self.btns.buildLessButton,
+        app: self
+      });
+
+
+      self.menus.tools = new DropdownView({
+        title: _t('Tools'),
+        items: [
+          self.btns.buildRuleButton,
+          self.btns.buildLessButton,
+        ],
+        id: 'file_menu',
+        app: self,
+        icon: 'file',
+        disable: function() {}
+      });
+
       self.buttonGroup = new ButtonGroup({
         items: [
-          self.showInspectorsButton,
-          self.buildRuleButton,
+          self.menus.tools,
+          self.btns.showInspectorsButton,
           self.previewThemeButton,
-          self.fullscreenButton,
-          self.buildLessButton,
-          self.refreshButton,
-          self.cacheButton,
-          self.helpButton
+          self.btns.fullscreenButton,
+          self.btns.refreshButton,
+          self.btns.cacheButton,
+          self.btns.helpButton
         ],
         id: 'mapper'
       });

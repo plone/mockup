@@ -145,6 +145,46 @@ define([
       expect($results.first().text()).to.be.equal('AAA');
     });
 
+    it('remove html input', function() {
+      $('<input type="hidden" class="pat-select2"' +
+        '    data-pat-select2="placeholder:Search for a Value;' +
+        '                     vocabularyUrl: /select2-ajax.json;' +
+        '                     width:20em" />'
+      ).appendTo('body');
+      var pattern = $('.pat-select2').patternSelect2();
+
+      var $input = $('.select2-input');
+      $input.click().val('<img src="logo.png" />Evil logo');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      this.clock.tick(1000);
+
+      var $results = $('li.select2-result-selectable');
+      expect($results.size()).to.equal(4);
+      expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
+      expect($results.first().text()).to.be.equal('Evil logo');
+    });
+
+    it('do not html-escape input', function() {
+      $('<input type="hidden" class="pat-select2"' +
+        '    data-pat-select2="placeholder:Search for a Value;' +
+        '                     vocabularyUrl: /select2-ajax.json;' +
+        '                     width:20em" />'
+      ).appendTo('body');
+      var pattern = $('.pat-select2').patternSelect2();
+
+      var $input = $('.select2-input');
+      $input.click().val('this < that & those');
+      var keyup = $.Event('keyup-change');
+      $input.trigger(keyup);
+      this.clock.tick(1000);
+
+      var $results = $('li.select2-result-selectable');
+      expect($results.size()).to.equal(4);
+      expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
+      expect($results.first().text()).to.be.equal('this < that & those');
+    });
+
     it('sets up orderable tags', function() {
       var $el = $(
         '<div>' +
@@ -259,7 +299,7 @@ define([
       registry.scan($el);
       expect($('#test-select2', $el).is('input')).to.equal(true);
       expect($('#test-select2', $el).attr('type')).to.equal('hidden');
-      expect($('#test-select2', $el).attr('class')).to.equal('pat-select2 select2-offscreen');
+      expect($('#test-select2', $el).hasClass('pat-select2')).to.equal(true);
       expect($('#test-select2', $el).attr('name')).to.equal('test-name');
       expect($('#test-select2', $el).val()).to.equal('1;3');
       var $results = $('li.select2-search-choice', $el);

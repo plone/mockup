@@ -1,9 +1,24 @@
-@import (less) "@{bowerPath}/tinymce-builded/js/tinymce/skins/lightgray/skin.less";
-@import (less) "@{bowerPath}/tinymce-builded/js/tinymce/skins/lightgray/Content.Objects.less";
-@import (inline) "@{bowerPath}/tinymce-builded/js/tinymce/plugins/visualblocks/css/visualblocks.css";
+@import (inline) "@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/skin.min.css";
+@import (inline) "@{bowerPath}tinymce-builded/js/tinymce/plugins/visualblocks/css/visualblocks.css";
 @import "@{mockupPath}/modal/pattern.modal.less";
 @import "@{mockupPath}/autotoc/pattern.autotoc.less";
 @import "@{mockupPath}/upload/less/pattern.upload.less";
+
+@font-face{
+  font-family:'tinymce';
+  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.eot');
+  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.eot?#iefix') format('embedded-opentype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.woff') format('woff'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.ttf') format('truetype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.svg#tinymce') format('svg');
+  font-weight:normal;
+  font-style:normal
+}
+
+@font-face{
+  font-family:'tinymce-small';
+  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.eot');
+  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.eot?#iefix') format('embedded-opentype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.woff') format('woff'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.ttf') format('truetype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.svg#tinymce') format('svg');
+  font-weight:normal;
+  font-style:normal
+}
 
 div.linkModal {
     .pattern-relateditems-container{
@@ -93,11 +108,6 @@ div.linkModal {
         top: 0;
         left: 0;
     }
-}
-
-.pattern-relateditems-result-image img{
-    max-height: 30px;
-    max-width: 80px;
 }
 
 .mce-item-table td {

@@ -62,10 +62,10 @@ define([
 
       var $modal = self.$el.parents('.plone-modal');
       if ($modal.size() !== 0) {
-        $modal.data('pattern-modal').on('hide', function(e) {
-          var modal = $modal.data('pattern-modal');
+        $modal.data('patternPloneModal').on('hide', function(e) {
+          var modal = $modal.data('patternPloneModal');
           if (modal) {
-            modal._suppressHide = self._handleUnload.apply(self, e);
+            modal._suppressHide = self._handleUnload.call(self, e);
           }
         });
       } else {

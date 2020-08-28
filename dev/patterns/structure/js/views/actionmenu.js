@@ -23,7 +23,6 @@ define([
     menuOptions: null,
     // Dynamic menu options
     menuGenerator: 'mockup-patterns-structure-url/js/actionmenu',
-    needsRescan: false,
 
     eventConstructor: function(definition) {
       var self = this;
@@ -60,11 +59,14 @@ define([
               menuOptionsCategorized[category] = [];
           }
           menuOptionsCategorized[category].push(menuOption);
-          if (menuOption.modal || menuOption.category === 'button') {
-            self.needsRescan = true;
+          menuOption.css = menuOption.css || '';
+          if (menuOption.modal === true) {
+            // add standard pat-plone-modal.
+            // If you want another modal implementation, don't use modal=true but set the css option on action items.
+            menuOption.css += ' pat-plone-modal';
           }
 
-		      // Create event handler and add it to the results object.
+          // Create event handler and add it to the results object.
           var e = self.eventConstructor(menuOption);
           if (e) {
             result['click a.' + idx] = e;
@@ -103,7 +105,6 @@ define([
       var data = this.model.toJSON();
       data.header = self.options.header || null;
       data.menuOptions = self.menuOptionsCategorized;
-
       self.$el.html(self.template($.extend({
         _t: _t,
         id: utils.generateId()
@@ -118,9 +119,7 @@ define([
         self.$el.addClass(self.options.className);
       }
 
-      if (this.needsRescan) {
-        registry.scan(this.$el);
-      }
+      registry.scan(this.$el);
 
       return this;
     }

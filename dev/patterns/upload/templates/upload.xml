@@ -1,7 +1,7 @@
 <div class="upload-container upload-multiple">
     <h2 class="title"><%- _t("Upload here") %></h2>
     <p class="help">
-        <%- _t('Drag and drop files from your computer onto the area below or click the "Browse" button.') %>
+        <%- _t('Drag and drop files from your computer onto the area below or click the Browse button.') %>
     </p>
     <div class="upload-area">
         <div class="fallback">
@@ -13,14 +13,14 @@
                 <input
                     id="fakeUploadFile"
                     placeholder="<%- _t("Choose File") %>"
-                    disabled="disabled"
+                    disabled
                     />
             </div>
             <div class="col-md-3">
                 <button
                     type="button"
                     class="btn btn-primary browse">
-                    Browse
+                    <%- _t("Browse") %>
                 </button>
             </div>
         </div>
@@ -28,6 +28,7 @@
             <div class="previews">
             </div>
             <div class="controls">
+                <% if (allowPathSelection) { %>
                 <div class="path">
                     <label><%- _t("Upload to...") %></label>
                     <p class="form-help">
@@ -38,6 +39,7 @@
                         name="location"
                         />
                 </div>
+                <% } %>
                 <div class="actions row">
                     <div class="col-md-9">
                         <div class="progress progress-striped active">

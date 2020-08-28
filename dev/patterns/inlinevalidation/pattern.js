@@ -40,6 +40,23 @@ define([
        }
     },
 
+    render_error_bootstrap: function ($field, errmsg) {
+        var $input = $('input', $field), $errbox = $('.invalid-feedback', $field);
+        if (errmsg !== '') {
+            $input.addClass('is-invalid');
+            if($errbox.length) {
+                $errbox.html(errmsg);
+            } else {
+                $('<div class="invalid-feedback">' + errmsg + '</div>').insertAfter($input);
+            }
+        } else {
+            $input.removeClass('is-invalid');
+            if($errbox.length) {
+                $errbox.remove();
+            }
+        }
+    },
+
     append_url_path: function (url, extra) {
         // Add '/extra' on to the end of the URL, respecting querystring
         var i, ret, urlParts = url.split(/\?/);
@@ -50,6 +67,14 @@ define([
             ret += '?' + urlParts[i];
         }
         return ret;
+    },
+
+    queue: function (queueName, callback) {
+        if (typeof callback === 'undefined') {
+          callback = queueName;
+          queueName = 'fx';  // 'fx' autoexecutes by default
+        }
+        $(window).queue(queueName, callback);
     },
 
     validate_archetypes_field: function (input) {
@@ -70,9 +95,19 @@ define([
         var traditional;
         var params = $.param({uid: uid, fname: fname, value: value}, traditional = true);
         if ($field && uid && fname) {
-            $.post($('base').attr('href') + '/at_validate_field', params, function (data) {
-                this.render_error($field, data.errmsg);
-            });
+            this.queue($.proxy(function(next) {
+                $.ajax({
+                    type: 'POST',
+                    url: $('base').attr('href') + '/at_validate_field?' + params,
+                    iframe: false,
+                    success: $.proxy(function (data) {
+                      this.render_error($field, data.errmsg);
+                      next();
+                    }, this),
+                    error: function () { next(); },
+                    dataType: 'json'
+                });
+            }, this));
         }
     },
 
@@ -80,36 +115,60 @@ define([
         var $input = $(input),
             $field = $input.closest('.field'),
             $form = $field.closest('form'),
+            $cloned_form = $form.clone(),
             fname = $field.attr('data-fieldname');
 
-        $form.ajaxSubmit({
-            url: this.append_url_path($form.attr('action'), '@@formlib_validate_field'),
-            data: {fname: fname},
-            iframe: false,
-            success: $.proxy(function (data) {
-                this.render_error($field, data.errmsg);
-            }, this),
-            dataType: 'json'
-        });
+        // XXX: Remove binary files so they are not uploaded to server
+        $cloned_form.find("input[type=file]").remove();
+        this.queue($.proxy(function(next) {
+            $cloned_form.ajaxSubmit({
+                url: this.append_url_path($cloned_form.attr('action'), '@@formlib_validate_field'),
+                data: {fname: fname},
+                iframe: false,
+                success: $.proxy(function (data) {
+                    this.render_error($field, data.errmsg);
+                    next();
+                }, this),
+                error: function () { next(); },
+                dataType: 'json'
+            });
+        }, this));
     },
 
     validate_z3cform_field: function (input) {
         var $input = $(input),
             $field = $input.closest('.field'),
             $form = $field.closest('form'),
+            $cloned_form = $form.clone(),
             fset = $input.closest('fieldset').attr('data-fieldset'),
             fname = $field.attr('data-fieldname');
 
+        // XXX: When cloning a form, values from 'select' elements are not kept
+        //      so we copy them from the original form here.
+        $.each( $("select", $form), function ( k, v ) {
+          $('select[name="'+v.name+'"]', $cloned_form).val($(v).val());
+        } );
+
+        // XXX: Remove binary files so they are not uploaded to server
+        $cloned_form.find("input[type=file]").remove();
         if (fname) {
-            $form.ajaxSubmit({
-                url: this.append_url_path($form.attr('action'), '@@z3cform_validate_field'),
-                data: {fname: fname, fset: fset},
-                iframe: false,
-                success: $.proxy(function (data) {
-                    this.render_error($field, data.errmsg);
-                }, this),
-                dataType: 'json'
-            });
+          this.queue($.proxy(function(next) {
+              $cloned_form.ajaxSubmit({
+                  url: this.append_url_path($cloned_form.attr('action'), '@@z3cform_validate_field'),
+                  data: {fname: fname, fset: fset},
+                  iframe: false,
+                  success: $.proxy(function (data) {
+                      if($field.hasClass('form-group')) {
+                          this.render_error_bootstrap($field, data.errmsg);
+                      } else {
+                          this.render_error($field, data.errmsg);
+                      }
+                      next();
+                  }, this),
+                  error: function () { next(); },
+                  dataType: 'json'
+              });
+          }, this));
         }
     },
 
@@ -120,7 +179,7 @@ define([
           'input[type="password"], ' +
           'input[type="checkbox"], ' +
           'select, ' +
-          'textarea').on('blur', 
+          'textarea').on('blur',
 
           $.proxy(function (ev) {
             if (this.options.type === 'archetypes') {

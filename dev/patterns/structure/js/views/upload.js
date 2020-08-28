@@ -17,7 +17,7 @@ define([
       self.app = options.app;
       PopoverView.prototype.initialize.apply(self, [options]);
       self.currentPathData = null;
-      self.app.on('context-info-loaded', function(data) {
+      $('body').on('context-info-loaded', function(event, data) {
         self.currentPathData = data;
       });
     },
@@ -29,10 +29,8 @@ define([
       options.success = function() {
         self.app.collection.pager();
       };
-      options.relatedItems = {
-        vocabularyUrl: self.app.options.vocabularyUrl
-      };
       options.currentPath = self.app.getCurrentPath();
+      options.allowPathSelection = false;
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), options);
       return this;
     },
@@ -45,13 +43,7 @@ define([
         return;
       }
       var currentPath = self.app.getCurrentPath();
-      var relatedItems = self.upload.relatedItems;
-      if (self.currentPathData && relatedItems && currentPath !== self.upload.currentPath){
-        if (currentPath === '/'){
-          relatedItems.$el.select2('data', []);
-        } else {
-          relatedItems.$el.select2('data', [self.currentPathData.object]);
-        }
+      if (self.currentPathData && currentPath !== self.upload.currentPath){
         self.upload.setPath(currentPath);
       }
     }

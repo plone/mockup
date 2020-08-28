@@ -33,7 +33,7 @@ define([
       var self = this;
       var $input = self.$('input');
       var filename = $input.val();
-      if (filename){
+      if (filename) {
         self.app.doAction('renameFile', {
           type: 'POST',
           data: {
@@ -44,20 +44,19 @@ define([
             self.hide();
             self.data = data;
             self.app.refreshTree(function() {
-              if( self.data.newParent != "/" ) {
-                var path = [self.data.newParent, self.data.newName].join('/');
-                var oldPath = [self.data.oldParent, self.data.oldName].join('/');
-              }
-              else {
-                var path = '/' + self.data.newName;
-                var oldPath = '/' + self.data.oldName
+              var path;
+              var oldPath;
+              if (self.data.newParent != '/') {
+                path = [self.data.newParent, self.data.newName].join('/');
+                oldPath = [self.data.oldParent, self.data.oldName].join('/');
+              } else {
+                path = '/' + self.data.newName;
+                oldPath = '/' + self.data.oldName;
               }
 
-              if( self.app.fileData[path] !== undefined ) {
-                self.app.refreshFile(path)
-              }
-              else {
-                var node = self.app.getNodeByPath(path);
+              if (self.app.fileData[path] !== undefined) {
+                self.app.refreshFile(path);
+              } else {
                 self.app.selectItem(path);
               }
 

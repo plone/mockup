@@ -1,0 +1,31 @@
+{
+    "name": "datatables.net-rowreorder",
+    "version": "1.2.3",
+    "description": "RowReorder for DataTables ",
+    "files": [
+        "js/**/*.js"
+    ],
+    "main": "./js/dataTables.rowReorder.js",
+    "keywords": [
+        "row reordering",
+        "DataTables",
+        "jQuery",
+        "table",
+        "DataTables"
+    ],
+    "homepage": "https://datatables.net",
+    "bugs": "https://datatables.net/forums",
+    "license": "MIT",
+    "author": {
+        "name": "SpryMedia Ltd",
+        "url": "http://datatables.net"
+    },
+    "dependencies": {
+        "jquery": ">=1.7",
+        "datatables.net": "^1.10.15"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DataTables/Dist-DataTables-RowReorder.git"
+    }
+}

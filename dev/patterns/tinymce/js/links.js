@@ -14,6 +14,8 @@ define([
   'use strict';
 
   var LinkType = Base.extend({
+    name: 'linktype',
+    trigger: '.pat-linktype-dummy',
     defaults: {
       linkModal: null // required
     },
@@ -55,6 +57,8 @@ define([
   });
 
   var ExternalLink = LinkType.extend({
+    name: 'externallinktype',
+    trigger: '.pat-externallinktype-dummy',
     init: function() {
       LinkType.prototype.init.call(this);
       this.getEl().on('change', function(){
@@ -73,6 +77,8 @@ define([
   });
 
   var InternalLink = LinkType.extend({
+    name: 'internallinktype',
+    trigger: '.pat-internallinktype-dummy',
     init: function() {
       LinkType.prototype.init.call(this);
       this.getEl().addClass('pat-relateditems');
@@ -84,8 +90,9 @@ define([
     },
 
     createRelatedItems: function() {
-      this.relatedItems = new RelatedItems(this.getEl(),
-        this.linkModal.options.relatedItems);
+      var options = this.linkModal.options.relatedItems;
+      options.upload = false;  // ensure that related items upload is off.
+      this.relatedItems = new RelatedItems(this.getEl(), options);
     },
 
     value: function() {
@@ -133,6 +140,8 @@ define([
   });
 
   var UploadLink = LinkType.extend({
+    name: 'uploadlinktype',
+    trigger: '.pat-uploadlinktype-dummy',
     /* need to do it a bit differently here.
        when a user uploads and tries to upload from
        it, you need to delegate to the real insert
@@ -162,6 +171,8 @@ define([
   });
 
   var ImageLink = InternalLink.extend({
+    name: 'imagelinktype',
+    trigger: '.pat-imagelinktype-dummy',
     toUrl: function() {
       var value = this.value();
       return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
@@ -169,6 +180,8 @@ define([
   });
 
   var EmailLink = LinkType.extend({
+    name: 'emaillinktype',
+    trigger: '.pat-emaillinktype-dummy',
     toUrl: function() {
       var self = this;
       var val = self.value();
@@ -200,6 +213,8 @@ define([
   });
 
   var AnchorLink = LinkType.extend({
+    name: 'anchorlinktype',
+    trigger: '.pat-anchorlinktype-dummy',
     init: function() {
       LinkType.prototype.init.call(this);
       this.$select = this.$el.find('select');
@@ -223,7 +238,7 @@ define([
       self.anchorData = [];
       var node, i, j, name, title;
 
-      var nodes = self.tiny.dom.select('a.mceItemAnchor,img.mceItemAnchor,a.mce-item-anchor,img.mce-item-anchor');
+      var nodes = self.tiny.dom.select('.mceItemAnchor,.mce-item-anchor');
       for (i = 0; i < nodes.length; i = i + 1) {
         node = nodes[i];
         name = self.tiny.dom.getAttrib(node, 'name');
@@ -332,7 +347,7 @@ define([
 
     editor.addButton('unlink', {
       icon: 'unlink',
-      tooltip: 'Remove link(s)',
+      tooltip: 'Remove link',
       cmd: 'unlink',
       stateSelector: 'a[href]'
     });
@@ -409,38 +424,6 @@ define([
       self.dom = self.tiny.dom;
       self.linkType = self.options.initialLinkType;
       self.linkTypes = {};
-
-      self.data = {};
-      // get selection BEFORE..
-      // This is pulled from TinyMCE link plugin
-      self.initialText = null;
-      var value;
-      self.rng = self.tiny.selection.getRng();
-      self.selectedElm = self.tiny.selection.getNode();
-      self.anchorElm = self.tiny.dom.getParent(self.selectedElm, 'a[href]');
-      self.onlyText = self.isOnlyTextSelected();
-
-      self.data.text = self.initialText = self.anchorElm ? (self.anchorElm.innerText || self.anchorElm.textContent) : self.tiny.selection.getContent({format: 'text'});
-      self.data.href = self.anchorElm ? self.tiny.dom.getAttrib(self.anchorElm, 'href') : '';
-
-      if (self.anchorElm) {
-        self.data.target = self.tiny.dom.getAttrib(self.anchorElm, 'target');
-      } else if (self.tiny.settings.default_link_target) {
-        self.data.target = self.tiny.settings.default_link_target;
-      }
-
-      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'rel'))) {
-        self.data.rel = value;
-      }
-
-      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'class'))) {
-        self.data['class'] = value;
-      }
-
-      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'title'))) {
-        self.data.title = value;
-      }
-
       self.modal = registry.patterns['plone-modal'].init(self.$el, {
         html: self.generateModalHtml(),
         content: null,
@@ -483,17 +466,29 @@ define([
         upload: this.options.upload,
         text: this.options.text,
         insertHeading: this.options.text.insertHeading,
+        insertImageHelp: this.options.text.insertImageHelp,
+        uploadText: this.options.text.upload,
+        insertLinkHelp: this.options.text.insertLinkHelp,
+        internal: this.options.text.internal,
+        external: this.options.text.external,
+        anchor: this.options.text.anchor,
+        anchorLabel: this.options.text.anchorLabel,
+        target: this.options.text.target,
         linkTypes: this.options.linkTypes,
-        externalText: this.options.text.external,
+        externalText: this.options.text.externalText,
         emailText: this.options.text.email,
         subjectText: this.options.text.subject,
         targetList: this.options.targetList,
         titleText: this.options.text.title,
-        externalImageText: this.options.text.externalImage,
+        internalImageText: this.options.text.internalImage,
+        externalImage: this.options.text.externalImage,
+        externalImageText: this.options.text.externalImageText,
         altText: this.options.text.alt,
         imageAlignText: this.options.text.imageAlign,
+        captionFromDescriptionText: this.options.text.captionFromDescription,
+        captionText: this.options.text.caption,
         scaleText: this.options.text.scale,
-        scales: this.options.scales,
+        imageScales: this.options.imageScales,
         cancelBtn: this.options.text.cancelBtn,
         insertBtn: this.options.text.insertBtn
       });
@@ -513,6 +508,8 @@ define([
       self.$alt = $('input[name="alt"]', self.modal.$modal);
       self.$align = $('select[name="align"]', self.modal.$modal);
       self.$scale = $('select[name="scale"]', self.modal.$modal);
+      self.$captionFromDescription = $('input[name="captionFromDescription"]', self.modal.$modal);
+      self.$caption = $('textarea[name="caption"]', self.modal.$modal);
 
       /* load up all the link types */
       _.each(self.options.linkTypes, function(type) {
@@ -532,6 +529,15 @@ define([
           }
         });
       });
+
+      self.$captionFromDescription.change(function () {
+        if (this.checked) {
+          self.$caption.prop('disabled', true);
+        } else {
+          self.$caption.prop('disabled', false);
+        }
+      });
+
     },
 
     getLinkUrl: function() {
@@ -591,17 +597,23 @@ define([
     updateImage: function(src) {
       var self = this;
       var title = self.$title.val();
+      var captionFromDescription = self.$captionFromDescription.prop('checked')
 
       self.tiny.focus();
       self.tiny.selection.setRng(self.rng);
+
+      var cssclasses = ['image-richtext', self.$align.val()];
+      if (captionFromDescription) {
+        cssclasses.push('captioned');
+      }
 
       var data = $.extend(true, {}, {
         src: src,
         title: title ? title : null,
         alt: self.$alt.val(),
-        'class': 'image-' + self.$align.val(),
+        'class': cssclasses.join(' '),
         'data-linkType': self.linkType,
-        'data-scale': self.$scale.val()
+        'data-scale': self.$scale.val(),
       }, self.linkTypes[self.linkType].attributes());
       if (self.imgElm && !self.imgElm.getAttribute('data-mce-object')) {
         data.width = self.dom.getAttrib(self.imgElm, 'width');
@@ -617,14 +629,30 @@ define([
         };
       }
 
-      if (!self.imgElm) {
-        data.id = '__mcenew';
-        self.tiny.insertContent(self.dom.createHTML('img', data));
-        self.imgElm = self.dom.get('__mcenew');
-        self.dom.setAttrib(self.imgElm, 'id', null);
-      } else {
-        self.dom.setAttribs(self.imgElm, data);
+      if (self.imgElm) {
+        self.dom.remove(self.imgElm);
       }
+      if (self.captionElm) {
+        self.dom.remove(self.captionElm);
+      }
+      if (self.figureElm) {
+        self.dom.remove(self.figureElm);
+      }
+
+      data.id = '__mcenew';
+      var html_inner = self.dom.createHTML('img', data);
+      var caption = self.$caption.val();
+      var html_string;
+      if (caption && ! captionFromDescription) {
+        html_inner += '\n' + self.dom.createHTML('figcaption', {}, caption);
+        //html_inner += '\n' + self.dom.createHTML('figcaption', { class: 'mceNonEditable' }, caption);
+        html_string = self.dom.createHTML('figure', {}, html_inner);
+      } else {
+        html_string = html_inner;
+      }
+      self.tiny.insertContent(html_string);
+      self.imgElm = self.dom.get('__mcenew');
+      self.dom.setAttrib(self.imgElm, 'id', null);
 
       waitLoad(self.imgElm);
       if (self.imgElm.complete) {
@@ -712,53 +740,103 @@ define([
 
     initData: function() {
       var self = this;
-      self.selection = self.tiny.selection;
-      self.tiny.focus();
-      var selectedElm = self.imgElm = self.selection.getNode();
-      self.anchorElm = self.dom.getParent(selectedElm, 'a[href]');
 
-      var linkType;
+      self.data = {};
+      // get selection BEFORE..
+      // This is pulled from TinyMCE link plugin
+      self.initialText = null;
+      var value;
+      self.rng = self.tiny.selection.getRng();
+      self.selectedElm = self.tiny.selection.getNode();
+      self.anchorElm = self.tiny.dom.getParent(self.selectedElm, 'a[href]');
+      self.onlyText = self.isOnlyTextSelected();
+
+      self.data.text = self.initialText = self.anchorElm ? (self.anchorElm.innerText || self.anchorElm.textContent) : self.tiny.selection.getContent({format: 'text'});
+      self.data.href = self.anchorElm ? self.tiny.dom.getAttrib(self.anchorElm, 'href') : '';
+
+      if (self.anchorElm) {
+        self.data.target = self.tiny.dom.getAttrib(self.anchorElm, 'target');
+      } else if (self.tiny.settings.default_link_target) {
+        self.data.target = self.tiny.settings.default_link_target;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'rel'))) {
+        self.data.rel = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'class'))) {
+        self.data['class'] = value;
+      }
+
+      if ((value = self.tiny.dom.getAttrib(self.anchorElm, 'title'))) {
+        self.data.title = value;
+      }
+
+      self.tiny.focus();
+      self.anchorElm = self.dom.getParent(self.selectedElm, 'a[href]');
+
+      var linkType
       if (self.isImageMode()) {
-        if (self.imgElm.nodeName !== 'IMG') {
-          // try finding elsewhere
-          if (self.anchorElm) {
-            var imgs = self.anchorElm.getElementsByTagName('img');
-            if (imgs.length > 0) {
-              self.imgElm = imgs[0];
-              self.focusElement(self.imgElm);
-            }
-          }
+
+        var figure;
+        var img;
+        var caption;
+        if (self.selectedElm.nodeName === 'FIGURE') {
+          figure = self.selectedElm;
+          img = figure.querySelector('img');
+          caption = figure.querySelector('figcaption');
+        } else if (self.selectedElm.nodeName === 'IMG') {
+          figure = $(self.selectedElm).closest('figure');
+          figure = figure.length ? figure[0] : undefined;
+          img = self.selectedElm;
+          caption = figure ? figure.querySelector('figcaption') : undefined;
+        } else if (self.selectedElm.nodeName === 'FIGCAPTION') {
+          figure = $(self.selectedElm).closest('figure');
+          figure = figure.length ? figure[0] : undefined;
+          img = figure ? figure.querySelector('img') : undefined;
+          caption = self.selectedElm;
         }
-        if (self.imgElm.nodeName !== 'IMG') {
-          // okay, still no image, unset
-          self.imgElm = null;
-        }
+
+        self.imgElm = img;
+        self.figureElm = figure;
+        self.captionElm = caption;
+
         if (self.imgElm) {
           var src = self.dom.getAttrib(self.imgElm, 'src');
           self.$title.val(self.dom.getAttrib(self.imgElm, 'title'));
           self.$alt.val(self.dom.getAttrib(self.imgElm, 'alt'));
+
+          if ($(self.imgElm).hasClass('captioned')) {
+            self.$captionFromDescription.prop('checked', true);
+            self.$caption.prop('disabled', true);
+          }
+          if (self.captionElm) {
+            self.$caption.val(self.captionElm.innerHTML);
+          }
+
           linkType = self.dom.getAttrib(self.imgElm, 'data-linktype');
           if (linkType) {
             self.linkType = linkType;
             self.linkTypes[self.linkType].load(self.imgElm);
             var scale = self.dom.getAttrib(self.imgElm, 'data-scale');
-            if(scale){
-              self.$scale.val(scale);
-            }
+            self.$scale.val(scale);
             $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
-          }else if (src) {
+          } else if (src) {
             self.guessImageLink(src);
           }
           var className = self.dom.getAttrib(self.imgElm, 'class');
           var klasses = className.split(' ');
           for (var i = 0; i < klasses.length; i = i + 1) {
             var klass = klasses[i];
-            if (klass.indexOf('image-') !== -1) {
-              self.$align.val(klass.replace('image-', ''));
+            for (var availClass in self.options.imageClasses) {
+              if (availClass.indexOf(klass) !== -1) {
+                self.$align.val(klass);
+              }
             }
           }
         }
-      }else if (self.anchorElm) {
+
+      } else if (self.anchorElm) {
         self.focusElement(self.anchorElm);
         var href = '';
         href = self.dom.getAttrib(self.anchorElm, 'href');
@@ -768,7 +846,11 @@ define([
         if (linkType) {
           self.linkType = linkType;
           self.linkTypes[self.linkType].load(self.anchorElm);
-          $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
+          var $panel = $('#tinylink-' + self.linkType, self.modal.$modal);
+          // $('#tinylink-' + self.linkType, self.modal.$modal).trigger('click');
+          if ($panel.length === 1) {
+            $('#'+$panel.data('autotoc-trigger-id')).trigger('click');
+          }
         }else if (href) {
           self.guessAnchorLink(href);
         }

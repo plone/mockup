@@ -1,32 +1,28 @@
 @import "mixins.less";
 
 @import "@{bowerPath}/bootstrap/less/variables.less";
-@icon-font-path: "../dev/bower_components/bootstrap/dist/fonts/";
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
 @import "@{bowerPath}/bootstrap/less/bootstrap.less";
-@icon-font-path: "../dev/bower_components/bootstrap/dist/fonts/";
-@mockuplessPath: '../less/';
+@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
 
-
-@import "../patterns/autotoc/pattern.autotoc.less";
-@import "../patterns/markspeciallinks/pattern.markspeciallinks.less";
-@import "../patterns/modal/pattern.modal.less";
-@import "../patterns/pickadate/pattern.pickadate.less";
-@import "../patterns/querystring/pattern.querystring.less";
-@import "../patterns/relateditems/pattern.relateditems.less";
-@import "../patterns/select2/pattern.select2.less";
-@import "../patterns/structure/less/pattern.structure.less";
-@import "../patterns/tinymce/less/pattern.tinymce.less";
-@import "../patterns/tooltip/pattern.tooltip.less";
-@import "../patterns/tree/pattern.tree.less";
-@import "../patterns/upload/less/pattern.upload.less";
-@import "../patterns/filemanager/pattern.filemanager.less";
-@import "../patterns/thememapper/pattern.thememapper.less";
-@import "../patterns/resourceregistry/pattern.resourceregistry.less";
-@import "../patterns/livesearch/pattern.livesearch.less";
-@import "../patterns/recurrence/pattern.recurrence.less";
-
-@import "@{bowerPath}/bootstrap/less/variables.less";
-@import "@{bowerPath}/bootstrap/less/bootstrap.less";
+@import "@{mockupPath}/autotoc/pattern.autotoc.less";
+@import "@{mockupPath}/datatables/pattern.datatables.less";
+@import "@{mockupPath}/filemanager/pattern.filemanager.less";
+@import "@{mockupPath}/livesearch/pattern.livesearch.less";
+@import "@{mockupPath}/markspeciallinks/pattern.markspeciallinks.less";
+@import "@{mockupPath}/modal/pattern.modal.less";
+@import "@{mockupPath}/pickadate/pattern.pickadate.less";
+@import "@{mockupPath}/querystring/pattern.querystring.less";
+@import "@{mockupPath}/recurrence/pattern.recurrence.less";
+@import "@{mockupPath}/relateditems/pattern.relateditems.less";
+@import "@{mockupPath}/resourceregistry/pattern.resourceregistry.less";
+@import "@{mockupPath}/select2/pattern.select2.less";
+@import "@{mockupPath}/structure/less/pattern.structure.less";
+@import "@{mockupPath}/thememapper/pattern.thememapper.less";
+@import "@{mockupPath}/tinymce/less/pattern.tinymce.less";
+@import "@{mockupPath}/tooltip/pattern.tooltip.less";
+@import "@{mockupPath}/tree/pattern.tree.less";
+@import "@{mockupPath}/upload/less/pattern.upload.less";
 
 @mockupColor1: #0083BE;
 @mockupColor2: #026B99;
@@ -138,7 +134,11 @@ body {
       padding: 0.5em;
       border: 1px solid #CCC;
       display: block;
-      height: 135px;
+      overflow-y: auto;
+
+      h2 {
+        font-size: @font-size-base * 2;
+      }
 
       &:focus {
         outline: none;
@@ -248,7 +248,7 @@ body {
     }
   }
 }
-  
+
 @media (min-width: @screen-sm-min) {
 
   .mockup-header {
@@ -308,7 +308,6 @@ body {
 }
 
 @media (min-width: @screen-md-min) {
-
   .mockup-content .mockup-autotoc {
     ul ul {
       display: block;
@@ -319,8 +318,8 @@ body {
   }
 }
 
-@media (min-width: @screen-lg-min) {
-
-  .mockup-content .mockup-autotoc {
+@media (min-width: @screen-sm-min) {
+  .mockup-content .mockup-patterns .mockup-pattern-tile {
+    height: 160px;
   }
 }

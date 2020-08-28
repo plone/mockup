@@ -1,0 +1,32 @@
+{
+    "name": "datatables.net-scroller-bs",
+    "version": "1.4.3",
+    "description": "Scroller for DataTables with styling for [Bootstrap 3](http://getbootstrap.com/)",
+    "files": [
+        "css/**/*.css"
+    ],
+    "style": "css/scroller.bootstrap.css",
+    "keywords": [
+        "virtual scrolling",
+        "DataTables",
+        "jQuery",
+        "table",
+        "Bootstrap"
+    ],
+    "homepage": "https://datatables.net",
+    "bugs": "https://datatables.net/forums",
+    "license": "MIT",
+    "author": {
+        "name": "SpryMedia Ltd",
+        "url": "http://datatables.net"
+    },
+    "dependencies": {
+        "jquery": ">=1.7",
+        "datatables.net-bs": "^1.10.15",
+        "datatables.net-scroller": "1.4.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DataTables/Dist-DataTables-Scroller-Bootstrap.git"
+    }
+}

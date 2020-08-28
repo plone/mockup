@@ -13,6 +13,9 @@ so with a little effort, it should work!
     $ cd mockup
     $ make bootstrap
 
+A note on yarn: We require the use of yarn, because yarn supports installing the packages in a cursom directory, which npm doesn't.
+Our package directory is located at: ``mockup/node_modules``.
+
 Now you have the complete source code for all Patterns from Mockup.
 From here on you generate bundles of common functionality and minify them.
 
@@ -47,7 +50,7 @@ and then you open index.html with your browser!
 
  * `less/` : Contains all the [Less](http://lesscss.org/) code for all the patterns and bundles
 
- * `lib/` : Contains external libraries not necessarily found in the bower repositories
+ * `lib/` : Contains external libraries not necessarily found in ``mockup/node_modules``.
 
  * `tests/` : Contains all tests for patterns and bundles, including general setup and configuration code
 

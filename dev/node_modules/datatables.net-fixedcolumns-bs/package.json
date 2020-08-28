@@ -1,0 +1,32 @@
+{
+    "name": "datatables.net-fixedcolumns-bs",
+    "version": "3.2.3",
+    "description": "FixedColumns for DataTables with styling for [Bootstrap 3](http://getbootstrap.com/)",
+    "files": [
+        "css/**/*.css"
+    ],
+    "style": "css/fixedColumns.bootstrap.css",
+    "keywords": [
+        "fixed columns",
+        "DataTables",
+        "jQuery",
+        "table",
+        "Bootstrap"
+    ],
+    "homepage": "https://datatables.net",
+    "bugs": "https://datatables.net/forums",
+    "license": "MIT",
+    "author": {
+        "name": "SpryMedia Ltd",
+        "url": "http://datatables.net"
+    },
+    "dependencies": {
+        "jquery": ">=1.7",
+        "datatables.net-bs": "^1.10.15",
+        "datatables.net-fixedcolumns": "3.2.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DataTables/Dist-DataTables-FixedColumns-Bootstrap.git"
+    }
+}

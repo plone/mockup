@@ -41,6 +41,7 @@ define([
     resultsClass: 'livesearch-results',
     defaults: {
       ajaxUrl: null,
+      defaultSortOn: '',
       perPage: 7,
       quietMillis: 350,
       minimumInputLength: 4,
@@ -59,10 +60,31 @@ define([
       if(page === undefined){
         page = 1;
       }
+      var sort_on = function(){
+        var parameters = location.search,
+            sorton_position = parameters.indexOf('sort_on');
+        if(sorton_position === -1){
+          // return default sort
+          var $searchResults = $('#search-results');
+          if($searchResults.length > 0){
+            return $searchResults.attr('data-default-sort');
+          }
+          return self.options.defaultSortOn;
+        }
+        // cut string before sort_on parameter
+        var sort_on = parameters.substring(sorton_position);
+        // cut other parameters
+        sort_on = sort_on.split('&')[0];
+        // get just the value
+        sort_on = sort_on.split('=')[1];
+        return sort_on;
+      }();
+
       $.ajax({
         url: self.options.ajaxUrl + '?' + query +
              '&page=' + page +
-             '&perPage=' + self.options.perPage,
+             '&perPage=' + self.options.perPage +
+             '&sort_on=' + sort_on,
         dataType: 'json'
       }).done(function(data){
         self.results = data;
@@ -198,9 +220,15 @@ define([
           self.render();
         }
       }).attr('autocomplete', 'off').off('keyup').on('keyup', function(e){
-        // first off, we're capturing up, down and enter key presses
+        var code = e.keyCode || e.which;
+        // first off, we're capturing esc presses
+        if(code === 27){
+          self.$input.val('');
+          self.hide();
+          return;
+        }
+        // then, we're capturing up, down and enter key presses
         if(self.results && self.results.items && self.results.items.length > 0){
-          var code = e.keyCode || e.which;
           if(code === 13){
             /* enter key, check to see if there is a selected item */
             if(self.selectedItem !== -1){
@@ -240,6 +268,10 @@ define([
           self.results = null;
           self.render();
         }
+      });
+      $('#sorting-options a').click(function(e){
+        e.preventDefault();
+        self.onceFocused = false;
       });
 
       /* create result dom */

@@ -1,0 +1,6 @@
+@import "settings";
+
+fieldset.focus > .legend,
+label.focus {
+	color: $colour-accent;
+}

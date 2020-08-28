@@ -21,8 +21,8 @@ define([
     deleteButtonClicked: function(e) {
       var self = this;
       var path = self.app.getNodePath();
-      if( path === undefined ) {
-        alert("No file selected.");
+      if (path === undefined) {
+        alert('No file selected.');
         return;
       }
       self.app.doAction('delete', {
@@ -39,8 +39,8 @@ define([
             parent = parent.substr(0, parent.lastIndexOf('/'));
 
             var node = self.app.getNodeByPath(parent);
-            if( node !== null ) {
-                self.app.$tree.tree('openNode', node);
+            if (node !== null) {
+              self.app.$tree.tree('openNode', node);
             }
 
             self.app.closeActiveTab();

@@ -16,6 +16,9 @@
  *    automaticallyAddButtonActions(boolean): Automatically create actions for elements matched with the buttons selector. They will use the options provided in actionOptions. (true)
  *    loadLinksWithinModal(boolean): Automatically load links inside of the modal using AJAX. (true)
  *    actionOptions(object): A hash of selector to options. Where options can include any of the defaults from actionOptions. Allows for the binding of events to elements in the content and provides options for handling ajax requests and displaying them in the modal. ({})
+ *        onSuccess(Function|string): function which is called with parameters (modal, response, state, xhr, form) when form has been successfully submitted. if value is a string, this is the name of a function at window level
+ *        onFormError(Function|string): function which is called with parameters (modal, response, state, xhr, form) when backend has sent an error after form submission. if value is a string, this is the name of a function at window level
+ *        onError(Function|string): function which is called with parameters (xhr, textStatus, errorStatus) when form submission has failed. if value is a string, this is the name of a function at window level
  *
  *
  * Documentation:
@@ -103,11 +106,12 @@ define([
       },
       title: null,
       titleSelector: 'h1:first',
-      buttons: '.formControls > input[type="submit"]',
+      buttons: '.formControls > input[type="submit"], .formControls > button',
       content: '#content',
       automaticallyAddButtonActions: true,
       loadLinksWithinModal: true,
-      prependContent: '.portalMessage',
+      prependContent: '.portalMessage, #global_statusmessage',
+      onRender: null,
       templateOptions: {
         className: 'plone-modal fade',
         classDialog: 'plone-modal-dialog',
@@ -150,7 +154,7 @@ define([
         timeout: 5000,
         displayInModal: true,
         reloadWindowOnClose: true,
-        error: '.portalMessage.error',
+        error: '.portalMessage.error, .alert-danger',
         formFieldError: '.field.error',
         onSuccess: null,
         onError: null,
@@ -271,10 +275,14 @@ define([
               options.onTimeout.apply(self, xhr, errorStatus);
             // on "error", "abort", and "parsererror"
             } else if (options.onError) {
-              options.onError(xhr, textStatus, errorStatus);
+              if (typeof options.onError === 'string') {
+                window[options.onError](xhr, textStatus, errorStatus);
+              } else {
+                  options.onError(xhr, textStatus, errorStatus);
+              }
             } else {
-              window.alert(_t('There was an error submitting the form.'));
-              console.log('error happened do something');
+              // window.alert(_t('There was an error submitting the form.'));
+              console.log('error happened', textStatus, ' do something');
             }
             self.emit('formActionError', [xhr, textStatus, errorStatus]);
           },
@@ -285,7 +293,11 @@ define([
             if ($(options.error, response).size() !== 0 ||
                 $(options.formFieldError, response).size() !== 0) {
               if (options.onFormError) {
-                options.onFormError(self, response, state, xhr, form);
+                if (typeof options.onFormError === 'string') {
+                  window[options.onFormError](self, response, state, xhr, form);
+                } else {
+                  options.onFormError(self, response, state, xhr, form);
+                }
               } else {
                 self.redraw(response, patternOptions);
               }
@@ -302,7 +314,11 @@ define([
             }
 
             if (options.onSuccess) {
-              options.onSuccess(self, response, state, xhr, form);
+              if (typeof options.onSuccess === 'string') {
+                window[options.onSuccess](self, response, state, xhr, form);
+              } else {
+                  options.onSuccess(self, response, state, xhr, form);
+              }
             }
 
             if (options.displayInModal === true) {
@@ -321,6 +337,10 @@ define([
       handleLinkAction: function($action, options, patternOptions) {
         var self = this;
         var url;
+        if ($action.hasClass('pat-plone-modal')) {
+          // if link is a modal pattern, do not reload the page
+          return ;
+        }
 
         // Figure out URL
         if (options.ajaxUrl) {
@@ -335,7 +355,12 @@ define([
 
         // Non-ajax link (I know it says "ajaxUrl" ...)
         if (options.displayInModal === false) {
-          window.parent.location.href = url;
+          if($action.attr('target') === '_blank'){
+            window.open(url, '_blank');
+            self.loading.hide();
+          }else{
+            window.location = url;
+          }
           return;
         }
 
@@ -356,8 +381,13 @@ define([
         }).done(function(response, state, xhr) {
           self.redraw(response, patternOptions);
           if (options.onSuccess) {
-            options.onSuccess(self, response, state, xhr);
+            if (typeof options.onSuccess === 'string') {
+              window[options.onSuccess](self, response, state, xhr);
+            } else {
+                options.onSuccess(self, response, state, xhr);
+            }
           }
+
           self.emit('linkActionSuccess', [response, state, xhr]);
         }).always(function(){
           self.loading.hide();
@@ -488,6 +518,14 @@ define([
         }
         self.$modal.data('pattern-' + self.name, self);
         self.emit('after-render');
+        if (options.onRender) {
+          if (typeof options.onRender === 'string') {
+            window[options.onRender](self);
+          } else {
+              options.onRender(self);
+          }
+        }
+
       }
     },
     reloadWindow: function() {
@@ -540,7 +578,10 @@ define([
             self.options.content = '';
           }
           if (!self.options.ajaxUrl && self.$el.attr('href').substr(0, 1) !== '#') {
-            self.options.ajaxUrl = self.$el.attr('href');
+            self.options.ajaxUrl = function () {
+              // Resolve ``href`` attribute later, when modal is shown.
+              return self.$el.attr('href');
+            };
           }
         }
         self.$el.on('click', function(e) {
@@ -556,8 +597,14 @@ define([
       var self = this;
       self.emit('before-ajax');
       self.loading.show();
+
+      var ajaxUrl = self.options.ajaxUrl;
+      if (typeof ajaxUrl === 'function') {
+        ajaxUrl = ajaxUrl.apply(self, [self.options]);
+      }
+
       self.ajaxXHR = $.ajax({
-        url: self.options.ajaxUrl,
+        url: ajaxUrl,
         type: self.options.ajaxType
       }).done(function(response, textStatus, xhr) {
         self.ajaxXHR = undefined;
@@ -603,8 +650,10 @@ define([
       var self = this;
       self.$wrapper.addClass('image-modal');
       var src = self.$el.attr('href');
+      var srcset = self.$el.attr('data-modal-srcset') || '';
+      var title = $.trim(self.$el.context.innerText) || 'Image';
       // XXX aria?
-      self.$raw = $('<div><h1>Image</h1><div id="content"><div class="modal-image"><img src="' + src + '" /></div></div></div>');
+      self.$raw = $('<div><h1>' + title + '</h1><div id="content"><div class="modal-image"><img src="' + src + '" srcset="' + srcset + '" /></div></div></div>');
       self._show();
     },
 
@@ -829,9 +878,6 @@ define([
       self.$modal.addClass(self.options.templateOptions.classActiveName);
       registry.scan(self.$modal);
       self.positionModal();
-      $('img', self.$modal).load(function() {
-        self.positionModal();
-      });
       $(window.parent).on('resize.plone-modal.patterns', function() {
         self.positionModal();
       });
@@ -857,6 +903,7 @@ define([
       }
       self.$wrapper.remove();
       if ($('.plone-modal', $('body')).size() < 1) {
+        self._suppressHide = undefined;
         self.backdrop.hide();
         $('body').removeClass('plone-modal-open');
         $(window.parent).off('resize.plone-modal.patterns');

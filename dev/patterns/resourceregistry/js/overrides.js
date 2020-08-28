@@ -33,8 +33,8 @@ define([
           '<% if(view.editing){ %>' +
             '<p class="resource-name text-primary"><%- view.editing %></p> ' +
             '<div class="plone-btn-group">' +
-              '<button class="plone-btn plone-btn-primary plone-btn-xs disabled"><%- _t("Save") %></button> ' +
-              '<button class="plone-btn plone-btn-default plone-btn-xs disabled"><%- _t("Cancel") %></button>' +
+              '<button class="plone-btn plone-btn-primary plone-btn-xs" disabled><%- _t("Save") %></button> ' +
+              '<button class="plone-btn plone-btn-default plone-btn-xs" disabled><%- _t("Cancel") %></button>' +
               '<button class="plone-btn plone-btn-danger plone-btn-xs"><%- _t("Delete customizations") %></button>' +
             '</div>' +
           '<% } %>' +
@@ -78,7 +78,7 @@ define([
         filepath: that.editing,
         data: that.editor.editor.getValue()
       }, function(){
-        that.$el.find('.plone-btn-primary,.plone-btn-default').addClass('disabled');
+        that.$el.find('.plone-btn-primary,.plone-btn-default').prop('disabled', true);
       });
     },
 
@@ -200,9 +200,9 @@ define([
       that.editor.setSyntax(that.editing);
       that.tabView.loading.hide();
       that.editor.editor.on('change', function(){
-        that.$el.find('.plone-btn-primary,.plone-btn-default').removeClass('disabled');
+        that.$el.find('.plone-btn-primary,.plone-btn-default').prop('disabled', false);
       });
-    }    
+    }
   });
 
   return OverridesView;

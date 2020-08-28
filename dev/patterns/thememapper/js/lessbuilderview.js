@@ -50,41 +50,41 @@ define([
       this.setFilename();
     },
     setFilename: function() {
-        var self = this;
+      var self = this;
 
-        if( self.app.lessPaths['save'] === undefined ) {
-            return;
-        }
+      if (self.app.lessPaths['save'] === undefined) {
+        return;
+      }
 
-        var filePath = self.app.lessPaths['less'];
-        var devPath = self.app.devPath[0];
-        var prodPath = self.app.prodPath[0];
+      var filePath = self.app.lessPaths['less'];
+      var devPath = self.app.devPath[0];
+      var prodPath = self.app.prodPath[0];
+      var f;
 
-        if( filePath == devPath ) {
-            var f = prodPath;
-        }
-        else {
-            var f = self.app.lessPaths['save'];
-        }
+      if (filePath == devPath) {
+        f = prodPath;
+      } else {
+        f = self.app.lessPaths['save'];
+      }
 
-        f = f.substr(f.lastIndexOf('/') + 1, f.length);
-        self.$filename.attr('placeholder', f);
+      f = f.substr(f.lastIndexOf('/') + 1, f.length);
+      self.$filename.attr('placeholder', f);
     },
     start: function() {
       var self = this;
       self.$button.show();
       self.$errorButton.hide();
-      self.$message.text("Click to compile the current file");
+      self.$message.text('Click to compile the current file');
       self.$error.hide();
     },
     working: function() {
       var self = this;
       self.$button.hide();
-      self.$message.text("Working....");
+      self.$message.text('Working....');
     },
     end: function() {
       var self = this;
-      self.$message.text("Compiled successfully");
+      self.$message.text('Compiled successfully');
       setTimeout(self.reset.bind(self), 3000);
     },
     reset: function() {
@@ -93,47 +93,49 @@ define([
       self.toggle();
     },
     showError: function(error) {
-      this.$message.text("");
+      this.$message.text('');
       this.$error.text(error).show();
       this.$errorButton.show();
     },
     showLessBuilder: function() {
       var self = this;
 
-      if( self.app.lessPaths['save'] === undefined ) {
-        self.showError("Error: invalid filetype");
+      if (self.app.lessPaths['save'] === undefined) {
+        self.showError('Error: invalid filetype');
         return false;
       }
 
       self.working();
 
       var config = {
-        less: [ self.app.lessVariableUrl,
-                self.app.lessPaths['less'],
-                self.app.lessUrl]
-      }
+        less: [self.app.lessVariableUrl,
+          self.app.lessPaths['less'],
+          self.app.lessUrl
+        ]
+      };
 
       var iframe = new IFrame({
         name: 'lessc',
         resources: config.less,
         callback: self.app.saveThemeCSS,
         env: self.app,
-        configure: function(iframe){
-          iframe.window.lessErrorReporting = function(what, error, href){
-            if( error.href !== undefined )
-            {
+        configure: function(iframe) {
+          iframe.window.lessErrorReporting = function(what, error, href) {
+            if (error.href !== undefined) {
               self.app.fileManager.ace.editor.scrollToLine(error.line, true);
-              if( error.type == "Name" ) {
-                var reg = new RegExp(".*(@\\S+)\\s.*");
+              if (error.type == 'Name') {
+                var reg = new RegExp('.*(@\\S+)\\s.*');
                 var matches = reg.exec(error.message);
-                if( matches !== null ) {
+                if (matches !== null) {
                   var varName = matches[1];
                   var result = self.app.fileManager.ace.editor.findAll(varName);
                 }
-              }
-              else {
+              } else {
                 //The line number is always off by 1? (and LESS indexes from 0) so -2
-                self.app.fileManager.ace.editor.moveCursorToPosition({row: error.line - 2, column: error.column});
+                self.app.fileManager.ace.editor.moveCursorToPosition({
+                  row: error.line - 2,
+                  column: error.column
+                });
                 self.app.fileManager.ace.editor.focus();
               }
               self.showError(error);
@@ -148,10 +150,10 @@ define([
               var iframe = window.iframe['lessc'];
               var styles = $('style', iframe.document);
 
-              var css = "";
+              var css = '';
 
               $(styles).each(function() {
-                 css += this.innerHTML;
+                css += this.innerHTML;
               });
 
               iframe.options.callback(css);

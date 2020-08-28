@@ -70,37 +70,47 @@ define([
         expect(fn).to.throwException(TypeError);
       });
 
+      it('parses the body tag\'s content from a response with multiple lines', function() {
+        var response = '<body><h1>foo</h1>\n\t<p>bar\n</p></body>',
+            html = utils.parseBodyTag(response);
+        expect(html).to.equal('<h1>foo</h1>\n\t<p>bar\n</p>');
+      });
+
+      it('parses the body tag\'s content from a response with not ASCII chars (e.g. line separator)', function() {
+        var response = '<body><p>foo ' + String.fromCharCode(8232) + ' bar</p></body>',
+            html = utils.parseBodyTag(response);
+        expect(html).to.equal('<p>foo ' + String.fromCharCode(8232) + ' bar</p>');
+      });
+
     });
 
     describe('bool', function() {
 
-      it('returns true for "true"', function() {
+      it('returns true for truthy values', function() {
+        expect(utils.bool(true)).to.be.equal(true);
+        expect(utils.bool(1)).to.be.equal(true);
+        expect(utils.bool('1')).to.be.equal(true);
         expect(utils.bool('true')).to.be.equal(true);
         expect(utils.bool(' true ')).to.be.equal(true);
         expect(utils.bool('TRUE')).to.be.equal(true);
         expect(utils.bool('True')).to.be.equal(true);
+        expect(utils.bool(13)).to.be.equal(true);
+        expect(utils.bool('foo')).to.be.equal(true);
       });
-
-      it('returns true for true', function() {
-        var val = utils.bool(true);
-        expect(val).to.be.equal(true);
-      });
-
-      it('returns true for true', function() {
-        var val = utils.bool(1);
-        expect(val).to.be.equal(true);
-      });
-
-      it('returns false for strings != "true"', function() {
-        expect(utils.bool('1')).to.be.equal(false);
-        expect(utils.bool('')).to.be.equal(false);
+        
+      it('returns false for falsy values', function() {
         expect(utils.bool('false')).to.be.equal(false);
-      });
-
-      it('returns false for undefined/null', function() {
+        expect(utils.bool(' false ')).to.be.equal(false);
+        expect(utils.bool('FALSE')).to.be.equal(false);
+        expect(utils.bool('False')).to.be.equal(false);
+        expect(utils.bool(false)).to.be.equal(false);
+        expect(utils.bool('0')).to.be.equal(false);
+        expect(utils.bool(0)).to.be.equal(false);
+        expect(utils.bool('')).to.be.equal(false);
         expect(utils.bool(undefined)).to.be.equal(false);
         expect(utils.bool(null)).to.be.equal(false);
       });
+
     });
 
 
@@ -176,7 +186,7 @@ define([
         expect(loading.$el.is(':visible')).to.equal(true);
       });
       it('hide loader', function() {
-        var loading = new utils.Loading(); 
+        var loading = new utils.Loading();
         loading.show();
         loading.hide();
         expect(loading.$el.is(':visible')).to.equal(false);
@@ -211,6 +221,19 @@ define([
 
     });
 
+    describe('HTML manupulation', function() {
+
+      it('escaping', function() {
+        var escaped = utils.escapeHTML('<img src="logo.png" />');
+        expect(escaped).to.equal('&lt;img src="logo.png" /&gt;');
+      });
+
+      it('removing', function() {
+        var clean = utils.removeHTML('<p>Paragraph</p>');
+        expect(clean).to.equal('Paragraph');
+      });
+
+    });
 
   });
 

@@ -3,12 +3,11 @@
  * Options:
  *    relatedItems(object): Related items pattern options. ({ attributes: ["UID", "Title", "Description", "getURL", "portal_type", "path", "ModificationDate"], batchSize: 20, basePath: "/", vocabularyUrl: null, width: 500, maximumSelectionSize: 1, placeholder: "Search for item on site..." })
  *    upload(object): Upload pattern options. ({ attributes: look at upload pattern for getting the options list })
- *    text(object): Translation strings ({ insertBtn: "Insert", cancelBtn: "Cancel", insertHeading: "Insert link", title: "Title", internal: "Internal", external: "External", email: "Email", anchor: "Anchor", subject: "Subject" image: "Image", imageAlign: "Align", scale: "Size", alt: "Alternative Text", externalImage: "External Image URI"})
- *    scales(string): TODO: is this even used ('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,Large (768x768):large')
+ *    text(object): Translation strings ({ insertBtn: "Insert", cancelBtn: "Cancel", insertHeading: "Insert link", title: "Title", internal: "Internal", external: "External", email: "Email", anchor: "Anchor", subject: "Subject" image: "Image", imageAlign: "Align", scale: "Size", alt: "Alternative Text", captionFromDescription: "Show Image Caption from Image Description", caption: "Image Caption", externalImage: "External Image URI"})
+ *    imageScales(string): Image scale name/value object-array or JSON string for use in the image dialog.
  *    targetList(array): TODO ([ {text: "Open in this window / frame", value: ""}, {text: "Open in new window", value: "_blank"}, {text: "Open in parent window / frame", value: "_parent"}, {text: "Open in top frame (replaces all frames)", value: "_top"}])
  *    imageTypes(string): TODO ('Image')
  *    folderTypes(string): TODO ('Folder,Plone Site')
- *    linkableTypes(string): TODO ('Document,Event,File,Folder,Image,News Item,Topic')
  *    tiny(object): TODO ({ plugins: [ "advlist autolink lists charmap print preview anchor", "usearchreplace visualblocks code fullscreen autoresize", "insertdatetime media table contextmenu paste plonelink ploneimage" ], menubar: "edit table format tools view insert",
  toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage", autoresize_max_height: 1500 })
  *    prependToUrl(string): Text to prepend to generated internal urls. ('')
@@ -63,8 +62,6 @@ define([
   'underscore',
   'pat-base',
   'tinymce',
-  'text!mockup-patterns-tinymce-url/templates/result.xml',
-  'text!mockup-patterns-tinymce-url/templates/selection.xml',
   'mockup-utils',
   'mockup-patterns-tinymce-url/js/links',
   'mockup-i18n',
@@ -88,7 +85,6 @@ define([
   'tinymce-image',
   'tinymce-importcss',
   'tinymce-insertdatetime',
-  'tinymce-layer',
   'tinymce-legacyoutput',
   'tinymce-link',
   'tinymce-lists',
@@ -111,10 +107,7 @@ define([
   'tinymce-visualchars',
   'tinymce-wordcount',
   'tinymce-compat3x'
-], function($, _,
-            Base, tinymce,
-            ResultTemplate, SelectionTemplate,
-            utils, LinkModal, I18n, _t) {
+], function($, _, Base, tinymce, utils, LinkModal, I18n, _t) {
   'use strict';
 
   var TinyMCE = Base.extend({
@@ -143,28 +136,50 @@ define([
         insertHeading: _t('Insert link'),
         title: _t('Title'),
         internal: _t('Internal'),
-        external: _t('External URL (can be relative within this site or absolute if it starts with http:// or https://)'),
+        external: _t('External'),
+        externalText: _t('External URL (can be relative within this site or absolute if it starts with http:// or https://)'),
         email: _t('Email Address'),
         anchor: _t('Anchor'),
+        anchorLabel: _t('Select an anchor'),
+        target: _t('Target'),
         subject: _t('Email Subject (optional)'),
         image: _t('Image'),
         imageAlign: _t('Align'),
         scale: _t('Size'),
         alt: _t('Alternative Text'),
-        externalImage: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)')
+        insertImageHelp: _t('Specify an image. It can be on this site already (Internal Image), an image you upload (Upload), or from an external site (External Image).'),
+        internalImage: _t('Internal Image'),
+        externalImage: _t('External Image'),
+        externalImageText: _t('External Image URL (can be relative within this site or absolute if it starts with http:// or https://)'),
+        upload: _t('Upload'),
+        insertLinkHelp: _t('Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor).'),
+        captionFromDescription: _t('Show Image Caption from Image Description'),
+        caption: _t('Image Caption'),
       },
       // URL generation options
-      loadingBaseUrl: '../../../bower_components/tinymce-builded/js/tinymce/',
+      loadingBaseUrl: '../../../node_modules/tinymce-builded/js/tinymce/',
       prependToUrl: '',
       appendToUrl: '',
       linkAttribute: 'path', // attribute to get link value from data
-      prependToScalePart: '/imagescale/', // some value here is required to be able to parse scales back
+      prependToScalePart: '/imagescale/',
       appendToScalePart: '',
       appendToOriginalScalePart: '',
       defaultScale: 'large',
-      scales: _t('Listing (16x16):listing,Icon (32x32):icon,Tile (64x64):tile,' +
-              'Thumb (128x128):thumb,Mini (200x200):mini,Preview (400x400):preview,' +
-              'Large (768x768):large'),
+      imageScales: [
+        {title: 'Mini', value: 'mini'},
+        {title: 'Thumb', value: 'thumb'},
+        {title: 'Listing', value: 'listing'},
+        {title: 'Preview', value: 'preview'},
+        {title: 'Tile', value: 'tile'},
+        {title: 'Icon', value: 'icon'},
+        {title: 'Large', value: 'large'}
+      ],
+      imageClasses: {
+        'image-inline': _t('Inline'),
+        'image-right': _t('Right'),
+        'image-left': _t('Left'),
+        'image-responsive': _t('Responsive')
+      },
       targetList: [
         {text: _t('Open in this window / frame'), value: ''},
         {text: _t('Open in new window'), value: '_blank'},
@@ -174,8 +189,8 @@ define([
       imageTypes: ['Image'],
       folderTypes: ['Folder', 'Plone Site'],
       tiny: {
-        'content_css': 'docs-tinymce-content.min.css',
-        theme: '-modern',
+        'content_css': '/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css',
+        theme: 'modern',
         plugins: ['advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'anchor', 'searchreplace',
                   'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'contextmenu',
                   'paste', 'plonelink', 'ploneimage'],
@@ -224,14 +239,7 @@ define([
             insertHeading: _t('Insert Image')
           },
           relatedItems: {
-            baseCriteria: [{
-              i: 'portal_type',
-              o: 'plone.app.querystring.operation.list.contains',
-              v: self.options.imageTypes.concat(self.options.folderTypes)
-            }],
-            selectableTypes: self.options.imageTypes,
-            resultTemplate: ResultTemplate,
-            selectionTemplate: SelectionTemplate
+            selectableTypes: self.options.imageTypes
           }
         });
         var $el = $('<div/>').insertAfter(self.$el);
@@ -250,16 +258,9 @@ define([
     generateImageUrl: function(data, scale_name) {
       var self = this;
       var url = self.generateUrl(data);
-      if (scale_name !== ''){
-        var part = scale_name;
-        for(var i=0; i<self.options.scales.length; i=i+1){
-          if(self.options.scales[i].name === scale_name){
-            part = self.options.scales[i].part;
-          }
-        }
-        url = (url + self.options.prependToScalePart + part +
-               self.options.appendToScalePart);
-      }else{
+      if (scale_name) {
+        url = url + self.options.prependToScalePart + scale_name + self.options.appendToScalePart;
+      } else {
         url = url + self.options.appendToOriginalScalePart;
       }
       return url;
@@ -300,7 +301,7 @@ define([
       var self = this;
       var i18n = new I18n();
       var lang = i18n.currentLanguage;
-      if (lang !== 'en-us' && self.options.tiny.language !== 'en') {
+      if (lang !== 'en' && self.options.tiny.language !== 'en') {
         tinymce.baseURL = self.options.loadingBaseUrl;
         // does the expected language exist?
         $.ajax({
@@ -343,6 +344,11 @@ define([
       self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
       // tiny needs an id in order to initialize. Creat it if not set.
       var id = utils.setId(self.$el);
+
+      if (self.options.imageScales && typeof self.options.imageScales === 'string') {
+        self.options.imageScales = JSON.parse(self.options.imageScales);
+      }
+
       var tinyOptions = self.options.tiny;
       if (self.options.inline === true) {
         self.options.tiny.inline = true;
@@ -358,11 +364,6 @@ define([
       // XXX: disabled skin means it wont load css files which we already
       // include in widgets.min.css
       tinyOptions.skin = false;
-      self.options.relatedItems.generateImageUrl = function(data, scale) {
-        // this is so, in our result and selection template, we can
-        // access getting actual urls from related items
-        return self.generateImageUrl.apply(self, [data, scale]);
-      };
 
       tinyOptions.init_instance_callback = function(editor) {
         if (self.tiny === undefined || self.tiny === null) {
@@ -371,19 +372,10 @@ define([
       };
 
       self.initLanguage(function() {
-        if(typeof(self.options.scales) === 'string'){
-          self.options.scales = _.map(self.options.scales.split(','), function(scale){
-            scale = scale.split(':');
-            return {
-              part: scale[1],
-              name: scale[1],
-              label: scale[0]
-            };
-          });
-        }
         if(typeof(self.options.folderTypes) === 'string'){
           self.options.folderTypes = self.options.folderTypes.split(',');
         }
+
         if(typeof(self.options.imageTypes) === 'string'){
           self.options.imageTypes = self.options.imageTypes.split(',');
         }
@@ -395,7 +387,9 @@ define([
           self.$el.hide();
         }
 
-        if(tinyOptions.importcss_file_filter && tinyOptions.importcss_file_filter.indexOf(',') !== -1){
+        if(tinyOptions.importcss_file_filter &&
+           typeof tinyOptions.importcss_file_filter.indexOf === 'function' &&
+           tinyOptions.importcss_file_filter.indexOf(',') !== -1){
           // need a custom function to check now
           var files = tinyOptions.importcss_file_filter.split(',');
 
@@ -409,6 +403,38 @@ define([
           };
         }
 
+        if (tinyOptions.importcss_selector_filter &&
+            tinyOptions.importcss_selector_filter.length) {
+          tinyOptions.importcss_selector_filter =
+            new RegExp(tinyOptions.importcss_selector_filter);
+        }
+
+        if (tinyOptions.importcss_groups &&
+            tinyOptions.importcss_groups.length) {
+          for(var i=0; i<tinyOptions.importcss_groups.length; i++){
+            if (tinyOptions.importcss_groups[i].filter &&
+                tinyOptions.importcss_groups[i].filter.length) {
+              tinyOptions.importcss_groups[i].filter =
+                new RegExp(tinyOptions.importcss_groups[i].filter);
+            }
+          }
+        }
+
+        /* If TinyMCE is rendered inside of a modal, set an ID on
+         * .plone-modal-dialog and use that as the ui_container
+         * setting for TinyMCE to anchor it there. This ensures that
+         * sub-menus are displayed relative to the modal rather than
+         * the document body. 
+         * Generate a random id and append it, because there might be
+         * more than one TinyMCE in the DOM.
+         */
+        var modal_container = self.$el.parents(".plone-modal-dialog")
+
+        if (modal_container.length > 0) {
+            var random_id = Math.random().toString(36).substring(2, 15) ;
+            modal_container.attr("id", "tiny-ui-container-" + random_id);
+            tinyOptions['ui_container'] = "#tiny-ui-container-" + random_id;
+        }
         tinymce.init(tinyOptions);
         self.tiny = tinymce.get(self.tinyId);
 

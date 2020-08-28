@@ -1,5 +1,0 @@
-{
-  "name": "jquery.tinymce",
-  "version": "3.5.8",
-  "main": ["./jscripts/tiny_mce/tiny_mce.js", "./jscripts/tiny_mce/jquery.tinymce.js"]
-}

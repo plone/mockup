@@ -1,0 +1,17 @@
+<li class="pattern-relateditems-recentlyused">
+  <a class="pattern-relateditems-recentlyused-select" data-uid="<%- UID %>">
+    <div class="pattern-relateditems-recentlyused-info">
+      <span
+        class="pattern-relateditems-recentlyused-title <%- portal_type ? 'contenttype-' + portal_type.toLowerCase() : '' %> <%- review_state ? 'state-' + review_state : '' %>"
+        title="<%- portal_type %>">
+        <%- Title %>
+      </span>
+      <span class="pattern-relateditems-recentlyused-path"><%- path %></span>
+    </div>
+    <% if (getURL && (getIcon || portal_type === "Image")) { %>
+      <div class="pattern-relateditems-recentlyused-image">
+        <img src="<%- getURL %>/@@images/image/tile" />
+      </div>
+    <% } %>
+  </a>
+</li>

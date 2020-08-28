@@ -682,9 +682,9 @@ define([
       data = {
         paths: {
           'autotoc': 'patterns/autotoc/pattern',
-          'pat-base': 'bower_components/patternslib/src/core/base',
-          'jquery': 'bower_components/jquery/dist/jquery',
-          'pat-registry': 'bower_components/patternslib/src/core/registry'
+          'pat-base': 'node_modules/patternslib/src/core/base',
+          'jquery': 'node_modules/jquery/dist/jquery',
+          'pat-registry': 'node_modules/patternslib/src/core/registry'
         },
         include: ['autotoc']
       };

@@ -1,0 +1,39 @@
+<% if (mode!=='auto') { %>
+<div class="btn-group mode-selector" role="group">
+  <button type="button" class="mode search btn <% if (mode=='search') { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>
+  <button type="button" class="mode browse btn <% if (mode=='browse') { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>
+</div>
+<% } %>
+<div class="path-wrapper">
+  <span class="pattern-relateditems-path-label"><%- searchText %></span>
+  <a class="crumb" href="/"><span class="glyphicon glyphicon-home"/></a>
+  <%= items %>
+</div>
+<div class="controls pull-right">
+
+  <% if (recentlyUsedItems) { %>
+  <div class="recentlyUsed dropdown pull-right">
+    <button type="button" class="recentlyUsed dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="glyphicon glyphicon-time"/>
+      <%- recentlyUsedText %>
+      <span class="caret"/>
+    </button>
+    <ul class="dropdown-menu">
+      <%= recentlyUsedItems %>
+    </ul>
+  </div>
+  <% } %>
+
+  <% if (favorites.length > 0) { %>
+  <div class="favorites dropdown pull-right">
+    <button type="button" class="favorites dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="glyphicon glyphicon-star"/>
+      <%- favText %>
+      <span class="caret"/>
+    </button>
+    <ul class="dropdown-menu">
+      <%= favItems %>
+    </ul>
+  </div>
+  <% } %>
+</div>

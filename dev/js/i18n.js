@@ -14,11 +14,13 @@ define([
   var I18N = function() {
     var self = this;
     self.baseUrl = $('body').attr('data-i18ncatalogurl');
+    self.currentLanguage = $('html').attr('lang') || 'en';
 
-    if (!self.baseUrl) {
-      self.baseUrl = '/plonejsi18n';
+    // Fix for country specific languages
+    if (self.currentLanguage.split('-').length > 1) {
+      self.currentLanguage = self.currentLanguage.split('-')[0] + '_' + self.currentLanguage.split('-')[1].toUpperCase();
     }
-    self.currentLanguage = $('html').attr('lang') || 'en-us';
+
     self.storage = null;
     self.catalogs = {};
     self.ttl = 24 * 3600 * 1000;
@@ -76,6 +78,9 @@ define([
             return;
           }
         }
+      }
+      if (!self.baseUrl) {
+        return;
       }
       $.getJSON(self.getUrl(domain, language), function (catalog) {
         if (catalog === null) {

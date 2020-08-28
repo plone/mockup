@@ -80,7 +80,8 @@ define([
         } else {
           msg = _t('Error ' + failMsg + ' "' + self.model.attributes.Title + '"');
         }
-        self.app.setStatus({text: msg, type: data.status || 'warning'});
+        self.app.clearStatus();
+        self.app.setStatus({ text: msg, type: data.status || 'warning' });
       });
     },
 

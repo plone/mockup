@@ -18,13 +18,11 @@ define([
       self.upload = new Upload(self.$('.uploadify-me').addClass('pat-upload'), {
         url: self.app.options.uploadUrl,
         success: function(response) {
-          if( self.callback ) {
-            if( response.status == "success" ) {  
+          if (self.callback) {
+            if (response.status == 'success') {
               self.callback.apply(self.app, [response]);
-            }
-            else
-            {
-                alert("There was a problem during the upload process");
+            } else {
+              alert('There was a problem during the upload process');
             }
           }
         }
@@ -34,7 +32,6 @@ define([
     toggle: function(button, e) {
       /* we need to be able to change the current default upload directory */
       PopoverView.prototype.toggle.apply(this, [button, e]);
-      var self = this;
       if (!this.opened) {
         return;
       }

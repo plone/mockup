@@ -2,6 +2,8 @@
 @icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
 @import "@{bowerPath}/bootstrap/less/glyphicons.less";
 @import "@{mockuplessPath}/ui.less";
+@import "@{mockupPath}/tooltip/pattern.tooltip.less";
+@import "@{mockupPath}/datatables/pattern.datatables.less";
 
 @import "@{bowerPath}/bootstrap/less/mixins.less";
 @import "@{bowerPath}/bootstrap/less/utilities.less";
@@ -16,17 +18,11 @@
 @import (reference) "@{bowerPath}/bootstrap/less/forms.less";
 @import (reference) "@{bowerPath}/bootstrap/less/navbar.less";
 @import (reference) "@{bowerPath}/bootstrap/less/navs.less";
-@import (reference) "@{bowerPath}/bootstrap/less/tooltip.less";
 @import (reference) "@{bowerPath}/bootstrap/less/component-animations.less";
 @import (reference) "@{mockuplessPath}/popover.less";
 
 
-/*
-@import "@{bowerPath}bootstrap/less/tooltip.less";
-*/
-
 .pat-structure {
-
     .fade:extend(.fade all){}
     .collapse:extend(.collapse all){}
     .collapsing:extend(.collapsing all){}
@@ -35,9 +31,6 @@
     .popover-title:extend(.popover-title all){}
     .popover-content:extend(.popover-content all){}
     .arrow:extend(.arrow all){}
-    .tooltip:extend(.tooltip all){}
-    .tooltip-arrow:extend(.tooltip-arrow all){}
-    .tooltip-inner:extend(.tooltip-inner all){}
 
     .table:extend(.table all){}
     .pagination:extend(.pagination all){}
@@ -70,11 +63,53 @@
 
     .open:extend(.open all){}
 
-    .btn{
+    .btn {
         .btn-sm();
-        padding: 5px 5px;
-        font-size: 13px;
     }
+
+    .btn.has-filter {
+        .btn-info();
+    }
+    input.has-filter {
+        border: 1px solid @btn-info-border;
+    }
+
+    .pagination{
+        vertical-align: middle;
+    }
+
+    div.pagination{
+        margin-left: 10px;
+    }
+
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #fafafa;
+
+        border: none;
+        min-height: auto;
+        margin: 0;
+
+
+        &>a.btn:last-of-type,
+        .btn-group {
+            margin-right: 1em;
+        }
+        #filter {
+            width: 20em;
+            float: right;
+
+            .btn-queryfilter {
+                margin-left: 1em;
+            }
+        }
+        &>a.btn, .btn-group, #filter {
+            margin-bottom: 0.5em;
+        }
+    }
+
     table{
         margin-bottom: 0;
 
@@ -83,8 +118,12 @@
                 width: 15px;
             }
             td.actionmenu-container{
-                .btn{
-                    padding: 2px 4px;
+                a {
+                    white-space: nowrap;
+                    &,
+                    &:hover {
+                        text-decoration: none;
+                    }
                 }
             }
         }
@@ -94,13 +133,17 @@
                 padding-top: 2px;
             }
         }
-    }
-    .navbar {
-        min-height: inherit;
-        margin-bottom: 5px;
-
-        .btn-group{
-            margin-left: 5px;
+        .plone-item-expired,
+        .plone-item-ineffective {
+          .badge();
+          font-size: 12px;
+          color: white;
+        }
+        .plone-item-expired {
+          background-color: @plone-toolbar-private-color;
+        }
+        .plone-item-ineffective {
+          background-color: @plone-toolbar-internal-color;
         }
     }
     .table th, .table td {
@@ -127,24 +170,34 @@
             height: 31px;
         }
     }
-    .alert.status{
-        margin-bottom: 5px;
-        padding: 5px;
+    .fc-status {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+        padding: 0.5em;
         color: @plone-link-color;
-    }
+        .fc-status-text {
+            flex-grow: 1;
+        }
+        .btn {
+            margin-left: 1em;
+        }
 
-    #filter{
-        width: 200px;
-        float: right;
     }
 
     .popover.upload{
         max-width: 650px;
     }
 
+    .popover.rearrange{
+        max-width: 400px;
+    }
+
     .upload-container .upload-area{
         width: 500px;
     }
+
+    li.disabled a {pointer-events: none;}
 
     /* button overrides to make it look
        more streamlined */
@@ -163,19 +216,11 @@
         border-bottom-left-radius: 0;
     }
 
-    @media all and (max-width: 1200px) {
-        #filter{
-            margin-top: 5px;
-            float: left;
-        }
-        #btngroup-mainbuttons{
-            float: left;
+    @media all and (max-width: 522px) {
+        .navbar #filter{
+            float: none;
             width: 100%;
-            margin-left: 0;
-            margin-top: 5px;
         }
-    }
-    @media all and (max-width: 620px) {
         #btn-attribute-columns{
             display:none;
         }
@@ -203,9 +248,6 @@
             }
         }
     }
-}
-
-.pat-structure {
 
     .popover {
         .popover-title {
@@ -247,7 +289,10 @@
     .itemRow.default-page .title > *:first-child:before{
         content: '*';
         color: red;
+        position: absolute;
+        text-indent: -4px;
     }
+
 }
 
 .popover.selected-items {
@@ -287,7 +332,6 @@
 }
 
 #popover-rename {
-    width: 400px;
 
     .popover-content{
         max-height: 500px;
@@ -303,13 +347,27 @@
         border-bottom: 1px solid #0E6EB0;
         margin-bottom: 5px;
         padding-bottom: 10px;
+
+        /* clearfix */
+        display: table;
+        clear: both;
+        content: '';
+
+        div.form-group {
+            float: left;
+        }
+        img {
+            float: left;
+            margin-left: 1em;
+        }
+
     }
 }
 
 .popover.attribute-columns{
     ul{
         list-style: none;
-        margin: 0;
+        margin: 0 0 1ex 0;
         padding: 0;
 
         li{
@@ -319,8 +377,16 @@
             border-bottom: none;
             padding: 3px 7px;
 
+            &:last-child {
+                border-bottom: 1px solid #DDD;
+            }
+
             label{
                 margin-bottom: 0;
+
+                input[type="checkbox"] {
+                    margin-right: 1ex;
+                }
             }
         }
 
@@ -332,13 +398,13 @@
     cursor: move;
 }
 
-table.structure-dragging{
+table.structure-dragging {
     outline: 1px dashed black;
     background-color: white;
     .itemRow{
         .actionmenu-container{
             display: none;
-        } 
+        }
         td{
             padding: 5px;
         }

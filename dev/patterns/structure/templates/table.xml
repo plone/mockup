@@ -1,30 +1,27 @@
-<div class="alert alert-<%- status.type %> status">
-  <strong><%- status.label %></strong>
-  <span><%- status.text %></span>&nbsp;<% // &nbsp; to get correct height for empty alerts %>
+<div class="fc-breadcrumbs-container">
+  <div class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
+    <a href="#" title="<%- _t('Root') %>" aria-label="<%- _t('Root') %>" data-path="/">
+      <span class="glyphicon glyphicon-home" aria-hidden="true"></span> /
+    </a>
+    <% _.each(pathParts, function(part, idx, list){
+      if(part){
+        if(idx > 0){ %>
+          /
+        <% } %>
+        <a href="#" class="crumb" data-path="<%- part %>"><%- part %></a>
+      <% }
+    }); %>
+  </div>
 </div>
 
-<table class="table table-striped table-bordered">
+<table class="pat-datatables table table-striped table-bordered"
+       data-pat-datatables="<%- datatables_options %>">
   <thead>
-    <tr class="fc-breadcrumbs-container">
-      <td class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
-        <a href="#" data-path="/">
-          <span class="glyphicon glyphicon-home"></span> /
-        </a>
-        <% _.each(pathParts, function(part, idx, list){
-          if(part){
-            if(idx > 0){ %>
-              /
-            <% } %>
-            <a href="#" class="crumb" data-path="<%- part %>"><%- part %></a>
-          <% }
-        }); %>
-      </td>
-    </tr>
     <tr>
-      <th class="selection"><input type="checkbox" class="select-all" /></th>
-      <th class="title">Title</th>
+      <th class="selection"><label for="selectAllInputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select all') %>"><%- _t('Select all') %></label><input id="selectAllInputCheckbox" type="checkbox" class="select-all" /></th>
+      <th class="title"><%- _t('Title') %></th>
       <% _.each(activeColumns, function(column){ %>
-        <% if(_.has(availableColumns, column)) { %>
+        <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
           <th><%- availableColumns[column] %></th>
         <% } %>
       <% }); %>

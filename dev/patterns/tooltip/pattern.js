@@ -4,6 +4,13 @@
  *    enterEvent(string): Event used to trigger tooltip. ('mouseenter')
  *    exitEvent(string): Event used to dismiss tooltip. ('mouseleave')
  *
+ * data-pat-tooltip Configuration
+ *    ajaxUrl(string): the ajax source of tooltip content (null). if null, tooltip displays content of title
+ *    contentSelector(string): selects a subset of content (null)
+ *    class(string): add one or several (white space separated) class to tooltip, at the .tooltip.mockup-tooltip level
+ *    style(object): add css styles to tooltip, at the .tooltip.mockup-tooltip level
+ *    innerStyle(object): add css styles to tooltip, at the .tooltip-inner level
+ *
  * Documentation:
  *    # Directions
  *
@@ -41,24 +48,6 @@ define([
 ], function($, Base, undefined) {
   'use strict';
 
-  var Tooltip = Base.extend({
-    name: 'tooltip',
-    trigger: '.pat-tooltip',
-    parser: 'mockup',
-    defaults: {
-      html: false
-    },
-    init: function() {
-        if (this.options.html === 'true') {
-          // TODO: fix the parser!
-          this.options.html = true;
-        } else {
-          this.options.html = false;
-        }
-        this.data = new bootstrapTooltip(this.$el[0], this.options);
-    },
-  });
-
   //This is pulled almost directly from the Bootstrap Tooltip
   //extension. We rename it just to differentiate from the pattern.
   var bootstrapTooltip = function (element, options) {
@@ -76,9 +65,9 @@ define([
 
   bootstrapTooltip.DEFAULTS = {
     animation: true,
-    placement: 'top',
+    placement: 'auto',
     selector: false,
-    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+    template: '<div class="tooltip mockup-tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
     trigger: 'hover focus',
     title: '',
     delay: 0,
@@ -155,6 +144,8 @@ define([
       $(obj.currentTarget).data('bs.' + this.type, self)
     }
 
+    self.leaving = false;
+
     clearTimeout(self.timeout)
 
     self.hoverState = 'in'
@@ -169,6 +160,7 @@ define([
   bootstrapTooltip.prototype.leave = function (obj) {
     var self = obj instanceof this.constructor ?
       obj : $(obj.currentTarget).data('bs.' + this.type)
+    self.leaving = true;
 
     if (!self) {
       self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
@@ -191,24 +183,22 @@ define([
 
     if (this.hasContent() && this.enabled) {
       this.$element.trigger(e)
-
       var inDom = $.contains(document.documentElement, this.$element[0])
       if (e.isDefaultPrevented() || !inDom) return
-      var that = this
 
       var $tip = this.tip()
 
       var tipId = this.getUID(this.type)
-
-      this.setContent()
+      var self = this;
+      this.setContent().then(function() {
       $tip.attr('id', tipId)
-      this.$element.attr('aria-describedby', tipId)
+      self.$element.attr('aria-describedby', tipId)
 
-      if (this.options.animation) $tip.addClass('fade')
+      if (self.options.animation) $tip.addClass('fade')
 
-      var placement = typeof this.options.placement == 'function' ?
-        this.options.placement.call(this, $tip[0], this.$element[0]) :
-        this.options.placement
+      var placement = typeof self.options.placement == 'function' ?
+        self.options.placement.call(self, $tip[0], self.$element[0]) :
+        self.options.placement
 
       var autoToken = /\s?auto?\s?/i
       var autoPlace = autoToken.test(placement)
@@ -218,18 +208,18 @@ define([
         .detach()
         .css({ top: 0, left: 0, display: 'block' })
         .addClass(placement)
-        .data('bs.' + this.type, this)
+        .data('bs.' + self.type, self)
 
-      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+      self.options.container ? $tip.appendTo(self.options.container) : $tip.insertAfter(self.$element)
 
-      var pos          = this.getPosition()
+      var pos          = self.getPosition()
       var actualWidth  = $tip[0].offsetWidth
       var actualHeight = $tip[0].offsetHeight
 
       if (autoPlace) {
         var orgPlacement = placement
-        var $parent      = this.$element.parent()
-        var parentDim    = this.getPosition($parent)
+        var $parent      = self.$element.parent()
+        var parentDim    = self.getPosition($parent)
 
         placement = placement == 'bottom' && pos.top   + pos.height       + actualHeight - parentDim.scroll > parentDim.height ? 'top'    :
                     placement == 'top'    && pos.top   - parentDim.scroll - actualHeight < 0                                   ? 'bottom' :
@@ -242,22 +232,26 @@ define([
           .addClass(placement)
       }
 
-      var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
+      var calculatedOffset = self.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
 
-      this.applyPlacement(calculatedOffset, placement)
+      self.applyPlacement(calculatedOffset, placement)
 
       var complete = function () {
-        that.$element.trigger('shown.bs.' + that.type)
-        that.hoverState = null
+        self.$element.trigger('shown.bs.' + self.type);
+        self.hoverState = null;
+        if (self.leaving) {  // prevent a race condition bug when user has leaved before complete
+          self.leave(self);
+        }
       }
 
-      $.support.transition && this.$tip.hasClass('fade') ?
+      $.support.transition && self.$tip.hasClass('fade') ?
         $tip
           .one('bsTransitionEnd', complete)
           .emulateTransitionEnd(150) :
         complete()
+      })
     }
-  }
+  };
 
   bootstrapTooltip.prototype.applyPlacement = function (offset, placement) {
     var $tip   = this.tip()
@@ -314,12 +308,39 @@ define([
   }
 
   bootstrapTooltip.prototype.setContent = function () {
-    var $tip  = this.tip()
-    var title = this.getTitle()
+    var $tip  = this.tip();
+    var type = this.options.html ? 'html' : 'text';
+    var selector = this.options.patTooltip ? this.options.patTooltip.contentSelector : null;
 
-    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
-    $tip.removeClass('fade in top bottom left right')
-  }
+    function setContent(content) {
+      if (type === 'html' && !!selector) {
+        content = $(content).find(selector).html();
+      }
+      $tip.find('.tooltip-inner')[type](content);
+    }
+    function removeClasses() {
+      $tip.removeClass('fade in top bottom left right')
+    }
+    var title = this.getTitle();
+    var url = this.getUrl();
+      if (!!url) {
+        removeClasses();
+        return $.get(url).then(function(content) {
+          setContent(content);
+        });
+      } else {
+        removeClasses();
+        setContent(title);
+        return new Promise(function(resolve, reject) {
+          resolve(title)
+        });
+      }
+
+  };
+
+  bootstrapTooltip.prototype.getUrl = function () {
+    return this.options.patTooltip ? this.options.patTooltip.ajaxUrl : null;
+  };
 
   bootstrapTooltip.prototype.hide = function () {
     var that = this
@@ -358,8 +379,8 @@ define([
   }
 
   bootstrapTooltip.prototype.hasContent = function () {
-    return this.getTitle()
-  }
+    return this.getTitle() || this.getUrl();
+  };
 
   bootstrapTooltip.prototype.getPosition = function ($element) {
     $element   = $element || this.$element
@@ -412,7 +433,6 @@ define([
     var title
     var $e = this.$element
     var o  = this.options
-
     title = $e.attr('data-original-title')
       || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
 
@@ -426,7 +446,24 @@ define([
   }
 
   bootstrapTooltip.prototype.tip = function () {
-    return (this.$tip = this.$tip || $(this.options.template))
+    if (!!this.$tip) {
+      return this.$tip;
+    }
+    var $tip = this.$tip || $(this.options.template);
+    if (this.options.patTooltip) {
+
+    if (this.options.patTooltip.style) {
+      $tip.css(this.options.patTooltip.style)
+    }
+    if (this.options.patTooltip['class']) {
+      $tip.addClass(this.options.patTooltip['class'])
+    }
+    if (this.options.patTooltip.innerStyle) {
+      $tip.find('.tooltip-inner').css(this.options.patTooltip.innerStyle)
+    }
+    }
+    this.$tip = $tip;
+    return $tip;
   }
 
   bootstrapTooltip.prototype.arrow = function () {
@@ -470,6 +507,25 @@ define([
     clearTimeout(this.timeout)
     this.hide().$element.off('.' + this.type).removeData('bs.' + this.type)
   }
+
+  var Tooltip = Base.extend({
+    name: 'tooltip',
+    trigger: '.pat-tooltip',
+    parser: 'mockup',
+    defaults: {
+      html: false,
+      placement: 'top'
+    },
+    init: function() {
+        if (this.options.html === 'true' || this.options.html === true) {
+          // TODO: fix the parser!
+          this.options.html = true;
+        } else {
+          this.options.html = false;
+        }
+        this.data = new bootstrapTooltip(this.$el[0], this.options);
+      },
+  });
 
   return Tooltip;
 

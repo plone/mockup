@@ -84,6 +84,28 @@ define([
         expect(_('foo')).to.be('bar');
         server.restore();
       });
+
+      it('handles country specific translations', function() {
+        var i18n = new I18n();
+        var server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        var clock = sinon.useFakeTimers();
+
+        server.respondWith('GET', /plonejsi18n/, function (xhr) {
+          xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({
+            foo: 'bar-us',
+          }));
+        });
+        i18n.configure({
+          currentLanguage: 'en-us',
+          baseUrl: '/plonejsi18n'
+        });
+        i18n.loadCatalog('foobar-us');
+        clock.tick(500);
+        var _ = i18n.MessageFactory('foobar-us');
+        expect(_('foo')).to.be('bar-us');
+        server.restore();
+      });
     });
 
   });

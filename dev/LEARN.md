@@ -18,27 +18,35 @@ You might also want to review the *Mockup Project Structure* section of *Getting
 
 <pre>
 mockup/
-  bower.json
-  docs/
-  Gruntfile.js
-  index.html
-  js/
-    bundles/
-      widgets.js
-      &hellip;
-    config.js
-    patterns/
-    router.js
-    ui/
-    utils.js
-  less/
-  lib/
+  CHANGES.rst
+  CONTRIBUTING.rst
+  LICENSE.rst
   Makefile
+  MANIFEST.in
+  mockup/
+    build/
+    configure.zcml
+    CONTRIBUTE.md
+    GETTING_STARTED.md
+    Gruntfile.js
+    index.html
+    __init__.py
+    js/
+      bundles/
+      	widgets.js
+      	&hellip;
+      config.js
+      &hellip;
+      router.js
+      ui/
+      utils.js
+    LEARN.md
+    less/
+    lib/
+    node_modules/
+    patterns/
+    tests/
   package.json
-  package.nix
-  plone/
-    mockup
-  tests/
   &hellip;
 </pre>
 
@@ -52,9 +60,9 @@ So, let's get started!
 
 ### Defining the Pattern
 
-The first step is to go to the *js/patterns* subdirectory and create a file called *hello.js* in it with the following contents:
+The first step is to go to the */patterns* subdirectory, create a directory called */hello*, and then create a file *pattern.js* in the */hello* subdirectory in it with the following contents:
 
-**js/patterns/hello.js:**
+**patterns/hello/pattern.js:**
 <pre>
 define([
   'jquery',
@@ -115,14 +123,14 @@ So, first open the file *js/config.js* and add the following line under the *pat
     baseUrl: './',
     paths: {
       &hellip;
-      'underscore': 'bower_components/underscore/underscore',
-      'mockup-patterns-helloworld': 'js/patterns/hello' // <- right here!
+      'underscore': 'node_modules/underscore/underscore',
+      'mockup-patterns-helloworld': 'patterns/hello/pattern' // <- right here!
   },
   &hellip;
 </pre>
 
 
-This tells the bundling/packaging machinery that a module called *mockup-patterns-helloworld* is defined in the file *hello.js* under the *js/patterns* subdirectory (relative to where config.js is located).  
+This tells the bundling/packaging machinery that a module called *mockup-patterns-helloworld* is defined in the file *pattern.js* under the *patterns/hello* subdirectory (relative to where config.js is located).  
 **Note: we omit the file's .js suffix in the path definition**.
 
 To tell the machinery to include our pattern in the widget bundle,
@@ -161,7 +169,7 @@ further details.
 Now that we have defined,
 registered and bundled our HelloWorld pattern,
 it's time to take it for a test drive!
-Inside the root "mockup" directory create a simple HTML file called *hello.html* with the following contents:
+Inside the subdirectory */mockup* (i.e */mockup/mockup*) directory create a simple HTML file called *hello.html* with the following contents:
 
 **hello.html:**
 <pre>
@@ -204,7 +212,7 @@ allow us to change the label's font color and its background color.
 
 We first need to update the pattern definition in
 
-**js/patterns/hello.js:**
+**patterns/hello/pattern.js:**
 <pre>
 var HelloWorld = Base.extend({
   name: 'helloworld',
@@ -420,7 +428,7 @@ for a couple of good reasons:
 
 #### The *describe()* Function
 
-We define a group of test cases by using the [describe()](http://visionmedia.github.io/mocha/#interfaces) function found in the aforementioned Mocha test framework.
+We define a group of test cases by using the [describe()](https://mochajs.org/#interfaces) function found in the aforementioned Mocha test framework.
 The first parameter is the name for the test case group,
 which could be anything,
 really (and not necessarily *"HelloWorld"*).
@@ -450,7 +458,7 @@ Note that regarding the tests,
 we have only scratched the surface here.
 Describing all the options the test framework provides is beyond the scope of this tutorial.  
 To learn more about how to write tests,
-please consult Mocha's [documentation](http://visionmedia.github.io/mocha/).
+please consult Mocha's [documentation](https://mochajs.org/).
 
 
 ### Running the Tests
@@ -484,7 +492,7 @@ behind the scenes.
 Karma launched a process which now monitors our pattern code and tests for changes.
 
 With Karma still running,
-try changing the *js/patterns/hello.js* file so that the HelloWorld pattern changes the label text to something other than *"Hello, world!"*.
+try changing the *patterns/hello/pattern.js* file so that the HelloWorld pattern changes the label text to something other than *"Hello, world!"*.
 Karma will detect the change and automatically re-run the test(s) which will now, of course, fail.
 If you now change the *tests/pattern-helloworld-test.js* so that it will accept the new behavior of the HelloWorld pattern,
 Karma will automatically re-run the tests, which will now again pass.
@@ -613,7 +621,7 @@ $ mv jquery.foggy.min.js lib/
 </pre>
 
 ### Create a Wrapper Pattern
-**js/patterns/foggy.js:**
+**patterns/foggy/pattern.js:**
 
     define([
       'jquery',
@@ -644,7 +652,7 @@ Note, we need to map the jquery.foggy Pattern name to the path and we also need 
         baseUrl: './',
         paths: {
           &hellip;
-          'mockup-patterns-foggy': 'js/patterns/foggy',
+          'mockup-patterns-foggy': 'patterns/foggy/pattern.js',
           'jquery.foggy': 'lib/jquery.foggy.min'
       },
       shim: {
@@ -686,7 +694,7 @@ Note, we need to map the jquery.foggy Pattern name to the path and we also need 
 `Foggy` lets you set the blur radius in pixels,
 so we can add support for that to the Pattern.
 
-**js/patterns/foggy.js:**
+**patterns/foggy/pattern.js:**
 
     var Foggy = Base.extend({
       name: 'foggy',

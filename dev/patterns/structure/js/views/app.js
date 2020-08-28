@@ -16,6 +16,7 @@ define([
   'mockup-patterns-structure-url/js/views/upload',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-patterns-structure-url/js/collections/selected',
+  'text!mockup-patterns-structure-url/templates/status.xml',
   'mockup-utils',
   'translate',
   'pat-logger',
@@ -24,34 +25,38 @@ define([
   TableView, SelectionWellView,
   GenericPopover, RearrangeView, SelectionButtonView,
   PagingView, ColumnsView, TextFilterView, UploadView,
-  _ResultCollection, SelectedCollection, utils, _t, logger) {
+  _ResultCollection, SelectedCollection, StatusTemplate, utils, _t, logger) {
   'use strict';
 
   var log = logger.getLogger('pat-structure');
 
   var AppView = BaseView.extend({
     tagName: 'div',
-    status: {
-      type: 'none',
-      text: '',
-      label: ''
-    },
-    pasteAllowed: !!$.cookie('__cp'),
+    statusTemplate: _.template(StatusTemplate),
+    statusMessages: [],
     sort_on: 'getObjPositionInParent',
     sort_order: 'ascending',
     additionalCriterias: [],
     cookieSettingPrefix: '_fc_',
+
+    buttons: null,
+    textfilter: null,
+    forms: [],
+
+    pasteAllowed: function () {
+        return !!$.cookie('__cp');
+    },
+
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
       self.loading = new utils.Loading();
       self.loading.show();
-      self.pasteAllowed = !!$.cookie('__cp');
 
       /* close popovers when clicking away */
       $(document).click(function(e) {
         var $el = $(e.target);
-        if (!$el.is(':visible')) {
+        if (!$el.is(':visible') || $el.css('visibility') === 'hidden' || $el.css('opacity') === '0') {
           // ignore this, fake event trigger to element that is not visible
           return;
         }
@@ -89,7 +94,7 @@ define([
         collection: self.selectedCollection,
         triggerView: self.toolbar.get('selected-items'),
         app: self,
-        id: 'structure-well'
+        id: 'selected-items'
       });
 
       self.toolbar.get('selected-items').disable();
@@ -110,7 +115,7 @@ define([
             url: self.getAjaxUrl(self.contextInfoUrl),
             dataType: 'json',
             success: function(data) {
-              self.trigger('context-info-loaded', data);
+              $('body').trigger('context-info-loaded', [data]);
             },
             error: function(response) {
               // XXX handle error?
@@ -169,7 +174,7 @@ define([
           // TODO figure out whether the following event after this is
           // needed at all.
         }
-        $('body').trigger('structure-url-changed', path);
+        $('body').trigger('structure-url-changed', [path]);
 
       });
 
@@ -203,7 +208,7 @@ define([
             path = '/';
           }
           self.setCurrentPath(path);
-          $('body').trigger('structure-url-changed', path);
+          $('body').trigger('structure-url-changed', [path]);
           // since this next call causes state to be pushed...
           self.doNotPushState = true;
           self.collection.goTo(self.collection.information.firstPage);
@@ -231,8 +236,7 @@ define([
     togglePasteBtn: function(){
       var self = this;
       if (_.find(self.buttons.items, function(btn){ return btn.id === 'paste'; })) {
-        self.pasteAllowed = !!$.cookie('__cp');
-        if (self.pasteAllowed) {
+        if (self.pasteAllowed()) {
           self.buttons.get('paste').enable();
         } else {
           self.buttons.get('paste').disable();
@@ -240,6 +244,12 @@ define([
       }
     },
     inQueryMode: function() {
+      if (this.toolbar) {
+          var term = this.toolbar.get('filter').term;
+          if (term){
+            return true;
+          }
+      }
       if (this.additionalCriterias.length > 0) {
         return true;
       }
@@ -267,6 +277,8 @@ define([
     },
     setCurrentPath: function(path) {
       this.collection.setCurrentPath(path);
+      this.textfilter.clearTerm();
+      this.clearStatus();
     },
     getAjaxUrl: function(url) {
       return url.replace('{path}', this.getCurrentPath());
@@ -321,25 +333,25 @@ define([
       }
     },
     ajaxSuccessResponse: function(data, callback) {
-      var self = this;
-      self.selectedCollection.reset();
+      this.clearStatus();
+      this.selectedCollection.reset();
       if (data.status === 'success') {
-        self.collection.reset();
+        this.collection.reset();
       }
       if (data.msg) {
         // give status message somewhere...
-        self.setStatus(data.msg, data.status || 'warning');
+        this.setStatus({text: data.msg, type: data.status || 'warning'});
       }
       if (callback !== null && callback !== undefined) {
         callback(data);
       }
-      self.collection.pager();
+      this.collection.pager();
     },
     ajaxErrorResponse: function(response, url) {
       if (response.status === 404) {
         window.alert(_t('operation url ${url} is not valid', {url: url}));
       } else {
-        window.alert(_t('there was an error performing action'));
+        window.alert(_t('there was an error performing the action'));
       }
     },
     setupButtons: function() {
@@ -347,7 +359,7 @@ define([
       var items = [];
 
       var columnsBtn = new ButtonView({
-        id: 'attribute-columns',
+        id: 'structure-columns',
         tooltip: _t('Configure displayed columns'),
         icon: 'th'
       });
@@ -355,19 +367,21 @@ define([
       self.columnsView = new ColumnsView({
         app: self,
         triggerView: columnsBtn,
-        id: 'structure-columns'
+        id: 'structure-columns',
+        placement: 'bottom-right'
       });
       items.push(columnsBtn);
 
       items.push(new SelectionButtonView({
         title: _t('Selected'),
         id: 'selected-items',
+        tooltip: _t('Manage selection'),
         collection: this.selectedCollection
       }));
 
       if (self.options.rearrange) {
         var rearrangeButton = new ButtonView({
-          id: 'rearrange',
+          id: 'structure-rearrange',
           title: _t('Rearrange'),
           icon: 'sort-by-attributes',
           tooltip: _t('Rearrange folder contents'),
@@ -389,7 +403,8 @@ define([
         });
         self.uploadView = new UploadView({
           triggerView: uploadButton,
-          app: self
+          app: self,
+          id: 'upload'
         });
         items.push(uploadButton);
       }
@@ -404,7 +419,7 @@ define([
             buttonOptions.triggerView = button;
             buttonOptions.app = self;
             var view = new GenericPopover(buttonOptions);
-            self.$el.append(view.el);
+            self.forms.push(view.el);
           } else {
             button.on('button:click', self.buttonClickEvent, self);
           }
@@ -419,10 +434,12 @@ define([
       });
       items.push(self.buttons);
 
-      items.push(new TextFilterView({
+      self.textfilter = new TextFilterView({
         id: 'filter',
         app: this
-      }));
+      });
+      items.push(self.textfilter);
+
       this.toolbar = new Toolbar({
         items: items
       });
@@ -440,8 +457,9 @@ define([
         },
         dataType: 'json',
         success: function(data) {
+          self.clearStatus();
           if (data.msg) {
-            self.setStatus(data.msg);
+            self.setStatus({text: data.msg});
           } else if (data.status !== 'success') {
             // XXX handle error here with something?
             self.setStatus({text: 'error moving item', type: 'error'});
@@ -449,46 +467,100 @@ define([
           self.collection.pager(); // reload it all
         },
         error: function() {
+          self.clearStatus();
           self.setStatus({text: 'error moving item', type: 'error'});
         }
       });
     },
-    setStatus: function(msg, type) {
-      if (!msg) {
-        // clear it
-        this.status.text = '';
-        this.status.label = '';
-        this.status.type = 'none';
-      } else if (typeof(msg) === 'string') {
-        this.status.text = msg;
-        this.status.label = '';
-        this.status.type = type || 'warning';
+
+    clearStatus: function(key) {
+      var statusContainer = this.$el[0].querySelector('.fc-status-container');
+      var statusItem;
+      var toBeRemoved = [];
+      if (key) {
+        // remove specific status, even if marked with ``fixed``.
+        toBeRemoved = this.statusMessages.filter(function (item) { return item.key === key; });
+        toBeRemoved.forEach(function (statusItem) {
+          try {
+            statusContainer.removeChild(statusItem.el);
+          } catch(e) {
+            // just ignore.
+          }
+        });
+        this.statusMessages = this.statusMessages.filter(function (item) { return item.key !== key; });
       } else {
-        // support setting portal status messages here
-        this.status.label = msg.label || '';
-        this.status.text = msg.text;
-        this.status.type = msg.type || 'warning';
+        // remove all status messages except those marked with ``fixed``.
+        this.statusMessages.forEach(function (statusItem) {
+          if (!statusItem.fixed) {
+            try {
+              statusContainer.removeChild(statusItem.el);
+              toBeRemoved.push(statusItem);
+            } catch(e) {
+              // just ignore.
+            }
+          }
+        }.bind(this));
+        this.statusMessages = this.statusMessages.filter(function (item) { return toBeRemoved.indexOf(item) === -1; });
       }
-      // still need to manually set in case rendering isn't done(especially true for tests)
-      var $status = this.$('.status');
-      $status[0].className = 'alert alert-' + this.status.type + ' status';
-      var $text = $('<span></span>');
-      $text.text(this.status.text);
-      var $label = $('<strong></strong>');
-      $label.text(this.status.label);
-      $status.empty().append($label).append($text);
     },
+
+    setStatus: function(status, btn, fixed, key) {
+
+      if (
+        key &&
+        this.statusMessages.filter(function (item) { return item.key === key; }).length > 0
+      ) {
+        // Prevent two same status messages
+        return;
+      }
+
+      var el = this.statusTemplate({
+        label: status.label || '',
+        text: status.text,
+        type: status.type || 'warning'
+      });
+
+      el = utils.createElementFromHTML(el);
+
+      if (btn) {
+        btn = $(btn)[0];  // support jquert + bare dom elements
+        el.appendChild(btn);
+      }
+
+      var status = {
+        el: el,
+        fixed: fixed,
+        key: key // to be used for filtering to prevent double status messages.
+      };
+
+      var statusContainer = this.$el[0].querySelector('.fc-status-container');
+      statusContainer.appendChild(status.el);
+      this.statusMessages.push(status);
+
+      return status;
+    },
+
     render: function() {
       var self = this;
 
       self.$el.append(self.toolbar.render().el);
-      self.$el.append(self.wellView.render().el);
-      self.$el.append(self.columnsView.render().el);
+      if (self.wellView) {
+        self.$el.find('#btn-' + self.wellView.id).after(self.wellView.render().el)
+      }
+      self.forms.forEach(function(element) {
+        var id = $(element).attr('id')
+        self.$el.find('#btn-'+id).after(element)
+      });
+
+      self.$el.append(utils.createElementFromHTML('<div class="fc-status-container"></div>'));
+      if (self.columnsView) {
+        self.$el.find('#btn-' + self.columnsView.id).after(self.columnsView.render().el)
+      }
       if (self.rearrangeView) {
-        self.$el.append(self.rearrangeView.render().el);
+        self.$el.find('#btn-' + self.rearrangeView.id).after(self.rearrangeView.render().el)
       }
       if (self.uploadView) {
-        self.$el.append(self.uploadView.render().el);
+        self.$el.find('#btn-' + self.uploadView.id).after(self.uploadView.render().el)
       }
 
       self.$el.append(self.tableView.render().el);

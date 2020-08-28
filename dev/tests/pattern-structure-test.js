@@ -3,16 +3,20 @@ define([
   'jquery',
   'underscore',
   'pat-registry',
+  'mockup-ui-url/views/button',
   'mockup-patterns-structure',
   'mockup-patterns-structure-url/js/views/actionmenu',
   'mockup-patterns-structure-url/js/views/app',
   'mockup-patterns-structure-url/js/models/result',
   'mockup-patterns-structure-url/js/views/table',
   'mockup-patterns-structure-url/js/views/tablerow',
+  'mockup-patterns-structure-url/js/views/generic-popover',
   'mockup-patterns-structure-url/js/collections/result',
   'mockup-utils',
   'sinon',
-], function(expect, $, _, registry, Structure, ActionMenuView, AppView, Result, TableView, TableRowView, ResultCollection, utils, sinon) {
+  'moment'
+], function(expect, $, _, registry, ButtonView, Structure, ActionMenuView, AppView, Result,
+            TableView, TableRowView, PropertiesView, ResultCollection, utils, sinon, moment) {
   'use strict';
 
   window.mocha.setup('bdd');
@@ -20,16 +24,16 @@ define([
 
   var structureUrlChangedPath = '';
   var dummyWindow = {};
-  var history = {
+  var stub_history = {
     'pushState': function(data, title, url) {
-      history.pushed = {
+      stub_history.pushed = {
         data: data,
         title: title,
         url: url
       };
     }
   };
-  dummyWindow.history = history;
+  dummyWindow.history = stub_history;
 
   function getQueryVariable(url, variable) {
     var query = url.split('?')[1];
@@ -131,6 +135,12 @@ define([
 
         'activeColumns': [],
         'availableColumns': [],
+        'defaultPageTypes': [
+          'Document',
+          'Event',
+          'News Item',
+          'Collection'
+        ],
         'indexOptionsUrl': '',
         'setDefaultPageUrl': '',
         'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
@@ -171,8 +181,8 @@ define([
       $('a.cutItem', el).click();
       this.clock.tick(500);
 
-      expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
-      expect(this.app.$('.status').hasClass('alert-successss'));
+      expect(this.app.$('.fc-status .fc-status-text').text().trim()).to.equal('Cut "Dummy Object"');
+      expect(this.app.$('.fc-status').hasClass('alert-successss'));
     });
 
     it('custom action menu items', function() {
@@ -202,8 +212,8 @@ define([
 
       $('a.cutItem', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text().trim()).to.equal('Cut "Dummy Object"');
-      expect(this.app.$('.status').hasClass('alert-success'));
+      expect(this.app.$('.fc-status .fc-status-text').text().trim()).to.equal('Cut "Dummy Object"');
+      expect(this.app.$('.fc-status').hasClass('alert-success'));
     });
 
     it('custom action menu items and actions.', function() {
@@ -216,7 +226,7 @@ define([
           },
           foobarClicked: function(e) {
             var self = this;
-            self.app.setStatus('Status: foobar clicked');
+            self.app.setStatus({ text: 'Status: foobar clicked' });
           }
         });
         return Actions;
@@ -251,12 +261,11 @@ define([
 
       $('a.foobar', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text().trim()).to.equal('Status: foobar clicked');
-      expect(this.app.$('.status').hasClass('alert-warning'));  // default status type
+      expect(this.app.$('.fc-status .fc-status-text').text().trim()).to.equal('Status: foobar clicked');
+      expect(this.app.$('.fc-status').hasClass('alert-warning'));  // default status type
     });
 
     it('custom action menu actions missing.', function() {
-      this.app.setStatus(null); // reset
       // Define a custom dummy "module"
       define('dummytestactions', ['backbone'], function(Backbone) {
         var Actions = Backbone.Model.extend({
@@ -266,7 +275,7 @@ define([
           },
           barbazClicked: function(e) {
             var self = this;
-            self.app.setStatus('Status: barbaz clicked');
+            self.app.setStatus({ text: 'Status: barbaz clicked' });
           }
         });
         return Actions;
@@ -305,10 +314,9 @@ define([
 
       // Broken/missing action
       var el = menu.render().el;
-      this.app.setStatus(null); // reset
       $('a.foobar', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text().trim()).to.equal('');
+      expect(this.app.$('.fc-status .fc-status-text').text().trim()).to.equal('');
     });
 
     it('custom action menu via generator.', function() {
@@ -321,7 +329,7 @@ define([
           },
           barbazClicked: function(e) {
             var self = this;
-            self.app.setStatus({text: 'Status: barbaz clicked', type: 'success'});
+            self.app.setStatus({ text: 'Status: barbaz clicked', type: 'success' });
           }
         });
         return Actions;
@@ -362,8 +370,8 @@ define([
       var el = menu.render().el;
       $('a.barbaz', el).click();
       this.clock.tick(500);
-      expect(this.app.$('.status').text().trim()).to.equal('Status: barbaz clicked');
-      expect(this.app.$('.status').hasClass('alert-success'));
+      expect(this.app.$('.fc-status .fc-status-text').text().trim()).to.equal('Status: barbaz clicked');
+      expect(this.app.$('.fc-status').hasClass('alert-success'));
     });
 
     it('custom action menu items in dropdown only', function() {
@@ -528,6 +536,12 @@ define([
         'activeColumns': [],
         'availableColumns': [],
         'collectionConstructor': 'mockup-patterns-structure-url/js/collections/result',
+        'defaultPageTypes': [
+          'Document',
+          'Event',
+          'News Item',
+          'Collection'
+        ],
         'typeToViewAction': {
           'File': '/view',
           'Image': '/view',
@@ -551,6 +565,7 @@ define([
         {
           model: {
             'Title': "Dummy Image",
+            'id': "dummy_page",
             'is_folderish': false,
             'portal_type': "Image",
             'getURL': 'http://nohost/dummy_image'
@@ -559,6 +574,7 @@ define([
         }, {
           model: {
             Title: "Dummy File",
+            id: "dummy_file",
             is_folderish: false,
             portal_type: "File",
             getURL: 'http://nohost/dummy_file'
@@ -567,6 +583,7 @@ define([
         }, {
           model: {
             Title: "Dummy Blob",
+            id: "dummy_blob",
             is_folderish: false,
             portal_type: "Blob",
             getURL: 'http://nohost/dummy_blob'
@@ -575,6 +592,7 @@ define([
         }, {
           model: {
             Title: "Dummy Document",
+            id: "dummy_document",
             is_folderish: false,
             portal_type: "Document",
             getURL: 'http://nohost/dummy_document'
@@ -604,10 +622,11 @@ define([
     });
 
     it('should display an icon for contents with images', function() {
-      this.app.iconSize = 'largest_possible';
+      this.app.thumb_scale = 'tile';
 
       var model = new Result({
           'Title': "Dummy Document",
+          'id': "dummy_document",
           'is_folderish': false,
           'portal_type': "Document",
           'getURL': 'http://nohost/dummy_image',
@@ -621,7 +640,7 @@ define([
       var el = row.render().el;
 
       expect($('.title img', el).length).to.equal(1);
-      expect($('.title img', el).attr('class')).to.have.string('image-largest_possible');
+      expect($('.title img', el).attr('class')).to.have.string('thumb-tile');
     });
 
     it('should display no icon for contents without images', function() {
@@ -629,6 +648,7 @@ define([
 
       var model = new Result({
           'Title': "Dummy Document",
+          'id': "dummy_document",
           'is_folderish': false,
           'portal_type': "Document",
           'getURL': 'http://nohost/dummy_image',
@@ -668,6 +688,7 @@ define([
 
 			var collection = new ResultCollection([{
         'Title': 'Date Columns Test Document',
+        'id': 'date_columns_test_document',
         'is_folderish': false,
         'portal_type': 'Document',
         'getURL': 'http://nohost/doc',
@@ -692,6 +713,106 @@ define([
 
     });
 
+    it('should display an expired label for expired contend', function() {
+
+      var expired = new Date();
+      expired.setDate(expired.getDate() - 10);
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document",
+        'ExpirationDate': expired.toJSON()
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .plone-item-expired', el).length).to.equal(1);
+      expect($('.title .plone-item-ineffective', el).length).to.equal(0);
+    });
+
+    it('should display an before publication date label for content which has an effective date in the future', function() {
+
+      var effective = new Date();
+      effective.setDate(effective.getDate() + 10);
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document",
+        'EffectiveDate': effective.toJSON()
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .plone-item-expired', el).length).to.equal(0);
+      expect($('.title .plone-item-ineffective', el).length).to.equal(1);
+    });
+
+    it('should show Description below title, if available', function() {
+
+      // Ensure, Description is set.
+      this.app.activeColumns = [
+        'Description'
+      ];
+      this.app.availableColumns = {
+        'Description': 'Description'
+      };
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'Description': "Oh, this is a description of this content!",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document"
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .Description', el).length).to.equal(1);
+      // Description should be shown below title, but not in a column.
+      expect($('td.Description', el).length).to.equal(0);
+    });
+
+    it('should not show Description, if not set', function() {
+
+      // Ensure, Description is not set.
+      this.app.activeColumns = [];
+      this.app.availableColumns = {};
+
+      var model = new Result({
+        'Title': "Dummy Document",
+        'Description': "Oh, this is a description of this content!",
+        'id': "dummy_document",
+        'is_folderish': false,
+        'portal_type': "Document"
+      });
+
+      var row = new TableRowView({
+        model: model,
+        app: this.app
+      });
+      var el = row.render().el;
+
+      expect($('.title .Description', el).length).to.equal(0);
+      expect($('td.Description', el).length).to.equal(0);
+    });
+
+
   });
 
   /* ==========================
@@ -712,6 +833,12 @@ define([
         "indexOptionsUrl": "/tests/json/queryStringCriteria.json",
         "contextInfoUrl": "{path}/contextInfo",
         "setDefaultPageUrl": "/setDefaultPage",
+        "defaultPageTypes": [
+          "Document",
+          "Event",
+          "News Item",
+          "Collection"
+        ],
         "urlStructure": {
           "base": "http://localhost:9876",
           "appended": "/folder_contents"
@@ -754,20 +881,22 @@ define([
           'review_state': 'published',
           'is_folderish': true,
           Subject: [],
-          id: 'folder'
+          id: 'folder',
+          ExpirationDate: moment().add(-2, 'days').format()
         });
         for (var i = start; i < end; i = i + 1) {
           items.push({
             UID: '123sdfasdf' + path + i,
             getURL: 'http://localhost:9876' + path + '/item' + i,
             path: path + '/item' + i,
-            portal_type: 'Document ' + i,
+            portal_type: 'Document',
             Description: 'document',
             Title: 'Document ' + i,
             'review_state': 'published',
             'is_folderish': false,
             Subject: [],
-            id: 'item' + i
+            id: 'item' + i,
+            ExpirationDate: moment().add(2, 'days').format()
           });
         }
 
@@ -833,14 +962,10 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(window, 'history').value(stub_history);
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
-
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
     });
 
     afterEach(function() {
@@ -852,15 +977,14 @@ define([
       extraDataJsonItem = null;
       this.server.restore();
       this.clock.restore();
-      this.sandbox.restore();
+      sinon.restore();
       $('body').html('');
-      utils.getWindow.restore();
     });
 
     it('initialize', function() {
       registry.scan(this.$el);
       // moveUrl provided, can get to this via order-support.
-      expect(this.$el.find('.order-support > table').size()).to.equal(1);
+      expect(this.$el.find('table').size()).to.equal(1);
     });
 
     it('select item populates selection well', function() {
@@ -979,8 +1103,8 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(1000);
       expect($popover.hasClass('active')).to.equal(false);
-      expect(this.$el.find('.order-support .status').html()).to.contain('rearrange');
-      expect(this.app.$('.status').hasClass('alert-successss'));
+      expect(this.$el.find('.order-support .fc-status').html()).to.contain('rearrange');
+      expect(this.app.$('.fc-status').hasClass('alert-successss'));
     });
 
     it('test select all', function() {
@@ -1014,13 +1138,21 @@ define([
         ).to.equal(0);
     });
 
+    it('test expired shows', function() {
+      registry.scan(this.$el);
+      this.clock.tick(500);
+
+      var $content_row = this.$el.find('table tbody tr').eq(0);
+      expect($content_row.find('td').eq(1).text().trim()).to.contain('Expired');
+    });
+
     it('test displayed content', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
 
       var $content_row = this.$el.find('table tbody tr').eq(0);
       expect($content_row.find('td').length).to.equal(6);
-      expect($content_row.find('td').eq(1).text().trim()).to.equal('Folder');
+      expect($content_row.find('td').eq(1).text().trim()).to.contain('Folder');
       expect($content_row.find('td').eq(2).text().trim()).to.equal('');
       expect($content_row.find('td').eq(3).text().trim()).to.equal('');
       expect($content_row.find('td').eq(4).text().trim()).to.equal('published');
@@ -1034,7 +1166,7 @@ define([
     it('test select displayed columns', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
-      var $row = this.$el.find('table thead tr').eq(1);
+      var $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($row.find('th').eq(1).text().trim()).to.equal('Title');
       expect($row.find('th').eq(2).text().trim()).to.equal('Last modified');
@@ -1058,7 +1190,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(7);
       expect($row.find('th').eq(5).text().trim()).to.equal('Object Size');
       expect($row.find('th').eq(6).text().trim()).to.equal('Actions');
@@ -1070,7 +1202,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($.parseJSON($.cookie('_fc_activeColumns')).value).to.eql(
           ["ModificationDate", "EffectiveDate", "review_state"]);
@@ -1109,11 +1241,12 @@ define([
       // cannot select all
       expect($('a.selectAll', item).length).to.equal(0);
       // can set default page
+      expect($('a.set-default-page', item).length).to.equal(1);
       expect($('a.set-default-page', item).text().trim()).to.equal(
         'Set as default page');
       $('a.set-default-page', item).click();
       this.clock.tick(1000);
-      expect(this.$el.find('.order-support .status').html()).to.contain('defaulted');
+      expect(this.$el.find('.fc-status').html()).to.contain('defaulted');
     });
 
     it('test itemRow actionmenu paste click', function() {
@@ -1129,7 +1262,7 @@ define([
       expect($('a.pasteItem', item0).text().trim()).to.equal('Paste');
       $('a.pasteItem', item0).click();
       this.clock.tick(1000);
-      expect(this.$el.find('.order-support .status').html()).to.contain('Pasted into "Folder"');
+      expect(this.$el.find('.fc-status').html()).to.contain('Pasted into "Folder"');
     });
 
     it('test itemRow actionmenu move-top click', function() {
@@ -1145,9 +1278,9 @@ define([
       $('.actionmenu a.move-top', item10).trigger('click');
       this.clock.tick(1000);
 
-      expect(this.$el.find('.order-support .status').html()).to.contain('moved');
-      expect(this.$el.find('.order-support .status').html()).to.contain('delta=top');
-      expect(this.$el.find('.order-support .status').html()).to.contain('id=item9');
+      expect(this.$el.find('.fc-status').html()).to.contain('moved');
+      expect(this.$el.find('.fc-status').html()).to.contain('delta=top');
+      expect(this.$el.find('.fc-status').html()).to.contain('id=item9');
       // No items actually moved, this is to be implemented server-side.
     });
 
@@ -1171,7 +1304,7 @@ define([
       expect(item.data().id).to.equal('item9');
       expect($('.title a.manage', item).attr('href')).to.equal('http://localhost:9876/item9');
       expect($('.actionmenu a.openItem', item).attr('href')).to.equal('http://localhost:9876/item9');
-      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:9876/item9/@@edit');
+      expect($('.actionmenu a.editItem', item).attr('href')).to.equal('http://localhost:9876/item9/edit');
     });
 
     it('test navigate to folder push states', function() {
@@ -1182,13 +1315,13 @@ define([
       expect(item.data().id).to.equal('folder');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/folder/folder_contents');
       expect(structureUrlChangedPath).to.eql('/folder');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/folder_contents');
       expect(structureUrlChangedPath).to.eql('');
     });
@@ -1274,20 +1407,17 @@ define([
 
       this.clock = sinon.useFakeTimers();
 
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
 
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
     });
 
     afterEach(function() {
       this.server.restore();
       this.clock.restore();
-      this.sandbox.restore();
       $('body').html('');
-      utils.getWindow.restore();
+      sinon.restore();
       $('body').off('structure-url-changed');
     });
 
@@ -1340,7 +1470,7 @@ define([
                '{"value":["ModificationDate","EffectiveDate","review_state",' +
                '"getObjSize"]}');
       this.clock.tick(500);
-      var $row = this.$el.find('table thead tr').eq(1);
+      var $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($row.find('th').eq(5).text().trim()).to.equal('Actions');
 
@@ -1360,7 +1490,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(7);
       expect($row.find('th').eq(5).text().trim()).to.equal('Type');
       expect($row.find('th').eq(6).text().trim()).to.equal('Actions');
@@ -1375,7 +1505,7 @@ define([
       $popover.find('button').trigger('click');
       this.clock.tick(500);
 
-      $row = this.$el.find('table thead tr').eq(1);
+      $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(6);
       expect($.parseJSON($.cookie('_fc_activeColumnsCustom')).value).to.eql(
           ["ModificationDate", "EffectiveDate", "review_state"]);
@@ -1476,7 +1606,7 @@ define([
     it('test select displayed columns', function() {
       registry.scan(this.$el);
       this.clock.tick(500);
-      var $row = this.$el.find('table thead tr').eq(1);
+      var $row = this.$el.find('table thead tr').eq(0);
       expect($row.find('th').length).to.equal(4);
       expect($row.find('th').eq(1).text().trim()).to.equal('Title');
       expect($row.find('th').eq(2).text().trim()).to.equal('Object Size');
@@ -1818,18 +1948,15 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
 
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
-      utils.getWindow.restore();
-      this.sandbox.restore();
+      sinon.restore();
       this.server.restore();
       this.clock.restore();
       $('body').html('');
@@ -1854,12 +1981,12 @@ define([
           option1: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus({text: 'Status: option1 selected', type: 'success'});
+            self.app.setStatus({ text: 'Status: option1 selected', type: 'success' });
           },
           option2: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus({text: 'Status: option2 selected', type: 'info'});
+            self.app.setStatus({ text: 'Status: option2 selected', type: 'info' });
           }
         });
         return Actions;
@@ -1871,14 +1998,14 @@ define([
       $('.actionmenu a.action1', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
-      expect($('.status').text()).to.contain('Status: option1 selected');
-      expect($('.status').hasClass('alert-success'));
+      expect($('.fc-status .fc-status-text').text()).to.contain('Status: option1 selected');
+      expect($('.fc-status').hasClass('alert-success'));
 
       $('.actionmenu a.action2', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
-      expect($('.status').text()).to.contain('Status: option2 selected');
-      expect($('.status').hasClass('alert-info'));
+      expect($('.fc-status').text()).to.contain('Status: option2 selected');
+      expect($('.fc-status').hasClass('alert-info'));
     });
 
     it('item link triggered', function() {
@@ -1891,7 +2018,7 @@ define([
           handleOther: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus({text: 'Status: not a folder', type: 'error'});
+            self.app.setStatus({ text: 'Status: not a folder', type: 'error' });
           }
         });
         return Actions;
@@ -1905,8 +2032,8 @@ define([
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
-      expect($('.status').text()).to.contain('Status: not a folder');
-      expect($('.status').hasClass('alert-error'));
+      expect($('.fc-status .fc-status-text').text()).to.contain('Status: not a folder');
+      expect($('.fc-status').hasClass('alert-error'));
     });
 
   });
@@ -1999,21 +2126,17 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
-      this.sandbox.stub(window.history, 'pushState', history.pushState);
-
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(window, 'history').value(stub_history);
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
-      utils.getWindow.restore();
-      this.sandbox.restore();
       this.server.restore();
       this.clock.restore();
+      sinon.restore();
       $('body').html('');
       $('body').off('structure-url-changed');
     });
@@ -2029,13 +2152,13 @@ define([
       expect(item.data().id).to.equal('folder');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view/folder');
       expect(structureUrlChangedPath).to.eql('');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view');
     });
 
@@ -2066,13 +2189,13 @@ define([
       expect(item.data().id).to.equal('folder');
       $('.title a.manage', item).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view/folder');
       expect(structureUrlChangedPath).to.eql('');
 
       $('.fc-breadcrumbs a', this.$el).eq(0).trigger('click');
       this.clock.tick(1000);
-      expect(history.pushed.url).to.equal(
+      expect(window.history.pushed.url).to.equal(
         'http://localhost:9876/traverse_view');
     });
 
@@ -2184,14 +2307,11 @@ define([
       });
 
       this.clock = sinon.useFakeTimers();
-      this.sandbox = sinon.sandbox.create();
-      this.sandbox.stub(window, 'history', history);
     });
 
     afterEach(function() {
       requirejs.undef('dummytestaction');
       requirejs.undef('dummyactionmenu');
-      this.sandbox.restore();
       this.server.restore();
       this.clock.restore();
       $('body').html('');
@@ -2208,12 +2328,12 @@ define([
           folderClicker: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus('Status: folder clicked');
+            self.app.setStatus({ text: 'Status: folder clicked' });
           },
           itemClicker: function(e) {
             e.preventDefault();
             var self = this;
-            self.app.setStatus('Status: item clicked');
+            self.app.setStatus({ text: 'Status: item clicked' });
           }
         });
         return Actions;
@@ -2259,7 +2379,7 @@ define([
       $('.actionmenu a.folderClicker', folder).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
-      expect($('.status').text()).to.contain('Status: folder clicked');
+      expect($('.fc-status .fc-status-text').text()).to.contain('Status: folder clicked');
 
       var item = this.$el.find('.itemRow').eq(1);
       // Check for complete new options
@@ -2269,7 +2389,7 @@ define([
       $('.actionmenu a.itemClicker', item).trigger('click');
       this.clock.tick(1000);
       // status will be set as defined.
-      expect($('.status').text()).to.contain('Status: item clicked');
+      expect($('.fc-status .fc-status-text').text()).to.contain('Status: item clicked');
 
     });
 
@@ -2405,7 +2525,7 @@ define([
 
       this.clock = sinon.useFakeTimers();
 
-      sinon.stub(utils, 'getWindow', function() {
+      sinon.stub(utils, 'getWindow').callsFake(function() {
         return dummyWindow;
       });
 
@@ -2415,7 +2535,7 @@ define([
       this.server.restore();
       this.clock.restore();
       $('body').html('');
-      utils.getWindow.restore();
+      sinon.restore();
     });
 
     it('test displayed content', function() {
@@ -2550,5 +2670,43 @@ define([
     });
 
   });
+
+  /* ==========================
+   TEST: PropertiesView concatenate duplicated values
+  ========================== */
+  describe('PropertiesView concatenate duplicated values', function() {
+    beforeEach(function() {
+        this.app = {
+            "buttonClickEvent": function(triggerView, data) {
+                this.data = data;
+            },
+            "selectedCollection": $()
+        };
+        var triggerView = new ButtonView({
+            "id": "foobar"
+        });
+        triggerView.$el.appendTo('body');
+        var options = {
+            "app": this.app,
+            "triggerView": triggerView,
+            "form": {
+                "template": '<select multiple name="foo"><option selected value="1">1</option>' +
+                '<option selected value="2">2</option><option value="3">3</option></select>'
+            }
+        };
+        this.popover = new PropertiesView(options);
+    });
+
+    afterEach(function() {
+        $('body').html('');
+    });
+
+    it('test applyButtonClicked', function() {
+        this.popover.toggle();
+        this.popover.applyButtonClicked();
+        expect(this.app.data.foo).to.equal('1,2');
+    });
+  });
+
 
 });

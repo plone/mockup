@@ -1,0 +1,17 @@
+{
+    "name": "cs-jqtree-contextmenu",
+    "version": "0.1.0",
+    "description": "Provides a simple way to handle context menus with jqTree.",
+    "main": "src/jqTreeContextMenu.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ChadSikorra/jqTreeContextMenu"
+    },
+    "dependencies": {
+        "jqtree": ">=0.16"
+    },
+    "keywords": [
+        "jqTree",
+        "context menu"
+    ]
+}

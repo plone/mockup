@@ -1,11 +1,12 @@
 <% _.each(menuOptions.button, function(menuOption){ %>
-<a class="action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
+<a class="action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <%- menuOption.css %>"
     href="<%- menuOption.url %>"
-    title="<%- _t(menuOption.title) %>">
+    title="<%- _t(menuOption.title) %>"
+    aria-label="<%- _t(menuOption.title) %>">
   <% if (menuOption.iconCSS) { %>
   <span class="<%- menuOption.iconCSS %>"></span>
   <% } else { %>
-  <%- _t(menuOption.title) %> 
+  <%- _t(menuOption.title) %>
   <% } %>
 </a>&nbsp;
 <% }); %>
@@ -18,7 +19,7 @@
     aria-haspopup="true"
     aria-expanded="true"
     id="<%- id %>"
-    title="Actions">
+    title='<%- _t("Actions") %>'>
   <span class="glyphicon glyphicon-cog"></span><span class="caret"></span>
 </a>
 <ul class="dropdown-menu pull-right" aria-labelledby="<%- id %>">
@@ -29,7 +30,7 @@
 
   <% _.each(menuOptions.dropdown, function(menuOption){ %>
   <li>
-    <a class="action <%- menuOption.name %> <%- menuOption.idx %> <% if (menuOption.modal) { %>pat-plone-modal<% } %>"
+    <a class="action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.css %>"
         href="<%- menuOption.url %>">
       <% if (menuOption.iconCSS) { %>
       <span class="<%- menuOption.iconCSS %>"></span>

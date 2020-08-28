@@ -1,0 +1,10 @@
+{
+    "css": [],
+    "js": [
+        "js/dataTables.fixedHeader.js",
+        "js/dataTables.fixedHeader.min.js"
+    ],
+    "src-repo": "http://github.com/DataTables/FixedHeader",
+    "last-sync": "44e6fae272203fe821214782c92362ac45f6a604",
+    "last-tag": "3.1.3"
+}

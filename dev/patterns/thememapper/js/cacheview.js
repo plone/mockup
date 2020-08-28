@@ -3,7 +3,7 @@ define([
   'underscore',
   'mockup-patterns-filemanager-url/js/basepopover',
   'mockup-utils'
-], function($, _, PopoverView, utils ) {
+], function($, _, PopoverView, utils) {
   'use strict';
   var template = _.template(
     '<div>' +
@@ -28,7 +28,7 @@ define([
 
         var url = self.app.options.themeUrl;
         url = url.substr(0, url.indexOf('portal_resource'));
-        url += "/theming-controlpanel";
+        url += '/theming-controlpanel';
 
         $.ajax({
           url: url,
@@ -36,7 +36,7 @@ define([
             'form.button.InvalidateCache': true,
             '_authenticator': utils.getAuthenticator()
           },
-          success: function(response) {
+          success: function() {
             self.$message.hide();
             self.$success.show();
             self.$clear.hide();
@@ -54,7 +54,6 @@ define([
     },
     toggle: function(button, e) {
       PopoverView.prototype.toggle.apply(this, [button, e]);
-      var self = this;
     }
 
   });

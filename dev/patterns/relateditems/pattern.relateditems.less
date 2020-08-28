@@ -1,185 +1,322 @@
-@import "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-@import "@{bowerPath}/bootstrap/less/glyphicons.less";
-@import "@{mockupPath}/select2/pattern.select2.less";
-@import "@{mockupPath}/tree/pattern.tree.less";
+@import '@{bowerPath}/bootstrap/less/variables.less'; // Modify this for custom colors, font-sizes, etc
+@icon-font-path: '@{bowerPath}/bootstrap/dist/fonts/';
+@import '@{bowerPath}/bootstrap/less/glyphicons.less';
+@import '@{mockuplessPath}/ui.less';
 
+@import (reference) '@{bowerPath}/bootstrap/less/mixins.less';
+@import (reference) '@{bowerPath}/bootstrap/less/utilities.less';
+@import (reference) '@{bowerPath}/bootstrap/less/buttons.less';
+@import (reference) '@{bowerPath}/bootstrap/less/button-groups.less';
+@import (reference) '@{bowerPath}/bootstrap/less/popovers.less';
+@import (reference) '@{mockuplessPath}/popover.less';
+
+@import '@{mockupPath}/select2/pattern.select2.less';
+
+
+.pattern-relateditems-container {
+
+    .fade:extend(.fade all){}
+    .collapse:extend(.collapse all){}
+    .collapsing:extend(.collapsing all){}
+
+    .popover:extend(.popover all){}
+    .popover-title:extend(.popover-title all){}
+    .popover-content:extend(.popover-content all){}
+    .arrow:extend(.arrow all){}
+
+    .table:extend(.table all){}
+    .pagination:extend(.pagination all){}
+
+    .btn:extend(.btn all){}
+    .btn-default:extend(.btn-default all){}
+    .btn-primary:extend(.btn-primary all){}
+    .btn-group:extend(.btn-group all){}
+    .input-group:extend(.input-group all){}
+    .input-group-addon:extend(.input-group-addon all){}
+    .input-group-btn:extend(.input-group-btn all){}
+    .dropdown-menu:extend(.dropdown-menu all){}
+    .dropdown-toggle:extend(.dropdown-toggle all){}
+    .dropdown-header:extend(.dropdown-header all){}
+    .divider:extend(.divider all){}
+
+    .table-striped:extend(.table-striped all){}
+    .table-bordered:extend(.table-bordered all){}
+
+    .navbar:extend(.navbar all){}
+    .navbar-search:extend(.navbar-search all){}
+    .form-search:extend(.form-search all){}
+    .ui-offset-parent:extend(.ui-offset-parent all){}
+
+    .form-group:extend(.form-group all){}
+    .help-block:extend(.help-block all){}
+    .checkbox:extend(.checkbox all){}
+
+    .open:extend(.open all){}
+
+    position: relative;
+    display: inline-block;
+
+    .toolbar {
+        background-color: #d8d8d8;
+        display: inline-block;
+        width: 100%;
+
+        .btn {
+            &:extend(.btn-sm);
+        }
+
+        .mode-selector {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .path-wrapper {
+            display: inline-block;
+            margin: 0.5em;
+            vertical-align: middle;
+        }
+
+        .controls {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+
+    .favorites
+    .recentlyUsed {
+        position: relative;  // make dropdown appear on right, as the dropdown is positioned absolute / left-0.
+    }
+
+    .dropdown-menu {
+        padding: 1em 0;
+
+        a {
+            cursor: pointer;
+            display: block;
+            padding: 0.5em 1em;
+
+            &,
+            &:hover {
+                border-bottom: 0;
+                text-decoration: none;
+            }
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .pattern-relateditems-recentlyused-select {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px;
+
+            .pattern-relateditems-recentlyused-info {
+                flex-grow: 2;
+                hyphens: auto;
+                white-space: normal;
+            }
+
+            .pattern-relateditems-recentlyused-image {
+                flex: 0 0 auto;
+            }
+        }
+    }
+
+    .toolbar .dropdown-menu {
+        min-width: 310px;
+    }
+
+    .pattern-relateditems-result-info {
+        flex-grow: 2;
+        margin: 0.4em 0.4em 0.4em 1.5em;
+        hyphens: auto;
+    }
+
+    .pattern-relateditems-item {
+        display: flex;
+    }
+}
 
 .pattern-relateditems-dropdown {
-  z-index: 10002;
+    .select2-results {
+        background-color: #fff;
+        max-height: 350px;
 
-  .select2-results {
-    .select2-highlighted {
-      color: #000;
-      background: #d8d8d8;
-    }
-    .select2-selected {
-      display: list-item;
-    }
-  }
-}
-.pat-relateditems {
+        .select2-result {
+            background-color: transparent;
 
+            &:nth-child(odd) {
+                background-color: #f7f7f7;
+            }
+
+            &.select2-highlighted {
+                border-left: 0.3em solid #007bb3;
+                border-right: 0.3em solid #007bb3;
+            }
+
+            &-label {
+                padding: 0;
+            }
+        }
+
+        .select2-selected {
+            display: list-item;
+        }
+    }
 }
 
 .pattern-relateditems-active {
+    background-color: #ddd;
     padding: 5px;
-    background-color: #DDD;
 }
 
-.pattern-relateditems-container {
-  display: inline-block;
-  position: relative;
-}
-.pattern-relateditems-path {
-  display: block;
-  line-height: 20px;
-  background-color: #f1f1f1;
-  font-size: 12px;
-  border: 1px solid #aaa;
-  border-bottom-style: none;
-  z-index: 4;
-  position: relative;
-  padding: 0 6px;
-  color: #333;
-
-  a {
-    padding: 0 6px;
-  }
-
-  em {
-    color: #666;
-  }
+.pattern-relateditems-path-label {
+    margin-top: 2px;
 }
 
-.pattern-relateditems-buttons {
-  position: absolute;
-  display: inline-block;
-  text-align: right;
-  font-size: 18px;
-  right: 0;
-  top: 50%;
-  margin-top: -16px;
-  a {
-    display: block;
-    height: 36px;
-    line-height: 36px;
-    .glyphicon();
-    .glyphicon-chevron-right();
-  }
-}
+.pat-relateditems {
+    .select2-choices {
+        align-items: stretch;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        padding: 0.2em;
 
-.pattern-relateditems-result {
-  padding-right: 30px;
-  position: relative;
-
-  a {
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
-  .pattern-relateditems-result-select {
-    display: block;
-    line-height: 15px;
-    padding-top: 5px;
-  }
-
-  .pattern-relateditems-result-path {
-    display: block;
-    color: #444;
-    font-size: 11px;
-  }
-}
-
-.pattern-relateditems-item {
-  .pattern-relateditems-item-path {
-    font-size: 11px;
-    color: #444;
-    display: block;
-  }
-}
-
-/* tree parts */
-.pattern-relateditems-tree {
-  .tree-container {
-    box-shadow: 0px 0px 8px 0px #DDD;
-    position: absolute;
-    background-color: white;
-    min-width: 200px;
-    padding: 0px;
-    left: -1px;
-    top: -11px;
-    border: 1px solid #5897fb;
-    display: none;
-    z-index: 10000;
-    min-width: 350px;
-    margin-top: 10px;
-
-    .pat-tree {
-      max-height: 400px;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      border-top: 1px solid #DDD;
-      border-bottom: 1px solid #DDD;
-      padding: 2px 0;
-    }
-
-    .select-folder-label {
-      font-weight: bold;
-    }
-
-    .tree-node-empty{
-      font-size: 75%;
-    }
-
-    .title-container{
-      background-color: #f1f1f1;
-    }
-
-    .jqtree-tree {
-      background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(1%, #eeeeee), color-stop(5%, #ffffff));
-      background-image: -webkit-linear-gradient(top, #eeeeee 1%, #ffffff 5%);
-      background-image: -moz-linear-gradient(top, #eeeeee 1%, #ffffff 5%);
-      background-image: linear-gradient(to bottom, #eeeeee 1%, #ffffff 5%);
-
-      .pattern-relateditems-buttons {
-        margin-top: -22px;
-        top: inherit;
-      }
-      .jqtree_common {
-        padding-left: 2px;
-      }
-
-      .jqtree_common.jqtree-selected {
-        .jqtree_common.jqtree-element {
-          background: #f1f1f1;
-          text-shadow: none;
+        > li {
+            flex: 1 1 100%;
         }
-      }
 
-      .jqtree-toggler{
-        top: 20%;
-      }
-
-      li.jqtree_common {
-        .jqtree-element{
-          padding: 0;
-        }
-        .jqtree_common.jqtree-element {
-            &:hover {
-                background: #f1f1f1;
+        .select2-search-choice {
+            &.select2-search-choice-focus {
+                border-left: 0.5em solid #286090;
             }
         }
-        &.jqtree-folder{
-          margin-left: 18px;
-
-          ul.jqtree_common{
-            margin-left:0;
-            padding-left:0;
-          }
-        }
-      }
     }
-  }
+
+    &.select2-container-multi {
+        .select2-choices {
+            .select2-search-choice {
+                background-image: none;
+                background-color: #eee;
+                margin: 0.2em;
+                padding: 0;
+                // make choices list compact:
+                // flex: 1 1 auto;
+
+                .select2-search-choice-close {
+                    left: 0.4rem;
+                    right: auto;
+                    text-decoration: none;
+                    top: 0.4rem;
+                }
+
+                .pattern-relateditems-item-image {
+                    flex: 0 0 auto;
+                }
+            }
+        }
+    }
+}
+
+
+.pattern-relateditems-result {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.15em;
+
+    a {
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    .pattern-relateditems-result-info {
+        padding: 0.4em;
+    }
+
+    .pattern-relateditems-result-browse-wrapper {
+        display: flex;
+        flex: 2 1 fill;
+        justify-content: flex-start;
+
+        .pattern-relateditems-result-select {
+            &:not(.selectable) {
+                &:not(.one-level-up) {
+                    opacity: 0.6;
+                }
+            }
+        }
+
+        .pattern-relateditems-result-browse {
+            font-size: 2.1rem;
+            line-height: 1.8em;
+            margin: 0 0.1em 0 0;
+            padding: 0 0.15em 0 0.1em;
+
+            &:hover {
+                background-color: lighten(#d8d8d8, 5%);
+            }
+
+            span {
+                vertical-align: middle;
+            }
+        }
+    }
+    &.one-level-up {
+        background-color: #ddd;
+
+        .pattern-relateditems-result-browse-wrapper {
+            flex-direction: row-reverse;
+        }
+    }
+}
+
+.pattern-relateditems-item-title,
+.pattern-relateditems-result-title {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    padding: 0;
+
+    &[class*="contenttype-"] {
+        &::before {
+            font-size: 1.46rem;
+            height: 25px;
+            vertical-align: middle;
+            width: 14px;
+        }
+    }
+}
+
+.pattern-relateditems-result-path {
+    margin-top: -5px;
+}
+
+// Keep images at 128x128 even if thumb size is set to higher
+// Global selectors are for modals and we override default from #content-core
+.pattern-relateditems-result-image,
+.pattern-relateditems-recentlyused-image,
+.pattern-relateditems-item-image {
+    img {
+        &,
+        #content-core & {
+            max-height: 128px;
+            max-width: 128px;
+        }
+    }
+}
+
+.pattern-relateditems {
+    &-recentlyused-path,
+    &-item-path,
+    &-result-path {
+        color: #444;
+        display: block;
+        font-size: 0.8em;
+        padding-left: 0.2em;
+    }
 }

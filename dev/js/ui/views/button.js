@@ -27,14 +27,6 @@ define([
       }
       BaseView.prototype.initialize.apply(this, [options]);
 
-      this.on('disable', function() {
-        this.disable();
-      }, this);
-
-      this.on('enable', function() {
-        this.enable();
-      }, this);
-
       this.on('render', function() {
         this.$el.attr('title', this.options.title || '');
         this.$el.attr('aria-label', this.options.title || this.options.tooltip || '');
@@ -43,7 +35,7 @@ define([
         }
         _.each(this.extraClasses, function(klass){
           this.$el.addClass(klass);
-        });
+        }.bind(this));
 
         if (this.tooltip !== null) {
 
@@ -69,11 +61,9 @@ define([
       return _.extend({'icon': '', 'title': ''}, this.options);
     },
     disable: function() {
-      this.options.disabled = true;
       this.$el.addClass('disabled');
     },
     enable: function() {
-      this.options.disabled = false;
       this.$el.removeClass('disabled');
     }
   });

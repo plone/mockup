@@ -1,0 +1,33 @@
+{
+    "name": "datatables.net-select-bs",
+    "version": "1.2.3",
+    "description": "Select for DataTables with styling for [Bootstrap 3](http://getbootstrap.com/)",
+    "files": [
+        "css/**/*.css"
+    ],
+    "style": "css/select.bootstrap.css",
+    "keywords": [
+        "select",
+        "selection",
+        "DataTables",
+        "jQuery",
+        "table",
+        "Bootstrap"
+    ],
+    "homepage": "https://datatables.net",
+    "bugs": "https://datatables.net/forums",
+    "license": "MIT",
+    "author": {
+        "name": "SpryMedia Ltd",
+        "url": "http://datatables.net"
+    },
+    "dependencies": {
+        "jquery": ">=1.7",
+        "datatables.net-bs": "^1.10.15",
+        "datatables.net-select": "1.2.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DataTables/Dist-DataTables-Select-Bootstrap.git"
+    }
+}
