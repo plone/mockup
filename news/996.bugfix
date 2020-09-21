@@ -1,4 +1,0 @@
-Fix regression for the disabled state of action buttons in folder contents
-and the Tools/Build CSS button in thememapper.
-This fixes https://github.com/plone/Products.CMFPlone/issues/2296
-[vincentfretin]

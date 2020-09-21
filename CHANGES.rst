@@ -8,6 +8,40 @@ Changelog
 
 .. towncrier release notes start
 
+2.7.9 (2020-09-21)
+------------------
+
+Bug fixes:
+
+
+- tinymce pattern: Add missing translations by...
+
+      - copying generateModalHtml function from master branch,
+      - adding some backported xml changes from 71ddf6f387
+      - adding 2 further translations (not yet in master)
+
+  [djowett-ftw] (#910)
+- Fix CSS issue on "Pattern options" tab in Resource Registries (padding-top of the tab content).
+  This fixes https://github.com/plone/Products.CMFPlone/issues/1111
+  [vincentfretin] (#990)
+- Fix some internationalization issues in structure pattern (folder_contents view): "Open", "Edit" and "Actions" tooltips are translated; all actions under "Actions" are translated; In filter menu the "No sorting" option of the sorting dropdown is translated.
+  [erral] (#991)
+- Fix regression for the disabled state of action buttons in folder contents
+  and the Tools/Build CSS button in thememapper.
+  This fixes https://github.com/plone/Products.CMFPlone/issues/2296
+  [vincentfretin] (#996)
+- Fix internationalization of "Filter" placeholder in selected items dialog.
+  [vincentfretin] (#997)
+- Fix filename overlapping the remove button in the Upload dialog.
+  This fixes https://github.com/plone/Products.CMFPlone/issues/2533 and
+  https://github.com/plone/plonetheme.barceloneta/issues/204
+  [vincentfretin] (#1000)
+- Respect default_page_types in actionmenu if folder_contents. Fixes https://github.com/plone/Products.CMFPlone/issues/2700 (backport to 5.1.x)
+  [pbauer] (#1008)
+- Fix external description text in tinymce link popup
+  [parruc] (#1010)
+
+
 2.7.8 (2019-05-21)
 ------------------
 
