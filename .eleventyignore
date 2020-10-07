@@ -1,0 +1,15 @@
+js/
+less/
+lib/
+node_modules/
+tests/
+mockup.egg-info/
+news/
+.nix/
+mockup/js
+mockup/less
+mockup/lib
+mockup/node_modules
+mockup/less
+mockup/tests
+

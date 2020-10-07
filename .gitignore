@@ -15,3 +15,6 @@ stamp-npm
 test-results.xml
 .vscode
 !.yarnrc
+/mockup/patterns
+/yarn-error.log
+/docs/_site

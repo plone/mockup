@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mockup docs</title>
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <!-- <link rel="stylesheet" href="/mockup/build/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="/mockup/build/filemanager.min.css" />
+    <link rel="stylesheet" href="/mockup/build/widgets.min.css" />
+    <link rel="stylesheet" href="/mockup/build/structure.min.css" />
+    <link rel="stylesheet" href="/main.css" />
+    <script src="/mockup/build/plone.min.js"></script>
+    <!-- <script src="/config.js"></script>
+        <script>
+        require = undefined
+        define = undefined
+    </script> -->
+    <!-- <script src="/mockup/build/sinon.js"></script> -->
+    <!-- <script type="module">
+      import sinon from '/mockup/build/sinon-esm.js';
+      </script> -->
+    <!-- <script src="/mockup/build/require.js"></script> -->
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <nav id="sidebar">
+        <ul class="menu">
+          <li class="">
+            <a class="" href="/">Home</a>
+          </li>
+          {% for pattern in collections.patterns %}
+          <li class="">
+            <a class="menu-item" href="{{ pattern.url }}">{{
+              pattern.data.title
+            }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <main id="content">
+        {{ content }}
+      </main>
+    </div>
+    <!-- <script src="/fakeserver.js"></script> -->
+  </body>
+</html>
