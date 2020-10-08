@@ -13,9 +13,17 @@
  *
  *    # Table
  *
+ *    The patttern needs to be defined on the direct parent element of the elements to be sorted.
+ *    Heads up: A <tbody> would be added to the table by browser automatically.
+ *    The pattern needs to be defined on the <tbody> then.
+ *
  *    {{ example-2 }}
  *
  * Example: example-1
+ *    <style type="text/css" media="screen">
+ *      .item-dragging { background-color: red; }
+ *      .dragging { background: green; }
+ *    </style>
  *    <ul class="pat-sortable">
  *      <li>One</li>
  *      <li>Two</li>
@@ -23,9 +31,8 @@
  *    </ul>
  *
  * Example: example-2
- *    <table class="table table-stripped pat-sortable"
- *           data-pat-sortable="selector:tr;">
- *      <tbody>
+ *    <table class="table table-stripped">
+ *      <tbody class="pat-sortable" data-pat-sortable="selector:tr;">
  *        <tr>
  *          <td>One One</td>
  *          <td>One Two</td>
@@ -43,12 +50,7 @@
  *
  */
 
-define([
-  "jquery",
-  "pat-base",
-  "jquery.event.drop",
-  "jquery.event.drag",
-], function ($, Base, drop) {
+define(["jquery", "pat-base", "sortable"], function ($, Base, Sortable) {
   "use strict";
 
   var SortablePattern = Base.extend({
@@ -59,80 +61,24 @@ define([
       selector: "li",
       dragClass: "item-dragging",
       cloneClass: "dragging",
-      createDragItem: function (pattern, $el) {
-        return $el
-          .clone()
-          .addClass(pattern.options.cloneClass)
-          .css({ opacity: 0.75, position: "absolute" })
-          .appendTo(document.body);
-      },
       drop: undefined, // callback function or name of global function
-      dragOptions: {
-        distance: 2,
-      },
     },
     init: function () {
-      var self = this;
-      var start = 0;
-
-      self.$el
-        .find(self.options.selector)
-        .drag("start", function (e, dd) {
-          var dragged = this;
-          var $el = $(this);
-          $(dragged).addClass(self.options.dragClass);
-          drop({
-            tolerance: function (event, proxy, target) {
-              if ($(target.elem).closest(self.$el).length === 0) {
-                /* prevent dragging conflict over another drag area */
-                return;
-              }
-              var test = event.pageY > target.top + target.height / 2;
-              $.data(
-                target.elem,
-                "drop+reorder",
-                test ? "insertAfter" : "insertBefore"
-              );
-              return this.contains(target, [event.pageX, event.pageY]);
-            },
-          });
-
-          start = $el.index();
-          return self.options.createDragItem(self, $el);
-        })
-        .drag(function (e, dd) {
-          /*jshint eqeqeq:false */
-          $(dd.proxy).css({
-            top: dd.offsetY,
-            left: dd.offsetX,
-          });
-          var drop = dd.drop[0],
-            method = $.data(drop || {}, "drop+reorder");
-          /* XXX Cannot use triple equals here */
-          if (method && drop && (drop != dd.current || method != dd.method)) {
-            $(this)[method](drop);
-            dd.current = drop;
-            dd.method = method;
-            dd.update();
+      var sortable = new Sortable(this.$el[0], {
+        draggable: this.options.selector,
+        chosenClass: this.options.dragClass,
+        dragClass: this.options.cloneClass,
+        onEnd: function (e) {
+          var cb = this.options.drop;
+          if (!cb) {
+            return;
           }
-        }, self.options.dragOptions)
-        .drag("end", function (e, dd) {
-          var $el = $(this);
-          $el.removeClass(self.options.dragClass);
-          $(dd.proxy).remove();
-          if (self.options.drop) {
-            if (typeof self.options.drop === "string") {
-              window[self.options.drop]($el, $el.index() - start);
-            } else {
-              self.options.drop($el, $el.index() - start);
-            }
+          if (typeof cb === "string") {
+            cb = window[this.options.drop];
           }
-        })
-        .drop("init", function (e, dd) {
-          /*jshint eqeqeq:false */
-          /* XXX Cannot use triple equals here */
-          return this == dd.drag ? false : true;
-        });
+          cb($(e.item), e.newIndex - e.oldIndex);
+        }.bind(this),
+      });
     },
   });
 
