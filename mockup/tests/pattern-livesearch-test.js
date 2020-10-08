@@ -56,26 +56,26 @@ define([
     it('results on focus', function() {
       this.ls.$input.trigger('focusin');
       this.clock.tick(1000);
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(9);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(9);
     });
 
     it('responds to keyup', function() {
       this.ls.$input.trigger('keyup');
       this.clock.tick(1000);
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(9);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(9);
     });
 
     it('does not show with minimum length not met', function() {
       this.ls.$input.attr('value', 'fo');
       this.ls.$input.trigger('keyup');
       this.clock.tick(1000);
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(1);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(1);
     });
 
     it('focus out hides', function() {
       this.ls.$input.trigger('keyup');
       this.clock.tick(1000);
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(9);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(9);
 
       this.ls.$input.trigger('focusout');
       this.clock.tick(1000);
@@ -86,7 +86,7 @@ define([
     it('focus back in shows already searched', function() {
       this.ls.$input.trigger('keyup');
       this.clock.tick(1000);
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(9);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(9);
 
       this.ls.$input.trigger('focusout');
       this.clock.tick(1000);
@@ -100,14 +100,14 @@ define([
     it('should show next and prev', function() {
       this.ls.$input.trigger('keyup');
       this.clock.tick(1000);
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(9);
-      expect(this.$el.find('.livesearch-results li a.next').size()).to.equal(1);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(9);
+      expect(this.$el.find('.livesearch-results li a.next').length).to.equal(1);
 
       this.ls.doSearch(2);
       this.clock.tick(1000);
 
-      expect(this.$el.find('.livesearch-results li').size()).to.equal(9);
-      expect(this.$el.find('.livesearch-results li a.prev').size()).to.equal(1);
+      expect(this.$el.find('.livesearch-results li').length).to.equal(9);
+      expect(this.$el.find('.livesearch-results li a.prev').length).to.equal(1);
     });
 
   });

@@ -38,14 +38,14 @@ define([
       this.$el.remove();
     });
     it('by default creates TOC from h1/h2/h3', function() {
-      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(0);
       Registry.scan(this.$el);
-      expect($('> nav', this.$el).size()).to.equal(1);
-      expect($('> nav > a', this.$el).size()).to.equal(9);
-      expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
-      expect($('> nav > a.autotoc-level-2', this.$el).size()).to.equal(4);
-      expect($('> nav > a.autotoc-level-3', this.$el).size()).to.equal(1);
-      expect($('> nav > a.autotoc-level-4', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(1);
+      expect($('> nav > a', this.$el).length).to.equal(9);
+      expect($('> nav > a.autotoc-level-1', this.$el).length).to.equal(4);
+      expect($('> nav > a.autotoc-level-2', this.$el).length).to.equal(4);
+      expect($('> nav > a.autotoc-level-3', this.$el).length).to.equal(1);
+      expect($('> nav > a.autotoc-level-4', this.$el).length).to.equal(0);
     });
     it('sets href and id', function() {
       Registry.scan(this.$el);
@@ -53,35 +53,35 @@ define([
       expect($('> nav > a:first', this.$el).attr('href')).to.equal('#autotoc-item-autotoc-0');
     });
     it('can be used as jQuery plugin as well', function () {
-      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(0);
       this.$el.patternAutotoc();
-      expect($('> nav', this.$el).size()).to.equal(1);
+      expect($('> nav', this.$el).length).to.equal(1);
     });
     it('can have custom levels', function() {
       this.$el.attr('data-pat-autotoc', 'levels: h1');
-      expect($('> nav', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(0);
       Registry.scan(this.$el);
-      expect($('> nav', this.$el).size()).to.equal(1);
-      expect($('> nav > a.autotoc-level-1', this.$el).size()).to.equal(4);
-      expect($('> nav > a.autotoc-level-2', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(1);
+      expect($('> nav > a.autotoc-level-1', this.$el).length).to.equal(4);
+      expect($('> nav > a.autotoc-level-2', this.$el).length).to.equal(0);
     });
     it('can be appended anywhere', function() {
       this.$el.attr('data-pat-autotoc', 'levels: h1;appendTo:.placeholder');
-      expect($('> nav', this.$el).size()).to.equal(0);
-      expect($('div.placeholder > nav', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).length).to.equal(0);
       Registry.scan(this.$el);
-      expect($('> nav', this.$el).size()).to.equal(0);
-      expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
+      expect($('> nav', this.$el).length).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).length).to.equal(1);
       expect($('div.placeholder', this.$el).children().eq(0).attr('id')).to.equal('first-elem');
       expect($('div.placeholder', this.$el).children().eq(1).attr('class')).to.equal('autotoc-nav');
     });
     it('can be prepended anywhere', function() {
       this.$el.attr('data-pat-autotoc', 'levels: h1;prependTo:.placeholder');
-      expect($('> nav', this.$el).size()).to.equal(0);
-      expect($('div.placeholder > nav', this.$el).size()).to.equal(0);
+      expect($('> nav', this.$el).length).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).length).to.equal(0);
       Registry.scan(this.$el);
-      expect($('> nav', this.$el).size()).to.equal(0);
-      expect($('div.placeholder > nav', this.$el).size()).to.equal(1);
+      expect($('> nav', this.$el).length).to.equal(0);
+      expect($('div.placeholder > nav', this.$el).length).to.equal(1);
       expect($('div.placeholder', this.$el).children().eq(0).attr('class')).to.equal('autotoc-nav');
       expect($('div.placeholder', this.$el).children().eq(1).attr('id')).to.equal('first-elem');
     });

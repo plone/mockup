@@ -48,7 +48,7 @@ define([
         content: '.content'
       });
       this.$el.trigger('click');
-      expect($('.content').size()).to.equal(2);
+      expect($('.content').length).to.equal(2);
     });
 
     it('load local content to target', function() {
@@ -59,8 +59,8 @@ define([
         target: '.target'
       });
       this.$el.trigger('click');
-      expect($('.content').size()).to.equal(2);
-      expect($('.target').size()).to.equal(0);
+      expect($('.content').length).to.equal(2);
+      expect($('.target').length).to.equal(0);
     });
 
     it('load remote content', function() {
@@ -69,7 +69,7 @@ define([
       });
       this.$el.trigger('click');
       this.clock.tick(1000);
-      expect($('#content').size()).to.equal(1);
+      expect($('#content').length).to.equal(1);
     });
 
   });

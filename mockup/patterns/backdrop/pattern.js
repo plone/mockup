@@ -37,7 +37,7 @@ define([
     init: function() {
       var self = this;
       self.$backdrop = $('> .' + self.options.className, self.$el);
-      if (self.$backdrop.size() === 0) {
+      if (self.$backdrop.length === 0) {
         self.$backdrop = $('<div/>')
             .hide()
             .appendTo(self.$el)

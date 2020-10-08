@@ -154,7 +154,7 @@ define([
                 scrollTop: $level.offset().top
               }, self.options.scrollDuration, self.options.scrollEasing);
             }
-            if (self.$el.parents('.plone-modal').size() !== 0) {
+            if (self.$el.parents('.plone-modal').length !== 0) {
               self.$el.trigger('resize.plone-modal.patterns');
             }
             $(this).trigger('clicked');
@@ -181,7 +181,7 @@ define([
     getLevel: function($el) {
       var elementLevel = 0;
       $.each(this.options.levels.split(','), function(level, levelSelector) {
-        if ($el.filter(levelSelector).size() === 1) {
+        if ($el.filter(levelSelector).length === 1) {
           elementLevel = level + 1;
           return false;
         }

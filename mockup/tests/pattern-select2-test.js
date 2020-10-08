@@ -47,10 +47,10 @@ define([
         ' <input class="pat-select2" data-pat-select2="tags: Red,Yellow,Blue"' +
         '        value="Yellow" />' +
         '</div>');
-      expect($('.select2-choices', $el).size()).to.equal(0);
+      expect($('.select2-choices', $el).length).to.equal(0);
       registry.scan($el);
-      expect($('.select2-choices', $el).size()).to.equal(1);
-      expect($('.select2-choices li', $el).size()).to.equal(2);
+      expect($('.select2-choices', $el).length).to.equal(1);
+      expect($('.select2-choices li', $el).length).to.equal(2);
     });
 
     it('init value map/tags from JSON string', function() {
@@ -60,7 +60,7 @@ define([
         initialValues: '{"Red": "RedTEXT", "Yellow": "YellowTEXT"}'
       });
       var $choices = $('.select2-choices li');
-      expect($choices.size()).to.equal(2);
+      expect($choices.length).to.equal(2);
     });
 
     it('init value map from string', function() {
@@ -70,7 +70,7 @@ define([
         initialValues: 'Yellow: YellowTEXT, Red: RedTEXT'
       });
       var $choices = $('.select2-choices li');
-      expect($choices.size()).to.equal(2);
+      expect($choices.length).to.equal(2);
       var $redChoice = $choices.eq(0);
       expect($redChoice.find('div').text()).to.equal('RedTEXT');
     });
@@ -90,7 +90,7 @@ define([
       '</div>');
 
       registry.scan($el);
-      expect($('.select2-choices li', $el).size()).to.equal(3);
+      expect($('.select2-choices li', $el).length).to.equal(3);
     });
 
     it('ajax vocabulary url configuration', function() {
@@ -113,14 +113,14 @@ define([
       var pattern = $('.pat-select2').patternSelect2();
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(0);
+      expect($results.length).to.equal(0);
 
       var clock = sinon.useFakeTimers();
       $('.select2-input').click();
       clock.tick(1000);
 
       $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(3);
+      expect($results.length).to.equal(3);
       expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
       expect($results.first().text()).to.be.equal('Red');
     });
@@ -140,7 +140,7 @@ define([
       this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(4);
+      expect($results.length).to.equal(4);
       expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
       expect($results.first().text()).to.be.equal('AAA');
     });
@@ -160,7 +160,7 @@ define([
       this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(4);
+      expect($results.length).to.equal(4);
       expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
       expect($results.first().text()).to.be.equal('Evil logo');
     });
@@ -180,7 +180,7 @@ define([
       this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(4);
+      expect($results.length).to.equal(4);
       expect($results.first().hasClass('select2-highlighted')).to.be.equal(true);
       expect($results.first().text()).to.be.equal('this < that & those');
     });
@@ -211,21 +211,21 @@ define([
       var pattern = $('.pat-select2').patternSelect2();
 
       var $results = $('li.select2-search-choice');
-      expect($results.size()).to.equal(2);
+      expect($results.length).to.equal(2);
       expect($.trim($results.eq(0).text())).to.equal('Yellow');
       expect($.trim($results.eq(1).text())).to.equal('Red');
 
       var firstElem = $results.eq(0);
       var secondElem = $results.eq(1);
       // css class is set and proxy is created when starting to drag
-      expect($('li.dragging').size()).to.equal(0);
+      expect($('li.dragging').length).to.equal(0);
       expect(firstElem.hasClass('select2-choice-dragging')).to.equal(false);
 
       firstElem.trigger($.Event('dragstart'));
 
       expect(firstElem.hasClass('select2-choice-dragging')).to.equal(true);
       var $proxy = $('li.dragging');
-      expect($proxy.size()).to.equal(1);
+      expect($proxy.length).to.equal(1);
 
       // css position is updated while dragging
       firstElem.trigger($.Event('drag'), {
@@ -240,7 +240,7 @@ define([
       // css class is removed and proxy is deleted when dragging stops
       firstElem.trigger($.Event('dragend'), {proxy: $proxy});
       expect(firstElem.hasClass('select2-choice-dragging')).to.equal(false);
-      expect($('li.dragging').size()).to.equal(0);
+      expect($('li.dragging').length).to.equal(0);
     });
 
     it('does not allow new items to be added', function() {
@@ -257,10 +257,10 @@ define([
       this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(0);
+      expect($results.length).to.equal(0);
 
       var $noResults = $('li.select2-no-results');
-      expect($noResults.size()).to.equal(1);
+      expect($noResults.length).to.equal(1);
     });
 
     it('does not allow new items to be added when using ajax', function() {
@@ -277,10 +277,10 @@ define([
       this.clock.tick(1000);
 
       var $results = $('li.select2-result-selectable');
-      expect($results.size()).to.equal(3);
+      expect($results.length).to.equal(3);
 
       var $noResults = $('li.select2-no-results');
-      expect($noResults.size()).to.equal(0);
+      expect($noResults.length).to.equal(0);
     });
 
     it('HTML multiple select widget converted to hidden inuput, before applying select2', function() {
@@ -303,7 +303,7 @@ define([
       expect($('#test-select2', $el).attr('name')).to.equal('test-name');
       expect($('#test-select2', $el).val()).to.equal('1;3');
       var $results = $('li.select2-search-choice', $el);
-      expect($results.size()).to.equal(2);
+      expect($results.length).to.equal(2);
       expect($.trim($results.eq(0).text())).to.equal('One');
       expect($.trim($results.eq(1).text())).to.equal('Three');
     });

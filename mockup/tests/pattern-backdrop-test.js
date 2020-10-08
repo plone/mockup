@@ -17,7 +17,7 @@ define([
     it('default behaviour', function() {
       var $el = $('<div></div>'),
           backdrop = new Backdrop($el);
-      expect($('.plone-backdrop', $el).size()).to.equal(1);
+      expect($('.plone-backdrop', $el).length).to.equal(1);
       expect($el.hasClass('plone-backdrop-active')).to.equal(false);
       backdrop.show();
       expect($el.hasClass('plone-backdrop-active')).to.equal(true);

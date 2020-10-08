@@ -346,7 +346,7 @@ define([
       }
       /* if there is active, make sure to reposition */
       var $active = $('li.active ul:visible', this.$container);
-      if ($active.size() > 0) {
+      if ($active.length > 0) {
         this.padPulloutContent($active);
       }
     },
