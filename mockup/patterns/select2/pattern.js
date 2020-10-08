@@ -64,14 +64,12 @@
  *
  */
 
-define([
-  "jquery",
-  "pat-base",
-  "mockup-utils",
-  "select2",
-  "jquery.event.drag",
-  "jquery.event.drop",
-], function ($, Base, utils) {
+define(["jquery", "pat-base", "mockup-utils", "sortable", "select2"], function (
+  $,
+  Base,
+  utils,
+  Sortable
+) {
   "use strict";
 
   var Select2 = Base.extend({
@@ -153,67 +151,26 @@ define([
     },
     initializeOrdering: function () {
       var self = this;
-      if (self.options.orderable) {
-        var formatSelection = function (data, $container) {
-          return data ? data.text : undefined;
-        };
-        if (self.options.formatSelection) {
-          formatSelection = self.options.formatSelection;
-        }
-
-        self.options.formatSelection = function (data, $container) {
-          $container
-            .parents("li")
-            .drag("start", function (e, dd) {
-              $(this).addClass("select2-choice-dragging");
-              self.$el.select2("onSortStart");
-              $.drop({
-                tolerance: function (event, proxy, target) {
-                  var test = event.pageY > target.top + target.height / 2;
-                  $.data(
-                    target.elem,
-                    "drop+reorder",
-                    test ? "insertAfter" : "insertBefore"
-                  );
-                  return this.contains(target, [event.pageX, event.pageY]);
-                },
-              });
-              return $(this)
-                .clone()
-                .addClass("dragging")
-                .css({ opacity: 0.75, position: "absolute" })
-                .appendTo(document.body);
-            })
-            .drag(function (e, dd) {
-              /*jshint eqeqeq:false */
-              $(dd.proxy).css({
-                top: dd.offsetY,
-                left: dd.offsetX,
-              });
-              var drop = dd.drop[0],
-                method = $.data(drop || {}, "drop+reorder");
-
-              /* XXX Cannot use triple equals here */
-              if (drop && (drop != dd.current || method != dd.method)) {
-                $(this)[method](drop);
-                dd.current = drop;
-                dd.method = method;
-                dd.update();
-              }
-            })
-            .drag("end", function (e, dd) {
-              $(this).removeClass("select2-choice-dragging");
-              self.$el.select2("onSortEnd");
-              $(dd.proxy).remove();
-            })
-            .drop("init", function (e, dd) {
-              /*jshint eqeqeq:false */
-              /* XXX Cannot use triple equals here */
-              return this == dd.drag ? false : true;
-            });
-          return formatSelection(data, $container);
-        };
+      if (!self.options.orderable) {
+        return;
       }
+      this.$el.on(
+        "change",
+        function (e) {
+          var sortable_el = this.$select2[0].querySelector(".select2-choices");
+          var sortable = new Sortable(sortable_el, {
+            draggable: "li",
+            dragClass: "select2-choice-dragging",
+            chosenClass: "dragging",
+            onStart: function (e) {
+              self.$el.select2("onSortStart");
+            }.bind(this),
+            onEnd: function (e) {
+              this.$el.select2("onSortEnd");
+            }.bind(this),
+          });
+        }.bind(this)
+      );
     },
     initializeSelect2: function () {
       var self = this;

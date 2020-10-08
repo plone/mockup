@@ -3,4 +3,5 @@ Upgrade to patternslib 3.
 Remove jquery.event.drag/drop.
 Depend on SortableJS as replacement for jquery.event.drag/drop.
 pat-sortable: Use SortableJS instead jquery.event.drag/drop based solution.
+pat-select2: Use SortableJS instead jquery.event.drag/drop based solution.
 [thet]
