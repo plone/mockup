@@ -5,15 +5,15 @@
 
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.addPassthroughCopy({"mockup/patterns": "patterns"});
   eleventyConfig.addPassthroughCopy({"favicon.ico": "favicon.ico"});
   eleventyConfig.addPassthroughCopy({"docs/main.css": "main.css"});
   eleventyConfig.addPassthroughCopy({"mockup/build": "mockup/build"});
-  eleventyConfig.addPassthroughCopy({"mockup/tests/fakeserver.js": "mockup/build/fakeserver.js"});
+  // eleventyConfig.addPassthroughCopy({"mockup/tests/fakeserver.js": "mockup/build/fakeserver.js"});
   eleventyConfig.addPassthroughCopy({"mockup/node_modules/bootstrap": "mockup/build/node_modules/bootstrap"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/requirejs/require.js": "mockup/build/require.js"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/sinon/pkg/sinon.js": "mockup/build/sinon.js"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/sinon/pkg/sinon-esm.js": "mockup/build/sinon-esm.js"});
-  eleventyConfig.addPassthroughCopy({"mockup/patterns": "patterns"});
   //eleventyConfig.addPassthroughCopy("mockup/patterns/**/*.json");
   //eleventyConfig.addPassthroughCopy({"../mockup/js/bundles": "js/bundles"});
   //eleventyConfig.addPassthroughCopy({"../mockup/js/config.js": "js/config.js"});

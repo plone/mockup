@@ -12,4 +12,6 @@ mockup/lib
 mockup/node_modules
 mockup/less
 mockup/tests
-
+mockup/node_modules/bootstrap/docs/
+mockup/node_modules/bootstrap/grunt/
+mockup/node_modules/bootstrap/js/tests/

@@ -1,0 +1,105 @@
+{
+  "results": [
+    {
+      "UID": "5c380e40de1f424b92e9a220467f078c",
+      "Title": "A Page",
+      "portal_type": "Document",
+      "path": "/en/demo/a-page",
+      "getURL": "https://demo.plone.org/en/demo/a-page",
+      "getIcon": null,
+      "is_folderish": false,
+      "review_state": "published"
+    },
+    {
+      "UID": "cfb30b644a9c4886b4950a7e708e0cbb",
+      "Title": "A Event",
+      "portal_type": "Event",
+      "path": "/en/demo/a-event",
+      "getURL": "https://demo.plone.org/en/demo/a-event",
+      "getIcon": null,
+      "is_folderish": false,
+      "review_state": "published"
+    },
+    {
+      "UID": "4423a1b21c06425886e315c4d0e3a676",
+      "Title": "A News Item",
+      "portal_type": "News Item",
+      "path": "/en/demo/a-news-item",
+      "getURL": "https://demo.plone.org/en/demo/a-news-item",
+      "getIcon": true,
+      "is_folderish": false,
+      "review_state": "published"
+    },
+    {
+      "UID": "a07f9e78ee864e689d72fde066adbac3",
+      "Title": "A Folder",
+      "portal_type": "Folder",
+      "path": "/en/demo/a-folder",
+      "getURL": "https://demo.plone.org/en/demo/a-folder",
+      "getIcon": null,
+      "is_folderish": true,
+      "review_state": "published"
+    },
+    {
+      "UID": "80101e01f8474f22b85e1704e580c0d9",
+      "Title": "A Video",
+      "portal_type": "File",
+      "path": "/en/demo/a-video.mp4",
+      "getURL": "https://demo.plone.org/en/demo/a-video.mp4",
+      "getIcon": null,
+      "is_folderish": false,
+      "review_state": null
+    },
+    {
+      "UID": "4620411803a54769832a906094928c6e",
+      "Title": "A File",
+      "portal_type": "File",
+      "path": "/en/demo/a-file.pdf",
+      "getURL": "https://demo.plone.org/en/demo/a-file.pdf",
+      "getIcon": null,
+      "is_folderish": false,
+      "review_state": null
+    },
+    {
+      "UID": "2ce50f00faf74ffb8e3db907e02f83fc",
+      "Title": "A Link",
+      "portal_type": "Link",
+      "path": "/en/demo/a-link",
+      "getURL": "https://demo.plone.org/en/demo/a-link",
+      "getIcon": null,
+      "is_folderish": false,
+      "review_state": "published"
+    },
+    {
+      "UID": "d5a10ad499c34d699049d8027c25e4ca",
+      "Title": "A Image",
+      "portal_type": "Image",
+      "path": "/en/demo/a-image.jpg",
+      "getURL": "https://demo.plone.org/en/demo/a-image.jpg",
+      "getIcon": true,
+      "is_folderish": false,
+      "review_state": null
+    },
+    {
+      "UID": "3b2157a632d54b82a0f54ce682f9d4a5",
+      "Title": "dscf0830.jpg",
+      "portal_type": "Image",
+      "path": "/en/demo/dscf0830.jpg",
+      "getURL": "https://demo.plone.org/en/demo/dscf0830.jpg",
+      "getIcon": true,
+      "is_folderish": false,
+      "review_state": null
+    },
+    {
+      "UID": "e620819142844814b39015fd60696ab7",
+      "Title": "dscf0833.jpg",
+      "portal_type": "Image",
+      "path": "/en/demo/dscf0833.jpg",
+      "getURL": "https://demo.plone.org/en/demo/dscf0833.jpg",
+      "getIcon": true,
+      "is_folderish": false,
+      "review_state": null
+    }
+  ],
+  "total": 12
+}
