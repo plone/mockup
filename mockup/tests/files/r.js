@@ -3933,7 +3933,7 @@ define('rhino/file', ['prim'], function (prim) {
             //Java's version of copy file.
             srcChannel = new java.io.FileInputStream(srcFileName).getChannel();
             destChannel = new java.io.FileOutputStream(destFileName).getChannel();
-            destChannel.transferFrom(srcChannel, 0, srcChannel.size());
+            destChannel.transferFrom(srcChannel, 0, srcChannel.length);
             srcChannel.close();
             destChannel.close();
 
@@ -18161,7 +18161,7 @@ AST_Toplevel.DEFMETHOD("figure_out_scope", function(options){
                 if (globals.has(name)) {
                     g = globals.get(name);
                 } else {
-                    g = new SymbolDef(self, globals.size(), node);
+                    g = new SymbolDef(self, globals.length, node);
                     g.undeclared = true;
                     g.global = true;
                     globals.set(name, g);
@@ -18235,7 +18235,7 @@ AST_Scope.DEFMETHOD("def_function", function(symbol){
 AST_Scope.DEFMETHOD("def_variable", function(symbol){
     var def;
     if (!this.variables.has(symbol.name)) {
-        def = new SymbolDef(this, this.variables.size(), symbol);
+        def = new SymbolDef(this, this.variables.length, symbol);
         this.variables.set(symbol.name, def);
         def.global = !this.parent_scope;
     } else {

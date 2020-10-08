@@ -494,9 +494,9 @@ define([
 
       var $el = $(menu.render().el).appendTo('body');
       var $body = $('body');
-      expect($('.plone-modal-wrapper', $body).size()).to.equal(0);
+      expect($('.plone-modal-wrapper', $body).length).to.equal(0);
       $('a.button', $el).trigger('click');
-      expect($('.plone-modal-wrapper', $body).size()).to.equal(1);
+      expect($('.plone-modal-wrapper', $body).length).to.equal(1);
     });
 
     it('modal dropdown true opens in modal', function() {
@@ -515,9 +515,9 @@ define([
 
       var $el = $(menu.render().el).appendTo('body');
       var $body = $('body');
-      expect($('.plone-modal-wrapper', $body).size()).to.equal(0);
+      expect($('.plone-modal-wrapper', $body).length).to.equal(0);
       $('a.button', $el).trigger('click');
-      expect($('.plone-modal-wrapper', $body).size()).to.equal(1);
+      expect($('.plone-modal-wrapper', $body).length).to.equal(1);
     });
 
   });
@@ -984,7 +984,7 @@ define([
     it('initialize', function() {
       registry.scan(this.$el);
       // moveUrl provided, can get to this via order-support.
-      expect(this.$el.find('table').size()).to.equal(1);
+      expect(this.$el.find('table').length).to.equal(1);
     });
 
     it('select item populates selection well', function() {
@@ -1424,7 +1424,7 @@ define([
     it('initialize', function() {
       registry.scan(this.$el);
       // no order-support for this one due to lack of moveUrl
-      expect(this.$el.find('.order-support > table').size()).to.equal(0);
+      expect(this.$el.find('.order-support > table').length).to.equal(0);
     });
 
     it('per page', function() {

@@ -34,38 +34,38 @@ define([
     });
 
     it('by default toggles on click event', function() {
-      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
 
       // scan dom for patterns
       registry.scan(this.$el);
-      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
       $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).to.equal(1);
+      expect($('.toggled', this.$el).length).to.equal(1);
       $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
     });
 
     it('can also listen to custom event', function() {
       $('.pat-toggle', this.$el).attr('data-pat-toggle', 'target: #target; targetScope: #body; value: toggled; event: customEvent');
-      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
       registry.scan(this.$el);
-      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
       $('.pat-toggle', this.$el).trigger('customEvent');
-      expect($('.toggled', this.$el).size()).to.equal(1);
+      expect($('.toggled', this.$el).length).to.equal(1);
     });
 
     it('can also toggle custom element attribute', function() {
       $('.pat-toggle', this.$el).attr('data-pat-toggle', 'target: #target; targetScope: #body; value: toggled; attribute: rel');
-      expect($('.toggled', this.$el).size()).to.equal(0);
-      expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
+      expect($('[rel="toggled"]', this.$el).length).to.equal(0);
       registry.scan(this.$el);
-      expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
-      expect($('.toggled', this.$el).size()).to.equal(0);
+      expect($('[rel="toggled"]', this.$el).length).to.equal(0);
+      expect($('.toggled', this.$el).length).to.equal(0);
       $('.pat-toggle', this.$el).trigger('click');
-      expect($('.toggled', this.$el).size()).to.equal(0);
-      expect($('[rel="toggled"]', this.$el).size()).to.equal(1);
+      expect($('.toggled', this.$el).length).to.equal(0);
+      expect($('[rel="toggled"]', this.$el).length).to.equal(1);
       $('.pat-toggle', this.$el).trigger('click');
-      expect($('[rel="toggled"]', this.$el).size()).to.equal(0);
+      expect($('[rel="toggled"]', this.$el).length).to.equal(0);
     });
 
     it('toggle multiple targets', function() {
@@ -88,11 +88,11 @@ define([
         '  <div class="target"></div>' +
         '</div>');
       registry.scan($el);
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(5);
+      expect($('.toggled', $el).length).to.equal(5);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
     });
 
     it('if some elements already marked, mark all with first click', function() {
@@ -115,11 +115,11 @@ define([
         '  <div class="target"></div>' +
         '</div>');
       registry.scan($el);
-      expect($('.toggled', $el).size()).to.equal(3);
+      expect($('.toggled', $el).length).to.equal(3);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(5);
+      expect($('.toggled', $el).length).to.equal(5);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
     });
 
     it('if all elements already marked, unmark all with first click', function() {
@@ -142,9 +142,9 @@ define([
         '  <div class="target toggled"></div>' +
         '</div>');
       registry.scan($el);
-      expect($('.toggled', $el).size()).to.equal(5);
+      expect($('.toggled', $el).length).to.equal(5);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
     });
 
     it('should also be able to mark the toggle itself', function() {
@@ -167,11 +167,11 @@ define([
         '  <div class="target"></div>' +
         '</div>');
       registry.scan($el);
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(6);
+      expect($('.toggled', $el).length).to.equal(6);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
     });
 
     it('should target itself when no target is specified', function() {
@@ -181,11 +181,11 @@ define([
         '    data-pat-toggle="value: toggled">Button</a>' +
         '</div>');
       registry.scan($el);
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(1);
+      expect($('.toggled', $el).length).to.equal(1);
       $('.pat-toggle', $el).trigger('click');
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
     });
 
     it('should use the targetScope option to find the target when specified', function() {
@@ -212,11 +212,11 @@ define([
         '</div>');
       registry.scan($el);
       var $pattern1 = $el.find('.pat-toggle').first();
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
       $pattern1.trigger('click');
-      expect($('.toggled', $el).size()).to.equal(1);
-      expect($('.parent1 .toggled', $el).size()).to.equal(1);
-      expect($('.parent2 .toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(1);
+      expect($('.parent1 .toggled', $el).length).to.equal(1);
+      expect($('.parent2 .toggled', $el).length).to.equal(0);
     });
 
     it('should use the target when targetScope is global', function() {
@@ -257,11 +257,11 @@ define([
         '</div>');
       registry.scan($el);
       var $pattern1 = $el.find('.pat-toggle').first();
-      expect($('.toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(0);
       $pattern1.trigger('click');
-      expect($('.toggled', $el).size()).to.equal(1);
-      expect($('.parent1 .toggled', $el).size()).to.equal(1);
-      expect($('.parent2 .toggled', $el).size()).to.equal(0);
+      expect($('.toggled', $el).length).to.equal(1);
+      expect($('.parent1 .toggled', $el).length).to.equal(1);
+      expect($('.parent2 .toggled', $el).length).to.equal(0);
     });
 
     it('should throw an error when it cannot find the target', function() {

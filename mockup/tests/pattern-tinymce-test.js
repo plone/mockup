@@ -457,7 +457,7 @@ define([
 
       expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
       setTimeout(function() {
-        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).length).to.equal(1);
         expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('external');
       }, 100);
     });
@@ -472,7 +472,7 @@ define([
 
       expect(pattern.linkModal.linkTypes.email.getEl().val()).to.equal('foo@bar.com');
       setTimeout(function() {
-        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).length).to.equal(1);
         expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('email');
       }, 100);
     });
@@ -486,7 +486,7 @@ define([
 
       expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
       setTimeout(function() {
-        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).length).to.equal(1);
         expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('anchor');
       }, 100);
     });
@@ -542,7 +542,7 @@ define([
 
       expect(pattern.linkModal.linkTypes.external.getEl().val()).to.equal('foobar');
       setTimeout(function() {
-        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).length).to.equal(1);
         expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('external');
       }, 100);
     });
@@ -557,7 +557,7 @@ define([
 
       expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal('#foobar');
       setTimeout(function() {
-        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).size()).to.equal(1);
+        expect($('fieldset.active', pattern.linkModal.modal.$wrapper).length).to.equal(1);
         expect($('fieldset.active', pattern.linkModal.modal.$wrapper).data('linktype')).to.equal('anchor');
       }, 100);
     });

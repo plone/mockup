@@ -290,8 +290,8 @@ define([
             self.loading.hide();
             // if error is found (NOTE: check for both the portal errors
             // and the form field-level errors)
-            if ($(options.error, response).size() !== 0 ||
-                $(options.formFieldError, response).size() !== 0) {
+            if ($(options.error, response).length !== 0 ||
+                $(options.formFieldError, response).length !== 0) {
               if (options.onFormError) {
                 if (typeof options.onFormError === 'string') {
                   window[options.onFormError](self, response, state, xhr, form);
@@ -957,7 +957,7 @@ define([
         self.initModal();
       }
       self.$wrapper.remove();
-      if ($('.plone-modal', $('body')).size() < 1) {
+      if ($('.plone-modal', $('body')).length < 1) {
         self._suppressHide = undefined;
         self.backdrop.hide();
         $('body').removeClass('plone-modal-open');

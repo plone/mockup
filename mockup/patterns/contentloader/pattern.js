@@ -122,7 +122,7 @@ define([
       var $target = that.$el;
       if(that.options.target !== null){
         $target = $(that.options.target);
-        if($target.size() === 0){
+        if($target.length === 0){
           that.$el.removeClass('loading-content');
           that.$el.addClass('content-load-error');
           log.warn('No target nodes found');

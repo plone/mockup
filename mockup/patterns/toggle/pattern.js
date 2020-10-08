@@ -146,7 +146,7 @@ define([
         self.$target = self.$el.parents(self.options.targetScope).first().find(self.options.target);
       }
 
-      if (!self.$target || self.$target.size() === 0) {
+      if (!self.$target || self.$target.length === 0) {
         $.error('No target found for "' + self.options.target + '".');
       }
 

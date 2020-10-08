@@ -74,27 +74,27 @@ define([
 
       registry.scan($el);
 
-      expect($('.plone-modal-wrapper', $el).size()).to.be.equal(0);
+      expect($('.plone-modal-wrapper', $el).length).to.be.equal(0);
       expect($el.hasClass('plone-backdrop-active')).to.be.equal(false);
-      expect($('.plone-modal-backdrop', $el).size()).to.be.equal(0);
-      expect($('.plone-modal', $el).size()).to.equal(0);
+      expect($('.plone-modal-backdrop', $el).length).to.be.equal(0);
+      expect($('.plone-modal', $el).length).to.equal(0);
 
       $('a.pat-plone-modal', $el).click();
 
       expect($('.plone-modal-backdrop', $el).is(':visible')).to.be.equal(true);
       expect($el.hasClass('plone-backdrop-active')).to.be.equal(true);
       expect($('.plone-modal-wrapper', $el).is(':visible')).to.be.equal(true);
-      expect($('.plone-modal', $el).size()).to.equal(1);
+      expect($('.plone-modal', $el).length).to.equal(1);
       expect($('.plone-modal', $el).hasClass('in')).to.be.equal(true);
-      expect($('.plone-modal .plone-modal-header', $el).size()).to.equal(1);
-      expect($('.plone-modal .plone-modal-body', $el).size()).to.equal(1);
-      expect($('.plone-modal .plone-modal-footer', $el).size()).to.equal(1);
+      expect($('.plone-modal .plone-modal-header', $el).length).to.equal(1);
+      expect($('.plone-modal .plone-modal-body', $el).length).to.equal(1);
+      expect($('.plone-modal .plone-modal-footer', $el).length).to.equal(1);
 
       var keydown = $.Event('keydown');
       keydown.keyCode = 27;
       $(document).trigger(keydown);
       expect($el.hasClass('plone-backdrop-active')).to.be.equal(false);
-      expect($('.plone-modal', $el).size()).to.equal(0);
+      expect($('.plone-modal', $el).length).to.equal(0);
 
       $el.remove();
     });
@@ -162,7 +162,7 @@ define([
         .patPloneModal()
         .on('show.plone-modal.patterns', function(e) {
           var $input = $('.pattern-modal-buttons').find('input');
-          expect($input.size()).to.equal(1);
+          expect($input.length).to.equal(1);
           $input.click();
           server.respond(); // XXX could not get autorespond to work
         })

@@ -32,13 +32,13 @@ define([
       var self = this;
 
       // pickadate is not initialized
-      expect($('.pattern-pickadate-wrapper', self.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', self.$el).length).to.equal(0);
 
       // scan dom for patterns
       registry.scan(self.$el);
 
       // pickadate is initialized
-      expect($('.pattern-pickadate-wrapper', this.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-wrapper', this.$el).length).to.equal(1);
 
       var dateWrapper = $('.pattern-pickadate-date', self.$el).parent(),
         timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
@@ -47,15 +47,15 @@ define([
       expect(self.$el.is(':hidden')).to.be.equal(true);
 
       // date and time inputs are there by default
-      expect($('.pattern-pickadate-date', self.$el).size()).to.equal(1);
-      expect($('.pattern-pickadate-time', self.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-date', self.$el).length).to.equal(1);
+      expect($('.pattern-pickadate-time', self.$el).length).to.equal(1);
 
       // no value on main element
       expect(self.$el.val()).to.be.equal('');
 
       // no picker is open
-      expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
-      expect(timeWrapper.find('.picker--opened').size()).to.be.equal(0);
+      expect(dateWrapper.find('.picker--opened').length).to.be.equal(0);
+      expect(timeWrapper.find('.picker--opened').length).to.be.equal(0);
     });
 
     it('open date picker', function(){
@@ -69,8 +69,8 @@ define([
 
       this.clock.tick(1000);
       // date picker should be opened but not time picker
-      expect(dateWrapper.find('.picker--opened').size()).to.be.equal(1);
-      expect(timeWrapper.find('.picker--opened').size()).to.be.equal(0);
+      expect(dateWrapper.find('.picker--opened').length).to.be.equal(1);
+      expect(timeWrapper.find('.picker--opened').length).to.be.equal(0);
 
     });
 
@@ -96,8 +96,8 @@ define([
 
       // time picker should be opened but not date picker
       this.clock.tick(1000);
-      expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
-      expect(timeWrapper.find('.picker--opened').size()).to.be.equal(1);
+      expect(dateWrapper.find('.picker--opened').length).to.be.equal(0);
+      expect(timeWrapper.find('.picker--opened').length).to.be.equal(1);
 
       // select some time
       var $selectedTime = timeWrapper.find('li').first().next().click();
@@ -131,12 +131,12 @@ define([
       registry.scan(self.$el);
 
       // there are not dropdowns to select year or month
-      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--year').size()).to.be.equal(0);
-      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--month').size()).to.be.equal(0);
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--year').length).to.be.equal(0);
+      expect($('.pattern-pickadate-date', self.$el).parent().find('.picker__select--month').length).to.be.equal(0);
 
       // there should be 24 items for each hour in time picker list.
       // The clear button is not shown in favor of a date + time clear button.
-      expect($('.pattern-pickadate-time', self.$el).parent().find('li').size()).to.be.equal(24);
+      expect($('.pattern-pickadate-time', self.$el).parent().find('li').length).to.be.equal(24);
     });
 
     it('only date element', function() {
@@ -146,13 +146,13 @@ define([
       $('.pat-pickadate', self.$el).attr('data-pat-pickadate', 'time:false');
 
       // pickadate is not initialized
-      expect($('.pattern-pickadate-wrapper', self.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', self.$el).length).to.equal(0);
 
       // scan dom for patterns
       registry.scan(self.$el);
 
       // pickadate is initialized
-      expect($('.pattern-pickadate-wrapper', self.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-wrapper', self.$el).length).to.equal(1);
 
       var dateWrapper = $('.pattern-pickadate-date', self.$el).parent();
 
@@ -160,21 +160,21 @@ define([
       expect(self.$el.is(':hidden')).to.be.equal(true);
 
       // date input is there by default
-      expect($('.pattern-pickadate-date', self.$el).size()).to.equal(1);
-      expect($('.pattern-pickadate-time', self.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-date', self.$el).length).to.equal(1);
+      expect($('.pattern-pickadate-time', self.$el).length).to.equal(0);
 
       // no value on main element
       expect(self.$el.val()).to.be.equal('');
 
       // date picker is not open
-      expect(dateWrapper.find('.picker--opened').size()).to.be.equal(0);
+      expect(dateWrapper.find('.picker--opened').length).to.be.equal(0);
 
       // we open date picker (calendar)
       $('.pattern-pickadate-date', self.$el).click();
 
       // date picker should be opened
       this.clock.tick(1000);
-      expect(dateWrapper.find('.picker--opened').size()).to.be.equal(1);
+      expect(dateWrapper.find('.picker--opened').length).to.be.equal(1);
 
       // select some date
       var $selectedDate = dateWrapper.find('td > div').first().click();
@@ -194,13 +194,13 @@ define([
       $('.pat-pickadate', self.$el).attr('data-pat-pickadate', 'date:false');
 
       // pickadate is not initialized
-      expect($('.pattern-pickadate-wrapper', self.$el).size()).to.equal(0);
+      expect($('.pattern-pickadate-wrapper', self.$el).length).to.equal(0);
 
       // scan dom for patterns
       registry.scan(self.$el);
 
       // pickadate is initialized
-      expect($('.pattern-pickadate-wrapper', self.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-wrapper', self.$el).length).to.equal(1);
 
       var timeWrapper = $('.pattern-pickadate-time', self.$el).parent();
 
@@ -208,21 +208,21 @@ define([
       expect(self.$el.is(':hidden')).to.be.equal(true);
 
       // time input is there by default
-      expect($('.pattern-pickadate-date', self.$el).size()).to.equal(0);
-      expect($('.pattern-pickadate-time', self.$el).size()).to.equal(1);
+      expect($('.pattern-pickadate-date', self.$el).length).to.equal(0);
+      expect($('.pattern-pickadate-time', self.$el).length).to.equal(1);
 
       // no value on main element
       expect(self.$el.val()).to.be.equal('');
 
       // time picker is not open
-      expect(timeWrapper.find('.picker--opened').size()).to.be.equal(0);
+      expect(timeWrapper.find('.picker--opened').length).to.be.equal(0);
 
       // we open time picker (calendar)
       $('.pattern-pickadate-time', self.$el).click();
 
       // time picker should be opened
       this.clock.tick(1000);
-      expect(timeWrapper.find('.picker--opened').size()).to.be.equal(1);
+      expect(timeWrapper.find('.picker--opened').length).to.be.equal(1);
 
       // select some time
       var $selectedTime = timeWrapper.find('li').first().next().click();
@@ -333,18 +333,18 @@ define([
         // date and time should exist by default
         var $timeWrapper = $('.pattern-pickadate-time-wrapper', self.$el),
           $dateWrapper = $('.pattern-pickadate-date-wrapper', self.$el);
-        expect($timeWrapper.size()).to.equal(1);
-        expect($dateWrapper.size()).to.equal(1);
+        expect($timeWrapper.length).to.equal(1);
+        expect($dateWrapper.length).to.equal(1);
 
         // timezone elements should not be available
         var $results = $('li.select2-result-selectable');
-        expect($results.size()).to.equal(0);
+        expect($results.length).to.equal(0);
 
         var $pattern = $('input.pattern-pickadate-timezone');
         $pattern.on('select2-open', function() {
           // timezone elements should be available
           $results = $('li.select2-result-selectable');
-          expect($results.size()).to.equal(2);
+          expect($results.length).to.equal(2);
         });
         $('a.select2-choice').trigger('mousedown');
 
@@ -422,7 +422,7 @@ define([
         expect($('input.pattern-pickadate-timezone').attr('data-value')).to.equal('Europe/Berlin');
 
         expect($('.pattern-pickadate-timezone').data('select2')._enabled).to.equal(false);
-        expect($('.select2-container-disabled').size()).to.equal(1);
+        expect($('.select2-container-disabled').length).to.equal(1);
       });
 
     });

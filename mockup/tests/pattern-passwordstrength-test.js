@@ -48,7 +48,7 @@ define([
       window.zxcvbn = fakeZxcvbn;
       registry.scan($el);
 
-      expect($el.find('.pat-passwordstrength').size()).to.be.equal(1);
+      expect($el.find('.pat-passwordstrength').length).to.be.equal(1);
       expect($el.find('.pat-passwordstrength-meter').hasClass('level-0')).to.be.equal(true);
     });
 
