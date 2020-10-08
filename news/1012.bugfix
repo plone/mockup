@@ -1,4 +1,5 @@
 Upgrade jQuery from 1.12.4 to 3.5.1.
 Upgrade to patternslib 3.
 Remove jquery.event.drag/drop.
+Depend on SortableJS as replacement for jquery.event.drag/drop.
 [thet]
