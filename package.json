@@ -54,7 +54,7 @@
     "logging": "https://github.com/Patternslib/logging.git#1.0.2",
     "marked": "0.3.5",
     "moment": "2.24.0",
-    "patternslib": "https://github.com/Patternslib/Patterns.git#2.1.3",
+    "patternslib": "https://github.com/Patternslib/Patterns.git#3.x",
     "pickadate": "3.6.4",
     "react": "0.10.0",
     "requirejs-text": "2.0.15",
