@@ -16,8 +16,4 @@
         name="mockupless"
         directory="./less" />
 
-    <browser:resourceDirectory
-        name="mockuplib"
-        directory="./lib" />
-
 </configure>
