@@ -3,4 +3,5 @@ docs/mockup/patterns
 docs/_site
 node_modules/
 stamp-yarn
+stats.json
 .vscode
