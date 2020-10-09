@@ -26,9 +26,7 @@ define([
             if (!options.id) {
                 var title = options.title || "";
                 options.id =
-                    title !== ""
-                        ? title.toLowerCase().replace(" ", "-")
-                        : this.cid;
+                    title !== "" ? title.toLowerCase().replace(" ", "-") : this.cid; // prettier-ignore
             }
             BaseView.prototype.initialize.apply(this, [options]);
 

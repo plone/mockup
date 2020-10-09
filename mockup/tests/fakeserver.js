@@ -348,7 +348,7 @@ define(["sinon", "jquery", "underscore"], function (sinon, $, _) {
             for (var i = 0; i < list.length; i = i + 1) {
                 var data = list[i];
                 data.getURL = window.location.origin + data.path;
-                data["review_state"] = ["published", "private", "review"][
+                data.review_state = ["published", "private", "review"][
                     Math.floor(Math.random() * 3)
                 ]; // jshint ignore:line
                 data.CreationDate =

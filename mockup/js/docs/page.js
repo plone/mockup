@@ -71,64 +71,22 @@ define([
                         });
                     }
                 });
+                // prettier-ignore
                 PageContent = div({ className: "row" }, [
                     div({ className: "col-md-3" }, [
-                        div(
-                            {
-                                className: "mockup-autotoc hidden-print",
-                                role: "complementary",
-                            },
-                            [
-                                ul(
-                                    { className: "nav" },
-                                    autotoc.map(function (item) {
-                                        return li(
-                                            { key: page.id + "/" + item.id },
-                                            [
-                                                a(
-                                                    {
-                                                        href:
-                                                            "#" +
-                                                            page.id +
-                                                            "/" +
-                                                            item.id,
-                                                    },
-                                                    item.title
-                                                ),
-                                                item.submenu
-                                                    ? ul(
-                                                          { className: "nav" },
-                                                          item.submenu.map(
-                                                              function (
-                                                                  subitem
-                                                              ) {
-                                                                  return li(
-                                                                      {
-                                                                          key:
-                                                                              page.id +
-                                                                              "/" +
-                                                                              subitem.id,
-                                                                      },
-                                                                      a(
-                                                                          {
-                                                                              href:
-                                                                                  "#" +
-                                                                                  page.id +
-                                                                                  "/" +
-                                                                                  subitem.id,
-                                                                          },
-                                                                          subitem.title
-                                                                      )
-                                                                  );
-                                                              }
-                                                          )
-                                                      )
-                                                    : undefined,
-                                            ]
-                                        );
-                                    })
-                                ),
-                            ]
+                        div({
+                            className: "mockup-autotoc hidden-print",
+                            role: "complementary",
+                        },
+                        [ul({ className: "nav" }, autotoc.map(function (item) {
+                            return li({ key: page.id + "/" + item.id }, [
+                                a({ href: "#" + page.id + "/" + item.id, }, item.title),
+                                item.submenu ? ul({ className: "nav" }, item.submenu.map( function (subitem) {
+                                    return li({ key: page.id + "/" + subitem.id, },
+                                        a({ href: "#" + page.id + "/" + subitem.id, }, subitem.title ));
+                                })) : undefined,
+                            ]);
+                        })),]
                         ),
                     ]),
                     div({
@@ -159,9 +117,7 @@ define([
                                 a(
                                     {
                                         className:
-                                            patternID === _pattern.id
-                                                ? "mockup-pattern-tile active"
-                                                : "mockup-pattern-tile",
+                                            patternID === _pattern.id ? "mockup-pattern-tile active" : "mockup-pattern-tile", // prettier-ignore
                                         href: "#" + page.id + "/" + _pattern.id,
                                     },
                                     [

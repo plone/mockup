@@ -236,9 +236,7 @@ define([
                         if (browsing) {
                             // flat search
                             searchpath =
-                                searchpath.slice(-1) !== "/"
-                                    ? searchpath + "/"
-                                    : searchpath;
+                                searchpath.slice(-1) !== "/" ? searchpath + "/" : searchpath; // prettier-ignore
                             if (
                                 item.path.split("/").length !==
                                 searchpath.split("/").length
