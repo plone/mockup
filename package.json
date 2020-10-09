@@ -37,6 +37,8 @@
     "datatables.net-select": "1.2.3",
     "datatables.net-select-bs": "1.2.3",
     "dropzone": "4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
     "jqtree": "1.4.10",
     "jquery": "^3.5.1",
     "jquery-form": "4.2.2",
