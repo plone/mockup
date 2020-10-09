@@ -68,7 +68,7 @@
       </div>
       <div class="form-group caption">
         <label><%- captionText %></label>
-        <textarea name="caption" />
+        <textarea name="caption"></textarea>
       </div>
       <div class="form-group align">
         <label><%- imageAlignText %></label>
@@ -78,7 +78,7 @@
               <%- options.imageClasses[align] %>
               </option>
           <% }); %>
-        <select>
+        </select>
       </div>
     </div>
 
