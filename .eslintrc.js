@@ -6,13 +6,7 @@ module.exports = {
         browser: true,
         node: true,
     },
-    ignorePatterns: [
-        "mockup/build/",
-        "mockup/coverage/",
-        "mockup/docs/",
-        "mockup/node_modules/",
-        "mockup/tests/files/r.js",
-    ],
+    ignorePatterns: ["dist/", "docs/", "node_modules/"],
     rules: {
         "no-debugger": 1,
         "no-duplicate-imports": 1,
