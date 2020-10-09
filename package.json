@@ -100,6 +100,9 @@
     "datatables.net": "1.10.16",
     "datatables.net-bs": "1.10.16"
   },
+  "scripts": {
+    "postinstall": "patch --forward mockup/node_modules/select2/select2.js < patches/select2.patch || true"
+  },
   "maintainers": [
     {
       "name": "Plone Foundation",
