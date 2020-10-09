@@ -1,7 +1,10 @@
 {
     "sortable_indexes": {
         "sortable_title": {
-            "operations": ["plone.app.querystring.operation.string.contains", "plone.app.querystring.operation.string.is"],
+            "operations": [
+                "plone.app.querystring.operation.string.contains",
+                "plone.app.querystring.operation.string.is"
+            ],
             "group": "Text",
             "description": "The item's title, transformed for sorting",
             "vocabulary": null,
@@ -25,7 +28,16 @@
             "sortable": true
         },
         "end": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The end date and time of an event",
             "vocabulary": null,
@@ -85,7 +97,16 @@
             "sortable": true
         },
         "effective": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The time and date an item was first published",
             "vocabulary": null,
@@ -145,7 +166,16 @@
             "sortable": true
         },
         "created": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The date an item was created",
             "vocabulary": null,
@@ -205,7 +235,16 @@
             "sortable": true
         },
         "expires": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The time and date an item was expired",
             "vocabulary": null,
@@ -265,7 +304,16 @@
             "sortable": true
         },
         "modified": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The time and date an item was last modified",
             "vocabulary": null,
@@ -343,7 +391,16 @@
             "sortable": true
         },
         "start": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The start date and time of an event",
             "vocabulary": null,
@@ -403,7 +460,10 @@
             "sortable": true
         },
         "Creator": {
-            "operations": ["plone.app.querystring.operation.string.is", "plone.app.querystring.operation.string.currentUser"],
+            "operations": [
+                "plone.app.querystring.operation.string.is",
+                "plone.app.querystring.operation.string.currentUser"
+            ],
             "group": "Metadata",
             "description": "The person that created an item",
             "vocabulary": null,
@@ -487,7 +547,16 @@
     },
     "indexes": {
         "start": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The start date and time of an event",
             "vocabulary": null,
@@ -547,7 +616,16 @@
             "sortable": true
         },
         "expires": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The time and date an item was expired",
             "vocabulary": null,
@@ -607,7 +685,16 @@
             "sortable": true
         },
         "end": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The end date and time of an event",
             "vocabulary": null,
@@ -685,7 +772,16 @@
             "sortable": false
         },
         "effective": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The time and date an item was first published",
             "vocabulary": null,
@@ -809,7 +905,16 @@
             "sortable": false
         },
         "created": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The date an item was created",
             "vocabulary": null,
@@ -869,7 +974,16 @@
             "sortable": true
         },
         "modified": {
-            "operations": ["plone.app.querystring.operation.date.lessThan", "plone.app.querystring.operation.date.largerThan", "plone.app.querystring.operation.date.between", "plone.app.querystring.operation.date.lessThanRelativeDate", "plone.app.querystring.operation.date.largerThanRelativeDate", "plone.app.querystring.operation.date.today", "plone.app.querystring.operation.date.beforeToday", "plone.app.querystring.operation.date.afterToday"],
+            "operations": [
+                "plone.app.querystring.operation.date.lessThan",
+                "plone.app.querystring.operation.date.largerThan",
+                "plone.app.querystring.operation.date.between",
+                "plone.app.querystring.operation.date.lessThanRelativeDate",
+                "plone.app.querystring.operation.date.largerThanRelativeDate",
+                "plone.app.querystring.operation.date.today",
+                "plone.app.querystring.operation.date.beforeToday",
+                "plone.app.querystring.operation.date.afterToday"
+            ],
             "group": "Dates",
             "description": "The time and date an item was last modified",
             "vocabulary": null,
@@ -976,7 +1090,10 @@
             "sortable": false
         },
         "sortable_title": {
-            "operations": ["plone.app.querystring.operation.string.contains", "plone.app.querystring.operation.string.is"],
+            "operations": [
+                "plone.app.querystring.operation.string.contains",
+                "plone.app.querystring.operation.string.is"
+            ],
             "group": "Text",
             "description": "The item's title, transformed for sorting",
             "vocabulary": null,
@@ -1000,7 +1117,10 @@
             "sortable": true
         },
         "Creator": {
-            "operations": ["plone.app.querystring.operation.string.is", "plone.app.querystring.operation.string.currentUser"],
+            "operations": [
+                "plone.app.querystring.operation.string.is",
+                "plone.app.querystring.operation.string.currentUser"
+            ],
             "group": "Metadata",
             "description": "The person that created an item",
             "vocabulary": null,
@@ -1024,7 +1144,11 @@
             "sortable": true
         },
         "getObjPositionInParent": {
-            "operations": ["plone.app.querystring.operation.int.is", "plone.app.querystring.operation.int.lessThan", "plone.app.querystring.operation.int.greaterThan"],
+            "operations": [
+                "plone.app.querystring.operation.int.is",
+                "plone.app.querystring.operation.int.lessThan",
+                "plone.app.querystring.operation.int.greaterThan"
+            ],
             "group": "Metadata",
             "description": "The order of an item in its parent folder",
             "vocabulary": null,
@@ -1048,7 +1172,10 @@
             "sortable": false
         },
         "isFolderish": {
-            "operations": ["plone.app.querystring.operation.boolean.isTrue", "plone.app.querystring.operation.boolean.isFalse"],
+            "operations": [
+                "plone.app.querystring.operation.boolean.isTrue",
+                "plone.app.querystring.operation.boolean.isFalse"
+            ],
             "group": "Metadata",
             "description": "Find items that can contain other objects",
             "vocabulary": null,
@@ -1072,7 +1199,10 @@
             "sortable": false
         },
         "path": {
-            "operations": ["plone.app.querystring.operation.string.relativePath", "plone.app.querystring.operation.string.path"],
+            "operations": [
+                "plone.app.querystring.operation.string.relativePath",
+                "plone.app.querystring.operation.string.path"
+            ],
             "group": "Metadata",
             "description": "The location of an item ",
             "vocabulary": null,
@@ -1114,7 +1244,10 @@
             "sortable": false
         },
         "isDefaultPage": {
-            "operations": ["plone.app.querystring.operation.boolean.isTrue", "plone.app.querystring.operation.boolean.isFalse"],
+            "operations": [
+                "plone.app.querystring.operation.boolean.isTrue",
+                "plone.app.querystring.operation.boolean.isFalse"
+            ],
             "group": "Metadata",
             "description": "Find items that are the default view for their containing folder.",
             "vocabulary": null,

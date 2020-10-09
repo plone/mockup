@@ -1,27 +1,43 @@
-@import (inline) "@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/skin.min.css";
-@import (inline) "@{bowerPath}tinymce-builded/js/tinymce/plugins/visualblocks/css/visualblocks.css";
+@import (inline)
+    "@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/skin.min.css";
+@import (inline)
+    "@{bowerPath}tinymce-builded/js/tinymce/plugins/visualblocks/css/visualblocks.css";
 @import "@{mockupPath}/modal/pattern.modal.less";
 @import "@{mockupPath}/autotoc/pattern.autotoc.less";
 @import "@{mockupPath}/upload/less/pattern.upload.less";
 
-@font-face{
-  font-family:'tinymce';
-  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.eot');
-  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.eot?#iefix') format('embedded-opentype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.woff') format('woff'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.ttf') format('truetype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.svg#tinymce') format('svg');
-  font-weight:normal;
-  font-style:normal
+@font-face {
+    font-family: "tinymce";
+    src: url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.eot");
+    src: url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.eot?#iefix")
+            format("embedded-opentype"),
+        url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.woff")
+            format("woff"),
+        url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.ttf")
+            format("truetype"),
+        url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce.svg#tinymce")
+            format("svg");
+    font-weight: normal;
+    font-style: normal;
 }
 
-@font-face{
-  font-family:'tinymce-small';
-  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.eot');
-  src:url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.eot?#iefix') format('embedded-opentype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.woff') format('woff'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.ttf') format('truetype'),url('@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.svg#tinymce') format('svg');
-  font-weight:normal;
-  font-style:normal
+@font-face {
+    font-family: "tinymce-small";
+    src: url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.eot");
+    src: url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.eot?#iefix")
+            format("embedded-opentype"),
+        url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.woff")
+            format("woff"),
+        url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.ttf")
+            format("truetype"),
+        url("@{bowerPath}tinymce-builded/js/tinymce/skins/lightgray/fonts/tinymce-small.svg#tinymce")
+            format("svg");
+    font-weight: normal;
+    font-style: normal;
 }
 
 div.linkModal {
-    .pattern-relateditems-container{
+    .pattern-relateditems-container {
         padding-top: 0;
         margin-right: 20px;
     }
@@ -30,25 +46,28 @@ div.linkModal {
     }
     div.linkTypes {
         line-height: 15px;
-        input{
+        input {
             margin: 5px 5px 9px 9px;
         }
     }
-    input[name="external"],input[name="externalImage"]{
+    input[name="external"],
+    input[name="externalImage"] {
         width: 80%;
     }
-    fieldset{
+    fieldset {
         padding-top: 10px;
         min-height: 90px;
     }
-    fieldset .input-wrapper{ display: inline-flex; }
-    .common-controls{
+    fieldset .input-wrapper {
+        display: inline-flex;
+    }
+    .common-controls {
         padding-top: 10px;
         border-top: 1px solid #ccc;
     }
 }
 
-.tinymce-dropzone{
+.tinymce-dropzone {
     position: relative;
 
     .dz-notice {
@@ -61,16 +80,16 @@ div.linkModal {
         opacity: 1;
     }
 
-    .dropzone-previews{
+    .dropzone-previews {
         background-color: #f5f5f5;
     }
-    .fallback{
+    .fallback {
         /* do not display fallback, just don't work for these weirdos */
         display: none;
     }
 }
 
-.tinymce-dropzone.dz-drag-hover{
+.tinymce-dropzone.dz-drag-hover {
     box-sizing: border-box;
 
     * {
@@ -79,7 +98,7 @@ div.linkModal {
     iframe {
         pointer-events: none;
     }
-    p{
+    p {
         font-size: 250%;
         position: absolute;
         width: 400px;
@@ -91,7 +110,7 @@ div.linkModal {
         text-align: center;
         opacity: 1;
     }
-    .dz-notice{
+    .dz-notice {
         display: block;
         opacity: 1;
         -ms-filter: none;
@@ -111,5 +130,5 @@ div.linkModal {
 }
 
 .mce-item-table td {
-	min-width: 0.6em;  // enforce a min-width while editing for tables with visual aid turned on
+    min-width: 0.6em; // enforce a min-width while editing for tables with visual aid turned on
 }

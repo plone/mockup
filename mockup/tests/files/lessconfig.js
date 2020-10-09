@@ -3,16 +3,16 @@ window.less = {
     logLevel: 3,
     async: false,
     fileAsync: false,
-    errorReporting: 'console',
+    errorReporting: "console",
     poll: 1000,
     functions: {},
     dumpLineNumbers: "comments",
     globalVars: {
-      sitePath: '"http://localhost:8080/Plone20"',
-      isPlone: 'false',
-      isMockup: 'true',
-      'mockuplessPath': '"../../less"',
-      'bowerPath': '"../../node_modules"',
-      'mockupPath': '"../../patterns"'
+        sitePath: '"http://localhost:8080/Plone20"',
+        isPlone: "false",
+        isMockup: "true",
+        mockuplessPath: '"../../less"',
+        bowerPath: '"../../node_modules"',
+        mockupPath: '"../../patterns"',
     },
-  };
+};

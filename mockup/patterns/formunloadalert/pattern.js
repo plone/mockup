@@ -26,76 +26,73 @@
  *
  */
 
+define(["jquery", "pat-base", "translate"], function ($, Base, _t) {
+    "use strict";
 
-define([
-  'jquery',
-  'pat-base',
-  'translate'
-], function ($, Base, _t) {
-  'use strict';
+    var FormUnloadAlert = Base.extend({
+        name: "formunloadalert",
+        trigger: ".pat-formunloadalert",
+        parser: "mockup",
+        _changed: false, // Stores a listing of raised changes by their key
+        _suppressed: false, // whether or not warning should be suppressed
+        defaults: {
+            message: _t(
+                "Discard changes? If you click OK, " +
+                    "any changes you have made will be lost."
+            ),
+            // events on which to check for changes
+            changingEvents: "change keyup paste",
+            // fields on which to check for changes
+            changingFields: "input,select,textarea,fileupload",
+        },
+        init: function () {
+            var self = this;
+            // if this is not a form just return
+            if (!self.$el.is("form")) {
+                return;
+            }
 
-  var FormUnloadAlert = Base.extend({
-    name: 'formunloadalert',
-    trigger: '.pat-formunloadalert',
-    parser: 'mockup',
-    _changed : false,       // Stores a listing of raised changes by their key
-    _suppressed : false,     // whether or not warning should be suppressed
-    defaults: {
-      message :  _t('Discard changes? If you click OK, ' +
-                 'any changes you have made will be lost.'),
-      // events on which to check for changes
-      changingEvents: 'change keyup paste',
-      // fields on which to check for changes
-      changingFields: 'input,select,textarea,fileupload'
-    },
-    init: function () {
-      var self = this;
-      // if this is not a form just return
-      if (!self.$el.is('form')) { return; }
+            $(self.options.changingFields, self.$el).on(
+                self.options.changingEvents,
+                function (evt) {
+                    self._changed = true;
+                }
+            );
 
-      $(self.options.changingFields, self.$el).on(
-        self.options.changingEvents,
-        function (evt) {
-          self._changed = true;
-        }
-      );
+            var $modal = self.$el.parents(".plone-modal");
+            if ($modal.length !== 0) {
+                $modal.data("patternPloneModal").on("hide", function (e) {
+                    var modal = $modal.data("patternPloneModal");
+                    if (modal) {
+                        modal._suppressHide = self._handleUnload.call(self, e);
+                    }
+                });
+            } else {
+                $(window).on("beforeunload", function (e) {
+                    return self._handleUnload(e);
+                });
+            }
 
-      var $modal = self.$el.parents('.plone-modal');
-      if ($modal.length !== 0) {
-        $modal.data('patternPloneModal').on('hide', function(e) {
-          var modal = $modal.data('patternPloneModal');
-          if (modal) {
-            modal._suppressHide = self._handleUnload.call(self, e);
-          }
-        });
-      } else {
-        $(window).on('beforeunload', function(e) {
-          return self._handleUnload(e);
-        });
-      }
-
-      self.$el.on('submit', function(e) {
-        self._suppressed = true;
-      });
-
-    },
-    _handleUnload : function (e) {
-      var self = this;
-      if (self._suppressed) {
-        self._suppressed = false;
-        return undefined;
-      }
-      if (self._changed) {
-        var msg = self.options.message;
-        self._handleMsg(e,msg);
-        $(window).trigger('messageset');
-        return msg;
-      }
-    },
-    _handleMsg:  function(e,msg) {
-      (e || window.event).returnValue = msg;
-    }
-  });
-  return FormUnloadAlert;
-
+            self.$el.on("submit", function (e) {
+                self._suppressed = true;
+            });
+        },
+        _handleUnload: function (e) {
+            var self = this;
+            if (self._suppressed) {
+                self._suppressed = false;
+                return undefined;
+            }
+            if (self._changed) {
+                var msg = self.options.message;
+                self._handleMsg(e, msg);
+                $(window).trigger("messageset");
+                return msg;
+            }
+        },
+        _handleMsg: function (e, msg) {
+            (e || window.event).returnValue = msg;
+        },
+    });
+    return FormUnloadAlert;
 });

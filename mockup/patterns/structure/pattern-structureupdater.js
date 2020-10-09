@@ -9,36 +9,36 @@
  *
  */
 
-define([
-  'jquery',
-  'pat-base'
-], function($, Base) {
-  'use strict';
+define(["jquery", "pat-base"], function ($, Base) {
+    "use strict";
 
-  var StructureUpdater = Base.extend({
-    name: 'structureupdater',
-    trigger: '.template-folder_contents',
-    parser: 'mockup',
-    defaults: {
-      titleSelector: '',
-      descriptionSelector: ''
-    },
+    var StructureUpdater = Base.extend({
+        name: "structureupdater",
+        trigger: ".template-folder_contents",
+        parser: "mockup",
+        defaults: {
+            titleSelector: "",
+            descriptionSelector: "",
+        },
 
-    init: function() {
+        init: function () {
+            $("body").on(
+                "context-info-loaded",
+                function (e, data) {
+                    if (this.options.titleSelector) {
+                        $(this.options.titleSelector, this.$el).html(
+                            (data.object && data.object.Title) || "&nbsp;"
+                        );
+                    }
+                    if (this.options.descriptionSelector) {
+                        $(this.options.descriptionSelector, this.$el).html(
+                            (data.object && data.object.Description) || "&nbsp;"
+                        );
+                    }
+                }.bind(this)
+            );
+        },
+    });
 
-      $('body').on('context-info-loaded', function (e, data) {
-        if (this.options.titleSelector) {
-            $(this.options.titleSelector, this.$el).html(data.object && data.object.Title || '&nbsp;');
-        }
-        if (this.options.descriptionSelector) {
-            $(this.options.descriptionSelector, this.$el).html(data.object && data.object.Description || '&nbsp;');
-        }
-      }.bind(this));
-
-    }
-
-  });
-
-  return StructureUpdater;
-
+    return StructureUpdater;
 });

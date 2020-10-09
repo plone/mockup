@@ -19,56 +19,51 @@
  *
  */
 
+define(["jquery", "pat-base", "translate"], function ($, Base, _t) {
+    "use strict";
 
-define([
-  'jquery',
-  'pat-base',
-  'translate'
-], function($, Base, _t) {
-  'use strict';
+    var PreventDoubleSubmit = Base.extend({
+        name: "preventdoublesubmit",
+        trigger: ".pat-preventdoublesubmit",
+        parser: "mockup",
+        defaults: {
+            message: _t(
+                "You already clicked the submit button. " +
+                    "Do you really want to submit this form again?"
+            ),
+            guardClassName: "submitting",
+            optOutClassName: "allowMultiSubmit",
+        },
+        init: function () {
+            var self = this;
 
-  var PreventDoubleSubmit = Base.extend({
-    name: 'preventdoublesubmit',
-    trigger: '.pat-preventdoublesubmit',
-    parser: 'mockup',
-    defaults: {
-      message : _t('You already clicked the submit button. ' +
-                'Do you really want to submit this form again?'),
-      guardClassName: 'submitting',
-      optOutClassName: 'allowMultiSubmit'
-    },
-    init: function() {
-      var self = this;
+            // if this is not a form just return
+            if (!self.$el.is("form")) {
+                return;
+            }
 
-      // if this is not a form just return
-      if (!self.$el.is('form')) {
-        return;
-      }
+            $(":submit", self.$el).click(function (e) {
+                // mark the button as clicked
+                $(":submit").removeAttr("clicked");
+                $(this).attr("clicked", "clicked");
 
-      $(':submit', self.$el).click(function(e) {
+                // if submitting and no opt-out guardClassName is found
+                // pop up confirmation dialog
+                if (
+                    $(this).hasClass(self.options.guardClassName) &&
+                    !$(this).hasClass(self.options.optOutClassName)
+                ) {
+                    return self._confirm.call(self);
+                }
 
-        // mark the button as clicked
-        $(':submit').removeAttr('clicked');
-        $(this).attr('clicked', 'clicked');
+                $(this).addClass(self.options.guardClassName);
+            });
+        },
 
-        // if submitting and no opt-out guardClassName is found
-        // pop up confirmation dialog
-        if ($(this).hasClass(self.options.guardClassName) &&
-              !$(this).hasClass(self.options.optOutClassName)) {
-          return self._confirm.call(self);
-        }
+        _confirm: function (e) {
+            return window.confirm(this.options.message);
+        },
+    });
 
-        $(this).addClass(self.options.guardClassName);
-      });
-
-    },
-
-    _confirm: function(e) {
-      return window.confirm(this.options.message);
-    }
-
-  });
-
-  return PreventDoubleSubmit;
-
+    return PreventDoubleSubmit;
 });

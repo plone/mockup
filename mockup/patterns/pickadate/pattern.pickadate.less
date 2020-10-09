@@ -1,90 +1,91 @@
 @import (less) "@{bowerPath}/pickadate/lib/themes/classic.css";
 @import (less) "@{bowerPath}/pickadate/lib/themes/classic.date.css";
 @import (less) "@{bowerPath}/pickadate/lib/themes/classic.time.css";
-@import (reference) '@{bowerPath}/bootstrap/less/mixins.less';
-@import (reference) '@{bowerPath}/bootstrap/less/buttons.less';
-
+@import (reference) "@{bowerPath}/bootstrap/less/mixins.less";
+@import (reference) "@{bowerPath}/bootstrap/less/buttons.less";
 
 .pattern-pickadate-wrapper {
-
-  .btn:extend(.btn all){
-    vertical-align: top;
-    margin: 0.2em
-  }
-  .btn-info:extend(.btn-info all){}
-  .btn-danger:extend(.btn-danger all){}
-
-  position: relative;
-  margin-bottom: 0.5em;
-
-  .picker{
-    display: none;
-    &.picker--opened{
-      display: block;
+    .btn:extend(.btn all) {
+        vertical-align: top;
+        margin: 0.2em;
     }
-  }
-
-  .pattern-pickadate-date-wrapper {
-    display: inline-block;
-    vertical-align: middle;
-    .picker__input {
-      width: 300px;
-      margin: 0.2em;
-      text-align: center;
-      cursor: context-menu;
+    .btn-info:extend(.btn-info all) {
     }
-    .picker__holder {
-      width: 300px;
-      font-size: 12px;
-      //margin: 0 0.5em;
-      margin-top:-2px;
+    .btn-danger:extend(.btn-danger all) {
     }
-  }
 
-  .pattern-pickadate-separator {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 0.2em;
-  }
+    position: relative;
+    margin-bottom: 0.5em;
 
-  .pattern-pickadate-time-wrapper {
-    display: inline-block;
-    vertical-align: middle;
-    .picker__input {
-      width: 180px;
-      margin: 0.2em;
-      text-align: center;
-      cursor: context-menu;
+    .picker {
+        display: none;
+        &.picker--opened {
+            display: block;
+        }
     }
-    .picker__holder {
-      width: 180px;
-      font-size: 11px;
-      //margin: 0 0.5em;
-      margin-top:-2px;
+
+    .pattern-pickadate-date-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        .picker__input {
+            width: 300px;
+            margin: 0.2em;
+            text-align: center;
+            cursor: context-menu;
+        }
+        .picker__holder {
+            width: 300px;
+            font-size: 12px;
+            //margin: 0 0.5em;
+            margin-top: -2px;
+        }
     }
-    .picker__list-item {
-      text-align: center;
+
+    .pattern-pickadate-separator {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 0.2em;
     }
-  }
 
-  .pattern-pickadate-timezone-wrapper {
-    display: inline-block;
-    vertical-align: middle;
-  }
+    .pattern-pickadate-time-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        .picker__input {
+            width: 180px;
+            margin: 0.2em;
+            text-align: center;
+            cursor: context-menu;
+        }
+        .picker__holder {
+            width: 180px;
+            font-size: 11px;
+            //margin: 0 0.5em;
+            margin-top: -2px;
+        }
+        .picker__list-item {
+            text-align: center;
+        }
+    }
 
-  .pattern-pickadate-now {
-    display: inline-block;
-  }
+    .pattern-pickadate-timezone-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+    }
 
-  .pattern-pickadate-clear {
-    display: inline-block;
-  }
+    .pattern-pickadate-now {
+        display: inline-block;
+    }
 
-  .picker__select--month, .picker__select--year {
-    height: 3em;
-  }
+    .pattern-pickadate-clear {
+        display: inline-block;
+    }
 
-  .picker__footer {
-    display: none;
-  }
+    .picker__select--month,
+    .picker__select--year {
+        height: 3em;
+    }
+
+    .picker__footer {
+        display: none;
+    }
 }
