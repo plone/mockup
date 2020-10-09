@@ -1,0 +1,49 @@
+--- mockup/node_modules/select2/select2.js-orig	2020-10-09 21:12:08.763799718 +0200
++++ mockup/node_modules/select2/select2.js-new	2020-10-09 21:11:42.607521087 +0200
+@@ -1,6 +1,10 @@
+ /*
+ Copyright 2012 Igor Vaynberg
+ 
++CUTOMIZED version for Plone RelatedItems pattern!
++See this for changes made, based on version 3.5.x branch of select2:
++https://github.com/collective/select2-3.5.3-custom
++
+ Version: 3.5.4 Timestamp: Sun Aug 30 13:30:32 EDT 2015
+ 
+ This software is licensed under the Apache License, Version 2.0 (the "Apache License") or the GNU
+@@ -1728,7 +1732,7 @@
+ 
+         // abstract
+         findHighlightableChoices: function() {
+-            return this.results.find(".select2-result-selectable:not(.select2-disabled):not(.select2-selected)");
++            return this.results.find(".select2-result-selectable:not(.select2-disabled)");
+         },
+ 
+         // abstract
+@@ -1739,7 +1743,7 @@
+             while (index > -1 && index < choices.length) {
+                 index += delta;
+                 var choice = $(choices[index]);
+-                if (choice.hasClass("select2-result-selectable") && !choice.hasClass("select2-disabled") && !choice.hasClass("select2-selected")) {
++                if (choice.hasClass("select2-result-selectable") && !choice.hasClass("select2-disabled")) {
+                     this.highlight(index);
+                     break;
+                 }
+@@ -2041,7 +2045,7 @@
+               return;
+             }
+             var index=this.highlight(),
+-                highlighted=this.results.find(".select2-highlighted"),
++                highlighted=this.results.find(".select2-highlighted:not(.select2-selected)"),
+                 data = highlighted.closest('.select2-result').data("select2-data");
+ 
+             if (data) {
+@@ -2949,7 +2953,7 @@
+                     }
+                     return;
+                 } else if (((e.which === KEY.BACKSPACE && this.keydowns == 1)
+-                    || e.which == KEY.LEFT) && (pos.offset == 0 && !pos.length)) {
++                    || e.which == KEY.LEFT && !this.opened()) && (pos.offset == 0 && !pos.length)) {
+ 
+                     this.selectChoice(selection.find(".select2-search-choice:not(.select2-locked)").last());
+                     killEvent(e);
