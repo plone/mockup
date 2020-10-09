@@ -14,7 +14,7 @@ so with a little effort, it should work!
     $ make bootstrap
 
 A note on yarn: We require the use of yarn, because yarn supports installing the packages in a cursom directory, which npm doesn't.
-Our package directory is located at: ``mockup/node_modules``.
+Our package directory is located at: `mockup/node_modules`.
 
 Now you have the complete source code for all Patterns from Mockup.
 From here on you generate bundles of common functionality and minify them.
@@ -32,35 +32,34 @@ and then you open index.html with your browser!
 
 ## Mockup Project Structure
 
- * `build/` : Contains all combined, optimized, and minimized JavaScript code,
-   as well as compiled CSS (Less) and media files
+-   `build/` : Contains all combined, optimized, and minimized JavaScript code,
+    as well as compiled CSS (Less) and media files
 
- * `docs/` : Documentation files built with `make docs`
+-   `docs/` : Documentation files built with `make docs`
 
- * `js/` : Contains all of the modularized JavaScript code
+-   `js/` : Contains all of the modularized JavaScript code
 
-    * `js/config.js` : Contains the RequireJS configuration
+    -   `js/config.js` : Contains the RequireJS configuration
 
-    * `js/bundles` : This is where a bundle is defined --
-      a bundle is a set of requirements,
-      code that specify the features being packaged and bootstraps your page.
+    -   `js/bundles` : This is where a bundle is defined --
+        a bundle is a set of requirements,
+        code that specify the features being packaged and bootstraps your page.
 
-    * `js/patterns` : Contains all individual, encapsulated patterns
-      e.g. widgets.js
+    -   `js/patterns` : Contains all individual, encapsulated patterns
+        e.g. widgets.js
 
- * `less/` : Contains all the [Less](http://lesscss.org/) code for all the patterns and bundles
+-   `less/` : Contains all the [Less](http://lesscss.org/) code for all the patterns and bundles
 
- * `lib/` : Contains external libraries not necessarily found in ``mockup/node_modules``.
+-   `lib/` : Contains external libraries not necessarily found in `mockup/node_modules`.
 
- * `tests/` : Contains all tests for patterns and bundles, including general setup and configuration code
+-   `tests/` : Contains all tests for patterns and bundles, including general setup and configuration code
 
- * `Gruntfile.js` : Defines the directives for compiling Less,
-   and for combining/optimizing/minimizing JavaScript to the defined bundles
+-   `Gruntfile.js` : Defines the directives for compiling Less,
+    and for combining/optimizing/minimizing JavaScript to the defined bundles
 
- * `index.html` : The main source of documentation for the mockup project
+-   `index.html` : The main source of documentation for the mockup project
 
- * `Makefile` : Scripts to build bundles, bootstrap the environment etc.
-
+-   `Makefile` : Scripts to build bundles, bootstrap the environment etc.
 
 ## What's a Pattern? What Are Bundles? How do they relate?
 
@@ -71,7 +70,7 @@ and may also require third party libraries.
 Think of a pattern as a module -- encapsulated and separate,
 and providing a widget or tool to be used by other patterns or in html.
 
-`Bundles` are defined in a similar way to *Patterns* --
+`Bundles` are defined in a similar way to _Patterns_ --
 they are encapsulated bits of JavaScript that define requirements for a bundle and have some extra code in them that's useful for integrating the required patterns into Plone products.
 
 Have a look at the [HelloWorld](#learn) example to see how to create your own Pattern and then how to bundle, test, build and use it.
@@ -116,9 +115,8 @@ or:
 
 These will run only the tests that end with foobar-test.js
 
-You can pass the ``verbose=true`` and ``debug=true`` command line options to
+You can pass the `verbose=true` and `debug=true` command line options to
 increase log output.
-
 
 # Creating docs
 
@@ -134,7 +132,6 @@ After that, access the served site in a webbrowser under the url:
 
     http://localhost:8000
 
-
 # Upgrade from pre-2.0 to 2.0 based Mockup patterns
 
 Since version 2.0, Mockup uses the Patternslib scanner and it's registry. This
@@ -142,21 +139,21 @@ allows us to: Use Patternslib patterns with Mockup/Plone and use Mockup
 patterns with Patternslib outside of Plone. The integration with Patternslib
 require that some small changes be made to newly developed Mockup patterns:
 
-1. Patterns should now use pat-registry as dependency instead of
-   mockup-registry.
+1.  Patterns should now use pat-registry as dependency instead of
+    mockup-registry.
 
-        define([
-            'jquery'
-            'pat-base',
-            'pat-registry'
-        ], function($, Base, registry) {
+         define([
+             'jquery'
+             'pat-base',
+             'pat-registry'
+         ], function($, Base, registry) {
 
-2. Patterns' selectors are now explicitly specified via the trigger attribute.
-   For example:
+2.  Patterns' selectors are now explicitly specified via the trigger attribute.
+    For example:
 
-       var Modal = Base.extend({
-         name: 'modal',
-         trigger: '.pat-modal',
+        var Modal = Base.extend({
+          name: 'modal',
+          trigger: '.pat-modal',
 
-3. Because of change 2, patterns now fire events via the emit method, instead
-   of the trigger method.
+3.  Because of change 2, patterns now fire events via the emit method, instead
+    of the trigger method.

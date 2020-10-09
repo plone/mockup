@@ -16,33 +16,30 @@
  *
  */
 
+define(["jquery", "pat-base", "jquery.recurrenceinput"], function ($, Base) {
+    "use strict";
 
-define([
-  'jquery',
-  'pat-base',
-  'jquery.recurrenceinput'
-], function($, Base) {
-  'use strict';
+    var Recurrence = Base.extend({
+        name: "recurrence",
+        trigger: ".pat-recurrence",
+        parser: "mockup",
+        defaults: {
+            // just passed onto the widget
+            language: "en",
+            localization: null,
+            configuration: {},
+        },
+        init: function () {
+            this.$el.addClass("recurrence-widget");
+            if (this.options.localization) {
+                $.tools.recurrenceinput.localize(
+                    this.options.language,
+                    this.options.localization
+                );
+            }
+            this.$el.recurrenceinput(this.options.configuration);
+        },
+    });
 
-  var Recurrence = Base.extend({
-    name: 'recurrence',
-    trigger: '.pat-recurrence',
-    parser: 'mockup',
-    defaults: {
-      // just passed onto the widget
-      language: 'en',
-      localization: null,
-      configuration: {}
-    },
-    init: function() {
-      this.$el.addClass('recurrence-widget');
-      if (this.options.localization) {
-        $.tools.recurrenceinput.localize(this.options.language, this.options.localization);
-      }
-      this.$el.recurrenceinput(this.options.configuration);
-    }
-  });
-
-  return Recurrence;
-
+    return Recurrence;
 });
