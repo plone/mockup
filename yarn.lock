@@ -4916,6 +4916,11 @@ tiny-lr@^1.1.1:
   version "4.6.2"
   resolved "https://github.com/artursmirnov/tinymce_builded.git#d171527d7a630f9509b66019be4a012d874ef587"
 
+tinymce@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.5.1.tgz#4f24ca6e7b698a3c7418a39ef0f3d613f4a703a4"
+  integrity sha512-z03C8/0TBby68Kp7YUTSCZ0QJINsFCv9U+Cv3TNHg+T1spZ4V6vOIgD0zeTd/xKqkru0P7IOHoeAnOjfpTLq7g==
+
 tippy.js@5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-5.2.0.tgz#5e5a13a196ad2e39c7ee6cac5bfdb0513e797501"
