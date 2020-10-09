@@ -570,7 +570,7 @@ define([
 
       if (self.$el.is('a')) {
         if (self.$el.attr('href') && !self.options.image) {
-          if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#') {
+          if (!self.options.target && self.$el.attr('href').substr(0, 1) === '#' && self.$el.attr("href").length > 1) {
             self.options.target = self.$el.attr('href');
             self.options.content = '';
           }
