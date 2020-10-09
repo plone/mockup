@@ -1,0 +1,5 @@
+mockup/build/
+mockup/coverage/
+mockup/docs/
+mockup/node_modules/
+mockup/tests/files/r.js
