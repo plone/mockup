@@ -11,7 +11,5 @@ module.exports = {
     moduleNameMapper: {
         "\\.(css|less|sass|scss)$": "identity-obj-proxy",
     },
-    transformIgnorePatterns: [
-        "/node_modules/(?!@fullcalendar/*).+\\.[t|j]sx?$",
-    ],
+    transformIgnorePatterns: ["/node_modules/(?!patternslib/*).+\\.[t|j]sx?$"],
 };
