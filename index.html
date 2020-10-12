@@ -1,0 +1,7 @@
+
+<h1>Mockup docs</h1>
+
+<h2>Patterns:</h2>
+{% for pattern in collections.patterns %}
+    <div class="card"><a href="{{ pattern.url }}">{{ pattern.data.title }}</a></div>
+{% endfor %}

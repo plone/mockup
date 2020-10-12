@@ -1,5 +1,3 @@
-mockup/build/
-mockup/coverage/
-mockup/docs/
-mockup/node_modules/
-mockup/tests/files/r.js
+dist/
+docs/
+node_modules/
