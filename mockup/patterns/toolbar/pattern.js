@@ -244,7 +244,7 @@ define([
           }
         });
 
-      $('body').on('click', function(event) {
+      $('body').off('click').on('click', function(event) {
         var $el = that.$container.find(event.target);
         // we need to check if the target isn't the nav which can be
         // triggered if we click on the portal-header and plone-toolbar-more-subset
