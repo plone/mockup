@@ -552,6 +552,14 @@ define([
         });
       }
 
+      if (self.options.backdropOptions.closeOnClick === true) {
+        $(document).on('click', function(e) {
+          if (!$(e.target).closest('.' + self.options.templateOptions.classModal).length) {
+            self.hide();
+          }
+        });
+      }
+
       $(window.parent).resize(function() {
         self.positionModal();
       });
@@ -746,42 +754,32 @@ define([
 
     activateFocusTrap: function() {
       var self = this;
-      var inputsBody = self.$modal.find('.' + self.options.templateOptions.classBodyName).first().find(
-        'select, input[type!=hidden], textarea, button, a'
+      var inputs = self.$modal.find('.' + self.options.templateOptions.classBodyName).first().find(
+        'select, input, textarea, button, a'
       );
-      var inputsFooter = self.$modal.find('.' + self.options.templateOptions.classFooterName).first().find(
-        'select, input[type!=hidden], textarea, button, a'
-      );
-      var inputs=[]
-      for (var i=0; i<inputsBody.length; i++){
-        if($(inputsBody[i]).is(':visible')){
-          inputs.push(inputsBody[i])
-        }
-      }
-      for (var j=0; j<inputsFooter.length; j++){
-        if($(inputsFooter[j]).is(':visible')){
-          inputs.push(inputsFooter[j])
-        }
-      }
 
       if (inputs.length === 0) {
         inputs = self.$modal.find('.plone-modal-title');
       }
-      var firstInput = inputs[0];
-      var lastInput = inputs[inputs.length-1];
+
+      var firstInput = inputs.first();
+      var lastInput = inputs.last();
       var closeInput = self.$modal.find('.plone-modal-close').first();
+
       $(document).on('keydown', '.' + self.options.templateOptions.classDialog, function(e) {
         if (e.which === 9) {
           e.preventDefault();
 
           var $target = $(e.target)
-          var currentIndex = $.inArray($target[0],inputs);
+          var currentIndex = inputs.index($target);
+
           if (currentIndex >= 0 && currentIndex < inputs.length) {
             var nextIndex = currentIndex + (e.shiftKey ? -1 : 1);
+
             if (nextIndex < 0 || nextIndex >= inputs.length) {
               closeInput.focus();
             } else {
-              inputs[nextIndex].focus();
+              inputs.get(nextIndex).focus();
             }
           } else if (e.shiftKey) {
             lastInput.focus();
@@ -790,13 +788,6 @@ define([
           }
         }
       });
-      if (self.options.backdropOptions.closeOnClick === true) {
-        self.$modal.on('click', function(e) {
-          if (!$(e.target).closest('.' + self.options.templateOptions.classModal).length) {
-            self.hide();
-          }
-        });
-      }
 
       self.$modal.find('.plone-modal-title').focus();
     },
