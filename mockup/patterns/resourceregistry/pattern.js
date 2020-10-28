@@ -116,34 +116,31 @@ define([
         activeTab: "registry",
         template: _.template(
             "" +
-                '<div class="autotabs mb-3">' +
-                '<ul class="nav nav-tabs main-tabs autotoc-nav">' +
-                '<li class="nav-item registry-btn"><a class="nav-link" href="#"><%- _t("Registry") %></a></li>' +
-                '<li class="nav-item overrides-btn"><a class="nav-link" href="#"><%- _t("Overrides") %></a></li>' +
-                '<li class="nav-item lessvariables-btn"><a class="nav-link" href="#"><%- _t("Less Variables") %></a></li>' +
-                '<li class="nav-item patternoptions-btn"><a class="nav-link" href="#"><%- _t("Pattern Options") %></a></li>' +
-                "</ul>" +
-                "</div>" +
-                '<div class="tab-content" />'
+                '<div class="pat-autotoc autotabs">' +
+                '<nav class="main-tabs autotoc-nav">' +
+                '<a class="registry-btn" href="#"><%- _t("Registry") %></a>' +
+                '<a class="overrides-btn" href="#"><%- _t("Overrides") %></a>' +
+                '<a class="lessvariables-btn" href="#"><%- _t("Less Variables") %></a>' +
+                '<a class="patternoptions-btn" href="#"><%- _t("Pattern Options") %></a>' +
+                "</nav>" +
+                '<div class="tab-content" />' +
+                "</div>"
         ),
         events: {
-            "click .registry-btn a": "hideShow",
-            "click .overrides-btn a": "hideShow",
-            "click .lessvariables-btn a": "hideShow",
-            "click .patternoptions-btn a": "hideShow",
+            "click a.registry-btn": "hideShow",
+            "click a.overrides-btn": "hideShow",
+            "click a.lessvariables-btn": "hideShow",
+            "click a.patternoptions-btn": "hideShow",
         },
         hideShow: function (e) {
             var self = this;
             if (e !== undefined) {
                 e.preventDefault();
-                self.activeTab = $(e.target)
-                    .parent()[0]
-                    .className.replace("-btn", "")
-                    .replace("nav-item ", "");
+                self.activeTab = e.target.className.replace("-btn", "");
             }
-            self.$(".main-tabs > li a").removeClass("active");
+            self.$(".main-tabs > a").removeClass("active");
             self.$content.find(".tab-pane").removeClass("active");
-            self.tabs[self.activeTab].btn.find("a").addClass("active");
+            self.tabs[self.activeTab].btn.addClass("active");
             self.tabs[self.activeTab].content.addClass("active");
         },
         initialize: function (options) {
