@@ -244,7 +244,7 @@ define([
           }
         });
 
-      $('body').off('click').on('click', function(event) {
+      $('body').off('click.closetoolbarsubmenus').on('click.closetoolbarsubmenus', function(event) {
         var $el = that.$container.find(event.target);
         // we need to check if the target isn't the nav which can be
         // triggered if we click on the portal-header and plone-toolbar-more-subset
@@ -509,8 +509,8 @@ define([
          This is for usability so the menu changes along with
          the folder contents context */
       $('body')
-        .off('structure-url-changed')
-        .on('structure-url-changed', function(e, path) {
+        .off('structure-url-changed.toolbar')
+        .on('structure-url-changed.toolbar', function(e, path) {
           $.ajax({
             url: $('body').attr('data-portal-url') + path + '/@@render-toolbar',
           }).done(function(data) {
