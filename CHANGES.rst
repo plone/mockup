@@ -8,6 +8,21 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.3 (2020-10-30)
+------------------
+
+Bug fixes:
+
+
+- Fix building of the docs bundle.
+  [thet] (#980)
+- Fix external description text in tinymce link popup
+  [parruc] (#1010)
+- Bump bl from 4.0.2 to 4.0.3 [dependabot, jensens] (#1014)
+- Bumps lodash from 4.17.15 to 4.17.20. [dependabot, jensens] (#1015)
+- Fix plone toolbar action links being updated only on the first navigation action in the folder_contents structure pattern. [fredvd] (#3191)
+
+
 3.2.2 (2020-08-14)
 ------------------
 
