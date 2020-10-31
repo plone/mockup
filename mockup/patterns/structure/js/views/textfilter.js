@@ -66,15 +66,16 @@ define([
       }
     },
 
-    setTerm: function(term, set_input) {
+    setTerm: function(term, set_input, refresh=true) {
       var term_el = this.$el[0].querySelector('.search-query');
       this.term = encodeURIComponent(term);
       if (set_input) {
         term_el.value = term;
       }
-      this.app.collection.currentPage = 1;
-      this.app.collection.pager();
-
+      if (refresh) {
+        this.app.collection.currentPage = 1;
+        this.app.collection.pager();
+      }
       if (term) {
         term_el.classList.add('has-filter');
         this.setFilterStatusMessage();
@@ -127,8 +128,8 @@ define([
       }
     },
 
-    clearTerm: function() {
-      this.setTerm('', true);
+    clearTerm: function(refresh=true) {
+      this.setTerm('', true, refresh);
     },
 
     clearFilter: function() {
