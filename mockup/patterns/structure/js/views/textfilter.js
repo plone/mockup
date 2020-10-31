@@ -41,7 +41,7 @@ define([
     setFilterStatusMessage: function() {
       var clear_btn = $('<button type="button" class="btn btn-primary btn-xs"></button>')
         .text(_t('Clear'))
-        .on('click', function() {
+        .off('click.textfilter').on('click.textfilter', function() {
           this.clearFilter();
         }.bind(this));
 
