@@ -517,7 +517,7 @@ define([
             var $newel = $(utils.parseBodyTag(data));
             var hasedit = $newel.find('#edit-zone').length;
             $newel = hasedit ? $newel.find('#edit-zone') : $newel;
-            var $replacetoolbar = $('#edit-bar').find('#edit-zone');
+            var $replacetoolbar = $('body').find('#edit-zone');
             $replacetoolbar.replaceWith($newel);
             Registry.scan($newel);
           });
