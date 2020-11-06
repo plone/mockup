@@ -282,7 +282,9 @@ define([
                     }
                 });
 
-            $("body").on("click", function (event) {
+            $("body")
+                .off("click.closetoolbarsubmenus")
+                .on("click.closetoolbarsubmenus", function (event) {
                 var $el = that.$container.find(event.target);
                 // we need to check if the target isn't the nav which can be
                 // triggered if we click on the portal-header and plone-toolbar-more-subset
@@ -570,20 +572,20 @@ define([
          This is for usability so the menu changes along with
          the folder contents context */
             $("body")
-                .off("structure-url-changed")
-                .on("structure-url-changed", function (e, path) {
+                .off("structure-url-changed.toolbar")
+                .on("structure-url-changed.toolbar", function (e, path) {
                     $.ajax({
                         url:
                             $("body").attr("data-portal-url") +
                             path +
                             "/@@render-toolbar",
                     }).done(function (data) {
-                        var $el = $(utils.parseBodyTag(data));
-                        $el = $el.find("#edit-zone").length
-                            ? $el.find("#edit-zone")
-                            : $el;
-                        that.$el.replaceWith($el);
-                        Registry.scan($el);
+                        var $newel = $(utils.parseBodyTag(data));
+                        var hasedit = $newel.find('#edit-zone').length;
+                        $newel = hasedit ? $newel.find("#edit-zone") : $newel;
+                        var $replacetoolbar = $('body').find('#edit-zone');
+                        $replacetoolbar.replaceWith($newel);
+                        Registry.scan($newel);
                     });
                 });
 
