@@ -66,13 +66,13 @@ define([
       }
     },
 
-    setTerm: function(term, set_input, refresh=true) {
+    setTerm: function(term, set_input, refresh) {
       var term_el = this.$el[0].querySelector('.search-query');
       this.term = encodeURIComponent(term);
       if (set_input) {
         term_el.value = term;
       }
-      if (refresh) {
+      if (refresh === undefined || refresh == true) {
         this.app.collection.currentPage = 1;
         this.app.collection.pager();
       }
@@ -128,7 +128,7 @@ define([
       }
     },
 
-    clearTerm: function(refresh=true) {
+    clearTerm: function(refresh) {
       this.setTerm('', true, refresh);
     },
 
