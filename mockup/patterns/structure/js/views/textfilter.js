@@ -41,7 +41,7 @@ define([
     setFilterStatusMessage: function() {
       var clear_btn = $('<button type="button" class="btn btn-primary btn-xs"></button>')
         .text(_t('Clear'))
-        .on('click', function() {
+        .off('click.textfilter').on('click.textfilter', function() {
           this.clearFilter();
         }.bind(this));
 
@@ -66,15 +66,16 @@ define([
       }
     },
 
-    setTerm: function(term, set_input) {
+    setTerm: function(term, set_input, refresh) {
       var term_el = this.$el[0].querySelector('.search-query');
       this.term = encodeURIComponent(term);
       if (set_input) {
         term_el.value = term;
       }
-      this.app.collection.currentPage = 1;
-      this.app.collection.pager();
-
+      if (refresh === undefined || refresh == true) {
+        this.app.collection.currentPage = 1;
+        this.app.collection.pager();
+      }
       if (term) {
         term_el.classList.add('has-filter');
         this.setFilterStatusMessage();
@@ -127,8 +128,8 @@ define([
       }
     },
 
-    clearTerm: function() {
-      this.setTerm('', true);
+    clearTerm: function(refresh) {
+      this.setTerm('', true, refresh);
     },
 
     clearFilter: function() {

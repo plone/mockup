@@ -277,7 +277,7 @@ define([
     },
     setCurrentPath: function(path) {
       this.collection.setCurrentPath(path);
-      this.textfilter.clearTerm();
+      this.textfilter.clearTerm(false);
       this.clearStatus();
     },
     getAjaxUrl: function(url) {

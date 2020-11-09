@@ -1,0 +1,1 @@
+Prevent a folder_contents navigation from triggering the double amount of XHR requests through the text filter. Also correctly unregister/register events with a namespace in the structure pattern.[fredvd]
