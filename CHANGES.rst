@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.4 (2020-11-11)
+------------------
+
+Bug fixes:
+
+
+- Don't depend on #edit-bar being present to update the toolbar after folder_contents navigation. Projects using plonetheme.barceloneta's backend.xml might not have that div/id in their html because of an error in the rules.xml. [fredvd] (#3191)
+- Prevent a folder_contents navigation from triggering the double amount of XHR requests through the text filter. Also correctly unregister/register events with a namespace in the structure pattern.[fredvd] (#3203)
+
+
 3.2.3 (2020-10-30)
 ------------------
 

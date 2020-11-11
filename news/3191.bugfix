@@ -1,1 +1,0 @@
-Don't depend on #edit-bar being present to update the toolbar after folder_contents navigation. Projects using plonetheme.barceloneta's backend.xml might not have that div/id in their html because of an error in the rules.xml. [fredvd]
