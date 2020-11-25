@@ -109,7 +109,7 @@ export default Base.extend({
         if ($content.length) {
             $content.show();
             $target.replaceWith($content);
-            Registry.scan($content);
+            registry.scan($content);
         } else {
             // empty target node instead of removing it.
             // allows for subsequent content loader calls to work sucessfully.
