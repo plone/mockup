@@ -12,7 +12,7 @@ import "./pat/autotoc/pattern";
 import "./pat/backdrop/pattern";
 import "./pat/contentloader/pattern";
 import "./pat/cookietrigger/pattern";
-//import "./pat/datatables/pattern";
+import "./pat/datatables/pattern";
 //import "./pat/eventedit/pattern";
 //import "./pat/filemanager/pattern";
 //import "./pat/formautofocus/pattern";
