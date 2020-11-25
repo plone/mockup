@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/backdrop/"
+permalink: "pat/backdrop/"
 title: Backdrop
 ---
 

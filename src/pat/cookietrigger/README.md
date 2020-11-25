@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/cookietrigger/"
+permalink: "pat/cookietrigger/"
 title: Cookie Trigger
 ---
 

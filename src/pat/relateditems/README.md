@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/relateditems/"
+permalink: "pat/relateditems/"
 title: RelatedItems
 ---
 

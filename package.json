@@ -54,7 +54,7 @@
     "tinymce-builded": "https://github.com/artursmirnov/tinymce_builded.git#4.7.13"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^0.11.0",
+    "@11ty/eleventy": "^0.11.1",
     "@11ty/eleventy-navigation": "^0.1.6",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/preset-env": "^7.9.6",
@@ -98,15 +98,15 @@
     "datatables.net-bs": "1.10.16"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js --env.NODE_ENV=development",
-    "build": "webpack --config webpack.config.js --env.NODE_ENV=production",
+    "start": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=development",
+    "build": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production",
     "build:stats": "webpack --config webpack.config.js --env.NODE_ENV=production --json > stats.json",
     "test": "jest --watch",
     "testonce": "jest",
     "postinstall": "patch --forward node_modules/select2/select2.js < patches/select2.patch || true",
     "docs-collect-patterns": "#DEACTIVATED#copyup -V src/pat/**/README.md docs/",
-    "docs-dev": "node_modules/.bin/eleventy --serve --output docs/_site/",
-    "docs-build": "node_modules/.bin/eleventy --output docs/_site/"
+    "docs-dev": "npx @11ty/eleventy --serve --output docs/_site/",
+    "docs-build": "npx @11ty/eleventy --output docs/_site/"
   },
   "browserslist": [
     ">0.2%",

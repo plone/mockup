@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/contentloader/"
+permalink: "pat/contentloader/"
 title: Content loader
 ---
 

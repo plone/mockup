@@ -108,9 +108,12 @@ module.exports = (env) => {
         config.output.publicPath = "/dist/";
         config.devServer = {
             inline: true,
-            contentBase: "./",
+            contentBase: "./docs/_site/",
             port: "8000",
             host: "0.0.0.0",
+            watchOptions: {
+                ignored: ['node_modules/**' ,'mockup/**']
+            },
         };
     }
     if (mode === "production") {

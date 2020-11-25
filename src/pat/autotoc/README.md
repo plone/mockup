@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/autotoc/"
+permalink: "pat/autotoc/"
 title: Autotoc
 ---
 

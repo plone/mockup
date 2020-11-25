@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/modal/"
+permalink: "pat/modal/"
 title: Modal
 ---
 

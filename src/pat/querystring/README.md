@@ -1,5 +1,5 @@
 ---
-permalink: "patterns/querystring/"
+permalink: "pat/querystring/"
 title: Querystring
 ---
 
