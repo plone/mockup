@@ -2,7 +2,7 @@ js/
 less/
 lib/
 node_modules/
-tests/
+/tests/
 mockup.egg-info/
 mockup/
 news/

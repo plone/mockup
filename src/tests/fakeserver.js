@@ -761,6 +761,50 @@ server.respondWith("GET", /context-info/, function (xhr, id) {
     );
 });
 
+server.respondWith("GET", /fileTree.json/, function (xhr, id) {
+    server.autoRespondAfter = 200;
+    var data = [
+        {
+            "label": "css",
+            "folder": true,
+            "children": [
+                {
+                    "label": "style.css",
+                    "folder": false
+                },
+                {
+                    "label": "tree.css",
+                    "folder": false
+                }
+            ]
+        },
+        {
+            "label": "js",
+            "folder": true,
+            "children": [
+                {
+                    "label": "jquery.js",
+                    "folder": false
+                },
+                {
+                    "label": "tree.js",
+                    "folder": false
+                }
+            ]
+        },
+        {
+            "label": "index.html",
+            "folder": false
+        }
+    ];
+
+    xhr.respond(
+        200,
+        { "Content-Type": "application/json" },
+        JSON.stringify(data)
+    );
+});
+
 server.respondWith("POST", /filemanager-actions/, function (xhr, id) {
     xhr.respond(
         200,

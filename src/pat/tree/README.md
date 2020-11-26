@@ -36,15 +36,20 @@ Tree pattern.
         }
     ];'> </div>
 
+### JSON data
+
+<div class="pat-tree"
+    data-pat-tree='data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;'></div>
+
 ### Remote data URL
 
 <div class="pat-tree"
-    data-pat-tree="dataUrl:/docs/dev/tests/json/fileTree.json;
-                    autoOpen:true"></div>
+    data-pat-tree="dataUrl:/fileTree.json;
+                    autoOpen:true;"></div>
 
 ### Drag and drop
 
 <div class="pat-tree"
-    data-pat-tree="dataUrl:/docs/dev/tests/json/fileTree.json;
+    data-pat-tree="dataUrl:fileTree.json;
                     dragAndDrop: true;
                     autoOpen: true"></div>

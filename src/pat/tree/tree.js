@@ -49,12 +49,17 @@ export default Base.extend({
         if (self.options.onLoad !== null) {
             // delay generating tree...
             var options = $.extend({}, self.options);
+
             $.getJSON(options.dataUrl, function (data) {
                 options.data = data;
                 delete options.dataUrl;
                 self.tree = self.$el.tree(options);
                 self.options.onLoad(self);
-            });
+                })
+                .fail(function(response) {
+                    console.log("failed to load json data");
+                })
+            ;
         } else {
             self.tree = self.$el.tree(self.options);
         }

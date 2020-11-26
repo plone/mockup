@@ -9,6 +9,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({"favicon.ico": "favicon.ico"});
   eleventyConfig.addPassthroughCopy({"docs/main.css": "dist/main.css"});
   eleventyConfig.addPassthroughCopy({"dist": "dist"});
+//   eleventyConfig.addPassthroughCopy({"src/tests/json":"dist/json"});
   eleventyConfig.addPassthroughCopy({"src/tests/fakeserver.js":"dist/fakeserver.js"});
   eleventyConfig.addPassthroughCopy({"node_modules/sinon": "dist/sinon"});
   eleventyConfig.addPassthroughCopy({"node_modules/underscore": "dist/underscore"});
