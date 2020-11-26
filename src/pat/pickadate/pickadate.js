@@ -5,6 +5,7 @@ import "pickadate/lib/picker.time";
 import $ from "jquery";
 import _t from "../../core/i18n-wrapper";
 import Base from "patternslib/src/core/base";
+import dom from "patternslib/src/core/dom";
 import utils from "../../core/utils";
 
 import "pickadate/lib/themes/classic.css";
@@ -122,7 +123,7 @@ export default Base.extend({
             timeValue = value[0];
         }
 
-        self.$el.hide();
+        dom.hide(self.$el[0]);
 
         self.$wrapper = $("<div/>")
             .addClass(self.options.classWrapperName)
