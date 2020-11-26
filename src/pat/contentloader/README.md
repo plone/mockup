@@ -12,15 +12,13 @@ target(string): CSS selector of target element, which is being replaced. If it's
 trigger(string): Event to trigger content loading. Defaults to "click"
 url(string): To load content from remote resource. Use 'el' to use with anchor tag href.
 
-
 ## Example 1
 
 <a href="#" class="pat-contentloader" data-pat-contentloader="content:#clexample1;target:#clexample1target;">Load content</a>
 <div id="clexample1target">Original Content</div>
 <div id="clexample1" style="display:none">Replaced Content</div>
 
-
 ## Example 2
 
-<a href="#" class="pat-contentloader" data-pat-contentloader="url:something.html;">Load content</a>
+<a href="#" class="pat-contentloader" data-pat-contentloader="url:/something.html;">Load content</a>
 

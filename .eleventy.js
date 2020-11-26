@@ -5,11 +5,13 @@
 
 
 module.exports = function(eleventyConfig) {
-  eleventyConfig.addPassthroughCopy({"src/pat": "pat"});
+  //eleventyConfig.addPassthroughCopy({"src/pat": "pat"});
   eleventyConfig.addPassthroughCopy({"favicon.ico": "favicon.ico"});
   eleventyConfig.addPassthroughCopy({"docs/main.css": "dist/main.css"});
   eleventyConfig.addPassthroughCopy({"dist": "dist"});
-  // eleventyConfig.addPassthroughCopy({"mockup/tests/fakeserver.js": "mockup/build/fakeserver.js"});
+  eleventyConfig.addPassthroughCopy({"src/tests/fakeserver.js":"dist/fakeserver.js"});
+  eleventyConfig.addPassthroughCopy({"node_modules/sinon": "dist/sinon"});
+  eleventyConfig.addPassthroughCopy({"node_modules/underscore": "dist/underscore"});
   eleventyConfig.addPassthroughCopy({"node_modules/bootstrap": "dist/bootstrap"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/requirejs/require.js": "mockup/build/require.js"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/sinon/pkg/sinon.js": "mockup/build/sinon.js"});
