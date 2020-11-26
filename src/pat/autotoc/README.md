@@ -5,20 +5,24 @@ title: Autotoc
 
 # Autotoc pattern.
 
-## Options
+Automatically create a table of contents.
 
-IDPrefix(string): Prefix used to generate ID. ('autotoc-item-')
-classActiveName(string): Class used for active level. ('active')
-classLevelPrefixName(string): Class prefix used for the TOC levels. ('autotoc-level-')
-classSectionName(string): Class used for section in TOC. ('autotoc-section')
-classTOCName(string): Class used for the TOC. ('autotoc-nav')
-levels(string): Selectors used to find levels. ('h1,h2,h3')
-scrollDuration(string): Speed of scrolling. ('slow')
-scrollEasing(string): Easing to use while scrolling. ('swing')
-section(string): Tag type to use for TOC. ('section')
+## Configuration
+
+| Option | Type | Default | Description |
+|:-:|:-:|:-:|:-:|
+| IDPrefix | string | 'autotoc-item-' | Prefix used to generate ID. |
+| classActiveName | string | 'active' | Class used for active level. |
+| classLevelPrefixName | string | 'autotoc-level-' | Class prefix used for the TOC levels. |
+| classSectionName | string | 'autotoc-section' | Class used for section in TOC. |
+| classTOCName | string | 'autotoc-nav' | Class used for the TOC. |
+| levels | string | 'h1,h2,h3' | Selectors used to find levels. |
+| scrollDuration | string | 'slow' | Speed of scrolling. |
+| scrollEasing | string | 'swing' | Easing to use while scrolling. |
+| section | string | 'section' | Tag type to use for TOC. |
 
 
-## Documentation
+## Examples
 
 ### Example 1
 
