@@ -827,6 +827,80 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@fullcalendar/adaptive@^5.3.1":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/adaptive/-/adaptive-5.4.0.tgz#9ae85133636794d1ab2a26d3b4f3dc881a48a4c7"
+  integrity sha512-eyTnqAb1tX/8VfdgyMA2GKRkV21OscaEeUKHtfMboRhRhoxqr/15PuC7QxznBThU3ONYJivlUe0FnH0Lhh5zyA==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    "@fullcalendar/premium-common" "~5.4.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/common@~5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.4.0.tgz#65474163e43bea4443b2577cd39d7021678237df"
+  integrity sha512-w6C5VLxZmS8AmbAIiIHy+p+S/G9wtsvFEgyM/Ijd+5/ENKV4bs8ieOsetdl79WUheRKg0oXiiG5fy1X3EFk/Gg==
+  dependencies:
+    tslib "^2.0.3"
+
+"@fullcalendar/core@^5.3.1":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-5.4.0.tgz#426eed400b0948b955e92275095d617e428be5a1"
+  integrity sha512-brg5TI/ZrCm+gBdKRkDLuenUxAEYa40Esw6yAtLbx0azRinhOZ+koqy4J3VA3dnv2W5HI9agVr9wuQLHWjqDtw==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    preact "^10.0.5"
+    tslib "^2.0.3"
+
+"@fullcalendar/daygrid@^5.3.2", "@fullcalendar/daygrid@~5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.4.0.tgz#9e29089f58166cbfea980da1a69b55e157794ed6"
+  integrity sha512-UgBcEWNMFuhnwQNH0NP1qWo3swH3jAqXY7Y43eQakwwFbCuP/gBSmiOgkVnfK2SmPJTDMEnFR5jApcXPlpPXlQ==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/interaction@^5.3.1":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-5.4.0.tgz#5d709a3381ca0670f6e629a4b19bdb4b9e18515c"
+  integrity sha512-Ve7i+kZ6ZwL84n2aSE762Pr5Sj9hFNKNVd+0wSGDpwgm4G4AWDfycHx0IyrbzqWCjcaP1aKChNYunkuPVl+rCg==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/list@^5.3.1":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-5.4.0.tgz#f6ade6d4a6dc9e61ef8eac155bc2fab94a897c76"
+  integrity sha512-6J/ZeZttjfPhpQ7elVHabvjvdnnvH/ttgRmqx5kYyV4Fpjm3TPD9DJVLsONAvp/wFM9PWoF4t+JkXapXJAYH3Q==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/luxon@^5.3.1":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/luxon/-/luxon-5.4.0.tgz#b0a2d6fd8e25b7a98a43f1d11c8e963e7b2e4021"
+  integrity sha512-dwcdhSNUz/OJAs4SfGHz2uHY4WCPFuAGLp5GvkEkjo3z9oJ1vq4OZXv/GNypsW+907rY9vh9tMHhmSeTExYQ8A==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/premium-common@~5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-5.4.0.tgz#2c9ff8fce44e8490ebc5e21330e49ffa762ea3d4"
+  integrity sha512-gPaWsAJMnBDj3zoxWXYI1l7sPxXq40+A4eKtPrt0ASbnXAFFA7Tb7uf4i9Q6ajUVaMXe4xtauZdZQGAR9HwP1Q==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/timegrid@^5.3.1":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-5.4.0.tgz#7869d6c8ba625f4508bb2f4c4a3c3933527a0690"
+  integrity sha512-/b3ZeZVEZf2BxC8mJ6nHW2XZY9mKbN+RpZbdocEiQniGqYq0o3hqGz0FXMA+JSTE6lGjo747RE3b5p295avw7A==
+  dependencies:
+    "@fullcalendar/common" "~5.4.0"
+    "@fullcalendar/daygrid" "~5.4.0"
+    tslib "^2.0.3"
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -1009,6 +1083,11 @@
     "@types/node" "*"
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
+
+"@juggle/resize-observer@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.2.0.tgz#5e0b448d27fe3091bae6216456512c5904d05661"
+  integrity sha512-fsLxt0CHx2HCV9EL8lDoVkwHffsA0snUpddYjdLyXcG5E41xaamn9ZyQqOE9TUJdrRlH8/hjIf+UdOdDeKCUgg==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -3992,13 +4071,6 @@ fsevents@^2.1.2, fsevents@~2.1.2:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.1.3.tgz#fb738703ae8d2f9fe900c33836ddebee8b97f23e"
 
-fullcalendar@^2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/fullcalendar/-/fullcalendar-2.9.1.tgz#dd2a84469b627749e47c5dd9fd71f56146e0651b"
-  dependencies:
-    jquery ">=1.7.1"
-    moment ">=2.5.0"
-
 function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
@@ -5297,7 +5369,7 @@ jquery.cookie@1.4.1:
   dependencies:
     jquery ""
 
-jquery@, jquery@3.5.1, jquery@>=1.7, jquery@>=1.7.1, jquery@>=1.7.2, jquery@>=1.9, jquery@^3.5.1:
+jquery@, jquery@3.5.1, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.9, jquery@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
 
@@ -5922,7 +5994,7 @@ moment@2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
 
-"moment@>= 2.9.0", moment@>=2.5.0, moment@^2.29.0:
+"moment@>= 2.9.0", moment@^2.29.0:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
 
@@ -6463,17 +6535,25 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
 
-"patternslib@https://github.com/Patternslib/Patterns.git#master":
+"patternslib@https://github.com/Patternslib/Patterns.git#8730f8c659f23fe35827c60d3eeadead8f27a84a":
   version "4.0.0-dev"
-  resolved "https://github.com/Patternslib/Patterns.git#245f89ad06fb92682014d905c75fda6593841e4a"
+  resolved "https://github.com/Patternslib/Patterns.git#8730f8c659f23fe35827c60d3eeadead8f27a84a"
   dependencies:
+    "@fullcalendar/adaptive" "^5.3.1"
+    "@fullcalendar/core" "^5.3.1"
+    "@fullcalendar/daygrid" "^5.3.2"
+    "@fullcalendar/interaction" "^5.3.1"
+    "@fullcalendar/list" "^5.3.1"
+    "@fullcalendar/luxon" "^5.3.1"
+    "@fullcalendar/timegrid" "^5.3.1"
+    "@juggle/resize-observer" "^3.2.0"
     "@stomp/stompjs" "^5.4.4"
-    fullcalendar "^2.9.1"
     google-code-prettify "^1.0.5"
     imagesloaded "^4.1.4"
     intersection-observer "^0.7.0"
     jquery "^3.5.1"
     jquery-jcrop "^0.9.13"
+    luxon "^1.24.1"
     masonry-layout "^4.2.2"
     moment "^2.29.0"
     moment-timezone "^0.5.31"
@@ -6488,7 +6568,7 @@ path-type@^4.0.0:
     slides "git+https://github.com/Patternslib/slides.git"
     spectrum-colorpicker "^1.8.0"
     stickyfilljs "git+https://github.com/syslabcom/stickyfill.git"
-    tippy.js "^6.2.6"
+    tippy.js "^6.2.7"
     underscore "^1.11.0"
     url-polyfill "^1.1.9"
     validate.js "^0.13.1"
@@ -6636,6 +6716,11 @@ postcss@^7.0.14, postcss@^7.0.32, postcss@^7.0.5, postcss@^7.0.6:
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+preact@^10.0.5:
+  version "10.5.7"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.7.tgz#f1d84725539e18f7ccbea937cf3db5895661dbd3"
+  integrity sha512-4oEpz75t/0UNcwmcsjk+BIcDdk68oao+7kxcpc1hQPNs2Oo3ZL9xFz8UBf350mxk/VEdD41L5b4l2dE3Ug3RYg==
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -8143,9 +8228,10 @@ timers-browserify@^2.0.4:
   version "4.6.2"
   resolved "https://github.com/artursmirnov/tinymce_builded.git#d171527d7a630f9509b66019be4a012d874ef587"
 
-tippy.js@^6.2.6:
-  version "6.2.6"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.2.6.tgz#4991bbe8f75e741fb92b5ccfeebcd072d71f8345"
+tippy.js@^6.2.7:
+  version "6.2.7"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.2.7.tgz#62fb34eda23f7d78151ddca922b62818c1ab9869"
+  integrity sha512-k+kWF9AJz5xLQHBi3K/XlmJiyu+p9gsCyc5qZhxxGaJWIW8SMjw1R+C7saUnP33IM8gUhDA2xX//ejRSwqR0tA==
   dependencies:
     "@popperjs/core" "^2.4.4"
 
@@ -8241,6 +8327,11 @@ tryer@^1.0.1:
 tslib@^1.10.0, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+
+tslib@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tty-browserify@0.0.0:
   version "0.0.0"
