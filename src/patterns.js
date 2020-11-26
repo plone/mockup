@@ -11,7 +11,7 @@ import jquery from "jquery";
 import "./pat/autotoc/autotoc";
 import "./pat/backdrop/backdrop";
 import "./pat/contentloader/contentloader";
-import "./pat/cookietrigger/cookietrigger;
+import "./pat/cookietrigger/cookietrigger";
 import "./pat/datatables/pattern";
 //import "./pat/eventedit/pattern";
 //import "./pat/filemanager/pattern";
