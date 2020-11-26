@@ -1,4 +1,5 @@
 import Base from "patternslib/src/core/base";
+import dom from "patternslib/src/core/dom";
 
 export default Base.extend({
     name: "cookietrigger",
@@ -35,9 +36,9 @@ export default Base.extend({
          * disabled.
          */
         if (this.isCookiesEnabled()) {
-            this.$el.hide();
+            dom.hide(this.el);
         } else {
-            this.$el.show();
+            dom.show(this.el);
         }
     },
 
