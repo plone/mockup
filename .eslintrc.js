@@ -5,7 +5,9 @@ module.exports = {
         es6: "true",
         browser: true,
         node: true,
+        jest: true,
     },
+    parser: "babel-eslint",
     ignorePatterns: ["dist/", "docs/", "node_modules/"],
     rules: {
         "no-debugger": 1,
@@ -16,13 +18,5 @@ module.exports = {
         "no-self-assign": 0,
         "no-useless-escape": 0,
     },
-    globals: {
-        define: true,
-        require: true,
-        // tests
-        it: true,
-        describe: true,
-        beforeEach: true,
-        afterEach: true,
-    },
+    globals: {},
 };
