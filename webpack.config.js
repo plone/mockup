@@ -48,7 +48,7 @@ module.exports = (env) => {
             rules: [
                 {
                     test: /\.js$/,
-                    exclude: /node_modules/,
+                    exclude: /node_modules\/(?!(patternslib)\/).*/,
                     loader: "babel-loader",
                 },
                 {
@@ -112,7 +112,7 @@ module.exports = (env) => {
             port: "8000",
             host: "0.0.0.0",
             watchOptions: {
-                ignored: ['node_modules/**' ,'mockup/**']
+                ignored: ["node_modules/**", "mockup/**"],
             },
         };
     }
