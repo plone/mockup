@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Pattern from "./pattern";
+import Pattern from "./autotoc";
 import registry from "patternslib/src/core/registry";
 import utils from "patternslib/src/core/utils";
 
