@@ -70,7 +70,7 @@ module.exports = (env) => {
                     ],
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.(?:sass|scss|css)$/i,
                     use: [
                         {
                             loader: "style-loader",
@@ -79,7 +79,12 @@ module.exports = (env) => {
                             },
                         },
                         "css-loader",
+                        "sass-loader",
                     ],
+                },
+                {
+                    test: /\.(png|jpe?g|gif)$/i,
+                    use: "file-loader",
                 },
             ],
         },
