@@ -4,8 +4,14 @@ lib/
 node_modules/
 tests/
 mockup.egg-info/
+mockup/
 news/
 .nix/
+src/
+docs/
+CONTRIBUTE
+GETTING_STARTED
+LEARN
 mockup/js
 mockup/less
 mockup/lib

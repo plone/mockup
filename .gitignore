@@ -5,3 +5,8 @@ node_modules/
 stamp-yarn
 stats.json
 .vscode
+/docs/mockup/coverage
+/mockup.egg-info
+/mockup/coverage
+/yarn-error.log
+/stamp-npm

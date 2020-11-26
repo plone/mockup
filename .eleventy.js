@@ -10,7 +10,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({"docs/main.css": "main.css"});
   eleventyConfig.addPassthroughCopy({"dist": "dist"});
   // eleventyConfig.addPassthroughCopy({"mockup/tests/fakeserver.js": "mockup/build/fakeserver.js"});
-  // eleventyConfig.addPassthroughCopy({"mockup/node_modules/bootstrap": "mockup/build/node_modules/bootstrap"});
+  eleventyConfig.addPassthroughCopy({"node_modules/bootstrap": "dist/bootstrap"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/requirejs/require.js": "mockup/build/require.js"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/sinon/pkg/sinon.js": "mockup/build/sinon.js"});
   // eleventyConfig.addPassthroughCopy({"mockup/node_modules/sinon/pkg/sinon-esm.js": "mockup/build/sinon-esm.js"});
