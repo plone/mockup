@@ -1,6 +1,7 @@
 process.traceDeprecation = true;
 const path = require("path");
 const webpack = require("webpack");
+const webpack_helpers = require("patternslib/webpack/webpack-helpers");
 
 // plugins
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -70,18 +71,17 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.css$/,
-                    use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+                    use: [
+                        {
+                            loader: "style-loader",
+                            options: {
+                                insert: webpack_helpers.top_head_insert,
+                            },
+                        },
+                        "css-loader",
+                    ],
                 },
             ],
-        },
-        resolve: {
-            alias: {
-                "moment": path.resolve(__dirname, "node_modules/moment"),
-                "moment-timezone": path.resolve(
-                    __dirname,
-                    "node_modules/moment-timezone"
-                ),
-            },
         },
         plugins: [
             new CopyPlugin({
