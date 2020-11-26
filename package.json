@@ -101,6 +101,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=development",
     "build": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production",
+    "watch": "webpack --config webpack.config.js --watch --env.NODE_ENV=development",
     "build:stats": "webpack --config webpack.config.js --env.NODE_ENV=production --json > stats.json",
     "test": "jest --watch",
     "testonce": "jest",
