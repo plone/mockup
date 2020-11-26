@@ -8,10 +8,10 @@ import registry from "patternslib/src/core/registry";
 import jquery from "jquery";
 
 // Import all used patterns for the bundle to be generated
-import "./pat/autotoc/pattern";
-import "./pat/backdrop/pattern";
-import "./pat/contentloader/pattern";
-import "./pat/cookietrigger/pattern";
+import "./pat/autotoc/autotoc";
+import "./pat/backdrop/backdrop";
+import "./pat/contentloader/contentloader";
+import "./pat/cookietrigger/cookietrigger;
 import "./pat/datatables/pattern";
 //import "./pat/eventedit/pattern";
 //import "./pat/filemanager/pattern";
