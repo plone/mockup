@@ -12,7 +12,7 @@ import "./pat/autotoc/autotoc";
 import "./pat/backdrop/backdrop";
 import "./pat/contentloader/contentloader";
 import "./pat/cookietrigger/cookietrigger";
-import "./pat/datatables/pattern";
+import "./pat/datatables/datatables.js";
 //import "./pat/eventedit/pattern";
 //import "./pat/filemanager/pattern";
 //import "./pat/formautofocus/pattern";
@@ -40,7 +40,7 @@ import "./pat/datatables/pattern";
 //import "./pat/toggle/pattern";
 //import "./pat/toolbar/pattern";
 //import "./pat/tooltip/pattern";
-//import "./pat/tree/pattern";
+import "./pat/tree/pattern";
 //import "./pat/upload/pattern";
 
 window.jQuery = jquery;
