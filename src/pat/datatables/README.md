@@ -1,5 +1,5 @@
 ---
-permalink: "pat/datatables/"
+permalink: "patterns/datatables/"
 title: DataTables
 ---
 

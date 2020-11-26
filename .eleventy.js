@@ -7,7 +7,7 @@
 module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({"src/pat": "pat"});
   eleventyConfig.addPassthroughCopy({"favicon.ico": "favicon.ico"});
-  eleventyConfig.addPassthroughCopy({"docs/main.css": "main.css"});
+  eleventyConfig.addPassthroughCopy({"docs/main.css": "dist/main.css"});
   eleventyConfig.addPassthroughCopy({"dist": "dist"});
   // eleventyConfig.addPassthroughCopy({"mockup/tests/fakeserver.js": "mockup/build/fakeserver.js"});
   eleventyConfig.addPassthroughCopy({"node_modules/bootstrap": "dist/bootstrap"});
