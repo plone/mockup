@@ -5747,10 +5747,6 @@ lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
 
-"logging@https://github.com/Patternslib/logging.git#1.0.2":
-  version "1.0.2"
-  resolved "https://github.com/Patternslib/logging.git#a31a550c2083089de2c677c169d7e0b0fb7a7967"
-
 loglevel@^1.6.8:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.7.0.tgz#728166855a740d59d38db01cf46f042caa041bb0"
@@ -6674,9 +6670,9 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
 
-"patternslib@https://github.com/Patternslib/Patterns.git#8730f8c659f23fe35827c60d3eeadead8f27a84a":
+"patternslib@https://github.com/Patternslib/Patterns.git#mockup-updates":
   version "4.0.0-dev"
-  resolved "https://github.com/Patternslib/Patterns.git#8730f8c659f23fe35827c60d3eeadead8f27a84a"
+  resolved "https://github.com/Patternslib/Patterns.git#b2791cfa12b65e75553514820978044e8c389306"
   dependencies:
     "@fullcalendar/adaptive" "^5.3.1"
     "@fullcalendar/core" "^5.3.1"
