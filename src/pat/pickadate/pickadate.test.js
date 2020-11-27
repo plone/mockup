@@ -535,7 +535,10 @@ describe("PickADate", function () {
 
     describe("automatically set the time on changing the date", function () {
         it.skip("parseTimeOffset works as expected", function () {
-            var pickadate = new Pattern($EL, {});
+            var pickadate = new Pattern(
+                document.body.querySelector(".pat-pickadate"),
+                {}
+            );
 
             // test false/true
             expect(pickadate.parseTimeOffset("false")).toEqual(false);
