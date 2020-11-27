@@ -44,7 +44,7 @@
     "jquery.recurrenceinput.js": "https://github.com/collective/jquery.recurrenceinput.js.git#master",
     "marked": "0.3.18",
     "moment": "2.24.0",
-    "patternslib": "https://github.com/Patternslib/Patterns.git#8730f8c659f23fe35827c60d3eeadead8f27a84a",
+    "patternslib": "https://github.com/Patternslib/Patterns.git#mockup-updates",
     "pickadate": "3.6.4",
     "prettier": "^2.1.2",
     "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
