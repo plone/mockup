@@ -34,7 +34,11 @@ Date and time picker widget.
 
 ### Example 1: Date and Time
 
-<input class="pat-pickadate"/>
+<input class="pat-datetime-picker"/>
+
+```html
+<input class="pat-datetime-picker"/>
+```
 
 ### Example 2: Date and Time with initial data
 

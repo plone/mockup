@@ -11,6 +11,9 @@ window.__patternslib_import_styles = true;
 import registry from "patternslib/src/core/registry";
 import jquery from "jquery";
 
+// Patternslib patterns
+import "patternslib/src/pat/datetime-picker/datetime-picker";
+
 // Import all used patterns for the bundle to be generated
 import "./pat/autotoc/autotoc";
 import "./pat/backdrop/backdrop";
@@ -28,7 +31,6 @@ import "./pat/eventedit/eventedit";
 //import "./pat/moment/pattern";
 //import "./pat/navigationmarker/pattern";
 //import "./pat/passwordstrength/pattern";
-import "./pat/pickadate/pickadate";
 //import "./pat/preventdoublesubmit/pattern";
 //import "./pat/querystring/pattern";
 //import "./pat/recurrence/pattern";
@@ -46,6 +48,9 @@ import "./pat/select2/select2";
 //import "./pat/tooltip/pattern";
 import "./pat/tree/tree";
 //import "./pat/upload/pattern";
+
+// REMOVE obsolete patterns
+//import "./pat/pickadate/pickadate";
 
 window.jQuery = jquery;
 registry.init();
