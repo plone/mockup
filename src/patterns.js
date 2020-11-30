@@ -43,7 +43,7 @@ import "./pat/select2/select2";
 //import "./pat/texteditor/pattern";
 //import "./pat/thememapper/pattern";
 //import "./pat/tinymce/pattern";
-//import "./pat/toggle/pattern";
+import "./pat/toggle/toggle";
 //import "./pat/toolbar/pattern";
 //import "./pat/tooltip/pattern";
 import "./pat/tree/tree";
