@@ -27,7 +27,7 @@ import "./pat/eventedit/eventedit";
 //import "./pat/inlinevalidation/pattern";
 //import "./pat/livesearch/pattern";
 //import "./pat/markspeciallinks/pattern";
-//import "./pat/modal/pattern";
+import "./pat/modal/modal";
 //import "./pat/moment/pattern";
 //import "./pat/navigationmarker/pattern";
 //import "./pat/passwordstrength/pattern";

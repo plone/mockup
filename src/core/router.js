@@ -1,13 +1,14 @@
 /* Pattern router
  */
-define(["underscore", "backbone"], function (_, Backbone) {
-    "use strict";
+import _ from "underscore";
+import Backbone from "backbone";
 
-    var regexEscape = function (s) {
-        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-    };
 
-    var Router = Backbone.Router.extend({
+const regexEscape = function (s) {
+    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
+
+    const Router = Backbone.Router.extend({
         actions: [],
         redirects: {},
         addRoute: function (
@@ -105,5 +106,4 @@ define(["underscore", "backbone"], function (_, Backbone) {
         },
     });
 
-    return new Router();
-});
+export default Router;
