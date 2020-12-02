@@ -22,17 +22,14 @@
  *
  */
 
-define([
-    "jquery",
-    "pat-base",
-    "pat-registry",
-    "mockup-utils",
-    "translate",
-    "jquery.cookie",
-], function ($, Base, Registry, utils, _t) {
-    "use strict";
+import $ from "jquery";
+import Base from "patternslib/src/core/base";
+import registry from "patternslib/src/core/registry";
+import utils from "../../core/utils";
+import _t from "../../core/i18n-wrapper";
+import cookie from "jquery.cookie"
 
-    var Toolbar = Base.extend({
+export default Base.extend({
         name: "toolbar",
         trigger: ".pat-toolbar",
         parser: "mockup",
@@ -583,7 +580,7 @@ define([
                             ? $el.find("#edit-zone")
                             : $el;
                         that.$el.replaceWith($el);
-                        Registry.scan($el);
+                        registry.scan($el);
                     });
                 });
 
@@ -601,5 +598,3 @@ define([
         },
     });
 
-    return Toolbar;
-});

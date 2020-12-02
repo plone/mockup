@@ -44,7 +44,7 @@ import "./pat/select2/select2";
 //import "./pat/thememapper/pattern";
 //import "./pat/tinymce/pattern";
 import "./pat/toggle/toggle";
-//import "./pat/toolbar/pattern";
+import "./pat/toolbar/toolbar";
 //import "./pat/tooltip/pattern";
 import "./pat/tree/tree";
 //import "./pat/upload/pattern";
