@@ -1,23 +1,16 @@
 import $ from "jquery";
 import Pattern from "./tree";
+import utils from "../../core/utils";
 
-// define(["expect", "jquery", "pat-registry", "mockup-patterns-tree"], function (
-//     expect,
-//     $,
-//     registry,
-//     Tree
-// ) {
-//     "use strict";
-
-    // window.mocha.setup("bdd");
-    // $.fx.off = true;
+$.fx.off = true;
 
 describe("Tree", function () {
 
     it("loads the tree with data", function () {
         document.body.innerHTML = `
-            <div class="pat-tree"/>
+            <div class="pat-tree"></div>
         `;
+        //await utils.timeout(1);
         const el = document.querySelector(".pat-tree");
         var tree = new Pattern(el, {
             autoOpen: true,

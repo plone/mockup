@@ -7,7 +7,6 @@ title: Tree
 
 Tree pattern.
 
-
 ## Configuration
 
 | Option | Type | Default | Description |
@@ -20,6 +19,23 @@ Tree pattern.
 | keyboardSupport | boolean | true | if keyboard naviation is allowed |
 
 ### JSON node data
+
+``` html
+<div class="pat-tree"
+    data-pat-tree='data:[
+        { "label": "node1",
+        "children": [
+            { "label": "child1" },
+            { "label": "child2" }
+        ]
+        },
+        { "label": "node2",
+        "children": [
+            { "label": "child3" }
+        ]
+        }
+    ];'> </div>
+```
 
 <div class="pat-tree"
     data-pat-tree='data:[
