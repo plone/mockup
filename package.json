@@ -98,7 +98,7 @@
   },
   "resolutions": {
     "backbone": "1.1.2",
-    "underscore": "1.9.1",
+    "underscore": "1.12.0",
     "jqtree": "1.4.10",
     "jquery": "3.5.1",
     "datatables.net": "1.10.22",
