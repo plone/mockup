@@ -63,6 +63,7 @@
     "bootstrap": "^5.0.0-alpha3",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.2.0",
+    "copyfiles": "^2.4.1",
     "core-js": "3",
     "css-loader": "^3.5.3",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
@@ -114,7 +115,7 @@
     "test": "jest --watch",
     "testonce": "jest",
     "postinstall": "patch --forward node_modules/select2/select2.js < patches/select2.patch || true",
-    "docs-collect-patterns": "#DEACTIVATED#copyup -V src/pat/**/README.md docs/",
+    "collect:patternslibdocs": "copyup -V node_modules/patternslib/src/pat/**/documentation.md docs/",
     "start:webpack": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=development",
     "start:docs": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --output docs/_site/",
     "start": "npm-run-all clean --parallel start:*"

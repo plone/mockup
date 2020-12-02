@@ -5,6 +5,7 @@
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.setUseGitIgnore(false);
   eleventyConfig.addPlugin(syntaxHighlight);
   //eleventyConfig.addPassthroughCopy({"src/pat": "pat"});
   eleventyConfig.addPassthroughCopy({"favicon.ico": "favicon.ico"});
@@ -29,9 +30,29 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addCollection("patterns", function(collectionApi) {
     return collectionApi.getFilteredByGlob("src/pat/**/README.md");
   });
+  eleventyConfig.addCollection("plpatterns", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("docs/patternslib/src/pat/**/*.md");
+  });
 
-  eleventyConfig.addLiquidFilter("replaceString", function(arg1, arg2, arg3) {
+  eleventyConfig.addFilter("replaceString", function(arg1, arg2, arg3) {
     return arg1.replace(arg2, arg3);
+  });
+
+  eleventyConfig.addFilter('pageTitle', item => {
+    if (item.data.title && item.data.title !== '') {
+      return `${item.data.title}`;
+    }
+    let url_parts = item.data.page.filePathStem.split('/');
+    return url_parts[url_parts.length - 2];
+  });
+
+  eleventyConfig.addFilter('stringify', function(value) {
+    return JSON.stringify(value);
+  });
+
+  eleventyConfig.addFilter('slugFromUrl', item => {
+    let url_parts = item.url.split('/');
+    return url_parts[url_parts.length];
   });
 
   eleventyConfig["dir"] = {
