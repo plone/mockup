@@ -28,7 +28,7 @@ For more options on select2 go to http://ivaynberg.github.io/select2/#documentat
 
 ### Autocomplete with search (single select)
 
-<select class="pat-select2" data-pat-select2="width:20em">
+<select class="pat-select2" data-pat-select2="width:20em;">
  <option value="Acholi">Acholi</option>
  <option value="Afrikaans">Afrikaans</option>
  <option value="Akan">Akan</option>
@@ -42,29 +42,67 @@ For more options on select2 go to http://ivaynberg.github.io/select2/#documentat
  <option value="Azeri">Azeri</option>
 </select>
 
+```html
+<select class="pat-select2" data-pat-select2="width:20em;">
+ <option value="Acholi">Acholi</option>
+ <option value="Afrikaans">Afrikaans</option>
+ <option value="Akan">Akan</option>
+ <option value="Albanian">Albanian</option>
+ <option value="Amharic">Amharic</option>
+ <option value="Arabic">Arabic</option>
+ <option value="Ashante">Ashante</option>
+ <option value="Asl">Asl</option>
+ <option value="Assyrian">Assyrian</option>
+ <option value="Azerbaijani">Azerbaijani</option>
+ <option value="Azeri">Azeri</option>
+</select>
+```
 
 ### Tagging
 
-<input type="text" class="pat-select2"
-       data-pat-select2="separator:,;
-                         tags:Red,Yellow,Green,Orange,Purple;
-                         width:20em;
-                         initialValues:Red:The Color Red,Orange:The Color Orange"
-       value="Red,Orange"/>
+<input class="pat-select2" type="text"
+    data-pat-select2="separator:,;
+                      tags:Red,Yellow,Green,Orange,Purple;
+                      width:20em;
+                      initialValues:Red:The Color Red,Orange:The Color Orange"
+    value="Red,Orange"/>
 
+
+```html
+<input class="pat-select2" type="text"
+    data-pat-select2="separator:,;
+                      tags:Red,Yellow,Green,Orange,Purple;
+                      width:20em;
+                      initialValues:Red:The Color Red,Orange:The Color Orange"
+    value="Red,Orange"/>
+```
 
 ### Orderable tags
 
-<input type="text" class="pat-select2"
-      data-pat-select2="orderable:true;
-                        tags:Red,Yellow,Green;
-                        width:20em" />
+<input class="pat-select2" type="text"
+    data-pat-select2="orderable:true;
+                      tags:Red,Yellow,Green;
+                      width:20em"/>
+
+```html
+<input class="pat-select2" type="text"
+    data-pat-select2="orderable:true;
+                      tags:Red,Yellow,Green;
+                      width:20em"/>
+```
+
 
 
 ### AJAX tags
 
-<input type="hidden" class="pat-select2"
-       data-pat-select2="placeholder:Search for a Value;
-                         vocabularyUrl:select2-test.json;
-                         width:20em" />
+<input class="pat-select2" type="hidden"
+    data-pat-select2="placeholder:Search for a Value;
+                      vocabularyUrl:select2-test.json;
+                      width:20em"/>
 
+```html
+<input class="pat-select2" type="hidden"
+    data-pat-select2="placeholder:Search for a Value;
+                      vocabularyUrl:select2-test.json;
+                      width:20em"/>
+```
