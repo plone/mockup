@@ -1,4 +1,5 @@
 process.traceDeprecation = true;
+const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const webpack_helpers = require("patternslib/webpack/webpack-helpers");
@@ -9,7 +10,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-module.exports = (env) => {
+module.exports = async (env) => {
     const mode = env.NODE_ENV;
 
     const config = {
@@ -106,6 +107,9 @@ module.exports = (env) => {
                 emitError: true,
             }),
         ],
+        resolve: {
+            alias: {},
+        },
     };
     if (mode === "development") {
         // Set public path to override __webpack_public_path__
@@ -120,6 +124,19 @@ module.exports = (env) => {
                 ignored: ["node_modules/**", "mockup/**"],
             },
         };
+
+        try {
+            await fs.promises.access(
+                path.resolve(__dirname, "devsrc/patternslib")
+            );
+            // Use checked-out version of patternslib
+            config.resolve.alias.patternslib = path.resolve(
+                __dirname,
+                "devsrc/patternslib"
+            );
+        } catch (error) {
+            // ignore.
+        }
     }
     if (mode === "production") {
         config.entry["bundle.min"] = config.entry["bundle"];
