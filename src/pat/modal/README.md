@@ -87,7 +87,7 @@ Modal with TinyMCE</a>
 | width | string | '' | Set the width of the modal, for example: 80% or 500px. |
 | margin | function or integer| 20 | A function, Integer or String which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer. |
 | position | string | 'center middle' | Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle. |
-| triggers | array | [] | Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format ``["EVENT SELECTOR"]`` or ["EVENT"]. For example, ``["click .someButton"]``. If you pass in only an event such as, ["change"], the event listener will be added to the element on which the modal was initiated, usually a link or button. |
+| triggers | array | [] | Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format ``["EVENT SELECTOR"]`` or ``["EVENT"]``. For example, ``["click .someButton"]``. If you pass in only an event such as, ``["change"]``, the event listener will be added to the element on which the modal was initiated, usually a link or button. |
 | title | string | null | A string to place in the modal header. If title is provided, titleSelector is not used. |
 | titleSelector | string | 'h1:first' | Selector for an element to extract from the content provided to the modal and place in the modal header. |
 | content | string | '#content' | Selector for an element within the content provided to the modal to use as the modal body. |
