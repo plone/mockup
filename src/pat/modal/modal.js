@@ -1,708 +1,391 @@
 import $ from "jquery";
 import Base from "patternslib/src/core/base";
-import _ from 'underscore';
+import _ from "underscore";
 import Backdrop from "../backdrop/backdrop";
 import registry from "patternslib/src/core/registry";
 import Router from "../../core/router";
 import utils from "../../core/utils";
-import _t from "../../core/i18n"
+import _t from "../../core/i18n";
 
 export default Base.extend({
-        name: "plone-modal",
-        trigger: ".pat-plone-modal",
-        parser: "mockup",
-        createModal: null,
-        $model: null,
-        defaults: {
-            width: "",
-            height: "",
-            margin: 20,
-            position: "center middle", // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
-            triggers: [],
-            zIndexSelector: ".plone-modal-wrapper,.plone-modal-backdrop",
-            backdrop: "body", // Element to initiate the Backdrop on.
-            backdropOptions: {
-                zIndex: "1040",
-                opacity: "0.85",
-                className: "plone-modal-backdrop",
-                classActiveName: "plone-backdrop-active",
-                closeOnEsc: true,
-                closeOnClick: true,
-            },
-            title: null,
-            titleSelector: "h1:first",
-            buttons:
-                '.formControls > input[type="submit"], .formControls > button',
-            content: "#content",
-            automaticallyAddButtonActions: true,
-            loadLinksWithinModal: true,
-            prependContent: ".portalMessage, #global_statusmessage",
-            onRender: null,
-            templateOptions: {
-                className: "plone-modal fade",
-                classDialog: "plone-modal-dialog",
-                classModal: "plone-modal-content",
-                classHeaderName: "plone-modal-header",
-                classBodyName: "plone-modal-body",
-                classFooterName: "plone-modal-footer",
-                classWrapperName: "plone-modal-wrapper",
-                classWrapperInnerName: "modal-wrapper-inner",
-                classActiveName: "in",
-                classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
-                classContentName: "", // String, class name to be applied to the content of the modal, useful for modal specific styling
-                template:
-                    "" +
-                    '<div class="<%= options.className %>">' +
-                    '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="plone-modal-title" <% } %> tabindex="-1">' +
-                    '    <div class="<%= options.classModal %>">' +
-                    '      <div class="<%= options.classHeaderName %>">' +
-                    '        <a class="plone-modal-close" aria-label="Close modal" title="Close modal" href="#">&times;</a>' +
-                    '        <% if (title) { %><h2 class="plone-modal-title" id="plone-modal-title" tabindex="0"><%= title %></h2><% } %>' +
-                    "      </div>" +
-                    '      <div class="<%= options.classBodyName %>">' +
-                    '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
-                    '        <div class="<%= options.classContentName %>"><%= content %></div>' +
-                    "      </div>" +
-                    '      <div class="<%= options.classFooterName %>"> ' +
-                    "        <% if (buttons) { %><%= buttons %><% } %>" +
-                    "      </div>" +
-                    "    </div>" +
-                    "  </div>" +
-                    "</div>",
-            },
-            actions: {},
-            actionOptions: {
-                eventType: "click",
-                disableAjaxFormSubmit: false,
-                target: null,
-                ajaxUrl: null, // string, or function($el, options) that returns a string
-                modalFunction: null, // String, function name on self to call
-                isForm: false,
-                timeout: 5000,
-                displayInModal: true,
-                reloadWindowOnClose: true,
-                error: ".portalMessage.error, .alert-danger",
-                formFieldError: ".field.error",
-                onSuccess: null,
-                onError: null,
-                onFormError: null,
-                onTimeout: null,
-                redirectOnResponse: false,
-                redirectToUrl: function ($action, response, options) {
-                    var reg;
-                    reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(
-                        response
-                    );
-                    if (reg && reg.length > 1) {
-                        // view url as data attribute on body (Plone 5)
-                        return reg[1].split('"')[0];
-                    }
-                    reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(
-                        response
-                    );
-                    if (reg && reg.length > 1) {
-                        // Base url as data attribute on body (Plone 5)
-                        return reg[1].split('"')[0];
-                    }
-                    reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
-                    if (reg && reg.length > 1) {
-                        // base tag available (Plone 4)
-                        return reg[1];
-                    }
-                    return "";
-                },
-            },
-            routerOptions: {
-                id: null,
-                pathExp: null,
-            },
-            form: function (actions) {
-                var self = this;
-                var $modal = self.$modal;
-
-                if (self.options.automaticallyAddButtonActions) {
-                    actions[self.options.buttons] = {};
+    name: "plone-modal",
+    trigger: ".pat-plone-modal",
+    parser: "mockup",
+    createModal: null,
+    $model: null,
+    defaults: {
+        width: "",
+        height: "",
+        margin: 20,
+        position: "center middle", // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
+        triggers: [],
+        zIndexSelector: ".plone-modal-wrapper,.plone-modal-backdrop",
+        backdrop: "body", // Element to initiate the Backdrop on.
+        backdropOptions: {
+            zIndex: "1040",
+            opacity: "0.85",
+            className: "plone-modal-backdrop",
+            classActiveName: "plone-backdrop-active",
+            closeOnEsc: true,
+            closeOnClick: true,
+        },
+        title: null,
+        titleSelector: "h1:first",
+        buttons: '.formControls > input[type="submit"], .formControls > button',
+        content: "#content",
+        automaticallyAddButtonActions: true,
+        loadLinksWithinModal: true,
+        prependContent: ".portalMessage, #global_statusmessage",
+        onRender: null,
+        templateOptions: {
+            className: "plone-modal fade",
+            classDialog: "plone-modal-dialog",
+            classModal: "plone-modal-content",
+            classHeaderName: "plone-modal-header",
+            classBodyName: "plone-modal-body",
+            classFooterName: "plone-modal-footer",
+            classWrapperName: "plone-modal-wrapper",
+            classWrapperInnerName: "modal-wrapper-inner",
+            classActiveName: "in",
+            classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
+            classContentName: "", // String, class name to be applied to the content of the modal, useful for modal specific styling
+            template:
+                "" +
+                '<div class="<%= options.className %>">' +
+                '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="plone-modal-title" <% } %> tabindex="-1">' +
+                '    <div class="<%= options.classModal %>">' +
+                '      <div class="<%= options.classHeaderName %>">' +
+                '        <a class="plone-modal-close" aria-label="Close modal" title="Close modal" href="#">&times;</a>' +
+                '        <% if (title) { %><h2 class="plone-modal-title" id="plone-modal-title" tabindex="0"><%= title %></h2><% } %>' +
+                "      </div>" +
+                '      <div class="<%= options.classBodyName %>">' +
+                '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
+                '        <div class="<%= options.classContentName %>"><%= content %></div>' +
+                "      </div>" +
+                '      <div class="<%= options.classFooterName %>"> ' +
+                "        <% if (buttons) { %><%= buttons %><% } %>" +
+                "      </div>" +
+                "    </div>" +
+                "  </div>" +
+                "</div>",
+        },
+        actions: {},
+        actionOptions: {
+            eventType: "click",
+            disableAjaxFormSubmit: false,
+            target: null,
+            ajaxUrl: null, // string, or function($el, options) that returns a string
+            modalFunction: null, // String, function name on self to call
+            isForm: false,
+            timeout: 5000,
+            displayInModal: true,
+            reloadWindowOnClose: true,
+            error: ".portalMessage.error, .alert-danger",
+            formFieldError: ".field.error",
+            onSuccess: null,
+            onError: null,
+            onFormError: null,
+            onTimeout: null,
+            redirectOnResponse: false,
+            redirectToUrl: function ($action, response, options) {
+                var reg;
+                reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(response);
+                if (reg && reg.length > 1) {
+                    // view url as data attribute on body (Plone 5)
+                    return reg[1].split('"')[0];
                 }
-                actions.a = {};
+                reg = /<body.*data-base-url=[\"'](.*)[\"'].*/im.exec(response);
+                if (reg && reg.length > 1) {
+                    // Base url as data attribute on body (Plone 5)
+                    return reg[1].split('"')[0];
+                }
+                reg = /<base.*href=[\"'](.*)[\"'].*/im.exec(response);
+                if (reg && reg.length > 1) {
+                    // base tag available (Plone 4)
+                    return reg[1];
+                }
+                return "";
+            },
+        },
+        routerOptions: {
+            id: null,
+            pathExp: null,
+        },
+        form: function (actions) {
+            var self = this;
+            var $modal = self.$modal;
 
-                $.each(actions, function (action, options) {
-                    var actionKeys = _.union(
-                        _.keys(self.options.actionOptions),
-                        ["templateOptions"]
-                    );
-                    var actionOptions = $.extend(
-                        true,
-                        {},
-                        self.options.actionOptions,
-                        _.pick(options, actionKeys)
-                    );
-                    options.templateOptions = $.extend(
-                        true,
-                        options.templateOptions,
-                        self.options.templateOptions
-                    );
+            if (self.options.automaticallyAddButtonActions) {
+                actions[self.options.buttons] = {};
+            }
+            actions.a = {};
 
-                    var patternKeys = _.union(
-                        _.keys(self.options.actionOptions),
-                        ["actions", "actionOptions"]
-                    );
-                    var patternOptions = $.extend(
-                        true,
-                        _.omit(options, patternKeys),
-                        self.options
-                    );
+            $.each(actions, function (action, options) {
+                var actionKeys = _.union(_.keys(self.options.actionOptions), [
+                    "templateOptions",
+                ]);
+                var actionOptions = $.extend(
+                    true,
+                    {},
+                    self.options.actionOptions,
+                    _.pick(options, actionKeys)
+                );
+                options.templateOptions = $.extend(
+                    true,
+                    options.templateOptions,
+                    self.options.templateOptions
+                );
 
-                    $(
-                        action,
-                        $("." + options.templateOptions.classBodyName, $modal)
-                    ).each(function (action) {
-                        var $action = $(this);
-                        $action.on(actionOptions.eventType, function (e) {
-                            e.stopPropagation();
-                            e.preventDefault();
+                var patternKeys = _.union(_.keys(self.options.actionOptions), [
+                    "actions",
+                    "actionOptions",
+                ]);
+                var patternOptions = $.extend(
+                    true,
+                    _.omit(options, patternKeys),
+                    self.options
+                );
 
-                            self.loading.show(false);
+                $(
+                    action,
+                    $("." + options.templateOptions.classBodyName, $modal)
+                ).each(function (action) {
+                    var $action = $(this);
+                    $action.on(actionOptions.eventType, function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
 
-                            // handle event on $action using a function on self
-                            if (actionOptions.modalFunction !== null) {
-                                self[actionOptions.modalFunction]();
-                                // handle event on input/button using jquery.form library
-                            } else if (
-                                $.nodeName($action[0], "input") ||
-                                $.nodeName($action[0], "button") ||
-                                options.isForm === true
-                            ) {
-                                self.options.handleFormAction.apply(self, [
-                                    $action,
-                                    actionOptions,
-                                    patternOptions,
-                                ]);
-                                // handle event on link with jQuery.ajax
-                            } else if (
-                                options.ajaxUrl !== null ||
-                                $.nodeName($action[0], "a")
-                            ) {
-                                self.options.handleLinkAction.apply(self, [
-                                    $action,
-                                    actionOptions,
-                                    patternOptions,
-                                ]);
-                            }
-                        });
+                        self.loading.show(false);
+
+                        // handle event on $action using a function on self
+                        if (actionOptions.modalFunction !== null) {
+                            self[actionOptions.modalFunction]();
+                            // handle event on input/button using jquery.form library
+                        } else if (
+                            $.nodeName($action[0], "input") ||
+                            $.nodeName($action[0], "button") ||
+                            options.isForm === true
+                        ) {
+                            self.options.handleFormAction.apply(self, [
+                                $action,
+                                actionOptions,
+                                patternOptions,
+                            ]);
+                            // handle event on link with jQuery.ajax
+                        } else if (
+                            options.ajaxUrl !== null ||
+                            $.nodeName($action[0], "a")
+                        ) {
+                            self.options.handleLinkAction.apply(self, [
+                                $action,
+                                actionOptions,
+                                patternOptions,
+                            ]);
+                        }
                     });
                 });
-            },
-            handleFormAction: function ($action, options, patternOptions) {
-                var self = this;
+            });
+        },
+        handleFormAction: function ($action, options, patternOptions) {
+            var self = this;
 
-                // pass action that was clicked when submiting form
-                var extraData = {};
-                extraData[$action.attr("name")] = $action.attr("value");
+            // pass action that was clicked when submiting form
+            var extraData = {};
+            extraData[$action.attr("name")] = $action.attr("value");
 
-                var $form;
+            var $form;
 
-                if ($.nodeName($action[0], "form")) {
-                    $form = $action;
+            if ($.nodeName($action[0], "form")) {
+                $form = $action;
+            } else {
+                $form = $action.parents("form:not(.disableAutoSubmit)");
+            }
+
+            var url;
+            if (options.ajaxUrl !== null) {
+                if (typeof options.ajaxUrl === "function") {
+                    url = options.ajaxUrl.apply(self, [$action, options]);
                 } else {
-                    $form = $action.parents("form:not(.disableAutoSubmit)");
+                    url = options.ajaxUrl;
                 }
+            } else {
+                url = $action.parents("form").attr("action");
+            }
 
-                var url;
-                if (options.ajaxUrl !== null) {
-                    if (typeof options.ajaxUrl === "function") {
-                        url = options.ajaxUrl.apply(self, [$action, options]);
+            if (options.disableAjaxFormSubmit) {
+                if ($action.attr("name") && $action.attr("value")) {
+                    $form.append(
+                        $(
+                            '<input type="hidden" name="' +
+                                $action.attr("name") +
+                                '" value="' +
+                                $action.attr("value") +
+                                '" />'
+                        )
+                    );
+                }
+                $form.trigger("submit");
+                return;
+            }
+            // We want to trigger the form submit event but NOT use the default
+            $form.on("submit", function (e) {
+                e.preventDefault();
+            });
+            $form.trigger("submit");
+
+            self.loading.show(false);
+            $form.ajaxSubmit({
+                timeout: options.timeout,
+                data: extraData,
+                url: url,
+                error: function (xhr, textStatus, errorStatus) {
+                    self.loading.hide();
+                    if (textStatus === "timeout" && options.onTimeout) {
+                        options.onTimeout.apply(self, xhr, errorStatus);
+                        // on "error", "abort", and "parsererror"
+                    } else if (options.onError) {
+                        if (typeof options.onError === "string") {
+                            window[options.onError](
+                                xhr,
+                                textStatus,
+                                errorStatus
+                            );
+                        } else {
+                            options.onError(xhr, textStatus, errorStatus);
+                        }
                     } else {
-                        url = options.ajaxUrl;
-                    }
-                } else {
-                    url = $action.parents("form").attr("action");
-                }
-
-                if (options.disableAjaxFormSubmit) {
-                    if ($action.attr("name") && $action.attr("value")) {
-                        $form.append(
-                            $(
-                                '<input type="hidden" name="' +
-                                    $action.attr("name") +
-                                    '" value="' +
-                                    $action.attr("value") +
-                                    '" />'
-                            )
+                        // window.alert(_t('There was an error submitting the form.'));
+                        console.log(
+                            "error happened",
+                            textStatus,
+                            " do something"
                         );
                     }
-                    $form.trigger("submit");
-                    return;
-                }
-                // We want to trigger the form submit event but NOT use the default
-                $form.on("submit", function (e) {
-                    e.preventDefault();
-                });
-                $form.trigger("submit");
-
-                self.loading.show(false);
-                $form.ajaxSubmit({
-                    timeout: options.timeout,
-                    data: extraData,
-                    url: url,
-                    error: function (xhr, textStatus, errorStatus) {
-                        self.loading.hide();
-                        if (textStatus === "timeout" && options.onTimeout) {
-                            options.onTimeout.apply(self, xhr, errorStatus);
-                            // on "error", "abort", and "parsererror"
-                        } else if (options.onError) {
-                            if (typeof options.onError === "string") {
-                                window[options.onError](
-                                    xhr,
-                                    textStatus,
-                                    errorStatus
-                                );
-                            } else {
-                                options.onError(xhr, textStatus, errorStatus);
-                            }
-                        } else {
-                            // window.alert(_t('There was an error submitting the form.'));
-                            console.log(
-                                "error happened",
-                                textStatus,
-                                " do something"
-                            );
-                        }
-                        self.emit("formActionError", [
-                            xhr,
-                            textStatus,
-                            errorStatus,
-                        ]);
-                    },
-                    success: function (response, state, xhr, form) {
-                        self.loading.hide();
-                        // if error is found (NOTE: check for both the portal errors
-                        // and the form field-level errors)
-                        if (
-                            $(options.error, response).length !== 0 ||
-                            $(options.formFieldError, response).length !== 0
-                        ) {
-                            if (options.onFormError) {
-                                if (typeof options.onFormError === "string") {
-                                    window[options.onFormError](
-                                        self,
-                                        response,
-                                        state,
-                                        xhr,
-                                        form
-                                    );
-                                } else {
-                                    options.onFormError(
-                                        self,
-                                        response,
-                                        state,
-                                        xhr,
-                                        form
-                                    );
-                                }
-                            } else {
-                                self.redraw(response, patternOptions);
-                            }
-                            return;
-                        }
-
-                        if (options.redirectOnResponse === true) {
-                            if (typeof options.redirectToUrl === "function") {
-                                window.parent.location.href = options.redirectToUrl.apply(
-                                    self,
-                                    [$action, response, options]
-                                );
-                            } else {
-                                window.parent.location.href =
-                                    options.redirectToUrl;
-                            }
-                            return; // cut out right here since we're changing url
-                        }
-
-                        if (options.onSuccess) {
-                            if (typeof options.onSuccess === "string") {
-                                window[options.onSuccess](
-                                    self,
-                                    response,
-                                    state,
-                                    xhr,
-                                    form
-                                );
-                            } else {
-                                options.onSuccess(
-                                    self,
-                                    response,
-                                    state,
-                                    xhr,
-                                    form
-                                );
-                            }
-                        }
-
-                        if (options.displayInModal === true) {
-                            self.redraw(response, patternOptions);
-                        } else {
-                            $action.trigger("destroy.plone-modal.patterns");
-                            // also calls hide
-                            if (options.reloadWindowOnClose) {
-                                self.reloadWindow();
-                            }
-                        }
-                        self.emit("formActionSuccess", [
-                            response,
-                            state,
-                            xhr,
-                            form,
-                        ]);
-                    },
-                });
-            },
-            handleLinkAction: function ($action, options, patternOptions) {
-                var self = this;
-                var url;
-                if ($action.hasClass("pat-plone-modal")) {
-                    // if link is a modal pattern, do not reload the page
-                    return;
-                }
-
-                // Figure out URL
-                if (options.ajaxUrl) {
-                    if (typeof options.ajaxUrl === "function") {
-                        url = options.ajaxUrl.apply(self, [$action, options]);
-                    } else {
-                        url = options.ajaxUrl;
-                    }
-                } else {
-                    url = $action.attr("href");
-                }
-
-                // Non-ajax link (I know it says "ajaxUrl" ...)
-                if (options.displayInModal === false) {
-                    if ($action.attr("target") === "_blank") {
-                        window.open(url, "_blank");
-                        self.loading.hide();
-                    } else {
-                        window.location = url;
-                    }
-                    return;
-                }
-
-                // ajax version
-                $.ajax({
-                    url: url,
-                })
-                    .fail(function (xhr, textStatus, errorStatus) {
-                        if (textStatus === "timeout" && options.onTimeout) {
-                            options.onTimeout(self.$modal, xhr, errorStatus);
-
-                            // on "error", "abort", and "parsererror"
-                        } else if (options.onError) {
-                            options.onError(xhr, textStatus, errorStatus);
-                        } else {
-                            window.alert(
-                                _t("There was an error loading modal.")
-                            );
-                        }
-                        self.emit("linkActionError", [
-                            xhr,
-                            textStatus,
-                            errorStatus,
-                        ]);
-                    })
-                    .done(function (response, state, xhr) {
-                        self.redraw(response, patternOptions);
-                        if (options.onSuccess) {
-                            if (typeof options.onSuccess === "string") {
-                                window[options.onSuccess](
-                                    self,
-                                    response,
-                                    state,
-                                    xhr
-                                );
-                            } else {
-                                options.onSuccess(self, response, state, xhr);
-                            }
-                        }
-
-                        self.emit("linkActionSuccess", [response, state, xhr]);
-                    })
-                    .always(function () {
-                        self.loading.hide();
-                    });
-            },
-            render: function (options) {
-                var self = this;
-
-                self.emit("before-render");
-
-                if (!self.$raw) {
-                    return;
-                }
-                var $raw = self.$raw.clone();
-                // fix for IE9 bug (see http://bugs.jquery.com/ticket/10550)
-                $("input:checked", $raw).each(function () {
-                    if (this.setAttribute) {
-                        this.setAttribute("checked", "checked");
-                    }
-                });
-
-                // Object that will be passed to the template
-                var tplObject = {
-                    title: "",
-                    prepend: "<div />",
-                    content: "",
-                    buttons: '<div class="pattern-modal-buttons"></div>',
-                    options: options.templateOptions,
-                };
-
-                // setup the Title
-                if (options.title === null) {
-                    var $title = $(options.titleSelector, $raw);
-                    tplObject.title = $title.html();
-                    $(options.titleSelector, $raw).remove();
-                } else {
-                    tplObject.title = options.title;
-                }
-
-                // Grab items to to insert into the prepend area
-                if (options.prependContent) {
-                    tplObject.prepend = $("<div />")
-                        .append($(options.prependContent, $raw).clone())
-                        .html();
-                    $(options.prependContent, $raw).remove();
-                }
-
-                // Filter out the content if there is a selector provided
-                if (options.content) {
-                    tplObject.content = $(options.content, $raw).html();
-                } else {
-                    tplObject.content = $raw.html();
-                }
-
-                // Render html
-                self.$modal = $(
-                    _.template(self.options.templateOptions.template)(tplObject)
-                );
-                self.$modalDialog = $(
-                    "> ." + self.options.templateOptions.classDialog,
-                    self.$modal
-                );
-                self.$modalContent = $(
-                    "> ." + self.options.templateOptions.classModal,
-                    self.$modalDialog
-                );
-
-                // In most browsers, when you hit the enter key while a form element is focused
-                // the browser will trigger the form 'submit' event.  Google Chrome also does this,
-                // but not when when the default submit button is hidden with 'display: none'.
-                // The following code will work around this issue:
-                $("form", self.$modal).on("keydown", function (event) {
-                    // ignore keys which are not enter, and ignore enter inside a textarea.
+                    self.emit("formActionError", [
+                        xhr,
+                        textStatus,
+                        errorStatus,
+                    ]);
+                },
+                success: function (response, state, xhr, form) {
+                    self.loading.hide();
+                    // if error is found (NOTE: check for both the portal errors
+                    // and the form field-level errors)
                     if (
-                        event.keyCode !== 13 ||
-                        event.target.nodeName === "TEXTAREA"
+                        $(options.error, response).length !== 0 ||
+                        $(options.formFieldError, response).length !== 0
                     ) {
+                        if (options.onFormError) {
+                            if (typeof options.onFormError === "string") {
+                                window[options.onFormError](
+                                    self,
+                                    response,
+                                    state,
+                                    xhr,
+                                    form
+                                );
+                            } else {
+                                options.onFormError(
+                                    self,
+                                    response,
+                                    state,
+                                    xhr,
+                                    form
+                                );
+                            }
+                        } else {
+                            self.redraw(response, patternOptions);
+                        }
                         return;
                     }
-                    event.preventDefault();
-                    $(
-                        "input[type=submit], button[type=submit], button:not(type)",
-                        this
-                    )
-                        .eq(0)
-                        .trigger("click");
-                });
 
-                // Setup buttons
-                $(options.buttons, self.$modal).each(function () {
-                    var $button = $(this);
-                    $button
-                        .on("click", function (e) {
-                            e.stopPropagation();
-                            e.preventDefault();
-                        })
-                        .clone()
-                        .appendTo($(".pattern-modal-buttons", self.$modal))
-                        .off("click")
-                        .on("click", function (e) {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            $button.trigger("click");
-                        });
-                    $button.hide();
-                });
-
-                self.emit("before-events-setup");
-
-                // Wire up events
-                $(
-                    ".plone-modal-header > a.plone-modal-close, .plone-modal-footer > a.plone-modal-close",
-                    self.$modal
-                )
-                    .off("click")
-                    .on("click", function (e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        $(e.target).trigger("destroy.plone-modal.patterns");
-                    });
-
-                // form
-                if (options.form) {
-                    options.form.apply(self, [options.actions]);
-                }
-
-                self.$modal
-                    .addClass(self.options.templateOptions.className)
-                    .on("destroy.plone-modal.patterns", function (e) {
-                        e.stopPropagation();
-                        self.hide();
-                    })
-                    .on("resize.plone-modal.patterns", function (e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        self.positionModal();
-                    })
-                    .appendTo(self.$wrapperInner);
-
-                if (self.options.loadLinksWithinModal) {
-                    self.$modal.on("click", function (e) {
-                        e.stopPropagation();
-                        if ($.nodeName(e.target, "a")) {
-                            e.preventDefault();
-                            // TODO: open links inside modal
-                            // and slide modal body
+                    if (options.redirectOnResponse === true) {
+                        if (typeof options.redirectToUrl === "function") {
+                            window.parent.location.href = options.redirectToUrl.apply(
+                                self,
+                                [$action, response, options]
+                            );
+                        } else {
+                            window.parent.location.href = options.redirectToUrl;
                         }
-                        self.$modal.trigger("modal-click");
-                    });
-                }
-                self.$modal.data("pattern-" + self.name, self);
-                self.emit("after-render");
-                if (options.onRender) {
-                    if (typeof options.onRender === "string") {
-                        window[options.onRender](self);
+                        return; // cut out right here since we're changing url
+                    }
+
+                    if (options.onSuccess) {
+                        if (typeof options.onSuccess === "string") {
+                            window[options.onSuccess](
+                                self,
+                                response,
+                                state,
+                                xhr,
+                                form
+                            );
+                        } else {
+                            options.onSuccess(self, response, state, xhr, form);
+                        }
+                    }
+
+                    if (options.displayInModal === true) {
+                        self.redraw(response, patternOptions);
                     } else {
-                        options.onRender(self);
-                    }
-                }
-            },
-        },
-        reloadWindow: function () {
-            window.parent.location.reload();
-        },
-        init: function () {
-            var self = this;
-            self.options.loadLinksWithinModal = $.parseJSON(
-                self.options.loadLinksWithinModal
-            );
-            console.log(self.options.routerOptions.id);
-            console.log(self.options.routerOptions.id);
-            // Router
-            if (self.options.routerOptions.id !== null) {
-                Router.addRoute(
-                    "modal",
-                    self.options.routerOptions.id,
-                    function () {
-                        this.show();
-                    },
-                    self,
-                    self.options.routerOptions.pathExp,
-                    self.options.routerOptions.expReplace
-                );
-            }
-
-            if (self.options.backdropOptions.closeOnEsc === true) {
-                $(document).on("keydown", function (e, data) {
-                    if (
-                        self.$el.is(
-                            "." + self.options.templateOptions.classActiveName
-                        )
-                    ) {
-                        if (e.keyCode === 27) {
-                            // ESC key pressed
-                            self.hide();
+                        $action.trigger("destroy.plone-modal.patterns");
+                        // also calls hide
+                        if (options.reloadWindowOnClose) {
+                            self.reloadWindow();
                         }
                     }
-                });
-            }
-
-            $(window.parent).resize(function () {
-                self.positionModal();
+                    self.emit("formActionSuccess", [
+                        response,
+                        state,
+                        xhr,
+                        form,
+                    ]);
+                },
             });
-
-            if (self.options.triggers) {
-                $.each(self.options.triggers, function (i, item) {
-                    var e = item.substring(0, item.indexOf(" "));
-                    var selector = item.substring(
-                        item.indexOf(" "),
-                        item.length
-                    );
-                    $(selector || self.$el).on(e, function (e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        self.show();
-                    });
-                });
-            }
-
-            if (self.$el.is("a")) {
-                if (self.$el.attr("href") && !self.options.image) {
-                    if (
-                        !self.options.target &&
-                        self.$el.attr("href").substr(0, 1) === "#" &&
-                        self.$el.attr("href").length > 1
-                    ) {
-                        self.options.target = self.$el.attr("href");
-                        self.options.content = "";
-                    }
-                    if (
-                        !self.options.ajaxUrl &&
-                        self.$el.attr("href").substr(0, 1) !== "#"
-                    ) {
-                        self.options.ajaxUrl = function () {
-                            // Resolve ``href`` attribute later, when modal is shown.
-                            return self.$el.attr("href");
-                        };
-                    }
-                }
-                self.$el.on("click", function (e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    self.show();
-                });
-            }
-            self.initModal();
         },
-
-        createAjaxModal: function () {
+        handleLinkAction: function ($action, options, patternOptions) {
             var self = this;
-            self.emit("before-ajax");
-            self.loading.show();
-
-            var ajaxUrl = self.options.ajaxUrl;
-            if (typeof ajaxUrl === "function") {
-                ajaxUrl = ajaxUrl.apply(self, [self.options]);
+            var url;
+            if ($action.hasClass("pat-plone-modal")) {
+                // if link is a modal pattern, do not reload the page
+                return;
             }
 
-            self.ajaxXHR = $.ajax({
-                url: ajaxUrl,
-                type: self.options.ajaxType,
+            // Figure out URL
+            if (options.ajaxUrl) {
+                if (typeof options.ajaxUrl === "function") {
+                    url = options.ajaxUrl.apply(self, [$action, options]);
+                } else {
+                    url = options.ajaxUrl;
+                }
+            } else {
+                url = $action.attr("href");
+            }
+
+            // Non-ajax link (I know it says "ajaxUrl" ...)
+            if (options.displayInModal === false) {
+                if ($action.attr("target") === "_blank") {
+                    window.open(url, "_blank");
+                    self.loading.hide();
+                } else {
+                    window.location = url;
+                }
+                return;
+            }
+
+            // ajax version
+            $.ajax({
+                url: url,
             })
-                .done(function (response, textStatus, xhr) {
-                    self.ajaxXHR = undefined;
-                    self.$raw = $("<div />").append(
-                        $(utils.parseBodyTag(response))
-                    );
-                    self.emit("after-ajax", self, textStatus, xhr);
-                    self._show();
-                })
                 .fail(function (xhr, textStatus, errorStatus) {
-                    var options = self.options.actionOptions;
                     if (textStatus === "timeout" && options.onTimeout) {
                         options.onTimeout(self.$modal, xhr, errorStatus);
+
+                        // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
                         options.onError(xhr, textStatus, errorStatus);
                     } else {
                         window.alert(_t("There was an error loading modal."));
-                        self.hide();
                     }
                     self.emit("linkActionError", [
                         xhr,
@@ -710,65 +393,554 @@ export default Base.extend({
                         errorStatus,
                     ]);
                 })
+                .done(function (response, state, xhr) {
+                    self.redraw(response, patternOptions);
+                    if (options.onSuccess) {
+                        if (typeof options.onSuccess === "string") {
+                            window[options.onSuccess](
+                                self,
+                                response,
+                                state,
+                                xhr
+                            );
+                        } else {
+                            options.onSuccess(self, response, state, xhr);
+                        }
+                    }
+
+                    self.emit("linkActionSuccess", [response, state, xhr]);
+                })
                 .always(function () {
                     self.loading.hide();
                 });
         },
-
-        createTargetModal: function () {
+        render: function (options) {
             var self = this;
-            self.$raw = $(self.options.target).clone();
-            self._show();
-        },
 
-        createBasicModal: function () {
-            var self = this;
-            self.$raw = $("<div/>").html(self.$el.clone());
-            self._show();
-        },
+            self.emit("before-render");
 
-        createHtmlModal: function () {
-            var self = this;
-            var $el = $(self.options.html);
-            self.$raw = $el;
-            self._show();
-        },
+            if (!self.$raw) {
+                return;
+            }
+            var $raw = self.$raw.clone();
+            // fix for IE9 bug (see http://bugs.jquery.com/ticket/10550)
+            $("input:checked", $raw).each(function () {
+                if (this.setAttribute) {
+                    this.setAttribute("checked", "checked");
+                }
+            });
 
-        createImageModal: function () {
-            var self = this;
-            self.$wrapper.addClass("image-modal");
-            var src = self.$el.attr("href");
-            var srcset = self.$el.attr("data-modal-srcset") || "";
-            var title = $.trim(self.$el.context.innerText) || "Image";
-            // XXX aria?
-            self.$raw = $(
-                "<div><h1>" +
-                    title +
-                    '</h1><div id="content"><div class="modal-image"><img src="' +
-                    src +
-                    '" srcset="' +
-                    srcset +
-                    '" /></div></div></div>'
-            );
-            self._show();
-        },
+            // Object that will be passed to the template
+            var tplObject = {
+                title: "",
+                prepend: "<div />",
+                content: "",
+                buttons: '<div class="pattern-modal-buttons"></div>',
+                options: options.templateOptions,
+            };
 
-        initModal: function () {
-            var self = this;
-            if (self.options.ajaxUrl) {
-                self.createModal = self.createAjaxModal;
-            } else if (self.options.target) {
-                self.createModal = self.createTargetModal;
-            } else if (self.options.html) {
-                self.createModal = self.createHtmlModal;
-            } else if (self.options.image) {
-                self.createModal = self.createImageModal;
+            // setup the Title
+            if (options.title === null) {
+                var $title = $(options.titleSelector, $raw);
+                tplObject.title = $title.html();
+                $(options.titleSelector, $raw).remove();
             } else {
-                self.createModal = self.createBasicModal;
+                tplObject.title = options.title;
+            }
+
+            // Grab items to to insert into the prepend area
+            if (options.prependContent) {
+                tplObject.prepend = $("<div />")
+                    .append($(options.prependContent, $raw).clone())
+                    .html();
+                $(options.prependContent, $raw).remove();
+            }
+
+            // Filter out the content if there is a selector provided
+            if (options.content) {
+                tplObject.content = $(options.content, $raw).html();
+            } else {
+                tplObject.content = $raw.html();
+            }
+
+            // Render html
+            self.$modal = $(
+                _.template(self.options.templateOptions.template)(tplObject)
+            );
+            self.$modalDialog = $(
+                "> ." + self.options.templateOptions.classDialog,
+                self.$modal
+            );
+            self.$modalContent = $(
+                "> ." + self.options.templateOptions.classModal,
+                self.$modalDialog
+            );
+
+            // In most browsers, when you hit the enter key while a form element is focused
+            // the browser will trigger the form 'submit' event.  Google Chrome also does this,
+            // but not when when the default submit button is hidden with 'display: none'.
+            // The following code will work around this issue:
+            $("form", self.$modal).on("keydown", function (event) {
+                // ignore keys which are not enter, and ignore enter inside a textarea.
+                if (
+                    event.keyCode !== 13 ||
+                    event.target.nodeName === "TEXTAREA"
+                ) {
+                    return;
+                }
+                event.preventDefault();
+                $(
+                    "input[type=submit], button[type=submit], button:not(type)",
+                    this
+                )
+                    .eq(0)
+                    .trigger("click");
+            });
+
+            // Setup buttons
+            $(options.buttons, self.$modal).each(function () {
+                var $button = $(this);
+                $button
+                    .on("click", function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    })
+                    .clone()
+                    .appendTo($(".pattern-modal-buttons", self.$modal))
+                    .off("click")
+                    .on("click", function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        $button.trigger("click");
+                    });
+                $button.hide();
+            });
+
+            self.emit("before-events-setup");
+
+            // Wire up events
+            $(
+                ".plone-modal-header > a.plone-modal-close, .plone-modal-footer > a.plone-modal-close",
+                self.$modal
+            )
+                .off("click")
+                .on("click", function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $(e.target).trigger("destroy.plone-modal.patterns");
+                });
+
+            // form
+            if (options.form) {
+                options.form.apply(self, [options.actions]);
+            }
+
+            self.$modal
+                .addClass(self.options.templateOptions.className)
+                .on("destroy.plone-modal.patterns", function (e) {
+                    e.stopPropagation();
+                    self.hide();
+                })
+                .on("resize.plone-modal.patterns", function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    self.positionModal();
+                })
+                .appendTo(self.$wrapperInner);
+
+            if (self.options.loadLinksWithinModal) {
+                self.$modal.on("click", function (e) {
+                    e.stopPropagation();
+                    if ($.nodeName(e.target, "a")) {
+                        e.preventDefault();
+                        // TODO: open links inside modal
+                        // and slide modal body
+                    }
+                    self.$modal.trigger("modal-click");
+                });
+            }
+            self.$modal.data("pattern-" + self.name, self);
+            self.emit("after-render");
+            if (options.onRender) {
+                if (typeof options.onRender === "string") {
+                    window[options.onRender](self);
+                } else {
+                    options.onRender(self);
+                }
             }
         },
+    },
+    reloadWindow: function () {
+        window.parent.location.reload();
+    },
+    init: function () {
+        var self = this;
+        self.options.loadLinksWithinModal = $.parseJSON(
+            self.options.loadLinksWithinModal
+        );
+        console.log(self.options.routerOptions.id);
+        console.log(self.options.routerOptions.id);
+        // Router
+        if (self.options.routerOptions.id !== null) {
+            Router.addRoute(
+                "modal",
+                self.options.routerOptions.id,
+                function () {
+                    this.show();
+                },
+                self,
+                self.options.routerOptions.pathExp,
+                self.options.routerOptions.expReplace
+            );
+        }
 
-        findPosition: function (
+        if (self.options.backdropOptions.closeOnEsc === true) {
+            $(document).on("keydown", function (e, data) {
+                if (
+                    self.$el.is(
+                        "." + self.options.templateOptions.classActiveName
+                    )
+                ) {
+                    if (e.keyCode === 27) {
+                        // ESC key pressed
+                        self.hide();
+                    }
+                }
+            });
+        }
+
+        $(window.parent).resize(function () {
+            self.positionModal();
+        });
+
+        if (self.options.triggers) {
+            $.each(self.options.triggers, function (i, item) {
+                var e = item.substring(0, item.indexOf(" "));
+                var selector = item.substring(item.indexOf(" "), item.length);
+                $(selector || self.$el).on(e, function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    self.show();
+                });
+            });
+        }
+
+        if (self.$el.is("a")) {
+            if (self.$el.attr("href") && !self.options.image) {
+                if (
+                    !self.options.target &&
+                    self.$el.attr("href").substr(0, 1) === "#" &&
+                    self.$el.attr("href").length > 1
+                ) {
+                    self.options.target = self.$el.attr("href");
+                    self.options.content = "";
+                }
+                if (
+                    !self.options.ajaxUrl &&
+                    self.$el.attr("href").substr(0, 1) !== "#"
+                ) {
+                    self.options.ajaxUrl = function () {
+                        // Resolve ``href`` attribute later, when modal is shown.
+                        return self.$el.attr("href");
+                    };
+                }
+            }
+            self.$el.on("click", function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                self.show();
+            });
+        }
+        self.initModal();
+    },
+
+    createAjaxModal: function () {
+        var self = this;
+        self.emit("before-ajax");
+        self.loading.show();
+
+        var ajaxUrl = self.options.ajaxUrl;
+        if (typeof ajaxUrl === "function") {
+            ajaxUrl = ajaxUrl.apply(self, [self.options]);
+        }
+
+        self.ajaxXHR = $.ajax({
+            url: ajaxUrl,
+            type: self.options.ajaxType,
+        })
+            .done(function (response, textStatus, xhr) {
+                self.ajaxXHR = undefined;
+                self.$raw = $("<div />").append(
+                    $(utils.parseBodyTag(response))
+                );
+                self.emit("after-ajax", self, textStatus, xhr);
+                self._show();
+            })
+            .fail(function (xhr, textStatus, errorStatus) {
+                var options = self.options.actionOptions;
+                if (textStatus === "timeout" && options.onTimeout) {
+                    options.onTimeout(self.$modal, xhr, errorStatus);
+                } else if (options.onError) {
+                    options.onError(xhr, textStatus, errorStatus);
+                } else {
+                    window.alert(_t("There was an error loading modal."));
+                    self.hide();
+                }
+                self.emit("linkActionError", [xhr, textStatus, errorStatus]);
+            })
+            .always(function () {
+                self.loading.hide();
+            });
+    },
+
+    createTargetModal: function () {
+        var self = this;
+        self.$raw = $(self.options.target).clone();
+        self._show();
+    },
+
+    createBasicModal: function () {
+        var self = this;
+        self.$raw = $("<div/>").html(self.$el.clone());
+        self._show();
+    },
+
+    createHtmlModal: function () {
+        var self = this;
+        var $el = $(self.options.html);
+        self.$raw = $el;
+        self._show();
+    },
+
+    createImageModal: function () {
+        var self = this;
+        self.$wrapper.addClass("image-modal");
+        var src = self.$el.attr("href");
+        var srcset = self.$el.attr("data-modal-srcset") || "";
+        var title = $.trim(self.$el.context.innerText) || "Image";
+        // XXX aria?
+        self.$raw = $(
+            "<div><h1>" +
+                title +
+                '</h1><div id="content"><div class="modal-image"><img src="' +
+                src +
+                '" srcset="' +
+                srcset +
+                '" /></div></div></div>'
+        );
+        self._show();
+    },
+
+    initModal: function () {
+        var self = this;
+        if (self.options.ajaxUrl) {
+            self.createModal = self.createAjaxModal;
+        } else if (self.options.target) {
+            self.createModal = self.createTargetModal;
+        } else if (self.options.html) {
+            self.createModal = self.createHtmlModal;
+        } else if (self.options.image) {
+            self.createModal = self.createImageModal;
+        } else {
+            self.createModal = self.createBasicModal;
+        }
+    },
+
+    findPosition: function (
+        horpos,
+        vertpos,
+        margin,
+        modalWidth,
+        modalHeight,
+        wrapperInnerWidth,
+        wrapperInnerHeight
+    ) {
+        var returnpos = {};
+        var absTop, absBottom, absLeft, absRight;
+        absRight = absLeft = absTop = absLeft = "auto";
+
+        // -- HORIZONTAL POSITION -----------------------------------------------
+        if (horpos === "left") {
+            absLeft = margin + "px";
+            // if the width of the wrapper is smaller than the modal, and thus the
+            // screen is smaller than the modal, force the left to simply be 0
+            if (modalWidth > wrapperInnerWidth) {
+                absLeft = "0px";
+            }
+            returnpos.left = absLeft;
+        } else if (horpos === "right") {
+            absRight = margin + "px";
+            // if the width of the wrapper is smaller than the modal, and thus the
+            // screen is smaller than the modal, force the right to simply be 0
+            if (modalWidth > wrapperInnerWidth) {
+                absRight = "0px";
+            }
+            returnpos.right = absRight;
+            returnpos.left = "auto";
+        }
+        // default, no specified location, is to center
+        else {
+            absLeft = wrapperInnerWidth / 2 - modalWidth / 2 - margin + "px";
+            // if the width of the wrapper is smaller than the modal, and thus the
+            // screen is smaller than the modal, force the left to simply be 0
+            if (modalWidth > wrapperInnerWidth) {
+                absLeft = "0px";
+            }
+            returnpos.left = absLeft;
+        }
+
+        // -- VERTICAL POSITION -------------------------------------------------
+        if (vertpos === "top") {
+            absTop = margin + "px";
+            // if the height of the wrapper is smaller than the modal, and thus the
+            // screen is smaller than the modal, force the top to simply be 0
+            if (modalHeight > wrapperInnerHeight) {
+                absTop = "0px";
+            }
+            returnpos.top = absTop;
+        } else if (vertpos === "bottom") {
+            absBottom = margin + "px";
+            // if the height of the wrapper is smaller than the modal, and thus the
+            // screen is smaller than the modal, force the bottom to simply be 0
+            if (modalHeight > wrapperInnerHeight) {
+                absBottom = "0px";
+            }
+            returnpos.bottom = absBottom;
+            returnpos.top = "auto";
+        } else {
+            // default case, no specified location, is to center
+            absTop = wrapperInnerHeight / 2 - modalHeight / 2 - margin + "px";
+            // if the height of the wrapper is smaller than the modal, and thus the
+            // screen is smaller than the modal, force the top to simply be 0
+            if (modalHeight > wrapperInnerHeight) {
+                absTop = "0px";
+            }
+            returnpos.top = absTop;
+        }
+        return returnpos;
+    },
+
+    modalInitialized: function () {
+        var self = this;
+        return self.$modal !== null && self.$modal !== undefined;
+    },
+
+    activateFocusTrap: function () {
+        var self = this;
+        var inputsBody = self.$modal
+            .find("." + self.options.templateOptions.classBodyName)
+            .first()
+            .find("select, input[type!=hidden], textarea, button, a");
+        var inputsFooter = self.$modal
+            .find("." + self.options.templateOptions.classFooterName)
+            .first()
+            .find("select, input[type!=hidden], textarea, button, a");
+        var inputs = [];
+        for (var i = 0; i < inputsBody.length; i++) {
+            if ($(inputsBody[i]).is(":visible")) {
+                inputs.push(inputsBody[i]);
+            }
+        }
+        for (var j = 0; j < inputsFooter.length; j++) {
+            if ($(inputsFooter[j]).is(":visible")) {
+                inputs.push(inputsFooter[j]);
+            }
+        }
+
+        if (inputs.length === 0) {
+            inputs = self.$modal.find(".plone-modal-title");
+        }
+        var firstInput = inputs[0];
+        var lastInput = inputs[inputs.length - 1];
+        var closeInput = self.$modal.find(".plone-modal-close").first();
+        $(document).on(
+            "keydown",
+            "." + self.options.templateOptions.classDialog,
+            function (e) {
+                if (e.which === 9) {
+                    e.preventDefault();
+
+                    var $target = $(e.target);
+                    var currentIndex = $.inArray($target[0], inputs);
+                    if (currentIndex >= 0 && currentIndex < inputs.length) {
+                        var nextIndex = currentIndex + (e.shiftKey ? -1 : 1);
+                        if (nextIndex < 0 || nextIndex >= inputs.length) {
+                            closeInput.focus();
+                        } else {
+                            inputs[nextIndex].focus();
+                        }
+                    } else if (e.shiftKey) {
+                        lastInput.focus();
+                    } else {
+                        firstInput.focus();
+                    }
+                }
+            }
+        );
+        if (self.options.backdropOptions.closeOnClick === true) {
+            self.$modal.on("click", function (e) {
+                if (
+                    !$(e.target).closest(
+                        "." + self.options.templateOptions.classModal
+                    ).length
+                ) {
+                    self.hide();
+                }
+            });
+        }
+
+        self.$modal.find(".plone-modal-title").focus();
+    },
+
+    positionModal: function () {
+        /* re-position modal at any point.
+         *
+         * Uses:
+         *  options.margin
+         *  options.width
+         *  options.height
+         *  options.position
+         */
+        var self = this;
+        // modal isn't initialized
+        if (!self.modalInitialized()) {
+            return;
+        }
+        // clear out any previously set styling
+        self.$modal.removeAttr("style");
+
+        // if backdrop wrapper is set on body, then wrapper should have height of
+        // the window, so we can do scrolling of inner wrapper
+        if (self.$wrapper.parent().is("body")) {
+            self.$wrapper.height($(window.parent).height());
+        }
+
+        var margin =
+            typeof self.options.margin === "function"
+                ? self.options.margin()
+                : self.options.margin;
+        self.$modal.css({
+            position: "absolute",
+            padding: margin,
+        });
+        self.$modalDialog.css({
+            margin: "0",
+            padding: "0",
+            width: self.options.width, // defaults to "", which doesn't override other css
+            height: self.options.height, // defaults to "", which doesn't override other css
+        });
+        self.$modalContent.css({
+            width: self.options.width, // defaults to "", which doesn't override other css
+        });
+
+        var posopt = self.options.position.split(" "),
+            horpos = posopt[0],
+            vertpos = posopt[1];
+        var modalWidth = self.$modalDialog.outerWidth(true);
+        var modalHeight = self.$modalDialog.outerHeight(true);
+        var wrapperInnerWidth = self.$wrapperInner.width();
+        var wrapperInnerHeight = self.$wrapperInner.height();
+        var pos = self.findPosition(
             horpos,
             vertpos,
             margin,
@@ -776,341 +948,143 @@ export default Base.extend({
             modalHeight,
             wrapperInnerWidth,
             wrapperInnerHeight
-        ) {
-            var returnpos = {};
-            var absTop, absBottom, absLeft, absRight;
-            absRight = absLeft = absTop = absLeft = "auto";
+        );
+        for (var key in pos) {
+            self.$modalDialog.css(key, pos[key]);
+        }
+    },
 
-            // -- HORIZONTAL POSITION -----------------------------------------------
-            if (horpos === "left") {
-                absLeft = margin + "px";
-                // if the width of the wrapper is smaller than the modal, and thus the
-                // screen is smaller than the modal, force the left to simply be 0
-                if (modalWidth > wrapperInnerWidth) {
-                    absLeft = "0px";
-                }
-                returnpos.left = absLeft;
-            } else if (horpos === "right") {
-                absRight = margin + "px";
-                // if the width of the wrapper is smaller than the modal, and thus the
-                // screen is smaller than the modal, force the right to simply be 0
-                if (modalWidth > wrapperInnerWidth) {
-                    absRight = "0px";
-                }
-                returnpos.right = absRight;
-                returnpos.left = "auto";
-            }
-            // default, no specified location, is to center
-            else {
-                absLeft =
-                    wrapperInnerWidth / 2 - modalWidth / 2 - margin + "px";
-                // if the width of the wrapper is smaller than the modal, and thus the
-                // screen is smaller than the modal, force the left to simply be 0
-                if (modalWidth > wrapperInnerWidth) {
-                    absLeft = "0px";
-                }
-                returnpos.left = absLeft;
-            }
+    render: function (options) {
+        var self = this;
+        self.emit("render");
+        self.options.render.apply(self, [options]);
+        self.emit("rendered");
+    },
 
-            // -- VERTICAL POSITION -------------------------------------------------
-            if (vertpos === "top") {
-                absTop = margin + "px";
-                // if the height of the wrapper is smaller than the modal, and thus the
-                // screen is smaller than the modal, force the top to simply be 0
-                if (modalHeight > wrapperInnerHeight) {
-                    absTop = "0px";
-                }
-                returnpos.top = absTop;
-            } else if (vertpos === "bottom") {
-                absBottom = margin + "px";
-                // if the height of the wrapper is smaller than the modal, and thus the
-                // screen is smaller than the modal, force the bottom to simply be 0
-                if (modalHeight > wrapperInnerHeight) {
-                    absBottom = "0px";
-                }
-                returnpos.bottom = absBottom;
-                returnpos.top = "auto";
-            } else {
-                // default case, no specified location, is to center
-                absTop =
-                    wrapperInnerHeight / 2 - modalHeight / 2 - margin + "px";
-                // if the height of the wrapper is smaller than the modal, and thus the
-                // screen is smaller than the modal, force the top to simply be 0
-                if (modalHeight > wrapperInnerHeight) {
-                    absTop = "0px";
-                }
-                returnpos.top = absTop;
-            }
-            return returnpos;
-        },
+    show: function () {
+        var self = this;
+        self.backdrop = self.createBackdrop();
+        self.createModal();
+    },
 
-        modalInitialized: function () {
-            var self = this;
-            return self.$modal !== null && self.$modal !== undefined;
-        },
+    createBackdrop: function () {
+        var self = this,
+            backdrop = new Backdrop(
+                self.$el.parents(self.options.backdrop),
+                self.options.backdropOptions
+            ),
+            zIndex = 1041;
 
-        activateFocusTrap: function () {
-            var self = this;
-            var inputsBody = self.$modal
-                .find("." + self.options.templateOptions.classBodyName)
-                .first()
-                .find("select, input[type!=hidden], textarea, button, a");
-            var inputsFooter = self.$modal
-                .find("." + self.options.templateOptions.classFooterName)
-                .first()
-                .find("select, input[type!=hidden], textarea, button, a");
-            var inputs = [];
-            for (var i = 0; i < inputsBody.length; i++) {
-                if ($(inputsBody[i]).is(":visible")) {
-                    inputs.push(inputsBody[i]);
-                }
-            }
-            for (var j = 0; j < inputsFooter.length; j++) {
-                if ($(inputsFooter[j]).is(":visible")) {
-                    inputs.push(inputsFooter[j]);
-                }
-            }
-
-            if (inputs.length === 0) {
-                inputs = self.$modal.find(".plone-modal-title");
-            }
-            var firstInput = inputs[0];
-            var lastInput = inputs[inputs.length - 1];
-            var closeInput = self.$modal.find(".plone-modal-close").first();
-            $(document).on(
-                "keydown",
-                "." + self.options.templateOptions.classDialog,
-                function (e) {
-                    if (e.which === 9) {
-                        e.preventDefault();
-
-                        var $target = $(e.target);
-                        var currentIndex = $.inArray($target[0], inputs);
-                        if (currentIndex >= 0 && currentIndex < inputs.length) {
-                            var nextIndex =
-                                currentIndex + (e.shiftKey ? -1 : 1);
-                            if (nextIndex < 0 || nextIndex >= inputs.length) {
-                                closeInput.focus();
-                            } else {
-                                inputs[nextIndex].focus();
-                            }
-                        } else if (e.shiftKey) {
-                            lastInput.focus();
-                        } else {
-                            firstInput.focus();
-                        }
-                    }
-                }
+        $(self.options.zIndexSelector).each(function () {
+            zIndex = Math.max(
+                zIndex,
+                parseInt($(this).css("zIndex")) + 1 || 1041
             );
-            if (self.options.backdropOptions.closeOnClick === true) {
-                self.$modal.on("click", function (e) {
-                    if (
-                        !$(e.target).closest(
-                            "." + self.options.templateOptions.classModal
-                        ).length
-                    ) {
-                        self.hide();
-                    }
-                });
+        });
+
+        self.$wrapper = $("<div/>")
+            .hide()
+            .css({
+                "z-index": zIndex,
+                "overflow-y": "auto",
+                "position": "fixed",
+                "height": "100%",
+                "width": "100%",
+                "bottom": "0",
+                "left": "0",
+                "right": "0",
+                "top": "0",
+            })
+            .addClass(self.options.templateOptions.classWrapperName)
+            .insertBefore(backdrop.$backdrop)
+            .on("click", function (e) {
+                if (self.options.backdropOptions.closeOnClick) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    backdrop.hide();
+                }
+            });
+        backdrop.on("hidden", function (e) {
+            if (
+                self.$modal !== undefined &&
+                self.$modal.hasClass(
+                    self.options.templateOptions.classActiveName
+                )
+            ) {
+                self.hide();
             }
+        });
+        self.loading = new utils.Loading({
+            backdrop: backdrop,
+        });
+        self.$wrapperInner = $("<div/>")
+            .addClass(self.options.classWrapperInnerName)
+            .css({
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+                right: "0",
+                top: "0",
+            })
+            .appendTo(self.$wrapper);
+        return backdrop;
+    },
 
-            self.$modal.find(".plone-modal-title").focus();
-        },
-
-        positionModal: function () {
-            /* re-position modal at any point.
-             *
-             * Uses:
-             *  options.margin
-             *  options.width
-             *  options.height
-             *  options.position
-             */
-            var self = this;
-            // modal isn't initialized
-            if (!self.modalInitialized()) {
+    _show: function () {
+        var self = this;
+        self.render.apply(self, [self.options]);
+        self.emit("show");
+        self.backdrop.show();
+        self.$wrapper.show();
+        self.loading.hide();
+        self.$el.addClass(self.options.templateOptions.classActiveName);
+        self.$modal.addClass(self.options.templateOptions.classActiveName);
+        registry.scan(self.$modal);
+        self.positionModal();
+        $(window.parent).on("resize.plone-modal.patterns", function () {
+            self.positionModal();
+        });
+        $("body").addClass("plone-modal-open");
+        self.emit("shown");
+        self.activateFocusTrap();
+    },
+    hide: function () {
+        var self = this;
+        if (self.ajaxXHR) {
+            self.ajaxXHR.abort();
+        }
+        self.emit("hide");
+        if (self._suppressHide) {
+            if (!window.confirm(self._suppressHide)) {
                 return;
             }
-            // clear out any previously set styling
-            self.$modal.removeAttr("style");
-
-            // if backdrop wrapper is set on body, then wrapper should have height of
-            // the window, so we can do scrolling of inner wrapper
-            if (self.$wrapper.parent().is("body")) {
-                self.$wrapper.height($(window.parent).height());
-            }
-
-            var margin =
-                typeof self.options.margin === "function"
-                    ? self.options.margin()
-                    : self.options.margin;
-            self.$modal.css({
-                position: "absolute",
-                padding: margin,
-            });
-            self.$modalDialog.css({
-                margin: "0",
-                padding: "0",
-                width: self.options.width, // defaults to "", which doesn't override other css
-                height: self.options.height, // defaults to "", which doesn't override other css
-            });
-            self.$modalContent.css({
-                width: self.options.width, // defaults to "", which doesn't override other css
-            });
-
-            var posopt = self.options.position.split(" "),
-                horpos = posopt[0],
-                vertpos = posopt[1];
-            var modalWidth = self.$modalDialog.outerWidth(true);
-            var modalHeight = self.$modalDialog.outerHeight(true);
-            var wrapperInnerWidth = self.$wrapperInner.width();
-            var wrapperInnerHeight = self.$wrapperInner.height();
-            var pos = self.findPosition(
-                horpos,
-                vertpos,
-                margin,
-                modalWidth,
-                modalHeight,
-                wrapperInnerWidth,
-                wrapperInnerHeight
-            );
-            for (var key in pos) {
-                self.$modalDialog.css(key, pos[key]);
-            }
-        },
-
-        render: function (options) {
-            var self = this;
-            self.emit("render");
-            self.options.render.apply(self, [options]);
-            self.emit("rendered");
-        },
-
-        show: function () {
-            var self = this;
-            self.backdrop = self.createBackdrop();
-            self.createModal();
-        },
-
-        createBackdrop: function () {
-            var self = this,
-                backdrop = new Backdrop(
-                    self.$el.parents(self.options.backdrop),
-                    self.options.backdropOptions
-                ),
-                zIndex = 1041;
-
-            $(self.options.zIndexSelector).each(function () {
-                zIndex = Math.max(
-                    zIndex,
-                    parseInt($(this).css("zIndex")) + 1 || 1041
-                );
-            });
-
-            self.$wrapper = $("<div/>")
-                .hide()
-                .css({
-                    "z-index": zIndex,
-                    "overflow-y": "auto",
-                    "position": "fixed",
-                    "height": "100%",
-                    "width": "100%",
-                    "bottom": "0",
-                    "left": "0",
-                    "right": "0",
-                    "top": "0",
-                })
-                .addClass(self.options.templateOptions.classWrapperName)
-                .insertBefore(backdrop.$backdrop)
-                .on("click", function (e) {
-                    if (self.options.backdropOptions.closeOnClick) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        backdrop.hide();
-                    }
-                });
-            backdrop.on("hidden", function (e) {
-                if (
-                    self.$modal !== undefined &&
-                    self.$modal.hasClass(
-                        self.options.templateOptions.classActiveName
-                    )
-                ) {
-                    self.hide();
-                }
-            });
-            self.loading = new utils.Loading({
-                backdrop: backdrop,
-            });
-            self.$wrapperInner = $("<div/>")
-                .addClass(self.options.classWrapperInnerName)
-                .css({
-                    position: "absolute",
-                    bottom: "0",
-                    left: "0",
-                    right: "0",
-                    top: "0",
-                })
-                .appendTo(self.$wrapper);
-            return backdrop;
-        },
-
-        _show: function () {
-            var self = this;
-            self.render.apply(self, [self.options]);
-            self.emit("show");
-            self.backdrop.show();
-            self.$wrapper.show();
-            self.loading.hide();
-            self.$el.addClass(self.options.templateOptions.classActiveName);
-            self.$modal.addClass(self.options.templateOptions.classActiveName);
-            registry.scan(self.$modal);
-            self.positionModal();
-            $(window.parent).on("resize.plone-modal.patterns", function () {
-                self.positionModal();
-            });
-            $("body").addClass("plone-modal-open");
-            self.emit("shown");
-            self.activateFocusTrap();
-        },
-        hide: function () {
-            var self = this;
-            if (self.ajaxXHR) {
-                self.ajaxXHR.abort();
-            }
-            self.emit("hide");
-            if (self._suppressHide) {
-                if (!window.confirm(self._suppressHide)) {
-                    return;
-                }
-            }
-            self.loading.hide();
-            self.$el.removeClass(self.options.templateOptions.classActiveName);
-            if (self.$modal !== undefined) {
-                self.$modal.remove();
-                self.initModal();
-            }
-            self.$wrapper.remove();
-            if ($(".plone-modal", $("body")).length < 1) {
-                self._suppressHide = undefined;
-                self.backdrop.hide();
-                $("body").removeClass("plone-modal-open");
-                $(window.parent).off("resize.plone-modal.patterns");
-            }
-            self.emit("hidden");
-            self.$el.focus();
-        },
-
-        redraw: function (response, options) {
-            var self = this;
-            self.emit("beforeDraw");
+        }
+        self.loading.hide();
+        self.$el.removeClass(self.options.templateOptions.classActiveName);
+        if (self.$modal !== undefined) {
             self.$modal.remove();
-            self.$raw = $("<div />").append($(utils.parseBodyTag(response)));
-            self.render.apply(self, [options || self.options]);
-            self.$modal.addClass(self.options.templateOptions.classActiveName);
-            self.positionModal();
-            registry.scan(self.$modal);
-            self.emit("afterDraw");
-        },
-    });
+            self.initModal();
+        }
+        self.$wrapper.remove();
+        if ($(".plone-modal", $("body")).length < 1) {
+            self._suppressHide = undefined;
+            self.backdrop.hide();
+            $("body").removeClass("plone-modal-open");
+            $(window.parent).off("resize.plone-modal.patterns");
+        }
+        self.emit("hidden");
+        self.$el.focus();
+    },
 
+    redraw: function (response, options) {
+        var self = this;
+        self.emit("beforeDraw");
+        self.$modal.remove();
+        self.$raw = $("<div />").append($(utils.parseBodyTag(response)));
+        self.render.apply(self, [options || self.options]);
+        self.$modal.addClass(self.options.templateOptions.classActiveName);
+        self.positionModal();
+        registry.scan(self.$modal);
+        self.emit("afterDraw");
+    },
+});
