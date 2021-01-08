@@ -18,7 +18,25 @@ Tree pattern.
 | selectable | boolean | true | if nodes can be selectable |
 | keyboardSupport | boolean | true | if keyboard naviation is allowed |
 
+## Examples
+
 ### JSON node data
+
+<div class="pat-tree"
+    data-pat-tree='data:[
+        { "label": "node1",
+        "children": [
+            { "label": "child1" },
+            { "label": "child2" }
+        ]
+        },
+        { "label": "node2",
+        "children": [
+            { "label": "child3" }
+        ]
+        }
+    ];'>
+</div>
 
 ``` html
 <div class="pat-tree"
@@ -34,38 +52,48 @@ Tree pattern.
             { "label": "child3" }
         ]
         }
-    ];'> </div>
+    ];'>
+</div>
 ```
-
-<div class="pat-tree"
-    data-pat-tree='data:[
-        { "label": "node1",
-        "children": [
-            { "label": "child1" },
-            { "label": "child2" }
-        ]
-        },
-        { "label": "node2",
-        "children": [
-            { "label": "child3" }
-        ]
-        }
-    ];'> </div>
 
 ### JSON data
 
 <div class="pat-tree"
-    data-pat-tree='data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;'></div>
+    data-pat-tree='data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;'>
+</div>
+
+```html
+<div class="pat-tree"
+    data-pat-tree='data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;'>
+</div>
+```
 
 ### Remote data URL
 
 <div class="pat-tree"
     data-pat-tree="dataUrl:/fileTree.json;
-                    autoOpen:true;"></div>
+                   autoOpen:true;">
+</div>
+
+```html
+<div class="pat-tree"
+    data-pat-tree="dataUrl:/fileTree.json;
+                   autoOpen:true;">
+</div>
+```
 
 ### Drag and drop
 
 <div class="pat-tree"
     data-pat-tree="dataUrl:fileTree.json;
-                    dragAndDrop: true;
-                    autoOpen: true"></div>
+                   dragAndDrop: true;
+                   autoOpen: true">
+</div>
+
+```html
+<div class="pat-tree"
+    data-pat-tree="dataUrl:fileTree.json;
+                   dragAndDrop: true;
+                   autoOpen: true">
+</div>
+```
