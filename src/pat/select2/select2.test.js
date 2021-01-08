@@ -1,4 +1,4 @@
-import "./select2";
+import PatternSelect2 from "./select2";
 import $ from "jquery";
 import registry from "patternslib/src/core/registry";
 import utils from "patternslib/src/core/utils";
@@ -42,7 +42,7 @@ describe("Select2", function () {
         var $el = $('<input class="pat-select2" value="Red" />').appendTo(
             "body"
         );
-        $el.patternSelect2({
+        new PatternSelect2($el, {
             tags: '["Red", "Yellow"]',
             initialValues: '{"Red": "RedTEXT", "Yellow": "YellowTEXT"}',
         });
@@ -54,7 +54,7 @@ describe("Select2", function () {
         var $el = $('<input class="pat-select2" value="Red" />').appendTo(
             "body"
         );
-        $el.patternSelect2({
+        new PatternSelect2($el, {
             tags: '["Red", "Yellow"]',
             initialValues: "Yellow: YellowTEXT, Red: RedTEXT",
         });
@@ -102,7 +102,7 @@ describe("Select2", function () {
                 "                     vocabularyUrl: /select2-ajax.json;" +
                 '                     width:20em" />'
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
 
         var $results = $("li.select2-result-selectable");
         expect($results.length).toEqual(0);
@@ -123,7 +123,7 @@ describe("Select2", function () {
                 "                     vocabularyUrl: /select2-ajax.json;" +
                 '                     width:20em" />'
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
 
         var $input = $(".select2-input");
         $input.click().val("AAA");
@@ -144,7 +144,7 @@ describe("Select2", function () {
                 "                     vocabularyUrl: /select2-ajax.json;" +
                 '                     width:20em" />'
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
 
         var $input = $(".select2-input");
         $input.click().val('<img src="logo.png" />Evil logo');
@@ -165,7 +165,7 @@ describe("Select2", function () {
                 "                     vocabularyUrl: /select2-ajax.json;" +
                 '                     width:20em" />'
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
 
         var $input = $(".select2-input");
         $input.click().val("this < that & those");
@@ -204,7 +204,7 @@ describe("Select2", function () {
                 "        />" +
                 "</div>"
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
 
         var $results = $("li.select2-search-choice");
         expect($results.length).toEqual(2);
@@ -246,7 +246,7 @@ describe("Select2", function () {
                 "                     allowNewItems: false;" +
                 '                     width:20em" />'
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
         var $input = $(".select2-input");
         $input.click().val("AAA");
         var keyup = $.Event("keyup-change");
@@ -267,7 +267,7 @@ describe("Select2", function () {
                 "                     allowNewItems: false;" +
                 '                     width:20em" />'
         ).appendTo("body");
-        var pattern = $(".pat-select2").patternSelect2();
+        var pattern = new PatternSelect2($(".pat-select2"));
         var $input = $(".select2-input");
         $input.click().val("AAA");
         var keyup = $.Event("keyup-change");

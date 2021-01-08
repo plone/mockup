@@ -91,6 +91,7 @@ export default Base.extend({
         if (!self.options.orderable) {
             return;
         }
+        // TODO: fix sorting!
         this.$el.on(
             "change",
             function (e) {
@@ -138,7 +139,7 @@ export default Base.extend({
             }
         }
 
-        self.$el.select2(self.options);
+        $(self.el).select2(self.options);
         self.$el.on("select2-selected", function (e) {
             callback(self.options.onSelected, e);
         });
