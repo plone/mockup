@@ -5,27 +5,15 @@ title: Querystring
 
 # Querystring
 
-## Default
-
-```html
-<input class="pat-querystring"
-        data-pat-querystring="indexOptionsUrl: /tests/json/queryStringCriteria.json" />
-```
-
-## Without preview
-
-```html
-<input class="pat-querystring"
-        data-pat-querystring="indexOptionsUrl: /tests/json/queryStringCriteria.json;
-            showPreviews: false;" />
-```
-
 ## Configuration
 
 | Option | Type | Default | Description |
-|-|-|-|-|
+|:-:|:-:|:-:|:-:|
 | criteria | object | {} | options to pass into criteria |
 | indexOptionsUrl | string | null | URL to grab index option data from. Must contain "sortable_indexes" and "indexes" data in JSON object. |
+| patternDateOptions | object | {} |  Options for the Date/Time select widget. |
+| patternAjaxSelectOptions | object | {} | Options for the AJAX select widget. |
+| patternRelateditemsOptions | object  | {} | Options for the related items widget. |
 | previewURL | string | 'portal_factory/@@querybuilder_html_results' | URL used to pass in a plone.app.querystring-formatted HTTP querystring and get an HTML list of results |
 | previewCountURL | string | 'portal_factory/@@querybuildernumberofresults' | URL  used to pass in a plone.app.querystring-formatted HTTP querystring and  get an HTML string of the total number of records found with the query |
 | classWrapperName | string | 'querystring-wrapper' | CSS class to apply to the wrapper element |
@@ -40,5 +28,26 @@ title: Querystring
 | classPreviewDescriptionName | string | 'querystring-preview-description' | CSS class to apply to the preview description |
 | classSortWrapperName | string | 'querystring-sort-wrapper' | CSS class to apply to the sort order and sort on wrapper |
 | showPreviews | boolean | true | Should previews be shown? |
-| selectionTemplate | string | Refer to source | Template for element that will be used to construct a selected item. |
-| selectionTemplateSelector | string | null | Select an element from the DOM from which to grab the selectionTemplate. |
+
+
+## Examples
+
+### Default
+
+```html
+<input class="pat-querystring"
+        data-pat-querystring="indexOptionsUrl: ./test-querystringcriteria.json" />
+```
+
+### Without previews
+
+<input class="pat-querystring"
+        data-pat-querystring="indexOptionsUrl: ./test-querystringcriteria.json;
+            showPreviews: false;" />
+
+```html
+<input class="pat-querystring"
+        data-pat-querystring="indexOptionsUrl: ./test-querystringcriteria.json;
+            showPreviews: false;" />
+```
+
