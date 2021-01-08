@@ -54,7 +54,7 @@ module.exports = async (env) => {
                     loader: "babel-loader",
                 },
                 {
-                    test: /\.html$/i,
+                    test: /\.*(?:html|xml)$/i,
                     use: "raw-loader",
                 },
                 {
