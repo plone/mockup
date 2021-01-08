@@ -107,9 +107,9 @@ module.exports = async (env) => {
                 emitError: true,
             }),
         ],
-        //resolve: {
-        //    alias: {},
-        //},
+        resolve: {
+            alias: {},
+        },
     };
     if (mode === "development") {
         // Set public path to override __webpack_public_path__
@@ -130,10 +130,10 @@ module.exports = async (env) => {
                 path.resolve(__dirname, "devsrc/patternslib")
             );
             // Use checked-out version of patternslib
-            //config.resolve.alias.patternslib = path.resolve(
-            //    __dirname,
-            //    "devsrc/patternslib"
-            //);
+            config.resolve.alias.patternslib = path.resolve(
+                __dirname,
+                "devsrc/patternslib"
+            );
         } catch (error) {
             // ignore.
         }
