@@ -1,11 +1,7 @@
-define(["mockup-ui-url/views/container"], function (ContainerView) {
-    "use strict";
+import ContainerView from "./container";
 
-    var Toolbar = ContainerView.extend({
-        tagName: "div",
-        className: "navbar",
-        idPrefix: "toolbar-",
-    });
-
-    return Toolbar;
+export default ContainerView.extend({
+    tagName: "div",
+    className: "navbar",
+    idPrefix: "toolbar-",
 });

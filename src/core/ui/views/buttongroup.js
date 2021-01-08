@@ -1,24 +1,18 @@
-define(["underscore", "mockup-ui-url/views/container"], function (
-    _,
-    ContainerView
-) {
-    "use strict";
+import _ from "underscore";
+import ContainerView from "./container";
 
-    var ButtonGroup = ContainerView.extend({
-        tagName: "div",
-        className: "btn-group",
-        idPrefix: "btngroup-",
-        disable: function () {
-            _.each(this.items, function (button) {
-                button.disable();
-            });
-        },
-        enable: function () {
-            _.each(this.items, function (button) {
-                button.enable();
-            });
-        },
-    });
-
-    return ButtonGroup;
+export default ContainerView.extend({
+    tagName: "div",
+    className: "btn-group",
+    idPrefix: "btngroup-",
+    disable: function () {
+        _.each(this.items, function (button) {
+            button.disable();
+        });
+    },
+    enable: function () {
+        _.each(this.items, function (button) {
+            button.enable();
+        });
+    },
 });
