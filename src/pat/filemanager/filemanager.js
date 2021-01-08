@@ -1,59 +1,25 @@
-
-// define([
-//     "jquery",
-//     "pat-base",
-//     "underscore",
-//     "jqtree-contextmenu",
-//     "mockup-patterns-tree",
-//     "mockup-patterns-texteditor",
-//     "text!mockup-patterns-filemanager-url/templates/app.xml",
-//     "mockup-ui-url/views/toolbar",
-//     "mockup-ui-url/views/button",
-//     "mockup-ui-url/views/buttongroup",
-//     "mockup-ui-url/views/anchor",
-//     "mockup-ui-url/views/dropdown",
-//     "mockup-patterns-filemanager-url/js/addnew",
-//     "mockup-patterns-filemanager-url/js/newfolder",
-//     "mockup-patterns-filemanager-url/js/findfile",
-//     "mockup-patterns-filemanager-url/js/findinfiles",
-//     "mockup-patterns-filemanager-url/js/delete",
-//     "mockup-patterns-filemanager-url/js/customize",
-//     "mockup-patterns-filemanager-url/js/rename",
-//     "mockup-patterns-filemanager-url/js/upload",
-//     "translate",
-//     "mockup-utils",
-//     "text!mockup-ui-url/templates/popover.xml",
-//     "text!mockup-ui-url/templates/dropdown.xml",
-// ], function (
-//     $,
-//     Base,
-//     _,
-//     ContextMenu,
-//     Tree,
-//     TextEditor,
-//     AppTemplate,
-//     Toolbar,
-//     ButtonView,
-//     ButtonGroup,
-//     AnchorView,
-//     DropdownView,
-//     AddNewView,
-//     NewFolderView,
-//     FindFileView,
-//     FindInFilesView,
-//     DeleteView,
-//     CustomizeView,
-//     RenameView,
-//     UploadView,
-//     _t,
-//     utils
-// ) {
-//     "use strict";
-
-
 import $ from "jquery";
 import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "patternslib/src/core/base";
+import _t from "../../core/i18n-wrapper";
+import _ from "underscore";
+import utils from "../../core/utils";
+import Tree from "../tree/tree";
+import TextEditor from "../texteditor/texteditor";
+import AppTemplate from "./templates/app.xml";
+import Toolbar from "../../core/ui/views/toolbar";
+import ButtonView from "../../core/ui/views/button";
+import ButtonGroup from "../../core/ui/views/buttongroup";
+import AnchorView from "../../core/ui/views/anchor";
+import DropdownView from "../../core/ui/views/dropdown";
+import AddNewView from "./js/addnew";
+import NewFolderView from "./js/newfolder";
+import FindFileView from "./js/findfile";
+import FindInFilesView from "./js/findinfiles";
+import DeleteView from "./js/delete";
+import CustomizeView from "./js/customize";
+import RenameView from "./js/rename";
+import UploadView from "./js/upload";
 
 export default Base.extend({
     name: "filemanager",
@@ -99,8 +65,7 @@ export default Base.extend({
                 /* if not using folder option, just allow, otherwise, only allow if folder */
                 if (position === "inside") {
                     return (
-                        target.folder === undefined ||
-                        target.folder === true
+                        target.folder === undefined || target.folder === true
                     );
                 }
                 return true;
@@ -486,17 +451,13 @@ export default Base.extend({
         });
 
         self.$tree.bind("tree.open", function (e) {
-            var element = $(e.node.element)
-                .find(":first")
-                .find(".glyphicon");
+            var element = $(e.node.element).find(":first").find(".glyphicon");
             $(element).addClass("glyphicon-folder-open");
             $(element).removeClass("glyphicon-folder-close");
         });
 
         self.$tree.bind("tree.close", function (e) {
-            var element = $(e.node.element)
-                .find(":first")
-                .find(".glyphicon");
+            var element = $(e.node.element).find(":first").find(".glyphicon");
             $(element).addClass("glyphicon-folder-close");
             $(element).removeClass("glyphicon-folder-open");
         });
@@ -691,10 +652,7 @@ export default Base.extend({
         for (var i = 0; i < folders.length; i++) {
             for (var z = 0; z < children.length; z++) {
                 if (children[z].name == folders[i]) {
-                    if (
-                        children[z].folder == true &&
-                        i != folders.length - 1
-                    ) {
+                    if (children[z].folder == true && i != folders.length - 1) {
                         children = children[z].children;
                         break;
                     } else {
@@ -781,10 +739,7 @@ export default Base.extend({
 
         self.$el.trigger("fileChange");
         self.ace.editor.on("change", function () {
-            if (
-                self.ace.editor.curOp &&
-                self.ace.editor.curOp.command.name
-            ) {
+            if (self.ace.editor.curOp && self.ace.editor.curOp.command.name) {
                 $('[data-path="' + path + '"]').addClass("modified");
             }
         });
