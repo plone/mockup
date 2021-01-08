@@ -1,3 +1,5 @@
+import PatternRelateditems from "./relateditems";
+
 define([
     "expect",
     "jquery",
@@ -335,10 +337,12 @@ define([
             options = JSON.stringify(options);
             $container = $('<div><input class="pat-relateditems" /></div>');
             $container.appendTo("body");
-            var pattern = $(".pat-relateditems", $container)
-                .attr("data-pat-relateditems", options)
-                .patternRelateditems()
-                .data("patternRelateditems");
+            var pattern = $(".pat-relateditems", $container).attr(
+                "data-pat-relateditems",
+                options
+            );
+            new PatternRelateditems(pattern);
+            pattern.data("patternRelateditems");
             return pattern;
         };
 
