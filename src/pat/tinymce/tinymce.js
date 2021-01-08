@@ -1,0 +1,475 @@
+import $ from "jquery";
+import _ from "underscore";
+import _t from "../../core/i18n-wrapper";
+import Base from "patternslib/src/core/base";
+import utils from "../../core/utils";
+import LinkModal from "./js/links";
+import I18n from "../../core/i18n";
+import tinymce from "tinymce-builded";
+
+// tinyMCE Plugins
+import "tinymce-builded/js/tinymce/themes/modern/theme";
+import "tinymce-builded/js/tinymce/plugins/advlist/plugin";
+import "tinymce-builded/js/tinymce/plugins/anchor/plugin";
+import "tinymce-builded/js/tinymce/plugins/autolink/plugin";
+import "tinymce-builded/js/tinymce/plugins/autoresize/plugin";
+import "tinymce-builded/js/tinymce/plugins/autosave/plugin";
+import "tinymce-builded/js/tinymce/plugins/bbcode/plugin";
+import "tinymce-builded/js/tinymce/plugins/charmap/plugin";
+import "tinymce-builded/js/tinymce/plugins/code/plugin";
+import "tinymce-builded/js/tinymce/plugins/colorpicker/plugin";
+import "tinymce-builded/js/tinymce/plugins/contextmenu/plugin";
+import "tinymce-builded/js/tinymce/plugins/directionality/plugin";
+import "tinymce-builded/js/tinymce/plugins/emoticons/plugin";
+import "tinymce-builded/js/tinymce/plugins/fullpage/plugin";
+import "tinymce-builded/js/tinymce/plugins/fullscreen/plugin";
+import "tinymce-builded/js/tinymce/plugins/hr/plugin";
+import "tinymce-builded/js/tinymce/plugins/image/plugin";
+import "tinymce-builded/js/tinymce/plugins/importcss/plugin";
+import "tinymce-builded/js/tinymce/plugins/insertdatetime/plugin";
+import "tinymce-builded/js/tinymce/plugins/legacyoutput/plugin";
+import "tinymce-builded/js/tinymce/plugins/link/plugin";
+import "tinymce-builded/js/tinymce/plugins/lists/plugin";
+import "tinymce-builded/js/tinymce/plugins/media/plugin";
+import "tinymce-builded/js/tinymce/plugins/nonbreaking/plugin";
+import "tinymce-builded/js/tinymce/plugins/noneditable/plugin";
+import "tinymce-builded/js/tinymce/plugins/pagebreak/plugin";
+import "tinymce-builded/js/tinymce/plugins/paste/plugin";
+import "tinymce-builded/js/tinymce/plugins/preview/plugin";
+import "tinymce-builded/js/tinymce/plugins/print/plugin";
+import "tinymce-builded/js/tinymce/plugins/save/plugin";
+import "tinymce-builded/js/tinymce/plugins/searchreplace/plugin";
+import "tinymce-builded/js/tinymce/plugins/spellchecker/plugin";
+import "tinymce-builded/js/tinymce/plugins/tabfocus/plugin";
+import "tinymce-builded/js/tinymce/plugins/table/plugin";
+import "tinymce-builded/js/tinymce/plugins/template/plugin";
+import "tinymce-builded/js/tinymce/plugins/textcolor/plugin";
+import "tinymce-builded/js/tinymce/plugins/textpattern/plugin";
+import "tinymce-builded/js/tinymce/plugins/visualblocks/plugin";
+import "tinymce-builded/js/tinymce/plugins/visualchars/plugin";
+import "tinymce-builded/js/tinymce/plugins/wordcount/plugin";
+import "tinymce-builded/js/tinymce/plugins/compat3x/plugin";
+
+export default Base.extend({
+    name: "tinymce",
+    trigger: ".pat-tinymce",
+    parser: "mockup",
+    defaults: {
+        upload: {
+            uploadMultiple: false,
+            maxFiles: 1,
+            showTitle: false,
+        },
+        relatedItems: {
+            // UID attribute is required here since we're working with related items
+            attributes: [
+                "UID",
+                "Title",
+                "portal_type",
+                "path",
+                "getURL",
+                "getIcon",
+                "is_folderish",
+                "review_state",
+            ],
+            batchSize: 20,
+            basePath: "/",
+            vocabularyUrl: null,
+            width: 500,
+            maximumSelectionSize: 1,
+            placeholder: _t("Search for item on site..."),
+        },
+        text: {
+            insertBtn: _t("Insert"), // so this can be configurable for different languages
+            cancelBtn: _t("Cancel"),
+            insertHeading: _t("Insert link"),
+            title: _t("Title"),
+            internal: _t("Internal"),
+            external: _t("External"),
+            externalText: _t(
+                "External URL (can be relative within this site or absolute if it starts with http:// or https://)"
+            ),
+            email: _t("Email Address"),
+            anchor: _t("Anchor"),
+            anchorLabel: _t("Select an anchor"),
+            target: _t("Target"),
+            subject: _t("Email Subject (optional)"),
+            image: _t("Image"),
+            imageAlign: _t("Align"),
+            scale: _t("Size"),
+            alt: _t("Alternative Text"),
+            insertImageHelp: _t(
+                "Specify an image. It can be on this site already (Internal Image), an image you upload (Upload), or from an external site (External Image)."
+            ),
+            internalImage: _t("Internal Image"),
+            externalImage: _t("External Image"),
+            externalImageText: _t(
+                "External Image URL (can be relative within this site or absolute if it starts with http:// or https://)"
+            ),
+            upload: _t("Upload"),
+            insertLinkHelp: _t(
+                "Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor)."
+            ),
+            captionFromDescription: _t(
+                "Show Image Caption from Image Description"
+            ),
+            caption: _t("Image Caption"),
+        },
+        // URL generation options
+        loadingBaseUrl: "../../../node_modules/tinymce-builded/js/tinymce/",
+        prependToUrl: "",
+        appendToUrl: "",
+        linkAttribute: "path", // attribute to get link value from data
+        prependToScalePart: "/imagescale/",
+        appendToScalePart: "",
+        appendToOriginalScalePart: "",
+        defaultScale: "large",
+        imageScales: [
+            { title: "Mini", value: "mini" },
+            { title: "Thumb", value: "thumb" },
+            { title: "Listing", value: "listing" },
+            { title: "Preview", value: "preview" },
+            { title: "Tile", value: "tile" },
+            { title: "Icon", value: "icon" },
+            { title: "Large", value: "large" },
+        ],
+        imageClasses: {
+            "image-inline": _t("Inline"),
+            "image-right": _t("Right"),
+            "image-left": _t("Left"),
+            "image-responsive": _t("Responsive"),
+        },
+        targetList: [
+            { text: _t("Open in this window / frame"), value: "" },
+            { text: _t("Open in new window"), value: "_blank" },
+            { text: _t("Open in parent window / frame"), value: "_parent" },
+            {
+                text: _t("Open in top frame (replaces all frames)"),
+                value: "_top",
+            },
+        ],
+        imageTypes: ["Image"],
+        folderTypes: ["Folder", "Plone Site"],
+        tiny: {
+            content_css:
+                "/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css",
+            theme: "modern",
+            plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "charmap",
+                "print",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "contextmenu",
+                "paste",
+                "plonelink",
+                "ploneimage",
+            ],
+            menubar: "edit table format tools view insert",
+            toolbar:
+                "undo redo | styleselect | bold italic | " +
+                "alignleft aligncenter alignright alignjustify | " +
+                "bullist numlist outdent indent | " +
+                "unlink plonelink ploneimage",
+            //'autoresize_max_height': 900,
+            height: 400,
+        },
+        inline: false,
+    },
+    addLinkClicked: function () {
+        var self = this;
+        if (self.linkModal === null) {
+            var $el = $("<div/>").insertAfter(self.$el);
+            var linkTypes = [
+                "internal",
+                "upload",
+                "external",
+                "email",
+                "anchor",
+            ];
+            if (!self.options.upload) {
+                linkTypes.splice(1, 1);
+            }
+            self.linkModal = new LinkModal(
+                $el,
+                $.extend(true, {}, self.options, {
+                    tinypattern: self,
+                    linkTypes: linkTypes,
+                })
+            );
+            self.linkModal.show();
+        } else {
+            self.linkModal.reinitialize();
+            self.linkModal.show();
+        }
+    },
+    addImageClicked: function () {
+        var self = this;
+        if (self.imageModal === null) {
+            var linkTypes = ["image", "uploadImage", "externalImage"];
+            if (!self.options.upload) {
+                linkTypes.splice(1, 1);
+            }
+            var options = $.extend(true, {}, self.options, {
+                tinypattern: self,
+                linkTypes: linkTypes,
+                initialLinkType: "image",
+                text: {
+                    insertHeading: _t("Insert Image"),
+                },
+                relatedItems: {
+                    selectableTypes: self.options.imageTypes,
+                },
+            });
+            var $el = $("<div/>").insertAfter(self.$el);
+            self.imageModal = new LinkModal($el, options);
+            self.imageModal.show();
+        } else {
+            self.imageModal.reinitialize();
+            self.imageModal.show();
+        }
+    },
+    generateUrl: function (data) {
+        var self = this;
+        var part = data[self.options.linkAttribute];
+        return self.options.prependToUrl + part + self.options.appendToUrl;
+    },
+    generateImageUrl: function (data, scale_name) {
+        var self = this;
+        var url = self.generateUrl(data);
+        if (scale_name) {
+            url =
+                url +
+                self.options.prependToScalePart +
+                scale_name +
+                self.options.appendToScalePart;
+        } else {
+            url = url + self.options.appendToOriginalScalePart;
+        }
+        return url;
+    },
+    stripGeneratedUrl: function (url) {
+        // to get original attribute back
+        var self = this;
+        url = url.split(self.options.prependToScalePart, 2)[0];
+        if (self.options.prependToUrl) {
+            var parts = url.split(self.options.prependToUrl, 2);
+            if (parts.length === 2) {
+                url = parts[1];
+            }
+        }
+        if (self.options.appendToUrl) {
+            url = url.split(self.options.appendToUrl)[0];
+        }
+        return url;
+    },
+    getScaleFromUrl: function (url) {
+        var self = this;
+        var split = url.split(self.options.prependToScalePart);
+        if (split.length !== 2) {
+            // not valid scale, screw it
+            return null;
+        }
+        if (self.options.appendToScalePart) {
+            url = split[1].split(self.options.appendToScalePart)[0];
+        } else {
+            url = split[1];
+        }
+        if (url.indexOf("/image_") !== -1) {
+            url = url.split("/image_")[1];
+        }
+        return url;
+    },
+    initLanguage: function (call_back) {
+        var self = this;
+        var i18n = new I18n();
+        var lang = i18n.currentLanguage;
+        if (lang !== "en" && self.options.tiny.language !== "en") {
+            tinymce.baseURL = self.options.loadingBaseUrl;
+            // does the expected language exist?
+            $.ajax({
+                url: tinymce.baseURL + "/langs/" + lang + ".js",
+                method: "GET",
+                cache: "true",
+                success: function () {
+                    self.options.tiny.language = lang;
+                    call_back();
+                },
+                error: function () {
+                    // expected lang not available, let's fallback to closest one
+                    if (lang.split("_") > 1) {
+                        lang = lang.split("_")[0];
+                    } else if (lang.split("-") > 1) {
+                        lang = lang.split("-")[0];
+                    } else {
+                        lang = lang + "_" + lang.toUpperCase();
+                    }
+                    $.ajax({
+                        url: tinymce.baseURL + "/langs/" + lang + ".js",
+                        method: "GET",
+                        cache: "true",
+                        success: function () {
+                            self.options.tiny.language = lang;
+                            call_back();
+                        },
+                        error: function () {
+                            call_back();
+                        },
+                    });
+                },
+            });
+        } else {
+            call_back();
+        }
+    },
+    init: function () {
+        var self = this;
+        self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
+        // tiny needs an id in order to initialize. Creat it if not set.
+        var id = utils.setId(self.$el);
+
+        if (
+            self.options.imageScales &&
+            typeof self.options.imageScales === "string"
+        ) {
+            self.options.imageScales = JSON.parse(self.options.imageScales);
+        }
+
+        var tinyOptions = self.options.tiny;
+        if (self.options.inline === true) {
+            self.options.tiny.inline = true;
+        }
+        self.tinyId = self.options.inline ? id + "-editable" : id; // when displaying TinyMCE inline, a separate div is created.
+        tinyOptions.selector = "#" + self.tinyId;
+        tinyOptions.addLinkClicked = function () {
+            self.addLinkClicked.apply(self, []);
+        };
+        tinyOptions.addImageClicked = function (file) {
+            self.addImageClicked.apply(self, [file]);
+        };
+        // XXX: disabled skin means it wont load css files which we already
+        // include in widgets.min.css
+        tinyOptions.skin = false;
+
+        tinyOptions.init_instance_callback = function (editor) {
+            if (self.tiny === undefined || self.tiny === null) {
+                self.tiny = editor;
+            }
+        };
+
+        self.initLanguage(function () {
+            if (typeof self.options.folderTypes === "string") {
+                self.options.folderTypes = self.options.folderTypes.split(",");
+            }
+
+            if (typeof self.options.imageTypes === "string") {
+                self.options.imageTypes = self.options.imageTypes.split(",");
+            }
+
+            if (self.options.inline === true) {
+                // create a div, which will be made content-editable by TinyMCE and
+                // copy contents from textarea to it. Then hide textarea.
+                self.$el.after(
+                    '<div id="' + self.tinyId + '">' + self.$el.val() + "</div>"
+                );
+                self.$el.hide();
+            }
+
+            if (
+                tinyOptions.importcss_file_filter &&
+                typeof tinyOptions.importcss_file_filter.indexOf ===
+                    "function" &&
+                tinyOptions.importcss_file_filter.indexOf(",") !== -1
+            ) {
+                // need a custom function to check now
+                var files = tinyOptions.importcss_file_filter.split(",");
+
+                tinyOptions.importcss_file_filter = function (value) {
+                    for (var i = 0; i < files.length; i++) {
+                        if (value.indexOf(files[i]) !== -1) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+            }
+
+            if (
+                tinyOptions.importcss_selector_filter &&
+                tinyOptions.importcss_selector_filter.length
+            ) {
+                tinyOptions.importcss_selector_filter = new RegExp(
+                    tinyOptions.importcss_selector_filter
+                );
+            }
+
+            if (
+                tinyOptions.importcss_groups &&
+                tinyOptions.importcss_groups.length
+            ) {
+                for (var i = 0; i < tinyOptions.importcss_groups.length; i++) {
+                    if (
+                        tinyOptions.importcss_groups[i].filter &&
+                        tinyOptions.importcss_groups[i].filter.length
+                    ) {
+                        tinyOptions.importcss_groups[i].filter = new RegExp(
+                            tinyOptions.importcss_groups[i].filter
+                        );
+                    }
+                }
+            }
+
+            /* If TinyMCE is rendered inside of a modal, set an ID on
+             * .plone-modal-dialog and use that as the ui_container
+             * setting for TinyMCE to anchor it there. This ensures that
+             * sub-menus are displayed relative to the modal rather than
+             * the document body.
+             * Generate a random id and append it, because there might be
+             * more than one TinyMCE in the DOM.
+             */
+            var modal_container = self.$el.parents(".plone-modal-dialog");
+
+            if (modal_container.length > 0) {
+                var random_id = Math.random().toString(36).substring(2, 15);
+                modal_container.attr("id", "tiny-ui-container-" + random_id);
+                tinyOptions["ui_container"] = "#tiny-ui-container-" + random_id;
+            }
+            tinymce.init(tinyOptions);
+            self.tiny = tinymce.get(self.tinyId);
+
+            /* tiny really should be doing this by default
+             * but this fixes overlays not saving data */
+            var $form = self.$el.parents("form");
+            $form.on("submit", function () {
+                if (self.options.inline === true) {
+                    // save back from contenteditable to textarea
+                    self.$el.val(self.tiny.getContent());
+                } else {
+                    // normal case
+                    self.tiny.save();
+                }
+            });
+        });
+    },
+    destroy: function () {
+        if (this.tiny) {
+            if (this.options.inline === true) {
+                // destroy also inline editable
+                this.$el.val(this.tiny.getContent());
+                $("#" + this.tinyId).remove();
+                this.$el.show();
+            }
+            this.tiny.destroy();
+            this.tiny = undefined;
+        }
+    },
+});
