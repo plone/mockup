@@ -1,4 +1,3 @@
-import "../select2/select2";
 import "pickadate/lib/picker";
 import "pickadate/lib/picker.date";
 import "pickadate/lib/picker.time";
@@ -7,6 +6,8 @@ import _t from "../../core/i18n-wrapper";
 import Base from "patternslib/src/core/base";
 import dom from "patternslib/src/core/dom";
 import utils from "../../core/utils";
+
+import PatternSelect2 from "../select2/select2";
 
 import "pickadate/lib/themes/classic.css";
 import "pickadate/lib/themes/classic.date.css";
@@ -245,31 +246,35 @@ export default Base.extend({
                     $("<div/>")
                         .addClass(self.options.classTimezoneWrapperName)
                         .appendTo(self.$wrapper)
+                );
+
+            new PatternSelect2(
+                self.$timezone,
+                $.extend(
+                    true,
+                    {
+                        placeholder: self.options.placeholderTimezone,
+                        width: "10em",
+                    },
+                    self.options.timezone,
+                    { multiple: false }
                 )
-                .patternSelect2(
-                    $.extend(
-                        true,
-                        {
-                            placeholder: self.options.placeholderTimezone,
-                            width: "10em",
-                        },
-                        self.options.timezone,
-                        { multiple: false }
-                    )
-                )
-                .on("change", function (e) {
-                    if (e.val !== undefined) {
-                        self.$timezone.attr("data-value", e.val);
-                        if (
-                            (self.options.date === false ||
-                                self.$date.attr("data-value") !== "") &&
-                            (self.options.time === false ||
-                                self.$time.attr("data-value") !== "")
-                        ) {
-                            self.updateValue.call(self);
-                        }
+            );
+
+            self.$timezone.on("change", function (e) {
+                if (e.val !== undefined) {
+                    self.$timezone.attr("data-value", e.val);
+                    if (
+                        (self.options.date === false ||
+                            self.$date.attr("data-value") !== "") &&
+                        (self.options.time === false ||
+                            self.$time.attr("data-value") !== "")
+                    ) {
+                        self.updateValue.call(self);
                     }
-                });
+                }
+            });
+
             var defaultTimezone = self.options.timezone.default;
             // if timezone has a default value included
             if (defaultTimezone) {
