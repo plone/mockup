@@ -869,7 +869,7 @@ define([
                 vocabularyUrl: "/data.json",
                 uploadUrl: "/upload",
                 moveUrl: "/moveitem",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 setDefaultPageUrl: "/setDefaultPage",
                 defaultPageTypes: [
@@ -983,19 +983,20 @@ define([
                     })
                 );
             });
-            this.server.respondWith("POST", "/setDefaultPage", function (
-                xhr,
-                id
-            ) {
-                xhr.respond(
-                    200,
-                    { "Content-Type": "application/json" },
-                    JSON.stringify({
-                        status: "success",
-                        msg: "defaulted",
-                    })
-                );
-            });
+            this.server.respondWith(
+                "POST",
+                "/setDefaultPage",
+                function (xhr, id) {
+                    xhr.respond(
+                        200,
+                        { "Content-Type": "application/json" },
+                        JSON.stringify({
+                            status: "success",
+                            msg: "defaulted",
+                        })
+                    );
+                }
+            );
             this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
                 var data = {
                     addButtons: [
@@ -1487,7 +1488,7 @@ define([
 
             var structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 buttons: [
@@ -1688,7 +1689,7 @@ define([
 
             var structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 activeColumns: ["getObjSize"],
@@ -1789,7 +1790,7 @@ define([
 
             var structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 activeColumns: [],
@@ -1922,7 +1923,7 @@ define([
 
             var structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 activeColumns: [],
@@ -2030,7 +2031,7 @@ define([
 
             var structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 activeColumns: [],
@@ -2252,7 +2253,7 @@ define([
 
             this.structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 activeColumns: [],
@@ -2449,7 +2450,7 @@ define([
 
             var structure = {
                 vocabularyUrl: "/data.json",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 activeColumnsCookie: "activeColumnsCustom",
                 activeColumns: [],
@@ -2680,7 +2681,7 @@ define([
                     'data-pat-structure="vocabularyUrl:/data.json;' +
                     "uploadUrl:/upload;" +
                     "moveUrl:/moveitem;" +
-                    "indexOptionsUrl:/tests/json/queryStringCriteria.json;" +
+                    "indexOptionsUrl:./test-querystringcriteria.json;" +
                     "contextInfoUrl:{path}/contextInfo;" +
                     "setDefaultPageUrl:/setDefaultPage;" +
                     ' ">' +
@@ -2826,7 +2827,7 @@ define([
                 vocabularyUrl: "/data.json",
                 uploadUrl: "/upload",
                 moveUrl: "/moveitem",
-                indexOptionsUrl: "/tests/json/queryStringCriteria.json",
+                indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 setDefaultPageUrl: "/setDefaultPage",
                 urlStructure: {

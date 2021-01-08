@@ -1,50 +1,47 @@
-define([
-    "jquery",
-    "underscore",
-    "mockup-ui-url/views/buttongroup",
-    "mockup-ui-url/views/button",
-    "bootstrap-dropdown",
-], function ($, _, ButtonGroup, ButtonView) {
-    "use strict";
+import $ from "jquery";
+import _ from "underscore";
+import ButtonGroup from "../../../../core/ui/views/buttongroup";
+import ButtonView from "../../../../core/ui/views/button";
+import "bootstrap/js/src/dropdown";
 
-    var AddMenu = ButtonGroup.extend({
-        title: "Add",
-        className: "btn-group addnew",
-        events: {},
-        initialize: function (options) {
-            var self = this;
-            ButtonGroup.prototype.initialize.apply(self, [options]);
-            $("body").on("context-info-loaded", function (event, data) {
-                self.$items.empty();
-                _.each(data.addButtons, function (item) {
-                    var view = new ButtonView({
-                        id: item.id,
-                        title: item.title,
-                        url: item.action,
-                    });
-                    view.render();
-                    var wrap = $("<li/>");
-                    // As we are reusing the whole ButtonView for render the add content
-                    // list we should remove entirely the "btn btn-default" classes.
-                    // This element in fact, should not have any class at all, so we
-                    // remove the attribute completely
-                    view.$el.removeAttr("class");
+export default ButtonGroup.extend({
+    title: "Add",
+    className: "btn-group addnew",
+    events: {},
+    initialize: function (options) {
+        var self = this;
+        ButtonGroup.prototype.initialize.apply(self, [options]);
+        $("body").on("context-info-loaded", function (event, data) {
+            self.$items.empty();
+            _.each(data.addButtons, function (item) {
+                var view = new ButtonView({
+                    id: item.id,
+                    title: item.title,
+                    url: item.action,
+                });
+                view.render();
+                var wrap = $("<li/>");
+                // As we are reusing the whole ButtonView for render the add content
+                // list we should remove entirely the "btn btn-default" classes.
+                // This element in fact, should not have any class at all, so we
+                // remove the attribute completely
+                view.$el.removeAttr("class");
 
-                    wrap.append(view.el);
-                    self.$items.append(wrap);
-                    view.$el.click(function (e) {
-                        self.buttonClicked.apply(self, [e, view]);
-                        return false;
-                    });
+                wrap.append(view.el);
+                self.$items.append(wrap);
+                view.$el.click(function (e) {
+                    self.buttonClicked.apply(self, [e, view]);
+                    return false;
                 });
             });
-        },
-        buttonClicked: function (e, button) {
-            var self = this;
-            e.preventDefault();
-            self.app.loading.show();
-            window.location = button.url;
-            /* Do not launch in overlay otherwise you get overlays insides of
+        });
+    },
+    buttonClicked: function (e, button) {
+        var self = this;
+        e.preventDefault();
+        self.app.loading.show();
+        window.location = button.url;
+        /* Do not launch in overlay otherwise you get overlays insides of
          overlays potentials--nasty. Leave here if we change our mind
          for some reason.
       $.ajax({
@@ -93,28 +90,25 @@ define([
         }
       });
     */
-        },
-        render: function () {
-            var self = this;
-            self.$el.empty();
+    },
+    render: function () {
+        var self = this;
+        self.$el.empty();
 
-            self.$el.append(
-                '<a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#">' +
-                    '<span class="glyphicon glyphicon-plus"></span>' +
-                    self.title +
-                    '<span class="caret"></span>' +
-                    "</a>" +
-                    '<ul class="dropdown-menu">' +
-                    "</ul>" +
-                    "</div>"
-            );
+        self.$el.append(
+            '<a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#">' +
+                '<span class="glyphicon glyphicon-plus"></span>' +
+                self.title +
+                '<span class="caret"></span>' +
+                "</a>" +
+                '<ul class="dropdown-menu">' +
+                "</ul>" +
+                "</div>"
+        );
 
-            self.$items = self.$(".dropdown-menu");
-            self.$dropdown = self.$(".dropdown-toggle");
-            self.$dropdown.dropdown();
-            return this;
-        },
-    });
-
-    return AddMenu;
+        self.$items = self.$(".dropdown-menu");
+        self.$dropdown = self.$(".dropdown-toggle");
+        self.$dropdown.dropdown();
+        return this;
+    },
 });

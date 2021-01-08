@@ -1,16 +1,31 @@
-How to customize the Structure Updater pattern
-==============================================
+---
+permalink: "pat/structure/"
+title: Structure Updater
+---
+
+# Structure updater pattern.
+
+The Structure Updater pattern updates the information of the current context after a user navigated to a new folder.
+
+## Configuration
+
+| Option | Type | Default | Description |
+|:-:|:-:|:-:|:-:|
+| titleSelector | string | "" | CSS selector to match title elements for the current context. |
+| descriptionSelector | string | "" | CSS selector to match description elements of the current context to be updated. |
+
+
+## How to customize the Structure Updater pattern
 
 The ``mockup-pattern-structureupdater`` updates the title and description on the page - if available - when a folder is changed in the structure pattern. It's triggered by the class ``template-folder_contents``, which is available on the body tag when the folder contents page is opened. The pattern listens on the ``context-info-loaded`` event, which is triggered by the structure pattern.
 
 Often you will have customized layouts, where you need to update also other parts of the site when the user changes to another folder.
 
 
-Pattern configuration
----------------------
+### Pattern configuration
 
 For simple cases, you can customize the CSS selector for the title and description via the options ``titleSelector`` and ``descriptionSelector`` for the pattern.
-This can be done by adding options for that pattern via the resource registry control panel under the "Pattern options" tab or via the ``registry.xml`` profile like so::
+This can be done by adding options for that pattern via the resource registry control panel under the "Pattern options" tab or via the ``registry.xml`` profile like so:
 
   <record name="plone.patternoptions">
     <value purge="False">
@@ -18,13 +33,11 @@ This can be done by adding options for that pattern via the resource registry co
     </value>
   </record>
 
-.. note::
-    For the ``titleSelector`` and ``descriptionSelector`` you have to provide valid JQuery selectors.
-    Like with any CSS selector you can also specify mutliple selectors by seperating them via a comma sign.
+> For the ``titleSelector`` and ``descriptionSelector`` you have to provide valid JQuery selectors.
+> Like with any CSS selector you can also specify mutliple selectors by seperating them via a comma sign.
 
 
-Pattern overloading
--------------------
+### Pattern overloading
 
 If you need some more control, you can overload the pattern and provide your own.
 
@@ -34,7 +47,7 @@ If you provide another path you can point it to your own implementation.
 
 This can be easily done in Plone, where the RequireJS configuration are ``plone.app.registry`` entries.
 
-For example, in your project's ``registry.xml`` profile, add this::
+For example, in your project's ``registry.xml`` profile, add this:
 
     <?xml version="1.0"?>
     <registry i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
@@ -49,7 +62,7 @@ For example, in your project's ``registry.xml`` profile, add this::
 
 
 In that example the custom implementation of the structure updater pattern lives in a ``plone.resource`` directory named ``my.project.resources``.
-This is configured in the project's ``configure.zcml``::
+This is configured in the project's ``configure.zcml``:
 
     <?xml version="1.0"?>
     <configure
@@ -62,7 +75,7 @@ This is configured in the project's ``configure.zcml``::
       />
     </configure>
 
-The custom implementation ``mockup-patterns-structureupdater.js`` looks like so::
+The custom implementation ``mockup-patterns-structureupdater.js`` looks like so:
 
     define([
         'pat-base',
@@ -86,7 +99,7 @@ The custom implementation ``mockup-patterns-structureupdater.js`` looks like so:
 You probably want to include the original behavior.
 If you have given the pattern another name than the original pattern, you can just let RequireJS depend on the original pattern and it will be registered and triggered as normal.
 We can include the original pattern via the ``mockup-patterns-structure-url`` path and incldue then the filename.
-The code looks then like so::
+The code looks then like so:
 
     define([
         'pat-base',
