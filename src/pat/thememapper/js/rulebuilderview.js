@@ -1,28 +1,23 @@
-define([
-    "underscore",
-    "mockup-patterns-filemanager-url/js/basepopover",
-    "text!mockup-patterns-thememapper-url/templates/rulebuilder.xml",
-], function (_, PopoverView, RulebuilderTemplate) {
-    "use strict";
-    var rulebuilderTemplate = _.template(RulebuilderTemplate);
+import _ from "underscore";
+import PopoverView from "../../filemanager/js/basepopover";
+import RulebuilderTemplate from "../templates/rulebuilder.xml";
 
-    var RuleBuilderView = PopoverView.extend({
-        className: "popover rulebuilderView",
-        title: _.template('<%= _t("Rule Builder") %>'),
-        content: rulebuilderTemplate,
-        render: function () {
-            PopoverView.prototype.render.call(this);
-            return this;
-        },
-        toggle: function (button, e) {
-            PopoverView.prototype.toggle.apply(this, [button, e]);
-            if (!this.opened) {
-                return;
-            } else {
-                this.app.ruleBuilder.checkSelectors();
-            }
-        },
-    });
+var rulebuilderTemplate = _.template(RulebuilderTemplate);
 
-    return RuleBuilderView;
+export default PopoverView.extend({
+    className: "popover rulebuilderView",
+    title: _.template('<%= _t("Rule Builder") %>'),
+    content: rulebuilderTemplate,
+    render: function () {
+        PopoverView.prototype.render.call(this);
+        return this;
+    },
+    toggle: function (button, e) {
+        PopoverView.prototype.toggle.apply(this, [button, e]);
+        if (!this.opened) {
+            return;
+        } else {
+            this.app.ruleBuilder.checkSelectors();
+        }
+    },
 });
