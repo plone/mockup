@@ -58,6 +58,8 @@ describe("AutoTOC", function () {
     });
     it("can be used as jQuery plugin as well", async (done) => {
         expect($("> nav", this.$el).length).toEqual(0);
+
+        // TODO: rlly? I'm currently changing all jQuery plugin calls to import/new style.
         this.$el.patternAutotoc();
         expect($("> nav", this.$el).length).toEqual(1);
 
