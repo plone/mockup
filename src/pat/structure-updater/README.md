@@ -1,5 +1,5 @@
 ---
-permalink: "pat/structure/"
+permalink: "pat/structure-updater/"
 title: Structure Updater
 ---
 
