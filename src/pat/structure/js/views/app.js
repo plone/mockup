@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
@@ -41,7 +42,7 @@ export default BaseView.extend({
         return !!$.cookie("__cp");
     },
 
-    initialize: function (options) {
+    initialize: async function (options) {
         var self = this;
         BaseView.prototype.initialize.apply(self, [options]);
         self.loading = new utils.Loading();
@@ -70,7 +71,7 @@ export default BaseView.extend({
             }
         });
 
-        var ResultCollection = require(options.collectionConstructor);
+        var ResultCollection = await import(options.collectionConstructor);
 
         self.collection = new ResultCollection([], {
             // Due to default implementation need to poke at things in here,
@@ -86,6 +87,7 @@ export default BaseView.extend({
         self.pagingView = new PagingView({ app: self });
 
         /* initialize buttons */
+        debugger;
         self.setupButtons();
 
         self.wellView = new SelectionWellView({
@@ -474,6 +476,7 @@ export default BaseView.extend({
         });
         items.push(self.textfilter);
 
+        debugger;
         this.toolbar = new Toolbar({
             items: items,
         });

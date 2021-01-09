@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
@@ -105,7 +106,7 @@ export default Backbone.View.extend({
         $(".actionmenu-container", self.$el).append(self.menu.render().el);
         return this;
     },
-    itemClicked: function (e) {
+    itemClicked: async function (e) {
         /* check if this should just be opened in new window */
         var self = this;
         var keyEvent = this.app.keyEvent;
@@ -129,7 +130,7 @@ export default Backbone.View.extend({
         if (!(typeof libName === "string" && typeof key === "string")) {
             return null;
         }
-        var ClsLib = require(libName);
+        var ClsLib = await import(libName);
         var lib = new ClsLib(self);
         return lib[method] && lib[method](e);
     },

@@ -19,7 +19,7 @@ var menuOptions = {
         modal: false,
     },
     "cutItem": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "cutClicked",
         url: "#",
         title: _t("Cut"),
@@ -29,7 +29,7 @@ var menuOptions = {
         modal: false,
     },
     "copyItem": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "copyClicked",
         url: "#",
         title: _t("Copy"),
@@ -39,7 +39,7 @@ var menuOptions = {
         modal: false,
     },
     "pasteItem": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "pasteClicked",
         url: "#",
         title: _t("Paste"),
@@ -49,7 +49,7 @@ var menuOptions = {
         modal: false,
     },
     "move-top": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "moveTopClicked",
         url: "#",
         title: _t("Move to top of folder"),
@@ -59,7 +59,7 @@ var menuOptions = {
         modal: false,
     },
     "move-bottom": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "moveBottomClicked",
         url: "#",
         title: _t("Move to bottom of folder"),
@@ -69,7 +69,7 @@ var menuOptions = {
         modal: false,
     },
     "set-default-page": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "setDefaultPageClicked",
         url: "#",
         title: _t("Set as default page"),
@@ -79,7 +79,7 @@ var menuOptions = {
         modal: false,
     },
     "selectAll": {
-        library: "mockup-patterns-structure-url/js/actions",
+        library: "../actions",
         method: "selectAll",
         url: "#",
         title: _t("Select all contained items"),

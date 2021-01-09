@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
@@ -16,7 +17,7 @@ export default BaseView.extend({
     // Static menu options
     menuOptions: null,
     // Dynamic menu options
-    menuGenerator: "mockup-patterns-structure-url/js/actionmenu",
+    menuGenerator: "../actionmenu",
 
     eventConstructor: function (definition) {
         var self = this;
@@ -27,8 +28,8 @@ export default BaseView.extend({
             return false;
         }
 
-        var doEvent = function (e) {
-            var libCls = require(libName);
+        var doEvent = async function (e) {
+            var libCls = await import(libName);
             var lib = new libCls(self);
             return lib[method] && lib[method](e);
         };

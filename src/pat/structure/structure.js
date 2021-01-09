@@ -16,7 +16,7 @@ export default Base.extend({
         contextInfoUrl: null, // for add new dropdown and other info
         setDefaultPageUrl: null,
         menuOptions: null, // default action menu options per item.
-        menuGenerator: "mockup-patterns-structure-url/js/actionmenu", // default menu generator
+        menuGenerator: "../actionmenu", // default menu generator. // relative to ./js/views
         backdropSelector: ".plone-modal", // Element upon which to apply backdrops used for popovers
 
         activeColumnsCookie: "activeColumns",
@@ -82,10 +82,7 @@ export default Base.extend({
         // action triggered for the primary link for each table row.
         tableRowItemAction: null,
         _default_tableRowItemAction: {
-            folder: [
-                "mockup-patterns-structure-url/js/navigation",
-                "folderClicked",
-            ],
+            folder: ["../navigation", "folderClicked"],
             other: [],
         },
 
@@ -104,8 +101,7 @@ export default Base.extend({
             "Collection",
         ],
 
-        collectionConstructor:
-            "mockup-patterns-structure-url/js/collections/result",
+        collectionConstructor: "../collections/result", // relative to js/views/app
 
         momentFormat: "L LT",
         rearrange: {
@@ -170,7 +166,7 @@ export default Base.extend({
             showTitle: true,
         },
     },
-    init: function () {
+    init: async function () {
         var self = this;
 
         /*
@@ -214,7 +210,7 @@ export default Base.extend({
         self.options.queryHelperAttributes = self.options.attributes;
         delete self.options.attributes;
 
-        self.view = new AppView(self.options);
+        self.view = await new AppView(self.options);
         self.$el.append(self.view.render().$el);
     },
 });
