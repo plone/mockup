@@ -1,3 +1,17 @@
+import $ from "jquery";
+import Pattern from "./toolbar";
+
+describe("Backdrop", function () {
+    it("default behaviour", function () {
+        var $el = $('<div id="edit-zone">' +
+                    ' <div class="pat-toolbar" />' +
+                    '</div>'),
+            toolbar = new Pattern($el);
+        expect($(".plone-backdrop", $el).length).toEqual(1);
+    });
+});
+
+        /*
 define([
     "expect",
     "jquery",
@@ -8,10 +22,6 @@ define([
 
     window.mocha.setup("bdd");
     $.fx.off = true;
-
-    /* ==========================
-   TEST: Plone Toolbar
-  ========================== */
 
     describe("Plone Toolbar", function () {
         beforeEach(function () {
@@ -39,3 +49,5 @@ define([
         });
     });
 });
+
+ */
