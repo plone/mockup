@@ -127,15 +127,10 @@ module.exports = async (env) => {
             },
         };
 
+        // Use checked-out versions of dependencies
         try {
-            await fs.promises.access(
-                path.resolve(__dirname, "devsrc/patternslib")
-            );
-            // Use checked-out version of patternslib
-            config.resolve.alias.patternslib = path.resolve(
-                __dirname,
-                "devsrc/patternslib"
-            );
+            await fs.promises.access(path.resolve(__dirname, "devsrc/patternslib")); // prettier-ignore
+            config.resolve.alias.patternslib = path.resolve(__dirname, "devsrc/patternslib"); // prettier-ignore
         } catch (error) {
             // ignore.
         }
