@@ -80,6 +80,7 @@
         "sass-loader": "^10.1.0",
         "sinon": "^9.2.1",
         "style-loader": "^1.2.1",
+        "svg-inline-loader": "^0.8.2",
         "terser-webpack-plugin": "^2.3.6",
         "url-polyfill": "^1.1.9",
         "webpack": "^4.43.0",

@@ -87,6 +87,10 @@ module.exports = async (env) => {
                     test: /\.(png|jpe?g|gif|svg)$/i,
                     use: "file-loader",
                 },
+                {
+                    test: /\.svg$/,
+                    loader: "svg-inline-loader",
+                },
             ],
         },
         plugins: [
