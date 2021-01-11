@@ -13,6 +13,13 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
     };
     config.output.path = path.resolve(build_dirname, "dist/");
 
+    // Volto / React
+    const config_babel_loader = config.rules.filter((it) => it.test === /\.js$/)[0];
+    config_babel_loader.test = /\.jsx?$/;
+    config_babel_loader.exclude = /node_modules\/(?!(.*patternslib)\/)(?!(pat-.*)\/)(?!(mockup|@plone)\/).*/;
+    config.resolve.alias["load-volto-addons"] = path.resolve(__dirname, "src/volto/load-volto-addons"); // prettier-ignore
+    config.resolve.alias["@sentry/node"] = "@sentry/browser";
+
     // Correct moment alias
     config.resolve.alias.moment = path.resolve(build_dirname, "node_modules/moment"); // prettier-ignore
 
@@ -29,7 +36,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         use: "svelte-loader",
     });
     config.resolve.alias.svelte = path.resolve("node_modules", "svelte");
-    config.resolve.extensions = [".wasm", ".mjs", ".js", ".json", ".svelte"];
+    config.resolve.extensions = [".wasm", ".mjs", ".js", ".json", ".svelte", ".jsx"];
     config.resolve.mainFields = ["svelte", "browser", "module", "main"];
     if (argv.mode === "development") {
         // Use checked-out versions of dependencies if available.
@@ -41,7 +48,9 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
                 if ([".gitkeep"].includes(it)) {
                     continue;
                 }
-                const prefix = it.indexOf("pat") === 0 ? "@patternslib/" : "";
+                let prefix = "";
+                prefix = it.indexOf("pat") === 0 ? "@patternslib/" : prefix;
+                prefix = it.indexOf("volto") === 0 ? "@plone/" : prefix;
                 config.resolve.alias[prefix + it] = path.resolve(
                     build_dirname,
                     `devsrc/${it}`

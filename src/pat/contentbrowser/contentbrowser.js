@@ -7,7 +7,8 @@ export default Base.extend({
     parser: "mockup",
 
     async init() {
-        // let volto = await import("@plone/volto");
+        let contentbrowser = await import("@plone/volto/components/manage/Contents/Contents.jsx"); // prettier-ignore
+
         this.el.style["background-color"] = "green";
     },
 });
