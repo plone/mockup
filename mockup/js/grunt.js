@@ -118,7 +118,7 @@
                         // BOOTSTRAP
                         {
                             expand: true,
-                            cwd: "node_modules/bootstrap/dist/fonts/",
+                            cwd: "node_modules/bootstrap3/dist/fonts/",
                             src: "glyphicons-halflings-regular.*",
                             dest: bundleOptions.path,
                             rename: function (dest, src) {
@@ -229,7 +229,7 @@
                     this.gruntConfig.sed[name + "-bootstrap-glyphicons"] = {
                         path: bundleOptions.path + name + ".min.css",
                         pattern:
-                            "url\\('../node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular",
+                            "url\\('../node_modules/bootstrap3/dist/fonts/glyphicons-halflings-regular",
                         replacement:
                             "url('" +
                             bundleOptions.url +
