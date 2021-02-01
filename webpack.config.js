@@ -101,6 +101,8 @@ module.exports = async (env) => {
                 $: "jquery",
                 jQuery: "jquery",
                 jquery: "jquery",
+                Backbone: "backbone",
+                _: "underscore",
             }),
             new DuplicatePackageCheckerPlugin({
                 verbose: true,
