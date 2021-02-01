@@ -1,11 +1,10 @@
 import $ from "jquery";
-import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import Base from "patternslib/src/core/base";
 import utils from "../../core/utils";
 import LinkModal from "./js/links";
 import I18n from "../../core/i18n";
-import tinymce from "tinymce-builded";
+import tinymce from "tinymce-builded/js/tinymce/tinymce";
 
 // tinyMCE Plugins
 import "tinymce-builded/js/tinymce/themes/modern/theme";
@@ -151,8 +150,8 @@ export default Base.extend({
         imageTypes: ["Image"],
         folderTypes: ["Folder", "Plone Site"],
         tiny: {
-            content_css:
-                "/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css",
+            //content_css:
+            //    "/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css",
             theme: "modern",
             plugins: [
                 "advlist",

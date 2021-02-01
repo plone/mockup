@@ -3,7 +3,7 @@ import _ from "underscore";
 import Base from "patternslib/src/core/base";
 import registry from "patternslib/src/core/registry";
 
-import tinymce from "tinymce-builded";
+import tinymce from "tinymce-builded/js/tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
 import RelatedItems from "../../relateditems/relateditems";

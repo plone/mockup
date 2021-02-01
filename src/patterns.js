@@ -42,7 +42,7 @@ import "./pat/structure/structure";
 //import "./pat/textareamimetypeselector/textareamimetypeselector";
 //import "./pat/texteditor/texteditor";
 //import "./pat/thememapper/thememapper";
-//import "./pat/tinymce/tinymce";
+import "./pat/tinymce/tinymce";
 import "./pat/toggle/toggle";
 import "./pat/toolbar/toolbar";
 import "./pat/tooltip/tooltip";
