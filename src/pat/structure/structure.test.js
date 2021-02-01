@@ -1,3 +1,9 @@
+// TODO:
+// removed:
+// - menuGenerator
+// - collectionConstructor
+// - tableRowItemAction
+
 define([
     "expect",
     "jquery",

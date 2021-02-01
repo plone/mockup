@@ -1,5 +1,5 @@
 import _ from "underscore";
-import _t from "../../core/i18n-wrapper";
+import _t from "../../../core/i18n-wrapper";
 
 var menuOptions = {
     "openItem": {
@@ -19,7 +19,6 @@ var menuOptions = {
         modal: false,
     },
     "cutItem": {
-        library: "../actions",
         method: "cutClicked",
         url: "#",
         title: _t("Cut"),
@@ -29,7 +28,6 @@ var menuOptions = {
         modal: false,
     },
     "copyItem": {
-        library: "../actions",
         method: "copyClicked",
         url: "#",
         title: _t("Copy"),
@@ -39,7 +37,6 @@ var menuOptions = {
         modal: false,
     },
     "pasteItem": {
-        library: "../actions",
         method: "pasteClicked",
         url: "#",
         title: _t("Paste"),
@@ -49,7 +46,6 @@ var menuOptions = {
         modal: false,
     },
     "move-top": {
-        library: "../actions",
         method: "moveTopClicked",
         url: "#",
         title: _t("Move to top of folder"),
@@ -59,7 +55,6 @@ var menuOptions = {
         modal: false,
     },
     "move-bottom": {
-        library: "../actions",
         method: "moveBottomClicked",
         url: "#",
         title: _t("Move to bottom of folder"),
@@ -69,7 +64,6 @@ var menuOptions = {
         modal: false,
     },
     "set-default-page": {
-        library: "../actions",
         method: "setDefaultPageClicked",
         url: "#",
         title: _t("Set as default page"),
@@ -79,7 +73,6 @@ var menuOptions = {
         modal: false,
     },
     "selectAll": {
-        library: "../actions",
         method: "selectAll",
         url: "#",
         title: _t("Select all contained items"),

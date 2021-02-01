@@ -3,6 +3,7 @@ import _ from "underscore";
 import Backbone from "backbone";
 import Result from "../models/result";
 import "backbone.paginator";
+import utils from "../../../../core/utils";
 
 export default Backbone.Paginator.requestPager.extend({
     model: Result,
@@ -11,7 +12,7 @@ export default Backbone.Paginator.requestPager.extend({
         this.view = options.view;
         this.url = options.url;
 
-        this.queryHelper = Utils.QueryHelper(
+        this.queryHelper = utils.QueryHelper(
             $.extend(true, {}, this.view.options, {
                 attributes: this.view.options.queryHelperAttributes,
             })

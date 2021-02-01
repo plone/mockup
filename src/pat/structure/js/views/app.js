@@ -23,6 +23,8 @@ import UploadView from "./upload";
 import SelectedCollection from "../collections/selected";
 import StatusTemplate from "../../templates/status.xml";
 
+import ResultCollection from "../collections/result";
+
 var log = logging.getLogger("pat-structure");
 
 export default BaseView.extend({
@@ -71,8 +73,6 @@ export default BaseView.extend({
             }
         });
 
-        var ResultCollection = await import(options.collectionConstructor);
-
         self.collection = new ResultCollection([], {
             // Due to default implementation need to poke at things in here,
             // view is passed.
@@ -87,7 +87,6 @@ export default BaseView.extend({
         self.pagingView = new PagingView({ app: self });
 
         /* initialize buttons */
-        debugger;
         self.setupButtons();
 
         self.wellView = new SelectionWellView({
@@ -476,7 +475,6 @@ export default BaseView.extend({
         });
         items.push(self.textfilter);
 
-        debugger;
         this.toolbar = new Toolbar({
             items: items,
         });

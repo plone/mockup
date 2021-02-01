@@ -1,7 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
-import _t from "../../core/i18n-wrapper";
-import utils from "../../core/utils";
+import _t from "../../../core/i18n-wrapper";
+import utils from "../../../core/utils";
 import Backbone from "backbone";
 import Result from "./models/result";
 

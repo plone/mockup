@@ -1,7 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import PopoverView from "../../../../core/ui/views/popover";
-import itemTemplate from "../../templates/selection_item.xml";
+import ItemTemplate from "../../templates/selection_item.xml";
 
 export default PopoverView.extend({
     className: "popover selected-items",

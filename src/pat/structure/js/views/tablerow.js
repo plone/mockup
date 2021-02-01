@@ -4,9 +4,9 @@ import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import utils from "../../../../core/utils";
 import Backbone from "backbone";
-import "moment";
+import moment from "moment";
 
-import Nav from "../navigation";
+import Navigation from "../navigation";
 import ActionMenuView from "./actionmenu";
 import TableRowTemplate from "../../templates/tablerow.xml";
 
@@ -99,7 +99,6 @@ export default Backbone.View.extend({
             app: self.app,
             model: self.model,
             menuOptions: self.app.menuOptions,
-            menuGenerator: self.app.menuGenerator,
             canMove: canMove,
         });
 
@@ -108,9 +107,7 @@ export default Backbone.View.extend({
     },
     itemClicked: async function (e) {
         /* check if this should just be opened in new window */
-        var self = this;
         var keyEvent = this.app.keyEvent;
-        var key;
         // Resolve the correct handler based on these keys.
         // Default handlers live in ../navigation.js (bound to Nav)
         if (
@@ -118,21 +115,10 @@ export default Backbone.View.extend({
             !this.model.attributes.is_folderish
         ) {
             // middle/ctrl-click or not a folder content
-            key = "other"; // default Nav.openClicked
-        } else {
-            key = "folder"; // default Nav.folderClicked
-        }
-        var definition = self.app.options.tableRowItemAction[key] || [];
-        // a bit of a duplicate from actionmenu.js, but this is calling
-        // directly.
-        var libName = definition[0],
-            method = definition[1];
-        if (!(typeof libName === "string" && typeof key === "string")) {
+            // not yet implemented.
             return null;
         }
-        var ClsLib = await import(libName);
-        var lib = new ClsLib(self);
-        return lib[method] && lib[method](e);
+        return Navigation.folderClicked(e);
     },
     itemSelected: function () {
         var checkbox = this.$("input")[0];

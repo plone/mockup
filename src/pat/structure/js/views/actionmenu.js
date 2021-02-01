@@ -9,6 +9,8 @@ import ActionMenuTemplate from "../../templates/actionmenu.xml";
 import "../../../modal/modal";
 import "../../../tooltip/tooltip";
 import "bootstrap/js/src/dropdown";
+import actionmenu_generator from "../actionmenu";
+import Actions from "../actions";
 
 export default BaseView.extend({
     className: "btn-group actionmenu",
@@ -17,23 +19,13 @@ export default BaseView.extend({
     // Static menu options
     menuOptions: null,
     // Dynamic menu options
-    menuGenerator: "../actionmenu",
 
     eventConstructor: function (definition) {
-        var self = this;
-        var libName = definition.library,
-            method = definition.method;
-
-        if (!(typeof libName === "string" && typeof method === "string")) {
+        const method = definition.method;
+        if (!method || !this.actions[method]) {
             return false;
         }
-
-        var doEvent = async function (e) {
-            var libCls = await import(libName);
-            var lib = new libCls(self);
-            return lib[method] && lib[method](e);
-        };
-        return doEvent;
+        return this.actions[method];
     },
 
     events: function () {
@@ -73,25 +65,17 @@ export default BaseView.extend({
         return result;
     },
 
-    initialize: function (options) {
+    initialize: async function (options) {
         var self = this;
+        this.actions = new Actions(options);
         BaseView.prototype.initialize.apply(self, [options]);
         self.options = options;
         self.selectedCollection = self.app.selectedCollection;
 
         // Then acquire the constructor method if specified, and
-        var menuGenerator = self.options.menuGenerator || self.menuGenerator;
-        if (menuGenerator) {
-            var menuGen = require(menuGenerator);
-            // override those options here.  All definition done here so
-            // that self.events() will return the right things.
-            var menuOptions = menuGen(self);
-            if (typeof menuOptions === "object") {
-                // Only assign this if we got the right basic type.
-                self.menuOptions = menuOptions;
-                // Should warn otherwise.
-            }
-        }
+        // override those options here.  All definition done here so
+        // that self.events() will return the right things.
+        self.menuOptions = actionmenu_generator(self);
     },
     render: function () {
         var self = this;

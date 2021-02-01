@@ -16,7 +16,6 @@ export default Base.extend({
         contextInfoUrl: null, // for add new dropdown and other info
         setDefaultPageUrl: null,
         menuOptions: null, // default action menu options per item.
-        menuGenerator: "../actionmenu", // default menu generator. // relative to ./js/views
         backdropSelector: ".plone-modal", // Element upon which to apply backdrops used for popovers
 
         activeColumnsCookie: "activeColumns",
@@ -79,13 +78,6 @@ export default Base.extend({
             total_comments: "Total comments",
         },
 
-        // action triggered for the primary link for each table row.
-        tableRowItemAction: null,
-        _default_tableRowItemAction: {
-            folder: ["../navigation", "folderClicked"],
-            other: [],
-        },
-
         typeToViewAction: null,
         _default_typeToViewAction: {
             File: "/view",
@@ -100,8 +92,6 @@ export default Base.extend({
             "News Item",
             "Collection",
         ],
-
-        collectionConstructor: "../collections/result", // relative to js/views/app
 
         momentFormat: "L LT",
         rearrange: {
@@ -188,16 +178,6 @@ export default Base.extend({
             if (self.options[idx] === null) {
                 self.options[idx] = self.options["_default_" + idx];
             }
-        });
-
-        var mergeDefaults = ["tableRowItemAction"];
-        _.each(mergeDefaults, function (idx) {
-            var old = self.options[idx];
-            self.options[idx] = $.extend(
-                false,
-                self.options["_default_" + idx],
-                old
-            );
         });
 
         self.browsing = true; // so all queries will be correct with QueryHelper
