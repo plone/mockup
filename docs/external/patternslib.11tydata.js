@@ -6,7 +6,7 @@ module.exports = {
     },
     permalink: data => {
         let url_parts = data.page.filePathStem.split('/');
-        return `patternslib/${url_parts[url_parts.length - 2]}/`;
+        return `external/patternslib/${url_parts[url_parts.length - 2]}/`;
     }
   },
   layout: "layout_patternslib.liquid"

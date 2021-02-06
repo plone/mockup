@@ -30,8 +30,11 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addCollection("patterns", function(collectionApi) {
     return collectionApi.getFilteredByGlob("src/pat/**/README.md");
   });
-  eleventyConfig.addCollection("plpatterns", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("docs/patternslib/src/pat/**/*.md");
+  eleventyConfig.addCollection("externalpatterns", function(collectionApi) {
+    return collectionApi.getFilteredByGlob([
+        "docs/external/patternslib/src/pat/**/*.md",
+        "docs/external/pat-*/README.md"
+    ]);
   });
 
   eleventyConfig.addFilter("replaceString", function(arg1, arg2, arg3) {

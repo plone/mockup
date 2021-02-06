@@ -10,6 +10,7 @@ stats.json
 /mockup/coverage
 /yarn-error.log
 /stamp-npm
-/docs/patternslib/src/
+/docs/external/patternslib
+/docs/external/pat-*
 devsrc/*
 !devsrc/.gitkeep
