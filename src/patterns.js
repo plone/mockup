@@ -42,13 +42,14 @@ import "./pat/structure/structure";
 //import "./pat/textareamimetypeselector/textareamimetypeselector";
 //import "./pat/texteditor/texteditor";
 //import "./pat/thememapper/thememapper";
-import "./pat/tinymce/tinymce";
+//import "./pat/tinymce/tinymce";
 import "./pat/toggle/toggle";
 import "./pat/toolbar/toolbar";
 import "./pat/tooltip/tooltip";
 import "./pat/tree/tree";
 import "./pat/upload/upload";
 import "pat-code-editor/src/code-editor";
+import "pat-tinymce/src/tinymce";
 
 // REMOVE obsolete patterns
 import "./pat/pickadate/pickadate";
