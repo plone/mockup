@@ -48,6 +48,7 @@ import "./pat/toolbar/toolbar";
 import "./pat/tooltip/tooltip";
 import "./pat/tree/tree";
 import "./pat/upload/upload";
+import "pat-code-editor/src/code-editor";
 
 // REMOVE obsolete patterns
 import "./pat/pickadate/pickadate";
