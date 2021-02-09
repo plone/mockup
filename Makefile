@@ -16,8 +16,11 @@ clean:
 
 .PHONY: dev-patternslib
 dev-patternslib:
-	mkdir -p devsrc; cd devsrc; test -x patternslib     || git clone git@github.com:Patternslib/Patterns.git --branch mockup-updates patternslib
+	mkdir -p devsrc; cd devsrc; test -x patternslib || git clone git@github.com:Patternslib/Patterns.git --branch mockup-updates patternslib
 
+.PHONY: dev-patternslib-sass
+dev-patternslib-sass:
+	mkdir -p devsrc; cd devsrc; test -x patterns-sass || git clone git@github.com:Patternslib/patterns-sass.git --branch mockup-updates patterns-sass
 
 .PHONY: dev-pat-tinymce
 dev-pat-tinymce:
@@ -29,4 +32,4 @@ dev-pat-code-editor:
 
 .PHONY: dev-volto
 dev-volto:
-	mkdir -p devsrc; cd devsrc; test -x volto           || git clone git@github.com:plone/volto.git --branch thet-mockup volto
+	mkdir -p devsrc; cd devsrc; test -x volto || git clone git@github.com:plone/volto.git --branch thet-mockup volto
