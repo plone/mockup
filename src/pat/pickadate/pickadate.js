@@ -1,17 +1,9 @@
-import "pickadate/lib/picker";
-import "pickadate/lib/picker.date";
-import "pickadate/lib/picker.time";
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
-import _t from "../../core/i18n-wrapper";
 import Base from "patternslib/src/core/base";
+import _t from "../../core/i18n-wrapper";
 import dom from "patternslib/src/core/dom";
 import utils from "../../core/utils";
-
-import PatternSelect2 from "../select2/select2";
-
-import "pickadate/lib/themes/classic.css";
-import "pickadate/lib/themes/classic.date.css";
-import "pickadate/lib/themes/classic.time.css";
 
 export default Base.extend({
     name: "pickadate",
@@ -104,7 +96,15 @@ export default Base.extend({
         }
         return [hours, mins];
     },
-    init: function () {
+    init: async function () {
+        import("pickadate/lib/themes/classic.css");
+        import("pickadate/lib/themes/classic.date.css");
+        import("pickadate/lib/themes/classic.time.css");
+
+        await import("pickadate/lib/picker");
+        await import("pickadate/lib/picker.date");
+        await import("pickadate/lib/picker.time");
+
         var self = this,
             value = self.$el.val().split(" "),
             dateValue = value[0] || "",
@@ -247,6 +247,9 @@ export default Base.extend({
                         .addClass(self.options.classTimezoneWrapperName)
                         .appendTo(self.$wrapper)
                 );
+
+            let PatternSelect2 = await import("../select2/select2");
+            PatternSelect2 = PatternSelect2.default;
 
             new PatternSelect2(
                 self.$timezone,
