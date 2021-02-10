@@ -7,7 +7,7 @@ import registry from "patternslib/src/core/registry";
 import BaseView from "../../../../core/ui/views/base";
 import ActionMenuTemplate from "../../templates/actionmenu.xml";
 import "../../../modal/modal";
-import "../../../tooltip/tooltip";
+import "patternslib/src/pat/tooltip/tooltip";
 import "bootstrap/js/src/dropdown";
 import actionmenu_generator from "../actionmenu";
 import Actions from "../actions";

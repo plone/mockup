@@ -1,6 +1,6 @@
 import _ from "underscore";
 import BaseView from "./base";
-import "../../../pat/tooltip/tooltip";
+import Tooltip from "patternslib/src/pat/tooltip/tooltip";
 
 export default BaseView.extend({
     tagName: "a",

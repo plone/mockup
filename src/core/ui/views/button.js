@@ -1,6 +1,6 @@
 import _ from "underscore";
 import BaseView from "./base";
-import Tooltip from "../../../pat/tooltip/tooltip";
+import Tooltip from "patternslib/src/pat/tooltip/tooltip";
 
 export default BaseView.extend({
     tagName: "a",
@@ -46,7 +46,7 @@ export default BaseView.extend({
 
                 if (this.tooltip !== null) {
                     this.$el.attr("title", this.tooltip);
-                    var tooltipPattern = new Tooltip(this.$el);
+                    new Tooltip(this.$el);
                     // XXX since tooltip triggers hidden
                     // suppress so it plays nice with modals, backdrops, etc
                     this.$el.on("hidden", function (e) {
