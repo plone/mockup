@@ -11,7 +11,7 @@ import jquery from "jquery";
 
 // Patternslib patterns
 import "patternslib/src/pat/datetime-picker/datetime-picker";
-import "patternslib/src/pat/tooltip/tooltip";
+import { parser as tooltip_parser } from "patternslib/src/pat/tooltip/tooltip";
 import "pat-code-editor/src/code-editor";
 import "pat-tinymce/src/tinymce";
 
@@ -49,7 +49,6 @@ import "./pat/upload/upload";
 
 // REMOVE obsolete patterns
 //import "./pat/pickadate/pickadate";
-//import "./pat/tooltip/tooltip";
 //import "./pat/tinymce/tinymce";
 //import "./pat/texteditor/texteditor";
 
@@ -58,5 +57,8 @@ window.__patternslib_import_styles = true;
 
 // Register jQuery globally
 window.jQuery = jquery;
+
+// Change default value for pat-tooltip trigger
+tooltip_parser.parameters.trigger.value = "hover";
 
 registry.init();
