@@ -37,7 +37,7 @@
         "moment": "2.29.1",
         "pat-code-editor": "https://github.com/Patternslib/pat-code-editor.git#master",
         "pat-tinymce": "https://github.com/Patternslib/pat-tinymce.git#master",
-        "patternslib": "https://github.com/Patternslib/Patterns.git#c718baa7057cd218d1704d5c66ace8ded0a43e44",
+        "patternslib": "https://github.com/Patternslib/Patterns.git#b9946c6dffed926e56b1974611a287b0a6344d32",
         "pickadate": "3.6.4",
         "prettier": "^2.1.2",
         "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
