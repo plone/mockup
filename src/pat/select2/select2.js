@@ -1,9 +1,7 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import Base from "patternslib/src/core/base";
 import utils from "../../core/utils";
-import Sortable from "sortablejs";
-import "select2";
-import "select2/select2.css";
 
 export default Base.extend({
     name: "select2",
@@ -86,31 +84,27 @@ export default Base.extend({
             delete self.options.tags;
         }
     },
-    initializeOrdering: function () {
-        var self = this;
-        if (!self.options.orderable) {
+    initializeOrdering: async function () {
+        if (!this.options.orderable) {
             return;
         }
         // TODO: fix sorting!
-        this.$el.on(
-            "change",
-            function (e) {
-                var sortable_el = this.$select2[0].querySelector(
-                    ".select2-choices"
-                );
-                var sortable = new Sortable(sortable_el, {
-                    draggable: "li",
-                    dragClass: "select2-choice-dragging",
-                    chosenClass: "dragging",
-                    onStart: function (e) {
-                        self.$el.select2("onSortStart");
-                    }.bind(this),
-                    onEnd: function (e) {
-                        this.$el.select2("onSortEnd");
-                    }.bind(this),
-                });
-            }.bind(this)
-        );
+        this.$el.on("change", async () => {
+            let Sortable = await import("sortablejs");
+            Sortable = Sortable.default;
+
+            const sortable_el = this.$select2[0].querySelector(
+                ".select2-choices"
+            );
+
+            new Sortable(sortable_el, {
+                draggable: "li",
+                dragClass: "select2-choice-dragging",
+                chosenClass: "dragging",
+                onStart: () => this.$el.select2("onSortStart"),
+                onEnd: () => this.$el.select2("onSortEnd"),
+            });
+        });
     },
     initializeSelect2: function () {
         var self = this;
@@ -164,7 +158,10 @@ export default Base.extend({
             $(".select2-dropdown-open", self.$el.parent()).length === 1;
         return isOpen;
     },
-    init: function () {
+    init: async function () {
+        import("select2/select2.css");
+        await import("select2");
+
         var self = this;
 
         self.options.allowNewItems = self.options.hasOwnProperty(
