@@ -129,8 +129,16 @@ module.exports = async (env) => {
 
         // Use checked-out versions of dependencies
         try {
-            await fs.promises.access(path.resolve(__dirname, "devsrc/patternslib")); // prettier-ignore
-            config.resolve.alias.patternslib = path.resolve(__dirname, "devsrc/patternslib"); // prettier-ignore
+            const dev_includes = await fs.promises.readdir("devsrc/");
+            for (const it of dev_includes) {
+                if (it in [".gitkeep"]) {
+                    continue;
+                }
+                config.resolve.alias[it] = path.resolve(
+                    __dirname,
+                    `devsrc/${it}`
+                );
+            }
         } catch (error) {
             // ignore.
         }
