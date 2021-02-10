@@ -14,3 +14,4 @@ stats.json
 /docs/external/pat-*
 devsrc/*
 !devsrc/.gitkeep
+/docs/patternslib/
