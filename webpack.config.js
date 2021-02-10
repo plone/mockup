@@ -50,7 +50,7 @@ module.exports = async (env) => {
             rules: [
                 {
                     test: /\.js$/,
-                    exclude: /node_modules\/(?!(patternslib)\/).*/,
+                    exclude: /node_modules\/(?!(patternslib)\/)(?!(pat-.*)\/).*/,
                     loader: "babel-loader",
                 },
                 {
