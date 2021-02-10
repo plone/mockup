@@ -123,7 +123,7 @@ module.exports = async (env) => {
             port: "8000",
             host: "0.0.0.0",
             watchOptions: {
-                ignored: ["node_modules/**", "mockup/**"],
+                ignored: ["node_modules/**", "mockup/**", "docs/**"],
             },
         };
 
