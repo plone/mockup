@@ -479,6 +479,7 @@ export default Base.extend({
         }
     },
     init: function () {
+        console.log("init toolbar...")
         var that = this;
         that.heightTimeout = 0;
         that.$container = $(that.options.containerSelector);
