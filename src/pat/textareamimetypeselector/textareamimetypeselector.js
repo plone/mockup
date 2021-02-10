@@ -1,46 +1,41 @@
-import $ from "jquery";
 import Base from "patternslib/src/core/base";
 import registry from "patternslib/src/core/registry";
-import "../tinymce/tinymce";
+import "pat-tinymce/src/tinymce";
 
 export default Base.extend({
     name: "textareamimetypeselector",
     trigger: ".pat-textareamimetypeselector",
     parser: "mockup",
     textarea: undefined,
-    currentWidget: undefined,
+    current_widget: undefined,
     defaults: {
         textareaName: "",
         widgets: {
             "text/html": { pattern: "tinymce", patternOptions: {} },
         },
     },
-    init: function () {
-        var self = this,
-            $el = self.$el,
-            current;
-        self.textarea = $('[name="' + self.options.textareaName + '"]');
-        $el.change(function (e) {
-            self.initTextarea(e.target.value);
-        });
-        self.initTextarea($el.val());
+    init() {
+        this.textarea = document.querySelector(
+            `[name="${this.options.textareaName}"]`
+        );
+        this.el.addEventListener("input", (e) =>
+            this.init_textarea(e.target.value)
+        );
+        this.init_textarea(this.el.value);
     },
-    initTextarea: function (mimetype) {
-        var self = this,
-            patternConfig = self.options.widgets[mimetype],
-            pattern;
+    init_textarea(mimetype) {
+        const pattern_config = this.options.widgets[mimetype];
         // First, destroy current
-        if (self.currentWidget) {
+        if (this.current_widget) {
             // The pattern must implement the destroy method.
-            self.currentWidget.destroy();
+            this.current_widget.destroy();
         }
         // Then, setup new
-        if (patternConfig) {
-            pattern = new registry.patterns[patternConfig.pattern](
-                self.textarea,
-                patternConfig.patternOptions || {}
+        if (pattern_config) {
+            this.current_widget = new registry.patterns[pattern_config.pattern](
+                this.textarea,
+                pattern_config.patternOptions || {}
             );
-            self.currentWidget = pattern;
         }
     },
 });
