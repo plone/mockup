@@ -5,9 +5,7 @@
 // Import base
 import "./public_path"; // first import
 
-// Import pattern styles in JavaScript
-window.__patternslib_import_styles = true;
-
+// Core
 import registry from "patternslib/src/core/registry";
 import jquery from "jquery";
 
@@ -55,5 +53,10 @@ import "./pat/upload/upload";
 //import "./pat/tinymce/tinymce";
 //import "./pat/texteditor/texteditor";
 
+// Import pattern styles in JavaScript
+window.__patternslib_import_styles = true;
+
+// Register jQuery globally
 window.jQuery = jquery;
+
 registry.init();
