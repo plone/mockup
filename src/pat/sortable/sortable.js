@@ -1,6 +1,6 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import Base from "patternslib/src/core/base";
-import Sortable from "sortablejs";
 
 export default Base.extend({
     name: "sortable",
@@ -12,8 +12,10 @@ export default Base.extend({
         cloneClass: "dragging",
         drop: undefined, // callback function or name of global function
     },
-    init: function () {
-        var sortable = new Sortable(this.$el[0], {
+    init: async function () {
+        let Sortable = await import("sortablejs");
+        Sortable = Sortable.default;
+        new Sortable(this.$el[0], {
             draggable: this.options.selector,
             chosenClass: this.options.dragClass,
             dragClass: this.options.cloneClass,
