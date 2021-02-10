@@ -13,6 +13,9 @@ import jquery from "jquery";
 
 // Patternslib patterns
 import "patternslib/src/pat/datetime-picker/datetime-picker";
+import "patternslib/src/pat/tooltip/tooltip";
+import "pat-code-editor/src/code-editor";
+import "pat-tinymce/src/tinymce";
 
 // Import all used patterns for the bundle to be generated
 import "./pat/autotoc/autotoc";
@@ -40,19 +43,17 @@ import "./pat/select2/select2";
 import "./pat/sortable/sortable";
 import "./pat/structure/structure";
 //import "./pat/textareamimetypeselector/textareamimetypeselector";
-//import "./pat/texteditor/texteditor";
 //import "./pat/thememapper/thememapper";
-//import "./pat/tinymce/tinymce";
 import "./pat/toggle/toggle";
 import "./pat/toolbar/toolbar";
-import "./pat/tooltip/tooltip";
 import "./pat/tree/tree";
 import "./pat/upload/upload";
-import "pat-code-editor/src/code-editor";
-import "pat-tinymce/src/tinymce";
 
 // REMOVE obsolete patterns
-import "./pat/pickadate/pickadate";
+//import "./pat/pickadate/pickadate";
+//import "./pat/tooltip/tooltip";
+//import "./pat/tinymce/tinymce";
+//import "./pat/texteditor/texteditor";
 
 window.jQuery = jquery;
 registry.init();
