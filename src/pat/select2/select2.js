@@ -106,7 +106,10 @@ export default Base.extend({
             });
         });
     },
-    initializeSelect2: function () {
+    initializeSelect2: async function () {
+        import("select2/select2.css");
+        await import("select2");
+
         var self = this;
         self.options.formatResultCssClass = function (ob) {
             if (ob.id) {
@@ -158,10 +161,7 @@ export default Base.extend({
             $(".select2-dropdown-open", self.$el.parent()).length === 1;
         return isOpen;
     },
-    init: async function () {
-        import("select2/select2.css");
-        await import("select2");
-
+    init: function () {
         var self = this;
 
         self.options.allowNewItems = self.options.hasOwnProperty(
