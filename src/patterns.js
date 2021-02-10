@@ -11,6 +11,7 @@ import jquery from "jquery";
 
 // Patternslib patterns
 import "patternslib/src/pat/datetime-picker/datetime-picker";
+import "patternslib/src/pat/validation/validation";
 import { parser as tooltip_parser } from "patternslib/src/pat/tooltip/tooltip";
 import "pat-code-editor/src/code-editor";
 import "pat-tinymce/src/tinymce";
@@ -25,7 +26,6 @@ import "./pat/eventedit/eventedit";
 //import "./pat/filemanager/filemanager";
 import "./pat/formautofocus/formautofocus";
 import "./pat/formunloadalert/formunloadalert";
-import "./pat/inlinevalidation/inlinevalidation";
 import "./pat/livesearch/livesearch";
 import "./pat/markspeciallinks/markspeciallinks";
 import "./pat/modal/modal";
