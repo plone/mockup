@@ -102,7 +102,7 @@
     "scripts": {
         "clean": "rimraf docs/_site",
         "build:webpack": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production",
-        "build:webpack:plone": "webpack --config webpack-test.config.js --info-verbosity verbose --env.NODE_ENV=production",
+        "build:webpack:plone": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production --env.DEPLOYMENT=plone",
         "build:docs": "ELEVENTY_ENV=production  npx @11ty/eleventy --output docs/_site/",
         "build": "run-s clean build:webpack build:docs",
         "watch:webpack": "webpack --config webpack.config.js --watch --env.NODE_ENV=development",

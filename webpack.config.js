@@ -152,5 +152,11 @@ module.exports = async (env) => {
         config.entry["bundle-polyfills.min"] = config.entry["bundle-polyfills"];
         config.output.chunkFilename = "chunks/[name].[contenthash].min.js";
     }
+    if (env.DEPLOYMENT === "plone") {
+        config.output.path = path.resolve(
+            __dirname,
+            "../plone.staticresources/src/plone/staticresources/static/bundles/"
+        );
+    }
     return config;
 };
