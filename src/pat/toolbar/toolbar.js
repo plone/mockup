@@ -4,6 +4,7 @@ import registry from "patternslib/src/core/registry";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
 import "jquery.cookie";
+import "./pattern.toolbar.scss";
 
 export default Base.extend({
     name: "toolbar",

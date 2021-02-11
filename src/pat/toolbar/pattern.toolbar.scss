@@ -191,7 +191,7 @@
 
     li.active a.label-state-pending > span,
     a.label-state-pending > span:hover {
-      color: (#fff - $plone-toolbar-text-color) !important;
+      color: $plone-toolbar-text-color !important;
     } //contrast
 
     a.label-state-draft > span:before,
@@ -643,8 +643,8 @@
   }
 }
 
-/*plone-toolbar-top*/
 
+/*plone-toolbar-top*/
 .plone-toolbar-top #edit-zone {
   position: fixed;
   width: 100%;
@@ -897,8 +897,8 @@
   }
 
   #edit-zone {
-    .plone-toolbar-expanded
-    #edit-zone(); /*default view users left-expanded as a reference*/
+    // .plone-toolbar-expanded
+    // #edit-zone(); /*default view users left-expanded as a reference*/
     /*width: 100%;*/
 
     right: 0;
@@ -950,24 +950,25 @@
     height: 100%;
   }
 }
-@media (min-width: $plone-screen-xs-min) {
-}
+
+// @media (min-width: $plone-screen-xs-min) {
+// }
 
 /* transitions for menu openings*/
 
-#edit-zone,
-body {
-}
+// #edit-zone,
+// body {
+// }
 
-#edit-zone nav > ul ul {
-}
+// #edit-zone nav > ul ul {
+// }
 
 #edit-zone nav > ul li.active ul {
   display: block;
 }
 
-.plone-toolbar-top #edit-zone nav > ul li.active ul {
-}
+// .plone-toolbar-top #edit-zone nav > ul li.active ul {
+// }
 
 /* small height devices <480 apanyo*/
 // @media (max-height: 480px) {
