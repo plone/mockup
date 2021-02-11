@@ -117,6 +117,20 @@ module.exports = async (env) => {
             alias: {},
         },
     };
+
+    // Use checked-out versions of dependencies if available.
+    try {
+        const dev_includes = await fs.promises.readdir("devsrc/");
+        for (const it of dev_includes) {
+            if (it in [".gitkeep"]) {
+                continue;
+            }
+            config.resolve.alias[it] = path.resolve(__dirname, `devsrc/${it}`);
+        }
+    } catch (error) {
+        // ignore.
+    }
+
     if (mode === "development") {
         // Set public path to override __webpack_public_path__
         // for webpack-dev-server
@@ -130,23 +144,8 @@ module.exports = async (env) => {
                 ignored: ["node_modules/**", "mockup/**", "docs/**"],
             },
         };
-
-        // Use checked-out versions of dependencies
-        try {
-            const dev_includes = await fs.promises.readdir("devsrc/");
-            for (const it of dev_includes) {
-                if (it in [".gitkeep"]) {
-                    continue;
-                }
-                config.resolve.alias[it] = path.resolve(
-                    __dirname,
-                    `devsrc/${it}`
-                );
-            }
-        } catch (error) {
-            // ignore.
-        }
     }
+
     if (mode === "production") {
         config.entry["bundle.min"] = config.entry["bundle"];
         config.entry["bundle-polyfills.min"] = config.entry["bundle-polyfills"];
