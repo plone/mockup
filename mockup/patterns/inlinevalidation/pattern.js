@@ -47,7 +47,7 @@ define(["jquery", "pat-base"], function ($, Base) {
                 } else {
                     $(
                         '<div class="invalid-feedback">' + errmsg + "</div>"
-                    ).insertAfter($input);
+                    ).appendTo($field);
                 }
             } else {
                 $input.removeClass("is-invalid");
@@ -161,8 +161,8 @@ define(["jquery", "pat-base"], function ($, Base) {
                 $field = $input.closest(".field"),
                 $form = $field.closest("form"),
                 $cloned_form = $form.clone(),
-                fset = $input.closest("fieldset").attr("data-fieldset"),
-                fname = $field.attr("data-fieldname");
+                fset = $input.closest("fieldset").data("fieldset"),
+                fname = $field.data("fieldname");
 
             // XXX: When cloning a form, values from 'select' elements are not kept
             //      so we copy them from the original form here.
@@ -185,14 +185,10 @@ define(["jquery", "pat-base"], function ($, Base) {
                             data: { fname: fname, fset: fset },
                             iframe: false,
                             success: $.proxy(function (data) {
-                                if ($field.hasClass("form-group")) {
-                                    this.render_error_bootstrap(
-                                        $field,
-                                        data.errmsg
-                                    );
-                                } else {
-                                    this.render_error($field, data.errmsg);
-                                }
+                                this.render_error_bootstrap(
+                                    $field,
+                                    data.errmsg
+                                );
                                 next();
                             }, this),
                             error: function () {
