@@ -106,7 +106,7 @@
         "build:docs": "ELEVENTY_ENV=production  npx @11ty/eleventy --output docs/_site/",
         "build": "run-s clean build:webpack build:docs",
         "watch:webpack": "webpack --config webpack.config.js --watch --env.NODE_ENV=development",
-        "watch:webpack:plone": "webpack --config webpack-test.config.js --watch --env.NODE_ENV=production",
+        "watch:webpack:plone": "webpack --config webpack.config.js --watch --env.NODE_ENV=production --env.DEPLOYMENT=plone",
         "build-stats": "webpack --config webpack.config.js --env.NODE_ENV=production --json > stats.json",
         "test": "jest --watch",
         "testonce": "jest",
