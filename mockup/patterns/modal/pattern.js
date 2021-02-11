@@ -156,7 +156,7 @@ define([
                 timeout: 5000,
                 displayInModal: true,
                 reloadWindowOnClose: true,
-                error: ".portalMessage.error, .alert-danger",
+                error: ".portalMessage.error, .statusmessage-error",
                 formFieldError: ".field.error",
                 onSuccess: null,
                 onError: null,
