@@ -14,6 +14,9 @@ clean:
 	rm -rf $(BUNDLER_DIR) node_modules stamp-yarn
 
 
+.PHONY: dev-all
+dev-all: dev-patternslib dev-pat-tinymce dev-pat-code-editor
+
 .PHONY: dev-patternslib
 dev-patternslib:
 	mkdir -p devsrc; cd devsrc; test -x patternslib || git clone git@github.com:Patternslib/Patterns.git --branch mockup-updates patternslib
