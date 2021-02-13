@@ -12,7 +12,7 @@
     "ace-builds": "1.2.6",
     "backbone": "1.1.2",
     "backbone.paginator": "1.0.0",
-    "bootstrap": "3.4.1",
+    "bootstrap3": "https://github.com/twbs/bootstrap.git#68b0d231a13201eb14acd3dc84e51543d16e5f7e",
     "cs-jqtree-contextmenu": "0.1.0",
     "datatables.net": "1.10.16",
     "datatables.net-autofill": "2.0.0",
