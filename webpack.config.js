@@ -50,7 +50,8 @@ module.exports = async (env) => {
             rules: [
                 {
                     test: /\.js$/,
-                    exclude: /node_modules\/(?!(patternslib)\/)(?!(pat-.*)\/).*/,
+                    // Also exclude mockup itself, so that plone.staticresources does not need to modify and add mockup to excludes.
+                    exclude: /node_modules\/(?!(mockup)\/)(?!(patternslib)\/)(?!(pat-.*)\/).*/,
                     loader: "babel-loader",
                 },
                 {
@@ -117,7 +118,6 @@ module.exports = async (env) => {
             alias: {},
         },
     };
-
 
     // Use checked-out versions of dependencies if available.
     // try {
