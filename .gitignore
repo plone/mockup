@@ -16,3 +16,4 @@ devsrc/*
 !devsrc/.gitkeep
 /docs/patternslib/
 /src/pat/tinymce/tinymce.css
+/src/pat/modal/modal.css

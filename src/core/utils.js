@@ -375,6 +375,13 @@ var createElementFromHTML = function (htmlString) {
     return div.firstChild;
 };
 
+
+var resolveIcon = async function (iconName) {
+    const iconResp = await fetch(PORTAL_URL + "/@@iconresolver/" + iconName);
+    const iconText = await iconResp.text();
+    return iconText;
+};
+
 export default {
     bool: bool,
     escapeHTML: escapeHTML,
@@ -387,6 +394,7 @@ export default {
     loading: new Loading(), // provide default loader
     parseBodyTag: parseBodyTag,
     QueryHelper: QueryHelper,
+    resolveIcon: resolveIcon,
     setId: setId,
     storage: storage,
     createElementFromHTML: createElementFromHTML,
