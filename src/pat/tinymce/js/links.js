@@ -340,14 +340,14 @@ tinymce.PluginManager.add("ploneimage", function (editor) {
     editor.ui.registry.addButton("ploneimage", {
         icon: "image",
         tooltip: "Insert/edit image",
-        onAction: editor.settings.addImageClicked(buttonApi),
+        onAction: editor.settings.addImageClicked,
         // stateSelector: "img:not([data-mce-object])",
     });
 
     editor.ui.registry.addButton("ploneimage", {
         icon: "image",
         text: "Insert image",
-        onAction: editor.settings.addImageClicked(buttonApi),
+        onAction: editor.settings.addImageClicked,
         context: "insert",
         prependToContext: true,
     });
@@ -359,7 +359,7 @@ tinymce.PluginManager.add("plonelink", function (editor) {
         icon: "link",
         tooltip: "Insert/edit link",
         shortcut: "Ctrl+K",
-        onAction: editor.settings.addLinkClicked(buttonApi),
+        onAction: editor.settings.addLinkClicked,
         stateSelector: "a[href]",
     });
 
@@ -378,7 +378,7 @@ tinymce.PluginManager.add("plonelink", function (editor) {
         icon: "link",
         text: "Insert link",
         shortcut: "Ctrl+K",
-        onAction: editor.settings.addLinkClicked(buttonApi),
+        onAction: editor.settings.addLinkClicked,
         stateSelector: "a[href]",
         context: "insert",
         prependToContext: true,

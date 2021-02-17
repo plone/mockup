@@ -6,7 +6,7 @@ import registry from "patternslib/src/core/registry";
 import Router from "../../core/router";
 import utils from "../../core/utils";
 import _t from "../../core/i18n";
-
+import "./modal.scss";
 
 
 export default Base.extend({
@@ -48,7 +48,7 @@ export default Base.extend({
             classFooterName: "modal-footer",
             classWrapperName: "modal-wrapper",
             classWrapperInnerName: "modal-wrapper-inner",
-            classActiveName: "in",
+            classActiveName: "show",
             classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
             classContentName: "", // String, class name to be applied to the content of the modal, useful for modal specific styling
             template:
@@ -736,14 +736,19 @@ export default Base.extend({
     initModal: function () {
         var self = this;
         if (self.options.ajaxUrl) {
+            console.log("ajaxModal");
             self.createModal = self.createAjaxModal;
         } else if (self.options.target) {
+            console.log("targetModal");
             self.createModal = self.createTargetModal;
         } else if (self.options.html) {
+            console.log("htmlModal");
             self.createModal = self.createHtmlModal;
         } else if (self.options.image) {
+            console.log("imageModal");
             self.createModal = self.createImageModal;
         } else {
+            console.log("defaultModal");
             self.createModal = self.createBasicModal;
         }
     },
