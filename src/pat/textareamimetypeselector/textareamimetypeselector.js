@@ -1,6 +1,7 @@
 import Base from "patternslib/src/core/base";
 import registry from "patternslib/src/core/registry";
-import "pat-tinymce/src/tinymce";
+import "../tinymce/tinymce";
+// import "pat-tinymce/src/tinymce";
 
 export default Base.extend({
     name: "textareamimetypeselector",

@@ -3,7 +3,7 @@ import _ from "underscore";
 import Base from "patternslib/src/core/base";
 import registry from "patternslib/src/core/registry";
 
-import tinymce from "tinymce-builded/js/tinymce/tinymce";
+import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
 import RelatedItems from "../../relateditems/relateditems";
@@ -337,17 +337,17 @@ var AnchorLink = LinkType.extend({
 });
 
 tinymce.PluginManager.add("ploneimage", function (editor) {
-    editor.addButton("ploneimage", {
+    editor.ui.registry.addButton("ploneimage", {
         icon: "image",
         tooltip: "Insert/edit image",
-        onclick: editor.settings.addImageClicked,
-        stateSelector: "img:not([data-mce-object])",
+        onAction: editor.settings.addImageClicked(buttonApi),
+        // stateSelector: "img:not([data-mce-object])",
     });
 
-    editor.addMenuItem("ploneimage", {
+    editor.ui.registry.addButton("ploneimage", {
         icon: "image",
         text: "Insert image",
-        onclick: editor.settings.addImageClicked,
+        onAction: editor.settings.addImageClicked(buttonApi),
         context: "insert",
         prependToContext: true,
     });
@@ -355,28 +355,30 @@ tinymce.PluginManager.add("ploneimage", function (editor) {
 
 /* register the tinymce plugin */
 tinymce.PluginManager.add("plonelink", function (editor) {
-    editor.addButton("plonelink", {
+    editor.ui.registry.addButton("plonelink", {
         icon: "link",
         tooltip: "Insert/edit link",
         shortcut: "Ctrl+K",
-        onclick: editor.settings.addLinkClicked,
+        onAction: editor.settings.addLinkClicked(buttonApi),
         stateSelector: "a[href]",
     });
 
-    editor.addButton("unlink", {
+    editor.ui.registry.addButton("unlink", {
         icon: "unlink",
         tooltip: "Remove link",
-        cmd: "unlink",
+        onAction: function () {
+            editor.execCommand('unlink');
+        },
         stateSelector: "a[href]",
     });
 
-    editor.addShortcut("Ctrl+K", "", editor.settings.addLinkClicked);
+    editor.ui.registry.addButton("Ctrl+K", "", editor.settings.addLinkClicked);
 
-    editor.addMenuItem("plonelink", {
+    editor.ui.registry.addButton("plonelink", {
         icon: "link",
         text: "Insert link",
         shortcut: "Ctrl+K",
-        onclick: editor.settings.addLinkClicked,
+        onAction: editor.settings.addLinkClicked(buttonApi),
         stateSelector: "a[href]",
         context: "insert",
         prependToContext: true,
@@ -529,7 +531,7 @@ export default Base.extend({
         var self = this;
         self.$target = $('select[name="target"]', self.modal.$modal);
         self.$button = $(
-            '.plone-modal-footer input[name="insert"]',
+            '.modal-footer input[name="insert"]',
             self.modal.$modal
         );
         self.$title = $('input[name="title"]', self.modal.$modal);
@@ -800,7 +802,7 @@ export default Base.extend({
             }
             self.hide();
         });
-        $('.plone-modal-footer input[name="cancel"]', self.modal.$modal).click(
+        $('.modal-footer input[name="cancel"]', self.modal.$modal).click(
             function (e) {
                 e.preventDefault();
                 self.hide();

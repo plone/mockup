@@ -15,3 +15,4 @@ stats.json
 devsrc/*
 !devsrc/.gitkeep
 /docs/patternslib/
+/src/pat/tinymce/tinymce.css

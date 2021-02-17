@@ -13,8 +13,9 @@ import jquery from "jquery";
 import "patternslib/src/pat/datetime-picker/datetime-picker";
 import "patternslib/src/pat/validation/validation";
 import { parser as tooltip_parser } from "patternslib/src/pat/tooltip/tooltip";
-import "pat-code-editor/src/code-editor";
-import "pat-tinymce/src/tinymce";
+//import "pat-code-editor/src/code-editor";
+//import "pat-tinymce/src/tinymce";
+
 
 // Import all used patterns for the bundle to be generated
 import "./pat/autotoc/autotoc";
@@ -49,7 +50,7 @@ import "./pat/upload/upload";
 
 // REMOVE obsolete patterns
 //import "./pat/pickadate/pickadate";
-//import "./pat/tinymce/tinymce";
+import "./pat/tinymce/tinymce";
 //import "./pat/texteditor/texteditor";
 
 // Import pattern styles in JavaScript

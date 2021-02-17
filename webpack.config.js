@@ -118,18 +118,19 @@ module.exports = async (env) => {
         },
     };
 
+
     // Use checked-out versions of dependencies if available.
-    try {
-        const dev_includes = await fs.promises.readdir("devsrc/");
-        for (const it of dev_includes) {
-            if (it in [".gitkeep"]) {
-                continue;
-            }
-            config.resolve.alias[it] = path.resolve(__dirname, `devsrc/${it}`);
-        }
-    } catch (error) {
-        // ignore.
-    }
+    // try {
+    //     const dev_includes = await fs.promises.readdir("devsrc/");
+    //     for (const it of dev_includes) {
+    //         if (it in [".gitkeep"]) {
+    //             continue;
+    //         }
+    //         config.resolve.alias[it] = path.resolve(__dirname, `devsrc/${it}`);
+    //     }
+    // } catch (error) {
+    //     // ignore.
+    // }
 
     if (mode === "development") {
         // Set public path to override __webpack_public_path__

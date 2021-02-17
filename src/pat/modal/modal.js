@@ -7,6 +7,8 @@ import Router from "../../core/router";
 import utils from "../../core/utils";
 import _t from "../../core/i18n";
 
+
+
 export default Base.extend({
     name: "plone-modal",
     trigger: ".pat-plone-modal",
@@ -19,13 +21,13 @@ export default Base.extend({
         margin: 20,
         position: "center middle", // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
         triggers: [],
-        zIndexSelector: ".plone-modal-wrapper,.plone-modal-backdrop",
+        zIndexSelector: ".modal-wrapper,.modal-backdrop",
         backdrop: "body", // Element to initiate the Backdrop on.
         backdropOptions: {
             zIndex: "1040",
             opacity: "0.85",
-            className: "plone-modal-backdrop",
-            classActiveName: "plone-backdrop-active",
+            className: "modal-backdrop",
+            classActiveName: "backdrop-active",
             closeOnEsc: true,
             closeOnClick: true,
         },
@@ -38,13 +40,13 @@ export default Base.extend({
         prependContent: ".portalMessage, #global_statusmessage",
         onRender: null,
         templateOptions: {
-            className: "plone-modal fade",
-            classDialog: "plone-modal-dialog",
-            classModal: "plone-modal-content",
-            classHeaderName: "plone-modal-header",
-            classBodyName: "plone-modal-body",
-            classFooterName: "plone-modal-footer",
-            classWrapperName: "plone-modal-wrapper",
+            className: "modal fade",
+            classDialog: "modal-dialog",
+            classModal: "modal-content",
+            classHeaderName: "modal-header",
+            classBodyName: "modal-body",
+            classFooterName: "modal-footer",
+            classWrapperName: "modal-wrapper",
             classWrapperInnerName: "modal-wrapper-inner",
             classActiveName: "in",
             classPrependName: "", // String, css class to be applied to the wrapper of the prepended content
@@ -52,11 +54,11 @@ export default Base.extend({
             template:
                 "" +
                 '<div class="<%= options.className %>">' +
-                '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="plone-modal-title" <% } %> tabindex="-1">' +
-                '    <div class="<%= options.classModal %>">' +
+                '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="modal-title" <% } %> tabindex="-1">' +
+                '    <div class="<%= options.classModal %>" role="document">' +
                 '      <div class="<%= options.classHeaderName %>">' +
-                '        <a class="plone-modal-close" aria-label="Close modal" title="Close modal" href="#">&times;</a>' +
-                '        <% if (title) { %><h2 class="plone-modal-title" id="plone-modal-title" tabindex="0"><%= title %></h2><% } %>' +
+                '        <a class="modal-close" aria-label="Close modal" title="Close modal" href="#">&times;</a>' +
+                '        <% if (title) { %><h2 class="modal-title" id="modal-title" tabindex="0"><%= title %></h2><% } %>' +
                 "      </div>" +
                 '      <div class="<%= options.classBodyName %>">' +
                 '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
@@ -520,7 +522,7 @@ export default Base.extend({
 
             // Wire up events
             $(
-                ".plone-modal-header > a.plone-modal-close, .plone-modal-footer > a.plone-modal-close",
+                ".modal-header > a.modal-close, .modal-footer > a.modal-close",
                 self.$modal
             )
                 .off("click")
@@ -848,11 +850,11 @@ export default Base.extend({
         }
 
         if (inputs.length === 0) {
-            inputs = self.$modal.find(".plone-modal-title");
+            inputs = self.$modal.find(".modal-title");
         }
         var firstInput = inputs[0];
         var lastInput = inputs[inputs.length - 1];
-        var closeInput = self.$modal.find(".plone-modal-close").first();
+        var closeInput = self.$modal.find(".modal-close").first();
         $(document).on(
             "keydown",
             "." + self.options.templateOptions.classDialog,
@@ -889,7 +891,7 @@ export default Base.extend({
             });
         }
 
-        self.$modal.find(".plone-modal-title").focus();
+        self.$modal.find(".modal-title").focus();
     },
 
     positionModal: function () {
@@ -1044,7 +1046,7 @@ export default Base.extend({
         $(window.parent).on("resize.plone-modal.patterns", function () {
             self.positionModal();
         });
-        $("body").addClass("plone-modal-open");
+        $("body").addClass("modal-open");
         self.emit("shown");
         self.activateFocusTrap();
     },
@@ -1066,10 +1068,10 @@ export default Base.extend({
             self.initModal();
         }
         self.$wrapper.remove();
-        if ($(".plone-modal", $("body")).length < 1) {
+        if ($(".modal", $("body")).length < 1) {
             self._suppressHide = undefined;
             self.backdrop.hide();
-            $("body").removeClass("plone-modal-open");
+            $("body").removeClass("modal-open");
             $(window.parent).off("resize.plone-modal.patterns");
         }
         self.emit("hidden");

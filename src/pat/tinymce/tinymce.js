@@ -1,53 +1,61 @@
 import $ from "jquery";
 import _t from "../../core/i18n-wrapper";
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "patternslib/src/core/base";
 import utils from "../../core/utils";
 import LinkModal from "./js/links";
 import I18n from "../../core/i18n";
-import tinymce from "tinymce-builded/js/tinymce/tinymce";
+import tinymce from "tinymce/tinymce";
+
+import "./tinymce.scss";
+//import "tinymce/skins/content/default/content.css";
+import "tinymce/skins/ui/oxide/content.css";
+import "tinymce/skins/ui/oxide/skin.css";
 
 // tinyMCE Plugins
-import "tinymce-builded/js/tinymce/themes/modern/theme";
-import "tinymce-builded/js/tinymce/plugins/advlist/plugin";
-import "tinymce-builded/js/tinymce/plugins/anchor/plugin";
-import "tinymce-builded/js/tinymce/plugins/autolink/plugin";
-import "tinymce-builded/js/tinymce/plugins/autoresize/plugin";
-import "tinymce-builded/js/tinymce/plugins/autosave/plugin";
-import "tinymce-builded/js/tinymce/plugins/bbcode/plugin";
-import "tinymce-builded/js/tinymce/plugins/charmap/plugin";
-import "tinymce-builded/js/tinymce/plugins/code/plugin";
-import "tinymce-builded/js/tinymce/plugins/colorpicker/plugin";
-import "tinymce-builded/js/tinymce/plugins/contextmenu/plugin";
-import "tinymce-builded/js/tinymce/plugins/directionality/plugin";
-import "tinymce-builded/js/tinymce/plugins/emoticons/plugin";
-import "tinymce-builded/js/tinymce/plugins/fullpage/plugin";
-import "tinymce-builded/js/tinymce/plugins/fullscreen/plugin";
-import "tinymce-builded/js/tinymce/plugins/hr/plugin";
-import "tinymce-builded/js/tinymce/plugins/image/plugin";
-import "tinymce-builded/js/tinymce/plugins/importcss/plugin";
-import "tinymce-builded/js/tinymce/plugins/insertdatetime/plugin";
-import "tinymce-builded/js/tinymce/plugins/legacyoutput/plugin";
-import "tinymce-builded/js/tinymce/plugins/link/plugin";
-import "tinymce-builded/js/tinymce/plugins/lists/plugin";
-import "tinymce-builded/js/tinymce/plugins/media/plugin";
-import "tinymce-builded/js/tinymce/plugins/nonbreaking/plugin";
-import "tinymce-builded/js/tinymce/plugins/noneditable/plugin";
-import "tinymce-builded/js/tinymce/plugins/pagebreak/plugin";
-import "tinymce-builded/js/tinymce/plugins/paste/plugin";
-import "tinymce-builded/js/tinymce/plugins/preview/plugin";
-import "tinymce-builded/js/tinymce/plugins/print/plugin";
-import "tinymce-builded/js/tinymce/plugins/save/plugin";
-import "tinymce-builded/js/tinymce/plugins/searchreplace/plugin";
-import "tinymce-builded/js/tinymce/plugins/spellchecker/plugin";
-import "tinymce-builded/js/tinymce/plugins/tabfocus/plugin";
-import "tinymce-builded/js/tinymce/plugins/table/plugin";
-import "tinymce-builded/js/tinymce/plugins/template/plugin";
-import "tinymce-builded/js/tinymce/plugins/textcolor/plugin";
-import "tinymce-builded/js/tinymce/plugins/textpattern/plugin";
-import "tinymce-builded/js/tinymce/plugins/visualblocks/plugin";
-import "tinymce-builded/js/tinymce/plugins/visualchars/plugin";
-import "tinymce-builded/js/tinymce/plugins/wordcount/plugin";
-import "tinymce-builded/js/tinymce/plugins/compat3x/plugin";
+import "tinymce/plugins/advlist";
+import "tinymce/plugins/anchor";
+import "tinymce/plugins/autolink";
+import "tinymce/plugins/autoresize";
+import "tinymce/plugins/autosave";
+import "tinymce/plugins/bbcode";
+import "tinymce/plugins/charmap";
+import "tinymce/plugins/code";
+import "tinymce/plugins/colorpicker";
+import "tinymce/plugins/contextmenu";
+import "tinymce/plugins/directionality";
+import "tinymce/plugins/emoticons";
+import "tinymce/plugins/fullpage";
+import "tinymce/plugins/fullscreen";
+import "tinymce/plugins/hr";
+import "tinymce/plugins/image";
+import "tinymce/plugins/importcss";
+import "tinymce/plugins/insertdatetime";
+import "tinymce/plugins/legacyoutput";
+import "tinymce/plugins/link";
+import "tinymce/plugins/lists";
+import "tinymce/plugins/media";
+import "tinymce/plugins/nonbreaking";
+import "tinymce/plugins/noneditable";
+import "tinymce/plugins/pagebreak";
+import "tinymce/plugins/paste";
+import "tinymce/plugins/preview";
+import "tinymce/plugins/print";
+import "tinymce/plugins/save";
+import "tinymce/plugins/searchreplace";
+import "tinymce/plugins/spellchecker";
+import "tinymce/plugins/tabfocus";
+import "tinymce/plugins/table";
+import "tinymce/plugins/template";
+import "tinymce/plugins/textcolor";
+import "tinymce/plugins/textpattern";
+import "tinymce/plugins/visualblocks";
+import "tinymce/plugins/visualchars";
+import "tinymce/plugins/wordcount";
+import "tinymce/themes/silver";
+
+import "tinymce/icons/default";
+
 
 export default Base.extend({
     name: "tinymce",
@@ -115,7 +123,7 @@ export default Base.extend({
             caption: _t("Image Caption"),
         },
         // URL generation options
-        loadingBaseUrl: "../../../node_modules/tinymce-builded/js/tinymce/",
+        loadingBaseUrl: "++plone++static/tinybase",
         prependToUrl: "",
         appendToUrl: "",
         linkAttribute: "path", // attribute to get link value from data
@@ -152,7 +160,7 @@ export default Base.extend({
         tiny: {
             //content_css:
             //    "/base/node_modules/tinymce-builded/js/tinymce/skins/lightgray/content.min.css",
-            theme: "modern",
+            theme: "silver",
             plugins: [
                 "advlist",
                 "autolink",
@@ -174,11 +182,7 @@ export default Base.extend({
                 "ploneimage",
             ],
             menubar: "edit table format tools view insert",
-            toolbar:
-                "undo redo | styleselect | bold italic | " +
-                "alignleft aligncenter alignright alignjustify | " +
-                "bullist numlist outdent indent | " +
-                "unlink plonelink ploneimage",
+            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage",
             //'autoresize_max_height': 900,
             height: 400,
         },
@@ -331,6 +335,7 @@ export default Base.extend({
         }
     },
     init: function () {
+        console.log("init tinymce from mockup");
         var self = this;
         self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
         // tiny needs an id in order to initialize. Creat it if not set.
