@@ -18,7 +18,7 @@
           class="pattern-relateditems-result-browse"
           data-path="<%- path %>"
           title="<%- oneLevelUp ? one_level_up : open_folder %>">
-          <span class="<%- oneLevelUp ? 'icon-left-circle' : 'icon-right-circle' %>"></span>
+          <%= oneLevelUp ? iconLevelUp : iconLevelDown %>
         </a>
       <% } %>
   <% if (!oneLevelUp) { %>

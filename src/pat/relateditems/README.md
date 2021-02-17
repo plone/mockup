@@ -11,7 +11,6 @@ This is the related items pattern.
 
 | Option | Type | Default | Description |
 |:-:|:-:|:-:|:-:|
-
 | attributes | array | ['UID', 'Title', 'portal_type', 'path'] | This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. |
 | basePath | string| set to rootPath. | Start browse/search in this path. |
 | breadcrumbTemplate | string |  | Template to use for a single item in the breadcrumbs. |
