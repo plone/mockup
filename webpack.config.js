@@ -155,7 +155,7 @@ module.exports = async (env) => {
     if (env.DEPLOYMENT === "plone") {
         config.output.path = path.resolve(
             __dirname,
-            "../plone.staticresources/src/plone/staticresources/static/bundles/"
+            "../plone.staticresources/src/plone/staticresources/static/bundle-plone/"
         );
     }
     return config;
