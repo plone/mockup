@@ -12,14 +12,18 @@ define([
       '<input type="text" name="upload" style="display:none" />' +
       '<div class="uploadify-me"></div>'),
 
+    context_info_loaded_handler: function(event, data) {
+      this.currentPathData = data;
+    },
+
     initialize: function(options) {
       var self = this;
       self.app = options.app;
       PopoverView.prototype.initialize.apply(self, [options]);
       self.currentPathData = null;
-      $('body').on('context-info-loaded', function(event, data) {
-        self.currentPathData = data;
-      });
+      $('body')
+        .off('context-info-loaded', this.context_info_loaded_handler.bind(this))
+        .on('context-info-loaded', this.context_info_loaded_handler.bind(this));
     },
 
     render: function() {

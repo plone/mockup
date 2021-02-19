@@ -11,33 +11,38 @@ define([
     title: 'Add',
     className: 'btn-group addnew',
     events: {},
-    initialize: function(options) {
-      var self = this;
-      ButtonGroup.prototype.initialize.apply(self, [options]);
-      $('body').on('context-info-loaded', function(event, data) {
-        self.$items.empty();
-        _.each(data.addButtons, function(item) {
-          var view = new ButtonView({
-            id: item.id,
-            title: item.title,
-            url: item.action
-          });
-          view.render();
-          var wrap = $('<li/>');
-          // As we are reusing the whole ButtonView for render the add content
-          // list we should remove entirely the "btn btn-default" classes.
-          // This element in fact, should not have any class at all, so we
-          // remove the attribute completely
-          view.$el.removeAttr('class');
 
-          wrap.append(view.el);
-          self.$items.append(wrap);
-          view.$el.click(function(e) {
-            self.buttonClicked.apply(self, [e, view]);
-            return false;
-          });
+    context_info_loaded_handler: function(event, data) {
+      this.$items.empty();
+      var self = this;
+      _.each(data.addButtons, function(item) {
+        var view = new ButtonView({
+          id: item.id,
+          title: item.title,
+          url: item.action
+        });
+        view.render();
+        var wrap = $('<li/>');
+        // As we are reusing the whole ButtonView for render the add content
+        // list we should remove entirely the "btn btn-default" classes.
+        // This element in fact, should not have any class at all, so we
+        // remove the attribute completely
+        view.$el.removeAttr('class');
+
+        wrap.append(view.el);
+        self.$items.append(wrap);
+        view.$el.click(function(e) {
+          self.buttonClicked.apply(self, [e, view]);
+          return false;
         });
       });
+    },
+
+    initialize: function(options) {
+      ButtonGroup.prototype.initialize.apply(this, [options]);
+      $('body')
+        .off('context-info-loaded', this.context_info_loaded_handler.bind(this))
+        .on('context-info-loaded', this.context_info_loaded_handler.bind(this));
     },
     buttonClicked: function(e, button) {
       var self = this;
