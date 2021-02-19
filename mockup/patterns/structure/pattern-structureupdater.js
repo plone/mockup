@@ -24,18 +24,19 @@ define([
       descriptionSelector: ''
     },
 
+    context_info_loaded_handler: function (e, data) {
+      if (this.options.titleSelector) {
+        $(this.options.titleSelector, this.$el).html(data.object && data.object.Title || '&nbsp;');
+      }
+      if (this.options.descriptionSelector) {
+        $(this.options.descriptionSelector, this.$el).html(data.object && data.object.Description || '&nbsp;');
+      }
+    },
+
     init: function() {
-
-      $('body').off('context-info-loaded').on('context-info-loaded', function (e, data) {
-
-        if (this.options.titleSelector) {
-            $(this.options.titleSelector, this.$el).html(data.object && data.object.Title || '&nbsp;');
-        }
-        if (this.options.descriptionSelector) {
-            $(this.options.descriptionSelector, this.$el).html(data.object && data.object.Description || '&nbsp;');
-        }
-      }.bind(this));
-
+      $('body')
+        .off('context-info-loaded', this.context_info_loaded_handler.bind(this))
+        .on('context-info-loaded', this.context_info_loaded_handler.bind(this));
     }
 
   });

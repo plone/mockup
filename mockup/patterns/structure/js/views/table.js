@@ -19,6 +19,13 @@ define([
   var TableView = BaseView.extend({
     tagName: 'div',
     template: _.template(TableTemplate),
+
+    context_info_loaded_handler: function(event, data) {
+      this.contextInfo = data;
+      /* set default page info */
+      this.setContextInfo();
+    },
+
     initialize: function(options) {
       var self = this;
       BaseView.prototype.initialize.apply(self, [options]);
@@ -31,12 +38,9 @@ define([
       self.subsetIds = [];
       self.contextInfo = null;
 
-      $('body').off('context-info-loaded').on('context-info-loaded', function(event, data) {
-
-        self.contextInfo = data;
-        /* set default page info */
-        self.setContextInfo();
-      });
+      $('body')
+        .off('context-info-loaded', this.context_info_loaded_handler.bind(this))
+        .on('context-info-loaded', this.context_info_loaded_handler.bind(this));
 
       self.dateColumns = [
         'ModificationDate',
