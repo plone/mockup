@@ -8,6 +8,19 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.5 (2021-02-19)
+------------------
+
+Bug fixes:
+
+
+- Do only remove the correct event listener on ``context-info-loaded`` before adding a new one.
+  Fixes a problem where the current path was not updated for the upload popup when changing paths.
+  Fixes: #1016
+  Refs: #1028, #1030, #1039
+  [thet] (#1041)
+
+
 3.2.4 (2020-11-11)
 ------------------
 

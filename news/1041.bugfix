@@ -1,5 +1,0 @@
-Do only remove the correct event listener on ``context-info-loaded`` before adding a new one.
-Fixes a problem where the current path was not updated for the upload popup when changing paths.
-Fixes: #1016
-Refs: #1028, #1030, #1039
-[thet]
