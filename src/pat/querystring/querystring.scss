@@ -1,7 +1,3 @@
-@import "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-@import "@{bowerPath}/bootstrap/less/glyphicons.less";
-
 #content .field .querystring-criteria-wrapper .picker__input {
     font-size: 16px;
     margin: 1px;
@@ -27,8 +23,7 @@
         margin: 8px 4px;
         cursor: pointer;
 
-        .glyphicon();
-        .glyphicon-remove();
+        // TODO: Add icon "remove"
     }
 
     .querystring-criteria-index {

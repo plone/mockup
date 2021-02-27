@@ -1,10 +1,8 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import Base from "patternslib/src/core/base";
-import PatternSelect2 from "../select2/select2";
-import "../pickadate/pickadate";
-import "../relateditems/relateditems";
 
 var Criteria = function () {
     this.init.apply(this, arguments);
@@ -25,6 +23,7 @@ Criteria.prototype = {
     },
     init: function (
         $el,
+        app,
         options,
         indexes,
         index,
@@ -36,6 +35,7 @@ Criteria.prototype = {
         patternRelateditemsOptions
     ) {
         var self = this;
+        self.app = app;
 
         self.options = $.extend(true, {}, self.defaults, options);
         self.indexes = indexes;
@@ -105,7 +105,7 @@ Criteria.prototype = {
         );
 
         // add blink (select2)
-        new PatternSelect2(self.$index, {
+        self.app.pattern_select2(self.$index, {
             width: self.options.indexWidth,
             placeholder: _t("Select criteria"),
         });
@@ -147,7 +147,7 @@ Criteria.prototype = {
         );
 
         // add blink (select2)
-        new PatternSelect2(self.$operator, { width: "10em" });
+        self.app.pattern_select2(self.$operator, { width: "10em" });
         self.$operator.on("change", function (e) {
             self.createValue(index);
             self.createClear();
@@ -434,7 +434,10 @@ Criteria.prototype = {
                         .appendTo(self.$value);
                 });
             }
-            new PatternSelect2(self.$value, self.patternAjaxSelectOptions);
+            self.app.pattern_select2(
+                self.$value,
+                self.patternAjaxSelectOptions
+            );
         }
 
         if (
@@ -663,7 +666,9 @@ export default Base.extend({
         classSortWrapperName: "querystring-sort-wrapper",
         showPreviews: true,
     },
-    init: function () {
+    init: async function () {
+        import("./querystring.scss");
+
         var self = this;
 
         // hide input element
@@ -677,22 +682,25 @@ export default Base.extend({
         self.initialized = false;
 
         if (self.options.indexOptionsUrl) {
-            $.ajax({
-                url: self.options.indexOptionsUrl,
-                success: function (data) {
-                    self.options.indexes = data.indexes;
-                    self.options["sortable_indexes"] = data["sortable_indexes"]; // jshint ignore:line
-                    self._init();
-                },
-                error: function (xhr) {
-                    // XXX handle this...
-                },
-            });
+            try {
+                const response = await fetch(self.options.indexOptionsUrl);
+                const data = await response.json();
+                self.options.indexes = data.indexes;
+                self.options["sortable_indexes"] = data["sortable_indexes"];
+                self._init();
+            } catch (e) {
+                // XXX handle this...
+            }
         } else {
             self._init();
         }
     },
-    _init: function () {
+    _init: async function () {
+        this.pattern_select2 = await import("../select2/select2");
+        this.pattern_select2 = this.pattern_select2.default;
+        import("../pickadate/pickadate");
+        import("../relateditems/relateditems");
+
         var self = this;
         self.$criteriaWrapper = $("<div/>")
             .addClass(self.options.classWrapperName)
@@ -748,6 +756,7 @@ export default Base.extend({
             baseUrl = self.options.indexOptionsUrl.replace(/(@@.*)/g, ""),
             criteria = new Criteria(
                 self.$criteriaWrapper,
+                self,
                 self.options.criteria,
                 self.options.indexes,
                 index,
@@ -835,7 +844,7 @@ export default Base.extend({
                     .html(self.options.indexes[key].title)
             );
         }
-        new PatternSelect2(self.$sortOn, { width: "150px" });
+        self.pattern_select2(self.$sortOn, { width: "150px" });
 
         self.$sortOrder = $('<input type="checkbox" />')
             .attr("name", "sort_reversed:boolean")

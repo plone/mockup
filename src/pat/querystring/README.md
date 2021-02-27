@@ -34,20 +34,23 @@ title: Querystring
 
 ### Default
 
+<input class="pat-querystring"
+        data-pat-querystring="indexOptionsUrl: /dist/test-querystringcriteria.json" />
+
 ```html
 <input class="pat-querystring"
-        data-pat-querystring="indexOptionsUrl: ./test-querystringcriteria.json" />
+        data-pat-querystring="indexOptionsUrl: /dist/test-querystringcriteria.json" />
 ```
 
 ### Without previews
 
 <input class="pat-querystring"
-        data-pat-querystring="indexOptionsUrl: ./test-querystringcriteria.json;
+        data-pat-querystring="indexOptionsUrl: /dist/test-querystringcriteria.json;
             showPreviews: false;" />
 
 ```html
 <input class="pat-querystring"
-        data-pat-querystring="indexOptionsUrl: ./test-querystringcriteria.json;
+        data-pat-querystring="indexOptionsUrl: /dist/test-querystringcriteria.json;
             showPreviews: false;" />
 ```
 

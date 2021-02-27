@@ -13,6 +13,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({"dist": "dist"});
 //   eleventyConfig.addPassthroughCopy({"src/tests/json":"dist/json"});
   eleventyConfig.addPassthroughCopy({"src/tests/fakeserver.js":"dist/fakeserver.js"});
+  eleventyConfig.addPassthroughCopy({"src/pat/querystring/test-querystringcriteria.json":"dist/test-querystringcriteria.json"});
   eleventyConfig.addPassthroughCopy({"node_modules/prism-themes": "dist/prism-themes"});
   eleventyConfig.addPassthroughCopy({"node_modules/sinon": "dist/sinon"});
   eleventyConfig.addPassthroughCopy({"node_modules/tinymce/skins": "dist/skins"});
