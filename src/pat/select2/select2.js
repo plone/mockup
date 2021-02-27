@@ -108,6 +108,7 @@ export default Base.extend({
     },
     initializeSelect2: async function () {
         import("select2/select2.css");
+        import("./select2.scss");
         await import("select2");
 
         var self = this;
