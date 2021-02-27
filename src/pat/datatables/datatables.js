@@ -13,6 +13,14 @@ export default Base.extend({
     },
 
     async init() {
+        import("datatables.net-bs/css/dataTables.bootstrap.css");
+        import("datatables.net-buttons-bs/css/buttons.bootstrap.min.css");
+        import("datatables.net-colreorder-bs/css/colReorder.bootstrap.min.css");
+        import("datatables.net-rowreorder-bs/css/rowReorder.bootstrap.min.css");
+        import("datatables.net-select-bs/css/select.bootstrap.min.css");
+        import("datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"); // prettier-ignore
+        import("datatables.net-fixedcolumns-bs/css/fixedColumns.bootstrap.min.css"); // prettier-ignore
+
         await import("datatables.net");
         await import("datatables.net-bs");
         await import("datatables.net-buttons");
