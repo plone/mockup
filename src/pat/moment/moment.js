@@ -1,7 +1,8 @@
 import $ from "jquery";
 import i18n from "../../core/i18n";
 import Base from "patternslib/src/core/base";
-import moment from "moment";
+
+let Moment;
 
 var currentLanguage = new i18n().currentLanguage;
 var localeLoaded = false;
@@ -79,8 +80,8 @@ export default Base.extend({
         if (currentLanguage in self.moment_i18n_map) {
             currentLanguage = self.moment_i18n_map[currentLanguage];
         }
-        moment.locale([currentLanguage, "en"]);
-        date = moment(date);
+        Moment.locale([currentLanguage, "en"]);
+        date = Moment(date);
         if (!date.isValid()) {
             return;
         }
@@ -98,7 +99,10 @@ export default Base.extend({
             $el.html(date);
         }
     },
-    init: function () {
+    init: async function () {
+        Moment = await import("moment");
+        Moment = Moment.default;
+
         var self = this;
         if (!localeLoaded) {
             // The locale has not finished to load yet, we will execute the init
