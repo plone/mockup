@@ -1,16 +1,11 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import Base from "patternslib/src/core/base";
 import utils from "../../core/utils";
 
-import RelatedItems from "../relateditems/relateditems";
-import Dropzone from "dropzone";
-import UploadTemplate from "./templates/upload.xml";
-import PreviewTemplate from "./templates/preview.xml";
-
-/* we do not want this plugin to auto discover */
-Dropzone.autoDiscover = false;
+let Dropzone;
 
 export default Base.extend({
     name: "upload",
@@ -56,7 +51,17 @@ export default Base.extend({
         },
     },
 
-    init: function () {
+    init: async function () {
+        import("dropzone/dist/dropzone.css");
+        import("./upload.scss");
+        Dropzone = await import("dropzone");
+        Dropzone = Dropzone.default;
+        /* we do not want this plugin to auto discover */
+        Dropzone.autoDiscover = false;
+
+        let UploadTemplate = await import("./templates/upload.xml");
+        UploadTemplate = UploadTemplate.default;
+
         var self = this,
             template = UploadTemplate;
 
@@ -135,7 +140,7 @@ export default Base.extend({
             }
         });
 
-        var dzoneOptions = this.getDzoneOptions();
+        var dzoneOptions = await this.getDzoneOptions();
 
         try {
             // if init of Dropzone fails it says nothing and
@@ -311,7 +316,10 @@ export default Base.extend({
         return url;
     },
 
-    getDzoneOptions: function () {
+    getDzoneOptions: async function () {
+        let PreviewTemplate = await import("./templates/preview.xml");
+        PreviewTemplate = PreviewTemplate.default;
+
         var self = this;
 
         // This pattern REQUIRE dropzone to be clickable
@@ -481,6 +489,9 @@ export default Base.extend({
     },
 
     setupRelatedItems: function ($input) {
+        let RelatedItems = import("../relateditems/relateditems");
+        RelatedItems = RelatedItems.default;
+
         var self = this;
         var options = self.options.relatedItems;
         options.upload = false; // ensure that related items upload is off.
