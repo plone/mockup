@@ -6,8 +6,6 @@ import registry from "patternslib/src/core/registry";
 import Router from "../../core/router";
 import utils from "../../core/utils";
 import _t from "../../core/i18n";
-import "./modal.scss";
-
 
 export default Base.extend({
     name: "plone-modal",
@@ -576,6 +574,8 @@ export default Base.extend({
         window.parent.location.reload();
     },
     init: function () {
+        import("./modal.scss");
+
         var self = this;
         self.options.loadLinksWithinModal = $.parseJSON(
             self.options.loadLinksWithinModal
