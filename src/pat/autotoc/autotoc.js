@@ -17,6 +17,8 @@ export default Base.extend({
         scrollEasing: "swing",
     },
     init: function () {
+        import("./autotoc.scss");
+
         var self = this;
 
         self.$toc = $("<nav/>").addClass(self.options.classTOCName);
