@@ -100,6 +100,7 @@ export default Base.extend({
         import("pickadate/lib/themes/classic.css");
         import("pickadate/lib/themes/classic.date.css");
         import("pickadate/lib/themes/classic.time.css");
+        import("./pickadate.scss");
 
         await import("pickadate/lib/picker");
         await import("pickadate/lib/picker.date");

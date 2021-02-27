@@ -1,21 +1,11 @@
-@import (less) "@{bowerPath}/pickadate/lib/themes/classic.css";
-@import (less) "@{bowerPath}/pickadate/lib/themes/classic.date.css";
-@import (less) "@{bowerPath}/pickadate/lib/themes/classic.time.css";
-@import (reference) "@{bowerPath}/bootstrap/less/mixins.less";
-@import (reference) "@{bowerPath}/bootstrap/less/buttons.less";
-
 .pattern-pickadate-wrapper {
-    .btn:extend(.btn all) {
+    position: relative;
+    margin-bottom: 0.5em;
+
+    .btn {
         vertical-align: top;
         margin: 0.2em;
     }
-    .btn-info:extend(.btn-info all) {
-    }
-    .btn-danger:extend(.btn-danger all) {
-    }
-
-    position: relative;
-    margin-bottom: 0.5em;
 
     .picker {
         display: none;
