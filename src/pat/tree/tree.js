@@ -3,7 +3,6 @@ import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "patternslib/src/core/base";
 import utils from "../../core/utils";
 
-
 export default Base.extend({
     name: "tree",
     trigger: ".pat-tree",
@@ -17,6 +16,8 @@ export default Base.extend({
     },
 
     async init() {
+        import("jqtree/jqtree.css");
+        import("./tree.scss");
         await import("jqtree");
 
         var self = this;
@@ -24,9 +25,7 @@ export default Base.extend({
         for (var optionKey in self.options) {
             var def = self.defaults[optionKey];
             if (def !== undefined && typeof def === "boolean") {
-                self.options[optionKey] = utils.bool(
-                    self.options[optionKey]
-                );
+                self.options[optionKey] = utils.bool(self.options[optionKey]);
             }
         }
 
@@ -35,8 +34,7 @@ export default Base.extend({
                 /* if not using folder option, just allow, otherwise, only allow if folder */
                 if (position === "inside") {
                     return (
-                        target.folder === undefined ||
-                        target.folder === true
+                        target.folder === undefined || target.folder === true
                     );
                 }
                 return true;
@@ -55,11 +53,9 @@ export default Base.extend({
                 delete options.dataUrl;
                 self.tree = self.$el.tree(options);
                 self.options.onLoad(self);
-                })
-                .fail(function(response) {
-                    console.log("failed to load json data");
-                })
-            ;
+            }).fail(function (response) {
+                console.log("failed to load json data");
+            });
         } else {
             self.tree = self.$el.tree(self.options);
         }
