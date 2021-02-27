@@ -35,6 +35,7 @@
         "jquery.recurrenceinput.js": "https://github.com/collective/jquery.recurrenceinput.js.git#master",
         "marked": "0.3.18",
         "moment": "2.29.1",
+        "pat-code-editor": "https://github.com/Patternslib/pat-code-editor.git#master",
         "patternslib": "https://github.com/Patternslib/Patterns.git#edc311e9d1f76f62b0582d3db518c8217626a859",
         "pickadate": "3.6.4",
         "prettier": "^2.1.2",
