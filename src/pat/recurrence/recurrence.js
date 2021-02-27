@@ -1,11 +1,6 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import Base from "patternslib/src/core/base";
-
-// tmpl BEFORE recurrenceinput
-import "jquery.recurrenceinput.js/lib/jquery.tools.dateinput";
-import "jquery.recurrenceinput.js/lib/jquery.tools.overlay";
-import "jquery.recurrenceinput.js/lib/jquery.tmpl";
-import "jquery.recurrenceinput.js/src/jquery.recurrenceinput";
 
 export default Base.extend({
     name: "recurrence",
@@ -17,7 +12,16 @@ export default Base.extend({
         localization: null,
         configuration: {},
     },
-    init: function () {
+    init: async function () {
+        // tmpl BEFORE recurrenceinput
+        import("jquery.recurrenceinput.js/lib/jquery.tools.dateinput.css");
+        import("jquery.recurrenceinput.js/lib/jquery.tools.overlay.css");
+        import("jquery.recurrenceinput.js/src/jquery.recurrenceinput.css");
+        await import("jquery.recurrenceinput.js/lib/jquery.tools.dateinput");
+        await import("jquery.recurrenceinput.js/lib/jquery.tools.overlay");
+        await import("jquery.recurrenceinput.js/lib/jquery.tmpl");
+        await import("jquery.recurrenceinput.js/src/jquery.recurrenceinput");
+
         this.$el.addClass("recurrence-widget");
         if (this.options.localization) {
             $.tools.recurrenceinput.localize(
