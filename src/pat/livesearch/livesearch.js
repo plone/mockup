@@ -203,6 +203,8 @@ export default Base.extend({
         this.$el.removeClass("livesearch-active");
     },
     init: function () {
+        import("./livesearch.scss");
+
         var self = this;
 
         self.$input = self.$el.find(self.options.inputSelector);
