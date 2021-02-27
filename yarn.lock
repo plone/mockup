@@ -7585,9 +7585,9 @@ path-type@^4.0.0:
     validate.js "^0.13.1"
     whatwg-fetch "^3.4.0"
 
-"patternslib@https://github.com/Patternslib/Patterns.git#edc311e9d1f76f62b0582d3db518c8217626a859":
+"patternslib@https://github.com/Patternslib/Patterns.git#b0bbf9fdf0f98ad60e43d2e691fc5fe8b6b33929":
   version "4.0.0-dev"
-  resolved "https://github.com/Patternslib/Patterns.git#edc311e9d1f76f62b0582d3db518c8217626a859"
+  resolved "https://github.com/Patternslib/Patterns.git#b0bbf9fdf0f98ad60e43d2e691fc5fe8b6b33929"
   dependencies:
     "@fullcalendar/adaptive" "^5.3.1"
     "@fullcalendar/core" "^5.3.1"
