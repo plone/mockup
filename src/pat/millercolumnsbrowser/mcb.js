@@ -1,12 +1,7 @@
-//import $ from "jquery";
-import _ from "underscore";
 import Base from "patternslib/src/core/base";
 import Parser from "patternslib/src/core/parser";
-import _t from "../../core/i18n-wrapper";
-//import utils from "../../core/utils";
 
 // This pattern
-import registry from "patternslib/src/core/registry";
 import MillerColumnsBrowser from "./src/MillerColumnsBrowser.svelte";
 const parser = new Parser("contentbrowser");
 
