@@ -14,7 +14,7 @@ export default function () {
   store.request = async (method, path, params = null) => {
     // let baseUrlParams = "?name=plone.app.vocabularies.Catalog&field=relatedItems&query=";
     console.log("store.request() path:", path)
-    let baseUrlParams = "?query=";
+    let baseUrlParams = "&query=";
     let vocabQuery = `{"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"${path}::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}`;
     //let attributes = cfg.attr_string.split(",").map((item) => item.trim());
     let attributesParam = "&attributes=" + JSON.stringify(cfg.attributes);

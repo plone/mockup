@@ -81,7 +81,7 @@
         <div class="levelPath">{level.path}</div>
         {#each level.results as item, n}
           <div class="row relatedItem{n % 2 == 0 ? ' odd' : ' even'}">
-            <div class="col-3" title={item.portal_type}>{item.Title}</div>
+            <div class="col-5" title={item.portal_type}>{item.Title}</div>
             {#if item.portal_type === "Image"}
             <div class="col">
                 <img
@@ -181,13 +181,13 @@
   .relatedItem > * {
     padding: 1rem;
   }
-  .relatedItem > svg,
-  .relatedItem > img {
-    padding: 0 1rem;
+  .relatedItem > div > svg,
+  .relatedItem > div> img {
+    /* padding: 0; */
     margin: auto 0;
   }
 
-  .relatedItem > img{
+  .relatedItem > div > img{
     object-fit: cover;
     width: 32px;
     height: 32px;
