@@ -18,8 +18,8 @@ export default function () {
     let vocabQuery = `{"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"${path}::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}`;
     //let attributes = cfg.attr_string.split(",").map((item) => item.trim());
     let attributesParam = "&attributes=" + JSON.stringify(cfg.attributes);
-    // let batchParam = "&batch=" + JSON.stringify({ page: 1, size: 100 });
-    let url = cfg.vocabulary_url + baseUrlParams + vocabQuery + attributesParam; // + batchParam;
+    let batchParam = "&batch=" + JSON.stringify({ page: 1, size: 100 });
+    let url = cfg.vocabularyUrl + baseUrlParams + vocabQuery + attributesParam + batchParam;
     console.log("url: ", url);
 
     store.update((data) => {
@@ -48,8 +48,8 @@ export default function () {
 
   store.get = async (path) => {
     console.log("store.get() path: ", path);
-    let parts = path.split("/");
-    const depth = parts.length >= cfg.max_depth ? cfg.max_depth : parts.length;
+    let parts = path.split("/") || [];
+    const depth = parts.length >= cfg.maxDepth ? cfg.maxDepth : parts.length;
     let paths = [];
 
     let partsToShow = parts.slice(parts.length - depth, parts.length);
@@ -69,8 +69,8 @@ export default function () {
 
     let levels = [];
     for (var p of paths) {
-      console.log("GET path/p: ", p);
-      let level = await store.request("GET", p);
+      console.log("GET basePath/p: ", cfg.basePath + p);
+      let level = await store.request("GET", cfg.basePath + p);
       level.path = p;
       levels = [level, ...levels];
     }

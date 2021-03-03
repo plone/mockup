@@ -1,10 +1,11 @@
 import { writable } from 'svelte/store';
 
-export const currentPath = writable('/Plone13/');
+export const currentPath = writable('/');
 export const config = writable({
-    vocabulary_url: null,
-    attr_string: null,
-    max_depth: 3,
+    vocabularyUrl: null,
+    attributes: null,
+    maxDepth: 3,
+    basePath: null,
 });
 
 //export const levelItems = writable([]);

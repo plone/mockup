@@ -10,8 +10,36 @@ import registry from "patternslib/src/core/registry";
 import MillerColumnsBrowser from "./src/MillerColumnsBrowser.svelte";
 const parser = new Parser("contentbrowser");
 
-parser.addArgument("vocabulary-url", "http://localhost:8081/Plone/@@getVocabulary");
-parser.addArgument("attributes", "UID, Title, portal_type, path, getURL, getIcon, is_folderish, review_state");
+parser.addArgument(
+    "vocabulary-url",
+    "http://localhost:8081/Plone/@@getVocabulary"
+);
+parser.addArgument(
+    "attributes",
+    [
+        "UID",
+        "Title",
+        "portal_type",
+        "path",
+        "getURL",
+        "getIcon",
+        "is_folderish",
+        "review_state",
+    ],
+    [
+        "UID",
+        "Title",
+        "portal_type",
+        "path",
+        "getURL",
+        "getIcon",
+        "is_folderish",
+        "review_state",
+    ],
+    true
+);
+parser.addArgument("max-depth", "2");
+parser.addArgument("base-path", "/Plone14");
 
 //import "./relateditems.scss";
 
@@ -20,62 +48,10 @@ parser.addArgument("attributes", "UID, Title, portal_type, path, getURL, getIcon
 //     RIGHT: 39,
 // };
 
-
 export default Base.extend({
     name: "contentbrowser",
     trigger: ".pat-contentbrowser",
     //parser: "mockup",
-    // currentPath: undefined,
-    // selectedUIDs: [],
-    // openAfterInit: undefined,
-    // defaults: {
-    //     // main option
-    //     vocabularyUrl: null, // must be set to work
-
-    //     // more options
-    //     attributes: [
-    //         "UID",
-    //         "Title",
-    //         "portal_type",
-    //         "path",
-    //         "getURL",
-    //         "getIcon",
-    //         "is_folderish",
-    //         "review_state",
-    //     ], // used by utils.QueryHelper
-    //     basePath: "",
-    //     pageSize: 10,
-    //     browsing: undefined,
-    //     closeOnSelect: true,
-    //     contextPath: undefined,
-    //     favorites: [],
-    //     // orderable: true, // mockup-patterns-select2
-    //     pathOperator: "plone.app.querystring.operation.string.path",
-    //     rootPath: "/",
-    //     rootUrl: "", // default to be relative.
-    //     scanSelection: false, // False, to no unnecessarily use CPU time on this.
-    //     selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
-    //     separator: ",",
-    //     sortOn: null,
-    //     sortOrder: "ascending",
-    //     tokenSeparators: [",", " "],
-    //     // upload: false,
-    //     // uploadAllowView: undefined,
-    //     // width: "100%",
-
-    //     // needed
-    //     multiple: true,
-    // },
-
-    browseTo: function (path) {
-        var self = this;
-        // self.emit("before-browse");
-        self.currentPath = path;
-        // $(self.el).select2("close");
-        // self.renderToolbar();
-        // $(self.el).select2("open");
-        // self.emit("after-browse");
-    },
 
     isSelectable: function (item) {
         var self = this;
@@ -100,6 +76,8 @@ export default Base.extend({
             // hydrate: true,
             props: {
                 maxDepth: this.options.maxDepth,
+                basePath: this.options.basePath,
+                attributes: this.options.attributes,
                 vocabularyUrl: this.options.vocabularyUrl,
             },
         });

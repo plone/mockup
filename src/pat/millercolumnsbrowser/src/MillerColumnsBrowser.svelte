@@ -10,22 +10,21 @@
   import { fade, fly } from "svelte/transition";
   import { flip } from "svelte/animate";
 
-  export let max_depth = 2;
+  export let maxDepth = 2;
+  export let basePath = "/Plone";
   // export let attr_string = "UID, Title, portal_type, path, getURL, getIcon, is_folderish, review_state";
   export let attributes = [];
-  export let vocabularyUrl = "http://localhost:8081/Plone/@@getVocabulary";
+  export let vocabularyUrl = "http://localhost:8080/Plone/@@getVocabulary";
   //url = 'http://localhost:8081/Plone13/@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems&query={"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"/Plone::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}&attributes=["UID","Title","portal_type","path","getURL","getIcon","is_folderish","review_state"]&batch={"page":1,"size":10}';
   // console.log(url);
   //       http://localhost:8080/Plone13/@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems&query={"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"/Plone13/::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}&attributes=["UID","Title","portal_type","path","getURL","getIcon","is_folderish","review_state"]&batch={"page":1,"size":10}
   const relatedItems = millerColumnsStore();
 
   onMount(async () => {
-    console.log("mounted...");
-    console.log("max_depth ", max_depth);
-    console.log("vocabulary_url ", vocabulary_url);
-    $config.max_depth = max_depth;
-    $config.vocabulary_url = vocabularyUrl;
-    // $config.attr_string = attr_string;
+    console.log("onMount: vocabularyUrl", vocabularyUrl);
+    $config.maxDepth = maxDepth;
+    $config.basePath = basePath;
+    $config.vocabularyUrl = vocabularyUrl;
     $config.attributes = attributes;
     relatedItems.get($currentPath);
   });
@@ -38,7 +37,8 @@
   $: {
     // vocabQuery = `{"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"${$currentPath}::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}`;
     // url = vocabularyUrl + vocabQuery + attributesParam; // + batchParam;
-    if($config.vocabulary_url) {
+    if($config.vocabularyUrl) {
+    console.log("vocabularyUrl", vocabularyUrl);
       console.log("currentPath changed: ", $currentPath);
       relatedItems.get($currentPath);
     }
@@ -46,8 +46,9 @@
 
   onDestroy(config_unsubscribe);
 </script>
-{max_depth}
-<h2>Related Items Prototype</h2>
+{maxDepth}
+{$currentPath}
+<h2>Content Browser Prototype</h2>
 <div class="toolBar">
   <svg
     class="homeAction bi bi-house"
@@ -71,23 +72,26 @@
 {#await $relatedItems}
   <p>...waiting</p>
 {:then levels}
-  <div class="levelColumns">
+  <div class="levelColumns row">
     {#each levels as level, i (level.path)}
       <div
-        class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
+        class="col levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
         in:fly|local={{ duration: 1000 }}
       >
         <div class="levelPath">{level.path}</div>
         {#each level.results as item, n}
-          <div class="relatedItem{n % 2 == 0 ? ' odd' : ' even'}">
-            <div title={item.portal_type}>{item.Title}</div>
+          <div class="row relatedItem{n % 2 == 0 ? ' odd' : ' even'}">
+            <div class="col-3" title={item.portal_type}>{item.Title}</div>
             {#if item.portal_type === "Image"}
+            <div class="col">
                 <img
                   src="{item.getURL}/@@images/image/tile"
                   alt={item.Title}
                 />
+            </div>
             {/if}
             {#if item.is_folderish}
+            <div class="col">
               <svg on:click={() => changePath(item.path)}
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -100,6 +104,7 @@
                     d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
                   />
                 </svg>
+            </div>
             {/if}
           </div>
           <!-- <RelatedItem
@@ -150,7 +155,7 @@
   }
 
   .levelColumn {
-    min-width: 200px;
+    /* min-width: 200px; */
     border-top: 5px solid transparent;
   }
   .levelColumn.even {
@@ -163,9 +168,9 @@
   }
   .relatedItem {
     /* padding: 1rem 1rem; */
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    /* display: flex; */
+    /* align-items: baseline; */
+    /* justify-content: space-between; */
     border-right: 1px solid #ddd;
     /* border-left: 1px solid #ddd; */
   }
