@@ -17,8 +17,8 @@ const KEY = {
 };
 
 export default Base.extend({
-    name: "miller-columns-browser",
-    trigger: ".pat-miller-columns-browser",
+    name: "millercolumnsbrowser",
+    trigger: ".pat-millercolumnsbrowser",
     //parser: "mockup",
     currentPath: undefined,
     selectedUIDs: [],
@@ -87,27 +87,15 @@ export default Base.extend({
     },
 
     init: function () {
-        var self = this;
-        console.log("init mcb")
-
-        // Remove trailing slash
-        self.options.rootPath = self.options.rootPath.replace(/\/$/, "");
-        // Substract rootPath from basePath with is the relative currentPath. Has a leading slash. Or use '/'
-        self.currentPath =
-            self.options.basePath.substr(self.options.rootPath.length) || "/";
-        console.log("self.currentPath: ", self.currentPath);
-        // if (self.selectedUIDs.indexOf(item.UID) !== -1) {
-        //     // do not allow already selected items to be selected again.
-        //     item.selectable = false;
-        // }
-        console.log("self.options: ",self.options)
-        const component_instance = new MillerColumnsBrowser({
+        console.log("init mcb");
+        console.log("self.options: ", this.options);
+        this.component_instance = new MillerColumnsBrowser({
             target: this.el,
             // hydrate: true,
             props: {
-                attributes: self.options.attributes,
-                vocabularyUrl: self.options.vocabularyUrl,
-            }
+                maxDepth: this.options.maxDepth,
+                vocabularyUrl: this.options.vocabularyUrl,
+            },
         });
-    }
+    },
 });
