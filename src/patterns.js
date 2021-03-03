@@ -37,6 +37,7 @@ import "./pat/preventdoublesubmit/preventdoublesubmit";
 import "./pat/querystring/querystring";
 import "./pat/recurrence/recurrence";
 import "./pat/relateditems/relateditems";
+import "./pat/millercolumnsbrowser/mcb";
 //import "./pat/resourceregistry/resourceregistry";
 import "./pat/select2/select2";
 import "./pat/sortable/sortable";

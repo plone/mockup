@@ -11,6 +11,7 @@ news/
 CONTRIBUTE
 GETTING_STARTED
 LEARN
+/src/pat/**/node_modules
 mockup/js
 mockup/less
 mockup/lib

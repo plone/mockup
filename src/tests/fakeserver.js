@@ -237,6 +237,7 @@ for (var pathi = 0; pathi < basePaths.length; pathi = pathi + 1) {
     }
 }
 
+
 server.respondWith(/relateditems-test\.json/, function (xhr, id) {
     var searchables = [
         {
