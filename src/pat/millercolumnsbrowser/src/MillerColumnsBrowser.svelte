@@ -11,10 +11,9 @@
   import { flip } from "svelte/animate";
 
   export let max_depth = 2;
-  export let attr_string =
-    "UID, Title, portal_type, path, getURL, getIcon, is_folderish, review_state";
+  // export let attr_string = "UID, Title, portal_type, path, getURL, getIcon, is_folderish, review_state";
   export let attributes = [];
-  export let vocabulary_url = "http://localhost:8081/Plone/@@getVocabulary";
+  export let vocabularyUrl = "http://localhost:8081/Plone/@@getVocabulary";
   //url = 'http://localhost:8081/Plone13/@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems&query={"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"/Plone::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}&attributes=["UID","Title","portal_type","path","getURL","getIcon","is_folderish","review_state"]&batch={"page":1,"size":10}';
   // console.log(url);
   //       http://localhost:8080/Plone13/@@getVocabulary?name=plone.app.vocabularies.Catalog&field=relatedItems&query={"criteria":[{"i":"path","o":"plone.app.querystring.operation.string.path","v":"/Plone13/::1"}],"sort_on":"getObjPositionInParent","sort_order":"ascending"}&attributes=["UID","Title","portal_type","path","getURL","getIcon","is_folderish","review_state"]&batch={"page":1,"size":10}
@@ -25,8 +24,8 @@
     console.log("max_depth ", max_depth);
     console.log("vocabulary_url ", vocabulary_url);
     $config.max_depth = max_depth;
-    $config.vocabulary_url = vocabulary_url;
-    $config.attr_string = attr_string;
+    $config.vocabulary_url = vocabularyUrl;
+    // $config.attr_string = attr_string;
     $config.attributes = attributes;
     relatedItems.get($currentPath);
   });
