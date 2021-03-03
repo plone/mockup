@@ -71,6 +71,11 @@ module.exports = async (env) => {
                     ],
                 },
                 {
+                    test: /\.svelte$/,
+                    exclude: /node_modules/,
+                    use: "svelte-loader",
+                },
+                {
                     test: /\.(?:sass|scss|css)$/i,
                     use: [
                         {
@@ -114,10 +119,13 @@ module.exports = async (env) => {
             }),
         ],
         resolve: {
-            alias: {},
+            alias: {
+                svelte: path.resolve("node_modules", "svelte"),
+            },
+            extensions: [".wasm", ".mjs", ".js", ".json", ".svelte"],
+            mainFields: ["svelte", "browser", "module", "main"],
         },
     };
-
 
     // Use checked-out versions of dependencies if available.
     // try {
