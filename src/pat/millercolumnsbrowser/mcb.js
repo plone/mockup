@@ -36,28 +36,19 @@ parser.addArgument(
 parser.addArgument("max-depth", "2");
 parser.addArgument("base-path", "/Plone14");
 
-//import "./relateditems.scss";
-
-// const KEY = {
-//     LEFT: 37,
-//     RIGHT: 39,
-// };
-
 export default Base.extend({
     name: "contentbrowser",
     trigger: ".pat-contentbrowser",
-    //parser: "mockup",
 
     isSelectable: function (item) {
-        var self = this;
         if (item.selectable === false) {
             return false;
         }
-        if (self.options.selectableTypes === null) {
+        if (this.options.selectableTypes === null) {
             return true;
         } else {
             return (
-                self.options.selectableTypes.indexOf(item.portal_type) !== -1
+                this.options.selectableTypes.indexOf(item.portal_type) !== -1
             );
         }
     },
@@ -65,7 +56,7 @@ export default Base.extend({
     init: function () {
         console.log("init mcb");
         this.options = parser.parse(this.el, this.options);
-        console.log("self.options: ", this.options);
+        console.log("this.options: ", this.options);
         this.component_instance = new MillerColumnsBrowser({
             target: this.el,
             // hydrate: true,
