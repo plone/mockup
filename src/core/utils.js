@@ -375,11 +375,26 @@ var createElementFromHTML = function (htmlString) {
     return div.firstChild;
 };
 
-
-var resolveIcon = async function (iconName) {
-    const iconResp = await fetch(PORTAL_URL + "/@@iconresolver/" + iconName);
-    const iconText = await iconResp.text();
-    return iconText;
+const resolveIcon = async function (name) {
+    // /@@iconresolver/ or /@@icontag/
+    const url = document.querySelector("meta[name=iconresolver]")?.content;
+    let icon = null;
+    if (url) {
+        const resp = await fetch(`${url}/${name}`);
+        icon = await resp.json();
+    }
+    if (!icon) {
+        // fallback
+        try {
+            import("../styles/icons.scss");
+            icon = await import(`bootstrap-icons/icons/${name}.svg`);
+            icon = icon?.default;
+        } catch (e) {
+            // import error
+            console.warn(e);
+        }
+    }
+    return icon || "";
 };
 
 export default {

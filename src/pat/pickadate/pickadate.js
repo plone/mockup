@@ -315,11 +315,11 @@ export default Base.extend({
         }
 
         if (utils.bool(self.options.today)) {
-            self.$now = $(
-                '<button type="button" class="btn btn-xs btn-info" title="' +
-                    self.options.today +
-                    '"><span class="glyphicon glyphicon-time"></span></button>'
-            )
+            self.$now = $(`<button
+                type="button"
+                class="btn btn-sm btn-info"
+                title="${self.options.today}"
+            >${await utils.resolveIcon("clock")}</button>`)
                 .addClass(self.options.classNowName)
                 .on("click", function (e) {
                     e.preventDefault();
@@ -336,11 +336,11 @@ export default Base.extend({
         }
 
         if (utils.bool(self.options.clear)) {
-            self.$clear = $(
-                '<button type="button" class="btn btn-xs btn-danger" title="' +
-                    self.options.clear +
-                    '"><span class="glyphicon glyphicon-trash"></span></button>'
-            )
+            self.$clear = $(`<button
+                type="button"
+                class="btn btn-sm btn-danger"
+                title="${self.options.clear}"
+            >${await utils.resolveIcon("trash")}</button>`)
                 .addClass(self.options.classClearName)
                 .on("click", function (e) {
                     e.preventDefault();

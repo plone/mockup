@@ -85,7 +85,7 @@ module.exports = async (env) => {
                     ],
                 },
                 {
-                    test: /\.(png|jpe?g|gif|svg)$/i,
+                    test: /\.(png|jpe?g|gif)$/i,
                     use: "file-loader",
                 },
                 {
