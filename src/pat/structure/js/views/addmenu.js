@@ -2,7 +2,6 @@ import $ from "jquery";
 import _ from "underscore";
 import ButtonGroup from "../../../../core/ui/views/buttongroup";
 import ButtonView from "../../../../core/ui/views/button";
-import "bootstrap/js/src/dropdown";
 
 export default ButtonGroup.extend({
     title: "Add",
@@ -41,62 +40,13 @@ export default ButtonGroup.extend({
         e.preventDefault();
         self.app.loading.show();
         window.location = button.url;
-        /* Do not launch in overlay otherwise you get overlays insides of
-         overlays potentials--nasty. Leave here if we change our mind
-         for some reason.
-      $.ajax({
-        url: button.url,
-        type: 'POST',
-        data: {
-          '_authenticator': $('[name="_authenticator"]').val(),
-        },
-        success: function(response) {
-          self.app.loading.hide();
-          var modal = new Modal(self.$el, {
-            html: utils.parseBodyTag(response),
-            content: '#content',
-            width: '80%',
-            backdropOptions: {
-              closeOnClick: false
-            },
-            automaticallyAddButtonActions: false,
-            actionOptions: {
-              displayInModal: false,
-              reloadWindowOnClose: false
-            },
-            actions: {
-              'input#form-buttons-save, .formControls input[name="form.button.save"]': {
-                onSuccess: function(modal, response, state, xhr, form) {
-                  self.app.collection.pager();
-                  if (self.$items.is(':visible')) {
-                    self.$dropdown.dropdown('toggle');
-                  }
-                  modal.hide();
-                },
-                onError: function() {
-                  window.alert('error on form');
-                }
-              },
-              'input#form-buttons-cancel, .formControls input[name="form.button.cancel"]': {
-                modalFunction: 'hide'
-              }
-            },
-          });
-          modal.show();
-        },
-        error: function() {
-          // XXX handle error
-          self.app.loading.hide();
-        }
-      });
-    */
     },
     render: function () {
         var self = this;
         self.$el.empty();
 
         self.$el.append(
-            '<a class="btn dropdown-toggle btn-default" data-toggle="dropdown" href="#">' +
+            '<button type="button" class="btn dropdown-toggle btn-default" data-bs-toggle="dropdown">' +
                 '<span class="glyphicon glyphicon-plus"></span>' +
                 self.title +
                 '<span class="caret"></span>' +
@@ -107,8 +57,6 @@ export default ButtonGroup.extend({
         );
 
         self.$items = self.$(".dropdown-menu");
-        self.$dropdown = self.$(".dropdown-toggle");
-        self.$dropdown.dropdown();
         return this;
     },
 });

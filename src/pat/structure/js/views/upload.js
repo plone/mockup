@@ -1,3 +1,4 @@
+import $ from "jquery";
 import _ from "underscore";
 import PopoverView from "../../../../core/ui/views/popover";
 import Upload from "../../../upload/upload";

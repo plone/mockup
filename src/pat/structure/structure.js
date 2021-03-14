@@ -1,4 +1,3 @@
-import $ from "jquery";
 import _ from "underscore";
 import Base from "patternslib/src/core/base";
 import AppView from "./js/views/app";
@@ -157,6 +156,8 @@ export default Base.extend({
         },
     },
     init: async function () {
+        import("bootstrap/js/src/dropdown");
+
         var self = this;
 
         /*

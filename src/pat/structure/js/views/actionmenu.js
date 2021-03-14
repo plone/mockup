@@ -8,7 +8,6 @@ import BaseView from "../../../../core/ui/views/base";
 import ActionMenuTemplate from "../../templates/actionmenu.xml";
 import "../../../modal/modal";
 import "patternslib/src/pat/tooltip/tooltip";
-import "bootstrap/js/src/dropdown";
 import actionmenu_generator from "../actionmenu";
 import Actions from "../actions";
 
@@ -95,11 +94,6 @@ export default BaseView.extend({
                 )
             )
         );
-
-        if (data.menuOptions.dropdown) {
-            self.$dropdown = self.$(".dropdown-toggle");
-            self.$dropdown.dropdown();
-        }
 
         if (self.options.className) {
             self.$el.addClass(self.options.className);
