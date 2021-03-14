@@ -4,9 +4,6 @@ import Base from "patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
 
-// UI
-import ButtonView from "../../core/ui/views/button";
-
 // This pattern
 import BreadcrumbTemplate from "./templates/breadcrumb.xml";
 import FavoriteTemplate from "./templates/favorite.xml";
@@ -300,6 +297,9 @@ export default Base.extend({
             icon_root: await utils.resolveIcon("house-fill"),
             icon_recently_used: await utils.resolveIcon("grid-fill"),
             icon_favorites: await utils.resolveIcon("star-fill"),
+            icon_upload: await utils.resolveIcon("cloud-arrow-up"),
+            upload: this.options.upload,
+            upload_text: _t("Upload"),
         });
 
         self.$toolbar.html(html);
@@ -397,25 +397,54 @@ export default Base.extend({
             );
         }
 
-        function initUploadView(UploadView, disabled) {
-            var uploadButtonId = "upload-" + utils.generateId();
-            var uploadButton = new ButtonView({
-                id: uploadButtonId,
-                title: _t("Upload"),
-                tooltip: _t("Upload files"),
-                icon: "upload",
-            });
-            if (disabled) {
-                uploadButton.disable();
-            }
-            $(".controls", self.$toolbar).prepend(uploadButton.render().el);
-            self.uploadView = new UploadView({
-                triggerView: uploadButton,
-                app: self,
-            });
-            $("#btn-" + uploadButtonId, self.$toolbar).append(
-                self.uploadView.render().el
+        async function initUploadView(disabled) {
+            let Upload = await import("../upload/upload");
+            Upload = Upload.default;
+
+            const upload_button = self.$toolbar[0].querySelector(
+                ".upload button"
             );
+            upload_button.disabled = disabled;
+
+            const upload_el = self.$toolbar[0].querySelector(
+                ".upload .pat-upload"
+            );
+
+            const upload_config = {
+                success: (e, response) => {
+                    const uid = response.UID;
+                    if (uid) {
+                        const query = new utils.QueryHelper({
+                            vocabularyUrl: self.options.vocabularyUrl,
+                            attributes: self.options.attributes,
+                        });
+                        query.search(
+                            "UID",
+                            "plone.app.querystring.operation.selection.is",
+                            uid,
+                            (e) => {
+                                var data = self.$el.select2("data");
+                                data.push.apply(data, e.results);
+                                self.$el.select2("data", data, true);
+                                self.emit("selected");
+                                self.popover.hide();
+                            },
+                            false
+                        );
+                    }
+                },
+                uloadMultiple: true,
+                allowPathSelection: false,
+                relativePath: "fileUpload",
+                baseUrl: self.options.rootUrl,
+            };
+            const upload = new Upload($(upload_el), upload_config);
+
+            upload_button.addEventListener("show.bs.dropdown", () => {
+                if (self.currentPath !== upload.currentPath) {
+                    upload.setPath(self.currentPath);
+                }
+            });
         }
 
         // upload
@@ -424,8 +453,6 @@ export default Base.extend({
             utils.featureSupport.dragAndDrop() &&
             utils.featureSupport.fileApi()
         ) {
-            let UploadView = await import("./relateditems-upload");
-            UploadView = UploadView.default;
             if (self.options.uploadAllowView) {
                 // Check, if uploads are allowed in current context
                 $.ajax({
@@ -437,12 +464,12 @@ export default Base.extend({
                     },
                     type: "GET",
                     success: function (result) {
-                        initUploadView(UploadView, !result.allowUpload);
+                        initUploadView(!result.allowUpload);
                     },
                 });
             } else {
                 // just initialize upload view without checking, if uploads are allowed.
-                initUploadView(UploadView);
+                initUploadView();
             }
         }
     },

@@ -85,14 +85,14 @@ This is the related items pattern.
 ```
 
 
-## Default, mode auto, favorites and recentlyUsed
+## Default, mode auto, favorites, recently used and upload
 
 <input type="text" class="pat-relateditems"
-    data-pat-relateditems='{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true}' />
+    data-pat-relateditems='{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true, "upload": true}' />
 
 ```html
 <input type="text" class="pat-relateditems"
-    data-pat-relateditems='{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true}' />
+    data-pat-relateditems='{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true, "upload": true}' />
 ```
 
 

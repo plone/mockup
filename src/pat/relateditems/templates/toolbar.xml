@@ -35,3 +35,16 @@
   </ul>
 </div>
 <% } %>
+
+<% if (upload) { %>
+<div class="upload dropdown ms-2">
+  <button type="button" class="upload dropdown-toggle btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= icon_upload %>
+    <%- upload_text %>
+    <span class="caret"/>
+  </button>
+  <ul class="dropdown-menu">
+    <div class="pat-upload"></div>
+  </ul>
+</div>
+<% } %>
