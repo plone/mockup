@@ -3,23 +3,7 @@ import _ from "underscore";
 import Base from "patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
-
-// This pattern
-import BreadcrumbTemplate from "./templates/breadcrumb.xml";
-import FavoriteTemplate from "./templates/favorite.xml";
-import ResultTemplate from "./templates/result.xml";
-import RecentlyUsedTemplate from "./templates/recentlyused.xml";
-import SelectionTemplate from "./templates/selection.xml";
-import ToolbarTemplate from "./templates/toolbar.xml";
 import registry from "patternslib/src/core/registry";
-
-// Other patterns
-import Select2 from "../select2/select2";
-
-import "./relateditems.scss";
-
-// External
-import "bootstrap/js/src/dropdown";
 
 const KEY = {
     LEFT: 37,
@@ -75,17 +59,11 @@ export default Base.extend({
         uploadAllowView: undefined,
 
         // templates
-        breadcrumbTemplate: BreadcrumbTemplate,
         breadcrumbTemplateSelector: null,
-        favoriteTemplate: FavoriteTemplate,
         favoriteTemplateSelector: null,
-        recentlyusedTemplate: RecentlyUsedTemplate,
         recentlyusedTemplateSelector: null,
-        resultTemplate: ResultTemplate,
         resultTemplateSelector: null,
-        selectionTemplate: SelectionTemplate,
         selectionTemplateSelector: null,
-        toolbarTemplate: ToolbarTemplate,
         toolbarTemplateSelector: null,
 
         // needed
@@ -118,10 +96,10 @@ export default Base.extend({
         if (self.options[tpl + "TemplateSelector"]) {
             template = $(self.options[tpl + "TemplateSelector"]).html();
             if (!template) {
-                template = self.options[tpl + "Template"];
+                template = self[tpl + "Template"];
             }
         } else {
-            template = self.options[tpl + "Template"];
+            template = self[tpl + "Template"];
         }
         // let's give all the options possible to the template generation
         var options = $.extend(true, {}, self.options, item, {
@@ -535,6 +513,18 @@ export default Base.extend({
     },
 
     init: async function () {
+        const Select2 = (await import("../select2/select2")).default;
+        import("./relateditems.scss");
+        import("bootstrap/js/src/dropdown");
+
+        // templates
+        this.breadcrumbTemplate = (await import("./templates/breadcrumb.xml")).default; // prettier-ignore
+        this.favoriteTemplate = (await import("./templates/favorite.xml")).default; // prettier-ignore
+        this.recentlyusedTemplate = (await import("./templates/recentlyused.xml")).default; // prettier-ignore
+        this.resultTemplate = (await import("./templates/result.xml")).default; // prettier-ignore
+        this.selectionTemplate = (await import("./templates/selection.xml")).default; // prettier-ignore
+        this.toolbarTemplate = (await import("./templates/toolbar.xml")).default; // prettier-ignore
+
         var self = this;
 
         self.browsing = self.options.mode !== "search";
