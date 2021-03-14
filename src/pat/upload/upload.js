@@ -54,16 +54,13 @@ export default Base.extend({
     init: async function () {
         import("dropzone/dist/dropzone.css");
         import("./upload.scss");
-        Dropzone = await import("dropzone");
-        Dropzone = Dropzone.default;
+        Dropzone = (await import("dropzone")).default;
         /* we do not want this plugin to auto discover */
         Dropzone.autoDiscover = false;
 
-        let UploadTemplate = await import("./templates/upload.xml");
-        UploadTemplate = UploadTemplate.default;
+        const UploadTemplate = (await import("./templates/upload.xml")).default;
 
-        var self = this,
-            template = UploadTemplate;
+        var self = this;
 
         if (typeof self.options.allowPathSelection === "undefined") {
             // Set allowPathSelection to true, if we can use path based urls.
@@ -88,7 +85,7 @@ export default Base.extend({
         self.currentPath = self.options.currentPath;
         self.currentFile = 0;
 
-        template = _.template(template)({
+        let template = _.template(UploadTemplate)({
             _t: _t,
             allowPathSelection: self.options.allowPathSelection,
         });
