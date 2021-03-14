@@ -76,7 +76,6 @@ export default Base.extend({
         tokenSeparators: [",", " "],
         upload: false,
         uploadAllowView: undefined,
-        width: "100%",
 
         // templates
         breadcrumbTemplate: BreadcrumbTemplate,
@@ -523,7 +522,6 @@ export default Base.extend({
 
         self.$el.wrap('<div class="pattern-relateditems-container" />');
         self.$container = self.$el.parents(".pattern-relateditems-container");
-        self.$container.width(self.options.width);
 
         Select2.prototype.initializeValues.call(self);
         Select2.prototype.initializeTags.call(self);
@@ -698,7 +696,7 @@ export default Base.extend({
 
         Select2.prototype.initializeSelect2.call(self);
 
-        self.$toolbar = $('<div class="toolbar ui-offset-parent" />');
+        self.$toolbar = $('<div class="toolbar d-flex" />');
         self.$container.prepend(self.$toolbar);
         self.$el.on("select2-selecting", function (event) {
             if (!self.isSelectable(event.choice)) {

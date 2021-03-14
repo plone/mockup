@@ -1,97 +1,15 @@
-// @import "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-// @icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-// @import "@{bowerPath}/bootstrap/less/glyphicons.less";
-// @import "@{mockuplessPath}/ui.less";
-
-// @import (reference) "@{bowerPath}/bootstrap/less/mixins.less";
-// @import (reference) "@{bowerPath}/bootstrap/less/utilities.less";
-// @import (reference) "@{bowerPath}/bootstrap/less/buttons.less";
-// @import (reference) "@{bowerPath}/bootstrap/less/button-groups.less";
-// @import (reference) "@{bowerPath}/bootstrap/less/popovers.less";
-// @import (reference) "@{mockuplessPath}/popover.less";
-
-// @import "@{mockupPath}/select2/pattern.select2.less";
-
 .pattern-relateditems-container {
-    // .fade:extend(.fade all) {
-    // }
-    // .collapse:extend(.collapse all) {
-    // }
-    // .collapsing:extend(.collapsing all) {
-    // }
-
-    // .popover:extend(.popover all) {
-    // }
-    // .popover-title:extend(.popover-title all) {
-    // }
-    // .popover-content:extend(.popover-content all) {
-    // }
-    // .arrow:extend(.arrow all) {
-    // }
-
-    // .table:extend(.table all) {
-    // }
-    // .pagination:extend(.pagination all) {
-    // }
-
-    // .btn:extend(.btn all) {
-    // }
-    // .btn-default:extend(.btn-default all) {
-    // }
-    // .btn-primary:extend(.btn-primary all) {
-    // }
-    // .btn-group:extend(.btn-group all) {
-    // }
-    // .input-group:extend(.input-group all) {
-    // }
-    // .input-group-addon:extend(.input-group-addon all) {
-    // }
-    // .input-group-btn:extend(.input-group-btn all) {
-    // }
-    // .dropdown-menu:extend(.dropdown-menu all) {
-    // }
-    // .dropdown-toggle:extend(.dropdown-toggle all) {
-    // }
-    // .dropdown-header:extend(.dropdown-header all) {
-    // }
-    // .divider:extend(.divider all) {
-    // }
-
-    // .table-striped:extend(.table-striped all) {
-    // }
-    // .table-bordered:extend(.table-bordered all) {
-    // }
-
-    // .navbar:extend(.navbar all) {
-    // }
-    // .navbar-search:extend(.navbar-search all) {
-    // }
-    // .form-search:extend(.form-search all) {
-    // }
-    // .ui-offset-parent:extend(.ui-offset-parent all) {
-    // }
-
-    // .form-group:extend(.form-group all) {
-    // }
-    // .help-block:extend(.help-block all) {
-    // }
-    // .checkbox:extend(.checkbox all) {
-    // }
-
-    // .open:extend(.open all) {
-    // }
-
     position: relative;
     display: inline-block;
+
+    .select2-container {
+        min-width: 100%;
+    }
 
     .toolbar {
         background-color: #d8d8d8;
         display: inline-block;
         width: 100%;
-
-        // .btn {
-        //     &:extend(.btn-sm);
-        // }
 
         .mode-selector {
             display: inline-block;
@@ -103,59 +21,6 @@
             margin: 0.5em;
             vertical-align: middle;
         }
-
-        .controls {
-            display: inline-block;
-            vertical-align: middle;
-        }
-    }
-
-    .favorites .recentlyUsed {
-        position: relative; // make dropdown appear on right, as the dropdown is positioned absolute / left-0.
-    }
-
-    .dropdown-menu {
-        padding: 1em 0;
-
-        a {
-            cursor: pointer;
-            display: block;
-            padding: 0.5em 1em;
-
-            &,
-            &:hover {
-                border-bottom: 0;
-                text-decoration: none;
-            }
-
-            &:hover {
-                background: rgba(0, 0, 0, 0.1);
-            }
-
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-
-        .pattern-relateditems-recentlyused-select {
-            display: flex;
-            justify-content: space-between;
-            padding: 3px;
-
-            .pattern-relateditems-recentlyused-info {
-                flex-grow: 2;
-                hyphens: auto;
-                white-space: normal;
-            }
-
-            .pattern-relateditems-recentlyused-image {
-                flex: 0 0 auto;
-            }
-        }
-    }
-
-    .toolbar .dropdown-menu {
-        min-width: 310px;
     }
 
     .pattern-relateditems-result-info {

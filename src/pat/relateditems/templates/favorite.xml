@@ -1,1 +1,1 @@
-<li><a href="<%- path %>" class="fav" aria-labelledby="blip"><%- title %></a></li>
+<li><a href="<%- path %>" class="fav dropdown-item" aria-labelledby="blip"><%- title %></a></li>
