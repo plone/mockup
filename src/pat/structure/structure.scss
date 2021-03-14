@@ -1,108 +1,6 @@
-@import "@{bowerPath}/bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-@icon-font-path: "@{bowerPath}/bootstrap/dist/fonts/";
-@import "@{bowerPath}/bootstrap/less/glyphicons.less";
-@import "@{mockuplessPath}/ui.less";
-@import "@{mockupPath}/tooltip/pattern.tooltip.less";
-@import "@{mockupPath}/datatables/pattern.datatables.less";
-
-@import "@{bowerPath}/bootstrap/less/mixins.less";
-@import "@{bowerPath}/bootstrap/less/utilities.less";
-@import (reference) "@{bowerPath}/bootstrap/less/buttons.less";
-@import (reference) "@{bowerPath}/bootstrap/less/button-groups.less";
-@import (reference) "@{bowerPath}/bootstrap/less/badges.less";
-@import (reference) "@{bowerPath}/bootstrap/less/popovers.less";
-@import (reference) "@{bowerPath}/bootstrap/less/pagination.less";
-@import (reference) "@{bowerPath}/bootstrap/less/input-groups.less";
-@import (reference) "@{bowerPath}/bootstrap/less/tables.less";
-@import (reference) "@{bowerPath}/bootstrap/less/dropdowns.less";
-@import (reference) "@{bowerPath}/bootstrap/less/forms.less";
-@import (reference) "@{bowerPath}/bootstrap/less/navbar.less";
-@import (reference) "@{bowerPath}/bootstrap/less/navs.less";
-@import (reference) "@{bowerPath}/bootstrap/less/component-animations.less";
-@import (reference) "@{mockuplessPath}/popover.less";
-
 .pat-structure {
-    .fade:extend(.fade all) {
-    }
-    .collapse:extend(.collapse all) {
-    }
-    .collapsing:extend(.collapsing all) {
-    }
-
-    .popover:extend(.popover all) {
-    }
-    .popover-title:extend(.popover-title all) {
-    }
-    .popover-content:extend(.popover-content all) {
-    }
-    .arrow:extend(.arrow all) {
-    }
-
-    .table:extend(.table all) {
-    }
-    .pagination:extend(.pagination all) {
-    }
-
-    .btn:extend(.btn all) {
-    }
-    .btn-default:extend(.btn-default all) {
-    }
-    .btn-danger:extend(.btn-danger all) {
-    }
-    .btn-primary:extend(.btn-primary all) {
-    }
-    .btn-group:extend(.btn-group all) {
-    }
-    .btn-success:extend(.btn-success all) {
-    }
-    .input-group:extend(.input-group all) {
-    }
-    .input-group-addon:extend(.input-group-addon all) {
-    }
-    .input-group-btn:extend(.input-group-btn all) {
-    }
-    .dropdown-menu:extend(.dropdown-menu all) {
-    }
-    .dropdown-toggle:extend(.dropdown-toggle all) {
-    }
-    .dropdown-header:extend(.dropdown-header all) {
-    }
-    .divider:extend(.divider all) {
-    }
-
-    .table-striped:extend(.table-striped all) {
-    }
-    .table-bordered:extend(.table-bordered all) {
-    }
-
-    .navbar:extend(.navbar all) {
-    }
-    .navbar-search:extend(.navbar-search all) {
-    }
-    .form-search:extend(.form-search all) {
-    }
-    .ui-offset-parent:extend(.ui-offset-parent all) {
-    }
-
-    .form-group:extend(.form-group all) {
-    }
-    .help-block:extend(.help-block all) {
-    }
-    .checkbox:extend(.checkbox all) {
-    }
-
-    .open:extend(.open all) {
-    }
-
-    .btn {
-        .btn-sm();
-    }
-
-    .btn.has-filter {
-        .btn-info();
-    }
     input.has-filter {
-        border: 1px solid @btn-info-border;
+        border: 1px solid orange;
     }
 
     .pagination {
@@ -167,15 +65,15 @@
         }
         .plone-item-expired,
         .plone-item-ineffective {
-            .badge();
+            //.badge();
             font-size: 12px;
             color: white;
         }
         .plone-item-expired {
-            background-color: @plone-toolbar-private-color;
+            background-color: red;
         }
         .plone-item-ineffective {
-            background-color: @plone-toolbar-internal-color;
+            background-color: purple;
         }
     }
     .table th,
@@ -209,7 +107,7 @@
         align-items: center;
         margin-bottom: 1em;
         padding: 0.5em;
-        color: @plone-link-color;
+        color: blue;
         .fc-status-text {
             flex-grow: 1;
         }
@@ -358,7 +256,7 @@
             }
 
             a:before {
-                .glyphicon-remove-sign();
+                //.glyphicon-remove-sign();
                 color: #999;
 
                 &:hover {

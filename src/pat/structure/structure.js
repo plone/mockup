@@ -156,6 +156,7 @@ export default Base.extend({
         },
     },
     init: async function () {
+        import("./structure.scss");
         import("bootstrap/js/src/dropdown");
 
         var self = this;
