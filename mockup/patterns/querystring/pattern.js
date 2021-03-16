@@ -913,12 +913,12 @@ define([
                     self.refreshPreviewEvent.call(self);
                     if ($(this).prop("checked")) {
                         $(
-                            '.option input[type="checkbox"]',
+                            'input[type="checkbox"]',
                             existingSortOrder
                         ).prop("checked", true);
                     } else {
                         $(
-                            '.option input[type="checkbox"]',
+                            'input[type="checkbox"]',
                             existingSortOrder
                         ).prop("checked", false);
                     }
@@ -938,7 +938,7 @@ define([
             // will be synced back and forth between the querystring's form elements
             if (existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
                 var reversed = $(
-                    '.option input[type="checkbox"]',
+                    'input[type="checkbox"]',
                     existingSortOrder
                 ).prop("checked");
                 var sortOn = $('[id$="-sort_on"]', existingSortOn).val();
