@@ -2,7 +2,7 @@ import Base from "patternslib/src/core/base";
 import Parser from "patternslib/src/core/parser";
 
 // This pattern
-import MillerColumnsBrowser from "./src/MillerColumnsBrowser.svelte";
+import ContentBrowser from "./src/ContentBrowser.svelte";
 const parser = new Parser("contentbrowser");
 
 parser.addArgument(
@@ -66,14 +66,18 @@ export default Base.extend({
         console.log("init mcb");
         this.options = parser.parse(this.el, this.options);
         console.log("self.options: ", this.options);
-        this.component_instance = new MillerColumnsBrowser({
-            target: this.el,
-            // hydrate: true,
+        const newEl = document.createElement("div");
+        newEl.classList.add('content-browser');
+        // this.el.setAttribute('style', 'display: none');
+        this.el.parentNode.insertBefore(newEl, this.el);
+        this.component_instance = new ContentBrowser({
+            target: newEl,
             props: {
                 maxDepth: this.options.maxDepth,
                 basePath: this.options.basePath,
                 attributes: this.options.attributes,
                 vocabularyUrl: this.options.vocabularyUrl,
+                selectedItemsNode: this.el,
             },
         });
     },

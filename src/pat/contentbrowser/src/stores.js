@@ -7,5 +7,8 @@ export const config = writable({
     maxDepth: 3,
     basePath: null,
 });
+export const selectedItems = writable([]);
+
+export const cache = writable({});
 
 //export const levelItems = writable([]);

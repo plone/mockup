@@ -82,6 +82,7 @@
         "style-loader": "^1.2.1",
         "svelte": "^3.35.0",
         "svelte-loader": "^3.0.0",
+        "svelte-scrollto": "^0.2.0",
         "svg-inline-loader": "^0.8.2",
         "terser-webpack-plugin": "^2.3.6",
         "url-polyfill": "^1.1.9",
