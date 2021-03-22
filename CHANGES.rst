@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.6 (2021-03-22)
+------------------
+
+Bug fixes:
+
+
+- Remove fonts from patterns to avoid multiple inline includes.
+  [agitator] (#1042)
+
+
 3.2.5 (2021-02-19)
 ------------------
 
