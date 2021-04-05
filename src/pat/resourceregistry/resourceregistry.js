@@ -9,7 +9,7 @@ import OverridesView from "./js/overrides";
 import RegistryView from "./js/registry";
 import PatternOptionsView from "./js/patternoptions";
 
-export default BaseView.extend({
+const TabView = BaseView.extend({
     tagName: "div",
     activeTab: "registry",
     template: _.template(
@@ -138,7 +138,7 @@ export default BaseView.extend({
     },
 });
 
-var ResourceRegistry = Base.extend({
+export default Base.extend({
     name: "resourceregistry",
     trigger: ".pat-resourceregistry",
     parser: "mockup",

@@ -3,7 +3,7 @@ import BaseView from "../../../core/ui/views/base";
 import _ from "underscore";
 import _t from "../../../core/i18n-wrapper";
 import utils from "../../../core/utils";
-import TextEditor from "../../texteditor/texteditor";
+import CodeEditor from "pat-code-editor";
 import Select2 from "../../select2/select2";
 
 export default BaseView.extend({
@@ -222,20 +222,22 @@ export default BaseView.extend({
     },
 
     showEditor: function (data) {
-        var that = this;
-        var $pre = $('<pre class="pat-texteditor" />');
-        $pre.text(data);
-        that.$editorContainer.empty().append($pre);
-        that.editor = new TextEditor($pre, {
-            width: $(".editor").width(),
-            height: 500,
-        });
-        that.editor.setSyntax(that.editing);
-        that.tabView.loading.hide();
-        that.editor.editor.on("change", function () {
-            that.$el
+        const editor_el = document.createElement("textarea");
+        editor_el.setAttribute("class", "pat-code-editor");
+        editor_el.setAttribute(
+            "data-pat-code-editor",
+            `language: ${this.editing}`
+        );
+        editor_el.value = data;
+        this.$editorContainer[0].innerHTML = "";
+        this.$editorContainer[0].appendChild(editor_el);
+        this.editor = new CodeEditor(editor_el);
+        this.editor.codeeditor.onUpdate(() => {
+            this.$el
                 .find(".plone-btn-primary,.plone-btn-default")
                 .prop("disabled", false);
         });
+
+        this.tabView.loading.hide();
     },
 });
