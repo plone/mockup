@@ -6127,10 +6127,10 @@ jquery.cookie@1.4.1:
   dependencies:
     jquery ""
 
-jquery@, jquery@3.5.1, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.9, jquery@^3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
-  integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==
+jquery@, jquery@3.6.0, jquery@>=1.7, jquery@>=1.7.2, jquery@>=1.9, jquery@^3.5.1, jquery@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
+  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
 
 js-beautify@^1.6.12:
   version "1.13.5"
@@ -7551,9 +7551,10 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-"patternslib@https://github.com/Patternslib/Patterns#master":
-  version "4.0.0-dev"
-  resolved "https://github.com/Patternslib/Patterns#b8a28281ca86c649ff7278c7ae08e29593086ae8"
+patternslib@4.0.0-dev.0:
+  version "4.0.0-dev.0"
+  resolved "https://registry.yarnpkg.com/patternslib/-/patternslib-4.0.0-dev.0.tgz#79e708b347903d3b3ed50b4fe70c6aaec143a4cf"
+  integrity sha512-CURlfRygr7Dwh48VK0IF+sTA3iSP2kZMBWOCRbNBhokX4QRl1FO35zXZEvVJxNguICbQWVtzNry8LkOD+HnJRg==
   dependencies:
     "@fullcalendar/adaptive" "^5.3.1"
     "@fullcalendar/core" "^5.3.1"
@@ -7567,7 +7568,7 @@ path-type@^4.0.0:
     google-code-prettify "^1.0.5"
     imagesloaded "^4.1.4"
     intersection-observer "^0.7.0"
-    jquery "^3.5.1"
+    jquery "^3.6.0"
     jquery-jcrop "^0.9.13"
     luxon "^1.24.1"
     masonry-layout "^4.2.2"
@@ -7590,9 +7591,9 @@ path-type@^4.0.0:
     validate.js "^0.13.1"
     whatwg-fetch "^3.4.0"
 
-"patternslib@https://github.com/Patternslib/Patterns.git#b0bbf9fdf0f98ad60e43d2e691fc5fe8b6b33929":
+"patternslib@https://github.com/Patternslib/Patterns#master":
   version "4.0.0-dev"
-  resolved "https://github.com/Patternslib/Patterns.git#b0bbf9fdf0f98ad60e43d2e691fc5fe8b6b33929"
+  resolved "https://github.com/Patternslib/Patterns#b8a28281ca86c649ff7278c7ae08e29593086ae8"
   dependencies:
     "@fullcalendar/adaptive" "^5.3.1"
     "@fullcalendar/core" "^5.3.1"
