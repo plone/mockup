@@ -8130,6 +8130,10 @@ svelte-hmr@^0.12.3:
   version "0.12.8"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.8.tgz#10459a59a75c93583bd2f70fc84c403495767ebe"
 
+svelte-keydown@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/svelte-keydown/-/svelte-keydown-0.2.1.tgz#42e046146e189d6cb123f26da86055be60633a26"
+
 svelte-loader@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/svelte-loader/-/svelte-loader-3.0.0.tgz#16fbdc7036d95629e861a519fd53c0d7319060f3"

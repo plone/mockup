@@ -6,83 +6,52 @@ The Goals of Mockup
 1. Standardize configuration of patterns implemented in js
    to use HTML data attributes, so they can be developed
    without running a backend server.
-2. Use modern AMD approach to declaring dependencies on other js libs.
-3. Full unit testing of js
 
-Install & Run Tests
--------------------
-Install Node version 0.10 or greater
+Developing Mockup Patterns
+==========================
 
-    `Install using package manager, e.g. apt or yum
-    <https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager>`_
+    Until we merge into Plone 6.0 branch, you have to use the following plip-file in buildout.coredev to get all packages in there right versions: plips/plip-3211-mockup-redone.cfg
 
-    `Install without using package manager
-    <https://github.com/joyent/node/wiki/Installation>`_
+### How to work?
 
-Install PhantomJS
+In general they are two ways in working with Mockup:
 
-    `Download and install PhantomJS
-    <http://phantomjs.org/download.html>`_
+- working without Plone backend, use and test the patterns inside the docs (faster)
+- working with Plone backend and test the patterns in their real environment (slower)
 
-Maybe use your package manager::
+### npm run scripts
 
-    $ apt-get install phantomjs
+We provide some useful npm scripts, you can use to build the bundles and docs.
 
-Now git clone & build Mockup::
+| script  | description  |
+|:--|:--|
+| build:webpack:plone | build the bundles with webpack and move the result to plone.staticresources package |
+| build:docs | build docs with 11ty |
+| build:stats | build stats for webpack-bundle-analyzer |
+| build | build bundles with webpack and build docs with 11ty |
+| watch:webpack | watch for files changes and run webpack, used when working with docs |
+| watch:webpack:plone | watch for files changes and run webpack and move result to plone.staticresources, used when working with Plone backend |
+| test | run tests and watch for changes |
+| testonce | run test once |
+| collect:externaldocs | fetches external docs from patternslib, run this before buildung docs, after updating patternslib |
+| start:webpack | start webpack-dev-server for working on patterns without Plone backend |
+| start:docs | start 11ty dev server to work on docs (markdown files in mockup) |
+| start | run cleanup, webpack- and 11ty-dev-server to develop patterns and mockup docs without Plone backend  |
+| webpack-bundle-analyzer | start webpack-bundle-analyzer with existing stats file |
+| show:stats | build stats and start webpack-bundle-analyzer, shows bundle size stats in browser |
 
-    $ git clone https://github.com/plone/mockup.git
-    $ cd mockup
-    $ make bootstrap
 
-Run tests with PhantomJS::
+You can use them either with npm or with yarn:
 
-    $ make test
+    npm run watch:webpack:plone
 
-Run tests with Chrome::
+or
 
-    $ make test-dev
+    yarn watch:webpack:plone
 
-Generate widgets.pot file in the working directory for Plone translations::
+Using yarn is a bit shorter, but npm provides tab-completion of existing scripts.
 
-    $ make i18n-dump
-
-If you are currently in the buildout.coredev/src/mockup folder and want to update
-the translations in plone.app.locales, first go back in the buildout.coredev
-folder, copy widgets.pot in the plone.app.locales package and resync the po files like
-this::
-
-    $ cd ../..
-    $ cp src/mockup/widgets.pot src/plone.app.locales/plone/app/locales/locales/widgets.pot
-    $ bin/buildout -c experimental/i18n.cfg  # to have the bin/i18n command
-    $ bin/i18n widgets
-
-If you did some changes in the js files and want to test them live in Plone:
-
-- go to Site Setup -> Resource Registries
-- click on the "Development Mode (only logged in users)" checkbox
-- click on the "Develop Javascript" button for the plone-editor-tools bundle
-  (for folder contents changes, may be another bundle for an other pattern)
-- click the "Save" button
-- refresh your page (folder contents for example)
-
-To have the js changes in the next Plone release, you need to build the
-bundles, see `README of plone.staticresources <https://github.com/plone/plone.staticresources>`_
-You may be interested reading `JavaScript For Plone Developers <https://training.plone.org/5/javascript/index.html>`_ and
-`Resource Registry <https://docs.plone.org/adapt-and-extend/theming/resourceregistry.html>`_ documentation too.
-
-To test a translation, for example French:
-
-- edit the po file src/plone.app.locales/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po
-- restart your instance to rebuild the mo file from the po file
-- purge your localStorage and refresh the page to trigger a new download of the translations
-
-The translations are handled by mockup/js/i18n.js that calls the plonejsi18n view defined
-in plone.app.content to generate a json of the translations from the mo file.
-The plonejsi18n view is called one time for a given domain and language and the result
-is cached in localStorage for 24 hours.
-The only way to test the new translations is to restart the instance to update the mo file
-from the po file, and then to purge the localStorage to trigger a new download of the translations.
-
+For more scripts and details have a look at the scripts section of the package.json file.
 
 License
 =======

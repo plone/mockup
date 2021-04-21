@@ -8,7 +8,10 @@ export const config = writable({
     basePath: null,
 });
 export const selectedItems = writable([]);
+export const selectedUids = writable([]);
+export const showContentBrowser = writable(false);
 
 export const cache = writable({});
 
 //export const levelItems = writable([]);
+

@@ -40,6 +40,7 @@
         "prettier": "^2.1.2",
         "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.12.0",
+        "svelte-keydown": "^0.2.1",
         "tinymce": "^5.6.2"
     },
     "devDependencies": {
@@ -107,6 +108,7 @@
         "build:webpack:plone": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production --env.DEPLOYMENT=plone",
         "build:docs": "ELEVENTY_ENV=production  npx @11ty/eleventy --output docs/_site/",
         "build:stats": "webpack --config webpack.config.js --env.NODE_ENV=production --json > stats.json",
+        "build:stats:dev": "webpack --config webpack.config.js --env.NODE_ENV=development --json > stats.json",
         "build": "run-s clean build:webpack build:docs",
         "watch:webpack": "webpack --config webpack.config.js --watch --env.NODE_ENV=development",
         "watch:webpack:plone": "webpack --config webpack.config.js --watch --env.NODE_ENV=production --env.DEPLOYMENT=plone",
@@ -116,7 +118,9 @@
         "collect:externaldocs": "copyup -V node_modules/patternslib/src/pat/**/documentation.md node_modules/pat-*/README.md docs/external/",
         "start:webpack": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=development",
         "start:docs": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --output docs/_site/",
-        "start": "npm-run-all clean --parallel start:*"
+        "start": "npm-run-all clean --parallel start:*",
+        "start:stats": "run-s build:stats webpack-bundle-analyzer",
+        "show:stats": "npx webpack-bundle-analyzer stats.json"
     },
     "browserslist": [
         ">0.2%",

@@ -11,18 +11,32 @@ export const config_unsubscribe = config.subscribe((value) => {
 export default function () {
     const store = writable([]);
 
-    store.request = async (method, path, params = null) => {
-        let vocabQuery = {
-            criteria: [
-                {
-                    i: "path",
-                    o: "plone.app.querystring.operation.string.path",
-                    v: `${path}::1`,
-                },
-            ],
-            sort_on: "getObjPositionInParent",
-            sort_order: "ascending",
-        };
+    store.request = async ({method='GET', path=null, uids=null, params=null}) => {
+        let vocabQuery;
+        if (path) {
+            vocabQuery = {
+                criteria: [
+                    {
+                        i: "path",
+                        o: "plone.app.querystring.operation.string.path",
+                        v: `${path}::1`,
+                    },
+                ],
+                sort_on: "getObjPositionInParent",
+                sort_order: "ascending",
+            };
+        }
+        if (uids) {
+            vocabQuery = {
+                criteria: [
+                    {
+                        i: "UID",
+                        o: "plone.app.querystring.operation.list.contains",
+                        v: uids,
+                    },
+                ],
+            };
+        }
 
         let url = `${cfg.vocabularyUrl}&query=${JSON.stringify(
             vocabQuery
@@ -30,7 +44,6 @@ export default function () {
             page: 1,
             size: 100,
         })}`;
-        console.log("url: ", url);
 
         store.update((data) => {
             delete data.errors;
@@ -53,11 +66,11 @@ export default function () {
                 data.errors = json.errors;
                 return data;
             });
+            return {};
         }
     };
 
     store.get = async (path) => {
-        console.log("store.get() path: ", path);
         let parts = path.split("/") || [];
         const depth =
             parts.length >= cfg.maxDepth ? cfg.maxDepth : parts.length;
@@ -78,18 +91,17 @@ export default function () {
 
         let levels = [];
         for (var p of paths) {
-            console.log("GET basePath/p: ", cfg.basePath + p);
-            let level;
+            let level = {};
             const c = get(cache);
-            if(Object.keys(c).indexOf(p) === -1){
-                console.log("not in cache: ", p)
-                level = await store.request("GET", cfg.basePath + p);
+            if (Object.keys(c).indexOf(p) === -1) {
+                console.log("not in cache: ", p);
+                level = await store.request({method:"GET", path:cfg.basePath + p});
                 cache.update((n) => {
                     n[p] = level;
                     return n;
-                })
-            }else{
-                console.log("in cache: ", p)
+                });
+            } else {
+                console.log("in cache: ", p);
                 level = c[p];
             }
             console.log(get(cache));

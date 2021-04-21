@@ -3,17 +3,20 @@ import Parser from "patternslib/src/core/parser";
 
 // This pattern
 import ContentBrowser from "./src/ContentBrowser.svelte";
+import SelectedItems from "./src/SelectedItems.svelte";
+
 const parser = new Parser("contentbrowser");
 
 parser.addArgument(
     "vocabulary-url",
-    "http://localhost:8081/Plone/@@getVocabulary"
+    "http://localhost:8080/Plone14/@@getVocabulary?name=plone.app.vocabularies.Catalog"
 );
 parser.addArgument(
     "attributes",
     [
         "UID",
         "Title",
+        "Description",
         "portal_type",
         "path",
         "getURL",
@@ -24,6 +27,7 @@ parser.addArgument(
     [
         "UID",
         "Title",
+        "Description",
         "portal_type",
         "path",
         "getURL",
@@ -33,50 +37,47 @@ parser.addArgument(
     ],
     true
 );
-parser.addArgument("max-depth", "2");
+parser.addArgument("max-depth", "200");
 parser.addArgument("base-path", "/Plone14");
+parser.addArgument("max-selectionsize", "9999");
+// parser.addArgument("selectable-types", [],[], true);
+//parser.addArgument("selectable-types", [],[], true);
 
-//import "./relateditems.scss";
-
-// const KEY = {
-//     LEFT: 37,
-//     RIGHT: 39,
-// };
 
 export default Base.extend({
     name: "contentbrowser",
     trigger: ".pat-contentbrowser",
     //parser: "mockup",
 
-    isSelectable: function (item) {
-        var self = this;
-        if (item.selectable === false) {
-            return false;
-        }
-        if (self.options.selectableTypes === null) {
-            return true;
-        } else {
-            return (
-                self.options.selectableTypes.indexOf(item.portal_type) !== -1
-            );
-        }
-    },
-
     init: function () {
-        console.log("init mcb");
+        console.log("init ContentBrowser patter with options: ", this.options)
         this.options = parser.parse(this.el, this.options);
-        console.log("self.options: ", this.options);
-        const newEl = document.createElement("div");
-        newEl.classList.add('content-browser');
-        // this.el.setAttribute('style', 'display: none');
-        this.el.parentNode.insertBefore(newEl, this.el);
-        this.component_instance = new ContentBrowser({
-            target: newEl,
+
+        const contentBrowserEl = document.createElement("div");
+        contentBrowserEl.classList.add('content-browser-wrapper');
+        const bodyElement = document.querySelector("body");
+        bodyElement.append(contentBrowserEl);
+
+        console.log("pat-contentbrowser options", this.options);
+        this.component_instance_browser = new ContentBrowser({
+            target: contentBrowserEl,
             props: {
-                maxDepth: this.options.maxDepth,
+                maxDepth: this.options.max.depth,
                 basePath: this.options.basePath,
                 attributes: this.options.attributes,
                 vocabularyUrl: this.options.vocabularyUrl,
+            },
+        });
+
+        const selectedItemsEl = document.createElement("div");
+        selectedItemsEl.classList.add('selected-items');
+        this.el.parentNode.insertBefore(selectedItemsEl, this.el);
+
+        // this.el.setAttribute('style', 'display: none');
+        this.component_instance_sel_items = new SelectedItems({
+            target: selectedItemsEl,
+            props: {
+                maxSelectionsize: this.options.max.selectionsize,
                 selectedItemsNode: this.el,
             },
         });

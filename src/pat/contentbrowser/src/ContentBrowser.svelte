@@ -2,36 +2,42 @@
 <script>
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
-    // import RelatedItem from "./relateditem/RelatedItem.svelte";
-    import { currentPath, config, selectedItems } from "./stores.js";
+    import {
+        currentPath,
+        config,
+        selectedItems,
+        selectedUids,
+        showContentBrowser,
+    } from "./stores.js";
     import contentStore from "./ContentStore";
     import { config_unsubscribe } from "./ContentStore";
+    import { clickOutside } from "./clickOutside";
     import { fly } from "svelte/transition";
-    //import { flip } from "svelte/animate";
     import * as animateScroll from "svelte-scrollto";
+    import Keydown from "svelte-keydown";
 
     animateScroll.setGlobalOptions({
         scrollX: true,
         container: ".levelColumns",
-        duration: 1500,
+        duration: 500,
     });
-    export let maxDepth = 2;
-    export let basePath = "/Plone";
-    export let attributes = [];
-    export let vocabularyUrl = "http://localhost:8080/Plone/@@getVocabulary";
-    export let selectedItemsNode;
+
+    export let maxDepth;
+    export let basePath;
+    export let attributes;
+    export let vocabularyUrl;
+    export const contentItems = contentStore();
+
     let previewItem = { UID: "" };
-    let showContentBrowser = false;
-    const contentItems = contentStore();
 
     let vw = Math.max(
         document.documentElement.clientWidth || 0,
         window.innerWidth || 0
     );
-    let vh = Math.max(
-        document.documentElement.clientHeight || 0,
-        window.innerHeight || 0
-    );
+    // let vh = Math.max(
+    //     document.documentElement.clientHeight || 0,
+    //     window.innerHeight || 0
+    // );
     let breakPoint = ["xs", 0];
 
     function getBreakPoint() {
@@ -55,14 +61,12 @@
     }
 
     onMount(async () => {
-        console.log("onMount: vocabularyUrl", vocabularyUrl);
         $config.maxDepth = maxDepth;
         $config.basePath = basePath;
         $config.vocabularyUrl = vocabularyUrl;
         $config.attributes = attributes;
         breakPoint = getBreakPoint();
-        contentItems.get($currentPath);
-        readSelectedItemsFromInput();
+        //contentItems.get($currentPath);
     });
 
     function changePath(item) {
@@ -85,23 +89,18 @@
 
     function selectItem(item) {
         selectedItems.update((n) => [...n, item]);
-        showContentBrowser = false;
+        selectedUids.update(() => $selectedItems.map((x) => x.UID));
+        $showContentBrowser = false;
         previewItem = { UID: "" };
     }
 
-    function unselectItem(i) {
-        selectedItems.update((n) => {
-            n.splice(i, 1);
-            return n;
-        });
+    function cancelSelection() {
+        $showContentBrowser = false;
+        previewItem = { UID: "" };
     }
 
-    function readSelectedItemsFromInput() {
-        //debugger
-        console.log(selectedItemsNode.value.split(";"));
-        const uidsFromNode = selectedItemsNode.value.split(";");
-        // FIXME: resolve UID's to items
-        selectedItems.update(() => uidsFromNode);
+    function isSelectable(item) {
+        return $selectedUids.indexOf(item.UID) === -1;
     }
 
     function scrollToRight() {
@@ -109,7 +108,7 @@
         if (scrollContainer) {
             animateScroll.scrollTo({
                 // element: ".levelColumn:last-child",
-                x: (scrollContainer.scrollWidth + 100),
+                x: scrollContainer.scrollWidth + 100,
             });
         }
     }
@@ -121,15 +120,7 @@
 
     $: {
         if ($config.vocabularyUrl) {
-            console.log("currentPath has changed: ", $currentPath);
             contentItems.get($currentPath);
-        }
-    }
-
-    $: {
-        if ($selectedItems.length) {
-            const uids = $selectedItems.map((x) => x.UID);
-            selectedItemsNode.value = uids.join(";");
         }
     }
 
@@ -141,12 +132,15 @@
     onDestroy(config_unsubscribe);
 </script>
 
-<div class="content-browser-wrapper">
-    {#if showContentBrowser}
+<Keydown paused={!$showContentBrowser} on:Escape={cancelSelection} />
+{#if $showContentBrowser}
+    <div class="content-browser-position-wrapper">
         <nav
             class="content-browser"
             transition:fly={{ x: (vw / 100) * 94, opacity: 1 }}
             on:introend={() => scrollToRight()}
+            use:clickOutside
+            on:click_outside={cancelSelection}
         >
             <div class="toolBar">
                 <svg
@@ -166,16 +160,21 @@
                         fill-rule="evenodd"
                         d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"
                     />
-                </svg> <span class="path">{$currentPath}</span>
+                </svg>
+                <span class="path">{$currentPath}</span>
+                <button
+                    class="btn btn-secondary btn-sm"
+                    on:click={() => cancelSelection()}>cancel</button
+                >
             </div>
             {#await $contentItems}
-                <p>...waiting</p>
+                <p>...loading content items</p>
             {:then levels}
                 <div class="levelColumns">
                     {#each levels as level, i (level.path)}
                         <div
                             class="levelColumn{i % 2 == 0 ? ' odd' : ' even'}"
-                            in:fly|local={{ duration: 1000 }}
+                            in:fly|local={{ duration: 300 }}
                         >
                             <div class="levelPath">{level.path}</div>
                             {#each level.results as item, n}
@@ -193,46 +192,14 @@
                                     <div title={item.portal_type}>
                                         {item.Title}
                                     </div>
-                                    <!-- {#if item.portal_type === "Image"}
-                            <div class="col-1">
-                                <img
-                                    src="{item.getURL}/@@images/image/tile"
-                                    alt={item.Title}
-                                />
-                            </div>
-                        {/if} -->
-                                    <!-- {#if item.is_folderish}
-                            <div class="col-1">
-                                <svg
-                                    on:click={() => changePath(item)}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="currentColor"
-                                    class="bi bi-arrow-right-circle-fill"
-                                    viewBox="0 0 16 16"
-                                >
-                                    <path
-                                        d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
-                                    />
-                                </svg>
-                            </div>
-                        {/if} -->
                                 </div>
-                                <!-- <RelatedItem
-          title={item.Title}
-          path={item.path}
-          url={item.getURL}
-          is_folderish={item.is_folderish}
-          portal_type={item.portal_type}
-          uid={item.UID}
-        /> -->
                             {/each}
                         </div>
                     {/each}
                     {#if previewItem.UID}
                         <div class="preview">
                             <h4>{previewItem.Title}</h4>
+                            <p>{previewItem.Description}</p>
                             {#if previewItem.portal_type === "Image"}
                                 <div>
                                     <img
@@ -244,6 +211,7 @@
                             <button
                                 class="btn btn-primary btn-lg"
                                 on:click={() => selectItem(previewItem)}
+                                disabled={!isSelectable(previewItem)}
                                 >select</button
                             >
                         </div>
@@ -253,57 +221,27 @@
                 <p style="color: red">{error.message}</p>
             {/await}
         </nav>
-    {/if}
+    </div>
+{/if}
 
-    <ul class="content-browser-selected-items">
-        {#each $selectedItems as selItem, i}
-            <li>
-                <button on:click={() => unselectItem(i)}
-                    ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        class="bi bi-trash"
-                        viewBox="0 0 16 16"
-                    >
-                        <path
-                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
-                        />
-                        <path
-                            fill-rule="evenodd"
-                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                        />
-                    </svg></button
-                >
-                <span class="item-title">{selItem.Title}</span>
-                {#if selItem.getURL && (selItem.getIcon || selItem.portal_type === "Image")}<img
-                        src="{selItem.getURL}/@@images/image/mini"
-                        alt={selItem.Title}
-                    />{/if}
-            </li>
-        {/each}
-    </ul>
-    <button class="btn btn-primary" on:click={() => (showContentBrowser = true)}
-        >add</button
-    >
-    <!-- {vw} / {vh} -->
-</div>
 
 <style>
-    /* .content-browser-wrapper {
-        position: relative;
-    } */
-
-    .content-browser {
-        position: absolute;
-        right: 0;
+    .content-browser-position-wrapper {
+        position: fixed;
         top: 0;
-        height: 100%;
-        padding: 1rem;
-        width: 96%;
+        right: 0;
+        z-index: 1500;
+        /* width: 95vw; */
+        height: 100vh;
+    }
+    .content-browser {
+        height: 99vh;
+        /* padding: 1rem; */
+        width: 95%;
         background-color: #eee;
-        z-index: 100;
+        z-index: 1500;
+        display: flex;
+        flex-direction: column;
     }
 
     .toolBar {
@@ -311,13 +249,15 @@
         padding: 0.5rem 1rem;
         color: #333;
         font-size: 1.2rem;
-        overflow: hidden;
         width: 100%;
         height: 2.1em;
+        display: flex;
+        justify-content: space-between;
     }
     .toolBar > .path {
         padding: 0 1.5rem;
         line-height: 1em;
+        overflow: hidden;
     }
     .homeAction {
         width: 1em;
@@ -329,7 +269,8 @@
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        overflow-x: scroll;
+        overflow-x: auto;
+        flex-grow: 3;
     }
 
     .levelColumn {
@@ -343,6 +284,10 @@
     .levelPath {
         background: #eee;
         padding: 0.5rem 1rem;
+        height: 3rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .contentItem {
         /* padding: 1rem 1rem; */
@@ -350,7 +295,11 @@
         align-items: baseline;
         justify-content: space-between;
         border-right: 1px solid #ddd;
-        /* border-left: 1px solid #ddd; */
+        font-size: 90%;
+        background-color: #fff;
+        height: 3rem;
+        border-top: 3px solid transparent;
+        border-bottom: 3px solid transparent;
     }
     .contentItem.even {
         background-color: aliceblue;
@@ -363,7 +312,11 @@
         border-bottom: 3px dashed lightskyblue;
     }
     .contentItem > * {
-        padding: 1rem;
+        padding: 0.5rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 100%;
     }
 
     .preview {
@@ -387,33 +340,6 @@
         width: 100%;
     }
 
-    .content-browser-selected-items {
-        list-style: none;
-        padding-left: 0;
-    }
-    .content-browser-selected-items li {
-        border-radius: 0.3rem;
-        background-color: #eee;
-        padding: 0.5rem;
-        margin-bottom: 0.5rem;
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .content-browser-selected-items li > * {
-        margin-right: 0.5rem;
-        display: block;
-    }
-    .content-browser-selected-items li .item-title {
-        flex-grow: 3;
-    }
-    .content-browser-selected-items li > img {
-        object-fit: cover;
-        width: 128px;
-        height: 128px;
-    }
-
     @media screen and (min-width: 800px) {
         .content-browser {
             width: 700px;
@@ -429,8 +355,4 @@
             width: 1100px;
         }
     }
-    /* #selected_items > * {
-    margin-bottom: 1rem;
-    display: block;
-  } */
 </style>
