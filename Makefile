@@ -1,38 +1,59 @@
-YARN 		    ?= npx yarn
-
-.PHONY: install
-install: stamp-yarn
+ESLINT ?= npx eslint
+YARN   ?= npx yarn
 
 
 stamp-yarn:
 	$(YARN) install
+	# Install pre commit hook
+	$(YARN) husky install
 	touch stamp-yarn
 
 
+clean-dist:
+	rm -Rf dist/
+
+
 .PHONY: clean
-clean:
-	rm -rf $(BUNDLER_DIR) node_modules stamp-yarn
+clean: clean-dist
+	rm -f stamp-yarn
+	rm -Rf node_modules/
 
 
-.PHONY: dev-all
-dev-all: dev-patternslib dev-pat-tinymce dev-pat-code-editor
+eslint: stamp-yarn
+	$(ESLINT) ./src
 
-.PHONY: dev-patternslib
-dev-patternslib:
-	mkdir -p devsrc; cd devsrc; test -x patternslib || git clone git@github.com:Patternslib/Patterns.git --branch mockup-updates patternslib
 
-.PHONY: dev-patternslib-sass
-dev-patternslib-sass:
-	mkdir -p devsrc; cd devsrc; test -x patterns-sass || git clone git@github.com:Patternslib/patterns-sass.git --branch mockup-updates patterns-sass
+.PHONY: check
+check:: stamp-yarn eslint
+	$(YARN) run test
 
-.PHONY: dev-pat-tinymce
-dev-pat-tinymce:
-	mkdir -p devsrc; cd devsrc; test -x pat-tinymce || git clone git@github.com:Patternslib/pat-tinymce.git --branch master pat-tinymce
 
-.PHONY: dev-pat-code-editor
-dev-pat-code-editor:
-	mkdir -p devsrc; cd devsrc; test -x pat-code-editor || git clone git@github.com:Patternslib/pat-code-editor.git --branch master pat-code-editor
+.PHONY: bundle
+bundle: stamp-yarn
+	$(YARN) run build
 
-.PHONY: dev-volto
-dev-volto:
-	mkdir -p devsrc; cd devsrc; test -x volto || git clone git@github.com:plone/volto.git --branch thet-mockup volto
+
+.PHONY: release-major
+release-major: check
+	npx release-it major --dry-run --ci && \
+		npx release-it major --ci
+
+
+.PHONY: release-minor
+release-minor: check
+	npx release-it minor --dry-run --ci && \
+		npx release-it minor --ci
+
+
+.PHONY: release-patch
+release-patch: check
+	npx release-it --dry-run --ci && \
+		npx release-it --ci
+
+
+.PHONY: serve
+serve:: stamp-yarn
+	$(YARN) run start
+
+
+#

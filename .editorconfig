@@ -1,12 +1,15 @@
 [*]
-indent_style = space
+charset = utf-8
 end_of_line = lf
+indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
-charset = utf-8
 
-[*.js]
+[*{js,jsx,vue,ts}]
 indent_size = 4
 
-[{*.css,*.scss,*.xml,*.html}]
+[*.{css,scss,xml,html,yml}]
 indent_size = 2
+
+[Makefile]
+indent_style = tab

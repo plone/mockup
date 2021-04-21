@@ -9,7 +9,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 import jquery from "jquery";
-window.jQuery = jquery;
+window.$ = window.jQuery = jquery;
 jquery.expr.pseudos.visible = function () {
     // Fix jQuery ":visible" selector always returns false in JSDOM.
     // https://github.com/jsdom/jsdom/issues/1048#issuecomment-401599392
