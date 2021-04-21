@@ -2,13 +2,16 @@
     "name": "mockup",
     "version": "4.0.0",
     "description": "A collection of client side patterns for faster and easier web development",
-    "homepage": "http://plone.github.io/mockup",
     "license": "BSD-3-Clause",
+    "main": "./src/patterns.js",
     "engines": {
         "node": ">=8.12.0",
         "yarn": "^1.3.2"
     },
     "dependencies": {
+        "@juggle/resize-observer": "^3.2.0",
+        "@patternslib/pat-code-editor": "^1.0.0",
+        "@patternslib/patternslib": "4",
         "backbone": "1.1.2",
         "backbone.paginator": "1.0.0",
         "bootstrap-icons": "^1.4.0",
@@ -28,6 +31,7 @@
         "datatables.net-select": "^1.3.1",
         "datatables.net-select-bs": "^1.3.1",
         "dropzone": "4.3.0",
+        "intersection-observer": "^0.7.0",
         "jqtree": "1.4.10",
         "jquery": "^3.6.0",
         "jquery-form": "4.2.2",
@@ -36,22 +40,27 @@
         "jquery.recurrenceinput.js": "https://github.com/collective/jquery.recurrenceinput.js.git#master",
         "marked": "0.3.18",
         "moment": "2.29.1",
-        "pat-code-editor": "https://github.com/Patternslib/pat-code-editor.git#master",
-        "patternslib": "4.0.0-dev.0",
         "pickadate": "3.6.4",
         "prettier": "^2.1.2",
+        "promise-polyfill": "^8.1.0",
         "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.12.0",
-        "tinymce": "^5.6.2"
+        "tinymce": "^5.6.2",
+        "url-polyfill": "^1.1.9",
+        "whatwg-fetch": "^3.4.0"
     },
     "devDependencies": {
         "@11ty/eleventy": "^0.11.1",
         "@11ty/eleventy-navigation": "^0.1.6",
         "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.4",
+        "@babel/core": "^7.13.15",
+        "@babel/eslint-parser": "^7.13.14",
         "@babel/plugin-proposal-optional-chaining": "^7.11.0",
         "@babel/preset-env": "^7.9.6",
-        "@testing-library/jest-dom": "^5.5.0",
-        "babel-eslint": "^10.1.0",
+        "@commitlint/cli": "^12.1.1",
+        "@commitlint/config-conventional": "^12.1.1",
+        "@release-it/conventional-changelog": "^2.0.1",
+        "@testing-library/jest-dom": "^5.11.10",
         "babel-loader": "^8.1.0",
         "bootstrap": "^5.0.0-beta2",
         "clean-webpack-plugin": "^3.0.0",
@@ -65,76 +74,75 @@
         "eslint-config-prettier": "^6.12.0",
         "expose-loader": "^0.7.5",
         "file-loader": "^6.2.0",
+        "husky": "^6.0.0",
         "identity-obj-proxy": "^3.0.0",
         "imports-loader": "^0.8.0",
-        "intersection-observer": "^0.7.0",
-        "jest": "^26.0.1",
-        "jest-watch-typeahead": "^0.6.0",
+        "jest": "^26.6.3",
+        "jest-raw-loader": "^1.0.1",
+        "jest-watch-typeahead": "^0.6.2",
         "less": "~3.12.2",
         "npm-run-all": "^4.1.5",
         "prettier": "^2.1.2",
         "prism-themes": "^1.5.0",
-        "promise-polyfill": "^8.1.0",
         "raw-loader": "^4.0.1",
         "regenerator-runtime": "^0.13.5",
+        "release-it": "^14.6.1",
         "rimraf": "^3.0.2",
-        "sass": "^1.29.0",
-        "sass-loader": "^10.1.0",
+        "sass": "^1.32.8",
+        "sass-loader": "^10.1.1",
         "sinon": "^9.2.1",
         "style-loader": "^1.2.1",
         "svg-inline-loader": "^0.8.2",
         "terser-webpack-plugin": "^2.3.6",
-        "url-polyfill": "^1.1.9",
         "webpack": "^4.43.0",
-        "webpack-bundle-analyzer": "^3.8.0",
-        "webpack-cli": "^3.3.11",
-        "webpack-dev-server": "^3.10.3",
-        "whatwg-fetch": "^3.4.0",
-        "whybundled": "^1.4.3"
+        "webpack-bundle-analyzer": "^3.9.0",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.2",
+        "whybundled": "^2.0.0",
+        "yarn": "^1.22.10"
     },
     "resolutions": {
         "backbone": "1.1.2",
         "underscore": "1.12.0",
         "jqtree": "1.4.10",
         "jquery": "3.6.0",
-        "datatables.net": "1.10.23",
-        "datatables.net-bs": "1.10.23"
+        "datatables.net": "1.10.24",
+        "datatables.net-bs": "1.10.24"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
-        "build:webpack": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production",
-        "build:webpack:plone": "webpack --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=production --env.DEPLOYMENT=plone",
+        "build:webpack": "webpack --config webpack.config.js --info-verbosity verbose --mode=production",
+        "build:webpack:plone": "webpack --config webpack.config.js --info-verbosity verbose --mode=production --env.DEPLOYMENT=plone",
         "build:docs": "ELEVENTY_ENV=production  npx @11ty/eleventy --output docs/_site/",
-        "build:stats": "webpack --config webpack.config.js --env.NODE_ENV=production --json > stats.json",
+        "build:stats": "webpack --config webpack.config.js --mode=production --json > stats.json",
         "build": "run-s clean build:webpack build:docs",
-        "watch:webpack": "webpack --config webpack.config.js --watch --env.NODE_ENV=development",
-        "watch:webpack:plone": "webpack --config webpack.config.js --watch --env.NODE_ENV=production --env.DEPLOYMENT=plone",
-        "test": "jest --watch",
-        "testonce": "jest",
+        "watch:webpack": "webpack --config webpack.config.js --watch --mode=development",
+        "watch:webpack:plone": "webpack --config webpack.config.js --watch --mode=production --env.DEPLOYMENT=plone",
         "postinstall": "patch --forward node_modules/select2/select2.js < patches/select2.patch || true",
         "collect:externaldocs": "copyup -V node_modules/patternslib/src/pat/**/documentation.md node_modules/pat-*/README.md docs/external/",
-        "start:webpack": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --env.NODE_ENV=development",
+        "start:webpack": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --mode=development",
         "start:docs": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --output docs/_site/",
-        "start": "npm-run-all clean --parallel start:*"
+        "start": "npm-run-all clean --parallel start:*",
+        "test": "jest",
+        "testwatch": "jest --watch"
     },
-    "browserslist": [
-        ">0.2%",
-        "ie >= 11",
-        "not dead"
-    ],
-    "maintainers": [
-        {
-            "name": "Plone Foundation",
-            "email": "plone-developers@lists.sourceforge.net",
-            "url": "http://plone.org"
-        }
-    ],
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ]
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "author": {
+        "name": "Plone Foundation",
+        "email": "releasemanager@plone.org"
+    },
+    "homepage": "https://github.com/plone/mockup",
     "repository": {
         "type": "git",
         "url": "https://github.com/plone/mockup.git"
-    },
-    "bugs": {
-        "url": "https://github.com/plone/mockup/issues",
-        "email": "plone-developers@lists.sourceforge.net"
     }
 }
