@@ -3,6 +3,13 @@
   display: block;
 }
 
+.modal .modal-dialog {
+    width: auto;
+    max-width: 800px;
+    
+    margin: 10px;
+}
+
 // .plone-modal-loading {
 //     .plone-progress-bar();
 //     .progress.active .progress-bar();
