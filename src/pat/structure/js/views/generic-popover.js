@@ -2,7 +2,7 @@ import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import PopoverView from "../../../../core/ui/views/popover";
-import registry from "patternslib/src/core/registry";
+import registry from "@patternslib/patternslib/src/core/registry";
 
 export default PopoverView.extend({
     events: {

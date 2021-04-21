@@ -3,7 +3,7 @@ import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import utils from "../../../../core/utils";
-import logging from "patternslib/src/core/logging";
+import logging from "@patternslib/patternslib/src/core/logging";
 import "jquery.cookie";
 
 import Toolbar from "../../../../core/ui/views/toolbar";

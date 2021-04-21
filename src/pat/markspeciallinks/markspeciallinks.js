@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 
 export default Base.extend({
     name: "markspeciallinks",

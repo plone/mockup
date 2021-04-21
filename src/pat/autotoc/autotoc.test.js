@@ -1,7 +1,7 @@
 import $ from "jquery";
 import Pattern from "./autotoc";
-import registry from "patternslib/src/core/registry";
-import utils from "patternslib/src/core/utils";
+import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
 
 describe("AutoTOC", function () {
     beforeEach(() => {

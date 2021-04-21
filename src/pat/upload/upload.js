@@ -2,7 +2,7 @@ import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import utils from "../../core/utils";
 
 let Dropzone;

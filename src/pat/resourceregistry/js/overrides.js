@@ -3,7 +3,7 @@ import BaseView from "../../../core/ui/views/base";
 import _ from "underscore";
 import _t from "../../../core/i18n-wrapper";
 import utils from "../../../core/utils";
-import CodeEditor from "pat-code-editor";
+import CodeEditor from "@patternslib/pat-code-editor";
 import Select2 from "../../select2/select2";
 
 export default BaseView.extend({
@@ -143,10 +143,7 @@ export default BaseView.extend({
                 var items = [];
                 var url;
                 if (resource.js) {
-                    if (
-                        resource.js &&
-                        resource.js.indexOf("++plone++") !== -1
-                    ) {
+                    if (resource.js && resource.js.indexOf("++plone++") !== -1) {
                         url = base + resource.js;
                         if (overrides.indexOf(url) === -1) {
                             items.push({ id: url, text: url });
@@ -224,10 +221,7 @@ export default BaseView.extend({
     showEditor: function (data) {
         const editor_el = document.createElement("textarea");
         editor_el.setAttribute("class", "pat-code-editor");
-        editor_el.setAttribute(
-            "data-pat-code-editor",
-            `language: ${this.editing}`
-        );
+        editor_el.setAttribute("data-pat-code-editor", `language: ${this.editing}`);
         editor_el.value = data;
         this.$editorContainer[0].innerHTML = "";
         this.$editorContainer[0].appendChild(editor_el);

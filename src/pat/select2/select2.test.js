@@ -1,7 +1,7 @@
 import PatternSelect2 from "./select2";
 import $ from "jquery";
-import registry from "patternslib/src/core/registry";
-import utils from "patternslib/src/core/utils";
+import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
 
 const SELECT2_TIMEOUT = 500;
 

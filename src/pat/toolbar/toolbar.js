@@ -1,6 +1,6 @@
 import $ from "jquery";
-import Base from "patternslib/src/core/base";
-import registry from "patternslib/src/core/registry";
+import Base from "@patternslib/patternslib/src/core/base";
+import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import _t from "../../core/i18n-wrapper";
 import "jquery.cookie";

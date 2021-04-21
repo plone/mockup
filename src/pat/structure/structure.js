@@ -1,5 +1,5 @@
 import _ from "underscore";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import AppView from "./js/views/app";
 
 export default Base.extend({

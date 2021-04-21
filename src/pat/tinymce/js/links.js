@@ -1,7 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
-import Base from "patternslib/src/core/base";
-import registry from "patternslib/src/core/registry";
+import Base from "@patternslib/patternslib/src/core/base";
+import registry from "@patternslib/patternslib/src/core/registry";
 
 import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";

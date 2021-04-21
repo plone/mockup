@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 
 export default Base.extend({

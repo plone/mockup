@@ -1,6 +1,6 @@
 import $ from "jquery";
 import i18n from "../../core/i18n";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 
 let Moment;
 

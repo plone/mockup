@@ -1,9 +1,9 @@
 import $ from "jquery";
 import _ from "underscore";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
-import registry from "patternslib/src/core/registry";
+import registry from "@patternslib/patternslib/src/core/registry";
 
 const KEY = {
     LEFT: 37,

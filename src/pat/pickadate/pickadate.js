@@ -1,8 +1,8 @@
 import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
-import dom from "patternslib/src/core/dom";
+import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../core/utils";
 
 export default Base.extend({

@@ -1,6 +1,6 @@
 import $ from "jquery";
 import "regenerator-runtime/runtime"; // needed for ``await`` support
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 import _ from "underscore";
 import utils from "../../core/utils";

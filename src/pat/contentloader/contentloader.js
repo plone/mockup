@@ -1,7 +1,7 @@
 import $ from "jquery";
-import Base from "patternslib/src/core/base";
-import logger from "patternslib/src/core/logging";
-import registry from "patternslib/src/core/registry";
+import Base from "@patternslib/patternslib/src/core/base";
+import logger from "@patternslib/patternslib/src/core/logging";
+import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import _ from "underscore";
 

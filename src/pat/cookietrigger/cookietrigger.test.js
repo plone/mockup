@@ -1,5 +1,5 @@
 import $ from "jquery";
-import dom from "patternslib/src/core/dom";
+import dom from "@patternslib/patternslib/src/core/dom";
 import Pattern from "./cookietrigger";
 
 describe("Cookie Trigger", () => {

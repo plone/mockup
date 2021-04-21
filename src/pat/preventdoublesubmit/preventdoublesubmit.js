@@ -1,6 +1,6 @@
 import $ from "jquery";
 import _t from "../../core/i18n-wrapper";
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 
 export default Base.extend({
     name: "preventdoublesubmit",

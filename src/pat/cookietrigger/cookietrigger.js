@@ -1,5 +1,5 @@
-import Base from "patternslib/src/core/base";
-import dom from "patternslib/src/core/dom";
+import Base from "@patternslib/patternslib/src/core/base";
+import dom from "@patternslib/patternslib/src/core/dom";
 
 export default Base.extend({
     name: "cookietrigger",

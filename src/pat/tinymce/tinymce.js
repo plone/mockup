@@ -1,7 +1,7 @@
 import $ from "jquery";
 import _t from "../../core/i18n-wrapper";
 import "regenerator-runtime/runtime"; // needed for ``await`` support
-import Base from "patternslib/src/core/base";
+import Base from "@patternslib/patternslib/src/core/base";
 import utils from "../../core/utils";
 import LinkModal from "./js/links";
 import I18n from "../../core/i18n";

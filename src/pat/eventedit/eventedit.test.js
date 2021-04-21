@@ -1,6 +1,6 @@
 import "./eventedit";
 import $ from "jquery";
-import registry from "patternslib/src/core/registry";
+import registry from "@patternslib/patternslib/src/core/registry";
 
 describe("Event Edit", function () {
     afterEach(function () {
