@@ -5,7 +5,8 @@ YARN   ?= npx yarn
 stamp-yarn:
 	$(YARN) install
 	# Install pre commit hook
-	$(YARN) husky install
+	#Do not yet - while heave development - enforce pre-commit commitlint hook.
+	#$(YARN) husky install
 	touch stamp-yarn
 
 
