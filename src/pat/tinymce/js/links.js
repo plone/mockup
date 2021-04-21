@@ -6,7 +6,7 @@ import registry from "patternslib/src/core/registry";
 import tinymce from "tinymce/tinymce";
 import LinkTemplate from "../templates/link.xml";
 import ImageTemplate from "../templates/image.xml";
-import RelatedItems from "../../relateditems/relateditems";
+import ContentBrowser from "../../contentbrowser/contentbrowser";
 import "../../autotoc/autotoc";
 import "../../modal/modal";
 import PatternUpload from "../../upload/upload";
@@ -26,11 +26,13 @@ var LinkType = Base.extend({
     },
 
     getEl: function () {
-        return this.$el.find("input");
+        return this.el.querySelector("input");
     },
 
     value: function () {
-        return $.trim(this.getEl().val());
+        const val = $.trim(this.getEl().value);
+        console.log("...val: ", val)
+        return val
     },
 
     toUrl: function () {
@@ -38,16 +40,12 @@ var LinkType = Base.extend({
     },
 
     load: function (element) {
-        this.getEl().attr(
-            "value",
-            this.tiny.dom.getAttrib(element, "data-val")
-        );
+        this.getEl().value = this.tiny.dom.getAttrib(element, "data-val");
     },
 
     set: function (val) {
-        var $el = this.getEl();
-        $el.attr("value", val);
-        $el.val(val);
+        var el = this.getEl();
+        el.value = val;
     },
 
     attributes: function () {
@@ -82,25 +80,23 @@ var InternalLink = LinkType.extend({
     trigger: ".pat-internallinktype-dummy",
     init: function () {
         LinkType.prototype.init.call(this);
-        this.getEl().addClass("pat-relateditems");
-        this.createRelatedItems();
+        this.getEl().classList.add("pat-contentbrowser");
+        this.createContentBrowser();
     },
 
     getEl: function () {
-        return this.$el.find("input:not(.select2-input)");
+        return this.el.querySelector("input");
     },
 
-    createRelatedItems: function () {
-        var options = this.linkModal.options.relatedItems;
+    createContentBrowser: function () {
+        var options = this.linkModal.options.contentBrowser;
         options.upload = false; // ensure that related items upload is off.
-        this.relatedItems = new RelatedItems(this.getEl(), options);
+        // console.log(options);
+        this.contentBrowser = new ContentBrowser(this.getEl(), options);
     },
 
     value: function () {
-        var val = this.getEl().select2("data");
-        if (val && typeof val === "object") {
-            val = val[0];
-        }
+        var val = this.getEl().value;
         return val;
     },
 
@@ -114,26 +110,28 @@ var InternalLink = LinkType.extend({
     load: function (element) {
         var val = this.tiny.dom.getAttrib(element, "data-val");
         if (val) {
+            console.log("load: val:", val);
             this.set(val);
         }
     },
 
     set: function (val) {
-        var $el = this.getEl();
+        let el = this.getEl();
         // kill it and then reinitialize since select2 will load data then
-        $el.select2("destroy");
-        $el.removeData("pattern-relateditems"); // reset the pattern
-        $el.parent().replaceWith($el);
-        $el.attr("value", val);
-        $el.val(val);
-        this.createRelatedItems();
+        // $el.select2("destroy");
+        // $el.removeData("pattern-relateditems"); // reset the pattern
+        // $el.parent().replaceWith($el);
+        el.value = val;
+        const event = new Event('change');
+        el.dispatchEvent(event);
+        console.log("set internal link:", val);
     },
 
     attributes: function () {
         var val = this.value();
         if (val) {
             return {
-                "data-val": val.UID,
+                "data-val": val,
             };
         }
         return {};
@@ -176,6 +174,7 @@ var ImageLink = InternalLink.extend({
     trigger: ".pat-imagelinktype-dummy",
     toUrl: function () {
         var value = this.value();
+        console.log("image link: value", value);
         return this.tinypattern.generateImageUrl(
             value,
             this.linkModal.$scale.val()
@@ -658,7 +657,7 @@ export default Base.extend({
         if (captionFromDescription) {
             cssclasses.push("captioned");
         }
-
+        console.log("updateImage attributes: ", self.linkTypes[self.linkType].attributes());
         var data = $.extend(
             true,
             {},
@@ -697,6 +696,7 @@ export default Base.extend({
         }
 
         data.id = "__mcenew";
+        console.log("data: ...", data)
         var html_inner = self.dom.createHTML("img", data);
         var caption = self.$caption.val();
         var html_string;
@@ -707,6 +707,7 @@ export default Base.extend({
         } else {
             html_string = html_inner;
         }
+        console.log("tinymce img html string to insert: ", html_string);
         self.tiny.insertContent(html_string);
         self.imgElm = self.dom.get("__mcenew");
         self.dom.setAttrib(self.imgElm, "id", null);
@@ -904,6 +905,7 @@ export default Base.extend({
 
                 linkType = self.dom.getAttrib(self.imgElm, "data-linktype");
                 if (linkType) {
+                    console.log("linkType...");
                     self.linkType = linkType;
                     self.linkTypes[self.linkType].load(self.imgElm);
                     var scale = self.dom.getAttrib(self.imgElm, "data-scale");
@@ -947,6 +949,7 @@ export default Base.extend({
     },
 
     guessImageLink: function (src) {
+        console.log("guessImageLink: ", src);
         if (src.indexOf(this.options.prependToScalePart) !== -1) {
             this.linkType = "image";
             this.$scale.val(this.tinypattern.getScaleFromUrl(src));
@@ -958,10 +961,12 @@ export default Base.extend({
     },
 
     guessAnchorLink: function (href) {
+        console.log("guessAnchorLink: ", href);
         if (
             this.options.prependToUrl &&
             href.indexOf(this.options.prependToUrl) !== -1
         ) {
+            console.log("guessAnchorLink internal: ", href);
             // XXX if using default configuration, it gets more difficult
             // here to detect internal urls so this might need to change...
             this.linkType = "internal";

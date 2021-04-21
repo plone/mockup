@@ -67,11 +67,12 @@ export default Base.extend({
             maxFiles: 1,
             showTitle: false,
         },
-        relatedItems: {
+        contentBrowser: {
             // UID attribute is required here since we're working with related items
             attributes: [
                 "UID",
                 "Title",
+                "Description",
                 "portal_type",
                 "path",
                 "getURL",
@@ -82,7 +83,7 @@ export default Base.extend({
             batchSize: 20,
             basePath: "/",
             vocabularyUrl: null,
-            width: 500,
+            width: "95%",
             maximumSelectionSize: 1,
             placeholder: _t("Search for item on site..."),
         },
@@ -243,7 +244,7 @@ export default Base.extend({
     },
     generateUrl: function (data) {
         var self = this;
-        var part = data[self.options.linkAttribute];
+        var part = data;
         return self.options.prependToUrl + part + self.options.appendToUrl;
     },
     generateImageUrl: function (data, scale_name) {
@@ -262,6 +263,7 @@ export default Base.extend({
     },
     stripGeneratedUrl: function (url) {
         // to get original attribute back
+        console.log("stripGeneratedUrl: in", url);
         var self = this;
         url = url.split(self.options.prependToScalePart, 2)[0];
         if (self.options.prependToUrl) {
@@ -273,9 +275,11 @@ export default Base.extend({
         if (self.options.appendToUrl) {
             url = url.split(self.options.appendToUrl)[0];
         }
+        console.log("stripGeneratedUrl: out", url);
         return url;
     },
     getScaleFromUrl: function (url) {
+        console.log("getScaleFromUrl: in", url);
         var self = this;
         var split = url.split(self.options.prependToScalePart);
         if (split.length !== 2) {
@@ -290,6 +294,7 @@ export default Base.extend({
         if (url.indexOf("/image_") !== -1) {
             url = url.split("/image_")[1];
         }
+        console.log("getScaleFromUrl: out", url);
         return url;
     },
     initLanguage: function (call_back) {
@@ -335,7 +340,6 @@ export default Base.extend({
         }
     },
     init: function () {
-        console.log("init tinymce from mockup");
         var self = this;
         self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
         // tiny needs an id in order to initialize. Creat it if not set.
