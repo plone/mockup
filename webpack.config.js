@@ -1,4 +1,5 @@
 process.traceDeprecation = true;
+const fs = require("fs");
 const path = require("path");
 const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config.js");
 const webpack = require("webpack");
