@@ -12,6 +12,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = async (env) => {
     const mode = env.NODE_ENV;
+    const prod = mode === 'production';
 
     const config = {
         mode: mode,
@@ -72,8 +73,17 @@ module.exports = async (env) => {
                 },
                 {
                     test: /\.svelte$/,
-                    exclude: /node_modules/,
-                    use: "svelte-loader",
+                    // exclude: /node_modules/,
+                    use: {
+                        loader: "svelte-loader",
+                        options: {
+                            compilerOptions: {
+                                dev: !prod
+                            },
+                            emitCss: prod,
+                            hotReload: !prod
+                        }
+                    }
                 },
                 {
                     test: /\.(?:sass|scss|css)$/i,
