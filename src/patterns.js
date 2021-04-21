@@ -3,7 +3,7 @@
  */
 
 // Import base
-import "./public_path"; // first import
+import "@patternslib/patternslib/src/public_path";
 
 // Core
 import registry from "@patternslib/patternslib/src/core/registry";
