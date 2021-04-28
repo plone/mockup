@@ -122,7 +122,7 @@
         "postinstall": "patch --forward node_modules/select2/select2.js < patches/select2.patch || true",
         "collect:externaldocs": "copyup -V node_modules/patternslib/src/pat/**/documentation.md node_modules/pat-*/README.md docs/external/",
         "start:webpack": "webpack-dev-server --config webpack.config.js --info-verbosity verbose --mode=development",
-        "start:docs": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --output docs/_site/",
+        "start:docs": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --port 8001 --output docs/_site/",
         "start": "npm-run-all clean --parallel start:*",
         "test": "jest",
         "testwatch": "jest --watch"
