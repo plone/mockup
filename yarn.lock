@@ -1629,10 +1629,10 @@
     codejar "^3.4.0"
     prismjs "^1.23.0"
 
-"@patternslib/patternslib@4":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-4.1.0.tgz#99ac19fd58a20247b59830c09789b99c4d67ccb9"
-  integrity sha512-Eh/8FWV8iz2uTU5rrVfEgoTdSE78ap+y7S8hKzhsSCyHx+HRGuXbHHJxCW4ng0VH8oOLPqZ09mjyoVubncIYvw==
+"@patternslib/patternslib@4", "@patternslib/patternslib@4.2.3", "@patternslib/patternslib@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-4.2.3.tgz#fe69f53e7762e6da0ec4aeba5811cf929098a4b7"
+  integrity sha512-fIRW/QoSb6k2f92AijOOCM0LS0O+mVv8Z4aZwFMuYT66ZmvNR5n/4LlxYofXxT6N3A0O+SlNOW6FOuEukvai9g==
   dependencies:
     "@fullcalendar/adaptive" "^5.3.1"
     "@fullcalendar/core" "^5.3.1"
