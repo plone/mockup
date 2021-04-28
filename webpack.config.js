@@ -23,6 +23,14 @@ module.exports = async (env, argv) => {
         })
     );
 
+    // Add Svelte support
+    config.module.rules.push({
+        test: /\.svelte$/,
+        use: "svelte-loader",
+    });
+    config.resolve.alias.svelte = path.resolve("node_modules", "svelte");
+    config.resolve.extensions = [".wasm", ".mjs", ".js", ".json", ".svelte"];
+    config.resolve.mainFields = ["svelte", "browser", "module", "main"];
     if (argv.mode === "development") {
         // Use checked-out versions of dependencies if available.
         try {
