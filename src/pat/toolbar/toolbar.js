@@ -48,10 +48,7 @@ export default Base.extend({
             .on("click", function () {
                 var $el = $(that.$el);
                 if ($el.hasClass("open")) {
-                    that.$container.css(
-                        "right",
-                        "-" + that.options.toolbar_width
-                    );
+                    that.$container.css("right", "-" + that.options.toolbar_width);
                     $("html").css("margin-left", "0");
                     $("html").css("margin-right", "0");
                     $el.removeClass("open");
@@ -61,17 +58,12 @@ export default Base.extend({
                 } else {
                     that.$container.css("right", "0");
                     $el.addClass("open");
-                    $("html").css(
-                        "margin-left",
-                        "-" + that.options.toolbar_width
-                    );
+                    $("html").css("margin-left", "-" + that.options.toolbar_width);
                     $("html").css("margin-right", that.options.toolbar_width);
                 }
             });
         // Remove desktop event binding
-        $("nav > ul > li", that.$container)
-            .has("a .plone-toolbar-caret")
-            .off("click");
+        $("nav > ul > li", that.$container).has("a .plone-toolbar-caret").off("click");
         // Add sub-menu events
         $("nav li a", that.$container)
             .has(".plone-toolbar-caret")
@@ -82,10 +74,7 @@ export default Base.extend({
                 var $el = $(this).parent();
                 if ($el.hasClass(that.options.classNames.active)) {
                     that.$container.css("right", "0");
-                    $("html").css(
-                        "margin-left",
-                        "-" + that.options.toolbar_width
-                    );
+                    $("html").css("margin-left", "-" + that.options.toolbar_width);
                     $("html").css("margin-right", that.options.toolbar_width);
                     $("nav li", that.$container).removeClass(
                         that.options.classNames.active
@@ -155,14 +144,10 @@ export default Base.extend({
                     );
                     if (that.state.left) {
                         $("body").addClass(that.options.classNames.leftDefault);
-                        $("body").removeClass(
-                            that.options.classNames.leftExpanded
-                        );
+                        $("body").removeClass(that.options.classNames.leftExpanded);
                     } else {
                         $("body").addClass(that.options.classNames.topDefault);
-                        $("body").removeClass(
-                            that.options.classNames.topExpanded
-                        );
+                        $("body").removeClass(that.options.classNames.topExpanded);
                     }
                 } else {
                     that.setState({
@@ -175,17 +160,11 @@ export default Base.extend({
                         that.options.classNames.active
                     );
                     if (that.state.left) {
-                        $("body").addClass(
-                            that.options.classNames.leftExpanded
-                        );
-                        $("body").removeClass(
-                            that.options.classNames.leftDefault
-                        );
+                        $("body").addClass(that.options.classNames.leftExpanded);
+                        $("body").removeClass(that.options.classNames.leftDefault);
                     } else {
                         $("body").addClass(that.options.classNames.topExpanded);
-                        $("body").removeClass(
-                            that.options.classNames.topDefault
-                        );
+                        $("body").removeClass(that.options.classNames.topDefault);
                     }
                 }
                 that.hideElements();
@@ -222,9 +201,7 @@ export default Base.extend({
                         "aria-hidden",
                         "true"
                     );
-                    $("." + active_class, that.$container).removeClass(
-                        active_class
-                    );
+                    $("." + active_class, that.$container).removeClass(active_class);
                     // we need to close the more subset as well not just the content-menus
                     // when we click on the personal bar
                     $("#plone-toolbar-more-subset").hide();
@@ -245,10 +222,7 @@ export default Base.extend({
             // active lists because the user assumes that he targeted an element outside
             // the edit-bar
             if (!$el.length || $el.prop("tagName") === "NAV") {
-                $("nav > ul > li", that.$container).each(function (
-                    key,
-                    element
-                ) {
+                $("nav > ul > li", that.$container).each(function (key, element) {
                     $(element).removeClass(that.options.classNames.active);
                 });
                 // we need to close the more subset as well not just the content-menus
@@ -412,9 +386,7 @@ export default Base.extend({
         });
         var $toolbar_more_options = $("#plone-toolbar-more-options");
         wtc -= $toolbar_more_options.width();
-        var $content_menus = $toolbar_menus.filter(
-            '[id^="plone-contentmenu-"]'
-        );
+        var $content_menus = $toolbar_menus.filter('[id^="plone-contentmenu-"]');
         var $content_views = $toolbar_menus.filter('[id^="contentview-"]');
         if (w < wtc) {
             if (!$toolbar_more_options.length) {
@@ -433,10 +405,7 @@ export default Base.extend({
                     // we want only the list items with id that contains plone-contentmenu and not the children links
                     // of these lists therefore we iterate only over the list elements
                     $content_menus.each(function () {
-                        $(this)
-                            .clone(true, true)
-                            .show()
-                            .appendTo($toolbar_more_subset);
+                        $(this).clone(true, true).show().appendTo($toolbar_more_subset);
                     });
 
                     that.cloneViewsIntoSubset(
@@ -445,23 +414,19 @@ export default Base.extend({
                         $toolbar_more_subset
                     );
                     var active_class = that.options.classNames.active;
-                    $toolbar_more_options
-                        .find("a")
-                        .on("click", function (event) {
-                            // close existing opened contentmenus
-                            $("." + active_class, that.$container).removeClass(
-                                active_class
-                            );
+                    $toolbar_more_options.find("a").on("click", function (event) {
+                        // close existing opened contentmenus
+                        $("." + active_class, that.$container).removeClass(active_class);
 
-                            var $more_list = $(this).parent();
-                            // properly toggle active class for toolbar_more list item
-                            $more_list.toggleClass(
-                                "active",
-                                $toolbar_more_subset.is(":hidden")
-                            );
-                            $toolbar_more_subset.toggle();
-                            event.preventDefault();
-                        });
+                        var $more_list = $(this).parent();
+                        // properly toggle active class for toolbar_more list item
+                        $more_list.toggleClass(
+                            "active",
+                            $toolbar_more_subset.is(":hidden")
+                        );
+                        $toolbar_more_subset.toggle();
+                        event.preventDefault();
+                    });
                 })();
             }
         } else {
@@ -480,7 +445,7 @@ export default Base.extend({
         }
     },
     init: function () {
-        console.log("init toolbar...")
+        console.log("init toolbar...");
         var that = this;
         that.heightTimeout = 0;
         that.$container = $(that.options.containerSelector);
@@ -491,11 +456,7 @@ export default Base.extend({
         };
         if (toolbar_cookie) {
             try {
-                that.state = $.extend(
-                    {},
-                    that.state,
-                    $.parseJSON(toolbar_cookie)
-                );
+                that.state = $.extend({}, that.state, $.parseJSON(toolbar_cookie));
             } catch (e) {
                 // ignore
             }
@@ -519,15 +480,10 @@ export default Base.extend({
             .off("structure-url-changed")
             .on("structure-url-changed", function (e, path) {
                 $.ajax({
-                    url:
-                        $("body").attr("data-portal-url") +
-                        path +
-                        "/@@render-toolbar",
+                    url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
                 }).done(function (data) {
                     var $el = $(utils.parseBodyTag(data));
-                    $el = $el.find("#edit-zone").length
-                        ? $el.find("#edit-zone")
-                        : $el;
+                    $el = $el.find("#edit-zone").length ? $el.find("#edit-zone") : $el;
                     that.$el.replaceWith($el);
                     registry.scan($el);
                 });
