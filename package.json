@@ -11,6 +11,7 @@
     "dependencies": {
         "@juggle/resize-observer": "^3.2.0",
         "@patternslib/pat-code-editor": "^1.0.0",
+        "@patternslib/pat-content-browser": "https://github.com/plone/pat-content-browser.git#master",
         "@patternslib/patternslib": "^4.2.3",
         "backbone": "1.1.2",
         "backbone.paginator": "1.0.0",
