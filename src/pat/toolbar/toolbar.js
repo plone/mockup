@@ -25,7 +25,7 @@ export default Base.extend({
             active: "active",
         },
         cookieName: "plone-toolbar",
-        toolbar_width: "120px",
+        toolbar_width: "220px",
         submenu_width: "180px",
         desktop_width: "768px",
     },
