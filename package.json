@@ -11,7 +11,7 @@
     "dependencies": {
         "@juggle/resize-observer": "^3.2.0",
         "@patternslib/pat-code-editor": "^1.0.0",
-        "@patternslib/patternslib": "^4.2.0",
+        "@patternslib/patternslib": "^4.2.3",
         "backbone": "1.1.2",
         "backbone.paginator": "1.0.0",
         "bootstrap-icons": "^1.4.0",
@@ -102,6 +102,7 @@
         "yarn": "^1.22.10"
     },
     "resolutions": {
+        "@patternslib/patternslib": "4.2.3",
         "backbone": "1.1.2",
         "underscore": "1.12.0",
         "jqtree": "1.4.10",
