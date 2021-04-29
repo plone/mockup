@@ -1457,9 +1457,11 @@
 
 "@patternslib/pat-content-browser@https://github.com/plone/pat-content-browser.git#master":
   version "0.9.0"
-  resolved "https://github.com/plone/pat-content-browser.git#d50801c07853bce2762ab8e4d610db4ec76976b6"
+  resolved "https://github.com/plone/pat-content-browser.git#ddc45abac64ab863c665b92d756d4202f61a0dcd"
   dependencies:
     "@patternslib/patternslib" "4"
+    svelte-keydown "^0.2.1"
+    svelte-scrollto "^0.2.0"
 
 "@patternslib/patternslib@4", "@patternslib/patternslib@4.2.3", "@patternslib/patternslib@^4.2.3":
   version "4.2.3"
@@ -10056,6 +10058,11 @@ svelte-hmr@^0.12.3:
   version "0.12.9"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.9.tgz#e323b71062a59bf4b73d2d5a7cc80dba256217e1"
 
+svelte-keydown@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/svelte-keydown/-/svelte-keydown-0.2.1.tgz#42e046146e189d6cb123f26da86055be60633a26"
+  integrity sha512-NweIcY3ulcPuzHFbU+h7J9sysqI90fvDOOLrjroEQNRYB7TmUGbSjvZuBv71MEdaRbh8Zhai67Ib96xH1KUgcg==
+
 svelte-loader@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/svelte-loader/-/svelte-loader-3.1.1.tgz#cb03541214b164edee58e4c98d4303f76df9013d"
@@ -10064,9 +10071,17 @@ svelte-loader@^3.1.1:
     svelte-dev-helper "^1.1.9"
     svelte-hmr "^0.12.3"
 
-svelte@^3.37.0:
+svelte-scrollto@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/svelte-scrollto/-/svelte-scrollto-0.2.0.tgz#a1da47876466796bba4533a4346537f752f01680"
+  integrity sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==
+  dependencies:
+    svelte "3.x"
+
+svelte@3.x, svelte@^3.37.0:
   version "3.37.0"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.37.0.tgz#dc7cd24bcc275cdb3f8c684ada89e50489144ccd"
+  integrity sha512-TRF30F4W4+d+Jr2KzUUL1j8Mrpns/WM/WacxYlo5MMb2E5Qy2Pk1Guj6GylxsW9OnKQl1tnF8q3hG/hQ3h6VUA==
 
 svg-inline-loader@^0.8.2:
   version "0.8.2"
