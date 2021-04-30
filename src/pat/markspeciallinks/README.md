@@ -101,15 +101,6 @@ To disable this effect for links on a one-by-one-basis, give them a class of 'li
 
 ### List of all protocol icons
 
-
-
-
-
-
-
-
-
-
 <div class="pat-markspeciallinks">
     <ul>
         <li><a href="https://plone.org">       https       </a>
