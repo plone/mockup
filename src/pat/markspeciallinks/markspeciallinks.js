@@ -1,73 +1,104 @@
-import $ from "jquery";
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "@patternslib/patternslib/src/core/base";
+import utils from "../../core/utils";
 
 export default Base.extend({
     name: "markspeciallinks",
     trigger: ".pat-markspeciallinks",
     parser: "mockup",
+
     defaults: {
         external_links_open_new_window: false,
         mark_special_links: true,
     },
-    init: function () {
-        var self = this,
-            $el = self.$el;
 
+    protocol_icon_map: {
+        // For a list of supported default protocol hander, see:
+        // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler#permitted_schemes
+        https: "plone.icon.link-45deg",
+        http: "plone.icon.link-45deg",
+        ftp: "plone.icon.cloud-download", // deprecated
+        callto: "plone.icon.telephone", // non-standard for skype
+        bitcoin: "plone.icon.credit-card", // no bitcoin icon yet
+        geo: "plone.icon.geo-alt",
+        im: "plone.icon.chat",
+        irc: "plone.icon.chat",
+        ircs: "plone.icon.chat",
+        magnet: "plone.icon.link-45deg",
+        mailto: "plone.icon.envelope",
+        mms: "plone.icon.chat",
+        news: "plone.icon.newspaper",
+        nntp: "plone.icon.newspaper",
+        openpgp4fpr: "plone.icon.key",
+        sip: "plone.icon.telephone",
+        sms: "plone.icon.chat",
+        smsto: "plone.icon.chat",
+        ssh: "plone.icon.lock",
+        tel: "plone.icon.telephone",
+        urn: "plone.icon.link-45deg",
+        webcal: "plone.icon.calendar",
+        wtai: "plone.icon.telephone",
+        xmpp: "plone.icon.chat",
+    },
+
+    async init() {
         // first make external links open in a new window, afterwards do the
         // normal plone link wrapping in only the content area
-        var elonw, msl, url, protocols, contentarea, res;
 
-        if (typeof self.options.external_links_open_new_window === "string") {
-            elonw = self.options.external_links_open_new_window.toLowerCase() === "true";
-        } else if (typeof self.options.external_links_open_new_window === "boolean") {
-            elonw = self.options.external_links_open_new_window;
+        let open_new_window = false;
+        if (typeof this.options.external_links_open_new_window === "string") {
+            open_new_window =
+                this.options.external_links_open_new_window.toLowerCase() === "true";
+        } else if (typeof this.options.external_links_open_new_window === "boolean") {
+            open_new_window = this.options.external_links_open_new_window;
         }
 
-        if (typeof self.options.mark_special_links === "string") {
-            msl = self.options.mark_special_links.toLowerCase() === "true";
-        } else if (typeof self.options.mark_special_links === "boolean") {
-            msl = self.options.mark_special_links;
+        let mark_special_links = false;
+        if (typeof this.options.mark_special_links === "string") {
+            mark_special_links =
+                this.options.mark_special_links.toLowerCase() === "true";
+        } else if (typeof this.options.mark_special_links === "boolean") {
+            mark_special_links = this.options.mark_special_links;
         }
 
-        url = window.location.protocol + "//" + window.location.host;
-        protocols = /^(mailto|ftp|news|irc|h323|sip|callto|https|feed|webcal)/;
-        contentarea = $el;
-
-        if (elonw) {
-            // all http links (without the link-plain class), not within this site
-            contentarea
-                .find('a[href^="http"]:not(.link-plain):not([href^="' + url + '"])')
-                .attr("target", "_blank")
-                .attr("rel", "noopener");
+        if (mark_special_links) {
+            import("./markspeciallinks.scss");
         }
 
-        if (msl) {
-            // All links with an http href (without the link-plain class), not within this site,
-            // and no img children should be wrapped in a link-external span
-            contentarea
-                .find(
-                    'a[href^="http:"]:not(.link-plain):not([href^="' +
-                        url +
-                        '"]):not(:has(img))'
-                )
-                .before('<i class="glyphicon link-external"></i>');
-            // All links without an http href (without the link-plain class), not within this site,
-            // and no img children should be wrapped in a link-[protocol] span
-            contentarea
-                .find(
-                    'a[href]:not([href^="http:"]):not(.link-plain):not([href^="' +
-                        url +
-                        '"]):not(:has(img)):not([href^="#"])'
-                )
-                .each(function () {
-                    // those without a http link may have another interesting protocol
-                    // wrap these in a link-[protocol] span
-                    res = protocols.exec($(this).attr("href"));
-                    if (res) {
-                        var iconclass = "glyphicon link-" + res[0];
-                        $(this).before('<i class="' + iconclass + '"></i>');
-                    }
-                });
+        // All links with an http href (without the link-plain class), not within this site,
+        // and no img children should be wrapped in a link-external span
+        const url = window.location.protocol + "//" + window.location.host;
+        const links = this.el.querySelectorAll(
+            `a[href]:not(.link-plain):not([href^="${url}"]):not([href^="#"])`
+        );
+        //:not(:has(img))
+        for (const link of links) {
+            let link_url;
+            try {
+                link_url = new URL(link.getAttribute("href"));
+            } catch (e) {
+                if (e instanceof TypeError) {
+                    // Not a valid URL.
+                    // Ignore and continue.
+                    continue;
+                }
+            }
+            if (open_new_window && link_url.protocol.startsWith("http")) {
+                link.setAttribute("target", "_blank");
+                link.setAttribute("rel", "noopener");
+            }
+
+            if (mark_special_links) {
+                const icon = this.protocol_icon_map[link_url.protocol.split(":")[0]];
+                if (icon) {
+                    const icon_el = await utils.resolveIcon(
+                        icon,
+                        true,
+                        "markspeciallinks__icon"
+                    );
+                    link.parentNode.insertBefore(icon_el, link);
+                }
+            }
         }
     },
 });

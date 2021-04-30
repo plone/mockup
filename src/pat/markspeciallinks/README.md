@@ -14,7 +14,7 @@ To disable this effect for links on a one-by-one-basis, give them a class of 'li
 |             Option             |  Type   | Default |                     Description                     |
 | :----------------------------: | :-----: | :-----: | :-------------------------------------------------: |
 | external_links_open_new_window | Boolean |  false  |        Open external links in a new window.         |
-|       mark_special_links       | Boolean |  false  | Marks external or special protocl links with class. |
+| mark_special_links             | Boolean |  false  | Marks external or special protocl links with class. |
 
 ## Examples
 
@@ -101,36 +101,71 @@ To disable this effect for links on a one-by-one-basis, give them a class of 'li
 
 ### List of all protocol icons
 
+
+
+
+
+
+
+
+
+
 <div class="pat-markspeciallinks">
     <ul>
-      <li><a href="http://www.plone.org">http</a></li>
-      <li><a href="https://www.plone.org">https</a></li>
-      <li><a href="mailto:info@plone.org">mailto</a></li>
-      <li><a href="ftp://www.plone.org">ftp</a></li>
-      <li><a href="news://www.plone.org">news</a></li>
-      <li><a href="irc://www.plone.org">irc</a></li>
-      <li><a href="h323://www.plone.org">h323</a></li>
-      <li><a href="sip://www.plone.org">sip</a></li>
-      <li><a href="callto://www.plone.org">callto</a></li>
-      <li><a href="feed://www.plone.org">feed</a></li>
-      <li><a href="webcal://www.plone.org">webcal</a></li>
+        <li><a href="https://plone.org">       https       </a>
+        <li><a href="http://plone.org">        http        </a>
+        <li><a href="ftp://plone.org">         ftp         </a>
+        <li><a href="callto://plone.org">      callto      </a>
+        <li><a href="bitcoin://plone.org">     bitcoin     </a>
+        <li><a href="geo://plone.org">         geo         </a>
+        <li><a href="im://plone.org">          im          </a>
+        <li><a href="irc://plone.org">         irc         </a>
+        <li><a href="ircs://plone.org">        ircs        </a>
+        <li><a href="magnet://plone.org">      magnet      </a>
+        <li><a href="mailto:info@plone.org">   mailto      </a>
+        <li><a href="mms://plone.org">         mms         </a>
+        <li><a href="news://plone.org">        news        </a>
+        <li><a href="nntp://plone.org">        nntp        </a>
+        <li><a href="openpgp4fpr://plone.org"> openpgp4fpr </a>
+        <li><a href="sip://plone.org">         sip         </a>
+        <li><a href="sms://plone.org">         sms         </a>
+        <li><a href="smsto://plone.org">       smsto       </a>
+        <li><a href="ssh://plone.org">         ssh         </a>
+        <li><a href="tel://plone.org">         tel         </a>
+        <li><a href="urn://plone.org">         urn         </a>
+        <li><a href="webcal://plone.org">      webcal      </a>
+        <li><a href="wtai://plone.org">        wtai        </a>
+        <li><a href="xmpp://plone.org">        xmpp        </a>
     </ul>
 </div>
 
 ```html
 <div class="pat-markspeciallinks">
     <ul>
-        <li><a href="http://www.plone.org">http</a></li>
-        <li><a href="https://www.plone.org">https</a></li>
-        <li><a href="mailto:info@plone.org">mailto</a></li>
-        <li><a href="ftp://www.plone.org">ftp</a></li>
-        <li><a href="news://www.plone.org">news</a></li>
-        <li><a href="irc://www.plone.org">irc</a></li>
-        <li><a href="h323://www.plone.org">h323</a></li>
-        <li><a href="sip://www.plone.org">sip</a></li>
-        <li><a href="callto://www.plone.org">callto</a></li>
-        <li><a href="feed://www.plone.org">feed</a></li>
-        <li><a href="webcal://www.plone.org">webcal</a></li>
+        <li><a href="https://plone.org">       https       </a>
+        <li><a href="http://plone.org">        http        </a>
+        <li><a href="ftp://plone.org">         ftp         </a>
+        <li><a href="callto://plone.org">      callto      </a>
+        <li><a href="bitcoin://plone.org">     bitcoin     </a>
+        <li><a href="geo://plone.org">         geo         </a>
+        <li><a href="im://plone.org">          im          </a>
+        <li><a href="irc://plone.org">         irc         </a>
+        <li><a href="ircs://plone.org">        ircs        </a>
+        <li><a href="magnet://plone.org">      magnet      </a>
+        <li><a href="mailto:info@plone.org">   mailto      </a>
+        <li><a href="mms://plone.org">         mms         </a>
+        <li><a href="news://plone.org">        news        </a>
+        <li><a href="nntp://plone.org">        nntp        </a>
+        <li><a href="openpgp4fpr://plone.org"> openpgp4fpr </a>
+        <li><a href="sip://plone.org">         sip         </a>
+        <li><a href="sms://plone.org">         sms         </a>
+        <li><a href="smsto://plone.org">       smsto       </a>
+        <li><a href="ssh://plone.org">         ssh         </a>
+        <li><a href="tel://plone.org">         tel         </a>
+        <li><a href="urn://plone.org">         urn         </a>
+        <li><a href="webcal://plone.org">      webcal      </a>
+        <li><a href="wtai://plone.org">        wtai        </a>
+        <li><a href="xmpp://plone.org">        xmpp        </a>
     </ul>
 </div>
 ```
