@@ -103,17 +103,10 @@ export default function (bundleName, bundleListItem) {
                 self.rview.options.data.lessUrl,
             ]),
             configure: function (iframe) {
-                iframe.window.lessErrorReporting = function (
-                    what,
-                    error,
-                    href
-                ) {
+                iframe.window.lessErrorReporting = function (what, error, href) {
                     if (what !== "remove") {
                         self.addResult(
-                            _t("less compilation error on file ") +
-                                href +
-                                ": " +
-                                error
+                            _t("less compilation error on file ") + href + ": " + error
                         );
                     }
                 };
@@ -136,10 +129,7 @@ export default function (bundleName, bundleListItem) {
                     return self.finished(true);
                 }
             }
-            if (
-                $styles.length === config.less.length &&
-                lessModified === true
-            ) {
+            if ($styles.length === config.less.length && lessModified === true) {
                 // we're finished, save it
                 var data = {};
                 $styles.each(function () {
@@ -174,10 +164,7 @@ export default function (bundleName, bundleListItem) {
                 /* XXX is this dead code? */
                 script = document.createElement("script");
                 script.setAttribute("type", "text/javascript");
-                script.setAttribute(
-                    "src",
-                    self.rview.options.data.lessModifyUrl
-                );
+                script.setAttribute("src", self.rview.options.data.lessModifyUrl);
                 head.appendChild(script);
 
                 lessModified = true;
@@ -242,19 +229,16 @@ export default function (bundleName, bundleListItem) {
             name: "rjs",
             resources: [self.rview.options.data.rjsUrl],
             onLoad: function (iframe) {
-                iframe.window.requirejs.optimize(
-                    config,
-                    function (combined_files) {
-                        self.addResult(
-                            _t("Saved javascript bundle, Build results") +
-                                ": <pre>" +
-                                combined_files +
-                                "</pre>"
-                        );
-                        self.buildCSSBundle();
-                        iframe.destroy();
-                    }
-                );
+                iframe.window.requirejs.optimize(config, function (combined_files) {
+                    self.addResult(
+                        _t("Saved javascript bundle, Build results") +
+                            ": <pre>" +
+                            combined_files +
+                            "</pre>"
+                    );
+                    self.buildCSSBundle();
+                    iframe.destroy();
+                });
             },
         });
     };

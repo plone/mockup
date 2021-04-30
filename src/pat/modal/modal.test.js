@@ -1,10 +1,10 @@
-define([
-    "expect",
-    "jquery",
-    "sinon",
-    "pat-registry",
-    "mockup-patterns-modal",
-], function (expect, $, sinon, registry, Modal) {
+define(["expect", "jquery", "sinon", "pat-registry", "mockup-patterns-modal"], function (
+    expect,
+    $,
+    sinon,
+    registry,
+    Modal
+) {
     "use strict";
 
     window.mocha.setup("bdd");
@@ -18,10 +18,7 @@ define([
         beforeEach(function () {
             this.server = sinon.fakeServer.create();
             this.server.autoRespond = true;
-            this.server.respondWith(/patterns-modal-load-via-ajax/, function (
-                xhr,
-                id
-            ) {
+            this.server.respondWith(/patterns-modal-load-via-ajax/, function (xhr, id) {
                 xhr.respond(
                     200,
                     { "Content-Type": "text/html" },
@@ -32,10 +29,7 @@ define([
                 );
             });
 
-            this.server.respondWith("GET", /modal-form\.html/, function (
-                xhr,
-                id
-            ) {
+            this.server.respondWith("GET", /modal-form\.html/, function (xhr, id) {
                 xhr.respond(
                     200,
                     { "Content-Type": "text/html" },
@@ -56,10 +50,7 @@ define([
                 );
             });
 
-            this.server.respondWith("POST", /modal-submit\.html/, function (
-                xhr,
-                id
-            ) {
+            this.server.respondWith("POST", /modal-submit\.html/, function (xhr, id) {
                 xhr.respond(
                     200,
                     { "content-Type": "text/html" },
@@ -99,22 +90,14 @@ define([
 
             $("a.pat-plone-modal", $el).click();
 
-            expect($(".plone-modal-backdrop", $el).is(":visible")).to.be.equal(
-                true
-            );
+            expect($(".plone-modal-backdrop", $el).is(":visible")).to.be.equal(true);
             expect($el.hasClass("plone-backdrop-active")).to.be.equal(true);
-            expect($(".plone-modal-wrapper", $el).is(":visible")).to.be.equal(
-                true
-            );
+            expect($(".plone-modal-wrapper", $el).is(":visible")).to.be.equal(true);
             expect($(".plone-modal", $el).length).to.equal(1);
             expect($(".plone-modal", $el).hasClass("in")).to.be.equal(true);
-            expect($(".plone-modal .plone-modal-header", $el).length).to.equal(
-                1
-            );
+            expect($(".plone-modal .plone-modal-header", $el).length).to.equal(1);
             expect($(".plone-modal .plone-modal-body", $el).length).to.equal(1);
-            expect($(".plone-modal .plone-modal-footer", $el).length).to.equal(
-                1
-            );
+            expect($(".plone-modal .plone-modal-footer", $el).length).to.equal(1);
 
             var keydown = $.Event("keydown");
             keydown.keyCode = 27;
@@ -144,9 +127,9 @@ define([
                     );
                 })
                 .click();
-            expect(
-                $(".plone-modal .plone-modal-header h3", $el).text()
-            ).to.equal("New Title");
+            expect($(".plone-modal .plone-modal-header h3", $el).text()).to.equal(
+                "New Title"
+            );
 
             $el.remove();
         });

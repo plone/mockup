@@ -10,14 +10,7 @@ const regexEscape = function (s) {
 const Router = Backbone.Router.extend({
     actions: [],
     redirects: {},
-    addRoute: function (
-        patternName,
-        id,
-        callback,
-        context,
-        pathExp,
-        expReplace
-    ) {
+    addRoute: function (patternName, id, callback, context, pathExp, expReplace) {
         if (
             _.findWhere(this.patterns, {
                 patternName: patternName,

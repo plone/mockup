@@ -306,9 +306,7 @@ define([
             registry.scan($el);
             expect(log.error.calledOnce).to.be(true);
             expect(
-                log.error.calledWith(
-                    "Failed while initializing 'toggle' pattern."
-                )
+                log.error.calledWith("Failed while initializing 'toggle' pattern.")
             ).to.be(true);
             log.error.restore();
         });

@@ -37,16 +37,14 @@ export default Base.extend({
                     // strings in the format "id:text", and convert it to an object
                     else {
                         seldefaults = {};
-                        $(
-                            self.options.initialValues.split(
-                                self.options.separator
-                            )
-                        ).each(function () {
-                            var selection = this.split(":");
-                            var id = $.trim(selection[0]);
-                            var text = $.trim(selection[1]);
-                            seldefaults[id] = text;
-                        });
+                        $(self.options.initialValues.split(self.options.separator)).each(
+                            function () {
+                                var selection = this.split(":");
+                                var id = $.trim(selection[0]);
+                                var text = $.trim(selection[1]);
+                                seldefaults[id] = text;
+                            }
+                        );
                     }
                 }
 
@@ -70,9 +68,7 @@ export default Base.extend({
             if (self.options.tags.substr(0, 1) === "[") {
                 self.options.tags = JSON.parse(self.options.tags);
             } else {
-                self.options.tags = self.options.tags.split(
-                    self.options.separator
-                );
+                self.options.tags = self.options.tags.split(self.options.separator);
             }
         }
 
@@ -93,9 +89,7 @@ export default Base.extend({
             let Sortable = await import("sortablejs");
             Sortable = Sortable.default;
 
-            const sortable_el = this.$select2[0].querySelector(
-                ".select2-choices"
-            );
+            const sortable_el = this.$select2[0].querySelector(".select2-choices");
 
             new Sortable(sortable_el, {
                 draggable: "li",
@@ -116,9 +110,7 @@ export default Base.extend({
             if (ob.id) {
                 return (
                     "select2-option-" +
-                    ob.id
-                        .toLowerCase()
-                        .replace(/[ \:\)\(\[\]\{\}\_\+\=\&\*\%\#]/g, "-")
+                    ob.id.toLowerCase().replace(/[ \:\)\(\[\]\{\}\_\+\=\&\*\%\#]/g, "-")
                 );
             }
         };
@@ -158,25 +150,20 @@ export default Base.extend({
     },
     opened: function () {
         var self = this;
-        var isOpen =
-            $(".select2-dropdown-open", self.$el.parent()).length === 1;
+        var isOpen = $(".select2-dropdown-open", self.$el.parent()).length === 1;
         return isOpen;
     },
     init: function () {
         var self = this;
 
-        self.options.allowNewItems = self.options.hasOwnProperty(
-            "allowNewItems"
-        )
+        self.options.allowNewItems = self.options.hasOwnProperty("allowNewItems")
             ? JSON.parse(self.options.allowNewItems)
             : true;
 
         if (self.options.ajax || self.options.vocabularyUrl) {
             if (self.options.vocabularyUrl) {
                 self.options.multiple =
-                    self.options.multiple === undefined
-                        ? true
-                        : self.options.multiple;
+                    self.options.multiple === undefined ? true : self.options.multiple;
                 self.options.ajax = self.options.ajax || {};
                 self.options.ajax.url = self.options.vocabularyUrl;
                 // XXX removing the following function does'nt break tests. dead code?
@@ -213,8 +200,7 @@ export default Base.extend({
                             results = [];
 
                             var haveResult =
-                                queryTerm === "" ||
-                                $.inArray(queryTerm, dataIds) >= 0;
+                                queryTerm === "" || $.inArray(queryTerm, dataIds) >= 0;
                             if (self.options.allowNewItems && !haveResult) {
                                 queryTerm = utils.removeHTML(queryTerm);
                                 results.push({

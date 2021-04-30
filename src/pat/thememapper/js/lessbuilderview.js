@@ -119,16 +119,9 @@ export default PopoverView.extend({
             callback: self.app.saveThemeCSS,
             env: self.app,
             configure: function (iframe) {
-                iframe.window.lessErrorReporting = function (
-                    what,
-                    error,
-                    href
-                ) {
+                iframe.window.lessErrorReporting = function (what, error, href) {
                     if (error.href !== undefined) {
-                        self.app.fileManager.ace.editor.scrollToLine(
-                            error.line,
-                            true
-                        );
+                        self.app.fileManager.ace.editor.scrollToLine(error.line, true);
                         if (error.type == "Name") {
                             var reg = new RegExp(".*(@\\S+)\\s.*");
                             var matches = reg.exec(error.message);
@@ -140,12 +133,10 @@ export default PopoverView.extend({
                             }
                         } else {
                             //The line number is always off by 1? (and LESS indexes from 0) so -2
-                            self.app.fileManager.ace.editor.moveCursorToPosition(
-                                {
-                                    row: error.line - 2,
-                                    column: error.column,
-                                }
-                            );
+                            self.app.fileManager.ace.editor.moveCursorToPosition({
+                                row: error.line - 2,
+                                column: error.column,
+                            });
                             self.app.fileManager.ace.editor.focus();
                         }
                         self.showError(error);

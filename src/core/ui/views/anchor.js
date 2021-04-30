@@ -30,10 +30,7 @@ export default BaseView.extend({
         this.on(
             "render",
             function () {
-                this.$el.attr(
-                    "title",
-                    this.options.tooltip || this.options.title || ""
-                );
+                this.$el.attr("title", this.options.tooltip || this.options.title || "");
                 this.$el.attr(
                     "aria-label",
                     this.options.title || this.options.tooltip || ""

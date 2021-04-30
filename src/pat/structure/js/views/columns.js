@@ -81,10 +81,7 @@ export default PopoverView.extend({
         self.$("input:checked").each(function () {
             self.app.activeColumns.push($(this).val());
         });
-        self.app.setCookieSetting(
-            self.app.activeColumnsCookie,
-            this.app.activeColumns
-        );
+        self.app.setCookieSetting(self.app.activeColumnsCookie, this.app.activeColumns);
         self.app.tableView.render();
     },
 });

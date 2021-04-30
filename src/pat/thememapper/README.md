@@ -7,13 +7,13 @@ title: Theme Mapper
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| filemanagerConfig | object | {} | The file manager pattern config. |
-| mockupUrl | string | null | Mockup URL. |
-| unthemedUrl | string | null | Unthemed site URL. |
-| helpUrl |  | string | null | Helper docs URL. |
-| previewUrl | string | null | URL to preview theme. |
+|      Option       |  Type  | Default |           Description            |
+| :---------------: | :----: | :-----: | :------------------------------: | ---------------- |
+| filemanagerConfig | object |   {}    | The file manager pattern config. |
+|     mockupUrl     | string |  null   |           Mockup URL.            |
+|    unthemedUrl    | string |  null   |        Unthemed site URL.        |
+|      helpUrl      |        | string  |               null               | Helper docs URL. |
+|    previewUrl     | string |  null   |      URL to preview theme.       |
 
 ## Example
 
@@ -25,10 +25,12 @@ title: Theme Mapper
                            helpUrl:http://docs.diazo.org/en/latest'></div>
 
 ```html
-<div class="pat-thememapper"
-     data-pat-thememapper='filemanagerConfig:{"actionUrl":"/filemanager-actions"};
+<div
+    class="pat-thememapper"
+    data-pat-thememapper='filemanagerConfig:{"actionUrl":"/filemanager-actions"};
                            mockupUrl:/tests/files/mapper.html;
                            unthemedUrl:/tests/files/mapper.html;
                            previewUrl:http://www.google.com;
-                           helpUrl:http://docs.diazo.org/en/latest'></div>
+                           helpUrl:http://docs.diazo.org/en/latest'
+></div>
 ```

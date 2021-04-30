@@ -3,15 +3,13 @@ import Pattern from "./toolbar";
 
 describe("Backdrop", function () {
     it("default behaviour", function () {
-        var $el = $('<div id="edit-zone">' +
-                    ' <div class="pat-toolbar" />' +
-                    '</div>'),
+        var $el = $('<div id="edit-zone">' + ' <div class="pat-toolbar" />' + "</div>"),
             toolbar = new Pattern($el);
         expect($(".plone-backdrop", $el).length).toEqual(1);
     });
 });
 
-        /*
+/*
 define([
     "expect",
     "jquery",

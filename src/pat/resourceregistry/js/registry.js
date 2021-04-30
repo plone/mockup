@@ -10,9 +10,7 @@ var AbstractResourceEntryView = BaseView.extend({
     tagName: "div",
     className: "resource-entry",
     template: _.template(
-        "<h3><%- name %></h3>" +
-            '<div class="panel-body form-horizontal">' +
-            "</div>"
+        "<h3><%- name %></h3>" + '<div class="panel-body form-horizontal">' + "</div>"
     ),
 
     serializedModel: function () {
@@ -76,9 +74,7 @@ var ResourceEntryView = AbstractResourceEntryView.extend({
         {
             name: "deps",
             title: _t("Dependencies"),
-            description: _t(
-                "Comma-separated values of resources for requirejs shim"
-            ),
+            description: _t("Comma-separated values of resources for requirejs shim"),
         },
         {
             name: "export",
@@ -165,16 +161,12 @@ var BundleEntryView = AbstractResourceEntryView.extend({
         {
             name: "jscompilation",
             title: _t("Compiled JavaScript"),
-            description: _t(
-                "Automatically generated path to the compiled JavaScript."
-            ),
+            description: _t("Automatically generated path to the compiled JavaScript."),
         },
         {
             name: "csscompilation",
             title: _t("Compiled CSS"),
-            description: _t(
-                "Automatically generated path to the compiled CSS."
-            ),
+            description: _t("Automatically generated path to the compiled CSS."),
         },
         {
             name: "stub_js_modules",
@@ -248,9 +240,7 @@ var RegistryResourceListItem = BaseView.extend({
                 })
             )
         ) {
-            delete this.options.registryView.options.data.resources[
-                this.options.name
-            ];
+            delete this.options.registryView.options.data.resources[this.options.name];
             this.options.registryView.dirty = true;
             if (
                 this.options.registryView.activeResource &&
@@ -297,8 +287,7 @@ var RegistryBundleListItem = RegistryResourceListItem.extend({
     }),
     developJavaScriptClicked: function (e) {
         e.preventDefault();
-        this.options.data.develop_javascript = !this.options.data
-            .develop_javascript;
+        this.options.data.develop_javascript = !this.options.data.develop_javascript;
         this.options.registryView.dirty = true;
         this.options.registryView.render();
         this.render();
@@ -343,9 +332,7 @@ var RegistryBundleListItem = RegistryResourceListItem.extend({
                 })
             )
         ) {
-            delete this.options.registryView.options.data.bundles[
-                this.options.name
-            ];
+            delete this.options.registryView.options.data.bundles[this.options.name];
             this.options.registryView.dirty = true;
             if (
                 this.options.registryView.activeResource &&
@@ -421,9 +408,7 @@ var BaseResourcesPane = BaseView.extend({
         }
         if (
             window.confirm(
-                _t(
-                    "Are you sure you want to cancel? You will lose all changes."
-                )
+                _t("Are you sure you want to cancel? You will lose all changes.")
             )
         ) {
             this._revertData(this.previousData);
@@ -510,23 +495,14 @@ export default BaseResourcesPane.extend({
             clearTimeout(self.filterTimeout);
         }
         self.filterTimeout = setTimeout(function () {
-            var filterText = self
-                .$(".resources-header input")
-                .val()
-                .toLowerCase();
+            var filterText = self.$(".resources-header input").val().toLowerCase();
             var $els = self.$(".resources .list-group-item");
             if (!filterText || filterText.length < 3) {
                 $els.removeClass("hidden");
             } else {
                 $els.each(function () {
                     var $el = $(this);
-                    if (
-                        $el
-                            .find("a")
-                            .html()
-                            .toLowerCase()
-                            .indexOf(filterText) !== -1
-                    ) {
+                    if ($el.find("a").html().toLowerCase().indexOf(filterText) !== -1) {
                         $el.removeClass("hidden");
                     } else {
                         $el.addClass("hidden");
@@ -656,8 +632,7 @@ export default BaseResourcesPane.extend({
             {
                 resources: JSON.stringify(self.options.data.resources),
                 bundles: JSON.stringify(self.options.data.bundles),
-                development:
-                    (self.options.data.development && "true") || "false",
+                development: (self.options.data.development && "true") || "false",
             },
             function () {
                 self.dirty = false;

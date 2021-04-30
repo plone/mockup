@@ -46,9 +46,7 @@ export default BaseView.extend({
         var self = this;
         var data = {};
         self.$(".form-group").each(function () {
-            data[$(this).find(".field-name").val()] = $(this)
-                .find(".field-value")
-                .val();
+            data[$(this).find(".field-name").val()] = $(this).find(".field-value").val();
         });
         self.options.data.patternoptions = data;
     },
@@ -71,16 +69,10 @@ export default BaseView.extend({
                             field.$el
                                 .removeClass("has-error")
                                 .removeClass("has-feedback");
-                            field
-                                .$(".form-control-feedback")
-                                .addClass("hidden");
+                            field.$(".form-control-feedback").addClass("hidden");
                         } catch (err) {
-                            field.$el
-                                .addClass("has-error")
-                                .addClass("has-feedback");
-                            field
-                                .$(".form-control-feedback")
-                                .removeClass("hidden");
+                            field.$el.addClass("has-error").addClass("has-feedback");
+                            field.$(".form-control-feedback").removeClass("hidden");
                         }
                         self.inputChanged();
                     },

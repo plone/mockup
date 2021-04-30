@@ -17,10 +17,10 @@ For example, to use the TinyMCE pattern for the HTML mimetype, use "text/html": 
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| textareaName | string | "" | Value of name attribute of the textarea. |
-| widgets | object  | {'text/html': {pattern: 'tinymce', patternOptions: {}}} | MimeType/PatternConfig pairs. |
+|    Option    |  Type  |                         Default                         |               Description                |
+| :----------: | :----: | :-----------------------------------------------------: | :--------------------------------------: |
+| textareaName | string |                           ""                            | Value of name attribute of the textarea. |
+|   widgets    | object | {'text/html': {pattern: 'tinymce', patternOptions: {}}} |      MimeType/PatternConfig pairs.       |
 
 ## Examples
 
@@ -30,7 +30,6 @@ For example, to use the TinyMCE pattern for the HTML mimetype, use "text/html": 
 ```html
 <div/>
 ```
-
 
 ### Mimetype selection on textarea including text/html mimetype with TinyMCE editor.
 
@@ -121,9 +120,9 @@ For example, to use the TinyMCE pattern for the HTML mimetype, use "text/html": 
  <h1>hello world</h1>
 </textarea>
 <select
-   name="text.mimeType"
-   class="pat-textareamimetypeselector"
-   data-pat-textareamimetypeselector='{
+    name="text.mimeType"
+    class="pat-textareamimetypeselector"
+    data-pat-textareamimetypeselector='{
      "textareaName": "text2",
      "widgets": {
        "text/html": {
@@ -139,9 +138,8 @@ For example, to use the TinyMCE pattern for the HTML mimetype, use "text/html": 
        }
      }
    }'
- >
- <option value="text/html">text/html</option>
- <option value="text/plain" selected="selected">text/plain</option>
+>
+    <option value="text/html">text/html</option>
+    <option value="text/plain" selected="selected">text/plain</option>
 </select>
 ```
-

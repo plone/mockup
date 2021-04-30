@@ -44,9 +44,7 @@ export default PopoverView.extend({
                         );
                         $("a", $item).click(function (e) {
                             e.preventDefault();
-                            self.customize(
-                                $(this).parents("li").eq(0).attr("data-id")
-                            );
+                            self.customize($(this).parents("li").eq(0).attr("data-id"));
                         });
                         self.$results.append($item);
                     });

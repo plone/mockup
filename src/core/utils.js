@@ -158,14 +158,7 @@ var QueryHelper = function (options) {
         };
     };
 
-    self.search = function (
-        term,
-        operation,
-        value,
-        callback,
-        useBaseCriteria,
-        type
-    ) {
+    self.search = function (term, operation, value, callback, useBaseCriteria, type) {
         if (useBaseCriteria === undefined) {
             useBaseCriteria = true;
         }

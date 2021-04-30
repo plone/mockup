@@ -146,44 +146,43 @@ export default Base.extend({
                     self.options
                 );
 
-                $(
-                    action,
-                    $("." + options.templateOptions.classBodyName, $modal)
-                ).each(function (action) {
-                    var $action = $(this);
-                    $action.on(actionOptions.eventType, function (e) {
-                        e.stopPropagation();
-                        e.preventDefault();
+                $(action, $("." + options.templateOptions.classBodyName, $modal)).each(
+                    function (action) {
+                        var $action = $(this);
+                        $action.on(actionOptions.eventType, function (e) {
+                            e.stopPropagation();
+                            e.preventDefault();
 
-                        self.loading.show(false);
+                            self.loading.show(false);
 
-                        // handle event on $action using a function on self
-                        if (actionOptions.modalFunction !== null) {
-                            self[actionOptions.modalFunction]();
-                            // handle event on input/button using jquery.form library
-                        } else if (
-                            $.nodeName($action[0], "input") ||
-                            $.nodeName($action[0], "button") ||
-                            options.isForm === true
-                        ) {
-                            self.options.handleFormAction.apply(self, [
-                                $action,
-                                actionOptions,
-                                patternOptions,
-                            ]);
-                            // handle event on link with jQuery.ajax
-                        } else if (
-                            options.ajaxUrl !== null ||
-                            $.nodeName($action[0], "a")
-                        ) {
-                            self.options.handleLinkAction.apply(self, [
-                                $action,
-                                actionOptions,
-                                patternOptions,
-                            ]);
-                        }
-                    });
-                });
+                            // handle event on $action using a function on self
+                            if (actionOptions.modalFunction !== null) {
+                                self[actionOptions.modalFunction]();
+                                // handle event on input/button using jquery.form library
+                            } else if (
+                                $.nodeName($action[0], "input") ||
+                                $.nodeName($action[0], "button") ||
+                                options.isForm === true
+                            ) {
+                                self.options.handleFormAction.apply(self, [
+                                    $action,
+                                    actionOptions,
+                                    patternOptions,
+                                ]);
+                                // handle event on link with jQuery.ajax
+                            } else if (
+                                options.ajaxUrl !== null ||
+                                $.nodeName($action[0], "a")
+                            ) {
+                                self.options.handleLinkAction.apply(self, [
+                                    $action,
+                                    actionOptions,
+                                    patternOptions,
+                                ]);
+                            }
+                        });
+                    }
+                );
             });
         },
         handleFormAction: function ($action, options, patternOptions) {
@@ -245,27 +244,15 @@ export default Base.extend({
                         // on "error", "abort", and "parsererror"
                     } else if (options.onError) {
                         if (typeof options.onError === "string") {
-                            window[options.onError](
-                                xhr,
-                                textStatus,
-                                errorStatus
-                            );
+                            window[options.onError](xhr, textStatus, errorStatus);
                         } else {
                             options.onError(xhr, textStatus, errorStatus);
                         }
                     } else {
                         // window.alert(_t('There was an error submitting the form.'));
-                        console.log(
-                            "error happened",
-                            textStatus,
-                            " do something"
-                        );
+                        console.log("error happened", textStatus, " do something");
                     }
-                    self.emit("formActionError", [
-                        xhr,
-                        textStatus,
-                        errorStatus,
-                    ]);
+                    self.emit("formActionError", [xhr, textStatus, errorStatus]);
                 },
                 success: function (response, state, xhr, form) {
                     self.loading.hide();
@@ -285,13 +272,7 @@ export default Base.extend({
                                     form
                                 );
                             } else {
-                                options.onFormError(
-                                    self,
-                                    response,
-                                    state,
-                                    xhr,
-                                    form
-                                );
+                                options.onFormError(self, response, state, xhr, form);
                             }
                         } else {
                             self.redraw(response, patternOptions);
@@ -313,13 +294,7 @@ export default Base.extend({
 
                     if (options.onSuccess) {
                         if (typeof options.onSuccess === "string") {
-                            window[options.onSuccess](
-                                self,
-                                response,
-                                state,
-                                xhr,
-                                form
-                            );
+                            window[options.onSuccess](self, response, state, xhr, form);
                         } else {
                             options.onSuccess(self, response, state, xhr, form);
                         }
@@ -334,12 +309,7 @@ export default Base.extend({
                             self.reloadWindow();
                         }
                     }
-                    self.emit("formActionSuccess", [
-                        response,
-                        state,
-                        xhr,
-                        form,
-                    ]);
+                    self.emit("formActionSuccess", [response, state, xhr, form]);
                 },
             });
         },
@@ -387,22 +357,13 @@ export default Base.extend({
                     } else {
                         window.alert(_t("There was an error loading modal."));
                     }
-                    self.emit("linkActionError", [
-                        xhr,
-                        textStatus,
-                        errorStatus,
-                    ]);
+                    self.emit("linkActionError", [xhr, textStatus, errorStatus]);
                 })
                 .done(function (response, state, xhr) {
                     self.redraw(response, patternOptions);
                     if (options.onSuccess) {
                         if (typeof options.onSuccess === "string") {
-                            window[options.onSuccess](
-                                self,
-                                response,
-                                state,
-                                xhr
-                            );
+                            window[options.onSuccess](self, response, state, xhr);
                         } else {
                             options.onSuccess(self, response, state, xhr);
                         }
@@ -482,17 +443,11 @@ export default Base.extend({
             // The following code will work around this issue:
             $("form", self.$modal).on("keydown", function (event) {
                 // ignore keys which are not enter, and ignore enter inside a textarea.
-                if (
-                    event.keyCode !== 13 ||
-                    event.target.nodeName === "TEXTAREA"
-                ) {
+                if (event.keyCode !== 13 || event.target.nodeName === "TEXTAREA") {
                     return;
                 }
                 event.preventDefault();
-                $(
-                    "input[type=submit], button[type=submit], button:not(type)",
-                    this
-                )
+                $("input[type=submit], button[type=submit], button:not(type)", this)
                     .eq(0)
                     .trigger("click");
             });
@@ -598,11 +553,7 @@ export default Base.extend({
 
         if (self.options.backdropOptions.closeOnEsc === true) {
             $(document).on("keydown", function (e, data) {
-                if (
-                    self.$el.is(
-                        "." + self.options.templateOptions.classActiveName
-                    )
-                ) {
+                if (self.$el.is("." + self.options.templateOptions.classActiveName)) {
                     if (e.keyCode === 27) {
                         // ESC key pressed
                         self.hide();
@@ -672,9 +623,7 @@ export default Base.extend({
         })
             .done(function (response, textStatus, xhr) {
                 self.ajaxXHR = undefined;
-                self.$raw = $("<div />").append(
-                    $(utils.parseBodyTag(response))
-                );
+                self.$raw = $("<div />").append($(utils.parseBodyTag(response)));
                 self.emit("after-ajax", self, textStatus, xhr);
                 self._show();
             })
@@ -887,9 +836,8 @@ export default Base.extend({
         if (self.options.backdropOptions.closeOnClick === true) {
             self.$modal.on("click", function (e) {
                 if (
-                    !$(e.target).closest(
-                        "." + self.options.templateOptions.classModal
-                    ).length
+                    !$(e.target).closest("." + self.options.templateOptions.classModal)
+                        .length
                 ) {
                     self.hide();
                 }
@@ -983,10 +931,7 @@ export default Base.extend({
             zIndex = 1041;
 
         $(self.options.zIndexSelector).each(function () {
-            zIndex = Math.max(
-                zIndex,
-                parseInt($(this).css("zIndex")) + 1 || 1041
-            );
+            zIndex = Math.max(zIndex, parseInt($(this).css("zIndex")) + 1 || 1041);
         });
 
         self.$wrapper = $("<div/>")
@@ -1014,9 +959,7 @@ export default Base.extend({
         backdrop.on("hidden", function (e) {
             if (
                 self.$modal !== undefined &&
-                self.$modal.hasClass(
-                    self.options.templateOptions.classActiveName
-                )
+                self.$modal.hasClass(self.options.templateOptions.classActiveName)
             ) {
                 self.hide();
             }

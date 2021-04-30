@@ -79,8 +79,7 @@ const i18n = function () {
             var key = domain + "-" + language;
             if (key in self.storage) {
                 if (
-                    Date.now() -
-                        parseInt(self.storage.getItem(key + "-updated"), 10) <
+                    Date.now() - parseInt(self.storage.getItem(key + "-updated"), 10) <
                     self.ttl
                 ) {
                     var catalog = JSON.parse(self.storage.getItem(key));

@@ -110,10 +110,7 @@ export default Backbone.View.extend({
         var keyEvent = this.app.keyEvent;
         // Resolve the correct handler based on these keys.
         // Default handlers live in ../navigation.js (bound to Nav)
-        if (
-            (keyEvent && keyEvent.ctrlKey) ||
-            !this.model.attributes.is_folderish
-        ) {
+        if ((keyEvent && keyEvent.ctrlKey) || !this.model.attributes.is_folderish) {
             // middle/ctrl-click or not a folder content
             // not yet implemented.
             return null;
@@ -153,9 +150,7 @@ export default Backbone.View.extend({
                     var $tr = $(this).closest("tr.itemRow");
                     if ($tr.length > 0) {
                         var model = $tr[0].model;
-                        var existing = selectedCollection.getByUID(
-                            model.attributes.UID
-                        );
+                        var existing = selectedCollection.getByUID(model.attributes.UID);
                         if (this.checked) {
                             if (!existing) {
                                 selectedCollection.add(model.clone());

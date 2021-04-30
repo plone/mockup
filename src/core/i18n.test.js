@@ -1,9 +1,4 @@
-define(["expect", "jquery", "mockup-i18n", "sinon"], function (
-    expect,
-    $,
-    I18n,
-    sinon
-) {
+define(["expect", "jquery", "mockup-i18n", "sinon"], function (expect, $, I18n, sinon) {
     "use strict";
 
     window.mocha.setup("bdd");

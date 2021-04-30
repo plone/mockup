@@ -44,14 +44,8 @@ export default PopoverView.extend({
                         var path;
                         var oldPath;
                         if (self.data.newParent != "/") {
-                            path = [
-                                self.data.newParent,
-                                self.data.newName,
-                            ].join("/");
-                            oldPath = [
-                                self.data.oldParent,
-                                self.data.oldName,
-                            ].join("/");
+                            path = [self.data.newParent, self.data.newName].join("/");
+                            oldPath = [self.data.oldParent, self.data.oldName].join("/");
                         } else {
                             path = "/" + self.data.newName;
                             oldPath = "/" + self.data.oldName;

@@ -26,8 +26,7 @@ export default Base.extend({
             return 0;
         }
         // delete cookie
-        document.cookie =
-            "areYourCookiesEnabled=; expires=Thu, 01-Jan-70 00:00:01 GMT";
+        document.cookie = "areYourCookiesEnabled=; expires=Thu, 01-Jan-70 00:00:01 GMT";
         return 1;
     },
 

@@ -13,23 +13,18 @@ export default PopoverView.extend({
     render() {
         var self = this;
         PopoverView.prototype.render.call(this);
-        self.upload = new Upload(
-            self.$(".uploadify-me").addClass("pat-upload"),
-            {
-                url: self.app.options.uploadUrl,
-                success(response) {
-                    if (self.callback) {
-                        if (response.status == "success") {
-                            self.callback.apply(self.app, [response]);
-                        } else {
-                            alert(
-                                "There was a problem during the upload process"
-                            );
-                        }
+        self.upload = new Upload(self.$(".uploadify-me").addClass("pat-upload"), {
+            url: self.app.options.uploadUrl,
+            success(response) {
+                if (self.callback) {
+                    if (response.status == "success") {
+                        self.callback.apply(self.app, [response]);
+                    } else {
+                        alert("There was a problem during the upload process");
                     }
-                },
-            }
-        );
+                }
+            },
+        });
         return this;
     },
     toggle(button, e) {

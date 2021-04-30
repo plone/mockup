@@ -34,9 +34,7 @@ const TabView = BaseView.extend({
         var self = this;
         if (e !== undefined) {
             e.preventDefault();
-            self.activeTab = $(e.target)
-                .parent()[0]
-                .className.replace("-btn", "");
+            self.activeTab = $(e.target).parent()[0].className.replace("-btn", "");
         }
         self.$(".main-tabs > li a").removeClass("active");
         self.$content.find(".tab-pane").removeClass("active");
@@ -130,8 +128,7 @@ const TabView = BaseView.extend({
                     onError(resp);
                 } else {
                     window.alert(
-                        _t("Error processing ajax request for action: ") +
-                            action
+                        _t("Error processing ajax request for action: ") + action
                     );
                 }
             });

@@ -22,21 +22,19 @@ describe("Event Edit", function () {
         registry.scan($el);
 
         // checking initial
-        expect(
-            $(".pattern-pickadate-time-wrapper", $el)[0].style.display
-        ).toEqual("block");
+        expect($(".pattern-pickadate-time-wrapper", $el)[0].style.display).toEqual(
+            "block"
+        );
         expect($(sel_end, $el)[0].style.display).toEqual("block");
         expect(
             $(
-                sel_start +
-                    ' .pattern-pickadate-time-wrapper input[name="_submit"]',
+                sel_start + ' .pattern-pickadate-time-wrapper input[name="_submit"]',
                 $el
             ).prop("value")
         ).toEqual("14:00");
         expect(
             $(
-                sel_end +
-                    ' .pattern-pickadate-time-wrapper input[name="_submit"]',
+                sel_end + ' .pattern-pickadate-time-wrapper input[name="_submit"]',
                 $el
             ).prop("value")
         ).toEqual("15:30");
@@ -52,33 +50,30 @@ describe("Event Edit", function () {
         // clicking whole day
         $(sel_whole_day + " input", $el).prop("checked", true);
         $(sel_whole_day + " input", $el).trigger("change");
-        expect(
-            $(".pattern-pickadate-time-wrapper", $el)[0].style.display
-        ).toEqual("none");
+        expect($(".pattern-pickadate-time-wrapper", $el)[0].style.display).toEqual(
+            "none"
+        );
         $(sel_whole_day + " input", $el).prop("checked", false);
         $(sel_whole_day + " input", $el).trigger("change");
-        expect(
-            $(".pattern-pickadate-time-wrapper", $el)[0].style.display
-        ).toEqual("block");
+        expect($(".pattern-pickadate-time-wrapper", $el)[0].style.display).toEqual(
+            "block"
+        );
 
         // changing start time
         $(sel_start + " .pattern-pickadate-time", $el).click();
         $(
-            sel_start +
-                ' .pattern-pickadate-time-wrapper li:contains("10:00 AM")',
+            sel_start + ' .pattern-pickadate-time-wrapper li:contains("10:00 AM")',
             $el
         ).click();
         expect(
             $(
-                sel_start +
-                    ' .pattern-pickadate-time-wrapper input[name="_submit"]',
+                sel_start + ' .pattern-pickadate-time-wrapper input[name="_submit"]',
                 $el
             ).prop("value")
         ).toEqual("10:00");
         expect(
             $(
-                sel_end +
-                    ' .pattern-pickadate-time-wrapper input[name="_submit"]',
+                sel_end + ' .pattern-pickadate-time-wrapper input[name="_submit"]',
                 $el
             ).prop("value")
         ).toEqual("15:30");
@@ -92,8 +87,7 @@ describe("Event Edit", function () {
         expect($(sel_end, $el).hasClass("error")).toEqual(true);
         $(sel_end + " .pattern-pickadate-time", $el).click();
         $(
-            sel_end +
-                ' .pattern-pickadate-time-wrapper li:contains("10:30 AM")',
+            sel_end + ' .pattern-pickadate-time-wrapper li:contains("10:30 AM")',
             $el
         ).click();
         expect($(sel_end, $el).hasClass("error")).toEqual(false);
@@ -101,21 +95,18 @@ describe("Event Edit", function () {
         // changing start time again
         $(sel_start + " .pattern-pickadate-time", $el).click();
         $(
-            sel_start +
-                ' .pattern-pickadate-time-wrapper li:contains("10:00 AM")',
+            sel_start + ' .pattern-pickadate-time-wrapper li:contains("10:00 AM")',
             $el
         ).click();
         expect(
             $(
-                sel_start +
-                    ' .pattern-pickadate-time-wrapper input[name="_submit"]',
+                sel_start + ' .pattern-pickadate-time-wrapper input[name="_submit"]',
                 $el
             ).prop("value")
         ).toEqual("10:00");
         expect(
             $(
-                sel_end +
-                    ' .pattern-pickadate-time-wrapper input[name="_submit"]',
+                sel_end + ' .pattern-pickadate-time-wrapper input[name="_submit"]',
                 $el
             ).prop("value")
         ).toEqual("10:30");

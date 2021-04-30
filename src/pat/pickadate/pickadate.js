@@ -147,21 +147,15 @@ export default Base.extend({
                             if (e.select !== undefined) {
                                 self.$date.attr("data-value", e.select);
                                 if (
-                                    self.options.autoSetTimeOnDateChange !==
-                                        false &&
+                                    self.options.autoSetTimeOnDateChange !== false &&
                                     self.$time
                                 ) {
-                                    if (
-                                        !self.$time
-                                            .pickatime("picker")
-                                            .get("select")
-                                    ) {
+                                    if (!self.$time.pickatime("picker").get("select")) {
                                         self.$time
                                             .pickatime("picker")
                                             .set(
                                                 "select",
-                                                self.options
-                                                    .autoSetTimeOnDateChange
+                                                self.options.autoSetTimeOnDateChange
                                             );
                                     }
                                 }
@@ -214,13 +208,8 @@ export default Base.extend({
 
             // XXX: bug in pickatime
             // work around pickadate bug loading 00:xx as value
-            if (
-                typeof timeValue === "string" &&
-                timeValue.substring(0, 2) === "00"
-            ) {
-                self.$time
-                    .pickatime("picker")
-                    .set("select", timeValue.split(":"));
+            if (typeof timeValue === "string" && timeValue.substring(0, 2) === "00") {
+                self.$time.pickatime("picker").set("select", timeValue.split(":"));
                 self.$time.attr("data-value", timeValue);
             }
         }
@@ -232,11 +221,7 @@ export default Base.extend({
         ) {
             self.$separator = $("<span/>")
                 .addClass(self.options.classSeparatorName)
-                .html(
-                    self.options.separator === " "
-                        ? "&nbsp;"
-                        : self.options.separator
-                )
+                .html(self.options.separator === " " ? "&nbsp;" : self.options.separator)
                 .appendTo(self.$wrapper);
         }
 
@@ -285,10 +270,7 @@ export default Base.extend({
                 var isInList;
                 // the timezone list contains the default value
                 self.options.timezone.data.some(function (obj) {
-                    isInList =
-                        obj.text === self.options.timezone.default
-                            ? true
-                            : false;
+                    isInList = obj.text === self.options.timezone.default ? true : false;
                     return isInList;
                 });
                 if (isInList) {
@@ -302,10 +284,7 @@ export default Base.extend({
             // if data contains only one timezone this value will be chosen
             // and the timezone dropdown list will be disabled and
             if (self.options.timezone.data.length === 1) {
-                self.$timezone.attr(
-                    "data-value",
-                    self.options.timezone.data[0].text
-                );
+                self.$timezone.attr("data-value", self.options.timezone.data[0].text);
                 self.$timezone
                     .parent()
                     .find(".select2-chosen")

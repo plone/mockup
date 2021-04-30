@@ -1,10 +1,9 @@
 //import sinon from "sinon";
-import sinon from './sinon/pkg/sinon-esm.js';
+import sinon from "./sinon/pkg/sinon-esm.js";
 import "./underscore/underscore-min.js";
 
 // define(["sinon", "jquery", "underscore"], function (sinon, $, _) {
 //     "use strict";
-
 
 function getQueryVariable(url, variable) {
     var query;
@@ -210,13 +209,10 @@ function generateUID(size) {
         size = 30;
     }
     var text = "";
-    var possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < size; i = i + 1) {
-        text += possible.charAt(
-            Math.floor(Math.random() * possible.length)
-        );
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
 }
@@ -226,9 +222,7 @@ for (var pathi = 0; pathi < basePaths.length; pathi = pathi + 1) {
         randomItems.push({
             UID: generateUID(),
             Title:
-                possibleNames[
-                    Math.floor(Math.random() * possibleNames.length)
-                ] +
+                possibleNames[Math.floor(Math.random() * possibleNames.length)] +
                 " " +
                 j,
             path: basePath + generateUID(8),
@@ -356,19 +350,12 @@ server.respondWith(/relateditems-test\.json/, function (xhr, id) {
             data.review_state = ["published", "private", "review"][
                 Math.floor(Math.random() * 3)
             ]; // jshint ignore:line
-            data.CreationDate =
-                dates[Math.floor(Math.random() * dates.length)];
-            data.ModificationDate =
-                dates[Math.floor(Math.random() * dates.length)];
-            data.EffectiveDate =
-                dates[Math.floor(Math.random() * dates.length)];
+            data.CreationDate = dates[Math.floor(Math.random() * dates.length)];
+            data.ModificationDate = dates[Math.floor(Math.random() * dates.length)];
+            data.EffectiveDate = dates[Math.floor(Math.random() * dates.length)];
             data.Subject = [
-                possibleTags[
-                    Math.floor(Math.random() * possibleTags.length)
-                ],
-                possibleTags[
-                    Math.floor(Math.random() * possibleTags.length)
-                ],
+                possibleTags[Math.floor(Math.random() * possibleTags.length)],
+                possibleTags[Math.floor(Math.random() * possibleTags.length)],
             ];
             data.id = data.Title.replace(" ", "-").toLowerCase();
             if (data.portal_type === "Folder") {
@@ -379,8 +366,7 @@ server.respondWith(/relateditems-test\.json/, function (xhr, id) {
         }
     };
     addSomeData(searchables);
-    searchables[0].getURL =
-        window.location.origin + "/tests/images/plone.png";
+    searchables[0].getURL = window.location.origin + "/tests/images/plone.png";
     searchables[0].path = "/tests/images/plone.png";
 
     var results = [];
@@ -474,10 +460,7 @@ server.respondWith(/relateditems-test\.json/, function (xhr, id) {
         { "Content-Type": "application/json" },
         JSON.stringify({
             total: results.length,
-            results: results.slice(
-                page * pageSize,
-                page * pageSize + (pageSize - 1)
-            ),
+            results: results.slice(page * pageSize, page * pageSize + (pageSize - 1)),
         })
     );
 });
@@ -585,9 +568,7 @@ server.respondWith(
     "GET",
     /portal_factory\/@@querybuildernumberofresults/,
     function (xhr, id) {
-        var content = $(
-            "#querystring-number-results-example-results"
-        ).text();
+        var content = $("#querystring-number-results-example-results").text();
         xhr.respond(200, { "content-Type": "text/html" }, content);
     }
 );
@@ -608,27 +589,21 @@ var basicActions = [
 
 var actionData = {
     "/copy": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: selection.length + " items copied",
         };
     },
     "/cut": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: selection.length + " items cut",
         };
     },
     "/paste": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: "pasted " + selection.length + " items",
@@ -641,36 +616,28 @@ var actionData = {
         };
     },
     "/tags": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: "Tags updated for " + selection.length + " items",
         };
     },
     "/properties": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: "Properties updated for " + selection.length + " items",
         };
     },
     "/rename": function (xhr) {
-        var torename = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "torename")
-        );
+        var torename = JSON.parse(getQueryVariable("?" + xhr.requestBody, "torename"));
         return {
             status: "success",
             msg: "Renamed " + torename.length + " items",
         };
     },
     "/workflow": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         if (xhr.requestBody.indexOf("transitions") !== -1) {
             var transitions = JSON.parse(
                 getQueryVariable("?" + xhr.requestBody, "transitions")
@@ -697,18 +664,14 @@ var actionData = {
         }
     },
     "/delete": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: "Deleted " + selection.length + " items",
         };
     },
     "/rearrange": function (xhr) {
-        var selection = JSON.parse(
-            getQueryVariable("?" + xhr.requestBody, "selection")
-        );
+        var selection = JSON.parse(getQueryVariable("?" + xhr.requestBody, "selection"));
         return {
             status: "success",
             msg: "Rearranged items",
@@ -725,11 +688,7 @@ _.each(basicActions, function (action) {
         if (actionData[action]) {
             data = actionData[action](xhr);
         }
-        xhr.respond(
-            200,
-            { "Content-Type": "application/json" },
-            JSON.stringify(data)
-        );
+        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
     });
 });
 
@@ -754,63 +713,51 @@ server.respondWith("GET", /context-info/, function (xhr, id) {
             portal_type: "Folder",
         };
     }
-    xhr.respond(
-        200,
-        { "Content-Type": "application/json" },
-        JSON.stringify(data)
-    );
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
 });
 
 server.respondWith("GET", /fileTree.json/, function (xhr, id) {
     server.autoRespondAfter = 200;
     var data = [
         {
-            "label": "css",
-            "folder": true,
-            "children": [
+            label: "css",
+            folder: true,
+            children: [
                 {
-                    "label": "style.css",
-                    "folder": false
+                    label: "style.css",
+                    folder: false,
                 },
                 {
-                    "label": "tree.css",
-                    "folder": false
-                }
-            ]
+                    label: "tree.css",
+                    folder: false,
+                },
+            ],
         },
         {
-            "label": "js",
-            "folder": true,
-            "children": [
+            label: "js",
+            folder: true,
+            children: [
                 {
-                    "label": "jquery.js",
-                    "folder": false
+                    label: "jquery.js",
+                    folder: false,
                 },
                 {
-                    "label": "tree.js",
-                    "folder": false
-                }
-            ]
+                    label: "tree.js",
+                    folder: false,
+                },
+            ],
         },
         {
-            "label": "index.html",
-            "folder": false
-        }
+            label: "index.html",
+            folder: false,
+        },
     ];
 
-    xhr.respond(
-        200,
-        { "Content-Type": "application/json" },
-        JSON.stringify(data)
-    );
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
 });
 
 server.respondWith("POST", /filemanager-actions/, function (xhr, id) {
-    xhr.respond(
-        200,
-        { "Content-Type": "application/json" },
-        JSON.stringify({})
-    );
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({}));
 });
 
 server.respondWith("GET", /filemanager-actions/, function (xhr, id) {
@@ -863,11 +810,7 @@ server.respondWith("GET", /filemanager-actions/, function (xhr, id) {
                 folder: false,
             },
         ];
-        xhr.respond(
-            200,
-            { "Content-Type": "application/json" },
-            JSON.stringify(data)
-        );
+        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
     } else if (action === "getFile") {
         var path = getQueryVariable(xhr.url, "path");
         var extension = path.substr(path.lastIndexOf(".") + 1);
@@ -876,8 +819,7 @@ server.respondWith("GET", /filemanager-actions/, function (xhr, id) {
         if (extension === "js") {
             data = 'var foo = function() { \n\talert("Hi!"); \n};';
         } else if (extension === "css") {
-            data =
-                "#content.highlight { \n\tbackground-color: #D1F03A; \n}";
+            data = "#content.highlight { \n\tbackground-color: #D1F03A; \n}";
         } else if (extension === "html") {
             data = "<html>\n\t<body>\n\t\t<p>Hi!</p>\n\t</body>\n</html>";
         } else if (extension === "xml") {
@@ -936,16 +878,13 @@ server.respondWith("POST", /registry-manager/, function (xhr, id) {
                 "autotoc": "patterns/autotoc/pattern",
                 "pat-base": "node_modules/patternslib/src/core/base",
                 "jquery": "node_modules/jquery/dist/jquery",
-                "pat-registry":
-                    "node_modules/patternslib/src/core/registry",
+                "pat-registry": "node_modules/patternslib/src/core/registry",
             },
             include: ["autotoc"],
         };
     } else if (action === "less-build-config") {
         data = {
-            less: [
-                "patterns/resourceregistry/pattern.resourceregistry.less",
-            ],
+            less: ["patterns/resourceregistry/pattern.resourceregistry.less"],
         };
     } else if (action === "save-js-build") {
         data = {
@@ -956,9 +895,5 @@ server.respondWith("POST", /registry-manager/, function (xhr, id) {
             filepath: "++plone++static/autotoc.css",
         };
     }
-    xhr.respond(
-        200,
-        { "Content-Type": "application/json" },
-        JSON.stringify(data)
-    );
+    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
 });

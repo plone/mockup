@@ -128,9 +128,7 @@ export default function (thememapper) {
             for (var i = 0; i < amount; ++i) {
                 padding += " ";
             }
-            return (
-                "\n" + padding + string.replace(/\n/g, "\n" + padding) + "\n"
-            );
+            return "\n" + padding + string.replace(/\n/g, "\n" + padding) + "\n";
         }
 
         //If we're already starting at the very end, go back to the beginning
@@ -297,11 +295,7 @@ export default function (thememapper) {
                 "<" +
                 self.ruleType +
                 "\n    " +
-                self.calculateDiazoSelector(
-                    self._themeElement,
-                    "theme",
-                    themeChildren
-                ) +
+                self.calculateDiazoSelector(self._themeElement, "theme", themeChildren) +
                 "\n    " +
                 self.calculateDiazoSelector(
                     self._contentElement,
@@ -576,10 +570,7 @@ export default function (thememapper) {
                     self.ruleBuilderPopover.load();
                 }
             }
-        } else if (
-            ruleBuilder.ruleType != null &&
-            ruleBuilder.currentScope == null
-        ) {
+        } else if (ruleBuilder.ruleType != null && ruleBuilder.currentScope == null) {
             $els.wizardSteps.hide();
             $els.step2.show();
             self.updateRule(ruleBuilder);

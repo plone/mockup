@@ -32,10 +32,7 @@ export default Base.extend({
         var ace = window.ace;
 
         ace.config.set("packaged", true);
-        ace.config.set(
-            "basePath",
-            "++plone++static/components/ace-builds/src/"
-        );
+        ace.config.set("basePath", "++plone++static/components/ace-builds/src/");
 
         // set id on current element
         var id = utils.setId(self.$el);
@@ -59,16 +56,10 @@ export default Base.extend({
         }
         self.editor.getSession().setMode("ace/mode/" + self.options.mode);
         self.editor.getSession().setTabSize(parseInt(self.options.tabSize, 10));
-        self.editor
-            .getSession()
-            .setUseSoftTabs(utils.bool(self.options.softTabs));
-        self.editor
-            .getSession()
-            .setUseWrapMode(utils.bool(self.options.wrapMode));
+        self.editor.getSession().setUseSoftTabs(utils.bool(self.options.softTabs));
+        self.editor.getSession().setUseWrapMode(utils.bool(self.options.wrapMode));
         self.editor.renderer.setShowGutter(utils.bool(self.options.showGutter));
-        self.editor.setShowPrintMargin(
-            utils.bool(self.options.showPrintMargin)
-        );
+        self.editor.setShowPrintMargin(utils.bool(self.options.showPrintMargin));
         self.editor.setReadOnly(utils.bool(self.options.readOnly));
     },
     setSyntax: function (name) {

@@ -54,11 +54,7 @@ export default Base.extend({
         ],
 
         activeColumns: null,
-        _default_activeColumns: [
-            "ModificationDate",
-            "EffectiveDate",
-            "review_state",
-        ],
+        _default_activeColumns: ["ModificationDate", "EffectiveDate", "review_state"],
 
         availableColumns: null,
         _default_availableColumns: {
@@ -85,12 +81,7 @@ export default Base.extend({
         },
 
         defaultPageTypes: null,
-        _default_defaultPageTypes: [
-            "Document",
-            "Event",
-            "News Item",
-            "Collection",
-        ],
+        _default_defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
 
         momentFormat: "L LT",
         rearrange: {

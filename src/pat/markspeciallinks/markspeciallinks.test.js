@@ -69,39 +69,17 @@ define([
         it("check for correct icon classes per protocol", function () {
             registry.scan(this.$el);
             var listel = this.$el.next(".icons").find("li");
-            expect(
-                listel.eq(0).find("i").hasClass("link-external")
-            ).to.be.equal(true);
-            expect(listel.eq(1).find("i").hasClass("link-https")).to.be.equal(
-                true
-            );
-            expect(listel.eq(2).find("i").hasClass("link-mailto")).to.be.equal(
-                true
-            );
-            expect(listel.eq(3).find("i").hasClass("link-ftp")).to.be.equal(
-                true
-            );
-            expect(listel.eq(4).find("i").hasClass("link-news")).to.be.equal(
-                true
-            );
-            expect(listel.eq(5).find("i").hasClass("link-irc")).to.be.equal(
-                true
-            );
-            expect(listel.eq(6).find("i").hasClass("link-h323")).to.be.equal(
-                true
-            );
-            expect(listel.eq(7).find("i").hasClass("link-sip")).to.be.equal(
-                true
-            );
-            expect(listel.eq(8).find("i").hasClass("link-callto")).to.be.equal(
-                true
-            );
-            expect(listel.eq(9).find("i").hasClass("link-feed")).to.be.equal(
-                true
-            );
-            expect(listel.eq(10).find("i").hasClass("link-webcal")).to.be.equal(
-                true
-            );
+            expect(listel.eq(0).find("i").hasClass("link-external")).to.be.equal(true);
+            expect(listel.eq(1).find("i").hasClass("link-https")).to.be.equal(true);
+            expect(listel.eq(2).find("i").hasClass("link-mailto")).to.be.equal(true);
+            expect(listel.eq(3).find("i").hasClass("link-ftp")).to.be.equal(true);
+            expect(listel.eq(4).find("i").hasClass("link-news")).to.be.equal(true);
+            expect(listel.eq(5).find("i").hasClass("link-irc")).to.be.equal(true);
+            expect(listel.eq(6).find("i").hasClass("link-h323")).to.be.equal(true);
+            expect(listel.eq(7).find("i").hasClass("link-sip")).to.be.equal(true);
+            expect(listel.eq(8).find("i").hasClass("link-callto")).to.be.equal(true);
+            expect(listel.eq(9).find("i").hasClass("link-feed")).to.be.equal(true);
+            expect(listel.eq(10).find("i").hasClass("link-webcal")).to.be.equal(true);
         });
         it("do not show the lock icon for anchor links", function () {
             registry.scan(this.$el);

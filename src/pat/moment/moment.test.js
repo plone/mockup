@@ -1,9 +1,9 @@
-define([
-    "expect",
-    "jquery",
-    "pat-registry",
-    "mockup-patterns-moment",
-], function (expect, $, registry, Moment) {
+define(["expect", "jquery", "pat-registry", "mockup-patterns-moment"], function (
+    expect,
+    $,
+    registry,
+    Moment
+) {
     "use strict";
 
     window.mocha.setup("bdd");
@@ -66,9 +66,7 @@ define([
                 '<div class="pat-moment" data-pat-moment="format:relative;setTitle:true">2012-10-02 14:30</div>'
             );
             registry.scan($el);
-            expect($el.attr("title")).to.equal(
-                "Tuesday, October 2, 2012 2:30 PM"
-            );
+            expect($el.attr("title")).to.equal("Tuesday, October 2, 2012 2:30 PM");
         });
         it("test setTitle default (false)", function () {
             var $el = $(

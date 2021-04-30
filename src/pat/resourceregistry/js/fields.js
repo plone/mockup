@@ -172,9 +172,7 @@ var ResourceListFieldView = ResourceInputFieldView.extend({
         self.$("input").each(function () {
             data.push($(this).val());
         });
-        self.options.registryData[
-            self.options.name
-        ] = self.options.value = data;
+        self.options.registryData[self.options.name] = self.options.value = data;
         $(document).trigger("resource-data-changed");
     },
 
@@ -233,9 +231,9 @@ var ResourceSortableListFieldView = ResourceListFieldView.extend({
 
 var ResourceTextAreaFieldView = ResourceInputFieldView.extend({
     inputChanged: function () {
-        this.options.registryData[
-            this.options.name
-        ] = this.options.value = this.$("textarea").val();
+        this.options.registryData[this.options.name] = this.options.value = this.$(
+            "textarea"
+        ).val();
     },
     template: _.template(
         '<label class="col-sm-3 control-label"><%- title %></label>' +
@@ -250,9 +248,9 @@ var ResourceSelectFieldView = ResourceInputFieldView.extend({
         "change select": "inputChanged",
     },
     inputChanged: function () {
-        this.options.registryData[
-            this.options.name
-        ] = this.options.value = this.$(".select").select2("val");
+        this.options.registryData[this.options.name] = this.options.value = this.$(
+            ".select"
+        ).select2("val");
         $(document).trigger("resource-data-changed");
     },
 

@@ -9,18 +9,17 @@ Automatically create a table of contents.
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| IDPrefix | string | 'autotoc-item-' | Prefix used to generate ID. |
-| classActiveName | string | 'active' | Class used for active level. |
-| classLevelPrefixName | string | 'autotoc-level-' | Class prefix used for the TOC levels. |
-| classSectionName | string | 'autotoc-section' | Class used for section in TOC. |
-| classTOCName | string | 'autotoc-nav' | Class used for the TOC. |
-| levels | string | 'h1,h2,h3' | Selectors used to find levels. |
-| scrollDuration | string | 'slow' | Speed of scrolling. |
-| scrollEasing | string | 'swing' | Easing to use while scrolling. |
-| section | string | 'section' | Tag type to use for TOC. |
-
+|        Option        |  Type  |      Default      |              Description              |
+| :------------------: | :----: | :---------------: | :-----------------------------------: |
+|       IDPrefix       | string |  'autotoc-item-'  |      Prefix used to generate ID.      |
+|   classActiveName    | string |     'active'      |     Class used for active level.      |
+| classLevelPrefixName | string | 'autotoc-level-'  | Class prefix used for the TOC levels. |
+|   classSectionName   | string | 'autotoc-section' |    Class used for section in TOC.     |
+|     classTOCName     | string |   'autotoc-nav'   |        Class used for the TOC.        |
+|        levels        | string |    'h1,h2,h3'     |    Selectors used to find levels.     |
+|    scrollDuration    | string |      'slow'       |          Speed of scrolling.          |
+|     scrollEasing     | string |      'swing'      |    Easing to use while scrolling.     |
+|       section        | string |     'section'     |       Tag type to use for TOC.        |
 
 ## Examples
 
@@ -42,7 +41,6 @@ Automatically create a table of contents.
  beauties have been nowhere near the bananas. I thought the two of
  us could talk man-on-man.</p>
 </div>
-
 
 ### Example 2
 

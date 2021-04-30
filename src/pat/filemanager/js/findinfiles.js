@@ -95,10 +95,7 @@ export default PopoverView.extend({
                                 "<b>" +
                                 result[0] +
                                 "</b>" +
-                                line.substr(
-                                    result["index"] + result[0].length,
-                                    20
-                                ),
+                                line.substr(result["index"] + result[0].length, 20),
                         });
                     }
                 }

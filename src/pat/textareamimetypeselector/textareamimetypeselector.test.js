@@ -110,9 +110,7 @@ define([
             // Initially, text/plain is selected and textarea should be visible.
             expect($textarea.is(":visible")).to.be.ok();
             // But TinyMCE shouldn't be there
-            expect($(".mce-content-body[contenteditable='true']").length).to.be(
-                0
-            );
+            expect($(".mce-content-body[contenteditable='true']").length).to.be(0);
             // Value should be at it's initial state
             expect($textarea.val()).to.be.equal("hello world");
 
@@ -132,9 +130,7 @@ define([
             // Switching back to text/plain should destroy TinyMCE
             $el.val("text/plain").change();
             expect($textarea.is(":visible")).to.be.ok();
-            expect($(".mce-content-body[contenteditable='true']").length).to.be(
-                0
-            );
+            expect($(".mce-content-body[contenteditable='true']").length).to.be(0);
             // Unfortunately, TinyMCE changes the value just by loading TinyMCE.
             expect($textarea.val()).to.be.equal("<p>hello mellow</p>");
 

@@ -1,9 +1,9 @@
-define([
-    "expect",
-    "jquery",
-    "pat-registry",
-    "mockup-patterns-sortable",
-], function (expect, $, registry, Pattern) {
+define(["expect", "jquery", "pat-registry", "mockup-patterns-sortable"], function (
+    expect,
+    $,
+    registry,
+    Pattern
+) {
     "use strict";
 
     window.mocha.setup("bdd");
@@ -77,16 +77,12 @@ define([
                                             todrag.dispatchEvent(drop);
                                             setTimeout(
                                                 function () {
-                                                    todrag.dispatchEvent(
-                                                        mouseup
-                                                    );
-                                                    setTimeout(function () {},
-                                                    50);
+                                                    todrag.dispatchEvent(mouseup);
+                                                    setTimeout(function () {}, 50);
                                                     console.log(el.outerHTML);
                                                     expect(
                                                         $todrag.hasClass(
-                                                            sortable.options
-                                                                .dragClass
+                                                            sortable.options.dragClass
                                                         )
                                                     ).to.equal(true);
                                                     done();

@@ -210,9 +210,7 @@ export default BaseView.extend({
                 }
                 // take off the base url
                 var path = url.substring(base.length);
-                if (
-                    path.substring(path.length - appended.length) === appended
-                ) {
+                if (path.substring(path.length - appended.length) === appended) {
                     /* check that it ends with appended value */
                     path = path.substring(0, path.length - appended.length);
                 }
@@ -455,10 +453,7 @@ export default BaseView.extend({
                 }
             } catch (err) {
                 log.error(
-                    "Error initializing button " +
-                        buttonOptions.title +
-                        " " +
-                        err
+                    "Error initializing button " + buttonOptions.title + " " + err
                 );
             }
         });
@@ -595,9 +590,7 @@ export default BaseView.extend({
 
         self.$el.append(self.toolbar.render().el);
         if (self.wellView) {
-            self.$el
-                .find("#btn-" + self.wellView.id)
-                .after(self.wellView.render().el);
+            self.$el.find("#btn-" + self.wellView.id).after(self.wellView.render().el);
         }
         self.forms.forEach(function (element) {
             var id = $(element).attr("id");
@@ -605,9 +598,7 @@ export default BaseView.extend({
         });
 
         self.$el.append(
-            utils.createElementFromHTML(
-                '<div class="fc-status-container"></div>'
-            )
+            utils.createElementFromHTML('<div class="fc-status-container"></div>')
         );
         if (self.columnsView) {
             self.$el

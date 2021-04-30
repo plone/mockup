@@ -16,12 +16,8 @@ export default Base.extend({
         },
     },
     init() {
-        this.textarea = document.querySelector(
-            `[name="${this.options.textareaName}"]`
-        );
-        this.el.addEventListener("input", (e) =>
-            this.init_textarea(e.target.value)
-        );
+        this.textarea = document.querySelector(`[name="${this.options.textareaName}"]`);
+        this.el.addEventListener("input", (e) => this.init_textarea(e.target.value));
         this.init_textarea(this.el.value);
     },
     init_textarea(mimetype) {

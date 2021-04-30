@@ -34,11 +34,7 @@ export default Backbone.View.extend({
     },
     applyTemplate: function () {
         if (this.template !== null) {
-            var data = $.extend(
-                { _t: _t },
-                this.options,
-                this.serializedModel()
-            );
+            var data = $.extend({ _t: _t }, this.options, this.serializedModel());
             var template = this.template;
             if (typeof template === "string") {
                 template = _.template(template);

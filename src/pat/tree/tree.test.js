@@ -5,7 +5,6 @@ import utils from "../../core/utils";
 $.fx.off = true;
 
 describe("Tree", function () {
-
     it("loads the tree with data", function () {
         document.body.innerHTML = `
             <div class="pat-tree"></div>

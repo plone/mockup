@@ -75,9 +75,7 @@ define(["expect", "jquery", "mockup-utils"], function (expect, $, utils) {
 
             it("parses the body tag's content from a response with not ASCII chars (e.g. line separator)", function () {
                 var response =
-                        "<body><p>foo " +
-                        String.fromCharCode(8232) +
-                        " bar</p></body>",
+                        "<body><p>foo " + String.fromCharCode(8232) + " bar</p></body>",
                     html = utils.parseBodyTag(response);
                 expect(html).to.equal(
                     "<p>foo " + String.fromCharCode(8232) + " bar</p>"

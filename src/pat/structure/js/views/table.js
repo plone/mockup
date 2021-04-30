@@ -105,8 +105,7 @@ export default BaseView.extend({
                     // empty column instead of displaying "None".
                     if (
                         result.attributes.hasOwnProperty(col) &&
-                        (result.attributes[col] === "None" ||
-                            !result.attributes[col])
+                        (result.attributes[col] === "None" || !result.attributes[col])
                     ) {
                         result.attributes[col] = "";
                     }
@@ -134,9 +133,7 @@ export default BaseView.extend({
         registry.scan(self.$el);
 
         self.$el.find("table").on("order.dt", function (e, settings, details) {
-            var btn = $(
-                '<button type="button" class="btn btn-danger btn-xs"></button>'
-            )
+            var btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
                 .text(_t("Reset column sorting"))
                 .on("click", function (e) {
                     // Use column 0 to restore ordering and then empty list so it doesn't
@@ -191,9 +188,7 @@ export default BaseView.extend({
     },
     selectAll: function (e) {
         if ($(e.target).is(":checked")) {
-            $('input[type="checkbox"]', this.$("tbody"))
-                .prop("checked", true)
-                .change();
+            $('input[type="checkbox"]', this.$("tbody")).prop("checked", true).change();
         } else {
             /* delaying the re-rendering is much faster in this case */
             this.selectedCollection.remove(this.collection.models, {
@@ -233,11 +228,7 @@ export default BaseView.extend({
             },
             drop: function ($el, delta) {
                 if (delta !== 0) {
-                    self.app.moveItem(
-                        $el.attr("data-id"),
-                        delta,
-                        self.subsetIds
-                    );
+                    self.app.moveItem($el.attr("data-id"), delta, self.subsetIds);
                     self.storeOrder();
                 }
             },

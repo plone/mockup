@@ -214,14 +214,9 @@ var Inspector = Base.extend({
 
         self.$frameInfo
             .css("backgroundColor", highlightBg)
-            .animate(
-                { backgroundColor: originalBg },
-                animateMs,
-                null,
-                function () {
-                    self.$frameInfo.css("backgroundColor", originalBg);
-                }
-            );
+            .animate({ backgroundColor: originalBg }, animateMs, null, function () {
+                self.$frameInfo.css("backgroundColor", originalBg);
+            });
     },
     onsave: function (highlighter, node) {
         var self = this;
@@ -286,13 +281,9 @@ export default Base.extend({
     init: function () {
         var self = this;
         if (typeof self.options.filemanagerConfig === "string") {
-            self.options.filemanagerConfig = $.parseJSON(
-                self.options.filemanagerConfig
-            );
+            self.options.filemanagerConfig = $.parseJSON(self.options.filemanagerConfig);
         }
-        self.$fileManager = $('<div class="pat-filemanager"/>').appendTo(
-            self.$el
-        );
+        self.$fileManager = $('<div class="pat-filemanager"/>').appendTo(self.$el);
         self.$container = $('<div class="row"></div>').appendTo(self.$el);
         self.$styleBox = $('<div id="styleBox"></div>').appendTo(self.$el);
         self.$inspectorContainer = $('<div id="inspectors"></div>').appendTo(
@@ -301,13 +292,12 @@ export default Base.extend({
         self.$mockupInspector = $('<div class="mockup-inspector"/>').appendTo(
             self.$inspectorContainer
         );
-        self.$unthemedInspector = $(
-            '<div class="unthemed-inspector"/>'
-        ).appendTo(self.$inspectorContainer);
+        self.$unthemedInspector = $('<div class="unthemed-inspector"/>').appendTo(
+            self.$inspectorContainer
+        );
 
         // initialize patterns now
-        self.lessUrl =
-            self.options.lessUrl !== undefined ? self.options.lessUrl : false;
+        self.lessUrl = self.options.lessUrl !== undefined ? self.options.lessUrl : false;
         self.lessVariableUrl =
             self.options.lessVariables !== undefined
                 ? self.options.lessVariables
@@ -424,12 +414,8 @@ export default Base.extend({
     },
     setDefaultPaths: function (manifest) {
         var self = this;
-        var dev = new RegExp(
-            "development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)"
-        );
-        var prod = new RegExp(
-            "production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)"
-        );
+        var dev = new RegExp("development-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
+        var prod = new RegExp("production-css\\s*=\\s*\\/\\+\\+theme\\+\\+.*?\\/(.*)");
 
         var devUrl = dev.exec(manifest.contents)[1];
         var prodUrl = prod.exec(manifest.contents)[1];
@@ -466,8 +452,7 @@ export default Base.extend({
                 } else {
                     self.fileManager.refreshTree(function () {
                         //We need to make sure we open the newest version
-                        delete self
-                            .fileManager.fileData["/" + self.lessPaths["save"]];
+                        delete self.fileManager.fileData["/" + self.lessPaths["save"]];
                         self.fileManager.selectItem(self.lessPaths["save"]);
                     });
                 }
@@ -625,12 +610,8 @@ export default Base.extend({
             id: "mapper",
         });
         $("#toolbar .navbar", self.$el).append(self.buttonGroup.render().el);
-        $("#toolbar .navbar", self.$el).append(
-            self.rulebuilderView.render().el
-        );
+        $("#toolbar .navbar", self.$el).append(self.rulebuilderView.render().el);
         $("#toolbar .navbar", self.$el).append(self.cacheView.render().el);
-        $("#toolbar .navbar", self.$el).append(
-            self.lessbuilderView.render().el
-        );
+        $("#toolbar .navbar", self.$el).append(self.lessbuilderView.render().el);
     },
 });

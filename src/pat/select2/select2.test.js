@@ -7,16 +7,14 @@ const SELECT2_TIMEOUT = 500;
 
 describe("Select2", function () {
     beforeEach(function () {
-        $.fn.select2.ajaxDefaults.transport = jest
-            .fn()
-            .mockImplementation((opts) => {
-                const items = [
-                    { id: "red", text: "Red" },
-                    { id: "blue", text: "Blue" },
-                    { id: "yellow", text: "Yellow" },
-                ];
-                return opts.success({ total: items.length, results: items });
-            });
+        $.fn.select2.ajaxDefaults.transport = jest.fn().mockImplementation((opts) => {
+            const items = [
+                { id: "red", text: "Red" },
+                { id: "blue", text: "Blue" },
+                { id: "yellow", text: "Yellow" },
+            ];
+            return opts.success({ total: items.length, results: items });
+        });
     });
 
     afterEach(function () {
@@ -39,9 +37,7 @@ describe("Select2", function () {
     });
 
     it("init value map/tags from JSON string", function () {
-        var $el = $('<input class="pat-select2" value="Red" />').appendTo(
-            "body"
-        );
+        var $el = $('<input class="pat-select2" value="Red" />').appendTo("body");
         new PatternSelect2($el, {
             tags: '["Red", "Yellow"]',
             initialValues: '{"Red": "RedTEXT", "Yellow": "YellowTEXT"}',
@@ -51,9 +47,7 @@ describe("Select2", function () {
     });
 
     it("init value map from string", function () {
-        var $el = $('<input class="pat-select2" value="Red" />').appendTo(
-            "body"
-        );
+        var $el = $('<input class="pat-select2" value="Red" />').appendTo("body");
         new PatternSelect2($el, {
             tags: '["Red", "Yellow"]',
             initialValues: "Yellow: YellowTEXT, Red: RedTEXT",
@@ -190,9 +184,7 @@ describe("Select2", function () {
         );
 
         registry.scan($el);
-        expect(
-            $(".select2-container", $el).hasClass("select2-orderable")
-        ).toEqual(true);
+        expect($(".select2-container", $el).hasClass("select2-orderable")).toEqual(true);
     });
 
     it.skip("handles orderable tag drag events", function () {

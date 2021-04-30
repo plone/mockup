@@ -43,10 +43,7 @@ define([
                     })
                 );
             });
-            this.server.respondWith(/relateditems-test\.json/, function (
-                xhr,
-                id
-            ) {
+            this.server.respondWith(/relateditems-test\.json/, function (xhr, id) {
                 var query = xhr.url.split("?")[1];
                 var vars = query.split("&");
                 for (var i = 0; i < vars.length; i += 1) {
@@ -114,10 +111,7 @@ define([
 
         it("creates tinymce", function () {
             var $el = $(
-                "<div>" +
-                    '  <textarea class="pat-tinymce">' +
-                    "  </textarea>" +
-                    "</div>"
+                "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
             ).appendTo("body");
             registry.scan($el);
             expect($el.children().length).to.be.greaterThan(1);
@@ -139,16 +133,10 @@ define([
 
         it("loads buttons for plugins", function () {
             var $el = $(
-                "<div>" +
-                    '  <textarea class="pat-tinymce">' +
-                    "  </textarea>" +
-                    "</div>"
+                "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
             ).appendTo("body");
             registry.scan($el);
-            expect(tinymce.get(0).buttons).to.have.keys(
-                "plonelink",
-                "ploneimage"
-            );
+            expect(tinymce.get(0).buttons).to.have.keys("plonelink", "ploneimage");
             tinymce.get(0).remove();
         });
 
@@ -202,9 +190,7 @@ define([
                 prependToUrl: "resolveuid/",
                 linkAttribute: "UID",
             });
-            expect(tiny.stripGeneratedUrl("resolveuid/foobar")).to.equal(
-                "foobar"
-            );
+            expect(tiny.stripGeneratedUrl("resolveuid/foobar")).to.equal("foobar");
         });
 
         it("test parses correct attribute from url with appended value", function () {
@@ -238,9 +224,9 @@ define([
             var pattern = createTinymce({
                 prependToScalePart: "/somescale",
             });
-            expect(
-                pattern.getScaleFromUrl("foobar/somescale/image_large")
-            ).to.equal("large");
+            expect(pattern.getScaleFromUrl("foobar/somescale/image_large")).to.equal(
+                "large"
+            );
         });
 
         it("get scale with appended option", function () {
@@ -248,18 +234,18 @@ define([
                 prependToScalePart: "/somescale/",
                 appendToScalePart: "/@@view",
             });
-            expect(
-                pattern.getScaleFromUrl("foobar/somescale/large/@@view")
-            ).to.equal("large");
+            expect(pattern.getScaleFromUrl("foobar/somescale/large/@@view")).to.equal(
+                "large"
+            );
         });
 
         it("get scale handles edge case of image_ for plone", function () {
             var pattern = createTinymce({
                 prependToScalePart: "/somescale",
             });
-            expect(
-                pattern.getScaleFromUrl("foobar/somescale/image_large")
-            ).to.equal("large");
+            expect(pattern.getScaleFromUrl("foobar/somescale/image_large")).to.equal(
+                "large"
+            );
         });
 
         it("test add link", function () {
@@ -278,9 +264,7 @@ define([
                 path: "/foobar",
                 getIcon: "",
             });
-            expect(pattern.linkModal.getLinkUrl()).to.equal(
-                "resolveuid/foobar"
-            );
+            expect(pattern.linkModal.getLinkUrl()).to.equal("resolveuid/foobar");
         });
 
         it("test add external link", function () {
@@ -295,12 +279,8 @@ define([
             var pattern = createTinymce();
             pattern.addLinkClicked();
             pattern.linkModal.linkType = "email";
-            pattern.linkModal.linkTypes.email
-                .getEl()
-                .attr("value", "foo@bar.com");
-            expect(pattern.linkModal.getLinkUrl()).to.equal(
-                "mailto:foo@bar.com"
-            );
+            pattern.linkModal.linkTypes.email.getEl().attr("value", "foo@bar.com");
+            expect(pattern.linkModal.getLinkUrl()).to.equal("mailto:foo@bar.com");
         });
         it("test add image link", function () {
             var pattern = createTinymce({
@@ -317,9 +297,7 @@ define([
             });
 
             pattern.imageModal.linkType = "image";
-            pattern.imageModal.$scale.find(
-                '[value="thumb"]'
-            )[0].selected = true;
+            pattern.imageModal.$scale.find('[value="thumb"]')[0].selected = true;
             expect(pattern.imageModal.getLinkUrl()).to.equal(
                 "resolveuid/foobar/@@images/image/thumb"
             );
@@ -342,9 +320,9 @@ define([
             var pattern = $el.data().patternTinymce;
             pattern.addImageClicked();
             $("#" + $("#tinylink-uploadImage").data().navref).click();
-            expect(
-                $("#tinylink-uploadImage").parent().hasClass("active")
-            ).to.equal(true);
+            expect($("#tinylink-uploadImage").parent().hasClass("active")).to.equal(
+                true
+            );
             var blob;
             try {
                 blob = new Blob(["dummy data"], { type: "image/png" });
@@ -359,15 +337,11 @@ define([
                 blob = builder.getBlob();
             }
             blob.name = "blah.png";
-            pattern.imageModal.$upload
-                .data()
-                .patternUpload.dropzone.addFile(blob);
+            pattern.imageModal.$upload.data().patternUpload.dropzone.addFile(blob);
             $(".upload-all", pattern.imageModal.$upload).click();
             this.clock.tick(1000);
 
-            expect($("#tinylink-image").parent().hasClass("active")).to.equal(
-                true
-            );
+            expect($("#tinylink-image").parent().hasClass("active")).to.equal(true);
             expect(pattern.imageModal.getLinkUrl()).to.equal(
                 "/blah.png/imagescale/large"
             );
@@ -377,8 +351,7 @@ define([
                 prependToUrl: "resolveuid/",
                 linkAttribute: "UID",
                 prependToScalePart: "/@@images/image/",
-                imageScales:
-                    '[{"title": "Custom Scale", "value": "customscale"}]',
+                imageScales: '[{"title": "Custom Scale", "value": "customscale"}]',
             });
             pattern.addImageClicked();
             pattern.imageModal.linkTypes.image.getEl().select2("data", {
@@ -391,9 +364,7 @@ define([
             expect(
                 pattern.imageModal.$scale.html().indexOf("Custom Scale")
             ).to.be.greaterThan(-1);
-            pattern.imageModal.$scale.find(
-                '[value="customscale"]'
-            )[0].selected = true;
+            pattern.imageModal.$scale.find('[value="customscale"]')[0].selected = true;
             expect(pattern.imageModal.getLinkUrl()).to.equal(
                 "resolveuid/foobar/@@images/image/customscale"
             );
@@ -474,9 +445,7 @@ define([
             });
             pattern.linkModal.$button.trigger("click");
             expect(pattern.tiny.getContent()).to.contain('data-val="foobar"');
-            expect(pattern.tiny.getContent()).to.contain(
-                'data-linktype="internal"'
-            );
+            expect(pattern.tiny.getContent()).to.contain('data-linktype="internal"');
         });
 
         it("test loading link also sets up related items correctly", function () {
@@ -489,9 +458,7 @@ define([
             pattern.addLinkClicked();
 
             pattern.linkModal.linkTypes.internal.set("123sdfasdf");
-            var val = pattern.linkModal.linkTypes.internal
-                .getEl()
-                .select2("data");
+            var val = pattern.linkModal.linkTypes.internal.getEl().select2("data");
             /* XXX ajax not loading quickly enough here...
       expect(val.UID).to.equal('123sdfasdf');
       */
@@ -501,26 +468,18 @@ define([
             var pattern = createTinymce();
             pattern.addLinkClicked();
             pattern.linkModal.hide();
-            expect(pattern.linkModal.modal.$modal.is(":visible")).to.equal(
-                false
-            );
+            expect(pattern.linkModal.modal.$modal.is(":visible")).to.equal(false);
             pattern.addLinkClicked();
-            expect(pattern.linkModal.modal.$modal.is(":visible")).to.equal(
-                true
-            );
+            expect(pattern.linkModal.modal.$modal.is(":visible")).to.equal(true);
         });
 
         it("test reopen add image modal", function () {
             var pattern = createTinymce();
             pattern.addImageClicked();
             pattern.imageModal.hide();
-            expect(pattern.imageModal.modal.$modal.is(":visible")).to.equal(
-                false
-            );
+            expect(pattern.imageModal.modal.$modal.is(":visible")).to.equal(false);
             pattern.addImageClicked();
-            expect(pattern.imageModal.modal.$modal.is(":visible")).to.equal(
-                true
-            );
+            expect(pattern.imageModal.modal.$modal.is(":visible")).to.equal(true);
         });
 
         it("test loads existing link external values", function () {
@@ -540,8 +499,7 @@ define([
             );
             setTimeout(function () {
                 expect(
-                    $("fieldset.active", pattern.linkModal.modal.$wrapper)
-                        .length
+                    $("fieldset.active", pattern.linkModal.modal.$wrapper).length
                 ).to.equal(1);
                 expect(
                     $("fieldset.active", pattern.linkModal.modal.$wrapper).data(
@@ -568,8 +526,7 @@ define([
             );
             setTimeout(function () {
                 expect(
-                    $("fieldset.active", pattern.linkModal.modal.$wrapper)
-                        .length
+                    $("fieldset.active", pattern.linkModal.modal.$wrapper).length
                 ).to.equal(1);
                 expect(
                     $("fieldset.active", pattern.linkModal.modal.$wrapper).data(
@@ -582,19 +539,14 @@ define([
         it("test anchor link adds existing anchors to list", function () {
             var pattern = createTinymce();
 
-            pattern.tiny.setContent(
-                '<a class="mceItemAnchor" name="foobar"></a>'
-            );
+            pattern.tiny.setContent('<a class="mceItemAnchor" name="foobar"></a>');
 
             pattern.addLinkClicked();
 
-            expect(
-                pattern.linkModal.linkTypes.anchor.anchorNodes.length
-            ).to.equal(1);
+            expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
             setTimeout(function () {
                 expect(
-                    $("fieldset.active", pattern.linkModal.modal.$wrapper)
-                        .length
+                    $("fieldset.active", pattern.linkModal.modal.$wrapper).length
                 ).to.equal(1);
                 expect(
                     $("fieldset.active", pattern.linkModal.modal.$wrapper).data(
@@ -611,9 +563,7 @@ define([
 
             pattern.tiny.setContent("<h1>blah</h1>");
             pattern.addLinkClicked();
-            expect(
-                pattern.linkModal.linkTypes.anchor.anchorNodes.length
-            ).to.equal(1);
+            expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
         });
 
         it("test anchor get index", function () {
@@ -623,9 +573,7 @@ define([
 
             pattern.tiny.setContent("<h1>blah</h1><h1>foobar</h1>");
             pattern.addLinkClicked();
-            expect(
-                pattern.linkModal.linkTypes.anchor.getIndex("foobar")
-            ).to.equal(1);
+            expect(pattern.linkModal.linkTypes.anchor.getIndex("foobar")).to.equal(1);
         });
 
         it("test anchor get url", function () {
@@ -636,9 +584,7 @@ define([
             pattern.tiny.setContent("<h1>blah</h1>");
             pattern.addLinkClicked();
             pattern.linkModal.linkTypes.anchor.$select.select2("data", "0");
-            expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal(
-                "#blah"
-            );
+            expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal("#blah");
         });
 
         it("test tracks link type changes", function () {
@@ -647,10 +593,7 @@ define([
             });
 
             pattern.addLinkClicked();
-            pattern.linkModal.modal.$modal
-                .find(".autotoc-nav a")
-                .eq(1)
-                .trigger("click");
+            pattern.linkModal.modal.$modal.find(".autotoc-nav a").eq(1).trigger("click");
             expect(pattern.linkModal.linkType).to.equal("upload");
         });
 
@@ -669,8 +612,7 @@ define([
             );
             setTimeout(function () {
                 expect(
-                    $("fieldset.active", pattern.linkModal.modal.$wrapper)
-                        .length
+                    $("fieldset.active", pattern.linkModal.modal.$wrapper).length
                 ).to.equal(1);
                 expect(
                     $("fieldset.active", pattern.linkModal.modal.$wrapper).data(
@@ -692,13 +634,10 @@ define([
             );
             pattern.addLinkClicked();
 
-            expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal(
-                "#foobar"
-            );
+            expect(pattern.linkModal.linkTypes.anchor.toUrl()).to.equal("#foobar");
             setTimeout(function () {
                 expect(
-                    $("fieldset.active", pattern.linkModal.modal.$wrapper)
-                        .length
+                    $("fieldset.active", pattern.linkModal.modal.$wrapper).length
                 ).to.equal(1);
                 expect(
                     $("fieldset.active", pattern.linkModal.modal.$wrapper).data(

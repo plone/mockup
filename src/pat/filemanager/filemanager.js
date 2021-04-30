@@ -64,9 +64,7 @@ export default Base.extend({
             onCanMoveTo: function (moved, target, position) {
                 /* if not using folder option, just allow, otherwise, only allow if folder */
                 if (position === "inside") {
-                    return (
-                        target.folder === undefined || target.folder === true
-                    );
+                    return target.folder === undefined || target.folder === true;
                 }
                 return true;
             },
@@ -613,9 +611,7 @@ export default Base.extend({
                     return;
                 }
                 self.ace.editor.scrollToLine(self.fileData[doc].line);
-                self.ace.editor.moveCursorToPosition(
-                    self.fileData[doc].cursorPosition
-                );
+                self.ace.editor.moveCursorToPosition(self.fileData[doc].cursorPosition);
                 //We only want this to fire after the intial render,
                 //Not after rendering a "scroll" or "focus" event,
                 //So we remove it immediately after.
@@ -696,9 +692,7 @@ export default Base.extend({
 
         // first we need to save the current editor content
         if (self.currentPath) {
-            self.fileData[
-                self.currentPath
-            ].contents = self.ace.editor.getValue();
+            self.fileData[self.currentPath].contents = self.ace.editor.getValue();
             var lineNum = self.ace.editor.getFirstVisibleRow();
             self.fileData[self.currentPath].line = lineNum;
             self.fileData[

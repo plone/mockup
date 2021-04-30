@@ -1,9 +1,9 @@
-define([
-    "expect",
-    "jquery",
-    "pat-registry",
-    "mockup-patterns-formautofocus",
-], function (expect, $, registry, FormAutoFocus) {
+define(["expect", "jquery", "pat-registry", "mockup-patterns-formautofocus"], function (
+    expect,
+    $,
+    registry,
+    FormAutoFocus
+) {
     "use strict";
 
     window.mocha.setup("bdd");
@@ -50,9 +50,9 @@ define([
             expect($("input#first-input").is(":focus")).to.be.equal(false);
             $("input").on("focusin", function () {
                 expect($(this).attr("id")).to.equal("input1-inside-error");
-                expect(
-                    $("input#first-input-should-not-focus").is(":focus")
-                ).to.be.equal(false);
+                expect($("input#first-input-should-not-focus").is(":focus")).to.be.equal(
+                    false
+                );
                 expect(
                     $("input#input-inside-error-should-not-focus").is(":focus")
                 ).to.be.equal(false);
@@ -75,9 +75,9 @@ define([
             expect($("input#first-input").is(":focus")).to.be.equal(false);
             $("input").on("focusin", function () {
                 expect($(this).attr("id")).to.equal("first-input");
-                expect(
-                    $("input#first-input-should-not-focus").is(":focus")
-                ).to.be.equal(false);
+                expect($("input#first-input-should-not-focus").is(":focus")).to.be.equal(
+                    false
+                );
                 expect(
                     $("input#input-inside-error-should-not-focus").is(":focus")
                 ).to.be.equal(false);

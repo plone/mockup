@@ -173,12 +173,12 @@ export default Base.extend({
                 var more = page * this.options.pageSize < data.total;
                 var results = data.results;
 
-                this.selectedUIDs = ($(this.el).select2("data") || []).map(
-                    function (el) {
-                        // populate current selection. Reuse in formatResult
-                        return el.UID;
-                    }
-                );
+                this.selectedUIDs = ($(this.el).select2("data") || []).map(function (
+                    el
+                ) {
+                    // populate current selection. Reuse in formatResult
+                    return el.UID;
+                });
 
                 // Filter out items:
                 // While browsing: always include folderish items
@@ -209,8 +209,7 @@ export default Base.extend({
                         {
                             oneLevelUp: true,
                             Title: _t("One level up"),
-                            path:
-                                path.slice(0, path.length - 1).join("/") || "/",
+                            path: path.slice(0, path.length - 1).join("/") || "/",
                             currentPath: this.currentPath,
                             is_folderish: true,
                             selectable: false,
@@ -247,10 +246,8 @@ export default Base.extend({
         var favoritesHtml = "";
         _.each(self.options.favorites, function (item) {
             var item_copy = _.clone(item);
-            item_copy.path =
-                item_copy.path.substr(self.options.rootPath.length) || "/";
-            favoritesHtml =
-                favoritesHtml + self.applyTemplate("favorite", item_copy);
+            item_copy.path = item_copy.path.substr(self.options.rootPath.length) || "/";
+            favoritesHtml = favoritesHtml + self.applyTemplate("favorite", item_copy);
         });
 
         var recentlyUsedHtml = "";
@@ -379,14 +376,10 @@ export default Base.extend({
             let Upload = await import("../upload/upload");
             Upload = Upload.default;
 
-            const upload_button = self.$toolbar[0].querySelector(
-                ".upload button"
-            );
+            const upload_button = self.$toolbar[0].querySelector(".upload button");
             upload_button.disabled = disabled;
 
-            const upload_el = self.$toolbar[0].querySelector(
-                ".upload .pat-upload"
-            );
+            const upload_el = self.$toolbar[0].querySelector(".upload .pat-upload");
 
             const upload_config = {
                 success: (e, response) => {
@@ -506,9 +499,7 @@ export default Base.extend({
         if (self.options.selectableTypes === null) {
             return true;
         } else {
-            return (
-                self.options.selectableTypes.indexOf(item.portal_type) !== -1
-            );
+            return self.options.selectableTypes.indexOf(item.portal_type) !== -1;
         }
     },
 
@@ -612,19 +603,14 @@ export default Base.extend({
                     event.preventDefault();
                     // event.stopPropagation();
                     if ($(this).is(".selectable")) {
-                        var $parent = $(this).parents(
-                            ".pattern-relateditems-result"
-                        );
+                        var $parent = $(this).parents(".pattern-relateditems-result");
                         if ($parent.is(".pattern-relateditems-active")) {
                             $parent.removeClass("pattern-relateditems-active");
                             self.deselectItem(item);
                         } else {
                             if (self.options.maximumSelectionSize > 0) {
                                 var items = $(self.el).select2("data");
-                                if (
-                                    items.length >=
-                                    self.options.maximumSelectionSize
-                                ) {
+                                if (items.length >= self.options.maximumSelectionSize) {
                                     $(self.el).select2("close");
                                 }
                             }
@@ -665,14 +651,10 @@ export default Base.extend({
                     "plone.app.querystring.operation.list.contains",
                     ids,
                     function (data) {
-                        var results = data.results.reduce(function (
-                            prev,
-                            item
-                        ) {
+                        var results = data.results.reduce(function (prev, item) {
                             prev[item.UID] = item;
                             return prev;
-                        },
-                        {});
+                        }, {});
 
                         try {
                             callback(
@@ -737,8 +719,7 @@ export default Base.extend({
                         ? ".pattern-relateditems-result.one-level-up"
                         : ".select2-highlighted";
 
-                var browsableItemSelector =
-                    ".pattern-relateditems-result-browse";
+                var browsableItemSelector = ".pattern-relateditems-result-browse";
                 var browsableItem = $(browsableItemSelector, selectorContext);
 
                 if (browsableItem.length !== 1) {

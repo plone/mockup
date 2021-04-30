@@ -18,12 +18,8 @@ export default Base.extend({
         var elonw, msl, url, protocols, contentarea, res;
 
         if (typeof self.options.external_links_open_new_window === "string") {
-            elonw =
-                self.options.external_links_open_new_window.toLowerCase() ===
-                "true";
-        } else if (
-            typeof self.options.external_links_open_new_window === "boolean"
-        ) {
+            elonw = self.options.external_links_open_new_window.toLowerCase() === "true";
+        } else if (typeof self.options.external_links_open_new_window === "boolean") {
             elonw = self.options.external_links_open_new_window;
         }
 
@@ -40,11 +36,7 @@ export default Base.extend({
         if (elonw) {
             // all http links (without the link-plain class), not within this site
             contentarea
-                .find(
-                    'a[href^="http"]:not(.link-plain):not([href^="' +
-                        url +
-                        '"])'
-                )
+                .find('a[href^="http"]:not(.link-plain):not([href^="' + url + '"])')
                 .attr("target", "_blank")
                 .attr("rel", "noopener");
         }

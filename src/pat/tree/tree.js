@@ -33,9 +33,7 @@ export default Base.extend({
             self.options.onCanMoveTo = function (moved, target, position) {
                 /* if not using folder option, just allow, otherwise, only allow if folder */
                 if (position === "inside") {
-                    return (
-                        target.folder === undefined || target.folder === true
-                    );
+                    return target.folder === undefined || target.folder === true;
                 }
                 return true;
             };

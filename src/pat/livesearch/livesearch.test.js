@@ -19,10 +19,7 @@ define([
             this.server = sinon.fakeServer.create();
             this.server.autoRespond = true;
 
-            this.server.respondWith("GET", /livesearch\.json/, function (
-                xhr,
-                id
-            ) {
+            this.server.respondWith("GET", /livesearch\.json/, function (xhr, id) {
                 var items = [];
                 for (var i = 0; i < 7; i = i + 1) {
                     items.push({
@@ -88,9 +85,7 @@ define([
 
             this.ls.$input.trigger("focusout");
             this.clock.tick(1000);
-            expect(
-                this.$el.find(".livesearch-results").is(":visible")
-            ).to.equal(false);
+            expect(this.$el.find(".livesearch-results").is(":visible")).to.equal(false);
         });
 
         it("focus back in shows already searched", function () {
@@ -100,32 +95,24 @@ define([
 
             this.ls.$input.trigger("focusout");
             this.clock.tick(1000);
-            expect(
-                this.$el.find(".livesearch-results").is(":visible")
-            ).to.equal(false);
+            expect(this.$el.find(".livesearch-results").is(":visible")).to.equal(false);
 
             this.ls.$input.trigger("focusin");
             this.clock.tick(1000);
-            expect(
-                this.$el.find(".livesearch-results").is(":visible")
-            ).to.equal(true);
+            expect(this.$el.find(".livesearch-results").is(":visible")).to.equal(true);
         });
 
         it("should show next and prev", function () {
             this.ls.$input.trigger("keyup");
             this.clock.tick(1000);
             expect(this.$el.find(".livesearch-results li").length).to.equal(9);
-            expect(
-                this.$el.find(".livesearch-results li a.next").length
-            ).to.equal(1);
+            expect(this.$el.find(".livesearch-results li a.next").length).to.equal(1);
 
             this.ls.doSearch(2);
             this.clock.tick(1000);
 
             expect(this.$el.find(".livesearch-results li").length).to.equal(9);
-            expect(
-                this.$el.find(".livesearch-results li a.prev").length
-            ).to.equal(1);
+            expect(this.$el.find(".livesearch-results li a.prev").length).to.equal(1);
         });
     });
 });

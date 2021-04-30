@@ -151,9 +151,7 @@ export default Base.extend({
             });
             var nav = [];
             if (self.page > 1) {
-                var $prev = $(
-                    '<a href="#" class="prev">' + _t("Previous") + "</a>"
-                );
+                var $prev = $('<a href="#" class="prev">' + _t("Previous") + "</a>");
                 $prev.click(function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
@@ -162,9 +160,7 @@ export default Base.extend({
                 nav.push($prev);
             }
             if (self.page * self.options.perPage < self.results.total) {
-                var $next = $(
-                    '<a href="#" class="next">' + _t("Next") + "</a>"
-                );
+                var $next = $('<a href="#" class="next">' + _t("Next") + "</a>");
                 $next.click(function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
@@ -231,10 +227,7 @@ export default Base.extend({
                     /* Case: field already filled out but no reasons
              present yet, do ajax search and grab some results */
                     self.onceFocused = true;
-                    if (
-                        self.$input.val().length >=
-                        self.options.minimumInputLength
-                    ) {
+                    if (self.$input.val().length >= self.options.minimumInputLength) {
                         self.doSearch();
                     }
                 } else if (!self.$results.is(":visible")) {
@@ -260,8 +253,7 @@ export default Base.extend({
                     if (code === 13) {
                         /* enter key, check to see if there is a selected item */
                         if (self.selectedItem !== -1) {
-                            window.location =
-                                self.results.items[self.selectedItem].url;
+                            window.location = self.results.items[self.selectedItem].url;
                         }
                         return;
                     } else if (code === 38) {
@@ -289,9 +281,7 @@ export default Base.extend({
                 if (self.active) {
                     return;
                 }
-                if (
-                    self.$input.val().length >= self.options.minimumInputLength
-                ) {
+                if (self.$input.val().length >= self.options.minimumInputLength) {
                     self.timeout = setTimeout(function () {
                         self.doSearch();
                     }, self.options.quietMillis);

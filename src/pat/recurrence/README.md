@@ -7,11 +7,10 @@ title: Recurrence
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| localization | object | null | Customizations to locatizations. |
-| configuration | object |  | recurrent input widget configuration |
-
+|    Option     |  Type  | Default |             Description              |
+| :-----------: | :----: | :-----: | :----------------------------------: |
+| localization  | object |  null   |   Customizations to locatizations.   |
+| configuration | object |         | recurrent input widget configuration |
 
 ## Example
 
@@ -20,4 +19,3 @@ title: Recurrence
 ```html
 <textarea class="pat-recurrence"></textarea>
 ```
-

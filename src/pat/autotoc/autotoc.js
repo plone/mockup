@@ -35,9 +35,7 @@ export default Base.extend({
             self.$el.addClass(self.options.className);
         }
 
-        $(self.options.section, self.$el).addClass(
-            self.options.classSectionName
-        );
+        $(self.options.section, self.$el).addClass(self.options.classSectionName);
 
         var asTabs = self.$el.hasClass("autotabs");
 
@@ -54,10 +52,7 @@ export default Base.extend({
             if (window.location.hash === "#" + id) {
                 activeId = id;
             }
-            if (
-                activeId === null &&
-                $level.hasClass(self.options.classActiveName)
-            ) {
+            if (activeId === null && $level.hasClass(self.options.classActiveName)) {
                 activeId = id;
             }
             $level.data("navref", id);
@@ -66,9 +61,7 @@ export default Base.extend({
                 .text($level.text())
                 .attr("id", id)
                 .attr("href", "#" + id)
-                .addClass(
-                    self.options.classLevelPrefixName + self.getLevel($level)
-                )
+                .addClass(self.options.classLevelPrefixName + self.getLevel($level))
                 .on("click", function (e, options) {
                     e.stopPropagation();
                     e.preventDefault();
@@ -109,11 +102,7 @@ export default Base.extend({
                     $(this).trigger("clicked");
                     if (!options.skipHash) {
                         if (window.history && window.history.pushState) {
-                            window.history.pushState(
-                                {},
-                                "",
-                                "#" + $el.attr("id")
-                            );
+                            window.history.pushState({}, "", "#" + $el.attr("id"));
                         }
                     }
                 });

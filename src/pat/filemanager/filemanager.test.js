@@ -24,10 +24,7 @@ define([
             this.server.autoRespond = true;
             this.clock = sinon.useFakeTimers();
 
-            this.server.respondWith("GET", /filemanager-actions/, function (
-                xhr,
-                id
-            ) {
+            this.server.respondWith("GET", /filemanager-actions/, function (xhr, id) {
                 var data = [
                     {
                         label: "css",

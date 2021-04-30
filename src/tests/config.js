@@ -8,9 +8,7 @@ if (typeof Object.assign !== "function") {
             // .length of function is 2
             "use strict";
             if (target === null || target === undefined) {
-                throw new TypeError(
-                    "Cannot convert undefined or null to object"
-                );
+                throw new TypeError("Cannot convert undefined or null to object");
             }
 
             var to = Object(target);
@@ -21,12 +19,7 @@ if (typeof Object.assign !== "function") {
                 if (nextSource !== null && nextSource !== undefined) {
                     for (var nextKey in nextSource) {
                         // Avoid bugs when hasOwnProperty is shadowed
-                        if (
-                            Object.prototype.hasOwnProperty.call(
-                                nextSource,
-                                nextKey
-                            )
-                        ) {
+                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
                             to[nextKey] = nextSource[nextKey];
                         }
                     }
@@ -47,10 +40,7 @@ var tests = Object.keys(window.__karma__.files).filter(function (file) {
     if (args) {
         // workaround for cmd line arguments not parsed
         if (Object.prototype.toString.call(args) === "[object Array]") {
-            args.join(" ").replace(/--pattern[\s|=]+(\S+)?\s*/, function (
-                match,
-                value
-            ) {
+            args.join(" ").replace(/--pattern[\s|=]+(\S+)?\s*/, function (match, value) {
                 pattern = value;
             });
         }

@@ -104,9 +104,7 @@ export default Base.extend({
             if (this.$el.hasClass(".upload-container")) {
                 this.$el.addClass("no-ajax-upload");
             } else {
-                this.$el
-                    .closest(".upload-container")
-                    .addClass("no-ajax-upload");
+                this.$el.closest(".upload-container").addClass("no-ajax-upload");
             }
         }
 
@@ -193,10 +191,7 @@ export default Base.extend({
         }
 
         self.dropzone.on("complete", function (file) {
-            if (
-                file.status === Dropzone.SUCCESS &&
-                self.dropzone.files.length === 1
-            ) {
+            if (file.status === Dropzone.SUCCESS && self.dropzone.files.length === 1) {
                 self.showHideControls();
             }
         });
@@ -298,9 +293,7 @@ export default Base.extend({
                 if (url[url.length - 1] !== "/") {
                     url = url + "/";
                 }
-                url =
-                    url +
-                    self.pathJoin(self.currentPath, self.options.relativePath);
+                url = url + self.pathJoin(self.currentPath, self.options.relativePath);
             } else {
                 var $form = self.$el.parents("form");
                 if ($form.length > 0) {
@@ -395,10 +388,7 @@ export default Base.extend({
                 return;
             }
 
-            if (
-                [Dropzone.SUCCESS, Dropzone.CANCELED].indexOf(file.status) !==
-                -1
-            ) {
+            if ([Dropzone.SUCCESS, Dropzone.CANCELED].indexOf(file.status) !== -1) {
                 // remove it
                 self.dropzone.removeFile(file);
                 process();
@@ -440,9 +430,7 @@ export default Base.extend({
             })
             .fail(function () {
                 if (window.DEBUG) {
-                    console.alert(
-                        _t("Error uploading with TUS resumable uploads")
-                    );
+                    console.alert(_t("Error uploading with TUS resumable uploads"));
                 }
                 file.status = Dropzone.ERROR;
             })

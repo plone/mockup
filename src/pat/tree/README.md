@@ -9,14 +9,14 @@ Tree pattern.
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| data | jSON | undefined | load data structure directly into tree |
-| dataUrl | jSON | undefined | Load data from remote url |
-| autoOpen | boolean | false | auto open tree contents |
-| dragAndDrop | boolean | false | node drag and drop support |
-| selectable | boolean | true | if nodes can be selectable |
-| keyboardSupport | boolean | true | if keyboard naviation is allowed |
+|     Option      |  Type   |  Default  |              Description               |
+| :-------------: | :-----: | :-------: | :------------------------------------: |
+|      data       |  jSON   | undefined | load data structure directly into tree |
+|     dataUrl     |  jSON   | undefined |       Load data from remote url        |
+|    autoOpen     | boolean |   false   |        auto open tree contents         |
+|   dragAndDrop   | boolean |   false   |       node drag and drop support       |
+|   selectable    | boolean |   true    |       if nodes can be selectable       |
+| keyboardSupport | boolean |   true    |    if keyboard naviation is allowed    |
 
 ## Examples
 
@@ -38,8 +38,9 @@ Tree pattern.
     ];'>
 </div>
 
-``` html
-<div class="pat-tree"
+```html
+<div
+    class="pat-tree"
     data-pat-tree='data:[
         { "label": "node1",
         "children": [
@@ -52,8 +53,8 @@ Tree pattern.
             { "label": "child3" }
         ]
         }
-    ];'>
-</div>
+    ];'
+></div>
 ```
 
 ### JSON data
@@ -63,9 +64,10 @@ Tree pattern.
 </div>
 
 ```html
-<div class="pat-tree"
-    data-pat-tree='data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;'>
-</div>
+<div
+    class="pat-tree"
+    data-pat-tree='data:[{"label": "node1","children": [{"label": "child1"},{"label": "child2"}]}]; autoOpen:true;'
+></div>
 ```
 
 ### Remote data URL
@@ -76,10 +78,11 @@ Tree pattern.
 </div>
 
 ```html
-<div class="pat-tree"
+<div
+    class="pat-tree"
     data-pat-tree="dataUrl:/fileTree.json;
-                   autoOpen:true;">
-</div>
+                   autoOpen:true;"
+></div>
 ```
 
 ### Drag and drop
@@ -91,9 +94,10 @@ Tree pattern.
 </div>
 
 ```html
-<div class="pat-tree"
+<div
+    class="pat-tree"
     data-pat-tree="dataUrl:fileTree.json;
                    dragAndDrop: true;
-                   autoOpen: true">
-</div>
+                   autoOpen: true"
+></div>
 ```

@@ -7,22 +7,20 @@ title: Eventedit
 
 The pattern works with plone.app.event Archetypes and Dexterity forms.
 
-- Start / end validation: The pattern adds a error class, if end is before start.
+-   Start / end validation: The pattern adds a error class, if end is before start.
 
-- Start / end delta: After changing the start date, the end date is automatically updated by a delta timespan.
-  The delta is calculated from the difference of the start and end time, if they are already set.
+-   Start / end delta: After changing the start date, the end date is automatically updated by a delta timespan.
+    The delta is calculated from the difference of the start and end time, if they are already set.
 
-- Whole day handling: After clicking the whole day checkbox, the start and end time fields are hidden.
+-   Whole day handling: After clicking the whole day checkbox, the start and end time fields are hidden.
 
-- Open end handling: After clicking the open end checkbox, the end date/time field is hidden.
-
+-   Open end handling: After clicking the open end checkbox, the end date/time field is hidden.
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
+|   Option   |  Type  | Default |                                  Description                                  |
+| :--------: | :----: | :-----: | :---------------------------------------------------------------------------: |
 | errorClass | string | "error" | class to set on the end datetime field wrapper, if end date validation fails. |
-
 
 ## Examples
 
@@ -47,7 +45,6 @@ The pattern works with plone.app.event Archetypes and Dexterity forms.
     </div>
 </div>
 
-
 ### Example 2
 
 <div class="pat-eventedit">
@@ -68,4 +65,3 @@ The pattern works with plone.app.event Archetypes and Dexterity forms.
         <input type="checkbox" id="openEnd" />
     </div>
 </div>
-

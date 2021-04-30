@@ -76,13 +76,7 @@ export default Backbone.Model.extend({
                 self.app.collection.pager();
                 self.app.updateButtons();
             } else {
-                msg = _t(
-                    "Error " +
-                        failMsg +
-                        ' "' +
-                        self.model.attributes.Title +
-                        '"'
-                );
+                msg = _t("Error " + failMsg + ' "' + self.model.attributes.Title + '"');
             }
             self.app.clearStatus();
             self.app.setStatus({

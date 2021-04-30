@@ -114,10 +114,7 @@ define([
                     "mockup-patterns-structure-url/js/collections/result",
             });
 
-            expect(app.collection.queryHelper.options.attributes).to.eql([
-                "foo",
-                "bar",
-            ]);
+            expect(app.collection.queryHelper.options.attributes).to.eql(["foo", "bar"]);
 
             expect(JSON.parse(app.collection.queryParser())).to.eql({
                 criteria: [
@@ -160,12 +157,7 @@ define([
 
                 activeColumns: [],
                 availableColumns: [],
-                defaultPageTypes: [
-                    "Document",
-                    "Event",
-                    "News Item",
-                    "Collection",
-                ],
+                defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
                 indexOptionsUrl: "",
                 setDefaultPageUrl: "",
                 collectionConstructor:
@@ -209,9 +201,9 @@ define([
             $("a.cutItem", el).click();
             this.clock.tick(500);
 
-            expect(
-                this.app.$(".fc-status .fc-status-text").text().trim()
-            ).to.equal('Cut "Dummy Object"');
+            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
+                'Cut "Dummy Object"'
+            );
             expect(this.app.$(".fc-status").hasClass("alert-successss"));
         });
 
@@ -242,9 +234,9 @@ define([
 
             $("a.cutItem", el).click();
             this.clock.tick(500);
-            expect(
-                this.app.$(".fc-status .fc-status-text").text().trim()
-            ).to.equal('Cut "Dummy Object"');
+            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
+                'Cut "Dummy Object"'
+            );
             expect(this.app.$(".fc-status").hasClass("alert-success"));
         });
 
@@ -293,9 +285,9 @@ define([
 
             $("a.foobar", el).click();
             this.clock.tick(500);
-            expect(
-                this.app.$(".fc-status .fc-status-text").text().trim()
-            ).to.equal("Status: foobar clicked");
+            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
+                "Status: foobar clicked"
+            );
             expect(this.app.$(".fc-status").hasClass("alert-warning")); // default status type
         });
 
@@ -350,9 +342,7 @@ define([
             var el = menu.render().el;
             $("a.foobar", el).click();
             this.clock.tick(500);
-            expect(
-                this.app.$(".fc-status .fc-status-text").text().trim()
-            ).to.equal("");
+            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal("");
         });
 
         it("custom action menu via generator.", function () {
@@ -409,9 +399,9 @@ define([
             var el = menu.render().el;
             $("a.barbaz", el).click();
             this.clock.tick(500);
-            expect(
-                this.app.$(".fc-status .fc-status-text").text().trim()
-            ).to.equal("Status: barbaz clicked");
+            expect(this.app.$(".fc-status .fc-status-text").text().trim()).to.equal(
+                "Status: barbaz clicked"
+            );
             expect(this.app.$(".fc-status").hasClass("alert-success"));
         });
 
@@ -576,12 +566,7 @@ define([
                 availableColumns: [],
                 collectionConstructor:
                     "mockup-patterns-structure-url/js/collections/result",
-                defaultPageTypes: [
-                    "Document",
-                    "Event",
-                    "News Item",
-                    "Collection",
-                ],
+                defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
                 typeToViewAction: {
                     File: "/view",
                     Image: "/view",
@@ -687,9 +672,7 @@ define([
             var el = row.render().el;
 
             expect($(".title img", el).length).to.equal(1);
-            expect($(".title img", el).attr("class")).to.have.string(
-                "thumb-tile"
-            );
+            expect($(".title img", el).attr("class")).to.have.string("thumb-tile");
         });
 
         it("should display no icon for contents without images", function () {
@@ -878,12 +861,7 @@ define([
                 indexOptionsUrl: "./test-querystringcriteria.json",
                 contextInfoUrl: "{path}/contextInfo",
                 setDefaultPageUrl: "/setDefaultPage",
-                defaultPageTypes: [
-                    "Document",
-                    "Event",
-                    "News Item",
-                    "Collection",
-                ],
+                defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
                 urlStructure: {
                     base: "http://localhost:9876",
                     appended: "/folder_contents",
@@ -989,20 +967,16 @@ define([
                     })
                 );
             });
-            this.server.respondWith(
-                "POST",
-                "/setDefaultPage",
-                function (xhr, id) {
-                    xhr.respond(
-                        200,
-                        { "Content-Type": "application/json" },
-                        JSON.stringify({
-                            status: "success",
-                            msg: "defaulted",
-                        })
-                    );
-                }
-            );
+            this.server.respondWith("POST", "/setDefaultPage", function (xhr, id) {
+                xhr.respond(
+                    200,
+                    { "Content-Type": "application/json" },
+                    JSON.stringify({
+                        status: "success",
+                        msg: "defaulted",
+                    })
+                );
+            });
             this.server.respondWith("GET", /contextInfo/, function (xhr, id) {
                 var data = {
                     addButtons: [
@@ -1101,8 +1075,7 @@ define([
             // XSS happened.
             expect(window.foo).not.equal(1);
             expect(
-                $(".popover-content .selected-item a", this.$el).eq(0).data()
-                    .xss
+                $(".popover-content .selected-item a", this.$el).eq(0).data().xss
             ).not.equal("bobby");
             var selectedItems = $(".popover-content .selected-item", this.$el);
             expect($(selectedItems[0]).text()).to.contain(
@@ -1135,9 +1108,7 @@ define([
             $item2.trigger("change");
             this.clock.tick(1000);
             expect(this.$el.find("#btn-selected-items").html()).to.contain("2");
-            this.$el
-                .find(".popover.selected-items a.remove-all")
-                .trigger("click");
+            this.$el.find(".popover.selected-items a.remove-all").trigger("click");
             this.clock.tick(1000);
             expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
         });
@@ -1152,9 +1123,9 @@ define([
             expect(page1Btn.html()).not.to.contain(
                 this.$el.find(".pagination li.active a").eq("0").html()
             );
-            expect(
-                this.$el.find(".pagination li.active a").eq("0").html()
-            ).to.contain("2");
+            expect(this.$el.find(".pagination li.active a").eq("0").html()).to.contain(
+                "2"
+            );
         });
 
         it("per page", function () {
@@ -1192,9 +1163,9 @@ define([
             $popover.find("button").trigger("click");
             this.clock.tick(1000);
             expect($popover.hasClass("active")).to.equal(false);
-            expect(
-                this.$el.find(".order-support .fc-status").html()
-            ).to.contain("rearrange");
+            expect(this.$el.find(".order-support .fc-status").html()).to.contain(
+                "rearrange"
+            );
             expect(this.app.$(".fc-status").hasClass("alert-successss"));
         });
 
@@ -1205,12 +1176,10 @@ define([
             $item[0].checked = true;
             $item.trigger("change");
             this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain(
-                "16"
+            expect(this.$el.find("#btn-selected-items").html()).to.contain("16");
+            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
+                16
             );
-            expect(
-                $("table tbody .selection input:checked", this.$el).length
-            ).to.equal(16);
         });
 
         it("test unselect all", function () {
@@ -1220,20 +1189,18 @@ define([
             $item[0].checked = true;
             $item.trigger("change");
             this.clock.tick(1000);
-            expect(this.$el.find("#btn-selected-items").html()).to.contain(
-                "16"
+            expect(this.$el.find("#btn-selected-items").html()).to.contain("16");
+            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
+                16
             );
-            expect(
-                $("table tbody .selection input:checked", this.$el).length
-            ).to.equal(16);
 
             $item[0].checked = false;
             $item.trigger("change");
             this.clock.tick(1000);
             expect(this.$el.find("#btn-selected-items").html()).to.contain("0");
-            expect(
-                $("table tbody .selection input:checked", this.$el).length
-            ).to.equal(0);
+            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
+                0
+            );
         });
 
         it("test expired shows", function () {
@@ -1241,9 +1208,7 @@ define([
             this.clock.tick(500);
 
             var $content_row = this.$el.find("table tbody tr").eq(0);
-            expect($content_row.find("td").eq(1).text().trim()).to.contain(
-                "Expired"
-            );
+            expect($content_row.find("td").eq(1).text().trim()).to.contain("Expired");
         });
 
         it("test displayed content", function () {
@@ -1252,22 +1217,16 @@ define([
 
             var $content_row = this.$el.find("table tbody tr").eq(0);
             expect($content_row.find("td").length).to.equal(6);
-            expect($content_row.find("td").eq(1).text().trim()).to.contain(
-                "Folder"
-            );
+            expect($content_row.find("td").eq(1).text().trim()).to.contain("Folder");
             expect($content_row.find("td").eq(2).text().trim()).to.equal("");
             expect($content_row.find("td").eq(3).text().trim()).to.equal("");
-            expect($content_row.find("td").eq(4).text().trim()).to.equal(
-                "published"
-            );
+            expect($content_row.find("td").eq(4).text().trim()).to.equal("published");
             expect($content_row.find("a.openItem").attr("href")).to.equal(
                 "http://localhost:9876/folder"
             );
 
             var $content_row1 = this.$el.find("table tbody tr").eq(1);
-            expect($content_row1.find("td").eq(1).text().trim()).to.equal(
-                "Document 0"
-            );
+            expect($content_row1.find("td").eq(1).text().trim()).to.equal("Document 0");
             expect($content_row1.find("a.openItem").attr("href")).to.equal(
                 "http://localhost:9876/item0"
             );
@@ -1279,13 +1238,9 @@ define([
             var $row = this.$el.find("table thead tr").eq(0);
             expect($row.find("th").length).to.equal(6);
             expect($row.find("th").eq(1).text().trim()).to.equal("Title");
-            expect($row.find("th").eq(2).text().trim()).to.equal(
-                "Last modified"
-            );
+            expect($row.find("th").eq(2).text().trim()).to.equal("Last modified");
             expect($row.find("th").eq(3).text().trim()).to.equal("Published");
-            expect($row.find("th").eq(4).text().trim()).to.equal(
-                "Review state"
-            );
+            expect($row.find("th").eq(4).text().trim()).to.equal("Review state");
             expect($row.find("th").eq(5).text().trim()).to.equal("Actions");
 
             expect($.cookie("_fc_activeColumns")).to.be(undefined);
@@ -1347,9 +1302,7 @@ define([
             // no pasting (see next test
             expect($(".actionmenu a.pasteItem", folder).length).to.equal(0);
             // no set default page
-            expect($(".actionmenu a.set-default-page", folder).length).to.equal(
-                0
-            );
+            expect($(".actionmenu a.set-default-page", folder).length).to.equal(0);
             // can select all
             expect($(".actionmenu a.selectAll", folder).text().trim()).to.equal(
                 "Select all contained items"
@@ -1421,13 +1374,11 @@ define([
             var folder = this.$el.find(".itemRow").eq(0);
             $(".actionmenu a.selectAll", folder).trigger("click");
             this.clock.tick(1000);
-            expect(
-                $("table tbody .selection input:checked", this.$el).length
-            ).to.equal(0);
-            // all items in the folder be populated within the selection well.
-            expect(this.$el.find("#btn-selected-items").html()).to.contain(
-                "101"
+            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
+                0
             );
+            // all items in the folder be populated within the selection well.
+            expect(this.$el.find("#btn-selected-items").html()).to.contain("101");
         });
 
         it("test navigate to item", function () {
@@ -1648,9 +1599,7 @@ define([
             expect($row.find("th").length).to.equal(7);
             expect($row.find("th").eq(5).text().trim()).to.equal("Type");
             expect($row.find("th").eq(6).text().trim()).to.equal("Actions");
-            expect(
-                $.parseJSON($.cookie("_fc_activeColumnsCustom")).value
-            ).to.eql([
+            expect($.parseJSON($.cookie("_fc_activeColumnsCustom")).value).to.eql([
                 "ModificationDate",
                 "EffectiveDate",
                 "review_state",
@@ -1671,9 +1620,11 @@ define([
 
             $row = this.$el.find("table thead tr").eq(0);
             expect($row.find("th").length).to.equal(6);
-            expect(
-                $.parseJSON($.cookie("_fc_activeColumnsCustom")).value
-            ).to.eql(["ModificationDate", "EffectiveDate", "review_state"]);
+            expect($.parseJSON($.cookie("_fc_activeColumnsCustom")).value).to.eql([
+                "ModificationDate",
+                "EffectiveDate",
+                "review_state",
+            ]);
         });
 
         it("test main buttons count", function () {
@@ -2161,12 +2112,8 @@ define([
             var item = this.$el.find(".itemRow").eq(0);
             // Check for complete new options
             expect($(".actionmenu * a", item).length).to.equal(2);
-            expect($(".actionmenu a.action1", item).text().trim()).to.equal(
-                "Option 1"
-            );
-            expect($(".actionmenu a.action2", item).text().trim()).to.equal(
-                "Option 2"
-            );
+            expect($(".actionmenu a.action1", item).text().trim()).to.equal("Option 1");
+            expect($(".actionmenu a.action2", item).text().trim()).to.equal("Option 2");
 
             define("dummytestaction", ["backbone"], function (Backbone) {
                 var Actions = Backbone.Model.extend({
@@ -2208,9 +2155,7 @@ define([
             $(".actionmenu a.action2", item).trigger("click");
             this.clock.tick(1000);
             // status will be set as defined.
-            expect($(".fc-status").text()).to.contain(
-                "Status: option2 selected"
-            );
+            expect($(".fc-status").text()).to.contain("Status: option2 selected");
             expect($(".fc-status").hasClass("alert-info"));
         });
 
@@ -2613,9 +2558,9 @@ define([
 
             // Check for complete new options
             expect($(".actionmenu * a", folder).length).to.equal(1);
-            expect(
-                $(".actionmenu a.folderClicker", folder).text().trim()
-            ).to.equal("Folder Clicker");
+            expect($(".actionmenu a.folderClicker", folder).text().trim()).to.equal(
+                "Folder Clicker"
+            );
             $(".actionmenu a.folderClicker", folder).trigger("click");
             this.clock.tick(1000);
             // status will be set as defined.
@@ -2798,25 +2743,19 @@ define([
 
             var $content_row = this.$el.find("table tbody tr").eq(0);
             expect($content_row.find("td").length).to.equal(6);
-            expect($content_row.find("td").eq(1).text().trim()).to.equal(
-                "Folder"
-            );
+            expect($content_row.find("td").eq(1).text().trim()).to.equal("Folder");
             expect($content_row.find("td").eq(2).text().trim()).to.equal("");
             expect($content_row.find("td").eq(3).text().trim()).to.equal("");
-            expect($content_row.find("td").eq(4).text().trim()).to.equal(
-                "published"
+            expect($content_row.find("td").eq(4).text().trim()).to.equal("published");
+            expect($content_row.find(".actionmenu a.openItem").attr("href")).to.equal(
+                "http://localhost:9876/folder"
             );
-            expect(
-                $content_row.find(".actionmenu a.openItem").attr("href")
-            ).to.equal("http://localhost:9876/folder");
 
             var $content_row1 = this.$el.find("table tbody tr").eq(1);
-            expect($content_row1.find("td").eq(1).text().trim()).to.equal(
-                "Document 0"
+            expect($content_row1.find("td").eq(1).text().trim()).to.equal("Document 0");
+            expect($content_row1.find(".actionmenu a.openItem").attr("href")).to.equal(
+                "http://localhost:9876/item0"
             );
-            expect(
-                $content_row1.find(".actionmenu a.openItem").attr("href")
-            ).to.equal("http://localhost:9876/item0");
         });
     });
 
@@ -2927,9 +2866,9 @@ define([
             $item.trigger("change");
             this.clock.tick(1000);
             expect(this.$el.find("#btn-selected-items").html()).to.contain("2");
-            expect(
-                $("table tbody .selection input:checked", this.$el).length
-            ).to.equal(2);
+            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
+                2
+            );
 
             // XXX passing this test for now with bad data - uncheck cannot
             // remove items without an id (but with UID specified), so this
@@ -2938,9 +2877,9 @@ define([
             $item.trigger("change");
             this.clock.tick(1000);
             expect(this.$el.find("#btn-selected-items").html()).to.contain("1");
-            expect(
-                $("table tbody .selection input:checked", this.$el).length
-            ).to.equal(1);
+            expect($("table tbody .selection input:checked", this.$el).length).to.equal(
+                1
+            );
         });
     });
 

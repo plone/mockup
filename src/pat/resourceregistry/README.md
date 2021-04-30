@@ -7,19 +7,18 @@ title: Resource Registry
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| bundles | object | {} | object with all bundles |
-| resources | object | {} | object with all resources |
-| javascripts | object | {} | object with all legacy type javascripts |
-| css | object | {} | object with all legacy type css |
-| overrides | array | [] | List of current overrides |
-| managerUrl | string | null | url to handle manage actions |
-| baseUrl | string  | null | to render resources from |
-| lesscUrl | string | null | url to lessc to load for compiling less |
-| rjsUrl | string | null | url to lessc to load for compiling less |
-| lessvariables | object | {} | group of settings that can be configured |
-
+|    Option     |  Type  | Default |               Description                |
+| :-----------: | :----: | :-----: | :--------------------------------------: |
+|    bundles    | object |   {}    |         object with all bundles          |
+|   resources   | object |   {}    |        object with all resources         |
+|  javascripts  | object |   {}    | object with all legacy type javascripts  |
+|      css      | object |   {}    |     object with all legacy type css      |
+|   overrides   | array  |   []    |        List of current overrides         |
+|  managerUrl   | string |  null   |       url to handle manage actions       |
+|    baseUrl    | string |  null   |         to render resources from         |
+|   lesscUrl    | string |  null   | url to lessc to load for compiling less  |
+|    rjsUrl     | string |  null   | url to lessc to load for compiling less  |
+| lessvariables | object |   {}    | group of settings that can be configured |
 
 ## Example
 
@@ -88,8 +87,9 @@ title: Resource Registry
 </div>
 
 ```html
-<div class="pat-resourceregistry"
-   data-pat-resourceregistry='{"bundles":{
+<div
+    class="pat-resourceregistry"
+    data-pat-resourceregistry='{"bundles":{
                                 "plone": {
                                   "resources": ["plone"], "depends": "",
                                   "expression": "", "enabled": true, "conditionalcomment": "",
@@ -149,7 +149,6 @@ title: Resource Registry
                               "manageUrl": "/registry-manager",
                               "lessUrl": "node_modules/less/dist/less-1.7.4.min.js",
                               "lessConfigUrl": "tests/files/lessconfig.js",
-                              "rjsUrl": "tests/files/r.js"}'>
-</div>
+                              "rjsUrl": "tests/files/r.js"}'
+></div>
 ```
-

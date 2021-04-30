@@ -153,9 +153,7 @@ define([
                 .find(".resource-entry .field-css input")
                 .attr("value", "foobar")
                 .trigger("change");
-            expect(this.pat.options.resources.autotoc.url).to.equal(
-                "patterns/autotoc"
-            );
+            expect(this.pat.options.resources.autotoc.url).to.equal("patterns/autotoc");
         });
 
         it("edit bundle data", function () {
@@ -164,18 +162,14 @@ define([
                 .find(".resource-entry .field-expression input")
                 .attr("value", "foobar")
                 .trigger("change");
-            expect(this.pat.options.bundles.plone.expression).to.equal(
-                "foobar"
-            );
+            expect(this.pat.options.bundles.plone.expression).to.equal("foobar");
         });
 
         it("delete resource", function () {
             window.confirm = function () {
                 return true;
             };
-            this.$pat
-                .find(".resource-list-item-autotoc button")
-                .trigger("click");
+            this.$pat.find(".resource-list-item-autotoc button").trigger("click");
             expect(this.pat.options.resources.autotoc).to.equal(undefined);
         });
 

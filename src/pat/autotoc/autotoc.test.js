@@ -86,12 +86,12 @@ describe("AutoTOC", function () {
 
         expect($("> nav", this.$el).length).toEqual(0);
         expect($("div.placeholder > nav", this.$el).length).toEqual(1);
-        expect(
-            $("div.placeholder", this.$el).children().eq(0).attr("id")
-        ).toEqual("first-elem");
-        expect(
-            $("div.placeholder", this.$el).children().eq(1).attr("class")
-        ).toEqual("autotoc-nav");
+        expect($("div.placeholder", this.$el).children().eq(0).attr("id")).toEqual(
+            "first-elem"
+        );
+        expect($("div.placeholder", this.$el).children().eq(1).attr("class")).toEqual(
+            "autotoc-nav"
+        );
 
         done();
     });
@@ -104,12 +104,12 @@ describe("AutoTOC", function () {
 
         expect($("> nav", this.$el).length).toEqual(0);
         expect($("div.placeholder > nav", this.$el).length).toEqual(1);
-        expect(
-            $("div.placeholder", this.$el).children().eq(0).attr("class")
-        ).toEqual("autotoc-nav");
-        expect(
-            $("div.placeholder", this.$el).children().eq(1).attr("id")
-        ).toEqual("first-elem");
+        expect($("div.placeholder", this.$el).children().eq(0).attr("class")).toEqual(
+            "autotoc-nav"
+        );
+        expect($("div.placeholder", this.$el).children().eq(1).attr("id")).toEqual(
+            "first-elem"
+        );
 
         done();
     });

@@ -99,9 +99,7 @@ Criteria.prototype = {
 
         // attach index select to DOM
         self.$wrapper.append(
-            $("<div/>")
-                .addClass(self.options.classIndexName)
-                .append(self.$index)
+            $("<div/>").addClass(self.options.classIndexName).append(self.$index)
         );
 
         // add blink (select2)
@@ -141,9 +139,7 @@ Criteria.prototype = {
 
         // attach operators select to DOM
         self.$wrapper.append(
-            $("<div/>")
-                .addClass(self.options.classOperatorName)
-                .append(self.$operator)
+            $("<div/>").addClass(self.options.classOperatorName).append(self.$operator)
         );
 
         // add blink (select2)
@@ -161,9 +157,7 @@ Criteria.prototype = {
             return oval;
         }
         //This allows us to use the same query operation for multiple dropdown options.
-        oval = oval
-            .replace("advanced", "relativePath")
-            .replace("path", "relativePath");
+        oval = oval.replace("advanced", "relativePath").replace("path", "relativePath");
         return oval;
     },
     createPathOperators: function () {
@@ -289,10 +283,7 @@ Criteria.prototype = {
         } else if (widget === "DateWidget") {
             self.$value = $('<input type="text"/>')
                 .addClass(self.options.classValueName + "-" + widget)
-                .attr(
-                    "data-pat-pickadate",
-                    JSON.stringify(self.patternDateOptions)
-                ) // have to pass as attributes otherwise time bool will overwritten to an object by the mockupParser
+                .attr("data-pat-pickadate", JSON.stringify(self.patternDateOptions)) // have to pass as attributes otherwise time bool will overwritten to an object by the mockupParser
                 .val(value)
                 .appendTo($wrapper)
                 .patternPickadate()
@@ -312,10 +303,7 @@ Criteria.prototype = {
             var startdt = $('<input type="text"/>')
                 .addClass(self.options.classValueName + "-" + widget)
                 .addClass(self.options.classValueName + "-" + widget + "-start")
-                .attr(
-                    "data-pat-pickadate",
-                    JSON.stringify(self.patternDateOptions)
-                )
+                .attr("data-pat-pickadate", JSON.stringify(self.patternDateOptions))
                 .val(val1)
                 .appendTo(startwrap)
                 .patternPickadate()
@@ -323,18 +311,13 @@ Criteria.prototype = {
                     self.trigger("value-changed");
                 });
             $wrapper.append(
-                $("<span/>")
-                    .html(_t("to"))
-                    .addClass(self.options.classBetweenDtName)
+                $("<span/>").html(_t("to")).addClass(self.options.classBetweenDtName)
             );
             var endwrap = $("<span/>").appendTo($wrapper);
             var enddt = $('<input type="text"/>')
                 .addClass(self.options.classValueName + "-" + widget)
                 .addClass(self.options.classValueName + "-" + widget + "-end")
-                .attr(
-                    "data-pat-pickadate",
-                    JSON.stringify(self.patternDateOptions)
-                )
+                .attr("data-pat-pickadate", JSON.stringify(self.patternDateOptions))
                 .val(val2)
                 .appendTo(endwrap)
                 .patternPickadate()
@@ -434,26 +417,17 @@ Criteria.prototype = {
                         .appendTo(self.$value);
                 });
             }
-            self.app.pattern_select2(
-                self.$value,
-                self.patternAjaxSelectOptions
-            );
+            self.app.pattern_select2(self.$value, self.patternAjaxSelectOptions);
         }
 
-        if (
-            typeof value !== "undefined" &&
-            typeof self.$value !== "undefined"
-        ) {
+        if (typeof value !== "undefined" && typeof self.$value !== "undefined") {
             if ($.isArray(self.$value)) {
                 $.each(value, function (i, v) {
                     self.$value[i].select2("val", v);
                 });
             } else {
                 var trimmedValue = value;
-                if (
-                    typeof value === "string" &&
-                    widget !== "RelativePathWidget"
-                ) {
+                if (typeof value === "string" && widget !== "RelativePathWidget") {
                     trimmedValue = value.replace(/::-?[0-9]+/, "");
                 }
                 self.$value.select2("val", trimmedValue);
@@ -817,9 +791,7 @@ export default Base.extend({
         // XXX do this in a way so it'll work with other forms will work
         // as long as they provide sort_on and sort_reversed fields in z3c form
         var existingSortOn = $('[id$="-sort_on"]').filter('[id^="formfield-"]');
-        var existingSortOrder = $('[id$="-sort_reversed"]').filter(
-            '[id^="formfield-"]'
-        );
+        var existingSortOrder = $('[id$="-sort_reversed"]').filter('[id^="formfield-"]');
 
         $("<span/>")
             .addClass(self.options.classSortLabelName)
@@ -833,15 +805,11 @@ export default Base.extend({
                 $('[id$="sort_on"]', existingSortOn).val($(this).val());
             });
 
-        self.$sortOn.append(
-            $('<option value="">' + _t("No sorting") + "</option>")
-        ); // default no sorting
+        self.$sortOn.append($('<option value="">' + _t("No sorting") + "</option>")); // default no sorting
         for (var key in self.options["sortable_indexes"]) {
             // jshint ignore:line
             self.$sortOn.append(
-                $("<option/>")
-                    .attr("value", key)
-                    .html(self.options.indexes[key].title)
+                $("<option/>").attr("value", key).html(self.options.indexes[key].title)
             );
         }
         self.pattern_select2(self.$sortOn, { width: "150px" });
@@ -876,10 +844,9 @@ export default Base.extend({
         // if the form already contains the sort fields, hide them! Their values
         // will be synced back and forth between the querystring's form elements
         if (existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
-            var reversed = $(
-                '.option input[type="checkbox"]',
-                existingSortOrder
-            ).prop("checked");
+            var reversed = $('.option input[type="checkbox"]', existingSortOrder).prop(
+                "checked"
+            );
             var sortOn = $('[id$="-sort_on"]', existingSortOn).val();
             if (reversed) {
                 self.$sortOrder.prop("checked", true);
@@ -954,14 +921,14 @@ export default Base.extend({
               .prependTo(self.$previewPane);
           });
       */
-        self._previewXhr = $.get(
-            self.options.previewURL + "?" + query.join("&")
-        ).done(function (data, stat) {
-            $("<div/>")
-                .addClass(self.options.classPreviewResultsWrapperName)
-                .html(data)
-                .appendTo(self.$previewPane);
-        });
+        self._previewXhr = $.get(self.options.previewURL + "?" + query.join("&")).done(
+            function (data, stat) {
+                $("<div/>")
+                    .addClass(self.options.classPreviewResultsWrapperName)
+                    .html(data)
+                    .appendTo(self.$previewPane);
+            }
+        );
     },
     updateValue: function () {
         // updating the original input with json data in the form:

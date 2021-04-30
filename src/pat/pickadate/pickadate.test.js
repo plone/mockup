@@ -8,9 +8,7 @@ describe("PickADate", function () {
         document.body.innerHTML = `
             <div><input class="pat-pickadate" data-pat-pickadate=\'{"autoSetTimeOnDateChange": "false"}\'/></div>
         `;
-        Date.now = jest.fn(() =>
-            new Date(Date.UTC(2016, 12, 23, 15, 30)).valueOf()
-        );
+        Date.now = jest.fn(() => new Date(Date.UTC(2016, 12, 23, 15, 30)).valueOf());
     });
 
     afterEach(function () {
@@ -20,17 +18,17 @@ describe("PickADate", function () {
 
     it("date and time element initialized", function () {
         // pickadate is not initialized
-        expect(
-            document.querySelectorAll(".pattern-pickadate-wrapper").length
-        ).toEqual(0);
+        expect(document.querySelectorAll(".pattern-pickadate-wrapper").length).toEqual(
+            0
+        );
 
         // scan dom for patterns
         registry.scan(document.body);
 
         // pickadate is initialized
-        expect(
-            document.querySelectorAll(".pattern-pickadate-wrapper").length
-        ).toEqual(1);
+        expect(document.querySelectorAll(".pattern-pickadate-wrapper").length).toEqual(
+            1
+        );
 
         const input_date = document.querySelector(".pattern-pickadate-date");
         const input_time = document.querySelector(".pattern-pickadate-time");
@@ -101,12 +99,8 @@ describe("PickADate", function () {
         await utils.timeout(1);
 
         // time picker should be opened but not date picker
-        expect(dateWrapper.querySelectorAll(".picker--opened").length).toEqual(
-            0
-        );
-        expect(timeWrapper.querySelectorAll(".picker--opened").length).toEqual(
-            1
-        );
+        expect(dateWrapper.querySelectorAll(".picker--opened").length).toEqual(0);
+        expect(timeWrapper.querySelectorAll(".picker--opened").length).toEqual(1);
 
         // select some time
         const selectedTime = timeWrapper.querySelectorAll("li")[1];
@@ -146,9 +140,8 @@ describe("PickADate", function () {
 
         // there are not dropdowns to select year or month
         expect(
-            $(".pattern-pickadate-date", self.$el)
-                .parent()
-                .find(".picker__select--year").length
+            $(".pattern-pickadate-date", self.$el).parent().find(".picker__select--year")
+                .length
         ).toEqual(0);
         expect(
             $(".pattern-pickadate-date", self.$el)
@@ -204,9 +197,9 @@ describe("PickADate", function () {
         var $selectedDate = dateWrapper.find("td > div").first().click();
 
         // selected date should be saved on date picker element
-        expect(
-            $(".pattern-pickadate-date", self.$el).attr("data-value")
-        ).toEqual($selectedDate.attr("data-pick"));
+        expect($(".pattern-pickadate-date", self.$el).attr("data-value")).toEqual(
+            $selectedDate.attr("data-pick")
+        );
 
         // and also on main element since time element is disabled
         expect($(".pat-pickadate", self.$el).val()).to.not.equal("");
@@ -253,9 +246,9 @@ describe("PickADate", function () {
         var $selectedTime = timeWrapper.find("li").first().next().click();
 
         // selected date should be saved on date picker element
-        expect(
-            $(".pattern-pickadate-time", self.$el).attr("data-value")
-        ).toEqual($selectedTime.attr("data-pick"));
+        expect($(".pattern-pickadate-time", self.$el).attr("data-value")).toEqual(
+            $selectedTime.attr("data-pick")
+        );
 
         // and also on main element since time element is disabled
         expect($(".pat-pickadate", self.$el).val()).to.not.equal("");
@@ -271,9 +264,9 @@ describe("PickADate", function () {
         registry.scan(self.$el);
 
         // date picker value is parsed correctly from main element ...
-        expect(
-            $(".pattern-pickadate-date", self.$el).attr("data-value")
-        ).toEqual("2001-10-10");
+        expect($(".pattern-pickadate-date", self.$el).attr("data-value")).toEqual(
+            "2001-10-10"
+        );
 
         // ... and make sure 2001-10-10 is picked in the date picker calendar
         expect(
@@ -296,9 +289,9 @@ describe("PickADate", function () {
         ).toEqual("10");
 
         // time picker value is parsed correctly from main element
-        expect(
-            $(".pattern-pickadate-time", self.$el).attr("data-value")
-        ).toEqual("10:10");
+        expect($(".pattern-pickadate-time", self.$el).attr("data-value")).toEqual(
+            "10:10"
+        );
 
         // and make sure 10:00 AM is picked in the time picker list
         expect(
@@ -321,9 +314,9 @@ describe("PickADate", function () {
         registry.scan(self.$el);
 
         // time picker value is parsed correctly from main element
-        expect(
-            $(".pattern-pickadate-time", self.$el).attr("data-value")
-        ).toEqual("15:10");
+        expect($(".pattern-pickadate-time", self.$el).attr("data-value")).toEqual(
+            "15:10"
+        );
 
         // and make sure 10:00 AM is picked in the time picker list
         expect(
@@ -346,9 +339,9 @@ describe("PickADate", function () {
         registry.scan(self.$el);
 
         // date picker value is parsed correctly from main element ...
-        expect(
-            $(".pattern-pickadate-date", self.$el).attr("data-value")
-        ).toEqual("1801-12-30");
+        expect($(".pattern-pickadate-date", self.$el).attr("data-value")).toEqual(
+            "1801-12-30"
+        );
 
         // ... and make sure 1801-12-30 is picked in the date picker calendar
         expect(
@@ -382,9 +375,9 @@ describe("PickADate", function () {
         registry.scan(self.$el);
 
         // time picker value is parsed correctly from main element
-        expect(
-            $(".pattern-pickadate-time", self.$el).attr("data-value")
-        ).toEqual("00:00");
+        expect($(".pattern-pickadate-time", self.$el).attr("data-value")).toEqual(
+            "00:00"
+        );
 
         // and make sure 10:00 AM is picked in the time picker list
         expect(
@@ -478,12 +471,12 @@ describe("PickADate", function () {
             registry.scan($input);
 
             // check if data values are set to default
-            expect(
-                $(".pattern-pickadate-timezone .select2-chosen").text()
-            ).toEqual("Europe/Vienna");
-            expect(
-                $("input.pattern-pickadate-timezone").attr("data-value")
-            ).toEqual("Europe/Vienna");
+            expect($(".pattern-pickadate-timezone .select2-chosen").text()).toEqual(
+                "Europe/Vienna"
+            );
+            expect($("input.pattern-pickadate-timezone").attr("data-value")).toEqual(
+                "Europe/Vienna"
+            );
         });
 
         it.skip("should only set the default value when it exists in the list", function () {
@@ -499,12 +492,12 @@ describe("PickADate", function () {
             registry.scan($input, ["pickadate"]);
 
             // check if visible and data value are set to default
-            expect(
-                $(".pattern-pickadate-timezone .select2-chosen").text()
-            ).toEqual("Enter timezone...");
-            expect(
-                $("input.pattern-pickadate-timezone").attr("data-value")
-            ).toEqual(undefined);
+            expect($(".pattern-pickadate-timezone .select2-chosen").text()).toEqual(
+                "Enter timezone..."
+            );
+            expect($("input.pattern-pickadate-timezone").attr("data-value")).toEqual(
+                undefined
+            );
         });
 
         it.skip("should write to default and disable the dropdown field if only one value exists", function () {
@@ -522,13 +515,13 @@ describe("PickADate", function () {
 
             // check if data values are set to default
             expect($(".select2-chosen", $time).text()).toEqual("Europe/Berlin");
-            expect(
-                $("input.pattern-pickadate-timezone").attr("data-value")
-            ).toEqual("Europe/Berlin");
+            expect($("input.pattern-pickadate-timezone").attr("data-value")).toEqual(
+                "Europe/Berlin"
+            );
 
-            expect(
-                $(".pattern-pickadate-timezone").data("select2")._enabled
-            ).toEqual(false);
+            expect($(".pattern-pickadate-timezone").data("select2")._enabled).toEqual(
+                false
+            );
             expect($(".select2-container-disabled").length).toEqual(1);
         });
     });
@@ -577,14 +570,14 @@ describe("PickADate", function () {
             var $selectedDate = $dateWrapper.find("td > div").first().click();
 
             // selected date should be saved on date picker element
-            expect(
-                $(".pattern-pickadate-date", $el).attr("data-value")
-            ).toEqual($selectedDate.attr("data-pick"));
+            expect($(".pattern-pickadate-date", $el).attr("data-value")).toEqual(
+                $selectedDate.attr("data-pick")
+            );
 
             // default time should be available on time picker element.
-            expect(
-                $(".pattern-pickadate-time", $el).attr("data-value")
-            ).toEqual("15,30");
+            expect($(".pattern-pickadate-time", $el).attr("data-value")).toEqual(
+                "15,30"
+            );
 
             // pickadate should be have this value set.
             expect($(".pat-pickadate", $el).val()).to.contain("15:30");
@@ -603,14 +596,14 @@ describe("PickADate", function () {
             var $selectedDate = $dateWrapper.find("td > div").first().click();
 
             // selected date should be saved on date picker element
-            expect(
-                $(".pattern-pickadate-date", $el).attr("data-value")
-            ).toEqual($selectedDate.attr("data-pick"));
+            expect($(".pattern-pickadate-date", $el).attr("data-value")).toEqual(
+                $selectedDate.attr("data-pick")
+            );
 
             // default time should be available on time picker element.
-            expect(
-                $(".pattern-pickadate-time", $el).attr("data-value")
-            ).toEqual("12,30");
+            expect($(".pattern-pickadate-time", $el).attr("data-value")).toEqual(
+                "12,30"
+            );
 
             // pickadate should be have this value set.
             expect($(".pat-pickadate", $el).val()).to.contain("12:30");
@@ -629,14 +622,14 @@ describe("PickADate", function () {
             var $selectedDate = $dateWrapper.find("td > div").first().click();
 
             // selected date should be saved on date picker element
-            expect(
-                $(".pattern-pickadate-date", $el).attr("data-value")
-            ).toEqual($selectedDate.attr("data-pick"));
+            expect($(".pattern-pickadate-date", $el).attr("data-value")).toEqual(
+                $selectedDate.attr("data-pick")
+            );
 
             // default time should be available on time picker element.
-            expect(
-                $(".pattern-pickadate-time", $el).attr("data-value")
-            ).toEqual("16,30");
+            expect($(".pattern-pickadate-time", $el).attr("data-value")).toEqual(
+                "16,30"
+            );
 
             // pickadate should be have this value set.
             expect($(".pat-pickadate", $el).val()).to.contain("16:30");
@@ -655,14 +648,14 @@ describe("PickADate", function () {
             var $selectedDate = $dateWrapper.find("td > div").first().click();
 
             // selected date should be saved on date picker element
-            expect(
-                $(".pattern-pickadate-date", $el).attr("data-value")
-            ).toEqual($selectedDate.attr("data-pick"));
+            expect($(".pattern-pickadate-date", $el).attr("data-value")).toEqual(
+                $selectedDate.attr("data-pick")
+            );
 
             // default time should be available on time picker element.
-            expect(
-                $(".pattern-pickadate-time", $el).attr("data-value")
-            ).toEqual("14,30");
+            expect($(".pattern-pickadate-time", $el).attr("data-value")).toEqual(
+                "14,30"
+            );
 
             // pickadate should be have this value set.
             expect($(".pat-pickadate", $el).val()).to.contain("14:30");

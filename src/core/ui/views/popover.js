@@ -219,11 +219,7 @@ export default ContainerView.extend({
                 actualHeight = $tip[0].offsetHeight;
             }
 
-            this.positionArrow(
-                delta - width + actualWidth,
-                actualWidth,
-                "left"
-            );
+            this.positionArrow(delta - width + actualWidth, actualWidth, "left");
         } else if (placement !== "bottom-right") {
             // If placement is bottom-right, don't override left position for the arrow that is defined in css to 20px.
             this.positionArrow(actualHeight - height, actualHeight, "top");

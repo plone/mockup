@@ -350,10 +350,7 @@ define([
             initializePattern();
 
             expect($(".select2-container-multi"), $container).to.have.length(1);
-            expect(
-                $(".pattern-relateditems-container"),
-                $container
-            ).to.have.length(1);
+            expect($(".pattern-relateditems-container"), $container).to.have.length(1);
             expect(
                 $(".pattern-relateditems-container .toolbar .path-wrapper"),
                 $container
@@ -380,9 +377,7 @@ define([
             ).to.have.length(5);
 
             // Select first folder
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
             expect($("input.pat-relateditems").val()).to.be.equal("UID6");
 
             // Still, this folder should be shown in the result list - only not selectable.
@@ -395,9 +390,7 @@ define([
             ).to.have.length(5);
 
             // Browse into second folder which contains images
-            $(
-                '.pattern-relateditems-result-browse[data-path="/folder2"]'
-            ).click();
+            $('.pattern-relateditems-result-browse[data-path="/folder2"]').click();
             clock.tick(1000);
 
             // 1 "One level up" and 2 images
@@ -446,9 +439,7 @@ define([
             ).to.have.length(2);
 
             // We can even browse into folders in search mode
-            $(
-                '.pattern-relateditems-result-browse[data-path="/folder2"]'
-            ).click();
+            $('.pattern-relateditems-result-browse[data-path="/folder2"]').click();
             clock.tick(1000);
 
             // Being in folder 2, we see again one item...
@@ -465,9 +456,7 @@ define([
             $(
                 'a.pattern-relateditems-result-select[data-path="/folder2/image18"]'
             ).click();
-            expect($("input.pat-relateditems").val()).to.be.equal(
-                "UID6,UID17,UID18"
-            );
+            expect($("input.pat-relateditems").val()).to.be.equal("UID6,UID17,UID18");
         });
 
         it("browse roundtrip", function () {
@@ -494,9 +483,7 @@ define([
             // PT 2
 
             // select one element
-            $(
-                'a.pattern-relateditems-result-select[data-path="/image1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/image1"]').click();
             expect($("input.pat-relateditems").val()).to.be.equal("UID8");
 
             // PT 3
@@ -513,9 +500,7 @@ define([
             ).to.have.length(2);
 
             // add another one
-            $(
-                'a.pattern-relateditems-result-select[data-path="/image2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/image2"]').click();
             expect($("input.pat-relateditems").val()).to.be.equal("UID8,UID9");
 
             // remove first one
@@ -535,9 +520,7 @@ define([
             ).to.have.length(2);
 
             // add first from result
-            $(
-                'a.pattern-relateditems-result-select[data-path="/image3"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/image3"]').click();
             expect($("input.pat-relateditems").val()).to.be.equal("UID9,UID10");
         });
 
@@ -564,9 +547,7 @@ define([
             //  // PT 2
 
             //  // select one element
-            $(
-                'a.pattern-relateditems-result-select[data-path="/document1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/document1"]').click();
             expect($("input.pat-relateditems").val()).to.be.equal("UID1");
 
             //  // PT 3
@@ -583,9 +564,7 @@ define([
             ).to.have.length(10);
 
             //  // add another one
-            $(
-                'a.pattern-relateditems-result-select[data-path="/document2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/document2"]').click();
             expect($("input.pat-relateditems").val()).to.be.equal("UID1,UID2");
 
             //  // remove first one
@@ -634,14 +613,11 @@ define([
             clock.tick(1000);
 
             expect(
-                $(
-                    ".path-wrapper .pattern-relateditems-path-label",
-                    $container
-                ).text()
+                $(".path-wrapper .pattern-relateditems-path-label", $container).text()
             ).to.be.equal("Current path:");
-            expect(
-                $($(".path-wrapper .crumb")[1], $container).text()
-            ).to.be.equal("folder1");
+            expect($($(".path-wrapper .crumb")[1], $container).text()).to.be.equal(
+                "folder1"
+            );
         });
 
         it("use recently used", function () {
@@ -664,15 +640,11 @@ define([
             // folder 1
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
             // folder 2
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
 
             // check, if items are selected
             expect($("input.pat-relateditems").val()).to.be.equal("UID6,UID7");
@@ -721,15 +693,11 @@ define([
             // folder 1
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
             // folder 2
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
 
             // check, if items are selected
             expect($("input.pat-relateditems").val()).to.be.equal("UID6,UID7");
@@ -763,32 +731,22 @@ define([
             // folder 1
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
             // folder 2
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
             // image 1
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/image1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/image1"]').click();
             // image 2
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/image2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/image2"]').click();
 
             // check, if items are selected
-            expect($("input.pat-relateditems").val()).to.be.equal(
-                "UID6,UID7,UID8,UID9"
-            );
+            expect($("input.pat-relateditems").val()).to.be.equal("UID6,UID7,UID8,UID9");
 
             // destroy relateditems widget and reload it
             $(".pattern-relateditems-container").remove();
@@ -800,9 +758,7 @@ define([
             });
 
             // only two should be visible, last selected should be first in list.
-            expect(
-                $(".pattern-relateditems-recentlyused-select").length
-            ).to.be.equal(2);
+            expect($(".pattern-relateditems-recentlyused-select").length).to.be.equal(2);
             expect(
                 $($(".pattern-relateditems-recentlyused-select")[0]).data("uid")
             ).to.be.equal("UID9");
@@ -834,15 +790,11 @@ define([
             // folder 1
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder1"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder1"]').click();
             // folder 2
             $(".select2-search-field input.select2-input").click();
             clock.tick(1000);
-            $(
-                'a.pattern-relateditems-result-select[data-path="/folder2"]'
-            ).click();
+            $('a.pattern-relateditems-result-select[data-path="/folder2"]').click();
 
             var items = JSON.parse(localStorage[key]);
             expect(items.length).to.be.equal(2);

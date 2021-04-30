@@ -69,17 +69,11 @@ define([
             expect(getScripts().length).to.equal(1);
             expect(getScripts()).to.contain("http://example.com/zxcvbn.js");
 
-            $el.find("input[type=password]")
-                .attr("value", "a")
-                .trigger("keyup");
+            $el.find("input[type=password]").attr("value", "a").trigger("keyup");
             expect(getScripts().length).to.equal(1);
-            $el.find("input[type=password]")
-                .attr("value", "aa")
-                .trigger("keyup");
+            $el.find("input[type=password]").attr("value", "aa").trigger("keyup");
             expect(getScripts().length).to.equal(1);
-            $el.find("input[type=password]")
-                .attr("value", "aaa")
-                .trigger("keyup");
+            $el.find("input[type=password]").attr("value", "aaa").trigger("keyup");
             expect(getScripts().length).to.equal(1);
             expect(getScripts()).to.contain("http://example.com/zxcvbn.js");
 
@@ -98,21 +92,17 @@ define([
             window.zxcvbn = fakeZxcvbn;
             registry.scan($el);
 
-            $el.find("input[type=password]")
-                .attr("value", "a")
-                .trigger("keyup");
-            expect(
-                $el.find(".pat-passwordstrength-meter").attr("class")
-            ).to.equal("pat-passwordstrength-meter level-1");
+            $el.find("input[type=password]").attr("value", "a").trigger("keyup");
+            expect($el.find(".pat-passwordstrength-meter").attr("class")).to.equal(
+                "pat-passwordstrength-meter level-1"
+            );
             expect(window.providedStrings.length).to.equal(0);
             expect(window.providedInterval).to.equal(500);
 
-            $el.find("input[type=password]")
-                .attr("value", "aa")
-                .trigger("keyup");
-            expect(
-                $el.find(".pat-passwordstrength-meter").attr("class")
-            ).to.equal("pat-passwordstrength-meter level-2");
+            $el.find("input[type=password]").attr("value", "aa").trigger("keyup");
+            expect($el.find(".pat-passwordstrength-meter").attr("class")).to.equal(
+                "pat-passwordstrength-meter level-2"
+            );
             expect(window.providedStrings.length).to.equal(0);
             expect(window.providedInterval).to.equal(500);
         });
@@ -128,12 +118,10 @@ define([
             window.zxcvbn = fakeZxcvbn;
             registry.scan($el);
 
-            $el.find("input[type=password]")
-                .attr("value", "a")
-                .trigger("keyup");
-            expect(
-                $el.find(".pat-passwordstrength-meter").attr("class")
-            ).to.equal("pat-passwordstrength-meter level-1");
+            $el.find("input[type=password]").attr("value", "a").trigger("keyup");
+            expect($el.find(".pat-passwordstrength-meter").attr("class")).to.equal(
+                "pat-passwordstrength-meter level-1"
+            );
             expect(window.providedStrings.length).to.equal(2);
             expect(window.providedStrings).to.contain("bob_geldof");
             expect(window.providedStrings).to.contain("on");

@@ -56,7 +56,6 @@ import "tinymce/themes/silver";
 
 import "tinymce/icons/default";
 
-
 export default Base.extend({
     name: "tinymce",
     trigger: ".pat-tinymce",
@@ -117,9 +116,7 @@ export default Base.extend({
             insertLinkHelp: _t(
                 "Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor)."
             ),
-            captionFromDescription: _t(
-                "Show Image Caption from Image Description"
-            ),
+            captionFromDescription: _t("Show Image Caption from Image Description"),
             caption: _t("Image Caption"),
         },
         // URL generation options
@@ -182,7 +179,8 @@ export default Base.extend({
                 "ploneimage",
             ],
             menubar: "edit table format tools view insert",
-            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage",
+            toolbar:
+                "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage",
             //'autoresize_max_height': 900,
             height: 400,
         },
@@ -192,13 +190,7 @@ export default Base.extend({
         var self = this;
         if (self.linkModal === null) {
             var $el = $("<div/>").insertAfter(self.$el);
-            var linkTypes = [
-                "internal",
-                "upload",
-                "external",
-                "email",
-                "anchor",
-            ];
+            var linkTypes = ["internal", "upload", "external", "email", "anchor"];
             if (!self.options.upload) {
                 linkTypes.splice(1, 1);
             }
@@ -341,10 +333,7 @@ export default Base.extend({
         // tiny needs an id in order to initialize. Creat it if not set.
         var id = utils.setId(self.$el);
 
-        if (
-            self.options.imageScales &&
-            typeof self.options.imageScales === "string"
-        ) {
+        if (self.options.imageScales && typeof self.options.imageScales === "string") {
             self.options.imageScales = JSON.parse(self.options.imageScales);
         }
 
@@ -390,8 +379,7 @@ export default Base.extend({
 
             if (
                 tinyOptions.importcss_file_filter &&
-                typeof tinyOptions.importcss_file_filter.indexOf ===
-                    "function" &&
+                typeof tinyOptions.importcss_file_filter.indexOf === "function" &&
                 tinyOptions.importcss_file_filter.indexOf(",") !== -1
             ) {
                 // need a custom function to check now
@@ -416,10 +404,7 @@ export default Base.extend({
                 );
             }
 
-            if (
-                tinyOptions.importcss_groups &&
-                tinyOptions.importcss_groups.length
-            ) {
+            if (tinyOptions.importcss_groups && tinyOptions.importcss_groups.length) {
                 for (var i = 0; i < tinyOptions.importcss_groups.length; i++) {
                     if (
                         tinyOptions.importcss_groups[i].filter &&

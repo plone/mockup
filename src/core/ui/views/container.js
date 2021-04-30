@@ -59,8 +59,7 @@ export default BaseView.extend({
                 var slice = [].slice;
                 var eventName = arguments[0];
                 var eventTarget;
-                var newName =
-                    self.id !== "" ? self.id + "." + eventName : eventName;
+                var newName = self.id !== "" ? self.id + "." + eventName : eventName;
                 if (arguments.length > 1) {
                     eventTarget = arguments[1];
                 }
@@ -69,10 +68,7 @@ export default BaseView.extend({
                     newArgs[0] = newName;
                     self.trigger.apply(self, newArgs);
                 }
-                if (
-                    eventTarget !== undefined &&
-                    eventTarget.isUIView === true
-                ) {
+                if (eventTarget !== undefined && eventTarget.isUIView === true) {
                     if (eventTarget.propagateEvent(eventName) === true) {
                         self.trigger.apply(self, arguments);
                     }

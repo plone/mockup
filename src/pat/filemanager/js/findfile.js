@@ -77,9 +77,7 @@ export default PopoverView.extend({
                     self.filterFiles(patt, data);
                     if (self.noMatches == 0) {
                         self.$results.append(
-                            "<span>No results found for " +
-                                searchFor +
-                                "</span>"
+                            "<span>No results found for " + searchFor + "</span>"
                         );
                     }
                 },

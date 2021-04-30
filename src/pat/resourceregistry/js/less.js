@@ -46,9 +46,7 @@ export default BaseView.extend({
         var self = this;
         var data = {};
         self.$(".form-group").each(function () {
-            data[$(this).find(".field-name").val()] = $(this)
-                .find(".field-value")
-                .val();
+            data[$(this).find(".field-name").val()] = $(this).find(".field-value").val();
         });
         self.options.data.lessvariables = data;
     },

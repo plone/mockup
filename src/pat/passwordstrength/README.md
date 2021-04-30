@@ -7,10 +7,9 @@ title: Password strength
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|:-:|:-:|:-:|:-:|
-| zxcvbn | string | cdnjs | Location to load zxcvbn from. Defaults to cdnjs |
-
+| Option |  Type  | Default |                   Description                   |
+| :----: | :----: | :-----: | :---------------------------------------------: |
+| zxcvbn | string |  cdnjs  | Location to load zxcvbn from. Defaults to cdnjs |
 
 ## Examples
 
@@ -30,9 +29,9 @@ title: Password strength
        />
 
 ```html
-<input type="password"
-       class="pat-passwordstrength"
-       data-pat-passwordstrength="zxcvbn: //moo.com/zxcvbn.js"
-       />
+<input
+    type="password"
+    class="pat-passwordstrength"
+    data-pat-passwordstrength="zxcvbn: //moo.com/zxcvbn.js"
+/>
 ```
-

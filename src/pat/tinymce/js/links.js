@@ -38,10 +38,7 @@ var LinkType = Base.extend({
     },
 
     load: function (element) {
-        this.getEl().attr(
-            "value",
-            this.tiny.dom.getAttrib(element, "data-val")
-        );
+        this.getEl().attr("value", this.tiny.dom.getAttrib(element, "data-val"));
     },
 
     set: function (val) {
@@ -176,10 +173,7 @@ var ImageLink = InternalLink.extend({
     trigger: ".pat-imagelinktype-dummy",
     toUrl: function () {
         var value = this.value();
-        return this.tinypattern.generateImageUrl(
-            value,
-            this.linkModal.$scale.val()
-        );
+        return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
     },
 });
 
@@ -202,9 +196,7 @@ var EmailLink = LinkType.extend({
 
     load: function (element) {
         LinkType.prototype.load.apply(this, [element]);
-        this.linkModal.$subject.val(
-            this.tiny.dom.getAttrib(element, "data-subject")
-        );
+        this.linkModal.$subject.val(this.tiny.dom.getAttrib(element, "data-subject"));
     },
 
     getSubject: function () {
@@ -367,7 +359,7 @@ tinymce.PluginManager.add("plonelink", function (editor) {
         icon: "unlink",
         tooltip: "Remove link",
         onAction: function () {
-            editor.execCommand('unlink');
+            editor.execCommand("unlink");
         },
         stateSelector: "a[href]",
     });
@@ -437,8 +429,7 @@ export default Base.extend({
         var self = this;
         self.tinypattern = self.options.tinypattern;
         if (self.tinypattern.options.anchorSelector) {
-            self.options.anchorSelector =
-                self.tinypattern.options.anchorSelector;
+            self.options.anchorSelector = self.tinypattern.options.anchorSelector;
         }
         self.tiny = self.tinypattern.tiny;
         self.dom = self.tiny.dom;
@@ -461,8 +452,7 @@ export default Base.extend({
         // Partial html and not a fully selected anchor element
         if (
             /</.test(html) &&
-            (!/^<a [^>]+>[^<]+<\/a>$/.test(html) ||
-                html.indexOf("href=") === -1)
+            (!/^<a [^>]+>[^<]+<\/a>$/.test(html) || html.indexOf("href=") === -1)
         ) {
             return false;
         }
@@ -510,8 +500,7 @@ export default Base.extend({
             externalImageText: this.options.text.externalImageText,
             altText: this.options.text.alt,
             imageAlignText: this.options.text.imageAlign,
-            captionFromDescriptionText: this.options.text
-                .captionFromDescription,
+            captionFromDescriptionText: this.options.text.captionFromDescription,
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
             imageScales: this.options.imageScales,
@@ -521,19 +510,13 @@ export default Base.extend({
     },
 
     isImageMode: function () {
-        return (
-            ["image", "uploadImage", "externalImage"].indexOf(this.linkType) !==
-            -1
-        );
+        return ["image", "uploadImage", "externalImage"].indexOf(this.linkType) !== -1;
     },
 
     initElements: function () {
         var self = this;
         self.$target = $('select[name="target"]', self.modal.$modal);
-        self.$button = $(
-            '.modal-footer input[name="insert"]',
-            self.modal.$modal
-        );
+        self.$button = $('.modal-footer input[name="insert"]', self.modal.$modal);
         self.$title = $('input[name="title"]', self.modal.$modal);
         self.$subject = $('input[name="subject"]', self.modal.$modal);
 
@@ -548,10 +531,7 @@ export default Base.extend({
 
         /* load up all the link types */
         _.each(self.options.linkTypes, function (type) {
-            var $container = $(
-                ".linkType." + type + " .main",
-                self.modal.$modal
-            );
+            var $container = $(".linkType." + type + " .main", self.modal.$modal);
             self.linkTypes[type] = new self.options.linkTypeClassMapping[type](
                 $container,
                 {
@@ -647,9 +627,7 @@ export default Base.extend({
     updateImage: function (src) {
         var self = this;
         var title = self.$title.val();
-        var captionFromDescription = self.$captionFromDescription.prop(
-            "checked"
-        );
+        var captionFromDescription = self.$captionFromDescription.prop("checked");
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
@@ -729,26 +707,19 @@ export default Base.extend({
                 {},
                 self.options.relatedItems
             );
-            self.options.upload.relatedItems.selectableTypes =
-                self.options.folderTypes;
+            self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
             self.$upload.addClass("pat-upload");
             new PatternUpload(self.$upload, self.options.upload);
             self.$upload.on("uploadAllCompleted", function (evt, data) {
                 if (self.linkTypes.image) {
                     self.linkTypes.image.set(data.data.UID);
                     $(
-                        "#" +
-                            $("#tinylink-image", self.modal.$modal).data(
-                                "navref"
-                            )
+                        "#" + $("#tinylink-image", self.modal.$modal).data("navref")
                     ).trigger("click");
                 } else {
                     self.linkTypes.internal.set(data.data.UID);
                     $(
-                        "#" +
-                            $("#tinylink-internal", self.modal.$modal).data(
-                                "navref"
-                            )
+                        "#" + $("#tinylink-internal", self.modal.$modal).data("navref")
                     ).trigger("click");
                 }
             });
@@ -757,9 +728,7 @@ export default Base.extend({
         self.$button.off("click").on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
-            self.linkType = self.modal.$modal
-                .find("fieldset.active")
-                .data("linktype");
+            self.linkType = self.modal.$modal.find("fieldset.active").data("linktype");
 
             if (self.linkType === "uploadImage" || self.linkType === "upload") {
                 var patUpload = self.$upload.data().patternUpload;
@@ -768,10 +737,7 @@ export default Base.extend({
                     self.$upload.on("uploadAllCompleted", function (evt, data) {
                         var counter = 0;
                         var checkUpload = function () {
-                            if (
-                                counter < 5 &&
-                                !self.linkTypes[self.linkType].value()
-                            ) {
+                            if (counter < 5 && !self.linkTypes[self.linkType].value()) {
                                 counter += 1;
                                 setTimeout(checkUpload, 100);
                                 return;
@@ -802,12 +768,10 @@ export default Base.extend({
             }
             self.hide();
         });
-        $('.modal-footer input[name="cancel"]', self.modal.$modal).click(
-            function (e) {
-                e.preventDefault();
-                self.hide();
-            }
-        );
+        $('.modal-footer input[name="cancel"]', self.modal.$modal).click(function (e) {
+            e.preventDefault();
+            self.hide();
+        });
     },
 
     show: function () {
@@ -839,10 +803,7 @@ export default Base.extend({
             : "";
 
         if (self.anchorElm) {
-            self.data.target = self.tiny.dom.getAttrib(
-                self.anchorElm,
-                "target"
-            );
+            self.data.target = self.tiny.dom.getAttrib(self.anchorElm, "target");
         } else if (self.tiny.settings.default_link_target) {
             self.data.target = self.tiny.settings.default_link_target;
         }
@@ -875,9 +836,7 @@ export default Base.extend({
                 figure = $(self.selectedElm).closest("figure");
                 figure = figure.length ? figure[0] : undefined;
                 img = self.selectedElm;
-                caption = figure
-                    ? figure.querySelector("figcaption")
-                    : undefined;
+                caption = figure ? figure.querySelector("figcaption") : undefined;
             } else if (self.selectedElm.nodeName === "FIGCAPTION") {
                 figure = $(self.selectedElm).closest("figure");
                 figure = figure.length ? figure[0] : undefined;
@@ -908,9 +867,7 @@ export default Base.extend({
                     self.linkTypes[self.linkType].load(self.imgElm);
                     var scale = self.dom.getAttrib(self.imgElm, "data-scale");
                     self.$scale.val(scale);
-                    $("#tinylink-" + self.linkType, self.modal.$modal).trigger(
-                        "click"
-                    );
+                    $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
                 } else if (src) {
                     self.guessImageLink(src);
                 }
@@ -965,9 +922,7 @@ export default Base.extend({
             // XXX if using default configuration, it gets more difficult
             // here to detect internal urls so this might need to change...
             this.linkType = "internal";
-            this.linkTypes.internal.set(
-                this.tinypattern.stripGeneratedUrl(href)
-            );
+            this.linkTypes.internal.set(this.tinypattern.stripGeneratedUrl(href));
         } else if (href.indexOf("mailto:") !== -1) {
             this.linkType = "email";
             var email = href.substring("mailto:".length, href.length);

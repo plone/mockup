@@ -93,9 +93,7 @@ export default PopoverView.extend({
              render the updated content and then put the original back */
                     var originalContent = self.content;
                     self.setContent(
-                        "<p>" +
-                            _t("Error loading popover from server.") +
-                            "</p>",
+                        "<p>" + _t("Error loading popover from server.") + "</p>",
                         false
                     );
                     self.renderContent();
