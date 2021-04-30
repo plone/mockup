@@ -298,7 +298,7 @@ export default Base.extend({
                 type="button"
                 class="btn btn-sm btn-info"
                 title="${self.options.today}"
-            >${await utils.resolveIcon("clock")}</button>`)
+            >${await utils.resolveIcon("plone.icon.clock")}</button>`)
                 .addClass(self.options.classNowName)
                 .on("click", function (e) {
                     e.preventDefault();
@@ -319,7 +319,7 @@ export default Base.extend({
                 type="button"
                 class="btn btn-sm btn-danger"
                 title="${self.options.clear}"
-            >${await utils.resolveIcon("trash")}</button>`)
+            >${await utils.resolveIcon("plone.icon.trash")}</button>`)
                 .addClass(self.options.classClearName)
                 .on("click", function (e) {
                     e.preventDefault();

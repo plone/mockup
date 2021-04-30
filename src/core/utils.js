@@ -380,8 +380,12 @@ const resolveIcon = async function (name) {
         // fallback
         try {
             import("../styles/icons.scss");
-            icon = await import(`bootstrap-icons/icons/${name}.svg`);
-            icon = icon?.default;
+            const iconmap = await import("../iconmap.json");
+            const parts = iconmap[name]?.split?.("/");
+            if (parts[0].includes("bootstrap-icons")) {
+                icon = await import(`bootstrap-icons/icons/${parts[1]}`);
+                icon = icon?.default;
+            }
         } catch (e) {
             // import error
             console.warn(e);
