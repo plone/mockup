@@ -22,20 +22,24 @@ export default PopoverView.extend({
             "</div>" +
             '<button class="btn btn-block btn-primary"><%- _t("Rearrange") %></button>'
     ),
+
     events: {
         "click button": "rearrangeButtonClicked",
     },
+
     initialize: function (options) {
         this.app = options.app;
         PopoverView.prototype.initialize.apply(this, [options]);
         this.options.rearrangeProperties = this.app.options.rearrange.properties;
     },
+
     render: function () {
         PopoverView.prototype.render.call(this);
         this.$rearrangeOn = this.$('[name="rearrange_on"]');
         this.$reversed = this.$('[name="reversed"]');
         return this;
     },
+
     rearrangeButtonClicked: function () {
         if (this.app.collection.queryHelper.getCurrentPath() === "/") {
             if (
@@ -50,7 +54,7 @@ export default PopoverView.extend({
                 return;
             }
         }
-        var data = {
+        const data = {
             rearrange_on: this.$rearrangeOn.val(),
             reversed: false,
         };

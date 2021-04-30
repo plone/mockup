@@ -8,6 +8,7 @@ export default Backbone.Model.extend({
             getURL: "",
         };
     },
+
     uid: function () {
         return this.attributes.UID;
     },

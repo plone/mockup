@@ -1,4 +1,3 @@
-import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
@@ -25,7 +24,7 @@ import StatusTemplate from "../../templates/status.xml";
 
 import ResultCollection from "../collections/result";
 
-var log = logging.getLogger("pat-structure");
+const log = logging.getLogger("pat-structure");
 
 export default BaseView.extend({
     tagName: "div",
@@ -44,14 +43,13 @@ export default BaseView.extend({
         return !!$.cookie("__cp");
     },
 
-    initialize: async function (options) {
-        var self = this;
-        BaseView.prototype.initialize.apply(self, [options]);
-        self.loading = new utils.Loading();
-        self.loading.show();
+    initialize: function (options) {
+        BaseView.prototype.initialize.apply(this, [options]);
+        this.loading = new utils.Loading();
+        this.loading.show();
 
         /* close popovers when clicking away */
-        $(document).click(function (e) {
+        $(document).click((e) => {
             var $el = $(e.target);
             if (
                 !$el.is(":visible") ||
@@ -73,54 +71,54 @@ export default BaseView.extend({
             }
         });
 
-        self.collection = new ResultCollection([], {
+        this.collection = new ResultCollection([], {
             // Due to default implementation need to poke at things in here,
             // view is passed.
-            view: self,
-            url: self.options.collectionUrl,
+            view: this,
+            url: this.options.collectionUrl,
         });
 
-        self.setAllCookieSettings();
+        this.setAllCookieSettings();
 
-        self.selectedCollection = new SelectedCollection();
-        self.tableView = new TableView({ app: self });
-        self.pagingView = new PagingView({ app: self });
+        this.selectedCollection = new SelectedCollection();
+        this.tableView = new TableView({ app: this });
+        this.pagingView = new PagingView({ app: this });
 
         /* initialize buttons */
-        self.setupButtons();
+        this.setupButtons();
 
-        self.wellView = new SelectionWellView({
-            collection: self.selectedCollection,
-            triggerView: self.toolbar.get("selected-items"),
-            app: self,
+        this.wellView = new SelectionWellView({
+            collection: this.selectedCollection,
+            triggerView: this.toolbar.get("selected-items"),
+            app: this,
             id: "selected-items",
         });
 
-        self.toolbar.get("selected-items").disable();
-        self.buttons.disable();
+        this.toolbar.get("selected-items").disable();
+        this.buttons.disable();
 
         var timeout = 0;
-        self.selectedCollection.on(
+        this.selectedCollection.on(
             "add remove reset",
-            function (/*modal, collection*/) {
+            (/*modal, collection*/) => {
                 /* delay rendering since this can happen in batching */
                 clearTimeout(timeout);
-                timeout = setTimeout(function () {
-                    self.updateButtons();
+                timeout = setTimeout(() => {
+                    this.updateButtons();
                 }, 100);
             },
-            self
+            this
         );
 
-        self.collection.on("sync", function () {
-            if (self.contextInfoUrl) {
+        this.collection.on("sync", () => {
+            if (this.contextInfoUrl) {
                 $.ajax({
-                    url: self.getAjaxUrl(self.contextInfoUrl),
+                    url: this.getAjaxUrl(this.contextInfoUrl),
                     dataType: "json",
-                    success: function (data) {
+                    success: (data) => {
                         $("body").trigger("context-info-loaded", [data]);
                     },
-                    error: function (response) {
+                    error: (response) => {
                         // XXX handle error?
                         if (response.status === 404) {
                             log.info("context info url not found");
@@ -128,12 +126,12 @@ export default BaseView.extend({
                     },
                 });
             }
-            self.loading.hide();
+            this.loading.hide();
         });
 
-        self.collection.on("pager", function () {
-            self.loading.show();
-            self.updateButtons();
+        this.collection.on("pager", () => {
+            this.loading.show();
+            this.updateButtons();
 
             // the remaining calls are related to window.pushstate.
             // abort if feature unavailable.
@@ -144,36 +142,36 @@ export default BaseView.extend({
             // undo the flag set by popState to prevent the push state
             // from being triggered here, and early abort out of the
             // function to not execute the folowing pushState logic.
-            if (self.doNotPushState) {
-                self.doNotPushState = false;
+            if (this.doNotPushState) {
+                this.doNotPushState = false;
                 return;
             }
 
-            var path = self.getCurrentPath();
+            var path = this.getCurrentPath();
             var url;
             if (path === "/") {
                 path = "";
             }
             /* maintain history here */
-            if (self.options.pushStateUrl) {
+            if (this.options.pushStateUrl) {
                 // permit an extra slash in pattern, but strip that if there
                 // as path always will be prefixed with a `/`
-                var pushStateUrl = self.options.pushStateUrl.replace(
+                var pushStateUrl = this.options.pushStateUrl.replace(
                     "/{path}",
                     "{path}"
                 );
                 url = pushStateUrl.replace("{path}", path);
                 window.history.pushState(null, null, url);
-            } else if (self.options.urlStructure) {
+            } else if (this.options.urlStructure) {
                 // fallback to urlStructure specification
                 url =
-                    self.options.urlStructure.base +
+                    this.options.urlStructure.base +
                     path +
-                    self.options.urlStructure.appended;
+                    this.options.urlStructure.appended;
                 window.history.pushState(null, null, url);
             }
 
-            if (self.options.traverseView) {
+            if (this.options.traverseView) {
                 // flag specifies that the context view implements a traverse
                 // view (i.e. IPublishTraverse) and the path is a virtual path
                 // of some kind - use the base object instead for that by not
@@ -186,10 +184,10 @@ export default BaseView.extend({
         });
 
         if (
-            (self.options.pushStateUrl || self.options.urlStructure) &&
+            (this.options.pushStateUrl || this.options.urlStructure) &&
             utils.featureSupport.history()
         ) {
-            $(window).bind("popstate", function () {
+            $(window).bind("popstate", () => {
                 /* normalize this url first... */
                 var win = utils.getWindow();
                 var url = win.location.href;
@@ -200,13 +198,13 @@ export default BaseView.extend({
                 if (url.indexOf("#") !== -1) {
                     url = url.split("#")[0];
                 }
-                if (self.options.pushStateUrl) {
-                    var tmp = self.options.pushStateUrl.split("{path}");
+                if (this.options.pushStateUrl) {
+                    var tmp = this.options.pushStateUrl.split("{path}");
                     base = tmp[0];
                     appended = tmp[1];
                 } else {
-                    base = self.options.urlStructure.base;
-                    appended = self.options.urlStructure.appended;
+                    base = this.options.urlStructure.base;
+                    appended = this.options.urlStructure.appended;
                 }
                 // take off the base url
                 var path = url.substring(base.length);
@@ -217,46 +215,47 @@ export default BaseView.extend({
                 if (!path) {
                     path = "/";
                 }
-                self.setCurrentPath(path);
+                this.setCurrentPath(path);
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
-                self.doNotPushState = true;
-                self.collection.goTo(self.collection.information.firstPage);
+                this.doNotPushState = true;
+                this.collection.goTo(this.collection.information.firstPage);
             });
             /* detect key events */
-            $(document).bind("keyup keydown", function (e) {
-                self.keyEvent = e;
+            $(document).bind("keyup keydown", (e) => {
+                this.keyEvent = e;
             });
         }
 
-        self.togglePasteBtn();
+        this.togglePasteBtn();
     },
+
     updateButtons: function () {
-        var self = this;
-        if (self.selectedCollection.length) {
-            self.toolbar.get("selected-items").enable();
-            self.buttons.enable();
+        if (this.selectedCollection.length) {
+            this.toolbar.get("selected-items").enable();
+            this.buttons.enable();
         } else {
             this.toolbar.get("selected-items").disable();
-            self.buttons.disable();
+            this.buttons.disable();
         }
 
-        self.togglePasteBtn();
+        this.togglePasteBtn();
     },
+
     togglePasteBtn: function () {
-        var self = this;
         if (
-            _.find(self.buttons.items, function (btn) {
+            _.find(this.buttons.items, (btn) => {
                 return btn.id === "paste";
             })
         ) {
-            if (self.pasteAllowed()) {
-                self.buttons.get("paste").enable();
+            if (this.pasteAllowed()) {
+                this.buttons.get("paste").enable();
             } else {
-                self.buttons.get("paste").disable();
+                this.buttons.get("paste").disable();
             }
         }
     },
+
     inQueryMode: function () {
         if (this.toolbar) {
             var term = this.toolbar.get("filter").term;
@@ -277,10 +276,10 @@ export default BaseView.extend({
         }
         return false;
     },
+
     getSelectedUids: function (collection) {
-        var self = this;
         if (collection === undefined) {
-            collection = self.selectedCollection;
+            collection = this.selectedCollection;
         }
         var uids = [];
         collection.each(function (item) {
@@ -288,24 +287,27 @@ export default BaseView.extend({
         });
         return uids;
     },
+
     getCurrentPath: function () {
         return this.collection.getCurrentPath();
     },
+
     setCurrentPath: function (path) {
         this.collection.setCurrentPath(path);
         this.textfilter.clearTerm();
         this.clearStatus();
     },
+
     getAjaxUrl: function (url) {
         return url.replace("{path}", this.getCurrentPath());
     },
+
     buttonClickEvent: function (button) {
-        var self = this;
         var data = null;
         var callback = null;
 
         if (button.url) {
-            self.loading.show();
+            this.loading.show();
             // handle ajax now
 
             if (arguments.length > 1) {
@@ -325,32 +327,33 @@ export default BaseView.extend({
             }
             if (data.selection === undefined) {
                 // if selection is overridden by another mechanism
-                data.selection = JSON.stringify(self.getSelectedUids());
+                data.selection = JSON.stringify(this.getSelectedUids());
             }
             data._authenticator = utils.getAuthenticator();
             if (data.folder === undefined) {
-                data.folder = self.getCurrentPath();
+                data.folder = this.getCurrentPath();
             }
 
-            var url = self.getAjaxUrl(button.url);
+            var url = this.getAjaxUrl(button.url);
             $.ajax(
                 {
                     url: url,
                     type: "POST",
                     data: data,
-                    success: function (data) {
-                        self.ajaxSuccessResponse.apply(self, [data, callback]);
-                        self.loading.hide();
+                    success: (data) => {
+                        this.ajaxSuccessResponse.apply(this, [data, callback]);
+                        this.loading.hide();
                     },
-                    error: function (response) {
-                        self.ajaxErrorResponse.apply(self, [response, url]);
-                        self.loading.hide();
+                    error: (response) => {
+                        this.ajaxErrorResponse.apply(this, [response, url]);
+                        this.loading.hide();
                     },
                 },
-                self
+                this
             );
         }
     },
+
     ajaxSuccessResponse: function (data, callback) {
         this.clearStatus();
         this.selectedCollection.reset();
@@ -369,6 +372,7 @@ export default BaseView.extend({
         }
         this.collection.pager();
     },
+
     ajaxErrorResponse: function (response, url) {
         if (response.status === 404) {
             window.alert(_t("operation url ${url} is not valid", { url: url }));
@@ -376,8 +380,8 @@ export default BaseView.extend({
             window.alert(_t("there was an error performing the action"));
         }
     },
+
     setupButtons: function () {
-        var self = this;
         var items = [];
 
         var columnsBtn = new ButtonView({
@@ -386,8 +390,8 @@ export default BaseView.extend({
             icon: "th",
         });
 
-        self.columnsView = new ColumnsView({
-            app: self,
+        this.columnsView = new ColumnsView({
+            app: this,
             triggerView: columnsBtn,
             id: "structure-columns",
             placement: "bottom-right",
@@ -403,23 +407,23 @@ export default BaseView.extend({
             })
         );
 
-        if (self.options.rearrange) {
+        if (this.options.rearrange) {
             var rearrangeButton = new ButtonView({
                 id: "structure-rearrange",
                 title: _t("Rearrange"),
                 icon: "sort-by-attributes",
                 tooltip: _t("Rearrange folder contents"),
-                url: self.options.rearrange.url,
+                url: this.options.rearrange.url,
             });
-            self.rearrangeView = new RearrangeView({
+            this.rearrangeView = new RearrangeView({
                 triggerView: rearrangeButton,
-                app: self,
+                app: this,
                 id: "structure-rearrange",
             });
             items.push(rearrangeButton);
         }
         if (
-            self.options.upload &&
+            this.options.upload &&
             utils.featureSupport.dragAndDrop() &&
             utils.featureSupport.fileApi()
         ) {
@@ -429,53 +433,53 @@ export default BaseView.extend({
                 tooltip: _t("Upload files"),
                 icon: "upload",
             });
-            self.uploadView = new UploadView({
+            this.uploadView = new UploadView({
                 triggerView: uploadButton,
-                app: self,
+                app: this,
                 id: "upload",
             });
             items.push(uploadButton);
         }
 
         var buttons = [];
-        _.each(self.options.buttons, function (buttonOptions) {
+        for (const buttonOptions of this.options.buttons) {
             try {
                 var button = new ButtonView(buttonOptions);
                 buttons.push(button);
 
                 if (button.form) {
                     buttonOptions.triggerView = button;
-                    buttonOptions.app = self;
+                    buttonOptions.app = this;
                     var view = new GenericPopover(buttonOptions);
-                    self.forms.push(view.el);
+                    this.forms.push(view.el);
                 } else {
-                    button.on("button:click", self.buttonClickEvent, self);
+                    button.on("button:click", () => this.buttonClickEvent(), this);
                 }
             } catch (err) {
                 log.error(
                     "Error initializing button " + buttonOptions.title + " " + err
                 );
             }
-        });
-        self.buttons = new ButtonGroup({
+        }
+        this.buttons = new ButtonGroup({
             items: buttons,
             id: "mainbuttons",
-            app: self,
+            app: this,
         });
-        items.push(self.buttons);
+        items.push(this.buttons);
 
-        self.textfilter = new TextFilterView({
+        this.textfilter = new TextFilterView({
             id: "filter",
             app: this,
         });
-        items.push(self.textfilter);
+        items.push(this.textfilter);
 
         this.toolbar = new Toolbar({
             items: items,
         });
     },
+
     moveItem: function (id, delta, subsetIds) {
-        var self = this;
         $.ajax({
             url: this.getAjaxUrl(this.options.moveUrl),
             type: "POST",
@@ -486,22 +490,22 @@ export default BaseView.extend({
                 subsetIds: JSON.stringify(subsetIds),
             },
             dataType: "json",
-            success: function (data) {
-                self.clearStatus();
+            success: (data) => {
+                this.clearStatus();
                 if (data.msg) {
-                    self.setStatus({ text: data.msg });
+                    this.setStatus({ text: data.msg });
                 } else if (data.status !== "success") {
                     // XXX handle error here with something?
-                    self.setStatus({
+                    this.setStatus({
                         text: "error moving item",
                         type: "error",
                     });
                 }
-                self.collection.pager(); // reload it all
+                this.collection.pager(); // reload it all
             },
-            error: function () {
-                self.clearStatus();
-                self.setStatus({
+            error: () => {
+                this.clearStatus();
+                this.setStatus({
                     text: "error moving item",
                     type: "error",
                 });
@@ -511,7 +515,6 @@ export default BaseView.extend({
 
     clearStatus: function (key) {
         var statusContainer = this.$el[0].querySelector(".fc-status-container");
-        var statusItem;
         var toBeRemoved = [];
         if (key) {
             // remove specific status, even if marked with ``fixed``.
@@ -572,7 +575,7 @@ export default BaseView.extend({
             el.appendChild(btn);
         }
 
-        var status = {
+        status = {
             el: el,
             fixed: fixed,
             key: key, // to be used for filtering to prevent double status messages.
@@ -586,48 +589,47 @@ export default BaseView.extend({
     },
 
     render: function () {
-        var self = this;
-
-        self.$el.append(self.toolbar.render().el);
-        if (self.wellView) {
-            self.$el.find("#btn-" + self.wellView.id).after(self.wellView.render().el);
+        this.$el.append(this.toolbar.render().el);
+        if (this.wellView) {
+            this.$el.find("#btn-" + this.wellView.id).after(this.wellView.render().el);
         }
-        self.forms.forEach(function (element) {
-            var id = $(element).attr("id");
-            self.$el.find("#btn-" + id).after(element);
-        });
+        for (const form of this.forms) {
+            var id = $(form).attr("id");
+            this.$el.find("#btn-" + id).after(form);
+        }
 
-        self.$el.append(
+        this.$el.append(
             utils.createElementFromHTML('<div class="fc-status-container"></div>')
         );
-        if (self.columnsView) {
-            self.$el
-                .find("#btn-" + self.columnsView.id)
-                .after(self.columnsView.render().el);
+        if (this.columnsView) {
+            this.$el
+                .find("#btn-" + this.columnsView.id)
+                .after(this.columnsView.render().el);
         }
-        if (self.rearrangeView) {
-            self.$el
-                .find("#btn-" + self.rearrangeView.id)
-                .after(self.rearrangeView.render().el);
+        if (this.rearrangeView) {
+            this.$el
+                .find("#btn-" + this.rearrangeView.id)
+                .after(this.rearrangeView.render().el);
         }
-        if (self.uploadView) {
-            self.$el
-                .find("#btn-" + self.uploadView.id)
-                .after(self.uploadView.render().el);
+        if (this.uploadView) {
+            this.$el
+                .find("#btn-" + this.uploadView.id)
+                .after(this.uploadView.render().el);
         }
 
-        self.$el.append(self.tableView.render().el);
-        self.$el.append(self.pagingView.render().el);
+        this.$el.append(this.tableView.render().el);
+        this.$el.append(this.pagingView.render().el);
 
         // Backdrop class
-        if (self.options.backdropSelector !== null) {
-            $(self.options.backdropSelector).addClass("ui-backdrop-element");
+        if (this.options.backdropSelector !== null) {
+            $(this.options.backdropSelector).addClass("ui-backdrop-element");
         } else {
-            self.$el.addClass("ui-backdrop-element");
+            this.$el.addClass("ui-backdrop-element");
         }
 
-        return self;
+        return this;
     },
+
     getCookieSetting: function (name, _default) {
         if (_default === undefined) {
             _default = null;
@@ -645,6 +647,7 @@ export default BaseView.extend({
         }
         return val;
     },
+
     setCookieSetting: function (name, val) {
         $.cookie(
             this.cookieSettingPrefix + name,
@@ -653,6 +656,7 @@ export default BaseView.extend({
             })
         );
     },
+
     setAllCookieSettings: function () {
         this.activeColumns = this.getCookieSetting(
             this.activeColumnsCookie,

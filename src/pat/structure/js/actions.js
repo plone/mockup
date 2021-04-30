@@ -1,5 +1,4 @@
 import $ from "jquery";
-import _ from "underscore";
 import _t from "../../../core/i18n-wrapper";
 import utils from "../../../core/utils";
 import Backbone from "backbone";
@@ -13,45 +12,45 @@ export default Backbone.Model.extend({
         this.model = options.model;
         this.selectedCollection = this.app.selectedCollection;
     },
+
     selectAll: function (e) {
         // This implementation is very specific to the default collection
         // with the reliance on its queryParser and queryHelper.  Custom
         // collection (Backbone.Paginator.requestPager implementation)
         // will have to come up with their own action for this.
         e.preventDefault();
-        var self = this;
-        var page = 1;
-        var count = 0;
-        var getPage = function () {
-            self.app.loading.show();
+        let page = 1;
+        let count = 0;
+        const getPage = function () {
+            this.app.loading.show();
             $.ajax({
-                url: self.app.collection.url,
+                url: this.app.collection.url,
                 type: "GET",
                 dataType: "json",
                 data: {
-                    query: self.app.collection.queryParser({
-                        searchPath: self.model.attributes.path,
+                    query: this.app.collection.queryParser({
+                        searchPath: this.model.attributes.path,
                     }),
                     batch: JSON.stringify({
                         page: page,
                         size: 100,
                     }),
                     attributes: JSON.stringify(
-                        self.app.collection.queryHelper.options.attributes
+                        this.app.collection.queryHelper.options.attributes
                     ),
                 },
-            }).done(function (data) {
-                var items = self.app.collection.parse(data, count);
+            }).done((data) => {
+                const items = this.app.collection.parse(data, count);
                 count += items.length;
-                _.each(items, function (item) {
-                    self.app.selectedCollection.add(new Result(item));
-                });
+                for (const item of items) {
+                    this.app.selectedCollection.add(new Result(item));
+                }
                 page += 1;
                 if (data.total > count) {
                     getPage();
                 } else {
-                    self.app.loading.hide();
-                    self.app.tableView.render();
+                    this.app.loading.hide();
+                    this.app.tableView.render();
                 }
             });
         };
@@ -59,27 +58,26 @@ export default Backbone.Model.extend({
     },
 
     doAction: function (buttonName, successMsg, failMsg) {
-        var self = this;
         $.ajax({
-            url: self.app.buttons.get(buttonName).options.url,
+            url: this.app.buttons.get(buttonName).options.url,
             data: {
-                selection: JSON.stringify([self.model.attributes.UID]),
-                folder: self.model.attributes.path,
+                selection: JSON.stringify([this.model.attributes.UID]),
+                folder: this.model.attributes.path,
                 _authenticator: utils.getAuthenticator(),
             },
             dataType: "json",
             type: "POST",
-        }).done(function (data) {
-            var msg;
+        }).done((data) => {
+            let msg;
             if (data.status === "success") {
-                msg = _t(successMsg + ' "' + self.model.attributes.Title + '"');
-                self.app.collection.pager();
-                self.app.updateButtons();
+                msg = _t(`${successMsg} "${this.model.attributes.Title}"`);
+                this.app.collection.pager();
+                this.app.updateButtons();
             } else {
-                msg = _t("Error " + failMsg + ' "' + self.model.attributes.Title + '"');
+                msg = _t(`Error ${failMsg} "${this.model.attributes.Title}"`);
             }
-            self.app.clearStatus();
-            self.app.setStatus({
+            this.app.clearStatus();
+            this.app.setStatus({
                 text: msg,
                 type: data.status || "warning",
             });
@@ -87,43 +85,44 @@ export default Backbone.Model.extend({
     },
 
     cutClicked: function (e) {
-        var self = this;
         e.preventDefault();
-        self.doAction("cut", _t("Cut"), _t("cutting"));
+        this.doAction("cut", _t("Cut"), _t("cutting"));
     },
+
     copyClicked: function (e) {
-        var self = this;
         e.preventDefault();
-        self.doAction("copy", _t("Copied"), _t("copying"));
+        this.doAction("copy", _t("Copied"), _t("copying"));
     },
+
     pasteClicked: function (e) {
-        var self = this;
         e.preventDefault();
-        self.doAction("paste", _t("Pasted into"), _t("Error pasting into"));
+        this.doAction("paste", _t("Pasted into"), _t("Error pasting into"));
     },
+
     moveTopClicked: function (e) {
         e.preventDefault();
         this.app.moveItem(this.model.attributes.id, "top");
     },
+
     moveBottomClicked: function (e) {
         e.preventDefault();
         this.app.moveItem(this.model.attributes.id, "bottom");
     },
+
     setDefaultPageClicked: function (e) {
         e.preventDefault();
-        var self = this;
         $.ajax({
-            url: self.app.getAjaxUrl(self.app.setDefaultPageUrl),
+            url: this.app.getAjaxUrl(this.app.setDefaultPageUrl),
             type: "POST",
             data: {
                 _authenticator: $('[name="_authenticator"]').val(),
                 id: this.model.attributes.id,
             },
-            success: function (data) {
-                self.app.ajaxSuccessResponse.apply(self.app, [data]);
+            success: (data) => {
+                this.app.ajaxSuccessResponse.apply(this.app, [data]);
             },
-            error: function (data) {
-                self.app.ajaxErrorResponse.apply(self.app, [data]);
+            error: (data) => {
+                this.app.ajaxErrorResponse.apply(this.app, [data]);
             },
         });
     },

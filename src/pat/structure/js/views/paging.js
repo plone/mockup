@@ -18,6 +18,7 @@ export default Backbone.View.extend({
     tagName: "aside",
     template: _.template(PagingTemplate),
     maxPages: 7,
+
     initialize: function (options) {
         this.options = options;
         this.app = this.options.app;
@@ -29,9 +30,9 @@ export default Backbone.View.extend({
     },
 
     render: function () {
-        var data = this.collection.info();
+        const data = this.collection.info();
         data.pages = this.getPages(data);
-        var html = this.template(
+        const html = this.template(
             $.extend(
                 {
                     _t: _t,
@@ -44,22 +45,21 @@ export default Backbone.View.extend({
     },
 
     getPages: function (data) {
-        var totalPages = data.totalPages;
+        const totalPages = data.totalPages;
         if (!totalPages) {
             return [];
         }
-        var currentPage = data.currentPage;
-        var left = 1;
-        var right = totalPages;
+        let left = 1;
+        let right = totalPages;
         if (totalPages > this.maxPages) {
-            left = Math.max(1, Math.floor(currentPage - this.maxPages / 2));
+            left = Math.max(1, Math.floor(data.currentPage - this.maxPages / 2));
             right = Math.min(left + this.maxPages, totalPages);
             if (right - left < this.maxPages) {
                 left = left - Math.floor(this.maxPages / 2);
             }
         }
-        var pages = [];
-        for (var i = left; i <= right; i = i + 1) {
+        let pages = [];
+        for (let i = left; i <= right; i = i + 1) {
             pages.push(i);
         }
 
@@ -78,36 +78,42 @@ export default Backbone.View.extend({
         }
         return pages;
     },
+
     nextResultPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
         this.collection.requestNextPage();
     },
+
     previousResultPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
         this.collection.requestPreviousPage();
     },
+
     gotoFirst: function (e) {
         e.preventDefault();
         this.app.clearStatus();
         this.collection.goTo(this.collection.information.firstPage);
     },
+
     gotoLast: function (e) {
         e.preventDefault();
         this.app.clearStatus();
         this.collection.goTo(this.collection.information.totalPages);
     },
+
     gotoPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        var page = $(e.target).text();
+        const page = $(e.target).text();
         this.collection.goTo(page);
     },
+
     changeCount: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        var per = $(e.target).text();
+        const per = $(e.target).text();
         this.collection.howManyPer(per);
         this.app.setCookieSetting("perPage", per);
     },

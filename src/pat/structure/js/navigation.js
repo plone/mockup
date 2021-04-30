@@ -10,9 +10,8 @@ export default Backbone.Model.extend({
     folderClicked: function (e) {
         e.preventDefault();
         // handler for folder, go down path and show in contents window.
-        var self = this;
-        self.app.setCurrentPath(self.model.attributes.path);
+        this.app.setCurrentPath(this.model.attributes.path);
         // also switch to fix page in batch
-        self.app.collection.goTo(self.app.collection.information.firstPage);
+        this.app.collection.goTo(this.app.collection.information.firstPage);
     },
 });

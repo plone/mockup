@@ -1,4 +1,3 @@
-import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
@@ -20,7 +19,7 @@ export default BaseView.extend({
     // Dynamic menu options
 
     eventConstructor: function (definition) {
-        const method = definition.method;
+        const method = definition.method?.bind?.(this);
         if (!method || !this.actions[method]) {
             return false;
         }
@@ -31,16 +30,16 @@ export default BaseView.extend({
         /* Backbone.view.events
          * Specify a set of DOM events, which will bound to methods on the view.
          */
-        var self = this;
-        var result = {};
-        var menuOptionsCategorized = {};
-        _.each(self.menuOptions, function (menuOption, key) {
+        const result = {};
+        const menuOptionsCategorized = {};
+
+        _.each(this.menuOptions, (menuOption, key) => {
             // set a unique identifier to uniquely bind the events.
-            var idx = utils.generateId();
+            const idx = utils.generateId();
             menuOption.idx = idx;
             menuOption.name = key; // we want to add the action's key as class name to the output.
 
-            var category = menuOption.category || "dropdown";
+            const category = menuOption.category || "dropdown";
             if (menuOptionsCategorized[category] === undefined) {
                 menuOptionsCategorized[category] = [];
             }
@@ -53,50 +52,47 @@ export default BaseView.extend({
             }
 
             // Create event handler and add it to the results object.
-            var e = self.eventConstructor(menuOption);
+            const e = this.eventConstructor(menuOption);
             if (e) {
                 result["click a." + idx] = e;
             }
         });
 
         // Abusing the loop above to also initialize menuOptionsCategorized
-        self.menuOptionsCategorized = menuOptionsCategorized;
+        this.menuOptionsCategorized = menuOptionsCategorized;
         return result;
     },
 
-    initialize: async function (options) {
-        var self = this;
+    initialize: function (options) {
         this.actions = new Actions(options);
-        BaseView.prototype.initialize.apply(self, [options]);
-        self.options = options;
-        self.selectedCollection = self.app.selectedCollection;
+        BaseView.prototype.initialize.apply(this, [options]);
+        this.options = options;
+        this.selectedCollection = this.app.selectedCollection;
 
         // Then acquire the constructor method if specified, and
         // override those options here.  All definition done here so
-        // that self.events() will return the right things.
-        self.menuOptions = actionmenu_generator(self);
+        // that this.events() will return the right things.
+        this.menuOptions = actionmenu_generator(this);
     },
-    render: function () {
-        var self = this;
-        self.$el.empty();
 
-        var data = this.model.toJSON();
-        data.header = self.options.header || null;
-        data.menuOptions = self.menuOptionsCategorized;
-        self.$el.html(
-            self.template(
-                $.extend(
-                    {
-                        _t: _t,
-                        id: utils.generateId(),
-                    },
-                    data
-                )
+    render: function () {
+        this.el.innerHTML = "";
+
+        const data = this.model.toJSON();
+        data.header = this.options.header || null;
+        data.menuOptions = this.menuOptionsCategorized;
+        this.el.innerHTML = this.template(
+            $.extend(
+                {
+                    _t: _t,
+                    id: utils.generateId(),
+                },
+                data
             )
         );
 
-        if (self.options.className) {
-            self.$el.addClass(self.options.className);
+        if (this.options.className) {
+            this.$el.addClass(this.options.className);
         }
 
         registry.scan(this.$el);

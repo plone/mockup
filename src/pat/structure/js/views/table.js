@@ -13,25 +13,25 @@ import "bootstrap/js/src/alert";
 export default BaseView.extend({
     tagName: "div",
     template: _.template(TableTemplate),
-    initialize: function (options) {
-        var self = this;
-        BaseView.prototype.initialize.apply(self, [options]);
-        self.collection = self.app.collection;
-        self.selectedCollection = self.app.selectedCollection;
-        self.listenTo(self.collection, "sync", self.render);
-        self.listenTo(self.selectedCollection, "remove", self.render);
-        self.listenTo(self.selectedCollection, "reset", self.render);
-        self.collection.pager();
-        self.subsetIds = [];
-        self.contextInfo = null;
 
-        $("body").on("context-info-loaded", function (event, data) {
-            self.contextInfo = data;
+    initialize: function (options) {
+        BaseView.prototype.initialize.apply(this, [options]);
+        this.collection = this.app.collection;
+        this.selectedCollection = this.app.selectedCollection;
+        this.listenTo(this.collection, "sync", this.render);
+        this.listenTo(this.selectedCollection, "remove", this.render);
+        this.listenTo(this.selectedCollection, "reset", this.render);
+        this.collection.pager();
+        this.subsetIds = [];
+        this.contextInfo = null;
+
+        $("body").on("context-info-loaded", (event, data) => {
+            this.contextInfo = data;
             /* set default page info */
-            self.setContextInfo();
+            this.setContextInfo();
         });
 
-        self.dateColumns = [
+        this.dateColumns = [
             "ModificationDate",
             "EffectiveDate",
             "CreationDate",
@@ -41,38 +41,38 @@ export default BaseView.extend({
             "last_comment_date",
         ];
     },
+
     events: {
         "click .fc-breadcrumbs a": "breadcrumbClicked",
         "change .select-all": "selectAll",
     },
+
     setContextInfo: function () {
-        var self = this;
-        var data = self.contextInfo;
-        var $defaultPage = self.$('[data-id="' + data.defaultPage + '"]');
+        const data = this.contextInfo;
+        const $defaultPage = this.$('[data-id="' + data.defaultPage + '"]');
         if ($defaultPage.length > 0) {
             $defaultPage.addClass("default-page");
         }
         /* set breadcrumb title info */
-        var crumbs = data.breadcrumbs;
+        const crumbs = data.breadcrumbs;
         if (crumbs && crumbs.length) {
-            var $crumbs = self.$(".fc-breadcrumbs a.crumb");
-            _.each(crumbs, function (crumb, idx) {
+            const $crumbs = this.$(".fc-breadcrumbs a.crumb");
+            _.each(crumbs, (crumb, idx) => {
                 $crumbs.eq(idx).html(crumb.title);
             });
         }
     },
-    render: function () {
-        var self = this;
 
+    render: function () {
         // By default do not start sorted by any column
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
-        var datatables_options = {
+        const datatables_options = {
             aaSorting: [],
             aoColumnDefs: [
                 {
                     bSortable: false,
-                    aTargets: [0, self.app.activeColumns.length + 2],
+                    aTargets: [0, this.app.activeColumns.length + 2],
                 },
             ],
             paging: false,
@@ -81,27 +81,27 @@ export default BaseView.extend({
         };
 
         // If options were passed from the pattern, override these ones
-        $.extend(datatables_options, self.app.options.datatables_options);
+        $.extend(datatables_options, this.app.options.datatables_options);
 
-        self.$el.html(
-            self.template({
+        this.$el.html(
+            this.template({
                 _t: _t,
                 pathParts: _.filter(
-                    self.app.getCurrentPath().split("/").slice(1),
-                    function (val) {
+                    this.app.getCurrentPath().split("/").slice(1),
+                    (val) => {
                         return val.length > 0;
                     }
                 ),
-                activeColumns: self.app.activeColumns,
-                availableColumns: self.app.availableColumns,
+                activeColumns: this.app.activeColumns,
+                availableColumns: this.app.availableColumns,
                 datatables_options: JSON.stringify(datatables_options),
             })
         );
 
-        if (self.collection.length) {
-            var container = self.$("tbody");
-            self.collection.each(function (result) {
-                self.dateColumns.map(function (col) {
+        if (this.collection.length) {
+            const container = this.$("tbody");
+            this.collection.each((result) => {
+                this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
                     if (
                         result.attributes.hasOwnProperty(col) &&
@@ -111,46 +111,47 @@ export default BaseView.extend({
                     }
                 });
 
-                var view = new TableRowView({
+                const view = new TableRowView({
                     model: result,
-                    app: self.app,
-                    table: self,
+                    app: this.app,
+                    table: this,
                 }).render();
                 container.append(view.el);
             });
         }
-        self.moment = new patMoment(self.$el, {
-            selector: "." + self.dateColumns.join(",."),
-            format: self.options.app.momentFormat,
+        this.moment = new patMoment(this.$el, {
+            selector: "." + this.dateColumns.join(",."),
+            format: this.options.app.momentFormat,
         });
 
-        if (self.app.options.moveUrl) {
-            self.addReordering();
+        if (this.app.options.moveUrl) {
+            this.addReordering();
         }
 
-        self.storeOrder();
+        this.storeOrder();
 
-        registry.scan(self.$el);
+        registry.scan(this.$el);
 
-        self.$el.find("table").on("order.dt", function (e, settings, details) {
-            var btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+        this.$el.find("table").on("order.dt", () => {
+            const btn = $(
+                '<button type="button" class="btn btn-danger btn-xs"></button>'
+            )
                 .text(_t("Reset column sorting"))
-                .on("click", function (e) {
+                .on("click", () => {
                     // Use column 0 to restore ordering and then empty list so it doesn't
                     // show the icon in the column header
-                    self.$el
-                        .find("table.pat-datatables")
-                        .data("patternDatatables")
-                        .table.order([0, "asc"])
-                        .draw()
-                        .order([])
-                        .draw();
+                    const table = this.$el.find("table.pat-datatables");
+                    const api = table.dataTable().api();
+                    api.order([0, "asc"]);
+                    api.draw();
+                    api.order([]);
+                    api.draw();
                     // Restore reordering by drag and drop
-                    self.addReordering();
+                    this.addReordering();
                     // Clear the status message
-                    self.app.clearStatus();
+                    this.app.clearStatus();
                 });
-            self.app.setStatus(
+            this.app.setStatus(
                 {
                     text: _t(
                         "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
@@ -162,30 +163,32 @@ export default BaseView.extend({
                 "sorting_dndreordering_disabled"
             );
             $(".pat-datatables tbody").find("tr").off("drag");
-            self.$el.removeClass("order-support");
+            this.$el.removeClass("order-support");
         });
 
         return this;
     },
+
     breadcrumbClicked: function (e) {
         e.preventDefault();
-        var $el = $(e.target);
+        let $el = $(e.target);
         if ($el[0].tagName !== "A") {
             $el = $el.parent("a");
         }
-        var path = "";
-        $($el.prevAll("a").get().reverse()).each(function () {
-            var part = $(this).attr("data-path");
+        let path = "";
+        for (const item of $($el.prevAll("a").get().reverse())) {
+            let part = $(item).attr("data-path");
             path += part;
             if (part !== "/") {
                 path += "/";
             }
-        });
+        }
         path += $el.attr("data-path");
         this.app.setCurrentPath(path);
         this.collection.currentPage = 1;
         this.collection.pager();
     },
+
     selectAll: function (e) {
         if ($(e.target).is(":checked")) {
             $('input[type="checkbox"]', this.$("tbody")).prop("checked", true).change();
@@ -199,24 +202,24 @@ export default BaseView.extend({
         this.setContextInfo();
     },
     toggleSelectAll: function (e) {
-        var $el = $(e.target);
+        const $el = $(e.target);
         if (!$el.is(":checked")) {
             this.$(".select-all").prop("checked", false);
         }
     },
+
     addReordering: function () {
-        var self = this;
         // if we have a custom query going on, we do not allow sorting.
-        if (self.app.inQueryMode()) {
-            self.$el.removeClass("order-support");
+        if (this.app.inQueryMode()) {
+            this.$el.removeClass("order-support");
             return;
         }
-        self.$el.addClass("order-support");
-        var dd = new Sortable(self.$("tbody"), {
+        this.$el.addClass("order-support");
+        new Sortable(this.$("tbody"), {
             selector: "tr",
-            createDragItem: function (pattern, $el) {
-                var $tr = $el.clone();
-                var $table = $("<table><tbody></tbody></table>");
+            createDragItem: (pattern, $el) => {
+                const $tr = $el.clone();
+                const $table = $("<table><tbody></tbody></table>");
                 $("tbody", $table).append($tr);
                 $table
                     .addClass("structure-dragging")
@@ -226,20 +229,20 @@ export default BaseView.extend({
                 $table.appendTo(document.body);
                 return $table;
             },
-            drop: function ($el, delta) {
+            drop: ($el, delta) => {
                 if (delta !== 0) {
-                    self.app.moveItem($el.attr("data-id"), delta, self.subsetIds);
-                    self.storeOrder();
+                    this.app.moveItem($el.attr("data-id"), delta, this.subsetIds);
+                    this.storeOrder();
                 }
             },
         });
     },
+
     storeOrder: function () {
-        var self = this;
-        var subsetIds = [];
-        self.$("tbody tr.itemRow").each(function () {
+        const subsetIds = [];
+        this.$("tbody tr.itemRow").each(function () {
             subsetIds.push($(this).attr("data-id"));
         });
-        self.subsetIds = subsetIds;
+        this.subsetIds = subsetIds;
     },
 });

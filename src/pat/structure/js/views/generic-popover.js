@@ -10,108 +10,108 @@ export default PopoverView.extend({
         "click button.closeBtn": "toggle",
     },
     submitText: _t("Apply"),
-    initialize: function (options) {
-        var self = this;
-        self.app = options.app;
-        self.className = "popover " + options.id;
-        self.title = options.form.title || options.title;
-        self.submitText = options.form.submitText || _t("Apply");
-        self.submitContext = options.form.submitContext || "primary";
-        self.data = {};
 
-        self.options = options;
-        self.setContent(options.form.template);
+    initialize: function (options) {
+        this.app = options.app;
+        this.className = "popover " + options.id;
+        this.title = options.form.title || options.title;
+        this.submitText = options.form.submitText || _t("Apply");
+        this.submitContext = options.form.submitContext || "primary";
+        this.data = {};
+
+        this.options = options;
+        this.setContent(options.form.template);
 
         PopoverView.prototype.initialize.apply(this, [options]);
     },
+
     setContent: function (content) {
-        var self = this;
-        var html = "<form>" + content + "</form>";
+        let html = "<form>" + content + "</form>";
         html +=
             '<button class="btn btn-block btn-' +
-            self.submitContext +
+            this.submitContext +
             ' applyBtn">' +
-            self.submitText +
+            this.submitText +
             " </button>";
-        if (self.options.form.closeText) {
+        if (this.options.form.closeText) {
             html +=
                 '<button class="btn btn-block btn-default closeBtn">' +
-                self.options.form.closeText +
+                this.options.form.closeText +
                 " </button>";
         }
         this.content = _.template(html);
     },
+
     getTemplateOptions: function () {
-        var self = this;
-        var items = [];
-        self.app.selectedCollection.each(function (item) {
+        const items = [];
+        for (const item of this.app.selectedCollection) {
             items.push(item.toJSON());
-        });
-        return $.extend({}, true, self.options, {
+        }
+        return $.extend({}, true, this.options, {
             items: items,
-            data: self.data,
+            data: this.data,
         });
     },
+
     applyButtonClicked: function () {
-        var self = this;
-        var data = {};
-        _.each(self.$el.find("form").serializeArray(), function (param) {
+        const data = {};
+        for (const param of this.$el.find("form").serializeArray()) {
             if (param.name in data) {
                 data[param.name] += "," + param.value;
             } else {
                 data[param.name] = param.value;
             }
-        });
+        }
 
-        self.app.buttonClickEvent(this.triggerView, data);
-        self.hide();
+        this.app.buttonClickEvent(this.triggerView, data);
+        this.hide();
     },
+
     afterRender: function () {
-        var self = this;
-        if (self.options.form.dataUrl) {
-            self.$(".popover-content").html(_t("Loading..."));
-            self.app.loading.show();
-            var url = self.app.getAjaxUrl(self.options.form.dataUrl);
+        if (this.options.form.dataUrl) {
+            this.$(".popover-content").html(_t("Loading..."));
+            this.app.loading.show();
+            const url = this.app.getAjaxUrl(this.options.form.dataUrl);
             $.ajax({
                 url: url,
                 dataType: "json",
                 type: "POST",
                 cache: false,
                 data: {
-                    selection: JSON.stringify(self.app.getSelectedUids()),
+                    selection: JSON.stringify(this.app.getSelectedUids()),
                     transitions: true,
                     render: "yes",
                 },
             })
-                .done(function (result) {
-                    self.data = result.data || result;
-                    self.renderContent();
-                    registry.scan(self.$el);
+                .done((result) => {
+                    this.data = result.data || result;
+                    this.renderContent();
+                    registry.scan(this.$el);
                 })
-                .fail(function () {
+                .fail(() => {
                     /* we temporarily set original html to a value here so we can
              render the updated content and then put the original back */
-                    var originalContent = self.content;
-                    self.setContent(
+                    const originalContent = this.content;
+                    this.setContent(
                         "<p>" + _t("Error loading popover from server.") + "</p>",
                         false
                     );
-                    self.renderContent();
-                    self.content = originalContent;
+                    this.renderContent();
+                    this.content = originalContent;
                 })
-                .always(function () {
-                    self.app.loading.hide();
-                    self.position();
+                .always(() => {
+                    this.app.loading.hide();
+                    this.position();
                 });
         } else {
-            registry.scan(self.$el);
-            self.position();
+            registry.scan(this.$el);
+            this.position();
         }
     },
+
     toggle: function (button, e) {
         PopoverView.prototype.toggle.apply(this, [button, e]);
-        var self = this;
-        if (!self.opened) {
+        if (!this.opened) {
             return;
         } else {
             this.$el.replaceWith(this.render().el);

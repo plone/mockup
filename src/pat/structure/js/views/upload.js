@@ -11,42 +11,39 @@ export default PopoverView.extend({
             '<div class="uploadify-me"></div>'
     ),
 
-    initialize: function (options) {
-        var self = this;
-        self.app = options.app;
-        PopoverView.prototype.initialize.apply(self, [options]);
-        self.currentPathData = null;
-        $("body").on("context-info-loaded", function (event, data) {
-            self.currentPathData = data;
+    initialize(options) {
+        this.app = options.app;
+        PopoverView.prototype.initialize.apply(this, [options]);
+        this.currentPathData = null;
+        $("body").on("context-info-loaded", (event, data) => {
+            this.currentPathData = data;
         });
     },
 
-    render: function () {
-        var self = this;
+    render() {
         PopoverView.prototype.render.call(this);
-        var options = self.app.options.upload;
-        options.success = function () {
-            self.app.collection.pager();
+        var options = this.app.options.upload;
+        options.success = () => {
+            this.app.collection.pager();
         };
-        options.currentPath = self.app.getCurrentPath();
+        options.currentPath = this.app.getCurrentPath();
         options.allowPathSelection = false;
-        self.upload = new Upload(
-            self.$(".uploadify-me").addClass("pat-upload"),
+        this.upload = new Upload(
+            this.$(".uploadify-me").addClass("pat-upload"),
             options
         );
         return this;
     },
 
-    toggle: function (button, e) {
+    toggle(button, e) {
         /* we need to be able to change the current default upload directory */
         PopoverView.prototype.toggle.apply(this, [button, e]);
-        var self = this;
         if (!this.opened) {
             return;
         }
-        var currentPath = self.app.getCurrentPath();
-        if (self.currentPathData && currentPath !== self.upload.currentPath) {
-            self.upload.setPath(currentPath);
+        var currentPath = this.app.getCurrentPath();
+        if (this.currentPathData && currentPath !== this.upload.currentPath) {
+            this.upload.setPath(currentPath);
         }
     },
 });

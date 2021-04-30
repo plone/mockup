@@ -33,18 +33,13 @@ export default BaseView.extend({
     },
 
     setFilterStatusMessage: function () {
-        var clear_btn = $(
+        const clear_btn = $(
             '<button type="button" class="btn btn-primary btn-xs"></button>'
         )
             .text(_t("Clear"))
-            .on(
-                "click",
-                function () {
-                    this.clearFilter();
-                }.bind(this)
-            );
+            .on("click", () => this.clearFilter());
 
-        var statusTextFilter = _t(
+        const statusTextFilter = _t(
             "This listing has filters applied. Not all items are shown."
         );
         this.app.setStatus(
@@ -57,7 +52,7 @@ export default BaseView.extend({
             this.statusKeyFilter
         );
 
-        var statusTextSorting = _t(
+        const statusTextSorting = _t(
             "Drag and drop reordering is disabled while filters are applied."
         );
         this.app.setStatus(
@@ -79,7 +74,7 @@ export default BaseView.extend({
     },
 
     setTerm: function (term, set_input) {
-        var term_el = this.$el[0].querySelector(".search-query");
+        const term_el = this.$el[0].querySelector(".search-query");
         this.term = encodeURIComponent(term);
         if (set_input) {
             term_el.value = term;
@@ -91,9 +86,9 @@ export default BaseView.extend({
             term_el.classList.add("has-filter");
             this.setFilterStatusMessage();
         } else {
-            var hasquery = false;
+            let hasquery = false;
             try {
-                var qu = this.$queryString.val();
+                const qu = this.$queryString.val();
                 if (qu && JSON.parse(qu).length > 0) {
                     hasquery = true;
                 }
@@ -107,8 +102,8 @@ export default BaseView.extend({
     },
 
     setQuery: function (query, set_input) {
-        var query_string = null;
-        var query_obj = null;
+        let query_string = null;
+        let query_obj = null;
         try {
             if (typeof query === "string") {
                 query_obj = JSON.parse(query);
@@ -170,42 +165,40 @@ export default BaseView.extend({
             indexOptionsUrl: this.app.options.indexOptionsUrl,
             showPreviews: false,
         });
-        var self = this;
-        self.queryString.$el.on("change", function () {
-            if (self.timeoutId) {
-                clearTimeout(self.timeoutId);
+        this.queryString.$el.on("change", () => {
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
             }
-            self.timeoutId = setTimeout(function () {
-                self.setQuery(self.$queryString.val(), false);
+            this.timeoutId = setTimeout(() => {
+                this.setQuery(this.$queryString.val(), false);
             }, this.keyupDelay);
         });
-        self.queryString.$el.on("initialized", function () {
-            self.queryString.$sortOn.on("change", function () {
-                self.app["sort_on"] = self.queryString.$sortOn.val(); // jshint ignore:line
-                self.app.collection.currentPage = 1;
-                self.app.collection.pager();
+        this.queryString.$el.on("initialized", () => {
+            this.queryString.$sortOn.on("change", () => {
+                this.app["sort_on"] = this.queryString.$sortOn.val(); // jshint ignore:line
+                this.app.collection.currentPage = 1;
+                this.app.collection.pager();
             });
-            self.queryString.$sortOrder.change(function () {
-                if (self.queryString.$sortOrder[0].checked) {
-                    self.app["sort_order"] = "reverse"; // jshint ignore:line
+            this.queryString.$sortOrder.change(() => {
+                if (this.queryString.$sortOrder[0].checked) {
+                    this.app["sort_order"] = "reverse"; // jshint ignore:line
                 } else {
-                    self.app["sort_order"] = "ascending"; // jshint ignore:line
+                    this.app["sort_order"] = "ascending"; // jshint ignore:line
                 }
-                self.app.collection.currentPage = 1;
-                self.app.collection.pager();
+                this.app.collection.currentPage = 1;
+                this.app.collection.pager();
             });
         });
         return this;
     },
 
     filter: function (event) {
-        var self = this;
-        if (self.timeoutId) {
-            clearTimeout(self.timeoutId);
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
         }
-        self.timeoutId = setTimeout(function () {
-            var term_el = $(event.currentTarget);
-            self.setTerm(term_el.val(), false);
+        this.timeoutId = setTimeout(() => {
+            const term_el = $(event.currentTarget);
+            this.setTerm(term_el.val(), false);
         }, this.keyupDelay);
     },
 });

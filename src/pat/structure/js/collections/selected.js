@@ -3,9 +3,11 @@ import Result from "../models/result";
 
 export default Backbone.Collection.extend({
     model: Result,
+
     removeResult: function (model) {
         return this.removeByUID(model.uid());
     },
+
     removeByUID: function (uid) {
         var found = this.getByUID(uid);
         if (found) {
@@ -13,6 +15,7 @@ export default Backbone.Collection.extend({
         }
         return found;
     },
+
     getByUID: function (uid) {
         return this.findWhere({ UID: uid });
     },

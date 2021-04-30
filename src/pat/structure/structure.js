@@ -1,4 +1,3 @@
-import _ from "underscore";
 import Base from "@patternslib/patternslib/src/core/base";
 import AppView from "./js/views/app";
 
@@ -19,19 +18,7 @@ export default Base.extend({
 
         activeColumnsCookie: "activeColumns",
 
-        /*
-        As the options operate on a merging basis per new attribute
-        (key/value pairs) on the option Object in a recursive fashion,
-        array items are also treated as Objects so that custom options
-        are replaced starting from index 0 up to the length of the
-        array.  In the case of buttons, custom buttons are simply
-        replaced starting from the first one.  The following defines the
-        customized attributes that should be replaced wholesale, with
-        the default version prefixed with `_default_`.
-      */
-
-        attributes: null,
-        _default_attributes: [
+        attributes: [
             "CreationDate",
             "EffectiveDate",
             "ExpirationDate",
@@ -53,11 +40,9 @@ export default Base.extend({
             "UID",
         ],
 
-        activeColumns: null,
-        _default_activeColumns: ["ModificationDate", "EffectiveDate", "review_state"],
+        activeColumns: ["ModificationDate", "EffectiveDate", "review_state"],
 
-        availableColumns: null,
-        _default_availableColumns: {
+        availableColumns: {
             id: "ID",
             ModificationDate: "Last modified",
             EffectiveDate: "Published",
@@ -73,15 +58,13 @@ export default Base.extend({
             total_comments: "Total comments",
         },
 
-        typeToViewAction: null,
-        _default_typeToViewAction: {
+        typeToViewAction: {
             File: "/view",
             Image: "/view",
             Blob: "/view",
         },
 
-        defaultPageTypes: null,
-        _default_defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
+        defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
 
         momentFormat: "L LT",
         rearrange: {
@@ -93,8 +76,7 @@ export default Base.extend({
         },
         moveUrl: null,
 
-        buttons: null,
-        _default_buttons: [
+        buttons: [
             {
                 tooltip: "Cut",
                 title: "Cut",
@@ -146,44 +128,22 @@ export default Base.extend({
             showTitle: true,
         },
     },
-    init: async function () {
+
+    init() {
         import("./structure.scss");
         import("bootstrap/js/src/dropdown");
 
-        var self = this;
-
-        /*
-        This part replaces the undefined (null) values in the user
-        modifiable attributes with the default values.
-
-        May want to consider moving the _default_* values out of the
-        options object.
-      */
-        var replaceDefaults = [
-            "attributes",
-            "activeColumns",
-            "availableColumns",
-            "buttons",
-            "typeToViewAction",
-            "defaultPageTypes",
-        ];
-        _.each(replaceDefaults, function (idx) {
-            if (self.options[idx] === null) {
-                self.options[idx] = self.options["_default_" + idx];
-            }
-        });
-
-        self.browsing = true; // so all queries will be correct with QueryHelper
-        self.options.collectionUrl = self.options.vocabularyUrl;
-        self.options.pattern = self;
+        this.browsing = true; // so all queries will be correct with QueryHelper
+        this.options.collectionUrl = this.options.vocabularyUrl;
+        this.options.pattern = this;
 
         // the ``attributes`` options key is not compatible with backbone,
         // but queryHelper that will be constructed by the default
         // ResultCollection will expect this to be passed into it.
-        self.options.queryHelperAttributes = self.options.attributes;
-        delete self.options.attributes;
+        this.options.queryHelperAttributes = this.options.attributes;
+        delete this.options.attributes;
 
-        self.view = await new AppView(self.options);
-        self.$el.append(self.view.render().$el);
+        this.view = new AppView(this.options);
+        this.$el.append(this.view.render().$el);
     },
 });

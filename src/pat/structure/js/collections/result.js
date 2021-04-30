@@ -1,5 +1,4 @@
 import $ from "jquery";
-import _ from "underscore";
 import Backbone from "backbone";
 import Result from "../models/result";
 import "backbone.paginator";
@@ -7,6 +6,7 @@ import utils from "../../../../core/utils";
 
 export default Backbone.Paginator.requestPager.extend({
     model: Result,
+
     initialize: function (models, options) {
         this.options = options;
         this.view = options.view;
@@ -19,24 +19,18 @@ export default Backbone.Paginator.requestPager.extend({
         );
 
         this.queryParser = function (options) {
-            var self = this;
             if (options === undefined) {
                 options = {};
             }
-            var term = null;
-            if (self.view.toolbar) {
-                term = self.view.toolbar.get("filter").term;
-            }
-            var sortOn = self.view.sort_on; // jshint ignore:line
-            var sortOrder = self.view.sort_order; // jshint ignore:line
-            if (!sortOn) {
-                sortOn = "getObjPositionInParent";
-            }
+            const term = this.view?.toolbar?.get?.("filter")?.term || null;
+            const sortOn = this.view.sort_on || "getObjPositionInParent";
+            const sortOrder = this.view.sort_order;
+
             return JSON.stringify({
-                criteria: self.queryHelper.getCriterias(
+                criteria: this.queryHelper.getCriterias(
                     term,
                     $.extend({}, options, {
-                        additionalCriterias: self.view.additionalCriterias,
+                        additionalCriterias: this.view.additionalCriterias,
                     })
                 ),
                 sort_on: sortOn,
@@ -54,16 +48,20 @@ export default Backbone.Paginator.requestPager.extend({
             options,
         ]);
     },
+
     getCurrentPath: function () {
         return this.queryHelper.getCurrentPath();
     },
+
     setCurrentPath: function (path) {
         this.queryHelper.currentPath = path;
     },
+
     pager: function () {
         this.trigger("pager");
         Backbone.Paginator.requestPager.prototype.pager.apply(this, []);
     },
+
     paginator_core: {
         // the type of the request (GET by default)
         type: "GET",
@@ -73,6 +71,7 @@ export default Backbone.Paginator.requestPager.extend({
             return this.url;
         },
     },
+
     paginator_ui: {
         // the lowest page index your API allows to be accessed
         firstPage: 1,
@@ -82,6 +81,7 @@ export default Backbone.Paginator.requestPager.extend({
         // how many items per page should be shown
         perPage: 15,
     },
+
     // server_api are query parameters passed directly (currently GET
     // parameters).  These are currently generated using following
     // functions.  Renamed to queryParams in Backbone.Paginator 2.0.
@@ -97,18 +97,19 @@ export default Backbone.Paginator.requestPager.extend({
             return JSON.stringify(this.queryHelper.options.attributes);
         },
     },
+
     parse: function (response, baseSortIdx) {
         if (baseSortIdx === undefined) {
             baseSortIdx = 0;
         }
         this.totalRecords = response.total;
-        var results = response.results;
-        // XXX manually set sort order here since backbone will otherwise
-        // do arbitrary sorting?
-        _.each(results, function (item, idx) {
+        const results = response.results;
+        // Manually set sort order here since backbone will otherwise do arbitrary sorting
+        for (const [idx, item] of results.entries()) {
             item._sort = idx;
-        });
+        }
         return results;
     },
+
     comparator: "_sort",
 });

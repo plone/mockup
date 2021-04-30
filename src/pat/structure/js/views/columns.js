@@ -23,17 +23,17 @@ export default PopoverView.extend({
     events: {
         "click button": "applyButtonClicked",
     },
+
     initialize: function (options) {
         this.app = options.app;
         PopoverView.prototype.initialize.apply(this, [options]);
     },
-    afterRender: function () {
-        var self = this;
 
-        var objKeySortCmp = function (a, b) {
+    afterRender: function () {
+        const objKeySortCmp = (a, b) => {
             // object key sort compare function
-            var ca = self.app.availableColumns[a];
-            var cb = self.app.availableColumns[b];
+            const ca = this.app.availableColumns[a];
+            const cb = this.app.availableColumns[b];
             if (ca < cb) {
                 return -1;
             } else if (ca == cb) {
@@ -43,45 +43,45 @@ export default PopoverView.extend({
             }
         };
 
-        self.$container = self.$("ul");
+        this.$container = this.$("ul");
 
-        _.each(self.app.activeColumns, function (id) {
-            var $el = $(
-                self.itemTemplate({
-                    title: self.app.availableColumns[id],
+        for (const id of this.app.activeColumns) {
+            const $el = $(
+                this.itemTemplate({
+                    title: this.app.availableColumns[id],
                     id: id,
                 })
             );
             $el.find("input")[0].checked = true;
-            self.$container.append($el);
-        });
+            this.$container.append($el);
+        }
 
-        var availableKeys = _.keys(
-            _.omit(self.app.availableColumns, self.app.activeColumns)
+        const availableKeys = _.keys(
+            _.omit(this.app.availableColumns, this.app.activeColumns)
         ).sort(objKeySortCmp);
-        _.each(availableKeys, function (id) {
-            var $el = $(
-                self.itemTemplate({
-                    title: self.app.availableColumns[id],
+        for (const id of availableKeys) {
+            const $el = $(
+                this.itemTemplate({
+                    title: this.app.availableColumns[id],
                     id: id,
                 })
             );
-            self.$container.append($el);
-        });
+            this.$container.append($el);
+        }
 
-        var dd = new Sortable(self.$container, {
+        new Sortable(this.$container, {
             selector: "li",
         });
         return this;
     },
-    applyButtonClicked: function () {
-        var self = this;
+
+    applyButtonClicked() {
         this.hide();
-        self.app.activeColumns = [];
-        self.$("input:checked").each(function () {
-            self.app.activeColumns.push($(this).val());
-        });
-        self.app.setCookieSetting(self.app.activeColumnsCookie, this.app.activeColumns);
-        self.app.tableView.render();
+        this.app.activeColumns = [];
+        for (const inp of this.$("input:checked")) {
+            this.app.activeColumns.push($(inp).val());
+        }
+        this.app.setCookieSetting(this.app.activeColumnsCookie, this.app.activeColumns);
+        this.app.tableView.render();
     },
 });

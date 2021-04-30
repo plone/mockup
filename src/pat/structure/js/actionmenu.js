@@ -1,7 +1,7 @@
 import _ from "underscore";
 import _t from "../../../core/i18n-wrapper";
 
-var menuOptions = {
+const menuOptions = {
     "openItem": {
         url: "#",
         title: _t("Open"),
@@ -83,17 +83,17 @@ var menuOptions = {
     },
 };
 
-var ActionMenu = function (menu) {
+const ActionMenu = function (menu) {
     // If an explicit menu was specified as an option to AppView, this
     // constructor will not override that.
     if (menu.menuOptions !== null) {
         return menu.menuOptions;
     }
 
-    var model = menu.model.attributes;
-    var app = menu.app;
+    const model = menu.model.attributes;
+    const app = menu.app;
 
-    var result = _.clone(menuOptions);
+    const result = _.clone(menuOptions);
     if (!(app.pasteAllowed() && model.is_folderish)) {
         delete result.pasteItem;
     }
@@ -112,8 +112,8 @@ var ActionMenu = function (menu) {
         delete result.selectAll;
     }
 
-    var typeToViewAction = app.options.typeToViewAction;
-    var viewAction = (typeToViewAction && typeToViewAction[model.portal_type]) || "";
+    const typeToViewAction = app.options.typeToViewAction;
+    const viewAction = (typeToViewAction && typeToViewAction[model.portal_type]) || "";
     result.openItem.url = model.getURL + viewAction;
     result.editItem.url = model.getURL + "/edit";
 
