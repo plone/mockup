@@ -368,7 +368,8 @@ var createElementFromHTML = function (htmlString) {
     return div.firstChild;
 };
 
-const resolveIcon = async function (name) {
+const resolveIcon = async function (name, as_node, css_class) {
+    // Return a <svg> element from a icon name.
     // /@@iconresolver/ or /@@icontag/
     const url = document.querySelector("meta[name=iconresolver]")?.content;
     let icon = null;
@@ -391,7 +392,19 @@ const resolveIcon = async function (name) {
             console.warn(e);
         }
     }
-    return icon || "";
+    if (!icon) {
+        return as_node ? null : "";
+    }
+
+    if (as_node) {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = icon;
+        icon = tmp.querySelector("svg");
+    }
+    if (as_node && css_class) {
+        icon.classList.add(css_class);
+    }
+    return icon;
 };
 
 export default {
