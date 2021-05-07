@@ -4,17 +4,17 @@ const path = require("path");
 const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config.js");
 const webpack = require("webpack");
 
-module.exports = async (env, argv) => {
+module.exports = async (env, argv, build_dirname = __dirname) => {
     const config = patternslib_config(env, argv);
 
     config.entry = {
-        "bundle": path.resolve(__dirname, "src/patterns.js"),
-        "bundle-polyfills": path.resolve(__dirname, "node_modules/@patternslib/patternslib/src/polyfills.js"), // prettier-ignore
+        "bundle": path.resolve(build_dirname, "src/patterns.js"),
+        "bundle-polyfills": path.resolve(build_dirname, "node_modules/@patternslib/patternslib/src/polyfills.js"), // prettier-ignore
     };
-    config.output.path = path.resolve(__dirname, "dist/");
+    config.output.path = path.resolve(build_dirname, "dist/");
 
     // Correct moment alias
-    config.resolve.alias.moment = path.resolve(__dirname, "node_modules/moment"); // prettier-ignore
+    config.resolve.alias.moment = path.resolve(build_dirname, "node_modules/moment"); // prettier-ignore
 
     config.plugins.push(
         new webpack.ProvidePlugin({
@@ -35,7 +35,7 @@ module.exports = async (env, argv) => {
         // Use checked-out versions of dependencies if available.
         try {
             const dev_includes = await fs.promises.readdir(
-                path.resolve(__dirname, "devsrc/")
+                path.resolve(build_dirname, "devsrc/")
             );
             for (const it of dev_includes) {
                 if ([".gitkeep"].includes(it)) {
@@ -43,7 +43,7 @@ module.exports = async (env, argv) => {
                 }
                 const prefix = it.indexOf("pat") === 0 ? "@patternslib/" : "";
                 config.resolve.alias[prefix + it] = path.resolve(
-                    __dirname,
+                    build_dirname,
                     `devsrc/${it}`
                 );
             }
@@ -73,7 +73,7 @@ module.exports = async (env, argv) => {
 
     if (env && env.DEPLOYMENT === "plone") {
         config.output.path = path.resolve(
-            __dirname,
+            build_dirname,
             "../plone.staticresources/src/plone/staticresources/static/bundle-plone/"
         );
     }
