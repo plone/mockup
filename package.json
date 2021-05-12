@@ -12,7 +12,7 @@
         "@juggle/resize-observer": "^3.2.0",
         "@patternslib/pat-code-editor": "^1.0.0",
         "@patternslib/pat-content-browser": "https://github.com/plone/pat-content-browser.git#master",
-        "@patternslib/patternslib": "^4.2.3",
+        "@patternslib/patternslib": "^4.2.4",
         "backbone": "1.1.2",
         "backbone.paginator": "1.0.0",
         "bootstrap": "^5.0.0",
@@ -105,7 +105,7 @@
         "yarn": "^1.22.10"
     },
     "resolutions": {
-        "@patternslib/patternslib": "4.2.3",
+        "@patternslib/patternslib": "4.2.4",
         "backbone": "1.1.2",
         "underscore": "1.12.0",
         "jqtree": "1.4.10",
