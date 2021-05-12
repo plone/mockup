@@ -188,22 +188,26 @@
     }
 
     .popover {
-        .popover-title {
-            .remove-all {
-                display: inline-block;
-                clear: left;
-                margin-top: 5px;
-                margin-left: 6px;
+      &:not(.active) {
+        display: none;
+      }
 
-                &:before {
-                    padding-right: 5px;
-                }
+      .popover-title {
+        .remove-all {
+          display: inline-block;
+          clear: left;
+          margin-top: 5px;
+          margin-left: 6px;
 
-                &:hover {
-                    text-decoration: none;
-                }
-            }
+          &:before {
+            padding-right: 5px;
+          }
+
+          &:hover {
+            text-decoration: none;
+          }
         }
+      }
     }
 
     .clear {
