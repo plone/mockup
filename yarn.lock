@@ -1463,9 +1463,10 @@
     svelte-keydown "^0.2.1"
     svelte-scrollto "^0.2.0"
 
-"@patternslib/patternslib@4", "@patternslib/patternslib@4.2.3", "@patternslib/patternslib@^4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-4.2.3.tgz#fe69f53e7762e6da0ec4aeba5811cf929098a4b7"
+"@patternslib/patternslib@4", "@patternslib/patternslib@4.2.4", "@patternslib/patternslib@^4.2.4":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-4.2.4.tgz#51e949d1e0e1525ad5b619f2ed9e2373ae39808d"
+  integrity sha512-pN9mM6qRBiARiUgHENIRwlh8V/y4oKJenqF5Fs9iOS0QpbS6HHp/KgTeGQDgVXSOiHjPItXBGowLWjxWbll4UA==
   dependencies:
     "@fullcalendar/adaptive" "^5.3.1"
     "@fullcalendar/core" "^5.3.1"
@@ -2584,9 +2585,10 @@ bootstrap-icons@^1.4.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.4.1.tgz#5071d2ea9dab0ad79ca5673a97a0074872c74e14"
 
-bootstrap@^5.0.0-beta2:
-  version "5.0.0-beta3"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.0.0-beta3.tgz#c959f61fbd03667a1b158f763856994859d7a465"
+bootstrap@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.0.1.tgz#e7939d599119dc818a90478a2a299bdaff037e09"
+  integrity sha512-Fl79+wsLOZKoiU345KeEaWD0ik8WKRI5zm0YSPj2oF1Qr+BO7z0fco6GbUtqjoG1h4VI89PeKJnMsMMVQdKKTw==
 
 boxen@^5.0.0:
   version "5.0.1"
