@@ -14,11 +14,14 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
     config.output.path = path.resolve(build_dirname, "dist/");
 
     // Volto / React
-    const config_babel_loader = config.rules.filter((it) => it.test === /\.js$/)[0];
+    const config_babel_loader = config.module.rules.filter(
+        (it) => it.loader === "babel-loader"
+    )[0];
     config_babel_loader.test = /\.jsx?$/;
     config_babel_loader.exclude = /node_modules\/(?!(.*patternslib)\/)(?!(pat-.*)\/)(?!(mockup|@plone)\/).*/;
     config.resolve.alias["load-volto-addons"] = path.resolve(__dirname, "src/volto/load-volto-addons"); // prettier-ignore
     config.resolve.alias["@sentry/node"] = "@sentry/browser";
+    config.resolve.alias["~/../locales"] = path.resolve(__dirname, "devsrc/volto/locales"); // prettier-ignore
 
     // Correct moment alias
     config.resolve.alias.moment = path.resolve(build_dirname, "node_modules/moment"); // prettier-ignore
@@ -49,11 +52,17 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
                     continue;
                 }
                 let prefix = "";
-                prefix = it.indexOf("pat") === 0 ? "@patternslib/" : prefix;
-                prefix = it.indexOf("volto") === 0 ? "@plone/" : prefix;
+                let suffix = "";
+                if (it.indexOf("pat") === 0) {
+                    prefix = "@patternslib/";
+                }
+                if (it.indexOf("volto") === 0) {
+                    prefix = "@plone/";
+                    suffix = "/src";
+                }
                 config.resolve.alias[prefix + it] = path.resolve(
                     build_dirname,
-                    `devsrc/${it}`
+                    `devsrc/${it}${suffix}`
                 );
             }
         } catch (error) {
