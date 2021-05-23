@@ -8,8 +8,8 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
     const config = patternslib_config(env, argv);
 
     config.entry = {
-        "bundle": path.resolve(build_dirname, "src/patterns.js"),
-        "bundle-polyfills": path.resolve(build_dirname, "node_modules/@patternslib/patternslib/src/polyfills.js"), // prettier-ignore
+        bundle: path.resolve(build_dirname, "src/patterns.js"),
+        //"bundle-polyfills": path.resolve(build_dirname, "node_modules/@patternslib/patternslib/src/polyfills.js"), // prettier-ignore
     };
     config.output.path = path.resolve(build_dirname, "dist/");
 
@@ -86,7 +86,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
     if (argv.mode === "production") {
         // Also create minified bundles along with the non-minified ones.
         config.entry["bundle.min"] = config.entry["bundle"];
-        config.entry["bundle-polyfills.min"] = config.entry["bundle-polyfills"];
+        //config.entry["bundle-polyfills.min"] = config.entry["bundle-polyfills"];
     }
 
     if (env && env.DEPLOYMENT === "plone") {
