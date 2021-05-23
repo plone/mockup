@@ -8,96 +8,48 @@ export default Base.extend({
 
     async init() {
         window.__CLIENT__ = true; // Define as volto client
+        window.__DEVELOPMENT__ = true;
+        window.__SERVER__ = false;
 
+        //await import("@plone/volto/config");
         const React = (await import("react")).default;
         const ReactDOM = (await import("react-dom")).default;
         const IntlProvider = (await import("react-intl")).IntlProvider;
         const Provider = (await import("react-redux")).Provider;
-        const ContentBrowser = (await import("@plone/volto/components/manage/Contents/Contents.jsx")).default; // prettier-ignore
-        const MemoryRouter = (await import("react-router-dom")).MemoryRouter;
-        const configureStore = (await import("redux-mock-store")).default;
-        const mockStore = configureStore();
+        const Contents = (await import("@plone/volto/components/manage/Contents/Contents.jsx")).default; // prettier-ignore
+        const configureStore = (await import("@plone/volto/store")).default;
+        const ConnectedRouter = (await import("connected-react-router")).ConnectedRouter;
+        const ReduxAsyncConnect = (await import("@plone/volto/helpers/AsyncConnect")).ReduxAsyncConnect; // prettier-ignore
+        const createBrowserHistory = (await import("history")).createBrowserHistory;
+        const Api = (await import("@plone/volto/helpers")).Api;
+        //const persistAuthToken = (await import("@plone/volto/helpers")).persistAuthToken;
+        const config = (await import("@plone/volto/registry")).default;
 
-        const store = mockStore({
-            actions: {
-                actions: {
-                    document_actions: [],
-                    object: [
-                        {
-                            icon: "",
-                            id: "folderContents",
-                            title: "Contents",
-                        },
-                    ],
-                },
-            },
-            userSession: {
-                token: "14134234123qwdaf",
-            },
-            search: {
-                items: [
-                    {
-                        "@id": "/blog",
-                        "@type": "Folder",
-                        "title": "Blog",
-                        "descripton": "My Blog",
-                        "ModificationDate": "2017-04-19T22:48:56+02:00",
-                        "EffectiveDate": "2017-04-19T22:48:56+02:00",
-                        "review_state": "private",
-                    },
-                ],
-                total: 1,
-            },
-            breadcrumbs: {
-                items: [
-                    {
-                        url: "/blog",
-                        title: "Blog",
-                    },
-                ],
-            },
-            clipboard: {
-                action: "copy",
-                source: ["/blog"],
-                request: {
-                    loading: false,
-                    loaded: false,
-                },
-            },
-            content: {
-                delete: {
-                    loading: false,
-                    loaded: false,
-                },
-                update: {
-                    loading: false,
-                    loaded: false,
-                },
-                updatecolumns: {
-                    loading: false,
-                    loaded: false,
-                },
-            },
-            intl: {
-                locale: "en",
-                messages: {},
-            },
-        });
+        const history = createBrowserHistory();
+        const api = new Api();
+        const store = configureStore(window.__data, history, api);
+        //persistAuthToken(store);
+
+        const routes = {
+            path: "/**",
+            component: Contents,
+        };
 
         ReactDOM.render(
             React.createElement(
                 Provider,
                 { store: store },
                 React.createElement(
-                    MemoryRouter,
-                    {},
+                    IntlProvider,
+                    { locale: "en" },
                     React.createElement(
-                        IntlProvider,
-                        { locale: "en" },
+                        ConnectedRouter,
+                        { history: history },
                         React.createElement(
-                            ContentBrowser,
+                            ReduxAsyncConnect,
                             {
-                                location: { pathname: "/blog" },
+                                routes: routes,
+                                helpers: api,
                             },
                             null
                         )
