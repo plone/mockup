@@ -74,7 +74,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         config.output.publicPath = "/dist/";
         config.devServer = {
             inline: true,
-            contentBase: "./docs/_site/",
+            contentBase: ".",
             port: "8000",
             host: "0.0.0.0",
             watchOptions: {
