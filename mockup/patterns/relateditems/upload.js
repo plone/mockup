@@ -52,7 +52,7 @@ define([
             };
             options.uploadMultiple = true;
             options.allowPathSelection = false;
-            options.relativePath = "fileUpload";
+            options.relativePath = "@@fileUpload";
             options.baseUrl = self.app.options.rootUrl;
             self.upload = new Upload(
                 self.$(".uploadify-me").addClass("pat-upload"),
