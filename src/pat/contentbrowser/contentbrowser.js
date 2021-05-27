@@ -11,29 +11,50 @@ export default Base.extend({
         window.__DEVELOPMENT__ = true;
         window.__SERVER__ = false;
 
-        //await import("@plone/volto/config");
+        // await import("@plone/volto/config");
+        //
+        //
+        //
+        //
+        //
+        //
+
+        const config = (await import("@plone/volto/registry")).default;
+
+        const contentIcons = (await import("@plone/volto/config/ContentIcons"))
+            .contentIcons;
+
+        config.set("settings", {
+            apiPath: "http://localhost:8080/Plone",
+            storeExtenders: [],
+            nonContentRoutes: [],
+            contentIcons: contentIcons,
+        });
+
         const React = (await import("react")).default;
         const ReactDOM = (await import("react-dom")).default;
         const IntlProvider = (await import("react-intl")).IntlProvider;
         const Provider = (await import("react-redux")).Provider;
         const Contents = (await import("@plone/volto/components/manage/Contents/Contents.jsx")).default; // prettier-ignore
         const configureStore = (await import("@plone/volto/store")).default;
-        const ConnectedRouter = (await import("connected-react-router")).ConnectedRouter;
-        const ReduxAsyncConnect = (await import("@plone/volto/helpers/AsyncConnect")).ReduxAsyncConnect; // prettier-ignore
+
+        const StaticRouter = (await import("react-router-dom")).StaticRouter;
+
         const createBrowserHistory = (await import("history")).createBrowserHistory;
         const Api = (await import("@plone/volto/helpers")).Api;
-        //const persistAuthToken = (await import("@plone/volto/helpers")).persistAuthToken;
-        const config = (await import("@plone/volto/registry")).default;
 
         const history = createBrowserHistory();
         const api = new Api();
         const store = configureStore(window.__data, history, api);
+
+        //const persistAuthToken = (await import("@plone/volto/helpers")).persistAuthToken;
         //persistAuthToken(store);
 
-        const routes = {
-            path: "/**",
-            component: Contents,
-        };
+        //const ConnectedRouter = (await import("connected-react-router")).ConnectedRouter;
+        //const routes = {
+        //    path: "/**",
+        //    component: Contents,
+        //};
 
         ReactDOM.render(
             React.createElement(
@@ -43,14 +64,11 @@ export default Base.extend({
                     IntlProvider,
                     { locale: "en" },
                     React.createElement(
-                        ConnectedRouter,
-                        { history: history },
+                        StaticRouter,
+                        { location: "/" },
                         React.createElement(
-                            ReduxAsyncConnect,
-                            {
-                                routes: routes,
-                                helpers: api,
-                            },
+                            Contents,
+                            { location: { pathname: "/" } },
                             null
                         )
                     )
