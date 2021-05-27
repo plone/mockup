@@ -1,6 +1,4 @@
 @import "@{bowerPath}/bootstrap3/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-@icon-font-path: "@{bowerPath}/bootstrap3/dist/fonts/";
-@import "@{bowerPath}/bootstrap3/less/glyphicons.less";
 @import "@{mockuplessPath}/ui.less";
 @import "@{mockupPath}/tooltip/pattern.tooltip.less";
 @import "@{mockupPath}/datatables/pattern.datatables.less";
@@ -358,7 +356,9 @@
             }
 
             a:before {
-                .glyphicon-remove-sign();
+                &:before { 
+                    content: "\e014"; 
+                }
                 color: #999;
 
                 &:hover {
