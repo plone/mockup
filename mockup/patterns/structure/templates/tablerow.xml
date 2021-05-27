@@ -16,6 +16,9 @@
     <% if(expired){ %>
       <span class="plone-item-expired"><%- _t('Expired') %></span>
     <% } %>
+    <% if(attributes["exclude_from_nav"]){ %>
+      <span class="plone-item-hidden"><%- _t('Hidden') %></span>
+    <% } %>
     <% if(ineffective){ %>
       <span class="plone-item-ineffective"><%- _t('Before publishing date') %></span>
     <% } %>
