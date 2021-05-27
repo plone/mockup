@@ -48,6 +48,9 @@ import "./pat/toolbar/toolbar";
 import "./pat/tree/tree";
 import "./pat/upload/upload";
 
+// Volto
+import "./pat/contentbrowser/contentbrowser";
+
 // REMOVE obsolete patterns
 //import "./pat/pickadate/pickadate";
 import "./pat/tinymce/tinymce";
