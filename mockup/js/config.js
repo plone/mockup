@@ -15,14 +15,17 @@
         "bbcode",
         "charmap",
         "code",
+        "codesample",
         "colorpicker",
         "contextmenu",
         "directionality",
         "emoticons",
         "fullpage",
         "fullscreen",
+        "help",
         "hr",
         "image",
+        "imagetools",
         "importcss",
         "insertdatetime",
         "legacyoutput",
@@ -35,6 +38,7 @@
         "paste",
         "preview",
         "print",
+        "quickbars",
         "save",
         "searchreplace",
         "spellchecker",
@@ -43,10 +47,10 @@
         "template",
         "textcolor",
         "textpattern",
+        "toc",
         "visualblocks",
         "visualchars",
         "wordcount",
-        "compat3x",
     ];
 
     // prettier-ignore
@@ -184,8 +188,8 @@
             "sinon":                                     "node_modules/sinon/pkg/sinon",
             "sortable":                                  "node_modules/sortablejs/dist/sortable.umd",
             "text":                                      "node_modules/requirejs-text/text",
-            "tinymce":                                   "node_modules/tinymce-builded/js/tinymce/tinymce",
-            "tinymce-modern-theme":                      "node_modules/tinymce-builded/js/tinymce/themes/modern/theme",
+            "tinymce":                                   "node_modules/tinymce/tinymce",
+            "tinymce-theme":                             "node_modules/tinymce/themes/silver/theme",
             "underscore":                                "node_modules/underscore/underscore",
 
             // For the docs viewer
@@ -255,9 +259,7 @@
     for (var i = 0; i < tinymcePlugins.length; i = i + 1) {
         var plugin = tinymcePlugins[i];
         requirejsOptions.paths["tinymce-" + plugin] =
-            "node_modules/tinymce-builded/js/tinymce/plugins/" +
-            plugin +
-            "/plugin";
+            "node_modules/tinymce/plugins/" + plugin + "/plugin";
         requirejsOptions.shim["tinymce-" + plugin] = {
             deps: ["tinymce"],
         };

@@ -348,17 +348,17 @@ define([
     });
 
     tinymce.PluginManager.add("ploneimage", function (editor) {
-        editor.addButton("ploneimage", {
+        editor.ui.registry.addButton("ploneimage", {
             icon: "image",
             tooltip: "Insert/edit image",
-            onclick: editor.settings.addImageClicked,
+            onAction: editor.settings.addImageClicked,
             stateSelector: "img:not([data-mce-object])",
         });
 
-        editor.addMenuItem("ploneimage", {
+        editor.ui.registry.addMenuItem("ploneimage", {
             icon: "image",
             text: "Insert image",
-            onclick: editor.settings.addImageClicked,
+            onAction: editor.settings.addImageClicked,
             context: "insert",
             prependToContext: true,
         });
@@ -366,28 +366,30 @@ define([
 
     /* register the tinymce plugin */
     tinymce.PluginManager.add("plonelink", function (editor) {
-        editor.addButton("plonelink", {
+        editor.ui.registry.addButton("plonelink", {
             icon: "link",
             tooltip: "Insert/edit link",
             shortcut: "Ctrl+K",
-            onclick: editor.settings.addLinkClicked,
+            onAction: editor.settings.addLinkClicked,
             stateSelector: "a[href]",
         });
 
-        editor.addButton("unlink", {
+        editor.ui.registry.addButton("unlink", {
             icon: "unlink",
             tooltip: "Remove link",
-            cmd: "unlink",
+            onAction: function () {
+                editor.execCommand("unlink");
+            },
             stateSelector: "a[href]",
         });
 
         editor.addShortcut("Ctrl+K", "", editor.settings.addLinkClicked);
 
-        editor.addMenuItem("plonelink", {
+        editor.ui.registry.addMenuItem("plonelink", {
             icon: "link",
             text: "Insert link",
             shortcut: "Ctrl+K",
-            onclick: editor.settings.addLinkClicked,
+            onAction: editor.settings.addLinkClicked,
             stateSelector: "a[href]",
             context: "insert",
             prependToContext: true,

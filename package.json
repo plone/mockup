@@ -55,6 +55,7 @@
     "requirejs-text": "2.0.15",
     "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
     "sortablejs": "^1.12.0",
+    "tinymce": "^5.5.1",
     "tinymce-builded": "https://github.com/artursmirnov/tinymce_builded.git#4.7.13"
   },
   "devDependencies": {
