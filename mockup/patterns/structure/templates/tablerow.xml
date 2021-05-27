@@ -13,6 +13,9 @@
         <em><%- id %></em>
       <% } %>
     </a>
+    <% if(attributes["exclude_from_nav"]){ %>
+      <span class="plone-item-hidden"><%- _t('Hidden') %></span>
+    <% } %>
     <% if(expired){ %>
       <span class="plone-item-expired"><%- _t('Expired') %></span>
     <% } %>
