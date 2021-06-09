@@ -1,12 +1,13 @@
 import _ from "underscore";
 import BaseView from "./base";
 import Tooltip from "@patternslib/patternslib/src/pat/tooltip/tooltip";
+import utils from "../../utils";
 
 export default BaseView.extend({
     tagName: "a",
     className: "btn",
     eventPrefix: "button",
-    context: "default",
+    context: "outline-secondary",
     idPrefix: "btn-",
     attributes: {
         href: "#",
