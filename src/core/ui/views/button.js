@@ -14,36 +14,38 @@ export default BaseView.extend({
     },
     extraClasses: [],
     tooltip: null,
-    template:
-        '<% if (icon) { %><span class="glyphicon glyphicon-<%= icon %>"></span><% } %> <%= title %>',
+    template: '<%= title %>',
     events: {
         click: "handleClick",
     },
     initialize: function (options) {
         if (!options.id) {
-            var title = options.title || "";
-            options.id =
-                    title !== "" ? title.toLowerCase().replace(" ", "-") : this.cid; // prettier-ignore
+            const title = options.title || "";
+            options.id = title !== "" ? title.toLowerCase().replace(" ", "-") : this.cid; // prettier-ignore
         }
         BaseView.prototype.initialize.apply(this, [options]);
 
         this.on(
             "render",
-            function () {
+            async function (){
                 this.$el.attr("title", this.options.title || "");
-                this.$el.attr(
-                    "aria-label",
-                    this.options.title || this.options.tooltip || ""
-                );
-                if (this.context !== null) {
+                this.$el.attr("aria-label", this.options.title || this.options.tooltip || "");
+                if(this.context !== null){
                     this.$el.addClass("btn-" + this.context);
                 }
                 _.each(
-                    this.extraClasses,
-                    function (klass) {
-                        this.$el.addClass(klass);
-                    }.bind(this)
+                  this.extraClasses,
+                  function(klass){
+                      this.$el.addClass(klass);
+                  }.bind(this)
                 );
+
+                if(this.icon && typeof this.icon == 'string'){
+                    const iconMarkup = await utils.resolveIcon('plone.icon.' + this.icon, true);
+                    if(iconMarkup){
+                        this.$el.prepend(iconMarkup);
+                    }
+                }
 
                 if (this.tooltip !== null) {
                     this.$el.attr("title", this.tooltip);
