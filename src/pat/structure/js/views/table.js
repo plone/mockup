@@ -6,7 +6,7 @@ import BaseView from "../../../../core/ui/views/base";
 import TableRowView from "./tablerow";
 import TableTemplate from "../../templates/table.xml";
 import Sortable from "../../../sortable/sortable";
-import patMoment from "../../../moment/moment";
+import PatMoment from "../../../moment/moment";
 import "../../../datatables/datatables";
 import "bootstrap/js/src/alert";
 
@@ -119,7 +119,7 @@ export default BaseView.extend({
                 container.append(view.el);
             });
         }
-        this.moment = new patMoment(this.$el, {
+        this.moment = new PatMoment(this.$el, {
             selector: "." + this.dateColumns.join(",."),
             format: this.options.app.momentFormat,
         });
