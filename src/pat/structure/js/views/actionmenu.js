@@ -75,12 +75,22 @@ export default BaseView.extend({
         this.menuOptions = actionmenu_generator(this);
     },
 
-    render: function () {
+    render: async function () {
         this.el.innerHTML = "";
 
         const data = this.model.toJSON();
         data.header = this.options.header || null;
         data.menuOptions = this.menuOptionsCategorized;
+        for(const button of data.menuOptions.button){
+           if(button.icon){
+               button.iconSVG = await utils.resolveIcon('plone.icon.' + button.icon);
+           }
+        }
+        for(const button of data.menuOptions.dropdown){
+           if(button.icon){
+               button.iconSVG = await utils.resolveIcon('plone.icon.' + button.icon);
+           }
+        }
         this.el.innerHTML = this.template(
             $.extend(
                 {
