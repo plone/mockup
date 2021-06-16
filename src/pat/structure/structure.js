@@ -129,7 +129,7 @@ export default Base.extend({
         },
     },
 
-    init() {
+    async init() {
         import("./structure.scss");
         import("bootstrap/js/src/dropdown");
 
@@ -143,7 +143,8 @@ export default Base.extend({
         this.options.queryHelperAttributes = this.options.attributes;
         delete this.options.attributes;
 
-        this.view = new AppView(this.options);
-        this.$el.append(this.view.render().$el);
+        this.view = await new AppView(this.options);
+        await this.view.render();
+        this.$el.append(this.view.$el);
     },
 });
