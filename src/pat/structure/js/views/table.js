@@ -63,7 +63,7 @@ export default BaseView.extend({
         }
     },
 
-    render: function () {
+    render: async function () {
         // By default do not start sorted by any column
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
@@ -100,7 +100,7 @@ export default BaseView.extend({
 
         if (this.collection.length) {
             const container = this.$("tbody");
-            this.collection.each((result) => {
+            await this.collection.each(async (result) => {
                 this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
                     if (
@@ -115,7 +115,8 @@ export default BaseView.extend({
                     model: result,
                     app: this.app,
                     table: this,
-                }).render();
+                });
+                await view.render();
                 container.append(view.el);
             });
         }

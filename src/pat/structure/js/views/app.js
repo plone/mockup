@@ -43,7 +43,7 @@ export default BaseView.extend({
         return !!$.cookie("__cp");
     },
 
-    initialize: function (options) {
+    initialize: async function (options) {
         BaseView.prototype.initialize.apply(this, [options]);
         this.loading = new utils.Loading();
         this.loading.show();
@@ -81,7 +81,7 @@ export default BaseView.extend({
         this.setAllCookieSettings();
 
         this.selectedCollection = new SelectedCollection();
-        this.tableView = new TableView({ app: this });
+        this.tableView = await new TableView({ app: this });
         this.pagingView = new PagingView({ app: this });
 
         /* initialize buttons */
@@ -455,7 +455,8 @@ export default BaseView.extend({
                 } else {
                     button.on("button:click", () => this.buttonClickEvent(), this);
                 }
-            } catch (err) {
+            }
+            catch (err) {
                 log.error(
                     "Error initializing button " + buttonOptions.title + " " + err
                 );
@@ -588,7 +589,7 @@ export default BaseView.extend({
         return status;
     },
 
-    render: function () {
+    render: async function () {
         this.$el.append(this.toolbar.render().el);
         if (this.wellView) {
             this.$el.find("#btn-" + this.wellView.id).after(this.wellView.render().el);
@@ -617,7 +618,8 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        this.$el.append(this.tableView.render().el);
+        await this.tableView.render();
+        this.$el.append(this.tableView.el);
         this.$el.append(this.pagingView.render().el);
 
         // Backdrop class
