@@ -14,32 +14,32 @@
 
 <% if (menuOptions.dropdown) { %>
 <div class="dropdown">
-<button class="dropdown-toggle btn btn-sm"
-    type="button"
-    data-bs-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="true"
-    id="<%- id %>"
-    title='<%- _t("Actions") %>'>
-  <%= dropdownIcon %><span class="caret"></span>
-</button>
-<ul class="dropdown-menu pull-right" aria-labelledby="<%- id %>">
-  <% if (header) { %>
-    <li class="dropdown-header"><%- header %></li>
-    <li class="divider"></li>
-  <% } %>
+  <button class="dropdown-toggle btn btn-sm"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+      id="<%- id %>"
+      title='<%- _t("Actions") %>'>
+    <%= dropdownIcon %><span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="<%- id %>">
+    <% if (header) { %>
+      <li class="dropdown-header"><%- header %></li>
+      <li class="divider"></li>
+    <% } %>
 
-  <% _.each(menuOptions.dropdown, function(menuOption){ %>
-  <li>
-    <a class="dropdown-item action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.css %>"
-        href="<%- menuOption.url %>">
-      <% if (menuOption.iconSVG) { %>
-        <%= menuOption.iconSVG %>
-      <% } %>
-      <%- _t(menuOption.title) %>
-    </a>
-  </li>
-  <% }); %>
-</ul>
+    <% _.each(menuOptions.dropdown, function(menuOption){ %>
+    <li>
+      <a class="dropdown-item action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.css %>"
+          href="<%- menuOption.url %>">
+        <% if (menuOption.iconSVG) { %>
+          <%= menuOption.iconSVG %>
+        <% } %>
+        <%- _t(menuOption.title) %>
+      </a>
+    </li>
+    <% }); %>
+  </ul>
 </div>
 <% } %>
