@@ -79,45 +79,44 @@ export default Base.extend({
         buttons: [
             {
                 tooltip: "Cut",
-                title: "Cut",
                 url: "/cut",
+                icon: "plone-cut"
             },
             {
                 tooltip: "Copy",
-                title: "Copy",
                 url: "/copy",
+                icon: "plone-copy"
             },
             {
                 tooltip: "Paste",
-                title: "Paste",
                 url: "/paste",
+                icon: "plone-paste",
             },
             {
                 tooltip: "Delete",
-                title: "Delete",
                 url: "/delete",
                 context: "danger",
-                icon: "trash",
+                icon: "plone-delete",
             },
             {
                 tooltip: "Workflow",
-                title: "Workflow",
                 url: "/workflow",
+                icon: "plone-lock",
             },
             {
                 tooltip: "Tags",
-                title: "Tags",
                 url: "/tags",
+                icon: "tags"
             },
             {
                 tooltip: "Properties",
-                title: "Properties",
                 url: "/properties",
+                icon: "plone-edit",
             },
             {
                 tooltip: "Rename",
-                title: "Rename",
                 url: "/rename",
+                icon: "plone-rename",
             },
         ],
 
