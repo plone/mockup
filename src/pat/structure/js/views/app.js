@@ -50,7 +50,7 @@ export default BaseView.extend({
 
         /* close popovers when clicking away */
         $(document).click((e) => {
-            var $el = $(e.target);
+            const $el = $(e.target);
             if (
                 !$el.is(":visible") ||
                 $el.css("visibility") === "hidden" ||
@@ -62,9 +62,9 @@ export default BaseView.extend({
             if ($el.is("a") || $el.parent().is("a")) {
                 return;
             }
-            var $popover = $(".popover:visible");
+            const $popover = $(".popover:visible");
             if ($popover.length > 0 && !$.contains($popover[0], $el[0])) {
-                var popover = $popover.data("component");
+                const popover = $popover.data("component");
                 if (popover) {
                     popover.hide();
                 }
@@ -97,7 +97,7 @@ export default BaseView.extend({
         this.toolbar.get("selected-items").disable();
         this.buttons.disable();
 
-        var timeout = 0;
+        let timeout = 0;
         this.selectedCollection.on(
             "add remove reset",
             (/*modal, collection*/) => {
@@ -147,8 +147,8 @@ export default BaseView.extend({
                 return;
             }
 
-            var path = this.getCurrentPath();
-            var url;
+            let path = this.getCurrentPath();
+            let url;
             if (path === "/") {
                 path = "";
             }
@@ -156,7 +156,7 @@ export default BaseView.extend({
             if (this.options.pushStateUrl) {
                 // permit an extra slash in pattern, but strip that if there
                 // as path always will be prefixed with a `/`
-                var pushStateUrl = this.options.pushStateUrl.replace(
+                const pushStateUrl = this.options.pushStateUrl.replace(
                     "/{path}",
                     "{path}"
                 );
@@ -189,9 +189,9 @@ export default BaseView.extend({
         ) {
             $(window).bind("popstate", () => {
                 /* normalize this url first... */
-                var win = utils.getWindow();
-                var url = win.location.href;
-                var base, appended;
+                const win = utils.getWindow();
+                let url = win.location.href;
+                let base, appended;
                 if (url.indexOf("?") !== -1) {
                     url = url.split("?")[0];
                 }
@@ -199,7 +199,7 @@ export default BaseView.extend({
                     url = url.split("#")[0];
                 }
                 if (this.options.pushStateUrl) {
-                    var tmp = this.options.pushStateUrl.split("{path}");
+                    const tmp = this.options.pushStateUrl.split("{path}");
                     base = tmp[0];
                     appended = tmp[1];
                 } else {
@@ -207,7 +207,7 @@ export default BaseView.extend({
                     appended = this.options.urlStructure.appended;
                 }
                 // take off the base url
-                var path = url.substring(base.length);
+                let path = url.substring(base.length);
                 if (path.substring(path.length - appended.length) === appended) {
                     /* check that it ends with appended value */
                     path = path.substring(0, path.length - appended.length);
@@ -258,8 +258,7 @@ export default BaseView.extend({
 
     inQueryMode: function () {
         if (this.toolbar) {
-            var term = this.toolbar.get("filter").term;
-            if (term) {
+            if (this.toolbar.get("filter").term) {
                 return true;
             }
         }
@@ -281,7 +280,7 @@ export default BaseView.extend({
         if (collection === undefined) {
             collection = this.selectedCollection;
         }
-        var uids = [];
+        const uids = [];
         collection.each(function (item) {
             uids.push(item.uid());
         });
@@ -303,21 +302,21 @@ export default BaseView.extend({
     },
 
     buttonClickEvent: function (button) {
-        var data = null;
-        var callback = null;
+        let data = null;
+        let callback = null;
 
         if (button.url) {
             this.loading.show();
             // handle ajax now
 
             if (arguments.length > 1) {
-                var arg1 = arguments[1];
+                const arg1 = arguments[1];
                 if (!arg1.preventDefault) {
                     data = arg1;
                 }
             }
             if (arguments.length > 2) {
-                var arg2 = arguments[2];
+                const arg2 = arguments[2];
                 if (typeof arg2 === "function") {
                     callback = arg2;
                 }
@@ -334,7 +333,7 @@ export default BaseView.extend({
                 data.folder = this.getCurrentPath();
             }
 
-            var url = this.getAjaxUrl(button.url);
+            const url = this.getAjaxUrl(button.url);
             $.ajax(
                 {
                     url: url,
@@ -382,12 +381,12 @@ export default BaseView.extend({
     },
 
     setupButtons: function () {
-        var items = [];
+        const items = [];
 
-        var columnsBtn = new ButtonView({
+        const columnsBtn = new ButtonView({
             id: "structure-columns",
             tooltip: _t("Configure displayed columns"),
-            icon: "th",
+            icon: "plone-three-dots",
         });
 
         this.columnsView = new ColumnsView({
@@ -404,14 +403,15 @@ export default BaseView.extend({
                 id: "selected-items",
                 tooltip: _t("Manage selection"),
                 collection: this.selectedCollection,
+                icon: 'plone-selection',
             })
         );
 
         if (this.options.rearrange) {
-            var rearrangeButton = new ButtonView({
+            const rearrangeButton = new ButtonView({
                 id: "structure-rearrange",
                 title: _t("Rearrange"),
-                icon: "sort-by-attributes",
+                icon: "plone-rearrange",
                 tooltip: _t("Rearrange folder contents"),
                 url: this.options.rearrange.url,
             });
@@ -427,7 +427,7 @@ export default BaseView.extend({
             utils.featureSupport.dragAndDrop() &&
             utils.featureSupport.fileApi()
         ) {
-            var uploadButton = new ButtonView({
+            const uploadButton = new ButtonView({
                 id: "upload",
                 title: _t("Upload"),
                 tooltip: _t("Upload files"),
@@ -441,16 +441,16 @@ export default BaseView.extend({
             items.push(uploadButton);
         }
 
-        var buttons = [];
+        const buttons = [];
         for (const buttonOptions of this.options.buttons) {
             try {
-                var button = new ButtonView(buttonOptions);
+                const button = new ButtonView(buttonOptions);
                 buttons.push(button);
 
                 if (button.form) {
                     buttonOptions.triggerView = button;
                     buttonOptions.app = this;
-                    var view = new GenericPopover(buttonOptions);
+                    const view = new GenericPopover(buttonOptions);
                     this.forms.push(view.el);
                 } else {
                     button.on("button:click", () => this.buttonClickEvent(), this);
@@ -515,8 +515,8 @@ export default BaseView.extend({
     },
 
     clearStatus: function (key) {
-        var statusContainer = this.$el[0].querySelector(".fc-status-container");
-        var toBeRemoved = [];
+        const statusContainer = this.$el[0].querySelector(".fc-status-container");
+        let toBeRemoved = [];
         if (key) {
             // remove specific status, even if marked with ``fixed``.
             toBeRemoved = this.statusMessages.filter(function (item) {
@@ -563,13 +563,11 @@ export default BaseView.extend({
             return;
         }
 
-        var el = this.statusTemplate({
+        const el = utils.createElementFromHTML(this.statusTemplate({
             label: status.label || "",
             text: status.text,
             type: status.type || "warning",
-        });
-
-        el = utils.createElementFromHTML(el);
+        }));
 
         if (btn) {
             btn = $(btn)[0]; // support jquert + bare dom elements
@@ -582,7 +580,7 @@ export default BaseView.extend({
             key: key, // to be used for filtering to prevent double status messages.
         };
 
-        var statusContainer = this.$el[0].querySelector(".fc-status-container");
+        const statusContainer = this.$el[0].querySelector(".fc-status-container");
         statusContainer.appendChild(status.el);
         this.statusMessages.push(status);
 
@@ -595,8 +593,14 @@ export default BaseView.extend({
             this.$el.find("#btn-" + this.wellView.id).after(this.wellView.render().el);
         }
         for (const form of this.forms) {
-            var id = $(form).attr("id");
-            this.$el.find("#btn-" + id).after(form);
+            const id = $(form).attr("id");
+            const $btn = this.$el.find("#btn-" + id);
+            if($btn.closest('.btn-group').length){
+                $btn.closest('.btn-group').after(form);
+            }
+            else{
+                this.$el.find("#btn-" + id).after(form);
+            }
         }
 
         this.$el.append(
@@ -636,7 +640,7 @@ export default BaseView.extend({
         if (_default === undefined) {
             _default = null;
         }
-        var val;
+        let val;
         try {
             val = $.cookie(this.cookieSettingPrefix + name);
             val = $.parseJSON(val).value;
@@ -664,7 +668,7 @@ export default BaseView.extend({
             this.activeColumnsCookie,
             this.activeColumns
         );
-        var perPage = this.getCookieSetting("perPage", 15);
+        let perPage = this.getCookieSetting("perPage", 15);
         if (typeof perPage === "string") {
             perPage = parseInt(perPage);
         }
