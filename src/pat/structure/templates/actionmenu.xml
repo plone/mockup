@@ -1,5 +1,5 @@
 <% _.each(menuOptions.button, function(menuOption){ %>
-<a class="action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <%- menuOption.css %>"
+<a class="btn btn-sm action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <%- menuOption.css %>"
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>"
     aria-label="<%- _t(menuOption.title) %>">
@@ -8,11 +8,12 @@
   <% } else { %>
   <%- _t(menuOption.title) %>
   <% } %>
-</a>&nbsp;
+</a>
 <% }); %>
 
 
 <% if (menuOptions.dropdown) { %>
+<div class="dropdown">
 <button class="dropdown-toggle btn btn-sm"
     type="button"
     data-bs-toggle="dropdown"
@@ -40,4 +41,5 @@
   </li>
   <% }); %>
 </ul>
+</div>
 <% } %>
