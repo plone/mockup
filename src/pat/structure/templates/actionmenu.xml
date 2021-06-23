@@ -3,8 +3,8 @@
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>"
     aria-label="<%- _t(menuOption.title) %>">
-  <% if (menuOption.iconCSS) { %>
-  <span class="<%- menuOption.iconCSS %>"></span>
+  <% if (menuOption.iconSVG) { %>
+    <%= menuOption.iconSVG %>
   <% } else { %>
   <%- _t(menuOption.title) %>
   <% } %>
@@ -20,7 +20,7 @@
     aria-expanded="true"
     id="<%- id %>"
     title='<%- _t("Actions") %>'>
-  <span class="glyphicon glyphicon-cog"></span><span class="caret"></span>
+  <%= dropdownIcon %><span class="caret"></span>
 </button>
 <ul class="dropdown-menu pull-right" aria-labelledby="<%- id %>">
   <% if (header) { %>
@@ -32,8 +32,8 @@
   <li>
     <a class="dropdown-item action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.css %>"
         href="<%- menuOption.url %>">
-      <% if (menuOption.iconCSS) { %>
-      <span class="<%- menuOption.iconCSS %>"></span>
+      <% if (menuOption.iconSVG) { %>
+        <%= menuOption.iconSVG %>
       <% } %>
       <%- _t(menuOption.title) %>
     </a>

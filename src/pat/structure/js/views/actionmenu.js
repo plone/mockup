@@ -94,6 +94,7 @@ export default BaseView.extend({
         this.el.innerHTML = this.template(
             $.extend(
                 {
+                    dropdownIcon: await utils.resolveIcon('plone.icon.plone-settings'),
                     _t: _t,
                     id: utils.generateId(),
                 },
