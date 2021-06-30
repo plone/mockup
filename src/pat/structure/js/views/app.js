@@ -453,7 +453,7 @@ export default BaseView.extend({
                     const view = new GenericPopover(buttonOptions);
                     this.forms.push(view.el);
                 } else {
-                    button.on("button:click", () => this.buttonClickEvent(), this);
+                    button.on("button:click", () => this.buttonClickEvent(button), this);
                 }
             }
             catch (err) {
