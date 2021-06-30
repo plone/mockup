@@ -36,10 +36,6 @@
         #filter {
             width: 20em;
             float: right;
-
-            .btn-queryfilter {
-                margin-left: 1em;
-            }
         }
 
         & > a.btn,
@@ -127,13 +123,6 @@
 
     .contextmenuactive {
         outline: 1px dashed orange;
-    }
-
-    .navbar-search {
-        input.form-control,
-        #btn-query {
-            height: 31px;
-        }
     }
 
     .fc-status {

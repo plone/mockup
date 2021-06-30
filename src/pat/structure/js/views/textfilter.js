@@ -11,11 +11,8 @@ export default BaseView.extend({
     className: "navbar-search form-search ui-offset-parent",
     template: _.template(
         '<div class="input-group">' +
-            '<label class="hiddenStructure" for="textFilterInput" aria-label="<%- _t("Search") %>"><%- _t("Search") %>"</label>' +
-            '<input id="textFilterInput" type="text" class="form-control search-query" placeholder="<%- _t("Search") %>">' +
-            '<span class="input-group-btn">' +
-            "</span>" +
-            "</div>"
+            '<input id="textFilterInput" type="text" class="form-control search-query" aria-label="<%- _t("Search") %>" placeholder="<%- _t("Search") %>">' +
+        "</div>"
     ),
     popoverContent: _.template('<input class="pat-querystring" />'),
     events: {
@@ -157,7 +154,7 @@ export default BaseView.extend({
             content: this.popoverContent,
             placement: "left",
         });
-        this.$(".input-group-btn").append(this.button.render().el);
+        this.$el.find(".input-group").append(this.button.render().el);
         this.$el.append(this.popover.render().el);
         this.popover.$el.addClass("query");
         this.$queryString = this.popover.$("input.pat-querystring");

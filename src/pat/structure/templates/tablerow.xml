@@ -1,7 +1,7 @@
 <td class="selection" data-order="<%- attributes['_sort'] %>"><label for="select<%- attributes['_sort'] %>InputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select') %>"><%- _t('Select') %></label><input id="select<%- attributes['_sort'] %>InputCheckbox" <% if(selected){ %> checked="checked" <% } %> type="checkbox"/></td>
 
 <td class="title">
-  <div class="pull-left">
+  <div>
     <a href="<%- viewURL %>"
         class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
         title="<%- portal_type %>">
@@ -28,7 +28,7 @@
     <% } %>
   </div>
   <% if(attributes["getIcon"] && thumb_scale) { %>
-    <img class="thumb-<%- thumb_scale %> pull-right" src="<%- getURL %>/@@images/image/<%- thumb_scale %>">
+    <img class="thumb-<%- thumb_scale %>" alt="<%- _t('Preview image') %> <%- Title || id %>" src="<%- getURL %>/@@images/image/<%- thumb_scale %>">
   <% } %>
 </td>
 

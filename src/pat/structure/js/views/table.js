@@ -134,9 +134,7 @@ export default BaseView.extend({
         registry.scan(this.$el);
 
         this.$el.find("table").on("order.dt", () => {
-            const btn = $(
-                '<button type="button" class="btn btn-danger btn-xs"></button>'
-            )
+            const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
                 .text(_t("Reset column sorting"))
                 .on("click", () => {
                     // Use column 0 to restore ordering and then empty list so it doesn't
