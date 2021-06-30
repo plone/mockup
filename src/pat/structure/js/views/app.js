@@ -457,9 +457,7 @@ export default BaseView.extend({
                 }
             }
             catch (err) {
-                log.error(
-                    "Error initializing button " + buttonOptions.title + " " + err
-                );
+                log.error(`Error initializing button ${buttonOptions.title || buttonOptions.id} ${err}`);
             }
         }
         this.buttons = new ButtonGroup({
@@ -498,8 +496,8 @@ export default BaseView.extend({
                 } else if (data.status !== "success") {
                     // XXX handle error here with something?
                     this.setStatus({
-                        text: "error moving item",
-                        type: "error",
+                        text: _t("Error moving item"),
+                        type: "danger",
                     });
                 }
                 this.collection.pager(); // reload it all
@@ -507,8 +505,8 @@ export default BaseView.extend({
             error: () => {
                 this.clearStatus();
                 this.setStatus({
-                    text: "error moving item",
-                    type: "error",
+                    text:  _t("Error moving item"),
+                    type: "danger",
                 });
             },
         });
