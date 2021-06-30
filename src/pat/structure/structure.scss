@@ -1,3 +1,8 @@
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/forms/form-control";
+
 .pat-structure {
     input.has-filter {
         border: 1px solid orange;
@@ -71,6 +76,7 @@
                         text-decoration: none;
                     }
                 }
+
                 .btn {
                     color: var(--bs-primary);
                     padding: 0.25rem 0.2rem;
@@ -215,7 +221,14 @@
         }
 
         .popover-content {
-            padding: 9px 14px;
+            padding: $popover-body-padding-x $popover-body-padding-y;
+
+            form {
+                max-height: 500px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                margin-bottom: $popover-body-padding-y;
+            }
         }
 
         &.upload {
@@ -267,117 +280,99 @@
             text-decoration: underline;
         }
     }
-}
 
-.popover.selected-items {
-    .items {
-        max-height: 300px;
-        overflow-y: auto;
+    .popover.selected-items {
+        .items {
+            max-height: 300px;
+            overflow-y: auto;
 
-        .selected-item {
-            display: block;
-            margin: 0 8px 3px 0;
-            border-radius: 6px;
-            padding: 4px 6px;
-
-            &:hover {
-                background-color: #f2f2f2;
-            }
-
-            a:hover {
-                text-decoration: none;
-            }
-
-            a:before {
-                //.glyphicon-remove-sign();
-                color: #999;
+            .selected-item {
+                display: block;
+                margin: 0 8px 3px 0;
+                border-radius: 6px;
+                padding: 4px 6px;
 
                 &:hover {
-                    color: #000;
+                    background-color: #f2f2f2;
+                }
+
+                a:hover {
+                    text-decoration: none;
+                }
+
+                a:before {
+                    //.glyphicon-remove-sign();
+                    color: #999;
+
+                    &:hover {
+                        color: #000;
+                    }
                 }
             }
         }
     }
-}
 
-.popover.query {
-    width: 700px;
-    max-width: 700px;
-}
-
-#popover-rename {
-    .popover-content {
-        max-height: 500px;
-        overflow-y: scroll;
+    .popover.query {
+        width: 700px;
+        max-width: 700px;
     }
 
-    input {
-        width: 100%;
-        height: 24px;
-        line-height: 110%;
-        font-size: 110%;
-    }
-
-    div.item {
-        border-bottom: 1px solid #0e6eb0;
-        margin-bottom: 5px;
-        padding-bottom: 10px;
-
-        /* clearfix */
-        display: table;
-        clear: both;
-        content: "";
-
-        div.form-group {
-            float: left;
+    #popover-rename {
+        .form-control {
+            @extend .form-control-sm;
         }
 
-        img {
-            float: left;
-            margin-left: 1em;
+        div.item {
+            border-bottom: 1px solid #0e6eb0;
+            margin-bottom: 5px;
+            padding-bottom: 10px;
+
+            img {
+                margin-left: 1em;
+            }
         }
     }
-}
 
-.popover.attribute-columns {
-    ul {
-        list-style: none;
-        margin: 0 0 1ex 0;
-        padding: 0;
-
-        li {
+    .popover.attribute-columns {
+        ul {
             list-style: none;
-            cursor: move;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            padding: 3px 7px;
+            margin: 0 0 1ex 0;
+            padding: 0;
 
-            &:last-child {
-                border-bottom: 1px solid #ddd;
-            }
+            li {
+                list-style: none;
+                cursor: move;
+                border: 1px solid #ddd;
+                border-bottom: none;
+                padding: 3px 7px;
 
-            label {
-                margin-bottom: 0;
+                &:last-child {
+                    border-bottom: 1px solid #ddd;
+                }
 
-                input[type="checkbox"] {
-                    margin-right: 1ex;
+                label {
+                    margin-bottom: 0;
+
+                    input[type="checkbox"] {
+                        margin-right: 1ex;
+                    }
                 }
             }
         }
     }
-}
 
-table.structure-dragging {
-    outline: 1px dashed black;
-    background-color: white;
+    table.structure-dragging {
+        outline: 1px dashed black;
+        background-color: white;
 
-    .itemRow {
-        .actionmenu-container {
-            display: none;
-        }
+        .itemRow {
+            .actionmenu-container {
+                display: none;
+            }
 
-        td {
-            padding: 5px;
+            td {
+                padding: 5px;
+            }
         }
     }
 }
