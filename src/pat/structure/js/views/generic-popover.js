@@ -44,7 +44,7 @@ export default PopoverView.extend({
 
     getTemplateOptions: function () {
         const items = [];
-        for (const item of this.app.selectedCollection) {
+        for(const item of this.app.selectedCollection.models){
             items.push(item.toJSON());
         }
         return $.extend({}, true, this.options, {
@@ -113,9 +113,8 @@ export default PopoverView.extend({
         PopoverView.prototype.toggle.apply(this, [button, e]);
         if (!this.opened) {
             return;
-        } else {
-            this.$el.replaceWith(this.render().el);
-            this.position();
         }
+        this.$el.replaceWith(this.render().el);
+        this.position();
     },
 });
