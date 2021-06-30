@@ -163,11 +163,6 @@
         #btn-attribute-columns {
             display: none;
         }
-        #btn-selected-items {
-            border-top-left-radius: 3px;
-            border-bottom-left-radius: 3px;
-            border-left: 1px solid #cccccc;
-        }
         table {
             thead {
                 th {
@@ -202,7 +197,7 @@
 
         .popover-title {
             padding: 8px 14px;
-            background-color: #f7f7f7;
+            background-color: var(--bs-light);
 
             .remove-all {
                 display: inline-block;
@@ -221,13 +216,14 @@
         }
 
         .popover-content {
-            padding: $popover-body-padding-x $popover-body-padding-y;
+            padding: $popover-body-padding-y $popover-body-padding-x;
 
             form {
+                padding: $popover-body-padding-y $popover-body-padding-x;
                 max-height: 500px;
                 overflow-y: auto;
                 overflow-x: hidden;
-                margin-bottom: $popover-body-padding-y;
+                margin: $popover-body-padding-y * -1 $popover-body-padding-x * -1 $popover-body-padding-y;
             }
         }
 
@@ -256,11 +252,11 @@
 
     .itemRow {
         .title a {
-            color: #333333;
+            color: var(--bs-gray-dark);
         }
 
         &.folder .title a {
-            color: #005580;
+            color: var(--bs-primary);
         }
 
         &.default-page .title > *:first-child:before {
@@ -293,7 +289,7 @@
                 padding: 4px 6px;
 
                 &:hover {
-                    background-color: #f2f2f2;
+                    background-color: var(--bs-light);
                 }
 
                 a:hover {
@@ -301,11 +297,10 @@
                 }
 
                 a:before {
-                    //.glyphicon-remove-sign();
-                    color: #999;
+                    color: var(--bs-gray);
 
                     &:hover {
-                        color: #000;
+                        color: var(--bs-gray-dark);
                     }
                 }
             }
@@ -323,9 +318,15 @@
         }
 
         div.item {
-            border-bottom: 1px solid #0e6eb0;
+            border-bottom: 1px solid var(--bs-primary);
             margin-bottom: 5px;
             padding-bottom: 10px;
+
+            &:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
 
             img {
                 margin-left: 1em;
@@ -342,12 +343,12 @@
             li {
                 list-style: none;
                 cursor: move;
-                border: 1px solid #ddd;
+                border: 1px solid var(--bs-gray);
                 border-bottom: none;
                 padding: 3px 7px;
 
                 &:last-child {
-                    border-bottom: 1px solid #ddd;
+                    border-bottom: 1px solid var(--bs-gray);
                 }
 
                 label {
