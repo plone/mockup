@@ -31,22 +31,25 @@
         z-index: 10;
         border: none;
         min-height: auto;
-        margin: 0;
+        margin: 0 0 0.5em;
 
         & > a.btn:last-of-type,
         .btn-group {
             margin-right: 1em;
         }
 
+        #btn-selected-items,
+        #btn-structure-rearrange,
+        #btn-upload,
+        #btn-filter {
+            svg {
+                margin-right: 0.25rem;
+            }
+        }
+
         #filter {
             width: 20em;
             float: right;
-        }
-
-        & > a.btn,
-        .btn-group,
-        #filter {
-            margin-bottom: 0.5em;
         }
     }
 
