@@ -13,6 +13,7 @@ import "bootstrap/js/src/alert";
 export default BaseView.extend({
     tagName: "div",
     template: _.template(TableTemplate),
+    tableSortable: null,
 
     initialize: function (options) {
         BaseView.prototype.initialize.apply(this, [options]);
@@ -24,6 +25,7 @@ export default BaseView.extend({
         this.collection.pager();
         this.subsetIds = [];
         this.contextInfo = null;
+        this.tableSortable = null;
 
         $("body").on("context-info-loaded", (event, data) => {
             this.contextInfo = data;
@@ -141,6 +143,9 @@ export default BaseView.extend({
                 if(ordArr.length === 1){
                     const order = ordArr[0];
                     if(order.col === 0 && order.dir === 'asc'){
+                        if(this.tableSortable){
+                            this.tableSortable.enableSort();
+                        }
                         // Clear the status message
                         this.app.clearStatus("sorting_dndreordering_disabled");
                         return;
@@ -167,7 +172,9 @@ export default BaseView.extend({
                   false,
                   "sorting_dndreordering_disabled"
                 );
-                this.$el.find(".pat-datatables tbody").off("drag pointerdown dragenter dragover");
+                if(this.tableSortable){
+                    this.tableSortable.disableSort();
+                }
                 this.$el.removeClass("order-support");
             });
 
@@ -221,7 +228,7 @@ export default BaseView.extend({
             return;
         }
         this.$el.addClass("order-support");
-        new Sortable(this.$("tbody"), {
+        this.tableSortable = new Sortable(this.$("tbody"), {
             selector: "tr",
             createDragItem: (pattern, $el) => {
                 const $tr = $el.clone();
