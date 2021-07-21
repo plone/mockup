@@ -1,4 +1,4 @@
-<% _.each(menuOptions.button, function(menuOption){ %>
+<% _.each(menuOptions.button, (menuOption) => { %>
 <a class="btn btn-sm action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <%- menuOption.css %>"
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>"
@@ -29,7 +29,7 @@
       <li class="divider"></li>
     <% } %>
 
-    <% _.each(menuOptions.dropdown, function(menuOption){ %>
+    <% _.each(menuOptions.dropdown, (menuOption) => { %>
     <li>
       <a class="dropdown-item action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.css %>"
           href="<%- menuOption.url %>">

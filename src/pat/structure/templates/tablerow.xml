@@ -32,7 +32,7 @@
   <% } %>
 </td>
 
-<% _.each(activeColumns, function(column) { %>
+<% _.each(activeColumns, (column) => { %>
   <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
     <td class="<%- column %>" data-order="<%- attributes[column] %>"><%- attributes[column] %></td>
   <% } %>

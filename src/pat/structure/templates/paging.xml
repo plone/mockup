@@ -9,7 +9,7 @@
         &lt;
       </a>
     </li>
-    <% _.each(pages, function(p){ %>
+    <% _.each(pages, (p) => { %>
     <li class="page-item <% if (currentPage == p) { %>active<% } else if ( p == '...' ) { %>disabled<% }%>">
       <a href="#" class="page-link page"><%- p %></a>
     </li>

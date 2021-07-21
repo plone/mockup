@@ -68,7 +68,7 @@ export default BaseView.extend({
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
         const datatables_options = {
-            aaSorting: [],
+            order: [0, "asc"],
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -133,22 +133,27 @@ export default BaseView.extend({
 
         registry.scan(this.$el);
 
-        this.$el.find("table").on("order.dt", () => {
+        this.$el.find("table").on("order.dt", (e, settings, ordArr) => {
+            // prevent message from showing for nativ order
+            if(ordArr.length === 1){
+                const order = ordArr[0];
+                if(order.col === 0 && order.dir === 'asc'){
+                    // Restore reordering by drag and drop
+                    this.addReordering();
+                    // Clear the status message
+                    this.app.clearStatus("sorting_dndreordering_disabled");
+                    return;
+                }
+            }
+
             const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
                 .text(_t("Reset column sorting"))
                 .on("click", () => {
                     // Use column 0 to restore ordering and then empty list so it doesn't
                     // show the icon in the column header
-                    const table = this.$el.find("table.pat-datatables");
-                    const api = table.dataTable().api();
+                    const api = $(e.target).dataTable().api();
                     api.order([0, "asc"]);
                     api.draw();
-                    api.order([]);
-                    api.draw();
-                    // Restore reordering by drag and drop
-                    this.addReordering();
-                    // Clear the status message
-                    this.app.clearStatus();
                 });
             this.app.setStatus(
                 {
