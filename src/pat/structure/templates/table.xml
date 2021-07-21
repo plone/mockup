@@ -3,7 +3,7 @@
     <a href="#" title="<%- _t('Root') %>" aria-label="<%- _t('Root') %>" data-path="/">
       <span class="glyphicon glyphicon-home" aria-hidden="true"></span> /
     </a>
-    <% _.each(pathParts, function(part, idx, list){
+    <% _.each(pathParts, (part, idx, list) => {
       if(part){
         if(idx > 0){ %>
           /
@@ -20,7 +20,7 @@
     <tr>
       <th class="selection"><label for="selectAllInputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select all') %>"><%- _t('Select all') %></label><input id="selectAllInputCheckbox" type="checkbox" class="select-all" /></th>
       <th class="title"><%- _t('Title') %></th>
-      <% _.each(activeColumns, function(column){ %>
+      <% _.each(activeColumns, (column) => { %>
         <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
           <th><%- availableColumns[column] %></th>
         <% } %>

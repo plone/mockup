@@ -6,7 +6,7 @@ const menuOptions = {
         url: "#",
         title: _t("Open"),
         category: "button",
-        iconCSS: "glyphicon glyphicon-eye-open",
+        icon: "toolbar-action/view",
         css: "",
         modal: false,
     },
@@ -14,7 +14,7 @@ const menuOptions = {
         url: "#",
         title: _t("Edit"),
         category: "button",
-        iconCSS: "glyphicon glyphicon-pencil",
+        icon: "toolbar-action/edit",
         css: "",
         modal: false,
     },
@@ -23,7 +23,7 @@ const menuOptions = {
         url: "#",
         title: _t("Cut"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-scissors",
+        icon: "plone-cut",
         css: "",
         modal: false,
     },
@@ -32,7 +32,7 @@ const menuOptions = {
         url: "#",
         title: _t("Copy"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-duplicate",
+        icon: "plone-copy",
         css: "",
         modal: false,
     },
@@ -41,7 +41,7 @@ const menuOptions = {
         url: "#",
         title: _t("Paste"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-open-file",
+        icon: "plone-paste",
         css: "",
         modal: false,
     },
@@ -50,7 +50,7 @@ const menuOptions = {
         url: "#",
         title: _t("Move to top of folder"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-step-backward rright",
+        icon: "arrow-bar-up",
         css: "",
         modal: false,
     },
@@ -59,7 +59,7 @@ const menuOptions = {
         url: "#",
         title: _t("Move to bottom of folder"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-step-backward rleft",
+        icon: "arrow-bar-down",
         css: "",
         modal: false,
     },
@@ -68,7 +68,7 @@ const menuOptions = {
         url: "#",
         title: _t("Set as default page"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-ok-circle",
+        icon: "check-circle",
         css: "",
         modal: false,
     },
@@ -77,7 +77,7 @@ const menuOptions = {
         url: "#",
         title: _t("Select all contained items"),
         category: "dropdown",
-        iconCSS: "glyphicon glyphicon-check",
+        icon: "check-all",
         css: "",
         modal: false,
     },
@@ -102,7 +102,7 @@ const ActionMenu = function (menu) {
         delete result["move-bottom"];
     }
     if (
-        app.defaultPageTypes.indexOf(model.portal_type) == -1 ||
+        app.defaultPageTypes.indexOf(model.portal_type) === -1 ||
         !app.setDefaultPageUrl
     ) {
         delete result["set-default-page"];

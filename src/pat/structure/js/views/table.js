@@ -6,13 +6,14 @@ import BaseView from "../../../../core/ui/views/base";
 import TableRowView from "./tablerow";
 import TableTemplate from "../../templates/table.xml";
 import Sortable from "../../../sortable/sortable";
-import patMoment from "../../../moment/moment";
+import PatMoment from "../../../moment/moment";
 import "../../../datatables/datatables";
 import "bootstrap/js/src/alert";
 
 export default BaseView.extend({
     tagName: "div",
     template: _.template(TableTemplate),
+    tableSortable: null,
 
     initialize: function (options) {
         BaseView.prototype.initialize.apply(this, [options]);
@@ -24,6 +25,7 @@ export default BaseView.extend({
         this.collection.pager();
         this.subsetIds = [];
         this.contextInfo = null;
+        this.tableSortable = null;
 
         $("body").on("context-info-loaded", (event, data) => {
             this.contextInfo = data;
@@ -63,12 +65,12 @@ export default BaseView.extend({
         }
     },
 
-    render: function () {
+    render: async function () {
         // By default do not start sorted by any column
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
         const datatables_options = {
-            aaSorting: [],
+            order: [0, "asc"],
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -100,7 +102,7 @@ export default BaseView.extend({
 
         if (this.collection.length) {
             const container = this.$("tbody");
-            this.collection.each((result) => {
+            await this.collection.each(async (result) => {
                 this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
                     if (
@@ -115,56 +117,66 @@ export default BaseView.extend({
                     model: result,
                     app: this.app,
                     table: this,
-                }).render();
+                });
+                await view.render();
                 container.append(view.el);
             });
         }
-        this.moment = new patMoment(this.$el, {
+        this.moment = new PatMoment(this.$el, {
             selector: "." + this.dateColumns.join(",."),
             format: this.options.app.momentFormat,
         });
 
-        if (this.app.options.moveUrl) {
-            this.addReordering();
-        }
-
-        this.storeOrder();
-
         registry.scan(this.$el);
 
-        this.$el.find("table").on("order.dt", () => {
-            const btn = $(
-                '<button type="button" class="btn btn-danger btn-xs"></button>'
-            )
-                .text(_t("Reset column sorting"))
-                .on("click", () => {
-                    // Use column 0 to restore ordering and then empty list so it doesn't
-                    // show the icon in the column header
-                    const table = this.$el.find("table.pat-datatables");
-                    const api = table.dataTable().api();
-                    api.order([0, "asc"]);
-                    api.draw();
-                    api.order([]);
-                    api.draw();
-                    // Restore reordering by drag and drop
+        this.$el.find("table")
+            .on("init.dt", () => {
+                // Add reordering action by drag and drop
+                if(this.app.options.moveUrl){
                     this.addReordering();
-                    // Clear the status message
-                    this.app.clearStatus();
-                });
-            this.app.setStatus(
-                {
-                    text: _t(
+                }
+                // store Order of nativ sorting for move action
+                this.storeOrder();
+            })
+            .on("order.dt", (e, settings, ordArr) => {
+                // prevent message from showing for nativ order
+                if(ordArr.length === 1){
+                    const order = ordArr[0];
+                    if(order.col === 0 && order.dir === 'asc'){
+                        if(this.tableSortable){
+                            this.tableSortable.enableSort();
+                        }
+                        // Clear the status message
+                        this.app.clearStatus("sorting_dndreordering_disabled");
+                        return;
+                    }
+                }
+
+                const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+                  .text(_t("Reset column sorting"))
+                  .on("click", () => {
+                      // Use column 0 to restore ordering and then empty list so it doesn't
+                      // show the icon in the column header
+                      const api = $(e.target).dataTable().api();
+                      api.order([0, "asc"]);
+                      api.draw();
+                  });
+                this.app.setStatus(
+                  {
+                      text: _t(
                         "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
-                    ),
-                    type: "warning",
-                },
-                btn,
-                false,
-                "sorting_dndreordering_disabled"
-            );
-            $(".pat-datatables tbody").find("tr").off("drag");
-            this.$el.removeClass("order-support");
-        });
+                      ),
+                      type: "warning",
+                  },
+                  btn,
+                  false,
+                  "sorting_dndreordering_disabled"
+                );
+                if(this.tableSortable){
+                    this.tableSortable.disableSort();
+                }
+                this.$el.removeClass("order-support");
+            });
 
         return this;
     },
@@ -209,13 +221,14 @@ export default BaseView.extend({
     },
 
     addReordering: function () {
+        console.warn('addReordering');
         // if we have a custom query going on, we do not allow sorting.
         if (this.app.inQueryMode()) {
             this.$el.removeClass("order-support");
             return;
         }
         this.$el.addClass("order-support");
-        new Sortable(this.$("tbody"), {
+        this.tableSortable = new Sortable(this.$("tbody"), {
             selector: "tr",
             createDragItem: (pattern, $el) => {
                 const $tr = $el.clone();

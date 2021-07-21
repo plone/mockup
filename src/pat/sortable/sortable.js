@@ -15,7 +15,8 @@ export default Base.extend({
     init: async function () {
         let Sortable = await import("sortablejs");
         Sortable = Sortable.default;
-        new Sortable(this.$el[0], {
+        this.sortable = new Sortable(this.$el[0], {
+            animation: 150,
             draggable: this.options.selector,
             chosenClass: this.options.dragClass,
             dragClass: this.options.cloneClass,
@@ -31,4 +32,10 @@ export default Base.extend({
             }.bind(this),
         });
     },
+    disableSort: function(){
+        this.sortable.option('sort', false);
+    },
+    enableSort: function(){
+        this.sortable.option('sort', true);
+    }
 });

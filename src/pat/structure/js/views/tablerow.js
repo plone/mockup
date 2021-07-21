@@ -43,7 +43,7 @@ export default Backbone.View.extend({
         return dt.diff(this.now, "seconds") > 0;
     },
 
-    render: function () {
+    render: async function () {
         const data = this.model.toJSON();
         data.selected = false;
         if (this.selectedCollection.findWhere({ UID: data.UID })) {
@@ -101,8 +101,8 @@ export default Backbone.View.extend({
             menuOptions: this.app.menuOptions,
             canMove: canMove,
         });
-
-        $(".actionmenu-container", this.$el).append(this.menu.render().el);
+        await this.menu.render();
+        $(".actionmenu-container", this.$el).append(this.menu.el);
         return this;
     },
 
