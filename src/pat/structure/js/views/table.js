@@ -125,50 +125,51 @@ export default BaseView.extend({
             format: this.options.app.momentFormat,
         });
 
-        if (this.app.options.moveUrl) {
-            this.addReordering();
-        }
-
-        this.storeOrder();
-
         registry.scan(this.$el);
 
-        this.$el.find("table").on("order.dt", (e, settings, ordArr) => {
-            // prevent message from showing for nativ order
-            if(ordArr.length === 1){
-                const order = ordArr[0];
-                if(order.col === 0 && order.dir === 'asc'){
-                    // Restore reordering by drag and drop
+        this.$el.find("table")
+            .on("init.dt", () => {
+                // Add reordering action by drag and drop
+                if(this.app.options.moveUrl){
                     this.addReordering();
-                    // Clear the status message
-                    this.app.clearStatus("sorting_dndreordering_disabled");
-                    return;
                 }
-            }
+                // store Order of nativ sorting for move action
+                this.storeOrder();
+            })
+            .on("order.dt", (e, settings, ordArr) => {
+                // prevent message from showing for nativ order
+                if(ordArr.length === 1){
+                    const order = ordArr[0];
+                    if(order.col === 0 && order.dir === 'asc'){
+                        // Clear the status message
+                        this.app.clearStatus("sorting_dndreordering_disabled");
+                        return;
+                    }
+                }
 
-            const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
-                .text(_t("Reset column sorting"))
-                .on("click", () => {
-                    // Use column 0 to restore ordering and then empty list so it doesn't
-                    // show the icon in the column header
-                    const api = $(e.target).dataTable().api();
-                    api.order([0, "asc"]);
-                    api.draw();
-                });
-            this.app.setStatus(
-                {
-                    text: _t(
+                const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
+                  .text(_t("Reset column sorting"))
+                  .on("click", () => {
+                      // Use column 0 to restore ordering and then empty list so it doesn't
+                      // show the icon in the column header
+                      const api = $(e.target).dataTable().api();
+                      api.order([0, "asc"]);
+                      api.draw();
+                  });
+                this.app.setStatus(
+                  {
+                      text: _t(
                         "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
-                    ),
-                    type: "warning",
-                },
-                btn,
-                false,
-                "sorting_dndreordering_disabled"
-            );
-            $(".pat-datatables tbody").find("tr").off("drag");
-            this.$el.removeClass("order-support");
-        });
+                      ),
+                      type: "warning",
+                  },
+                  btn,
+                  false,
+                  "sorting_dndreordering_disabled"
+                );
+                this.$el.find(".pat-datatables tbody").off("drag pointerdown dragenter dragover");
+                this.$el.removeClass("order-support");
+            });
 
         return this;
     },
@@ -213,6 +214,7 @@ export default BaseView.extend({
     },
 
     addReordering: function () {
+        console.warn('addReordering');
         // if we have a custom query going on, we do not allow sorting.
         if (this.app.inQueryMode()) {
             this.$el.removeClass("order-support");
