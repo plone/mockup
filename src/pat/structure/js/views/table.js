@@ -220,7 +220,6 @@ export default BaseView.extend({
     },
 
     addReordering: function () {
-        console.warn('addReordering');
         // if we have a custom query going on, we do not allow sorting.
         if (this.app.inQueryMode()) {
             this.$el.removeClass("order-support");
