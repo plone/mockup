@@ -5,7 +5,6 @@ import utils from "../../../../core/utils";
 import Backbone from "backbone";
 import moment from "moment";
 
-import Navigation from "../navigation";
 import ActionMenuView from "./actionmenu";
 import TableRowTemplate from "../../templates/tablerow.xml";
 
@@ -45,10 +44,8 @@ export default Backbone.View.extend({
 
     render: async function () {
         const data = this.model.toJSON();
-        data.selected = false;
-        if (this.selectedCollection.findWhere({ UID: data.UID })) {
-            data.selected = true;
-        }
+
+        data.selected = !!this.selectedCollection.findWhere({UID: data.UID});
         data.attributes = this.model.attributes;
         data.activeColumns = this.app.activeColumns;
         data.availableColumns = this.app.availableColumns;
@@ -57,10 +54,7 @@ export default Backbone.View.extend({
         data._authenticator = utils.getAuthenticator();
         data.thumb_scale = this.app.thumb_scale;
 
-        const viewAction =
-            (this.app.typeToViewAction &&
-                this.app.typeToViewAction[data.attributes.portal_type]) ||
-            "";
+        const viewAction = (this.app.typeToViewAction && this.app.typeToViewAction[data.attributes.portal_type]) || "";
         data.viewURL = data.attributes.getURL + viewAction;
 
         data._t = _t;
@@ -68,18 +62,15 @@ export default Backbone.View.extend({
         data.ineffective = this.ineffective(data);
         this.$el.html(this.template(data));
         const attrs = this.model.attributes;
-        this.$el
-            .addClass("state-" + attrs["review_state"])
-            .addClass("type-" + attrs.portal_type); // jshint ignore:line
-        if (attrs["is_folderish"]) {
-            // jshint ignore:line
+        this.$el.addClass([`state-${attrs.review_state}`, `type-${attrs.portal_type}`]);
+        if (data.is_folderish) {
             this.$el.addClass("folder");
         }
         this.$el.attr("data-path", data.path);
         this.$el.attr("data-UID", data.UID);
         this.$el.attr("data-id", data.id);
         this.$el.attr("data-type", data.portal_type);
-        this.$el.attr("data-folderish", data["is_folderish"]); // jshint ignore:line
+        this.$el.attr("data-folderish", data.is_folderish);
         this.$el.removeClass("expired");
         this.$el.removeClass("ineffective");
 
@@ -110,13 +101,17 @@ export default Backbone.View.extend({
         /* check if this should just be opened in new window */
         const keyEvent = this.app.keyEvent;
         // Resolve the correct handler based on these keys.
-        // Default handlers live in ../navigation.js (bound to Nav)
         if ((keyEvent && keyEvent.ctrlKey) || !this.model.attributes.is_folderish) {
             // middle/ctrl-click or not a folder content
             // not yet implemented.
             return null;
         }
-        return Navigation.folderClicked(e);
+
+        e.preventDefault();
+        // handler for folder, go down path and show in contents window.
+        this.app.setCurrentPath(this.model.attributes.path);
+        // also switch to fix page in batch
+        this.app.collection.goTo(this.app.collection.information.firstPage);
     },
 
     itemSelected: function () {

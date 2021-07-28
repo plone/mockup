@@ -197,8 +197,7 @@ export default BaseView.extend({
         }
         path += $el.attr("data-path");
         this.app.setCurrentPath(path);
-        this.collection.currentPage = 1;
-        this.collection.pager();
+        this.app.collection.goTo(this.app.collection.information.firstPage);
     },
 
     selectAll: function (e) {
