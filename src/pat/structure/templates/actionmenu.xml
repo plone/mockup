@@ -1,5 +1,5 @@
 <% _.each(menuOptions.button, (menuOption) => { %>
-<a class="btn btn-sm action <%- menuOption.name %> <%- menuOption.idx %> pat-tooltip <%- menuOption.css %>"
+<a class="btn btn-sm action pat-tooltip <%- menuOption.classes.join(' ') %>"
     href="<%- menuOption.url %>"
     title="<%- _t(menuOption.title) %>"
     aria-label="<%- _t(menuOption.title) %>">
@@ -31,7 +31,7 @@
 
     <% _.each(menuOptions.dropdown, (menuOption) => { %>
     <li>
-      <a class="dropdown-item action <%- menuOption.name %> <%- menuOption.idx %> <%- menuOption.css %>"
+      <a class="dropdown-item action <%- menuOption.classes.join(' ') %>"
           href="<%- menuOption.url %>">
         <% if (menuOption.iconSVG) { %>
           <%= menuOption.iconSVG %>

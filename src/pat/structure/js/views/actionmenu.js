@@ -19,11 +19,11 @@ export default BaseView.extend({
     // Dynamic menu options
 
     eventConstructor: function (definition) {
-        const method = definition.method?.bind?.(this);
+        const method = definition.method;
         if (!method || !this.actions[method]) {
             return false;
         }
-        return this.actions[method];
+        return this.actions[method].bind(this.actions);
     },
 
     events: function () {
@@ -35,8 +35,7 @@ export default BaseView.extend({
 
         _.each(this.menuOptions, (menuOption, key) => {
             // set a unique identifier to uniquely bind the events.
-            const idx = utils.generateId();
-            menuOption.idx = idx;
+            menuOption.idx = utils.generateId();
             menuOption.name = key; // we want to add the action's key as class name to the output.
 
             const category = menuOption.category || "dropdown";
@@ -44,7 +43,10 @@ export default BaseView.extend({
                 menuOptionsCategorized[category] = [];
             }
             menuOptionsCategorized[category].push(menuOption);
-            menuOption.css = menuOption.css || "";
+            menuOption.classes = [menuOption.name, menuOption.idx];
+            if(menuOption.css){
+                menuOption.classes.push(menuOption.css);
+            }
             if (menuOption.modal === true) {
                 // add standard pat-plone-modal.
                 // If you want another modal implementation, don't use modal=true but set the css option on action items.
@@ -54,7 +56,7 @@ export default BaseView.extend({
             // Create event handler and add it to the results object.
             const e = this.eventConstructor(menuOption);
             if (e) {
-                result["click a." + idx] = e;
+                result[`click a.${menuOption.name}`] = e;
             }
         });
 
