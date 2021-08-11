@@ -24,6 +24,7 @@ export default Backbone.View.extend({
         this.selectedCollection = this.app.selectedCollection;
         this.table = this.options.table;
         this.now = moment();
+        this.listenTo(this.table, "context-info:set", this.render);
     },
 
     expired: function (data) {
@@ -65,6 +66,9 @@ export default Backbone.View.extend({
         this.$el.addClass([`state-${attrs.review_state}`, `type-${attrs.portal_type}`]);
         if (data.is_folderish) {
             this.$el.addClass("folder");
+        }
+        if(data.id === this.table.contextInfo?.defaultPage){
+            this.$el.addClass('default-page');
         }
         this.$el.attr("data-path", data.path);
         this.$el.attr("data-UID", data.UID);

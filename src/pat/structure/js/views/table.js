@@ -51,10 +51,6 @@ export default BaseView.extend({
 
     setContextInfo: function () {
         const data = this.contextInfo;
-        const $defaultPage = this.$('[data-id="' + data.defaultPage + '"]');
-        if ($defaultPage.length > 0) {
-            $defaultPage.addClass("default-page");
-        }
         /* set breadcrumb title info */
         const crumbs = data.breadcrumbs;
         if (crumbs && crumbs.length) {
@@ -63,6 +59,7 @@ export default BaseView.extend({
                 $crumbs.eq(idx).html(crumb.title);
             });
         }
+        this.trigger("context-info:set");
     },
 
     render: async function () {
