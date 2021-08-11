@@ -21,7 +21,7 @@ export default Backbone.Model.extend({
         e.preventDefault();
         let page = 1;
         let count = 0;
-        const getPage = function () {
+        const getPage = () => {
             this.app.loading.show();
             $.ajax({
                 url: this.app.collection.url,
