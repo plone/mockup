@@ -58,6 +58,7 @@ export default Backbone.View.extend({
         data.viewURL = data.attributes.getURL + viewAction;
 
         data._t = _t;
+        data.convertColumnValue = this.convertColumnValue.bind(this);
         data.expired = this.expired(data);
         data.ineffective = this.ineffective(data);
         this.$el.html(this.template(data));
@@ -97,7 +98,25 @@ export default Backbone.View.extend({
         });
         await this.menu.render();
         $(".actionmenu-container", this.$el).append(this.menu.el);
+
         return this;
+    },
+
+    /**
+     * Converts Column value in Human-Readable format
+     * @param {string} column
+     * @param {*} value
+     * @returns {string|*}
+     */
+    convertColumnValue: function(column, value) {
+        if(this.table.dateColumns.includes(column)){
+            const date = new Date(value);
+            if(date instanceof Date && date.toString() === 'Invalid Date'){
+                return value;
+            }
+            return date.toLocaleString(this.app.language, this.app.dateFormat);
+        }
+        return value;
     },
 
     itemClicked: function (e) {

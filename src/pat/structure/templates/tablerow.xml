@@ -34,7 +34,7 @@
 
 <% _.each(activeColumns, (column) => { %>
   <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
-    <td class="<%- column %>" data-order="<%- attributes[column] %>"><%- attributes[column] %></td>
+    <td class="<%- column %>" data-order="<%- attributes[column] %>"><%- convertColumnValue(column, attributes[column]) %></td>
   <% } %>
 <% }); %>
 
