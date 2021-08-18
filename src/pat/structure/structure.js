@@ -66,7 +66,11 @@ export default Base.extend({
 
         defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
 
-        momentFormat: "L LT",
+        language: 'en',
+        dateFormat: {
+            dateStyle: "medium",
+            timeStyle: "medium"
+        },
         rearrange: {
             properties: {
                 id: "ID",
@@ -135,6 +139,7 @@ export default Base.extend({
         this.browsing = true; // so all queries will be correct with QueryHelper
         this.options.collectionUrl = this.options.vocabularyUrl;
         this.options.pattern = this;
+        this.options.language = document.querySelector('html').getAttribute("lang") || 'en';
 
         // the ``attributes`` options key is not compatible with backbone,
         // but queryHelper that will be constructed by the default

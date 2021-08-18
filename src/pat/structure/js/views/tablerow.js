@@ -3,7 +3,6 @@ import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import utils from "../../../../core/utils";
 import Backbone from "backbone";
-import moment from "moment";
 
 import ActionMenuView from "./actionmenu";
 import TableRowTemplate from "../../templates/tablerow.xml";
@@ -23,7 +22,7 @@ export default Backbone.View.extend({
         this.app = options.app;
         this.selectedCollection = this.app.selectedCollection;
         this.table = this.options.table;
-        this.now = moment();
+        this.now = new Date();
         this.listenTo(this.table, "context-info:set", this.render);
     },
 
@@ -31,16 +30,16 @@ export default Backbone.View.extend({
         if (!data.attributes.ExpirationDate) {
             return false;
         }
-        const dt = moment(data.attributes.ExpirationDate);
-        return dt.diff(this.now, "seconds") < 0;
+        const dt = new Date(data.attributes.ExpirationDate);
+        return this.now > dt;
     },
 
     ineffective: function (data) {
         if (!data.attributes.EffectiveDate) {
             return false;
         }
-        const dt = moment(data.attributes.EffectiveDate);
-        return dt.diff(this.now, "seconds") > 0;
+        const dt = new Date(data.attributes.EffectiveDate);
+        return this.now > dt;
     },
 
     render: async function () {
