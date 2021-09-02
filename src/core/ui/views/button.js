@@ -41,7 +41,7 @@ export default BaseView.extend({
                 );
 
                 if(this.icon && typeof this.icon == 'string'){
-                    const iconMarkup = await utils.resolveIcon('plone.icon.' + this.icon, true);
+                    const iconMarkup = await utils.resolveIcon(`plone.icon.${this.icon}`, true);
                     if(iconMarkup){
                         this.$el.prepend(iconMarkup);
                     }
