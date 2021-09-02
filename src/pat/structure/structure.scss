@@ -36,6 +36,7 @@
         border: none;
         min-height: auto;
         margin: 0 0 0.5em;
+        background-color: $body-bg;
 
         & > a.btn:last-of-type,
         .btn-group {
