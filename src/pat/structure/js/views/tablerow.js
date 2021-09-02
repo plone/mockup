@@ -39,7 +39,7 @@ export default Backbone.View.extend({
             return false;
         }
         const dt = new Date(data.attributes.EffectiveDate);
-        return this.now > dt;
+        return this.now < dt;
     },
 
     render: async function () {
