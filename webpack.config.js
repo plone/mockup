@@ -31,25 +31,6 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
     config.resolve.alias.svelte = path.resolve("node_modules", "svelte");
     config.resolve.extensions = [".wasm", ".mjs", ".js", ".json", ".svelte"];
     config.resolve.mainFields = ["svelte", "browser", "module", "main"];
-    if (argv.mode === "development") {
-        // Use checked-out versions of dependencies if available.
-        try {
-            const dev_includes = await fs.promises.readdir(
-                path.resolve(build_dirname, "devsrc/")
-            );
-            for (const it of dev_includes) {
-                if ([".gitkeep"].includes(it)) {
-                    continue;
-                }
-                const prefix = it.indexOf("pat") === 0 ? "@patternslib/" : "";
-                config.resolve.alias[prefix + it] = path.resolve(
-                    build_dirname,
-                    `devsrc/${it}`
-                );
-            }
-        } catch (error) {
-            // ignore.
-        }
 
         // Set public path to override __webpack_public_path__
         // for webpack-dev-server
