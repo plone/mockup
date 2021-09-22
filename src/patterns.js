@@ -14,7 +14,7 @@ import "@patternslib/patternslib/src/pat/datetime-picker/datetime-picker";
 import "@patternslib/patternslib/src/pat/validation/validation";
 import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/tooltip/tooltip";
 import "@patternslib/pat-code-editor/src/code-editor";
-import "@patternslib/pat-content-browser/src/content-browser";
+//import "@patternslib/pat-content-browser/src/content-browser";
 //import "@patternslib/pat-tinymce/src/tinymce";
 
 // Import all used patterns for the bundle to be generated
