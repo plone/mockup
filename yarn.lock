@@ -7443,6 +7443,13 @@ jqtree@1.4.10, jqtree@>=0.16:
   dependencies:
     jquery ">=1.9"
 
+jqtree@1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.6.1.tgz#1df198aec08627ccf03705acf1975c6315355144"
+  integrity sha512-anZeFRJzNFhnwECciCV5xGK507aKV+c8qGM9yWTNKCKOBlkPzsFUfrMsN8g2ZLh6hyOMKLKEryYrMA7F68Mnvw==
+  dependencies:
+    jquery ">=1.9"
+
 jquery-form@4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/jquery-form/-/jquery-form-4.2.2.tgz#9f96fb141ec9cbe0cdaf58b4d3f1dcbb009cdd52"
