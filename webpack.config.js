@@ -6,14 +6,14 @@ const webpack = require("webpack");
 module.exports = async (env, argv, build_dirname = __dirname) => {
     let config = {
         entry: {
-            "bundle": path.resolve(build_dirname, "src/patterns.js"),
+            "bundle": path.resolve(__dirname, "src/patterns.js"),
             "bundle-polyfills": path.resolve(build_dirname, "node_modules/@patternslib/patternslib/src/polyfills.js"), // prettier-ignore
         },
     };
 
     config = patternslib_config(env, argv, config);
 
-    config.output.path = path.resolve(build_dirname, "dist/");
+    config.output.path = path.resolve(__dirname, "dist/");
 
     config.plugins.push(
         new webpack.ProvidePlugin({
