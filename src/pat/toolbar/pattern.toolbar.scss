@@ -4,7 +4,7 @@
 @import "variables.scss";
 
 #edit-zone {
-    font-family: $plone-toolbar-font-primary;
+    // font-family: $plone-toolbar-font-primary;
     font-weight: 400;
     position: fixed;
     z-index: 20;
@@ -70,7 +70,7 @@
     /*first-level*/
 
     nav > ul {
-        font-family: $plone-toolbar-font-primary;
+        // font-family: $plone-toolbar-font-primary;
         font-size: 12px;
         margin: 0;
         padding: 0;
@@ -78,8 +78,8 @@
 
         [class^="icon"] {
             font-size: 20px;
+            vertical-align: middle;
         }
-
         a {
             position: relative;
             overflow: hidden;
@@ -215,7 +215,7 @@
         /*second-level*/
 
         ul {
-            font-family: $plone-toolbar-font-secondary;
+            // font-family: $plone-toolbar-font-secondary;
             font-size: 14px;
             line-height: 30px;
             position: absolute;
@@ -961,6 +961,10 @@
 
 // #edit-zone nav > ul ul {
 // }
+
+#edit-zone svg.toolbarIcon {
+    vertical-align: initial;
+}
 
 #edit-zone nav > ul li.active ul {
     display: block;
