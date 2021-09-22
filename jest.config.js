@@ -9,5 +9,6 @@ module.exports = {
     moduleNameMapper: {
         "\\.(css|less|sass|scss)$": "identity-obj-proxy",
     },
+    testEnvironment: "jsdom",
     transformIgnorePatterns: ["/node_modules/(?!.*patternslib/*).+\\.[t|j]sx?$"],
 };
