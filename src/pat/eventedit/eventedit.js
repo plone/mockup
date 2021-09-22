@@ -1,6 +1,6 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
-import pat_pickadate from "../pickadate/pickadate";
+import "../pickadate/pickadate";
 
 export default Base.extend({
     name: "eventedit",
@@ -15,21 +15,13 @@ export default Base.extend({
             jq_open_end,
             jq_end,
             jq_start;
-        var jq_whole_day, jq_time;
-        jq_whole_day = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-whole_day input", $el),
-            $("#archetypes-fieldname-wholeDay input#wholeDay", $el)
+        const jq_whole_day = $(
+            "#formfield-form-widgets-IEventBasic-whole_day input",
+            $el
         );
-
-        jq_time = self.aOrB(
-            $(
-                "#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper",
-                $el
-            ),
-            $(
-                "#archetypes-fieldname-startDate .pattern-pickadate-time-wrapper, #archetypes-fieldname-endDate .pattern-pickadate-time-wrapper",
-                $el
-            )
+        const jq_time = $(
+            "#formfield-form-widgets-IEventBasic-start .pattern-pickadate-time-wrapper, #formfield-form-widgets-IEventBasic-end .pattern-pickadate-time-wrapper",
+            $el
         );
 
         if (jq_whole_day.length > 0 && jq_time.length > 0) {
@@ -40,14 +32,8 @@ export default Base.extend({
         }
 
         // OPEN END INIT
-        jq_open_end = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-open_end input", $el),
-            $("#archetypes-fieldname-openEnd input#openEnd", $el)
-        );
-        jq_end = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-end", $el),
-            $("#archetypes-fieldname-endDate", $el)
-        );
+        jq_open_end = $("#formfield-form-widgets-IEventBasic-open_end input", $el);
+        jq_end = $("#formfield-form-widgets-IEventBasic-end", $el);
         if (jq_open_end.length > 0) {
             jq_open_end.bind("change", function (e) {
                 self.showHideWidget(jq_end, e.target.checked, true);
@@ -56,10 +42,7 @@ export default Base.extend({
         }
 
         // START/END SETTING/VALIDATION
-        jq_start = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-start", $el),
-            $("#archetypes-fieldname-startDate", $el)
-        );
+        jq_start = $("#formfield-form-widgets-IEventBasic-start", $el);
         jq_start.each(function () {
             $(this).on("change", ".picker__input", function () {
                 self.updateEndDate();
@@ -70,20 +53,6 @@ export default Base.extend({
                 self.validateEndDate();
             });
         });
-    },
-
-    aOrB: function (a, b) {
-        /* Return element a or element b, depending on which is available.
-         * Parameter a and b: CSS selectors.
-         * Returns: a jQuery object.
-         */
-        var ret;
-        if ($(a).length > 0) {
-            ret = a;
-        } else {
-            ret = b;
-        }
-        return $(ret);
     },
 
     getDateTime: function (datetimewidget) {
@@ -121,16 +90,10 @@ export default Base.extend({
             start_datetime,
             end_datetime;
         start_datetime = self.getDateTime(
-            self.aOrB(
-                $("#formfield-form-widgets-IEventBasic-start", $el),
-                $("#archetypes-fieldname-startDate", $el)
-            )
+            $("#formfield-form-widgets-IEventBasic-start", $el)
         );
         end_datetime = self.getDateTime(
-            self.aOrB(
-                $("#formfield-form-widgets-IEventBasic-end", $el),
-                $("#archetypes-fieldname-endDate", $el)
-            )
+            $("#formfield-form-widgets-IEventBasic-end", $el)
         );
         return (end_datetime - start_datetime) / 1000 / 60;
     },
@@ -142,14 +105,8 @@ export default Base.extend({
             jq_end,
             start_date,
             new_end_date;
-        jq_start = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-start", $el),
-            $("#archetypes-fieldname-startDate", $el)
-        );
-        jq_end = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-end", $el),
-            $("#archetypes-fieldname-endDate", $el)
-        );
+        jq_start = $("#formfield-form-widgets-IEventBasic-start", $el);
+        jq_end = $("#formfield-form-widgets-IEventBasic-end", $el);
 
         start_date = self.getDateTime(jq_start);
         new_end_date = new Date(start_date.getTime());
@@ -172,14 +129,8 @@ export default Base.extend({
             jq_end,
             start_datetime,
             end_datetime;
-        jq_start = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-start", $el),
-            $("#archetypes-fieldname-startDate", $el)
-        );
-        jq_end = self.aOrB(
-            $("#formfield-form-widgets-IEventBasic-end", $el),
-            $("#archetypes-fieldname-endDate", $el)
-        );
+        jq_start = $("#formfield-form-widgets-IEventBasic-start", $el);
+        jq_end = $("#formfield-form-widgets-IEventBasic-end", $el);
         start_datetime = self.getDateTime(jq_start);
         end_datetime = self.getDateTime(jq_end);
         if (end_datetime < start_datetime) {

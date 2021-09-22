@@ -142,31 +142,4 @@ describe("Event Edit", function () {
             "div#formfield-form-widgets-IEventBasic-whole_day"
         );
     });
-
-    it.skip("Editing an Archetypes event", function () {
-        base_test_case(
-            '<div class="pat-eventedit">' +
-                '  <div id="archetypes-fieldname-startDate">' +
-                "    Start" +
-                '    <input class="pat-pickadate" type="text" name="startDate" value="2014-08-14 14:00" />' +
-                "  </div>" +
-                '  <div id="archetypes-fieldname-endDate">' +
-                "    End" +
-                '    <input class="pat-pickadate" type="text" name="endDate" value="2014-08-14 15:30" />' +
-                "  </div>" +
-                '  <div id="archetypes-fieldname-wholeDay">' +
-                "    Whole Day" +
-                '    <input type="checkbox" id="wholeDay" />' +
-                "  </div>" +
-                '  <div id="archetypes-fieldname-openEnd">' +
-                "    Open End" +
-                '    <input type="checkbox" id="openEnd" />' +
-                "  </div>" +
-                "</div>",
-            "div#archetypes-fieldname-startDate",
-            "div#archetypes-fieldname-endDate",
-            "div#archetypes-fieldname-openEnd",
-            "div#archetypes-fieldname-wholeDay"
-        );
-    });
 });
