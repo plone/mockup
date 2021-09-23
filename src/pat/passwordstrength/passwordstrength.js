@@ -45,10 +45,7 @@ export default Base.extend({
         function setLevel() {
             var score = 0;
 
-            if (typeof window.zxcvbn !== "function") {
-                // No zxcvbn yet, try and load it
-                loadScript(self.options.zxcvbn);
-            } else if (pwfield.value.length > 0) {
+            if (pwfield.value.length > 0) {
                 // Run zxcvbn, supplying the value of any other widgets in the form
                 score = Math.max(
                     1,
@@ -84,7 +81,12 @@ export default Base.extend({
         pwfield.onkeyup = function (e) {
             setLevel();
         };
-        // initial setting
+        // init zxcvbn
+        if (typeof window.zxcvbn !== "function") {
+            // No zxcvbn yet, try and load it
+            loadScript(self.options.zxcvbn);
+        }
+        // initial pwmeter setting
         setLevel();
     },
 });
