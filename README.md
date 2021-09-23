@@ -1,115 +1,109 @@
-Plone Mockup is an ongoing effort to modernize Plone's javascript story. Check out examples and documentation at http://plone.github.io/mockup/
+# Plone Mockup
 
-The Goals of Mockup
--------------------
-
-1. Standardize configuration of patterns implemented in js
-   to use HTML data attributes, so they can be developed
-   without running a backend server.
-2. Use modern AMD approach to declaring dependencies on other js libs.
-3. Full unit testing of js
-
-Install & Run Tests
--------------------
-Install Node version 0.10 or greater
-
-    `Install using package manager, e.g. apt or yum
-    <https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager>`_
-
-    `Install without using package manager
-    <https://github.com/joyent/node/wiki/Installation>`_
-
-Install PhantomJS
-
-    `Download and install PhantomJS
-    <http://phantomjs.org/download.html>`_
-
-Maybe use your package manager::
-
-    $ apt-get install phantomjs
-
-Now git clone & build Mockup::
-
-    $ git clone https://github.com/plone/mockup.git
-    $ cd mockup
-    $ make bootstrap
-
-Run tests with PhantomJS::
-
-    $ make test
-
-Run tests with Chrome::
-
-    $ make test-dev
-
-Generate widgets.pot file in the working directory for Plone translations::
-
-    $ make i18n-dump
-
-If you are currently in the buildout.coredev/src/mockup folder and want to update
-the translations in plone.app.locales, first go back in the buildout.coredev
-folder, copy widgets.pot in the plone.app.locales package and resync the po files like
-this::
-
-    $ cd ../..
-    $ cp src/mockup/widgets.pot src/plone.app.locales/plone/app/locales/locales/widgets.pot
-    $ bin/buildout -c experimental/i18n.cfg  # to have the bin/i18n command
-    $ bin/i18n widgets
-
-If you did some changes in the js files and want to test them live in Plone:
-
-- go to Site Setup -> Resource Registries
-- click on the "Development Mode (only logged in users)" checkbox
-- click on the "Develop Javascript" button for the plone-editor-tools bundle
-  (for folder contents changes, may be another bundle for an other pattern)
-- click the "Save" button
-- refresh your page (folder contents for example)
-
-To have the js changes in the next Plone release, you need to build the
-bundles, see `README of plone.staticresources <https://github.com/plone/plone.staticresources>`_
-You may be interested reading `JavaScript For Plone Developers <https://training.plone.org/5/javascript/index.html>`_ and
-`Resource Registry <https://docs.plone.org/adapt-and-extend/theming/resourceregistry.html>`_ documentation too.
-
-To test a translation, for example French:
-
-- edit the po file src/plone.app.locales/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po
-- restart your instance to rebuild the mo file from the po file
-- purge your localStorage and refresh the page to trigger a new download of the translations
-
-The translations are handled by mockup/js/i18n.js that calls the plonejsi18n view defined
-in plone.app.content to generate a json of the translations from the mo file.
-The plonejsi18n view is called one time for a given domain and language and the result
-is cached in localStorage for 24 hours.
-The only way to test the new translations is to restart the instance to update the mo file
-from the po file, and then to purge the localStorage to trigger a new download of the translations.
+Mockup is the JavaScript stack of the Plone Classic UI.
 
 
-License
-=======
+## Install
 
-The BSD 3-Clause License. Copyrights hold the Plone Foundation.
-See `LICENSE.rst <LICENSE.rst>`_ for details.
+- Have a current node.js installed.
+
+- Run: ``npx yarn install``:
+  We are using yarn instead of npm.
+  ``npx`` is for running a npm package command - or downloading and installing it first.
+
+- Run: ``yarn start``:
+  This starts up the webpack build process in watch mode.
+  Any JavaScript changes are immediately compiled.
+  For some changes - like for adding new packages via ``yarn add`` and then using it you might need to restart.
+  The command also spins up a development server for our 11ty based documentation and demo pages.
+
+- Go to ``http://localhost:8000``:
+  On this port our demo and documentation pages are served.
 
 
-Credits
--------
+## Running tests
 
-Originally created by `Rok Garbas <http://garbas.si/>`_ using parts of `Patterns
-library <http://patternslib.com/>`_. Now maintained by the `Plone Foundation
-<http://plone.org/>`_.
+- ``jest``: Run all tests
+- ``jest src/pat/PATH-TO-PATTERN``: Run a specific test suite
+- ``jest src/pat/PATH-TO-PATTERN -t "Test name"``: Run a specific test matching "Test name" from a specific test suite.
+- ``jest --watch``: Run the interactive test runner.
 
 
-Status of builds
-----------------
+## Debugging tests
 
-.. image:: https://travis-ci.org/plone/mockup.png
-   :target: https://travis-ci.org/plone/mockup
-   :alt: Travis CI
+The tests are based on jsdom - a library mocking DOM and HTML standards in JavaScript.
+No real browsers are involved, which make the tests run really fast.
 
-.. image:: https://coveralls.io/repos/plone/mockup/badge.png?branch=master
-   :target: https://coveralls.io/r/plone/mockup?branch=master
-   :alt: Coveralls
+Still, you can connect to the Chome debugging interface via:
 
-.. image:: https://d2weczhvl823v0.cloudfront.net/plone/mockup/trend.png
-   :target: https://bitdeli.com/free
-   :alt: Bitdeli
+```
+node --inspect-brk node_modules/.bin/jest --runInBand ./src/pat/PATH-TO-PATTERN``
+```
+
+Connect in chrome via:
+
+```
+chrome://inspect
+```
+
+You can pass Jest any parameter it accepts, like `-t TESTPATTERN`::
+
+```
+node --inspect-brk node_modules/.bin/jest --runInBand ./src/pat/PATH-TO-PATTERN -t test.name
+```
+
+You can put some ``debugger;`` statements to the code to break the execution and investigate.
+
+
+## Developing external Packages
+
+If you want to work on ony external package like Patternslib or any external Mockup pattern you can do so by linking those packages into the node_modules folder via ``yarn link``.
+
+
+1) Check out the external package you want to develop on.
+
+2) Make sure you have installed the dependencies in the development package (e.g. by running ``yarn install``). (TODO: verify that!)
+
+3) Run ``yarn link`` in the external development package to register it with yarn.
+
+4) Run ``yarn link "PACKAGE-NAME"`` in mockup to create the node_modules symlink.
+
+
+After developing you might want to run ``yarn unlink "PACKAGE-NAME"`` to unlink the development package.
+
+
+For more information see:
+
+- https://classic.yarnpkg.com/en/docs/cli/link/
+- https://classic.yarnpkg.com/en/docs/cli/unlink
+- https://docs.npmjs.com/cli/v7/commands/npm-link
+
+
+**Please note:**: Make sure to unlink and reinstall development pacakges before building a production bundle.
+In doubt, remove the node_modules directory and re-install.
+
+
+## Bundle build analyzation
+
+https://survivejs.com/webpack/optimizing/build-analysis/
+https://formidable.com/blog/2018/finding-webpack-duplicates-with-inspectpack-plugin/
+
+Build the stats.json file:
+
+```
+npx yarn build:stats
+```
+
+Check dependency tree and why which package was included:
+https://www.npmjs.com/package/whybundled
+
+```
+npx whybundled stats.json
+```
+
+Visualize dependency tree and analyze bundle size:
+https://www.npmjs.com/package/webpack-bundle-analyzer
+
+```
+webpack-bundle-analyzer stats.json
+```
