@@ -11,9 +11,11 @@ import jquery from "jquery";
 
 // Patternslib patterns
 import "@patternslib/patternslib/src/pat/datetime-picker/datetime-picker";
+import "@patternslib/patternslib/src/pat/display-time/display-time";
 import "@patternslib/patternslib/src/pat/validation/validation";
 import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/tooltip/tooltip";
 import "@patternslib/pat-code-editor/src/code-editor";
+
 //import "@patternslib/pat-content-browser/src/content-browser";
 //import "@patternslib/pat-tinymce/src/tinymce";
 
@@ -29,7 +31,6 @@ import "./pat/formunloadalert/formunloadalert";
 import "./pat/livesearch/livesearch";
 import "./pat/markspeciallinks/markspeciallinks";
 import "./pat/modal/modal";
-import "./pat/moment/moment";
 import "./pat/navigationmarker/navigationmarker";
 import "./pat/passwordstrength/passwordstrength";
 import "./pat/preventdoublesubmit/preventdoublesubmit";

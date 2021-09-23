@@ -41,7 +41,6 @@
         "jquery.cookie": "1.4.1",
         "jquery.recurrenceinput.js": "https://github.com/collective/jquery.recurrenceinput.js.git#master",
         "marked": "0.3.18",
-        "moment": "2.29.1",
         "pickadate": "3.6.4",
         "promise-polyfill": "^8.1.0",
         "select2": "https://github.com/ivaynberg/select2.git#3.5.4",
