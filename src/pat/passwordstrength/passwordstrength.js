@@ -68,8 +68,7 @@ export default Base.extend({
                 );
             }
             var wclass = "";
-            if (score != 0 && typeof score !== 'undefined')
-            {
+            if (score != 0){
                 wclass = " w-" + (25 * score);
             }
             pwmeter.className = "progress-bar" + wclass + " " + indicators[score];
