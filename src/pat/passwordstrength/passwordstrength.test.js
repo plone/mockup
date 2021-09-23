@@ -52,10 +52,8 @@ define([
             window.zxcvbn = fakeZxcvbn;
             registry.scan($el);
 
-            expect($el.find(".pat-passwordstrength").length).to.be.equal(1);
-            expect(
-                $el.find(".pat-passwordstrength-meter").hasClass("level-0")
-            ).to.be.equal(true);
+            expect($el.find(".progress").length).to.be.equal(1);
+            expect($el.find(".progress-bar").length).to.be.equal(1);
         });
 
         it("tries to load zxcvbn once if not available", function () {
@@ -93,15 +91,15 @@ define([
             registry.scan($el);
 
             $el.find("input[type=password]").attr("value", "a").trigger("keyup");
-            expect($el.find(".pat-passwordstrength-meter").attr("class")).to.equal(
-                "pat-passwordstrength-meter level-1"
+            expect($el.find(".progress-bar").attr("class")).to.equal(
+                "progress-bar w-25 bg-danger"
             );
             expect(window.providedStrings.length).to.equal(0);
             expect(window.providedInterval).to.equal(500);
 
-            $el.find("input[type=password]").attr("value", "aa").trigger("keyup");
-            expect($el.find(".pat-passwordstrength-meter").attr("class")).to.equal(
-                "pat-passwordstrength-meter level-2"
+            $el.find("input[type=password]").attr("value", "aA1!bB$").trigger("keyup");
+            expect($el.find(".progress-bar").attr("class")).to.equal(
+                "progress-bar w-50 bg-warning"
             );
             expect(window.providedStrings.length).to.equal(0);
             expect(window.providedInterval).to.equal(500);
@@ -119,8 +117,8 @@ define([
             registry.scan($el);
 
             $el.find("input[type=password]").attr("value", "a").trigger("keyup");
-            expect($el.find(".pat-passwordstrength-meter").attr("class")).to.equal(
-                "pat-passwordstrength-meter level-1"
+            expect($el.find(".progress-bar").attr("class")).to.equal(
+                "progress-bar w-0 bg-transparent"
             );
             expect(window.providedStrings.length).to.equal(2);
             expect(window.providedStrings).to.contain("bob_geldof");
