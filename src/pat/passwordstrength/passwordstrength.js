@@ -67,7 +67,12 @@ export default Base.extend({
                     ).score
                 );
             }
-            pwmeter.className = "progress-bar w-" + (25 * score) + " " + indicators[score];
+            var wclass = "";
+            if (score != 0 && typeof score !== 'undefined')
+            {
+                wclass = " w-" + (25 * score);
+            }
+            pwmeter.className = "progress-bar" + wclass + " " + indicators[score];
             pwmeter.setAttribute("aria-valuenow", 25 * score);
         }
 
