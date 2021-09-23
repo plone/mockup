@@ -12,16 +12,6 @@ const mockFetch =
         });
 
 
-const mockAjax = function() {
-    const fakeResponse = {
-        id: 1,
-        name: "All",
-        value: "Dummy Data"
-    };
-    return Promise.resolve(fakeResponse);
-
-}
-
 describe("Querystring", function () {
     beforeEach(() => {
         document.body.innerHTML = `
