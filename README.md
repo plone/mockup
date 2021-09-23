@@ -105,5 +105,5 @@ Visualize dependency tree and analyze bundle size:
 https://www.npmjs.com/package/webpack-bundle-analyzer
 
 ```
-webpack-bundle-analyzer stats.json
+npx webpack-bundle-analyzer stats.json
 ```
