@@ -11,7 +11,6 @@ TEST: Password strength
 ========================== */
 
 describe("Password strength", function () {
-var orig_setTimeout = window.setTimeout;
 
 function fakeZxcvbn(input, strings) {
     window.providedStrings = strings;
@@ -29,18 +28,6 @@ function getScripts() {
 	    return src.indexOf("zxcvbn") !== -1;
 	});
 }
-
-beforeEach(function () {
-    window.setTimeout = function (fun, interval) {
-	window.providedInterval = interval;
-	fun();
-	return 0;
-    };
-});
-
-afterEach(function () {
-    window.setTimeout = orig_setTimeout;
-});
 
 it("adds markup below input element", function () {
     var $el = $(
@@ -64,14 +51,6 @@ it("tries to load zxcvbn once if not available", function () {
     expect(getScripts().length).toEqual(1);
     expect(getScripts()).toContain("http://example.com/zxcvbn.js");
 
-    $el.find("input[type=password]").attr("value", "a").trigger("keyup");
-    expect(getScripts().length).toEqual(1);
-    $el.find("input[type=password]").attr("value", "aa").trigger("keyup");
-    expect(getScripts().length).toEqual(1);
-    $el.find("input[type=password]").attr("value", "aaa").trigger("keyup");
-    expect(getScripts().length).toEqual(1);
-    expect(getScripts()).toContain("http://example.com/zxcvbn.js");
-
     $el2 = $(
 	'<div><input type="password" class="pat-passwordstrength" data-pat-passwordstrength="zxcvbn: http://example.com/zxcvbn.js" /></div>'
     );
@@ -92,14 +71,24 @@ it("sets level based on the entered password", function () {
 	"progress-bar w-25 bg-danger"
     );
     expect(window.providedStrings.length).toEqual(0);
-    expect(window.providedInterval).toEqual(500);
 
-    $el.find("input[type=password]").attr("value", "aA1!bB$").trigger("keyup");
+    $el.find("input[type=password]").attr("value", "aa").trigger("keyup");
     expect($el.find(".progress-bar").attr("class")).toEqual(
 	"progress-bar w-50 bg-warning"
     );
     expect(window.providedStrings.length).toEqual(0);
-    expect(window.providedInterval).toEqual(500);
+
+    $el.find("input[type=password]").attr("value", "aaa").trigger("keyup");
+    expect($el.find(".progress-bar").attr("class")).toEqual(
+	"progress-bar w-75 bg-warning"
+    );
+    expect(window.providedStrings.length).toEqual(0);
+
+    $el.find("input[type=password]").attr("value", "aaaa").trigger("keyup");
+    expect($el.find(".progress-bar").attr("class")).toEqual(
+	"progress-bar w-100 bg-success"
+    );
+    expect(window.providedStrings.length).toEqual(0);
 });
 
 it("provides zxcvbn with other form field values", function () {
@@ -115,7 +104,7 @@ it("provides zxcvbn with other form field values", function () {
 
     $el.find("input[type=password]").attr("value", "a").trigger("keyup");
     expect($el.find(".progress-bar").attr("class")).toEqual(
-	"progress-bar w-0 bg-transparent"
+	"progress-bar w-25 bg-danger"
     );
     expect(window.providedStrings.length).toEqual(2);
     expect(window.providedStrings).toContain("bob_geldof");
