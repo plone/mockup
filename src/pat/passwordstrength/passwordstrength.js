@@ -1,4 +1,3 @@
-import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 
 function loadScript(src) {
@@ -20,6 +19,12 @@ function loadScript(src) {
     s.src = src;
     scripts[0].parentNode.insertBefore(s, scripts[0]);
 }
+function htmlToElement(html) {
+    var htmltmp = document.createElement('div');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    htmltmp.innerHTML = html;
+    return htmltmp.firstElementChild;
+}
 
 export default Base.extend({
     name: "passwordstrength",
@@ -30,12 +35,10 @@ export default Base.extend({
     },
     init: function () {
         var self = this,
-            // last jquery part: how to access the element? .el? .element? this?
-            pwfield = this.$el[0],
-            pwmeterContainer = document.createElement("div", {class: "progress mt-3"}),
-            pwmeter = document.createElement("div", {class: "progress-bar", role: "progressbar"}),
-            indicators = {1: "bg-danger", 2: "bg-warning", 3: "bg-info", 4: "bg-success"};
-
+            pwfield = this.el,
+            pwmeterContainer = htmlToElement('<div class="progress mt-3"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>'),
+            pwmeter = pwmeterContainer.firstChild,
+            indicators = {0: "bg-transparent", 1: "bg-danger", 2: "bg-warning", 3: "bg-warning", 4: "bg-success"};
         function setLevel() {
             var score = 0;
 
@@ -64,22 +67,16 @@ export default Base.extend({
                     ).score
                 );
             }
-            pwmeter.className = "progress-bar " + indicators[score];
-            pwmeter.setAttribute("style", "width: " + (25 * score) + "%");
+            pwmeter.className = "progress-bar w-" + (25 * score) + " " + indicators[score];
+            pwmeter.setAttribute("aria-valuenow", 25 * score);
         }
 
-        pwmeter.setAttribute("aria-valuemin", "0");
-        pwmeter.setAttribute("aria-valuemax", "100");
-        pwmeterContainer.appendChild(pwmeter);
-        pwmeterContainer.className = "progress mt-3";
         pwfield.parentNode.insertBefore(pwmeterContainer, pwfield.nextSibling);
-        // todo: test without (i really do not want the check to delay just because i'm typing fast)
-        //var timeoutId = 0;
-        $(pwfield).on("keyup", function (e) {
-            //clearTimeout(timeoutId);
-            //timeoutId = setTimeout(setLevel, 500);
+        // set up key strokes to change the meter
+        pwfield.onkeyup = function (e) {
             setLevel();
-        });
+        };
+        // initial setting
         setLevel();
     },
 });
