@@ -86,34 +86,29 @@
             height: 50px;
             color: $plone-toolbar-text-color;
 
-            &:hover > span {
+            &:hover > * {
                 margin-top: -50px;
                 -webkit-transition: margin-top 0.35s;
                 transition: margin-top 0.35s;
             }
 
-            &:hover > span.plone-toolbar-caret {
+            &:hover > .plone-toolbar-caret {
                 opacity: 1;
             }
 
-            > span {
+            > * {
                 display: block;
-                width: $plone-left-toolbar;
                 height: 50px;
                 text-align: center;
-
                 &:before {
                     line-height: 50px;
                 }
             }
 
-            > span + span {
+            > * + * {
                 line-height: 1em;
                 display: table-cell;
-                width: $plone-left-toolbar;
-                height: 50px;
-                padding: 0 8px;
-                text-align: center;
+                padding: 0 1em;
                 vertical-align: middle;
                 background: $plone-toolbar-link;
             }
@@ -508,7 +503,7 @@
     nav > ul a > [class^="icon"] {
         display: table-cell;
         width: 40px;
-        padding-left: 10px;
+        padding: 0 0.5em;
     }
 
     nav > ul a > .icon-logout {
