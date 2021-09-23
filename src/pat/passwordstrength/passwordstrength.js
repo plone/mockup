@@ -33,6 +33,7 @@ export default Base.extend({
         zxcvbn: "//cdnjs.cloudflare.com/ajax/libs/zxcvbn/1.0/zxcvbn.js",
     },
     init: function () {
+        import("./passwordstrength.scss");
         var self = this,
             $pwfield = this.$el,
             $pwmeter = jsDiv().append([jsDiv(), jsDiv(), jsDiv(), jsDiv()]);
