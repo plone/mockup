@@ -43,7 +43,8 @@ module.exports = function (eleventyConfig) {
     });
     eleventyConfig.addCollection("externalpatterns", function (collectionApi) {
         return collectionApi.getFilteredByGlob([
-            "docs/external/patternslib/src/pat/**/*.md",
+            "docs/external/@patternslib/patternslib/src/pat/**/*.md",
+            "docs/external/@patternslib/pat-*/README.md",
             "docs/external/pat-*/README.md",
         ]);
     });
