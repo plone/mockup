@@ -1,60 +1,10 @@
-import $ from "jquery";
-import _t from "../../core/i18n-wrapper";
 import "regenerator-runtime/runtime"; // needed for ``await`` support
+import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
-import utils from "../../core/utils";
-import LinkModal from "./js/links";
 import I18n from "../../core/i18n";
-import tinymce from "tinymce/tinymce";
-
-import "./tinymce.scss";
-//import "tinymce/skins/content/default/content.css";
-import "tinymce/skins/ui/oxide/content.css";
-import "tinymce/skins/ui/oxide/skin.css";
-
-// tinyMCE Plugins
-import "tinymce/plugins/advlist";
-import "tinymce/plugins/anchor";
-import "tinymce/plugins/autolink";
-import "tinymce/plugins/autoresize";
-import "tinymce/plugins/autosave";
-import "tinymce/plugins/bbcode";
-import "tinymce/plugins/charmap";
-import "tinymce/plugins/code";
-import "tinymce/plugins/colorpicker";
-import "tinymce/plugins/contextmenu";
-import "tinymce/plugins/directionality";
-import "tinymce/plugins/emoticons";
-import "tinymce/plugins/fullpage";
-import "tinymce/plugins/fullscreen";
-import "tinymce/plugins/hr";
-import "tinymce/plugins/image";
-import "tinymce/plugins/importcss";
-import "tinymce/plugins/insertdatetime";
-import "tinymce/plugins/legacyoutput";
-import "tinymce/plugins/link";
-import "tinymce/plugins/lists";
-import "tinymce/plugins/media";
-import "tinymce/plugins/nonbreaking";
-import "tinymce/plugins/noneditable";
-import "tinymce/plugins/pagebreak";
-import "tinymce/plugins/paste";
-import "tinymce/plugins/preview";
-import "tinymce/plugins/print";
-import "tinymce/plugins/save";
-import "tinymce/plugins/searchreplace";
-import "tinymce/plugins/spellchecker";
-import "tinymce/plugins/tabfocus";
-import "tinymce/plugins/table";
-import "tinymce/plugins/template";
-import "tinymce/plugins/textcolor";
-import "tinymce/plugins/textpattern";
-import "tinymce/plugins/visualblocks";
-import "tinymce/plugins/visualchars";
-import "tinymce/plugins/wordcount";
-import "tinymce/themes/silver";
-
-import "tinymce/icons/default";
+import LinkModal from "./js/links";
+import _t from "../../core/i18n-wrapper";
+import utils from "../../core/utils";
 
 export default Base.extend({
     name: "tinymce",
@@ -326,8 +276,63 @@ export default Base.extend({
             call_back();
         }
     },
-    init: function () {
+    init: async function () {
         console.log("init tinymce from mockup");
+
+        console.log("step 1: import");
+
+        import("./tinymce.scss");
+        //import("tinymce/skins/content/default/content.css");
+        import("tinymce/skins/ui/oxide/content.css");
+        import("tinymce/skins/ui/oxide/skin.css");
+
+        // tinyMCE Plugins
+        const tinymce = await import("tinymce/tinymce");
+        await import("tinymce/plugins/advlist");
+        await import("tinymce/plugins/anchor");
+        await import("tinymce/plugins/autolink");
+        await import("tinymce/plugins/autoresize");
+        await import("tinymce/plugins/autosave");
+        await import("tinymce/plugins/bbcode");
+        await import("tinymce/plugins/charmap");
+        await import("tinymce/plugins/code");
+        await import("tinymce/plugins/colorpicker");
+        await import("tinymce/plugins/contextmenu");
+        await import("tinymce/plugins/directionality");
+        await import("tinymce/plugins/emoticons");
+        await import("tinymce/plugins/fullpage");
+        await import("tinymce/plugins/fullscreen");
+        await import("tinymce/plugins/hr");
+        await import("tinymce/plugins/image");
+        await import("tinymce/plugins/importcss");
+        await import("tinymce/plugins/insertdatetime");
+        await import("tinymce/plugins/legacyoutput");
+        await import("tinymce/plugins/link");
+        await import("tinymce/plugins/lists");
+        await import("tinymce/plugins/media");
+        await import("tinymce/plugins/nonbreaking");
+        await import("tinymce/plugins/noneditable");
+        await import("tinymce/plugins/pagebreak");
+        await import("tinymce/plugins/paste");
+        await import("tinymce/plugins/preview");
+        await import("tinymce/plugins/print");
+        await import("tinymce/plugins/save");
+        await import("tinymce/plugins/searchreplace");
+        await import("tinymce/plugins/spellchecker");
+        await import("tinymce/plugins/tabfocus");
+        await import("tinymce/plugins/table");
+        await import("tinymce/plugins/template");
+        await import("tinymce/plugins/textcolor");
+        await import("tinymce/plugins/textpattern");
+        await import("tinymce/plugins/visualblocks");
+        await import("tinymce/plugins/visualchars");
+        await import("tinymce/plugins/wordcount");
+        await import("tinymce/themes/silver");
+
+        await import("tinymce/icons/default");
+
+        console.log("step 2: init");
+
         var self = this;
         self.linkModal = self.imageModal = self.uploadModal = self.pasteModal = null;
         // tiny needs an id in order to initialize. Creat it if not set.
