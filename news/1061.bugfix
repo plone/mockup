@@ -1,0 +1,11 @@
+switch to bootstrap progress bar and replace jquery
+switch to current version 4.4.2 of zxcvbn and use a real url in the docs example to make it work (and not fall back on the cdn)
+use htmlToElement to create the markup from a string
+replace light blue color with orange (two warning steps)
+correct the aria markers
+remove remnants of the pwmeter reaction delay
+remove unused scss file
+test workover, adjust to new markup (tests)
+[veritazx]
+check if score is defined and not zero, to set width class 
+[yurj]
