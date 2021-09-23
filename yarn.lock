@@ -7436,17 +7436,17 @@ jest@^27.2.1:
     import-local "^3.0.2"
     jest-cli "^27.2.1"
 
-jqtree@1.4.10, jqtree@>=0.16:
-  version "1.4.10"
-  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.4.10.tgz#ef3a348773f820e0844f05e9cd905da989ea1f4d"
-  integrity sha512-SKefhiz4tPW8jal608GVcX2FgYKa1RC8b3bpOp6xd2Br26UeuunaNCZABWk9QGzKDMoZyNwbfVf9N3xDVjy5XQ==
-  dependencies:
-    jquery ">=1.9"
-
 jqtree@1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.6.1.tgz#1df198aec08627ccf03705acf1975c6315355144"
   integrity sha512-anZeFRJzNFhnwECciCV5xGK507aKV+c8qGM9yWTNKCKOBlkPzsFUfrMsN8g2ZLh6hyOMKLKEryYrMA7F68Mnvw==
+  dependencies:
+    jquery ">=1.9"
+
+jqtree@>=0.16:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.4.10.tgz#ef3a348773f820e0844f05e9cd905da989ea1f4d"
+  integrity sha512-SKefhiz4tPW8jal608GVcX2FgYKa1RC8b3bpOp6xd2Br26UeuunaNCZABWk9QGzKDMoZyNwbfVf9N3xDVjy5XQ==
   dependencies:
     jquery ">=1.9"
 
@@ -8336,7 +8336,7 @@ moment-timezone@^0.5.31:
   dependencies:
     moment ">= 2.9.0"
 
-moment@2.29.1, "moment@>= 2.9.0", moment@^2.29.1:
+"moment@>= 2.9.0", moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
