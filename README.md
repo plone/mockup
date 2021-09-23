@@ -40,7 +40,7 @@ Still, you can connect to the Chome debugging interface via:
 node --inspect-brk node_modules/.bin/jest --runInBand ./src/pat/PATH-TO-PATTERN``
 ```
 
-Connect in chrome via:
+Connect in chrome via (You need to click "continue" or "Resume script execution" in the inspector once to proceed):
 
 ```
 chrome://inspect
