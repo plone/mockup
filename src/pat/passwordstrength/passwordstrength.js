@@ -26,7 +26,7 @@ export default Base.extend({
     trigger: ".pat-passwordstrength",
     parser: "mockup",
     defaults: {
-        zxcvbn: "//cdnjs.cloudflare.com/ajax/libs/zxcvbn/1.0/zxcvbn.js",
+        zxcvbn: "//cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js",
     },
     init: function () {
         var self = this,
