@@ -3,6 +3,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 function loadScript(src) {
     var s,
         i,
+        head,
         scripts = document.getElementsByTagName("script");
 
     // Check script element doesn't already exist
@@ -17,7 +18,9 @@ function loadScript(src) {
     s.type = "text/javascript";
     s.async = true;
     s.src = src;
-    scripts[0].parentNode.insertBefore(s, scripts[0]);
+    // use head tag to find a place to insert the script node
+    head = document.getElementsByTagName("head")[0]
+    head.insertBefore(s, head.firstChild);
 }
 function htmlToElement(html) {
     var htmltmp = document.createElement('div');
