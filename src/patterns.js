@@ -23,7 +23,6 @@ import "./pat/backdrop/backdrop";
 import "./pat/contentloader/contentloader";
 import "./pat/cookietrigger/cookietrigger";
 import "./pat/datatables/datatables";
-import "./pat/eventedit/eventedit";
 //import "./pat/filemanager/filemanager";
 import "./pat/formautofocus/formautofocus";
 import "./pat/formunloadalert/formunloadalert";
