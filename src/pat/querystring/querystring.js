@@ -2,6 +2,7 @@ import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
+import utils from "../../core/utils";
 import Base from "@patternslib/patternslib/src/core/base";
 
 var Criteria = function () {
@@ -103,7 +104,7 @@ Criteria.prototype = {
         );
 
         // add blink (select2)
-        self.app.pattern_select2(self.$index, {
+        self.$index.patternSelect2({
             width: self.options.indexWidth,
             placeholder: _t("Select criteria"),
         });
@@ -115,7 +116,7 @@ Criteria.prototype = {
         });
 
         if (typeof index !== "undefined") {
-            self.$index.select2("val", index);
+            self.$index.val(index);
             self.createOperator(index, operator, value);
             self.createClear();
         }
@@ -143,7 +144,7 @@ Criteria.prototype = {
         );
 
         // add blink (select2)
-        self.app.pattern_select2(self.$operator, { width: "10em" });
+        self.$operator.patternSelect2({ width: "10em" });
         self.$operator.on("change", function (e) {
             self.createValue(index);
             self.createClear();
@@ -232,10 +233,10 @@ Criteria.prototype = {
         self.appendOperators(index);
 
         if (typeof operator === "undefined") {
-            operator = self.$operator.select2("val");
+            operator = self.$operator.val();
         }
 
-        self.$operator.select2("val", operator);
+        self.$operator.val(operator);
         self.createValue(index, value);
 
         self.trigger("create-operator");
@@ -363,8 +364,7 @@ Criteria.prototype = {
                     }
                 } else {
                     if (value === ".::1") {
-                        self.$operator.select2(
-                            "val",
+                        self.$operator.val(
                             "plone.app.querystring.operation.string.path"
                         );
                     }
@@ -417,20 +417,20 @@ Criteria.prototype = {
                         .appendTo(self.$value);
                 });
             }
-            self.app.pattern_select2(self.$value, self.patternAjaxSelectOptions);
+            self.$value.patternSelect2(self.patternAjaxSelectOptions);
         }
 
         if (typeof value !== "undefined" && typeof self.$value !== "undefined") {
-            if ($.isArray(self.$value)) {
+            if (Array.isArray(self.$value)) {
                 $.each(value, function (i, v) {
-                    self.$value[i].select2("val", v);
+                    self.$value[i].val(v);
                 });
             } else {
                 var trimmedValue = value;
                 if (typeof value === "string" && widget !== "RelativePathWidget") {
                     trimmedValue = value.replace(/::-?[0-9]+/, "");
                 }
-                self.$value.select2("val", trimmedValue);
+                self.$value.val(trimmedValue);
             }
         }
 
@@ -471,7 +471,7 @@ Criteria.prototype = {
         var self = this;
         self.trigger("remove-value");
         if (self.$value) {
-            if ($.isArray(self.$value)) {
+            if (Array.isArray(self.$value)) {
                 // date ranges have 2 values
                 self.$value[0].parents(".querystring-criteria-value").remove();
             } else {
@@ -485,7 +485,7 @@ Criteria.prototype = {
         var self = this;
 
         // index
-        var ival = self.$index.select2("val");
+        var ival = self.$index.val();
         if (ival === "") {
             // no index selected, no query
             return "";
@@ -514,12 +514,12 @@ Criteria.prototype = {
             vstr = [];
         if (typeof self.$value === "undefined") {
             vstr.push(vstrbase);
-        } else if ($.isArray(self.$value)) {
+        } else if (Array.isArray(self.$value)) {
             // handles only datepickers from the 'between' operator right now
             $.each(self.$value, function (i, v) {
                 vstr.push(vstrlistbase + $(this).val());
             });
-        } else if ($.isArray(self.$value.val())) {
+        } else if (Array.isArray(self.$value.val())) {
             // handles multible values
             $.each(self.$value.val(), function (i, v) {
                 vstr.push(vstrlistbase + v);
@@ -543,7 +543,7 @@ Criteria.prototype = {
         var self = this;
 
         // index
-        var ival = self.$index.select2("val");
+        var ival = self.$index.val();
         if (ival === "") {
             // no index selected, no query
             return "";
@@ -566,7 +566,7 @@ Criteria.prototype = {
         }
         // value(s)
         var varr = [];
-        if ($.isArray(self.$value)) {
+        if (Array.isArray(self.$value)) {
             // handles only datepickers from the 'between' operator right now
             $.each(self.$value, function (i, v) {
                 varr.push($(this).val());
@@ -641,6 +641,11 @@ export default Base.extend({
         showPreviews: true,
     },
     init: async function () {
+        await import("select2");
+        await import("../select2/select2");
+        await import("../pickadate/pickadate");
+        await import("../relateditems/relateditems");
+
         import("./querystring.scss");
 
         var self = this;
@@ -655,6 +660,9 @@ export default Base.extend({
         // initialization can be detailed if by ajax
         self.initialized = false;
 
+        // get remove icon for criterias
+        self.options.criteria.remove = await utils.resolveIcon("plone.icon.x-circle");
+
         if (self.options.indexOptionsUrl) {
             try {
                 const response = await fetch(self.options.indexOptionsUrl);
@@ -665,16 +673,9 @@ export default Base.extend({
             } catch (e) {
                 // XXX handle this...
             }
-        } else {
-            self._init();
         }
     },
-    _init: async function () {
-        this.pattern_select2 = await import("../select2/select2");
-        this.pattern_select2 = this.pattern_select2.default;
-        import("../pickadate/pickadate");
-        import("../relateditems/relateditems");
-
+    _init: function () {
         var self = this;
         self.$criteriaWrapper = $("<div/>")
             .addClass(self.options.classWrapperName)
@@ -791,7 +792,7 @@ export default Base.extend({
         // XXX do this in a way so it'll work with other forms will work
         // as long as they provide sort_on and sort_reversed fields in z3c form
         var existingSortOn = $('[id$="-sort_on"]').filter('[id^="formfield-"]');
-        var existingSortOrder = $('[id$="-sort_reversed"]').filter('[id^="formfield-"]');
+        var existingSortOrder = $('[id*="-sort_reversed"]').filter('[id^="formfield-"]');
 
         $("<span/>")
             .addClass(self.options.classSortLabelName)
@@ -812,22 +813,22 @@ export default Base.extend({
                 $("<option/>").attr("value", key).html(self.options.indexes[key].title)
             );
         }
-        self.pattern_select2(self.$sortOn, { width: "150px" });
+        self.$sortOn.patternSelect2({ width: "150px" });
 
         self.$sortOrder = $('<input type="checkbox" />')
             .attr("name", "sort_reversed:boolean")
             .change(function () {
                 self.refreshPreviewEvent.call(self);
                 if ($(this).prop("checked")) {
-                    $('.option input[type="checkbox"]', existingSortOrder).prop(
-                        "checked",
-                        true
-                    );
+                    $(
+                        'input[type="checkbox"]',
+                        existingSortOrder
+                    ).prop("checked", true);
                 } else {
-                    $('.option input[type="checkbox"]', existingSortOrder).prop(
-                        "checked",
-                        false
-                    );
+                    $(
+                        'input[type="checkbox"]',
+                        existingSortOrder
+                    ).prop("checked", false);
                 }
             });
 
@@ -844,14 +845,14 @@ export default Base.extend({
         // if the form already contains the sort fields, hide them! Their values
         // will be synced back and forth between the querystring's form elements
         if (existingSortOn.length >= 1 && existingSortOrder.length >= 1) {
-            var reversed = $('.option input[type="checkbox"]', existingSortOrder).prop(
+            var reversed = $('input[type="checkbox"]', existingSortOrder).prop(
                 "checked"
             );
             var sortOn = $('[id$="-sort_on"]', existingSortOn).val();
             if (reversed) {
                 self.$sortOrder.prop("checked", true);
             }
-            self.$sortOn.select2("val", sortOn);
+            self.$sortOn.val(sortOn);
             $(existingSortOn).hide();
             $(existingSortOrder).hide();
         }
@@ -863,19 +864,10 @@ export default Base.extend({
             return; // cut out of this if there are no previews available
         }
 
-        /* TEMPORARY */
-        //if (typeof self._tmpcnt === 'undefined') { self._tmpcnt = 0; }
-        //self._tmpcnt++;
-        /* /TEMPORARY */
-
         if (typeof self._previewXhr !== "undefined") {
             self._previewXhr.abort();
         }
-        /*
-      if (typeof self._count_xhr !== 'undefined') {
-        self._count_xhr.abort();
-      }
-      */
+
         if (typeof self.$previewPane !== "undefined") {
             self.$previewPane.remove();
         }
@@ -906,21 +898,6 @@ export default Base.extend({
             query.push("sort_order=reverse");
         }
 
-        /* TEMPORARY */
-        //self.$previewPane.html(
-        //    'refreshed ' + self._tmpcnt + ' times<br />'
-        //    + (query.length > 1 ? query.join('<br />&') : query));
-        /* /TEMPORARY */
-
-        /*
-      self._count_xhr = $.get(self.options.previewCountURL + '?' + query.join('&'))
-          .done(function(data, stat) {
-            $('<div/>')
-              .addClass(self.options.classPreviewCountWrapperName)
-              .html(data)
-              .prependTo(self.$previewPane);
-          });
-      */
         self._previewXhr = $.get(self.options.previewURL + "?" + query.join("&")).done(
             function (data, stat) {
                 $("<div/>")

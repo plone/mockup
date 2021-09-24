@@ -14,7 +14,7 @@ export default Base.extend({
         guardClassName: "submitting",
         optOutClassName: "allowMultiSubmit",
     },
-    init: function () {
+    init() {
         var self = this;
 
         // if this is not a form just return
@@ -22,7 +22,7 @@ export default Base.extend({
             return;
         }
 
-        $(":submit", self.$el).click(function (e) {
+        $(":submit", self.$el).click(function () {
             // mark the button as clicked
             $(":submit").removeAttr("clicked");
             $(this).attr("clicked", "clicked");
@@ -40,7 +40,7 @@ export default Base.extend({
         });
     },
 
-    _confirm: function (e) {
+    _confirm() {
         return window.confirm(this.options.message);
     },
 });
