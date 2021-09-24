@@ -4,7 +4,7 @@
 @import "variables.scss";
 
 #edit-zone {
-    font-family: $plone-toolbar-font-primary;
+    // font-family: $plone-toolbar-font-primary;
     font-weight: 400;
     position: fixed;
     z-index: 20;
@@ -70,7 +70,7 @@
     /*first-level*/
 
     nav > ul {
-        font-family: $plone-toolbar-font-primary;
+        // font-family: $plone-toolbar-font-primary;
         font-size: 12px;
         margin: 0;
         padding: 0;
@@ -78,42 +78,37 @@
 
         [class^="icon"] {
             font-size: 20px;
+            vertical-align: middle;
         }
-
         a {
             position: relative;
             overflow: hidden;
             height: 50px;
             color: $plone-toolbar-text-color;
 
-            &:hover > span {
+            &:hover > * {
                 margin-top: -50px;
                 -webkit-transition: margin-top 0.35s;
                 transition: margin-top 0.35s;
             }
 
-            &:hover > span.plone-toolbar-caret {
+            &:hover > .plone-toolbar-caret {
                 opacity: 1;
             }
 
-            > span {
+            > * {
                 display: block;
-                width: $plone-left-toolbar;
                 height: 50px;
                 text-align: center;
-
                 &:before {
                     line-height: 50px;
                 }
             }
 
-            > span + span {
+            > * + * {
                 line-height: 1em;
                 display: table-cell;
-                width: $plone-left-toolbar;
-                height: 50px;
-                padding: 0 8px;
-                text-align: center;
+                padding: 0 1em;
                 vertical-align: middle;
                 background: $plone-toolbar-link;
             }
@@ -215,7 +210,7 @@
         /*second-level*/
 
         ul {
-            font-family: $plone-toolbar-font-secondary;
+            // font-family: $plone-toolbar-font-secondary;
             font-size: 14px;
             line-height: 30px;
             position: absolute;
@@ -508,7 +503,7 @@
     nav > ul a > [class^="icon"] {
         display: table-cell;
         width: 40px;
-        padding-left: 10px;
+        padding: 0 0.5em;
     }
 
     nav > ul a > .icon-logout {
@@ -961,6 +956,10 @@
 
 // #edit-zone nav > ul ul {
 // }
+
+#edit-zone svg.toolbarIcon {
+    vertical-align: initial;
+}
 
 #edit-zone nav > ul li.active ul {
     display: block;
