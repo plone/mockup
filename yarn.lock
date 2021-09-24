@@ -7436,17 +7436,17 @@ jest@^27.2.1:
     import-local "^3.0.2"
     jest-cli "^27.2.1"
 
-jqtree@1.4.10, jqtree@>=0.16:
-  version "1.4.10"
-  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.4.10.tgz#ef3a348773f820e0844f05e9cd905da989ea1f4d"
-  integrity sha512-SKefhiz4tPW8jal608GVcX2FgYKa1RC8b3bpOp6xd2Br26UeuunaNCZABWk9QGzKDMoZyNwbfVf9N3xDVjy5XQ==
-  dependencies:
-    jquery ">=1.9"
-
 jqtree@1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.6.1.tgz#1df198aec08627ccf03705acf1975c6315355144"
   integrity sha512-anZeFRJzNFhnwECciCV5xGK507aKV+c8qGM9yWTNKCKOBlkPzsFUfrMsN8g2ZLh6hyOMKLKEryYrMA7F68Mnvw==
+  dependencies:
+    jquery ">=1.9"
+
+jqtree@>=0.16:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/jqtree/-/jqtree-1.4.10.tgz#ef3a348773f820e0844f05e9cd905da989ea1f4d"
+  integrity sha512-SKefhiz4tPW8jal608GVcX2FgYKa1RC8b3bpOp6xd2Br26UeuunaNCZABWk9QGzKDMoZyNwbfVf9N3xDVjy5XQ==
   dependencies:
     jquery ">=1.9"
 
@@ -11436,10 +11436,15 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
-tinymce@^5.6.2:
-  version "5.9.2"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.9.2.tgz#c56a1d7800ac23026fbe6e0fcf444c0f157ccafe"
-  integrity sha512-/dHTsbxo0YwLvB5krRqiw/qHEm04/k6l0dvAQ3hO5oNw4e9QalKcUQCdr+g/b/FWcsUMP6scvKmm8MX50/j3Cg==
+tinymce-i18n@^20.12.25:
+  version "20.12.25"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-20.12.25.tgz#479d2c69613ec2324aeadb4478c9da2d8d4e0bb8"
+  integrity sha512-MOVCgGbkZ2ZVvb9B38Mbdhwam1oZOBXDkxmzcHX3W7c3RCB8r4VG9DS8+4BcsoCCgfUg1JXwh2Hk+7aXcYXkkg==
+
+tinymce@5.6.2:
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.6.2.tgz#4c20c22e328c5d0baab204928dbc2b0ecbed18b4"
+  integrity sha512-z7zvM5seOPiW86/vqf08kStwW5Zs5U9oQfuqh2rTj4jEcT2QzxT0v72i2zw3W6rbTLldkAej6edFZphj5ee5zg==
 
 tippy.js@^6.2.7:
   version "6.3.1"

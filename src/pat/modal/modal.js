@@ -535,8 +535,7 @@ export default Base.extend({
         self.options.loadLinksWithinModal = $.parseJSON(
             self.options.loadLinksWithinModal
         );
-        console.log(self.options.routerOptions.id);
-        console.log(self.options.routerOptions.id);
+        console.log("routerOptions.id: ", self.options.routerOptions.id);
         // Router
         if (self.options.routerOptions.id !== null) {
             Router.addRoute(
