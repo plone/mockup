@@ -20,7 +20,6 @@ define([
     "mockup-patterns-structure-url/js/collections/result",
     "mockup-utils",
     "sinon",
-    "moment",
 ], function (
     expect,
     $,
@@ -36,8 +35,7 @@ define([
     PropertiesView,
     ResultCollection,
     utils,
-    sinon,
-    moment
+    sinon
 ) {
     "use strict";
 
@@ -895,6 +893,12 @@ define([
                     end = start + batch.size;
                 }
                 var items = [];
+
+                let date_1 = new Date();
+                date_1 = new Date(date_1.setDate(date_1.getDate() - 2)).toISOString();
+                let date_2 = new Date();
+                date_2 = new Date(date_2.setDate(date_2.getDate() + 2)).toISOString();
+
                 items.push({
                     UID: "123sdfasdf" + path + "Folder",
                     getURL: "http://localhost:9876" + path + "/folder",
@@ -906,7 +910,7 @@ define([
                     is_folderish: true,
                     Subject: [],
                     id: "folder",
-                    ExpirationDate: moment().add(-2, "days").format(),
+                    ExpirationDate: date_1,
                 });
                 for (var i = start; i < end; i = i + 1) {
                     items.push({
@@ -920,7 +924,7 @@ define([
                         is_folderish: false,
                         Subject: [],
                         id: "item" + i,
-                        ExpirationDate: moment().add(2, "days").format(),
+                        ExpirationDate: date_2,
                     });
                 }
 

@@ -1,6 +1,6 @@
-import $ from "jquery";
 import dom from "@patternslib/patternslib/src/core/dom";
 import Pattern from "./cookietrigger";
+import { jest } from "@jest/globals";
 
 describe("Cookie Trigger", () => {
     afterEach(() => {
@@ -18,7 +18,7 @@ describe("Cookie Trigger", () => {
         dom.hide(el);
 
         const pattern = new Pattern(el);
-        spyOn(pattern, "isCookiesEnabled").and.callFake(() => 0);
+        jest.spyOn(pattern, "isCookiesEnabled").mockImplementation(() => 0);
         pattern.init(el); // need to spy on already initialized pattern. re-init
 
         expect(el.style.display).not.toEqual("none");
@@ -37,7 +37,7 @@ describe("Cookie Trigger", () => {
         dom.hide(el);
 
         const pattern = new Pattern(el);
-        spyOn(pattern, "isCookiesEnabled").and.callFake(() => 1);
+        jest.spyOn(pattern, "isCookiesEnabled").mockImplementation(() => 1);
         pattern.init(el); // need to spy on already initialized pattern. re-init
 
         expect(el.style.display).toEqual("none");

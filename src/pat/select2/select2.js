@@ -80,7 +80,7 @@ export default Base.extend({
             delete self.options.tags;
         }
     },
-    initializeOrdering: async function () {
+    initializeOrdering: function () {
         if (!this.options.orderable) {
             return;
         }
@@ -153,7 +153,7 @@ export default Base.extend({
         var isOpen = $(".select2-dropdown-open", self.$el.parent()).length === 1;
         return isOpen;
     },
-    init: function () {
+    init: async function () {
         var self = this;
 
         self.options.allowNewItems = self.options.hasOwnProperty("allowNewItems")
@@ -239,6 +239,6 @@ export default Base.extend({
         self.initializeValues();
         self.initializeTags();
         self.initializeOrdering();
-        self.initializeSelect2();
+        await self.initializeSelect2();
     },
 });
