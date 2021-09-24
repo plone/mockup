@@ -1,6 +1,7 @@
 .pattern-relateditems-container {
     position: relative;
     display: inline-block;
+    width: 100%;
 
     .select2-container {
         min-width: 100%;
@@ -37,10 +38,12 @@
 .pattern-relateditems-dropdown {
     .select2-results {
         background-color: #fff;
-        max-height: 350px;
+        max-height: 950px;
 
         .select2-result {
             background-color: transparent;
+            border-left: 0.3em solid transparent;
+            border-right: 0.3em solid transparent;
 
             &:nth-child(odd) {
                 background-color: #f7f7f7;
@@ -193,6 +196,9 @@
 .pattern-relateditems-recentlyused-image,
 .pattern-relateditems-item-image {
     img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
         &,
         #content-core & {
             max-height: 128px;
