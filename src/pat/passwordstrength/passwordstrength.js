@@ -39,7 +39,7 @@ export default Base.extend({
     init: function () {
         var self = this,
             pwfield = this.el,
-            pwmeterContainer = htmlToElement('<div class="progress mt-3"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>'),
+            pwmeterContainer = htmlToElement('<div class="progress my-3"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>'),
             pwmeter = pwmeterContainer.firstChild,
             indicators = {0: "bg-transparent", 1: "bg-danger", 2: "bg-warning", 3: "bg-warning", 4: "bg-success"};
         function setLevel() {
