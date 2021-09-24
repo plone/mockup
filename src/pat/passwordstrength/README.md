@@ -25,13 +25,13 @@ title: Password strength
 
 <input type="password"
        class="pat-passwordstrength"
-       data-pat-passwordstrength="zxcvbn: //moo.com/zxcvbn.js"
+       data-pat-passwordstrength="zxcvbn: //lowe.github.io/tryzxcvbn/zxcvbn.js"
        />
 
 ```html
 <input
     type="password"
     class="pat-passwordstrength"
-    data-pat-passwordstrength="zxcvbn: //moo.com/zxcvbn.js"
+    data-pat-passwordstrength="zxcvbn: //lowe.github.io/tryzxcvbn/zxcvbn.js"
 />
 ```

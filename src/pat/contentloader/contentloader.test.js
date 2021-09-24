@@ -12,7 +12,7 @@ describe("Livesearch", function () {
             <div class="content">foobar</div>
         `;
         const el = document.querySelector(".pat-contentloader");
-        const loader = new Pattern(el, { content: ".content" });
+        new Pattern(el, { content: ".content" });
         el.dispatchEvent(new Event("click"));
         expect(document.querySelectorAll(".content").length).toEqual(2);
     });
@@ -24,7 +24,7 @@ describe("Livesearch", function () {
             <div class="target">blah</div>
         `;
         const el = document.querySelector(".pat-contentloader");
-        const loader = new Pattern(el, {
+        new Pattern(el, {
             content: ".content",
             target: ".target",
         });
@@ -52,7 +52,7 @@ describe("Livesearch", function () {
             <a href="#" class="pat-contentloader">Loader</a>
         `;
         const el = document.querySelector(".pat-contentloader");
-        const loader = new Pattern(el, { url: "something.html" });
+        new Pattern(el, { url: "something.html" });
         el.dispatchEvent(new Event("click"));
         expect(document.querySelectorAll("#content").length).toEqual(1);
 
