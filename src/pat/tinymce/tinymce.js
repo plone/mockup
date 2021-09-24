@@ -284,22 +284,15 @@ export default Base.extend({
         }
         return url;
     },
-    initLanguage: function (call_back) {
+    initLanguage: async function (call_back) {
         var self = this;
         var i18n = new I18n();
         var lang = i18n.currentLanguage;
         if (lang !== "en" && self.options.tiny.language !== "en") {
-            tinymce.baseURL = self.options.loadingBaseUrl;
-            // does the expected language exist?
-            $.ajax({
-                url: tinymce.baseURL + "/langs/" + lang + ".js",
-                method: "GET",
-                cache: "true",
-                success: function () {
-                    self.options.tiny.language = lang;
-                    call_back();
-                },
-                error: function () {
+            try {
+                await import(`tinymce-i18n/langs5/${lang}`);
+            } catch (e) {
+                try {
                     // expected lang not available, let's fallback to closest one
                     if (lang.split("_") > 1) {
                         lang = lang.split("_")[0];
@@ -308,20 +301,45 @@ export default Base.extend({
                     } else {
                         lang = lang + "_" + lang.toUpperCase();
                     }
-                    $.ajax({
-                        url: tinymce.baseURL + "/langs/" + lang + ".js",
-                        method: "GET",
-                        cache: "true",
-                        success: function () {
-                            self.options.tiny.language = lang;
-                            call_back();
-                        },
-                        error: function () {
-                            call_back();
-                        },
-                    });
-                },
-            });
+                    await import(`tinymce-i18n/langs5/${lang}`);
+                } catch {
+                    console.log("Could not load TinyMCE language:", lang);
+                }
+            }
+                call_back();
+            // tinymce.baseURL = self.options.loadingBaseUrl;
+            // does the expected language exist?
+        //     $.ajax({
+        //         url: tinymce.baseURL + "/langs/" + lang + ".js",
+        //         method: "GET",
+        //         cache: "true",
+        //         success: function () {
+        //             self.options.tiny.language = lang;
+        //             call_back();
+        //         },
+        //         error: function () {
+        //             // expected lang not available, let's fallback to closest one
+        //             if (lang.split("_") > 1) {
+        //                 lang = lang.split("_")[0];
+        //             } else if (lang.split("-") > 1) {
+        //                 lang = lang.split("-")[0];
+        //             } else {
+        //                 lang = lang + "_" + lang.toUpperCase();
+        //             }
+        //             $.ajax({
+        //                 url: tinymce.baseURL + "/langs/" + lang + ".js",
+        //                 method: "GET",
+        //                 cache: "true",
+        //                 success: function () {
+        //                     self.options.tiny.language = lang;
+        //                     call_back();
+        //                 },
+        //                 error: function () {
+        //                     call_back();
+        //                 },
+        //             });
+        //         },
+        //     });
         } else {
             call_back();
         }
