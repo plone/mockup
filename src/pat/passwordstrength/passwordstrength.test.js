@@ -1,5 +1,4 @@
 import "./passwordstrength";
-import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 
 /* ==========================
@@ -26,62 +25,68 @@ function getScripts() {
 }
 
 it("adds markup below input element", function () {
-    var $el = $(
-	'<div><input type="password" class="pat-passwordstrength" /></div>'
-    );
+    var $el = document.createElement('div');
+    $el.innerHTML = '<div><input type="password" class="pat-passwordstrength" /></div>';
     window.zxcvbn = fakeZxcvbn;
     registry.scan($el);
-
-    expect($el.find(".progress").length).toEqual(1);
-    expect($el.find(".progress-bar").length).toEqual(1);
+    expect($el.querySelectorAll(".progress").length).toEqual(1);
+    expect($el.querySelectorAll(".progress-bar").length).toEqual(1);
 });
 
 it("tries to load zxcvbn once if not available", function () {
-    var $el2,
-	$el = $(
-	    '<div><input type="password" class="pat-passwordstrength" data-pat-passwordstrength="zxcvbn: http://example.com/zxcvbn.js" /></div>'
-	);
+    var $el2 = document.createElement('div');
+    var $el = document.createElement('div');
+    $el.innerHTML = '<div><input type="password" class="pat-passwordstrength" data-pat-passwordstrength="zxcvbn: http://example.com/zxcvbn.js" /></div>';
+
     window.zxcvbn = undefined;
     expect(getScripts().length).toEqual(0);
     registry.scan($el);
     expect(getScripts().length).toEqual(1);
     expect(getScripts()).toContain("http://example.com/zxcvbn.js");
 
-    $el2 = $(
-	'<div><input type="password" class="pat-passwordstrength" data-pat-passwordstrength="zxcvbn: http://example.com/zxcvbn.js" /></div>'
-    );
+    $el2.innerHTML = '<div><input type="password" class="pat-passwordstrength" data-pat-passwordstrength="zxcvbn: http://example.com/zxcvbn.js" /></div>';
     registry.scan($el2);
     expect(getScripts().length).toEqual(1);
     expect(getScripts()).toContain("http://example.com/zxcvbn.js");
 });
 
 it("sets level based on the entered password", function () {
-    var $el = $(
-	'<div><input type="password" class="pat-passwordstrength" /></div>'
-    );
+    var $el = document.createElement('div');
+    $el.innerHTML = '<div><input type="password" class="pat-passwordstrength" /></div>';
     window.zxcvbn = fakeZxcvbn;
     registry.scan($el);
 
-    $el.find("input[type=password]").attr("value", "a").trigger("keyup");
-    expect($el.find(".progress-bar").attr("class")).toEqual(
+    function returnKeyUp () {
+    const event = new KeyboardEvent("keyup", {});
+    return event;
+    }
+
+    $el.querySelectorAll("input[type=password]")[0].setAttribute("value", "a");
+    $el.querySelectorAll("input[type=password]")[0].dispatchEvent(returnKeyUp());
+
+    expect($el.querySelectorAll(".progress-bar")[0].getAttribute("class")).toEqual(
 	"progress-bar w-25 bg-danger"
     );
     expect(window.providedStrings.length).toEqual(0);
 
-    $el.find("input[type=password]").attr("value", "aa").trigger("keyup");
-    expect($el.find(".progress-bar").attr("class")).toEqual(
+    $el.querySelectorAll("input[type=password]")[0].setAttribute("value", "aa");
+    $el.querySelectorAll("input[type=password]")[0].dispatchEvent(returnKeyUp());
+    expect($el.querySelectorAll(".progress-bar")[0].getAttribute("class")).toEqual(
 	"progress-bar w-50 bg-warning"
     );
     expect(window.providedStrings.length).toEqual(0);
 
-    $el.find("input[type=password]").attr("value", "aaa").trigger("keyup");
-    expect($el.find(".progress-bar").attr("class")).toEqual(
+    $el.querySelectorAll("input[type=password]")[0].setAttribute("value", "aaa");
+    $el.querySelectorAll("input[type=password]")[0].dispatchEvent(returnKeyUp());
+    expect($el.querySelectorAll(".progress-bar")[0].getAttribute("class")).toEqual(
 	"progress-bar w-75 bg-warning"
     );
     expect(window.providedStrings.length).toEqual(0);
 
-    $el.find("input[type=password]").attr("value", "aaaa").trigger("keyup");
-    expect($el.find(".progress-bar").attr("class")).toEqual(
+    $el.querySelectorAll("input[type=password]")[0].setAttribute("value", "aaaa");
+    $el.querySelectorAll("input[type=password]")[0].dispatchEvent(returnKeyUp());
+
+    expect($el.querySelectorAll(".progress-bar")[0].getAttribute("class")).toEqual(
 	"progress-bar w-100 bg-success"
     );
     expect(window.providedStrings.length).toEqual(0);
