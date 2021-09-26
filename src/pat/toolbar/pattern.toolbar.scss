@@ -90,7 +90,8 @@
                 color: $plone-toolbar-text-color;
                 height: 100%;
 
-                &:hover > * {
+                &:hover > span,
+                &:hover > time {
                     margin-top: -3rem;
                     -webkit-transition: margin-top 0.35s;
                     transition: margin-top 0.35s;
@@ -100,7 +101,8 @@
                     opacity: 1;
                 }
 
-                > * {
+                > span,
+                > time {
                     display: block;
                     height: 3rem;
                     text-align: center;
@@ -109,7 +111,8 @@
                     }
                 }
 
-                > * + * {
+                > span + span,
+                > span + time {
                     line-height: 1em;
                     display: table-cell;
                     padding: 0 1em;
