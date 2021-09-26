@@ -12,6 +12,7 @@
     left: 0;
     width: $plone-left-toolbar;
     height: 100%;
+    box-sizing: border-box;
     color: $plone-toolbar-text-color;
     background: $plone-toolbar-bg;
     word-wrap: break-word;
@@ -37,21 +38,21 @@
     .plone-toolbar-logo {
         display: table-cell;
         width: $plone-left-toolbar;
-        height: 50px;
-        padding-right: 18px;
-        padding-left: 18px;
+        height: 3rem;
+        padding-right: 1rem;
+        padding-left: 1rem;
         cursor: pointer;
         vertical-align: middle;
         background: darken($plone-toolbar-link, 10%);
 
         &:after {
             position: absolute;
-            top: 50px;
-            left: 25px;
+            top: 3rem;
+            left: 1.5rem;
             content: "";
-            border-top: 4px solid darken($plone-toolbar-link, 10%);
-            border-right: 4px solid transparent;
-            border-left: 4px solid transparent;
+            border-top: 0.3rem solid darken($plone-toolbar-link, 10%);
+            border-right: 0.3rem solid transparent;
+            border-left: 0.3rem solid transparent;
         }
 
         &:hover {
@@ -62,7 +63,7 @@
             &:after {
                 -webkit-transition: border-top 0.25s;
                 transition: border-top 0.35s;
-                border-top: 4px solid $plone-toolbar-link;
+                border-top: 0.3rem solid $plone-toolbar-link;
             }
         }
     }
@@ -80,37 +81,41 @@
             font-size: 20px;
             vertical-align: middle;
         }
-        a {
-            position: relative;
-            overflow: hidden;
-            height: 50px;
-            color: $plone-toolbar-text-color;
+        > li {
+            height: 3rem;
 
-            &:hover > * {
-                margin-top: -50px;
-                -webkit-transition: margin-top 0.35s;
-                transition: margin-top 0.35s;
-            }
+            > a {
+                position: relative;
+                overflow: hidden;
+                color: $plone-toolbar-text-color;
+                height: 100%;
 
-            &:hover > .plone-toolbar-caret {
-                opacity: 1;
-            }
-
-            > * {
-                display: block;
-                height: 50px;
-                text-align: center;
-                &:before {
-                    line-height: 50px;
+                &:hover > * {
+                    margin-top: -3rem;
+                    -webkit-transition: margin-top 0.35s;
+                    transition: margin-top 0.35s;
                 }
-            }
 
-            > * + * {
-                line-height: 1em;
-                display: table-cell;
-                padding: 0 1em;
-                vertical-align: middle;
-                background: $plone-toolbar-link;
+                &:hover > .plone-toolbar-caret {
+                    opacity: 1;
+                }
+
+                > * {
+                    display: block;
+                    height: 3rem;
+                    text-align: center;
+                    &:before {
+                        line-height: 3rem;
+                    }
+                }
+
+                > * + * {
+                    line-height: 1em;
+                    display: table-cell;
+                    padding: 0 1em;
+                    vertical-align: middle;
+                    background: $plone-toolbar-link;
+                }
             }
         }
 
