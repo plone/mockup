@@ -71,14 +71,12 @@
     /*first-level*/
 
     nav > ul {
-        // font-family: $plone-toolbar-font-primary;
-        font-size: 12px;
         margin: 0;
         padding: 0;
         list-style: none;
 
         [class^="icon"] {
-            font-size: 20px;
+            font-size: 1.2em;
             vertical-align: middle;
         }
         > li {
@@ -117,9 +115,12 @@
                     display: table-cell;
                     padding: 0 1em;
                     vertical-align: middle;
-                    background: $plone-toolbar-link;
                 }
             }
+        }
+
+        > li li .plone-icon {
+            padding-right: 0.5em;
         }
 
         .scroll-btn {
@@ -218,9 +219,6 @@
         /*second-level*/
 
         ul {
-            // font-family: $plone-toolbar-font-secondary;
-            font-size: 14px;
-            line-height: 30px;
             position: absolute;
             top: 0;
             left: $plone-left-toolbar;
@@ -237,8 +235,6 @@
                 display: inline !important;
 
                 &:before {
-                    font-size: 10px;
-                    line-height: 18px;
                     position: absolute;
                     top: 0;
                     right: 10px;
@@ -510,8 +506,8 @@
 
     nav > ul a > [class^="icon"] {
         display: table-cell;
-        width: 40px;
-        padding: 0 0.5em;
+        width: 1.2em;
+        padding: 0 0 0 0.5em;
     }
 
     nav > ul a > .icon-logout {
