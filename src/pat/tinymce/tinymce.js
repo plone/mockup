@@ -2,9 +2,10 @@ import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import I18n from "../../core/i18n";
-import LinkModal from "./js/links";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
+
+let LinkModal = null;
 
 export default Base.extend({
     name: "tinymce",
@@ -305,7 +306,7 @@ export default Base.extend({
         import("tinymce/skins/ui/oxide/skin.css");
 
         // tinyMCE Plugins
-        const tinymce = await import("tinymce/tinymce");
+        const tinymce = (await import("tinymce/tinymce")).default;
         await import("tinymce/plugins/advlist");
         await import("tinymce/plugins/anchor");
         await import("tinymce/plugins/autolink");
@@ -348,6 +349,8 @@ export default Base.extend({
         await import("tinymce/themes/silver");
 
         await import("tinymce/icons/default");
+
+        LinkModal = (await import("./js/links")).default;
 
         console.log("step 2: init");
 
