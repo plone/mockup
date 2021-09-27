@@ -1,3 +1,7 @@
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
 $plone-gray-light: lighten(#000, 46.5%);
 $plone-link-color: #007bb3; //plone blue
 $plone-gray-lighter: lighten(#000, 80%); // #ccc //disableds like
@@ -19,16 +23,5 @@ $plone-toolbar-private-color: #c4183c; // red
 $plone-toolbar-internal-color: #fab82a; // is draft
 $plone-toolbar-internally-published-color: #883dfa; // is intranet
 
-$plone-screen-sm-min: 768px;
-$plone-screen-xs-max: ($plone-screen-sm-min + 1);
-$plone-screen-xs-min: 480px;
-$plone-screen-md-min: 992px;
-$plone-screen-lg-min: 1200px;
-
-$plone-left-toolbar-expanded: 220px;
-$plone-left-toolbar: 60px;
-$plone-toolbar-submenu-width: 280px;
-
-$plone-container-sm: 750px;
-$plone-container-md: 970px;
-$plone-container-lg: 1170px;
+$plone-toolbar-width: 220px;
+$plone-toolbar-width-collapsed: 25px;
