@@ -42,6 +42,9 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
             watchOptions: {
                 ignored: ["node_modules/**", "mockup/**", "docs/**"],
             },
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
         };
     }
 
