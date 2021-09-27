@@ -308,20 +308,18 @@
                 white-space: nowrap;
 
                 &:last-child {
-                    padding-bottom: 5px;
+                    padding-bottom: 0.5em;
                 }
 
                 > span {
-                    line-height: 20px;
                     display: block;
                     height: auto;
-                    padding: 5px 15px;
+                    padding: 0.5em 1em;
                 }
 
                 > a {
-                    line-height: 20px;
                     height: auto;
-                    padding: 5px 15px;
+                    padding: 0.5em 1em;
                 }
 
                 &.plone-toolbar-submenu-header,
@@ -724,7 +722,7 @@
 
     nav > ul li.active ul {
         top: auto;
-        height: inherit;
+        height: auto;
         max-height: 1000px; // trick to activate transition
     }
 
@@ -759,11 +757,6 @@
 
     nav > ul a > span + span {
         width: inherit;
-        padding: 0 8px 0 0;
-    }
-
-    nav > ul a > [class^="icon"] {
-        padding-left: 0;
     }
 
     .plone-toolbar-caret {
@@ -851,9 +844,9 @@
         #personal-bar-container {
             position: absolute;
             bottom: 0;
+            width: 100%;
             border-top: 1px solid #ddd;
             background-color: black;
-            box-shadow: -6px 2px 6px 2px #ddd;
 
             ul {
                 position: fixed;
