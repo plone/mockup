@@ -55,8 +55,8 @@ export default Base.extend({
                 '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="modal-title" <% } %> tabindex="-1">' +
                 '    <div class="<%= options.classModal %>" role="document">' +
                 '      <div class="<%= options.classHeaderName %>">' +
-                '        <a class="modal-close" aria-label="Close modal" title="Close modal" href="#">&times;</a>' +
-                '        <% if (title) { %><h2 class="modal-title" id="modal-title" tabindex="0"><%= title %></h2><% } %>' +
+                '        <% if (title) { %><h5 class="modal-title" id="modal-title" tabindex="0"><%= title %></h5><% } %>' +
+                '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
                 "      </div>" +
                 '      <div class="<%= options.classBodyName %>">' +
                 '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
@@ -189,8 +189,8 @@ export default Base.extend({
             var self = this;
 
             // pass action that was clicked when submiting form
-            var extraData = {};
-            extraData[$action.attr("name")] = $action.attr("value");
+            var formData = [];
+            formData.push({"name": $action.attr("name"), "value": $action.attr("value")});
 
             var $form;
 
@@ -232,10 +232,14 @@ export default Base.extend({
             });
             $form.trigger("submit");
 
+            // serialize form data
+            formData = [].concat(formData, $form.serializeArray());
+
             self.loading.show(false);
-            $form.ajaxSubmit({
+            $.ajax({
                 timeout: options.timeout,
-                data: extraData,
+                type: $form.attr("method"),
+                data: formData,
                 url: url,
                 error: function (xhr, textStatus, errorStatus) {
                     self.loading.hide();
