@@ -20,8 +20,9 @@ Mockup is the JavaScript stack of the Plone Classic UI.
 - Go to ``http://localhost:8000``:
   On this port our demo and documentation pages are served.
 
-
 ## Running tests
+
+You can either install jest with yarn/npm globally or also use it with ``npx jest``
 
 - ``jest``: Run all tests
 - ``jest src/pat/PATH-TO-PATTERN``: Run a specific test suite
