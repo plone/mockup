@@ -125,7 +125,7 @@ var InternalLink = LinkType.extend({
         var $el = this.getEl();
         // kill it and then reinitialize since select2 will load data then
         $el.select2("destroy");
-        $el.removeData("pattern-relateditems"); // reset the pattern
+        $el.removeData("pat-relateditems"); // reset the pattern
         $el.parent().replaceWith($el);
         $el.attr("value", val);
         $el.val(val);

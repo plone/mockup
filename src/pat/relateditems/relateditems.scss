@@ -1,4 +1,4 @@
-.pattern-relateditems-container {
+.pat-relateditems-container {
     position: relative;
     display: inline-block;
     width: 100%;
@@ -24,18 +24,18 @@
         }
     }
 
-    .pattern-relateditems-result-info {
+    .pat-relateditems-result-info {
         flex-grow: 2;
         margin: 0.4em 0.4em 0.4em 1.5em;
         hyphens: auto;
     }
 
-    .pattern-relateditems-item {
+    .pat-relateditems-item {
         display: flex;
     }
 }
 
-.pattern-relateditems-dropdown {
+.pat-relateditems-dropdown {
     .select2-results {
         background-color: #fff;
         max-height: 950px;
@@ -65,12 +65,12 @@
     }
 }
 
-.pattern-relateditems-active {
+.pat-relateditems-active {
     background-color: #ddd;
     padding: 5px;
 }
 
-.pattern-relateditems-path-label {
+.pat-relateditems-path-label {
     margin-top: 2px;
 }
 
@@ -110,7 +110,7 @@
                     top: 0.4rem;
                 }
 
-                .pattern-relateditems-item-image {
+                .pat-relateditems-item-image {
                     flex: 0 0 auto;
                 }
             }
@@ -118,7 +118,7 @@
     }
 }
 
-.pattern-relateditems-result {
+.pat-relateditems-result {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.15em;
@@ -129,16 +129,16 @@
         }
     }
 
-    .pattern-relateditems-result-info {
+    .pat-relateditems-result-info {
         padding: 0.4em;
     }
 
-    .pattern-relateditems-result-browse-wrapper {
+    .pat-relateditems-result-browse-wrapper {
         display: flex;
         flex: 2 1 fill;
         justify-content: flex-start;
 
-        .pattern-relateditems-result-select {
+        .pat-relateditems-result-select {
             &:not(.selectable) {
                 &:not(.one-level-up) {
                     opacity: 0.6;
@@ -146,7 +146,7 @@
             }
         }
 
-        .pattern-relateditems-result-browse {
+        .pat-relateditems-result-browse {
             font-size: 2.1rem;
             line-height: 1.8em;
             margin: 0 0.1em 0 0;
@@ -164,14 +164,14 @@
     &.one-level-up {
         background-color: #ddd;
 
-        .pattern-relateditems-result-browse-wrapper {
+        .pat-relateditems-result-browse-wrapper {
             flex-direction: row-reverse;
         }
     }
 }
 
-.pattern-relateditems-item-title,
-.pattern-relateditems-result-title {
+.pat-relateditems-item-title,
+.pat-relateditems-result-title {
     font-size: 1.6rem;
     line-height: 1.2;
     padding: 0;
@@ -186,15 +186,15 @@
     }
 }
 
-.pattern-relateditems-result-path {
+.pat-relateditems-result-path {
     margin-top: -5px;
 }
 
 // Keep images at 128x128 even if thumb size is set to higher
 // Global selectors are for modals and we override default from #content-core
-.pattern-relateditems-result-image,
-.pattern-relateditems-recentlyused-image,
-.pattern-relateditems-item-image {
+.pat-relateditems-result-image,
+.pat-relateditems-recentlyused-image,
+.pat-relateditems-item-image {
     img {
       width: 100px;
       height: 100px;
@@ -207,7 +207,7 @@
     }
 }
 
-.pattern-relateditems {
+.pat-relateditems {
     &-recentlyused-path,
     &-item-path,
     &-result-path {

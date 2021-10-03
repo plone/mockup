@@ -1,14 +1,14 @@
-<div class="pattern-relateditems-item">
-  <div class="pattern-relateditems-result-info">
+<div class="pat-relateditems-item">
+  <div class="pat-relateditems-result-info">
     <span
-      class="pattern-relateditems-item-title <%- portal_type ? 'contenttype-' + portal_type.toLowerCase() : '' %> <%- review_state ? 'state-' + review_state : '' %>"
+      class="pat-relateditems-item-title <%- portal_type ? 'contenttype-' + portal_type.toLowerCase() : '' %> <%- review_state ? 'state-' + review_state : '' %>"
       title="<%- portal_type %>">
       <%- Title %>
     </span>
-    <span class="pattern-relateditems-item-path"><%- path %></span>
+    <span class="pat-relateditems-item-path"><%- path %></span>
   </div>
   <% if (getURL && (getIcon || portal_type === "Image")) { %>
-    <div class="pattern-relateditems-item-image">
+    <div class="pat-relateditems-item-image">
       <img src="<%- getURL %>/@@images/image/thumb" />
     </div>
   <% } %>

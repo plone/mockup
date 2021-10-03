@@ -38,7 +38,7 @@ export default Base.extend({
         browsing: undefined,
         closeOnSelect: true,
         contextPath: undefined,
-        dropdownCssClass: "pattern-relateditems-dropdown",
+        dropdownCssClass: "pat-relateditems-dropdown",
         favorites: [],
         recentlyUsed: false,
         recentlyUsedMaxItems: 20,
@@ -283,8 +283,8 @@ export default Base.extend({
         $(".dropdown-toggle", self.$toolbar).dropdown();
 
         // unbind mouseup event from select2 to override the behavior:
-        $(".pattern-relateditems-dropdown").unbind("mouseup");
-        $(".pattern-relateditems-dropdown").bind("mouseup", function (e) {
+        $(".pat-relateditems-dropdown").unbind("mouseup");
+        $(".pat-relateditems-dropdown").bind("mouseup", function (e) {
             e.stopPropagation();
         });
 
@@ -349,7 +349,7 @@ export default Base.extend({
         });
 
         if (self.options.recentlyUsed) {
-            $(".pattern-relateditems-recentlyused-select", self.$toolbar).on(
+            $(".pat-relateditems-recentlyused-select", self.$toolbar).on(
                 "click",
                 function (event) {
                     event.preventDefault();
@@ -529,8 +529,8 @@ export default Base.extend({
 
         self.setAjax();
 
-        self.$el.wrap('<div class="pattern-relateditems-container" />');
-        self.$container = self.$el.parents(".pattern-relateditems-container");
+        self.$el.wrap('<div class="pat-relateditems-container" />');
+        self.$container = self.$el.parents(".pat-relateditems-container");
 
         Select2.prototype.initializeValues.call(self);
         Select2.prototype.initializeTags.call(self);
@@ -598,15 +598,15 @@ export default Base.extend({
             }
             var result = $(self.applyTemplate("result", item));
 
-            $(".pattern-relateditems-result-select", result).on(
+            $(".pat-relateditems-result-select", result).on(
                 "click",
                 function (event) {
                     event.preventDefault();
                     // event.stopPropagation();
                     if ($(this).is(".selectable")) {
-                        var $parent = $(this).parents(".pattern-relateditems-result");
-                        if ($parent.is(".pattern-relateditems-active")) {
-                            $parent.removeClass("pattern-relateditems-active");
+                        var $parent = $(this).parents(".pat-relateditems-result");
+                        if ($parent.is(".pat-relateditems-active")) {
+                            $parent.removeClass("pat-relateditems-active");
                             self.deselectItem(item);
                         } else {
                             if (self.options.maximumSelectionSize > 0) {
@@ -616,7 +616,7 @@ export default Base.extend({
                                 }
                             }
                             self.selectItem(item);
-                            $parent.addClass("pattern-relateditems-active");
+                            $parent.addClass("pat-relateditems-active");
                             if (self.options.closeOnSelect) {
                                 $(self.el).select2("close");
                             }
@@ -625,7 +625,7 @@ export default Base.extend({
                 }
             );
 
-            $(".pattern-relateditems-result-browse", result).on(
+            $(".pat-relateditems-result-browse", result).on(
                 "click",
                 function (event) {
                     event.preventDefault();
@@ -717,10 +717,10 @@ export default Base.extend({
 
                 var selectorContext =
                     event.which === KEY.LEFT
-                        ? ".pattern-relateditems-result.one-level-up"
+                        ? ".pat-relateditems-result.one-level-up"
                         : ".select2-highlighted";
 
-                var browsableItemSelector = ".pattern-relateditems-result-browse";
+                var browsableItemSelector = ".pat-relateditems-result-browse";
                 var browsableItem = $(browsableItemSelector, selectorContext);
 
                 if (browsableItem.length !== 1) {

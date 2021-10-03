@@ -5,7 +5,7 @@
 </div>
 <% } %>
 <div class="path-wrapper flex-grow-1">
-  <span class="pattern-relateditems-path-label"><%- searchText %></span>
+  <span class="pat-relateditems-path-label"><%- searchText %></span>
   <a class="crumb" href="/"><%= icon_root %></a>
   <%= items %>
 </div>
