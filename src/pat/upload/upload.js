@@ -116,7 +116,7 @@ export default Base.extend({
         if (self.options.allowPathSelection) {
             // only use related items if we can generate path based urls and if it's not turned off.
             self.$pathInput = $('input[name="location"]', self.$el);
-            self.relatedItems = self.setupRelatedItems(self.$pathInput);
+            self.relatedItems = await self.setupRelatedItems(self.$pathInput);
         } else {
             $('input[name="location"]', self.$el).parent().remove();
             self.relatedItems = null;
@@ -473,9 +473,8 @@ export default Base.extend({
         self.options.url = self.dropzone.options.url = self.getUrl();
     },
 
-    setupRelatedItems: function ($input) {
-        let RelatedItems = import("../relateditems/relateditems");
-        RelatedItems = RelatedItems.default;
+    setupRelatedItems: async function ($input) {
+        const RelatedItems = (await import("../relateditems/relateditems")).default;
 
         var self = this;
         var options = self.options.relatedItems;
