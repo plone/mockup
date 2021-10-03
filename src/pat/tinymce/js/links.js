@@ -78,6 +78,9 @@ var InternalLink = LinkType.extend({
     name: "internallinktype",
     trigger: ".pat-internallinktype-dummy",
     init: function () {
+        if (!this.getEl().length) {
+            return;
+        }
         LinkType.prototype.init.call(this);
         this.getEl().addClass("pat-relateditems");
         this.createRelatedItems();
@@ -88,6 +91,9 @@ var InternalLink = LinkType.extend({
     },
 
     createRelatedItems: function () {
+        if (!this.getEl().length) {
+            return;
+        }
         var options = this.linkModal.options.relatedItems;
         options.upload = false; // ensure that related items upload is off.
         this.relatedItems = new RelatedItems(this.getEl(), options);
