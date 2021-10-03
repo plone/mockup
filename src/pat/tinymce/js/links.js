@@ -532,13 +532,15 @@ export default Base.extend({
         /* load up all the link types */
         _.each(self.options.linkTypes, function (type) {
             var $container = $(".linkType." + type + " .main", self.modal.$modal);
-            self.linkTypes[type] = new self.options.linkTypeClassMapping[type](
-                $container,
-                {
-                    linkModal: self,
-                    tinypattern: self.tinypattern,
-                }
-            );
+            if ($container.length) {
+                self.linkTypes[type] = new self.options.linkTypeClassMapping[type](
+                    $container,
+                    {
+                        linkModal: self,
+                        tinypattern: self.tinypattern,
+                    }
+                );
+            }
         });
 
         $(".autotoc-nav a", self.modal.$modal).click(function () {
