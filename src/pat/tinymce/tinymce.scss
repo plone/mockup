@@ -39,29 +39,11 @@ div.linkModal {
         padding-top: 0;
         margin-right: 20px;
     }
-    hr {
-        margin: 5px 0;
-    }
     div.linkTypes {
         line-height: 15px;
         input {
             margin: 5px 5px 9px 9px;
         }
-    }
-    input[name="external"],
-    input[name="externalImage"] {
-        width: 80%;
-    }
-    fieldset {
-        padding-top: 10px;
-        min-height: 90px;
-    }
-    fieldset .input-wrapper {
-        display: inline-flex;
-    }
-    .common-controls {
-        padding-top: 10px;
-        border-top: 1px solid #ccc;
     }
 }
 
