@@ -11,13 +11,13 @@
         <% if(_.contains(linkTypes, 'image')){ %>
       <fieldset class="linkType image" data-linkType="image">
         <legend id="tinylink-image"><%- internalImageText %></legend>
-        <div class="form-inline">
-          <div class="form-group main">
-            <input type="text" name="image" />
+        <div>
+          <div class="main mb-2">
+            <input type="text" name="image" class="form-control" />
           </div>
-          <div class="form-group scale">
+          <div class="scale mb-2">
             <label><%- scaleText %></label>
-            <select name="scale">
+            <select name="scale" class="form-select">
               <option value="">Original</option>
                 <% _.each(imageScales, function(scale) { %>
                   <option value="<%- scale.value %>" <% if (scale.value === options.defaultScale) { %>selected<% } %> >
@@ -41,9 +41,9 @@
       <fieldset class="linkType externalImage" data-linkType="externalImage">
         <legend id="tinylink-externalImage"><%- externalImage %></legend>
         <div>
-          <div class="form-group main">
+          <div class="main">
             <label><%- externalImageText %></label>
-            <input type="text" name="externalImage" />
+            <input type="text" name="externalImage" class="form-control" />
           </div>
         </div>
       </fieldset>
@@ -51,28 +51,28 @@
 
     </div><!-- / tabs -->
 
-    <div class="common-controls">
-      <div class="form-group title">
+    <div class="common-controls mt-3 border-top pt-3">
+      <div class="title mb-2">
         <label><%- titleText %></label>
-        <input type="text" name="title" />
+        <input type="text" name="title" class="form-control" />
       </div>
-      <div class="form-group text">
+      <div class="text mb-2">
         <label><%- altText %></label>
-        <input type="text" name="alt" />
+        <input type="text" name="alt" class="form-control" />
       </div>
-      <div class="form-group captionFromDescription">
-        <label>
-          <input type="checkbox" name="captionFromDescription" />
+      <div class="captionFromDescription form-check mb-2">
+        <input type="checkbox" name="captionFromDescription" class="form-check-input" />
+        <label for="captionFromDescription" class="form-check-label">
           <%- captionFromDescriptionText %>
         </label>
       </div>
-      <div class="form-group caption">
+      <div class="caption mb-2">
         <label><%- captionText %></label>
-        <textarea name="caption"></textarea>
+        <textarea name="caption" class="form-control"></textarea>
       </div>
-      <div class="form-group align">
+      <div class="align mb-2">
         <label><%- imageAlignText %></label>
-        <select name="align">
+        <select name="align" class="form-select">
           <% _.each(Object.keys(options.imageClasses), function(align){ %>
               <option value="<%- align %>">
               <%- options.imageClasses[align] %>
@@ -82,8 +82,8 @@
       </div>
     </div>
 
-    <input type="submit" class="plone-btn" name="cancel" value="<%- cancelBtn %>" />
-    <input type="submit" class="plone-btn plone-btn-primary context" name="insert" value="<%- insertBtn %>" />
+    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="<%- cancelBtn %>" />
+    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="<%- insertBtn %>" />
 
   </div>
 </div>
