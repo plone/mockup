@@ -12,9 +12,9 @@
       <fieldset class="linkType internal" data-linkType="internal">
         <legend id="tinylink-internal"><%- internal %></legend>
         <div>
-          <div class="form-group main">
+          <div class="main mb-2">
             <!-- this gives the name to the "linkType" -->
-            <input type="text" name="internal" />
+            <input type="text" name="internal" class="form-control" />
           </div>
         </div>
       </fieldset>
@@ -30,9 +30,9 @@
       <% if(_.contains(linkTypes, 'external')){ %>
       <fieldset class="linkType external" data-linkType="external">
         <legend id="tinylink-external"><%- external %></legend>
-        <div class="form-group main">
+        <div class="main mb-2">
           <label for="external"><%- externalText %></label>
-          <input type="text" name="external" />
+          <input type="text" name="external" class="form-control" />
         </div>
       </fieldset>
       <% } %>
@@ -40,14 +40,14 @@
       <% if(_.contains(linkTypes, 'email')){ %>
       <fieldset class="linkType email" data-linkType="email">
         <legend id="tinylink-email"><%- emailText %></legend>
-        <div class="form-inline">
-          <div class="form-group main">
+        <div>
+          <div class="main mb-2">
             <label><%- emailText %></label>
-            <input type="text" name="email" />
+            <input type="text" name="email" class="form-control" />
           </div>
-          <div class="form-group">
+          <div class="mb-2">
             <label><%- subjectText %></label>
-            <input type="text" name="subject" />
+            <input type="text" name="subject" class="form-control" />
           </div>
         </div>
       </fieldset>
@@ -57,10 +57,10 @@
       <fieldset class="linkType anchor" data-linkType="anchor">
         <legend id="tinylink-anchor"><%- anchor %></legend>
         <div>
-          <div class="form-group main">
+          <div class="main mb-2">
             <label><%- anchorLabel %></label>
             <div class="input-wrapper">
-              <select name="anchor" class="pat-select2" data-pat-select2="width:500px" />
+              <select name="anchor" class="pat-select2" data-pat-select2="width:500px"></select>
             </div>
           </div>
         </div>
@@ -69,22 +69,22 @@
 
     </div><!-- / tabs -->
 
-    <div class="common-controls">
-      <div class="form-group">
+    <div class="common-controls mt-3 border-top pt-3">
+      <div class="mb-2">
         <label><%- target %></label>
-        <select name="target">
+        <select name="target" class="form-select">
           <% _.each(targetList, function(target){ %>
             <option value="<%- target.value %>"><%- target.text %></option>
           <% }); %>
         </select>
       </div>
-      <div class="form-group">
+      <div class="mb-2">
         <label><%- titleText %></label>
-        <input type="text" name="title" />
+        <input type="text" name="title" class="form-control" />
       </div>
     </div>
 
-    <input type="submit" class="plone-btn" name="cancel" value="<%- cancelBtn %>" />
-    <input type="submit" class="plone-btn plone-btn-primary context" name="insert" value="<%- insertBtn %>" />
+    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="<%- cancelBtn %>" />
+    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="<%- insertBtn %>" />
   </div>
 </div>
