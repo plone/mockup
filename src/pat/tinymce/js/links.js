@@ -445,6 +445,9 @@ export default Base.extend({
             html: self.generateModalHtml(),
             content: null,
             buttons: ".plone-btn",
+            templateOptions: {
+                classDialog: "modal-dialog modal-lg"
+            }
         });
         self.modal.on("shown", function (e) {
             self.modalShown.apply(self, [e]);
