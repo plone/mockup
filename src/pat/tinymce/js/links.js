@@ -124,9 +124,9 @@ var InternalLink = LinkType.extend({
     set: function (val) {
         var $el = this.getEl();
         // kill it and then reinitialize since select2 will load data then
-        $el.select2("destroy");
-        $el.removeData("pat-relateditems"); // reset the pattern
-        $el.parent().replaceWith($el);
+        //$el.select2("destroy");
+        //$el.removeData("pat-relateditems"); // reset the pattern
+        //$el.parent().replaceWith($el);
         $el.attr("value", val);
         $el.val(val);
         this.createRelatedItems();
@@ -446,8 +446,10 @@ export default Base.extend({
             content: null,
             buttons: ".plone-btn",
             templateOptions: {
-                classDialog: "modal-dialog modal-lg"
-            }
+                classDialog: "modal-dialog modal-lg",
+                reloadWindowOnClose: false,
+            },
+            actionOptions: {reloadWindowOnClose: false}
         });
         self.modal.on("shown", function (e) {
             self.modalShown.apply(self, [e]);
