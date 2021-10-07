@@ -56,7 +56,7 @@ export default Base.extend({
                 '    <div class="<%= options.classModal %>" role="document">' +
                 '      <div class="<%= options.classHeaderName %>">' +
                 '        <% if (title) { %><h5 class="modal-title" id="modal-title" tabindex="0"><%= title %></h5><% } %>' +
-                '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+                '        <button type="button" class="btn-close modal-close" aria-label="Close"></button>' +
                 "      </div>" +
                 '      <div class="<%= options.classBodyName %>">' +
                 '        <div class="<%= options.classPrependName %>"><%= prepend %></div> ' +
@@ -479,7 +479,7 @@ export default Base.extend({
 
             // Wire up events
             $(
-                ".modal-header > a.modal-close, .modal-footer > a.modal-close",
+                ".modal-header > .modal-close, .modal-footer > .pattern-modal-buttons > .modal-close",
                 self.$modal
             )
                 .off("click")

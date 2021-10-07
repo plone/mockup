@@ -7,6 +7,9 @@ title: Modal
 
 This is the modal pattern.
 
+
+## Basic Modal
+
 <a href="#modal1" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
                     data-pat-plone-modal="width: 400">Modal basic</a>
 
@@ -28,10 +31,38 @@ This is the modal pattern.
 </div>
 ```
 
-<a href="#modal2" class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal"
-                data-pat-plone-modal="width: 500">Modal long scrolling</a>
+## Modal with Buttons
+
+<a href="#modal2" class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+                    data-pat-plone-modal="{'width': '400', 'buttons': ['.plone-btn']}">Modal with buttons</a>
 
 <div id="modal2" style="display: none">
+    <h1>Modal with buttons!</h1>
+    <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+    <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="Cancel" />
+    <input type="submit" class="btn btn-primary plone-btn" name="insert" value="Submit" />
+</div>
+
+
+```html
+<a
+    href="#modal2"
+    class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+    data-pat-plone-modal="{'width': '400', 'buttons': ['.plone-btn']}"
+    >Modal basic</a
+>
+<div id="modal2" style="display: none">
+    <h1>Basic modal!</h1>
+    <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+</div>
+```
+
+## Modal scrolling
+
+<a href="#modal3" class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal"
+                data-pat-plone-modal="width: 500">Modal long scrolling</a>
+
+<div id="modal3" style="display: none">
 <h1>Basic with scrolling</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -48,12 +79,12 @@ This is the modal pattern.
 
 ```html
 <a
-    href="#modal2"
+    href="#modal3"
     class="plone-btn plone-btn-lg plone-btn-primary pat-plone-modal"
     data-pat-plone-modal="width: 500"
     >Modal long scrolling</a
 >
-<div id="modal2" style="display: none">
+<div id="modal3" style="display: none">
     <h1>Basic with scrolling</h1>
     <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
@@ -86,6 +117,8 @@ This is the modal pattern.
     </p>
 </div>
 ```
+
+## Modal with TinyMCE
 
 <a href="#modaltinymce" class="btn btn-lg btn-primary pat-plone-modal"
 data-pat-plone-modal="height: 600px;
