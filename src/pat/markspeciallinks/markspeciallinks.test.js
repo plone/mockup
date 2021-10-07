@@ -1,19 +1,14 @@
-define([
-    "expect",
-    "jquery",
-    "pat-registry",
-    "mockup-patterns-markspeciallinks",
-], function (expect, $, registry, MarkSpecialLinks) {
-    "use strict";
-
-    window.mocha.setup("bdd");
-    $.fx.off = true;
+import "./markspeciallinks";
+import $ from "jquery";
+import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
 
     /* ==========================
    TEST: MarkSpecialLinks
   ========================== */
 
     describe("MarkSpecialLinks", function () {
+
         beforeEach(function () {
             this.$el = $(
                 "" +
@@ -53,38 +48,47 @@ define([
                     "  </p>" +
                     "</div>"
             );
+            // const url = "https://www.plone.org/";
+            // location = window.location;
+            // const mockLocation = new URL(url);
+            // mockLocation.replace = jest.fn();
+            // delete window.location;
+            // window.location = mockLocation;
         });
-        it("normal external links have target=_blank", function () {
+        it("normal external links have target=_blank", async function () {
+            const util = require('util');
+            await utils.timeout(1);
             registry.scan(this.$el);
+            await utils.timeout(1);
             var link = this.$el.find("a");
-            expect(link.eq(0).attr("target") === undefined).to.be.equal(true);
-            expect(link.eq(1).attr("target") === undefined).to.be.equal(true);
-            expect(link.eq(2).attr("target")).to.be.equal("_blank");
-            expect(link.eq(3).attr("target") === undefined).to.be.equal(true);
-            expect(link.eq(0).prev()[0].tagName).to.be.equal("I");
-            expect(link.eq(1).prev()[0].tagName).not.to.equal("I");
-            expect(link.eq(4).prev().length).to.be.equal(0);
-            expect(link.eq(5).prev()[0].tagName).not.to.equal("I");
+            // expect(window.location.url).toEqual(url);
+            expect(link.eq(0).attr("target") === undefined).toEqual(true);
+            expect(link.eq(1).attr("target") === undefined).toEqual(true);
+            expect(link.eq(2).attr("target")).toEqual("_blank");
+            expect(link.eq(3).attr("target") === undefined).toEqual(true);
+            expect(link.eq(0).prev()[0].tagName).toEqual("I");
+            expect(link.eq(1).prev()[0].tagName).not.toEqual("I");
+            expect(link.eq(4).prev().length).toEqual(0);
+            expect(link.eq(5).prev()[0].tagName).not.toEqual("I");
         });
         it("check for correct icon classes per protocol", function () {
             registry.scan(this.$el);
             var listel = this.$el.next(".icons").find("li");
-            expect(listel.eq(0).find("i").hasClass("link-external")).to.be.equal(true);
-            expect(listel.eq(1).find("i").hasClass("link-https")).to.be.equal(true);
-            expect(listel.eq(2).find("i").hasClass("link-mailto")).to.be.equal(true);
-            expect(listel.eq(3).find("i").hasClass("link-ftp")).to.be.equal(true);
-            expect(listel.eq(4).find("i").hasClass("link-news")).to.be.equal(true);
-            expect(listel.eq(5).find("i").hasClass("link-irc")).to.be.equal(true);
-            expect(listel.eq(6).find("i").hasClass("link-h323")).to.be.equal(true);
-            expect(listel.eq(7).find("i").hasClass("link-sip")).to.be.equal(true);
-            expect(listel.eq(8).find("i").hasClass("link-callto")).to.be.equal(true);
-            expect(listel.eq(9).find("i").hasClass("link-feed")).to.be.equal(true);
-            expect(listel.eq(10).find("i").hasClass("link-webcal")).to.be.equal(true);
+            expect(listel.eq(0).find("i").hasClass("link-external")).toEqual(true);
+            expect(listel.eq(1).find("i").hasClass("link-https")).toEqual(true);
+            expect(listel.eq(2).find("i").hasClass("link-mailto")).toEqual(true);
+            expect(listel.eq(3).find("i").hasClass("link-ftp")).toEqual(true);
+            expect(listel.eq(4).find("i").hasClass("link-news")).toEqual(true);
+            expect(listel.eq(5).find("i").hasClass("link-irc")).toEqual(true);
+            expect(listel.eq(6).find("i").hasClass("link-h323")).toEqual(true);
+            expect(listel.eq(7).find("i").hasClass("link-sip")).toEqual(true);
+            expect(listel.eq(8).find("i").hasClass("link-callto")).toEqual(true);
+            expect(listel.eq(9).find("i").hasClass("link-feed")).toEqual(true);
+            expect(listel.eq(10).find("i").hasClass("link-webcal")).toEqual(true);
         });
         it("do not show the lock icon for anchor links", function () {
             registry.scan(this.$el);
             var link = this.$el.next(".anchors").find("p").find("a");
-            expect(link.eq(0).prev().length).to.be.equal(0);
+            expect(link.eq(0).prev().length).toEqual(0);
         });
     });
-});
