@@ -1,0 +1,4 @@
+Fix updating images/links in tinymce
+Fix reload when cancel button was pressed
+Rename pattern-releateditems classes to pat-realateditems
+[MrTango]
