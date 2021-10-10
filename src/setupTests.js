@@ -16,6 +16,14 @@ jquery.expr.pseudos.visible = function () {
     return true;
 };
 
+class URL {
+    constructor(url) {
+        this.url = url;
+        this.protocol = url.split("//")[0];
+    }
+}
+window.URL = URL;
+
 // pat-subform
 // See https://github.com/jsdom/jsdom/issues/1937#issuecomment-461810980
 window.HTMLFormElement.prototype.submit = () => {};
