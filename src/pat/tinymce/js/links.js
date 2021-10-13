@@ -445,6 +445,7 @@ export default Base.extend({
             html: self.generateModalHtml(),
             content: null,
             buttons: ".plone-btn",
+            reloadWindowOnClose: false,
             templateOptions: {
                 classDialog: "modal-dialog modal-lg",
                 reloadWindowOnClose: false,
