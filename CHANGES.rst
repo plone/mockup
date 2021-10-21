@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.1 (2021-10-22)4.0.1 (2021-10-22)
+------------------
+
+New features:
+
+
+- Upgrade jQuery to 3.6.0 and some other version upgrades.
+  [thet] (#1077)
+
+
 4.0.0 (2021-10-21)4.0.0 (2021-10-21)
 ------------------
 
