@@ -1,1 +1,0 @@
-Fix plone toolbar action links being updated only on the first navigation action in the folder_contents structure pattern. Also clean up previous closetoolbarsubmenu's event handler before readding [fredvd]

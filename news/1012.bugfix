@@ -1,3 +1,0 @@
-pat-modal: Do not use "target" mode if href is "#" which isn't a valid id selector.
-pat-tinymce: Fix HTML of image template.
-[thet]

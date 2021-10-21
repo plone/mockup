@@ -8,6 +8,62 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0 (2021-10-21)4.0.0 (2021-10-21)
+------------------
+
+Breaking changes:
+
+
+- Upgrade jQuery from 1.12.4 to 3.5.1.
+  Upgrade to patternslib 3.
+  Remove jquery.event.drag/drop.
+  Depend on SortableJS as replacement for jquery.event.drag/drop.
+  pat-sortable: Use SortableJS instead jquery.event.drag/drop based solution.
+  pat-select2: Use SortableJS instead jquery.event.drag/drop based solution.
+  [thet]
+
+  .. note:: If you experience problems your JavaScript working with jQuery 3 follow the upgradfe guides:
+     https://jquery.com/upgrade-guide/3.0/
+     https://jquery.com/upgrade-guide/3.5/
+     A common source of problems is the removal of the deprecated ``.size()`` method in favor of the ``..length`` attribute which follows JavaScrpt array conventions. (#1012)
+
+
+New features:
+
+
+- pat-select2: Patch Select2 version to include UI improvements from: https://github.com/collective/select2-3.5.3-custom#mrtango-improve-relateditems-ux
+  [thet] (#1022)
+- Simpliy Travis configuration.
+  Do not set up tests for different browsers - we were always only testing in phantomjs.
+  Set up Travis caches.
+  [thet] (#1023)
+
+
+Bug fixes:
+
+
+- Fix building of the docs bundle.
+  [thet] (#980)
+- Fix external description text in tinymce link popup
+  [parruc] (#1010)
+- pat-modal: Do not use "target" mode if href is "#" which isn't a valid id selector.
+  pat-tinymce: Fix HTML of image template.
+  [thet] (#1012)
+- Bump bl from 4.0.2 to 4.0.3 [dependabot, jensens] (#1014)
+- Bumps lodash from 4.17.15 to 4.17.20. [dependabot, jensens] (#1015)
+- Move most dependencies to npm version, instead of github
+  [MrTango] (#1018)
+- Code style: Add prettier, eslint .editorconfig and reformat code base.
+  [thet] (#1021)
+- Fix selectors for ``sort_reversed`` checkbox in ``pat-querystring``
+  [petschki] (#1043)
+- Remove fonts from patterns to avoid multiple inline includes.
+  [agitator] (#1045)
+- Call fileUpload view explict with @@ to avoid plone.rest clashes.
+  [jensens] (#1052)
+- Fix plone toolbar action links being updated only on the first navigation action in the folder_contents structure pattern. Also clean up previous closetoolbarsubmenu's event handler before readding [fredvd] (#3191)
+
+
 3.2.2 (2020-08-14)
 ------------------
 
