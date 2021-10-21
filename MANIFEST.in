@@ -21,6 +21,8 @@ prune mockup/build
 prune mockup/coverage
 prune mockup/docs
 prune mockup/node_modules
+exclude .editorconfig
+exclude .prettierignore
 exclude .bowerrc
 exclude .travis.yml
 exclude Makefile
