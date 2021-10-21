@@ -1,0 +1,4 @@
+Be more strict with version specifications and allow only patch-level upgrades.
+The RequireJS config defines exact locations to dependencies which might change.
+This will get easier on ES6.
+[thet]
