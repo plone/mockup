@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.2 (2021-10-22)4.0.2 (2021-10-22)
+------------------
+
+Bug fixes:
+
+
+- Be more strict with version specifications and allow only patch-level upgrades.
+  The RequireJS config defines exact locations to dependencies which might change.
+  This will get easier on ES6.
+  [thet] (#1077)
+
+
 4.0.1 (2021-10-22)4.0.1 (2021-10-22)
 ------------------
 
