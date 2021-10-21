@@ -1,3 +1,4 @@
+include *.js
 include *.json
 include *.rst
 include .yarnrc
@@ -12,6 +13,7 @@ recursive-include mockup/less *
 recursive-include mockup/lib *
 recursive-include mockup/patterns *
 recursive-include mockup/tests *
+recursive-include patches *.patch
 prune .nix
 prune dist
 prune mockup/node_modules
