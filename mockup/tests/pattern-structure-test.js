@@ -108,10 +108,15 @@ define([
                     "mockup-patterns-structure-url/js/collections/result",
             });
 
-            expect(app.collection.queryHelper.options.attributes).to.eql([
-                "foo",
-                "bar",
-            ]);
+            expect(app.collection.queryHelper.options.attributes.length).to.eql(
+                2
+            );
+            expect(app.collection.queryHelper.options.attributes[0]).to.eql(
+                "foo"
+            );
+            expect(app.collection.queryHelper.options.attributes[1]).to.eql(
+                "bar"
+            );
 
             expect(JSON.parse(app.collection.queryParser())).to.eql({
                 criteria: [
