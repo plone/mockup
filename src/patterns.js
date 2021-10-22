@@ -2,9 +2,6 @@
  * All imports here will go into the compiled bundle.
  */
 
-// Import base
-import "@patternslib/patternslib/src/public_path";
-
 // Core
 import registry from "@patternslib/patternslib/src/core/registry";
 import jquery from "jquery";
