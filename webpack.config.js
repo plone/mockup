@@ -1,6 +1,8 @@
 process.traceDeprecation = true;
 const path = require("path");
-const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config.js");
+const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
+const svelte_config = require("@patternslib/pat-content-browser/webpack.svelte");
+
 const webpack = require("webpack");
 
 module.exports = async (env, argv, build_dirname = __dirname) => {
@@ -11,8 +13,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         },
     };
 
-    config = patternslib_config(env, argv, config);
-
+    config = svelte_config(env, argv, patternslib_config(env, argv, config, ["mockup"]));
     config.output.path = path.resolve(__dirname, "dist/");
 
     config.plugins.push(
@@ -22,30 +23,12 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         })
     );
 
-    // Add Svelte support
-    config.module.rules.push({
-        test: /\.svelte$/,
-        use: "svelte-loader",
-    });
-    config.resolve.alias.svelte = path.resolve("node_modules", "svelte");
-    config.resolve.extensions = [".wasm", ".mjs", ".js", ".json", ".svelte"];
-    config.resolve.mainFields = ["svelte", "browser", "module", "main"];
-
     if (process.env.NODE_ENV === "development") {
-        // Set public path to override __webpack_public_path__ for webpack-dev-server
-        config.output.publicPath = "/dist/";
-        config.devServer = {
-            inline: true,
-            contentBase: "./docs/_site/",
-            port: "8000",
-            host: "0.0.0.0",
-            watchOptions: {
-                ignored: ["node_modules/**", "mockup/**", "docs/**"],
-            },
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            },
+        config.devServer.static = {
+            directory: path.resolve(__dirname, "./docs/_site/"),
         };
+        config.devServer.port = "8000";
+        config.output.publicPath = "/dist/"; // publicPath to discover assets like the chunks directory
     }
 
     if (env && env.DEPLOYMENT === "plone") {
