@@ -109,7 +109,11 @@
         "backbone": "1.1.2",
         "datatables.net": "1.11.2",
         "jquery": "3.6.0",
+        "ua-parser-js": "0.7.28",
         "underscore": "1.13.1"
+    },
+    "resolutions-comments": {
+        "ua-parser-js": "See https://github.com/faisalman/ua-parser-js/issues/536"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
