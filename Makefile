@@ -3,7 +3,7 @@ YARN   ?= npx yarn
 
 
 stamp-yarn:
-	$(YARN) install
+	$(YARN) install --ignore-scripts
 	# Install pre commit hook
 	#Do not yet - while heave development - enforce pre-commit commitlint hook.
 	#$(YARN) husky install
