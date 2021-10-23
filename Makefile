@@ -4,6 +4,8 @@ YARN   ?= npx yarn
 
 stamp-yarn:
 	$(YARN) install --ignore-scripts
+	# Check if you can really ignore scripts by running:
+	#   npx can-i-ignore-scripts
 	# Install pre commit hook
 	#Do not yet - while heave development - enforce pre-commit commitlint hook.
 	#$(YARN) husky install
