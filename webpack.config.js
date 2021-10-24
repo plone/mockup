@@ -4,7 +4,6 @@ const patternslib_config = require("@patternslib/patternslib/webpack/webpack.con
 const svelte_config = require("@patternslib/pat-content-browser/webpack.svelte");
 
 const webpack = require("webpack");
-const { ModuleFederationPlugin } = require("webpack").container;
 
 module.exports = async (env, argv, build_dirname = __dirname) => {
     let config = {
@@ -38,16 +37,6 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
             "../plone.staticresources/src/plone/staticresources/static/bundle-plone/"
         );
     }
-
-    config.plugins.push(
-        new ModuleFederationPlugin({
-            shared: {
-                "@patternslib/patternslib": {
-                    singleton: true,
-                },
-            },
-        })
-    );
 
     return config;
 };
