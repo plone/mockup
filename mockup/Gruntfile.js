@@ -140,7 +140,7 @@ module.exports = function (grunt) {
             }
             console.log("reading file: " + filepath);
             var file = fs.readFileSync(filepath, { encoding: "utf-8" });
-            var re = /_t\((("[^"]+")|('[^']+'))(,\W{.*})?\)?\)/g;
+            var re = /_t\(\n?\s*(("[^"]+")|('[^']+'))(,\W{\n.*\n.*})?\)?\n?\s*\)/g;
             var m = re.exec(file);
             while (m) {
                 if (m) {
