@@ -34,7 +34,7 @@ export default Base.extend({
 
         var $modal = self.$el.parents(".plone-modal");
         if ($modal.length !== 0) {
-            $modal.data("patternPloneModal").on("hide", function (e) {
+            $modal.on("hide", function (e) {
                 var modal = $modal.data("patternPloneModal");
                 if (modal) {
                     modal._suppressHide = self._handleUnload.call(self, e);
