@@ -539,7 +539,6 @@ export default Base.extend({
         self.options.loadLinksWithinModal = $.parseJSON(
             self.options.loadLinksWithinModal
         );
-        console.log("routerOptions.id: ", self.options.routerOptions.id);
         // Router
         if (self.options.routerOptions.id !== null) {
             Router.addRoute(
@@ -688,19 +687,14 @@ export default Base.extend({
     initModal: function () {
         var self = this;
         if (self.options.ajaxUrl) {
-            console.log("ajaxModal");
             self.createModal = self.createAjaxModal;
         } else if (self.options.target) {
-            console.log("targetModal");
             self.createModal = self.createTargetModal;
         } else if (self.options.html) {
-            console.log("htmlModal");
             self.createModal = self.createHtmlModal;
         } else if (self.options.image) {
-            console.log("imageModal");
             self.createModal = self.createImageModal;
         } else {
-            console.log("defaultModal");
             self.createModal = self.createBasicModal;
         }
     },
