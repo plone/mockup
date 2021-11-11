@@ -33,6 +33,7 @@ import "./pat/modal/modal";
 import "./pat/navigationmarker/navigationmarker";
 import "./pat/passwordstrength/passwordstrength";
 import "./pat/preventdoublesubmit/preventdoublesubmit";
+import "./pat/manageportlets/manageportlets.js";
 import "./pat/querystring/querystring";
 import "./pat/recurrence/recurrence";
 import "./pat/relateditems/relateditems";
