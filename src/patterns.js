@@ -38,7 +38,6 @@ import "./pat/select2/select2";
 import "./pat/sortable/sortable";
 import "./pat/structure/structure";
 import "./pat/textareamimetypeselector/textareamimetypeselector";
-//import "./pat/thememapper/thememapper";
 import "./pat/toggle/toggle";
 import "./pat/toolbar/toolbar";
 import "./pat/tree/tree";
