@@ -282,13 +282,11 @@ Criteria.prototype = {
                     self.trigger("value-changed");
                 });
         } else if (widget === "DateWidget") {
-            self.$value = $('<input type="text"/>')
+            self.$value = $('<input type="date"/>')
                 .addClass(self.options.classValueName + "-" + widget)
-                .attr("data-pat-pickadate", JSON.stringify(self.patternDateOptions)) // have to pass as attributes otherwise time bool will overwritten to an object by the mockupParser
                 .val(value)
                 .appendTo($wrapper)
-                .patternPickadate()
-                .on("updated.pickadate.patterns", function () {
+                .on("change", function () {
                     self.trigger("value-changed");
                 });
         } else if (widget === "DateRangeWidget") {
@@ -301,28 +299,24 @@ Criteria.prototype = {
                 val2 = value[1] ? value[1] : "";
             }
 
-            var startdt = $('<input type="text"/>')
+            var startdt = $('<input type="date"/>')
                 .addClass(self.options.classValueName + "-" + widget)
                 .addClass(self.options.classValueName + "-" + widget + "-start")
-                .attr("data-pat-pickadate", JSON.stringify(self.patternDateOptions))
                 .val(val1)
                 .appendTo(startwrap)
-                .patternPickadate()
-                .on("updated.pickadate.patterns", function () {
+                .on("change", function () {
                     self.trigger("value-changed");
                 });
             $wrapper.append(
                 $("<span/>").html(_t("to")).addClass(self.options.classBetweenDtName)
             );
             var endwrap = $("<span/>").appendTo($wrapper);
-            var enddt = $('<input type="text"/>')
+            var enddt = $('<input type="date"/>')
                 .addClass(self.options.classValueName + "-" + widget)
                 .addClass(self.options.classValueName + "-" + widget + "-end")
-                .attr("data-pat-pickadate", JSON.stringify(self.patternDateOptions))
                 .val(val2)
                 .appendTo(endwrap)
-                .patternPickadate()
-                .on("updated.pickadate.patterns", function () {
+                .on("change", function () {
                     self.trigger("value-changed");
                 });
             self.$value = [startdt, enddt];
@@ -643,7 +637,6 @@ export default Base.extend({
     init: async function () {
         await import("select2");
         await import("../select2/select2");
-        await import("../pickadate/pickadate");
         await import("../relateditems/relateditems");
 
         import("./querystring.scss");
@@ -820,15 +813,12 @@ export default Base.extend({
             .change(function () {
                 self.refreshPreviewEvent.call(self);
                 if ($(this).prop("checked")) {
-                    $(
-                        'input[type="checkbox"]',
-                        existingSortOrder
-                    ).prop("checked", true);
+                    $('input[type="checkbox"]', existingSortOrder).prop("checked", true);
                 } else {
-                    $(
-                        'input[type="checkbox"]',
-                        existingSortOrder
-                    ).prop("checked", false);
+                    $('input[type="checkbox"]', existingSortOrder).prop(
+                        "checked",
+                        false
+                    );
                 }
             });
 
