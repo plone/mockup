@@ -34,7 +34,6 @@ import "./pat/manageportlets/manageportlets.js";
 import "./pat/querystring/querystring";
 import "./pat/recurrence/recurrence";
 import "./pat/relateditems/relateditems";
-import "./pat/resourceregistry/resourceregistry";
 import "./pat/select2/select2";
 import "./pat/sortable/sortable";
 import "./pat/structure/structure";
