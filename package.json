@@ -9,7 +9,6 @@
         "yarn": "^1.3.2"
     },
     "dependencies": {
-        "@juggle/resize-observer": "^3.3.1",
         "@patternslib/pat-code-editor": "^2.0.0",
         "@patternslib/pat-content-browser": "git+https://github.com/plone/pat-content-browser.git#a6d146bea74a64ba802663d00887b6b8fd7eef59",
         "@patternslib/patternslib": "^6.0.1",
@@ -33,23 +32,16 @@
         "datatables.net-select": "^1.3.3",
         "datatables.net-select-bs5": "^1.3.3",
         "dropzone": "4.3.0",
-        "intersection-observer": "^0.12.0",
         "jqtree": "1.6.1",
         "jquery": "^3.6.0",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
         "jquery.cookie": "1.4.1",
         "jquery.recurrenceinput.js": "git+https://github.com/collective/jquery.recurrenceinput.js.git#master",
-        "marked": "0.3.18",
-        "pickadate": "3.6.4",
-        "promise-polyfill": "^8.1.0",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.14.0",
-        "svelte": "^3.42.6",
         "tinymce": "^5.10.2",
-        "tinymce-i18n": "^20.12.25",
-        "url-polyfill": "^1.1.9",
-        "whatwg-fetch": "^3.4.0"
+        "tinymce-i18n": "^20.12.25"
     },
     "devDependencies": {
         "@11ty/eleventy": "^0.12.1",
