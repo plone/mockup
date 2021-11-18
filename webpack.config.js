@@ -19,6 +19,9 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         new webpack.ProvidePlugin({
             Backbone: "backbone",
             _: "underscore",
+            $: "jquery",
+            jQuery: "jquery",
+            jquery: "jquery",
         })
     );
 

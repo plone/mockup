@@ -1,6 +1,7 @@
 import $ from "jquery";
 import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "@patternslib/patternslib/src/core/base";
+import utils from "@patternslib/patternslib/src/core/utils";
 
 export default Base.extend({
     name: "datatables",
@@ -38,6 +39,8 @@ export default Base.extend({
         await import("datatables.net-rowreorder-bs5");
         await import("datatables.net-select");
         await import("datatables.net-select-bs5");
+
+        await utils.timeout(1);
 
         $(this.el).DataTable(this.options);
     },

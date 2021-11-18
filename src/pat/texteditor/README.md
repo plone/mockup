@@ -22,33 +22,27 @@ title: Text Editor
 
 ## Examples
 
-### Default
-
-<pre class="pat-texteditor" data-pat-texteditor="theme:clouds">
+### Code Editor
+<pre class="pat-code-editor">
 foobar
 </pre>
 
 ```html
-<pre class="pat-texteditor" data-pat-texteditor="theme:clouds">
+<pre class="pat-code-editor">
 foobar
 </pre>
 ```
 
-### Different theme
 
-<pre class="pat-texteditor" data-pat-texteditor="mode:javascript;theme:dawn;">
-var foo = 'bar';
-function foobar() {
- return foo;
-}
+
+### Default
+<pre class="pat-texteditor">
+foobar
 </pre>
 
 ```html
-<pre class="pat-texteditor" data-pat-texteditor="mode:javascript;theme:dawn;">
-var foo = 'bar';
-function foobar() {
- return foo;
-}
+<pre class="pat-texteditor">
+foobar
 </pre>
 ```
 
