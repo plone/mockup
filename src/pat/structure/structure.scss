@@ -8,7 +8,9 @@
         border: 1px solid orange;
     }
 
-    .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    .btn.disabled,
+    .btn[disabled],
+    fieldset[disabled] .btn {
         cursor: not-allowed;
     }
 
@@ -71,7 +73,8 @@
 
             th.sorting_disabled {
                 padding-right: $table-cell-padding-x !important;
-                &:after, &:before {
+                &:after,
+                &:before {
                     content: none;
                 }
             }
@@ -99,7 +102,8 @@
             }
         }
 
-        th, td {
+        th,
+        td {
             &:first-child {
                 border-left-width: 1px;
             }
@@ -238,7 +242,8 @@
                 max-height: 500px;
                 overflow-y: auto;
                 overflow-x: hidden;
-                margin: $popover-body-padding-y * -1 $popover-body-padding-x * -1 $popover-body-padding-y;
+                margin: $popover-body-padding-y * -1 $popover-body-padding-x * -1
+                    $popover-body-padding-y;
             }
         }
 
@@ -253,16 +258,6 @@
 
     .clear {
         clear: both;
-    }
-
-    .pattern-pickadate-wrapper {
-        .pattern-pickadate-date-wrapper .pattern-pickadate-date {
-            width: 200px;
-        }
-
-        .pattern-pickadate-time-wrapper .pattern-pickadate-time {
-            width: 120px;
-        }
     }
 
     .itemRow {
