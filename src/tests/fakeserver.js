@@ -30,12 +30,7 @@ server.xhr.useFilters = true;
 var okayUrls = [];
 server.xhr.addFilter(function (method, url) {
     //whenever the this returns true the request will not faked, is this working?
-    return (
-        url.indexOf("tests/json/") !== -1 ||
-        url.indexOf("ace/lib") !== -1 ||
-        /(?![filemanager])\..*\.xml$/i.test(url) ||
-        /(?![filemanager])\..*\.js$/i.test(url)
-    );
+    return url.indexOf("tests/json/") !== -1 || url.indexOf("ace/lib") !== -1;
 });
 server.autoRespond = true;
 server.autoRespondAfter = 200;
@@ -754,97 +749,6 @@ server.respondWith("GET", /fileTree.json/, function (xhr, id) {
     ];
 
     xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
-});
-
-server.respondWith("POST", /filemanager-actions/, function (xhr, id) {
-    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({}));
-});
-
-server.respondWith("GET", /filemanager-actions/, function (xhr, id) {
-    server.autoRespondAfter = 200;
-    var action = getQueryVariable(xhr.url, "action");
-    var data;
-
-    if (action === "dataTree") {
-        data = [
-            {
-                label: "css",
-                folder: true,
-                children: [
-                    {
-                        id: 1,
-                        label: "style.css",
-                        folder: false,
-                    },
-                    {
-                        id: 2,
-                        label: "tree.css",
-                        folder: false,
-                    },
-                ],
-            },
-            {
-                label: "js",
-                folder: true,
-                children: [
-                    {
-                        id: 3,
-                        label: "jquery.js",
-                        folder: false,
-                    },
-                    {
-                        id: 4,
-                        label: "tree.js",
-                        folder: false,
-                    },
-                ],
-            },
-            {
-                id: 5,
-                label: "index.html",
-                folder: false,
-            },
-            {
-                id: 6,
-                label: "rules.xml",
-                folder: false,
-            },
-        ];
-        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
-    } else if (action === "getFile") {
-        var path = getQueryVariable(xhr.url, "path");
-        var extension = path.substr(path.lastIndexOf(".") + 1);
-        data = "";
-
-        if (extension === "js") {
-            data = 'var foo = function() { \n\talert("Hi!"); \n};';
-        } else if (extension === "css") {
-            data = "#content.highlight { \n\tbackground-color: #D1F03A; \n}";
-        } else if (extension === "html") {
-            data = "<html>\n\t<body>\n\t\t<p>Hi!</p>\n\t</body>\n</html>";
-        } else if (extension === "xml") {
-            data =
-                '<?xml version="1.0" encoding="UTF-8"?>\n' +
-                "<rules\n" +
-                'xmlns="http://namespaces.plone.org/diazo"\n' +
-                'xmlns:css="http://namespaces.plone.org/diazo/css"\n' +
-                'xmlns:xsl="http://www.w3.org/1999/XSL/Transform">\n\n' +
-                '<theme href="theme.html" />\n' +
-                '<replace css:theme="html head title" css:content="html head title" />\n' +
-                '<replace css:content-children="#content" css:theme-children="#content" />\n' +
-                "</rules>";
-        } else {
-            data = "foobar";
-        }
-        xhr.respond(
-            200,
-            { "Content-Type": "application/json" },
-            JSON.stringify({
-                path: path,
-                data: data,
-            })
-        );
-    }
 });
 
 server.respondWith("GET", /search-resources/, function (xhr, id) {
