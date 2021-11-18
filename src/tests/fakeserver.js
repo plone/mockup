@@ -862,38 +862,3 @@ server.respondWith("GET", /search-resources/, function (xhr, id) {
         ])
     );
 });
-
-server.respondWith("GET", /resources-registry/, function (xhr, id) {
-    server.autoRespondAfter = 200;
-    xhr.respond(200, { "Content-Type": "text/plain" }, 'var foo = "bar";');
-});
-
-server.respondWith("POST", /registry-manager/, function (xhr, id) {
-    server.autoRespondAfter = 200;
-    var action = getQueryVariable(xhr.requestBody, "action");
-    var data = {};
-    if (action === "js-build-config") {
-        data = {
-            paths: {
-                "autotoc": "patterns/autotoc/pattern",
-                "pat-base": "node_modules/patternslib/src/core/base",
-                "jquery": "node_modules/jquery/dist/jquery",
-                "pat-registry": "node_modules/patternslib/src/core/registry",
-            },
-            include: ["autotoc"],
-        };
-    } else if (action === "less-build-config") {
-        data = {
-            less: ["patterns/resourceregistry/pattern.resourceregistry.less"],
-        };
-    } else if (action === "save-js-build") {
-        data = {
-            filepath: "++plone++static/autotoc.js",
-        };
-    } else if (action === "save-less-build") {
-        data = {
-            filepath: "++plone++static/autotoc.css",
-        };
-    }
-    xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify(data));
-});
