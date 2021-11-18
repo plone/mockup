@@ -8,8 +8,7 @@ const webpack = require("webpack");
 module.exports = async (env, argv, build_dirname = __dirname) => {
     let config = {
         entry: {
-            "bundle": path.resolve(__dirname, "src/index.js"),
-            "bundle-polyfills": path.resolve(build_dirname, "node_modules/@patternslib/patternslib/src/polyfills.js"), // prettier-ignore
+            bundle: path.resolve(__dirname, "src/index.js"),
         },
     };
 
