@@ -46,7 +46,6 @@ import "./pat/tree/tree";
 import "./pat/upload/upload";
 
 // REMOVE obsolete patterns
-import "./pat/pickadate/pickadate";
 import "./pat/tinymce/tinymce";
 //import "./pat/texteditor/texteditor";
 
