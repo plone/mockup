@@ -200,7 +200,7 @@ var Loading = function (options) {
      *   zIndex(integer or function): to override default z-index used
      */
     var self = this;
-    self.className = "plone-loader";
+    self.className = "spinner-border";
     var defaults = {
         backdrop: null,
         zIndex: 10005, // can be a function
@@ -221,6 +221,9 @@ var Loading = function (options) {
     self.show = function (closable) {
         self.init();
         self.$el.show();
+        self.$el.css("position", "absolute");
+        self.$el.css("top", "50%");
+        self.$el.css("left", "50%");
         var zIndex = self.options.zIndex;
         if (typeof zIndex === "function") {
             zIndex = Math.max(zIndex(), 10005);
@@ -228,7 +231,7 @@ var Loading = function (options) {
             // go through all modals and backdrops and make sure we have a higher
             // z-index to use
             zIndex = 10005;
-            $(".plone-modal-wrapper,.plone-modal-backdrop").each(function () {
+            $(".modal-wrapper,.-modal-backdrop").each(function () {
                 zIndex = Math.max(zIndex, $(this).css("zIndex") || 10005);
             });
             zIndex += 1;
