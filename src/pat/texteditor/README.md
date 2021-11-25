@@ -23,61 +23,14 @@ title: Text Editor
 ## Examples
 
 ### Default
-
-<pre class="pat-texteditor" data-pat-texteditor="theme:clouds">
+<pre class="pat-texteditor">
 foobar
 </pre>
 
 ```html
-<pre class="pat-texteditor" data-pat-texteditor="theme:clouds">
+<pre class="pat-texteditor">
 foobar
 </pre>
 ```
 
-### Different theme
 
-<pre class="pat-texteditor" data-pat-texteditor="mode:javascript;theme:dawn;">
-var foo = 'bar';
-function foobar() {
- return foo;
-}
-</pre>
-
-```html
-<pre class="pat-texteditor" data-pat-texteditor="mode:javascript;theme:dawn;">
-var foo = 'bar';
-function foobar() {
- return foo;
-}
-</pre>
-```
-
-### Different options
-
-<pre class="pat-texteditor"
-    data-pat-texteditor="mode:javascript;
-                  theme:ambiance;
-                  tabSize:2;
-                  showGutter:false;
-                  showPrintMargin:true;">
-var foo = 'bar';
-function foobar() {
- return foo;
-}
-</pre>
-
-```html
-<pre
-    class="pat-texteditor"
-    data-pat-texteditor="mode:javascript;
-                  theme:ambiance;
-                  tabSize:2;
-                  showGutter:false;
-                  showPrintMargin:true;"
->
-var foo = 'bar';
-function foobar() {
- return foo;
-}
-</pre>
-```

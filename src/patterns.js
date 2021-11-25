@@ -45,7 +45,7 @@ import "./pat/upload/upload";
 
 // REMOVE obsolete patterns
 import "./pat/tinymce/tinymce";
-//import "./pat/texteditor/texteditor";
+import "./pat/texteditor/texteditor";
 
 // Import pattern styles in JavaScript
 window.__patternslib_import_styles = true;
