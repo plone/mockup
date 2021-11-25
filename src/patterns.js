@@ -47,6 +47,9 @@ import "./pat/upload/upload";
 import "./pat/tinymce/tinymce";
 //import "./pat/texteditor/texteditor";
 
+// Controlpanels
+import "./pat/controlpanels/dexterity-types-listing";
+
 // Import pattern styles in JavaScript
 window.__patternslib_import_styles = true;
 
