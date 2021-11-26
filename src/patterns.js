@@ -50,6 +50,7 @@ import "./pat/tinymce/tinymce";
 // Controlpanels
 import "./pat/controlpanels/dexterity-types-listing";
 import "./pat/controlpanels/registry";
+import "./pat/controlpanels/schemaeditor";
 
 // Import pattern styles in JavaScript
 window.__patternslib_import_styles = true;
