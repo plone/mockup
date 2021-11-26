@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime"; // needed for ``await`` support
 import registry from "@patternslib/patternslib/src/core/registry";
 import Base from "@patternslib/patternslib/src/core/base";
 
