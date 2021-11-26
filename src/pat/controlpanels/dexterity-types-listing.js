@@ -10,6 +10,7 @@ export default Base.extend({
         const implementation = (
             await import("./dexterity-types-listing--implementation")
         ).default;
-        implementation(this.el);
+        const instance = new implementation(this.el);
+        instance.init();
     },
 });
