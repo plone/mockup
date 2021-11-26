@@ -6,7 +6,6 @@ export default Base.extend({
     trigger: ".pat-registry",
     parser: "mockup",
     init: async function () {
-        var self = this;
         const implementation = (await import("./registry--implementation.js")).default;
         const reg = new implementation(this.el);
         reg.init();
