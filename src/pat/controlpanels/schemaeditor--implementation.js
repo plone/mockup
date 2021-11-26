@@ -6,9 +6,9 @@ export default class SchemaEditor {
     }
 
     init() {
-        if ($("#form fieldset").length >= 2) {
+        if ($("#form fieldset", this.el).length >= 2) {
             // If multiple fieldsets, release after autotoc has been initialized
-            if ($("#form .autotoc-nav > a").length) {
+            if ($("#form .autotoc-nav > a", this.el).length) {
                 // pat-autotoc already initialized, script probably run after
                 // mockup initialization.
                 this.init_schemaeditor();
@@ -24,7 +24,7 @@ export default class SchemaEditor {
 
     init_add_field(fieldset_id) {
         if (fieldset_id) {
-            var $add_field = $("a#add-field");
+            var $add_field = $("a#add-field", this.el);
             var href = $add_field.attr("href").split("?")[0]; // get base href without any previously set ``fieldset_id``.
             $add_field.attr("href", href + "?fieldset_id=" + fieldset_id);
         }
@@ -32,7 +32,7 @@ export default class SchemaEditor {
 
     init_schemaeditor() {
         // delete field
-        $("a.schemaeditor-delete-field").click(function (e) {
+        $("a.schemaeditor-delete-field", this.el).click(function (e) {
             var trigger = $(this);
             e.preventDefault();
             if (!window.confirm(trigger.attr("data-confirm_msg"))) {
@@ -41,7 +41,7 @@ export default class SchemaEditor {
             $.post(
                 trigger.attr("href"),
                 {
-                    _authenticator: $('input[name="_authenticator"]').val(),
+                    _authenticator: $('input[name="_authenticator"]', this.el).val(),
                 },
                 function (data) {
                     trigger.closest(".fieldPreview").detach();
@@ -52,7 +52,7 @@ export default class SchemaEditor {
 
         var set_id_from_title = function () {
             var id = $.plone_schemaeditor_normalize_string($(this).val());
-            $("#form-widgets-__name__").val(id);
+            $("#form-widgets-__name__", this.el).val(id);
         };
         // set id from title
         $("body").on(
@@ -63,7 +63,7 @@ export default class SchemaEditor {
 
         // reorder fields and change fieldsets
         // initialize after autotoc pattern is loaded.
-        $(".fieldPreview.orderable").plone_schemaeditor_html5_sortable(
+        $(".fieldPreview.orderable", this.el).plone_schemaeditor_html5_sortable(
             function (position, fieldset_index) {
                 var url = [
                     location.protocol,
@@ -75,7 +75,7 @@ export default class SchemaEditor {
                     "/@@order",
                 ].join("");
                 $.post(url, {
-                    _authenticator: $('input[name="_authenticator"]').val(),
+                    _authenticator: $('input[name="_authenticator"]', this.el).val(),
                     pos: position,
                     fieldset_index: fieldset_index,
                 });
@@ -91,7 +91,7 @@ export default class SchemaEditor {
                     "/@@changefieldset",
                 ].join("");
                 $.post(url, {
-                    _authenticator: $('input[name="_authenticator"]').val(),
+                    _authenticator: $('input[name="_authenticator"]', this.el).val(),
                     fieldset_index: fieldset_index,
                 });
             }
@@ -99,7 +99,7 @@ export default class SchemaEditor {
 
         // ///////////////
         // ADD FIELD INIT
-        $("#form .autotoc-nav > a").each(function () {
+        $("#form .autotoc-nav > a", this.el).each(function () {
             $(this).on("click", function (e) {
                 e.preventDefault();
                 var fieldset_id = $(this).attr("data-fieldset_drag_id");
@@ -107,7 +107,7 @@ export default class SchemaEditor {
             });
         });
 
-        var fieldset_id = $("#form .autotoc-nav > a.active").attr(
+        var fieldset_id = $("#form .autotoc-nav > a.active", this.el).attr(
             "data-fieldset_drag_id"
         );
         this.init_add_field(fieldset_id);
