@@ -1633,12 +1633,12 @@
     chalk "^3.0.0"
     ora "^4.0.3"
 
-"@patternslib/pat-code-editor@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@patternslib/pat-code-editor/-/pat-code-editor-2.0.0.tgz#c6e2a3539f2488022e5ffc599f5525507d786276"
-  integrity sha512-kU/EQIeGCXhoL04mbrqDTEGtWGnjMQxQI6HRlw0rnUNknrwrdZpkt+Lq0eAlvRZbgN4V98QIj+yojkYydMSQ1Q==
+"@patternslib/pat-code-editor@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@patternslib/pat-code-editor/-/pat-code-editor-2.1.0.tgz#980766380e463f7dc51f3a25f4e66c1cfdadf400"
+  integrity sha512-m8HbF12Kriy2UArR4zPNzde2HovOH00T+FIOd71L30ajnUMXpW3+WlQ6b4Phvjw3S5j5ZrfnsPdCnbZu6wlQew==
   dependencies:
-    "@patternslib/patternslib" "^6.0.1"
+    "@patternslib/patternslib" "^6.2.0"
     codejar "^3.5.0"
     prismjs "^1.25.0"
 
@@ -1651,10 +1651,10 @@
     svelte-keydown "^0.3.1"
     svelte-scrollto "^0.2.0"
 
-"@patternslib/patternslib@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-6.0.1.tgz#de800ad3a74f9016373e8f532d7d0956cf444164"
-  integrity sha512-rpKNSZHi7a7p4nYIxYdKSKIRH99V9QeMRn74ox97Bd+YK/lCxbEKY+KXtzTC/2EMoMKyz2TbTWF0utV49w+vMA==
+"@patternslib/patternslib@^6.0.1", "@patternslib/patternslib@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-6.2.0.tgz#1e7ddf70f51a022c83fd06711e406f49fc716329"
+  integrity sha512-/LyHLTHShXr1lu920RCBuUseiS+rSIKTxiRek9mc+Sgx7tSvDOBF+zTRMI7ff3u5Me3OaXYyMeMCisovrPt8UA==
   dependencies:
     "@fullcalendar/adaptive" "^5.10.1"
     "@fullcalendar/core" "^5.10.1"
@@ -7221,11 +7221,6 @@ markdown-it@^10.0.0:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
-marked@0.3.18:
-  version "0.3.18"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.18.tgz#3ef058cd926101849b92a7a7c15db18c7fc76b2f"
-  integrity sha512-49i2QYhfULqaXzNZpxC808PisuCTGT2fgG0zrzdCI9N3rIfAWfW0nggvbXr6zvpynZdOG5+9xNxdzP0kwZnERw==
-
 masonry-layout@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/masonry-layout/-/masonry-layout-4.2.2.tgz#d57b44af13e601bfcdc423f1dd8348b5524de348"
@@ -8130,13 +8125,6 @@ photoswipe@^4.1.3:
   resolved "https://registry.yarnpkg.com/photoswipe/-/photoswipe-4.1.3.tgz#59f49494eeb9ddab5888d03392926a19bc197550"
   integrity sha512-89Z43IRUyw7ycTolo+AaiDn3W1EEIfox54hERmm9bI12IB9cvRfHSHez3XhAyU8XW2EAFrC+2sKMhh7SJwn0bA==
 
-pickadate@3.6.4:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/pickadate/-/pickadate-3.6.4.tgz#3ec4df80643166888d4c8656bffefe7bd53cdbae"
-  integrity sha512-2QN4aAXJJu1BN6L6ZzFd/rOWu9fzAPwNE9PpNX19YccuOu0c+0rMzO3sl72mNrfTmzR2jcLtvLUtw3PoWvhBrQ==
-  dependencies:
-    jquery ">=1.7"
-
 picocolors@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
@@ -8351,7 +8339,7 @@ progress@^2.0.0:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-promise-polyfill@^8.1.0, promise-polyfill@^8.2.1:
+promise-polyfill@^8.2.1:
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.1.tgz#1fa955b325bee4f6b8a4311e18148d4e5b46d254"
   integrity sha512-3p9zj0cEHbp7NVUxEYUWjQlffXqnXaZIMPkAO7HhFh8u5636xLRDHOUo2vpWSK0T2mqm6fKLXYn1KP6PAZ2gKg==
@@ -9834,7 +9822,7 @@ svelte-scrollto@^0.2.0:
   dependencies:
     svelte "3.x"
 
-svelte@3.x, svelte@^3.42.6, svelte@^3.44.0:
+svelte@3.x, svelte@^3.44.0:
   version "3.44.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.44.1.tgz#5cc772a8340f4519a4ecd1ac1a842325466b1a63"
   integrity sha512-4DrCEJoBvdR689efHNSxIQn2pnFwB7E7j2yLEJtHE/P8hxwZWIphCtJ8are7bjl/iVMlcEf5uh5pJ68IwR09vQ==
