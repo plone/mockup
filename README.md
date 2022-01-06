@@ -41,7 +41,7 @@ You can either install jest with yarn/npm globally or also use it with ``npx jes
 The tests are based on jsdom - a library mocking DOM and HTML standards in JavaScript.
 No real browsers are involved, which make the tests run really fast.
 
-Still, you can connect to the Chome debugging interface via:
+Still, you can connect to the Chrome debugging interface via:
 
 ```
 node --inspect-brk node_modules/.bin/jest --runInBand ./src/pat/PATH-TO-PATTERN``

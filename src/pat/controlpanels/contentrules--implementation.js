@@ -10,36 +10,40 @@ export default class Contentrules {
         table.find("tr:visible:even").removeClass("odd even").addClass("even");
     }
 
+    initStatusMessageArea() {
+        let msgWrapper = document.getElementById("portalMessagesWrapper");
+        if (msgWrapper) {
+            return;
+        }
+        let newNode = document.createElement("div");
+        newNode.id = "portalMessagesWrapper";
+        document.getElementById("content").insertAdjacentElement("afterbegin", newNode);
+    }
+
     addStatusMessage(message, type) {
         if (type === undefined) {
             type = "info";
         }
-        var _show = function () {
-            var msg = $(
-                '<dl class="portalMessage ' +
-                    type +
-                    '">' +
-                    "<dt>" +
-                    type +
-                    "</dt>" +
-                    "<dd>" +
-                    message +
-                    "</dd>" +
-                    "</dl>"
-            );
-            $("#content").before(msg);
-            msg.fadeIn();
-        };
-        var vis = $("dl.portalMessage:visible");
-        if (vis.length === 0) {
-            _show();
-        } else {
-            vis.fadeOut(_show);
-        }
+        let msgDlNode = document.createElement("dl");
+        let msgDtNode = document.createElement("dt");
+        let msgDdNode = document.createElement("dd");
+
+        msgDlNode.classList.add("alert", "alert-" + type);
+        msgDtNode.innerText = type;
+        msgDdNode.innerText = message;
+        msgDlNode.appendChild(msgDtNode);
+        msgDlNode.appendChild(msgDdNode);
+
+        let msgWrapper = document.getElementById("portalMessagesWrapper")
+        if(!msgWrapper) {return};
+        msgWrapper.innerHTML = "";
+        msgWrapper.appendChild(msgDlNode);
     }
 
     init() {
         let self = this;
+        self.initStatusMessageArea();
+
         // TODO find out why is it binding multiple times
         $(".btn-rule-action")
             .unbind("click")
@@ -47,6 +51,7 @@ export default class Contentrules {
                 e.preventDefault();
 
                 var $this = $(this),
+                    triggerEl = this,
                     $row = $this.parents("tr").first(),
                     $table = $row.parent(),
                     id = $this.data("value"),
@@ -66,25 +71,31 @@ export default class Contentrules {
                         self.addStatusMessage($("#trns_form_error").html(), "warn");
                     },
                     success: function () {
-                        // Enable
+                        let ruleTitle = "";
+                        ruleTitle = $row.find(".rule-title")[0].innerText;
 
+                        // Enable
                         if ($this.hasClass("btn-rule-enable")) {
                             $row.removeClass("state-disabled").addClass("state-enabled");
+                            triggerEl.parentNode.querySelector(".btn-rule-enable").classList.add("d-none")
+                            triggerEl.parentNode.querySelector(".btn-rule-disable").classList.remove("d-none")
+                            self.addStatusMessage($("#trns_form_success_enabled").html() + ": " + ruleTitle, "info");
                         }
 
                         // Disable
-
                         if ($this.hasClass("btn-rule-disable")) {
                             $row.removeClass("state-enabled").addClass("state-disabled");
+                            triggerEl.parentNode.querySelector(".btn-rule-disable").classList.add("d-none")
+                            triggerEl.parentNode.querySelector(".btn-rule-enable").classList.remove("d-none")
+                            self.addStatusMessage($("#trns_form_success_disabled").html() + ": " + ruleTitle, "info");
                         }
 
                         // DELETE
-
                         if ($this.hasClass("btn-rule-delete")) {
                             $row.remove();
                             self.updatezebra($table);
+                            self.addStatusMessage($("#trns_form_success_deleted").html() + ": " + ruleTitle, "info");
                         }
-                        self.addStatusMessage($("#trns_form_success").html(), "info");
                     },
                     complete: function () {
                         $("#spinner").hide();
