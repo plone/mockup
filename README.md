@@ -10,15 +10,21 @@ Mockup is the JavaScript stack of the Plone Classic UI.
 - Run: ``npx yarn install``:
   We are using yarn instead of npm.
   ``npx`` is for running a npm package command - or downloading and installing it first.
+  If yarn is already installed, a ``yarn install`` or just ``yarn`` is enough.
 
-- Run: ``yarn start``:
+- Run: ``yarn start`` or ``npm run start``:
   This starts up the webpack build process in watch mode.
   Any JavaScript changes are immediately compiled.
   For some changes - like for adding new packages via ``yarn add`` and then using it you might need to restart.
-  The command also spins up a development server for our 11ty based documentation and demo pages.
+  The command also spins up a development server for our ``11ty`` based documentation and demo pages.
+  If you don't need the docs running, you can run ``yarn start:webpack`` or ``npm run start:webpack`` instead, so that only the webpack devserver is running.
 
 - Go to ``http://localhost:8000``:
   On this port our demo and documentation pages are served.
+
+To use the resources directly from webpack-devserver, you have to change the ``plone`` bundle in the resource registry from ``++plone++static/bundle-plone/bundle.min.js`` to ``http://localhost:8000/dist/bundle.js``.
+
+For more commands inspect the script part of the package.json.
 
 ## Running tests
 
@@ -35,7 +41,7 @@ You can either install jest with yarn/npm globally or also use it with ``npx jes
 The tests are based on jsdom - a library mocking DOM and HTML standards in JavaScript.
 No real browsers are involved, which make the tests run really fast.
 
-Still, you can connect to the Chome debugging interface via:
+Still, you can connect to the Chrome debugging interface via:
 
 ```
 node --inspect-brk node_modules/.bin/jest --runInBand ./src/pat/PATH-TO-PATTERN``
