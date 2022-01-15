@@ -46,7 +46,7 @@
         "jquery.cookie": "1.4.1",
         "jquery.recurrenceinput.js": "https://github.com/collective/jquery.recurrenceinput.js.git#master",
         "logging": "https://github.com/Patternslib/logging.git#1.0.2",
-        "marked": "0.3.18",
+        "marked": "4.0.10",
         "moment": "2.24.0",
         "patternslib": "https://github.com/Patternslib/Patterns.git#3.x",
         "pickadate": "3.6.4",
