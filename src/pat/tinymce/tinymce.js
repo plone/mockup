@@ -319,7 +319,6 @@ export default Base.extend({
         await import("tinymce/plugins/contextmenu");
         await import("tinymce/plugins/directionality");
         await import("tinymce/plugins/emoticons");
-        await import("tinymce/plugins/fullpage");
         await import("tinymce/plugins/fullscreen");
         await import("tinymce/plugins/hr");
         await import("tinymce/plugins/image");
