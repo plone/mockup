@@ -18,7 +18,7 @@ export default class SchemaEditor {
             }
         } else {
             // If only one fieldset, initialize immediately
-            init_schemaeditor();
+            this.init_schemaeditor();
         }
     }
 
