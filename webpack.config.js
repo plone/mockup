@@ -1,49 +1,26 @@
 process.traceDeprecation = true;
+const package_json = require("./package.json");
 const path = require("path");
 const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
+const mf_config = require("@patternslib/patternslib/webpack/webpack.mf");
 
-module.exports = async (env, argv) => {
+module.exports = (env, argv) => {
     let config = {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
         },
-        externals: {
-            "window": "window",
-            "$": "jquery",
-            "jquery": "jQuery",
-            "window.jquery": "jQuery",
-            "bootstrap": true,
-        },
-        optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    tinymce: {
-                        name: "tinymce",
-                        test: /[\\/]node_modules[\\/]tinymce.*[\\/]/,
-                        chunks: "all",
-                    },
-                    datatables: {
-                        name: "datatables",
-                        test: /[\\/]node_modules[\\/]datatables.net.*[\\/]/,
-                        chunks: "all",
-                    },
-                    select2: {
-                        name: "select2",
-                        test: /[\\/]node_modules[\\/]select2.*[\\/]/,
-                        chunks: "all",
-                    },
-                    jquery_plugins: {
-                        name: "jquery_plugins",
-                        test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
-                        chunks: "all",
-                    },
-                },
-            },
-        },
     };
 
     config = patternslib_config(env, argv, config, ["mockup"]);
+
     config.output.path = path.resolve(__dirname, "dist/");
+
+    config.plugins.push(
+        mf_config({
+            package_json: package_json,
+            remote_entry: config.entry["bundle.min"],
+        })
+    );
 
     if (process.env.NODE_ENV === "development") {
         // Note: ``publicPath`` is set to "auto" in Patternslib,
