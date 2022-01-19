@@ -370,17 +370,17 @@ tinymce.PluginManager.add("plonelink", function (editor) {
         stateSelector: "a[href]",
     });
 
-    editor.ui.registry.addButton("Ctrl+K", "", editor.settings.addLinkClicked);
+    // editor.ui.registry.addButton("Ctrl+K", "", editor.settings.addLinkClicked);
 
-    editor.ui.registry.addButton("plonelink", {
-        icon: "link",
-        text: "Insert link",
-        shortcut: "Ctrl+K",
-        onAction: editor.settings.addLinkClicked,
-        stateSelector: "a[href]",
-        context: "insert",
-        prependToContext: true,
-    });
+    // editor.ui.registry.addButton("plonelink", {
+    //     icon: "link",
+    //     text: "Insert link",
+    //     shortcut: "Ctrl+K",
+    //     onAction: editor.settings.addLinkClicked,
+    //     stateSelector: "a[href]",
+    //     context: "insert",
+    //     prependToContext: true,
+    // });
 });
 
 export default Base.extend({
