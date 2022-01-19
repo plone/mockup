@@ -113,7 +113,7 @@
         "build:stats": "NODE_ENV=production webpack --config webpack.config.js --json > stats.json",
         "build": "run-s clean build:webpack build:docs",
         "watch:webpack": "NODE_ENV=development webpack --config webpack.config.js --watch",
-        "watch:webpack:plone": "NODE_ENV=development webpack --config webpack.config.js --watch --env.DEPLOYMENT=plone",
+        "watch:webpack:plone": "NODE_ENV=development webpack --config webpack.config.js --watch --env DEPLOYMENT=plone",
         "postinstall": "patch --forward node_modules/select2/select2.js < patches/select2.patch || true",
         "collect:externaldocs": "copyup -V node_modules/@patternslib/patternslib/src/pat/**/documentation.md node_modules/@patternslib/pat-*/README.md node_modules/pat-*/README.md docs/external/",
         "start:webpack": "NODE_ENV=development webpack serve --config webpack.config.js",
