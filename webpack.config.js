@@ -23,11 +23,10 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
     );
 
     if (process.env.NODE_ENV === "development") {
-        config.devServer.static = {
-            directory: path.resolve(__dirname, "./docs/_site/"),
-        };
+        // Note: ``publicPath`` is set to "auto" in Patternslib,
+        //        so for the devServer the public path set to "/".
         config.devServer.port = "8000";
-        config.output.publicPath = "/dist/"; // publicPath to discover assets like the chunks directory
+        config.devServer.static.directory = path.resolve(__dirname, "./docs/_site/");
     }
 
     if (env && env.DEPLOYMENT === "plone") {
