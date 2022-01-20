@@ -8,7 +8,7 @@ const webpack = require("webpack");
 module.exports = async (env, argv, build_dirname = __dirname) => {
     let config = {
         entry: {
-            bundle: path.resolve(__dirname, "src/index.js"),
+            "bundle.min": path.resolve(__dirname, "src/index.js"),
         },
     };
 

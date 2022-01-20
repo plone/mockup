@@ -22,7 +22,8 @@ Mockup is the JavaScript stack of the Plone Classic UI.
 - Go to ``http://localhost:8000``:
   On this port our demo and documentation pages are served.
 
-To use the resources directly from webpack-devserver, you have to change the ``plone`` bundle in the resource registry from ``++plone++static/bundle-plone/bundle.min.js`` to ``http://localhost:8000/dist/bundle.js``.
+To use the resources directly from webpack-devserver, you have to change the ``plone`` bundle in the resource registry from ``++plone++static/bundle-plone/bundle.min.js`` to ``http://localhost:8000/bundle.min.js``.
+Alternatively you can also just run ``yarn watch`` and have the resources recompiled to the ``++plone++static`` directory.
 
 For more commands inspect the script part of the package.json.
 
