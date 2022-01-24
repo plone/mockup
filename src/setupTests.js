@@ -27,3 +27,10 @@ window.URL = URL;
 // pat-subform
 // See https://github.com/jsdom/jsdom/issues/1937#issuecomment-461810980
 window.HTMLFormElement.prototype.submit = () => {};
+
+// patch dom.is_visible to not rely on jest-unavailable offsetWidth/Height but
+// simply test on display-none, which is set by jQuery show/hide.
+import dom from "@patternslib/patternslib/src/core/dom";
+dom.is_visible = (el) => {
+    return el.style.display !== "none";
+};
