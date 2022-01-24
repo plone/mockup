@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Offcanvas from "bootstrap";
+import { Offcanvas } from "bootstrap";
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
