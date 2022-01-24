@@ -25,10 +25,11 @@ body.plone-toolbar-left {
     a.nav-link {
         &:focus {
             background: $plone-toolbar-link;
+	    color: color-contrast($plone-toolbar-link);
         }
         &:hover {
             background: $plone-toolbar-link;
-
+            color: color-contrast($plone-toolbar-link);
             .label-state-published,
             .label-state-external {
                 color: lighten($plone-link-color, 10%) !important;
