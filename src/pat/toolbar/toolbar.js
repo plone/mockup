@@ -1,40 +1,42 @@
 import $ from "jquery";
+import Bootstrap from "bootstrap";
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
-import "./pattern.toolbar.scss";
 
 export default Base.extend({
     name: "toolbar",
     trigger: ".pat-toolbar",
     parser: "mockup",
     defaults: {},
-    init_offcanvas: function() {
-        var self = this,
-            offcanvas_toolbar = document.getElementById('edit-zone'),
-            bsOffcanvas = new bootstrap.Offcanvas(offcanvas_toolbar);
+    init_offcanvas: function () {
+        const offcanvas_toolbar = document.getElementById("edit-zone");
+        const bsOffcanvas = new Bootstrap.Offcanvas(offcanvas_toolbar);
         bsOffcanvas.show();
     },
     init: function () {
-        var self = this;
+        import("./pattern.toolbar.scss");
 
-        self.init_offcanvas();
+        this.init_offcanvas();
 
-        /* folder contents changes the context.
-         This is for usability so the menu changes along with
-         the folder contents context */
+        /* folder_contents change the context
+         This is for usability so the menu changes along with the folder contents context */
         $("body")
             .off("structure-url-changed")
-            .on("structure-url-changed", function (e, path) {
+            .on("structure-url-changed", (e, path) => {
                 $.ajax({
                     url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
-                }).done(function (data) {
-                    var $el = $(utils.parseBodyTag(data));
-                    $el = $el.find("#edit-zone").length ? $el.find("#edit-zone") : $el;
-                    self.$el.replaceWith($el);
-                    self.init_offcanvas();
+                }).done((data) => {
+                    const wrapper = $(utils.parseBodyTag(data));
+                    const $el = wrapper.find("#edit-zone").length
+                        ? wrapper.find("#edit-zone")
+                        : wrapper;
+                    this.$el.replaceWith($el);
+                    this.init_offcanvas();
                     registry.scan($el);
                 });
             });
+
+        this.el.classList.add("initialized");
     },
 });
