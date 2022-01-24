@@ -74,8 +74,9 @@ describe("Livesearch", function () {
         expect(this.$el.find(".livesearch-results li").length).toEqual(9);
 
         this.ls.$input.trigger("focusout");
-        this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(false);
+        setTimeout(function () {
+            expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(false);
+        }, 1000);
     });
 
     it("focus back in shows already searched", function () {
@@ -84,12 +85,14 @@ describe("Livesearch", function () {
         expect(this.$el.find(".livesearch-results li").length).toEqual(9);
 
         this.ls.$input.trigger("focusout");
-        this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(false);
+        setTimeout(function () {
+            expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(false);
+        }, 1000);
 
         this.ls.$input.trigger("focusin");
-        this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(true);
+        setTimeout(function () {
+            expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(true);
+        }, 1000);
     });
 
     it("should show next and prev", function () {
