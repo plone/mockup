@@ -1,5 +1,8 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
+import logger from "@patternslib/patternslib/src/core/logging";
+
+const log = logger.getLogger("pat-toggle");
 
 export default Base.extend({
     name: "toggle",
@@ -26,13 +29,13 @@ export default Base.extend({
         }
 
         if (!self.$target || self.$target.length === 0) {
-            $.error('No target found for "' + self.options.target + '".');
+            log.error(`No target found for "${self.options.target}".`);
         }
 
         self.on(self.options.event, function (e) {
-            self.toggle();
             e.stopPropagation();
             e.preventDefault();
+            self.toggle();
         });
     },
     isMarked: function () {
