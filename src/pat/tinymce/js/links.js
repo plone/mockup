@@ -99,6 +99,14 @@ var InternalLink = LinkType.extend({
         this.relatedItems = new RelatedItems(this.getEl(), options);
     },
 
+    updateRelatedItems: function(val) {
+        if(!this.relatedItems) {
+            // prevent toolbar from being rendered twice
+            this.createRelatedItems();
+        }
+        this.relatedItems.selectItem(val);
+    },
+
     value: function () {
         var val = this.getEl().select2("data");
         if (val && typeof val === "object") {
@@ -129,7 +137,7 @@ var InternalLink = LinkType.extend({
         //$el.parent().replaceWith($el);
         $el.attr("value", val);
         $el.val(val);
-        this.createRelatedItems();
+        this.UpdateRelatedItems(val);
     },
 
     attributes: function () {
@@ -337,17 +345,10 @@ var AnchorLink = LinkType.extend({
 tinymce.PluginManager.add("ploneimage", function (editor) {
     editor.ui.registry.addButton("ploneimage", {
         icon: "image",
+        text: "Insert image",
         tooltip: "Insert/edit image",
         onAction: editor.settings.addImageClicked,
         // stateSelector: "img:not([data-mce-object])",
-    });
-
-    editor.ui.registry.addButton("ploneimage", {
-        icon: "image",
-        text: "Insert image",
-        onAction: editor.settings.addImageClicked,
-        context: "insert",
-        prependToContext: true,
     });
 });
 
@@ -450,7 +451,8 @@ export default Base.extend({
                 classDialog: "modal-dialog modal-lg",
                 reloadWindowOnClose: false,
             },
-            actionOptions: {reloadWindowOnClose: false}
+            actionOptions: {reloadWindowOnClose: false},
+            backdropOptions: { closeOnClick: false }
         });
         self.modal.on("shown", function (e) {
             self.modalShown.apply(self, [e]);

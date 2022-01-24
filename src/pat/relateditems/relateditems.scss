@@ -9,8 +9,6 @@
 
     .toolbar {
         background-color: #d8d8d8;
-        display: inline-block;
-        width: 100%;
 
         .mode-selector {
             display: inline-block;
@@ -138,6 +136,10 @@
         flex: 2 1 fill;
         justify-content: flex-start;
 
+        a {
+            text-decoration:none;
+        }
+
         .pat-relateditems-result-select {
             &:not(.selectable) {
                 &:not(.one-level-up) {
@@ -147,9 +149,8 @@
         }
 
         .pat-relateditems-result-browse {
-            font-size: 2.1rem;
+            font-size: 1.5rem;
             line-height: 1.8em;
-            margin: 0 0.1em 0 0;
             padding: 0 0.15em 0 0.1em;
 
             &:hover {
@@ -172,7 +173,7 @@
 
 .pat-relateditems-item-title,
 .pat-relateditems-result-title {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     line-height: 1.2;
     padding: 0;
 

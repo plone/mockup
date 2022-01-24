@@ -12,20 +12,20 @@
 
 <% if (recentlyUsedItems) { %>
 <div class="recentlyUsed dropdown ms-2">
-  <button type="button" class="recentlyUsed dropdown-toggle btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button type="button" class="recentlyUsed dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <%= icon_recently_used %>
     <%- recentlyUsedText %>
     <span class="caret"/>
   </button>
-  <ul class="dropdown-menu">
+  <ul class="dropdown-menu dropdown-menu-end">
     <%= recentlyUsedItems %>
   </ul>
 </div>
 <% } %>
 
 <% if (favorites.length > 0) { %>
-<div class="favorites dropdown ms-2">
-  <button type="button" class="favorites dropdown-toggle btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="favorites dropdown dropdown-menu-end ms-2">
+  <button type="button" class="favorites dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <%= icon_favorites %>
     <%- favText %>
     <span class="caret"/>
@@ -37,8 +37,8 @@
 <% } %>
 
 <% if (upload) { %>
-<div class="upload dropdown ms-2">
-  <button type="button" class="upload dropdown-toggle btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="upload dropdown dropdown-menu-end ms-2">
+  <button type="button" class="upload dropdown-toggle btn btn-primary btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <%= icon_upload %>
     <%- upload_text %>
     <span class="caret"/>
