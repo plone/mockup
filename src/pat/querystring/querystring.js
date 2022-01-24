@@ -251,6 +251,8 @@ Criteria.prototype = {
         self.removeValue();
 
         var createDepthSelect = function (selected) {
+            // remove previous depth-select-box items
+            $wrapper.remove(".depth-select-box");
             var select =
                 "<div class='depth-select-box'>" +
                 "<label for='depth-select'>Depth</label>" +
@@ -349,24 +351,28 @@ Criteria.prototype = {
                         self.trigger("value-changed");
                     });
             } else {
-                //These 2 hard-coded values correspond to the "Current (./)" and "Parent (../)" options
-                //under the location index.
-                if (!value) {
-                    value = ".::1";
-                    if (self.$operator.val().indexOf("relativePath") > 0) {
-                        value = "..::1";
-                    }
-                } else {
-                    if (value === ".::1") {
+                console.log(value);
+                var pathAndDepth = [".", "1"];
+                if (typeof value !== "undefined") {
+                    pathAndDepth = value.split("::");
+                    if (pathAndDepth[0] === ".") {
                         self.$operator.val(
                             "plone.app.querystring.operation.string.path"
                         );
+                    } else {
+                        self.$operator.val(
+                            "plone.app.querystring.operation.string.relativePath"
+                        )
                     }
+                } else if(self.$operator.val() === "plone.app.querystring.operation.string.relativePath") {
+                    pathAndDepth = ["..", "1"];
                 }
+
                 self.$value = $('<input type="hidden"/>')
                     .addClass(self.options.classValueName + "-" + widget)
                     .appendTo($wrapper)
-                    .val(value);
+                    .val(pathAndDepth[0]);
+                self.$value.after(createDepthSelect(pathAndDepth[1]));
             }
         } else if (widget === "ReferenceWidget") {
             if (self.advanced) {
@@ -378,7 +384,7 @@ Criteria.prototype = {
                         self.trigger("value-changed");
                     });
             } else {
-                var pathAndDepth = ["", -1];
+                var pathAndDepth = ["", "-1"];
                 if (typeof value !== "undefined") {
                     pathAndDepth = value.split("::");
                 }
@@ -390,10 +396,8 @@ Criteria.prototype = {
                     .change(function () {
                         self.trigger("value-changed");
                     });
-                self.$value.parent().after(createDepthSelect(pathAndDepth[1]));
-                self.$value
-                    .parents("." + self.options.classValueName)
-                    .addClass("break-line");
+                $wrapper.addClass("break-line");
+                self.$value.after(createDepthSelect(pathAndDepth[1]));
             }
         } else if (widget === "MultipleSelectionWidget") {
             self.$value = $("<select/>")
