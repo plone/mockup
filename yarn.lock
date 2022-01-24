@@ -1966,10 +1966,10 @@
     svelte-keydown "^0.3.1"
     svelte-scrollto "^0.2.0"
 
-"@patternslib/patternslib@^6.0.1", "@patternslib/patternslib@^6.2.0", "@patternslib/patternslib@^6.3.2":
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-6.3.2.tgz#2c7948ec815abd5dc544fde3ae59edd66c3d9518"
-  integrity sha512-hGyUjGcew2m7lGF01BNqnOx9vDjYsrTCHE0dcTeLMliELZvx0MqPBHLjD2fb3VWKWub+zXmFJb34Lw3GipRwHA==
+"@patternslib/patternslib@^6.0.1", "@patternslib/patternslib@^6.2.0", "@patternslib/patternslib@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-6.4.0.tgz#87681cacab0fb7c50083e52cb87259f88d1a916d"
+  integrity sha512-+JmikowPH4YzvGNrGTB3tFfQIak8ip4YxbI4U/9gDk4wdC91WX8Eg1zw4BzsDdB0w09Jv95Oqc/bq6D5Jlb5Iw==
   dependencies:
     "@fullcalendar/adaptive" "^5.10.1"
     "@fullcalendar/core" "^5.10.1"
