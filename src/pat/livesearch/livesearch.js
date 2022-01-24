@@ -2,6 +2,7 @@ import $ from "jquery";
 import _ from "underscore";
 import _t from "../../core/i18n-wrapper";
 import Base from "@patternslib/patternslib/src/core/base";
+import dom from "@patternslib/patternslib/src/core/dom";
 
 export default Base.extend({
     name: "livesearch",
@@ -230,7 +231,7 @@ export default Base.extend({
                     if (self.$input.val().length >= self.options.minimumInputLength) {
                         self.doSearch();
                     }
-                } else if (!self.$results.is(":visible")) {
+                } else if (!dom.is_visible(self.$results[0])) {
                     self.render();
                 }
             })

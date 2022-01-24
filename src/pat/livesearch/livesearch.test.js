@@ -1,15 +1,14 @@
-import "./livesearch";
 import Livesearch from "./livesearch";
 import $ from "jquery";
-import registry from "@patternslib/patternslib/src/core/registry";
 import sinon from "sinon";
+import dom from "@patternslib/patternslib/src/core/dom";
 
 describe("Livesearch", function () {
     beforeEach(function () {
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
 
-        this.server.respondWith("GET", /livesearch\.json/, function (xhr, id) {
+        this.server.respondWith("GET", /livesearch\.json/, function (xhr) {
             var items = [];
             for (var i = 0; i < 7; i = i + 1) {
                 items.push({
@@ -30,12 +29,11 @@ describe("Livesearch", function () {
         });
         this.clock = sinon.useFakeTimers();
 
-        this.$el = $(
-            "" +
-                '<form class="pat-livesearch">' +
-                ' <input type="text" value="foobar" />' +
-                "</form>"
-        ).appendTo($("body"));
+        this.$el = $(`
+            <form class="pat-livesearch">
+                <input type="text" value="foobar" />
+            </form>
+        `).appendTo($("body"));
 
         this.ls = new Livesearch(this.$el, {
             ajaxUrl: "livesearch.json",
@@ -75,7 +73,7 @@ describe("Livesearch", function () {
 
         this.ls.$input.trigger("focusout");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(false);
+        expect(dom.is_visible(this.$el.find(".livesearch-results")[0])).toEqual(false);
     });
 
     it("focus back in shows already searched", function () {
@@ -85,11 +83,11 @@ describe("Livesearch", function () {
 
         this.ls.$input.trigger("focusout");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(false);
+        expect(dom.is_visible(this.$el.find(".livesearch-results")[0])).toEqual(false);
 
         this.ls.$input.trigger("focusin");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results").is(":visible")).toEqual(true);
+        expect(dom.is_visible(this.$el.find(".livesearch-results")[0])).toEqual(true);
     });
 
     it("should show next and prev", function () {
