@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Bootstrap from "bootstrap";
+import Offcanvas from "bootstrap";
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
@@ -11,7 +11,7 @@ export default Base.extend({
     defaults: {},
     init_offcanvas: function () {
         const offcanvas_toolbar = document.getElementById("edit-zone");
-        const bsOffcanvas = new Bootstrap.Offcanvas(offcanvas_toolbar);
+        const bsOffcanvas = new Offcanvas(offcanvas_toolbar);
         bsOffcanvas.show();
     },
     init: function () {
