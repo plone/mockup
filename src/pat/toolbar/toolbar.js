@@ -14,28 +14,23 @@ export default Base.extend({
         const bsOffcanvas = new Offcanvas(offcanvas_toolbar);
         bsOffcanvas.show();
     },
+    reload_main_toolbar: function(e, path) {
+        $.ajax({
+            url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
+        }).done((data) => {
+            const wrapper = $(utils.parseBodyTag(data));
+            const $el = wrapper.find("#edit-zone .plone-toolbar-main");
+            const $main_toolbar = $(".plone-toolbar-main", this.$el);
+            registry.scan($el);
+            $main_toolbar.replaceWith($el);
+        });
+    },
     init: function () {
         import("./pattern.toolbar.scss");
 
         this.init_offcanvas();
 
-        /* folder_contents change the context
-         This is for usability so the menu changes along with the folder contents context */
-        $("body")
-            .off("structure-url-changed")
-            .on("structure-url-changed", (e, path) => {
-                $.ajax({
-                    url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
-                }).done((data) => {
-                    const wrapper = $(utils.parseBodyTag(data));
-                    const $el = wrapper.find("#edit-zone").length
-                        ? wrapper.find("#edit-zone")
-                        : wrapper;
-                    this.$el.replaceWith($el);
-                    this.init_offcanvas();
-                    registry.scan($el);
-                });
-            });
+        $("body").on("structure-url-changed", this.reload_main_toolbar);
 
         this.el.classList.add("initialized");
     },
