@@ -5,7 +5,13 @@
 
 body.plone-toolbar-left {
     padding-left:$plone-toolbar-width-collapsed;
+
+    @include media-breakpoint-up(md) {
+        padding-left:$plone-toolbar-width;
+    }
+
 }
+
 
 .offcanvas-toggler {
     width:$plone-toolbar-width-collapsed;
@@ -62,13 +68,5 @@ body.plone-toolbar-left {
 
     .label-state-private {
         color: $plone-toolbar-private-color !important;
-    }
-}
-
-// Space left by the body for the toolbar
-
-@include media-breakpoint-up(md) {
-    body.plone-toolbar-left {
-        padding-left:$plone-toolbar-width;
     }
 }
