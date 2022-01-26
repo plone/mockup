@@ -28,6 +28,15 @@ body.plone-toolbar-left {
     .offcanvas-header {
         background-color:$plone-toolbar-link;
     }
+
+    @include media-breakpoint-up(md) {
+        // show offcanvas always
+        visibility:visible !important;
+        transform:none;
+        transition:none;
+        border-right:none;
+    }
+
     a.nav-link {
         &:focus {
             background: $plone-toolbar-link;

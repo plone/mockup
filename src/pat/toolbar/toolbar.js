@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { Offcanvas } from "bootstrap";
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
@@ -9,30 +8,23 @@ export default Base.extend({
     trigger: ".pat-toolbar",
     parser: "mockup",
     defaults: {},
-    init_offcanvas: function () {
-        const offcanvas_toolbar = document.getElementById("edit-zone");
-        const bsOffcanvas = new Offcanvas(offcanvas_toolbar);
-        bsOffcanvas.show();
-    },
-    reload_toolbar: function(e, path) {
-        $.ajax({
-            url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
-        }).done((data) => {
-            const wrapper = $(utils.parseBodyTag(data));
-            const $main_toolbar = wrapper.find("#edit-zone .plone-toolbar-main");
-            const $personal_tools = wrapper.find("#edit-zone #collapse-personaltools");
-            // setup modals
-            registry.scan($main_toolbar);
-            $(".plone-toolbar-main", this.$el).replaceWith($main_toolbar);
-            $("#collapse-personaltools", this.$el).replaceWith($personal_tools);
-        });
-    },
+
     init: function () {
         import("./pattern.toolbar.scss");
 
-        this.init_offcanvas();
-
-        $("body").on("structure-url-changed", this.reload_toolbar);
+        $("body").on("structure-url-changed", (e, path) => {
+            $.ajax({
+                url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",
+            }).done((data) => {
+                const wrapper = $(utils.parseBodyTag(data));
+                const $main_toolbar = wrapper.find("#edit-zone .plone-toolbar-main");
+                const $personal_tools = wrapper.find("#edit-zone #collapse-personaltools");
+                // setup modals
+                registry.scan($main_toolbar);
+                $(".plone-toolbar-main", this.$el).replaceWith($main_toolbar);
+                $("#collapse-personaltools", this.$el).replaceWith($personal_tools);
+            });
+        });
 
         this.el.classList.add("initialized");
     },
