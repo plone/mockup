@@ -52,6 +52,9 @@ var LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
+    updateRelatedItems: function(){
+        debugger
+    },
 });
 
 var ExternalLink = LinkType.extend({
@@ -454,7 +457,7 @@ export default Base.extend({
             actionOptions: {reloadWindowOnClose: false},
             backdropOptions: { closeOnClick: false }
         });
-        self.modal.on("shown", function (e) {
+        self.modal.on("shown", (e) => {
             self.modalShown.apply(self, [e]);
         });
     },
@@ -726,7 +729,7 @@ export default Base.extend({
             self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
             self.$upload.addClass("pat-upload");
             new PatternUpload(self.$upload, self.options.upload);
-            self.$upload.on("uploadAllCompleted", function (evt, data) {
+            self.$upload.on("uploadAllCompleted", function(evt, data) {
                 if (self.linkTypes.image) {
                     self.linkTypes.image.set(data.data.UID);
                     $(
@@ -738,7 +741,7 @@ export default Base.extend({
                         "#" + $("#tinylink-internal", self.modal.$modal).data("navref")
                     ).trigger("click");
                 }
-            });
+            }.bind(self));
         }
 
         self.$button.off("click").on("click", function (e) {
