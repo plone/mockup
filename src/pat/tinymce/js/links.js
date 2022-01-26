@@ -140,7 +140,7 @@ var InternalLink = LinkType.extend({
         //$el.parent().replaceWith($el);
         $el.attr("value", val);
         $el.val(val);
-        this.UpdateRelatedItems(val);
+        this.updateRelatedItems(val);
     },
 
     attributes: function () {
