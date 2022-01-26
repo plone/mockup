@@ -15,6 +15,9 @@ body.plone-toolbar-left {
 
 .offcanvas-toggler {
     width:$plone-toolbar-width-collapsed;
+    position:fixed;
+    top:0;
+    left:0;
     .toggler-header {
         background-color:$plone-toolbar-link;
     }
