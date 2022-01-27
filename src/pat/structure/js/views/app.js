@@ -3,7 +3,7 @@ import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import utils from "../../../../core/utils";
 import logging from "@patternslib/patternslib/src/core/logging";
-import "jquery.cookie";
+import Cookies from "js-cookie";
 
 import Toolbar from "../../../../core/ui/views/toolbar";
 import ButtonGroup from "../../../../core/ui/views/buttongroup";
@@ -40,7 +40,7 @@ export default BaseView.extend({
     forms: [],
 
     pasteAllowed: function () {
-        return !!$.cookie("__cp");
+        return !!Cookies.get("__cp");
     },
 
     initialize: async function (options) {
@@ -640,8 +640,8 @@ export default BaseView.extend({
         }
         let val;
         try {
-            val = $.cookie(this.cookieSettingPrefix + name);
-            val = $.parseJSON(val).value;
+            val = Cookies.get(this.cookieSettingPrefix + name);
+            val = JSON.parse(val).value;
         } catch (e) {
             /* error parsing json, load default here now */
             return _default;
@@ -653,7 +653,7 @@ export default BaseView.extend({
     },
 
     setCookieSetting: function (name, val) {
-        $.cookie(
+        Cookies.set(
             this.cookieSettingPrefix + name,
             JSON.stringify({
                 value: val,

@@ -20,6 +20,7 @@ define([
     "mockup-patterns-structure-url/js/collections/result",
     "mockup-utils",
     "sinon",
+    "js-cookie",
 ], function (
     expect,
     $,
@@ -35,7 +36,8 @@ define([
     PropertiesView,
     ResultCollection,
     utils,
-    sinon
+    sinon,
+    Cookies
 ) {
     "use strict";
 
@@ -1247,7 +1249,7 @@ define([
             expect($row.find("th").eq(4).text().trim()).to.equal("Review state");
             expect($row.find("th").eq(5).text().trim()).to.equal("Actions");
 
-            expect($.cookie("_fc_activeColumns")).to.be(undefined);
+            expect(Cookies.get("_fc_activeColumns")).to.be(undefined);
 
             this.$el.find("#btn-attribute-columns").trigger("click");
             this.clock.tick(500);
@@ -1268,7 +1270,7 @@ define([
             expect($row.find("th").length).to.equal(7);
             expect($row.find("th").eq(5).text().trim()).to.equal("Object Size");
             expect($row.find("th").eq(6).text().trim()).to.equal("Actions");
-            expect($.parseJSON($.cookie("_fc_activeColumns")).value).to.eql([
+            expect($.parseJSON(Cookies.get("_fc_activeColumns")).value).to.eql([
                 "ModificationDate",
                 "EffectiveDate",
                 "review_state",
@@ -1282,7 +1284,7 @@ define([
 
             $row = this.$el.find("table thead tr").eq(0);
             expect($row.find("th").length).to.equal(6);
-            expect($.parseJSON($.cookie("_fc_activeColumns")).value).to.eql([
+            expect($.parseJSON(Cookies.get("_fc_activeColumns")).value).to.eql([
                 "ModificationDate",
                 "EffectiveDate",
                 "review_state",
@@ -1334,7 +1336,7 @@ define([
 
         it("test itemRow actionmenu paste click", function () {
             // item pending to be pasted
-            $.cookie("__cp", "dummy");
+            Cookies.set("__cp", "dummy");
             this.clock.tick(1000);
             registry.scan(this.$el);
             this.clock.tick(1000);
@@ -1572,7 +1574,7 @@ define([
         it("test select displayed columns", function () {
             registry.scan(this.$el);
             // manually setting a borrowed cookie from the previous test.
-            $.cookie(
+            Cookies.set(
                 "_fc_activeColumns",
                 '{"value":["ModificationDate","EffectiveDate","review_state",' +
                     '"getObjSize"]}'
@@ -1582,7 +1584,7 @@ define([
             expect($row.find("th").length).to.equal(6);
             expect($row.find("th").eq(5).text().trim()).to.equal("Actions");
 
-            expect($.cookie("_fc_activeColumnsCustom")).to.be(undefined);
+            expect(Cookies.get("_fc_activeColumnsCustom")).to.be(undefined);
 
             this.$el.find("#btn-attribute-columns").trigger("click");
             this.clock.tick(500);
@@ -1603,14 +1605,14 @@ define([
             expect($row.find("th").length).to.equal(7);
             expect($row.find("th").eq(5).text().trim()).to.equal("Type");
             expect($row.find("th").eq(6).text().trim()).to.equal("Actions");
-            expect($.parseJSON($.cookie("_fc_activeColumnsCustom")).value).to.eql([
+            expect($.parseJSON(Cookies.get("_fc_activeColumnsCustom")).value).to.eql([
                 "ModificationDate",
                 "EffectiveDate",
                 "review_state",
                 "portal_type",
             ]);
             // standard cookie unchanged.
-            expect($.parseJSON($.cookie("_fc_activeColumns")).value).to.eql([
+            expect($.parseJSON(Cookies.get("_fc_activeColumns")).value).to.eql([
                 "ModificationDate",
                 "EffectiveDate",
                 "review_state",
@@ -1624,7 +1626,7 @@ define([
 
             $row = this.$el.find("table thead tr").eq(0);
             expect($row.find("th").length).to.equal(6);
-            expect($.parseJSON($.cookie("_fc_activeColumnsCustom")).value).to.eql([
+            expect($.parseJSON(Cookies.get("_fc_activeColumnsCustom")).value).to.eql([
                 "ModificationDate",
                 "EffectiveDate",
                 "review_state",

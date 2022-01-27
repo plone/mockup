@@ -2,7 +2,7 @@ import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
-import "jquery.cookie";
+import Cookies from "js-cookie";
 
 export default Base.extend({
     name: "toolbar",
@@ -30,13 +30,13 @@ export default Base.extend({
         // unpin toolbar and save state
         this.$el.on("click", ".offcanvas-unpin", (e) => {
             $("body").removeClass("plone-toolbar-left-expanded");
-            $.cookie("plone-toolbar", JSON.stringify({expanded: false}));
+            Cookies.set("plone-toolbar", JSON.stringify({expanded: false}), {path: "/"});
         });
 
         // pin toolbar and save state
         this.$el.on("click", ".offcanvas-pin", (e) => {
             $("body").addClass("plone-toolbar-left-expanded");
-            $.cookie("plone-toolbar", JSON.stringify({expanded: true}));
+            Cookies.set("plone-toolbar", JSON.stringify({expanded: true}), {path: "/"});
         });
 
         this.el.classList.add("initialized");
