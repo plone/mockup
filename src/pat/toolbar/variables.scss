@@ -22,6 +22,7 @@ $plone-toolbar-pending-color: #e2e721; // orange
 $plone-toolbar-private-color: #c4183c; // red
 $plone-toolbar-internal-color: #fab82a; // is draft
 $plone-toolbar-internally-published-color: #883dfa; // is intranet
+$plone-toolbar-locked-color: $warning; // is intranet
 
 $plone-toolbar-width: 220px;
-$plone-toolbar-width-collapsed: 25px;
+$plone-toolbar-width-collapsed: calc($spacer * 2);

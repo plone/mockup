@@ -2,6 +2,7 @@ import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
+import "jquery.cookie";
 
 export default Base.extend({
     name: "toolbar",
@@ -24,6 +25,18 @@ export default Base.extend({
                 $(".plone-toolbar-main", this.$el).replaceWith($main_toolbar);
                 $("#collapse-personaltools", this.$el).replaceWith($personal_tools);
             });
+        });
+
+        // unpin toolbar and save state
+        this.$el.on("click", ".offcanvas-unpin", (e) => {
+            $("body").removeClass("plone-toolbar-left-expanded");
+            $.cookie("plone-toolbar", JSON.stringify({expanded: false}));
+        });
+
+        // pin toolbar and save state
+        this.$el.on("click", ".offcanvas-pin", (e) => {
+            $("body").addClass("plone-toolbar-left-expanded");
+            $.cookie("plone-toolbar", JSON.stringify({expanded: true}));
         });
 
         this.el.classList.add("initialized");
