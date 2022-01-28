@@ -7218,11 +7218,6 @@ jquery.browser@0.1.0:
   resolved "https://registry.yarnpkg.com/jquery.browser/-/jquery.browser-0.1.0.tgz#9c72a6095fd2814b44476ea8f716677b72a6a2bb"
   integrity sha1-nHKmCV/SgUtER26o9xZne3Kmors=
 
-jquery.cookie@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/jquery.cookie/-/jquery.cookie-1.4.1.tgz#d63dce209eab691fe63316db08ca9e47e0f9385b"
-  integrity sha1-1j3OIJ6raR/mMxbbCMqeR+D5OFs=
-
 "jquery.recurrenceinput.js@git+https://github.com/collective/jquery.recurrenceinput.js.git#master":
   version "1.6.0"
   resolved "git+https://github.com/collective/jquery.recurrenceinput.js.git#deaec1116575d81698778f87d8c08f02487aadf9"
