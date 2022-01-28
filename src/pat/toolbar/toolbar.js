@@ -3,6 +3,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import Cookies from "js-cookie";
+import { Offcanvas } from "bootstrap";
 
 export default Base.extend({
     name: "toolbar",
@@ -36,6 +37,17 @@ export default Base.extend({
             $("body").addClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({expanded: true}), {path: "/"});
         });
+
+        // open/close collapsed toolbar on hovering over the offcanvas-toggler
+        const edit_zone = document.getElementById("edit-zone");
+        const offcanvas_toggler = document.querySelector(".toggler-hover");
+        const bsOffcanvas = new Offcanvas(edit_zone);
+        offcanvas_toggler.addEventListener("mouseenter touchstart", (e) => {
+            bsOffcanvas.show();
+        });
+        edit_zone.addEventListener("mouseleave", (e) => {
+            bsOffcanvas.hide();
+        })
 
         this.el.classList.add("initialized");
     },
