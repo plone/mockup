@@ -1,7 +1,6 @@
 process.traceDeprecation = true;
 const path = require("path");
 const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
-const svelte_config = require("@patternslib/pat-content-browser/webpack.svelte");
 
 module.exports = async (env, argv, build_dirname = __dirname) => {
     let config = {
@@ -43,7 +42,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         },
     };
 
-    config = svelte_config(env, argv, patternslib_config(env, argv, config, ["mockup"]));
+    config = patternslib_config(env, argv, config, ["mockup"]);
     config.output.path = path.resolve(__dirname, "dist/");
 
     if (process.env.NODE_ENV === "development") {
