@@ -134,7 +134,7 @@ export default Base.extend({
 
     async init() {
         import("./structure.scss");
-        import("bootstrap/js/src/dropdown");
+        (await import("bootstrap")).Dropdown;
 
         this.browsing = true; // so all queries will be correct with QueryHelper
         this.options.collectionUrl = this.options.vocabularyUrl;

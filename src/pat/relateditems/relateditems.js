@@ -504,7 +504,7 @@ export default Base.extend({
 
     init: async function () {
         const Select2 = (await import("../select2/select2")).default;
-        const Dropdown = (await import("bootstrap")).Dropdown;
+        (await import("bootstrap")).Dropdown;
         import("./relateditems.scss");
 
         // templates
