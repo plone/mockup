@@ -280,8 +280,6 @@ export default Base.extend({
 
         self.$toolbar.html(html);
 
-        $(".dropdown-toggle", self.$toolbar).dropdown();
-
         // unbind mouseup event from select2 to override the behavior:
         $(".pat-relateditems-dropdown").unbind("mouseup");
         $(".pat-relateditems-dropdown").bind("mouseup", function (e) {
@@ -506,8 +504,8 @@ export default Base.extend({
 
     init: async function () {
         const Select2 = (await import("../select2/select2")).default;
+        const Dropdown = (await import("bootstrap")).Dropdown;
         import("./relateditems.scss");
-        import("bootstrap/js/src/dropdown");
 
         // templates
         this.breadcrumbTemplate = (await import("./templates/breadcrumb.xml")).default; // prettier-ignore
