@@ -3,8 +3,6 @@ const path = require("path");
 const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
 const svelte_config = require("@patternslib/pat-content-browser/webpack.svelte");
 
-const webpack = require("webpack");
-
 module.exports = async (env, argv, build_dirname = __dirname) => {
     let config = {
         entry: {
@@ -14,13 +12,6 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
 
     config = svelte_config(env, argv, patternslib_config(env, argv, config, ["mockup"]));
     config.output.path = path.resolve(__dirname, "dist/");
-
-    config.plugins.push(
-        new webpack.ProvidePlugin({
-            Backbone: "backbone",
-            _: "underscore",
-        })
-    );
 
     if (process.env.NODE_ENV === "development") {
         // Note: ``publicPath`` is set to "auto" in Patternslib,

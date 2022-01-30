@@ -135,6 +135,13 @@ export default Base.extend({
         import("./structure.scss");
         (await import("bootstrap")).Dropdown;
 
+        const _ = (await import("underscore")).default;
+        const Backbone = (await import("backbone")).default;
+        window._ = _;
+        window.Backbone = Backbone;
+
+        const AppView = (await import("./js/views/app")).default;
+
         this.browsing = true; // so all queries will be correct with QueryHelper
         this.options.collectionUrl = this.options.vocabularyUrl;
         this.options.pattern = this;
