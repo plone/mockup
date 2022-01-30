@@ -1,5 +1,4 @@
 import Base from "@patternslib/patternslib/src/core/base";
-import AppView from "./js/views/app";
 
 export default Base.extend({
     name: "structure",
@@ -66,10 +65,10 @@ export default Base.extend({
 
         defaultPageTypes: ["Document", "Event", "News Item", "Collection"],
 
-        language: 'en',
+        language: "en",
         dateFormat: {
             dateStyle: "medium",
-            timeStyle: "medium"
+            timeStyle: "medium",
         },
         rearrange: {
             properties: {
@@ -84,12 +83,12 @@ export default Base.extend({
             {
                 tooltip: "Cut",
                 url: "/cut",
-                icon: "plone-cut"
+                icon: "plone-cut",
             },
             {
                 tooltip: "Copy",
                 url: "/copy",
-                icon: "plone-copy"
+                icon: "plone-copy",
             },
             {
                 tooltip: "Paste",
@@ -110,7 +109,7 @@ export default Base.extend({
             {
                 tooltip: "Tags",
                 url: "/tags",
-                icon: "tags"
+                icon: "tags",
             },
             {
                 tooltip: "Properties",
@@ -139,7 +138,8 @@ export default Base.extend({
         this.browsing = true; // so all queries will be correct with QueryHelper
         this.options.collectionUrl = this.options.vocabularyUrl;
         this.options.pattern = this;
-        this.options.language = document.querySelector('html').getAttribute("lang") || 'en';
+        this.options.language =
+            document.querySelector("html").getAttribute("lang") || "en";
 
         // the ``attributes`` options key is not compatible with backbone,
         // but queryHelper that will be constructed by the default

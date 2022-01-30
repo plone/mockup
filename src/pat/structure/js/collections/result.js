@@ -1,8 +1,8 @@
 import $ from "jquery";
 import Backbone from "backbone";
 import Result from "../models/result";
-import "backbone.paginator";
 import utils from "../../../../core/utils";
+import "backbone.paginator";
 
 export default Backbone.Paginator.requestPager.extend({
     model: Result,
