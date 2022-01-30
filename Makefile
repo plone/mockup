@@ -5,10 +5,9 @@ ESLINT ?= npx eslint
 YARN   ?= npx yarn
 
 
-stamp-yarn:
-	$(YARN) install --ignore-scripts
-	# Check if you can really ignore scripts by running:
-	#   npx can-i-ignore-scripts
+.PHONY: install
+stamp-yarn install:
+	$(YARN) install
 	# Install pre commit hook
 	#Do not yet - while heave development - enforce pre-commit commitlint hook.
 	#$(YARN) husky install
@@ -30,13 +29,19 @@ eslint: stamp-yarn
 
 
 .PHONY: check
-check:: stamp-yarn eslint
+check: stamp-yarn eslint
 	$(YARN) run test
 
 
 .PHONY: bundle
 bundle: stamp-yarn
 	$(YARN) run build
+
+
+# If you want to release on GitHub, make sure to have a .env file with a GITHUB_TOKEN.
+# Also see:
+#	https://github.com/settings/tokens
+#	and https://github.com/release-it/release-it/blob/master/docs/github-releases.md#automated
 
 
 .PHONY: release-major
@@ -64,7 +69,7 @@ release-patch: check
 
 
 .PHONY: serve
-serve:: stamp-yarn
+serve: stamp-yarn
 	$(YARN) run start
 
 
