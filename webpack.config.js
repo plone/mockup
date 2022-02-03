@@ -8,6 +8,12 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
         },
+        externals: {
+            window: "window",
+            $: 'jquery',
+            jquery: 'jQuery',
+            "window.jquery": 'jQuery',
+        },
     };
 
     config = svelte_config(env, argv, patternslib_config(env, argv, config, ["mockup"]));
