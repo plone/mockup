@@ -8,6 +8,38 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
         },
+        externals: {
+            window: "window",
+            $: 'jquery',
+            jquery: 'jQuery',
+            "window.jquery": 'jQuery',
+        },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    tinymce: {
+                        name: "tinymce",
+                            test: /[\\/]node_modules[\\/]tinymce.*[\\/]/,
+                            chunks: "all",
+                    },
+                    datatables: {
+                        name: "datatables",
+                            test: /[\\/]node_modules[\\/]datatables.net.*[\\/]/,
+                            chunks: "all",
+                    },
+                    select2: {
+                        name: "select2",
+                            test: /[\\/]node_modules[\\/]select2.*[\\/]/,
+                            chunks: "all",
+                    },
+                    jquery_plugins: {
+                        name: "jquery_plugins",
+                            test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
+                            chunks: "all",
+                    },
+                },
+            },
+        },
     };
 
     config = svelte_config(env, argv, patternslib_config(env, argv, config, ["mockup"]));
