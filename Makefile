@@ -28,9 +28,13 @@ eslint: stamp-yarn
 	$(ESLINT) ./src
 
 
-.PHONY: check
-check: stamp-yarn eslint
+.PHONY: test
+test: stamp-yarn
 	$(YARN) run test
+
+
+.PHONY: check
+check: stamp-yarn eslint test
 
 
 .PHONY: bundle

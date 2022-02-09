@@ -17,4 +17,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '16'
-    - run: make check
+    - run: make install
+    #- run: make eslint
+    - run: make test
