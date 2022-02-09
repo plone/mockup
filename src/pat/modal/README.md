@@ -143,12 +143,63 @@ Modal with TinyMCE</a>
 </div>
 ```
 
+
+## Modal modalSize modal-fullscreen
+
+<a href="#modal4"
+   class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+   data-pat-plone-modal="modalSizeClass: modal-fullscreen ; margin: 0;">Modal fullscreen!</a>
+
+<div id="modal4" style="display: none">
+    <h1>Full screen modal!</h1>
+    <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+</div>
+
+```html
+<a
+    href="#modal4"
+    class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+    data-pat-plone-modal="modalSizeClass: modal-fullscreen; margin: 0;"
+    >Modal fullscreen!</a
+>
+<div id="modal4" style="display: none">
+    <h1>Basic screen modal!</h1>
+    <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+</div>
+```
+
+## Modal modalSize modal-lg
+
+<a href="#modal5"
+   class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+   data-pat-plone-modal="modalSizeClass: modal-lg;">Modal large!</a>
+
+<div id="modal5" style="display: none">
+    <h1>Full screen modal!</h1>
+    <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+</div>
+
+```html
+<a
+    href="#modal5"
+    class="plone-btn plone-btn-large plone-btn-primary pat-plone-modal"
+    data-pat-plone-modal="modalSizeClass: modal-lg;"
+    >Modal large!</a
+>
+<div id="modal5" style="display: none">
+    <h1>Basic screen modal!</h1>
+    <p>Indeed. Whoa whoa whoa whoa. Wait.</p>
+</div>
+```
+
+
 ## Configuration
 
 |            Option             |        Type         |                                                               Default                                                               |                                                                                                                                                                                Description                                                                                                                                                                                |
 | :---------------------------: | :-----------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |            height             |       string        |                                                                 ''                                                                  |                                                                                                                                                              Set the height of the modal, for example: 250px                                                                                                                                                              |
 |             width             |       string        |                                                                 ''                                                                  |                                                                                                                                                          Set the width of the modal, for example: 80% or 500px.                                                                                                                                                           |
+|         modalSizeClass        |       string        |                                                                 ''                                                                  |                                                                                                                                                          Set the modal size class, for example: modal-sm, modal-lg, modal-xl or modal-fullscreen.                                                                                                                                                           |
 |            margin             | function or integer |                                                                 20                                                                  |                                                                                                               A function, Integer or String which will be used to set the margin of the modal in pixels. If a function is passed it must return an Integer.                                                                                                               |
 |           position            |       string        |                                                           'center middle'                                                           |                                                                                                             Position the modal relative to the window with the format: "<horizontal> <vertical>" -- allowed values: top, bottom, left, right, center, middle.                                                                                                             |
 |           triggers            |        array        |                                                                 []                                                                  | Add event listeners to elements on the page which will open the modal when triggered. Pass an Array of strings with the format `["EVENT SELECTOR"]` or `["EVENT"]`. For example, `["click .someButton"]`. If you pass in only an event such as, `["change"]`, the event listener will be added to the element on which the modal was initiated, usually a link or button. |

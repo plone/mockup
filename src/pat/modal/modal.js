@@ -16,7 +16,8 @@ export default Base.extend({
     defaults: {
         width: "",
         height: "",
-        margin: 20,
+        modalSizeClass: "",
+        margin: 0,
         position: "center middle", // format: '<horizontal> <vertical>' -- allowed values: top, bottom, left, right, center, middle
         triggers: [],
         zIndexSelector: ".modal-wrapper,.modal-backdrop",
@@ -52,7 +53,7 @@ export default Base.extend({
             template:
                 "" +
                 '<div class="<%= options.className %>">' +
-                '  <div class="<%= options.classDialog %>" role="dialog" <% if (title) { %>aria-labelledby="modal-title" <% } %> tabindex="-1">' +
+                '  <div class="<%= options.classDialog %><% if (modalSizeClass) { %> <%= modalSizeClass %><% } %>" role="dialog" <% if (title) { %>aria-labelledby="modal-title" <% } %> tabindex="-1">' +
                 '    <div class="<%= options.classModal %>" role="document">' +
                 '      <div class="<%= options.classHeaderName %>">' +
                 '        <% if (title) { %><h5 class="modal-title" id="modal-title" tabindex="0"><%= title %></h5><% } %>' +
@@ -145,7 +146,6 @@ export default Base.extend({
                     _.omit(options, patternKeys),
                     self.options
                 );
-
                 $(action, $("." + options.templateOptions.classBodyName, $modal)).each(
                     function (action) {
                         var $action = $(this);
@@ -400,6 +400,7 @@ export default Base.extend({
                 title: "",
                 prepend: "<div />",
                 content: "",
+                modalSizeClass: options.modalSizeClass,
                 buttons: '<div class="pattern-modal-buttons"></div>',
                 options: options.templateOptions,
             };
@@ -871,13 +872,17 @@ export default Base.extend({
             typeof self.options.margin === "function"
                 ? self.options.margin()
                 : self.options.margin;
-        self.$modal.css({
+        let modalCss = {
             position: "absolute",
-            padding: margin,
-        });
+        }
+        if(margin !== "0"){
+            modalCss["padding"] = margin;
+        }
+        console.log(modalCss)
+        self.$modal.css(modalCss);
         self.$modalDialog.css({
-            margin: "0",
-            padding: "0",
+            // margin: "0",
+            // padding: "0",
             width: self.options.width, // defaults to "", which doesn't override other css
             height: self.options.height, // defaults to "", which doesn't override other css
         });

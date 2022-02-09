@@ -15,6 +15,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ "node_modules/tinymce/themes": "dist/themes" });
     eleventyConfig.addPassthroughCopy({ "node_modules/underscore": "dist/underscore" });
     eleventyConfig.addPassthroughCopy({ "node_modules/bootstrap": "dist/bootstrap" });
+    eleventyConfig.addPassthroughCopy({ "node_modules/jquery": "dist/jquery" });
 
     // Filter source file names using a glob
     eleventyConfig.addCollection("patterns", function (collectionApi) {
