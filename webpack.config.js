@@ -13,6 +13,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
             $: 'jquery',
             jquery: 'jQuery',
             "window.jquery": 'jQuery',
+            "bootstrap": true,
         },
         optimization: {
             splitChunks: {
