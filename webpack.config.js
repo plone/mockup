@@ -2,7 +2,7 @@ process.traceDeprecation = true;
 const path = require("path");
 const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
 
-module.exports = async (env, argv, build_dirname = __dirname) => {
+module.exports = async (env, argv) => {
     let config = {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
@@ -54,7 +54,7 @@ module.exports = async (env, argv, build_dirname = __dirname) => {
 
     if (env && env.DEPLOYMENT === "plone") {
         config.output.path = path.resolve(
-            build_dirname,
+            __dirname,
             "../plone.staticresources/src/plone/staticresources/static/bundle-plone/"
         );
     }
