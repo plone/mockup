@@ -362,9 +362,12 @@ Criteria.prototype = {
                     } else {
                         self.$operator.val(
                             "plone.app.querystring.operation.string.relativePath"
-                        )
+                        );
                     }
-                } else if(self.$operator.val() === "plone.app.querystring.operation.string.relativePath") {
+                } else if (
+                    self.$operator.val() ===
+                    "plone.app.querystring.operation.string.relativePath"
+                ) {
                     pathAndDepth = ["..", "1"];
                 }
 
@@ -639,7 +642,6 @@ export default Base.extend({
         showPreviews: true,
     },
     init: async function () {
-        await import("select2");
         await import("../select2/select2");
         await import("../relateditems/relateditems");
 
