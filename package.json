@@ -72,7 +72,7 @@
         "grunt-contrib-watch": "~1.1.0",
         "grunt-karma": "~3.0.0",
         "grunt-sed": "collective/grunt-sed#e625902539f5c29f1246228270a0330c1097b1e4",
-        "karma": "~4.1.0",
+        "karma": "~6.3.14",
         "karma-chrome-launcher": "~2.2.0",
         "karma-coverage": "~1.1.2",
         "karma-firefox-launcher": "~1.1.0",
