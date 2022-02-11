@@ -5,6 +5,7 @@ import Base from "@patternslib/patternslib/src/core/base";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
 import registry from "@patternslib/patternslib/src/core/registry";
+import Select2 from "../select2/select2";
 
 const KEY = {
     LEFT: 37,
@@ -503,7 +504,6 @@ export default Base.extend({
     },
 
     init: async function () {
-        const Select2 = (await import("../select2/select2")).default;
         (await import("bootstrap")).Dropdown;
         import("./relateditems.scss");
 
