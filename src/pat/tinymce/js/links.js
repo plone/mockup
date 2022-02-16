@@ -53,7 +53,6 @@ var LinkType = Base.extend({
         };
     },
     updateRelatedItems: function(){
-        debugger
     },
 });
 
@@ -134,12 +133,7 @@ var InternalLink = LinkType.extend({
 
     set: function (val) {
         var $el = this.getEl();
-        // kill it and then reinitialize since select2 will load data then
-        //$el.select2("destroy");
-        //$el.removeData("pat-relateditems"); // reset the pattern
-        //$el.parent().replaceWith($el);
-        $el.attr("value", val);
-        $el.val(val);
+        $el.val(val).trigger("change");
         this.updateRelatedItems(val);
     },
 
