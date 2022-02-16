@@ -692,9 +692,15 @@ export default Base.extend({
         var caption = self.$caption.val();
         var html_string;
         if (caption && !captionFromDescription) {
+            // clean up img class, as we will have them on the firgure tag
+            var dummyDiv = document.createElement("div");
+            dummyDiv.innerHTML = html_inner
+            dummyDiv.querySelector("img").removeAttribute("class")
+            html_inner = dummyDiv.innerHTML
+
             html_inner += "\n" + self.dom.createHTML("figcaption", {}, caption);
             //html_inner += '\n' + self.dom.createHTML('figcaption', { class: 'mceNonEditable' }, caption);
-            html_string = self.dom.createHTML("figure", {}, html_inner);
+            html_string = self.dom.createHTML("figure", {class: data.class}, html_inner);
         } else {
             html_string = html_inner;
         }
