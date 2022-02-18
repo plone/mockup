@@ -89,10 +89,9 @@ export default Base.extend({
             { title: "Large", value: "large" },
         ],
         imageClasses: {
-            "image-inline": _t("Inline"),
-            "image-right": _t("Right"),
-            "image-left": _t("Left"),
-            "image-responsive": _t("Responsive"),
+            "float-none": _t("Inline"),
+            "float-end": _t("Right"),
+            "float-start": _t("Left"),
         },
         targetList: [
             { text: _t("Open in this window / frame"), value: "" },
