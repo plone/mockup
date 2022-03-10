@@ -644,8 +644,7 @@ export default Base.extend({
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
-
-        var cssclasses = ["image-richtext", self.$align.val()];
+        var cssclasses = ["image-richtext", self.$align.val(), "scale-" + self.$scale.val()];
         if (captionFromDescription) {
             cssclasses.push("captioned");
         }
