@@ -80,6 +80,12 @@
           <% }); %>
         </select>
       </div>
+      <div class="enable-zoom mb-2">
+        <input type="checkbox" name="enableImageZoom" class="form-check-input" />
+        <label for="enableImageZoom" class="form-check-label">
+          <%- enableImageZoom %>
+        </label>
+      </div>
     </div>
 
     <input type="submit" class="btn btn-secondary plone-btn me-1" name="cancel" value="<%- cancelBtn %>" />

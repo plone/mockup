@@ -53,6 +53,7 @@ export default Base.extend({
             subject: _t("Email Subject (optional)"),
             image: _t("Image"),
             imageAlign: _t("Align"),
+            enableImageZoom: _t("Enable image zoom"),
             scale: _t("Size"),
             alt: _t("Alternative Text"),
             insertImageHelp: _t(

@@ -512,6 +512,7 @@ export default Base.extend({
             altText: this.options.text.alt,
             imageAlignText: this.options.text.imageAlign,
             captionFromDescriptionText: this.options.text.captionFromDescription,
+            enableImageZoom: this.options.text.enableImageZoom,
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
             imageScales: this.options.imageScales,
@@ -534,6 +535,10 @@ export default Base.extend({
         self.$alt = $('input[name="alt"]', self.modal.$modal);
         self.$align = $('select[name="align"]', self.modal.$modal);
         self.$scale = $('select[name="scale"]', self.modal.$modal);
+        self.$enableImageZoom = $(
+            'input[name="enableImageZoom"]',
+            self.modal.$modal
+        );
         self.$captionFromDescription = $(
             'input[name="captionFromDescription"]',
             self.modal.$modal
@@ -641,6 +646,7 @@ export default Base.extend({
         var self = this;
         var title = self.$title.val();
         var captionFromDescription = self.$captionFromDescription.prop("checked");
+        var enableImageZoom = self.$enableImageZoom.prop("checked");
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
@@ -648,6 +654,9 @@ export default Base.extend({
         var cssclasses = ["image-richtext", self.$align.val()];
         if (captionFromDescription) {
             cssclasses.push("captioned");
+        }
+        if (enableImageZoom) {
+            cssclasses.push("zoomable");
         }
 
         var data = $.extend(
@@ -872,6 +881,9 @@ export default Base.extend({
                 self.$title.val(self.dom.getAttrib(self.imgElm, "title"));
                 self.$alt.val(self.dom.getAttrib(self.imgElm, "alt"));
 
+                if ($(self.imgElm).hasClass("zoomable")) {
+                    self.$enableImageZoom.prop("checked", true);
+                }
                 if ($(self.imgElm).hasClass("captioned")) {
                     self.$captionFromDescription.prop("checked", true);
                     self.$caption.prop("disabled", true);
