@@ -658,7 +658,7 @@ export default Base.extend({
         self.initialized = false;
 
         // get remove icon for criterias
-        self.options.criteria.remove = await utils.resolveIcon("plone.icon.x-circle");
+        self.options.criteria.remove = await utils.resolveIcon("x-circle");
 
         if (self.options.indexOptionsUrl) {
             try {

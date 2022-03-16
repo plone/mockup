@@ -1,5 +1,7 @@
 import $ from "jquery";
 
+
+
 var QueryHelper = function (options) {
     /* if pattern argument provided, it can implement the interface of:
      *    - browsing: boolean if currently browsing
@@ -371,17 +373,33 @@ var createElementFromHTML = function (htmlString) {
     return div.firstChild;
 };
 
+let iconCache = new Map();
+
 const resolveIcon = async function (name, as_node, css_class) {
     // Return a <svg> element from a icon name.
-    // /@@iconresolver/ or /@@icontag/
-    const url = document.querySelector("meta[name=iconresolver]")?.content;
+    // Example:
+    // const dropdownIcon: await utils.resolveIcon('plone-settings');
+    // if (name === 'plone.icon.plone-rearrange'){debugger}
+    const iconLookupName = `plone.icon.${name}`;
+    // const cached_icon = iconCache.has(iconLookupName) ? iconCache.get(iconLookupName) :
+    const cached_icon = iconCache.get(iconLookupName);
+    if(cached_icon){
+        console.log("use cached icon: ", name)
+        return cached_icon;
+    }
+    console.log("resolve icon: ", name)
+    const baseUrl = $("body").attr("data-portal-url");
     let icon = null;
-    if (url) {
-        const resp = await fetch(`${url}/${name}`);
-        icon = await resp.json();
+    if(baseUrl){
+        const url = baseUrl + "/@@iconresolver";
+        if (url) {
+            const resp = await fetch(`${url}/${name}`);
+            icon = await resp.text();
+        }
     }
     if (!icon) {
         // fallback
+        name = iconLookupName;
         try {
             import("../styles/icons.scss");
             const iconmap = await import("../iconmap.json");
@@ -407,6 +425,7 @@ const resolveIcon = async function (name, as_node, css_class) {
     if (as_node && css_class) {
         icon.classList.add(css_class);
     }
+    iconCache.set(iconLookupName, icon);
     return icon;
 };
 

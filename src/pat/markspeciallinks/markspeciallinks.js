@@ -15,30 +15,30 @@ export default Base.extend({
     protocol_icon_map: {
         // For a list of supported default protocol hander, see:
         // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler#permitted_schemes
-        https: "plone.icon.link-45deg",
-        http: "plone.icon.link-45deg",
-        ftp: "plone.icon.cloud-download", // deprecated
-        callto: "plone.icon.telephone", // non-standard for skype
-        bitcoin: "plone.icon.credit-card", // no bitcoin icon yet
-        geo: "plone.icon.geo-alt",
-        im: "plone.icon.chat",
-        irc: "plone.icon.chat",
-        ircs: "plone.icon.chat",
-        magnet: "plone.icon.link-45deg",
-        mailto: "plone.icon.envelope",
-        mms: "plone.icon.chat",
-        news: "plone.icon.newspaper",
-        nntp: "plone.icon.newspaper",
-        openpgp4fpr: "plone.icon.key",
-        sip: "plone.icon.telephone",
-        sms: "plone.icon.chat",
-        smsto: "plone.icon.chat",
-        ssh: "plone.icon.lock",
-        tel: "plone.icon.telephone",
-        urn: "plone.icon.link-45deg",
-        webcal: "plone.icon.calendar",
-        wtai: "plone.icon.telephone",
-        xmpp: "plone.icon.chat",
+        https: "link-45deg",
+        http: "link-45deg",
+        ftp: "cloud-download", // deprecated
+        callto: "telephone", // non-standard for skype
+        bitcoin: "credit-card", // no bitcoin icon yet
+        geo: "geo-alt",
+        im: "chat",
+        irc: "chat",
+        ircs: "chat",
+        magnet: "link-45deg",
+        mailto: "envelope",
+        mms: "chat",
+        news: "newspaper",
+        nntp: "newspaper",
+        openpgp4fpr: "key",
+        sip: "telephone",
+        sms: "chat",
+        smsto: "chat",
+        ssh: "lock",
+        tel: "telephone",
+        urn: "link-45deg",
+        webcal: "calendar",
+        wtai: "telephone",
+        xmpp: "chat",
     },
 
     async init() {
