@@ -74,6 +74,7 @@ export default Base.extend({
             properties: {
                 id: "ID",
                 sortable_title: "Title",
+                // icon: "plone-rearrange",
             },
             url: "/rearrange",
         },

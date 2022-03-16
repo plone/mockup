@@ -85,18 +85,18 @@ export default BaseView.extend({
         data.menuOptions = this.menuOptionsCategorized;
         for(const button of data.menuOptions.button){
            if(button.icon){
-               button.iconSVG = await utils.resolveIcon('plone.icon.' + button.icon);
+               button.iconSVG = await utils.resolveIcon(button.icon);
            }
         }
         for(const button of data.menuOptions.dropdown){
            if(button.icon){
-               button.iconSVG = await utils.resolveIcon('plone.icon.' + button.icon);
+               button.iconSVG = await utils.resolveIcon(button.icon);
            }
         }
         this.el.innerHTML = this.template(
             $.extend(
                 {
-                    dropdownIcon: await utils.resolveIcon('plone.icon.plone-settings'),
+                    dropdownIcon: await utils.resolveIcon('plone-settings'),
                     _t: _t,
                     id: utils.generateId(),
                 },

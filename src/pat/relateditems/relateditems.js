@@ -270,10 +270,10 @@ export default Base.extend({
             browseModeText: _t("Browse"),
             recentlyUsedItems: recentlyUsedHtml,
             recentlyUsedText: _t("Recently Used"),
-            icon_root: await utils.resolveIcon("plone.icon.house-fill"),
-            icon_recently_used: await utils.resolveIcon("plone.icon.grid-fill"),
-            icon_favorites: await utils.resolveIcon("plone.icon.star-fill"),
-            icon_upload: await utils.resolveIcon("plone.icon.cloud-arrow-up"),
+            icon_root: await utils.resolveIcon("house-fill"),
+            icon_recently_used: await utils.resolveIcon("grid-fill"),
+            icon_favorites: await utils.resolveIcon("star-fill"),
+            icon_upload: await utils.resolveIcon("cloud-arrow-up"),
             upload: this.options.upload,
             upload_text: _t("Upload"),
         });
@@ -567,8 +567,8 @@ export default Base.extend({
 
         Select2.prototype.initializeOrdering.call(self);
 
-        const icon_level_up = await utils.resolveIcon("plone.icon.arrow-left-circle");
-        const icon_level_down = await utils.resolveIcon("plone.icon.arrow-right-circle");
+        const icon_level_up = await utils.resolveIcon("arrow-left-circle");
+        const icon_level_down = await utils.resolveIcon("arrow-right-circle");
 
         self.options.formatResult = function (item) {
             item.selectable = self.isSelectable(item);
