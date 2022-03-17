@@ -21,7 +21,7 @@ This is the related items pattern.
 |         favorites          |  array  |                   []                    |                                               Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path".                                                |
 |    maximumSelectionSize    | integer |                   -1                    |                                                      The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited.                                                      |
 |     minimumInputLength     | integer |                    0                    |                                                                                               Number of characters necessary to start a search.                                                                                               |
-|            mode            | string  |                                         | Initial widget mode. Possible values: are 'auto', 'search' and 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'auto', which means the combination of both. |
+|            mode            | string  |                                         | Initial widget mode. Possible values: are 'auto', 'search' and 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'browse', which means the search and browse in separated tabs. Auto would combine global search and browse in one selection. |
 |         orderable          | boolean |                  true                   |                                                                                            Whether or not items should be drag-and-drop sortable.                                                                                             |
 |          pageSize          | integer |                   10                    |                                                                                         Batch size to break down big result sets into multiple pages.                                                                                         |
 |        recentlyUsed        | boolean |                  false                  |                                                                                                    Show the recently used items dropdown.                                                                                                     |
@@ -45,7 +45,7 @@ This is the related items pattern.
 |       vocabularyUrl        | string  |                  null                   |                                                                                       This is a URL to a JSON-formatted file used to populate the list                                                                                        |
 |           width            | string  |                 '100%'                  |                                                                                                        Specify a width for the widget.                                                                                                        |
 
-## Default, mode "search/browse" auto (combination of both)
+## Default, mode "browse" (separate browse and search tabs)
 
 <input type="text" class="pat-relateditems"
     data-pat-relateditems='{"selectableTypes": ["Document"], "vocabularyUrl": "relateditems-test.json"}' />
@@ -58,11 +58,11 @@ This is the related items pattern.
 />
 ```
 
-## Default, mode "browse"
+## Default, mode "auto" (search/browser combined)
 
 <input type="text" class="pat-relateditems"
     data-pat-relateditems="width:30em;
-                            mode:search;
+                            mode:auto;
                             vocabularyUrl:relateditems-test.json" />
 
 ```html
@@ -70,7 +70,7 @@ This is the related items pattern.
     type="text"
     class="pat-relateditems"
     data-pat-relateditems="width:30em;
-                            mode:search;
+                            mode:auto;
                             vocabularyUrl:relateditems-test.json"
 />
 ```
@@ -79,7 +79,7 @@ This is the related items pattern.
 
 <input type="text" class="pat-relateditems"
     data-pat-relateditems="width:30em;
-                            mode:browse;
+                            mode:search;
                             vocabularyUrl:relateditems-test.json" />
 
 ```html
@@ -87,12 +87,12 @@ This is the related items pattern.
     type="text"
     class="pat-relateditems"
     data-pat-relateditems="width:30em;
-                            mode:browse;
+                            mode:search;
                             vocabularyUrl:relateditems-test.json"
 />
 ```
 
-## Default, mode auto, favorites, recently used and upload
+## Default, mode browse, favorites, recently used and upload
 
 <input type="text" class="pat-relateditems"
     data-pat-relateditems='{"vocabularyUrl": "relateditems-test.json", "favorites": [{"title": "Projects", "path": "/path"}], "recentlyUsed": true, "upload": true}' />

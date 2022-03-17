@@ -45,7 +45,7 @@ export default Base.extend({
         recentlyUsedKey: "relateditems_recentlyused",
         maximumSelectionSize: -1,
         minimumInputLength: 0,
-        mode: "auto", // possible values are 'auto', 'search' and 'browse'.
+        mode: "browse", // possible values are 'auto', 'search' and 'browse'.
         orderable: true, // mockup-patterns-select2
         pathOperator: "plone.app.querystring.operation.string.path",
         rootPath: "/",
