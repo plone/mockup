@@ -15,4 +15,4 @@
 
 * Remove Mockup's ``pat-eventedit``, which was unused. Instead use Patternslib' ``pat-date-picker``, ``pat-depends`` and ``pat-validation``.
 
-
+* Restructure searchbox markup for mobile navigation as offcanvas sidebar.
