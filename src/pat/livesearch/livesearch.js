@@ -12,7 +12,7 @@ export default Base.extend({
     active: false,
     results: null,
     selectedItem: -1,
-    resultsClass: "livesearch-results",
+    resultsClass: "livesearch-results list-group mt-2 w-100 d-none",
     defaults: {
         ajaxUrl: null,
         defaultSortOn: "",
@@ -21,9 +21,9 @@ export default Base.extend({
         minimumInputLength: 4,
         inputSelector: 'input[type="text"]',
         itemTemplate:
-            '<li class="search-result <%- state %>">' +
-            '<h4 class="title"><a href="<%- url %>"><%- title %></a></h4>' +
-            '<p class="description"><%- description %></p>' +
+            '<li class="search-result <%- state %> list-group-item">' +
+            '<a class="fs-4" href="<%- url %>"><%- title %></a>' +
+            '<div class="description"><%- description %></div>' +
             "</li>",
     },
     doSearch: function (page) {
@@ -107,25 +107,25 @@ export default Base.extend({
 
         if (self.active) {
             self.$results.append(
-                $('<li class="searching">' + _t("searching…") + "</li>")
+                $('<li class="searching list-group-item">' + _t("searching…") + "</li>")
             );
         } else if (self.results === null) {
             // no results gathered yet
             self.$results.append(
                 $(
-                    '<li class="no-results no-search">' +
+                    '<li class="no-results no-search list-group-item">' +
                         _t("enter search phrase") +
                         "</li>"
                 )
             );
         } else if (self.results.total === 0) {
             self.$results.append(
-                $('<li class="no-results">' + _t("no results found") + "</li>")
+                $('<li class="no-results list-group-item">' + _t("no results found") + "</li>")
             );
         } else {
             self.$results.append(
                 $(
-                    '<li class="results-summary">' +
+                    '<li class="results-summary list-group-item">' +
                         _t("found") +
                         " " +
                         self.results.total +
@@ -146,7 +146,7 @@ export default Base.extend({
                     }
                 });
                 if (index === self.selectedItem) {
-                    $el.addClass("selected");
+                    $el.addClass("list-group-item-secondary");
                 }
                 self.$results.append($el);
             });
@@ -171,7 +171,7 @@ export default Base.extend({
             }
             if (nav.length > 0) {
                 var $li = $(
-                    '<li class="load-more"><div class="page">' +
+                    '<li class="list-group-item load-more"><div class="page">' +
                         self.page +
                         "</div></li>"
                 );
@@ -200,7 +200,7 @@ export default Base.extend({
         this.$el.removeClass("livesearch-active");
     },
     init: function () {
-        import("./livesearch.scss");
+        // import("./livesearch.scss");
 
         var self = this;
 
@@ -299,6 +299,6 @@ export default Base.extend({
         /* create result dom */
         self.$results = $('<ul class="' + self.resultsClass + '"></ul>')
             .hide()
-            .insertAfter(self.$input);
+            .insertAfter(self.$el);
     },
 });
