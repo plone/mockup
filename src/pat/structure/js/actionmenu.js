@@ -1,4 +1,4 @@
-import _ from "underscore";
+import _ from "lodash";
 import _t from "../../../core/i18n-wrapper";
 
 const menuOptions = {
@@ -93,7 +93,7 @@ const ActionMenu = function (menu) {
     const model = menu.model.attributes;
     const app = menu.app;
 
-    const result = _.clone(menuOptions);
+    const result = _.cloneDeep(menuOptions);
     if (!(app.pasteAllowed() && model.is_folderish)) {
         delete result.pasteItem;
     }
