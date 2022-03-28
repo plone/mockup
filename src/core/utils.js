@@ -381,13 +381,14 @@ const resolveIcon = async function (name, as_node, css_class) {
     // const dropdownIcon: await utils.resolveIcon('plone-settings');
     // if (name === 'plone.icon.plone-rearrange'){debugger}
     const iconLookupName = `plone.icon.${name}`;
+    const cache_key = as_node ? iconLookupName + '_as_node' : iconLookupName;
     // const cached_icon = iconCache.has(iconLookupName) ? iconCache.get(iconLookupName) :
-    const cached_icon = iconCache.get(iconLookupName);
+    const cached_icon = iconCache.get(cache_key);
     if(cached_icon){
-        console.log("use cached icon: ", name)
+        console.log("use cached icon: ", cache_key)
         return cached_icon;
     }
-    console.log("resolve icon: ", name)
+    console.log("resolve icon: ", iconLookupName)
     const baseUrl = $("body").attr("data-portal-url");
     let icon = null;
     if(baseUrl){
@@ -425,7 +426,7 @@ const resolveIcon = async function (name, as_node, css_class) {
     if (as_node && css_class) {
         icon.classList.add(css_class);
     }
-    iconCache.set(iconLookupName, icon);
+    iconCache.set(cache_key, icon);
     return icon;
 };
 
