@@ -5,10 +5,10 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*{js,jsx,vue,ts,json}]
+[*{js,jsx,vue,ts,json,css,scss}]
 indent_size = 4
 
-[*.{css,scss,xml,html,yml}]
+[*.{xml,html,yml}]
 indent_size = 2
 
 [Makefile]
