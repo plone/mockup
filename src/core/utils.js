@@ -1,6 +1,7 @@
 import $ from "jquery";
+import logging from "@patternslib/patternslib/src/core/logging";
 
-
+const logger = logging.getLogger("core utils");
 
 var QueryHelper = function (options) {
     /* if pattern argument provided, it can implement the interface of:
@@ -373,61 +374,74 @@ var createElementFromHTML = function (htmlString) {
     return div.firstChild;
 };
 
-let iconCache = new Map();
+const ICON_CACHE = new Map();
 
 const resolveIcon = async function (name, as_node, css_class) {
     // Return a <svg> element from a icon name.
     // Example:
     // const dropdownIcon: await utils.resolveIcon('plone-settings');
     // if (name === 'plone.icon.plone-rearrange'){debugger}
-    const iconLookupName = `plone.icon.${name}`;
-    const cache_key = as_node ? iconLookupName + '_as_node' : iconLookupName;
-    // const cached_icon = iconCache.has(iconLookupName) ? iconCache.get(iconLookupName) :
-    const cached_icon = iconCache.get(cache_key);
-    if(cached_icon){
-        console.log("use cached icon: ", cache_key)
-        return cached_icon;
-    }
-    console.log("resolve icon: ", iconLookupName)
-    const baseUrl = $("body").attr("data-portal-url");
-    let icon = null;
-    if(baseUrl){
-        const url = baseUrl + "/@@iconresolver";
-        if (url) {
-            const resp = await fetch(`${url}/${name}`);
-            icon = await resp.text();
-        }
-    }
-    if (!icon) {
-        // fallback
-        name = iconLookupName;
-        try {
-            import("../styles/icons.scss");
-            const iconmap = await import("../iconmap.json");
-            const parts = iconmap[name]?.split?.("/");
-            if (parts[0].includes("bootstrap-icons")) {
-                icon = await import(`bootstrap-icons/icons/${parts[1]}`);
-                icon = icon?.default;
-            }
-        } catch (e) {
-            // import error
-            console.warn(e);
-        }
-    }
-    if (!icon) {
-        return as_node ? null : "";
-    }
+    const icon_lookup_name = `plone.icon.${name}`;
+    const cache_key = as_node ? icon_lookup_name + "_as_node" : icon_lookup_name;
 
-    if (as_node) {
-        const tmp = document.createElement("div");
-        tmp.innerHTML = icon;
-        icon = tmp.querySelector("svg");
+    // ATTENTION: async/await trick ahead!
+    if (!ICON_CACHE.has(cache_key)) {
+        // 1) Immediately set the asynchronous function call to _resolve_icon in the icon cache.
+        // Subsequent calls will not re-set this because the cache_key is already set.
+        ICON_CACHE.set(cache_key, _resolve_icon());
+        logger.debug(`Loading icon "${icon_lookup_name}"`);
     }
-    if (as_node && css_class) {
-        icon.classList.add(css_class);
+    // 2) Await the promise for resolving the icon or just return the icon itself.
+    return await ICON_CACHE.get(cache_key);
+
+    async function _resolve_icon() {
+        // Do the actual loading.
+
+        const base_url = $("body").attr("data-portal-url");
+        let icon = null;
+        if (base_url) {
+            const url = base_url + "/@@iconresolver";
+            if (url) {
+                try {
+                    const resp = await fetch(`${url}/${name}`);
+                    icon = await resp.text();
+                } catch (e) {
+                    logger.warn(`Loading icon "${name}" from URL ${url} failed.`);
+                    console.warn(e);
+                }
+            }
+        }
+        if (!icon) {
+            // fallback
+            name = icon_lookup_name;
+            try {
+                import("../styles/icons.scss");
+                const iconmap = await import("../iconmap.json");
+                const parts = iconmap[name]?.split?.("/");
+                if (parts[0].includes("bootstrap-icons")) {
+                    icon = await import(`bootstrap-icons/icons/${parts[1]}`);
+                    icon = icon?.default;
+                }
+            } catch (e) {
+                // import error
+                logger.warn(`Loading icon "${icon_lookup_name}" failed from fallback.`);
+                console.warn(e);
+            }
+        }
+        if (!icon) {
+            return as_node ? null : "";
+        }
+
+        if (as_node) {
+            const tmp = document.createElement("div");
+            tmp.innerHTML = icon;
+            icon = tmp.querySelector("svg");
+        }
+        if (as_node && css_class) {
+            icon.classList.add(css_class);
+        }
+        return icon;
     }
-    iconCache.set(cache_key, icon);
-    return icon;
 };
 
 export default {
