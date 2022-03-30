@@ -5,7 +5,7 @@
     "license": "BSD-3-Clause",
     "main": "./src/patterns.js",
     "dependencies": {
-        "@patternslib/pat-code-editor": "^2.1.0",
+        "@patternslib/pat-code-editor": "^2.1.1",
         "@patternslib/pat-content-browser": "git+https://github.com/plone/pat-content-browser.git#a6d146bea74a64ba802663d00887b6b8fd7eef59",
         "@patternslib/patternslib": "^7.3.0",
         "backbone": "1.1.2",
