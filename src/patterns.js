@@ -12,7 +12,7 @@ import "bootstrap";
 // Patternslib patterns
 import "@patternslib/patternslib/src/pat/datetime-picker/datetime-picker";
 import "@patternslib/patternslib/src/pat/display-time/display-time";
-import "@patternslib/patternslib/src/pat/validation/validation";
+import { parser as validation_parser } from "@patternslib/patternslib/src/pat/validation/validation"; // Also loads the Pattern itself.
 import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/tooltip/tooltip";
 import "@patternslib/pat-code-editor/src/code-editor";
 
@@ -69,5 +69,9 @@ window.jQuery = jquery;
 
 // Change default value for pat-tooltip trigger
 tooltip_parser.parameters.trigger.value = "hover";
+
+// Change validation error template to be BS compatible
+validation_parser.parameters["error-template"].value =
+    '<em class="invalid-feedback">${this.message}</em>';
 
 registry.init();
