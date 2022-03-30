@@ -9,6 +9,7 @@ import TableTemplate from "../../templates/table.xml";
 import Sortable from "../../../sortable/sortable";
 import "../../../datatables/datatables";
 import "bootstrap/js/src/alert";
+import utils from "../../../../core/utils";
 
 export default BaseView.extend({
     tagName: "div",
@@ -85,6 +86,7 @@ export default BaseView.extend({
         this.$el.html(
             this.template({
                 _t: _t,
+                homeIcon: await utils.resolveIcon('house'),
                 pathParts: _.filter(
                     this.app.getCurrentPath().split("/").slice(1),
                     (val) => {
