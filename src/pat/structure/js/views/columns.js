@@ -75,13 +75,13 @@ export default PopoverView.extend({
         return this;
     },
 
-    applyButtonClicked() {
+    async applyButtonClicked() {
         this.hide();
         this.app.activeColumns = [];
         for (const inp of this.$("input:checked")) {
             this.app.activeColumns.push($(inp).val());
         }
         this.app.setCookieSetting(this.app.activeColumnsCookie, this.app.activeColumns);
-        this.app.tableView.render();
+        await this.app.tableView.render();
     },
 });

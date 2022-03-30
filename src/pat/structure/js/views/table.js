@@ -119,12 +119,11 @@ export default BaseView.extend({
             });
         }
 
-        registry.scan(this.$el);
-
-        this.$el.find("table")
+        this.$el
+            .find("table")
             .on("init.dt", () => {
                 // Add reordering action by drag and drop
-                if(this.app.options.moveUrl){
+                if (this.app.options.moveUrl) {
                     this.addReordering();
                 }
                 // store Order of nativ sorting for move action
@@ -132,10 +131,10 @@ export default BaseView.extend({
             })
             .on("order.dt", (e, settings, ordArr) => {
                 // prevent message from showing for nativ order
-                if(ordArr.length === 1){
+                if (ordArr.length === 1) {
                     const order = ordArr[0];
-                    if(order.col === 0 && order.dir === 'asc'){
-                        if(this.tableSortable){
+                    if (order.col === 0 && order.dir === "asc") {
+                        if (this.tableSortable) {
                             this.tableSortable.enableSort();
                         }
                         // Clear the status message
@@ -144,32 +143,35 @@ export default BaseView.extend({
                     }
                 }
 
-                const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
-                  .text(_t("Reset column sorting"))
-                  .on("click", () => {
-                      // Use column 0 to restore ordering and then empty list so it doesn't
-                      // show the icon in the column header
-                      const api = $(e.target).dataTable().api();
-                      api.order([0, "asc"]);
-                      api.draw();
-                  });
+                const btn = $(
+                    '<button type="button" class="btn btn-danger btn-xs"></button>'
+                )
+                    .text(_t("Reset column sorting"))
+                    .on("click", () => {
+                        // Use column 0 to restore ordering and then empty list so it doesn't
+                        // show the icon in the column header
+                        const api = $(e.target).dataTable().api();
+                        api.order([0, "asc"]);
+                        api.draw();
+                    });
                 this.app.setStatus(
-                  {
-                      text: _t(
-                        "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
-                      ),
-                      type: "warning",
-                  },
-                  btn,
-                  false,
-                  "sorting_dndreordering_disabled"
+                    {
+                        text: _t(
+                            "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
+                        ),
+                        type: "warning",
+                    },
+                    btn,
+                    false,
+                    "sorting_dndreordering_disabled"
                 );
-                if(this.tableSortable){
+                if (this.tableSortable) {
                     this.tableSortable.disableSort();
                 }
                 this.$el.removeClass("order-support");
             });
 
+        registry.scan(this.$el);
         return this;
     },
 
