@@ -1,6 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import PopoverView from "../../../../core/ui/views/popover";
+import utils from "../../../../core/utils";
 import ItemTemplate from "../../templates/selection_item.xml";
 
 export default PopoverView.extend({
@@ -9,7 +10,7 @@ export default PopoverView.extend({
     title: _.template(
         '<input type="text" class="filter" placeholder="<%- _t("Filter") %>" />' +
             '<a href="#" class=" remove-all">' +
-            '<span class="glyphicon glyphicon-remove-circle"></span> <%- _t("remove all") %></a>'
+            '<%= removeIcon %> <%- _t("remove all") %></a>'
     ),
 
     content: _.template(
@@ -36,7 +37,8 @@ export default PopoverView.extend({
         this.options["item_template"] = _.template(ItemTemplate); // jshint ignore:line
     },
 
-    render: function () {
+    render: async function () {
+        this.options["removeIcon"] = await utils.resolveIcon("x-circle");
         PopoverView.prototype.render.call(this);
         if (this.collection.length === 0) {
             this.$el.removeClass("active");

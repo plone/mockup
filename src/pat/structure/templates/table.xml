@@ -1,7 +1,7 @@
 <div class="fc-breadcrumbs-container">
   <div class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
     <a href="#" title="<%- _t('Root') %>" aria-label="<%- _t('Root') %>" data-path="/">
-      <span class="glyphicon glyphicon-home" aria-hidden="true"></span> /
+      <%= homeIcon %> /
     </a>
     <% _.each(pathParts, (part, idx, list) => {
       if(part){

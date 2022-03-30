@@ -588,7 +588,7 @@ export default BaseView.extend({
     render: async function () {
         this.$el.append(this.toolbar.render().el);
         if (this.wellView) {
-            this.$el.find("#btn-" + this.wellView.id).after(this.wellView.render().el);
+            this.$el.find("#btn-" + this.wellView.id).after((await this.wellView.render()).el);
         }
         for (const form of this.forms) {
             const id = $(form).attr("id");
