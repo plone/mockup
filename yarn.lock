@@ -2049,14 +2049,14 @@
     chalk "^3.0.0"
     ora "^4.0.3"
 
-"@patternslib/pat-code-editor@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@patternslib/pat-code-editor/-/pat-code-editor-2.1.0.tgz#980766380e463f7dc51f3a25f4e66c1cfdadf400"
-  integrity sha512-m8HbF12Kriy2UArR4zPNzde2HovOH00T+FIOd71L30ajnUMXpW3+WlQ6b4Phvjw3S5j5ZrfnsPdCnbZu6wlQew==
+"@patternslib/pat-code-editor@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@patternslib/pat-code-editor/-/pat-code-editor-2.1.1.tgz#01765eb4d95e16dcea653dae170ce38641961dc8"
+  integrity sha512-K7K28tc03wa3mbS5tB2PSYvoNAqHFpelnvdh0hivvOMFcIXllr4HHjNnvCAX/lSdAv9skwxBpygaq3lAzHI+Xg==
   dependencies:
-    "@patternslib/patternslib" "^6.2.0"
+    "@patternslib/patternslib" "^7.4.0"
     codejar "^3.5.0"
-    prismjs "^1.25.0"
+    prismjs "^1.27.0"
 
 "@patternslib/pat-content-browser@git+https://github.com/plone/pat-content-browser.git#a6d146bea74a64ba802663d00887b6b8fd7eef59":
   version "0.9.0"
@@ -2067,10 +2067,10 @@
     svelte-keydown "^0.3.1"
     svelte-scrollto "^0.2.0"
 
-"@patternslib/patternslib@^6.0.1", "@patternslib/patternslib@^6.2.0", "@patternslib/patternslib@^7.3.0":
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-7.3.0.tgz#fa73f8a584360c38fe6469847a0ac7ca639660d6"
-  integrity sha512-EtLMij2usnVj/1ZAtmDenTRSRJMzbWPEL4AYGEEGJWeKjIhnNiTrcvvMSHaXNuSBM3Zn1vNk6hE8oiZLP6OwiA==
+"@patternslib/patternslib@^6.0.1", "@patternslib/patternslib@^7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-7.4.0.tgz#b49a4716aa58cc7fe8dd8a5da6e647b0603b68ba"
+  integrity sha512-XHrcKTT4t7jUhVYb2pdEB+DbhKQ7upmr4fpU6eKCSClt69axivEhT3dEJeHUQGX9DmQKW/DU1dXTuGJMfc+QmA==
   dependencies:
     "@fullcalendar/adaptive" "^5.10.1"
     "@fullcalendar/core" "^5.10.1"
@@ -2101,7 +2101,6 @@
     slides "git+https://github.com/Patternslib/slides.git"
     spectrum-colorpicker "^1.8.0"
     tippy.js "^6.3.7"
-    underscore "^1.13.2"
     url-polyfill "^1.1.9"
     whatwg-fetch "^3.4.0"
 
@@ -2224,10 +2223,10 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@testing-library/jest-dom@^5.16.2":
-  version "5.16.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.16.2.tgz#f329b36b44aa6149cd6ced9adf567f8b6aa1c959"
-  integrity sha512-6ewxs1MXWwsBFZXIk4nKKskWANelkdUehchEOokHsN8X7c2eKXGw+77aRV63UU8f/DTSVUPLaGxdrj4lN7D/ug==
+"@testing-library/jest-dom@^5.16.3":
+  version "5.16.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.16.3.tgz#b76851a909586113c20486f1679ffb4d8ec27bfa"
+  integrity sha512-u5DfKj4wfSt6akfndfu1eG06jsdyA/IUrlX2n3pyq5UXgXMhXY+NJb8eNK/7pqPWAhCKsCGWDdDO0zKMKAYkEA==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@types/testing-library__jest-dom" "^5.9.1"
@@ -4536,14 +4535,7 @@ datatables.net-select@^1.3.4:
     datatables.net ">=1.11.3"
     jquery ">=1.7"
 
-datatables.net@1.11.3, datatables.net@>=1.10.25, datatables.net@>=1.11.3, datatables.net@^1.10.15:
-  version "1.11.3"
-  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.11.3.tgz#80e691036efcd62467558ee64c07dd566cb761b4"
-  integrity sha512-VMj5qEaTebpNurySkM6jy6sGpl+s6onPK8xJhYr296R/vUBnz1+id16NVqNf9z5aR076OGcpGHCuiTuy4E05oQ==
-  dependencies:
-    jquery ">=1.7"
-
-datatables.net@^1.11.5:
+datatables.net@1.11.5, datatables.net@>=1.10.25, datatables.net@>=1.11.3, datatables.net@^1.10.15, datatables.net@^1.11.5:
   version "1.11.5"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.11.5.tgz#858a69953a01e1d5b18786769802117b04b8e3c9"
   integrity sha512-nlFst2xfwSWaQgaOg5sXVG3cxYC0tH8E8d65289w9ROgF2TmLULOOpcdMpyxxUim/qEwVSEem42RjkTWEpr3eA==
@@ -5192,10 +5184,10 @@ eslint-visitor-keys@^3.3.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-3.3.0.tgz#f6480fa6b1f30efe2d1968aa8ac745b862469826"
   integrity sha512-mQ+suqKJVyeuwGYHAdjMFqjCyfl8+Ldnxuyp3ldiMBFKkvytrXUZWaiPCEav8qDHKty44bD+qV1IP4T+w+xXRA==
 
-eslint@^8.11.0:
-  version "8.11.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.11.0.tgz#88b91cfba1356fc10bb9eb592958457dfe09fb37"
-  integrity sha512-/KRpd9mIRg2raGxHRGwW9ZywYNAClZrHjdueHcrVDuO3a6bj83eoTirCCk0M0yPwOjWYKHwRVRid+xK4F/GHgA==
+eslint@^8.12.0:
+  version "8.12.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.12.0.tgz#c7a5bd1cfa09079aae64c9076c07eada66a46e8e"
+  integrity sha512-it1oBL9alZg1S8UycLm5YDMAkIhtH6FtAzuZs6YvoGVldWjbS08BkAdb/ymP9LlAyq8koANu32U7Ib/w+UNh8Q==
   dependencies:
     "@eslint/eslintrc" "^1.2.1"
     "@humanwhocodes/config-array" "^0.9.2"
@@ -8931,10 +8923,10 @@ prepend-http@^2.0.0:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-2.0.0.tgz#e92434bfa5ea8c19f41cdfd401d741a3c819d897"
   integrity sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=
 
-prettier@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.0.tgz#12f8f504c4d8ddb76475f441337542fa799207d4"
-  integrity sha512-m2FgJibYrBGGgQXNzfd0PuDGShJgRavjUoRCw1mZERIWVSXF0iLzLm+aOqTAbLnC3n6JzUhAA8uZnFVghHJ86A==
+prettier@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.1.tgz#d472797e0d7461605c1609808e27b80c0f9cfe17"
+  integrity sha512-8UVbTBYGwN37Bs9LERmxCPjdvPxlEowx2urIL6urHzdb3SDq4B/Z6xLFCblrSnE4iKWcS6ziJ3aOYrc1kz/E2A==
 
 pretty-format@^27.0.0, pretty-format@^27.3.1:
   version "27.3.1"
@@ -8980,6 +8972,11 @@ prismjs@^1.25.0:
   version "1.25.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.25.0.tgz#6f822df1bdad965734b310b315a23315cf999756"
   integrity sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg==
+
+prismjs@^1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.27.0.tgz#bb6ee3138a0b438a3653dd4d6ce0cc6510a45057"
+  integrity sha512-t13BGPUlFDR7wRB5kQDG4jjl7XeuH6jbJGt11JHPL96qwsEHNX2+68tFXqc1/k+/jALsbSWJKUOT/hcYAZ5LkA==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -10869,7 +10866,7 @@ unc-path-regex@^0.1.2:
   resolved "https://registry.yarnpkg.com/unc-path-regex/-/unc-path-regex-0.1.2.tgz#e73dd3d7b0d7c5ed86fbac6b0ae7d8c6a69d50fa"
   integrity sha1-5z3T17DXxe2G+6xrCufYxqadUPo=
 
-underscore@1.13.2, underscore@1.3.3, underscore@>=1.5.0, underscore@^1.13.2:
+underscore@1.13.2, underscore@1.3.3, underscore@>=1.5.0:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.2.tgz#276cea1e8b9722a8dbed0100a407dda572125881"
   integrity sha512-ekY1NhRzq0B08g4bGuX4wd2jZx5GnKz6mKSqFL4nqBlfyMGiG10gDFhDTMEfYmDL6Jy0FUIZp7wiRB+0BP7J2g==
