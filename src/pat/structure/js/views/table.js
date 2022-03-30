@@ -1,6 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
+import events from "@patternslib/patternslib/src/core/events";
 import registry from "@patternslib/patternslib/src/core/registry";
 import BaseView from "../../../../core/ui/views/base";
 import TableRowView from "./tablerow";
@@ -98,7 +99,8 @@ export default BaseView.extend({
 
         if (this.collection.length) {
             const container = this.$("tbody");
-            await this.collection.each(async (result) => {
+
+            this.collection.each(async (result) => {
                 this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
                     if (
@@ -116,15 +118,53 @@ export default BaseView.extend({
                 });
                 await view.render();
                 container.append(view.el);
+
+                this.el.dispatchEvent(new Event("render_collection"));
             });
+
+            // NOTE: this is based on the concept of awaiting an event.
+            // See this Stackoverflow answer here:
+            // https://stackoverflow.com/a/44746691/1337474
+            // For each collection callback above we throw an event "render_collection".
+            // When the number of thrown "render_collection" events equals the number of collection entries, we throw a "render_collection__finished" event.
+            // For this "render_collection__finished" event we're a-waiting for.
+            // And after that we can scan the table.
+            //
+            // I agree, this feels weired.
+            let cnt__render_collection = 0;
+            events.add_event_listener(
+                this.el,
+                "render_collection",
+                "render_collection__counter__listener",
+                () => {
+                    cnt__render_collection++;
+                    if (cnt__render_collection === this.collection.length) {
+                        this.el.dispatchEvent(new Event("render_collection__finished"));
+                    }
+                }
+            );
+            const render_collection__finished = () =>
+                new Promise((resolve) =>
+                    events.add_event_listener(
+                        this.el,
+                        "render_collection__finished",
+                        "render_collection__finished__listener",
+                        resolve,
+                        { once: true }
+                    )
+                );
+
+            await render_collection__finished();
+            events.remove_event_listener = (this.el, "render_collection__counter__listener"); // prettier-ignore
+            events.remove_event_listener = (this.el, "render_collection__finished__listener"); // prettier-ignore
+            registry.scan(this.$el);
         }
 
-        registry.scan(this.$el);
-
-        this.$el.find("table")
+        this.$el
+            .find("table")
             .on("init.dt", () => {
                 // Add reordering action by drag and drop
-                if(this.app.options.moveUrl){
+                if (this.app.options.moveUrl) {
                     this.addReordering();
                 }
                 // store Order of nativ sorting for move action
@@ -132,10 +172,10 @@ export default BaseView.extend({
             })
             .on("order.dt", (e, settings, ordArr) => {
                 // prevent message from showing for nativ order
-                if(ordArr.length === 1){
+                if (ordArr.length === 1) {
                     const order = ordArr[0];
-                    if(order.col === 0 && order.dir === 'asc'){
-                        if(this.tableSortable){
+                    if (order.col === 0 && order.dir === "asc") {
+                        if (this.tableSortable) {
                             this.tableSortable.enableSort();
                         }
                         // Clear the status message
@@ -144,27 +184,29 @@ export default BaseView.extend({
                     }
                 }
 
-                const btn = $('<button type="button" class="btn btn-danger btn-xs"></button>')
-                  .text(_t("Reset column sorting"))
-                  .on("click", () => {
-                      // Use column 0 to restore ordering and then empty list so it doesn't
-                      // show the icon in the column header
-                      const api = $(e.target).dataTable().api();
-                      api.order([0, "asc"]);
-                      api.draw();
-                  });
+                const btn = $(
+                    '<button type="button" class="btn btn-danger btn-xs"></button>'
+                )
+                    .text(_t("Reset column sorting"))
+                    .on("click", () => {
+                        // Use column 0 to restore ordering and then empty list so it doesn't
+                        // show the icon in the column header
+                        const api = $(e.target).dataTable().api();
+                        api.order([0, "asc"]);
+                        api.draw();
+                    });
                 this.app.setStatus(
-                  {
-                      text: _t(
-                        "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
-                      ),
-                      type: "warning",
-                  },
-                  btn,
-                  false,
-                  "sorting_dndreordering_disabled"
+                    {
+                        text: _t(
+                            "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
+                        ),
+                        type: "warning",
+                    },
+                    btn,
+                    false,
+                    "sorting_dndreordering_disabled"
                 );
-                if(this.tableSortable){
+                if (this.tableSortable) {
                     this.tableSortable.disableSort();
                 }
                 this.$el.removeClass("order-support");

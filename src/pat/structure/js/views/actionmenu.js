@@ -44,7 +44,7 @@ export default BaseView.extend({
             }
             menuOptionsCategorized[category].push(menuOption);
             menuOption.classes = [menuOption.name, menuOption.idx];
-            if(menuOption.css){
+            if (menuOption.css) {
                 menuOption.classes.push(menuOption.css);
             }
             if (menuOption.modal === true) {
@@ -83,20 +83,20 @@ export default BaseView.extend({
         const data = this.model.toJSON();
         data.header = this.options.header || null;
         data.menuOptions = this.menuOptionsCategorized;
-        for(const button of data.menuOptions.button){
-           if(button.icon){
-               button.iconSVG = await utils.resolveIcon(button.icon);
-           }
+        for (const button of data.menuOptions.button) {
+            if (button.icon) {
+                button.iconSVG = await utils.resolveIcon(button.icon);
+            }
         }
-        for(const button of data.menuOptions.dropdown){
-           if(button.icon){
-               button.iconSVG = await utils.resolveIcon(button.icon);
-           }
+        for (const button of data.menuOptions.dropdown) {
+            if (button.icon) {
+                button.iconSVG = await utils.resolveIcon(button.icon);
+            }
         }
         this.el.innerHTML = this.template(
             $.extend(
                 {
-                    dropdownIcon: await utils.resolveIcon('plone-settings'),
+                    dropdownIcon: await utils.resolveIcon("plone-settings"),
                     _t: _t,
                     id: utils.generateId(),
                 },
@@ -109,7 +109,6 @@ export default BaseView.extend({
         }
 
         registry.scan(this.$el);
-
         return this;
     },
 });
