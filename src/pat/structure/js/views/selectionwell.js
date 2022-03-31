@@ -15,7 +15,7 @@ export default PopoverView.extend({
 
     content: _.template(
         "<% collection.each(function(item) { %>" +
-            "<%= item_template(item.toJSON()) %>" +
+            "<%= item_template($.extend({'removeIcon': removeIcon}, item.toJSON())) %>" +
             "<% }); %>"
     ),
 
@@ -34,7 +34,7 @@ export default PopoverView.extend({
                 this.render();
             }, 50);
         });
-        this.options["item_template"] = _.template(ItemTemplate); // jshint ignore:line
+        this.options["item_template"] = _.template(ItemTemplate);
     },
 
     render: async function () {

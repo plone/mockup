@@ -18,50 +18,21 @@ export default BaseView.extend({
     menuOptions: null,
     // Dynamic menu options
 
-    eventConstructor: function (definition) {
-        const method = definition.method;
-        if (!method || !this.actions[method]) {
-            return false;
-        }
-        return this.actions[method].bind(this.actions);
-    },
-
-    events: function () {
-        /* Backbone.view.events
-         * Specify a set of DOM events, which will bound to methods on the view.
+    generate_events: function () {
+        /* Backbone.view.events:
+         * refactored since Backbone 1.4.1 calls "events" before "initialize"
          */
         const result = {};
-        const menuOptionsCategorized = {};
 
         _.each(this.menuOptions, (menuOption, key) => {
-            // set a unique identifier to uniquely bind the events.
-            menuOption.idx = utils.generateId();
-            menuOption.name = key; // we want to add the action's key as class name to the output.
-
-            const category = menuOption.category || "dropdown";
-            if (menuOptionsCategorized[category] === undefined) {
-                menuOptionsCategorized[category] = [];
-            }
-            menuOptionsCategorized[category].push(menuOption);
-            menuOption.classes = [menuOption.name, menuOption.idx];
-            if (menuOption.css) {
-                menuOption.classes.push(menuOption.css);
-            }
-            if (menuOption.modal === true) {
-                // add standard pat-plone-modal.
-                // If you want another modal implementation, don't use modal=true but set the css option on action items.
-                menuOption.css += " pat-plone-modal";
-            }
-
             // Create event handler and add it to the results object.
-            const e = this.eventConstructor(menuOption);
-            if (e) {
-                result[`click a.${menuOption.name}`] = e;
+            const method = menuOption.method;
+            if (!method || !this.actions[method]) {
+                return false;
             }
+            result[`click a.${key}`] = this.actions[method].bind(this.actions);
         });
 
-        // Abusing the loop above to also initialize menuOptionsCategorized
-        this.menuOptionsCategorized = menuOptionsCategorized;
         return result;
     },
 
@@ -71,10 +42,41 @@ export default BaseView.extend({
         this.options = options;
         this.selectedCollection = this.app.selectedCollection;
 
-        // Then acquire the constructor method if specified, and
-        // override those options here.  All definition done here so
-        // that this.events() will return the right things.
         this.menuOptions = actionmenu_generator(this);
+        // define events here and delegate them manually
+        this.events = this.generate_events();
+        // Backbone API
+        this.delegateEvents();
+    },
+
+    menuOptionsCategorized: async function() {
+        const result = {};
+
+        _.each(this.menuOptions, async (menuOption, key) => {
+            // set a unique identifier to uniquely bind the events.
+            menuOption.idx = utils.generateId();
+            menuOption.name = key; // we want to add the action's key as class name to the output.
+
+            const category = menuOption.category || "dropdown";
+            if (result[category] === undefined) {
+                result[category] = [];
+            }
+            result[category].push(menuOption);
+            menuOption.classes = [menuOption.name, menuOption.idx];
+            if (menuOption.css) {
+                menuOption.classes.push(menuOption.css);
+            }
+            if (menuOption.modal === true) {
+                // add standard pat-plone-modal.
+                // If you want another modal implementation, don't use modal=true but set the css option on action items.
+                menuOption.css += " pat-plone-modal";
+            }
+            if (menuOption.icon) {
+                menuOption.iconSVG = await utils.resolveIcon(menuOption.icon);
+            }
+        });
+
+        return result;
     },
 
     render: async function () {
@@ -82,17 +84,8 @@ export default BaseView.extend({
 
         const data = this.model.toJSON();
         data.header = this.options.header || null;
-        data.menuOptions = this.menuOptionsCategorized;
-        for (const button of data.menuOptions.button) {
-            if (button.icon) {
-                button.iconSVG = await utils.resolveIcon(button.icon);
-            }
-        }
-        for (const button of data.menuOptions.dropdown) {
-            if (button.icon) {
-                button.iconSVG = await utils.resolveIcon(button.icon);
-            }
-        }
+        data.menuOptions = await this.menuOptionsCategorized();
+
         this.el.innerHTML = this.template(
             $.extend(
                 {
@@ -109,6 +102,6 @@ export default BaseView.extend({
         }
 
         registry.scan(this.$el);
-        return this;
+        return this.el;
     },
 });

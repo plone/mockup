@@ -86,18 +86,19 @@ const menuOptions = {
 const ActionMenu = function (menu) {
     // If an explicit menu was specified as an option to AppView, this
     // constructor will not override that.
-    if (menu.menuOptions !== null) {
-        return menu.menuOptions;
+    if (menu.app.menuOptions !== null) {
+        return menu.app.menuOptions;
     }
 
     const model = menu.model.attributes;
     const app = menu.app;
+    const canMove = !!app.options.moveUrl
 
     const result = _.cloneDeep(menuOptions);
     if (!(app.pasteAllowed() && model.is_folderish)) {
         delete result.pasteItem;
     }
-    if (app.inQueryMode() || menu.options.canMove === false) {
+    if (app.inQueryMode() || canMove === false) {
         delete result["move-top"];
         delete result["move-bottom"];
     }
