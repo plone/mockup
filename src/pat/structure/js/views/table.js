@@ -102,6 +102,9 @@ export default BaseView.extend({
         if (this.collection.length) {
             const container = this.$("tbody");
 
+            const collection_length = this.collection.length;
+            let collection_cnt = 0;
+
             this.collection.each(async (result) => {
                 this.dateColumns.map((col) => {
                     // empty column instead of displaying "None".
@@ -121,44 +124,32 @@ export default BaseView.extend({
                 await view.render();
                 container.append(view.el);
 
-                this.el.dispatchEvent(new Event("render_collection"));
+                // Throw the ``table_row_rendering_finished`` event after all table rows have finished rendering.
+                collection_cnt++;
+                if (collection_cnt === collection_length) {
+                    this.el.dispatchEvent(new Event("table_row_rendering_finished"));
+                }
             });
 
             // NOTE: this is based on the concept of awaiting an event.
             // See this Stackoverflow answer here:
             // https://stackoverflow.com/a/44746691/1337474
-            // For each collection callback above we throw an event "render_collection".
-            // When the number of thrown "render_collection" events equals the number of collection entries, we throw a "render_collection__finished" event.
-            // For this "render_collection__finished" event we're a-waiting for.
+            // When the last table row has finished rendering, throw an event.
+            // For this "table_row_rendering_finished" event we're a-waiting for.
             // And after that we can scan the table.
-            //
-            // I agree, this feels weired.
-            let cnt__render_collection = 0;
-            events.add_event_listener(
-                this.el,
-                "render_collection",
-                "render_collection__counter__listener",
-                () => {
-                    cnt__render_collection++;
-                    if (cnt__render_collection === this.collection.length) {
-                        this.el.dispatchEvent(new Event("render_collection__finished"));
-                    }
-                }
-            );
-            const render_collection__finished = () =>
+            const table_row_rendering_finished = () =>
                 new Promise((resolve) =>
                     events.add_event_listener(
                         this.el,
-                        "render_collection__finished",
-                        "render_collection__finished__listener",
+                        "table_row_rendering_finished",
+                        "table_row_rendering_finished__listener",
                         resolve,
                         { once: true }
                     )
                 );
 
-            await render_collection__finished();
-            events.remove_event_listener = (this.el, "render_collection__counter__listener"); // prettier-ignore
-            events.remove_event_listener = (this.el, "render_collection__finished__listener"); // prettier-ignore
+            await table_row_rendering_finished();
+            events.remove_event_listener = (this.el, "table_row_rendering_finished__listener"); // prettier-ignore
             registry.scan(this.$el);
         }
 
