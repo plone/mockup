@@ -86,7 +86,7 @@ export default BaseView.extend({
         this.$el.html(
             this.template({
                 _t: _t,
-                homeIcon: await utils.resolveIcon('house'),
+                homeIcon: await utils.resolveIcon("house"),
                 pathParts: _.filter(
                     this.app.getCurrentPath().split("/").slice(1),
                     (val) => {
