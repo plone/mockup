@@ -16,7 +16,7 @@ export default BaseView.extend({
     template: _.template(TableTemplate),
     tableSortable: null,
 
-    initialize: function (options) {
+    initialize: async function (options) {
         BaseView.prototype.initialize.apply(this, [options]);
         this.collection = this.app.collection;
         this.selectedCollection = this.app.selectedCollection;

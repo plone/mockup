@@ -61,43 +61,28 @@ export default Backbone.View.extend({
         data.convertColumnValue = this.convertColumnValue.bind(this);
         data.expired = this.expired(data);
         data.ineffective = this.ineffective(data);
+
         this.$el.html(this.template(data));
+
         const attrs = this.model.attributes;
         this.$el.addClass([`state-${attrs.review_state}`, `type-${attrs.portal_type}`]);
-        if (data.is_folderish) {
-            this.$el.addClass("folder");
-        }
-        if(data.id === this.table.contextInfo?.defaultPage){
-            this.$el.addClass('default-page');
-        }
         this.$el.attr("data-path", data.path);
         this.$el.attr("data-UID", data.UID);
         this.$el.attr("data-id", data.id);
         this.$el.attr("data-type", data.portal_type);
         this.$el.attr("data-folderish", data.is_folderish);
-        this.$el.removeClass("expired");
-        this.$el.removeClass("ineffective");
-
-        if (data.expired) {
-            this.$el.addClass("expired");
-        }
-
-        if (data.ineffective) {
-            this.$el.addClass("ineffective");
-        }
+        this.$el.toggleClass("folder", data.is_folderish);
+        this.$el.toggleClass('default-page', data.id === this.table.contextInfo?.defaultPage);
+        this.$el.toggleClass("expired", data.expired);
+        this.$el.toggleClass("ineffective", data.ineffective);
 
         this.el.model = this.model;
 
-        const canMove = !!this.app.options.moveUrl;
-
-        this.menu = new ActionMenuView({
+        const menuview = new ActionMenuView({
             app: this.app,
             model: this.model,
-            menuOptions: this.app.menuOptions,
-            canMove: canMove,
         });
-        await this.menu.render();
-        $(".actionmenu-container", this.$el).append(this.menu.el);
+        $(".actionmenu-container", this.$el).append(await menuview.render());
 
         return this;
     },
@@ -138,13 +123,12 @@ export default Backbone.View.extend({
 
     itemSelected: function () {
         const checkbox = this.$("input")[0];
+        const selectedCollection = this.app.selectedCollection;
         if (checkbox.checked) {
-            this.app.selectedCollection.add(this.model.clone());
+            selectedCollection.add(this.model.clone());
         } else {
-            this.app.selectedCollection.removeResult(this.model);
+            selectedCollection.removeResult(this.model);
         }
-
-        const selectedCollection = this.selectedCollection;
 
         /* check for shift click now */
         const keyEvent = this.app.keyEvent;

@@ -78,7 +78,13 @@ export default BaseView.extend({
             url: this.options.collectionUrl,
         });
 
-        this.setAllCookieSettings();
+        // initialize batch size
+        this.collection.paginator_ui.perPage = parseInt(this.getCookieSetting("perPage", 15))
+
+        this.activeColumns = this.getCookieSetting(
+            this.activeColumnsCookie,
+            this.activeColumns
+        );
 
         this.selectedCollection = new SelectedCollection();
         this.tableView = await new TableView({ app: this });
@@ -661,15 +667,4 @@ export default BaseView.extend({
         );
     },
 
-    setAllCookieSettings: function () {
-        this.activeColumns = this.getCookieSetting(
-            this.activeColumnsCookie,
-            this.activeColumns
-        );
-        let perPage = this.getCookieSetting("perPage", 15);
-        if (typeof perPage === "string") {
-            perPage = parseInt(perPage);
-        }
-        this.collection.howManyPer(perPage);
-    },
 });
