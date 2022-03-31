@@ -114,13 +114,9 @@
     "engines": {
         "node": ">=12.20.0"
     },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ]
-    },
+    "browserslist": [
+        "defaults"
+    ],
     "author": {
         "name": "Plone Foundation",
         "email": "releasemanager@plone.org"
