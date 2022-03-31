@@ -16,7 +16,7 @@ export default BaseView.extend({
     template: _.template(TableTemplate),
     tableSortable: null,
 
-    initialize: async function (options) {
+    initialize: function (options) {
         BaseView.prototype.initialize.apply(this, [options]);
         this.collection = this.app.collection;
         this.selectedCollection = this.app.selectedCollection;
@@ -133,6 +133,7 @@ export default BaseView.extend({
 
             // NOTE: this is based on the concept of awaiting an event.
             // See this Stackoverflow answer here:
+
             // https://stackoverflow.com/a/44746691/1337474
             // When the last table row has finished rendering, throw an event.
             // For this "table_row_rendering_finished" event we're a-waiting for.
@@ -151,6 +152,8 @@ export default BaseView.extend({
             await table_row_rendering_finished();
             events.remove_event_listener = (this.el, "table_row_rendering_finished__listener"); // prettier-ignore
             registry.scan(this.$el);
+
+            return this;
         }
 
         this.$el
