@@ -155,8 +155,8 @@ export default Base.extend({
         this.options.queryHelperAttributes = this.options.attributes;
         delete this.options.attributes;
 
-        this.view = await new AppView(this.options);
-        await this.view.render();
-        this.$el.append(this.view.$el);
+        const view = new AppView(this.options);
+        await view.render();
+        this.$el.append(view.$el);
     },
 });

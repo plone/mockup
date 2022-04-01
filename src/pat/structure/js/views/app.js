@@ -43,7 +43,7 @@ export default BaseView.extend({
         return !!Cookies.get("__cp");
     },
 
-    initialize: async function (options) {
+    initialize: function (options) {
         BaseView.prototype.initialize.apply(this, [options]);
         this.loading = new utils.Loading();
         this.loading.show();
@@ -87,8 +87,6 @@ export default BaseView.extend({
         );
 
         this.selectedCollection = new SelectedCollection();
-        this.tableView = await new TableView({ app: this });
-        this.pagingView = new PagingView({ app: this });
 
         /* initialize buttons */
         this.setupButtons();
@@ -606,7 +604,6 @@ export default BaseView.extend({
                 this.$el.find("#btn-" + id).after(form);
             }
         }
-
         this.$el.append(
             utils.createElementFromHTML('<div class="fc-status-container"></div>')
         );
@@ -626,9 +623,13 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        await this.tableView.render();
-        this.$el.append(this.tableView.el);
-        this.$el.append(this.pagingView.render().el);
+        const tableView = new TableView({ app: this });
+        await tableView.render()
+        this.$el.append(tableView.el);
+
+        const pagingView = new PagingView({ app: this });
+        pagingView.render()
+        this.$el.append(pagingView.el);
 
         // Backdrop class
         if (this.options.backdropSelector !== null) {
