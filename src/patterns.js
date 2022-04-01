@@ -15,6 +15,7 @@ import "@patternslib/patternslib/src/pat/display-time/display-time";
 import { parser as validation_parser } from "@patternslib/patternslib/src/pat/validation/validation"; // Also loads the Pattern itself.
 import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/tooltip/tooltip";
 import "@patternslib/pat-code-editor/src/code-editor";
+import "@patternslib/patternslib/src/pat/inject/inject";
 
 //import "@patternslib/pat-content-browser/src/content-browser";
 //import "@patternslib/pat-tinymce/src/tinymce";
