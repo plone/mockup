@@ -77,7 +77,7 @@ export default BaseView.extend({
             term_el.value = term;
         }
         this.app.collection.currentPage = 1;
-        this.app.collection.pager();
+        this.app.collection.fetch();
 
         if (term) {
             term_el.classList.add("has-filter");
@@ -121,7 +121,7 @@ export default BaseView.extend({
         }
         this.app.additionalCriterias = query_obj;
         this.app.collection.currentPage = 1;
-        this.app.collection.pager();
+        this.app.collection.fetch();
         if (query_obj.length) {
             this.button.$el[0].classList.add("has-filter");
             this.setFilterStatusMessage();
@@ -174,7 +174,7 @@ export default BaseView.extend({
             this.queryString.$sortOn.on("change", () => {
                 this.app["sort_on"] = this.queryString.$sortOn.val(); // jshint ignore:line
                 this.app.collection.currentPage = 1;
-                this.app.collection.pager();
+                this.app.collection.fetch();
             });
             this.queryString.$sortOrder.change(() => {
                 if (this.queryString.$sortOrder[0].checked) {
@@ -183,7 +183,7 @@ export default BaseView.extend({
                     this.app["sort_order"] = "ascending"; // jshint ignore:line
                 }
                 this.app.collection.currentPage = 1;
-                this.app.collection.pager();
+                this.app.collection.fetch();
             });
         });
         return this;

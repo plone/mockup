@@ -24,7 +24,7 @@ export default PopoverView.extend({
         PopoverView.prototype.render.call(this);
         var options = this.app.options.upload;
         options.success = () => {
-            this.app.collection.pager();
+            this.app.collection.fetch();
         };
         options.currentPath = this.app.getCurrentPath();
         options.allowPathSelection = false;

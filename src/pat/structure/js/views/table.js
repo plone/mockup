@@ -23,7 +23,8 @@ export default BaseView.extend({
         this.listenTo(this.collection, "sync", this.render);
         this.listenTo(this.selectedCollection, "remove", this.render);
         this.listenTo(this.selectedCollection, "reset", this.render);
-        this.collection.pager();
+        // this sets page size and fetches the first one
+        this.collection.fetch();
         this.subsetIds = [];
         this.contextInfo = null;
         this.tableSortable = null;
@@ -225,7 +226,7 @@ export default BaseView.extend({
         }
         path += $el.attr("data-path");
         this.app.setCurrentPath(path);
-        this.app.collection.goTo(this.app.collection.information.firstPage);
+        this.app.collection.getPage(this.app.collection.state.firstPage);
     },
 
     selectAll: function (e) {

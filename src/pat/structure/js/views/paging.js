@@ -30,7 +30,7 @@ export default Backbone.View.extend({
     },
 
     render: function () {
-        const data = this.collection.info();
+        const data = this.collection.state;
         data.pages = this.getPages(data);
         const html = this.template(
             $.extend(
@@ -82,39 +82,39 @@ export default Backbone.View.extend({
     nextResultPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.requestNextPage();
+        this.collection.getNextPage();
     },
 
     previousResultPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.requestPreviousPage();
+        this.collection.getPreviousPage();
     },
 
     gotoFirst: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.goTo(this.collection.information.firstPage);
+        this.collection.getPage(this.collection.state.firstPage);
     },
 
     gotoLast: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.goTo(this.collection.information.totalPages);
+        this.collection.getPage(this.collection.state.totalPages);
     },
 
     gotoPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        const page = $(e.target).text();
-        this.collection.goTo(page);
+        const page = parseInt($(e.target).text());
+        this.collection.getPage(page);
     },
 
     changeCount: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        const per = $(e.target).text();
-        this.collection.howManyPer(per);
-        this.app.setCookieSetting("perPage", per);
+        const size = parseInt($(e.target).text());
+        this.collection.setPageSize(size);
+        this.app.setCookieSetting("pageSize", size);
     },
 });

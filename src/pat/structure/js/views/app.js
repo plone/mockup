@@ -78,15 +78,13 @@ export default BaseView.extend({
             url: this.options.collectionUrl,
         });
 
-        // initialize batch size
-        this.collection.paginator_ui.perPage = parseInt(this.getCookieSetting("perPage", 15))
-
         this.activeColumns = this.getCookieSetting(
             this.activeColumnsCookie,
             this.activeColumns
         );
 
         this.selectedCollection = new SelectedCollection();
+        this.tableView = new TableView({ app: this });
 
         /* initialize buttons */
         this.setupButtons();
@@ -130,18 +128,6 @@ export default BaseView.extend({
                     },
                 });
             }
-            this.loading.hide();
-        });
-
-        this.collection.on("pager", () => {
-            this.loading.show();
-            this.updateButtons();
-
-            // the remaining calls are related to window.pushstate.
-            // abort if feature unavailable.
-            if (!(window.history && window.history.pushState)) {
-                return;
-            }
 
             // undo the flag set by popState to prevent the push state
             // from being triggered here, and early abort out of the
@@ -150,6 +136,9 @@ export default BaseView.extend({
                 this.doNotPushState = false;
                 return;
             }
+
+            this.loading.show();
+            this.updateButtons();
 
             let path = this.getCurrentPath();
             let url;
@@ -185,6 +174,8 @@ export default BaseView.extend({
                 // needed at all.
             }
             $("body").trigger("structure-url-changed", [path]);
+
+            this.loading.hide();
         });
 
         if (
@@ -223,7 +214,7 @@ export default BaseView.extend({
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
                 this.doNotPushState = true;
-                this.collection.goTo(this.collection.information.firstPage);
+                this.collection.getPage(this.collection.state.firstPage);
             });
             /* detect key events */
             $(document).bind("keyup keydown", (e) => {
@@ -373,7 +364,7 @@ export default BaseView.extend({
         if (callback !== null && callback !== undefined) {
             callback(data);
         }
-        this.collection.pager();
+        this.collection.fetch();
     },
 
     ajaxErrorResponse: function (response, url) {
@@ -504,7 +495,7 @@ export default BaseView.extend({
                         type: "danger",
                     });
                 }
-                this.collection.pager(); // reload it all
+                this.collection.fetch(); // reload it all
             },
             error: () => {
                 this.clearStatus();
@@ -623,9 +614,8 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        const tableView = new TableView({ app: this });
-        await tableView.render()
-        this.$el.append(tableView.el);
+        await this.tableView.render()
+        this.$el.append(this.tableView.el);
 
         const pagingView = new PagingView({ app: this });
         pagingView.render()
