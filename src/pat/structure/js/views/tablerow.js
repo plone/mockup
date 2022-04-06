@@ -53,6 +53,7 @@ export default Backbone.View.extend({
         data.contenttype = data.portal_type.toLowerCase().replace(/\.| /g, "-");
         data._authenticator = utils.getAuthenticator();
         data.thumb_scale = this.app.thumb_scale;
+        data.mimeIcon = await utils.resolveIcon(`contenttype/${data.contenttype}`);
 
         const viewAction = (this.app.typeToViewAction && this.app.typeToViewAction[data.attributes.portal_type]) || "";
         data.viewURL = data.attributes.getURL + viewAction;
