@@ -5,8 +5,7 @@
     <a href="<%- viewURL %>"
         class="manage state-<%- review_state %> contenttype-<%- contenttype %>"
         title="<%- portal_type %>">
-        <% if(attributes["getMimeIcon"] && contenttype == 'file'){ %>
-           <img class="mime-icon" src="<%- getMimeIcon %>"> <% } %>
+      <%= mimeIcon %>
       <% if(Title){ %>
         <%- Title %>
       <% } else { %>
