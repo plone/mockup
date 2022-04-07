@@ -515,7 +515,8 @@ export default Base.extend({
             enableImageZoom: this.options.text.enableImageZoom,
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
-            imageScales: this.options.imageScales,
+            // imageScales: this.options.imageScales,
+            imageSrcsets: this.options.image_srcsets
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
         });
