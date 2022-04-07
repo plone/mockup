@@ -12,7 +12,7 @@ export default Base.extend({
     active: false,
     results: null,
     selectedItem: -1,
-    resultsClass: "livesearch-results list-group mt-2 w-100 d-none",
+    resultsClass: "livesearch-results list-group d-none",
     defaults: {
         ajaxUrl: null,
         defaultSortOn: "",
@@ -21,9 +21,21 @@ export default Base.extend({
         minimumInputLength: 4,
         inputSelector: 'input[type="text"]',
         itemTemplate:
-            '<li class="search-result <%- state %> list-group-item">' +
-            '<a class="fs-4" href="<%- url %>"><%- title %></a>' +
-            '<div class="description"><%- description %></div>' +
+            '<li class="search-result <%- state %> list-group-item list-group-item-action">' +
+                '<a class="text-reset text-decoration-none" href="<%- url %>">' +
+                '<div class="row">' +
+                    '<div class="col info">' +
+                        '<div class="heading"><%- title %></div>' +
+                        '<div class="description"><%- description %></div>' +
+                    '</div>' +
+
+                    '<% if (img_tag) { %> ' +
+                        '<div class="col img">' +
+                            '<%= img_tag %>' +
+                        '</div>' +
+                    '<% } %> ' +
+                '</div>' +
+                '</a>' +
             "</li>",
     },
     doSearch: function (page) {
@@ -146,53 +158,52 @@ export default Base.extend({
                     }
                 });
                 if (index === self.selectedItem) {
-                    $el.addClass("list-group-item-secondary");
+                    $el.addClass("active");
                 }
                 self.$results.append($el);
             });
-            var nav = [];
+            var nav = {};
             if (self.page > 1) {
-                var $prev = $('<a href="#" class="prev">' + _t("Previous") + "</a>");
+                var $prev = $('<a href="#" class="prev position-absolute ps-3 start-0">' + _t("Previous") + "</a>");
                 $prev.click(function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
                     self.doSearch(self.page - 1);
                 });
-                nav.push($prev);
+                nav.prev = $prev;
             }
             if (self.page * self.options.perPage < self.results.total) {
-                var $next = $('<a href="#" class="next">' + _t("Next") + "</a>");
+                var $next = $('<a href="#" class="next position-absolute pe-3 end-0">' + _t("Next") + "</a>");
                 $next.click(function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
                     self.doSearch(self.page + 1);
                 });
-                nav.push($next);
+                nav.next = $next;
             }
-            if (nav.length > 0) {
+            if (nav.next || nav.prev) {
                 var $li = $(
-                    '<li class="list-group-item load-more"><div class="page">' +
+                    '<li class="list-group-item load-more d-flex justify-content-center"><span class="page">' +
                         self.page +
-                        "</div></li>"
+                        "</span></li>"
                 );
-                $li.prepend(nav);
+                if (nav.prev) {
+                    $li.prepend(nav.prev);
+                }
+                if (nav.next) {
+                    $li.append(nav.next);
+                }
                 self.$results.append($li);
             }
         }
-        self.position();
+        self.show();
     },
-    position: function () {
+    show: function () {
         /* we are positioning directly below the
          input box, same width */
         var self = this;
 
         self.$el.addClass("livesearch-active");
-        var pos = self.$input.position();
-        self.$results.width(self.$el.outerWidth());
-        self.$results.css({
-            top: pos.top + self.$input.outerHeight(),
-            left: pos.left,
-        });
         self.$results.show();
     },
     hide: function () {
