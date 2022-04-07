@@ -903,8 +903,9 @@ export default Base.extend({
                 if (linkType) {
                     self.linkType = linkType;
                     self.linkTypes[self.linkType].load(self.imgElm);
-                    var scale = self.dom.getAttrib(self.imgElm, "data-scale");
-                    self.$scale.val(scale);
+                    // set scale selection in link modal:
+                    var srcset = self.dom.getAttrib(self.imgElm, "data-srcset");
+                    self.$scale.val(srcset);
                     $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
                 } else if (src) {
                     self.guessImageLink(src);
