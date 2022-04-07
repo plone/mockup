@@ -184,7 +184,10 @@ var ImageLink = InternalLink.extend({
     trigger: ".pat-imagelinktype-dummy",
     toUrl: function () {
         var value = this.value();
-        return this.tinypattern.generateImageUrl(value, this.linkModal.$scale.val());
+        return this.tinypattern.generateImageUrl(
+            value,
+            this.linkModal.getScaleFromSrcset(this.linkModal.$scale.val())
+        );
     },
 });
 
@@ -515,8 +518,7 @@ export default Base.extend({
             enableImageZoom: this.options.text.enableImageZoom,
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
-            // imageScales: this.options.imageScales,
-            imageSrcsets: this.options.image_srcsets
+            imageSrcsets: this.options.imageSrcsets,
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
         });
@@ -643,6 +645,11 @@ export default Base.extend({
         this.tiny.nodeChanged();
     },
 
+    getScaleFromSrcset: function (srcset) {
+        let srcsetConfig = this.options.imageSrcsets[srcset];
+        return srcsetConfig.sourceset[srcsetConfig.sourceset.length - 1].scale;
+    },
+
     updateImage: function (src) {
         var self = this;
         var title = self.$title.val();
@@ -651,14 +658,13 @@ export default Base.extend({
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
-        var cssclasses = ["image-richtext", self.$align.val(), "scale-" + self.$scale.val()];
+        var cssclasses = ["image-richtext", self.$align.val(), "image-size-" + self.$scale.val()];
         if (captionFromDescription) {
             cssclasses.push("captioned");
         }
         if (enableImageZoom) {
             cssclasses.push("zoomable");
         }
-
         var data = $.extend(
             true,
             {},
@@ -668,7 +674,8 @@ export default Base.extend({
                 "alt": self.$alt.val(),
                 "class": cssclasses.join(" "),
                 "data-linkType": self.linkType,
-                "data-scale": self.$scale.val(),
+                "data-srcset": self.$scale.val(),
+                "data-scale": self.getScaleFromSrcset(self.$scale.val()),
             },
             self.linkTypes[self.linkType].attributes()
         );
@@ -937,6 +944,7 @@ export default Base.extend({
     guessImageLink: function (src) {
         if (src.indexOf(this.options.prependToScalePart) !== -1) {
             this.linkType = "image";
+            // TODO: use data-scale attribute instead:
             this.$scale.val(this.tinypattern.getScaleFromUrl(src));
             this.linkTypes.image.set(this.tinypattern.stripGeneratedUrl(src));
         } else {

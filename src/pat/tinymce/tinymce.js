@@ -79,16 +79,58 @@ export default Base.extend({
         prependToScalePart: "/imagescale/",
         appendToScalePart: "",
         appendToOriginalScalePart: "",
-        defaultScale: "large",
-        imageScales: [
-            { title: "Mini", value: "mini" },
-            { title: "Thumb", value: "thumb" },
-            { title: "Listing", value: "listing" },
-            { title: "Preview", value: "preview" },
-            { title: "Tile", value: "tile" },
-            { title: "Icon", value: "icon" },
-            { title: "Large", value: "large" },
-        ],
+        // defaultScale: "large",
+        defaultSrcset: "medium",
+        imageSrcsets: {
+            large: {
+                "title": "Large",
+                "preview": "++theme++barceloneta/static/preview-image-large.png",
+                "use-in-editor": true,
+                "sourceset": [
+                    {
+                        scale: "teaser",
+                        media: "(min-width:768px) and (orientation:portrait)",
+                    },
+                    {
+                        scale: "large",
+                        media: "(min-width:768px)",
+                    },
+                    {
+                        scale: "larger",
+                        media: "(min-width:992px)",
+                    },
+                    {
+                        scale: "great",
+                        media: "(min-width:1200px)",
+                    },
+                    {
+                        scale: "huge",
+                        media: "(min-width:1400px)",
+                    },
+                    {
+                        scale: "huge",
+                    },
+                ],
+            },
+            medium: {
+                title: "Medium",
+                preview: "++theme++barceloneta/static/preview-image-medium.png",
+                sourceset: [
+                    {
+                        scale: "larger",
+                    },
+                ],
+            },
+            small: {
+                title: "Small",
+                preview: "++theme++barceloneta/static/preview-image-small.png",
+                sourceset: [
+                    {
+                        scale: "preview",
+                    },
+                ],
+            },
+        },
         imageClasses: {
             "image-inline": _t("Inline"),
             "image-right": _t("Right"),
@@ -138,14 +180,11 @@ export default Base.extend({
         inline: false,
     },
     init: async function () {
-
-        const implementation = (
-            await import("./tinymce--implementation")
-        ).default;
+        const implementation = (await import("./tinymce--implementation")).default;
         this.instance = new implementation(this.el, this.options);
         this.instance.init();
     },
     destroy: function () {
-        this.instance.destroy()
+        this.instance.destroy();
     },
 });
