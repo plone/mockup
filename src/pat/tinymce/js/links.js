@@ -520,7 +520,10 @@ export default Base.extend({
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
             imageSrcsets: this.options.imageSrcsets,
+<<<<<<< HEAD
             imageCaptioningEnabled: this.options.imageCaptioningEnabled,
+=======
+>>>>>>> d58a56f8 (Use imageSrcset in pat-tinymce)
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
         });
