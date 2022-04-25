@@ -661,11 +661,7 @@ export default Base.extend({
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
         var cssclasses = ["image-richtext", self.$align.val(), "image-size-" + self.$scale.val()];
-<<<<<<< HEAD
         if (captionFromDescription || caption) {
-=======
-        if (captionFromDescription) {
->>>>>>> 202169e0 (Use imageSrcset in pat-tinymce)
             cssclasses.push("captioned");
         }
         if (enableImageZoom) {
