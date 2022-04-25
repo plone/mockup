@@ -36,7 +36,7 @@
         "js-cookie": "^3.0.1",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.0",
-        "tinymce": "^5.10.2",
+        "tinymce": "^5.10.3",
         "tinymce-i18n": "^20.12.25"
     },
     "devDependencies": {
