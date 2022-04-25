@@ -81,6 +81,7 @@ export default Base.extend({
         appendToOriginalScalePart: "",
         // defaultScale: "large",
         defaultSrcset: "medium",
+        imageCaptioningEnabled: true,
         imageSrcsets: {
             large: {
                 "title": "Large",

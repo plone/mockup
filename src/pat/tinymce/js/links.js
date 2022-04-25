@@ -519,6 +519,7 @@ export default Base.extend({
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
             imageSrcsets: this.options.imageSrcsets,
+            imageCaptioningEnabled: this.options.imageCaptioningEnabled,
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
         });
@@ -655,11 +656,12 @@ export default Base.extend({
         var title = self.$title.val();
         var captionFromDescription = self.$captionFromDescription.prop("checked");
         var enableImageZoom = self.$enableImageZoom.prop("checked");
+        var caption = self.$caption.val();
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
         var cssclasses = ["image-richtext", self.$align.val(), "image-size-" + self.$scale.val()];
-        if (captionFromDescription) {
+        if (captionFromDescription || caption) {
             cssclasses.push("captioned");
         }
         if (enableImageZoom) {
@@ -679,9 +681,18 @@ export default Base.extend({
             },
             self.linkTypes[self.linkType].attributes()
         );
+        if (caption && !captionFromDescription){
+            data["data-captiontext"] = caption;
+        }
         if (self.imgElm && !self.imgElm.getAttribute("data-mce-object")) {
-            data.width = self.dom.getAttrib(self.imgElm, "width");
-            data.height = self.dom.getAttrib(self.imgElm, "height");
+            const imgWidth = self.dom.getAttrib(self.imgElm, "width");
+            const imgHight = self.dom.getAttrib(self.imgElm, "height");
+            if(imgWidth){
+                data.width = imgWidth;
+            }
+            if(imgHight){
+                data.height = imgHight;
+            }
         } else {
             self.imgElm = null;
         }
@@ -696,30 +707,11 @@ export default Base.extend({
         if (self.imgElm) {
             self.dom.remove(self.imgElm);
         }
-        if (self.captionElm) {
-            self.dom.remove(self.captionElm);
-        }
-        if (self.figureElm) {
-            self.dom.remove(self.figureElm);
-        }
 
         data.id = "__mcenew";
         var html_inner = self.dom.createHTML("img", data);
-        var caption = self.$caption.val();
         var html_string;
-        if (caption && !captionFromDescription) {
-            // clean up img class, as we will have them on the firgure tag
-            var dummyDiv = document.createElement("div");
-            dummyDiv.innerHTML = html_inner
-            dummyDiv.querySelector("img").removeAttribute("class")
-            html_inner = dummyDiv.innerHTML
-
-            html_inner += "\n" + self.dom.createHTML("figcaption", {}, caption);
-            //html_inner += '\n' + self.dom.createHTML('figcaption', { class: 'mceNonEditable' }, caption);
-            html_string = self.dom.createHTML("figure", {class: data.class}, html_inner);
-        } else {
-            html_string = html_inner;
-        }
+        html_string = html_inner;
         self.tiny.insertContent(html_string);
         self.imgElm = self.dom.get("__mcenew");
         self.dom.setAttrib(self.imgElm, "id", null);
@@ -860,64 +852,47 @@ export default Base.extend({
 
         var linkType;
         if (self.isImageMode()) {
-            var figure;
             var img;
-            var caption;
-            if (self.selectedElm.nodeName === "FIGURE") {
-                figure = self.selectedElm;
-                img = figure.querySelector("img");
-                caption = figure.querySelector("figcaption");
-            } else if (self.selectedElm.nodeName === "IMG") {
-                figure = $(self.selectedElm).closest("figure");
-                figure = figure.length ? figure[0] : undefined;
-                img = self.selectedElm;
-                caption = figure ? figure.querySelector("figcaption") : undefined;
-            } else if (self.selectedElm.nodeName === "FIGCAPTION") {
-                figure = $(self.selectedElm).closest("figure");
-                figure = figure.length ? figure[0] : undefined;
-                img = figure ? figure.querySelector("img") : undefined;
-                caption = self.selectedElm;
+            self.imgElm = img;
+
+            var src = self.dom.getAttrib(self.imgElm, "src");
+            var captionText = self.dom.getAttrib(self.imgElm, "data-captiontext");
+            self.$title.val(self.dom.getAttrib(self.imgElm, "title"));
+            self.$alt.val(self.dom.getAttrib(self.imgElm, "alt"));
+
+            if ($(self.imgElm).hasClass("zoomable")) {
+                self.$enableImageZoom.prop("checked", true);
+            }
+            if ($(self.imgElm).hasClass("captioned") && !captionText) {
+                self.$captionFromDescription.prop("checked", true);
+                self.$caption.prop("disabled", true);
+            }else if($(self.imgElm).hasClass("captioned") && captionText){
+                self.$captionFromDescription.prop("checked", false);
+            }else{
+                self.$captionFromDescription.prop("checked", false);
+            }
+            if (captionText) {
+                self.$caption.val(captionText);
             }
 
-            self.imgElm = img;
-            self.figureElm = figure;
-            self.captionElm = caption;
-
-            if (self.imgElm) {
-                var src = self.dom.getAttrib(self.imgElm, "src");
-                self.$title.val(self.dom.getAttrib(self.imgElm, "title"));
-                self.$alt.val(self.dom.getAttrib(self.imgElm, "alt"));
-
-                if ($(self.imgElm).hasClass("zoomable")) {
-                    self.$enableImageZoom.prop("checked", true);
-                }
-                if ($(self.imgElm).hasClass("captioned")) {
-                    self.$captionFromDescription.prop("checked", true);
-                    self.$caption.prop("disabled", true);
-                }
-                if (self.captionElm) {
-                    self.$caption.val(self.captionElm.innerHTML);
-                }
-
-                linkType = self.dom.getAttrib(self.imgElm, "data-linktype");
-                if (linkType) {
-                    self.linkType = linkType;
-                    self.linkTypes[self.linkType].load(self.imgElm);
-                    // set scale selection in link modal:
-                    var srcset = self.dom.getAttrib(self.imgElm, "data-srcset");
-                    self.$scale.val(srcset);
-                    $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
-                } else if (src) {
-                    self.guessImageLink(src);
-                }
-                var className = self.dom.getAttrib(self.imgElm, "class");
-                var klasses = className.split(" ");
-                for (var i = 0; i < klasses.length; i = i + 1) {
-                    var klass = klasses[i];
-                    for (var availClass in self.options.imageClasses) {
-                        if (availClass.indexOf(klass) !== -1) {
-                            self.$align.val(klass);
-                        }
+            linkType = self.dom.getAttrib(self.imgElm, "data-linktype");
+            if (linkType) {
+                self.linkType = linkType;
+                self.linkTypes[self.linkType].load(self.imgElm);
+                // set scale selection in link modal:
+                var srcset = self.dom.getAttrib(self.imgElm, "data-srcset");
+                self.$scale.val(srcset);
+                $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
+            } else if (src) {
+                self.guessImageLink(src);
+            }
+            var className = self.dom.getAttrib(self.imgElm, "class");
+            var klasses = className.split(" ");
+            for (var i = 0; i < klasses.length; i = i + 1) {
+                var klass = klasses[i];
+                for (var availClass in self.options.imageClasses) {
+                    if (availClass.indexOf(klass) !== -1) {
+                        self.$align.val(klass);
                     }
                 }
             }

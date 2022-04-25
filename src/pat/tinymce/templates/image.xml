@@ -59,6 +59,7 @@
         <label><%- altText %></label>
         <input type="text" name="alt" class="form-control" />
       </div>
+      <% if(imageCaptioningEnabled){ %>
       <div class="captionFromDescription form-check mb-2">
         <input type="checkbox" name="captionFromDescription" class="form-check-input" />
         <label for="captionFromDescription" class="form-check-label">
@@ -69,6 +70,7 @@
         <label><%- captionText %></label>
         <textarea name="caption" class="form-control"></textarea>
       </div>
+      <% } %>
       <div class="align mb-2">
         <label><%- imageAlignText %></label>
         <select name="align" class="form-select">
