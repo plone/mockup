@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.8 (2022-04-28)
+------------------
+
+Bug fixes:
+
+
+- Fix duplicated initialization of result collection. Ref: #1152
+  [petschki] (#1152)
+
+
 3.2.7 (2021-10-21)
 ------------------
 
