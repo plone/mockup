@@ -96,6 +96,7 @@
         "build:webpack": "NODE_ENV=production webpack --config webpack.config.js",
         "build:webpack:dev": "NODE_ENV=development webpack --config webpack.config.js",
         "build:webpack:plone": "NODE_ENV=production webpack --config webpack.config.js --env DEPLOYMENT=plone",
+        "build:webpack:dev:plone": "NODE_ENV=development webpack --config webpack.config.js --env DEPLOYMENT=plone",
         "build:docs": "ELEVENTY_ENV=production  npx @11ty/eleventy --output docs/_site/",
         "build:stats": "NODE_ENV=production webpack --config webpack.config.js --json > stats.json",
         "build": "run-s clean build:webpack build:docs",
