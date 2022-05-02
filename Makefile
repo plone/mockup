@@ -76,4 +76,14 @@ serve: stamp-yarn
 	$(YARN) run start
 
 
+.PHONY:
+watch-plone:
+	$(YARN) run watch:webpack:plone
+
+
+.PHONY:
+bundle-plone:
+	$(YARN) run build:webpack:plone
+
+
 #
