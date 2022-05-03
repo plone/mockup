@@ -87,6 +87,7 @@ export default BaseView.extend({
         );
 
         this.selectedCollection = new SelectedCollection();
+        this.tableView = new TableView({ app: this });
 
         /* initialize buttons */
         this.setupButtons();
@@ -623,9 +624,8 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        const tableView = new TableView({ app: this });
-        await tableView.render()
-        this.$el.append(tableView.el);
+        await this.tableView.render()
+        this.$el.append(this.tableView.el);
 
         const pagingView = new PagingView({ app: this });
         pagingView.render()
