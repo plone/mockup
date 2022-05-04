@@ -35,7 +35,7 @@ export default Base.extend({
                         inPath = true;
                     }
                 }
-                if ((navlink == portal_url) && (href != portal_url)) {
+                if ((navlink === portal_url) && (href !== portal_url)) {
                     // Avoid marking "Home" with "inPath", when not actually there
                     inPath = false;
                 }
