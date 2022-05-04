@@ -7,7 +7,7 @@ export default Base.extend({
     parser: "mockup",
     init: function () {
         var self = this;
-        var portal_url = $('body').data('portal-url');
+        const portal_url = document.body.dataset.portalUrl;
         var href =
             document.querySelector('head link[rel="canonical"]').href ||
             window.location.href;
