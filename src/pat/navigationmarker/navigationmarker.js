@@ -7,6 +7,7 @@ export default Base.extend({
     parser: "mockup",
     init: function () {
         var self = this;
+        const portal_url = document.body.dataset.portalUrl;
         var href =
             document.querySelector('head link[rel="canonical"]').href ||
             window.location.href;
@@ -33,6 +34,10 @@ export default Base.extend({
                     if (navParts[i] === hrefParts[i]) {
                         inPath = true;
                     }
+                }
+                if ((navlink === portal_url) && (href !== portal_url)) {
+                    // Avoid marking "Home" with "inPath", when not actually there
+                    inPath = false;
                 }
                 if (inPath) {
                     parent.addClass("inPath");
