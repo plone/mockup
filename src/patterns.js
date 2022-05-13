@@ -76,3 +76,4 @@ validation_parser.parameters["error-template"].value =
     '<em class="invalid-feedback">${this.message}</em>';
 
 registry.init();
+window.__patternslib_registry = registry;
