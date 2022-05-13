@@ -144,41 +144,42 @@ export default class TinyMCE {
 
         // tinyMCE Plugins
         const tinymce = (await import("tinymce/tinymce")).default;
+        await import("tinymce/models/dom");
         await import("tinymce/plugins/advlist");
         await import("tinymce/plugins/anchor");
         await import("tinymce/plugins/autolink");
         await import("tinymce/plugins/autoresize");
         await import("tinymce/plugins/autosave");
-        await import("tinymce/plugins/bbcode");
+        // await import("tinymce/plugins/bbcode");
         await import("tinymce/plugins/charmap");
         await import("tinymce/plugins/code");
-        await import("tinymce/plugins/colorpicker");
-        await import("tinymce/plugins/contextmenu");
+        // await import("tinymce/plugins/colorpicker");
+        // await import("tinymce/plugins/contextmenu");
         await import("tinymce/plugins/directionality");
         await import("tinymce/plugins/emoticons");
         await import("tinymce/plugins/fullscreen");
-        await import("tinymce/plugins/hr");
+        // await import("tinymce/plugins/hr");
         await import("tinymce/plugins/image");
         await import("tinymce/plugins/importcss");
         await import("tinymce/plugins/insertdatetime");
-        await import("tinymce/plugins/legacyoutput");
+        // await import("tinymce/plugins/legacyoutput");
         await import("tinymce/plugins/link");
         await import("tinymce/plugins/lists");
         await import("tinymce/plugins/media");
-        await import("tinymce/plugins/nonbreaking");
-        await import("tinymce/plugins/noneditable");
+        // await import("tinymce/plugins/nonbreaking");
+        // await import("tinymce/plugins/noneditable");
         await import("tinymce/plugins/pagebreak");
-        await import("tinymce/plugins/paste");
+        // await import("tinymce/plugins/paste");
         await import("tinymce/plugins/preview");
-        await import("tinymce/plugins/print");
+        // await import("tinymce/plugins/print");
         await import("tinymce/plugins/save");
         await import("tinymce/plugins/searchreplace");
-        await import("tinymce/plugins/spellchecker");
-        await import("tinymce/plugins/tabfocus");
+        // await import("tinymce/plugins/spellchecker");
+        // await import("tinymce/plugins/tabfocus");
         await import("tinymce/plugins/table");
         await import("tinymce/plugins/template");
-        await import("tinymce/plugins/textcolor");
-        await import("tinymce/plugins/textpattern");
+        // await import("tinymce/plugins/textcolor");
+        // await import("tinymce/plugins/textpattern");
         await import("tinymce/plugins/visualblocks");
         await import("tinymce/plugins/visualchars");
         await import("tinymce/plugins/wordcount");
@@ -292,6 +293,7 @@ export default class TinyMCE {
                 modal_container.attr("id", "tiny-ui-container-" + random_id);
                 tinyOptions["ui_container"] = "#tiny-ui-container-" + random_id;
             }
+            console.log(tinyOptions)
             tinymce.init(tinyOptions);
             self.tiny = tinymce.get(self.tinyId);
 

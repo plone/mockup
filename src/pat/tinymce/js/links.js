@@ -342,23 +342,24 @@ var AnchorLink = LinkType.extend({
     },
 });
 
-tinymce.PluginManager.add("ploneimage", function (editor) {
+tinymce.PluginManager.add("ploneimage", function (editor, url) {
     editor.ui.registry.addButton("ploneimage", {
         icon: "image",
         text: "Insert image",
         tooltip: "Insert/edit image",
-        onAction: editor.settings.addImageClicked,
+        onAction: editor.options.addImageClicked,
         // stateSelector: "img:not([data-mce-object])",
     });
 });
 
 /* register the tinymce plugin */
-tinymce.PluginManager.add("plonelink", function (editor) {
+tinymce.PluginManager.add("plonelink", function (editor, url) {
+    console.log(editor)
     editor.ui.registry.addButton("plonelink", {
         icon: "link",
         tooltip: "Insert/edit link",
         shortcut: "Ctrl+K",
-        onAction: editor.settings.addLinkClicked,
+        onAction: editor.options.addLinkClicked,
         stateSelector: "a[href]",
     });
 
@@ -371,13 +372,13 @@ tinymce.PluginManager.add("plonelink", function (editor) {
         stateSelector: "a[href]",
     });
 
-    // editor.ui.registry.addButton("Ctrl+K", "", editor.settings.addLinkClicked);
+    // editor.ui.registry.addButton("Ctrl+K", "", editor.options.addLinkClicked);
 
     // editor.ui.registry.addButton("plonelink", {
     //     icon: "link",
     //     text: "Insert link",
     //     shortcut: "Ctrl+K",
-    //     onAction: editor.settings.addLinkClicked,
+    //     onAction: editor.options.addLinkClicked,
     //     stateSelector: "a[href]",
     //     context: "insert",
     //     prependToContext: true,

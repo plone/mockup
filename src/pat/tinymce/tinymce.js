@@ -157,7 +157,7 @@ export default Base.extend({
                 "autolink",
                 "lists",
                 "charmap",
-                "print",
+                // "print",
                 "preview",
                 "anchor",
                 "searchreplace",
@@ -167,10 +167,10 @@ export default Base.extend({
                 "insertdatetime",
                 "media",
                 "table",
-                "contextmenu",
-                "paste",
-                "plonelink",
-                "ploneimage",
+                // "contextmenu",
+                // "paste",
+                // "plonelink",
+                // "ploneimage",
             ],
             menubar: "edit table format tools view insert",
             toolbar:
@@ -178,7 +178,7 @@ export default Base.extend({
             //'autoresize_max_height': 900,
             height: 400,
         },
-        inline: false,
+        inline: true,
     },
     init: async function () {
         const implementation = (await import("./tinymce--implementation")).default;
