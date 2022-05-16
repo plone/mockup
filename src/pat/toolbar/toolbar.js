@@ -28,13 +28,13 @@ export default Base.extend({
         });
 
         // unpin toolbar and save state
-        this.$el.on("click", ".offcanvas-unpin", (e) => {
+        this.$el.on("click", ".toolbar-collapse", (e) => {
             $("body").removeClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({expanded: false}), {path: "/"});
         });
 
         // pin toolbar and save state
-        this.$el.on("click", ".offcanvas-pin", (e) => {
+        this.$el.on("click", ".toolbar-expand", (e) => {
             $("body").addClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({expanded: true}), {path: "/"});
         });
