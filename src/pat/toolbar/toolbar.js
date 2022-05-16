@@ -11,6 +11,8 @@ export default Base.extend({
     defaults: {},
 
     init: function () {
+        import("./toolbar.scss");
+
         $("body").on("structure-url-changed", (e, path) => {
             $.ajax({
                 url: $("body").attr("data-portal-url") + path + "/@@render-toolbar",

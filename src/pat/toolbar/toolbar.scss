@@ -1,0 +1,250 @@
+/* TOOLBAR */
+@import "bootstrap/scss/bootstrap";
+
+:root {
+    --plone-toolbar-bg: var(--bs-dark);
+    --plone-toolbar-text-color: var(--bs-white);
+    --plone-toolbar-locked-color: var(--bs-warning);
+    --plone-toolbar-font: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --plone-toolbar-separator-color: var(--bs-gray-500);
+    --plone-toolbar-link-color: var(--plone-link-color);
+    --plone-toolbar-link-hover-color: var(--plone-link-hover-color);
+    --plone-toolbar-width: 220px;
+    --plone-toolbar-width-collapsed: 60px;
+    --plone-toolbar-top-height: 2.5rem;
+}
+
+/* general collapsed dark mode */
+#edit-zone {
+    font-family: var(--plone-toolbar-font);
+    position: fixed;
+    z-index: $zindex-offcanvas;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--plone-toolbar-bg);
+    width: var(--plone-toolbar-width);
+    color: var(--plone-toolbar-text-color);
+    border-right: none;
+
+    &,
+    .dropdown-menu {
+        background-color: var(--plone-toolbar-bg);
+    }
+
+    .dropdown-header {
+        color: var(--plone-toolbar-text-color);
+    }
+
+    .dropdown-menu {
+        border-radius: 0;
+        min-width: 12rem;
+    }
+
+    .nav-link,
+    .dropdown-item {
+        color: var(--plone-toolbar-text-color);
+
+        &:hover,
+        &:focus {
+            background: var(--plone-toolbar-link-color);
+            color: var(--plone-toolbar-text-color);
+
+            .label-state-published,
+            .label-state-external {
+                color: var(--plone-toolbar-link-hover-color) !important;
+            }
+        }
+    }
+
+    .toolbar-header {
+        background: var(--bs-primary);
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+        height: var(--plone-toolbar-top-height);
+
+        a {
+            color: var(--plone-toolbar-text-color);
+
+            @include media-breakpoint-down(md) {
+                display: none;
+            }
+        }
+    }
+
+
+    .label-state-published,
+    .label-state-external {
+        color: var(--plone-link-color-on-dark) !important;
+    }
+
+    .label-state-internally_published {
+        color: var(--plone-state-internally-published-color) !important;
+    }
+
+    .label-state-pending {
+        color: var(--plone-state-pending) !important;
+    }
+
+    li.active .label-state-pending,
+    .label-state-pending:hover {
+        color: var(--plone-toolbar-text-color) !important;
+    }
+
+    .label-state-draft,
+    .label-state-internal {
+        color: var(--plone-state-draft) !important;
+    }
+
+    .label-state-private {
+        color: var(--plone-state-private) !important;
+    }
+
+    .personaltools-wrapper {
+        margin-top: auto;
+        border-top: solid 1px var(--plone-toolbar-separator-color);
+        padding: 0.5rem 0;
+    }
+
+}
+
+body.plone-toolbar-left {
+    padding-left: var(--plone-toolbar-width-collapsed);
+
+    .toolbar-expand,
+    .toolbar-collapse {
+        display: none;
+    }
+
+    #edit-zone {
+        .nav-link {
+            padding-right: 0.5rem;
+        }
+
+        .border-top {
+            border-top-color: var(--plone-toolbar-separator-color);
+        }
+    }
+
+    .toolbar-expand {
+        display: block;
+    }
+
+    #edit-zone {
+        visibility: visible !important;
+        transform: none;
+        transition: none;
+        width: var(--plone-toolbar-width-collapsed);
+
+        .toolbar-label {
+            display: none;
+        }
+    }
+
+    // ONLY IF MD OR HIGHER
+    @include media-breakpoint-up(md) {
+        &.plone-toolbar-left-expanded {
+            .toolbar-expand {
+                display: none;
+            }
+
+            .toolbar-collapse {
+                display: block;
+            }
+
+            padding-left: var(--plone-toolbar-width);
+
+            #edit-zone {
+                width: var(--plone-toolbar-width);
+
+                .toolbar-label {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}
+
+/* extending dropdown from BS5 outside media query */
+body.plone-toolbar-top {
+    padding-left: var(--plone-toolbar-width-collapsed);
+    padding-top: 0;
+
+    .toolbar-expand,
+    .toolbar-collapse {
+        display: none;
+    }
+
+    .toolbar-label {
+        display: none;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    body.plone-toolbar-top {
+        padding-top: var(--plone-toolbar-top-height);
+        padding-left: 0;
+
+        .toolbar-collapse,
+        .toolbar-header {
+            height: 100%;
+        }
+
+        #edit-zone {
+            bottom: unset;
+            width: 100%;
+            flex-direction: row;
+            height: var(--plone-toolbar-top-height);
+
+            .plone-toolbar-main {
+                flex-direction: row;
+
+                >.border-top {
+                    border-top: none;
+                    border-right: solid 1px var(--plone-toolbar-separator-color);
+                }
+            }
+
+            .personaltools-wrapper {
+                margin-left: auto;
+                margin-top: 0;
+                padding: 0;
+                border-top: none;
+            }
+
+        }
+    }
+}
+
+/* Dropdown fixes for mobile with top bar  */
+@include media-breakpoint-down(md) {
+    body.plone-toolbar-top {
+        #edit-zone {
+            width: var(--plone-toolbar-width-collapsed);
+
+            .nav-link {
+                padding-right: 0.5rem;
+
+                &.dropdown-toggle::after {
+                    vertical-align: 0;
+                    margin-left: 0;
+                    border-top: .3em solid transparent;
+                    border-right: 0;
+                    border-bottom: .3em solid transparent;
+                    border-left: .3em solid;
+                }
+            }
+
+            .dropdown-menu.show {
+                display: block;
+                margin-left: var(--plone-toolbar-width-collapsed) !important;
+                margin-top: -2.5rem !important;
+            }
+
+
+        }
+    }
+}
