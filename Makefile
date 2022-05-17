@@ -4,6 +4,8 @@ export
 ESLINT ?= npx eslint
 YARN   ?= npx yarn
 
+PACKAGE_NAME = "mockup"
+
 
 .PHONY: install
 stamp-yarn install:
@@ -83,8 +85,8 @@ release-patch: check
 
 .PHONY: prerelease
 prerelease:
-	npx release-it patch --dry-run --ci --preRelease=alpha && \
-		npx release-it patch --ci --preRelease=alpha && \
+	npx release-it --dry-run --ci --preRelease=alpha && \
+		npx release-it --ci --preRelease=alpha && \
 		make release-zip && \
 		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
