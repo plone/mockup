@@ -1,5 +1,5 @@
 {
-    "name": "mockup",
+    "name": "@plone/mockup",
     "version": "5.0.0",
     "description": "A collection of client side patterns for faster and easier web development",
     "license": "BSD-3-Clause",
@@ -126,6 +126,11 @@
         "type": "git",
         "url": "https://github.com/plone/mockup.git"
     },
+    "keywords": [
+        "mockup",
+        "patternslib",
+        "plone"
+    ],
     "publishConfig": {
         "access": "public"
     }
