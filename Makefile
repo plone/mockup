@@ -67,7 +67,7 @@ release-minor: check
 release-patch: check
 	npx release-it patch --dry-run --ci && \
 		npx release-it patch --ci && \
-		npx release-it --github.release --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
+		npx release-it --github.preRelease --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
 
 
