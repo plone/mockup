@@ -38,7 +38,8 @@ var LinkType = Base.extend({
     },
 
     load: function (element) {
-        this.getEl().attr("value", this.tiny.dom.getAttrib(element, "data-val"));
+        let val = this.tiny.dom.getAttrib(element, "data-val");
+        this.getEl().attr("value", val);
     },
 
     set: function (val) {
@@ -853,6 +854,7 @@ export default Base.extend({
         var linkType;
         if (self.isImageMode()) {
             var img;
+            img = self.selectedElm;
             self.imgElm = img;
 
             var src = self.dom.getAttrib(self.imgElm, "src");
