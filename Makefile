@@ -72,7 +72,7 @@ release-patch: check
 
 
 .PHONY: prerelease
-release-patch: check
+release-patch: prerelease
 	npx release-it patch --dry-run --ci --preRelease=alpha && \
 		npx release-it patch --ci --preRelease=alpha && \
 		npx release-it --github.preRelease --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
