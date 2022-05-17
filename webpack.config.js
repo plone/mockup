@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
         },
     };
 
-    config = patternslib_config(env, argv, config, ["mockup"]);
+    config = patternslib_config(env, argv, config, ["@plone/mockup"]);
 
     config.output.path = path.resolve(__dirname, "dist/");
 
