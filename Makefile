@@ -46,12 +46,20 @@ bundle: stamp-yarn
 #	https://github.com/settings/tokens
 #	and https://github.com/release-it/release-it/blob/master/docs/github-releases.md#automated
 
+release-zip: clean-dist bundle
+	$(eval PACKAGE_VERSION := $(shell node -p "require('./package.json').version"))
+	@echo name is $(PACKAGE_NAME)
+	@echo version is $(PACKAGE_VERSION)
+	mkdir -p dist/$(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)
+	-mv dist/* dist/$(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)
+	cd dist/ && zip -r $(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION).zip $(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)/
 
 .PHONY: release-major
 release-major: check
 	npx release-it major --dry-run --ci && \
 		npx release-it major --ci && \
-		npx release-it --github.release --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
+		make release-zip && \
+		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
 
 
@@ -59,7 +67,8 @@ release-major: check
 release-minor: check
 	npx release-it minor --dry-run --ci && \
 		npx release-it minor --ci && \
-		npx release-it --github.release --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
+		make release-zip && \
+		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
 
 
@@ -67,7 +76,8 @@ release-minor: check
 release-patch: check
 	npx release-it patch --dry-run --ci && \
 		npx release-it patch --ci && \
-		npx release-it --github.release --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
+		make release-zip && \
+		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
 
 
@@ -75,7 +85,8 @@ release-patch: check
 prerelease:
 	npx release-it patch --dry-run --ci --preRelease=alpha && \
 		npx release-it patch --ci --preRelease=alpha && \
-		npx release-it --github.preRelease --github.update --no-github.draft --no-increment --no-git --no-npm --ci && \
+		make release-zip && \
+		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
 
 
