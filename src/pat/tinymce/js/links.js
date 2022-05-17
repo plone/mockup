@@ -520,14 +520,7 @@ export default Base.extend({
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
             imageSrcsets: this.options.imageSrcsets,
-<<<<<<< HEAD
-<<<<<<< HEAD
             imageCaptioningEnabled: this.options.imageCaptioningEnabled,
-=======
->>>>>>> d58a56f8 (Use imageSrcset in pat-tinymce)
-=======
-            imageCaptioningEnabled: this.options.imageCaptioningEnabled,
->>>>>>> 1ad5fe41 (refacture pat-tinymce captioning support, to rely on outputfilters)
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
         });
@@ -861,10 +854,7 @@ export default Base.extend({
         var linkType;
         if (self.isImageMode()) {
             var img;
-<<<<<<< HEAD
             img = self.selectedElm;
-=======
->>>>>>> 1ad5fe41 (refacture pat-tinymce captioning support, to rely on outputfilters)
             self.imgElm = img;
 
             var src = self.dom.getAttrib(self.imgElm, "src");
