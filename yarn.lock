@@ -1299,15 +1299,6 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fullcalendar/adaptive@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/adaptive/-/adaptive-5.10.1.tgz#4bfe50da38dfa7ef50f4af73fa6a983202d11165"
-  integrity sha512-Dg+v+nYZKqQ9vhn+z46VhIZ5+OujHBj7ufkZv2Tj0Q1DIdt2sMxMvF/u9WKBru1GCqXuTtGtjiMXLMpL/ZpSRA==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    "@fullcalendar/premium-common" "~5.10.1"
-    tslib "^2.1.0"
-
 "@fullcalendar/adaptive@^5.11.0":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/adaptive/-/adaptive-5.11.0.tgz#e789c47c81894c96a40bb383b4f4c443fa89964b"
@@ -1317,27 +1308,11 @@
     "@fullcalendar/premium-common" "~5.11.0"
     tslib "^2.1.0"
 
-"@fullcalendar/common@~5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.10.1.tgz#a019951743852277a4095e536fd7716f6f85b9aa"
-  integrity sha512-EumKIJcQTvQdTs75/9dmeREFgjcRVWzqHJS1Xvlz5mNsmB+w9EINCHETRjChtAQg1WD/lTQyVj4sHsKO7vCMSw==
-  dependencies:
-    tslib "^2.1.0"
-
 "@fullcalendar/common@~5.11.0":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.11.0.tgz#d7e47b4272ba6824f95581fb7fb630c5880f4212"
   integrity sha512-gWjbMAnN1u73Oqlgjbyky7i+3bY0hvFSnGT0YBPx44n874AkQa9e9OU12PMLTMOPy0tXPb8DEwRelFQ7CJNbcw==
   dependencies:
-    tslib "^2.1.0"
-
-"@fullcalendar/core@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-5.10.1.tgz#05c7653e5004149a63bcb03e9dc8b049186ca50b"
-  integrity sha512-8sVuC6ywXV+cxqsqTZaR1hgUqeyjVed20NyZ7lGW9AY0kma1GIEwLgqPS5Q6uVhHyin68lmgecKfJCwhxENE8w==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    preact "^10.0.5"
     tslib "^2.1.0"
 
 "@fullcalendar/core@^5.11.0":
@@ -1349,14 +1324,6 @@
     preact "^10.0.5"
     tslib "^2.1.0"
 
-"@fullcalendar/daygrid@^5.10.1", "@fullcalendar/daygrid@~5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.10.1.tgz#bdee4f58364fdab631b2abf8b56094ab5776f203"
-  integrity sha512-sfUMP+rew0krsBffgNcWWKhBCiyytGfRKZJoc64E8ohX7VWjPcPZuB1xgO5U4wPLmNkT0rZiHoGeQGTXw1+ZKg==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    tslib "^2.1.0"
-
 "@fullcalendar/daygrid@^5.11.0", "@fullcalendar/daygrid@~5.11.0":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.11.0.tgz#fd10391dfc2b6caa3538e0826f8d8f3e83e0e22a"
@@ -1365,28 +1332,12 @@
     "@fullcalendar/common" "~5.11.0"
     tslib "^2.1.0"
 
-"@fullcalendar/interaction@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-5.10.1.tgz#dfa74b5c50bbd5608eb50aeab6e579c8d20cb367"
-  integrity sha512-H1g1QeXg7yXtUcKmVtfg7uzm5R5ElFTvYniiXU+8kJda69IDg7Lee+Y7UDv5dvLb5/HxO86RhPVxRtcOQ8XdXw==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    tslib "^2.1.0"
-
 "@fullcalendar/interaction@^5.11.0":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-5.11.0.tgz#9cfb46cc5f75690394ef553d2c5cf4955782ff05"
   integrity sha512-9XTI5+ydqrSX+IL3iWgKBURXfnPewn57Tmsv9mJZhiqrUEF7/+qtftLoKEAc8ZdWk/+01aBe67PFL16uPXj2Jg==
   dependencies:
     "@fullcalendar/common" "~5.11.0"
-    tslib "^2.1.0"
-
-"@fullcalendar/list@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-5.10.1.tgz#8505aae09845b82f5bdb6251bda0f9d6342ef9d9"
-  integrity sha512-sB+AzM9P1nzGIzwVFNN8Zbocg5lkVQftyuJAZtULgu9o9e1rH/Aqsxt9Itf00N3WmMOh8H1LlnRpZF5kGu/j2w==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
     tslib "^2.1.0"
 
 "@fullcalendar/list@^5.11.0":
@@ -1405,37 +1356,12 @@
     "@fullcalendar/common" "~5.11.0"
     tslib "^2.1.0"
 
-"@fullcalendar/luxon@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/luxon/-/luxon-5.10.1.tgz#1ad8300c6cbbb467574c96980a69ba46730bde24"
-  integrity sha512-THmIytaHo2SFb1lUQ8hhkZjNgt9dmIpioGEuuIj4ETDS3pHFVHMTcV22vBFC74f6kc/OA2Vwfj3+5JHltKjD/g==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    tslib "^2.1.0"
-
-"@fullcalendar/premium-common@~5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-5.10.1.tgz#47d26406e926317fd45919c0f52ce6cc02a17baf"
-  integrity sha512-yOZgtVI/7tt1oeQABLQqTNLEv2YpxbE0ywvQ+VwtrKc5LksmUA2czO4peom1KIAwH6JsZnytpvwQ4k4cP8Ivaw==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    tslib "^2.1.0"
-
 "@fullcalendar/premium-common@~5.11.0":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-5.11.0.tgz#984ad16dba011c656ebc9ecb358bf6f2733c5e88"
   integrity sha512-XVLJwJQ26EhuglBM1flmrKtNt0BEUBHoazko/wvMiz5Yz17eABKQreFTidipOwjL3s74ifQzDoYpkQVn8TzpZQ==
   dependencies:
     "@fullcalendar/common" "~5.11.0"
-    tslib "^2.1.0"
-
-"@fullcalendar/timegrid@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-5.10.1.tgz#fa7feb909bf599eac1466b9e70c0d56ce0d1aefc"
-  integrity sha512-0O0m+JzFBlg8gxYr/rIjZViRlbndCtjZlDjjIylQHFBeWC32e3cpHEavKGbTIBLN8SDilUYAJnE21abSqC2G/w==
-  dependencies:
-    "@fullcalendar/common" "~5.10.1"
-    "@fullcalendar/daygrid" "~5.10.1"
     tslib "^2.1.0"
 
 "@fullcalendar/timegrid@^5.11.0":
@@ -1905,53 +1831,7 @@
     codejar "^3.5.0"
     prismjs "^1.27.0"
 
-"@patternslib/pat-content-browser@git+https://github.com/plone/pat-content-browser.git#a6d146bea74a64ba802663d00887b6b8fd7eef59":
-  version "0.9.0"
-  resolved "git+https://github.com/plone/pat-content-browser.git#a6d146bea74a64ba802663d00887b6b8fd7eef59"
-  dependencies:
-    "@patternslib/patternslib" "^6.0.1"
-    svelte "^3.44.0"
-    svelte-keydown "^0.3.1"
-    svelte-scrollto "^0.2.0"
-
-"@patternslib/patternslib@^6.0.1", "@patternslib/patternslib@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-7.4.0.tgz#b49a4716aa58cc7fe8dd8a5da6e647b0603b68ba"
-  integrity sha512-XHrcKTT4t7jUhVYb2pdEB+DbhKQ7upmr4fpU6eKCSClt69axivEhT3dEJeHUQGX9DmQKW/DU1dXTuGJMfc+QmA==
-  dependencies:
-    "@fullcalendar/adaptive" "^5.10.1"
-    "@fullcalendar/core" "^5.10.1"
-    "@fullcalendar/daygrid" "^5.10.1"
-    "@fullcalendar/interaction" "^5.10.1"
-    "@fullcalendar/list" "^5.10.1"
-    "@fullcalendar/luxon" "^5.10.1"
-    "@fullcalendar/timegrid" "^5.10.1"
-    "@juggle/resize-observer" "^3.3.1"
-    "@stomp/stompjs" "^6.1.2"
-    google-code-prettify "^1.0.5"
-    imagesloaded "^4.1.4"
-    intersection-observer "^0.12.0"
-    jquery "^3.6.0"
-    jquery-jcrop "^0.9.13"
-    luxon "^1.27.0"
-    masonry-layout "^4.2.2"
-    moment "^2.29.1"
-    moment-timezone "^0.5.34"
-    photoswipe "^4.1.3"
-    pikaday "^1.8.0"
-    promise-polyfill "^8.2.3"
-    screenfull "^6.0.1"
-    select2 "^3.5.1"
-    showdown "^2.0.3"
-    showdown-prettify "^1.3.0"
-    slick-carousel "^1.8.1"
-    slides "git+https://github.com/Patternslib/slides.git"
-    spectrum-colorpicker "^1.8.0"
-    tippy.js "^6.3.7"
-    url-polyfill "^1.1.9"
-    whatwg-fetch "^3.4.0"
-
-"@patternslib/patternslib@^8.0.0":
+"@patternslib/patternslib@8.0.0", "@patternslib/patternslib@^7.4.0", "@patternslib/patternslib@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-8.0.0.tgz#97eb79cc5e0b324d962e1bafceb7da9cbf9f0028"
   integrity sha512-fApsPEC89xeYs1idehIvKSCZn2bLi/723s71Ez+lBfDWlDt+3lQ861Ve//ArdeOXlviOvFbkwAnYk0h26lqoTg==
@@ -7519,7 +7399,7 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-luxon@^1.26.0, luxon@^1.27.0:
+luxon@^1.26.0:
   version "1.28.0"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.28.0.tgz#e7f96daad3938c06a62de0fb027115d251251fbf"
   integrity sha512-TfTiyvZhwBYM/7QdAVDh+7dBTBA29v4ik0Ce9zda3Mnf8on1S5KJI8P2jKFZ8+5C0jhmr0KwJEO/Wdpm0VeWJQ==
@@ -7797,7 +7677,7 @@ moment-timezone@^0.5.34:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.29.1:
+"moment@>= 2.9.0":
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -9636,13 +9516,6 @@ showdown@^1.3.0:
   dependencies:
     yargs "^14.2"
 
-showdown@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/showdown/-/showdown-2.0.3.tgz#1ec96dd19637fe4617b160f7b50280120964640b"
-  integrity sha512-jHytkv5c5YFTAOYIIaTT1zLL/aC+7C1FiP0CIGQozhHnnFSbor1oYkaNqWFL6CpB3zJNPPSxJrAlsHgzN14knQ==
-  dependencies:
-    commander "^9.0.0"
-
 showdown@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/showdown/-/showdown-2.1.0.tgz#1251f5ed8f773f0c0c7bfc8e6fd23581f9e545c5"
@@ -10199,42 +10072,6 @@ supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
-
-svelte-dev-helper@^1.1.9:
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/svelte-dev-helper/-/svelte-dev-helper-1.1.9.tgz#7d187db5c6cdbbd64d75a32f91b8998bde3273c3"
-  integrity sha1-fRh9tcbNu9ZNdaMvkbiZi94yc8M=
-
-svelte-hmr@^0.14.2:
-  version "0.14.11"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.14.11.tgz#63d532dc9c2c849ab708592f034765fa2502e568"
-  integrity sha512-R9CVfX6DXxW1Kn45Jtmx+yUe+sPhrbYSUp7TkzbW0jI5fVPn6lsNG9NEs5dFg5qRhFNAoVdRw5qQDLALNKhwbQ==
-
-svelte-keydown@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/svelte-keydown/-/svelte-keydown-0.3.1.tgz#b9045460ad468b51ba9054472896648fc771dbdd"
-  integrity sha512-/tLz9VcI9AEkCZnmLy85N2RGYm86QO9E4py7uI3FzzDo2LdFs3NRNxPo4OIqM6QgBn3rlunxmJY0QPoN0G259w==
-
-svelte-loader@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/svelte-loader/-/svelte-loader-3.1.2.tgz#b8fe0ea13fa306167402e16ffd0216ea2752b2bc"
-  integrity sha512-RhVIvitb+mtIwKNyvNQoDQ0EhXg2KH8LhQiiqeJh8u6vqJyGWoMoFcYCar69TT+1iaK5IYe0wPNYJ6TILcsurw==
-  dependencies:
-    loader-utils "^2.0.0"
-    svelte-dev-helper "^1.1.9"
-    svelte-hmr "^0.14.2"
-
-svelte-scrollto@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/svelte-scrollto/-/svelte-scrollto-0.2.0.tgz#a1da47876466796bba4533a4346537f752f01680"
-  integrity sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==
-  dependencies:
-    svelte "3.x"
-
-svelte@3.x, svelte@^3.44.0:
-  version "3.46.5"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.46.5.tgz#808daad6f3cbbeff550c3f7511f2667971eb080a"
-  integrity sha512-T4txpIgYEGTkpFY2KQoqvtDmapu/suHMx0GN2zAImdJ7liEdG29P0XpjcNHnOEU1a4lLJn1WXxreobBSIGdcbQ==
 
 symbol-observable@1.0.1:
   version "1.0.1"
