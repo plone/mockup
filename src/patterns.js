@@ -3,8 +3,8 @@
  */
 
 // Core
+import "@patternslib/patternslib/src/globals";
 import registry from "@patternslib/patternslib/src/core/registry";
-import jquery from "jquery";
 
 // Bootstrap
 import "bootstrap";
@@ -62,17 +62,14 @@ import "./pat/controlpanels/discussion";
 import "./pat/controlpanels/discussion-comments";
 import "./pat/controlpanels/discussion-moderation";
 
-// Import pattern styles in JavaScript
-window.__patternslib_import_styles = true;
-
-// Register jQuery globally
-window.jQuery = jquery;
-
 // Change default value for pat-tooltip trigger
 tooltip_parser.parameters.trigger.value = "hover";
 
 // Change validation error template to be BS compatible
 validation_parser.parameters["error-template"].value =
     '<em class="invalid-feedback">${this.message}</em>';
+
+// Import pattern styles in JavaScript
+window.__patternslib_import_styles = true;
 
 registry.init();
