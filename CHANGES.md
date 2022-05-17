@@ -1,5 +1,13 @@
 
 
+### [5.0.2-alpha.0](https://github.com/plone/mockup/compare/5.0.1-alpha.0...5.0.2-alpha.0) (2022-05-17)
+
+
+### Maintenance
+
+
+* **Bundle:** Also upload a compiled bundle release for GitHub. ([2604397](https://github.com/plone/mockup/commit/2604397277a3048ee77594e29c48b67d1f378df7))
+
 ### [5.0.1-alpha.0](https://github.com/plone/mockup/compare/5.0.0-alpha.0...5.0.1-alpha.0) (2022-05-17)
 
 
