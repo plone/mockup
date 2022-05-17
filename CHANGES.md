@@ -1,5 +1,13 @@
 
 
+### [5.0.2-alpha.1](https://github.com/plone/mockup/compare/5.0.2-alpha.0...5.0.2-alpha.1) (2022-05-17)
+
+
+### Bug Fixes
+
+
+* **Bundle:** Update new package name including [@plone](https://github.com/plone) scope. ([77bb86a](https://github.com/plone/mockup/commit/77bb86aa88dbb8c4189e8cf50e3650838b031cd8))
+
 ### [5.0.2-alpha.0](https://github.com/plone/mockup/compare/5.0.1-alpha.0...5.0.2-alpha.0) (2022-05-17)
 
 
