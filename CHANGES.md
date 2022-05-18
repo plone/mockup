@@ -1,5 +1,29 @@
 
 
+## [5.0.0-alpha.2](https://github.com/plone/mockup/compare/5.0.0-alpha.1...5.0.0-alpha.2) (2022-05-18)
+
+
+### Features
+
+
+* **Build:** Create jquery and bootstrap bundles with module federation support. ([32e00d4](https://github.com/plone/mockup/commit/32e00d447ba21d45bc608e7026e8312670bc080e))
+
+
+
+### Maintenance
+
+
+* **Build:** Fix Makefile - use github.preRelease switch for prerelease target. ([164a3a8](https://github.com/plone/mockup/commit/164a3a82f3360686668fe2412de489b048beb6ad))
+
+
+* **Build:** Update GitHub workflows definition. ([1180bb5](https://github.com/plone/mockup/commit/1180bb5f746b76ff026f618450c579058bd7e5f3))
+
+
+* **Build:** Upgrade Patternslib to 8.0.1. ([8103362](https://github.com/plone/mockup/commit/810336274bb1ccb08d0fbe6b37b32c4e00336a8e))
+
+
+* **Bundle:** Upgrade dependencies. ([e87d935](https://github.com/plone/mockup/commit/e87d935d4897f27d4c9a0cb869f3fbd2ce7c630e))
+
 ## [5.0.0-alpha.1](https://github.com/plone/mockup/compare/5.0.0-alpha.0...5.0.0-alpha.1) (2022-05-18)
 
 
