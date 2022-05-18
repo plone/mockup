@@ -8,6 +8,8 @@ module.exports = (env, argv) => {
     let config = {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
+            "bootstrap.min": path.resolve(__dirname, "src/index-bootstrap.js"),
+            "jquery.min": path.resolve(__dirname, "src/index-jquery.js"),
         },
     };
 
@@ -19,6 +21,32 @@ module.exports = (env, argv) => {
         mf_config({
             package_json: package_json,
             remote_entry: config.entry["bundle.min"],
+        })
+    );
+    config.plugins.push(
+        mf_config({
+            name: "bootstrap",
+            filename: "bootstrap-remote.min.js",
+            remote_entry: config.entry["bootstrap.min"],
+            shared: {
+                bootstrap: {
+                    singleton: true,
+                    requiredVersion: package_json.dependencies["bootstrap"],
+                },
+            },
+        })
+    );
+    config.plugins.push(
+        mf_config({
+            name: "jquery",
+            filename: "jquery-remote.min.js",
+            remote_entry: config.entry["jquery.min"],
+            shared: {
+                jquery: {
+                    singleton: true,
+                    requiredVersion: package_json.dependencies["jquery"],
+                },
+            },
         })
     );
 
@@ -35,6 +63,8 @@ module.exports = (env, argv) => {
             "../plone.staticresources/src/plone/staticresources/static/bundle-plone/"
         );
     }
+
+    //console.log(JSON.stringify(config, null, 4));
 
     return config;
 };
