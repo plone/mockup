@@ -88,7 +88,7 @@ prerelease:
 	npx release-it --dry-run --ci --preRelease=alpha && \
 		npx release-it --ci --preRelease=alpha && \
 		make release-zip && \
-		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
+		npx release-it --github.preRelease --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm --ci && \
 		git checkout CHANGES.md
 
 
