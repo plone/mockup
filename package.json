@@ -6,7 +6,7 @@
     "main": "./src/patterns.js",
     "dependencies": {
         "@patternslib/pat-code-editor": "^2.1.2",
-        "@patternslib/patternslib": "^8.0.1",
+        "@patternslib/patternslib": "^8.0.2",
         "backbone": "1.4.1",
         "backbone.paginator": "1.0.0",
         "bootstrap": "^5.2.0-beta1",
@@ -87,7 +87,7 @@
         "yarn": "^1.22.18"
     },
     "resolutions": {
-        "@patternslib/patternslib": "8.0.1",
+        "@patternslib/patternslib": "8.0.2",
         "jquery": "3.6.0"
     },
     "scripts": {
