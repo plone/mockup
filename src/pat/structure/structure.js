@@ -140,6 +140,7 @@ export default Base.extend({
         const Backbone = (await import("backbone")).default;
         window._ = _;
         window.Backbone = Backbone;
+        await import("backbone.paginator");
 
         const AppView = (await import("./js/views/app")).default;
 
