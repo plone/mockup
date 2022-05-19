@@ -1831,10 +1831,10 @@
     codejar "^3.5.0"
     prismjs "^1.27.0"
 
-"@patternslib/patternslib@8.0.1", "@patternslib/patternslib@^7.4.0", "@patternslib/patternslib@^8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-8.0.1.tgz#cbde1fdc288f2d273826912fd77c043556f0347d"
-  integrity sha512-Bqy+P3zGQ0Cwxdm8S1atr91ZcyQ3CNZdZnql6+6uGU0ojqUzJofFX+JDwtUB0T354b+rTh9MrNplo8+fM+zKUQ==
+"@patternslib/patternslib@8.0.2", "@patternslib/patternslib@^7.4.0", "@patternslib/patternslib@^8.0.2":
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/@patternslib/patternslib/-/patternslib-8.0.2.tgz#e062e369008b41e07ffb59395d3d82ae9a210b0f"
+  integrity sha512-U4tr0jMMsJh0AWKFihQkDqMAtiL4g5uyQU8USkX96vYbeGLXrfYcJynv3DVWc/SqHjqqs+98epJO8/USfefZcg==
   dependencies:
     "@fullcalendar/adaptive" "^5.11.0"
     "@fullcalendar/core" "^5.11.0"
@@ -5058,11 +5058,6 @@ expect@^28.1.0:
     jest-matcher-utils "^28.1.0"
     jest-message-util "^28.1.0"
     jest-util "^28.1.0"
-
-expose-loader@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-4.0.0.tgz#aa6f06f57cbc904175de4fe4eaff6211337e0231"
-  integrity sha512-kUEvHyf6MPR2ubZCL9aziP9Br5wxMvq1cghTpYhM6MW52NPq+7hXixw2EqQuI1SvGb1fDjc2ehJOg6645wR6ww==
 
 express@^4.17.3:
   version "4.18.1"
