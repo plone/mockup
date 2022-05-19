@@ -1,5 +1,16 @@
 
 
+## [5.0.0-alpha.4](https://github.com/plone/mockup/compare/5.0.0-alpha.3...5.0.0-alpha.4) (2022-05-19)
+
+
+### Maintenance
+
+
+* **Bundle:** expose-loader not needed anymore. ([0001ee0](https://github.com/plone/mockup/commit/0001ee0f5b3fe4f15bdc80ecec75194c4ca6f5be))
+
+
+* **Bundle:** Upgrade to Patternslib 8.0.2. ([76c8421](https://github.com/plone/mockup/commit/76c842177edf88a558e4369984ecfecc8bdd6bae))
+
 ## [5.0.0-alpha.3](https://github.com/plone/mockup/compare/5.0.0-alpha.2...5.0.0-alpha.3) (2022-05-19)
 
 
