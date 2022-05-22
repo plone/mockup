@@ -3,7 +3,6 @@ import Base from "@patternslib/patternslib/src/core/base";
 import _ from "underscore";
 import Backdrop from "../backdrop/backdrop";
 import registry from "@patternslib/patternslib/src/core/registry";
-import Router from "../../core/router";
 import utils from "../../core/utils";
 import _t from "../../core/i18n";
 
@@ -107,10 +106,6 @@ export default Base.extend({
                 }
                 return "";
             },
-        },
-        routerOptions: {
-            id: null,
-            pathExp: null,
         },
         form: function (actions) {
             var self = this;
@@ -540,19 +535,6 @@ export default Base.extend({
         self.options.loadLinksWithinModal = $.parseJSON(
             self.options.loadLinksWithinModal
         );
-        // Router
-        if (self.options.routerOptions.id !== null) {
-            Router.addRoute(
-                "modal",
-                self.options.routerOptions.id,
-                function () {
-                    this.show();
-                },
-                self,
-                self.options.routerOptions.pathExp,
-                self.options.routerOptions.expReplace
-            );
-        }
 
         if (self.options.backdropOptions.closeOnEsc === true) {
             $(document).on("keydown", function (e, data) {
