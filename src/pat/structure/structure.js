@@ -136,11 +136,12 @@ export default Base.extend({
         import("./structure.scss");
         (await import("bootstrap")).Dropdown;
 
+        // backbone paginator, loaded by app-view expects Backbone and
+        // Underscore to be in global namespace.
         const _ = (await import("underscore")).default;
         const Backbone = (await import("backbone")).default;
         window._ = _;
         window.Backbone = Backbone;
-        await import("backbone.paginator");
 
         const AppView = (await import("./js/views/app")).default;
 
