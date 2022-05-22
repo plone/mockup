@@ -89,7 +89,9 @@
     },
     "resolutions": {
         "@patternslib/patternslib": "8.0.2",
-        "jquery": "3.6.0"
+        "backbone": "1.4.1",
+        "jquery": "3.6.0",
+        "underscore": "1.13.3"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
