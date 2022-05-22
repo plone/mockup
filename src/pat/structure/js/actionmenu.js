@@ -1,4 +1,3 @@
-import _ from "lodash";
 import _t from "../../../core/i18n-wrapper";
 
 const menuOptions = {
@@ -92,9 +91,9 @@ const ActionMenu = function (menu) {
 
     const model = menu.model.attributes;
     const app = menu.app;
-    const canMove = !!app.options.moveUrl
+    const canMove = !!app.options.moveUrl;
 
-    const result = _.cloneDeep(menuOptions);
+    const result = JSON.parse(JSON.stringify(menuOptions));
     if (!(app.pasteAllowed() && model.is_folderish)) {
         delete result.pasteItem;
     }
