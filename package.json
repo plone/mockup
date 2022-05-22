@@ -36,7 +36,8 @@
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.0",
         "tinymce": "^5.10.2",
-        "tinymce-i18n": "^20.12.25"
+        "tinymce-i18n": "^20.12.25",
+        "underscore": "^1.13.3"
     },
     "devDependencies": {
         "@11ty/eleventy": "^0.12.1",
