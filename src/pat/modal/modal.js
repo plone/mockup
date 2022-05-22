@@ -190,7 +190,7 @@ export default Base.extend({
 
             // pass action that was clicked when submiting form
             var formData = [];
-            formData.push({"name": $action.attr("name"), "value": $action.attr("value")});
+            formData.push({ name: $action.attr("name"), value: $action.attr("value") });
 
             var $form;
 
@@ -874,11 +874,10 @@ export default Base.extend({
                 : self.options.margin;
         let modalCss = {
             position: "absolute",
-        }
-        if(margin !== "0"){
+        };
+        if (margin !== "0") {
             modalCss["padding"] = margin;
         }
-        console.log(modalCss)
         self.$modal.css(modalCss);
         self.$modalDialog.css({
             // margin: "0",
