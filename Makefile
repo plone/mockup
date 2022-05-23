@@ -40,7 +40,7 @@ check: stamp-yarn eslint test
 
 .PHONY: bundle
 bundle: stamp-yarn
-	$(YARN) run build
+	$(YARN) run build:webpack
 
 
 # If you want to release on GitHub, make sure to have a .env file with a GITHUB_TOKEN.
