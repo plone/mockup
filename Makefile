@@ -57,7 +57,7 @@ release-zip: clean-dist bundle
 	cd dist/ && zip -r $(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION).zip $(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)/
 
 .PHONY: release-major
-release-major: check
+release-major: clean install check
 	npx release-it major && \
 		make release-zip && \
 		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
@@ -65,7 +65,7 @@ release-major: check
 
 
 .PHONY: release-minor
-release-minor: check
+release-minor: clean install check
 	npx release-it minor && \
 		make release-zip && \
 		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
@@ -73,7 +73,7 @@ release-minor: check
 
 
 .PHONY: release-patch
-release-patch: check
+release-patch: clean install check
 	npx release-it patch && \
 		make release-zip && \
 		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
@@ -81,7 +81,7 @@ release-patch: check
 
 
 .PHONY: prerelease
-prerelease:
+prerelease: clean install
 	npx release-it --preRelease=alpha && \
 		make release-zip && \
 		npx release-it --github.preRelease --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
