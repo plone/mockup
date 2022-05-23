@@ -1,5 +1,45 @@
 
 
+## [5.0.0-alpha.5](https://github.com/plone/mockup/compare/5.0.0-alpha.4...5.0.0-alpha.5) (2022-05-23)
+
+
+### Bug Fixes
+
+
+* **pat structure:** Also import backbone.paginator and avoid a import/initialization problem where Backbone wasn't available. ([7c2b37f](https://github.com/plone/mockup/commit/7c2b37fefca06724e748ecac986d6f512fce06a7))
+
+
+
+### Breaking Changes
+
+
+* **core router:** Remove unused backbone router module. ([64ef907](https://github.com/plone/mockup/commit/64ef907d8a330b6ec2c80adfd8bd2c9e533b57dc))
+
+
+* **pat modal:** Remove untested and unused (core Plone) router option. ([79bcc81](https://github.com/plone/mockup/commit/79bcc8109beff43751c3d1ae5611359cd9f4dabd))
+
+
+
+### Maintenance
+
+
+* **Build:** Explicitly add underscore as dependency. ([26fdd0a](https://github.com/plone/mockup/commit/26fdd0a688fb355d1f634749217deeac275834fb))
+
+
+* **Build:** Fix backbone and underscore dependencies. backbone.paginator requests outdated versions. ([f229b9a](https://github.com/plone/mockup/commit/f229b9afc481a7f6f18cc7e43d34476e5b439ebf))
+
+
+* **Build:** Remove non interactive ci-mode from Makefile to allow for OTP prompt and two-factor auth on npm. Also remove dry-run as we're now asked for each step. ([7ba9ff8](https://github.com/plone/mockup/commit/7ba9ff8b39f4cd96e54a82059d83b75a53778cf5))
+
+
+* **pat modal:** Code formatting. ([ab780b4](https://github.com/plone/mockup/commit/ab780b4354a6ab48f53530f573c198b285b8535c))
+
+
+* **pat structure:** Don't depend on lodash. ([6f92a53](https://github.com/plone/mockup/commit/6f92a53cf748a6c0551e5151bff95a2b22b2d4d9))
+
+
+* **pat structure:** Importing backbone.paginator in collections.result is enough. Document why we add Underscore and Backbone to the global namespace. ([068301f](https://github.com/plone/mockup/commit/068301f406729d8c4e60840665e9845dceda5b99))
+
 ## [5.0.0-alpha.4](https://github.com/plone/mockup/compare/5.0.0-alpha.3...5.0.0-alpha.4) (2022-05-19)
 
 
