@@ -1,5 +1,29 @@
 
 
+## [5.0.0-alpha.6](https://github.com/plone/mockup/compare/5.0.0-alpha.5...5.0.0-alpha.6) (2022-05-23)
+
+
+### Maintenance
+
+
+* **Build:** Makefile: Do clean and install before releasing. ([51e9077](https://github.com/plone/mockup/commit/51e90776b572575d0367044cb8d5a84140c0b103))
+This avoids any node_modules subdirectories from linked dependencies to land in the build.
+
+* **Build:** Makefile: Only do a build:webpack when make build. Also makes release faster, where we do not need to build the docs - yet. ([8837459](https://github.com/plone/mockup/commit/88374594fe2278965e71aa76340cf70eb0c0c7a0))
+
+
+* **Bundle:** Move dependency backbone.paginator to devDependencies to avoid version conflicts. ([f40f64d](https://github.com/plone/mockup/commit/f40f64d17ae3207d90d59390b5430850f1d8b205))
+backbone.paginator is now in devDependencies as it requests outdated
+versions of Backbone and Underscore. Having this in normal dependencies
+field would eventually let backbone.paginator register itself in an
+outdated Backbone version and make it unavailable by those used in
+structure pattern.
+Having this in devDependencies avoids this, but also makes the structure
+pattern unavailable in add-on bundles unless this dependency is
+explicitly added.
+However, this should be fixed in a more sane way. But that's out of
+scope for now.
+
 ## [5.0.0-alpha.5](https://github.com/plone/mockup/compare/5.0.0-alpha.4...5.0.0-alpha.5) (2022-05-23)
 
 
