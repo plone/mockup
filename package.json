@@ -4,11 +4,13 @@
     "description": "A collection of client side patterns for faster and easier web development",
     "license": "BSD-3-Clause",
     "main": "./src/patterns.js",
+    "dependenciesComments": {
+        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions of Backbone and Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern."
+    },
     "dependencies": {
         "@patternslib/pat-code-editor": "^2.1.2",
         "@patternslib/patternslib": "^8.0.2",
         "backbone": "1.4.1",
-        "backbone.paginator": "1.0.0",
         "bootstrap": "^5.2.0-beta1",
         "bootstrap-icons": "^1.8.2",
         "cs-jqtree-contextmenu": "0.1.0",
@@ -53,6 +55,7 @@
         "@testing-library/jest-dom": "^5.16.4",
         "@types/sinon": "^10.0.11",
         "babel-loader": "^8.2.5",
+        "backbone.paginator": "1.0.0",
         "copy-webpack-plugin": "^11.0.0",
         "copyfiles": "^2.4.1",
         "core-js": "3.22.5",
