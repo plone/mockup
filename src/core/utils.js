@@ -403,7 +403,14 @@ const resolveIcon = async function (name, as_node, css_class) {
             const url = base_url + "/@@iconresolver";
             if (url) {
                 try {
-                    const resp = await fetch(`${url}/${name}`);
+                    // Fetch timeout
+                    const controller = new AbortController();
+                    // 5 second timeout:
+                    setTimeout(() => controller.abort(), 5000);
+
+                    const resp = await fetch(`${url}/${name}`, {
+                        signal: controller.signal,
+                    });
                     icon = await resp.text();
                 } catch (e) {
                     logger.warn(`Loading icon "${name}" from URL ${url} failed.`);
