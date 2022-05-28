@@ -367,13 +367,6 @@ var storage = {
     },
 };
 
-var createElementFromHTML = function (htmlString) {
-    // From: https://stackoverflow.com/a/494348/1337474
-    var div = document.createElement("div");
-    div.innerHTML = htmlString.trim();
-    return div.firstChild;
-};
-
 const ICON_CACHE = new Map();
 
 /**
@@ -460,5 +453,4 @@ export default {
     resolveIcon: resolveIcon,
     setId: setId,
     storage: storage,
-    createElementFromHTML: createElementFromHTML,
 };

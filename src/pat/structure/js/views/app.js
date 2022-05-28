@@ -1,6 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
+import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../../../core/utils";
 import logging from "@patternslib/patternslib/src/core/logging";
 import Cookies from "js-cookie";
@@ -571,13 +572,13 @@ export default BaseView.extend({
             return;
         }
 
-        const el = utils.createElementFromHTML(
+        const el = dom.create_from_string(
             this.statusTemplate({
                 label: status.label || "",
                 text: status.text,
                 type: status.type || "warning",
             })
-        );
+        ).lastChild;
 
         if (btn) {
             btn = $(btn)[0]; // support jquert + bare dom elements
@@ -614,7 +615,7 @@ export default BaseView.extend({
             }
         }
         this.$el.append(
-            utils.createElementFromHTML('<div class="fc-status-container"></div>')
+            dom.create_from_string('<div class="fc-status-container"></div>')
         );
         if (this.columnsView) {
             this.$el
