@@ -14,7 +14,7 @@ export default BaseView.extend({
     },
     extraClasses: [],
     tooltip: null,
-    template: '<%= title %>',
+    template: "<%= title %>",
     events: {
         click: "handleClick",
     },
@@ -27,22 +27,25 @@ export default BaseView.extend({
 
         this.on(
             "render",
-            async function (){
+            async function () {
                 this.$el.attr("title", this.options.title || "");
-                this.$el.attr("aria-label", this.options.title || this.options.tooltip || "");
-                if(this.context !== null){
+                this.$el.attr(
+                    "aria-label",
+                    this.options.title || this.options.tooltip || ""
+                );
+                if (this.context !== null) {
                     this.$el.addClass("btn-" + this.context);
                 }
                 _.each(
-                  this.extraClasses,
-                  function(klass){
-                      this.$el.addClass(klass);
-                  }.bind(this)
+                    this.extraClasses,
+                    function (klass) {
+                        this.$el.addClass(klass);
+                    }.bind(this)
                 );
 
-                if(this.icon && typeof this.icon == 'string'){
+                if (this.icon && typeof this.icon == "string") {
                     const iconMarkup = await utils.resolveIcon(this.icon, true);
-                    if(iconMarkup){
+                    if (iconMarkup) {
                         this.$el.prepend(iconMarkup);
                     }
                 }

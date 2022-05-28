@@ -79,7 +79,9 @@ export default BaseView.extend({
         });
 
         // initialize batch size
-        this.collection.paginator_ui.perPage = parseInt(this.getCookieSetting("perPage", 15))
+        this.collection.paginator_ui.perPage = parseInt(
+            this.getCookieSetting("perPage", 15)
+        );
 
         this.activeColumns = this.getCookieSetting(
             this.activeColumnsCookie,
@@ -408,7 +410,7 @@ export default BaseView.extend({
                 id: "selected-items",
                 tooltip: _t("Manage selection"),
                 collection: this.selectedCollection,
-                icon: 'plone-selection',
+                icon: "plone-selection",
             })
         );
 
@@ -460,9 +462,12 @@ export default BaseView.extend({
                 } else {
                     button.on("button:click", () => this.buttonClickEvent(button), this);
                 }
-            }
-            catch (err) {
-                log.error(`Error initializing button ${buttonOptions.title || buttonOptions.id} ${err}`);
+            } catch (err) {
+                log.error(
+                    `Error initializing button ${
+                        buttonOptions.title || buttonOptions.id
+                    } ${err}`
+                );
             }
         }
         this.buttons = new ButtonGroup({
@@ -510,7 +515,7 @@ export default BaseView.extend({
             error: () => {
                 this.clearStatus();
                 this.setStatus({
-                    text:  _t("Error moving item"),
+                    text: _t("Error moving item"),
                     type: "danger",
                 });
             },
@@ -566,11 +571,13 @@ export default BaseView.extend({
             return;
         }
 
-        const el = utils.createElementFromHTML(this.statusTemplate({
-            label: status.label || "",
-            text: status.text,
-            type: status.type || "warning",
-        }));
+        const el = utils.createElementFromHTML(
+            this.statusTemplate({
+                label: status.label || "",
+                text: status.text,
+                type: status.type || "warning",
+            })
+        );
 
         if (btn) {
             btn = $(btn)[0]; // support jquert + bare dom elements
@@ -593,15 +600,16 @@ export default BaseView.extend({
     render: async function () {
         this.$el.append(this.toolbar.render().el);
         if (this.wellView) {
-            this.$el.find("#btn-" + this.wellView.id).after((await this.wellView.render()).el);
+            this.$el
+                .find("#btn-" + this.wellView.id)
+                .after((await this.wellView.render()).el);
         }
         for (const form of this.forms) {
             const id = $(form).attr("id");
             const $btn = this.$el.find("#btn-" + id);
-            if($btn.closest('.btn-group').length){
-                $btn.closest('.btn-group').after(form);
-            }
-            else{
+            if ($btn.closest(".btn-group").length) {
+                $btn.closest(".btn-group").after(form);
+            } else {
                 this.$el.find("#btn-" + id).after(form);
             }
         }
@@ -624,11 +632,11 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        await this.tableView.render()
+        await this.tableView.render();
         this.$el.append(this.tableView.el);
 
         const pagingView = new PagingView({ app: this });
-        pagingView.render()
+        pagingView.render();
         this.$el.append(pagingView.el);
 
         // Backdrop class
@@ -667,5 +675,4 @@ export default BaseView.extend({
             })
         );
     },
-
 });
