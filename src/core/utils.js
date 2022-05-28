@@ -383,14 +383,12 @@ const ICON_CACHE = new Map();
  *     const dropdownIcon: await utils.resolveIcon('plone-settings');
  *
  * @param {String} name - The name of the icon as stored in the plone registry.
- * @param {Boolean} as_node - Return SVG icon as DOM node.
- * @param {String} css_class - Add a css class to the resulting SVG structure.
- * @returns {(String|Node)} - The SVG markup for the icon or a DOM node if as_node is set to ``true``.
+ * @returns {String} - The SVG markup for the icon.
  */
-const resolveIcon = async function (name, as_node, css_class) {
+const resolveIcon = async function (name) {
     // if (name === 'plone.icon.plone-rearrange'){debugger}
     const icon_lookup_name = `plone.icon.${name}`;
-    const cache_key = as_node ? icon_lookup_name + "_as_node" : icon_lookup_name;
+    const cache_key = icon_lookup_name;
 
     // ATTENTION: async/await trick ahead!
     if (!ICON_CACHE.has(cache_key)) {
@@ -406,7 +404,7 @@ const resolveIcon = async function (name, as_node, css_class) {
         // Do the actual loading.
 
         const base_url = $("body").attr("data-portal-url");
-        let icon = null;
+        let icon = "";
         if (base_url) {
             const url = base_url + "/@@iconresolver";
             if (url) {
@@ -442,18 +440,6 @@ const resolveIcon = async function (name, as_node, css_class) {
                 logger.warn(`Loading icon "${icon_lookup_name}" failed from fallback.`);
                 console.warn(e);
             }
-        }
-        if (!icon) {
-            return as_node ? null : "";
-        }
-
-        if (as_node) {
-            const tmp = document.createElement("div");
-            tmp.innerHTML = icon;
-            icon = tmp.querySelector("svg");
-        }
-        if (as_node && css_class) {
-            icon.classList.add(css_class);
         }
         return icon;
     }
