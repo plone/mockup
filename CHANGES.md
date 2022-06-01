@@ -1,5 +1,52 @@
 
 
+## [5.0.0-alpha.7](https://github.com/plone/mockup/compare/5.0.0-alpha.6...5.0.0-alpha.7) (2022-06-01)
+
+
+### Features
+
+
+* **pat structure:** lead image position in title column ([5ea6653](https://github.com/plone/mockup/commit/5ea6653c69c0a8708f8dffb37ec321d6444e1f44))
+
+
+
+### Bug Fixes
+
+
+* **pat structure:** dataTable styles ([a8e7250](https://github.com/plone/mockup/commit/a8e7250fef79294472a1c8c4ab8b8249d2745bde))
+
+
+
+### Breaking Changes
+
+
+* **core utils:** Remove createElementFromHTML. Use create_from_string from Patternslib core dom instead. ([7033e97](https://github.com/plone/mockup/commit/7033e97c4519e575e7485bfa0372be2876f832f4))
+
+
+* **core utils:** resolveIcon: Simplify method and remove as_node and css_class. ([0ecfb33](https://github.com/plone/mockup/commit/0ecfb33c6be1b10fa4f92e7ed5e02a411f504aea))
+These methods were used only in two places and can be substituted with create_from_string from Patternslib core dom.
+
+
+### Maintenance
+
+
+* Code formating. ([0486dcb](https://github.com/plone/mockup/commit/0486dcbcd6c06668651f5596465b81a5753a5dca))
+
+
+* **core utils:** api doc for resolvIcon. ([14b1f9c](https://github.com/plone/mockup/commit/14b1f9c368f0fce531769add7376ba5dc78805d8))
+
+
+* **core utils:** resolvIcon: Add a timeout for fetching icons remotely. Timeout is 5s. ([3a87d18](https://github.com/plone/mockup/commit/3a87d18994b07e56c19afef6a2ef1dd9a416bad0))
+
+
+* **pat structure:** bootstrap classes for checkbox/select elements ([9bef30f](https://github.com/plone/mockup/commit/9bef30fc13db039696e26823de14965c7425f624))
+
+
+* **pat structure:** Upgrade to backbone.paginator 2.x. ([e383de8](https://github.com/plone/mockup/commit/e383de87f7e89a50f91693d355f3cbce22684b22))
+
+
+* Upgrade dependencies. ([b886321](https://github.com/plone/mockup/commit/b8863219fbefdcba75f583494f7c03972b3aa540))
+
 ## [5.0.0-alpha.6](https://github.com/plone/mockup/compare/5.0.0-alpha.5...5.0.0-alpha.6) (2022-05-23)
 
 
