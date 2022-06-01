@@ -119,7 +119,7 @@ export default Backbone.View.extend({
         // handler for folder, go down path and show in contents window.
         this.app.setCurrentPath(this.model.attributes.path);
         // also switch to fix page in batch
-        this.app.collection.goTo(this.app.collection.information.firstPage);
+        this.app.collection.getFirstPage();
     },
 
     itemSelected: function () {

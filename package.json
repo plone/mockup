@@ -5,12 +5,14 @@
     "license": "BSD-3-Clause",
     "main": "./src/patterns.js",
     "dependenciesComments": {
-        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions of Backbone and Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern."
+        "backbone": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern.",
+        "backbone.paginator": "Dependency moved to devDependencies since it requests oudated versions Underscore. Not fixing this dependencies in other bundles would make use paginator those outdated dependencies and result in a broken structure pattern."
     },
     "dependencies": {
         "@patternslib/pat-code-editor": "^2.1.2",
-        "@patternslib/patternslib": "^8.0.2",
+        "@patternslib/patternslib": "8.1.0-alpha.1",
         "backbone": "1.4.1",
+        "backbone.paginator": "2.0.8",
         "bootstrap": "^5.2.0-beta1",
         "bootstrap-icons": "^1.8.2",
         "cs-jqtree-contextmenu": "0.1.0",
@@ -39,14 +41,14 @@
         "sortablejs": "^1.15.0",
         "tinymce": "^5.10.2",
         "tinymce-i18n": "^20.12.25",
-        "underscore": "^1.13.3"
+        "underscore": "git+https://github.com/jashkenas/underscore.git#75d257fa10131c3d65d870dd22095cb187cd1626"
     },
     "devDependencies": {
         "@11ty/eleventy": "^0.12.1",
         "@11ty/eleventy-navigation": "^0.3.3",
         "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.2",
         "@babel/core": "^7.17.12",
-        "@babel/eslint-parser": "^7.17.0",
+        "@babel/eslint-parser": "^7.18.2",
         "@babel/plugin-proposal-optional-chaining": "^7.17.12",
         "@babel/preset-env": "^7.17.12",
         "@commitlint/cli": "^17.0.0",
@@ -55,10 +57,9 @@
         "@testing-library/jest-dom": "^5.16.4",
         "@types/sinon": "^10.0.11",
         "babel-loader": "^8.2.5",
-        "backbone.paginator": "1.0.0",
         "copy-webpack-plugin": "^11.0.0",
         "copyfiles": "^2.4.1",
-        "core-js": "3.22.5",
+        "core-js": "3.22.7",
         "cross-env": "^7.0.3",
         "css-loader": "^6.7.1",
         "eslint": "^8.15.0",
@@ -81,20 +82,20 @@
         "sinon": "^14.0.0",
         "style-loader": "^3.3.0",
         "terser-webpack-plugin": "^5.3.1",
-        "timezone-mock": "^1.3.1",
+        "timezone-mock": "^1.3.2",
         "webpack": "^5.72.1",
         "webpack-bundle-analyzer": "^4.4.2",
         "webpack-cli": "^4.9.2",
-        "webpack-dev-server": "^4.9.0",
+        "webpack-dev-server": "^4.9.1",
         "webpack-modernizr-loader": "^5.0.0",
         "whybundled": "^2.0.0",
         "yarn": "^1.22.18"
     },
     "resolutions": {
-        "@patternslib/patternslib": "8.0.2",
+        "@patternslib/patternslib": "8.1.0-alpha.1",
         "backbone": "1.4.1",
         "jquery": "3.6.0",
-        "underscore": "1.13.3"
+        "underscore": "git+https://github.com/jashkenas/underscore.git#75d257fa10131c3d65d870dd22095cb187cd1626"
     },
     "scripts": {
         "clean": "rimraf docs/_site",

@@ -16,7 +16,7 @@ export default Backbone.Model.extend({
     selectAll: async function (e) {
         // This implementation is very specific to the default collection
         // with the reliance on its queryParser and queryHelper.  Custom
-        // collection (Backbone.Paginator.requestPager implementation)
+        // collection (PageableCollection implementation)
         // will have to come up with their own action for this.
         e.preventDefault();
         let page = 1;
@@ -83,7 +83,7 @@ export default Backbone.Model.extend({
         let msg;
         if (data.status === "success") {
             msg = _t(`${successMsg} "${this.model.attributes.Title}"`);
-            this.app.collection.pager();
+            this.app.collection.fetch();
             this.app.updateButtons();
         } else {
             msg = _t(`Error ${failMsg} "${this.model.attributes.Title}"`);

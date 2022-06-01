@@ -1,6 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
+import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../../../core/utils";
 import logging from "@patternslib/patternslib/src/core/logging";
 import Cookies from "js-cookie";
@@ -24,7 +25,7 @@ import StatusTemplate from "../../templates/status.xml";
 
 import ResultCollection from "../collections/result";
 
-const log = logging.getLogger("pat-structure");
+const log = logging.getLogger("pat-structure/app");
 
 export default BaseView.extend({
     tagName: "div",
@@ -49,7 +50,7 @@ export default BaseView.extend({
         this.loading.show();
 
         /* close popovers when clicking away */
-        $(document).click((e) => {
+        $(document).on("click", (e) => {
             const $el = $(e.target);
             if (
                 !$el.is(":visible") ||
@@ -78,18 +79,24 @@ export default BaseView.extend({
             url: this.options.collectionUrl,
         });
 
-        // initialize batch size
-        this.collection.paginator_ui.perPage = parseInt(this.getCookieSetting("perPage", 15))
-
         this.activeColumns = this.getCookieSetting(
             this.activeColumnsCookie,
             this.activeColumns
         );
 
         this.selectedCollection = new SelectedCollection();
+        this.pagingView = new PagingView({ app: this });
         this.tableView = new TableView({ app: this });
 
-        /* initialize buttons */
+        // set initial pageSize
+        this.collection.state.pageSize = this.getCookieSetting("pageSize", 15);
+
+         // fetch results from collection
+         // NOTE: this also calls this.tableView.render() and
+         // this.pagingView.render()
+         this.collection.fetch();
+
+        // initialize buttons
         this.setupButtons();
 
         this.wellView = new SelectionWellView({
@@ -131,18 +138,6 @@ export default BaseView.extend({
                     },
                 });
             }
-            this.loading.hide();
-        });
-
-        this.collection.on("pager", () => {
-            this.loading.show();
-            this.updateButtons();
-
-            // the remaining calls are related to window.pushstate.
-            // abort if feature unavailable.
-            if (!(window.history && window.history.pushState)) {
-                return;
-            }
 
             // undo the flag set by popState to prevent the push state
             // from being triggered here, and early abort out of the
@@ -151,6 +146,9 @@ export default BaseView.extend({
                 this.doNotPushState = false;
                 return;
             }
+
+            this.loading.show();
+            this.updateButtons();
 
             let path = this.getCurrentPath();
             let url;
@@ -186,6 +184,8 @@ export default BaseView.extend({
                 // needed at all.
             }
             $("body").trigger("structure-url-changed", [path]);
+
+            this.loading.hide();
         });
 
         if (
@@ -224,7 +224,7 @@ export default BaseView.extend({
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
                 this.doNotPushState = true;
-                this.collection.goTo(this.collection.information.firstPage);
+                this.collection.getPage(this.collection.state.firstPage);
             });
             /* detect key events */
             $(document).bind("keyup keydown", (e) => {
@@ -298,7 +298,7 @@ export default BaseView.extend({
 
     setCurrentPath: function (path) {
         this.collection.setCurrentPath(path);
-        this.textfilter.clearTerm();
+        // this.textfilter.clearTerm();
         this.clearStatus();
     },
 
@@ -374,7 +374,7 @@ export default BaseView.extend({
         if (callback !== null && callback !== undefined) {
             callback(data);
         }
-        this.collection.pager();
+        this.collection.fetch();
     },
 
     ajaxErrorResponse: function (response, url) {
@@ -408,7 +408,7 @@ export default BaseView.extend({
                 id: "selected-items",
                 tooltip: _t("Manage selection"),
                 collection: this.selectedCollection,
-                icon: 'plone-selection',
+                icon: "plone-selection",
             })
         );
 
@@ -460,9 +460,12 @@ export default BaseView.extend({
                 } else {
                     button.on("button:click", () => this.buttonClickEvent(button), this);
                 }
-            }
-            catch (err) {
-                log.error(`Error initializing button ${buttonOptions.title || buttonOptions.id} ${err}`);
+            } catch (err) {
+                log.error(
+                    `Error initializing button ${
+                        buttonOptions.title || buttonOptions.id
+                    } ${err}`
+                );
             }
         }
         this.buttons = new ButtonGroup({
@@ -505,12 +508,12 @@ export default BaseView.extend({
                         type: "danger",
                     });
                 }
-                this.collection.pager(); // reload it all
+                this.collection.fetch(); // reload it all
             },
             error: () => {
                 this.clearStatus();
                 this.setStatus({
-                    text:  _t("Error moving item"),
+                    text: _t("Error moving item"),
                     type: "danger",
                 });
             },
@@ -566,11 +569,13 @@ export default BaseView.extend({
             return;
         }
 
-        const el = utils.createElementFromHTML(this.statusTemplate({
-            label: status.label || "",
-            text: status.text,
-            type: status.type || "warning",
-        }));
+        const el = dom.create_from_string(
+            this.statusTemplate({
+                label: status.label || "",
+                text: status.text,
+                type: status.type || "warning",
+            })
+        ).lastChild;
 
         if (btn) {
             btn = $(btn)[0]; // support jquert + bare dom elements
@@ -593,20 +598,21 @@ export default BaseView.extend({
     render: async function () {
         this.$el.append(this.toolbar.render().el);
         if (this.wellView) {
-            this.$el.find("#btn-" + this.wellView.id).after((await this.wellView.render()).el);
+            this.$el
+                .find("#btn-" + this.wellView.id)
+                .after((await this.wellView.render()).el);
         }
         for (const form of this.forms) {
             const id = $(form).attr("id");
             const $btn = this.$el.find("#btn-" + id);
-            if($btn.closest('.btn-group').length){
-                $btn.closest('.btn-group').after(form);
-            }
-            else{
+            if ($btn.closest(".btn-group").length) {
+                $btn.closest(".btn-group").after(form);
+            } else {
                 this.$el.find("#btn-" + id).after(form);
             }
         }
         this.$el.append(
-            utils.createElementFromHTML('<div class="fc-status-container"></div>')
+            dom.create_from_string('<div class="fc-status-container"></div>')
         );
         if (this.columnsView) {
             this.$el
@@ -624,12 +630,11 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        await this.tableView.render()
+        // NOTE: tableView and pagingView get rendered on
+        // this.collection.fetch() on initialization so we simply
+        // append the rendered output to the template once here
         this.$el.append(this.tableView.el);
-
-        const pagingView = new PagingView({ app: this });
-        pagingView.render()
-        this.$el.append(pagingView.el);
+        this.$el.append(this.pagingView.el);
 
         // Backdrop class
         if (this.options.backdropSelector !== null) {
@@ -667,5 +672,4 @@ export default BaseView.extend({
             })
         );
     },
-
 });

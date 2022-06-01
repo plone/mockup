@@ -29,16 +29,16 @@
   <div class="pagination-info"><%- _t("Show:") %></div>
 
   <ul class="pagination pagination-sm">
-    <li class="page-item serverhowmany serverhowmany15 <% if(perPage == 15){ %>disabled<% } %>">
+    <li class="page-item serverhowmany serverhowmany15 <% if(pageSize == 15){ %>disabled<% } %>">
       <a href="#" class="page-link">15</a>
     </li>
-    <li class="page-item serverhowmany serverhowmany30 <% if(perPage == 30){ %>disabled<% } %>">
+    <li class="page-item serverhowmany serverhowmany30 <% if(pageSize == 30){ %>disabled<% } %>">
       <a href="#" class="page-link">30</a>
     </li>
-    <li class="page-item serverhowmany serverhowmany50 <% if(perPage == 50){ %>disabled<% } %>">
+    <li class="page-item serverhowmany serverhowmany50 <% if(pageSize == 50){ %>disabled<% } %>">
       <a href="#" class="page-link">50</a>
     </li>
-    <li class="page-item serverhowmany serverhowmany250 <% if(perPage == 250){ %>disabled<% } %>">
+    <li class="page-item serverhowmany serverhowmany250 <% if(pageSize == 250){ %>disabled<% } %>">
       <a href="#" class="page-link">250</a>
     </li>
   </ul>

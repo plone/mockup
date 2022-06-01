@@ -1,5 +1,6 @@
 import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "@patternslib/patternslib/src/core/base";
+import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../core/utils";
 
 export default Base.extend({
@@ -89,13 +90,12 @@ export default Base.extend({
             }
 
             if (mark_special_links) {
-                const icon = this.protocol_icon_map[link_url.protocol.split(":")[0]];
-                if (icon) {
-                    const icon_el = await utils.resolveIcon(
-                        icon,
-                        true,
-                        "markspeciallinks__icon"
-                    );
+                const icon_name =
+                    this.protocol_icon_map[link_url.protocol.split(":")[0]];
+                if (icon_name) {
+                    const icon = await utils.resolveIcon(icon_name);
+                    const icon_el = dom.create_from_string(icon);
+                    icon_el.classList.add("markspeciallinks__icon");
                     link.parentNode.insertBefore(icon_el, link);
                 }
             }

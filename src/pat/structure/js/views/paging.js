@@ -3,6 +3,10 @@ import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import Backbone from "backbone";
 import PagingTemplate from "../../templates/paging.xml";
+import logging from "@patternslib/patternslib/src/core/logging";
+
+const log = logging.getLogger("pat-structure/table");
+log.setLevel("DEBUG");
 
 export default Backbone.View.extend({
     events: {
@@ -23,14 +27,12 @@ export default Backbone.View.extend({
         this.options = options;
         this.app = this.options.app;
         this.collection = this.app.collection;
-        this.collection.on("reset", this.render, this);
-        this.collection.on("sync", this.render, this);
-
-        this.$el.appendTo("#pagination");
+        this.listenTo(this.collection, "reset", this.render);
+        this.listenTo(this.collection, "sync", this.render);
     },
 
     render: function () {
-        const data = this.collection.info();
+        const data = this.collection.state;
         data.pages = this.getPages(data);
         const html = this.template(
             $.extend(
@@ -40,6 +42,7 @@ export default Backbone.View.extend({
                 data
             )
         );
+
         this.$el.html(html);
         return this;
     },
@@ -82,39 +85,39 @@ export default Backbone.View.extend({
     nextResultPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.requestNextPage();
+        this.collection.getNextPage();
     },
 
     previousResultPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.requestPreviousPage();
+        this.collection.getPreviousPage();
     },
 
     gotoFirst: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.goTo(this.collection.information.firstPage);
+        this.collection.getPage(this.collection.state.firstPage);
     },
 
     gotoLast: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        this.collection.goTo(this.collection.information.totalPages);
+        this.collection.getPage(this.collection.state.totalPages);
     },
 
     gotoPage: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        const page = $(e.target).text();
-        this.collection.goTo(page);
+        const page = parseInt($(e.target).text());
+        this.collection.getPage(page);
     },
 
     changeCount: function (e) {
         e.preventDefault();
         this.app.clearStatus();
-        const per = $(e.target).text();
-        this.collection.howManyPer(per);
-        this.app.setCookieSetting("perPage", per);
+        const size = parseInt($(e.target).text());
+        this.collection.setPageSize(size, {first: true});
+        this.app.setCookieSetting("pageSize", size);
     },
 });

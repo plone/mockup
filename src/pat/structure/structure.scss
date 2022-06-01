@@ -260,8 +260,20 @@
     }
 
     .itemRow {
-        .title a {
-            color: var(--bs-gray-dark);
+        .title {
+            /* lead image positioning */
+            > div {
+                display:flex;
+                justify-content: space-between;
+                .lead-img {
+                    flex-shrink:0;
+                    margin-left:$spacer;
+                }
+            }
+
+            a {
+                color: var(--bs-gray-dark);
+            }
         }
 
         &.folder .title a {

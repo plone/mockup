@@ -4,8 +4,9 @@ import Result from "../models/result";
 import utils from "../../../../core/utils";
 import "backbone.paginator";
 
-export default Backbone.Paginator.requestPager.extend({
+export default Backbone.PageableCollection.extend({
     model: Result,
+    mode: "server",
 
     initialize: function (models, options) {
         this.options = options;
@@ -23,7 +24,7 @@ export default Backbone.Paginator.requestPager.extend({
                 options = {};
             }
             const term = this.view?.toolbar?.get?.("filter")?.term || null;
-            const sortOn = this.view.sort_on || "getObjPositionInParent";
+            const sortOn = this.view?.sort_on || "getObjPositionInParent";
             const sortOrder = this.view.sort_order;
 
             return JSON.stringify({
@@ -43,7 +44,7 @@ export default Backbone.Paginator.requestPager.extend({
             this.queryHelper.currentPath = window.location.hash.substring(1);
         }
 
-        Backbone.Paginator.requestPager.prototype.initialize.apply(this, [
+        Backbone.PageableCollection.prototype.initialize.apply(this, [
             models,
             options,
         ]);
@@ -57,59 +58,35 @@ export default Backbone.Paginator.requestPager.extend({
         this.queryHelper.currentPath = path;
     },
 
-    pager: function () {
-        this.trigger("pager");
-        Backbone.Paginator.requestPager.prototype.pager.apply(this, []);
-    },
-
-    paginator_core: {
-        // the type of the request (GET by default)
-        type: "GET",
-        // the type of reply (jsonp by default)
-        dataType: "json",
-        url: function () {
-            return this.url;
-        },
-    },
-
-    paginator_ui: {
-        // the lowest page index your API allows to be accessed
-        firstPage: 1,
-        // which page should the paginator start from
-        // (also, the actual page the paginator is on)
-        currentPage: 1,
-        // how many items per page should be shown
-        perPage: 15,
-    },
-
-    // server_api are query parameters passed directly (currently GET
+    // query parameters passed directly (currently GET
     // parameters).  These are currently generated using following
-    // functions.  Renamed to queryParams in Backbone.Paginator 2.0.
-    server_api: {
+    // functions.
+    queryParams: {
         query: function () {
             return this.queryParser();
         },
         batch: function () {
-            this.queryHelper.options.batchSize = this.perPage;
-            return JSON.stringify(this.queryHelper.getBatch(this.currentPage));
+            this.queryHelper.options.batchSize = this.state.pageSize;
+            return JSON.stringify(this.queryHelper.getBatch(this.state.currentPage));
         },
         attributes: function () {
             return JSON.stringify(this.queryHelper.options.attributes);
         },
     },
 
-    parse: function (response, baseSortIdx) {
-        if (baseSortIdx === undefined) {
-            baseSortIdx = 0;
-        }
-        this.totalRecords = response.total;
-        const results = response.results;
-        // Manually set sort order here since backbone will otherwise do arbitrary sorting
-        for (const [idx, item] of results.entries()) {
-            item._sort = idx;
-        }
-        return results;
+    parseState: function(response, queryParams, state, options) {
+        this.state.totalRecords = response.total;
+        this.state.totalPages = Math.ceil(
+            response.total / state.pageSize
+        );
     },
 
-    comparator: "_sort",
+    parseRecords: function (response, options) {
+        const results = response.results;
+        // Manually set sort order here since backbone will otherwise do arbitrary sorting
+        results.forEach((item, idx) => {
+            item._sort = idx;
+        });
+        return results;
+    },
 });

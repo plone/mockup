@@ -8,7 +8,7 @@ export default PopoverView.extend({
     content: _.template(
         '<div class="form-group">' +
             '<label><%- _t("What to rearrange on") %></label>' +
-            '<select name="rearrange_on" class="form-control">' +
+            '<select name="rearrange_on" class="form-select">' +
             "<% _.each(rearrangeProperties, function(title, property) { %>" +
             '<option value="<%- property %>"><%- title %></option>' +
             "<% }); %>" +
@@ -17,10 +17,11 @@ export default PopoverView.extend({
             '<b><%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %></b>' +
             "</p>" +
             "</div>" +
-            "<div>" +
-            '<label> <input type="checkbox" name="reversed" /> <%- _t("Reverse") %></label>' +
+            '<div class="form-check">' +
+            '<input class="form-check-input" type="checkbox" name="reversed" />' +
+            '<label class="form-check-label"><%- _t("Reverse") %></label>' +
             "</div>" +
-            '<button class="btn btn-block btn-primary"><%- _t("Rearrange") %></button>'
+            '<button class="btn btn-block btn-primary btn-sm"><%- _t("Rearrange") %></button>'
     ),
 
     events: {
@@ -41,7 +42,7 @@ export default PopoverView.extend({
     },
 
     rearrangeButtonClicked: function () {
-        if (this.app.collection.queryHelper.getCurrentPath() === "/") {
+        if (this.app.collection.getCurrentPath() === "/") {
             if (
                 !window.confirm(
                     _t(

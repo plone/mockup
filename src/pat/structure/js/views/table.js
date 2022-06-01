@@ -10,6 +10,9 @@ import Sortable from "../../../sortable/sortable";
 import "../../../datatables/datatables";
 import "bootstrap/js/src/alert";
 import utils from "../../../../core/utils";
+import logging from "@patternslib/patternslib/src/core/logging";
+
+const log = logging.getLogger("pat-structure/table");
 
 export default BaseView.extend({
     tagName: "div",
@@ -17,24 +20,26 @@ export default BaseView.extend({
     tableSortable: null,
 
     initialize: function (options) {
-        BaseView.prototype.initialize.apply(this, [options]);
-        this.collection = this.app.collection;
-        this.selectedCollection = this.app.selectedCollection;
-        this.listenTo(this.collection, "sync", this.render);
-        this.listenTo(this.selectedCollection, "remove", this.render);
-        this.listenTo(this.selectedCollection, "reset", this.render);
-        this.collection.pager();
-        this.subsetIds = [];
-        this.contextInfo = null;
-        this.tableSortable = null;
+        var self = this;
+        BaseView.prototype.initialize.apply(self, [options]);
+        self.collection = self.app.collection;
+        self.selectedCollection = self.app.selectedCollection;
+        self.subsetIds = [];
+        self.contextInfo = null;
+        self.tableSortable = null;
+
+        // init events
+        self.listenTo(self.collection, "sync", self.render);
+        self.listenTo(self.selectedCollection, "remove", self.render);
+        self.listenTo(self.selectedCollection, "reset", self.render);
 
         $("body").on("context-info-loaded", (event, data) => {
-            this.contextInfo = data;
+            self.contextInfo = data;
             /* set default page info */
-            this.setContextInfo();
+            self.setContextInfo();
         });
 
-        this.dateColumns = [
+        self.dateColumns = [
             "ModificationDate",
             "EffectiveDate",
             "CreationDate",
@@ -67,6 +72,7 @@ export default BaseView.extend({
         // By default do not start sorted by any column
         // Ignore first column and the last one (activeColumns.length + 1)
         // Do not show paginator, search or information, we only want column sorting
+
         const datatables_options = {
             order: [0, "asc"],
             aoColumnDefs: [
@@ -78,17 +84,14 @@ export default BaseView.extend({
             paging: false,
             searching: false,
             info: false,
+            ...this.app.options.datatables_options,
         };
-
-        // If options were passed from the pattern, override these ones
-        $.extend(datatables_options, this.app.options.datatables_options);
 
         this.$el.html(
             this.template({
                 _t: _t,
                 homeIcon: await utils.resolveIcon("house"),
-                pathParts: _.filter(
-                    this.app.getCurrentPath().split("/").slice(1),
+                pathParts: this.app.getCurrentPath().split("/").slice(1).filter(
                     (val) => {
                         return val.length > 0;
                     }
@@ -100,7 +103,7 @@ export default BaseView.extend({
         );
 
         if (this.collection.length) {
-            const container = this.$("tbody");
+            const container = $("tbody", this.$el);
 
             const collection_length = this.collection.length;
             let collection_cnt = 0;
@@ -177,15 +180,15 @@ export default BaseView.extend({
                         return;
                     }
                 }
-
+                const e_target = e.target;
                 const btn = $(
-                    '<button type="button" class="btn btn-danger btn-xs"></button>'
+                    '<button type="button" class="btn btn-danger btn-sm"></button>'
                 )
                     .text(_t("Reset column sorting"))
                     .on("click", () => {
                         // Use column 0 to restore ordering and then empty list so it doesn't
                         // show the icon in the column header
-                        const api = $(e.target).dataTable().api();
+                        const api = $(e_target).dataTable().api();
                         api.order([0, "asc"]);
                         api.draw();
                     });
@@ -225,7 +228,7 @@ export default BaseView.extend({
         }
         path += $el.attr("data-path");
         this.app.setCurrentPath(path);
-        this.app.collection.goTo(this.app.collection.information.firstPage);
+        this.app.collection.getPage(this.app.collection.state.firstPage);
     },
 
     selectAll: function (e) {

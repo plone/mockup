@@ -1,6 +1,7 @@
 import _ from "underscore";
 import BaseView from "./base";
 import Tooltip from "@patternslib/patternslib/src/pat/tooltip/tooltip";
+import dom from "@patternslib/patternslib/src/core/dom";
 import utils from "../../utils";
 
 export default BaseView.extend({
@@ -14,7 +15,7 @@ export default BaseView.extend({
     },
     extraClasses: [],
     tooltip: null,
-    template: '<%= title %>',
+    template: "<%= title %>",
     events: {
         click: "handleClick",
     },
@@ -27,23 +28,27 @@ export default BaseView.extend({
 
         this.on(
             "render",
-            async function (){
+            async function () {
                 this.$el.attr("title", this.options.title || "");
-                this.$el.attr("aria-label", this.options.title || this.options.tooltip || "");
-                if(this.context !== null){
+                this.$el.attr(
+                    "aria-label",
+                    this.options.title || this.options.tooltip || ""
+                );
+                if (this.context !== null) {
                     this.$el.addClass("btn-" + this.context);
                 }
                 _.each(
-                  this.extraClasses,
-                  function(klass){
-                      this.$el.addClass(klass);
-                  }.bind(this)
+                    this.extraClasses,
+                    function (klass) {
+                        this.$el.addClass(klass);
+                    }.bind(this)
                 );
 
-                if(this.icon && typeof this.icon == 'string'){
-                    const iconMarkup = await utils.resolveIcon(this.icon, true);
-                    if(iconMarkup){
-                        this.$el.prepend(iconMarkup);
+                if (this.icon && typeof this.icon == "string") {
+                    const icon_markup = await utils.resolveIcon(this.icon);
+                    const icon_el = dom.create_from_string(icon_markup);
+                    if (icon_el) {
+                        this.$el.prepend(icon_el);
                     }
                 }
 

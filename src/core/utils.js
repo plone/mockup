@@ -367,22 +367,21 @@ var storage = {
     },
 };
 
-var createElementFromHTML = function (htmlString) {
-    // From: https://stackoverflow.com/a/494348/1337474
-    var div = document.createElement("div");
-    div.innerHTML = htmlString.trim();
-    return div.firstChild;
-};
-
 const ICON_CACHE = new Map();
 
-const resolveIcon = async function (name, as_node, css_class) {
-    // Return a <svg> element from a icon name.
-    // Example:
-    // const dropdownIcon: await utils.resolveIcon('plone-settings');
+/**
+ * Return a <svg> element from a icon name.
+ *
+ * Example:
+ *     const dropdownIcon: await utils.resolveIcon('plone-settings');
+ *
+ * @param {String} name - The name of the icon as stored in the plone registry.
+ * @returns {String} - The SVG markup for the icon.
+ */
+const resolveIcon = async function (name) {
     // if (name === 'plone.icon.plone-rearrange'){debugger}
     const icon_lookup_name = `plone.icon.${name}`;
-    const cache_key = as_node ? icon_lookup_name + "_as_node" : icon_lookup_name;
+    const cache_key = icon_lookup_name;
 
     // ATTENTION: async/await trick ahead!
     if (!ICON_CACHE.has(cache_key)) {
@@ -398,12 +397,19 @@ const resolveIcon = async function (name, as_node, css_class) {
         // Do the actual loading.
 
         const base_url = $("body").attr("data-portal-url");
-        let icon = null;
+        let icon = "";
         if (base_url) {
             const url = base_url + "/@@iconresolver";
             if (url) {
                 try {
-                    const resp = await fetch(`${url}/${name}`);
+                    // Fetch timeout
+                    const controller = new AbortController();
+                    // 5 second timeout:
+                    setTimeout(() => controller.abort(), 5000);
+
+                    const resp = await fetch(`${url}/${name}`, {
+                        signal: controller.signal,
+                    });
                     icon = await resp.text();
                 } catch (e) {
                     logger.warn(`Loading icon "${name}" from URL ${url} failed.`);
@@ -428,18 +434,6 @@ const resolveIcon = async function (name, as_node, css_class) {
                 console.warn(e);
             }
         }
-        if (!icon) {
-            return as_node ? null : "";
-        }
-
-        if (as_node) {
-            const tmp = document.createElement("div");
-            tmp.innerHTML = icon;
-            icon = tmp.querySelector("svg");
-        }
-        if (as_node && css_class) {
-            icon.classList.add(css_class);
-        }
         return icon;
     }
 };
@@ -459,5 +453,4 @@ export default {
     resolveIcon: resolveIcon,
     setId: setId,
     storage: storage,
-    createElementFromHTML: createElementFromHTML,
 };

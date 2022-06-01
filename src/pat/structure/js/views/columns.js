@@ -10,7 +10,7 @@ export default PopoverView.extend({
         '<label><%- _t("Select columns to show, drag and drop to reorder") %></label>' +
             "<ul>" +
             "</ul>" +
-            '<button class="btn btn-block btn-success"><%- _t("Save") %></button>'
+            '<button class="btn btn-block btn-primary btn-sm"><%- _t("Save") %></button>'
     ),
     itemTemplate: _.template(
         "<li>" +
