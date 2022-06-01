@@ -41,7 +41,7 @@ export default PopoverView.extend({
     },
 
     rearrangeButtonClicked: function () {
-        if (this.app.collection.queryHelper.getCurrentPath() === "/") {
+        if (this.app.collection.getCurrentPath() === "/") {
             if (
                 !window.confirm(
                     _t(

@@ -25,7 +25,7 @@ import StatusTemplate from "../../templates/status.xml";
 
 import ResultCollection from "../collections/result";
 
-const log = logging.getLogger("pat-structure");
+const log = logging.getLogger("pat-structure/app");
 
 export default BaseView.extend({
     tagName: "div",
@@ -50,7 +50,7 @@ export default BaseView.extend({
         this.loading.show();
 
         /* close popovers when clicking away */
-        $(document).click((e) => {
+        $(document).on("click", (e) => {
             const $el = $(e.target);
             if (
                 !$el.is(":visible") ||
@@ -79,20 +79,24 @@ export default BaseView.extend({
             url: this.options.collectionUrl,
         });
 
-        // initialize batch size
-        this.collection.paginator_ui.perPage = parseInt(
-            this.getCookieSetting("perPage", 15)
-        );
-
         this.activeColumns = this.getCookieSetting(
             this.activeColumnsCookie,
             this.activeColumns
         );
 
         this.selectedCollection = new SelectedCollection();
+        this.pagingView = new PagingView({ app: this });
         this.tableView = new TableView({ app: this });
 
-        /* initialize buttons */
+        // set initial pageSize
+        this.collection.state.pageSize = this.getCookieSetting("pageSize", 15);
+
+         // fetch results from collection
+         // NOTE: this also calls this.tableView.render() and
+         // this.pagingView.render()
+         this.collection.fetch();
+
+        // initialize buttons
         this.setupButtons();
 
         this.wellView = new SelectionWellView({
@@ -134,18 +138,6 @@ export default BaseView.extend({
                     },
                 });
             }
-            this.loading.hide();
-        });
-
-        this.collection.on("pager", () => {
-            this.loading.show();
-            this.updateButtons();
-
-            // the remaining calls are related to window.pushstate.
-            // abort if feature unavailable.
-            if (!(window.history && window.history.pushState)) {
-                return;
-            }
 
             // undo the flag set by popState to prevent the push state
             // from being triggered here, and early abort out of the
@@ -154,6 +146,9 @@ export default BaseView.extend({
                 this.doNotPushState = false;
                 return;
             }
+
+            this.loading.show();
+            this.updateButtons();
 
             let path = this.getCurrentPath();
             let url;
@@ -189,6 +184,8 @@ export default BaseView.extend({
                 // needed at all.
             }
             $("body").trigger("structure-url-changed", [path]);
+
+            this.loading.hide();
         });
 
         if (
@@ -227,7 +224,7 @@ export default BaseView.extend({
                 $("body").trigger("structure-url-changed", [path]);
                 // since this next call causes state to be pushed...
                 this.doNotPushState = true;
-                this.collection.goTo(this.collection.information.firstPage);
+                this.collection.getPage(this.collection.state.firstPage);
             });
             /* detect key events */
             $(document).bind("keyup keydown", (e) => {
@@ -301,7 +298,7 @@ export default BaseView.extend({
 
     setCurrentPath: function (path) {
         this.collection.setCurrentPath(path);
-        this.textfilter.clearTerm();
+        // this.textfilter.clearTerm();
         this.clearStatus();
     },
 
@@ -377,7 +374,7 @@ export default BaseView.extend({
         if (callback !== null && callback !== undefined) {
             callback(data);
         }
-        this.collection.pager();
+        this.collection.fetch();
     },
 
     ajaxErrorResponse: function (response, url) {
@@ -511,7 +508,7 @@ export default BaseView.extend({
                         type: "danger",
                     });
                 }
-                this.collection.pager(); // reload it all
+                this.collection.fetch(); // reload it all
             },
             error: () => {
                 this.clearStatus();
@@ -633,12 +630,11 @@ export default BaseView.extend({
                 .after(this.uploadView.render().el);
         }
 
-        await this.tableView.render();
+        // NOTE: tableView and pagingView get rendered on
+        // this.collection.fetch() on initialization so we simply
+        // append the rendered output to the template once here
         this.$el.append(this.tableView.el);
-
-        const pagingView = new PagingView({ app: this });
-        pagingView.render();
-        this.$el.append(pagingView.el);
+        this.$el.append(this.pagingView.el);
 
         // Backdrop class
         if (this.options.backdropSelector !== null) {

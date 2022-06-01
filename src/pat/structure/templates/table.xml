@@ -3,7 +3,7 @@
     <a href="#" title="<%- _t('Root') %>" aria-label="<%- _t('Root') %>" data-path="/">
       <%= homeIcon %> /
     </a>
-    <% _.each(pathParts, (part, idx, list) => {
+    <% pathParts.forEach((part, idx) => {
       if(part){
         if(idx > 0){ %>
           /
@@ -20,8 +20,8 @@
     <tr>
       <th class="selection"><label for="selectAllInputCheckbox" class="hiddenStructure" aria-label="<%- _t('Select all') %>"><%- _t('Select all') %></label><input id="selectAllInputCheckbox" type="checkbox" class="select-all" /></th>
       <th class="title"><%- _t('Title') %></th>
-      <% _.each(activeColumns, (column) => { %>
-        <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
+      <% activeColumns.forEach((column, idx) => { %>
+        <% if(column !== 'Description' && hasOwnProperty.call(availableColumns, column)) { %>
           <th><%- availableColumns[column] %></th>
         <% } %>
       <% }); %>
