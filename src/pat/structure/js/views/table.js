@@ -75,10 +75,10 @@ export default BaseView.extend({
 
         const datatables_options = {
             order: [0, "asc"],
-            aoColumnDefs: [
+            columnDefs: [
                 {
-                    bSortable: false,
-                    aTargets: [0, this.app.activeColumns.length + 2],
+                    orderable: false,
+                    targets: [0, this.app.activeColumns.length + 1],
                 },
             ],
             paging: false,
