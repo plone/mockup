@@ -41,7 +41,7 @@
         "sortablejs": "^1.15.0",
         "tinymce": "^5.10.2",
         "tinymce-i18n": "^20.12.25",
-        "underscore": "git+https://github.com/jashkenas/underscore.git#75d257fa10131c3d65d870dd22095cb187cd1626"
+        "underscore": "^1.13.4"
     },
     "devDependencies": {
         "@11ty/eleventy": "^0.12.1",
@@ -95,7 +95,7 @@
         "@patternslib/patternslib": "8.1.0-alpha.1",
         "backbone": "1.4.1",
         "jquery": "3.6.0",
-        "underscore": "git+https://github.com/jashkenas/underscore.git#75d257fa10131c3d65d870dd22095cb187cd1626"
+        "underscore": "1.13.4"
     },
     "scripts": {
         "clean": "rimraf docs/_site",
