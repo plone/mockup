@@ -69,10 +69,10 @@ export default Backbone.Model.extend({
         const url = new URL(this.app.buttons.get(buttonName).options.url);
         const resp = await fetch(url, {
             headers: {
-                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             },
             method: "POST",
-            body: JSON.stringify({
+            body: new URLSearchParams({
                 selection: JSON.stringify([this.model.attributes.UID]),
                 folder: this.model.attributes.path,
                 _authenticator: utils.getAuthenticator(),
@@ -80,18 +80,19 @@ export default Backbone.Model.extend({
         });
         const data = await resp.json();
 
-        let msg;
+        let msg, state_type = "warning";
         if (data.status === "success") {
             msg = _t(`${successMsg} "${this.model.attributes.Title}"`);
             this.app.collection.fetch();
             this.app.updateButtons();
         } else {
-            msg = _t(`Error ${failMsg} "${this.model.attributes.Title}"`);
+            msg = _t("Error") + `: ${failMsg} "${this.model.attributes.Title}"`;
+            state_type = "danger";
         }
         this.app.clearStatus();
         this.app.setStatus({
             text: msg,
-            type: data.status || "warning",
+            type: data.status || state_type,
         });
     },
 
@@ -125,10 +126,13 @@ export default Backbone.Model.extend({
         try {
             const url = new URL(this.app.getAjaxUrl(this.app.setDefaultPageUrl));
             const resp = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
                 method: "POST",
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     id: this.model.attributes.id,
-                    _authenticator: $('[name="_authenticator"]').val(),
+                    _authenticator: utils.getAuthenticator(),
                 }),
             });
             const data = await resp.json();
