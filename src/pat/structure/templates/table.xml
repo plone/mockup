@@ -1,5 +1,5 @@
 <div class="fc-breadcrumbs-container">
-  <div class="fc-breadcrumbs" colspan="<%- activeColumns.length + 3 %>">
+  <div class="fc-breadcrumbs">
     <a href="#" title="<%- _t('Root') %>" aria-label="<%- _t('Root') %>" data-path="/">
       <%= homeIcon %> /
     </a>
