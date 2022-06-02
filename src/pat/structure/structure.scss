@@ -280,9 +280,11 @@
             color: var(--bs-primary);
         }
 
-        &.default-page .title > *:first-child:before {
-            content: "*";
-            color: red;
+        &.default-page .title > div > *:first-child:before {
+            color:$danger;
+            content: '•';
+            font-size:$font-size-lg;
+            line-height:1;
         }
     }
 
