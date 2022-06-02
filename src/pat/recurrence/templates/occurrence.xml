@@ -1,0 +1,44 @@
+<div class="rioccurrences">
+    <% for(const occurrence of occurrences) { %>
+        <div class="occurrence <%= ocurrence.type %>">
+            <span>
+                <%= ocurrence.formattedDate %>
+                <% if(ocurrence.type === "start") { %>
+                    <span class="rlabel"><%= localization.recurrenceStart %></span>
+                <% } %>
+                <% if(ocurrence.type === "rdate") { %>
+                    <span class="rlabel"><%= >localization.additionalDate %></span>
+                <% } %>
+            </span>
+            <% if(!readOnly) { %>
+                <span class="action">
+                    <% if(ocurrence.type === "rrule") { %>
+                        <a date="<%= ocurrence.date %>" href="#"
+                           class="<%= ocurrence.type %>" title="<%= localization.exclude %>">
+                            <%= localization.exclude %>
+                        </a>
+                    <% } %>
+                    <% if(ocurrence.type === "rdate") { %>
+                        <a date="<%= ocurrence.date %>" href="#"
+                           class="<%= ocurrence.type %>" title="<%= localization.remove %>">
+                            <%= localization.remove %>
+                        </a>
+                    <% } %>
+                    <% if(ocurrence.type === "exdate") { %>
+                        <a date="<%= ocurrence.date %>" href="#"
+                           class="<%= ocurrence.type %>" title="<%= localization.include %>">
+                           <%= localization.include %>
+                        </a>
+                    <% } %>
+                </span>
+            <% } %>
+        </div>
+    <% } %>
+    <div class="batching">
+        <% for(var index=0; index < batch.batches.length; index++) { %>
+            <span <% if(index === batch.currentBatch) { %>class="current"<% } %>>
+                <a href="#" start="<%= batch.batches[index][0] %>">[<%= batch.batches[index][0] %> - <%= batch.batches[index][1] %>]</a>
+            </span>
+        <% } %>
+    </div>
+</div>
