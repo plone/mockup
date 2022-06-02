@@ -1,5 +1,29 @@
 
 
+## [5.0.0-alpha.8](https://github.com/plone/mockup/compare/5.0.0-alpha.7...5.0.0-alpha.8) (2022-06-02)
+
+
+### Bug Fixes
+
+
+* **pat structure:** datatable sorting ([a3335ff](https://github.com/plone/mockup/commit/a3335ffb2f258c7b30490ab785d9fc1abd6f7c33))
+
+
+* **pat structure:** default page marker position ([f0bb04c](https://github.com/plone/mockup/commit/f0bb04c0b84a4e8e266cc5e733c0bbc498670737))
+
+
+* **pat structure:** row actions cut/copy/default_page ([179fb41](https://github.com/plone/mockup/commit/179fb41bd8cfd709eacde7778ab687374b39b9e1))
+
+
+
+### Maintenance
+
+
+* **Build:** update datatables.net ([a42f4a9](https://github.com/plone/mockup/commit/a42f4a9b2eb287d1207cd6706a932045b6d0fc02))
+
+
+* **Bundle:** new underscore release ([eeafed0](https://github.com/plone/mockup/commit/eeafed0db3eab6aee0b26593c17bd5f730050db2))
+
 ## [5.0.0-alpha.7](https://github.com/plone/mockup/compare/5.0.0-alpha.6...5.0.0-alpha.7) (2022-06-01)
 
 
