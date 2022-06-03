@@ -1,6 +1,6 @@
 <div class="rioccurrences">
     <% occurrences.forEach(function(occurrence) { %>
-        <div class="occurrence <%= occurrence.type %>">
+        <div class="d-flex justify-content-between occurrence <%= occurrence.type %>">
             <span>
                 <%= occurrence.formattedDate %>
                 <% if(occurrence.type === "start") { %>
@@ -14,19 +14,19 @@
                 <span class="action">
                     <% if(occurrence.type === "rrule") { %>
                         <a date="<%= occurrence.date %>" href="#"
-                           class="btn btn-sm btn-secondary <%= occurrence.type %>" title="<%= localization.exclude %>">
+                           class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.exclude %>">
                             <%= icons.exclude %>
                         </a>
                     <% } %>
                     <% if(occurrence.type === "rdate") { %>
                         <a date="<%= occurrence.date %>" href="#"
-                           class="btn btn-sm btn-secondary <%= occurrence.type %>" title="<%= localization.remove %>">
+                           class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.remove %>">
                             <%= icons.remove %>
                         </a>
                     <% } %>
                     <% if(occurrence.type === "exdate") { %>
                         <a date="<%= occurrence.date %>" href="#"
-                           class="btn btn-sm btn-secondary disabled <%= occurrence.type %>" title="<%= localization.include %>">
+                           class="btn btn-sm btn-outline-secondary <%= occurrence.type %>" title="<%= localization.include %>">
                            <%= icons.include %>
                         </a>
                     <% } %>

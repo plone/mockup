@@ -644,7 +644,7 @@ const RecurrenceInput = function(conf, textarea) {
         if (self.$modalForm.ical.RDATE === undefined) {
             self.$modalForm.ical.RDATE = [];
         }
-        var errorarea = self.$modalForm.find('.riaddoccurrence div.errorarea');
+        var errorarea = self.$modalForm.find('.riaddoccurrence div.alert');
         errorarea.text('');
         errorarea.hide();
 
@@ -912,7 +912,7 @@ const RecurrenceInput = function(conf, textarea) {
         messagearea.hide();
 
         // Hide add field errors
-        self.$modalForm.find('.riaddoccurrence div.errorarea').text('').hide();
+        self.$modalForm.find('.riaddoccurrence div.alert').text('').hide();
 
         // Repeats Daily
         if (self.$modalForm.find('#ridailyinterval').css('display') === 'block') {
