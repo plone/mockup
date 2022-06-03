@@ -286,8 +286,8 @@
             <div class="rioccurancesheader">
                 <h2><%= localization.preview %></h2>
                 <span class="refreshbutton action">
-                    <a class="rirefreshbutton" href="#" title="<%= localization.refresh %>">
-                        <%= localization.refresh %>
+                    <a class="btn btn-sm btn-secondary rirefreshbutton" href="#" title="<%= localization.refresh %>">
+                        <%= icons.reload %>
                     </a>
                 </span>
             </div>
@@ -301,8 +301,8 @@
             </div>
             <div class="riaddoccurrence">
                 <div class="errorarea"></div>
-                <input type="date" name="adddate" id="adddate" />
-                <input type="button" name="addaction" id="addaction" value="<%= localization.add %>">
+                <input class="form-control form-control-sm w-auto" type="date" name="adddate" id="adddate" />
+                <input class="btn btn-sm btn-success" type="button" name="addaction" id="addaction" value="<%= localization.add %>">
             </div>
         </div>
 

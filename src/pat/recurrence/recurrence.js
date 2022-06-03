@@ -6,7 +6,44 @@ import DisplayTemplate from "./templates/display.xml";
 import FormTemplate from "./templates/form.xml";
 import OccurrenceTemplate from "./templates/occurrence.xml";
 import Modal from "../modal/modal";
+import utils from "../../core/utils";
 
+// Formatting function (mostly) from jQueryTools dateinput
+var Re = /d{1,4}|m{1,4}|yy(?:yy)?|"[^"]*"|'[^']*'/g;
+
+function zeropad(val, len) {
+    val = val.toString();
+    len = len || 2;
+    while (val.length < len) { val = "0" + val; }
+    return val;
+}
+
+function format(date, fmt, conf) {
+    var d = date.getDate(),
+        D = date.getDay(),
+        m = date.getMonth(),
+        y = date.getFullYear(),
+
+        flags = {
+            d:    d,
+            dd:   zeropad(d),
+            ddd:  conf.localization.shortWeekdays[D],
+            dddd: conf.localization.weekdays[D],
+            m:    m + 1,
+            mm:   zeropad(m + 1),
+            mmm:  conf.localization.shortMonths[m],
+            mmmm: conf.localization.months[m],
+            yy:   String(y).slice(2),
+            yyyy: y
+        };
+
+    var result = fmt.replace(Re, function ($0) {
+        return flags.hasOwnProperty($0) ? flags[$0] : $0.slice(1, $0.length - 1);
+    });
+
+    return result;
+
+}
 
 function widgetSaveToRfc5545(form, conf, tz) {
     var value = form.find('select[name=rirtemplate]').val();
@@ -577,20 +614,18 @@ const RecurrenceInput = function(conf, textarea) {
         }
         self.$modalForm.ical.EXDATE.push(this.attributes.date.value);
         var $this = $(this);
-        $this.attr('class', 'exdate');
+        $this.addClass('exdate');
         $this.parent().parent().addClass('exdate');
-        $this.unbind(event);
-        $this.on("click", occurrenceInclude);
+        $this.off("click").on("click", occurrenceInclude);
     }
 
     function occurrenceInclude(event) {
         event.preventDefault();
         self.$modalForm.ical.EXDATE.splice($.inArray(this.attributes.date.value, self.$modalForm.ical.EXDATE), 1);
         var $this = $(this);
-        $this.attr('class', 'rrule');
+        $this.removeClass('exdate');
         $this.parent().parent().removeClass('exdate');
-        $this.unbind(event);
-        $this.on("click", occurrenceExclude);
+        $this.off("click").on("click", occurrenceExclude);
     }
 
     function occurrenceDelete(event) {
@@ -603,7 +638,7 @@ const RecurrenceInput = function(conf, textarea) {
 
     function occurrenceAdd(event) {
         event.preventDefault();
-        var datevalue = form
+        var datevalue = self.$modalForm
             .find('.riaddoccurrence input#adddate')
             .val();
         if (self.$modalForm.ical.RDATE === undefined) {
@@ -616,20 +651,21 @@ const RecurrenceInput = function(conf, textarea) {
         // Add date only if it is not already in RDATE
         if ($.inArray(datevalue, self.$modalForm.ical.RDATE) === -1) {
             self.$modalForm.ical.RDATE.push(datevalue);
-            var html = ['<div class="occurrence rdate" style="display: none;">',
-                    '<span class="rdate">',
-                        dateinput.val(),
-                        '<span class="rlabel">' + conf.localization.additionalDate + '</span>',
-                    '</span>',
-                    '<span class="action">',
-                        '<a date="' + datevalue + '" href="#" class="rdate" >',
-                            'Include',
-                        '</a>',
-                    '</span>',
-                    '</div>'].join('\n');
-            self.$modalForm.find('div.rioccurrences').prepend(html);
-            self.$modalForm.find('div.rioccurrences div')[0].slideDown();
-            self.$modalForm.find('div.rioccurrences .action a.rdate')[0].on("click", occurrenceDelete);
+            var $newdate = $(`<div class="occurrence rdate">
+                <span class="rdate">
+                    ${datevalue},
+                    <span class="rlabel">${conf.localization.additionalDate}</span>
+                </span>
+                <span class="action">
+                    <a date="${datevalue}" href="#" class="btn btn-sm btn-secondary rdate" >
+                        ${conf.icons.remove}
+                    </a>
+                </span>
+                </div>`);
+            $newdate.hide();
+            self.$modalForm.find('div.rioccurrences').prepend($newdate);
+            $newdate.slideDown();
+            $newdate.find('a.rdate').on("click", occurrenceDelete);
         } else {
             errorarea.text(conf.localization.alreadyAdded).show();
         }
@@ -670,22 +706,20 @@ const RecurrenceInput = function(conf, textarea) {
             cache: false,
             data: data,
             success: function (data, status, jqXHR) {
-                var result, element;
+                var result;
 
                 data.readOnly = readonly;
                 data.localization = conf.localization;
+                data.icons = conf.icons;
 
                 // Format dates:
-                var occurrence, date, y, m, d, each;
-                for (each in data.occurrences) {
-                    if (data.occurrences.hasOwnProperty(each)) {
-                        occurrence = data.occurrences[each];
-                        date = occurrence.date;
-                        y = parseInt(date.substring(0, 4), 10);
-                        m = parseInt(date.substring(4, 6), 10) - 1; // jan=0
-                        d = parseInt(date.substring(6, 8), 10);
-                        occurrence.formattedDate = format(new Date(y, m, d), conf.localization.longDateFormat, conf);
-                    }
+                var date, y, m, d;
+                for (let occurrence of data.occurrences) {
+                    date = occurrence.date;
+                    y = parseInt(date.substring(0, 4), 10);
+                    m = parseInt(date.substring(4, 6), 10) - 1; // jan=0
+                    d = parseInt(date.substring(6, 8), 10);
+                    occurrence.formattedDate = format(new Date(y, m, d), conf.localization.longDateFormat, conf);
                 }
 
                 result = _.template(OccurrenceTemplate)(data);
@@ -693,7 +727,8 @@ const RecurrenceInput = function(conf, textarea) {
                 occurrenceDiv.replaceWith(result);
 
                 // Add the batch actions:
-                element.find('.rioccurrences .batching a').on("click",
+                element.find('.rioccurrences .batching a').on(
+                    "click",
                     function (event) {
                         event.preventDefault();
                         loadOccurrences(startdate, rfc5545, this.attributes.start.value, readonly);
@@ -1295,14 +1330,30 @@ export default Base.extend({
         }
     },
 
+    load_icons: async function() {
+        return {
+            reload: await utils.resolveIcon("arrow-clockwise"),
+            remove: await utils.resolveIcon("trash"),
+            exclude: await utils.resolveIcon("calendar-x"),
+            include: await utils.resolveIcon("plus-circle"),
+        }
+    },
+
     init: async function () {
         // tmpl BEFORE recurrenceinput
         import("./recurrence.scss");
 
         this.$el.addClass("recurrence-widget");
+        var icons = await this.load_icons();
+
+        var config = {
+            ...this.options,
+            ...this.options.configuration,
+            icons: icons,
+        }
 
         // our recurrenceinput widget instance
-        var recurrenceinput = new RecurrenceInput(this.options, this.$el);
+        var recurrenceinput = new RecurrenceInput(config, this.$el);
         // hide textarea and place display widget after textarea
         this.$el.after(recurrenceinput.display);
 

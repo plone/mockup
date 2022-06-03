@@ -1,39 +1,39 @@
 <div class="rioccurrences">
-    <% for(const occurrence of occurrences) { %>
-        <div class="occurrence <%= ocurrence.type %>">
+    <% occurrences.forEach(function(occurrence) { %>
+        <div class="occurrence <%= occurrence.type %>">
             <span>
-                <%= ocurrence.formattedDate %>
-                <% if(ocurrence.type === "start") { %>
+                <%= occurrence.formattedDate %>
+                <% if(occurrence.type === "start") { %>
                     <span class="rlabel"><%= localization.recurrenceStart %></span>
                 <% } %>
-                <% if(ocurrence.type === "rdate") { %>
-                    <span class="rlabel"><%= >localization.additionalDate %></span>
+                <% if(occurrence.type === "rdate") { %>
+                    <span class="rlabel"><%= localization.additionalDate %></span>
                 <% } %>
             </span>
             <% if(!readOnly) { %>
                 <span class="action">
-                    <% if(ocurrence.type === "rrule") { %>
-                        <a date="<%= ocurrence.date %>" href="#"
-                           class="<%= ocurrence.type %>" title="<%= localization.exclude %>">
-                            <%= localization.exclude %>
+                    <% if(occurrence.type === "rrule") { %>
+                        <a date="<%= occurrence.date %>" href="#"
+                           class="btn btn-sm btn-secondary <%= occurrence.type %>" title="<%= localization.exclude %>">
+                            <%= icons.exclude %>
                         </a>
                     <% } %>
-                    <% if(ocurrence.type === "rdate") { %>
-                        <a date="<%= ocurrence.date %>" href="#"
-                           class="<%= ocurrence.type %>" title="<%= localization.remove %>">
-                            <%= localization.remove %>
+                    <% if(occurrence.type === "rdate") { %>
+                        <a date="<%= occurrence.date %>" href="#"
+                           class="btn btn-sm btn-secondary <%= occurrence.type %>" title="<%= localization.remove %>">
+                            <%= icons.remove %>
                         </a>
                     <% } %>
-                    <% if(ocurrence.type === "exdate") { %>
-                        <a date="<%= ocurrence.date %>" href="#"
-                           class="<%= ocurrence.type %>" title="<%= localization.include %>">
-                           <%= localization.include %>
+                    <% if(occurrence.type === "exdate") { %>
+                        <a date="<%= occurrence.date %>" href="#"
+                           class="btn btn-sm btn-secondary disabled <%= occurrence.type %>" title="<%= localization.include %>">
+                           <%= icons.include %>
                         </a>
                     <% } %>
                 </span>
             <% } %>
         </div>
-    <% } %>
+    <% }) %>
     <div class="batching">
         <% for(var index=0; index < batch.batches.length; index++) { %>
             <span <% if(index === batch.currentBatch) { %>class="current"<% } %>>
