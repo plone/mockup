@@ -651,7 +651,7 @@ const RecurrenceInput = function(conf, textarea) {
         // Add date only if it is not already in RDATE
         if ($.inArray(datevalue, self.$modalForm.ical.RDATE) === -1) {
             self.$modalForm.ical.RDATE.push(datevalue);
-            var $newdate = $(`<div class="occurrence rdate">
+            var $newdate = $(`<div class="d-flex justify-content-between occurrence rdate">
                 <span class="rdate">
                     ${datevalue},
                     <span class="rlabel">${conf.localization.additionalDate}</span>
@@ -841,42 +841,44 @@ const RecurrenceInput = function(conf, textarea) {
 
     // Loading (populating) display and form widget with
     // passed RFC5545 string (data)
-    function loadData(rfc5545) {
+    function loadData(rfc5545, form) {
         var selector, format, startdate, dayindex, day;
 
         if (rfc5545) {
-            widgetLoadFromRfc5545(self.$modalForm, conf, rfc5545, true);
+            widgetLoadFromRfc5545(form, conf, rfc5545, true);
+        } else {
+            form.ical = {RDATE: [], EXDATE: []};
         }
 
         startdate = findStartDate();
 
         if (startdate !== null) {
             // If the date is a real date, set the defaults in the form
-            self.$modalForm.find('select[name=rimonthlydayofmonthday]').val(startdate.getDate());
+            form.find('select[name=rimonthlydayofmonthday]').val(startdate.getDate());
             dayindex = conf.orderIndexes[Math.floor((startdate.getDate() - 1) / 7)];
             day = conf.weekdays[startdate.getDay()];
-            self.$modalForm.find('select[name=rimonthlyweekdayofmonthindex]').val(dayindex);
-            self.$modalForm.find('select[name=rimonthlyweekdayofmonth]').val(day);
+            form.find('select[name=rimonthlyweekdayofmonthindex]').val(dayindex);
+            form.find('select[name=rimonthlyweekdayofmonth]').val(day);
 
-            self.$modalForm.find('select[name=riyearlydayofmonthmonth]').val(startdate.getMonth() + 1);
-            self.$modalForm.find('select[name=riyearlydayofmonthday]').val(startdate.getDate());
-            self.$modalForm.find('select[name=riyearlyweekdayofmonthindex]').val(dayindex);
-            self.$modalForm.find('select[name=riyearlyweekdayofmonthday]').val(day);
-            self.$modalForm.find('select[name=riyearlyweekdayofmonthmonth]').val(startdate.getMonth() + 1);
+            form.find('select[name=riyearlydayofmonthmonth]').val(startdate.getMonth() + 1);
+            form.find('select[name=riyearlydayofmonthday]').val(startdate.getDate());
+            form.find('select[name=riyearlyweekdayofmonthindex]').val(dayindex);
+            form.find('select[name=riyearlyweekdayofmonthday]').val(day);
+            form.find('select[name=riyearlyweekdayofmonthmonth]').val(startdate.getMonth() + 1);
 
             // Now when we have a start date, we can also do an ajax call to calculate occurrences:
-            loadOccurrences(startdate, widgetSaveToRfc5545(self.$modalForm, conf, false).result, 0, false);
+            loadOccurrences(startdate, widgetSaveToRfc5545(form, conf, false).result, 0, false);
 
             // Show the add and refresh buttons:
-            self.$modalForm.find('div.rioccurrencesactions').show();
+            form.find('div.rioccurrencesactions').show();
 
         } else {
             // No EXDATE/RDATE support
-            self.$modalForm.find('div.rioccurrencesactions').hide();
+            form.find('div.rioccurrencesactions').hide();
         }
 
 
-        selector = self.$modalForm.find('select[name=rirtemplate]');
+        selector = form.find('select[name=rirtemplate]');
         displayFields(selector);
     }
 
@@ -889,8 +891,8 @@ const RecurrenceInput = function(conf, textarea) {
         if (startdate !== null) {
             loadOccurrences(startdate, widgetSaveToRfc5545(form, conf, false).result, 0, true);
         }
-        self.display.find('button[name="riedit"]').text(conf.localization.edit_rules);
-        self.display.find('button[name="ridelete"]').show();
+        self.display.find('a[name="riedit"]').text(conf.localization.edit_rules);
+        self.display.find('a[name="ridelete"]').show();
     }
 
     function recurrenceOff() {
@@ -898,8 +900,8 @@ const RecurrenceInput = function(conf, textarea) {
         label.text(conf.localization.displayUnactivate);
         textarea.val('').trigger("change");  // Clear the textarea.
         self.display.find('.rioccurrences').hide();
-        self.display.find('button[name="riedit"]').text(conf.localization.add_rules);
-        self.display.find('button[name="ridelete"]').hide();
+        self.display.find('a[name="riedit"]').text(conf.localization.add_rules);
+        self.display.find('a[name="ridelete"]').hide();
     }
 
     function checkFields(form) {
@@ -1128,24 +1130,21 @@ const RecurrenceInput = function(conf, textarea) {
     */
 
     // When you click "Delete...", the recurrence rules should be cleared.
-    self.display.find('button[name=ridelete]').on("click", function (e) {
+    self.display.find('a[name="ridelete"]').on("click", function (e) {
         e.preventDefault();
         recurrenceOff();
     });
 
     // Show form modal when you click on the "Edit..." link
-    self.display.find('button[name=riedit]').on(
-        "click",
-        function (e) {
+    self.display.find('a[name="riedit"]')
+        .on("click", function (e) {
             // Load the form to set up the right fields to show, etc.
             e.preventDefault();
             self.modal.show();
             self.$modalForm = $("form", self.modal.$modalContent);
-            loadData(textarea.val());
+            loadData(textarea.val(), self.$modalForm);
             initModalForm();
-        }
-    );
-
+        })
 }
 
 export default Base.extend({
