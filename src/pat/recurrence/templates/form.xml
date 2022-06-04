@@ -1,7 +1,7 @@
 <div class="riform">
     <form>
         <h1><%= localization.title %></h1>
-        <div id="messagearea" style="display: none;"> </div>
+        <div id="messagearea" class="alert alert-danger d-none"> </div>
         <div id="rirtemplate" class="mb-2 row">
             <label class="col-4 col-form-label" for="<%= name %>rtemplate" class="label">
                 <%= localization.recurrenceType %>

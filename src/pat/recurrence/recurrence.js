@@ -177,14 +177,14 @@ function widgetSaveToRfc5545(form, conf, tz) {
                 break;
             case 'BYENDDATE':
                 field = form.find('input[name=rirangebyenddatecalendar]');
-                date = field.val().replaceAll("-", "");
-                result += ';UNTIL=' + date + 'T000000';
+                date = field.val();
+                result += ';UNTIL=' + date.replaceAll("-", "") + 'T000000';
                 if (tz === true) {
                     // Make it UTC:
                     result += 'Z';
                 }
                 human += ', ' + conf.localization.rangeByEndDateHuman;
-                human += ' ' + date;
+                human += ' ' + format(new Date(...date.split("-")), conf.localization.longDateFormat, conf);
                 break;
             }
             break;
@@ -539,10 +539,8 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                     input = field.find('input[name=rirangebyenddatecalendar]');
                     year = until.slice(0, 4);
                     month = until.slice(4, 6);
-                    month = parseInt(month, 10) - 1;
                     day = until.slice(6, 8);
-                    var date_str = new Date(year, month, day).toISOString().substring(0, 10);
-                    input.val(date_str);
+                    input.val(`${year}-${month}-${day}`);
                 }
 
                 selectors = field.find('input[name=rirangetype]');
