@@ -284,7 +284,7 @@
 
         <div class="rioccurrencesactions">
             <div class="rioccurancesheader d-flex justify-content-between">
-                <h2><%= localization.preview %></h2>
+                <h6><strong><%= localization.preview %></strong></h6>
                 <span class="refreshbutton action">
                     <a class="btn btn-sm btn-outline-secondary rirefreshbutton" href="#" title="<%= localization.refresh %>">
                         <%= icons.reload %>
@@ -296,13 +296,13 @@
         <div class="rioccurrences"></div>
 
         <div class="rioccurrencesactions">
-            <div class="rioccurancesheader">
-                <h2><%= localization.addDate %></h2>
-            </div>
-            <div class="riaddoccurrence">
+            <h6><strong><%= localization.addDate %></strong></h6>
+            <div class="riaddoccurrence ">
                 <div class="alert alert-danger d-none"></div>
-                <input class="form-control form-control-sm w-auto" type="date" name="adddate" id="adddate" />
-                <input class="btn btn-sm btn-success" type="button" name="addaction" id="addaction" value="<%= localization.add %>">
+                <div class="input-group">
+                    <input class="form-control form-control-sm w-auto" type="date" name="adddate" id="adddate" />
+                    <input class="btn btn-sm btn-success" type="button" name="addaction" id="addaction" value="<%= localization.add %>">
+                </div>
             </div>
         </div>
 
