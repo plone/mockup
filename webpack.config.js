@@ -11,6 +11,10 @@ module.exports = (env, argv) => {
             "bootstrap.min": path.resolve(__dirname, "src/index-bootstrap.js"),
             "jquery.min": path.resolve(__dirname, "src/index-jquery.js"),
         },
+        externals: {
+            "window": "window",
+            "bootstrap": true,
+        },
     };
 
     config = patternslib_config(env, argv, config, ["@plone/mockup"]);
