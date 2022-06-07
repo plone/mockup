@@ -18,9 +18,9 @@
           <div class="scale mb-2">
             <label><%- scaleText %></label>
             <select name="scale" class="form-select">
-              <% _.each(Object.keys(imageSrcsets), function(key) { %>
+              <% _.each(Object.keys(pictureVariants), function(key) { %>
                 <option value="<%- key %>" <% if (key === options.defaultSrcset) { %>selected<% } %> >
-                  <%- imageSrcsets[key].title %>
+                  <%- pictureVariants[key].title %>
                 </option>
               <% }); %>
             </select>

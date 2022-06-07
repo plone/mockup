@@ -193,8 +193,8 @@ export default class TinyMCE {
         // tiny needs an id in order to initialize. Creat it if not set.
         var id = utils.setId(self.$el);
 
-        if (self.options.imageSrcsets && typeof self.options.imageSrcsets === "string") {
-            self.options.imageSrcsets = JSON.parse(self.options.imageSrcsets);
+        if (self.options.pictureVariants && typeof self.options.pictureVariants === "string") {
+            self.options.pictureVariants = JSON.parse(self.options.pictureVariants);
         }
 
         var tinyOptions = self.options.tiny;

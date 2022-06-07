@@ -82,7 +82,7 @@ export default Base.extend({
         // defaultScale: "large",
         defaultSrcset: "medium",
         imageCaptioningEnabled: true,
-        imageSrcsets: {
+        pictureVariants: {
             large: {
                 "title": "Large",
                 "preview": "++theme++barceloneta/static/preview-image-large.png",

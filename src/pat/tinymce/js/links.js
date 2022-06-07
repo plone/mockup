@@ -519,7 +519,7 @@ export default Base.extend({
             enableImageZoom: this.options.text.enableImageZoom,
             captionText: this.options.text.caption,
             scaleText: this.options.text.scale,
-            imageSrcsets: this.options.imageSrcsets,
+            pictureVariants: this.options.pictureVariants,
             imageCaptioningEnabled: this.options.imageCaptioningEnabled,
             cancelBtn: this.options.text.cancelBtn,
             insertBtn: this.options.text.insertBtn,
@@ -647,9 +647,9 @@ export default Base.extend({
         this.tiny.nodeChanged();
     },
 
-    getScaleFromSrcset: function (srcset) {
-        let srcsetConfig = this.options.imageSrcsets[srcset];
-        return srcsetConfig.sourceset[srcsetConfig.sourceset.length - 1].scale;
+    getScaleFromSrcset: function (pictureVariant) {
+        let pictureVariantsConfig = this.options.pictureVariants[pictureVariant];
+        return pictureVariantsConfig.sourceset[pictureVariantsConfig.sourceset.length - 1].scale;
     },
 
     updateImage: function (src) {
@@ -677,7 +677,7 @@ export default Base.extend({
                 "alt": self.$alt.val(),
                 "class": cssclasses.join(" "),
                 "data-linkType": self.linkType,
-                "data-srcset": self.$scale.val(),
+                "data-picturevariant": self.$scale.val(),
                 "data-scale": self.getScaleFromSrcset(self.$scale.val()),
             },
             self.linkTypes[self.linkType].attributes()
@@ -882,8 +882,8 @@ export default Base.extend({
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
                 // set scale selection in link modal:
-                var srcset = self.dom.getAttrib(self.imgElm, "data-srcset");
-                self.$scale.val(srcset);
+                var pictureVariant = self.dom.getAttrib(self.imgElm, "data-picturevariant");
+                self.$scale.val(pictureVariant);
                 $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
             } else if (src) {
                 self.guessImageLink(src);
