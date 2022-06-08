@@ -1,5 +1,13 @@
 
 
+## [5.0.0-alpha.9](https://github.com/plone/mockup/compare/5.0.0-alpha.8...5.0.0-alpha.9) (2022-06-08)
+
+
+### Bug Fixes
+
+
+* **pat structure:** bootstrap popover fix ([6611570](https://github.com/plone/mockup/commit/661157061958ffbb58aa1c5d2295e14a7540a42e))
+
 ## [5.0.0-alpha.8](https://github.com/plone/mockup/compare/5.0.0-alpha.7...5.0.0-alpha.8) (2022-06-02)
 
 
