@@ -213,6 +213,9 @@
             display: none;
         }
 
+        /* quickfix for Bootstrap 5.2.0-beta */
+        position:absolute !important;
+
         .popover-title {
             padding: 8px 14px;
             background-color: var(--bs-light);
