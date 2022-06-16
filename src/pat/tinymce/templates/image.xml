@@ -18,12 +18,11 @@
           <div class="scale mb-2">
             <label><%- scaleText %></label>
             <select name="scale" class="form-select">
-              <option value="">Original</option>
-                <% _.each(imageScales, function(scale) { %>
-                  <option value="<%- scale.value %>" <% if (scale.value === options.defaultScale) { %>selected<% } %> >
-                    <%- scale.title %>
-                  </option>
-                <% }); %>
+              <% _.each(Object.keys(pictureVariants), function(key) { %>
+                <option value="<%- key %>" <% if (key === options.defaultSrcset) { %>selected<% } %> >
+                  <%- pictureVariants[key].title %>
+                </option>
+              <% }); %>
             </select>
           </div>
         </div>
@@ -60,6 +59,7 @@
         <label><%- altText %></label>
         <input type="text" name="alt" class="form-control" />
       </div>
+      <% if(imageCaptioningEnabled){ %>
       <div class="captionFromDescription form-check mb-2">
         <input type="checkbox" name="captionFromDescription" class="form-check-input" />
         <label for="captionFromDescription" class="form-check-label">
@@ -70,6 +70,7 @@
         <label><%- captionText %></label>
         <textarea name="caption" class="form-control"></textarea>
       </div>
+      <% } %>
       <div class="align mb-2">
         <label><%- imageAlignText %></label>
         <select name="align" class="form-select">
