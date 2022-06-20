@@ -1,0 +1,318 @@
+<div class="riform">
+    <form>
+        <h1><%= localization.title %></h1>
+        <div id="messagearea" class="alert alert-danger d-none"> </div>
+        <div id="rirtemplate" class="mb-2 row">
+            <label class="col-4 col-form-label" for="<%= name %>rtemplate" class="label">
+                <%= localization.recurrenceType %>
+            </label>
+            <div class="col-8">
+                <select id="rirtemplate" name="rirtemplate" class="form-select form-select-sm">
+                    <% Object.keys(rtemplate).forEach(function(val, idx) { %>
+                        <option value="<%= val %>"><%= localization.rtemplate[val] %></value>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <div id="riformfields" class="mb-2">
+            <div id="ridailyinterval" class="rifield row">
+                <label class="col-4 col-form-label" for="<%= name %>dailyinterval">
+                    <%= localization.dailyInterval1 %>
+                </label>
+                <div class="col-8">
+                    <input class="form-control form-control-sm w-auto float-start me-3" type="text" size="2"
+                        value="1"
+                        name="ridailyinterval"
+                        id="<%= name %>dailyinterval" />
+                    <%= localization.dailyInterval2 %>
+                </div>
+            </div>
+
+            <div id="riweeklyinterval" class="rifield row">
+                <label class="col-4 col-form-label" for="<%= name %>weeklyinterval">
+                    <%= localization.weeklyInterval1 %>
+                </label>
+                <div class="col-8">
+                    <input class="form-control form-control-sm w-auto float-start me-3" type="text" size="2"
+                        value="1"
+                        name="riweeklyinterval"
+                        id="<%= name %>weeklyinterval"/>
+                    <%= localization.weeklyInterval2 %>
+                </div>
+            </div>
+
+            <div id="riweeklyweekdays" class="rifield row">
+                <label class="col-4 col-form-label" for="<%= name %>weeklyinterval"><%= localization.weeklyWeekdays %></label>
+                <div class="col-8">
+                    <div class="row">
+                    <% orderedWeekdays.forEach(function(weekday, idx) { %>
+                        <div class="riweeklyweekday col-auto">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    name="riweeklyweekdays<%=weekday %>"
+                                    id="<%= name %>weeklyWeekdays<%=weekday %>"
+                                    value="<%=weekday %>" />
+                                <label class="form-check-label" for="<%= name %>weeklyWeekdays<%= weekday %>"><%= localization.shortWeekdays[idx] %></label>
+                            </div>
+                        </div>
+                    <% }) %>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rimonthlyinterval" class="rifield row">
+                <label class="col-4 col-form-label" for="rimonthlyinterval"><%= localization.monthlyInterval1 %></label>
+                <div class="col-8">
+                    <input class="form-control form-control-sm w-auto float-start me-3" type="text" size="2"
+                        value="1"
+                        name="rimonthlyinterval"/>
+                    <%= localization.monthlyInterval2 %>
+                </div>
+            </div>
+
+            <div id="rimonthlyoptions" class="rifield row">
+                <label class="col-4 col-form-label" for="rimonthlytype"><%= localization.monthlyRepeatOn %></label>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="DAYOFMONTH"
+                                    name="rimonthlytype"
+                                    id="<%= name %>monthlytype:DAYOFMONTH" />
+                                <label class="form-check-label" for="<%= name %>monthlytype:DAYOFMONTH">
+                                    <%= localization.monthlyDayOfMonth1 %>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto" name="rimonthlydayofmonthday" id="<%= name %>monthlydayofmonthday">
+                                <% [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31].forEach(function(val, idx) { %>
+                                    <option value="<%= val %>"><%= val %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <%= localization.monthlyDayOfMonth2 %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="WEEKDAYOFMONTH"
+                                    name="rimonthlytype"
+                                    id="<%= name %>monthlytype:WEEKDAYOFMONTH" />
+                                <label class="form-check-label" for="<%= name %>monthlytype:WEEKDAYOFMONTH">
+                                    <%= localization.monthlyWeekdayOfMonth1 %>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="rimonthlyweekdayofmonthindex">
+                                <% orderIndexes.forEach(function(val, idx) { %>
+                                    <option value="<%= val %>"><%= localization.orderIndexes[idx] %></option>
+                                <% }) %>
+                            </select>
+                            <%= localization.monthlyWeekdayOfMonth2 %>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="rimonthlyweekdayofmonth">
+                                <% orderedWeekdays.forEach(function(val, idx) { %>
+                                    <option value="<%= val %>"><%= localization.weekdays[idx] %></option>
+                                <% }) %>
+                            </select>
+                            <%= localization.monthlyWeekdayOfMonth3 %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="riyearlyinterval" class="rifield row">
+                <label class="col-4 col-form-label" for="riyearlyinterval"><%= localization.yearlyInterval1 %></label>
+                <div class="col-8">
+                    <input class="form-control form-control-sm w-auto float-start me-3" type="text" size="2"
+                        value="1"
+                        name="riyearlyinterval"/>
+                    <%= localization.yearlyInterval2 %>
+                </div>
+            </div>
+
+            <div id="riyearlyoptions" class="rifield row">
+                <label class="col-4 col-form-label" for="riyearlyType"><%= localization.yearlyRepeatOn %></label>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="DAYOFMONTH"
+                                    name="riyearlyType"
+                                    id="<%= name %>yearlytype:DAYOFMONTH" />
+                                <label class="form-check-label" for="<%= name %>yearlytype:DAYOFMONTH">
+                                    <%= localization.yearlyDayOfMonth1 %>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="riyearlydayofmonthmonth">
+                            <% localization.months.forEach(function(val, idx) { %>
+                                <option value="<%= idx + 1 %>"><%= val %></option>
+                            <% }) %>
+                            </select>
+                            <%= localization.yearlyDayOfMonth2 %>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="riyearlydayofmonthday">
+                                <% [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31].forEach(function(val, idx) { %>
+                                    <option value="<%= val %>"><%= val %></option>
+                                <% }) %>
+                            </select>
+                            <%= localization.yearlyDayOfMonth3 %>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="WEEKDAYOFMONTH"
+                                    name="riyearlyType"
+                                    id="<%= name %>yearlytype:WEEKDAYOFMONTH"/>
+                                <label class="form-check-label" for="<%= name %>yearlytype:WEEKDAYOFMONTH">
+                                    <%= localization.yearlyWeekdayOfMonth1 %>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="riyearlyweekdayofmonthindex">
+                                <% orderIndexes.forEach(function(val, idx) { %>
+                                    <option value="<%= val %>"><%= localization.orderIndexes[idx] %></option>
+                                <% }) %>
+                            </select>
+                            <%= localization.yearlyWeekdayOfMonth2 %>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="riyearlyweekdayofmonthday">
+                                <% orderedWeekdays.forEach(function(val, idx) { %>
+                                    <option value="<%= val %>"><%= localization.weekdays[idx] %></option>
+                                <% }) %>
+                            </select>
+                            <%= localization.yearlyWeekdayOfMonth3 %>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm w-auto float-start me-2" name="riyearlyweekdayofmonthmonth">
+                                <% localization.months.forEach(function(val, idx) { %>
+                                    <option value="<%= idx + 1 %>"><%= val %></option>
+                                <% }) %>
+                            </select>
+                            <%= localization.yearlyWeekdayOfMonth4 %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rirangeoptions" class="rifield row">
+                <label class="col-4 col-form-label"><%= localization.range %></label>
+                <div class="col-8 pt-2">
+                    <% if(hasRepeatForeverButton) { %>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            value="NOENDDATE"
+                            name="rirangetype"
+                            id="<%= name %>rangetype:NOENDDATE"/>
+                        <label class="form-check-label" for="<%= name %>rangetype:NOENDDATE">
+                            <%= localization.rangeNoEnd %>
+                        </label>
+                    </div>
+                    <% } %>
+                    <div class="row mt-2">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    checked="checked"
+                                    value="BYOCCURRENCES"
+                                    name="rirangetype"
+                                    id="<%= name %>rangetype:BYOCCURRENCES"/>
+                                <label class="form-check-label" for="<%= name %>rangetype:BYOCCURRENCES">
+                                    <%= localization.rangeByOccurrences1 %>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <input
+                                class="form-control form-control-sm w-auto float-start me-3" type="text" size="3"
+                                value="7"
+                                name="rirangebyoccurrencesvalue" />
+                            <%= localization.rangeByOccurrences2 %>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    value="BYENDDATE"
+                                    name="rirangetype"
+                                    id="<%= name %>rangetype:BYENDDATE"/>
+                                <label class="form-check-label" for="<%= name %>rangetype:BYENDDATE">
+                                    <%= localization.rangeByEndDate %>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <input
+                                class="form-control form-control-sm w-auto" type="date"
+                                name="rirangebyenddatecalendar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rioccurrencesactions">
+            <div class="rioccurancesheader d-flex justify-content-between">
+                <h6><strong><%= localization.preview %></strong></h6>
+                <span class="refreshbutton action">
+                    <a class="btn btn-sm btn-outline-secondary rirefreshbutton" href="#" title="<%= localization.refresh %>">
+                        <%= icons.reload %>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="rioccurrences"></div>
+
+        <div class="rioccurrencesactions">
+            <h6><strong><%= localization.addDate %></strong></h6>
+            <div class="riaddoccurrence ">
+                <div class="alert alert-danger d-none"></div>
+                <div class="input-group">
+                    <input class="form-control form-control-sm w-auto" type="date" name="adddate" id="adddate" />
+                    <input class="btn btn-sm btn-success" type="button" name="addaction" id="addaction" value="<%= localization.add %>">
+                </div>
+            </div>
+        </div>
+
+        <div class="ributtons">
+            <button
+                type="submit"
+                class="btn btn-secondary me-2 ricancelbutton <%= ributtonExtraClass %>"><%= localization.cancel %></button>
+            <button
+                type="submit"
+                class="btn btn-primary risavebutton <%= ributtonExtraClass %>"><%= localization.save %></button>
+        </div>
+    </form>
+</div>

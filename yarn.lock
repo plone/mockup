@@ -6709,13 +6709,7 @@ jquery.browser@0.1.0:
   resolved "https://registry.yarnpkg.com/jquery.browser/-/jquery.browser-0.1.0.tgz#9c72a6095fd2814b44476ea8f716677b72a6a2bb"
   integrity sha512-5GjtLzzEBzxs/nwSVpCbSdk0acssfKsP7Upp43zmdHVV1Vb6E9VayyqPAQlfLrTeZL3YSWocCbkOvKdAc2CN4g==
 
-"jquery.recurrenceinput.js@git+https://github.com/collective/jquery.recurrenceinput.js.git#master":
-  version "1.6.0"
-  resolved "git+https://github.com/collective/jquery.recurrenceinput.js.git#deaec1116575d81698778f87d8c08f02487aadf9"
-  dependencies:
-    jquery ""
-
-jquery@, jquery@3.6.0, jquery@>=1.7, jquery@>=1.7.2, jquery@^3.6.0:
+jquery@3.6.0, jquery@>=1.7, jquery@>=1.7.2, jquery@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
