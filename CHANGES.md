@@ -1,5 +1,13 @@
 
 
+## [5.0.0-alpha.10](https://github.com/plone/mockup/compare/5.0.0-alpha.9...5.0.0-alpha.10) (2022-06-20)
+
+
+### Features
+
+
+* **pat structure:** simplify badge styling and add new "exclude_from_nav" badge ([a0d3573](https://github.com/plone/mockup/commit/a0d35731d661292f0aec653c4e14542dfc6c2d83))
+
 ## [5.0.0-alpha.9](https://github.com/plone/mockup/compare/5.0.0-alpha.8...5.0.0-alpha.9) (2022-06-08)
 
 
