@@ -1,2 +1,5 @@
 // Bundle entry for Bootstrap
-import "bootstrap";
+import bootstrap from "bootstrap";
+
+// Register Bootstrap globally
+window.bootstrap = bootstrap;
