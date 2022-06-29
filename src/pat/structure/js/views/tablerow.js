@@ -62,6 +62,7 @@ export default Backbone.View.extend({
         data.convertColumnValue = this.convertColumnValue.bind(this);
         data.expired = this.expired(data);
         data.ineffective = this.ineffective(data);
+        data.exclude_from_nav = data.exclude_from_nav||false;
 
         this.$el.html(this.template(data));
 
