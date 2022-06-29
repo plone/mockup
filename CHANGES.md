@@ -1,5 +1,13 @@
 
 
+## [5.0.0-alpha.11](https://github.com/plone/mockup/compare/5.0.0-alpha.10...5.0.0-alpha.11) (2022-06-29)
+
+
+### Bug Fixes
+
+
+* **pat structure:** fix tablerow items without `exclude_from_nav` attribute. ([1de6ce5](https://github.com/plone/mockup/commit/1de6ce573ac1a8e8beba34dda1dd03a22cede58b))
+
 ## [5.0.0-alpha.10](https://github.com/plone/mockup/compare/5.0.0-alpha.9...5.0.0-alpha.10) (2022-06-20)
 
 
