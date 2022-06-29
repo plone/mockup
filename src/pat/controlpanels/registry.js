@@ -1,4 +1,3 @@
-import registry from "@patternslib/patternslib/src/core/registry";
 import Base from "@patternslib/patternslib/src/core/base";
 
 export default Base.extend({

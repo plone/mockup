@@ -1,6 +1,5 @@
 import "./toggle";
 import $ from "jquery";
-import logger from "@patternslib/patternslib/src/core/logging";
 import registry from "@patternslib/patternslib/src/core/registry";
 import { jest } from "@jest/globals";
 
