@@ -61,7 +61,6 @@ export default class TinyMCE {
         var self = this;
         var part = data[self.options.linkAttribute];
         return self.options.prependToUrl + part + self.options.appendToUrl;
-
     }
     generateImageUrl(data, scale_name) {
         var self = this;
@@ -192,7 +191,10 @@ export default class TinyMCE {
         // tiny needs an id in order to initialize. Creat it if not set.
         var id = utils.setId(self.$el);
 
-        if (self.options.pictureVariants && typeof self.options.pictureVariants === "string") {
+        if (
+            self.options.pictureVariants &&
+            typeof self.options.pictureVariants === "string"
+        ) {
             self.options.pictureVariants = JSON.parse(self.options.pictureVariants);
         }
 

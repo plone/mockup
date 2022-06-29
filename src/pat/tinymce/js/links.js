@@ -53,8 +53,7 @@ var LinkType = Base.extend({
             "data-val": this.value(),
         };
     },
-    updateRelatedItems: function(){
-    },
+    updateRelatedItems: function () {},
 });
 
 var ExternalLink = LinkType.extend({
@@ -102,8 +101,8 @@ var InternalLink = LinkType.extend({
         this.relatedItems = new RelatedItems(this.getEl(), options);
     },
 
-    updateRelatedItems: function(val) {
-        if(!this.relatedItems) {
+    updateRelatedItems: function (val) {
+        if (!this.relatedItems) {
             // prevent toolbar from being rendered twice
             this.createRelatedItems();
         }
@@ -452,8 +451,8 @@ export default Base.extend({
                 classDialog: "modal-dialog modal-lg",
                 reloadWindowOnClose: false,
             },
-            actionOptions: {reloadWindowOnClose: false},
-            backdropOptions: { closeOnClick: false }
+            actionOptions: { reloadWindowOnClose: false },
+            backdropOptions: { closeOnClick: false },
         });
         self.modal.on("shown", (e) => {
             self.modalShown.apply(self, [e]);
@@ -540,10 +539,7 @@ export default Base.extend({
         self.$alt = $('input[name="alt"]', self.modal.$modal);
         self.$align = $('select[name="align"]', self.modal.$modal);
         self.$scale = $('select[name="scale"]', self.modal.$modal);
-        self.$enableImageZoom = $(
-            'input[name="enableImageZoom"]',
-            self.modal.$modal
-        );
+        self.$enableImageZoom = $('input[name="enableImageZoom"]', self.modal.$modal);
         self.$captionFromDescription = $(
             'input[name="captionFromDescription"]',
             self.modal.$modal
@@ -649,7 +645,9 @@ export default Base.extend({
 
     getScaleFromSrcset: function (pictureVariant) {
         let pictureVariantsConfig = this.options.pictureVariants[pictureVariant];
-        return pictureVariantsConfig.sourceset[pictureVariantsConfig.sourceset.length - 1].scale;
+        return pictureVariantsConfig.sourceset[
+            pictureVariantsConfig.sourceset.length - 1
+        ].scale;
     },
 
     updateImage: function (src) {
@@ -661,7 +659,11 @@ export default Base.extend({
 
         self.tiny.focus();
         self.tiny.selection.setRng(self.rng);
-        var cssclasses = ["image-richtext", self.$align.val(), "picture-variant-" + self.$scale.val()];
+        var cssclasses = [
+            "image-richtext",
+            self.$align.val(),
+            "picture-variant-" + self.$scale.val(),
+        ];
         if (captionFromDescription || caption) {
             cssclasses.push("captioned");
         }
@@ -682,16 +684,16 @@ export default Base.extend({
             },
             self.linkTypes[self.linkType].attributes()
         );
-        if (caption && !captionFromDescription){
+        if (caption && !captionFromDescription) {
             data["data-captiontext"] = caption;
         }
         if (self.imgElm && !self.imgElm.getAttribute("data-mce-object")) {
             const imgWidth = self.dom.getAttrib(self.imgElm, "width");
             const imgHight = self.dom.getAttrib(self.imgElm, "height");
-            if(imgWidth){
+            if (imgWidth) {
                 data.width = imgWidth;
             }
-            if(imgHight){
+            if (imgHight) {
                 data.height = imgHight;
             }
         } else {
@@ -738,19 +740,23 @@ export default Base.extend({
             self.options.upload.relatedItems.selectableTypes = self.options.folderTypes;
             self.$upload.addClass("pat-upload");
             new PatternUpload(self.$upload, self.options.upload);
-            self.$upload.on("uploadAllCompleted", function(evt, data) {
-                if (self.linkTypes.image) {
-                    self.linkTypes.image.set(data.data.UID);
-                    $(
-                        "#" + $("#tinylink-image", self.modal.$modal).data("navref")
-                    ).trigger("click");
-                } else {
-                    self.linkTypes.internal.set(data.data.UID);
-                    $(
-                        "#" + $("#tinylink-internal", self.modal.$modal).data("navref")
-                    ).trigger("click");
-                }
-            }.bind(self));
+            self.$upload.on(
+                "uploadAllCompleted",
+                function (evt, data) {
+                    if (self.linkTypes.image) {
+                        self.linkTypes.image.set(data.data.UID);
+                        $(
+                            "#" + $("#tinylink-image", self.modal.$modal).data("navref")
+                        ).trigger("click");
+                    } else {
+                        self.linkTypes.internal.set(data.data.UID);
+                        $(
+                            "#" +
+                                $("#tinylink-internal", self.modal.$modal).data("navref")
+                        ).trigger("click");
+                    }
+                }.bind(self)
+            );
         }
 
         self.$button.off("click").on("click", function (e) {
@@ -868,9 +874,9 @@ export default Base.extend({
             if ($(self.imgElm).hasClass("captioned") && !captionText) {
                 self.$captionFromDescription.prop("checked", true);
                 self.$caption.prop("disabled", true);
-            }else if($(self.imgElm).hasClass("captioned") && captionText){
+            } else if ($(self.imgElm).hasClass("captioned") && captionText) {
                 self.$captionFromDescription.prop("checked", false);
-            }else{
+            } else {
                 self.$captionFromDescription.prop("checked", false);
             }
             if (captionText) {
@@ -882,7 +888,10 @@ export default Base.extend({
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
                 // set scale selection in link modal:
-                var pictureVariant = self.dom.getAttrib(self.imgElm, "data-picturevariant");
+                var pictureVariant = self.dom.getAttrib(
+                    self.imgElm,
+                    "data-picturevariant"
+                );
                 self.$scale.val(pictureVariant);
                 $("#tinylink-" + self.linkType, self.modal.$modal).trigger("click");
             } else if (src) {

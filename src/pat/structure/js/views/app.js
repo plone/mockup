@@ -91,10 +91,10 @@ export default BaseView.extend({
         // set initial pageSize
         this.collection.state.pageSize = this.getCookieSetting("pageSize", 15);
 
-         // fetch results from collection
-         // NOTE: this also calls this.tableView.render() and
-         // this.pagingView.render()
-         this.collection.fetch();
+        // fetch results from collection
+        // NOTE: this also calls this.tableView.render() and
+        // this.pagingView.render()
+        this.collection.fetch();
 
         // initialize buttons
         this.setupButtons();

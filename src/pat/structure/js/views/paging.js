@@ -117,7 +117,7 @@ export default Backbone.View.extend({
         e.preventDefault();
         this.app.clearStatus();
         const size = parseInt($(e.target).text());
-        this.collection.setPageSize(size, {first: true});
+        this.collection.setPageSize(size, { first: true });
         this.app.setCookieSetting("pageSize", size);
     },
 });

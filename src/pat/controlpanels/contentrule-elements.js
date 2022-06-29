@@ -6,9 +6,8 @@ export default Base.extend({
 
     async init() {
         // Async import implementation to reduce bundle size for controlpanels
-        const implementation = (
-            await import("./contentrule-elements--implementation")
-        ).default;
+        const implementation = (await import("./contentrule-elements--implementation"))
+            .default;
         const instance = new implementation(this.el);
         instance.init();
     },

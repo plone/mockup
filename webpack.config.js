@@ -54,7 +54,10 @@ module.exports = (env, argv) => {
         // Note: ``publicPath`` is set to "auto" in Patternslib,
         //        so for the devServer the public path set to "/".
         config.devServer.port = "8000";
-        config.devServer.static.directory = path.resolve(__dirname, "./docs/_site/");
+        config.devServer.static.directory = path.resolve(
+            __dirname,
+            "./docs/_site/"
+        );
     }
 
     if (env && env.DEPLOYMENT === "plone") {

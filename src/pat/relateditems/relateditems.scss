@@ -137,7 +137,7 @@
         justify-content: flex-start;
 
         a {
-            text-decoration:none;
+            text-decoration: none;
         }
 
         .pat-relateditems-result-select {
@@ -197,9 +197,9 @@
 .pat-relateditems-recentlyused-image,
 .pat-relateditems-item-image {
     img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
         &,
         #content-core & {
             max-height: 128px;

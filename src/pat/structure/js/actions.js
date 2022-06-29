@@ -80,7 +80,8 @@ export default Backbone.Model.extend({
         });
         const data = await resp.json();
 
-        let msg, state_type = "warning";
+        let msg,
+            state_type = "warning";
         if (data.status === "success") {
             msg = _t(`${successMsg} "${this.model.attributes.Title}"`);
             this.app.collection.fetch();

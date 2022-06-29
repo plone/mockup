@@ -45,7 +45,7 @@ export default Backbone.View.extend({
     render: async function () {
         const data = this.model.toJSON();
 
-        data.selected = !!this.selectedCollection.findWhere({UID: data.UID});
+        data.selected = !!this.selectedCollection.findWhere({ UID: data.UID });
         data.attributes = this.model.attributes;
         data.activeColumns = this.app.activeColumns;
         data.availableColumns = this.app.availableColumns;
@@ -55,14 +55,17 @@ export default Backbone.View.extend({
         data.thumb_scale = this.app.thumb_scale;
         data.mimeIcon = await utils.resolveIcon(`contenttype/${data.contenttype}`);
 
-        const viewAction = (this.app.typeToViewAction && this.app.typeToViewAction[data.attributes.portal_type]) || "";
+        const viewAction =
+            (this.app.typeToViewAction &&
+                this.app.typeToViewAction[data.attributes.portal_type]) ||
+            "";
         data.viewURL = data.attributes.getURL + viewAction;
 
         data._t = _t;
         data.convertColumnValue = this.convertColumnValue.bind(this);
         data.expired = this.expired(data);
         data.ineffective = this.ineffective(data);
-        data.exclude_from_nav = data.exclude_from_nav||false;
+        data.exclude_from_nav = data.exclude_from_nav || false;
 
         this.$el.html(this.template(data));
 
@@ -74,7 +77,10 @@ export default Backbone.View.extend({
         this.$el.attr("data-type", data.portal_type);
         this.$el.attr("data-folderish", data.is_folderish);
         this.$el.toggleClass("folder", data.is_folderish);
-        this.$el.toggleClass('default-page', data.id === this.table.contextInfo?.defaultPage);
+        this.$el.toggleClass(
+            "default-page",
+            data.id === this.table.contextInfo?.defaultPage
+        );
         this.$el.toggleClass("expired", data.expired);
         this.$el.toggleClass("ineffective", data.ineffective);
 
@@ -95,10 +101,10 @@ export default Backbone.View.extend({
      * @param {*} value
      * @returns {string|*}
      */
-    convertColumnValue: function(column, value) {
-        if(this.table.dateColumns.includes(column)){
+    convertColumnValue: function (column, value) {
+        if (this.table.dateColumns.includes(column)) {
             const date = new Date(value);
-            if(date instanceof Date && date.toString() === 'Invalid Date'){
+            if (date instanceof Date && date.toString() === "Invalid Date") {
                 return value;
             }
             return date.toLocaleString(this.app.language, this.app.dateFormat);

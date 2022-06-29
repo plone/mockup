@@ -38,12 +38,11 @@ describe("FormAutoFocus", function () {
         expect($("input#first-input").is(":focus")).toEqual(false);
         $("input").on("focusin", function () {
             expect($(this).attr("id")).toEqual("input1-inside-error");
-            expect($("input#input2-inside-error").is(":focus"))
-            .toEqual(false);
-            expect($("input#first-input-should-not-focus").is(":focus"))
-            .toEqual(false);
-            expect($("input#input-inside-error-should-not-focus").is(":focus"))
-            .toEqual(false);
+            expect($("input#input2-inside-error").is(":focus")).toEqual(false);
+            expect($("input#first-input-should-not-focus").is(":focus")).toEqual(false);
+            expect($("input#input-inside-error-should-not-focus").is(":focus")).toEqual(
+                false
+            );
             done();
         });
         registry.scan($el);
@@ -62,12 +61,11 @@ describe("FormAutoFocus", function () {
         expect($("input#first-input").is(":focus")).toEqual(false);
         $("input").on("focusin", function () {
             expect($(this).attr("id")).toEqual("first-input");
-            expect($("input#second-input").is(":focus"))
-            .toEqual(false);
-            expect($("input#first-input-should-not-focus").is(":focus"))
-            .toEqual(false);
-            expect($("input#input-inside-error-should-not-focus").is(":focus"))
-            .toEqual(false);
+            expect($("input#second-input").is(":focus")).toEqual(false);
+            expect($("input#first-input-should-not-focus").is(":focus")).toEqual(false);
+            expect($("input#input-inside-error-should-not-focus").is(":focus")).toEqual(
+                false
+            );
             done();
         });
         registry.scan($el);
@@ -86,12 +84,11 @@ describe("FormAutoFocus", function () {
         expect($("input#first-input").is(":focus")).toEqual(false);
         $("input").on("focusin", function () {
             expect($(this).attr("id")).toEqual("second-input");
-            expect($("input#first-input").is(":focus"))
-            .toEqual(false);
-            expect($("input#first-input-should-not-focus").is(":focus"))
-            .toEqual(false);
-            expect($("input#input-inside-error-should-not-focus").is(":focus"))
-            .toEqual(false);
+            expect($("input#first-input").is(":focus")).toEqual(false);
+            expect($("input#first-input-should-not-focus").is(":focus")).toEqual(false);
+            expect($("input#input-inside-error-should-not-focus").is(":focus")).toEqual(
+                false
+            );
             done();
         });
         registry.scan($el);

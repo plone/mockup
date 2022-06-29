@@ -595,42 +595,36 @@ export default Base.extend({
             }
             var result = $(self.applyTemplate("result", item));
 
-            $(".pat-relateditems-result-select", result).on(
-                "click",
-                function (event) {
-                    event.preventDefault();
-                    // event.stopPropagation();
-                    if ($(this).is(".selectable")) {
-                        var $parent = $(this).parents(".pat-relateditems-result");
-                        if ($parent.is(".pat-relateditems-active")) {
-                            $parent.removeClass("pat-relateditems-active");
-                            self.deselectItem(item);
-                        } else {
-                            if (self.options.maximumSelectionSize > 0) {
-                                var items = $(self.el).select2("data");
-                                if (items.length >= self.options.maximumSelectionSize) {
-                                    $(self.el).select2("close");
-                                }
-                            }
-                            self.selectItem(item);
-                            $parent.addClass("pat-relateditems-active");
-                            if (self.options.closeOnSelect) {
+            $(".pat-relateditems-result-select", result).on("click", function (event) {
+                event.preventDefault();
+                // event.stopPropagation();
+                if ($(this).is(".selectable")) {
+                    var $parent = $(this).parents(".pat-relateditems-result");
+                    if ($parent.is(".pat-relateditems-active")) {
+                        $parent.removeClass("pat-relateditems-active");
+                        self.deselectItem(item);
+                    } else {
+                        if (self.options.maximumSelectionSize > 0) {
+                            var items = $(self.el).select2("data");
+                            if (items.length >= self.options.maximumSelectionSize) {
                                 $(self.el).select2("close");
                             }
                         }
+                        self.selectItem(item);
+                        $parent.addClass("pat-relateditems-active");
+                        if (self.options.closeOnSelect) {
+                            $(self.el).select2("close");
+                        }
                     }
                 }
-            );
+            });
 
-            $(".pat-relateditems-result-browse", result).on(
-                "click",
-                function (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    var path = $(this).data("path");
-                    self.browseTo(path);
-                }
-            );
+            $(".pat-relateditems-result-browse", result).on("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                var path = $(this).data("path");
+                self.browseTo(path);
+            });
 
             return $(result);
         };

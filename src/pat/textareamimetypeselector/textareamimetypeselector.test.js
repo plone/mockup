@@ -111,9 +111,9 @@ describe("Textarea MimeType Selector", function () {
         // Textarea should be hidden
         expect($textarea.is(":hidden")).toEqual(true);
         // And TinyMCE should be shown
-        expect(
-            $(".mce-content-body[contenteditable='true']").is(":visible")
-        ).toEqual(true);
+        expect($(".mce-content-body[contenteditable='true']").is(":visible")).toEqual(
+            true
+        );
 
         // Switching back to text/plain should destroy TinyMCE
         $el.val("text/plain").change();
@@ -125,8 +125,8 @@ describe("Textarea MimeType Selector", function () {
         // switching back to TinyMCE loads it again
         $el.val("text/html").change();
         expect($textarea.is(":hidden")).toEqual(true);
-        expect(
-            $(".mce-content-body[contenteditable='true']").is(":visible")
-        ).toEqual(true);
+        expect($(".mce-content-body[contenteditable='true']").is(":visible")).toEqual(
+            true
+        );
     });
 });

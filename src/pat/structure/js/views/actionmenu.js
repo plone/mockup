@@ -49,7 +49,7 @@ export default BaseView.extend({
         this.delegateEvents();
     },
 
-    menuOptionsCategorized: async function() {
+    menuOptionsCategorized: async function () {
         const result = {};
 
         _.each(this.menuOptions, async (menuOption, key) => {

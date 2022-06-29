@@ -27,16 +27,10 @@ describe("Upload", function () {
             await utils.timeout(1);
             expect($(".pat-upload", this.$el).hasClass("upload")).toEqual(true);
             expect($(".upload-area", this.$el).length).toEqual(1);
-            expect($(".upload-area", this.$el).hasClass("dz-clickable")).toEqual(
-                true
-            );
+            expect($(".upload-area", this.$el).hasClass("dz-clickable")).toEqual(true);
             expect($(".dz-message", this.$el).length).toEqual(1);
-            expect($(".dz-message", this.$el).hasClass("dz-default")).toEqual(
-                false
-            );
-            expect($(".dz-message p", this.$el).html()).toEqual(
-                "Drop files here..."
-            );
+            expect($(".dz-message", this.$el).hasClass("dz-default")).toEqual(false);
+            expect($(".dz-message p", this.$el).html()).toEqual("Drop files here...");
         });
         it("change className data option", async function () {
             var attr = $(".pat-upload", this.$el).attr("data-pat-upload");
@@ -46,9 +40,7 @@ describe("Upload", function () {
             );
             registry.scan(this.$el);
             await utils.timeout(1);
-            expect($(".pat-upload", this.$el).hasClass("drop-zone")).toEqual(
-                true
-            );
+            expect($(".pat-upload", this.$el).hasClass("drop-zone")).toEqual(true);
         });
         it("update clickable data option to false", async function () {
             var attr = $(".pat-upload", this.$el).attr("data-pat-upload");
@@ -58,19 +50,14 @@ describe("Upload", function () {
             );
             registry.scan(this.$el);
             await utils.timeout(1);
-            expect($(".pat-upload", this.$el).hasClass("dz-clickable")).toEqual(
-                false
-            );
+            expect($(".pat-upload", this.$el).hasClass("dz-clickable")).toEqual(false);
         });
         it("update wrap data option to true", async function () {
             expect(
                 $(".pat-upload", this.$el).parent().hasClass("upload-wrapper")
             ).toEqual(false);
             var attr = $(".pat-upload", this.$el).attr("data-pat-upload");
-            $(".pat-upload", this.$el).attr(
-                "data-pat-upload",
-                attr + "; wrap: true"
-            );
+            $(".pat-upload", this.$el).attr("data-pat-upload", attr + "; wrap: true");
             registry.scan(this.$el);
             await utils.timeout(1);
             expect(

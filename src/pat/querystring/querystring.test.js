@@ -3,14 +3,12 @@ import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
-
 const mockFetch =
     (json = {}) =>
     () =>
         Promise.resolve({
             json: () => Promise.resolve(json),
         });
-
 
 describe("Querystring", function () {
     beforeEach(() => {
@@ -151,14 +149,22 @@ describe("Querystring", function () {
         // querystring pattern initialized
         expect(document.querySelectorAll(".querystring-wrapper").length).toEqual(1);
         expect(document.querySelectorAll(".querystring-sort-wrapper").length).toEqual(1);
-        expect(document.querySelectorAll(".querystring-preview-wrapper").length).toEqual(1);
+        expect(document.querySelectorAll(".querystring-preview-wrapper").length).toEqual(
+            1
+        );
 
         // there should be 3 criteria rows now
-        expect(document.querySelectorAll(".querystring-criteria-wrapper").length).toEqual(3);
+        expect(
+            document.querySelectorAll(".querystring-criteria-wrapper").length
+        ).toEqual(3);
 
         // check for correct initialized values
         expect($(".querystring-sort-wrapper select").val()).toEqual("start");
-        expect($(".querystring-sort-wrapper .querystring-sortreverse input[type='checkbox']")[0].checked).toBeTruthy();
+        expect(
+            $(
+                ".querystring-sort-wrapper .querystring-sortreverse input[type='checkbox']"
+            )[0].checked
+        ).toBeTruthy();
 
         global.fetch.mockClear();
         delete global.fetch;

@@ -19,9 +19,13 @@ describe("Toolbar", function () {
     });
 
     it("Initializes correctly", async function () {
-        expect(document.body.querySelectorAll(".pat-toolbar.initialized").length).toBe(0);
+        expect(document.body.querySelectorAll(".pat-toolbar.initialized").length).toBe(
+            0
+        );
         registry.scan(document.body);
         await utils.timeout(1);
-        expect(document.body.querySelectorAll(".pat-toolbar.initialized").length).toBe(1);
+        expect(document.body.querySelectorAll(".pat-toolbar.initialized").length).toBe(
+            1
+        );
     });
 });

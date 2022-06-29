@@ -1,6 +1,3 @@
-
-
-
 div.rioccurrences div.batching {
     font-size: 70%;
     text-align: center;
@@ -16,21 +13,21 @@ div.rioccurrences .occurrence {
 }
 
 div.rioccurrences .occurrence:hover {
-    border-top: 1px solid #DDDDDD;
-    border-bottom: 1px solid #DDDDDD;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
 }
 
 div.rioccurrences .occurrence.start span.rlabel,
 div.rioccurrences .occurrence.rdate span.rlabel {
-    color: #9CBA9B;
+    color: #9cba9b;
     margin: 0 5px;
     font-size: 70%;
     font-weight: bold;
 }
 
 div.rioccurrences .occurrence.exdate {
-    opacity:0.4;
-    filter:alpha(opacity=40);
+    opacity: 0.4;
+    filter: alpha(opacity=40);
 }
 
 div.ridisplay .occurrence.exdate {
@@ -46,5 +43,5 @@ div.ridisplay .rimain a {
 }
 
 div.rioccurrences .occurrence.rdate {
-    background: #FFFFE0;
+    background: #ffffe0;
 }

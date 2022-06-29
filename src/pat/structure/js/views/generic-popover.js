@@ -44,7 +44,7 @@ export default PopoverView.extend({
 
     getTemplateOptions: function () {
         const items = [];
-        for(const item of this.app.selectedCollection.models){
+        for (const item of this.app.selectedCollection.models) {
             items.push(item.toJSON());
         }
         return $.extend({}, true, this.options, {
