@@ -1,4 +1,3 @@
-import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 import utils from "../../core/utils";

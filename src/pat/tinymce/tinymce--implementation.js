@@ -1,4 +1,3 @@
-import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import I18n from "../../core/i18n";
 import _t from "../../core/i18n-wrapper";
