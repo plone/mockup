@@ -1,8 +1,8 @@
 process.traceDeprecation = true;
 const package_json = require("./package.json");
 const path = require("path");
-const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
-const mf_config = require("@patternslib/patternslib/webpack/webpack.mf");
+const patternslib_config = require("@patternslib/dev/webpack/webpack.config");
+const mf_config = require("@patternslib/dev/webpack/webpack.mf");
 
 module.exports = (env, argv) => {
     let config = {
