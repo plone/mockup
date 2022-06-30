@@ -3,13 +3,12 @@ import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
 
-
 describe("Modal", function () {
-
     beforeEach(function () {
         $.ajax = jest.fn().mockImplementation(() => {
             console.log("AJAX call");
-            const fakeResponse = "<html>" +
+            const fakeResponse =
+                "<html>" +
                 "<head></head>" +
                 "<body>" +
                 '<div id="content">' +
@@ -35,10 +34,10 @@ describe("Modal", function () {
     it("default behaviour", async function () {
         var $el = $(
             '<div id="body">' +
-            ' <a class="pat-plone-modal" href="#target"' +
-            '    data-pat-plone-modal="backdrop: #body">Open</a>' +
-            ' <div id="target" style="display:none;">Target</div>' +
-            '</div>'
+                ' <a class="pat-plone-modal" href="#target"' +
+                '    data-pat-plone-modal="backdrop: #body">Open</a>' +
+                ' <div id="target" style="display:none;">Target</div>' +
+                "</div>"
         ).appendTo("body");
 
         registry.scan($el);
@@ -84,9 +83,7 @@ describe("Modal", function () {
             .patPloneModal()
             .on("show.plone-modal.patterns", function (e) {
                 var modal = $(this).data("pattern-plone-modal");
-                $(".plone-modal-header", modal.$modal).prepend(
-                    $("<h3>New Title</h3>")
-                );
+                $(".plone-modal-header", modal.$modal).prepend($("<h3>New Title</h3>"));
             })
             .click();
         expect($(".plone-modal .plone-modal-header h3", $el).text()).toEqual(
@@ -274,15 +271,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "center",
-                        "top",
-                        0,
-                        340,
-                        280,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("center", "top", 0, 340, 280, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("0px");
@@ -329,15 +318,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "left",
-                        "top",
-                        0,
-                        340,
-                        280,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("left", "top", 0, 340, 280, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("0px");
@@ -380,15 +361,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "right",
-                        "top",
-                        0,
-                        340,
-                        280,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("right", "top", 0, 340, 280, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("0px");
@@ -521,15 +494,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "center",
-                        "top",
-                        5,
-                        340,
-                        280,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("center", "top", 5, 340, 280, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("5px");
@@ -576,15 +541,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "left",
-                        "top",
-                        5,
-                        340,
-                        280,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("left", "top", 5, 340, 280, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("5px");
@@ -627,15 +584,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "right",
-                        "top",
-                        5,
-                        340,
-                        280,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("right", "top", 5, 340, 280, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("5px");
@@ -760,15 +709,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "center",
-                        "top",
-                        0,
-                        450,
-                        350,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("center", "top", 0, 450, 350, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("0px");
@@ -811,15 +752,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "left",
-                        "top",
-                        0,
-                        450,
-                        350,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("left", "top", 0, 450, 350, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("0px");
@@ -862,15 +795,7 @@ describe("Modal", function () {
                 .patPloneModal()
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
-                    var pos = modal.findPosition(
-                        "right",
-                        "top",
-                        0,
-                        450,
-                        350,
-                        400,
-                        300
-                    );
+                    var pos = modal.findPosition("right", "top", 0, 450, 350, 400, 300);
                     expect(pos).not.to.have.property("bottom");
                     expect(pos).to.have.property("top");
                     expect(pos.top).toEqual("0px");
@@ -911,5 +836,4 @@ describe("Modal", function () {
                 .click();
         });
     });
-
 });

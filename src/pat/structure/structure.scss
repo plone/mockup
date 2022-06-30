@@ -199,7 +199,7 @@
         }
 
         /* quickfix for Bootstrap 5.2.0-beta */
-        position:absolute !important;
+        position: absolute !important;
 
         .popover-title {
             padding: 8px 14px;
@@ -251,11 +251,11 @@
         .title {
             /* lead image positioning */
             > div {
-                display:flex;
+                display: flex;
                 justify-content: space-between;
                 .lead-img {
-                    flex-shrink:0;
-                    margin-left:$spacer;
+                    flex-shrink: 0;
+                    margin-left: $spacer;
                 }
             }
 
@@ -269,10 +269,10 @@
         }
 
         &.default-page .title > div > *:first-child:before {
-            color:$danger;
-            content: '•';
-            font-size:$font-size-lg;
-            line-height:1;
+            color: $danger;
+            content: "•";
+            font-size: $font-size-lg;
+            line-height: 1;
         }
     }
 

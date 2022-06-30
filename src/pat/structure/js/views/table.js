@@ -91,11 +91,13 @@ export default BaseView.extend({
             this.template({
                 _t: _t,
                 homeIcon: await utils.resolveIcon("house"),
-                pathParts: this.app.getCurrentPath().split("/").slice(1).filter(
-                    (val) => {
+                pathParts: this.app
+                    .getCurrentPath()
+                    .split("/")
+                    .slice(1)
+                    .filter((val) => {
                         return val.length > 0;
-                    }
-                ),
+                    }),
                 activeColumns: this.app.activeColumns,
                 availableColumns: this.app.availableColumns,
                 datatables_options: JSON.stringify(datatables_options),

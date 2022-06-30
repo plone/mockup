@@ -12,7 +12,7 @@ export default BaseView.extend({
     template: _.template(
         '<div class="input-group">' +
             '<input id="textFilterInput" type="text" class="form-control search-query" aria-label="<%- _t("Search") %>" placeholder="<%- _t("Search") %>">' +
-        "</div>"
+            "</div>"
     ),
     popoverContent: _.template('<input class="pat-querystring" />'),
     events: {

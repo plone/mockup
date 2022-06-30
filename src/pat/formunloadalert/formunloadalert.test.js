@@ -132,5 +132,4 @@ describe("FormUnloadAlert", function () {
         // the pattern should have exited.
         expect(pattern._changed).toEqual(false);
     });
-
 });

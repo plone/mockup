@@ -17,7 +17,7 @@ import utils from "@patternslib/patternslib/src/core/utils";
 //     window.mocha.setup("bdd").globals(["jQuery*"]);
 //     $.fx.off = true;
 
-    /* ==========================
+/* ==========================
    TEST: Related Items
   ========================== */
 
@@ -244,8 +244,7 @@ describe("Related Items", function () {
                         searchpath =
                             searchpath.slice(-1) !== "/" ? searchpath + "/" : searchpath; // prettier-ignore
                         if (
-                            item.path.split("/").length !==
-                            searchpath.split("/").length
+                            item.path.split("/").length !== searchpath.split("/").length
                         ) {
                             // not same number of path parts, so not same hirarchy
                             add = false;
@@ -310,20 +309,14 @@ describe("Related Items", function () {
 
             var query = getQueryVariable(xhr.url, "query");
 
-            var results = search(
-                root.concat(folder1).concat(folder2),
-                query.criteria
-            );
+            var results = search(root.concat(folder1).concat(folder2), query.criteria);
 
             xhr.respond(
                 200,
                 { "Content-Type": "application/json" },
                 JSON.stringify({
                     total: results.length,
-                    results: results.slice(
-                        page * pageSize,
-                        page * pageSize + pageSize
-                    ),
+                    results: results.slice(page * pageSize, page * pageSize + pageSize),
                 })
             );
         });
@@ -353,12 +346,10 @@ describe("Related Items", function () {
     it("test initialize", function () {
         initializePattern();
         utils.timeout(100);
-        console.log(document.body.innerHTML)
+        console.log(document.body.innerHTML);
         expect($(".select2-container-multi")).toHaveLength(1);
         expect($(".pat-relateditems-container")).toHaveLength(1);
-        expect(
-            $(".pat-relateditems-container .toolbar .path-wrapper")
-        ).toHaveLength(1);
+        expect($(".pat-relateditems-container .toolbar .path-wrapper")).toHaveLength(1);
     });
 
     it("auto roundtrip", function () {
@@ -375,9 +366,7 @@ describe("Related Items", function () {
 
         // Only Images and Folders should be shown.
         expect(
-            $(
-                ".pat-relateditems-result-select .pat-relateditems-result-info"
-            )
+            $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(5);
 
         // Select first folder
@@ -388,9 +377,7 @@ describe("Related Items", function () {
         $(".select2-search-field input.select2-input").click();
         clock.tick(1000);
         expect(
-            $(
-                ".pat-relateditems-result-select .pat-relateditems-result-info"
-            )
+            $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(5);
 
         // Browse into second folder which contains images
@@ -399,18 +386,12 @@ describe("Related Items", function () {
 
         // 1 "One level up" and 2 images
         expect(
-            $(
-                ".pat-relateditems-result-select .pat-relateditems-result-info"
-            )
+            $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(2);
-        expect($(".pat-relateditems-result")[0].textContent).toContain(
-            "One level up"
-        );
+        expect($(".pat-relateditems-result")[0].textContent).toContain("One level up");
 
         // Select first image
-        $(
-            'a.pat-relateditems-result-select[data-path="/folder2/image17"]'
-        ).click();
+        $('a.pat-relateditems-result-select[data-path="/folder2/image17"]').click();
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID17");
 
         // Browse one level up
@@ -423,9 +404,7 @@ describe("Related Items", function () {
 
         // Again, 5 items on root.
         expect(
-            $(
-                ".pat-relateditems-result-select .pat-relateditems-result-info"
-            )
+            $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(5);
 
         // Input a search term and enter search mode
@@ -437,9 +416,7 @@ describe("Related Items", function () {
 
         // Searching for folder 2 brings up 2 items: folder2 itself and the not-yet-selected image.
         expect(
-            $(
-                ".pat-relateditems-result-select .pat-relateditems-result-info"
-            )
+            $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(2);
 
         // We can even browse into folders in search mode
@@ -448,18 +425,12 @@ describe("Related Items", function () {
 
         // Being in folder 2, we see again one item...
         expect(
-            $(
-                ".pat-relateditems-result-select .pat-relateditems-result-info"
-            )
+            $(".pat-relateditems-result-select .pat-relateditems-result-info")
         ).toHaveLength(1);
-        expect($(".pat-relateditems-result")[0].textContent).toContain(
-            "One level up"
-        );
+        expect($(".pat-relateditems-result")[0].textContent).toContain("One level up");
 
         // Selecting the image will add it to the selected items.
-        $(
-            'a.pat-relateditems-result-select[data-path="/folder2/image18"]'
-        ).click();
+        $('a.pat-relateditems-result-select[data-path="/folder2/image18"]').click();
         expect($("input.pat-relateditems").val()).toEqual("UID6,UID17,UID18");
     });
 

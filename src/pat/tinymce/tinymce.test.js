@@ -8,7 +8,6 @@ import utils from "@patternslib/patternslib/src/core/utils";
 
 $.fx.off = true;
 
-
 var createTinymce = async function (options) {
     return await registry.patterns.tinymce.init(
         $('<textarea class="pat-tinymce"></textarea>').appendTo("body"),

@@ -4,9 +4,8 @@ import utils from "../../core/utils";
 import Modal from "../modal/modal";
 import Base from "@patternslib/patternslib/src/core/base";
 
-
 export default class ConfigRegistry {
-    constructor(el){
+    constructor(el) {
         this.el = el;
     }
     loadModals() {
@@ -25,17 +24,15 @@ export default class ConfigRegistry {
         });
     }
 
-    init(){
+    init() {
         var self = this;
         self.loadModals();
-        $("#recordsContainer").on(
-            "click",
-            "[type='reset']",
-            function () {
-                document.querySelector('#searchrow input[name="q"]').value = "";
-                document.querySelector("#searchrow form#registry-filter button[type='submit']").click();
-            }
-        );
+        $("#recordsContainer").on("click", "[type='reset']", function () {
+            document.querySelector('#searchrow input[name="q"]').value = "";
+            document
+                .querySelector("#searchrow form#registry-filter button[type='submit']")
+                .click();
+        });
         /* ajax retrieval of paging */
         $("#recordsContainer").on(
             "click",
@@ -84,7 +81,5 @@ export default class ConfigRegistry {
 
         /* some init */
         $('#searchrow input[name="q"]').trigger("keypress");
-
     }
-};
-
+}

@@ -1,4 +1,3 @@
-import "regenerator-runtime/runtime"; // needed for ``await`` support
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
 
@@ -32,10 +31,10 @@ export default Base.extend({
             }.bind(this),
         });
     },
-    disableSort: function(){
-        this.sortable.option('sort', false);
+    disableSort: function () {
+        this.sortable.option("sort", false);
     },
-    enableSort: function(){
-        this.sortable.option('sort', true);
-    }
+    enableSort: function () {
+        this.sortable.option("sort", true);
+    },
 });

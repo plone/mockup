@@ -34,8 +34,10 @@ export default class Contentrules {
         msgDlNode.appendChild(msgDtNode);
         msgDlNode.appendChild(msgDdNode);
 
-        let msgWrapper = document.getElementById("portalMessagesWrapper")
-        if(!msgWrapper) {return};
+        let msgWrapper = document.getElementById("portalMessagesWrapper");
+        if (!msgWrapper) {
+            return;
+        }
         msgWrapper.innerHTML = "";
         msgWrapper.appendChild(msgDlNode);
     }
@@ -77,24 +79,47 @@ export default class Contentrules {
                         // Enable
                         if ($this.hasClass("btn-rule-enable")) {
                             $row.removeClass("state-disabled").addClass("state-enabled");
-                            triggerEl.parentNode.querySelector(".btn-rule-enable").classList.add("d-none")
-                            triggerEl.parentNode.querySelector(".btn-rule-disable").classList.remove("d-none")
-                            self.addStatusMessage($("#trns_form_success_enabled").html() + ": " + ruleTitle, "info");
+                            triggerEl.parentNode
+                                .querySelector(".btn-rule-enable")
+                                .classList.add("d-none");
+                            triggerEl.parentNode
+                                .querySelector(".btn-rule-disable")
+                                .classList.remove("d-none");
+                            self.addStatusMessage(
+                                $("#trns_form_success_enabled").html() +
+                                    ": " +
+                                    ruleTitle,
+                                "info"
+                            );
                         }
 
                         // Disable
                         if ($this.hasClass("btn-rule-disable")) {
                             $row.removeClass("state-enabled").addClass("state-disabled");
-                            triggerEl.parentNode.querySelector(".btn-rule-disable").classList.add("d-none")
-                            triggerEl.parentNode.querySelector(".btn-rule-enable").classList.remove("d-none")
-                            self.addStatusMessage($("#trns_form_success_disabled").html() + ": " + ruleTitle, "info");
+                            triggerEl.parentNode
+                                .querySelector(".btn-rule-disable")
+                                .classList.add("d-none");
+                            triggerEl.parentNode
+                                .querySelector(".btn-rule-enable")
+                                .classList.remove("d-none");
+                            self.addStatusMessage(
+                                $("#trns_form_success_disabled").html() +
+                                    ": " +
+                                    ruleTitle,
+                                "info"
+                            );
                         }
 
                         // DELETE
                         if ($this.hasClass("btn-rule-delete")) {
                             $row.remove();
                             self.updatezebra($table);
-                            self.addStatusMessage($("#trns_form_success_deleted").html() + ": " + ruleTitle, "info");
+                            self.addStatusMessage(
+                                $("#trns_form_success_deleted").html() +
+                                    ": " +
+                                    ruleTitle,
+                                "info"
+                            );
                         }
                     },
                     complete: function () {

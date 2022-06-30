@@ -75,9 +75,7 @@ describe("utils", function () {
             var response =
                     "<body><p>foo " + String.fromCharCode(8232) + " bar</p></body>",
                 html = utils.parseBodyTag(response);
-            expect(html).toEqual(
-                "<p>foo " + String.fromCharCode(8232) + " bar</p>"
-            );
+            expect(html).toEqual("<p>foo " + String.fromCharCode(8232) + " bar</p>");
         });
     });
 
@@ -131,9 +129,7 @@ describe("utils", function () {
                 vocabularyUrl: "http://foobar.com/",
             });
             var qd = qh.getQueryData("foobar", 1);
-            expect(qd.batch).toEqual(
-                '{"page":1,"size":' + qh.options.batchSize + "}"
-            );
+            expect(qd.batch).toEqual('{"page":1,"size":' + qh.options.batchSize + "}");
         });
 
         it("selectAjax gets data correctly", function () {

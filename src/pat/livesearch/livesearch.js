@@ -22,20 +22,19 @@ export default Base.extend({
         inputSelector: 'input[type="text"]',
         itemTemplate:
             '<li class="search-result <%- state %> list-group-item list-group-item-action">' +
-                '<a class="text-reset text-decoration-none" href="<%- url %>">' +
-                '<div class="row">' +
-                    '<div class="col info">' +
-                        '<div class="heading"><%- title %></div>' +
-                        '<div class="description"><%- description %></div>' +
-                    '</div>' +
-
-                    '<% if (img_tag) { %> ' +
-                        '<div class="col img">' +
-                            '<%= img_tag %>' +
-                        '</div>' +
-                    '<% } %> ' +
-                '</div>' +
-                '</a>' +
+            '<a class="text-reset text-decoration-none" href="<%- url %>">' +
+            '<div class="row">' +
+            '<div class="col info">' +
+            '<div class="heading"><%- title %></div>' +
+            '<div class="description"><%- description %></div>' +
+            "</div>" +
+            "<% if (img_tag) { %> " +
+            '<div class="col img">' +
+            "<%= img_tag %>" +
+            "</div>" +
+            "<% } %> " +
+            "</div>" +
+            "</a>" +
             "</li>",
     },
     doSearch: function (page) {
@@ -132,7 +131,11 @@ export default Base.extend({
             );
         } else if (self.results.total === 0) {
             self.$results.append(
-                $('<li class="no-results list-group-item">' + _t("no results found") + "</li>")
+                $(
+                    '<li class="no-results list-group-item">' +
+                        _t("no results found") +
+                        "</li>"
+                )
             );
         } else {
             self.$results.append(
@@ -164,7 +167,11 @@ export default Base.extend({
             });
             var nav = {};
             if (self.page > 1) {
-                var $prev = $('<a href="#" class="prev position-absolute ps-3 start-0">' + _t("Previous") + "</a>");
+                var $prev = $(
+                    '<a href="#" class="prev position-absolute ps-3 start-0">' +
+                        _t("Previous") +
+                        "</a>"
+                );
                 $prev.click(function (e) {
                     self.disableHiding = true;
                     e.preventDefault();
@@ -173,7 +180,11 @@ export default Base.extend({
                 nav.prev = $prev;
             }
             if (self.page * self.options.perPage < self.results.total) {
-                var $next = $('<a href="#" class="next position-absolute pe-3 end-0">' + _t("Next") + "</a>");
+                var $next = $(
+                    '<a href="#" class="next position-absolute pe-3 end-0">' +
+                        _t("Next") +
+                        "</a>"
+                );
                 $next.click(function (e) {
                     self.disableHiding = true;
                     e.preventDefault();

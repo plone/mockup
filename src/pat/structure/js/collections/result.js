@@ -44,10 +44,7 @@ export default Backbone.PageableCollection.extend({
             this.queryHelper.currentPath = window.location.hash.substring(1);
         }
 
-        Backbone.PageableCollection.prototype.initialize.apply(this, [
-            models,
-            options,
-        ]);
+        Backbone.PageableCollection.prototype.initialize.apply(this, [models, options]);
     },
 
     getCurrentPath: function () {
@@ -74,11 +71,9 @@ export default Backbone.PageableCollection.extend({
         },
     },
 
-    parseState: function(response, queryParams, state, options) {
+    parseState: function (response, queryParams, state, options) {
         this.state.totalRecords = response.total;
-        this.state.totalPages = Math.ceil(
-            response.total / state.pageSize
-        );
+        this.state.totalPages = Math.ceil(response.total / state.pageSize);
     },
 
     parseRecords: function (response, options) {

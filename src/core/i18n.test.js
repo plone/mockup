@@ -2,7 +2,6 @@ import I18n from "./i18n";
 import sinon from "sinon";
 
 describe("I18N", function () {
-
     describe("configure", function () {
         var i18n = new I18n();
         it("ttl", function () {

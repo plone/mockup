@@ -19,11 +19,11 @@ function loadScript(src) {
     s.async = true;
     s.src = src;
     // use head tag to find a place to insert the script node
-    head = document.getElementsByTagName("head")[0]
+    head = document.getElementsByTagName("head")[0];
     head.insertBefore(s, head.firstChild);
 }
 function htmlToElement(html) {
-    var htmltmp = document.createElement('div');
+    var htmltmp = document.createElement("div");
     html = html.trim(); // Never return a text node of whitespace as the result
     htmltmp.innerHTML = html;
     return htmltmp.firstElementChild;
@@ -39,9 +39,17 @@ export default Base.extend({
     init: function () {
         var self = this,
             pwfield = this.el,
-            pwmeterContainer = htmlToElement('<div class="progress my-3"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>'),
+            pwmeterContainer = htmlToElement(
+                '<div class="progress my-3"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>'
+            ),
             pwmeter = pwmeterContainer.firstChild,
-            indicators = {0: "bg-transparent", 1: "bg-danger", 2: "bg-warning", 3: "bg-warning", 4: "bg-success"};
+            indicators = {
+                0: "bg-transparent",
+                1: "bg-danger",
+                2: "bg-warning",
+                3: "bg-warning",
+                4: "bg-success",
+            };
         function setLevel() {
             var score = 0;
 
@@ -68,8 +76,8 @@ export default Base.extend({
                 );
             }
             var wclass = "";
-            if (score != 0){
-                wclass = " w-" + (25 * score);
+            if (score != 0) {
+                wclass = " w-" + 25 * score;
             }
             pwmeter.className = "progress-bar" + wclass + " " + indicators[score];
             pwmeter.setAttribute("aria-valuenow", 25 * score);

@@ -1,11 +1,5 @@
-import "regenerator-runtime/runtime"; // needed for ``await`` support
-import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
-import I18n from "../../core/i18n";
 import _t from "../../core/i18n-wrapper";
-import utils from "../../core/utils";
-
-let LinkModal = null;
 
 export default Base.extend({
     name: "tinymce",
