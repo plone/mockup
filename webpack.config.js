@@ -1,8 +1,9 @@
 process.traceDeprecation = true;
-const package_json = require("./package.json");
 const path = require("path");
-const patternslib_config = require("@patternslib/patternslib/webpack/webpack.config");
-const mf_config = require("@patternslib/patternslib/webpack/webpack.mf");
+const package_json = require("./package.json");
+const patternslib_package_json = require("@patternslib/patternslib/package.json");
+const patternslib_config = require("@patternslib/dev/webpack/webpack.config");
+const mf_config = require("@patternslib/dev/webpack/webpack.mf");
 
 module.exports = (env, argv) => {
     let config = {
@@ -19,8 +20,13 @@ module.exports = (env, argv) => {
 
     config.plugins.push(
         mf_config({
-            package_json: package_json,
+            name: "patternslib",
+            filename: "remote.min.js",
             remote_entry: config.entry["bundle.min"],
+            dependencies: {
+                ...patternslib_package_json.dependencies,
+                ...package_json.dependencies,
+            },
         })
     );
     config.plugins.push(
@@ -28,11 +34,8 @@ module.exports = (env, argv) => {
             name: "bootstrap",
             filename: "bootstrap-remote.min.js",
             remote_entry: config.entry["bootstrap.min"],
-            shared: {
-                bootstrap: {
-                    singleton: true,
-                    requiredVersion: package_json.dependencies["bootstrap"],
-                },
+            dependencies: {
+                bootstrap: package_json.dependencies["bootstrap"],
             },
         })
     );
@@ -41,11 +44,8 @@ module.exports = (env, argv) => {
             name: "jquery",
             filename: "jquery-remote.min.js",
             remote_entry: config.entry["jquery.min"],
-            shared: {
-                jquery: {
-                    singleton: true,
-                    requiredVersion: package_json.dependencies["jquery"],
-                },
+            dependencies: {
+                jquery: package_json.dependencies["jquery"],
             },
         })
     );

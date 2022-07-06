@@ -1,1 +1,1 @@
-module.exports = require("@patternslib/patternslib/babel.config.js");
+module.exports = require("@patternslib/dev/babel.config.js");

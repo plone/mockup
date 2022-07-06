@@ -1,96 +1,30 @@
--include .env
-export
+##############
+## Please note
+##############
 
-ESLINT ?= npx eslint
-YARN   ?= npx yarn
-
-PACKAGE_NAME = "mockup"
-
-
-.PHONY: install
-stamp-yarn install:
-	$(YARN) install
-	# Install pre commit hook
-	$(YARN) husky install
-	touch stamp-yarn
-
-
-clean-dist:
-	rm -Rf dist/
-
-
-.PHONY: clean
-clean: clean-dist
-	rm -f stamp-yarn
-	rm -Rf node_modules/
-
-
-eslint: stamp-yarn
-	$(ESLINT) ./src
-
-
-.PHONY: test
-test: stamp-yarn
-	$(YARN) run test
-
-
-.PHONY: check
-check: stamp-yarn eslint test
-
-
-.PHONY: bundle
-bundle: stamp-yarn
-	$(YARN) run build:webpack
-
+# First, run ``make install``.
+# After that you have through Makefile extension all the other base targets available.
 
 # If you want to release on GitHub, make sure to have a .env file with a GITHUB_TOKEN.
 # Also see:
 #	https://github.com/settings/tokens
 #	and https://github.com/release-it/release-it/blob/master/docs/github-releases.md#automated
 
-release-zip: clean-dist bundle
-	$(eval PACKAGE_VERSION := $(shell node -p "require('./package.json').version"))
-	@echo name is $(PACKAGE_NAME)
-	@echo version is $(PACKAGE_VERSION)
-	mkdir -p dist/$(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)
-	-mv dist/* dist/$(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)
-	cd dist/ && zip -r $(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION).zip $(PACKAGE_NAME)-bundle-$(PACKAGE_VERSION)/
 
-.PHONY: release-major
-release-major: clean install check
-	npx release-it major && \
-		make release-zip && \
-		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
-		git checkout CHANGES.md
+# Include base Makefile
+-include node_modules/@patternslib/dev/Makefile
+
+# Define the GITHUB_TOKEN in the .env file for usage with release-it.
+-include .env
+export
 
 
-.PHONY: release-minor
-release-minor: clean install check
-	npx release-it minor && \
-		make release-zip && \
-		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
-		git checkout CHANGES.md
-
-
-.PHONY: release-patch
-release-patch: clean install check
-	npx release-it patch && \
-		make release-zip && \
-		npx release-it --github.release --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
-		git checkout CHANGES.md
-
-
-.PHONY: prerelease
-prerelease: clean install
-	npx release-it --preRelease=alpha && \
-		make release-zip && \
-		npx release-it --github.preRelease --github.update --github.assets=dist/*.zip --no-github.draft --no-increment --no-git --no-npm && \
-		git checkout CHANGES.md
-
-
-.PHONY: serve
-serve: stamp-yarn
-	$(YARN) run start
+.PHONY: install
+stamp-yarn install:
+	npx yarn install
+	# Install pre commit hook
+	npx yarn husky install
+	touch stamp-yarn
 
 
 .PHONY:
