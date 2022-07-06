@@ -1,4 +1,46 @@
+# Changelog
 
+
+
+## [5.0.0-alpha.12](https://github.com/plone/mockup/compare/5.0.0-alpha.11...5.0.0-alpha.12) (2022-07-06)
+
+
+### Maintenance
+
+
+* Adapt to @patternslib/dev module federation changes. ([730ab0f](https://github.com/plone/mockup/commit/730ab0f4c4b214bd39a1e266ab0123578c4fb606))
+
+* **Build:** Upgrade dependencies. ([b297ac4](https://github.com/plone/mockup/commit/b297ac46687130a45b72e89019b9fa43a78f2d3a))
+
+* **Build:** Upgrade Patterns to 9.0.0-beta.0 and pat-code-editor to 3.0.0. ([d6996bf](https://github.com/plone/mockup/commit/d6996bf5bf1ea244f9e216ff071e62b7964655c7))
+
+* **Cleanup:** prettier whole code base. ([e19f23e](https://github.com/plone/mockup/commit/e19f23e5ef79197810422f66e70127c77a0c7ec8))
+
+* **Cleanup:** Remove dependency regenerator-runtime except from test setup. The async/await runtime handling is already built-in in current Babel. ([e848c13](https://github.com/plone/mockup/commit/e848c13a063bad6eea980bfaae90413f53159cfa))
+
+* **Cleanup:** Remove unused dependencies. ([a5ef3f2](https://github.com/plone/mockup/commit/a5ef3f21f86cd58e7e19093f3a5d6abcbbe925d4))
+
+* **Cleanup:** Remove unused imports and variables. ([9b79ce3](https://github.com/plone/mockup/commit/9b79ce3808ff68acd2e8411cd455981a6aeaa78c))
+
+* **Cleanup:** Remove unused r.js file. ([e6322d3](https://github.com/plone/mockup/commit/e6322d3dd7d8f43220fdd5997d474a495b45e4cc))
+
+* Depend on @patternslib/dev and extend from there. ([2f2ef5f](https://github.com/plone/mockup/commit/2f2ef5fe47406713340d044444d35fceeb3313ee))
+
+* Extend babel config from @patternslib/dev. ([b702492](https://github.com/plone/mockup/commit/b702492f1b614b60c1e058b093ec1c818375ed11))
+
+* Extend commitlint config from @patternslib/dev. ([4330cf7](https://github.com/plone/mockup/commit/4330cf7b99d91e22ae38d72bc7e982856162584c))
+
+* Extend eslint config from @patternslib/dev. ([857f678](https://github.com/plone/mockup/commit/857f678f314e5d41eac182a676447a18402b1f77))
+
+* Extend jest config from @patternslib/dev. ([5c43d43](https://github.com/plone/mockup/commit/5c43d43d5c39f6fc123f3dd900b00082ceb8cc24))
+
+* Extend Makefile from @patternslib/dev. ([5da74f4](https://github.com/plone/mockup/commit/5da74f4e76fec1c66b6707be6479a61bfcecfc11))
+
+* Extend prettier config from @patternslib/dev. ([08ce446](https://github.com/plone/mockup/commit/08ce4466d8594200df16ad4538fc67cc6adc3471))
+
+* Extend release-it config from @patternslib/dev. ([ec69436](https://github.com/plone/mockup/commit/ec69436c837516cc654f11e4c8104b13bd7cbaf1))
+
+* Extend webpack config from @patternslib/dev. ([811673a](https://github.com/plone/mockup/commit/811673a0db4e0133ea19adee2bd6b84cc04ddbda))
 
 ## [5.0.0-alpha.11](https://github.com/plone/mockup/compare/5.0.0-alpha.10...5.0.0-alpha.11) (2022-06-29)
 
