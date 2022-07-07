@@ -9,7 +9,6 @@ module.exports = (env, argv) => {
     let config = {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
-            "bootstrap.min": path.resolve(__dirname, "src/index-bootstrap.js"),
         },
     };
 
@@ -37,16 +36,6 @@ module.exports = (env, argv) => {
                     requiredVersion: package_json.dependencies["jquery"],
                     eager: true,
                 },
-            },
-        })
-    );
-    config.plugins.push(
-        mf_config({
-            name: "bootstrap",
-            filename: "bootstrap-remote.min.js",
-            remote_entry: config.entry["bootstrap.min"],
-            dependencies: {
-                bootstrap: package_json.dependencies["bootstrap"],
             },
         })
     );
