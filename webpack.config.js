@@ -27,6 +27,18 @@ module.exports = (env, argv) => {
                 ...patternslib_package_json.dependencies,
                 ...package_json.dependencies,
             },
+            shared: {
+                bootstrap: {
+                    singleton: true,
+                    requiredVersion: package_json.dependencies["bootstrap"],
+                    eager: true,
+                },
+                jquery: {
+                    singleton: true,
+                    requiredVersion: package_json.dependencies["jquery"],
+                    eager: true,
+                },
+            },
         })
     );
     config.plugins.push(
