@@ -1976,10 +1976,10 @@
     colorette "^2.0.16"
     ora "^5.4.1"
 
-"@patternslib/dev@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@patternslib/dev/-/dev-2.2.1.tgz#0a4d35c322be0ba8cb7c28d1cf8cfee82c27abe7"
-  integrity sha512-8PIv3j7bikgddY/tAlTGvfLmFlzJit0fiBvyLAuHU/Wh7Bg5iOPDcjhYfZvJgq+k9qQAP+xMBrdRVfnodH+Niw==
+"@patternslib/dev@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@patternslib/dev/-/dev-2.3.0.tgz#0ec95bee69be9ce86adc7de1e1702c9ba0ddb048"
+  integrity sha512-46m2tBW9jIvvpXeNeFJ0WChTTTueFtPtZ0DxiDZR0IO2cF1IW12wWDrT4v1G7PpY/uSS05VDhRYbMEv1+N1gFg==
   dependencies:
     "@babel/core" "^7.18.6"
     "@babel/eslint-parser" "^7.18.2"
