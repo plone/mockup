@@ -16,6 +16,10 @@
  * functionality for each bundle is initialized.
  *
  */
+
+// global modules
+import "./globals";
+
 import "@patternslib/patternslib/webpack/module_federation";
 
 // And now load this bundle's actual entry point.

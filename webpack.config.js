@@ -9,8 +9,6 @@ module.exports = (env, argv) => {
     let config = {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
-            "bootstrap.min": path.resolve(__dirname, "src/index-bootstrap.js"),
-            "jquery.min": path.resolve(__dirname, "src/index-jquery.js"),
         },
     };
 
@@ -18,37 +16,22 @@ module.exports = (env, argv) => {
 
     config.output.path = path.resolve(__dirname, "dist/");
 
-    config.plugins.push(
-        mf_config({
-            name: "patternslib",
-            filename: "remote.min.js",
-            remote_entry: config.entry["bundle.min"],
-            dependencies: {
-                ...patternslib_package_json.dependencies,
-                ...package_json.dependencies,
-            },
-        })
-    );
-    config.plugins.push(
-        mf_config({
-            name: "bootstrap",
-            filename: "bootstrap-remote.min.js",
-            remote_entry: config.entry["bootstrap.min"],
-            dependencies: {
-                bootstrap: package_json.dependencies["bootstrap"],
-            },
-        })
-    );
-    config.plugins.push(
-        mf_config({
-            name: "jquery",
-            filename: "jquery-remote.min.js",
-            remote_entry: config.entry["jquery.min"],
-            dependencies: {
-                jquery: package_json.dependencies["jquery"],
-            },
-        })
-    );
+    let mockup_mf_config = mf_config({
+        name: "patternslib",
+        filename: "remote.min.js",
+        remote_entry: config.entry["bundle.min"],
+        dependencies: {
+            ...patternslib_package_json.dependencies,
+            ...package_json.dependencies,
+        },
+    });
+
+    // enable "eager sharing" for global modules
+    // see https://webpack.js.org/plugins/module-federation-plugin#eager
+    mockup_mf_config._options.shared.jquery.eager = true;
+    mockup_mf_config._options.shared.bootstrap.eager = true;
+
+    config.plugins.push(mockup_mf_config);
 
     if (process.env.NODE_ENV === "development") {
         // Note: ``publicPath`` is set to "auto" in Patternslib,
