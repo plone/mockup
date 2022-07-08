@@ -2,6 +2,34 @@
 
 
 
+## [5.0.0-alpha.13](https://github.com/plone/mockup/compare/5.0.0-alpha.12...5.0.0-alpha.13) (2022-07-08)
+
+
+### Features
+
+
+* Register jQuery and bootstrap globally with the main mockup bundle. ([a58eeab](https://github.com/plone/mockup/commit/a58eeabea00c014a00fb616885b277d15d60eb18))
+
+
+### Bug Fixes
+
+
+* Correct prettier config file name. ([545bd59](https://github.com/plone/mockup/commit/545bd59b38c676c94c38252c590590fd918e69c6))
+
+
+### Maintenance
+
+
+* Upgrade to @patternslib/dev 2.3.0. ([3c3dabb](https://github.com/plone/mockup/commit/3c3dabbd085e959354c80a26c98506910b539011))
+
+
+### Breaking Changes
+
+
+* Remove bootstrap bundle. ([4cd878e](https://github.com/plone/mockup/commit/4cd878ed86db4a11225474eb6c50813d9e08a8fe))
+
+* Remove jquery bundle. ([7596a14](https://github.com/plone/mockup/commit/7596a14bfa1d7cbaf1ffeb37d6019f3b1ffe2cdd))
+
 ## [5.0.0-alpha.12](https://github.com/plone/mockup/compare/5.0.0-alpha.11...5.0.0-alpha.12) (2022-07-06)
 
 
