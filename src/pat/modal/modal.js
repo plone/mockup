@@ -87,7 +87,7 @@ export default Base.extend({
             onFormError: null,
             onTimeout: null,
             redirectOnResponse: false,
-            redirectToUrl: function ($action, response, options) {
+            redirectToUrl: function ($action, response) {
                 var reg;
                 reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(response);
                 if (reg && reg.length > 1) {
@@ -142,7 +142,7 @@ export default Base.extend({
                     self.options
                 );
                 $(action, $("." + options.templateOptions.classBodyName, $modal)).each(
-                    function (action) {
+                    function () {
                         var $action = $(this);
                         $action.on(actionOptions.eventType, function (e) {
                             e.stopPropagation();
@@ -184,8 +184,8 @@ export default Base.extend({
             var self = this;
 
             // pass action that was clicked when submiting form
-            var formData = [];
-            formData.push({ name: $action.attr("name"), value: $action.attr("value") });
+            var extraData = {};
+            extraData[$action.attr("name")] = $action.attr("value");
 
             var $form;
 
@@ -227,14 +227,10 @@ export default Base.extend({
             });
             $form.trigger("submit");
 
-            // serialize form data
-            formData = [].concat(formData, $form.serializeArray());
-
             self.loading.show(false);
-            $.ajax({
+            $form.ajaxSubmit({
                 timeout: options.timeout,
-                type: $form.attr("method"),
-                data: formData,
+                data: extraData,
                 url: url,
                 error: function (xhr, textStatus, errorStatus) {
                     self.loading.hide();
@@ -528,8 +524,9 @@ export default Base.extend({
     reloadWindow: function () {
         window.parent.location.reload();
     },
-    init: function () {
+    init: async function () {
         import("./modal.scss");
+        (await import("jquery-form")).default;
 
         var self = this;
         self.options.loadLinksWithinModal = $.parseJSON(
@@ -537,7 +534,7 @@ export default Base.extend({
         );
 
         if (self.options.backdropOptions.closeOnEsc === true) {
-            $(document).on("keydown", function (e, data) {
+            $(document).on("keydown", function (e) {
                 if (self.$el.is("." + self.options.templateOptions.classActiveName)) {
                     if (e.keyCode === 27) {
                         // ESC key pressed
@@ -939,7 +936,7 @@ export default Base.extend({
                     backdrop.hide();
                 }
             });
-        backdrop.on("hidden", function (e) {
+        backdrop.on("hidden", function () {
             if (
                 self.$modal !== undefined &&
                 self.$modal.hasClass(self.options.templateOptions.classActiveName)
