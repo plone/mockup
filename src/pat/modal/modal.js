@@ -87,7 +87,7 @@ export default Base.extend({
             onFormError: null,
             onTimeout: null,
             redirectOnResponse: false,
-            redirectToUrl: function ($action, response, options) {
+            redirectToUrl: function ($action, response) {
                 var reg;
                 reg = /<body.*data-view-url=[\"'](.*)[\"'].*/im.exec(response);
                 if (reg && reg.length > 1) {
@@ -142,7 +142,7 @@ export default Base.extend({
                     self.options
                 );
                 $(action, $("." + options.templateOptions.classBodyName, $modal)).each(
-                    function (action) {
+                    function () {
                         var $action = $(this);
                         $action.on(actionOptions.eventType, function (e) {
                             e.stopPropagation();
@@ -537,7 +537,7 @@ export default Base.extend({
         );
 
         if (self.options.backdropOptions.closeOnEsc === true) {
-            $(document).on("keydown", function (e, data) {
+            $(document).on("keydown", function (e) {
                 if (self.$el.is("." + self.options.templateOptions.classActiveName)) {
                     if (e.keyCode === 27) {
                         // ESC key pressed
@@ -939,7 +939,7 @@ export default Base.extend({
                     backdrop.hide();
                 }
             });
-        backdrop.on("hidden", function (e) {
+        backdrop.on("hidden", function () {
             if (
                 self.$modal !== undefined &&
                 self.$modal.hasClass(self.options.templateOptions.classActiveName)
