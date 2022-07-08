@@ -2,6 +2,24 @@
 
 
 
+## [5.0.0-alpha.14](https://github.com/plone/mockup/compare/5.0.0-alpha.13...5.0.0-alpha.14) (2022-07-08)
+
+
+### Bug Fixes
+
+
+* **pat modal:** Use jquery-form to be able to upload binary data via AJAX. ([7466336](https://github.com/plone/mockup/commit/74663368b364b596a4a6e139de6708318eef7c1d))
+
+
+### Maintenance
+
+
+* **Build:** Upgrade @patternslib/patternslib to 9.0.0-beta.1. ([cc97892](https://github.com/plone/mockup/commit/cc9789218e72b93646bf421924dd8e14981db1b9))
+
+* **pat manageportlets:** Load jquery-form asynchronously. ([29145cf](https://github.com/plone/mockup/commit/29145cfc1aba30c58ccbf36c6dfadb44f2f480cd))
+
+* **pat modal:** Fix eslint errors. ([e5506ee](https://github.com/plone/mockup/commit/e5506eeffaf636136b3d0a8ebc8157543617dde4))
+
 ## [5.0.0-alpha.13](https://github.com/plone/mockup/compare/5.0.0-alpha.12...5.0.0-alpha.13) (2022-07-08)
 
 
