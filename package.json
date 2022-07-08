@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@patternslib/pat-code-editor": "^3.0.0",
-        "@patternslib/patternslib": "9.0.0-beta.0",
+        "@patternslib/patternslib": "9.0.0-beta.1",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "^5.2.0-beta1",
@@ -53,7 +53,7 @@
         "sinon": "^14.0.0"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.0.0-beta.0",
+        "@patternslib/patternslib": "9.0.0-beta.1",
         "backbone": "1.4.1",
         "jquery": "3.6.0",
         "underscore": "1.13.4"
