@@ -1,6 +1,4 @@
 import $ from "jquery";
-// import jquery.form from "jquery-form";
-import "jquery-form";
 import Modal from "../modal/modal";
 import Base from "@patternslib/patternslib/src/core/base";
 import logger from "@patternslib/patternslib/src/core/logging";
@@ -18,7 +16,8 @@ export default Base.extend({
     switchTimeout: 0,
     isModal: false,
     dirty: false,
-    init: function () {
+    init: async function () {
+        (await import("jquery-form")).default;
         var that = this;
         var $modal = that.$el.parents(".plone-modal");
         if ($modal.length === 1) {
