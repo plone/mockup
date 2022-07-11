@@ -37,4 +37,8 @@ bundle-plone:
 	$(YARN) run build:webpack:plone
 
 
+.PHONY: bundle
+bundle: stamp-yarn
+	$(YARN) run build:webpack
+
 #
