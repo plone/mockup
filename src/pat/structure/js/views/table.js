@@ -196,9 +196,7 @@ export default BaseView.extend({
                     });
                 this.app.setStatus(
                     {
-                        text: _t(
-                            "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
-                        ),
+                        text: _t("Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."), // prettier-ignore
                         type: "warning",
                     },
                     btn,

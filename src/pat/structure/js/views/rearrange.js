@@ -14,7 +14,7 @@ export default PopoverView.extend({
             "<% }); %>" +
             "</select>" +
             '<p class="help-block">' +
-            '<b><%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %></b>' +
+            '<b><%- _t("This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder.") %></b>' + // prettier-ignore
             "</p>" +
             "</div>" +
             '<div class="form-check">' +
@@ -45,11 +45,7 @@ export default PopoverView.extend({
         if (this.app.collection.getCurrentPath() === "/") {
             if (
                 !window.confirm(
-                    _t(
-                        "Sorting the content on the base of the site " +
-                            "could affect your navigation order. " +
-                            "Are you certain you want to do this?"
-                    )
+                    _t("Sorting the content on the base of the site could affect your navigation order. Are you certain you want to do this?") // prettier-ignore
                 )
             ) {
                 return;

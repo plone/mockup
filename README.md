@@ -180,3 +180,45 @@ https://www.npmjs.com/package/webpack-bundle-analyzer
 ```
 npx webpack-bundle-analyzer stats.json
 ```
+
+
+## i18n message extraction
+
+To update the translation file, the following needs to be done:
+
+1. Extract the messages from this package:
+
+```
+npx yarn run i18n
+```
+
+Or just ``npm run i18n``...
+
+2. Copy the widgets.pot file to plone.app.locales
+
+Assuming you are doing this from a buildout.coredev environment in the mockup folder:
+```
+cp widgets.pot ../plone.app.locales/plone/app/locales/locales/
+```
+
+3. Run i18ndude to update the po files
+
+```
+cd ../plone.app.locales/plone/app/locales/locales
+i18ndude sync --pot widgets.pot */LC_MESSAGES/widgets.po
+```
+
+## i18n message handling in Plone
+
+To test a translation, for example French:
+
+- Edit the po file ``src/plone.app.locales/plone/app/locales/locales/fr/LC_MESSAGES/widgets.po``.
+
+- Restart your instance to rebuild the mo file from the po file.
+
+- Purge your localStorage and refresh the page to trigger a new download of the translations.
+
+The translations are handled by ``src/core/i18n.js``.
+This translation helper that calls the ``@@plonejsi18n`` view defined in plone.app.content to generate a JSON of the translations from the mo file.
+The ``@@plonejsi18n`` view is called one time for a given domain and language and the result is cached in localStorage for 24 hours.
+The only way to test the new translations is to restart the instance to update the mo file from the po file, and then to purge the localStorage to trigger a new download of the translations.

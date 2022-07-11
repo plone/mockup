@@ -37,9 +37,7 @@ export default Base.extend({
             title: _t("Title"),
             internal: _t("Internal"),
             external: _t("External"),
-            externalText: _t(
-                "External URL (can be relative within this site or absolute if it starts with http:// or https://)"
-            ),
+            externalText: _t("External URL (can be relative within this site or absolute if it starts with http:// or https://)"), // prettier-ignore
             email: _t("Email Address"),
             anchor: _t("Anchor"),
             anchorLabel: _t("Select an anchor"),
@@ -50,18 +48,12 @@ export default Base.extend({
             enableImageZoom: _t("Enable image zoom"),
             scale: _t("Size"),
             alt: _t("Alternative Text"),
-            insertImageHelp: _t(
-                "Specify an image. It can be on this site already (Internal Image), an image you upload (Upload), or from an external site (External Image)."
-            ),
+            insertImageHelp: _t("Specify an image. It can be on this site already (Internal Image), an image you upload (Upload), or from an external site (External Image)."), // prettier-ignore
             internalImage: _t("Internal Image"),
             externalImage: _t("External Image"),
-            externalImageText: _t(
-                "External Image URL (can be relative within this site or absolute if it starts with http:// or https://)"
-            ),
+            externalImageText: _t("External Image URL (can be relative within this site or absolute if it starts with http:// or https://)"), // prettier-ignore
             upload: _t("Upload"),
-            insertLinkHelp: _t(
-                "Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor)."
-            ),
+            insertLinkHelp: _t("Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor)."), // prettier-ignore
             captionFromDescription: _t("Show Image Caption from Image Description"),
             caption: _t("Image Caption"),
         },

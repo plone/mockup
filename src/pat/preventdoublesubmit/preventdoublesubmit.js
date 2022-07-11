@@ -7,10 +7,7 @@ export default Base.extend({
     trigger: ".pat-preventdoublesubmit",
     parser: "mockup",
     defaults: {
-        message: _t(
-            "You already clicked the submit button. " +
-                "Do you really want to submit this form again?"
-        ),
+        message: _t("You already clicked the submit button. Do you really want to submit this form again?"), // prettier-ignore
         guardClassName: "submitting",
         optOutClassName: "allowMultiSubmit",
     },

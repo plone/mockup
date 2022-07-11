@@ -36,9 +36,7 @@ export default BaseView.extend({
             .text(_t("Clear"))
             .on("click", () => this.clearFilter());
 
-        const statusTextFilter = _t(
-            "This listing has filters applied. Not all items are shown."
-        );
+        const statusTextFilter = _t("This listing has filters applied. Not all items are shown."); // prettier-ignore
         this.app.setStatus(
             {
                 text: statusTextFilter,
@@ -49,9 +47,7 @@ export default BaseView.extend({
             this.statusKeyFilter
         );
 
-        const statusTextSorting = _t(
-            "Drag and drop reordering is disabled while filters are applied."
-        );
+        const statusTextSorting = _t("Drag and drop reordering is disabled while filters are applied."); // prettier-ignore
         this.app.setStatus(
             {
                 text: statusTextSorting,
