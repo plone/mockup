@@ -12,6 +12,7 @@ import { parser as validation_parser } from "@patternslib/patternslib/src/pat/va
 import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/tooltip/tooltip";
 import "@patternslib/pat-code-editor/src/code-editor";
 import "@patternslib/patternslib/src/pat/inject/inject";
+import "@patternslib/patternslib/src/pat/depends/depends";
 
 //import "@patternslib/pat-content-browser/src/content-browser";
 //import "@patternslib/pat-tinymce/src/tinymce";
