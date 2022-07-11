@@ -6,6 +6,8 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "../../core/utils";
 import _t from "../../core/i18n";
 
+import "jquery-form";
+
 export default Base.extend({
     name: "plone-modal",
     trigger: ".pat-plone-modal",
@@ -524,9 +526,8 @@ export default Base.extend({
     reloadWindow: function () {
         window.parent.location.reload();
     },
-    init: async function () {
+    init: function () {
         import("./modal.scss");
-        (await import("jquery-form")).default;
 
         var self = this;
         self.options.loadLinksWithinModal = $.parseJSON(
