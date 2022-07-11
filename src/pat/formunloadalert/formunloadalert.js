@@ -9,10 +9,7 @@ export default Base.extend({
     _changed: false, // Stores a listing of raised changes by their key
     _suppressed: false, // whether or not warning should be suppressed
     defaults: {
-        message: _t(
-            "Discard changes? If you click OK, " +
-                "any changes you have made will be lost."
-        ),
+        message: _t("Discard changes? If you click OK, any changes you have made will be lost."), // prettier-ignore
         // events on which to check for changes
         changingEvents: "change keyup paste",
         // fields on which to check for changes
