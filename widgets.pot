@@ -1,0 +1,531 @@
+# Gettext Message File for Plone mockup
+msgid ""
+msgstr ""
+"Project-Id-Version: mockup\n"
+"Last-Translator: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
+"Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8\n"
+"Domain: widgets\n"
+
+#: ./src/pat/formunloadalert/formunloadalert.js
+msgid "Discard changes? If you click OK, any changes you have made will be lost."
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "Error"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "There was an error searching…"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "searching…"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "enter search phrase"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "no results found"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "found"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "results"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "Previous"
+msgstr ""
+
+#: ./src/pat/livesearch/livesearch.js
+msgid "Next"
+msgstr ""
+
+#: ./src/pat/manageportlets/manageportlets.js
+msgid "Portlet changes saved"
+msgstr ""
+
+#: ./src/pat/manageportlets/manageportlets.js
+msgid "Info"
+msgstr ""
+
+#: ./src/pat/manageportlets/manageportlets.js
+msgid "Portlet added"
+msgstr ""
+
+#: ./src/pat/modal/modal.js
+msgid "There was an error submitting the form."
+msgstr ""
+
+#: ./src/pat/modal/modal.js
+msgid "There was an error loading modal."
+msgstr ""
+
+#: ./src/pat/preventdoublesubmit/preventdoublesubmit.js
+msgid "You already clicked the submit button. Do you really want to submit this form again?"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "Select criteria"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "to"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "days"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "Preview"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "Preview of at most 10 items"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "Sort on"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "No sorting"
+msgstr ""
+
+#: ./src/pat/querystring/querystring.js
+msgid "Reversed Order"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Open folder"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "current directory:"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Go one level up"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "One level up"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Favorites"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Current path:"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Search"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Browse"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Recently Used"
+msgstr ""
+
+#: ./src/pat/relateditems/relateditems.js
+msgid "Upload"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Open"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Edit"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Cut"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Copy"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Paste"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Move to top of folder"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Move to bottom of folder"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Set as default page"
+msgstr ""
+
+#: ./src/pat/structure/js/actionmenu.js
+msgid "Select all contained items"
+msgstr ""
+
+#: ./src/pat/structure/js/actions.js
+msgid "cutting"
+msgstr ""
+
+#: ./src/pat/structure/js/actions.js
+msgid "Copied"
+msgstr ""
+
+#: ./src/pat/structure/js/actions.js
+msgid "copying"
+msgstr ""
+
+#: ./src/pat/structure/js/actions.js
+msgid "Pasted into"
+msgstr ""
+
+#: ./src/pat/structure/js/actions.js
+msgid "Error pasting into"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "operation url ${url} is not valid"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "there was an error performing the action"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Configure displayed columns"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Selected"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Manage selection"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Rearrange"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Rearrange folder contents"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Upload files"
+msgstr ""
+
+#: ./src/pat/structure/js/views/app.js
+msgid "Error moving item"
+msgstr ""
+
+#: ./src/pat/structure/js/views/columns.js
+msgid "Columns"
+msgstr ""
+
+#: ./src/pat/structure/js/views/columns.js
+msgid "Select columns to show, drag and drop to reorder"
+msgstr ""
+
+#: ./src/pat/structure/js/views/columns.js
+msgid "Save"
+msgstr ""
+
+#: ./src/pat/structure/js/views/generic-popover.js
+msgid "Apply"
+msgstr ""
+
+#: ./src/pat/structure/js/views/generic-popover.js
+msgid "Loading..."
+msgstr ""
+
+#: ./src/pat/structure/js/views/generic-popover.js
+msgid "Error loading popover from server."
+msgstr ""
+
+#: ./src/pat/structure/js/views/rearrange.js
+msgid "Rearrange items in this folder"
+msgstr ""
+
+#: ./src/pat/structure/js/views/rearrange.js
+msgid "What to rearrange on"
+msgstr ""
+
+#: ./src/pat/structure/js/views/rearrange.js
+msgid "This permanently changes the order of items in this folder. This operation may take a long time depending on the size of the folder."
+msgstr ""
+
+#: ./src/pat/structure/js/views/rearrange.js
+msgid "Reverse"
+msgstr ""
+
+#: ./src/pat/structure/js/views/rearrange.js
+msgid "Sorting the content on the base of the site could affect your navigation order. Are you certain you want to do this?"
+msgstr ""
+
+#: ./src/pat/structure/js/views/selectionwell.js
+msgid "Filter"
+msgstr ""
+
+#: ./src/pat/structure/js/views/selectionwell.js
+msgid "remove all"
+msgstr ""
+
+#: ./src/pat/structure/js/views/table.js
+msgid "Reset column sorting"
+msgstr ""
+
+#: ./src/pat/structure/js/views/table.js
+msgid "Notice: Drag and drop reordering is disabled when viewing the contents sorted by a column."
+msgstr ""
+
+#: ./src/pat/structure/js/views/textfilter.js
+msgid "Clear"
+msgstr ""
+
+#: ./src/pat/structure/js/views/textfilter.js
+msgid "This listing has filters applied. Not all items are shown."
+msgstr ""
+
+#: ./src/pat/structure/js/views/textfilter.js
+msgid "Drag and drop reordering is disabled while filters are applied."
+msgstr ""
+
+#: ./src/pat/structure/templates/actionmenu.xml
+msgid "Actions"
+msgstr ""
+
+#: ./src/pat/structure/templates/paging.xml
+msgid "Show:"
+msgstr ""
+
+#: ./src/pat/structure/templates/paging.xml
+msgid "Page:"
+msgstr ""
+
+#: ./src/pat/structure/templates/paging.xml
+msgid "of"
+msgstr ""
+
+#: ./src/pat/structure/templates/paging.xml
+msgid "shown"
+msgstr ""
+
+#: ./src/pat/structure/templates/table.xml
+msgid "Root"
+msgstr ""
+
+#: ./src/pat/structure/templates/table.xml
+msgid "Select all"
+msgstr ""
+
+#: ./src/pat/structure/templates/table.xml
+msgid "Title"
+msgstr ""
+
+#: ./src/pat/structure/templates/tablerow.xml
+msgid "Select"
+msgstr ""
+
+#: ./src/pat/structure/templates/tablerow.xml
+msgid "Excluded from navigation"
+msgstr ""
+
+#: ./src/pat/structure/templates/tablerow.xml
+msgid "Expired"
+msgstr ""
+
+#: ./src/pat/structure/templates/tablerow.xml
+msgid "Before publishing date"
+msgstr ""
+
+#: ./src/pat/structure/templates/tablerow.xml
+msgid "Preview image"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce--implementation.js
+msgid "Insert Image"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Search for item on site..."
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Insert"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Cancel"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Insert link"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Internal"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "External"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "External URL (can be relative within this site or absolute if it starts with http:// or https://)"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Email Address"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Anchor"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Select an anchor"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Target"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Email Subject (optional)"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Image"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Align"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Enable image zoom"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Size"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Alternative Text"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Specify an image. It can be on this site already (Internal Image), an image you upload (Upload), or from an external site (External Image)."
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Internal Image"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "External Image"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "External Image URL (can be relative within this site or absolute if it starts with http:// or https://)"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Specify the object to link to. It can be on this site already (Internal), an object you upload (Upload), from an external site (External), an email address (Email), or an anchor on this page (Anchor)."
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Show Image Caption from Image Description"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Image Caption"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Inline"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Right"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Left"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Open in this window / frame"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Open in new window"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Open in parent window / frame"
+msgstr ""
+
+#: ./src/pat/tinymce/tinymce.js
+msgid "Open in top frame (replaces all frames)"
+msgstr ""
+
+#: ./src/pat/upload/templates/upload.xml
+msgid "Upload here"
+msgstr ""
+
+#: ./src/pat/upload/templates/upload.xml
+msgid "Drag and drop files from your computer onto the area below or click the Browse button."
+msgstr ""
+
+#: ./src/pat/upload/templates/upload.xml
+msgid "Drop files here..."
+msgstr ""
+
+#: ./src/pat/upload/templates/upload.xml
+msgid "Choose File"
+msgstr ""
+
+#: ./src/pat/upload/templates/upload.xml
+msgid "Upload to..."
+msgstr ""
+
+#: ./src/pat/upload/templates/upload.xml
+msgid "Select another destination folder or leave blank to add files to the current location."
+msgstr ""
+
+#: ./src/pat/upload/upload.js
+msgid "The file transfer failed"
+msgstr ""
+
+#: ./src/pat/upload/upload.js
+msgid "Error uploading with TUS resumable uploads"
+msgstr ""
+
+#: ./src/pat/upload/upload.js
+msgid "uploading..."
+msgstr ""
+
