@@ -75,7 +75,8 @@
         "start:docs": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --port 8001 --output docs/_site/",
         "start": "npm-run-all clean --parallel start:*",
         "test": "jest",
-        "testwatch": "jest --watch"
+        "testwatch": "jest --watch",
+        "i18n": "node src/i18n.js"
     },
     "engines": {
         "node": ">=12.20.0"
