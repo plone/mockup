@@ -2,6 +2,26 @@
 
 
 
+## [5.0.0-alpha.16](https://github.com/plone/mockup/compare/5.0.0-alpha.15...5.0.0-alpha.16) (2022-07-12)
+
+
+### Features
+
+
+* **i18n:** Add i18n script for gettext extraction and document the use of it. ([93ddfd7](https://github.com/plone/mockup/commit/93ddfd7fb5fd3efd35ba0e22f5300eb9f33b1393))
+
+* **pat depends:** Add pat-depends from @patternslib/patternslib to the build. ([f9acd2a](https://github.com/plone/mockup/commit/f9acd2a8bc1eef6fb4a3173b4f293e656f908c1d))This allows for optional form fields or other HTML‌ structure which depen on the value of form inputs.
+
+
+### Bug Fixes
+
+
+* **Build:** Fix Makefile and override make bundle target from @patternslib/dev. ([dbbca9d](https://github.com/plone/mockup/commit/dbbca9d8b973d399e8b3c0db098452965339aa97))
+
+* **i18n:** Translatable strings need to be in one line. ([66e6358](https://github.com/plone/mockup/commit/66e6358e48ac77a1c692a16dce151779ac55f8e9))
+
+* **pat tinymce:** Fix `linkType` mismatch in link/image modal ([12252a5](https://github.com/plone/mockup/commit/12252a535b5ac14a8a30890c6d0c2ede0ac6b749))
+
 ## [5.0.0-alpha.15](https://github.com/plone/mockup/compare/5.0.0-alpha.14...5.0.0-alpha.15) (2022-07-11)
 
 ## [5.0.0-alpha.14](https://github.com/plone/mockup/compare/5.0.0-alpha.13...5.0.0-alpha.14) (2022-07-08)
