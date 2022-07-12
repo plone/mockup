@@ -884,7 +884,7 @@ export default Base.extend({
             }
 
             linkType = self.dom.getAttrib(self.imgElm, "data-linktype");
-            if (linkType) {
+            if (linkType && (linkType in self.linkTypes)) {
                 self.linkType = linkType;
                 self.linkTypes[self.linkType].load(self.imgElm);
                 // set scale selection in link modal:
