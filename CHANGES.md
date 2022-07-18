@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-alpha.17](https://github.com/plone/mockup/compare/5.0.0-alpha.16...5.0.0-alpha.17) (2022-07-18)
+
+
+### Bug Fixes
+
+
+* **pat relateditems:** Make templates customizeable again via patternoptions ([984a9a6](https://github.com/plone/mockup/commit/984a9a6fde0720c0220fb153d35834e999035a51))
+
 ## [5.0.0-alpha.16](https://github.com/plone/mockup/compare/5.0.0-alpha.15...5.0.0-alpha.16) (2022-07-12)
 
 
