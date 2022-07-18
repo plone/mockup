@@ -96,11 +96,13 @@ export default Base.extend({
         var template;
         if (self.options[tpl + "TemplateSelector"]) {
             template = $(self.options[tpl + "TemplateSelector"]).html();
-            if (!template) {
+        }
+        if (!template) {
+            if(self.options[tpl + "Template"]) {
+                template = self.options[tpl + "Template"];
+            } else {
                 template = self[tpl + "Template"];
             }
-        } else {
-            template = self[tpl + "Template"];
         }
         // let's give all the options possible to the template generation
         var options = $.extend(true, {}, self.options, item, {
