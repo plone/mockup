@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-alpha.18](https://github.com/plone/mockup/compare/5.0.0-alpha.17...5.0.0-alpha.18) (2022-07-21)
+
+
+### Maintenance
+
+
+* **Build:** Update Boostrap to 5.2.0 and Boostrap Icons to 1.9.1 ([92b33cc](https://github.com/plone/mockup/commit/92b33cc270c433af6d05961c75eb17d2b5316c37))
+
 ## [5.0.0-alpha.17](https://github.com/plone/mockup/compare/5.0.0-alpha.16...5.0.0-alpha.17) (2022-07-18)
 
 
