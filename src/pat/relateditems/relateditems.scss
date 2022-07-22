@@ -31,6 +31,11 @@
     .pat-relateditems-item {
         display: flex;
     }
+
+    .pat-upload {
+        min-width:35rem;
+        margin:calc(var(--bs-gutter-x) * .75);
+    }
 }
 
 .pat-relateditems-dropdown {
