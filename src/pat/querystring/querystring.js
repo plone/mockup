@@ -74,6 +74,7 @@ Criteria.prototype = {
             .addClass(self.options.classRemoveName)
             .appendTo(self.$wrapper)
             .on("click", function (e) {
+                e.stopPropagation();
                 self.remove();
             });
 
