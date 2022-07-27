@@ -29,6 +29,8 @@ export default Base.extend({
             // The pattern must implement the destroy method.
             wdgt.destroy();
         });
+        // and clean
+        this.current_widgets = [];
 
         // Then, setup new
         if (pattern_config) {
