@@ -27,11 +27,11 @@ export default class SchemaEditor {
             var $add_field = $("a#add-field", this.el);
             var $fieldset = $("#form fieldset#fieldset-"+fieldset_id, this.el);
             if ($fieldset.data('can-add-fields') === false){
-                $add_field.hide();
+                $add_field.addClass('disabled');
             } else {
                 var href = $add_field.attr("href").split("?")[0]; // get base href without any previously set ``fieldset_id``.
                 $add_field.attr("href", href + "?fieldset_id=" + fieldset_id);
-                $add_field.show();
+                $add_field.removeClass('disabled');
             }
         }
     }
