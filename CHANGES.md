@@ -2,6 +2,26 @@
 
 
 
+## [5.0.0-alpha.19](https://github.com/plone/mockup/compare/5.0.0-alpha.18...5.0.0-alpha.19) (2022-08-03)
+
+
+### Features
+
+
+* **pat textareamimetypeselector:** Initialize all textareas with the same name. ([ff206b9](https://github.com/plone/mockup/commit/ff206b9a02bf4e049c388bc09f240c3c755a7da3))
+
+
+### Bug Fixes
+
+
+* **pat querystring:** Do not close modal if querystring criteria is removed. ([d22bb0b](https://github.com/plone/mockup/commit/d22bb0b1890c520aa5ed28ce3bed6553fec1e2c8))
+
+* **pat relateditems:** Minor CSS fixes for uploader dropdown. ([7c730eb](https://github.com/plone/mockup/commit/7c730eb8b9a92adc113a2327b82f9df53caf8777))
+
+* **pat schemaeditor:** Fix adding fields to fieldsets, and drag and drops between fieldsets. Prevent adding fields to fieldsets from behaviors. fixes gh-1201 ([9c3ec96](https://github.com/plone/mockup/commit/9c3ec96d5b247a4d3c3ececc28938af61f02d3c7))
+
+* **pat search:** Use core utils loader. ([a67f76e](https://github.com/plone/mockup/commit/a67f76eedc51eb16d54b5b7e415f75fe7178f330))
+
 ## [5.0.0-alpha.18](https://github.com/plone/mockup/compare/5.0.0-alpha.17...5.0.0-alpha.18) (2022-07-21)
 
 
