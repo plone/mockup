@@ -1,14 +1,12 @@
 import Base from "@patternslib/patternslib/src/core/base";
 import registry from "@patternslib/patternslib/src/core/registry";
 import "../tinymce/tinymce";
-// import "pat-tinymce/src/tinymce";
 
 export default Base.extend({
     name: "textareamimetypeselector",
     trigger: ".pat-textareamimetypeselector",
     parser: "mockup",
-    textarea: undefined,
-    current_widget: undefined,
+    current_widgets: [],
     defaults: {
         textareaName: "",
         widgets: {
@@ -16,23 +14,34 @@ export default Base.extend({
         },
     },
     init() {
-        this.textarea = document.querySelector(`[name="${this.options.textareaName}"]`);
-        this.el.addEventListener("input", (e) => this.init_textarea(e.target.value));
-        this.init_textarea(this.el.value);
+        this.el.addEventListener("input", (e) => this.init_textareas(e.target.value));
+        this.init_textareas(this.el.value);
     },
-    init_textarea(mimetype) {
+    init_textareas(mimetype) {
         const pattern_config = this.options.widgets[mimetype];
+
+        // there might be more than one textareas with the same name
+        // set up all of them with the same pattern options.
+        // the pattern itself must take care of an unique identifier!
+        const textareas = document.querySelectorAll(`textarea[name="${this.options.textareaName}"]`);
+
         // First, destroy current
-        if (this.current_widget) {
+        this.current_widgets.forEach((wdgt) => {
             // The pattern must implement the destroy method.
-            this.current_widget.destroy();
-        }
+            wdgt.destroy();
+        });
+        // and clean
+        this.current_widgets = [];
+
         // Then, setup new
-        if (pattern_config) {
-            this.current_widget = new registry.patterns[pattern_config.pattern](
-                this.textarea,
-                pattern_config.patternOptions || {}
-            );
+        if (pattern_config && textareas.length) {
+            textareas.forEach(async (area) => {
+                this.current_widgets.push(
+                    await new registry.patterns[pattern_config.pattern](
+                        area, pattern_config.patternOptions || {}
+                    )
+                );
+            });
         }
     },
 });
