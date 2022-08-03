@@ -25,14 +25,20 @@ export default class SchemaEditor {
     init_add_field(fieldset_id) {
         if (fieldset_id) {
             var $add_field = $("a#add-field", this.el);
-            var href = $add_field.attr("href").split("?")[0]; // get base href without any previously set ``fieldset_id``.
-            $add_field.attr("href", href + "?fieldset_id=" + fieldset_id);
+            var $fieldset = $("#form fieldset#fieldset-"+fieldset_id, this.el);
+            if ($fieldset.data('can-add-fields') === false){
+                $add_field.addClass('disabled');
+            } else {
+                var href = $add_field.attr("href").split("?")[0]; // get base href without any previously set ``fieldset_id``.
+                $add_field.attr("href", href + "?fieldset_id=" + fieldset_id);
+                $add_field.removeClass('disabled');
+            }
         }
     }
 
     init_schemaeditor() {
         // delete field
-        $("a.schemaeditor-delete-field", this.el).click(function (e) {
+        $("a.schemaeditor-delete-field", this.el).on("click", function (e) {
             var trigger = $(this);
             e.preventDefault();
             if (!window.confirm(trigger.attr("data-confirm_msg"))) {
@@ -97,13 +103,14 @@ export default class SchemaEditor {
             }
         );
 
+        var self = this;
         // ///////////////
         // ADD FIELD INIT
         $("#form .autotoc-nav > a", this.el).each(function () {
             $(this).on("click", function (e) {
                 e.preventDefault();
                 var fieldset_id = $(this).attr("data-fieldset_drag_id");
-                this.init_add_field(fieldset_id);
+                self.init_add_field(fieldset_id);
             });
         });
 
@@ -227,70 +234,73 @@ $.fn.plone_schemaeditor_html5_sortable = function (
     // ///////////
     // DROPPABLES
 
+    var self = this;
     // Make tab and legend elements droppable. we drop on legend when form tabbing is disabled
+    $("#form fieldset legend")
+    .each(function (i) {
+        var $fieldset = $("#form fieldset#fieldset-"+i, self.el);
+        if ($fieldset.data('can-add-fields') === true){
+            $(this).attr("droppable", "true")
+        }
+        $(this).attr("data-fieldset_drag_id", i);
+    });
     $("#form .autotoc-nav > a")
-        .attr("droppable", "true")
         .each(function (i) {
             // Plone 5 / mockup
+            var $fieldset = $("#form fieldset#fieldset-"+i, self.el);
+            if ($fieldset.data('can-add-fields') === true){
+                $(this).attr("droppable", "true");
+                this.ondrop = function (e) {
+                    // apply change fieldset when we drop a field on a tab or a legend
+                    e.preventDefault();
+                    var src = e.dataTransfer.getData("Text"),
+                        node = $("[data-drag_id=" + src + "]");
+                    var orig_fieldset = node.parents("fieldset");
+                    var orig_fieldset_id = orig_fieldset.attr("id").split("-")[1];
+                    var target_fieldset_id = $(this).attr("data-fieldset_drag_id");
+                    if (orig_fieldset_id != target_fieldset_id) {
+                        var target_fieldset = $("#fieldset-" + target_fieldset_id),
+                            tab_height = $(this).height(),
+                            tab_width = $(this).width(),
+                            tab_position = $(this).position();
+                        node.animate(
+                            {
+                                top: tab_position.top - node.position().top,
+                                left: tab_position.left - node.position().left,
+                                width: "50%",
+                                opacity: "0",
+                            },
+                            1000,
+                            function () {
+                                node.appendTo(target_fieldset);
+                                node.css("left", "");
+                                node.css("top", "");
+                                node.css("width", "");
+                                node.css("opacity", "");
+                            }
+                        );
+                        changefieldset_callback.apply(node, [target_fieldset_id]);
+                    }
+                    $(this).css("border", "");
+                };
+                this.ondragover = function (e) {
+                    // style when we drag over tab or legend
+                    e.preventDefault();
+                    var draggable = e.dataTransfer.getData("draggable");
+                    if (draggable) {
+                        $(this).css("border", "3px dotted red");
+                        $("#drop-marker").hide();
+                    }
+                    return false;
+                };
+                this.ondragleave = function (e) {
+                    // remove style when we leave tab or legend
+                    e.preventDefault();
+                    $(this).css("border", "");
+                    $("#drop-marker").show();
+                };
+            }
             $(this).attr("data-fieldset_drag_id", i);
-        });
-    $("#form fieldset legend")
-        .attr("droppable", "true")
-        .each(function (i) {
-            $(this).attr("data-fieldset_drag_id", i);
-        });
-    $("#form .autotoc-nav > a, #form fieldset legend")
-        .attr("droppable", "true")
-        .each(function () {
-            this.ondrop = function (e) {
-                // apply change fieldset when we drop a field on a tab or a legend
-                e.preventDefault();
-                var src = e.dataTransfer.getData("Text"),
-                    node = $("[data-drag_id=" + src + "]");
-                var orig_fieldset = node.parents("fieldset");
-                var orig_fieldset_id = orig_fieldset.attr("id").split("-")[1];
-                var target_fieldset_id = $(this).attr("data-fieldset_drag_id");
-                if (orig_fieldset_id != target_fieldset_id) {
-                    var target_fieldset = $("#fieldset-" + target_fieldset_id),
-                        tab_height = $(this).height(),
-                        tab_width = $(this).width(),
-                        tab_position = $(this).position();
-                    node.animate(
-                        {
-                            top: tab_position.top - node.position().top,
-                            left: tab_position.left - node.position().left,
-                            width: "50%",
-                            opacity: "0",
-                        },
-                        1000,
-                        function () {
-                            node.appendTo(target_fieldset);
-                            node.css("left", "");
-                            node.css("top", "");
-                            node.css("width", "");
-                            node.css("opacity", "");
-                        }
-                    );
-                    changefieldset_callback.apply(node, [target_fieldset_id]);
-                }
-                $(this).css("border", "");
-            };
-            this.ondragover = function (e) {
-                // style when we drag over tab or legend
-                e.preventDefault();
-                var draggable = e.dataTransfer.getData("draggable");
-                if (draggable) {
-                    $(this).css("border", "3px dotted red");
-                    $("#drop-marker").hide();
-                }
-                return false;
-            };
-            this.ondragleave = function (e) {
-                // remove style when we leave tab or legend
-                e.preventDefault();
-                $(this).css("border", "");
-                $("#drop-marker").show();
-            };
         });
 
     $('<span class="draghandle">&#x28FF;</span>')
