@@ -1,18 +1,13 @@
 // Plone extended search.
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
+import utils from "../../core/utils";
 
 export default Base.extend({
     name: "search",
     trigger: ".pat-search",
     init: function () {
-        var $loader = $(".plone-loader");
-        if ($loader.length === 0) {
-            $loader = $(
-                '<div class="plone-loader"><div class="spinner-border text-secondary" role="status"></div></div>'
-            );
-            $("body").append($loader);
-        }
+        var loading = new utils.Loading();
 
         var $filter = $("#search-filter");
         var $filterBtn = $("#search-filter-toggle", $filter);
@@ -25,8 +20,8 @@ export default Base.extend({
         if (window.history && window.history.pushState) {
             $(window).bind("popstate", function () {
                 /* we're just going to cheat and reload the page so
-         we aren't keep moving around state here..
-         Here, I'm lazy, we're not using react here... */
+                   we aren't keep moving around state here..
+                   Here, I'm lazy, we're not using react here... */
                 window.location = window.location.href;
             });
         }
@@ -44,7 +39,7 @@ export default Base.extend({
 
         var timeout = 0;
         var search = function () {
-            $loader.show();
+            loading.show();
             pushHistory();
             $.ajax({
                 url: window.location.origin + window.location.pathname + "?ajax_load=1",
@@ -54,7 +49,7 @@ export default Base.extend({
                 $("#search-results").replaceWith($("#search-results", $html));
                 $("#search-term").replaceWith($("#search-term", $html));
                 $("#results-count").replaceWith($("#results-count", $html));
-                $loader.hide();
+                loading.hide();
             });
         };
         var searchDelayed = function () {

@@ -18,4 +18,4 @@ jobs:
         cache: 'yarn'
     - run: make install
     #- run: make eslint
-    - run: make test
+    - run: yarn run test
