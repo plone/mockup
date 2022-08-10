@@ -6,6 +6,7 @@
 import registry from "@patternslib/patternslib/src/core/registry";
 
 // Patternslib patterns
+import "@patternslib/patternslib/src/pat/date-picker/date-picker";
 import "@patternslib/patternslib/src/pat/datetime-picker/datetime-picker";
 import "@patternslib/patternslib/src/pat/display-time/display-time";
 import { parser as validation_parser } from "@patternslib/patternslib/src/pat/validation/validation"; // Also loads the Pattern itself.
