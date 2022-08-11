@@ -452,7 +452,10 @@ export default Base.extend({
                 reloadWindowOnClose: false,
             },
             actionOptions: { reloadWindowOnClose: false },
-            backdropOptions: { closeOnClick: false },
+            backdropOptions: {
+                zIndex: "1340",
+                closeOnClick: false
+            },
         });
         self.modal.on("shown", (e) => {
             self.modalShown.apply(self, [e]);
