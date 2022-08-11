@@ -2,6 +2,18 @@
 
 
 
+## [5.0.0-alpha.20](https://github.com/plone/mockup/compare/5.0.0-alpha.19...5.0.0-alpha.20) (2022-08-11)
+
+
+### Bug Fixes
+
+
+* **pat modal:** fix zIndex of pat-modal, tinymce uses 1300, so we have to be higher ([2f4fd88](https://github.com/plone/mockup/commit/2f4fd88a12304e23d8fb0a13853632463e67018c))
+
+* **pat modal:** make it respect backdropOptions.zIndex if it is set ([50c1696](https://github.com/plone/mockup/commit/50c1696ef67a078f1fb20f18f707d18d6d9d1ce8))
+
+* **pat tinymce:** fix zIndex for link modals in tinymce to be higher than 1300 ([2618a38](https://github.com/plone/mockup/commit/2618a38814a75a288a0f1f5bef5e8ee8b7345a68))
+
 ## [5.0.0-alpha.19](https://github.com/plone/mockup/compare/5.0.0-alpha.18...5.0.0-alpha.19) (2022-08-03)
 
 
