@@ -909,7 +909,7 @@ export default Base.extend({
                 self.$el.parents(self.options.backdrop),
                 self.options.backdropOptions
             ),
-            zIndex = 1041;
+            zIndex = self.options.backdropOptions.zIndex || 1041;
 
         $(self.options.zIndexSelector).each(function () {
             zIndex = Math.max(zIndex, parseInt($(this).css("zIndex")) + 1 || 1041);
