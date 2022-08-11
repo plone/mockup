@@ -24,7 +24,7 @@ export default Base.extend({
         zIndexSelector: ".modal-wrapper,.modal-backdrop",
         backdrop: "body", // Element to initiate the Backdrop on.
         backdropOptions: {
-            zIndex: "1340",
+            zIndex: "1040",
             opacity: "0.85",
             className: "modal-backdrop",
             classActiveName: "backdrop-active",
