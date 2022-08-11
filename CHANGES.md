@@ -2,6 +2,22 @@
 
 
 
+## [5.0.0-alpha.21](https://github.com/plone/mockup/compare/5.0.0-alpha.20...5.0.0-alpha.21) (2022-08-11)
+
+
+### Features
+
+
+* **pat date-picker:** Add pat-date-picker from @patternslib/patternslib. ([0fa79a4](https://github.com/plone/mockup/commit/0fa79a45563fbf04d3fc996b7b74be4e3d8e3c44))
+
+
+### Maintenance
+
+
+* **Build:** Include bundle name and version in generated files (Feature of @patternslib/dev 2.4.0.) ([ffbc1c4](https://github.com/plone/mockup/commit/ffbc1c42a515ad0a7aac9aa885eeb922d3e1f61c))
+
+* Upgrade dependencies. ([1025636](https://github.com/plone/mockup/commit/10256367741e8d2e46256c09eeace8d62957f271))
+
 ## [5.0.0-alpha.20](https://github.com/plone/mockup/compare/5.0.0-alpha.19...5.0.0-alpha.20) (2022-08-11)
 
 
