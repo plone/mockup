@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Base from "@patternslib/patternslib/src/core/base";
+import I18n from "../../core/i18n";
 import utils from "../../core/utils";
 
 export default Base.extend({
@@ -103,6 +104,11 @@ export default Base.extend({
         import("select2/select2.css");
         import("./select2.scss");
         await import("select2");
+        try {
+            await import(`select2/select2_locale_${this.options.language}`);
+        } catch {
+            console.warn("Language file could not be loaded", this.options.language);
+        }
 
         var self = this;
         self.options.formatResultCssClass = function (ob) {
@@ -127,7 +133,6 @@ export default Base.extend({
                 return action;
             }
         }
-
         $(self.el).select2(self.options);
         self.$el.on("select2-selected", function (e) {
             callback(self.options.onSelected, e);
@@ -155,6 +160,8 @@ export default Base.extend({
     init: async function () {
         var self = this;
 
+        var i18n = new I18n();
+        self.options.language = i18n.currentLanguage;
         self.options.allowNewItems = self.options.hasOwnProperty("allowNewItems")
             ? JSON.parse(self.options.allowNewItems)
             : true;
