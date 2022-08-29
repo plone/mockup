@@ -1,4 +1,5 @@
 import Base from "@patternslib/patternslib/src/core/base";
+import I18n from "../../core/i18n";
 import _t from "../../core/i18n-wrapper";
 
 export default Base.extend({
@@ -163,11 +164,15 @@ export default Base.extend({
                 "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | unlink plonelink ploneimage",
             //'autoresize_max_height': 900,
             height: 400,
+            language: "en",
         },
         inline: false,
     },
     init: async function () {
         const implementation = (await import("./tinymce--implementation")).default;
+        var i18n = new I18n();
+        var lang = i18n.currentLanguage;
+        this.options.tiny.language = lang;
         this.instance = new implementation(this.el, this.options);
         this.instance.init();
     },
