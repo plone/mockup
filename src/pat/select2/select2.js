@@ -150,6 +150,7 @@ export default Base.extend({
         self.$el.parent().off("close.plone-modal.patterns");
         if (self.options.orderable) {
             self.$select2.addClass("select2-orderable");
+            self.$el.change();
         }
     },
     opened: function () {
