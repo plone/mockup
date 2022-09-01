@@ -80,17 +80,13 @@ export default Base.extend({
             delete self.options.tags;
         }
     },
-    initializeOrdering: function () {
+    initializeOrdering: async function () {
         if (!this.options.orderable) {
             return;
         }
-        // TODO: fix sorting!
-        this.$el.on("change", async () => {
-            let Sortable = await import("sortablejs");
-            Sortable = Sortable.default;
-
+        const Sortable = (await import("sortablejs")).default;
+        const _initializeOrdering = () => {
             const sortable_el = this.$select2[0].querySelector(".select2-choices");
-
             new Sortable(sortable_el, {
                 draggable: "li",
                 dragClass: "select2-choice-dragging",
@@ -98,7 +94,9 @@ export default Base.extend({
                 onStart: () => this.$el.select2("onSortStart"),
                 onEnd: () => this.$el.select2("onSortEnd"),
             });
-        });
+        };
+        this.$el.on("change", _initializeOrdering.bind(this));
+        _initializeOrdering();
     },
     initializeSelect2: async function () {
         import("select2/select2.css");
@@ -244,7 +242,7 @@ export default Base.extend({
 
         self.initializeValues();
         self.initializeTags();
-        self.initializeOrdering();
         await self.initializeSelect2();
+        await self.initializeOrdering();
     },
 });
