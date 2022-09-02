@@ -98,7 +98,7 @@ export default Base.extend({
             template = $(self.options[tpl + "TemplateSelector"]).html();
         }
         if (!template) {
-            if(self.options[tpl + "Template"]) {
+            if (self.options[tpl + "Template"]) {
                 template = self.options[tpl + "Template"];
             } else {
                 template = self[tpl + "Template"];
@@ -566,8 +566,6 @@ export default Base.extend({
             return $selection;
         };
 
-        Select2.prototype.initializeOrdering.call(self);
-
         const icon_level_up = await utils.resolveIcon("arrow-left-circle");
         const icon_level_down = await utils.resolveIcon("arrow-right-circle");
 
@@ -687,7 +685,8 @@ export default Base.extend({
             return item.UID;
         };
 
-        Select2.prototype.initializeSelect2.call(self);
+        await Select2.prototype.initializeSelect2.call(self);
+        await Select2.prototype.initializeOrdering.call(self);
 
         self.$toolbar = $('<div class="toolbar d-flex" />');
         self.$container.prepend(self.$toolbar);
