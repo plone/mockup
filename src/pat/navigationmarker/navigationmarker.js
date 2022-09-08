@@ -5,29 +5,31 @@ export default Base.extend({
     name: "navigationmarker",
     trigger: ".pat-navigationmarker",
     parser: "mockup",
-    init: function () {
+    init() {
         const portal_url = document.body.dataset.portalUrl;
-        var href =
+        const href =
             document.querySelector('head link[rel="canonical"]').href ||
             window.location.href;
+        const hrefParts = href.split("/");
 
-        $("a", this.$el).each(function () {
-            var navlink = this.href.replace("/view", "");
+        const nav_items = this.el.querySelectorAll("a");
+
+        for (const nav_item of nav_items) {
+            const navlink = nav_item.getAttribute("href", "").replace("/view", "");
             if (href.indexOf(navlink) !== -1) {
-                var parent = $(this).parent();
+                const parent = $(nav_item).parent();
 
                 // check the input-openers within the path
-                var check = parent.find("> input");
+                const check = parent.find("> input");
                 if (check.length) {
                     check[0].checked = true;
                 }
 
                 // set "inPath" to all nav items which are within the current path
                 // check if parts of navlink are in canonical url parts
-                var hrefParts = href.split("/");
-                var navParts = navlink.split("/");
-                var inPath = false;
-                for (var i = 0, size = navParts.length; i < size; i++) {
+                const navParts = navlink.split("/");
+                let inPath = false;
+                for (let i = 0, size = navParts.length; i < size; i++) {
                     // The last path-part must match.
                     inPath = false;
                     if (navParts[i] === hrefParts[i]) {
@@ -47,6 +49,6 @@ export default Base.extend({
                     parent.addClass("current");
                 }
             }
-        });
+        }
     },
 });
