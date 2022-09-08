@@ -92,10 +92,20 @@ In such cases you can just withdraw your changes on the yarn.lock file or remove
 -   Go to `http://localhost:8000`:
     On this port our demo and documentation pages are served.
 
-To use the resources directly from webpack-devserver, you have to change the `plone` bundle in the resource registry from `++plone++static/bundle-plone/bundle.min.js` to `http://localhost:8000/bundle.min.js`.
-Alternatively you can also just run `yarn watch` and have the resources recompiled to the `++plone++static` directory.
+
+# Development
+
+You can directly develop with the 11ty based documentation / demo server by running ``make serve``.
+
+If you want to develop in Plone, you have two options:
+
+1) Run `make watch-plone`. You need buildout to have plone.staticresources checked out next to Mockup.
+   Mockup will compile it's bundle directly into the `++plone++static` directory of plone.staticresources and update it when you change something in Mockup.
+
+2) Run `npx yarn start:webpack`, go to the resource registry ( http://localhost:8080/Plone/@@resourceregistry-controlpanel ) and add the URL `http://localhost:8000/bundle.min.js` to the JavaScript input field of the plone bundle instead of the other URL `++plone++static/bundle-plone/bundle.min.js`.
 
 For more commands inspect Makefile and the script part of the package.json.
+
 
 ## Running tests
 
