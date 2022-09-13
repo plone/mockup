@@ -76,63 +76,63 @@ describe("pat-navigationmarker", () => {
         const it3 = document.querySelector("a[href='../../path3']");
         const it4 = document.querySelector("a[href='https://patternslib.com/path4']");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
         expect(document.querySelectorAll(".inPath").length).toBe(0);
         expect(document.querySelector(".current a")).toBe(it0);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path1");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
         expect(document.querySelectorAll(".inPath").length).toBe(0);
         expect(document.querySelector(".current a")).toBe(it1);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path2");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
         expect(document.querySelectorAll(".inPath").length).toBe(0);
         expect(document.querySelector(".current a")).toBe(it2);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path2/path2.1");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
-        expect(document.querySelectorAll(".inPath").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
+        expect(document.querySelectorAll(".inPath").length).toBe(2);
         expect(document.querySelector(".current a")).toBe(it21);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path2/path2.2");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
-        expect(document.querySelectorAll(".inPath").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
+        expect(document.querySelectorAll(".inPath").length).toBe(2);
         expect(document.querySelector(".current a")).toBe(it22);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path2/path2.2/path2.2.1");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
-        expect(document.querySelectorAll(".inPath").length).toBe(2);
+        expect(document.querySelectorAll(".current").length).toBe(2);
+        expect(document.querySelectorAll(".inPath").length).toBe(4);
         expect(document.querySelector(".current a")).toBe(it221);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path2/path2.2/path2.2.2");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
-        expect(document.querySelectorAll(".inPath").length).toBe(2);
+        expect(document.querySelectorAll(".current").length).toBe(2);
+        expect(document.querySelectorAll(".inPath").length).toBe(4);
         expect(document.querySelector(".current a")).toBe(it222);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path3");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
         expect(document.querySelectorAll(".inPath").length).toBe(0);
         expect(document.querySelector(".current a")).toBe(it3);
 
         instance.clear_items();
         instance.mark_items("https://patternslib.com/path4");
 
-        expect(document.querySelectorAll(".current").length).toBe(1);
+        expect(document.querySelectorAll(".current").length).toBe(2);
         expect(document.querySelectorAll(".inPath").length).toBe(0);
         expect(document.querySelector(".current a")).toBe(it4);
     });

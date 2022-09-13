@@ -36,6 +36,7 @@ export default Base.extend({
                 : nav_item.parentNode;
 
             if (nav_url === current_url_prepared) {
+                nav_item.classList.add(this.options.currentClass);
                 wrapper.classList.add(this.options.currentClass);
             } else if (
                 // Compare the current navigation item url with a slash at the
@@ -45,6 +46,7 @@ export default Base.extend({
                 // be in the path.
                 nav_url !== portal_url
             ) {
+                nav_item.classList.add(this.options.inPathClass);
                 wrapper.classList.add(this.options.inPathClass);
             } else {
                 // Not even in path.
