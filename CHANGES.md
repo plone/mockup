@@ -2,6 +2,28 @@
 
 
 
+## [5.0.0-alpha.22](https://github.com/plone/mockup/compare/5.0.0-alpha.21...5.0.0-alpha.22) (2022-09-21)
+
+
+### Bug Fixes
+
+
+* **pat relateditems:** Fix initialization of ordering for pre-populated items. Fixes: [#1205](https://github.com/plone/mockup/issues/1205). ([ae42f40](https://github.com/plone/mockup/commit/ae42f40a9758b884f4d4f652fc4e5b7ee3a47110))Co-authored-by: Johannes Raggam <thetetet@gmail.com>
+Co-authored-by: Maurits van Rees <maurits@vanrees.org>
+
+* **pat select2:** Fix initialization of ordering for pre-populated items. Fixes: [#1205](https://github.com/plone/mockup/issues/1205). ([0ddcb5b](https://github.com/plone/mockup/commit/0ddcb5b9b4a89149228e59f82b791622663c5db1))Co-authored-by: Johannes Raggam <thetetet@gmail.com>
+Co-authored-by: Maurits van Rees <maurits@vanrees.org>
+
+* **pat-select2:** load language files ([b172397](https://github.com/plone/mockup/commit/b17239731260388c0a093ca5bc4c709faa48576c))
+
+* **pat-tinymce:** set the language in tiny options ([ba6e749](https://github.com/plone/mockup/commit/ba6e749f6e8000f6df210f9103d07aba69ff8885))
+
+
+### Maintenance
+
+
+* **Build:** upgrade Bootstrap to 5.2.1 ([73afbcc](https://github.com/plone/mockup/commit/73afbcc05dbf084ff392d3dcc7b3086bf27e5357))
+
 ## [5.0.0-alpha.21](https://github.com/plone/mockup/compare/5.0.0-alpha.20...5.0.0-alpha.21) (2022-08-11)
 
 
