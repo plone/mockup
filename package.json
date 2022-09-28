@@ -1,6 +1,6 @@
 {
     "name": "@plone/mockup",
-    "version": "5.0.0-alpha.21",
+    "version": "5.0.0-alpha.22",
     "description": "A collection of client side patterns for faster and easier web development",
     "license": "BSD-3-Clause",
     "main": "./src/patterns.js",
@@ -13,7 +13,7 @@
         "@patternslib/patternslib": "9.1.0-beta.0",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
-        "bootstrap": "^5.2.0",
+        "bootstrap": "^5.2.1",
         "bootstrap-icons": "^1.9.1",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "^1.12.1",

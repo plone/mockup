@@ -340,11 +340,13 @@ export default Base.extend({
 
         $("a.crumb", self.$toolbar).on("click", function (e) {
             e.preventDefault();
+            e.stopPropagation();
             self.browseTo($(this).attr("href"));
         });
 
         $("a.fav", self.$toolbar).on("click", function (e) {
             e.preventDefault();
+            e.stopPropagation();
             self.browseTo($(this).attr("href"));
         });
 
