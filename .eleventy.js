@@ -8,7 +8,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ dist: "dist" });
     eleventyConfig.addPassthroughCopy({ "src/tests/fakeserver.js": "dist/fakeserver.js" }); // prettier-ignore
     eleventyConfig.addPassthroughCopy({ "src/pat/querystring/test-querystringcriteria.json": "dist/test-querystringcriteria.json" }); // prettier-ignore
-    eleventyConfig.addPassthroughCopy({ "node_modules/prism-themes": "dist/prism-themes" }); // prettier-ignore
+    eleventyConfig.addPassthroughCopy({ "node_modules/prismjs": "dist/prismjs" });
     eleventyConfig.addPassthroughCopy({ "node_modules/sinon": "dist/sinon" });
     eleventyConfig.addPassthroughCopy({ "node_modules/tinymce/skins": "dist/skins" });
     eleventyConfig.addPassthroughCopy({ "node_modules/tinymce/icons": "dist/icons" });
