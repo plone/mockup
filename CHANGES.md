@@ -2,6 +2,24 @@
 
 
 
+## [5.0.0-alpha.23](https://github.com/plone/mockup/compare/5.0.0-alpha.22...5.0.0-alpha.23) (2022-10-03)
+
+
+### Bug Fixes
+
+
+* **Docs:** Fix eleventy documentation to include correct Prism theme. ([8394c6f](https://github.com/plone/mockup/commit/8394c6f8c7e5b0a8c91c78ea90fa789f8b0d0c50))
+
+* **pat relateditems:** call .stopPropagation on events for breadcrumbs links. Fixes: gh-1221 ([3cdca38](https://github.com/plone/mockup/commit/3cdca38ec89b49c1780fbb16c39d1dd84b313db3))
+
+
+### Maintenance
+
+
+* **Build:** Unlink all eventually linked @Patternslib dependencies before building bundles. ([4501e3c](https://github.com/plone/mockup/commit/4501e3cef8b2577069f4ec7791cd63272701cabf))
+
+* **Build:** Upgrade dependencies. ([b2e3184](https://github.com/plone/mockup/commit/b2e3184e9e14820cae63e17b2f9fbbf751d47b79))
+
 ## [5.0.0-alpha.22](https://github.com/plone/mockup/compare/5.0.0-alpha.21...5.0.0-alpha.22) (2022-09-21)
 
 
