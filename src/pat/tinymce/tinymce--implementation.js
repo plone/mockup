@@ -219,6 +219,24 @@ export default class TinyMCE {
                 self.tiny = editor;
             }
         };
+        tinyOptions["setup"] = (editor) => {
+            editor.ui.registry.addMenuButton('inserttable', {
+                icon: 'table',
+                tooltip: 'Insert table 2',
+                fetch: function(callback) {
+                    callback([
+                        {
+                            type: 'fancymenuitem',
+                            fancytype: 'inserttable',
+                            onAction: function(data) {
+                                // https://www.tiny.cloud/docs/plugins/table/#commands
+                                editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
+                            }
+                        }
+                    ]);
+                }
+            });
+        }
 
         self.initLanguage(function () {
             if (typeof self.options.folderTypes === "string") {
@@ -293,6 +311,8 @@ export default class TinyMCE {
                 modal_container.attr("id", "tiny-ui-container-" + random_id);
                 tinyOptions["ui_container"] = "#tiny-ui-container-" + random_id;
             }
+
+
             tinymce.init(tinyOptions);
             self.tiny = tinymce.get(self.tinyId);
 
