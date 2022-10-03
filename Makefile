@@ -21,9 +21,11 @@ export
 
 .PHONY: install
 stamp-yarn install:
-	npx yarn install
+	$(YARN) install
 	# Install pre commit hook
-	npx yarn husky install
+	$(YARN) husky install
+	# We have checked in the .husky files, so no need to add the commitlint hook again.
+	# $(YARN) husky add .husky/commit-msg "npx yarn commitlint --edit $1"
 	touch stamp-yarn
 
 
@@ -41,4 +43,10 @@ bundle-plone:
 bundle: stamp-yarn
 	$(YARN) run build:webpack
 
-#
+
+# Unlink any linked dependencies before building a bundle.
+bundle-pre:
+	-$(YARN) unlink @patternslib/dev
+	-$(YARN) unlink @patternslib/pat-code-editor
+	-$(YARN) unlink @patternslib/patternslib
+	$(YARN) install --force
