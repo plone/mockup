@@ -2,6 +2,28 @@
 
 
 
+## [5.0.0-alpha.24](https://github.com/plone/mockup/compare/5.0.0-alpha.23...5.0.0-alpha.24) (2022-10-03)
+
+
+### Features
+
+
+* pat-tinymce: add table header by default ([c6e27bb](https://github.com/plone/mockup/commit/c6e27bbce44478bfb969314fa05b090c294a235a))
+
+
+### Bug Fixes
+
+
+* pat-tinymce: fix inserttable button tooltip ([663b7f5](https://github.com/plone/mockup/commit/663b7f5cf730bdc3e953b8d3871f311d5bf6cd26))
+
+* pat-tinymce: Translate inserttable button tooltip. ([9878245](https://github.com/plone/mockup/commit/9878245580d5512377d844d05c86e4d4b304427d))
+
+
+### Maintenance
+
+
+* **Build:** Update Bootstrap 5.2.2 ([54c731f](https://github.com/plone/mockup/commit/54c731f0806934dcd3fc724a182c92e5a3255844))
+
 ## [5.0.0-alpha.23](https://github.com/plone/mockup/compare/5.0.0-alpha.22...5.0.0-alpha.23) (2022-10-03)
 
 
