@@ -220,23 +220,27 @@ export default class TinyMCE {
             }
         };
         tinyOptions["setup"] = (editor) => {
-            editor.ui.registry.addMenuButton('inserttable', {
-                icon: 'table',
-                tooltip: _t('Insert table with header row'),
-                fetch: function(callback) {
+            editor.ui.registry.addMenuButton("inserttable", {
+                icon: "table",
+                tooltip: _t("Insert table with header row"),
+                fetch: function (callback) {
                     callback([
                         {
-                            type: 'fancymenuitem',
-                            fancytype: 'inserttable',
-                            onAction: function(data) {
+                            type: "fancymenuitem",
+                            fancytype: "inserttable",
+                            onAction: function (data) {
                                 // https://www.tiny.cloud/docs/plugins/table/#commands
-                                editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
-                            }
-                        }
+                                editor.execCommand("mceInsertTable", false, {
+                                    rows: data.numRows,
+                                    columns: data.numColumns,
+                                    options: { headerRows: 1 },
+                                });
+                            },
+                        },
                     ]);
-                }
+                },
             });
-        }
+        };
 
         self.initLanguage(function () {
             if (typeof self.options.folderTypes === "string") {
@@ -311,7 +315,6 @@ export default class TinyMCE {
                 modal_container.attr("id", "tiny-ui-container-" + random_id);
                 tinyOptions["ui_container"] = "#tiny-ui-container-" + random_id;
             }
-
 
             tinymce.init(tinyOptions);
             self.tiny = tinymce.get(self.tinyId);
