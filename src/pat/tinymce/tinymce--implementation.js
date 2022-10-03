@@ -222,7 +222,7 @@ export default class TinyMCE {
         tinyOptions["setup"] = (editor) => {
             editor.ui.registry.addMenuButton('inserttable', {
                 icon: 'table',
-                tooltip: 'Insert table with header row',
+                tooltip: _t('Insert table with header row'),
                 fetch: function(callback) {
                     callback([
                         {
