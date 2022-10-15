@@ -16,7 +16,7 @@
  * functionality for each bundle is initialized.
  *
  */
-import "@patternslib/patternslib/webpack/module_federation";
+import "@patternslib/dev/webpack/module_federation";
 
 // And now load this bundle's actual entry point.
 import("./patterns");

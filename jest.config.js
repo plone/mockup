@@ -1,1 +1,6 @@
-module.exports = require("@patternslib/dev/jest.config.js");
+const path = require("path");
+const config = require("@patternslib/patternslib/jest.config.js");
+
+config.setupFilesAfterEnv.push(path.resolve(__dirname, "./src/setup-tests.js"));
+
+module.exports = config;
