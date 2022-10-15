@@ -16,6 +16,6 @@ jobs:
       with:
         node-version: '16'
         cache: 'yarn'
-    - run: make install
+    - run: yarn install
     #- run: make eslint
-    - run: yarn run test
+    - run: yarn test
