@@ -10,6 +10,82 @@ module.exports = () => {
         entry: {
             "bundle.min": path.resolve(__dirname, "src/index.js"),
         },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    tinymce_plugins: {
+                        name: "tinymce_plugins",
+                        test(module) {
+                            // `module.resource` contains the absolute path of the file on disk.
+                            const default_plugins = [
+                                "fullscreen",
+                                "hr",
+                                "lists",
+                                "media",
+                                "nonbreaking",
+                                "noneditable",
+                                "pagebreak",
+                                "paste",
+                                "preview",
+                                "print",
+                                "searchreplace",
+                                "tabfocus",
+                                "table",
+                                "visualchars",
+                                "wordcount",
+                                "code",
+                            ]
+                            let result = false;
+                            if (!module.resource){
+                                return result;
+                            }
+                            if (!module.resource.includes('plugins')){
+                                return result;
+                            }
+
+                            for (const plugin of default_plugins) {
+                                if (module.resource.includes(plugin)){
+                                    result = true;
+                                }
+                            }
+                            return result;
+                        },
+                        chunks: "all",
+                    },
+                    tinymce: {
+                        name: "tinymce",
+                        test(module) {
+                            // `module.resource` contains the absolute path of the file on disk.
+                            // Note the usage of `path.sep` instead of / or \, for cross-platform compatibility.
+                            const path = require('path');
+                            return (
+                            module.resource &&
+                            module.resource.includes('node_modules') &&
+                            module.resource.includes('tinymce') &&
+                            ! module.resource.includes('tinymce-i18n') &&
+                            ! module.resource.includes('plugins')
+                            );
+                        },
+                        chunks: "all",
+                    },
+                    datatables: {
+                        name: "datatables",
+                        test: /[\\/]node_modules[\\/]datatables.net.*[\\/]/,
+                        chunks: "all",
+                    },
+                    select2: {
+                        name: "select2",
+                        test: /[\\/]node_modules[\\/]select2.*[\\/]/,
+                        chunks: "all",
+                    },
+                    jquery_plugins: {
+                        name: "jquery_plugins",
+                        test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
+                        chunks: "all",
+                    }
+                },
+            },
+        },
     };
 
     config = webpack_config({
