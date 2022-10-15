@@ -12,10 +12,11 @@ describe("Livesearch", function () {
             var items = [];
             for (var i = 0; i < 7; i = i + 1) {
                 items.push({
-                    url: "http://localhost:8081/news/aggregator",
                     description: "Site News",
-                    title: "News",
+                    img_tag: "",
                     state: "published",
+                    title: "News",
+                    url: "http://localhost:8081/news/aggregator",
                 });
             }
             xhr.respond(
@@ -47,59 +48,70 @@ describe("Livesearch", function () {
         this.$el.remove();
     });
 
-    it("results on focus", function () {
+    it("1 - results on focus", function () {
         this.ls.$input.trigger("focusin");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results li").length).toEqual(9);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
     });
 
-    it("responds to keyup", function () {
+    it("2 - responds to keyup", function () {
         this.ls.$input.trigger("keyup");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results li").length).toEqual(9);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
     });
 
-    it("does not show with minimum length not met", function () {
+    it("3 - does not show with minimum length not met", function () {
         this.ls.$input.attr("value", "fo");
         this.ls.$input.trigger("keyup");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results li").length).toEqual(1);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(1);
     });
 
-    it("focus out hides", function () {
+    it("4 - focus out hides", function () {
         this.ls.$input.trigger("keyup");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results li").length).toEqual(9);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
 
         this.ls.$input.trigger("focusout");
         this.clock.tick(1000);
-        expect(dom.is_visible(this.$el.find(".livesearch-results")[0])).toEqual(false);
+
+        expect(dom.is_visible(document.querySelector(".livesearch-results"))).toEqual(
+            false
+        );
     });
 
-    it("focus back in shows already searched", function () {
+    it("5 - focus back in shows already searched", function () {
         this.ls.$input.trigger("keyup");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results li").length).toEqual(9);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
 
         this.ls.$input.trigger("focusout");
         this.clock.tick(1000);
-        expect(dom.is_visible(this.$el.find(".livesearch-results")[0])).toEqual(false);
+        expect(dom.is_visible(document.querySelector(".livesearch-results"))).toEqual(
+            false
+        );
 
         this.ls.$input.trigger("focusin");
         this.clock.tick(1000);
-        expect(dom.is_visible(this.$el.find(".livesearch-results")[0])).toEqual(true);
+        expect(dom.is_visible(document.querySelector(".livesearch-results"))).toEqual(
+            true
+        );
     });
 
-    it("should show next and prev", function () {
+    it("6 - should show next and prev", function () {
         this.ls.$input.trigger("keyup");
         this.clock.tick(1000);
-        expect(this.$el.find(".livesearch-results li").length).toEqual(9);
-        expect(this.$el.find(".livesearch-results li a.next").length).toEqual(1);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
+        expect(
+            document.querySelectorAll(".livesearch-results li a.next").length
+        ).toEqual(1);
 
         this.ls.doSearch(2);
         this.clock.tick(1000);
 
-        expect(this.$el.find(".livesearch-results li").length).toEqual(9);
-        expect(this.$el.find(".livesearch-results li a.prev").length).toEqual(1);
+        expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
+        expect(
+            document.querySelectorAll(".livesearch-results li a.prev").length
+        ).toEqual(1);
     });
 });
