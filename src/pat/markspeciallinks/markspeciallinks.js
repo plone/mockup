@@ -77,12 +77,11 @@ export default Base.extend({
             try {
                 link_url = new URL(link.getAttribute("href"));
             } catch (e) {
-                if (e instanceof TypeError) {
-                    // Not a valid URL.
-                    // Ignore and continue.
-                    continue;
-                }
+                // Not a valid URL.
+                // Ignore and continue.
+                continue;
             }
+
             if (open_new_window && link_url.protocol.startsWith("http")) {
                 link.setAttribute("target", "_blank");
                 link.setAttribute("rel", "noopener");
@@ -94,7 +93,7 @@ export default Base.extend({
                 if (icon_name) {
                     const icon = await utils.resolveIcon(icon_name);
                     const icon_el = dom.create_from_string(icon);
-                    icon_el.classList.add("markspeciallinks__icon");
+                    icon_el.querySelector("svg").classList.add("markspeciallinks__icon");
                     link.parentNode.insertBefore(icon_el, link);
                 }
             }
