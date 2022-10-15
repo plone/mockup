@@ -1,5 +1,6 @@
 import "./toggle";
 import $ from "jquery";
+import logger from "@patternslib/patternslib/src/core/logging";
 import registry from "@patternslib/patternslib/src/core/registry";
 import { jest } from "@jest/globals";
 
@@ -289,11 +290,11 @@ describe("Toggle", function () {
                 " </div>" +
                 "</div>"
         );
-        const spy_log_error = jest.spyOn(console, "error");
+        const log = logger.getLogger("pat-toggle");
+        const spy_log_error = jest.spyOn(log, "error");
         registry.scan($el);
         expect(spy_log_error).toHaveBeenCalledTimes(1);
         expect(spy_log_error).toHaveBeenCalledWith(
-            "pat-toggle:",
             'No target found for "#notarget".'
         );
         spy_log_error.mockRestore();
