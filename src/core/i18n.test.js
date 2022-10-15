@@ -76,7 +76,7 @@ describe("I18N", function () {
             clock.tick(500);
             var _ = i18n.MessageFactory("foobar");
             expect(_("foo")).toEqual("bar");
-            server.restore();
+            clock.restore();
         });
 
         it("handles country specific translations", function () {
@@ -102,7 +102,7 @@ describe("I18N", function () {
             clock.tick(500);
             var _ = i18n.MessageFactory("foobar-us");
             expect(_("foo")).toEqual("bar-us");
-            server.restore();
+            clock.restore();
         });
     });
 });
