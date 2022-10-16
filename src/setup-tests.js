@@ -10,12 +10,12 @@ jquery.expr.pseudos.visible = function () {
 };
 
 // Do not output error messages
-import logging from "@patternslib/patternslib/core/logging";
+import logging from "@patternslib/patternslib/src/core/logging";
 logging.setLevel(50);
 // level: FATAL
 
 // patch dom.is_visible to not rely on jest-unavailable offsetWidth/Height
-import dom from "@patternslib/patternslib/core/dom";
+import dom from "@patternslib/patternslib/src/core/dom";
 dom.is_visible = (el) => {
     return !el.hidden && el.style.display !== "none";
 };
