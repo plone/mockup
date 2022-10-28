@@ -76,9 +76,7 @@ function widgetSaveToRfc5545(form, conf, tz) {
                 weekdays = "";
                 i18nweekdays = "";
                 for (j = 0; j < conf.weekdays.length; j++) {
-                    input = field.find(
-                        "input[name=riweeklyweekdays" + conf.weekdays[j] + "]"
-                    );
+                    input = field.find(`input[name=riweeklyweekdays${j}]`);
                     if (input.is(":checked")) {
                         if (weekdays) {
                             weekdays += ",";
@@ -497,11 +495,13 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                     break;
 
                 case "riweeklyweekdays":
+                    if(byday.length === 0) break;
                     byday = byday.split(",");
                     for (d = 0; d < conf.weekdays.length; d++) {
+                        input = field.find(`input[name="riweeklyweekdays${d}"]`);
+                        if(input.length === 0) continue;
                         day = conf.weekdays[d];
-                        input = field.find("input[name=riweeklyweekdays" + day + "]");
-                        input.attr("checked", $.inArray(day, byday) !== -1);
+                        input.attr("checked", byday.includes(day));
                     }
                     break;
 
@@ -660,7 +660,7 @@ const RecurrenceInput = function (conf, textarea) {
     var now_date = new Date().toISOString().substring(0, 10);
     var index, i;
 
-    for (i = 0; i < 7; i++) {
+    for (let i = 0; i < 7; i++) {
         index = i + conf.firstDay;
         if (index > 6) {
             index = index - 7;
@@ -798,16 +798,16 @@ const RecurrenceInput = function (conf, textarea) {
             contentType: conf.ajaxContentType,
             cache: false,
             data: data,
-            success: function (data, status, jqXHR) {
+            success: function (resp, status, jqXHR) {
                 var result;
 
-                data.readOnly = readonly;
-                data.localization = conf.localization;
-                data.icons = conf.icons;
+                resp.readOnly = readonly;
+                resp.localization = conf.localization;
+                resp.icons = conf.icons;
 
                 // Format dates:
                 var date, y, m, d;
-                for (let occurrence of data.occurrences) {
+                for (let occurrence of resp.occurrences) {
                     date = occurrence.date;
                     y = parseInt(date.substring(0, 4), 10);
                     m = parseInt(date.substring(4, 6), 10) - 1; // jan=0
@@ -819,8 +819,7 @@ const RecurrenceInput = function (conf, textarea) {
                     );
                 }
 
-                result = _.template(OccurrenceTemplate)(data);
-                occurrenceDiv = element.find(".rioccurrences");
+                result = _.template(OccurrenceTemplate)(resp);
                 occurrenceDiv.replaceWith(result);
 
                 // Add the batch actions:
@@ -848,7 +847,7 @@ const RecurrenceInput = function (conf, textarea) {
                         .on("click", occurrenceDelete);
                 }
                 // Show the new div
-                element.find(".rioccurrences").show();
+                occurrenceDiv.show();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus);
@@ -950,7 +949,7 @@ const RecurrenceInput = function (conf, textarea) {
     // Loading (populating) display and form widget with
     // passed RFC5545 string (data)
     function loadData(rfc5545, form) {
-        var selector, format, startdate, dayindex, day;
+        var selector, startdate, dayindex, day;
 
         if (rfc5545) {
             widgetLoadFromRfc5545(form, conf, rfc5545, true);
@@ -1163,12 +1162,6 @@ const RecurrenceInput = function (conf, textarea) {
 
         self.$modalForm.find("input#addaction").on("click", occurrenceAdd);
 
-        // When the reload button is clicked, reload
-        self.$modalForm.find("a.rirefreshbutton").on("click", function (event) {
-            event.preventDefault();
-            updateOccurrences();
-        });
-
         // When selecting template, update what fieldsets are visible.
         self.$modalForm.find('select[name="rirtemplate"]').on("change", function (e) {
             displayFields($(this));
@@ -1198,8 +1191,14 @@ const RecurrenceInput = function (conf, textarea) {
             });
         // Update the selected dates section
         self.$modalForm
-            .find(
-                "input:radio, .riweeklyweekday > input, input[name=ridailyinterval], input[name=riweeklyinterval], input[name=rimonthlyinterval], input[name=riyearlyinterval]"
+            .find(`
+                input:radio,
+                input:checkbox,
+                .riweeklyweekday > input,
+                input[name=ridailyinterval],
+                input[name=riweeklyinterval],
+                input[name=rimonthlyinterval],
+                input[name=riyearlyinterval]`
             )
             .change(function (e) {
                 // Update only if the occurances are shown

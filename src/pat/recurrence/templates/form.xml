@@ -44,7 +44,7 @@
             <div id="riweeklyweekdays" class="rifield row">
                 <label class="col-4 col-form-label" for="<%= name %>weeklyinterval"><%= localization.weeklyWeekdays %></label>
                 <div class="col-8">
-                    <div class="row">
+                    <div class="row flex-nowrap">
                     <% orderedWeekdays.forEach(function(weekday, idx) { %>
                         <div class="riweeklyweekday col-auto">
                             <div class="form-check">
@@ -52,7 +52,7 @@
                                     name="riweeklyweekdays<%=weekday %>"
                                     id="<%= name %>weeklyWeekdays<%=weekday %>"
                                     value="<%=weekday %>" />
-                                <label class="form-check-label" for="<%= name %>weeklyWeekdays<%= weekday %>"><%= localization.shortWeekdays[idx] %></label>
+                                <label class="form-check-label" for="<%= name %>weeklyWeekdays<%= weekday %>"><%= localization.shortWeekdays[weekday] %></label>
                             </div>
                         </div>
                     <% }) %>
@@ -285,11 +285,6 @@
         <div class="rioccurrencesactions">
             <div class="rioccurancesheader d-flex justify-content-between">
                 <h6><strong><%= localization.preview %></strong></h6>
-                <span class="refreshbutton action">
-                    <a class="btn btn-sm btn-outline-secondary rirefreshbutton" href="#" title="<%= localization.refresh %>">
-                        <%= icons.reload %>
-                    </a>
-                </span>
             </div>
         </div>
 
