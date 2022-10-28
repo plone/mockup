@@ -825,6 +825,7 @@ const RecurrenceInput = function (conf, textarea) {
 
                 // Add the batch actions:
                 element.find(".rioccurrences .batching a").on("click", function (event) {
+                    event.stopPropagation();
                     event.preventDefault();
                     loadOccurrences(
                         startdate,
