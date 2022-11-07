@@ -355,7 +355,6 @@ function cleanDates(dates) {
 function parseIcal(icaldata) {
     var lines = [];
     var result = {};
-    var propAndValue = [];
     var line = null;
     var nextline;
 
@@ -395,9 +394,9 @@ function parseIcal(icaldata) {
 function widgetLoadFromRfc5545(form, conf, icaldata, force) {
     var unsupportedFeatures = [];
     var i, matches, match, matchIndex, rtemplate, d, input, index;
-    var selector, selectors, field, radiobutton, start, end;
+    var selectors, field, radiobutton;
     var interval, byday, bymonth, bymonthday, count, until;
-    var day, month, year, weekday, ical;
+    var day, month, year, weekday;
 
     form.ical = parseIcal(icaldata);
     if (form.ical.RRULE === undefined) {
@@ -658,7 +657,7 @@ const RecurrenceInput = function (conf, textarea) {
     // Extend conf with non-configurable data used by templates.
     var orderedWeekdays = [];
     var now_date = new Date().toISOString().substring(0, 10);
-    var index, i;
+    var index;
 
     for (let i = 0; i < 7; i++) {
         index = i + conf.firstDay;
