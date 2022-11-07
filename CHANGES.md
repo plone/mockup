@@ -2,6 +2,54 @@
 
 
 
+## [5.0.0-alpha.25](https://github.com/plone/mockup/compare/5.0.0-alpha.24...5.0.0-alpha.25) (2022-11-07)
+
+
+### Features
+
+
+* **pat tinymce:** Only import plugins that are actually enabled ([85846e6](https://github.com/plone/mockup/commit/85846e69295cf1209c72a51d1a44bca193e6fa8b))
+
+* Use webpack's `splitChunks` optimization for generating chunks ([6209520](https://github.com/plone/mockup/commit/62095201a66ffc5ae5c418f2a7ffe044b6bd75ac))
+
+
+### Bug Fixes
+
+
+* **core i18n:** fix tests ([65f0379](https://github.com/plone/mockup/commit/65f0379baa299f6612a0513b3c9ad18bd1b99a10))
+
+* **pat markspeciallinks:** fix tests ([67e031d](https://github.com/plone/mockup/commit/67e031d4edd037cdc27300fd460cbf2f0cda1862))
+
+* **pat recurrence:** Fix editing weekly weekdays. ([5d288c7](https://github.com/plone/mockup/commit/5d288c7fb9e25ee695a9bca0c35460f9259c4a7d))
+
+* **pat recurrence:** Fix pagination of recurrence dates to not close overlay. ([a011ba2](https://github.com/plone/mockup/commit/a011ba26cdcd87244015b94d1253d70ffde5cb63))
+
+
+### Maintenance
+
+
+* **Build:** Update path to the webpack module federation config. ([bfdaf25](https://github.com/plone/mockup/commit/bfdaf25b038242e7870aa8f335e1f12a5a616ecb))
+
+* **Build:** Upgrade to @patternslib/patternslib 9.7.0-alpha.2 and @patternslib/dev to 3.0.0. ([1fa9d49](https://github.com/plone/mockup/commit/1fa9d49a42f0ab40735b48d3b573b36ac915737c))
+
+* Do not use `--env` for environment variables ([63a33ff](https://github.com/plone/mockup/commit/63a33fffc86a368215370479c436d75b6926e9ab))
+
+* **pat modal:** Fix tests. ([aacd9fa](https://github.com/plone/mockup/commit/aacd9fac9da84833b72780ca2c3e66f1b3b442cd))
+
+* **pat toggle:** Fix tests. ([fd8f5ea](https://github.com/plone/mockup/commit/fd8f5ea2711228e3a0032c9020c1a595e373b833))
+
+* **pat-livesearch:** Fix tests. ([20e5876](https://github.com/plone/mockup/commit/20e5876731d08cd02ece2967adc4f86545476d5b))
+
+* **Tests:** Extend the jest config from Patternslib which has important mocks in place. ([aca56b9](https://github.com/plone/mockup/commit/aca56b98103771b039487323612a3ffd40c13268))
+
+* **Tests:** Remove unneeded test setup which comes already from @patternslib/patternslib. ([accf632](https://github.com/plone/mockup/commit/accf63286a3b625d0425d2990186f81cd49d2edc))
+
+* **Tests:** Rename to setup-tests for consistency with Patternslib. ([a7d65ad](https://github.com/plone/mockup/commit/a7d65ad283aeafe42d9af18153c4bbd987f7cc7f))
+
+* Upgrade dependencies. ([796804a](https://github.com/plone/mockup/commit/796804a5caba68fd433b3044869621918eff6732))
+
+* Upgrade Patternslib to 9.7.0-alpha.5. ([4866f30](https://github.com/plone/mockup/commit/4866f309e4ac13f2e13ae5279ca41605d98fa867))
+
 ## [5.0.0-alpha.24](https://github.com/plone/mockup/compare/5.0.0-alpha.23...5.0.0-alpha.24) (2022-10-03)
 
 
