@@ -28,7 +28,7 @@ export default Base.extend({
         });
 
         // unpin toolbar and save state
-        this.$el.on("click", ".toolbar-collapse", (e) => {
+        this.$el.on("click", ".toolbar-collapse", () => {
             $("body").removeClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({ expanded: false }), {
                 path: "/",
@@ -36,7 +36,7 @@ export default Base.extend({
         });
 
         // pin toolbar and save state
-        this.$el.on("click", ".toolbar-expand", (e) => {
+        this.$el.on("click", ".toolbar-expand", () => {
             $("body").addClass("plone-toolbar-left-expanded");
             Cookies.set("plone-toolbar", JSON.stringify({ expanded: true }), {
                 path: "/",

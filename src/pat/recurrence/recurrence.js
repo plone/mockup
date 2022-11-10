@@ -470,8 +470,6 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
 
         if (match) {
             rtemplate = conf.rtemplate[matchIndex];
-            // Set the selector:
-            selector = form.find("select[name=rirtemplate]").val(matchIndex);
         } else {
             for (rtemplate in conf.rtemplate) {
                 if (conf.rtemplate.hasOwnProperty(rtemplate)) {
@@ -494,11 +492,11 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
                     break;
 
                 case "riweeklyweekdays":
-                    if(byday.length === 0) break;
+                    if (byday.length === 0) break;
                     byday = byday.split(",");
                     for (d = 0; d < conf.weekdays.length; d++) {
                         input = field.find(`input[name="riweeklyweekdays${d}"]`);
-                        if(input.length === 0) continue;
+                        if (input.length === 0) continue;
                         day = conf.weekdays[d];
                         input.attr("checked", byday.includes(day));
                     }
@@ -677,7 +675,6 @@ const RecurrenceInput = function (conf, textarea) {
     // The recurrence type dropdown should show certain fields depending
     // on selection:
     function displayFields(selector) {
-        var i;
         // First hide all the fields
         self.$modalForm.find(".rifield").hide();
         // Then show the ones that should be shown.
@@ -848,7 +845,7 @@ const RecurrenceInput = function (conf, textarea) {
                 // Show the new div
                 occurrenceDiv.show();
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus) {
                 alert(textStatus);
             },
         });
@@ -918,7 +915,7 @@ const RecurrenceInput = function (conf, textarea) {
         }
         return startdate;
     }
-    function findEndDate(form) {
+    function findEndDate() {
         var endField, enddate;
 
         endField = self.$modalForm.find("input[name=rirangebyenddatecalendar]");
@@ -931,8 +928,8 @@ const RecurrenceInput = function (conf, textarea) {
         }
         return enddate;
     }
-    function findIntField(fieldName, form) {
-        var field, num, isInt;
+    function findIntField(fieldName) {
+        var field, num;
 
         field = self.$modalForm.find("input[name=" + fieldName + "]");
 
@@ -1162,17 +1159,17 @@ const RecurrenceInput = function (conf, textarea) {
         self.$modalForm.find("input#addaction").on("click", occurrenceAdd);
 
         // When selecting template, update what fieldsets are visible.
-        self.$modalForm.find('select[name="rirtemplate"]').on("change", function (e) {
+        self.$modalForm.find('select[name="rirtemplate"]').on("change", function () {
             displayFields($(this));
         });
 
         // When focus goes to a drop-down, select the relevant radiobutton.
-        self.$modalForm.find("select").on("change", function (e) {
+        self.$modalForm.find("select").on("change", function () {
             $(this).parent().find("> input").trigger("click").trigger("change");
         });
         self.$modalForm
             .find("input[name=rirangebyoccurrencesvalue]")
-            .on("change", function (e) {
+            .on("change", function () {
                 $(self)
                     .parent()
                     .find("input[name=rirangetype]")
@@ -1190,7 +1187,8 @@ const RecurrenceInput = function (conf, textarea) {
             });
         // Update the selected dates section
         self.$modalForm
-            .find(`
+            .find(
+                `
                 input:radio,
                 input:checkbox,
                 .riweeklyweekday > input,
@@ -1199,7 +1197,7 @@ const RecurrenceInput = function (conf, textarea) {
                 input[name=rimonthlyinterval],
                 input[name=riyearlyinterval]`
             )
-            .change(function (e) {
+            .change(function () {
                 // Update only if the occurances are shown
                 if (self.$modalForm.find(".rioccurrencesactions:visible").length !== 0) {
                     updateOccurrences();

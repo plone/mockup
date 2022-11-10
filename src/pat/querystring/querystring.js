@@ -145,7 +145,7 @@ Criteria.prototype = {
 
         // add blink (select2)
         self.$operator.patternSelect2({ width: "10em" });
-        self.$operator.on("change", function (e) {
+        self.$operator.on("change", function () {
             self.createValue(index);
             self.createClear();
             self.trigger("operator-changed");
@@ -387,7 +387,7 @@ Criteria.prototype = {
                         self.trigger("value-changed");
                     });
             } else {
-                var pathAndDepth = ["", "-1"];
+                pathAndDepth = ["", "-1"];
                 if (typeof value !== "undefined") {
                     pathAndDepth = value.split("::");
                 }
@@ -517,7 +517,7 @@ Criteria.prototype = {
             vstr.push(vstrbase);
         } else if (Array.isArray(self.$value)) {
             // handles only datepickers from the 'between' operator right now
-            $.each(self.$value, function (i, v) {
+            $.each(self.$value, function () {
                 vstr.push(vstrlistbase + $(this).val());
             });
         } else if (Array.isArray(self.$value.val())) {
@@ -569,7 +569,7 @@ Criteria.prototype = {
         var varr = [];
         if (Array.isArray(self.$value)) {
             // handles only datepickers from the 'between' operator right now
-            $.each(self.$value, function (i, v) {
+            $.each(self.$value, function () {
                 varr.push($(this).val());
             });
         } else if (typeof self.$value !== "undefined") {
@@ -742,13 +742,13 @@ export default Base.extend({
                 self.options.patternRelateditemsOptions
             );
 
-        criteria.on("remove", function (e) {
+        criteria.on("remove", function () {
             if (self.criterias[self.criterias.length - 1] === criteria) {
                 self.createCriteria();
             }
         });
 
-        criteria.on("index-changed", function (e) {
+        criteria.on("index-changed", function () {
             if (self.criterias[self.criterias.length - 1] === criteria) {
                 self.createCriteria();
             }
@@ -853,7 +853,7 @@ export default Base.extend({
             $(existingSortOrder).hide();
         }
     },
-    refreshPreviewEvent: function (value) {
+    refreshPreviewEvent: function () {
         var self = this;
 
         if (!self.options.showPreviews) {
@@ -868,8 +868,7 @@ export default Base.extend({
             self.$previewPane.remove();
         }
 
-        var query = [],
-            querypart;
+        var query = [];
         $.each(self.criterias, function (i, criteria) {
             var querypart = criteria.buildQueryPart();
             if (querypart !== "") {
@@ -895,7 +894,7 @@ export default Base.extend({
         }
 
         self._previewXhr = $.get(self.options.previewURL + "?" + query.join("&")).done(
-            function (data, stat) {
+            function (data) {
                 $("<div/>")
                     .addClass(self.options.classPreviewResultsWrapperName)
                     .html(data)
@@ -918,7 +917,6 @@ export default Base.extend({
                 criteriastrs.push(jsonstr);
             }
         });
-        var existing = self.$el.val();
         var val = "[" + criteriastrs.join(",") + "]";
         self.$el.val(val);
         self.$el.trigger("change");

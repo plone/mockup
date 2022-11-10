@@ -34,17 +34,17 @@ module.exports = () => {
                                 "visualchars",
                                 "wordcount",
                                 "code",
-                            ]
+                            ];
                             let result = false;
-                            if (!module.resource){
+                            if (!module.resource) {
                                 return result;
                             }
-                            if (!module.resource.includes('plugins')){
+                            if (!module.resource.includes("plugins")) {
                                 return result;
                             }
 
                             for (const plugin of default_plugins) {
-                                if (module.resource.includes(plugin)){
+                                if (module.resource.includes(plugin)) {
                                     result = true;
                                 }
                             }
@@ -57,13 +57,12 @@ module.exports = () => {
                         test(module) {
                             // `module.resource` contains the absolute path of the file on disk.
                             // Note the usage of `path.sep` instead of / or \, for cross-platform compatibility.
-                            const path = require('path');
                             return (
-                            module.resource &&
-                            module.resource.includes('node_modules') &&
-                            module.resource.includes('tinymce') &&
-                            ! module.resource.includes('tinymce-i18n') &&
-                            ! module.resource.includes('plugins')
+                                module.resource &&
+                                module.resource.includes("node_modules") &&
+                                module.resource.includes("tinymce") &&
+                                !module.resource.includes("tinymce-i18n") &&
+                                !module.resource.includes("plugins")
                             );
                         },
                         chunks: "all",
@@ -82,7 +81,7 @@ module.exports = () => {
                         name: "jquery_plugins",
                         test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
                         chunks: "all",
-                    }
+                    },
                 },
             },
         },
