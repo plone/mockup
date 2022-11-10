@@ -13,10 +13,11 @@ module.exports = () => {
         optimization: {
             splitChunks: {
                 cacheGroups: {
+                    // `module.resource` contains the absolute path of the file on disk.
+                    // We need to substitute the path separators to make it work on different OSes.
                     tinymce_plugins: {
                         name: "tinymce_plugins",
                         test(module) {
-                            // `module.resource` contains the absolute path of the file on disk.
                             const default_plugins = [
                                 "fullscreen",
                                 "hr",
@@ -35,52 +36,47 @@ module.exports = () => {
                                 "wordcount",
                                 "code",
                             ];
-                            let result = false;
-                            if (!module.resource) {
-                                return result;
-                            }
-                            if (!module.resource.includes("plugins")) {
-                                return result;
+                            if (
+                                /node_modules.tinymce.plugins/.test(module.resource) ===
+                                false
+                            ) {
+                                return false;
                             }
 
                             for (const plugin of default_plugins) {
                                 if (module.resource.includes(plugin)) {
-                                    result = true;
+                                    return true;
                                 }
                             }
-                            return result;
+                            return false;
                         },
-                        chunks: "all",
+                        chunks: "async",
                     },
                     tinymce: {
                         name: "tinymce",
                         test(module) {
-                            // `module.resource` contains the absolute path of the file on disk.
-                            // Note the usage of `path.sep` instead of / or \, for cross-platform compatibility.
                             return (
-                                module.resource &&
-                                module.resource.includes("node_modules") &&
-                                module.resource.includes("tinymce") &&
+                                /node_modules.tinymce/.test(module.resource) === true &&
                                 !module.resource.includes("tinymce-i18n") &&
                                 !module.resource.includes("plugins")
                             );
                         },
-                        chunks: "all",
+                        chunks: "async",
                     },
                     datatables: {
                         name: "datatables",
                         test: /[\\/]node_modules[\\/]datatables.net.*[\\/]/,
-                        chunks: "all",
+                        chunks: "async",
                     },
                     select2: {
                         name: "select2",
                         test: /[\\/]node_modules[\\/]select2.*[\\/]/,
-                        chunks: "all",
+                        chunks: "async",
                     },
                     jquery_plugins: {
                         name: "jquery_plugins",
                         test: /[\\/]node_modules[\\/]jquery\..*[\\/]/,
-                        chunks: "all",
+                        chunks: "async",
                     },
                 },
             },
