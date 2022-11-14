@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-alpha.26](https://github.com/plone/mockup/compare/5.0.0-alpha.25...5.0.0-alpha.26) (2022-11-14)
+
+
+### Bug Fixes
+
+
+* **Build:** Fix webpack cacheGroup optimization configuration. ([df853db](https://github.com/plone/mockup/commit/df853dbee2c6cf3eab9fa3e9a8e8f18dcbe24363))
+
 ## [5.0.0-alpha.25](https://github.com/plone/mockup/compare/5.0.0-alpha.24...5.0.0-alpha.25) (2022-11-07)
 
 
