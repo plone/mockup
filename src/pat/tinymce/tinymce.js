@@ -69,56 +69,6 @@ export default Base.extend({
         // defaultScale: "large",
         defaultSrcset: "medium",
         imageCaptioningEnabled: true,
-        pictureVariants: {
-            large: {
-                "title": "Large",
-                "preview": "++theme++barceloneta/static/preview-image-large.png",
-                "use-in-editor": true,
-                "sourceset": [
-                    {
-                        scale: "teaser",
-                        media: "(min-width:768px) and (orientation:portrait)",
-                    },
-                    {
-                        scale: "large",
-                        media: "(min-width:768px)",
-                    },
-                    {
-                        scale: "larger",
-                        media: "(min-width:992px)",
-                    },
-                    {
-                        scale: "great",
-                        media: "(min-width:1200px)",
-                    },
-                    {
-                        scale: "huge",
-                        media: "(min-width:1400px)",
-                    },
-                    {
-                        scale: "huge",
-                    },
-                ],
-            },
-            medium: {
-                title: "Medium",
-                preview: "++theme++barceloneta/static/preview-image-medium.png",
-                sourceset: [
-                    {
-                        scale: "larger",
-                    },
-                ],
-            },
-            small: {
-                title: "Small",
-                preview: "++theme++barceloneta/static/preview-image-small.png",
-                sourceset: [
-                    {
-                        scale: "preview",
-                    },
-                ],
-            },
-        },
         imageClasses: {
             "image-inline": _t("Inline"),
             "image-right": _t("Right"),
