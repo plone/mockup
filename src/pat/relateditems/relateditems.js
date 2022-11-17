@@ -698,10 +698,16 @@ export default Base.extend({
             }
         });
         self.renderToolbar();
+        self.$el.on("select2-loaded", function(event){
+            let yMax = window.innerHeight || document.documentElement.clientHeight;
+            const element = $(".pat-relateditems-dropdown.select2-drop-active .select2-results")[0]
+            const rect = element.getBoundingClientRect();
+            const maxHeight = yMax - rect.top -18;
+            $(element).css("max-height", `${maxHeight}px`);
+        });
 
         $(document).on("keyup", self.$el, function (event) {
             var isOpen = Select2.prototype.opened.call(self);
-
             if (!isOpen) {
                 return;
             }
