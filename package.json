@@ -10,11 +10,11 @@
     },
     "dependencies": {
         "@patternslib/pat-code-editor": "^3.0.0",
-        "@patternslib/patternslib": "9.7.0-alpha.5",
+        "@patternslib/patternslib": "9.7.0",
         "backbone": "1.4.1",
         "backbone.paginator": "2.0.8",
         "bootstrap": "^5.2.2",
-        "bootstrap-icons": "^1.9.1",
+        "bootstrap-icons": "^1.10.0",
         "cs-jqtree-contextmenu": "0.1.0",
         "datatables.net": "^1.12.1",
         "datatables.net-bs5": "^1.12.1",
@@ -53,7 +53,7 @@
         "sinon": "^14.0.0"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.7.0-alpha.5",
+        "@patternslib/patternslib": "9.7.0",
         "backbone": "1.4.1",
         "jquery": "3.6.1",
         "underscore": "1.13.6"
