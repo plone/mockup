@@ -2,6 +2,22 @@
 
 
 
+## [5.0.0-alpha.27](https://github.com/plone/mockup/compare/5.0.0-alpha.26...5.0.0-alpha.27) (2022-11-17)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** remove picture-variants defaults ([47a9d6a](https://github.com/plone/mockup/commit/47a9d6a41228d2ebd2f10071a5232318f54c4187))
+
+* set correct max-height for select2-results area ([4152adc](https://github.com/plone/mockup/commit/4152adc20aa20b268331fbf27881ce79478a1dca))
+
+
+### Maintenance
+
+
+* Upgrade dependencies ([cad4b9a](https://github.com/plone/mockup/commit/cad4b9af6d665de7e08e8974874b0bc1ce30aef1))
+
 ## [5.0.0-alpha.26](https://github.com/plone/mockup/compare/5.0.0-alpha.25...5.0.0-alpha.26) (2022-11-14)
 
 
