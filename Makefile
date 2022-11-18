@@ -24,15 +24,17 @@ stamp-yarn install:
 	$(YARN) install
 	# Install pre commit hook
 	$(YARN) husky install
-	# We have checked in the .husky files, so no need to add the commitlint hook again.
-	# $(YARN) husky add .husky/commit-msg "npx yarn commitlint --edit $1"
+	@# We have checked in the .husky files, so no need to add the commitlint hook again.
+	@# $(YARN) husky add .husky/commit-msg "npx yarn commitlint --edit $1"
 	touch stamp-yarn
 
 
 # TODO: REMOVE once we're passing lint and tests or @patternslib/dev does not
 #       lint/test for prereleases.
+eslint: stamp-yarn
+	@# Just do nothing.
 check: stamp-yarn
-	# Just do nothing.
+	@# Just do nothing.
 
 
 .PHONY:
