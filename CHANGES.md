@@ -2,6 +2,8 @@
 
 
 
+## [5.0.0-beta.0](https://github.com/plone/mockup/compare/5.0.0-alpha.27...5.0.0-beta.0) (2022-11-18)
+
 ## [5.0.0-alpha.27](https://github.com/plone/mockup/compare/5.0.0-alpha.26...5.0.0-alpha.27) (2022-11-17)
 
 
