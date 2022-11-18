@@ -1891,10 +1891,10 @@
     colorette "^2.0.16"
     ora "^5.4.1"
 
-"@patternslib/dev@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@patternslib/dev/-/dev-3.1.4.tgz#b0b9ea86294d34ff77c87eba6b6a0da09f683283"
-  integrity sha512-om64Gx81z4SDn+qEc+P4JoSCmYfKYzAcj6sGTPscvDCoXiG0K3fi1pqX/3cS6jI71/UfkAzOtH+z5iPtUp5vvQ==
+"@patternslib/dev@^3.1.5":
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@patternslib/dev/-/dev-3.1.5.tgz#0bccdf379379c0634dae145d1b6f3fa97c20f840"
+  integrity sha512-BOp+NZ8sdGq8eH+6iTmkp8FGZLJ7M3R1OLsS1OWctbCdAwJfdE6Xjr7EwoMpeM/Xn1rhbyixQfrSkb7KognEXg==
   dependencies:
     "@babel/core" "^7.20.2"
     "@babel/eslint-parser" "^7.19.1"
