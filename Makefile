@@ -31,8 +31,7 @@ stamp-yarn install:
 
 # TODO: REMOVE once we're passing lint and tests or @patternslib/dev does not
 #       lint/test for prereleases.
-.PHONY: check
-check:: stamp-yarn
+check: stamp-yarn
 	# Just do nothing.
 
 
