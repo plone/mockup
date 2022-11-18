@@ -2,6 +2,26 @@
 
 
 
+## [5.0.0-beta.1](https://github.com/plone/mockup/compare/5.0.0-beta.0...5.0.0-beta.1) (2022-11-18)
+
+
+### Bug Fixes
+
+
+* **Build:** Temporarily disable linting as long we're in prerelease mode. ([8387ebf](https://github.com/plone/mockup/commit/8387ebfea709a7bb2a7dcff22a8639a09feb81bd))
+
+* **Build:** Temporarily disable linting/testing as long we're in prerelease mode. ([b740390](https://github.com/plone/mockup/commit/b74039040610e7e68a925d1dd84757365efe95ab))
+
+* **Build:** Use single-colon target for check to overwrite the original from @patternslib/dev. ([316a9eb](https://github.com/plone/mockup/commit/316a9ebbdead0ec3a1d2c8810ec9693840a2d4bd))
+
+
+### Maintenance
+
+
+* **Build:** Upgrade dependencies. ([cb3d465](https://github.com/plone/mockup/commit/cb3d46516a55b5682887c837b67cc9062407c9f2))
+
+* **Bundle:** Upgrade dependencies. ([32f2d86](https://github.com/plone/mockup/commit/32f2d86b762d17ba5330f62c0d593418e2dd50d7))
+
 ## [5.0.0-beta.0](https://github.com/plone/mockup/compare/5.0.0-alpha.27...5.0.0-beta.0) (2022-11-18)
 
 ## [5.0.0-alpha.27](https://github.com/plone/mockup/compare/5.0.0-alpha.26...5.0.0-alpha.27) (2022-11-17)
