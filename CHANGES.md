@@ -2,6 +2,16 @@
 
 
 
+## [5.0.0-beta.3](https://github.com/plone/mockup/compare/5.0.0-beta.2...5.0.0-beta.3) (2022-11-23)
+
+
+### Maintenance
+
+
+* Update Bootstrap -> 5.2.3 ([acd098e](https://github.com/plone/mockup/commit/acd098e338fd4ffcea20c7493551fed7edb114c1))
+
+* Upgrade dependencies ([d530364](https://github.com/plone/mockup/commit/d53036498cf4ff6e228a25f932df55584df9f6b5))
+
 ## [5.0.0-beta.2](https://github.com/plone/mockup/compare/5.0.0-beta.1...5.0.0-beta.2) (2022-11-18)
 
 
