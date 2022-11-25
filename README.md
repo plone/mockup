@@ -1,4 +1,4 @@
-# Plone Mockup
+## Plone Mockup
 
 Mockup is the JavaScript stack of the Plone Classic UI.
 
