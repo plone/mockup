@@ -48,6 +48,10 @@ export default BaseView.extend({
             "end",
             "last_comment_date",
         ];
+
+        self.translatableColumns = [
+            "review_state",
+        ];
     },
 
     events: {
