@@ -40,7 +40,7 @@
 
 <% _.each(activeColumns, (column) => { %>
   <% if(column !== 'Description' && _.has(availableColumns, column)) { %>
-    <td class="<%- column %>" data-order="<%- attributes[column] %>"><%- convertColumnValue(column, attributes[column]) %></td>
+    <td class="<%- column %>" <% if (column === 'review_state') { %>style="color: var(--plone-state-<%-attributes[column]%>)"<% } %> data-order="<%- attributes[column] %>"><%- convertColumnValue(column, attributes[column]) %></td>
   <% } %>
 <% }); %>
 
