@@ -1,6 +1,7 @@
 import $ from "jquery";
 import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
+import { translate_plone as _tp } from "../../../../core/i18n-wrapper";
 import utils from "../../../../core/utils";
 import Backbone from "backbone";
 
@@ -108,6 +109,9 @@ export default Backbone.View.extend({
                 return value;
             }
             return date.toLocaleString(this.app.language, this.app.dateFormat);
+        }
+        if (this.table.translatableColumns.includes(column)) {
+            return _tp(value);
         }
         return value;
     },
