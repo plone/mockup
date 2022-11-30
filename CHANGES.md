@@ -2,6 +2,30 @@
 
 
 
+## [5.0.0-beta.4](https://github.com/plone/mockup/compare/5.0.0-beta.3...5.0.0-beta.4) (2022-11-30)
+
+
+### Features
+
+
+* **i18n:** export "plone" and "widgets" translation domains ([9a8858d](https://github.com/plone/mockup/commit/9a8858de3f0120e740281075c4c7902111e16164))
+
+* **pat livesearch:** toggle d-none instead of using the style attribute to show/hide the results ([c17c87d](https://github.com/plone/mockup/commit/c17c87d1a0b16702c8e2c0a4ae4ff80dcb09c0a4))
+
+* **pat structure:** define translatable columns and translate with `plone` domain. ([117e480](https://github.com/plone/mockup/commit/117e4804b0d10c944c458dfe8ecdc1e6e331ec75))
+
+
+### Bug Fixes
+
+
+* **pat structure:** Bring back state color to `review_state` column. ([e02fe26](https://github.com/plone/mockup/commit/e02fe2622e34027193348cbd094c7e42642d9627))
+
+
+### Maintenance
+
+
+* **build:** Update dependencies. ([2547019](https://github.com/plone/mockup/commit/2547019e61e24d76be7b6accc314dca09a489e5e))
+
 ## [5.0.0-beta.3](https://github.com/plone/mockup/compare/5.0.0-beta.2...5.0.0-beta.3) (2022-11-23)
 
 
