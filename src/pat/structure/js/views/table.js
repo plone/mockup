@@ -11,6 +11,7 @@ import "../../../datatables/datatables";
 import "bootstrap/js/src/alert";
 import utils from "../../../../core/utils";
 import logging from "@patternslib/patternslib/src/core/logging";
+import patternslib_utils from "@patternslib/patternslib/src/core/utils";
 
 const log = logging.getLogger("pat-structure/table");
 
@@ -66,7 +67,7 @@ export default BaseView.extend({
         if (crumbs && crumbs.length) {
             const $crumbs = this.$(".fc-breadcrumbs a.crumb");
             _.each(crumbs, (crumb, idx) => {
-                $crumbs.eq(idx).html(crumb.title);
+                $crumbs.eq(idx).html(patternslib_utils.escape_html(crumb.title));
             });
         }
         this.trigger("context-info:set");

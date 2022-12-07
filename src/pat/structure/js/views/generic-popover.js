@@ -3,6 +3,7 @@ import _ from "underscore";
 import _t from "../../../../core/i18n-wrapper";
 import PopoverView from "../../../../core/ui/views/popover";
 import registry from "@patternslib/patternslib/src/core/registry";
+import utils from "@patternslib/patternslib/src/core/utils";
 
 export default PopoverView.extend({
     events: {
@@ -45,7 +46,9 @@ export default PopoverView.extend({
     getTemplateOptions: function () {
         const items = [];
         for (const item of this.app.selectedCollection.models) {
-            items.push(item.toJSON());
+            let _json = item.toJSON();
+            _json["Title"] = utils.escape_html(_json["Title"]);
+            items.push(_json);
         }
         return $.extend({}, true, this.options, {
             items: items,
