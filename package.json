@@ -79,6 +79,10 @@
         "testwatch": "jest --watch",
         "i18n": "node src/i18n.js"
     },
+    "files": [
+        "/dist",
+        "/src"
+    ],
     "engines": {
         "node": ">=12.20.0"
     },
