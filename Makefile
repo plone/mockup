@@ -18,6 +18,7 @@
 -include .env
 export
 
+YARN   ?= npx yarn
 
 .PHONY: install
 stamp-yarn install:
