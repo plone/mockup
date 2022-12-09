@@ -1,7 +1,10 @@
 import $ from "jquery";
 import I18n from "../../core/i18n";
+import logger from "@patternslib/patternslib/src/core/logging";
 import _t from "../../core/i18n-wrapper";
 import utils from "../../core/utils";
+
+const log = logger.getLogger("tinymce--implementation");
 
 let LinkModal = null;
 
@@ -108,7 +111,7 @@ export default class TinyMCE {
         }
         return url;
     }
-    async initLanguage(call_back) {
+    async initLanguage() {
         var self = this;
         var i18n = new I18n();
         var lang = i18n.currentLanguage;
@@ -116,23 +119,22 @@ export default class TinyMCE {
             try {
                 await import(`tinymce-i18n/langs5/${lang}`);
             } catch (e) {
+                log.debug("Could not load TinyMCE language: ", lang);
                 try {
                     // expected lang not available, let's fallback to closest one
-                    if (lang.split("_") > 1) {
+                    if (lang.split("_").length > 1) {
                         lang = lang.split("_")[0];
-                    } else if (lang.split("-") > 1) {
-                        lang = lang.split("-")[0];
                     } else {
                         lang = lang + "_" + lang.toUpperCase();
                     }
+                    log.debug("Trying with: ", lang);
                     await import(`tinymce-i18n/langs5/${lang}`);
-                } catch {
-                    console.log("Could not load TinyMCE language:", lang);
+                    self.options.tiny.language = lang;
+                } catch (e) {
+                    log.debug("Could not load TinyMCE language. Fallback to English");
+                    self.options.tiny.language = "en";
                 }
             }
-            call_back();
-        } else {
-            call_back();
         }
     }
     async init() {
@@ -141,14 +143,20 @@ export default class TinyMCE {
         import("tinymce/skins/ui/oxide/skin.css");
 
         const tinymce = (await import("tinymce/tinymce")).default;
-
+        let valid_plugins = [];
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
             if (plugin == 'plonelink' || plugin == 'ploneimage'){
                 continue;
             }
-            await import("tinymce/plugins/" + plugin);
+            try{
+                await import("tinymce/plugins/" + plugin);
+                valid_plugins.push(plugin);
+            } catch (e) {
+                log.debug("Could not load TinyMCE plugin: ", plugin);
+            }
         }
+        this.options.tiny.plugins = valid_plugins;
 
         await import("tinymce/themes/silver");
 
@@ -212,95 +220,95 @@ export default class TinyMCE {
             });
         };
 
-        self.initLanguage(function () {
-            if (typeof self.options.folderTypes === "string") {
-                self.options.folderTypes = self.options.folderTypes.split(",");
-            }
+        await self.initLanguage();
 
-            if (typeof self.options.imageTypes === "string") {
-                self.options.imageTypes = self.options.imageTypes.split(",");
-            }
+        if (typeof self.options.folderTypes === "string") {
+            self.options.folderTypes = self.options.folderTypes.split(",");
+        }
 
+        if (typeof self.options.imageTypes === "string") {
+            self.options.imageTypes = self.options.imageTypes.split(",");
+        }
+
+        if (self.options.inline === true) {
+            // create a div, which will be made content-editable by TinyMCE and
+            // copy contents from textarea to it. Then hide textarea.
+            self.$el.after(
+                '<div id="' + self.tinyId + '">' + self.$el.val() + "</div>"
+            );
+            self.$el.hide();
+        }
+
+        if (
+            tinyOptions.importcss_file_filter &&
+            typeof tinyOptions.importcss_file_filter.indexOf === "function" &&
+            tinyOptions.importcss_file_filter.indexOf(",") !== -1
+        ) {
+            // need a custom function to check now
+            var files = tinyOptions.importcss_file_filter.split(",");
+
+            tinyOptions.importcss_file_filter = function (value) {
+                for (var i = 0; i < files.length; i++) {
+                    if (value.indexOf(files[i]) !== -1) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+        }
+
+        if (
+            tinyOptions.importcss_selector_filter &&
+            tinyOptions.importcss_selector_filter.length
+        ) {
+            tinyOptions.importcss_selector_filter = new RegExp(
+                tinyOptions.importcss_selector_filter
+            );
+        }
+
+        if (tinyOptions.importcss_groups && tinyOptions.importcss_groups.length) {
+            for (var i = 0; i < tinyOptions.importcss_groups.length; i++) {
+                if (
+                    tinyOptions.importcss_groups[i].filter &&
+                    tinyOptions.importcss_groups[i].filter.length
+                ) {
+                    tinyOptions.importcss_groups[i].filter = new RegExp(
+                        tinyOptions.importcss_groups[i].filter
+                    );
+                }
+            }
+        }
+
+        /* If TinyMCE is rendered inside of a modal, set an ID on
+            * .plone-modal-dialog and use that as the ui_container
+            * setting for TinyMCE to anchor it there. This ensures that
+            * sub-menus are displayed relative to the modal rather than
+            * the document body.
+            * Generate a random id and append it, because there might be
+            * more than one TinyMCE in the DOM.
+            */
+        var modal_container = self.$el.parents(".plone-modal-dialog");
+
+        if (modal_container.length > 0) {
+            var random_id = Math.random().toString(36).substring(2, 15);
+            modal_container.attr("id", "tiny-ui-container-" + random_id);
+            tinyOptions["ui_container"] = "#tiny-ui-container-" + random_id;
+        }
+
+        tinymce.init(tinyOptions);
+        self.tiny = tinymce.get(self.tinyId);
+
+        /* tiny really should be doing this by default
+            * but this fixes overlays not saving data */
+        var $form = self.$el.parents("form");
+        $form.on("submit", function () {
             if (self.options.inline === true) {
-                // create a div, which will be made content-editable by TinyMCE and
-                // copy contents from textarea to it. Then hide textarea.
-                self.$el.after(
-                    '<div id="' + self.tinyId + '">' + self.$el.val() + "</div>"
-                );
-                self.$el.hide();
+                // save back from contenteditable to textarea
+                self.$el.val(self.tiny.getContent());
+            } else {
+                // normal case
+                self.tiny.save();
             }
-
-            if (
-                tinyOptions.importcss_file_filter &&
-                typeof tinyOptions.importcss_file_filter.indexOf === "function" &&
-                tinyOptions.importcss_file_filter.indexOf(",") !== -1
-            ) {
-                // need a custom function to check now
-                var files = tinyOptions.importcss_file_filter.split(",");
-
-                tinyOptions.importcss_file_filter = function (value) {
-                    for (var i = 0; i < files.length; i++) {
-                        if (value.indexOf(files[i]) !== -1) {
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-            }
-
-            if (
-                tinyOptions.importcss_selector_filter &&
-                tinyOptions.importcss_selector_filter.length
-            ) {
-                tinyOptions.importcss_selector_filter = new RegExp(
-                    tinyOptions.importcss_selector_filter
-                );
-            }
-
-            if (tinyOptions.importcss_groups && tinyOptions.importcss_groups.length) {
-                for (var i = 0; i < tinyOptions.importcss_groups.length; i++) {
-                    if (
-                        tinyOptions.importcss_groups[i].filter &&
-                        tinyOptions.importcss_groups[i].filter.length
-                    ) {
-                        tinyOptions.importcss_groups[i].filter = new RegExp(
-                            tinyOptions.importcss_groups[i].filter
-                        );
-                    }
-                }
-            }
-
-            /* If TinyMCE is rendered inside of a modal, set an ID on
-             * .plone-modal-dialog and use that as the ui_container
-             * setting for TinyMCE to anchor it there. This ensures that
-             * sub-menus are displayed relative to the modal rather than
-             * the document body.
-             * Generate a random id and append it, because there might be
-             * more than one TinyMCE in the DOM.
-             */
-            var modal_container = self.$el.parents(".plone-modal-dialog");
-
-            if (modal_container.length > 0) {
-                var random_id = Math.random().toString(36).substring(2, 15);
-                modal_container.attr("id", "tiny-ui-container-" + random_id);
-                tinyOptions["ui_container"] = "#tiny-ui-container-" + random_id;
-            }
-
-            tinymce.init(tinyOptions);
-            self.tiny = tinymce.get(self.tinyId);
-
-            /* tiny really should be doing this by default
-             * but this fixes overlays not saving data */
-            var $form = self.$el.parents("form");
-            $form.on("submit", function () {
-                if (self.options.inline === true) {
-                    // save back from contenteditable to textarea
-                    self.$el.val(self.tiny.getContent());
-                } else {
-                    // normal case
-                    self.tiny.save();
-                }
-            });
         });
     }
     destroy() {

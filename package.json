@@ -38,8 +38,8 @@
         "js-cookie": "^3.0.1",
         "select2": "git+https://github.com/ivaynberg/select2.git#3.5.4",
         "sortablejs": "^1.15.0",
-        "tinymce": "^5.10.2",
-        "tinymce-i18n": "^22.10.18",
+        "tinymce": "^5.10.7",
+        "tinymce-i18n": "^22.12.4",
         "underscore": "^1.13.6"
     },
     "devDependencies": {

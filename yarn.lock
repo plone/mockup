@@ -9784,17 +9784,17 @@ timezone-mock@^1.3.4:
   resolved "https://registry.yarnpkg.com/timezone-mock/-/timezone-mock-1.3.4.tgz#16cc40bfad10d461f8a41ed7396eeb6ea1e1b2b3"
   integrity sha512-B0CGmOgMPVUZqp63eU/FGcDaL68JjHeiVnCF24K99Kj6AwCV15BHWMLCv8ZKSUq5oyVHTtg7p1ajOWfXB+0wnQ==
 
-tinymce-i18n@^22.10.18:
-  version "22.10.18"
-  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-22.10.18.tgz#4a7a0b7c8a75f354d7ee48a4df7990414c9a614a"
-  integrity sha512-p1nuOxBJWIsQ4vB2s30BGgwVBtdTqzAO464htmU+AAirKoU0cZTX7QO4nXQKb+kXyednWwPSqw4gcw+Jbm8OSg==
+tinymce-i18n@^22.12.4:
+  version "22.12.4"
+  resolved "https://registry.yarnpkg.com/tinymce-i18n/-/tinymce-i18n-22.12.4.tgz#c15d5263702e24c85f038a48b9d42f07b6393c97"
+  integrity sha512-WbyEJnFCAUhDV5gxw55y9evQFB7PGTFJ3+2Aki6DoOBDDOpYNuZggGGrNAKExmDKtlJ4tSn+FI1Mhq2QZBsNLw==
   dependencies:
     js-beautify "^1.14.3"
 
-tinymce@^5.10.2:
-  version "5.10.6"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.10.6.tgz#ea03927e9d20c035619dfd32ec4fd471c55e32c5"
-  integrity sha512-bnF2LUoycDsoZZLQBNHbOijrmoJuEeR1rQdqgo4s77BedufpOVnDh00OZKbseHeTMCxhVH05wvOqxLsi6vpeZw==
+tinymce@^5.10.7:
+  version "5.10.7"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.10.7.tgz#d89d446f1962f2a1df6b2b70018ce475ec7ffb80"
+  integrity sha512-9UUjaO0R7FxcFo0oxnd1lMs7H+D0Eh+dDVo5hKbVe1a+VB0nit97vOqlinj+YwgoBDt6/DSCUoWqAYlLI8BLYA==
 
 tippy.js@^6.3.7:
   version "6.3.7"
