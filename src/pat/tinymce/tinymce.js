@@ -124,7 +124,7 @@ export default Base.extend({
         var lang = i18n.currentLanguage;
         this.options.tiny.language = lang;
         this.instance = new implementation(this.el, this.options);
-        this.instance.init();
+        await this.instance.init();
     },
     destroy: function () {
         this.instance.destroy();
