@@ -1167,37 +1167,20 @@ const RecurrenceInput = function (conf, textarea) {
         self.$modalForm.find("select").on("change", function () {
             $(this).parent().find("> input").trigger("click").trigger("change");
         });
-        self.$modalForm
-            .find("input[name=rirangebyoccurrencesvalue]")
-            .on("change", function () {
-                $(self)
-                    .parent()
-                    .find("input[name=rirangetype]")
-                    .trigger("click")
-                    .trigger("change");
-            });
-        self.$modalForm
-            .find("input[name=rirangebyenddatecalendar]")
-            .on("change", function () {
-                // Update only if the occurances are shown
-                $(this).parent().find("input[name=rirangetype]").on("click");
-                if (self.$modalForm.find(".rioccurrencesactions:visible").length !== 0) {
-                    updateOccurrences();
-                }
-            });
         // Update the selected dates section
         self.$modalForm
-            .find(
-                `
+            .find(`
                 input:radio,
                 input:checkbox,
                 .riweeklyweekday > input,
                 input[name=ridailyinterval],
                 input[name=riweeklyinterval],
                 input[name=rimonthlyinterval],
-                input[name=riyearlyinterval]`
+                input[name=riyearlyinterval],
+                input[name=rirangebyoccurrencesvalue],
+                input[name=rirangebyenddatecalendar]`
             )
-            .change(function () {
+            .on("change", function () {
                 // Update only if the occurances are shown
                 if (self.$modalForm.find(".rioccurrencesactions:visible").length !== 0) {
                     updateOccurrences();
