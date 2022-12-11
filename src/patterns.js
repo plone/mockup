@@ -9,7 +9,7 @@ import registry from "@patternslib/patternslib/src/core/registry";
 import "@patternslib/patternslib/src/pat/date-picker/date-picker";
 import "@patternslib/patternslib/src/pat/datetime-picker/datetime-picker";
 import "@patternslib/patternslib/src/pat/display-time/display-time";
-import { parser as validation_parser } from "@patternslib/patternslib/src/pat/validation/validation"; // Also loads the Pattern itself.
+import { Pattern as ValidationPattern } from "@patternslib/patternslib/src/pat/validation/validation"; // Also loads the Pattern itself.
 import { parser as tooltip_parser } from "@patternslib/patternslib/src/pat/tooltip/tooltip";
 import "@patternslib/pat-code-editor/src/code-editor";
 import "@patternslib/patternslib/src/pat/inject/inject";
@@ -64,8 +64,8 @@ import "./pat/controlpanels/discussion-moderation";
 tooltip_parser.parameters.trigger.value = "hover";
 
 // Change validation error template to be BS compatible
-validation_parser.parameters["error-template"].value =
-    '<em class="invalid-feedback">${this.message}</em>';
+ValidationPattern.prototype.error_template = (message) =>
+    `<em class="invalid-feedback">${message}</em>`;
 
 // Import pattern styles in JavaScript
 window.__patternslib_import_styles = true;
