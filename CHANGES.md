@@ -2,6 +2,20 @@
 
 
 
+## [5.0.0-beta.7](https://github.com/plone/mockup/compare/5.0.0-beta.6...5.0.0-beta.7) (2022-12-12)
+
+
+### Bug Fixes
+
+
+* **pat tinymce:** Add plonelink and ploneimage to valid_plugins always. ([9319689](https://github.com/plone/mockup/commit/9319689ccc3335f6fd592b5120c4023831c08f5a))
+
+
+### Maintenance
+
+
+* **pat tinymce:** Cleanup old code no longer needed. closes gh-1198 ([6e2803f](https://github.com/plone/mockup/commit/6e2803f66f15316a036f9e39604ad7883ebb3653))
+
 ## [5.0.0-beta.6](https://github.com/plone/mockup/compare/5.0.0-beta.5...5.0.0-beta.6) (2022-12-12)
 
 
