@@ -2,6 +2,53 @@
 
 
 
+## [5.0.0-beta.5](https://github.com/plone/mockup/compare/5.0.0-beta.4...5.0.0-beta.5) (2022-12-12)
+
+
+### Features
+
+
+* **Build:** Include the build in the npm package. ([626a267](https://github.com/plone/mockup/commit/626a26713ae5cef0673add0c6e69cd82502aeea6))The compiled build is now included in npm packages by including the dist
+directory in .npmignore. To not increase the package size too much the
+JavaScript map files are not included. Now you can include Patternslib
+by using unpkg or jsDelivr like so:
+
+https://unpkg.com/@patternslib/pat-code-editor@4.0.0/dist/bundle.min.js
+or
+https://cdn.jsdelivr.net/npm/@patternslib/pat-code-editor@4.0.0/dist/bundle.min.js
+
+* **pat tinymce:** Improve tinymce async initialization. Proper fallback when specific languages are not found, and avoid errors for missing or not found plugins. fixes gh-1253 ([a4d4e78](https://github.com/plone/mockup/commit/a4d4e78d596a62a3166635423b8cb337bf79f73b))
+
+
+### Bug Fixes
+
+
+* **pat modal:** Fix close selector for default cancel buttons. ([4905251](https://github.com/plone/mockup/commit/490525106a04a1998ae0a699bd21a7442a04a073))
+
+* **pat recurrence:** Update occurrences on every field change/blur. ([4bf7430](https://github.com/plone/mockup/commit/4bf7430d5452291f17548d89f7e8236e50964ba6))
+
+* **pat registry:** Fix record editing modals. ([8a864cf](https://github.com/plone/mockup/commit/8a864cf512d3a1672aca24ca769de92d7b4774c3))
+
+* **pat structure:** fix escaped HTML in crumb and rename title. ([88ec616](https://github.com/plone/mockup/commit/88ec616559ee556f14f61c0dc8c4e6f3fd96fa01))
+
+* **pat-datatables:** Fix DataTables problem with new version. ([9081186](https://github.com/plone/mockup/commit/9081186f943572640fee760f3e7975d1541398ea))The 1.13.1 series of datatables-net introduced an import error.
+Fixing the version to the previous version which was known to work and exculde some imports with produce the same failure.
+
+
+### Maintenance
+
+
+* **Build:** Upgrade dependencies. ([7a46c8f](https://github.com/plone/mockup/commit/7a46c8fcba6d2b372d274ab83ce2fd4c8a988a14))
+
+* define YARN in our Makefile. ([b589434](https://github.com/plone/mockup/commit/b589434397767240feda3f4bbf03f9332c1dfe53))
+
+* Maintain own test setup config. ([238ff3b](https://github.com/plone/mockup/commit/238ff3b19b8da756285a306defadc00ae163b908))Don't extend from @patternslib/patternslib for setting up tests.
+The config files are not included in the npm package distributions anymore.
+
+* **pat-texteditor:** Use class based extension of @patternslib/pat-code-editor. ([1557679](https://github.com/plone/mockup/commit/15576797e51338d4345a90e242ede190d861f6b1))
+
+* **pat-validation:** Update customization of error-template which is now a method of the Validation class. ([70c8c6b](https://github.com/plone/mockup/commit/70c8c6b4c291526035966d28d015ea4e4fb55d66))
+
 ## [5.0.0-beta.4](https://github.com/plone/mockup/compare/5.0.0-beta.3...5.0.0-beta.4) (2022-11-30)
 
 
