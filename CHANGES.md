@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-beta.6](https://github.com/plone/mockup/compare/5.0.0-beta.5...5.0.0-beta.6) (2022-12-12)
+
+
+### Bug Fixes
+
+
+* Also include webpack.config.js in the build which is extended in plone.staticresources. ([ac4e717](https://github.com/plone/mockup/commit/ac4e7177939bf1e7027d8516e0d07438bca65c5c))
+
 ## [5.0.0-beta.5](https://github.com/plone/mockup/compare/5.0.0-beta.4...5.0.0-beta.5) (2022-12-12)
 
 
