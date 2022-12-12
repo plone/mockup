@@ -147,6 +147,7 @@ export default class TinyMCE {
         // tinyMCE Plugins
         for (const plugin of this.options.tiny.plugins) {
             if (plugin == 'plonelink' || plugin == 'ploneimage'){
+                valid_plugins.push(plugin);
                 continue;
             }
             try{
