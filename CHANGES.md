@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-beta.9](https://github.com/plone/mockup/compare/5.0.0-beta.8...5.0.0-beta.9) (2023-01-11)
+
+
+### Maintenance
+
+
+* update [@patternslib](https://github.com/patternslib) packages ([1439c02](https://github.com/plone/mockup/commit/1439c02b99bc4809ffcbe2d0640d428b1623603e))
+
 ## [5.0.0-beta.8](https://github.com/plone/mockup/compare/5.0.0-beta.7...5.0.0-beta.8) (2023-01-11)
 
 
