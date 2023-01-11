@@ -44,12 +44,12 @@ function format(date, fmt, conf) {
     return result;
 }
 
-function widgetSaveToRfc5545(form, conf, tz) {
+function widgetSaveToRfc5545(form, icaldata, conf, tz) {
     var value = form.find("select[name=rirtemplate]").val();
     var rtemplate = conf.rtemplate[value];
-    var result = rtemplate.rrule;
+    var result = "RRULE:" + rtemplate.rrule;
     var human = conf.localization.rtemplate[value];
-    var field, input, weekdays, i18nweekdays, i, j, index, tmp;
+    var field, input, weekdays, i18nweekdays, i, j, index;
     var day, month, year, interval, yearlyType, occurrences, date;
 
     for (i = 0; i < rtemplate.fields.length; i++) {
@@ -241,15 +241,22 @@ function widgetSaveToRfc5545(form, conf, tz) {
         }
     }
 
-    if (form.ical.RDATE !== undefined && form.ical.RDATE.length > 0) {
-        form.ical.RDATE.sort();
-        tmp = [];
-        for (i = 0; i < form.ical.RDATE.length; i++) {
-            if (form.ical.RDATE[i] !== "") {
-                year = parseInt(form.ical.RDATE[i].substring(0, 4), 10);
-                month = parseInt(form.ical.RDATE[i].substring(4, 6), 10) - 1;
-                day = parseInt(form.ical.RDATE[i].substring(6, 8), 10);
-                tmp.push(
+    if (icaldata.RDATE.length) {
+        icaldata.RDATE.sort();
+        let tmp_dates = [];
+        let tmp_human = [];
+        for (let rdate of icaldata.RDATE) {
+            if (rdate !== "") {
+                // RDATE values are "YYYY-MM-DD"
+                rdate += (rdate.length === 10) ? "T00:00:00" : "";
+                rdate += tz ? "Z" : "";
+                tmp_dates.push(rdate);
+
+                // human readable RDATE
+                year = parseInt(rdate.substring(0, 4), 10);
+                month = parseInt(rdate.substring(5, 7), 10) - 1;
+                day = parseInt(rdate.substring(8, 10), 10);
+                tmp_human.push(
                     format(
                         new Date(year, month, day),
                         conf.localization.longDateFormat,
@@ -258,20 +265,26 @@ function widgetSaveToRfc5545(form, conf, tz) {
                 );
             }
         }
-        if (tmp.length !== 0) {
-            human = human + conf.localization.including + " " + tmp.join("; ");
+        if (tmp_dates.length) {
+            result += `\nRDATE:${tmp_dates.join(",")}`;
+            human += `${conf.localization.including} ${tmp_human.join("; ")}`;
         }
     }
 
-    if (form.ical.EXDATE !== undefined && form.ical.EXDATE.length > 0) {
-        form.ical.EXDATE.sort();
-        tmp = [];
-        for (i = 0; i < form.ical.EXDATE.length; i++) {
-            if (form.ical.EXDATE[i] !== "") {
-                year = parseInt(form.ical.EXDATE[i].substring(0, 4), 10);
-                month = parseInt(form.ical.EXDATE[i].substring(4, 6), 10) - 1;
-                day = parseInt(form.ical.EXDATE[i].substring(6, 8), 10);
-                tmp.push(
+    if (icaldata.EXDATE.length) {
+        icaldata.EXDATE.sort();
+        let tmp_dates = [];
+        let tmp_human = [];
+        for (let exdate of icaldata.EXDATE) {
+            if (exdate !== "") {
+                // EXDATE values are "YYYYMMDDTHHMMZ"
+                tmp_dates.push(exdate);
+
+                // human readable EXDATE
+                year = parseInt(exdate.substring(0, 4), 10);
+                month = parseInt(exdate.substring(4, 6), 10) - 1;
+                day = parseInt(exdate.substring(6, 8), 10);
+                tmp_human.push(
                     format(
                         new Date(year, month, day),
                         conf.localization.longDateFormat,
@@ -280,39 +293,12 @@ function widgetSaveToRfc5545(form, conf, tz) {
                 );
             }
         }
-        if (tmp.length !== 0) {
-            human = human + conf.localization.except + " " + tmp.join("; ");
+        if (tmp_dates.length) {
+            result += `\nEXDATE:${tmp_dates.join(",")}`;
+            human += `${conf.localization.except} ${tmp_human.join("; ")}`;
         }
     }
-    result = "RRULE:" + result;
-    if (form.ical.EXDATE !== undefined && form.ical.EXDATE.join() !== "") {
-        tmp = $.map(form.ical.EXDATE, function (x) {
-            if (x.length === 8) {
-                // DATE format. Make it DATE-TIME
-                x += "T000000";
-            }
-            if (tz === true) {
-                // Make it UTC:
-                x += "Z";
-            }
-            return x;
-        });
-        result = result + "\nEXDATE:" + tmp;
-    }
-    if (form.ical.RDATE !== undefined && form.ical.RDATE.join() !== "") {
-        tmp = $.map(form.ical.RDATE, function (x) {
-            if (x.length === 8) {
-                // DATE format. Make it DATE-TIME
-                x += "T000000";
-            }
-            if (tz === true) {
-                // Make it UTC:
-                x += "Z";
-            }
-            return x;
-        });
-        result = result + "\nRDATE:" + tmp;
-    }
+
     return { result: result, description: human };
 }
 
@@ -354,7 +340,11 @@ function cleanDates(dates) {
 
 function parseIcal(icaldata) {
     var lines = [];
-    var result = {};
+    var result = {
+        RRULE: "",
+        RDATE: [],
+        EXDATE: [],
+    };
     var line = null;
     var nextline;
 
@@ -393,92 +383,86 @@ function parseIcal(icaldata) {
 
 function widgetLoadFromRfc5545(form, conf, icaldata, force) {
     var unsupportedFeatures = [];
-    var i, matches, match, matchIndex, rtemplate, d, input, index;
+    var i, matches, rtemplate, d, input, index;
     var selectors, field, radiobutton;
-    var interval, byday, bymonth, bymonthday, count, until;
+    var freq, interval, byday, bymonth, bymonthday, count, until;
     var day, month, year, weekday;
 
-    form.ical = parseIcal(icaldata);
-    if (form.ical.RRULE === undefined) {
+
+    if (icaldata.RRULE === undefined) {
         unsupportedFeatures.push(conf.localization.noRule);
         if (!force) {
             return -1; // Fail!
         }
     } else {
-        matches = /INTERVAL=([0-9]+);?/.exec(form.ical.RRULE);
+        matches = /FREQ=([^;]+);?/.exec(icaldata.RRULE);
+        if (matches) {
+            freq = matches[1];
+        } else {
+            freq = "DAILY";
+        }
+
+        matches = /INTERVAL=([0-9]+);?/.exec(icaldata.RRULE);
         if (matches) {
             interval = matches[1];
         } else {
             interval = "1";
         }
 
-        matches = /BYDAY=([^;]+);?/.exec(form.ical.RRULE);
+        matches = /BYDAY=([^;]+);?/.exec(icaldata.RRULE);
         if (matches) {
             byday = matches[1];
         } else {
             byday = "";
         }
 
-        matches = /BYMONTHDAY=([^;]+);?/.exec(form.ical.RRULE);
+        matches = /BYMONTHDAY=([^;]+);?/.exec(icaldata.RRULE);
         if (matches) {
             bymonthday = matches[1].split(",");
         } else {
             bymonthday = null;
         }
 
-        matches = /BYMONTH=([^;]+);?/.exec(form.ical.RRULE);
+        matches = /BYMONTH=([^;]+);?/.exec(icaldata.RRULE);
         if (matches) {
             bymonth = matches[1].split(",");
         } else {
             bymonth = null;
         }
 
-        matches = /COUNT=([0-9]+);?/.exec(form.ical.RRULE);
+        matches = /COUNT=([0-9]+);?/.exec(icaldata.RRULE);
         if (matches) {
             count = matches[1];
         } else {
             count = null;
         }
 
-        matches = /UNTIL=([0-9T]+);?/.exec(form.ical.RRULE);
+        matches = /UNTIL=([0-9T]+);?/.exec(icaldata.RRULE);
         if (matches) {
             until = matches[1];
         } else {
             until = null;
         }
 
-        matches = /BYSETPOS=([^;]+);?/.exec(form.ical.RRULE);
+        matches = /BYSETPOS=([^;]+);?/.exec(icaldata.RRULE);
         if (matches) {
             unsupportedFeatures.push(conf.localization.bysetpos);
         }
 
         // Find the best rule:
-        match = "";
-        matchIndex = null;
-        for (i in conf.rtemplate) {
-            if (conf.rtemplate.hasOwnProperty(i)) {
-                rtemplate = conf.rtemplate[i];
-                if (form.ical.RRULE.indexOf(rtemplate.rrule) === 0) {
-                    if (form.ical.RRULE.length > match.length) {
-                        // This is the best match so far
-                        match = form.ical.RRULE;
-                        matchIndex = i;
-                    }
-                }
-            }
-        }
-
-        if (match) {
-            rtemplate = conf.rtemplate[matchIndex];
+        if (conf.rtemplate.hasOwnProperty(freq.toLowerCase())) {
+            rtemplate = conf.rtemplate[freq.toLowerCase()];
         } else {
-            for (rtemplate in conf.rtemplate) {
-                if (conf.rtemplate.hasOwnProperty(rtemplate)) {
-                    rtemplate = conf.rtemplate[rtemplate];
-                    break;
-                }
+            for (freq of conf.rtemplate) {
+                /* fallback to first available template if no match above*/
+                rtemplate = conf.rtemplate[freq];
+                break;
             }
             unsupportedFeatures.push(conf.localization.noTemplateMatch);
         }
+
+        // set rirtemplate selector to computed value
+        form.find("select[name='rirtemplate']").val(freq.toLowerCase());
 
         for (i = 0; i < rtemplate.fields.length; i++) {
             field = form.find("#" + rtemplate.fields[i]);
@@ -651,6 +635,18 @@ function widgetLoadFromRfc5545(form, conf, icaldata, force) {
 
 const RecurrenceInput = function (conf, textarea) {
     var self = this;
+    var $textarea = $(textarea);
+
+    // initalize parsed icaldata
+    if (textarea.value) {
+        textarea["ical"] = parseIcal(textarea.value)
+    } else {
+        textarea["ical"] = {
+            RRULE: "",
+            RDATE: [],
+            EXDATE: [],
+        };
+    }
 
     // Extend conf with non-configurable data used by templates.
     var orderedWeekdays = [];
@@ -688,10 +684,7 @@ const RecurrenceInput = function (conf, textarea) {
 
     function occurrenceExclude(event) {
         event.preventDefault();
-        if (self.$modalForm.ical.EXDATE === undefined) {
-            self.$modalForm.ical.EXDATE = [];
-        }
-        self.$modalForm.ical.EXDATE.push(this.attributes.date.value);
+        textarea["ical"].EXDATE.push(this.attributes.date.value);
         var $this = $(this);
         $this.addClass("exdate");
         $this.parent().parent().addClass("exdate");
@@ -700,8 +693,8 @@ const RecurrenceInput = function (conf, textarea) {
 
     function occurrenceInclude(event) {
         event.preventDefault();
-        self.$modalForm.ical.EXDATE.splice(
-            $.inArray(this.attributes.date.value, self.$modalForm.ical.EXDATE),
+        textarea["ical"].EXDATE.splice(
+            $.inArray(this.attributes.date.value, textarea["ical"].EXDATE),
             1
         );
         var $this = $(this);
@@ -712,8 +705,8 @@ const RecurrenceInput = function (conf, textarea) {
 
     function occurrenceDelete(event) {
         event.preventDefault();
-        self.$modalForm.ical.RDATE.splice(
-            $.inArray(this.attributes.date.value, self.$modalForm.ical.RDATE),
+        textarea["ical"].RDATE.splice(
+            $.inArray(this.attributes.date.value, textarea["ical"].RDATE),
             1
         );
         $(this)
@@ -727,20 +720,21 @@ const RecurrenceInput = function (conf, textarea) {
     function occurrenceAdd(event) {
         event.preventDefault();
         var datevalue = self.$modalForm.find(".riaddoccurrence input#adddate").val();
-        if (self.$modalForm.ical.RDATE === undefined) {
-            self.$modalForm.ical.RDATE = [];
-        }
         var errorarea = self.$modalForm.find(".riaddoccurrence div.alert");
         errorarea.text("");
         errorarea.hide();
 
         // Add date only if it is not already in RDATE
-        if ($.inArray(datevalue, self.$modalForm.ical.RDATE) === -1) {
-            self.$modalForm.ical.RDATE.push(datevalue);
+        if ($.inArray(datevalue, textarea["ical"].RDATE) === -1) {
+            textarea["ical"].RDATE.push(datevalue);
             var $newdate =
                 $(`<div class="d-flex justify-content-between occurrence rdate">
                 <span class="rdate">
-                    ${datevalue},
+                    ${format(
+                        new Date(...datevalue.split("-")),
+                        conf.localization.longDateFormat,
+                        conf
+                    )},
                     <span class="rlabel">${conf.localization.additionalDate}</span>
                 </span>
                 <span class="action">
@@ -944,14 +938,10 @@ const RecurrenceInput = function (conf, textarea) {
 
     // Loading (populating) display and form widget with
     // passed RFC5545 string (data)
-    function loadData(rfc5545, form) {
+    function loadData(form) {
         var selector, startdate, dayindex, day;
 
-        if (rfc5545) {
-            widgetLoadFromRfc5545(form, conf, rfc5545, true);
-        } else {
-            form.ical = { RDATE: [], EXDATE: [] };
-        }
+        widgetLoadFromRfc5545(form, conf, textarea["ical"], true);
 
         startdate = findStartDate();
 
@@ -976,7 +966,7 @@ const RecurrenceInput = function (conf, textarea) {
             // Now when we have a start date, we can also do an ajax call to calculate occurrences:
             loadOccurrences(
                 startdate,
-                widgetSaveToRfc5545(form, conf, false).result,
+                textarea.value,
                 0,
                 false
             );
@@ -993,15 +983,15 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function recurrenceOn(form) {
-        var RFC5545 = widgetSaveToRfc5545(form, conf, false);
+        var RFC5545 = widgetSaveToRfc5545(form, textarea["ical"], conf, false);
         var label = self.display.find("label[class=ridisplay]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
-        textarea.val(RFC5545.result).trigger("change");
+        $textarea.val(RFC5545.result).trigger("change");
         var startdate = findStartDate();
         if (startdate !== null) {
             loadOccurrences(
                 startdate,
-                widgetSaveToRfc5545(form, conf, false).result,
+                RFC5545.result,
                 0,
                 true
             );
@@ -1013,7 +1003,7 @@ const RecurrenceInput = function (conf, textarea) {
     function recurrenceOff() {
         var label = self.display.find("label[class=ridisplay]");
         label.text(conf.localization.displayUnactivate);
-        textarea.val("").trigger("change"); // Clear the textarea.
+        $textarea.val("").trigger("change"); // Clear the textarea.
         self.display.find(".rioccurrences").hide();
         self.display.find('a[name="riedit"]').text(conf.localization.add_rules);
         self.display.find('a[name="ridelete"]').hide();
@@ -1142,7 +1132,7 @@ const RecurrenceInput = function (conf, textarea) {
         if (checkFields(form)) {
             loadOccurrences(
                 startDate,
-                widgetSaveToRfc5545(self.$modalForm, conf, false).result,
+                widgetSaveToRfc5545(self.$modalForm, textarea["ical"], conf, false).result,
                 0,
                 false
             );
@@ -1150,23 +1140,21 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function initModalForm() {
-        self.$modalForm.ical = { RDATE: [], EXDATE: [] };
         var enddate = self.$modalForm.find("input[name=rirangebyenddatecalendar]");
         if (!enddate.val()) {
-            enddate.val(now_date);
+            var start_date = findStartDate();
+            start_date.setDate(start_date.getDate() + 1);
+            enddate.val(start_date.toISOString().substring(0, 10));
         }
 
         self.$modalForm.find("input#addaction").on("click", occurrenceAdd);
 
-        // When selecting template, update what fieldsets are visible.
+        // When selecting template, update what fieldsets are visible and the occurrences.
         self.$modalForm.find('select[name="rirtemplate"]').on("change", function () {
             displayFields($(this));
+            updateOccurrences();
         });
 
-        // When focus goes to a drop-down, select the relevant radiobutton.
-        self.$modalForm.find("select").on("change", function () {
-            $(this).parent().find("> input").trigger("click").trigger("change");
-        });
         // Update the selected dates section
         self.$modalForm
             .find(`
@@ -1217,8 +1205,8 @@ const RecurrenceInput = function (conf, textarea) {
         },
     });
 
-    if (textarea.val()) {
-        var result = widgetLoadFromRfc5545(form, conf, textarea.val(), false);
+    if (textarea.value) {
+        var result = widgetLoadFromRfc5545(form, conf, textarea["ical"], false);
         if (result === -1) {
             var label = self.display.find("label[class=ridisplay]");
             label.text(conf.localization.noRule);
@@ -1243,7 +1231,7 @@ const RecurrenceInput = function (conf, textarea) {
         e.preventDefault();
         self.modal.show();
         self.$modalForm = $("form", self.modal.$modalContent);
-        loadData(textarea.val(), self.$modalForm);
+        loadData(self.$modalForm);
         initModalForm();
     });
 };
@@ -1454,7 +1442,7 @@ export default Base.extend({
         // tmpl BEFORE recurrenceinput
         import("./recurrence.scss");
 
-        this.$el.addClass("recurrence-widget");
+        this.el.classList.add("recurrence-widget");
         var icons = await this.load_icons();
 
         var config = {
@@ -1464,11 +1452,11 @@ export default Base.extend({
         };
 
         // our recurrenceinput widget instance
-        var recurrenceinput = new RecurrenceInput(config, this.$el);
+        var recurrenceinput = new RecurrenceInput(config, this.el);
         // hide textarea and place display widget after textarea
         this.$el.after(recurrenceinput.display);
 
         // hide the textarea
-        this.$el.hide();
+        this.el.style.display = "none";
     },
 });
