@@ -2,6 +2,20 @@
 
 
 
+## [5.0.0-beta.8](https://github.com/plone/mockup/compare/5.0.0-beta.7...5.0.0-beta.8) (2023-01-11)
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** Fix recurrencewidget to initialize saved values correctly and fix RDATE and EXDATE editing ([f2f8336](https://github.com/plone/mockup/commit/f2f8336c8fa47f682728d2fc91d28d35995d9431))
+
+
+### Maintenance
+
+
+* **pat textareamimetypeselector:** Fix tests. ([99e646a](https://github.com/plone/mockup/commit/99e646a5548d622c265b42ac5ed44f64f21cb2e3))
+
 ## [5.0.0-beta.7](https://github.com/plone/mockup/compare/5.0.0-beta.6...5.0.0-beta.7) (2022-12-12)
 
 
