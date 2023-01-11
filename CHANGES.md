@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-beta.10](https://github.com/plone/mockup/compare/5.0.0-beta.9...5.0.0-beta.10) (2023-01-11)
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** initial editing and correct time for additional RDATE values ([195ad31](https://github.com/plone/mockup/commit/195ad318492a77796193f5aa89abe35f4df4cbce))
+
 ## [5.0.0-beta.9](https://github.com/plone/mockup/compare/5.0.0-beta.8...5.0.0-beta.9) (2023-01-11)
 
 
