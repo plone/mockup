@@ -44,7 +44,7 @@ function format(date, fmt, conf) {
     return result;
 }
 
-function widgetSaveToRfc5545(form, icaldata, conf, tz) {
+function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
     var value = form.find("select[name=rirtemplate]").val();
     var rtemplate = conf.rtemplate[value];
     var result = "RRULE:" + rtemplate.rrule;
@@ -245,10 +245,13 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz) {
         icaldata.RDATE.sort();
         let tmp_dates = [];
         let tmp_human = [];
+        // make sure our additional RDATE dates have the same start time
+        const rdate_time = start_date ? `T${start_date.getHours()}:${start_date.getMinutes()}:00` : "T00:00:00";
+
         for (let rdate of icaldata.RDATE) {
             if (rdate !== "") {
                 // RDATE values are "YYYY-MM-DD"
-                rdate += (rdate.length === 10) ? "T00:00:00" : "";
+                rdate += (rdate.length === 10) ? rdate_time : "";
                 rdate += tz ? "Z" : "";
                 tmp_dates.push(rdate);
 
@@ -964,9 +967,11 @@ const RecurrenceInput = function (conf, textarea) {
             );
 
             // Now when we have a start date, we can also do an ajax call to calculate occurrences:
+            var rfc5545 = textarea.value || widgetSaveToRfc5545(form, textarea["ical"], conf, false).result;
+
             loadOccurrences(
                 startdate,
-                textarea.value,
+                rfc5545,
                 0,
                 false
             );
@@ -983,7 +988,7 @@ const RecurrenceInput = function (conf, textarea) {
     }
 
     function recurrenceOn(form) {
-        var RFC5545 = widgetSaveToRfc5545(form, textarea["ical"], conf, false);
+        var RFC5545 = widgetSaveToRfc5545(form, textarea["ical"], conf, false, findStartDate());
         var label = self.display.find("label[class=ridisplay]");
         label.text(conf.localization.displayActivate + " " + RFC5545.description);
         $textarea.val(RFC5545.result).trigger("change");
