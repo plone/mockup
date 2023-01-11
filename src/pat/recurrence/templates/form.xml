@@ -44,7 +44,7 @@
             <div id="riweeklyweekdays" class="rifield row">
                 <label class="col-4 col-form-label" for="<%= name %>weeklyinterval"><%= localization.weeklyWeekdays %></label>
                 <div class="col-8">
-                    <div class="row flex-nowrap">
+                    <div class="row">
                     <% orderedWeekdays.forEach(function(weekday, idx) { %>
                         <div class="riweeklyweekday col-auto">
                             <div class="form-check">
