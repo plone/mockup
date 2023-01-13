@@ -2,6 +2,14 @@
 
 
 
+## [5.0.0-beta.11](https://github.com/plone/mockup/compare/5.0.0-beta.10...5.0.0-beta.11) (2023-01-13)
+
+
+### Bug Fixes
+
+
+* **pat recurrence:** fix wrong month in BYENDDATE and RDATE when adding and occurrence ([76099ff](https://github.com/plone/mockup/commit/76099ffdee588d32e09d27147cdb5b400e7d544c))
+
 ## [5.0.0-beta.10](https://github.com/plone/mockup/compare/5.0.0-beta.9...5.0.0-beta.10) (2023-01-11)
 
 
