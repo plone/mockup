@@ -228,10 +228,11 @@ function widgetSaveToRfc5545(form, icaldata, conf, tz, start_date) {
                             result += "Z";
                         }
                         human += ", " + conf.localization.rangeByEndDateHuman;
+                        var date_parts = date.split("-");
                         human +=
                             " " +
                             format(
-                                new Date(...date.split("-")),
+                                new Date(date_parts[0], date_parts[1]-1, date_parts[2]),
                                 conf.localization.longDateFormat,
                                 conf
                             );
@@ -730,11 +731,12 @@ const RecurrenceInput = function (conf, textarea) {
         // Add date only if it is not already in RDATE
         if ($.inArray(datevalue, textarea["ical"].RDATE) === -1) {
             textarea["ical"].RDATE.push(datevalue);
+            var date_parts = datevalue.split("-");
             var $newdate =
                 $(`<div class="d-flex justify-content-between occurrence rdate">
                 <span class="rdate">
                     ${format(
-                        new Date(...datevalue.split("-")),
+                        new Date(date_parts[0], date_parts[1]-1, date_parts[2]),
                         conf.localization.longDateFormat,
                         conf
                     )},
