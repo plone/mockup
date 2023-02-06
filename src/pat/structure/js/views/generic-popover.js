@@ -36,7 +36,7 @@ export default PopoverView.extend({
             " </button>";
         if (this.options.form.closeText) {
             html +=
-                '<button class="btn btn-block btn-default closeBtn">' +
+                '<button class="btn btn-block btn-secondary closeBtn">' +
                 this.options.form.closeText +
                 " </button>";
         }
