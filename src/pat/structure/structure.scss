@@ -194,6 +194,8 @@
     }
 
     .popover {
+        overflow: hidden;
+
         &:not(.active) {
             display: none;
         }
@@ -203,7 +205,7 @@
 
         .popover-title {
             padding: 8px 14px;
-            background-color: var(--bs-light);
+            background-color: var(--bs-secondary-bg);
 
             .remove-all {
                 display: inline-block;
@@ -260,7 +262,7 @@
             }
 
             a {
-                color: var(--bs-gray-dark);
+                color: var(--bs-emphasis-color-subtle);
             }
         }
 
