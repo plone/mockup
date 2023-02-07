@@ -291,10 +291,10 @@ export default Base.extend({
             e.preventDefault();
             if (this.browsing) {
                 $("button.mode.search", this.$toolbar).toggleClass(
-                    "btn-primary btn-default"
+                    "btn-primary btn-secondary"
                 );
                 $("button.mode.browse", this.$toolbar).toggleClass(
-                    "btn-primary btn-default"
+                    "btn-primary btn-secondary"
                 );
                 this.browsing = false;
                 if (this.$el.select2("data").length > 0) {
@@ -316,10 +316,10 @@ export default Base.extend({
             e.preventDefault();
             if (!this.browsing) {
                 $("button.mode.search", this.$toolbar).toggleClass(
-                    "btn-primary btn-default"
+                    "btn-primary btn-secondary"
                 );
                 $("button.mode.browse", this.$toolbar).toggleClass(
-                    "btn-primary btn-default"
+                    "btn-primary btn-secondary"
                 );
                 this.browsing = true;
                 if (this.$el.select2("data").length > 0) {
