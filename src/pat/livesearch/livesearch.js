@@ -18,6 +18,7 @@ export default Base.extend({
         defaultSortOn: "",
         perPage: 7,
         quietMillis: 350,
+        timeoutHide: 200,
         minimumInputLength: 4,
         inputSelector: 'input[type="text"]',
         itemTemplate:
@@ -242,7 +243,7 @@ export default Base.extend({
                         // and refocus elemtn
                         self.$input.focus();
                     }
-                }, 200);
+                }, self.options.timeoutHide);
             })
             .off("focusin")
             .on("focusin", function () {
