@@ -8,7 +8,7 @@
     }
 
     .toolbar {
-        background-color: #d8d8d8;
+        background-color: var(--bs-secondary-bg);
 
         .mode-selector {
             display: inline-block;
@@ -40,17 +40,12 @@
 
 .pat-relateditems-dropdown {
     .select2-results {
-        background-color: #fff;
         max-height: 950px;
 
         .select2-result {
             background-color: transparent;
             border-left: 0.3em solid transparent;
             border-right: 0.3em solid transparent;
-
-            &:nth-child(odd) {
-                background-color: #f7f7f7;
-            }
 
             &.select2-highlighted {
                 border-left: 0.3em solid #007bb3;
@@ -100,7 +95,6 @@
         .select2-choices {
             .select2-search-choice {
                 background-image: none;
-                background-color: #eee;
                 margin: 0.2em;
                 padding: 0;
                 // make choices list compact:
@@ -217,7 +211,7 @@
     &-recentlyused-path,
     &-item-path,
     &-result-path {
-        color: #444;
+        color: var(--bs-secondary-text);
         display: block;
         font-size: 0.8em;
         padding-left: 0.2em;
