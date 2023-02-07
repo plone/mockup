@@ -6,20 +6,20 @@ import Sortable from "../../../sortable/sortable";
 export default PopoverView.extend({
     className: "popover attribute-columns",
     title: _.template('<%- _t("Columns") %>'),
-    content: _.template(
-        '<label><%- _t("Select columns to show, drag and drop to reorder") %></label>' +
-            "<ul>" +
-            "</ul>" +
-            '<button class="btn btn-block btn-primary btn-sm"><%- _t("Save") %></button>'
-    ),
-    itemTemplate: _.template(
-        "<li>" +
-            "<label>" +
-            '<input type="checkbox" value="<%- id %>"/>' +
-            "<%- title %>" +
-            "</label>" +
-            "</li>"
-    ),
+    content: _.template(`
+        <label>
+            <%- _t("Select columns to show, drag and drop to reorder") %>
+        </label>
+        <ul>
+        </ul>
+        <button class="btn btn-block btn-primary btn-sm"><%- _t("Save") %></button>`),
+    itemTemplate: _.template(`
+        <li>
+            <label>
+                <input type="checkbox" value="<%- id %>"/>
+                <%- title %>
+            </label>
+        </li>`),
     events: {
         "click button": "applyButtonClicked",
     },

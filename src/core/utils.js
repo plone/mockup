@@ -396,8 +396,8 @@ const resolveIcon = async function (name) {
     async function _resolve_icon() {
         // Do the actual loading.
 
-        const base_url = $("body").attr("data-portal-url");
         let icon = "";
+        const base_url = document.body.getAttribute("data-portal-url");
         if (base_url) {
             const url = base_url + "/@@iconresolver";
             if (url) {
