@@ -54,13 +54,6 @@ describe("AutoTOC", function () {
             "#autotoc-item-autotoc-0"
         );
     });
-    it("can be used as jQuery plugin as well", async function () {
-        expect($("> nav", this.$el).length).toEqual(0);
-
-        // TODO: rlly? I'm currently changing all jQuery plugin calls to import/new style.
-        this.$el.patternAutotoc();
-        expect($("> nav", this.$el).length).toEqual(1);
-    });
     it("can have custom levels", async function () {
         this.$el.attr("data-pat-autotoc", "levels: h1");
         expect($("> nav", this.$el).length).toEqual(0);
