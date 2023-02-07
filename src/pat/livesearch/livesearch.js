@@ -214,12 +214,12 @@ export default Base.extend({
          input box, same width */
         var self = this;
 
-        self.$results[0].classList.remove('d-none');
-        self.$el[0].classList.add('livesearch-active');
+        self.$results[0].classList.remove("d-none");
+        self.$el[0].classList.add("livesearch-active");
     },
     hide: function () {
         this.$el[0].classList.remove("livesearch-active");
-        this.$results[0].classList.add('d-none');
+        this.$results[0].classList.add("d-none");
     },
     init: function () {
         // import("./livesearch.scss");
@@ -319,7 +319,8 @@ export default Base.extend({
         });
 
         /* create result dom */
-        self.$results = $('<ul class="' + self.resultsClass + '"></ul>')
-            .insertAfter(self.$el);
+        self.$results = $('<ul class="' + self.resultsClass + '"></ul>').insertAfter(
+            self.$el
+        );
     },
 });
