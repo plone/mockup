@@ -42,7 +42,7 @@
                 &.active {
                     border: 1px solid #ddd;
                     border-bottom-color: #fff;
-                    color: #555555;
+                    color: var(--bs-secondary-text);
                     cursor: default;
                 }
                 &.active:hover {

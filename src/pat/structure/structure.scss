@@ -96,7 +96,7 @@
                 }
 
                 .btn {
-                    color: var(--bs-primary);
+                    color: var(--bs-link-color);
                     padding: 0.25rem 0.2rem;
                 }
             }
@@ -267,7 +267,7 @@
         }
 
         &.folder .title a {
-            color: var(--bs-primary);
+            color: var(--bs-link-color);
         }
 
         &.default-page .title > div > *:first-child:before {
