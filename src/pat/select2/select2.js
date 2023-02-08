@@ -91,11 +91,11 @@ export default Base.extend({
                 draggable: "li",
                 dragClass: "select2-choice-dragging",
                 chosenClass: "dragging",
-                onStart: () => this.$el.select2("onSortStart"),
-                onEnd: () => this.$el.select2("onSortEnd"),
+                onStart: () => this.$select2_el.select2("onSortStart"),
+                onEnd: () => this.$select2_el.select2("onSortEnd"),
             });
         };
-        this.$el.on("change", _initializeOrdering.bind(this));
+        this.$select2_el.on("change", _initializeOrdering.bind(this));
         _initializeOrdering();
     },
     initializeSelect2: async function () {
@@ -134,38 +134,42 @@ export default Base.extend({
                 return action;
             }
         }
-        $(self.el).select2(self.options);
-        self.$el.on("select2-selected", function (e) {
+
+        this.$select2_el.select2(self.options);
+        this.$select2_el.on("select2-selected", function (e) {
             callback(self.options.onSelected, e);
         });
-        self.$el.on("select2-selecting", function (e) {
+        this.$select2_el.on("select2-selecting", function (e) {
             callback(self.options.onSelecting, e);
         });
-        self.$el.on("select2-deselecting", function (e) {
+        this.$select2_el.on("select2-deselecting", function (e) {
             callback(self.options.onDeselecting, e);
         });
-        self.$el.on("select2-deselected", function (e) {
+        this.$select2_el.on("select2-deselected", function (e) {
             callback(self.options.onDeselected, e);
         });
-        self.$select2 = self.$el.parent().find(".select2-container");
-        self.$el.parent().off("close.plone-modal.patterns");
+        this.$select2 = this.$select2_el.parent().find(".select2-container");
+        this.$select2_el.parent().off("close.plone-modal.patterns");
         if (self.options.orderable) {
             self.$select2.addClass("select2-orderable");
         }
     },
     opened: function () {
-        var self = this;
-        var isOpen = $(".select2-dropdown-open", self.$el.parent()).length === 1;
+        var isOpen = $(".select2-dropdown-open", this.$select2_el.parent()).length === 1;
         return isOpen;
     },
     init: async function () {
         var self = this;
-
+        this.$select2_el = this.$el;
         var i18n = new I18n();
         self.options.language = i18n.currentLanguage;
         self.options.allowNewItems = self.options.hasOwnProperty("allowNewItems")
             ? JSON.parse(self.options.allowNewItems)
             : true;
+
+        if (this.el.hasAttribute("multiple")) {
+            self.options.multiple = true;
+        }
 
         if (self.options.ajax || self.options.vocabularyUrl) {
             if (self.options.vocabularyUrl) {
@@ -232,17 +236,15 @@ export default Base.extend({
             var options = $.map(self.$el.find("option"), function (o) {
                 return { text: $(o).html(), id: o.value };
             });
-            var $hidden = $('<input type="hidden" />');
-            $hidden.val(vals.join(self.options.separator));
-            $hidden.attr("class", self.$el.attr("class"));
-            $hidden.attr("name", self.$el.attr("name"));
-            $hidden.attr("id", self.$el.attr("id"));
-            self.$orig = self.$el;
-            self.$el.replaceWith($hidden);
-            self.$el = $hidden;
+            this.$select2_el = $('<input type="hidden" />');
+            this.$select2_el.val(vals.join(self.options.separator));
+            this.$select2_el.attr("class", self.$el.attr("class"));
+            this.$select2_el.attr("name", self.$el.attr("name"));
+            this.$select2_el.attr("id", self.$el.attr("id"));
+            this.el.after(this.$select2_el[0]);
+            this.el.remove();
             self.options.data = options;
         }
-
         self.initializeValues();
         self.initializeTags();
         await self.initializeSelect2();
