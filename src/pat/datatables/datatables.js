@@ -1,4 +1,3 @@
-import $ from "jquery";
 import "regenerator-runtime/runtime"; // needed for ``await`` support
 import Base from "@patternslib/patternslib/src/core/base";
 
@@ -39,6 +38,6 @@ export default Base.extend({
         await import("datatables.net-select");
         //await import("datatables.net-select-bs5");
 
-        $(this.el).DataTable(this.options);
+        this.$el.DataTable(this.options);
     },
 });

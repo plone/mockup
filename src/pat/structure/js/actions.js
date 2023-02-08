@@ -1,4 +1,3 @@
-import $ from "jquery";
 import _t from "../../../core/i18n-wrapper";
 import utils from "../../../core/utils";
 import Backbone from "backbone";
