@@ -103,7 +103,10 @@ export default Base.extend({
         import("./select2.scss");
         await import("select2");
         try {
-            await import(`select2/select2_locale_${this.options.language}`);
+            // Don't load "en" which is the default where no separate language file exists.
+            if (this.options.language && this.options.language !== "en") {
+                await import(`select2/select2_locale_${this.options.language}`);
+            }
         } catch {
             console.warn("Language file could not be loaded", this.options.language);
         }
