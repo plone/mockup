@@ -69,6 +69,9 @@ export default Base.extend({
 
         // needed
         multiple: true,
+
+        // ajax settings
+        ajaxTimeout: 500,
     },
 
     recentlyUsed(filterSelectable) {
@@ -115,10 +118,12 @@ export default Base.extend({
     },
 
     setAjax() {
+        const ajaxTimeout = parseInt(this.options.ajaxTimeout || 500, 10);
+
         const ajax = {
             url: this.options.vocabularyUrl,
             dataType: "JSON",
-            quietMillis: 500,
+            quietMillis: ajaxTimeout,
 
             data: (term, page) => {
                 const criterias = [];
