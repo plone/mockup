@@ -32,7 +32,7 @@
         "datatables.net-select-bs5": "1.6.0",
         "dropzone": "4.3.0",
         "jqtree": "1.6.3",
-        "jquery": "^3.6.1",
+        "jquery": "^3.6.3",
         "jquery-form": "4.3.0",
         "jquery.browser": "0.1.0",
         "js-cookie": "^3.0.1",
@@ -53,9 +53,9 @@
         "sinon": "^14.0.2"
     },
     "resolutions": {
-        "@patternslib/patternslib": "9.7.0",
+        "@patternslib/patternslib": "9.8.1",
         "backbone": "1.4.1",
-        "jquery": "3.6.1",
+        "jquery": "3.6.3",
         "underscore": "1.13.6"
     },
     "scripts": {
