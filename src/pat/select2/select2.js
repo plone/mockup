@@ -9,6 +9,7 @@ export default Base.extend({
     parser: "mockup",
     defaults: {
         separator: ",",
+        ajaxTimeout: 300,
     },
 
     initializeValues() {
@@ -196,9 +197,12 @@ export default Base.extend({
             }
 
             let queryTerm = "";
+
+            const ajaxTimeout = parseInt(this.options.ajaxTimeout || 300, 10);
+            delete this.options.ajaxTimeout;
             this.options.ajax = $.extend(
                 {
-                    quietMillis: 300,
+                    quietMillis: ajaxTimeout,
                     data: (term, page) => {
                         queryTerm = term;
                         return {
