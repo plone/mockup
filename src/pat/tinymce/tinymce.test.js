@@ -19,13 +19,11 @@ describe("TinyMCE", function () {
     afterEach(function () {
         $("body").empty();
         this.server.restore();
-        this.clock.restore();
     });
 
     beforeEach(function () {
         this.server = sinon.fakeServer.create();
         this.server.autoRespond = true;
-        this.clock = sinon.useFakeTimers();
         //this.server.respondImmediately = true;
 
         this.server.respondWith("POST", /upload/, function (xhr, id) {
@@ -108,74 +106,62 @@ describe("TinyMCE", function () {
         });
     });
 
-    // it("creates tinymce", function () {
-    //     var $el = $(
-    //         "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
-    //     ).appendTo("body");
-    //     console.log($el.children());
-    //     registry.scan($el);
-    //     expect($el.children().length).toBeGreaterThan(1);
-    //     tinymce.get(0).remove();
-    // });
+    it("creates tinymce", async function () {
+        var $el = $(
+            "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
+        ).appendTo("body");
+        registry.scan($el);
+        await utils.timeout(10);
+        expect($el.children().length).toBeGreaterThan(1);
+        tinymce.get(0).remove();
+    });
 
-    // it("maintains an initial textarea value", async function () {
-    //     document.body.innerHTML = `
-    //         <textarea class="pat-tinymce">
-    //             foobar
-    //         </textarea>
-    //     `;
+    it.skip("maintains an initial textarea value", async function () {
+        var $el = $(
+            "<div>" +
+                '  <textarea class="pat-tinymce">' +
+                "    foobar" +
+                "  </textarea>" +
+                "</div>"
+        ).appendTo("body");
+        registry.scan($el);
+        await utils.timeout(10);
+        console.log(tinymce.get(0).getContent());
+        expect(tinymce.get(0).getContent()).toEqual("<p>foobar</p>");
+        tinymce.get(0).remove();
+    });
 
-    //     const el = document.querySelector(".pat-tinymce");
-    //     const instance = new TinyMCE(el);
-    //     utils.timeout(1);
-    //     utils.timeout(100);
-    //     console.log(document.body.innerHTML);
-    //     // var $el = $(
-    //     //     "<div>" +
-    //     //         '  <textarea class="pat-tinymce">' +
-    //     //         "    foobar" +
-    //     //         "  </textarea>" +
-    //     //         "</div>"
-    //     // ).appendTo("body");
-    //     // registry.scan($el);
-    //     // utils.timeout(1)
-    //     // utils.timeout(1)
-    //     // utils.timeout(1)
-    //     // utils.timeout(1)
-    //     // console.log(document.body.innerHTML)
-    //     // expect(tinymce.get(0).getContent()).toEqual("<p>foobar</p>");
-    //     // tinymce.get(0).remove();
-    // });
+    it("loads buttons for plugins", async function () {
+        var $el = $(
+            "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
+        ).appendTo("body");
+        registry.scan($el);
+        await utils.timeout(10);
+        expect(tinymce.get(0).settings.plugins).toContain("plonelink ploneimage");
+        expect(tinymce.get(0).settings.toolbar).toContain("plonelink ploneimage");
+        tinymce.get(0).remove();
+    });
 
-    // it("loads buttons for plugins", function () {
-    //     var $el = $(
-    //         "<div>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</div>"
-    //     ).appendTo("body");
-    //     registry.scan($el);
-    //     expect(tinymce.get(0).buttons).to.have.keys("plonelink", "ploneimage");
-    //     tinymce.get(0).remove();
-    // });
+    it.skip("on form submit, save data to form", async function () {
+        var $container = $(
+            "<form>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</form>"
+        ).appendTo("body");
 
-    // it("on form submit, save data to form", function () {
-    //     var $container = $(
-    //         "<form>" + '  <textarea class="pat-tinymce">' + "  </textarea>" + "</form>"
-    //     ).appendTo("body");
+        var $el = $container.find("textarea");
+        var tinymce = new TinyMCE($el);
+        // TODO: This needs to be properly addressed. Manually setting tinymce
+        //       as initialized is not correct, but it will have to do for now
+        //       https://github.com/plone/mockup/pull/832#issuecomment-369113718
+        tinymce.tiny.initialized = true;
 
-    //     var $el = $container.find("textarea");
-    //     var tinymce = new TinyMCE($el);
-    //     // TODO: This needs to be properly addressed. Manually setting tinymce
-    //     //       as initialized is not correct, but it will have to do for now
-    //     //       https://github.com/plone/mockup/pull/832#issuecomment-369113718
-    //     tinymce.tiny.initialized = true;
+        tinymce.tiny.setContent("<p>foobar</p>");
+        $container.submit(function (e) {
+            e.preventDefault();
+        });
+        $container.trigger("submit");
 
-    //     tinymce.tiny.setContent("<p>foobar</p>");
-    //     $container.submit(function (e) {
-    //         e.preventDefault();
-    //     });
-    //     $container.trigger("submit");
-
-    //     expect($el.val()).to.equal("<p>foobar</p>");
-    // });
+        expect($el.val()).to.equal("<p>foobar</p>");
+    });
 
     it("test create correct url from metadata", async function () {
         var tiny = await createTinymce({
@@ -206,84 +192,85 @@ describe("TinyMCE", function () {
         expect(tiny.instance.stripGeneratedUrl("resolveuid/foobar")).toEqual("foobar");
     });
 
-    // it("test parses correct attribute from url with appended value", function () {
-    //     var tiny = createTinymce({
-    //         prependToUrl: "resolveuid/",
-    //         linkAttribute: "UID",
-    //         appendToUrl: "/@@view",
-    //     });
-    //     expect(tiny.stripGeneratedUrl("resolveuid/foobar/@@view")).to.equal("foobar");
-    // });
+    it("test parses correct attribute from url with appended value", async function () {
+        var tiny = await createTinymce({
+            prependToUrl: "resolveuid/",
+            linkAttribute: "UID",
+            appendToUrl: "/@@view",
+        });
+        expect(tiny.instance.stripGeneratedUrl("resolveuid/foobar/@@view")).toEqual("foobar");
+    });
 
-    // it("test get scale from url", function () {
-    //     var pattern = createTinymce({
-    //         prependToScalePart: "/somescale/",
-    //     });
-    //     expect(pattern.getScaleFromUrl("foobar/somescale/foobar")).to.equal("foobar");
-    // });
+    it("test get scale from url", async function () {
+        var tiny = await createTinymce({
+            prependToScalePart: "/somescale/",
+        });
+        expect(tiny.instance.getScaleFromUrl("foobar/somescale/foobar")).toEqual("foobar");
+    });
 
-    // it("test get scale return null if invalid", function () {
-    //     var pattern = createTinymce({
-    //         prependToScalePart: "/somescale/",
-    //     });
-    //     expect(pattern.getScaleFromUrl("foobar")).to.equal(null);
-    // });
+    it("test get scale return null if invalid", async function () {
+        var tiny = await createTinymce({
+            prependToScalePart: "/somescale/",
+        });
+        expect(tiny.instance.getScaleFromUrl("foobar")).toEqual(null);
+    });
 
-    // it("get scale handles edge case of image_ for plone", function () {
-    //     var pattern = createTinymce({
-    //         prependToScalePart: "/somescale",
-    //     });
-    //     expect(pattern.getScaleFromUrl("foobar/somescale/image_large")).to.equal(
-    //         "large"
-    //     );
-    // });
+    it("get scale handles edge case of image_ for plone", async function () {
+        var tiny = await createTinymce({
+            prependToScalePart: "/somescale",
+        });
+        expect(tiny.instance.getScaleFromUrl("foobar/somescale/image_large")).toEqual(
+            "large"
+        );
+    });
 
-    // it("get scale with appended option", function () {
-    //     var pattern = createTinymce({
-    //         prependToScalePart: "/somescale/",
-    //         appendToScalePart: "/@@view",
-    //     });
-    //     expect(pattern.getScaleFromUrl("foobar/somescale/large/@@view")).to.equal(
-    //         "large"
-    //     );
-    // });
+    it("get scale with appended option", async function () {
+        var tiny = await createTinymce({
+            prependToScalePart: "/somescale/",
+            appendToScalePart: "/@@view",
+        });
+        expect(tiny.instance.getScaleFromUrl("foobar/somescale/large/@@view")).toEqual(
+            "large"
+        );
+    });
 
-    // it("get scale handles edge case of image_ for plone", function () {
-    //     var pattern = createTinymce({
-    //         prependToScalePart: "/somescale",
-    //     });
-    //     expect(pattern.getScaleFromUrl("foobar/somescale/image_large")).to.equal(
-    //         "large"
-    //     );
-    // });
+    it("get scale handles edge case of image_ for plone", async function () {
+        var tiny = await createTinymce({
+            prependToScalePart: "/somescale",
+        });
+        expect(tiny.instance.getScaleFromUrl("foobar/somescale/image_large")).toEqual(
+            "large"
+        );
+    });
 
-    // it("test add link", async function () {
-    //     var pattern = await createTinymce({
-    //         prependToUrl: "resolveuid/",
-    //         linkAttribute: "UID",
-    //         relatedItems: {
-    //             ajaxvocabulary: "/data.json",
-    //         },
-    //     });
-    //     pattern.instance.addLinkClicked();
-    //     pattern.instance.linkModal.linkTypes.internal.getEl().select2("data", {
-    //         UID: "foobar",
-    //         portal_type: "Document",
-    //         Title: "Foobar",
-    //         path: "/foobar",
-    //         getIcon: "",
-    //     });
-    //     expect(pattern.instance.linkModal.getLinkUrl()).toEqual("resolveuid/foobar");
-    // });
+    it.skip("test add link", async function () {
+        var pattern = await createTinymce({
+            prependToUrl: "resolveuid/",
+            linkAttribute: "UID",
+            relatedItems: {
+                ajaxvocabulary: "/data.json",
+            },
+        });
+        pattern.instance.addLinkClicked();
+        pattern.instance.linkModal.linkTypes.internal.getEl().select2("data", {
+            UID: "foobar",
+            portal_type: "Document",
+            Title: "Foobar",
+            path: "/foobar",
+            getIcon: "",
+        });
+        expect(pattern.instance.linkModal.getLinkUrl()).toEqual("resolveuid/foobar");
+    });
 
-    // it("test add external link", function () {
-    //     var pattern = createTinymce();
-    //     pattern.addLinkClicked();
-    //     var modal = pattern.linkModal;
-    //     modal.linkType = "external";
-    //     modal.linkTypes.external.getEl().attr("value", "http://foobar");
-    //     expect(pattern.linkModal.getLinkUrl()).to.equal("http://foobar");
-    // });
+    it.skip("test add external link", async function () {
+        var pattern = await createTinymce();
+        pattern.instance.addLinkClicked();
+        var modal = pattern.instance.linkModal;
+        modal.linkType = "external";
+        modal.linkTypes.external.getEl().attr("value", "http://foobar");
+        expect(pattern.instance.linkModal.getLinkUrl()).to.equal("http://foobar");
+    });
+
     // it("test add email link", function () {
     //     var pattern = createTinymce();
     //     pattern.addLinkClicked();
@@ -291,6 +278,7 @@ describe("TinyMCE", function () {
     //     pattern.linkModal.linkTypes.email.getEl().attr("value", "foo@bar.com");
     //     expect(pattern.linkModal.getLinkUrl()).to.equal("mailto:foo@bar.com");
     // });
+
     // it("test add image link", function () {
     //     var pattern = createTinymce({
     //         prependToUrl: "resolveuid/",
@@ -311,6 +299,7 @@ describe("TinyMCE", function () {
     //         "resolveuid/foobar/@@images/image/thumb"
     //     );
     // });
+
     // it("test add image link upload", function () {
     //     var $el = $(
     //         '<textarea class="pat-tinymce" data-pat-tinymce=\'' +
@@ -351,6 +340,7 @@ describe("TinyMCE", function () {
     //     expect($("#tinylink-image").parent().hasClass("active")).to.equal(true);
     //     expect(pattern.imageModal.getLinkUrl()).to.equal("/blah.png/imagescale/large");
     // });
+
     // it("test add image with custom scale", function () {
     //     var pattern = createTinymce({
     //         prependToUrl: "resolveuid/",
@@ -374,6 +364,7 @@ describe("TinyMCE", function () {
     //         "resolveuid/foobar/@@images/image/customscale"
     //     );
     // });
+
     // it("test add image with and without caption", function () {
     //     var pattern = createTinymce({
     //         prependToUrl: "resolveuid/",
@@ -533,14 +524,14 @@ describe("TinyMCE", function () {
     //     }, 100);
     // });
 
-    // it("test anchor link adds existing anchors to list", function () {
-    //     var pattern = createTinymce();
+    // it("test anchor link adds existing anchors to list", async function () {
+    //     var pattern = await createTinymce();
 
     //     pattern.tiny.setContent('<a class="mceItemAnchor" name="foobar"></a>');
 
-    //     pattern.addLinkClicked();
+    //     pattern.instance.addLinkClicked();
 
-    //     expect(pattern.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
+    //     expect(pattern.instance.linkModal.linkTypes.anchor.anchorNodes.length).to.equal(1);
     //     setTimeout(function () {
     //         expect(
     //             $("fieldset.active", pattern.linkModal.modal.$wrapper).length
@@ -636,35 +627,36 @@ describe("TinyMCE", function () {
     //     }, 100);
     // });
 
-    // it("test inline tinyMCE roundtrip", function () {
-    //     var $container = $(
-    //         "<form>" +
-    //             '<textarea class="pat-tinymce" data-pat-tinymce=\'{"inline": true}\'>' +
-    //             "<h1>just testing</h1>" +
-    //             "</textarea>" +
-    //             "</form>"
-    //     ).appendTo("body");
-    //     registry.scan($container);
+    it("test inline tinyMCE roundtrip", async function () {
+        var $container = $(
+            "<form>" +
+                '<textarea class="pat-tinymce" data-pat-tinymce=\'{"inline": true}\'>' +
+                "<h1>just testing</h1>" +
+                "</textarea>" +
+                "</form>"
+        ).appendTo("body");
+        registry.scan($container);
+        await utils.timeout(10);
 
-    //     var $el = $container.find("textarea");
-    //     var id = $el.attr("id");
+        var $el = $container.find("textarea");
+        var id = $el.attr("id");
 
-    //     var $editable = $container.find("#" + id + "-editable");
+        var $editable = $container.find("#" + id + "-editable");
 
-    //     // check, if everything is in place
-    //     expect($editable.is("div")).to.be.equal(true);
-    //     expect($editable.html()).to.be.equal($el.val());
+        // check, if everything is in place
+        expect($editable.is("div")).toEqual(true);
+        expect($editable.html()).toEqual($el.val());
 
-    //     // check, if changes are submitted on form submit
-    //     var changed_txt = "changed contents";
-    //     $editable.html(changed_txt);
-    //     var $form = $container.find("form");
-    //     // Avoid error when running tests: "Some of your tests did a full page reload!"
-    //     $container.submit(function (e) {
-    //         e.preventDefault();
-    //     });
-    //     $container.trigger("submit");
-    //     expect($el.val()).to.be.equal(changed_txt);
-    //     tinymce.get(0).remove();
-    // });
+        // check, if changes are submitted on form submit
+        var changed_txt = "changed contents";
+        $editable.html(changed_txt);
+        var $form = $container.find("form");
+        // Avoid error when running tests: "Some of your tests did a full page reload!"
+        $container.submit(function (e) {
+            e.preventDefault();
+        });
+        $container.trigger("submit");
+        expect($el.val()).toEqual(changed_txt);
+        tinymce.get(0).remove();
+    });
 });
