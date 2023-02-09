@@ -41,7 +41,7 @@
                 border-radius: 4px 4px 0 0;
                 &.active {
                     border: 1px solid #ddd;
-                    border-bottom-color: #fff;
+                    border-bottom-color: var(--bs-body-bg);
                     color: var(--bs-secondary-text);
                     cursor: default;
                 }
@@ -49,9 +49,10 @@
                     background-color: transparent;
                 }
                 &:hover {
-                    background-color: #eee;
+                    // background-color: #eee;
+                    background-color: var(--bs-secondary-bg);
                     border-color: #eee;
-                    border-bottom-color: #fff;
+                    border-bottom-color: var(--bs-body-bg);
                 }
             }
         }

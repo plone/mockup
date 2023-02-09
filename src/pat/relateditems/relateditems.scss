@@ -64,7 +64,6 @@
 }
 
 .pat-relateditems-active {
-    background-color: #ddd;
     padding: 5px;
 }
 
@@ -162,8 +161,6 @@
         }
     }
     &.one-level-up {
-        background-color: #ddd;
-
         .pat-relateditems-result-browse-wrapper {
             flex-direction: row-reverse;
         }
