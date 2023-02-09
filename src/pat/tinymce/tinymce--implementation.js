@@ -139,8 +139,14 @@ export default class TinyMCE {
     }
     async init() {
         import("./tinymce.scss");
-        import("tinymce/skins/ui/oxide/content.css");
-        import("tinymce/skins/ui/oxide/skin.css");
+
+        const theme = $('html').attr('data-bs-theme');
+        let css = 'oxide';
+        if (theme && theme == 'dark') {
+            css = 'oxide-dark';
+        }
+        import (`tinymce/skins/ui/${css}/content.css`);
+        import (`tinymce/skins/ui/${css}/skin.css`);
 
         const tinymce = (await import("tinymce/tinymce")).default;
         let valid_plugins = [];
