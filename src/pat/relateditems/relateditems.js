@@ -71,8 +71,8 @@ export default Base.extend({
         multiple: true,
     },
 
-    recentlyUsed: function (filterSelectable) {
-        var ret = utils.storage.get(this.options.recentlyUsedKey) || [];
+    recentlyUsed(filterSelectable) {
+        let ret = utils.storage.get(this.options.recentlyUsedKey) || [];
         // hard-limit to 1000 entries
         ret = ret.slice(ret.length - 1000, ret.length);
         if (filterSelectable) {
@@ -83,7 +83,7 @@ export default Base.extend({
             ret.filter(this.isSelectable.bind(this));
         }
         // max is applied AFTER filtering selectable items.
-        var max = parseInt(this.options.recentlyUsedMaxItems, 10);
+        const max = parseInt(this.options.recentlyUsedMaxItems, 10);
         if (max) {
             // return the slice from the end, as we want to display newest items first.
             ret = ret.slice(ret.length - max, ret.length);
@@ -91,22 +91,21 @@ export default Base.extend({
         return ret;
     },
 
-    applyTemplate: function (tpl, item) {
-        var self = this;
-        var template;
-        if (self.options[tpl + "TemplateSelector"]) {
-            template = $(self.options[tpl + "TemplateSelector"]).html();
+    applyTemplate(tpl, item) {
+        let template;
+        if (this.options[tpl + "TemplateSelector"]) {
+            template = $(this.options[tpl + "TemplateSelector"]).html();
         }
         if (!template) {
-            if (self.options[tpl + "Template"]) {
-                template = self.options[tpl + "Template"];
+            if (this.options[tpl + "Template"]) {
+                template = this.options[tpl + "Template"];
             } else {
-                template = self[tpl + "Template"];
+                template = this[tpl + "Template"];
             }
         }
         // let's give all the options possible to the template generation
-        var options = $.extend(true, {}, self.options, item, {
-            browsing: self.browsing,
+        const options = $.extend(true, {}, this.options, item, {
+            browsing: this.browsing,
             open_folder: _t("Open folder"),
             current_directory: _t("current directory:"),
             one_level_up: _t("Go one level up"),
@@ -115,14 +114,14 @@ export default Base.extend({
         return _.template(template)(options);
     },
 
-    setAjax: function () {
-        var ajax = {
+    setAjax() {
+        const ajax = {
             url: this.options.vocabularyUrl,
             dataType: "JSON",
             quietMillis: 500,
 
-            data: function (term, page) {
-                var criterias = [];
+            data: (term, page) => {
+                const criterias = [];
                 if (term) {
                     term = "*" + term + "*";
                     criterias.push({
@@ -150,14 +149,14 @@ export default Base.extend({
                         (this.browsing ? "::1" : ""),
                 });
 
-                var sort_on = this.options.sortOn;
-                var sort_order = sort_on ? this.options.sortOrder : null;
+                let sort_on = this.options.sortOn;
+                let sort_order = sort_on ? this.options.sortOrder : null;
                 if (this.browsing && sort_on === null) {
                     sort_on = "getObjPositionInParent";
                     sort_order = "ascending";
                 }
 
-                var data = {
+                const data = {
                     query: JSON.stringify({
                         criteria: criterias,
                         sort_on: sort_on,
@@ -170,15 +169,13 @@ export default Base.extend({
                     }),
                 };
                 return data;
-            }.bind(this),
+            },
 
-            results: function (data, page) {
-                var more = page * this.options.pageSize < data.total;
-                var results = data.results;
+            results: (data, page) => {
+                const more = page * this.options.pageSize < data.total;
+                let results = data.results;
 
-                this.selectedUIDs = ($(this.el).select2("data") || []).map(function (
-                    el
-                ) {
+                this.selectedUIDs = (this.$el.select2("data") || []).map((el) => {
                     // populate current selection. Reuse in formatResult
                     return el.UID;
                 });
@@ -187,21 +184,19 @@ export default Base.extend({
                 // While browsing: always include folderish items
                 // Browsing and searching: Only include selectable items which are not already selected, and all folders
                 // even if they're selected, as we need them available for browsing/selecting their children
-                results = results.filter(
-                    function (item) {
-                        if (
-                            (this.browsing && item.is_folderish) ||
-                            (this.isSelectable(item) &&
-                                this.selectedUIDs.indexOf(item.UID) === -1)
-                        ) {
-                            return true;
-                        }
-                        return false;
-                    }.bind(this)
-                );
+                results = results.filter((item) => {
+                    if (
+                        (this.browsing && item.is_folderish) ||
+                        (this.isSelectable(item) &&
+                            this.selectedUIDs.indexOf(item.UID) === -1)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                });
 
                 // Extend ``data`` with a ``oneLevelUp`` item when browsing
-                var path = this.currentPath.split("/");
+                const path = this.currentPath.split("/");
                 if (
                     page === 1 && // Show level up only on top.
                     this.browsing && // only level up when browsing
@@ -223,47 +218,46 @@ export default Base.extend({
                     results: results,
                     more: more,
                 };
-            }.bind(this),
+            },
         };
         this.options.ajax = ajax;
     },
 
-    renderToolbar: async function () {
-        var self = this;
-        var path = self.currentPath;
-        var html;
+    async renderToolbar() {
+        const path = this.currentPath;
+        let html;
 
-        var paths = path.split("/");
-        var itemPath = "";
-        var itemsHtml = "";
-        _.each(paths, function (node) {
-            if (node !== "") {
-                var item = {};
-                item.path = itemPath = itemPath + "/" + node;
-                item.text = node;
-                itemsHtml = itemsHtml + self.applyTemplate("breadcrumb", item);
+        const parts = path.split("/");
+        let itemPath = "";
+        let itemsHtml = "";
+        for (const part of parts) {
+            if (part !== "") {
+                const item = {};
+                item.path = itemPath = `${itemPath}/${part}`;
+                item.text = part;
+                itemsHtml = itemsHtml + this.applyTemplate("breadcrumb", item);
             }
-        });
-
-        // favorites
-        var favoritesHtml = "";
-        _.each(self.options.favorites, function (item) {
-            var item_copy = _.clone(item);
-            item_copy.path = item_copy.path.substr(self.options.rootPath.length) || "/";
-            favoritesHtml = favoritesHtml + self.applyTemplate("favorite", item_copy);
-        });
-
-        var recentlyUsedHtml = "";
-        if (self.options.recentlyUsed) {
-            var recentlyUsed = self.recentlyUsed(true); // filter out only those items which can actually be selected
-            _.each(recentlyUsed.reverse(), function (item) {
-                // reverse to get newest first.
-                recentlyUsedHtml =
-                    recentlyUsedHtml + self.applyTemplate("recentlyused", item);
-            });
         }
 
-        html = self.applyTemplate("toolbar", {
+        // favorites
+        let favoritesHtml = "";
+        for (const item of this.options.favorites) {
+            const item_copy = _.clone(item);
+            item_copy.path = item_copy.path.substr(this.options.rootPath.length) || "/";
+            favoritesHtml = favoritesHtml + this.applyTemplate("favorite", item_copy);
+        }
+
+        let recentlyUsedHtml = "";
+        if (this.options.recentlyUsed) {
+            const recentlyUsed = this.recentlyUsed(true); // filter out only those items which can actually be selected
+            for (const item of recentlyUsed.reverse()) {
+                // reverse to get newest first.
+                recentlyUsedHtml =
+                    recentlyUsedHtml + this.applyTemplate("recentlyused", item);
+            }
+        }
+
+        html = this.applyTemplate("toolbar", {
             items: itemsHtml,
             favItems: favoritesHtml,
             favText: _t("Favorites"),
@@ -280,83 +274,83 @@ export default Base.extend({
             upload_text: _t("Upload"),
         });
 
-        self.$toolbar.html(html);
+        this.$toolbar.html(html);
 
         // unbind mouseup event from select2 to override the behavior:
         $(".pat-relateditems-dropdown").unbind("mouseup");
-        $(".pat-relateditems-dropdown").bind("mouseup", function (e) {
+        $(".pat-relateditems-dropdown").bind("mouseup", (e) => {
             e.stopPropagation();
         });
 
-        $("button.mode.search", self.$toolbar).on("click", function (e) {
+        $("button.mode.search", this.$toolbar).on("click", (e) => {
             e.preventDefault();
-            if (self.browsing) {
-                $("button.mode.search", self.$toolbar).toggleClass(
+            if (this.browsing) {
+                $("button.mode.search", this.$toolbar).toggleClass(
                     "btn-primary btn-default"
                 );
-                $("button.mode.browse", self.$toolbar).toggleClass(
+                $("button.mode.browse", this.$toolbar).toggleClass(
                     "btn-primary btn-default"
                 );
-                self.browsing = false;
-                if ($(self.el).select2("data").length > 0) {
+                this.browsing = false;
+                if (this.$el.select2("data").length > 0) {
                     // Have to call after initialization
-                    self.openAfterInit = true;
+                    this.openAfterInit = true;
                 }
-                if (!self.openAfterInit) {
-                    $(self.el).select2("close");
-                    $(self.el).select2("open");
+                if (!this.openAfterInit) {
+                    this.$el.select2("close");
+                    this.$el.select2("open");
                 }
             } else {
                 // just open result list
-                $(self.el).select2("close");
-                $(self.el).select2("open");
+                this.$el.select2("close");
+                this.$el.select2("open");
             }
         });
 
-        $("button.mode.browse", self.$toolbar).on("click", function (e) {
+        $("button.mode.browse", this.$toolbar).on("click", (e) => {
             e.preventDefault();
-            if (!self.browsing) {
-                $("button.mode.search", self.$toolbar).toggleClass(
+            if (!this.browsing) {
+                $("button.mode.search", this.$toolbar).toggleClass(
                     "btn-primary btn-default"
                 );
-                $("button.mode.browse", self.$toolbar).toggleClass(
+                $("button.mode.browse", this.$toolbar).toggleClass(
                     "btn-primary btn-default"
                 );
-                self.browsing = true;
-                if ($(self.el).select2("data").length > 0) {
+                this.browsing = true;
+                if (this.$el.select2("data").length > 0) {
                     // Have to call after initialization
-                    self.openAfterInit = true;
+                    this.openAfterInit = true;
                 }
-                if (!self.openAfterInit) {
-                    $(self.el).select2("close");
-                    $(self.el).select2("open");
+                if (!this.openAfterInit) {
+                    this.$el.select2("close");
+                    this.$el.select2("open");
                 }
             } else {
                 // just open result list
-                $(self.el).select2("close");
-                $(self.el).select2("open");
+                this.$el.select2("close");
+                this.$el.select2("open");
             }
         });
 
-        $("a.crumb", self.$toolbar).on("click", function (e) {
+        $("a.crumb", this.$toolbar).on("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
-            self.browseTo($(this).attr("href"));
+            this.browseTo($(e.currentTarget).attr("href"));
         });
 
-        $("a.fav", self.$toolbar).on("click", function (e) {
+        $("a.fav", this.$toolbar).on("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
-            self.browseTo($(this).attr("href"));
+            this.browseTo($(e.currentTarget).attr("href"));
         });
 
-        if (self.options.recentlyUsed) {
-            $(".pat-relateditems-recentlyused-select", self.$toolbar).on(
+        if (this.options.recentlyUsed) {
+            $(".pat-relateditems-recentlyused-select", this.$toolbar).on(
                 "click",
-                function (event) {
+                (event) => {
                     event.preventDefault();
-                    var uid = $(this).data("uid");
-                    var item = self.recentlyUsed().filter(function (it) {
+                    const uid = $(event.currentTarget).data("uid");
+                    let item = this.recentlyUsed().filter((it) => {
                         return it.UID === uid;
                     });
                     if (item.length > 0) {
@@ -364,10 +358,10 @@ export default Base.extend({
                     } else {
                         return;
                     }
-                    self.selectItem(item);
-                    if (self.options.maximumSelectionSize > 0) {
-                        var items = $(self.el).select2("data");
-                        if (items.length >= self.options.maximumSelectionSize) {
+                    this.selectItem(item);
+                    if (this.options.maximumSelectionSize > 0) {
+                        const items = this.$el.select2("data");
+                        if (items.length >= this.options.maximumSelectionSize) {
                             return;
                         }
                     }
@@ -379,29 +373,29 @@ export default Base.extend({
             let Upload = await import("../upload/upload");
             Upload = Upload.default;
 
-            const upload_button = self.$toolbar[0].querySelector(".upload button");
+            const upload_button = this.$toolbar[0].querySelector(".upload button");
             upload_button.disabled = disabled;
 
-            const upload_el = self.$toolbar[0].querySelector(".upload .pat-upload");
+            const upload_el = this.$toolbar[0].querySelector(".upload .pat-upload");
 
             const upload_config = {
                 success: (e, response) => {
                     const uid = response.UID;
                     if (uid) {
                         const query = new utils.QueryHelper({
-                            vocabularyUrl: self.options.vocabularyUrl,
-                            attributes: self.options.attributes,
+                            vocabularyUrl: this.options.vocabularyUrl,
+                            attributes: this.options.attributes,
                         });
                         query.search(
                             "UID",
                             "plone.app.querystring.operation.selection.is",
                             uid,
                             (e) => {
-                                var data = self.$el.select2("data");
+                                const data = this.$el.select2("data");
                                 data.push.apply(data, e.results);
-                                self.$el.select2("data", data, true);
-                                self.emit("selected");
-                                self.popover.hide();
+                                this.$el.select2("data", data, true);
+                                this.emit("selected");
+                                this.popover.hide();
                             },
                             false
                         );
@@ -410,34 +404,34 @@ export default Base.extend({
                 uloadMultiple: true,
                 allowPathSelection: false,
                 relativePath: "fileUpload",
-                baseUrl: self.options.rootUrl,
+                baseUrl: this.options.rootUrl,
             };
             const upload = new Upload($(upload_el), upload_config);
 
             upload_button.addEventListener("show.bs.dropdown", () => {
-                if (self.currentPath !== upload.currentPath) {
-                    upload.setPath(self.currentPath);
+                if (this.currentPath !== upload.currentPath) {
+                    upload.setPath(this.currentPath);
                 }
             });
         }
 
         // upload
         if (
-            self.options.upload &&
+            this.options.upload &&
             utils.featureSupport.dragAndDrop() &&
             utils.featureSupport.fileApi()
         ) {
-            if (self.options.uploadAllowView) {
+            if (this.options.uploadAllowView) {
                 // Check, if uploads are allowed in current context
                 $.ajax({
-                    url: self.options.uploadAllowView,
-                    // url: self.currentUrl() + self.options.uploadAllowView,  // not working yet
+                    url: this.options.uploadAllowView,
+                    // url: this.currentUrl() + this.options.uploadAllowView,  // not working yet
                     dataType: "JSON",
                     data: {
-                        path: self.options.rootPath + self.currentPath,
+                        path: this.options.rootPath + this.currentPath,
                     },
                     type: "GET",
-                    success: function (result) {
+                    success: (result) => {
                         initUploadView(!result.allowUpload);
                     },
                 });
@@ -448,65 +442,61 @@ export default Base.extend({
         }
     },
 
-    browseTo: function (path) {
-        var self = this;
-        self.emit("before-browse");
-        self.currentPath = path;
-        $(self.el).select2("close");
-        self.renderToolbar();
-        $(self.el).select2("open");
-        self.emit("after-browse");
+    browseTo(path) {
+        this.emit("before-browse");
+        this.currentPath = path;
+        this.$el.select2("close");
+        this.renderToolbar();
+        this.$el.select2("open");
+        this.emit("after-browse");
     },
 
-    selectItem: function (item) {
-        var self = this;
-        self.emit("selecting");
-        var data = $(self.el).select2("data");
+    selectItem(item) {
+        this.emit("selecting");
+        const data = this.$el.select2("data");
         data.push(item);
-        $(self.el).select2("data", data, true);
+        this.$el.select2("data", data, true);
 
-        if (self.options.recentlyUsed) {
+        if (this.options.recentlyUsed) {
             // add to recently added items
-            var recentlyUsed = self.recentlyUsed(); // do not filter for selectable but get all. append to that list the new item.
-            var alreadyPresent = recentlyUsed.filter(function (it) {
+            const recentlyUsed = this.recentlyUsed(); // do not filter for selectable but get all. append to that list the new item.
+            const alreadyPresent = recentlyUsed.filter((it) => {
                 return it.UID === item.UID;
             });
             if (alreadyPresent.length > 0) {
                 recentlyUsed.splice(recentlyUsed.indexOf(alreadyPresent[0]), 1);
             }
             recentlyUsed.push(item);
-            utils.storage.set(self.options.recentlyUsedKey, recentlyUsed);
+            utils.storage.set(this.options.recentlyUsedKey, recentlyUsed);
         }
 
-        self.emit("selected");
+        this.emit("selected");
     },
 
-    deselectItem: function (item) {
-        var self = this;
-        self.emit("deselecting");
-        var data = $(self.el).select2("data");
-        _.each(data, function (obj, i) {
+    deselectItem(item) {
+        this.emit("deselecting");
+        const data = this.$el.select2("data");
+        data.forEach((obj, i) => {
             if (obj.UID === item.UID) {
                 data.splice(i, 1);
             }
         });
-        $(self.el).select2("data", data, true);
-        self.emit("deselected");
+        this.$el.select2("data", data, true);
+        this.emit("deselected");
     },
 
-    isSelectable: function (item) {
-        var self = this;
+    isSelectable(item) {
         if (item.selectable === false) {
             return false;
         }
-        if (self.options.selectableTypes === null) {
+        if (this.options.selectableTypes === null) {
             return true;
         } else {
-            return self.options.selectableTypes.indexOf(item.portal_type) !== -1;
+            return this.options.selectableTypes.indexOf(item.portal_type) !== -1;
         }
     },
 
-    init: async function () {
+    async init() {
         (await import("bootstrap")).Dropdown;
         import("./relateditems.scss");
 
@@ -518,26 +508,24 @@ export default Base.extend({
         this.selectionTemplate = (await import("./templates/selection.xml")).default; // prettier-ignore
         this.toolbarTemplate = (await import("./templates/toolbar.xml")).default; // prettier-ignore
 
-        var self = this;
-
         this.$select2_el = this.$el;
-        self.browsing = self.options.mode !== "search";
+        this.browsing = this.options.mode !== "search";
 
         // Remove trailing slash
-        self.options.rootPath = self.options.rootPath.replace(/\/$/, "");
+        this.options.rootPath = this.options.rootPath.replace(/\/$/, "");
         // Substract rootPath from basePath with is the relative currentPath. Has a leading slash. Or use '/'
-        self.currentPath =
-            self.options.basePath.substr(self.options.rootPath.length) || "/";
+        this.currentPath =
+            this.options.basePath.substr(this.options.rootPath.length) || "/";
 
-        self.setAjax();
+        this.setAjax();
 
-        self.$el.wrap('<div class="pat-relateditems-container" />');
-        self.$container = self.$el.parents(".pat-relateditems-container");
+        this.$el.wrap('<div class="pat-relateditems-container" />');
+        this.$container = this.$el.parents(".pat-relateditems-container");
 
-        Select2.prototype.initializeValues.call(self);
-        Select2.prototype.initializeTags.call(self);
+        Select2.prototype.initializeValues.call(this);
+        Select2.prototype.initializeTags.call(this);
 
-        self.options.formatSelection = function (item) {
+        this.options.formatSelection = (item) => {
             item = $.extend(
                 true,
                 {
@@ -552,19 +540,19 @@ export default Base.extend({
             );
 
             // activate petterns on the result set.
-            var $selection = $(self.applyTemplate("selection", item));
-            if (self.options.scanSelection) {
+            const $selection = $(this.applyTemplate("selection", item));
+            if (this.options.scanSelection) {
                 registry.scan($selection);
             }
-            if (self.options.maximumSelectionSize == 1) {
+            if (this.options.maximumSelectionSize == 1) {
                 // If this related field accepts only 1 item, the breadcrumbs should
                 // reflect the location for this particular item
-                var itemPath = item.path;
-                var path_split = itemPath.split("/");
+                let itemPath = item.path;
+                let path_split = itemPath.split("/");
                 path_split = path_split.slice(0, -1); // Remove last part of path, we always want the parent path
                 itemPath = path_split.join("/");
-                self.currentPath = itemPath;
-                self.renderToolbar();
+                this.currentPath = itemPath;
+                this.renderToolbar();
             }
             return $selection;
         };
@@ -572,8 +560,8 @@ export default Base.extend({
         const icon_level_up = await utils.resolveIcon("arrow-left-circle");
         const icon_level_down = await utils.resolveIcon("arrow-right-circle");
 
-        self.options.formatResult = function (item) {
-            item.selectable = self.isSelectable(item);
+        this.options.formatResult = (item) => {
+            item.selectable = this.isSelectable(item);
             item = $.extend(
                 true,
                 {
@@ -592,61 +580,62 @@ export default Base.extend({
                 item
             );
 
-            if (self.selectedUIDs.indexOf(item.UID) !== -1) {
+            if (this.selectedUIDs.indexOf(item.UID) !== -1) {
                 // do not allow already selected items to be selected again.
                 item.selectable = false;
             }
-            var result = $(self.applyTemplate("result", item));
+            const result = $(this.applyTemplate("result", item));
 
-            $(".pat-relateditems-result-select", result).on("click", function (event) {
+            $(".pat-relateditems-result-select", result).on("click", (event) => {
+                const _el = event.currentTarget;
                 event.preventDefault();
                 // event.stopPropagation();
-                if ($(this).is(".selectable")) {
-                    var $parent = $(this).parents(".pat-relateditems-result");
+                if ($(_el).is(".selectable")) {
+                    const $parent = $(_el).parents(".pat-relateditems-result");
                     if ($parent.is(".pat-relateditems-active")) {
                         $parent.removeClass("pat-relateditems-active");
-                        self.deselectItem(item);
+                        this.deselectItem(item);
                     } else {
-                        if (self.options.maximumSelectionSize > 0) {
-                            var items = $(self.el).select2("data");
-                            if (items.length >= self.options.maximumSelectionSize) {
-                                $(self.el).select2("close");
+                        if (this.options.maximumSelectionSize > 0) {
+                            const items = this.$el.select2("data");
+                            if (items.length >= this.options.maximumSelectionSize) {
+                                this.$el.select2("close");
                             }
                         }
-                        self.selectItem(item);
+                        this.selectItem(item);
                         $parent.addClass("pat-relateditems-active");
-                        if (self.options.closeOnSelect) {
-                            $(self.el).select2("close");
+                        if (this.options.closeOnSelect) {
+                            this.$el.select2("close");
                         }
                     }
                 }
             });
 
-            $(".pat-relateditems-result-browse", result).on("click", function (event) {
+            $(".pat-relateditems-result-browse", result).on("click", (event) => {
                 event.preventDefault();
                 event.stopPropagation();
-                var path = $(this).data("path");
-                self.browseTo(path);
+                const path = $(event.currentTarget).data("path");
+                this.browseTo(path);
             });
 
             return $(result);
         };
 
-        self.options.initSelection = function (element, callback) {
-            var value = $(element).val();
+        this.options.initSelection = (element, callback) => {
+            const value = $(element).val();
             if (value !== "") {
-                var ids = value.split(self.options.separator);
-                var query = new utils.QueryHelper(
-                    $.extend(true, {}, self.options, {
-                        pattern: self,
+                const ids = value.split(this.options.separator);
+                const query = new utils.QueryHelper(
+                    $.extend(true, {}, this.options, {
+                        pattern: this,
                     })
                 );
                 query.search(
                     "UID",
                     "plone.app.querystring.operation.list.contains",
                     ids,
-                    function (data) {
-                        var results = data.results.reduce(function (prev, item) {
+                    (data) => {
+                        const results = data.results.reduce((prev, item) => {
                             prev[item.UID] = item;
                             return prev;
                         }, {});
@@ -654,12 +643,8 @@ export default Base.extend({
                         try {
                             callback(
                                 ids
-                                    .map(function (uid) {
-                                        return results[uid];
-                                    })
-                                    .filter(function (item) {
-                                        return item !== undefined;
-                                    })
+                                    .map((uid) => results[uid])
+                                    .filter((item) => item !== undefined)
                             );
                         } catch (e) {
                             // Select2 3.5.4 throws an error in some cases in
@@ -667,10 +652,10 @@ export default Base.extend({
                             // No idea why, hard to track.
                         }
 
-                        if (self.openAfterInit) {
+                        if (this.openAfterInit) {
                             // open after initialization
-                            $(self.el).select2("open");
-                            self.openAfterInit = undefined;
+                            this.$el.select2("open");
+                            this.openAfterInit = undefined;
                         }
                     },
                     false
@@ -678,37 +663,37 @@ export default Base.extend({
             }
         };
 
-        self.options.tokenizer = function (input) {
+        this.options.tokenizer = (input) => {
             if (this.options.mode === "auto") {
                 this.browsing = input ? false : true;
             }
-        }.bind(this);
-
-        self.options.id = function (item) {
-            return item.UID;
         };
 
-        await Select2.prototype.initializeSelect2.call(self);
-        await Select2.prototype.initializeOrdering.call(self);
+        this.options.id = (item) => item.UID;
 
-        self.$toolbar = $('<div class="toolbar d-flex" />');
-        self.$container.prepend(self.$toolbar);
-        self.$el.on("select2-selecting", function (event) {
-            if (!self.isSelectable(event.choice)) {
+        await Select2.prototype.initializeSelect2.call(this);
+        await Select2.prototype.initializeOrdering.call(this);
+
+        this.$toolbar = $('<div class="toolbar d-flex" />');
+        this.$container.prepend(this.$toolbar);
+        this.$el.on("select2-selecting", (event) => {
+            if (!this.isSelectable(event.choice)) {
                 event.preventDefault();
             }
         });
-        self.renderToolbar();
-        self.$el.on("select2-loaded", function(event){
+        this.renderToolbar();
+        this.$el.on("select2-loaded", () => {
             let yMax = window.innerHeight || document.documentElement.clientHeight;
-            const element = $(".pat-relateditems-dropdown.select2-drop-active .select2-results")[0]
+            const element = $(
+                ".pat-relateditems-dropdown.select2-drop-active .select2-results"
+            )[0];
             const rect = element.getBoundingClientRect();
-            const maxHeight = yMax - rect.top -18;
+            const maxHeight = yMax - rect.top - 18;
             $(element).css("max-height", `${maxHeight}px`);
         });
 
-        $(document).on("keyup", self.$el, function (event) {
-            var isOpen = Select2.prototype.opened.call(self);
+        $(document).on("keyup", this.$el, (event) => {
+            const isOpen = Select2.prototype.opened.call(this);
             if (!isOpen) {
                 return;
             }
@@ -716,21 +701,21 @@ export default Base.extend({
             if (event.which === KEY.LEFT || event.which === KEY.RIGHT) {
                 event.stopPropagation();
 
-                var selectorContext =
+                const selectorContext =
                     event.which === KEY.LEFT
                         ? ".pat-relateditems-result.one-level-up"
                         : ".select2-highlighted";
 
-                var browsableItemSelector = ".pat-relateditems-result-browse";
-                var browsableItem = $(browsableItemSelector, selectorContext);
+                const browsableItemSelector = ".pat-relateditems-result-browse";
+                const browsableItem = $(browsableItemSelector, selectorContext);
 
                 if (browsableItem.length !== 1) {
                     return;
                 }
 
-                var path = browsableItem.data("path");
+                const path = browsableItem.data("path");
 
-                self.browseTo(path);
+                this.browseTo(path);
             }
         });
     },
