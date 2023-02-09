@@ -2,7 +2,6 @@ import "./modal";
 import $ from "jquery";
 import registry from "@patternslib/patternslib/src/core/registry";
 import utils from "@patternslib/patternslib/src/core/utils";
-import sinon from "sinon";
 
 describe("Modal", function () {
     const registry_scan = async () => {
@@ -19,7 +18,7 @@ describe("Modal", function () {
         });
         $.ajax = jest.fn().mockImplementation((params) => {
             let fakeResponse = "404";
-            if(params.url === "modal-form.html") {
+            if (params.url === "modal-form.html") {
                 fakeResponse = `
                     <html>
                     <head></head>
@@ -43,16 +42,16 @@ describe("Modal", function () {
                             return {
                                 always: () => {
                                     return fakeResponse;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                },
+                            };
+                        },
+                    };
+                },
+            };
         });
     };
 
-    beforeEach(function() {
+    beforeEach(function () {
         mockJQueryAjax();
 
         document.body.innerHTML = `
@@ -117,7 +116,7 @@ describe("Modal", function () {
     });
 
     it("3 - load modal content via ajax", () => {
-        $('#body2 a.pat-plone-modal')
+        $("#body2 a.pat-plone-modal")
             .on("show.plone-modal.patterns", function (e) {
                 expect(document.querySelectorAll(".modal-body").length).toEqual(1);
             })
@@ -125,7 +124,7 @@ describe("Modal", function () {
     });
 
     it("4 - redirects to base urls", function () {
-        $('#body2 a.pat-plone-modal')
+        $("#body2 a.pat-plone-modal")
             .on("show.plone-modal.patterns", function (e) {
                 var modal = $(this).data("pattern-plone-modal");
                 expect(
@@ -157,7 +156,7 @@ describe("Modal", function () {
     });
 
     it("5 - handles forms and form submits", function () {
-        $('#body3 a.pat-plone-modal')
+        $("#body3 a.pat-plone-modal")
             .on("show.plone-modal.patterns", async function (e) {
                 await utils.timeout(1);
                 var $input = $(".pattern-modal-buttons").find("input");
@@ -193,7 +192,7 @@ describe("Modal", function () {
         // -- CHANGE POSITION ONLY ----------------------------------------------
         //
         it("7.1 - position: center middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -221,7 +220,7 @@ describe("Modal", function () {
                 .trigger("click");
         });
         it("7.2 - position: left middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -247,7 +246,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.3 - position: right middle, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -274,7 +273,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.4 - position: center top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("center", "top", 0, 340, 280, 400, 300);
@@ -292,7 +291,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.5 - position: center bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -319,7 +318,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.6 - position: left top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("left", "top", 0, 340, 280, 400, 300);
@@ -335,7 +334,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.7 - position: left bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -360,7 +359,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.8 - position: right top, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("right", "top", 0, 340, 280, 400, 300);
@@ -377,7 +376,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.9 - position: right bottom, margin: 0, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -407,7 +406,7 @@ describe("Modal", function () {
         // -- NON-ZERO MARGIN ---------------------------------------------------
         //
         it("7.10 - position: center middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -435,7 +434,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.11 - position: left middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -461,7 +460,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.12 - position: right middle, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -488,7 +487,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.13 - position: center top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("center", "top", 5, 340, 280, 400, 300);
@@ -506,7 +505,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.14 - position: center bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -533,7 +532,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.15 - position: left top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("left", "top", 5, 340, 280, 400, 300);
@@ -549,7 +548,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.16 - position: left bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -574,7 +573,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.17 - position: right top, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("right", "top", 5, 340, 280, 400, 300);
@@ -591,7 +590,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.18 - position: right bottom, margin: 5, modal: 340x280, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -621,7 +620,7 @@ describe("Modal", function () {
         // -- WRAPPER SMALLER THAN MODAL ----------------------------------------
         //
         it("7.19 - position: center middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -645,7 +644,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.20 - position: left middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -669,7 +668,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.21 - position: right middle, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -694,7 +693,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.22 - position: center top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("center", "top", 0, 450, 350, 400, 300);
@@ -710,7 +709,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.23 - position: center bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -735,7 +734,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.24 - position: left top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("left", "top", 0, 450, 350, 400, 300);
@@ -751,7 +750,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.25 - position: left bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(
@@ -776,7 +775,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.26 - position: right top, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition("right", "top", 0, 450, 350, 400, 300);
@@ -793,7 +792,7 @@ describe("Modal", function () {
                 .click();
         });
         it("7.27 - position: right bottom, margin: 0, modal: 450x350, wrapper: 400x300", function (done) {
-            $('#body2 a.pat-plone-modal')
+            $("#body2 a.pat-plone-modal")
                 .on("show.plone-modal.patterns", function (e) {
                     var modal = $(this).data("pattern-plone-modal");
                     var pos = modal.findPosition(

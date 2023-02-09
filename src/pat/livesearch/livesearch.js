@@ -18,6 +18,7 @@ export default Base.extend({
         defaultSortOn: "",
         perPage: 7,
         quietMillis: 350,
+        timeoutHide: 200,
         minimumInputLength: 4,
         inputSelector: 'input[type="text"]',
         itemTemplate:
@@ -214,12 +215,12 @@ export default Base.extend({
          input box, same width */
         var self = this;
 
-        self.$results[0].classList.remove('d-none');
-        self.$el[0].classList.add('livesearch-active');
+        self.$results[0].classList.remove("d-none");
+        self.$el[0].classList.add("livesearch-active");
     },
     hide: function () {
         this.$el[0].classList.remove("livesearch-active");
-        this.$results[0].classList.add('d-none');
+        this.$results[0].classList.add("d-none");
     },
     init: function () {
         // import("./livesearch.scss");
@@ -242,7 +243,7 @@ export default Base.extend({
                         // and refocus elemtn
                         self.$input.focus();
                     }
-                }, 200);
+                }, self.options.timeoutHide);
             })
             .off("focusin")
             .on("focusin", function () {
@@ -319,7 +320,8 @@ export default Base.extend({
         });
 
         /* create result dom */
-        self.$results = $('<ul class="' + self.resultsClass + '"></ul>')
-            .insertAfter(self.$el);
+        self.$results = $('<ul class="' + self.resultsClass + '"></ul>').insertAfter(
+            self.$el
+        );
     },
 });

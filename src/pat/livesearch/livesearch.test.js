@@ -1,7 +1,7 @@
 import Livesearch from "./livesearch";
 import $ from "jquery";
 import sinon from "sinon";
-import dom from "@patternslib/patternslib/src/core/dom";
+import utils from "@patternslib/patternslib/src/core/utils";
 
 describe("Livesearch", function () {
     beforeEach(function () {
@@ -28,7 +28,6 @@ describe("Livesearch", function () {
                 })
             );
         });
-        this.clock = sinon.useFakeTimers();
 
         this.$el = $(`
             <form class="pat-livesearch">
@@ -38,76 +37,74 @@ describe("Livesearch", function () {
 
         this.ls = new Livesearch(this.$el, {
             ajaxUrl: "livesearch.json",
+            quietMillis: 1,
+            timeoutHide: 1,
         });
     });
 
     afterEach(function () {
         $("body").empty();
         this.server.restore();
-        this.clock.restore();
         this.$el.remove();
     });
 
-    it("1 - results on focus", function () {
+    it("1 - results on focus", async function () {
         this.ls.$input.trigger("focusin");
-        this.clock.tick(1000);
+        await utils.timeout(10);
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
     });
 
-    it("2 - responds to keyup", function () {
+    it("2 - responds to keyup", async function () {
         this.ls.$input.trigger("keyup");
-        this.clock.tick(1000);
+        await utils.timeout(100);
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
     });
 
-    it("3 - does not show with minimum length not met", function () {
+    it("3 - does not show with minimum length not met", async function () {
         this.ls.$input.attr("value", "fo");
         this.ls.$input.trigger("keyup");
-        this.clock.tick(1000);
+        await utils.timeout(1);
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(1);
     });
 
-    it("4 - focus out hides", function () {
+    it("4 - focus out hides", async function () {
         this.ls.$input.trigger("keyup");
-        this.clock.tick(1000);
+        await utils.timeout(100);
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
 
         this.ls.$input.trigger("focusout");
-        this.clock.tick(1000);
+        await utils.timeout(10);
 
-        expect(dom.is_visible(document.querySelector(".livesearch-results"))).toEqual(
-            false
-        );
+        const results = document.querySelector(".livesearch-results");
+        expect(results.classList.contains("d-none")).toBe(true);
     });
 
-    it("5 - focus back in shows already searched", function () {
+    it("5 - focus back in shows already searched", async function () {
         this.ls.$input.trigger("keyup");
-        this.clock.tick(1000);
+        await utils.timeout(100);
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
 
         this.ls.$input.trigger("focusout");
-        this.clock.tick(1000);
-        expect(dom.is_visible(document.querySelector(".livesearch-results"))).toEqual(
-            false
-        );
+        await utils.timeout(1);
+
+        const results = document.querySelector(".livesearch-results");
+        expect(results.classList.contains("d-none")).toBe(true);
 
         this.ls.$input.trigger("focusin");
-        this.clock.tick(1000);
-        expect(dom.is_visible(document.querySelector(".livesearch-results"))).toEqual(
-            true
-        );
+        await utils.timeout(1);
+        expect(results.classList.contains("d-none")).toBe(false);
     });
 
-    it("6 - should show next and prev", function () {
+    it("6 - should show next and prev", async function () {
         this.ls.$input.trigger("keyup");
-        this.clock.tick(1000);
+        await utils.timeout(100);
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
         expect(
             document.querySelectorAll(".livesearch-results li a.next").length
         ).toEqual(1);
 
         this.ls.doSearch(2);
-        this.clock.tick(1000);
+        await utils.timeout(10);
 
         expect(document.querySelectorAll(".livesearch-results li").length).toEqual(9);
         expect(
