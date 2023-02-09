@@ -520,6 +520,7 @@ export default Base.extend({
 
         var self = this;
 
+        this.$select2_el = this.$el;
         self.browsing = self.options.mode !== "search";
 
         // Remove trailing slash
