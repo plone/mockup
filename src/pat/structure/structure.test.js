@@ -26,12 +26,8 @@ import StatusTemplate from "./templates/status.xml";
 
 import ResultCollection from "./js/collections/result";
 
-import { ICON_CACHE } from "../../core/utils";
-
 import logging from "@patternslib/patternslib/src/core/logging";
 logging.setLevel(20);
-
-ICON_CACHE["plone.icon.plone-view"] = "x";
 
 $.fx.off = true;
 
@@ -493,7 +489,7 @@ describe("Structure", function () {
         expect($("table tbody .selection input:checked", this.$el).length).toEqual(16);
     });
 
-    it.skip("test unselect all", async function () {
+    it("test unselect all", async function () {
         registry.scan(this.$el);
         await utils.timeout(200);
 
